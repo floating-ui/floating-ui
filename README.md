@@ -30,3 +30,7 @@ var thePopper = new Near(reference, popper, options); // that's all
 ## Popper.js
 
 This one is used to style your Popper, add the nice arrow to it, in and out animations and so on.
+
+## Copyright and license
+
+Code and documentation copyright 2016 Federico Zivolo. Code released under the MIT license. Docs released under Creative Commons.
