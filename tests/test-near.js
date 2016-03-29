@@ -58,7 +58,7 @@ describe('Near.js', function() {
 
         var left    = popper.getBoundingClientRect().left;
         var local   = 93;
-        var ci      = 101;
+        var ci      = 102;
         console.log(left);
         expect(left === local || left === ci).toBeTruthy();
 
