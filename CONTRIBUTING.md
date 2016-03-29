@@ -1,5 +1,13 @@
 # Contributing to Popper.js
 
+## Report bugs
+
+If you find a bug, please, try to isolate the specific case and provide a fiddle on CodePen or JSFiddle to make it easy to reproduce the problem and help others finding a solution.
+
+If your issue is not about a bug, please make sure to consider posting on StackOverflow instead.
+
+Feature requests are welcome!
+
 ## Setup
 
 In order to properly work on the development environment, run:
@@ -12,14 +20,23 @@ and make sure to have `grunt-cli` and `bower` installed globally.
 
 ## Developing
 
-To serve the files just run `grunt serve` and visit `localhost:9000` on your browser.
-
-Right now we are using `tests/test.html` to manually test the behavior of Near.js.
+We develop following a test driven development approach.
 
 ## Test
 
 We have a grunt + karma + jasmine environment to unit test Popper.js
 Feel free to add tests to the `/tests` folder, any JavaScript file in that folder will be executed as test.
+
+To run tests:
+
+```bash
+npm test
+```
+
+**Note:** we use Chrome even for the tests on Travis CI, despite this, the CSS offsets of the page elements seem to be different when the tests are ran on Travis CI or on your local machine.
+Due to this problem, right now we make assertions checking both the local and CI offsets.
+
+Any suggestion to get rid of this problem is more than welcome tho.
 
 ## Build
 
@@ -31,4 +48,4 @@ grunt dist
 
 The files will be automatically minified and copied in the `build` directory.
 
-**NB** Never commit changes and builds together! Each build should have its own dedicated commit.
+**Note:** never commit changes and builds together! Each build should have its own dedicated commit.
