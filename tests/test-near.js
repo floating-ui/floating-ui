@@ -42,6 +42,7 @@ describe('Near.js', function() {
         var top     = popper.getBoundingClientRect().top;
         var local   = 43;
         var ci      = 44;
+        console.log(top);
         expect(top === local || top === ci).toBeTruthy();
 
         pop.destroy();
@@ -56,8 +57,9 @@ describe('Near.js', function() {
         });
 
         var left    = popper.getBoundingClientRect().left;
-        var local   = 92;
+        var local   = 93;
         var ci      = 101;
+        console.log(left);
         expect(left === local || left === ci).toBeTruthy();
 
         pop.destroy();
