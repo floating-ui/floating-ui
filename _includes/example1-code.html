@@ -1,0 +1,19 @@
+<h2 id="example1" tabindex="0">Poppers on 4 sides</h2>
+<p>
+    Placing poppers around elements is just that easy!
+</p>
+
+{% highlight javascript %}
+var popperOnTop = new Near(referenceElement, onTopPopper, {
+    placement: 'top'
+});
+var popperOnBottom = new Near(referenceElement, onBottomPopper, {
+    placement: 'bottom'
+});
+var popperOnLeft = new Near(referenceElement, onLeftPopper, {
+    placement: 'left'
+});
+var popperOnRight = new Near(referenceElement, onRightPopper, {
+    placement: 'right'
+});
+{% endhighlight %}

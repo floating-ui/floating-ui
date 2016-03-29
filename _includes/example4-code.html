@@ -1,0 +1,16 @@
+<h2 id="example4" tabindex="0">Shifted poppers</h2>
+<p>
+    Shift your poppers on start or end of its reference element side.
+</p>
+
+{% highlight javascript %}
+var shiftStart = new Near(referenceElement, shiftStartPopper, {
+    placement: 'left-start',
+    boundariesElement: container
+});
+
+var shiftEnd = new Near(referenceElement, shiftEndPopper, {
+    placement: 'bottom-end',
+    boundariesElement: container
+});
+{% endhighlight %}

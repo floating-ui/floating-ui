@@ -1,0 +1,58 @@
+# Welcome to Jekyll!
+#
+
+# Site settings
+title: Popper.js
+encoding: utf-8
+description: |
+  A kickass set of libraries<br>
+  used to create poppers in web applications.
+owner: Federico Zivolo & contributors # or company name
+first_published: 2016 # if migrating another site, the year of your first publish
+email: federico.zivolo@gmail.com
+baseurl: "/popper.js" # the subpath of your site, e.g. /blog
+url: "http://fezvrasta.gitlab.io/popper.js/" # the base hostname & protocol for your site
+github: https://github.com/FezVrasta/popper.js
+social:
+  twitter: https://twitter.com/FezVr4sta
+  github: https://github.com/FezVrasta
+  linkedin-square: https://linkedin.com/in/FezVrasta
+  #email: /contact/
+  #flickr:
+  #instagram:
+  #youtube-square:
+  #spotify:
+  #stack-overflow:
+  #vimeo:
+  #reddit:
+  #stubleupon:
+  #delicious:
+  #pied-piper:
+  #digg:
+  #soundcloud:
+  #deviantart:
+  #angellist:
+  #tumblr-square:
+  #stackexchange:
+  #weibo:
+  #trello:
+  #foursquare:
+  #linux:
+  #bitbucket-square:
+  #vk:
+  #slack:
+  #vine:
+  #weixin:
+  #yelp:
+  #skyatlas:
+  #leanpub:
+  #connectdevelop:
+  #ils:
+  #forumbee:
+  #tripadvisor:
+  #amazon:
+
+# Build settings
+markdown: kramdown
+#sass:
+#  style: compressed

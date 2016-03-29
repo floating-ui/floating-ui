@@ -1,0 +1,22 @@
+{
+    "boss": true,
+    "curly": true,
+    "eqeqeq": true,
+    "eqnull": true,
+    "immed": true,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "node": true,
+    "sub": true,
+    "undef": true,
+    "unused": true,
+    "browser": true,
+    "latedef": false,
+    "globals": {
+        "_": true,
+        "define": true,
+        "root": true,
+        "factory": true
+    }
+}
