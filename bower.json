@@ -1,0 +1,25 @@
+{
+  "name": "popper.js",
+  "description": "",
+  "main": "src/popper.js",
+  "authors": [
+    "Federico Zivolo & Andrea Scianò"
+  ],
+  "license": "MIT",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "requirejs": "^2.2.0"
+  }
+}

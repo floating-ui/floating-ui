@@ -1,0 +1,40 @@
+{
+  "name": "popper.js",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/popper.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/FezVrasta/popper.js.git"
+  },
+  "author": "Federico Zivolo <federico.zivolo@gmail.com>",
+  "contributors": [
+    {
+      "name": "Andrea Scianò"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FezVrasta/popper.js/issues"
+  },
+  "homepage": "https://github.com/FezVrasta/popper.js#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-banner": "^0.6.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-env": "^0.4.4",
+    "grunt-jsdoc-to-markdown": "^1.2.0",
+    "grunt-karma": "^0.12.2",
+    "grunt-serve": "^0.1.6",
+    "grunt-shell-spawn": "^0.3.10",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-jasmine": "^0.3.8"
+  }
+}

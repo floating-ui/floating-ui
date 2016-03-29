@@ -1,0 +1,90 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Ubuntu, Arial, sans-serif;
+}
+#rel {
+    position: absolute;
+    color: black;
+    background: yellow;
+    top: 40vh;
+    left: 50vw;
+    padding: 30px;
+}
+
+#theEvilBoundary {
+    position: absolute;
+    top: 300px;
+    left: 100px;
+    background: red;
+    padding: 200px;
+}
+
+#thePopper3 {
+    height: 200px;
+}
+.ref {
+    display: inline-block;
+    background: red;
+    padding: 10px;
+}
+.popper {
+    position: absolute;
+    background: #222;
+    color: white;
+    width: 150px;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    padding: 5px;
+}
+.popper .popper__arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+}
+.popper[x-placement^="top"] {
+    margin-bottom: 5px;
+}
+.popper[x-placement^="top"] .popper__arrow {
+    border-width: 5px 5px 0 5px;
+    border-color: #222 transparent transparent transparent;
+    bottom: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.popper[x-placement^="bottom"] {
+    margin-top: 5px;
+}
+.popper[x-placement^="bottom"] .popper__arrow {
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #222 transparent;
+    top: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.popper[x-placement^="right"] {
+    margin-left: 5px;
+}
+.popper[x-placement^="right"] .popper__arrow {
+    border-width: 5px 5px 5px 0;
+    border-color: transparent #222 transparent transparent;
+    left: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+}
+.popper[x-placement^="left"] {
+    margin-right: 5px;
+}
+.popper[x-placement^="left"] .popper__arrow {
+    border-width: 5px 0 5px 5px;
+    border-color: transparent transparent transparent #222;
+    right: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+}

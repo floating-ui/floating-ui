@@ -1,0 +1,15 @@
+before_script:
+    - apt-get update -y
+    - apt-get install -y libssl-dev build-essential chromium-browser xvfb
+    - curl -sL https://raw.githubusercontent.com/creationix/nvm/v0.29.0/install.sh | bash
+    - source /root/.bashrc # bash version
+    - . ~/.nvm/nvm.sh # sh version
+    - nvm install node
+    - nvm use node
+    - npm install -g grunt-cli bower
+    - npm install
+    - bower install --allow-root
+
+test:
+    script:
+        - grunt test-ci
