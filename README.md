@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/FezVrasta/popper.js.svg?branch=master)](https://travis-ci.org/FezVrasta/popper.js)
+
 # Popper.js
 
 <img src="popperjs.png" align="right" width=250>
