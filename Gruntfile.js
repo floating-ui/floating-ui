@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         karma: {
             options: {
                 frameworks: ['jasmine'],
-                singleRun: false,
+                singleRun: true,
                 browsers: browsers,
                 customLaunchers: {
                     'ChromeTest': {
