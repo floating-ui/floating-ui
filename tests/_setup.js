@@ -5,4 +5,11 @@ document.body.appendChild(wrapper);
 
 beforeEach(function() {
     jasmineWrapper.innerHTML = '';
+
+    this.addMatchers({
+        toBeNear: function(expected, within) {
+            within = within || 1;
+            return (this.actual >= (expected - within)) && (this.actual <= (expected + within));
+        }
+    });
 });
