@@ -6,10 +6,14 @@ document.body.appendChild(wrapper);
 beforeEach(function() {
     jasmineWrapper.innerHTML = '';
 
-    this.addMatchers({
-        toBeNear: function(expected, within) {
-            within = within || 1;
-            return (this.actual >= (expected - within)) && (this.actual <= (expected + within));
+    jasmine.addMatchers({
+        toBeApprox: function() {
+            return {
+                compare: function(actual, expected, within) {
+                    within = within || 1;
+                    return { pass: (actual >= (expected - within)) && (actual <= (expected + within)) };
+                }
+            };
         }
     });
 });

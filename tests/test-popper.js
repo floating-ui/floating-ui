@@ -40,7 +40,7 @@ describe('Popper.js', function() {
         var pop = new TestPopper(reference, popper);
 
         var top = popper.getBoundingClientRect().top;
-        expect(top).toBeNear(51);
+        expect(top).toBeApprox(51);
 
         pop.destroy();
     });
@@ -86,7 +86,7 @@ describe('Popper.js', function() {
         var pop = new TestPopper(ref, popper);
 
         var top     = popper.getBoundingClientRect().top;
-        expect(top).toBeNear(-449);
+        expect(top).toBeApprox(-449);
         pop.destroy();
 
     });
