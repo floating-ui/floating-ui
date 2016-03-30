@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
     fakeBody.scrollTop = fakeBody.scrollHeight / 2 - fakeBody.clientHeight / 2;
 
     setTimeout(function() {
-        var pop1 = new Near(example2reference1, example2popper1, {
+        var pop1 = new Popper(example2reference1, example2popper1, {
             placement: 'left',
             boundariesElement: example2reference1.parentNode.parentNode
         });

@@ -23,19 +23,19 @@
 <script>
 document.addEventListener('DOMContentLoaded', function(){
     setTimeout(function() {
-        var popperOnTop = new Near(example1reference1, example1popper1, {
+        var popperOnTop = new Popper(example1reference1, example1popper1, {
             placement: 'top',
             boundariesElement: example1reference1.parentNode
         });
-        var popperOnBottom = new Near(example1reference1, example1popper2, {
+        var popperOnBottom = new Popper(example1reference1, example1popper2, {
             placement: 'bottom',
             boundariesElement: example1reference1.parentNode
         });
-        var popperOnLeft = new Near(example1reference1, example1popper3, {
+        var popperOnLeft = new Popper(example1reference1, example1popper3, {
             placement: 'left',
             boundariesElement: example1reference1.parentNode
         });
-        var popperOnRight = new Near(example1reference1, example1popper4, {
+        var popperOnRight = new Popper(example1reference1, example1popper4, {
             placement: 'right',
             boundariesElement: example1reference1.parentNode
         });

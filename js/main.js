@@ -97,6 +97,6 @@
 
 	});
 
-	new Near(document.getElementById('header-title'), document.getElementById('title-popper'));
+	new Popper(document.getElementById('header-title'), document.getElementById('title-popper'));
 
 })(jQuery);
