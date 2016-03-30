@@ -1,5 +1,5 @@
 /**
- * @fileOverview Kickass set of libraries to place poppers near their reference elements.
+ * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version 0.1.0
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
@@ -38,7 +38,7 @@
         module.exports = factory();
     } else {
         // Browser globals (root is window)
-        root.Near = factory();
+        root.Popper = factory();
     }
 }(this, function () {
 
@@ -78,10 +78,10 @@
     };
 
     /**
-     * Create a new Near.js instance
-     * @constructor Near
-     * @param {Element} triger
-     * @param {Element} popper
+     * Create a new Popper.js instance
+     * @constructor Popper
+     * @param {HTMLElement} triger
+     * @param {HTMLElement|Object} popper - the HTML element used as popper, or a configuration used to generate the popper
      * @param {Object} options
      * @param {String} [options.placement=bottom]
      *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
@@ -103,7 +103,7 @@
      *      Additional padding for the boundaries
      *
      * @param {Array} [options.preventOverflowOrder=['left', 'right', 'top', 'bottom']]
-     *      Order used when Near.js tries to avoid overflows from the boundaries, they will be checked in order,
+     *      Order used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
      *      this means that the last ones will never overflow
      *
      * @param {String|Array} [options.flipBehavior='flip']
@@ -124,17 +124,29 @@
      *      The function should reflect the @params and @returns of preventOverflow
      *
      * @param {Function}
-     *      If the last argument of Near.js is a function, it will be executed after the initialization of the popper
-     *      it's scope will be window, the first argument will be the Near.js instance.
+     *      If the last argument of Popper.js is a function, it will be executed after the initialization of the popper
+     *      it's scope will be window, the first argument will be the Popper.js instance.
      */
-    function Near(trigger, popper, options/*, callback*/) {
+    function Popper(trigger, popper, options/*, callback*/) {
         this._trigger = trigger;
-        this._popper  = popper;
+
+        // if the popper variable is a configuration object, parse it to generate an HTMLElement
+        // generate a default popper if is not defined
+        var isNotDefined = popper === undefined || popper === null;
+        var isFunction = typeof popper === 'function';
+        var isConfig = popper && popper.constructor.name === 'Object';
+        if (  isNotDefined || isFunction || isConfig) {
+            this._popper = this.parse(isConfig ? popper : {});
+        }
+        // otherwise, use the given HTMLElement as popper
+        else {
+            this._popper = popper;
+        }
 
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
 
-        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Near.js
+        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
         // so we return the corresponding method
         this._options.modifiers = this._options.modifiers.map(function(modifier) {
             if (typeof modifier === 'string') {
@@ -168,9 +180,9 @@
     /**
      * Destroy the popper
      * @method
-     * @memberof Near
+     * @memberof Popper
      */
-    Near.prototype.destroy = function() {
+    Popper.prototype.destroy = function() {
         this._popper.removeAttribute('x-placement');
         this._popper.style.left = '';
         this._popper.style.position = '';
@@ -182,9 +194,9 @@
     /**
      * Updates the position of the popper, computing the new offsets and applying the new style
      * @method
-     * @memberof Near
+     * @memberof Popper
      */
-    Near.prototype.update = function() {
+    Popper.prototype.update = function() {
         var data = {};
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
@@ -228,15 +240,100 @@
     };
 
     /**
+     * Helper used to generate poppers from a configuration file
+     * @method
+     * @memberof Popper
+     */
+    Popper.prototype.parse = function(config) {
+        var defaultConfig = {
+            tagName: 'div',
+            classNames: [ 'popper' ],
+            attributes: [],
+            parent: root.document.body,
+            content: '',
+            allowHtml: false,
+            arrow: {
+                tagName: 'div',
+                classNames: [ 'popper__arrow' ],
+                attributes: [ 'x-arrow']
+            }
+        };
+        config = Object.assign({}, defaultConfig, config);
+
+        var d = root.document;
+
+        var popper = d.createElement(config.tagName);
+        addClassNames(popper, config.classNames);
+        addAttributes(popper, config.attributes);
+        if (config.allowHtml) {
+            popper.innerHTML = config.content;
+        } else {
+            popper.textContent = config.content;
+        }
+
+        if (config.arrow) {
+            var arrow = d.createElement(config.arrow.tagName);
+            addClassNames(arrow, config.arrow.classNames);
+            addAttributes(arrow, config.arrow.attributes);
+            popper.appendChild(arrow);
+        }
+
+        var parent = config.parent;
+
+        // if the given parent is a string, use it to match an element
+        // if more than one element is matched, the first one will be used as parent
+        // if no elements are matched, the script will throw an error
+        if (typeof parent === 'string') {
+            parent = d.querySelectorAll(config.parent);
+            if (parent.length > 1) {
+                console.warning('WARNING: the given `parent` query(' + config.parent + ') matched more than one element, the first one will be used');
+            }
+            if (parent.length === 0) {
+                throw 'ERROR: the given `parent` doesn\'t exists!';
+            }
+            parent = parent[0];
+        }
+        // if the given parent is a DOM nodes list or an array of nodes with more than one element,
+        // the first one will be used as parent
+        if (parent.length > 1) {
+            console.warning('WARNING: you have passed as parent a list of elements, the first one will be used');
+            parent = parent[0];
+        }
+
+        // append the generated popper to its parent
+        parent.appendChild(popper);
+
+        return popper;
+
+        /**
+         * Adds class names to the given element
+         * @param {HTMLElement} target
+         * @param {Array} classes
+         */
+        function addClassNames(element, classNames) {
+            classNames.forEach(function(className) {
+                element.classList.add(className);
+            });
+        }
+
+        function addAttributes(element, attributes) {
+            attributes.forEach(function(attribute) {
+                element.setAttribute(attribute.split(':')[0], attribute.split(':')[1]);
+            });
+        }
+
+    };
+
+    /**
      * Get offsets to the popper
      * @method
-     * @memberof Near
+     * @memberof Popper
      * @access private
      * @param {Element} popper - the popper element
      * @param {Element} trigger - the trigger element (the popper will be relative to this)
      * @returns {Object} An object containing the offsets which will be applied to the popper
      */
-    Near.prototype._getOffsets = function(popper, trigger, placement) {
+    Popper.prototype._getOffsets = function(popper, trigger, placement) {
         var container = getOffsetParent(trigger);
         placement = placement.split('-')[0];
 
@@ -292,10 +389,10 @@
     /**
      * Setup needed event listeners used to update the popper position
      * @method
-     * @memberof Near
+     * @memberof Popper
      * @access private
      */
-    Near.prototype._setupEventListeners = function() {
+    Popper.prototype._setupEventListeners = function() {
         // NOTE: 1 DOM access here
         _updateBound = this.update.bind(this);
         root.addEventListener('resize', _updateBound);
@@ -312,10 +409,10 @@
     /**
      * Remove event listeners used to update the popper position
      * @method
-     * @memberof Near
+     * @memberof Popper
      * @access private
      */
-    Near.prototype._removeEventListeners = function() {
+    Popper.prototype._removeEventListeners = function() {
         // NOTE: 1 DOM access here
         root.removeEventListener('resize', _updateBound);
         if (this._options.boundariesElement !== 'window') {
@@ -332,14 +429,14 @@
     /**
      * Computed the boundaries limits and return them
      * @method
-     * @memberof Near
+     * @memberof Popper
      * @access private
      * @param {Object} data - Object containing the property "offsets" generated by `_getOffsets`
      * @param {Number} padding - Boundaries padding
      * @param {Element} boundariesElement - Element used to define the boundaries
      * @returns {Object} Coordinates of the boundaries
      */
-    Near.prototype._getBoundaries = function(data, padding, boundariesElement) {
+    Popper.prototype._getBoundaries = function(data, padding, boundariesElement) {
         // NOTE: 1 DOM access here
         var boundaries = {};
         var width, height;
@@ -390,13 +487,13 @@
     /**
      * Loop trough the list of modifiers and run them in order, each of them will then edit the data object
      * @method
-     * @memberof Near
+     * @memberof Popper
      * @access public
      * @param {Object} data
      * @param {Array} modifiers
      * @param {Function} ends
      */
-    Near.prototype.runModifiers = function(data, modifiers, ends) {
+    Popper.prototype.runModifiers = function(data, modifiers, ends) {
         var modifiersToRun = modifiers.slice();
         if (ends !== undefined) {
             modifiersToRun = this._options.modifiers.slice(0, getArrayKeyIndex(this._options.modifiers, ends));
@@ -414,10 +511,10 @@
     /**
      * Helper used to know if the given modifier depends from another one.
      * @method
-     * @memberof Near
+     * @memberof Popper
      */
 
-    Near.prototype.isModifierRequired = function(requesting, requested) {
+    Popper.prototype.isModifierRequired = function(requesting, requested) {
         var index = getArrayKeyIndex(this._options.modifiers, requesting);
         return !!this._options.modifiers.slice(0, index).filter(function(modifier) {
             return modifier === requested;
@@ -430,20 +527,20 @@
 
     /**
      * Modifiers list
-     * @namespace Near.modifiers
-     * @memberof Near
+     * @namespace Popper.modifiers
+     * @memberof Popper
      * @type {Object}
      */
-    Near.prototype.modifiers = {};
+    Popper.prototype.modifiers = {};
 
     /**
      * Modifier used to shift the popper on the start or end of its reference element side
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by `update` method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.shift = function(data) {
+    Popper.prototype.modifiers.shift = function(data) {
         var trigger = data.offsets.trigger;
         var popper = getPopperClientRect(data.offsets.popper);
         var placement = data.placement;
@@ -498,11 +595,11 @@
     /**
      * Modifier used to make sure the popper does not overflows from it's boundaries
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by `update` method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.preventOverflow = function(data) {
+    Popper.prototype.modifiers.preventOverflow = function(data) {
         var order = this._options.preventOverflowOrder;
         var popper = getPopperClientRect(data.offsets.popper);
 
@@ -547,11 +644,11 @@
     /**
      * Modifier used to make sure the popper is always near its trigger
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.keepTogether = function(data) {
+    Popper.prototype.modifiers.keepTogether = function(data) {
         var popper  = getPopperClientRect(data.offsets.popper);
         var trigger = data.offsets.trigger;
         var f = Math.floor;
@@ -577,11 +674,11 @@
      * Requires the `preventOverflow` modifier before it in order to work.
      * **NOTE:** This modifier will run all its previous modifiers everytime it tries to flip the popper!
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.flip = function(data) {
+    Popper.prototype.modifiers.flip = function(data) {
         // check if preventOverflow is in the list of modifiers before the flip modifier.
         // otherwise flip would not work as expected.
         if (!this.isModifierRequired(this.modifiers.flip, this.modifiers.preventOverflow)) {
@@ -645,11 +742,11 @@
      * Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
      * The offsets will shift the popper on the side of its trigger element.
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.offset = function(data) {
+    Popper.prototype.modifiers.offset = function(data) {
         var offset = this._options.offset;
         var popper  = data.offsets.popper;
 
@@ -672,11 +769,11 @@
      * Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the trigger
      * It will use the CSS outer size of the arrow element to know how many pixels of conjuction are needed
      * @method
-     * @memberof Near.modifiers
+     * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
      * @returns {Object} The data object, properly modified
      */
-    Near.prototype.modifiers.arrow = function(data) {
+    Popper.prototype.modifiers.arrow = function(data) {
         var arrow  = this._options.arrowElement;
 
         // if the arrowElement is a string, suppose it's a CSS selector
@@ -1032,5 +1129,5 @@
         });
     }
 
-    return Near;
+    return Popper;
 }));

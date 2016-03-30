@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/FezVrasta/popper.js/issues"
   },
-  "homepage": "https://github.com/FezVrasta/popper.js#readme",
+  "homepage": "https://fezvrasta.github.com/popper.js",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-banner": "^0.6.0",

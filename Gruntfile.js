@@ -26,19 +26,19 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     sourceMap: true,
-                    sourceMapName: 'build/near.min.js.map',
+                    sourceMapName: 'build/popper.min.js.map',
                     preserveComments: /(?:license|version)/
                 },
                 files: {
-                    'build/near.min.js': ['build/near.js']
+                    'build/popper.min.js': ['build/popper.js']
                 }
             }
         },
         copy: {
             dist: {
                 nonull: true,
-                src: 'src/near.js',
-                dest: 'build/near.js',
+                src: 'src/popper.js',
+                dest: 'build/popper.js',
             }
         },
         jsdoc2md: {
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         karma: {
             options: {
                 frameworks: ['jasmine'],
-                singleRun: true,
+                singleRun: false,
                 browsers: browsers,
                 customLaunchers: {
                     'ChromeTest': {
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
                     position: 'replace',
                 },
                 files: {
-                    src: [ 'build/near.js' ]
+                    src: [ 'build/popper.js' ]
                 }
             }
         },

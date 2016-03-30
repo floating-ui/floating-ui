@@ -1,17 +1,17 @@
-describe('Near.js', function() {
+describe('Popper.js', function() {
     // define modules paths
     require.config({
         paths: {
-            near: 'base/src/near'
+            popper: 'base/src/popper'
         }
     });
 
-    var TestNear;
+    var TestPopper;
 
     it('should load the AMD module', function(done) {
-        require(['near'], function(Near) {
-            TestNear = Near;
-            expect(Near).toBeDefined();
+        require(['popper'], function(Popper) {
+            TestPopper = Popper;
+            expect(Popper).toBeDefined();
             done();
         });
     });
@@ -28,7 +28,7 @@ describe('Near.js', function() {
         jasmineWrapper.appendChild(trigger);
 
         // initialize new popper instance
-        var pop = new TestNear(trigger, popper);
+        var pop = new TestPopper(trigger, popper);
 
         expect(pop).toBeDefined();
     });
@@ -37,13 +37,10 @@ describe('Near.js', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
-        var pop = new TestNear(reference, popper);
+        var pop = new TestPopper(reference, popper);
 
-        var top     = popper.getBoundingClientRect().top;
-        var local   = 43;
-        var ci      = 44;
-        console.log(top);
-        expect(top === local || top === ci).toBeTruthy();
+        var top = popper.getBoundingClientRect().top;
+        expect(top).toBe(51);
 
         pop.destroy();
     });
@@ -52,15 +49,14 @@ describe('Near.js', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
-        var pop = new TestNear(reference, popper, {
+        var pop = new TestPopper(reference, popper, {
             placement: 'right'
         });
 
         var left    = popper.getBoundingClientRect().left;
         var local   = 93;
         var ci      = 102;
-        console.log(left);
-        expect(left === local || left === ci).toBeTruthy();
+        expect([local, ci]).toContain(left);
 
         pop.destroy();
     });
@@ -87,12 +83,10 @@ describe('Near.js', function() {
 
 
         scrolling.scrollTop = 500;
-        var pop = new TestNear(ref, popper);
+        var pop = new TestPopper(ref, popper);
 
         var top     = popper.getBoundingClientRect().top;
-        var local   = -457;
-        var ci      = -456;
-        expect(top === local || top === ci).toBeTruthy();
+        expect(top).toBe(-449);
         pop.destroy();
 
     });
@@ -101,9 +95,31 @@ describe('Near.js', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
-        new TestNear(reference, popper, function(pop) {
+        new TestPopper(reference, popper, function(pop) {
             pop.destroy();
             expect(popper.style.top).toBe('');
+            done();
+        });
+    });
+
+    it('should create a popper using the default configuration', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference, function(instance) {
+            expect(document.querySelectorAll('.popper').length).toBe(1);
+            document.body.removeChild(instance._popper);
+            done();
+        });
+    });
+
+    it('should create a popper using a custom configuration', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference, {
+            content: 'something'
+        }, function(instance) {
+            expect(instance._popper.innerText).toBe('something');
+            document.body.removeChild(instance._popper);
             done();
         });
     });

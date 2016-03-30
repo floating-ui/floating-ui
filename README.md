@@ -3,7 +3,7 @@
 # Popper.js
 
 <img src="popperjs.png" align="right" width=250>
-Popper.js is a set of libraries used to create **poppers** in web applications.
+Popper.js is a library used to create **poppers** in web applications.
 
 ### Wut? Poppers?
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
@@ -15,46 +15,47 @@ Popper.js is built from the ground up to being modular and fully ~~hackable~~ **
 It supports a **plugin system** you can use to add particular behaviors to your poppers.  
 It's **AMD** and **CommonJS** compatible and it's well documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
 
-<br>
---------------
-<br>
+### The Library
 
-# Popper.js Libraries
-
-Popper.js is a set of libraries, but right now the only released one is Near.js.
-
-## Near.js
-
-Near.js (*I wanted to call it "Together.js" but seems like Mozilla already used it... Thanks, Mozilla*) is the library with the job of making sure your popper stays near the defined reference element (if you want so).
+Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).  
+Additionally, it provides an easy way to generate your popper element if you don't want to use one already in your DOM.
 
 Ok, let's stop talking, I'll show you how to use it:
 
-```js
-var reference = document.querySelector('.my-button');
-var popper = document.querySelector('.the-popper');
-var options = { /* more later... */ }
 
-var thePopper = new Near(reference, popper, options); // that's all
-```
-
-It's the real badass of the family, all the hard work is on its shoulders and we'll never thank it enough for all its work!
-
-## Popper.js
-
-This library is still work in progress, basically will allow you to automatically create tooltips and popovers just defining their reference element.
-All the hard work is done by **Near.js** under the hood, but we want to make even easier to create poppers and Popper.js will make this possible.
-
-Here is an example of how the API will look like:
+#### Basic usage
+create a popper near a button:
 
 ```js
 var reference = document.querySelector('.my-button');
-var options = { /* more later... */ };
-
-var thePopper = new Popper(reference, options);
+var thePopper = new Popper(
+    reference,
+    {
+        content: 'My awesome popper!'
+    },
+    {
+        // popper options here
+    }
+});
 ```
 
-These few lines will create a new element and will initialize it using Near.js.
-As you see, it's just a shorthand for what you can already do with **Near.js** right now.
+#### "Advanced" usage
+given an existing popper, ask Popper.js to position it near its button
+
+```js
+var reference = document.querySelector('.my-button');
+var popper = document.querySelector('.my-popper');
+var anotherPopper = new Popper(
+    reference,
+    popper,
+    {
+        // popper options here
+    }
+});
+```
+
+If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
+
 Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can already do right now!
 
 
