@@ -40,7 +40,7 @@ describe('Popper.js', function() {
         var pop = new TestPopper(reference, popper);
 
         var top = popper.getBoundingClientRect().top;
-        expect(top).toBe(51);
+        expect(top).toBeNear(51);
 
         pop.destroy();
     });
@@ -55,7 +55,7 @@ describe('Popper.js', function() {
 
         var left    = popper.getBoundingClientRect().left;
         var local   = 93;
-        var ci      = 102;
+        var ci      = 110;
         expect([local, ci]).toContain(left);
 
         pop.destroy();
@@ -86,7 +86,7 @@ describe('Popper.js', function() {
         var pop = new TestPopper(ref, popper);
 
         var top     = popper.getBoundingClientRect().top;
-        expect(top).toBe(-449);
+        expect(top).toBeNear(-449);
         pop.destroy();
 
     });
