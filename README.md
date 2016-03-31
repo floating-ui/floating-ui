@@ -1,6 +1,7 @@
 # Popper.js
 
 [![Build Status](https://travis-ci.org/FezVrasta/popper.js.svg?branch=master)](https://travis-ci.org/FezVrasta/popper.js)
+[![npm version](https://badge.fury.io/js/popper.js.svg)](https://badge.fury.io/js/popper.js)
 
 <img src="https://github.com/FezVrasta/popper.js/blob/master/popperjs.png" align="right" width=250>
 Popper.js is a library used to create **poppers** in web applications.
