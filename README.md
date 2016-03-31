@@ -34,7 +34,7 @@ npm install popper.js --save
 bower install popper.js --save
 ```
 
-**jsDelivr ([pending approvation](https://github.com/jsdelivr/jsdelivr/pull/10723))**
+**jsDelivr**
 ```
 http://www.jsdelivr.com/projects/popper.js
 ```

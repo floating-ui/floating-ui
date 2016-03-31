@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.1.0
+ * @version 0.2.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -77,11 +77,35 @@
         modifiersIgnored: [],
     };
 
+     var defaultConfig = {
+            tagName: 'div',
+            classNames: [ 'popper' ],
+            attributes: [],
+            parent: root.document.body,
+            content: '',
+            allowHtml: false,
+            arrow: {
+                tagName: 'div',
+                classNames: [ 'popper__arrow' ],
+                attributes: [ 'x-arrow']
+            }
+        };
+
     /**
      * Create a new Popper.js instance
      * @constructor Popper
      * @param {HTMLElement} triger
-     * @param {HTMLElement|Object} popper - the HTML element used as popper, or a configuration used to generate the popper
+     * @param {HTMLElement|Object} popper
+     *      The HTML element used as popper, or a configuration used to generate the popper.
+     * @param {String} [popper.tagName='div'] The tag name of the generated popper.
+     * @param {Array} [popper.classNames=['popper']] Array of classes to apply to the generated popper.
+     * @param {Array} [popper.attributes] Array of attributes to apply, specify `attr:value` to assign a value to it.
+     * @param {HTMLElement|String} [popper.parent=window.document.body] The parent element, given as HTMLElement or as query string.
+     * @param {String} [popper.content] The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.
+     * @param {Boolean} [popper.allowHtml=false] If set to true, the `content` will be parsed as HTML.
+     * @param {String} [popper.arrow.tagName='div'] Same as `popper.tagName` but for the arrow element.
+     * @param {Array} [popper.arrow.classNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
+     * @param {String} [popper.arrow.attributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
      *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
