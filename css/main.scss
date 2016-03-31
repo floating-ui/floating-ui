@@ -1927,3 +1927,7 @@ $baseurl: '{{ site.baseurl }}/images';
     margin-top: -1.9em;
     font-size: .8em;
 }
+
+.page-layout #carbonads {
+    float: right;
+}
