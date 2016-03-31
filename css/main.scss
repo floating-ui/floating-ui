@@ -1931,3 +1931,9 @@ $baseurl: '{{ site.baseurl }}/images';
 .page-layout #carbonads {
     float: right;
 }
+
+@include breakpoint(medium) {
+	.page-layout #carbonads {
+		float: none;
+	}
+}
