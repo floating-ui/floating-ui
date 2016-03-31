@@ -1297,6 +1297,7 @@ $baseurl: '{{ site.baseurl }}/images';
 			}
             img {
                 width: 130px;
+                z-index: 1;
             }
         }
 
