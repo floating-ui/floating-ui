@@ -1885,3 +1885,45 @@ $baseurl: '{{ site.baseurl }}/images';
 #header:not(.alt) ~ #title-popper {
 	opacity: 1;
 }
+
+
+/* CarbonADS */
+#carbonads {
+	display: block;
+	overflow: hidden;
+	padding: 1em;
+	line-height: 1.5;
+	font-size: 0.7em;
+	margin: 0 auto 2em auto;
+	width: 400px;
+	border-radius: 2px;
+	background: rgba(0, 0, 0, 0.035);
+}
+
+#carbonads span {
+    display: block;
+    overflow: hidden;
+}
+
+#carbonads a {
+	border: 0;
+}
+
+.carbon-text {
+    display: block;
+    float: left;
+    max-width: 61%;
+    text-align: left;
+}
+
+.carbon-img {
+    float: left;
+    margin-right: 1em;
+}
+
+.carbon-poweredby {
+    display: block;
+    float: right;
+    margin-top: -1.9em;
+    font-size: .8em;
+}
