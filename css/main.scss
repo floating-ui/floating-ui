@@ -1938,3 +1938,11 @@ $baseurl: '{{ site.baseurl }}/images';
 		float: none;
 	}
 }
+@include breakpoint(small) {
+    #carbonads {
+        width: 314px;
+    }
+    #carbonads a {
+        max-width: 52%;
+    }
+}
