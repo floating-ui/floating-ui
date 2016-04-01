@@ -82,6 +82,7 @@ Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of e
 I want to thank some friends and projects for the work they did:
 
 - [@AndreaScn](https://github.com/AndreaScn) for its work on the GitHub Page and the manual testing he did during the development;
+- [@vampolo](https://github.com/vampolo) for the original idea and for the name of the library;
 - [Sysdig](https://github.com/Draios) for all the awesome things I learned during these years that made possible for me to write this library;
 - [Tether.js](http://github.hubspot.com/tether/) for having inspired me in writing a positioning library ready for the real world;
 - **you** for the star you'll give to this project and for beeing so awesome to give this project a try :)
