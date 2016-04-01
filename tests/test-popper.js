@@ -8,7 +8,7 @@ describe('Popper.js', function() {
 
     var TestPopper;
 
-    it('should load the AMD module', function(done) {
+    it('loads the AMD module', function(done) {
         require(['popper'], function(Popper) {
             TestPopper = Popper;
             expect(Popper).toBeDefined();
@@ -33,7 +33,7 @@ describe('Popper.js', function() {
         expect(pop).toBeDefined();
     });
 
-    it('should init a bottom popper', function() {
+    it('inits a bottom popper', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -45,7 +45,7 @@ describe('Popper.js', function() {
         pop.destroy();
     });
 
-    it('should init a right popper', function() {
+    it('inits a right popper', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -54,14 +54,14 @@ describe('Popper.js', function() {
         });
 
         var left    = popper.getBoundingClientRect().left;
-        var local   = 93;
+        var local   = 92;
         var ci      = 110;
         expect([local, ci]).toContain(left);
 
         pop.destroy();
     });
 
-    it('should create a popper inside a scrolling div, contained in a relative div', function() {
+    it('inits a popper inside a scrolling div, contained in a relative div', function() {
         var relative = document.createElement('div');
         relative.style.height = '800px';
         relative.style.width = '800px';
@@ -91,7 +91,107 @@ describe('Popper.js', function() {
 
     });
 
-    it('should init a popper and destroy it using its callback', function(done) {
+    it('inits a popper inside a body, with its reference element inside a relative div', function() {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        jasmineWrapper.appendChild(relative);
+
+        var ref = appendNewRef(1, 'ref', relative);
+        var popper = appendNewPopper(2, 'popper');
+
+        new TestPopper(ref, popper, function(pop) {
+            expect(popper.getBoundingClientRect().top).toBeApprox(63);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            pop.destroy();
+        });
+
+    });
+
+    it('inits a popper inside a scrolled body, with its reference element inside a relative div', function() {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', relative);
+        ref.style.marginTop = '200px';
+        var popper = appendNewPopper(2, 'popper');
+
+        new TestPopper(ref, popper, function(pop) {
+            expect(popper.getBoundingClientRect().top).toBeApprox(-800 + 263);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            pop.destroy();
+        });
+    });
+
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function() {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var scrolling = document.createElement('div');
+        scrolling.style.width = '800px';
+        scrolling.style.height = '800px';
+        scrolling.style.overflow = 'auto';
+        relative.appendChild(scrolling);
+
+        var superHigh = document.createElement('div');
+        superHigh.style.width = '800px';
+        superHigh.style.height = '1600px';
+        scrolling.appendChild(superHigh);
+
+        scrolling.scrollTop = 500;
+
+        var ref = appendNewRef(1, 'ref', scrolling);
+        ref.style.marginTop = '200px';
+        var popper = appendNewPopper(2, 'popper');
+
+        new TestPopper(ref, popper, function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            pop.destroy();
+        });
+    });
+
+    it('inits a popper near a reference element, both inside a fixed element, inside a scrolled body', function(done) {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.margin = '20px';
+        fixed.style.height = '50px';
+        fixed.style.width = '100%';
+        jasmineWrapper.appendChild(fixed);
+
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', fixed);
+        var popper = appendNewPopper(2, 'popper', fixed);
+
+        new TestPopper(ref, popper, function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(83);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            pop.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper and destroy it using its callback', function(done) {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -102,7 +202,7 @@ describe('Popper.js', function() {
         });
     });
 
-    it('should create a popper using the default configuration', function(done) {
+    it('creates a popper using the default configuration', function(done) {
         var reference = appendNewRef(1);
 
         new TestPopper(reference, function(instance) {
@@ -112,7 +212,7 @@ describe('Popper.js', function() {
         });
     });
 
-    it('should create a popper using a custom configuration', function(done) {
+    it('creates a popper using a custom configuration', function(done) {
         var reference = appendNewRef(1);
 
         new TestPopper(reference, {
