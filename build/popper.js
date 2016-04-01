@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.2.1
+ * @version 0.2.2
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -76,20 +76,6 @@
 
         modifiersIgnored: [],
     };
-
-     var defaultConfig = {
-            tagName: 'div',
-            classNames: [ 'popper' ],
-            attributes: [],
-            parent: root.document.body,
-            content: '',
-            allowHtml: false,
-            arrow: {
-                tagName: 'div',
-                classNames: [ 'popper__arrow' ],
-                attributes: [ 'x-arrow']
-            }
-        };
 
     /**
      * Create a new Popper.js instance
@@ -331,6 +317,8 @@
 
         /**
          * Adds class names to the given element
+         * @function
+         * @ignore
          * @param {HTMLElement} target
          * @param {Array} classes
          */
@@ -340,6 +328,15 @@
             });
         }
 
+        /**
+         * Adds attributes to the given element
+         * @function
+         * @ignore
+         * @param {HTMLElement} target
+         * @param {Array} attributes
+         * @example
+         * addAttributes(element, [ 'data-info:foobar' ]);
+         */
         function addAttributes(element, attributes) {
             attributes.forEach(function(attribute) {
                 element.setAttribute(attribute.split(':')[0], attribute.split(':')[1]);
@@ -358,13 +355,21 @@
      * @returns {Object} An object containing the offsets which will be applied to the popper
      */
     Popper.prototype._getOffsets = function(popper, trigger, placement) {
-        var container = getOffsetParent(trigger);
         placement = placement.split('-')[0];
+        var popperOffsets = {};
+
+        var container = getOffsetParent(trigger);
+
+        // Decide if the popper will be fixed
+        // If the trigger is inside a fixed context, the popper will be fixed as well to allow them to scroll together
+        var isParentFixed = isFixed(trigger, container);
+        popperOffsets.position = isParentFixed ? 'fixed' : 'absolute';
+
 
         //
         // Get trigger position
         //
-        var triggerOffsets = getOffsetRect(trigger, true);
+        var triggerOffsets = getOffsetRectRelativeToCustomParent(trigger, getOffsetParent(popper), isParentFixed);
 
         //
         // Get popper sizes
@@ -374,7 +379,6 @@
         //
         // Compute offsets of popper
         //
-        var popperOffsets = {};
 
         // depending by the popper placement we have to compute its offsets slightly differently
         if (['right', 'left'].indexOf(placement) !== -1) {
@@ -397,10 +401,6 @@
         popperOffsets.width   = popperRect.width;
         popperOffsets.height  = popperRect.height;
 
-        // Decide if the popper will be fixed
-        // If the trigger is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-        var isParentFixed = isFixed(trigger, container);
-        popperOffsets.position = isParentFixed ? 'fixed' : 'absolute';
 
         return {
             popper: popperOffsets,
@@ -745,8 +745,8 @@
 
             // using Math.floor because the trigger offsets may contain decimals we are not going to consider here
             if (
-                a && Math.floor(data.offsets.trigger[placement]) > popperOffsets[placementOpposite] ||
-                !a && Math.floor(data.offsets.trigger[placement]) < popperOffsets[placementOpposite]
+                a && Math.floor(data.offsets.trigger[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
+                !a && Math.floor(data.offsets.trigger[placement]) < Math.floor(popperOffsets[placementOpposite])
             ) {
                 // we'll use this boolean to detect any flip loop
                 data.flipped = true;
@@ -977,7 +977,7 @@
      */
     function getOffsetParent(element) {
         // NOTE: 1 DOM access here
-        return element.offsetParent || root.document.body;
+        return element.offsetParent === root.document.body || !element.offsetParent ? root.document.documentElement : element.offsetParent;
     }
 
     /**
@@ -1063,35 +1063,73 @@
     /**
      * Get the position of the given element, relative to its offset parent
      * @function
-     * @access private
+     * @ignore
      * @param {Element} element
      * @return {Object} position - Coordinates of the element and its `scrollTop`
      */
-    function getOffsetRect(element, absolute) {
-        var scrollParent = getScrollParent(element);
-        var offsetParent = getOffsetParent(element);
-
-        var scrollTop = 0;
-        var scrollLeft = 0;
-        if ((offsetParent === scrollParent || offsetParent.contains(scrollParent)) && absolute) {
-            scrollTop = scrollParent.scrollTop;
-            scrollLeft = scrollParent.scrollLeft;
-        }
+    function getOffsetRect(element) {
         var elementRect = {
             width: element.offsetWidth,
             height: element.offsetHeight,
-            left: element.offsetLeft - scrollLeft,
-            top: element.offsetTop - scrollTop
+            left: element.offsetLeft,
+            top: element.offsetTop
         };
 
         elementRect.right = elementRect.left + elementRect.width;
         elementRect.bottom = elementRect.top + elementRect.height;
 
-        elementRect.scrollTop = scrollTop;
-        elementRect.scrollLeft = scrollLeft;
-
         // position
         return elementRect;
+    }
+
+    /**
+     * Get bounding client rect of given element
+     * @function
+     * @ignore
+     * @param {HTMLElement} element
+     * @return {Object} client rect
+     */
+    function getBoundingClientRect(element) {
+        var rect = element.getBoundingClientRect();
+        return {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.right - rect.left,
+            height: rect.bottom - rect.top
+        };
+    }
+
+    /**
+     * Given an element and one of its parents, return the offset
+     * @function
+     * @ignore
+     * @param {HTMLElement} element
+     * @param {HTMLElement} parent
+     * @return {Object} rect
+     */
+    function getOffsetRectRelativeToCustomParent(element, parent, fixed) {
+        var elementRect = getBoundingClientRect(element);
+        var parentRect = getBoundingClientRect(parent);
+
+        if (fixed) {
+            var scrollParent = getScrollParent(parent);
+            parentRect.top += scrollParent.scrollTop;
+            parentRect.bottom += scrollParent.scrollTop;
+            parentRect.left += scrollParent.scrollLeft;
+            parentRect.right += scrollParent.scrollLeft;
+        }
+
+        var rect = {
+            top: elementRect.top - parentRect.top ,
+            left: elementRect.left - parentRect.left ,
+            bottom: (elementRect.top - parentRect.top) + elementRect.height,
+            right: (elementRect.left - parentRect.left) + elementRect.width,
+            width: elementRect.width,
+            height: elementRect.height
+        };
+        return rect;
     }
 
     /**
