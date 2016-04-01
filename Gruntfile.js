@@ -66,7 +66,10 @@ module.exports = function(grunt) {
                     'tests/styles/*.css'
                 ]
             },
-            unit: {}
+            unit: {},
+            local: {
+                singleRun: false,
+            }
         },
         jshint: {
             default: ['src/**/*.js']
@@ -105,6 +108,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('doc', ['jsdoc2md']);
     grunt.registerTask('dist', [ 'copy:dist', 'usebanner:dist', 'uglify:dist']);
-    grunt.registerTask('test', ['jshint', 'karma:unit']);
+    grunt.registerTask('test', ['jshint', 'karma:local']);
     grunt.registerTask('test-ci', ['jshint', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
 };
