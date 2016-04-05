@@ -11,7 +11,7 @@
     "es6",
     "globals"
   ],
-  "homepage": "",
+  "homepage": "https://fezvrasta.github.io/popper.js",
   "ignore": [
     "**/.*",
     "node_modules",

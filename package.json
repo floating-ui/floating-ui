@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "",
   "main": "src/popper.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/FezVrasta/popper.js.git"
+    "url": "git+https://github.com/FezVrasta/popper.js.git"
   },
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "contributors": [
