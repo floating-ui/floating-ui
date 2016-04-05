@@ -10,7 +10,7 @@ $baseurl: '{{ site.baseurl }}/images';
 @import 'font-awesome.min.css';
 @import 'popper.css';
 @import 'code.css';
-@import url('http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic');
+@import url('//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic');
 
 /*
 	Spectral by HTML5 UP
@@ -1282,24 +1282,24 @@ $baseurl: '{{ site.baseurl }}/images';
 			@include wrapper(accent7);
 		}
 
-        &.sponsor {
-            display: block;
-            height: 100px;
+		&.sponsor {
+			display: block;
+			height: 100px;
 			padding: 0;
-            background-color: #EE5A4C;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+			background-color: #EE5A4C;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			text-decoration: none;
 			border: 0;
 			&:hover {
 				text-decoration: none;
 			}
-            img {
-                width: 130px;
-                z-index: 1;
-            }
-        }
+			img {
+				width: 130px;
+				z-index: 1;
+			}
+		}
 
 		@include breakpoint(medium) {
 			@include padding(4em, 3em);
@@ -1902,8 +1902,8 @@ $baseurl: '{{ site.baseurl }}/images';
 }
 
 #carbonads span {
-    display: block;
-    overflow: hidden;
+	display: block;
+	overflow: hidden;
 }
 
 #carbonads a {
@@ -1911,26 +1911,26 @@ $baseurl: '{{ site.baseurl }}/images';
 }
 
 .carbon-text {
-    display: block;
-    float: left;
-    max-width: 61%;
-    text-align: left;
+	display: block;
+	float: left;
+	max-width: 61%;
+	text-align: left;
 }
 
 .carbon-img {
-    float: left;
-    margin-right: 1em;
+	float: left;
+	margin-right: 1em;
 }
 
 .carbon-poweredby {
-    display: block;
-    float: right;
-    margin-top: -1.9em;
-    font-size: .8em;
+	display: block;
+	float: right;
+	margin-top: -1.9em;
+	font-size: .8em;
 }
 
 .page-layout #carbonads {
-    float: right;
+	float: right;
 }
 
 @include breakpoint(medium) {
@@ -1939,10 +1939,10 @@ $baseurl: '{{ site.baseurl }}/images';
 	}
 }
 @include breakpoint(small) {
-    #carbonads {
-        width: 314px;
-    }
-    #carbonads a {
-        max-width: 52%;
-    }
+	#carbonads {
+		width: 314px;
+	}
+	#carbonads a {
+		max-width: 52%;
+	}
 }
