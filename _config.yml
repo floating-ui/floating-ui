@@ -11,7 +11,7 @@ owner: Federico Zivolo & contributors # or company name
 first_published: 2016 # if migrating another site, the year of your first publish
 email: federico.zivolo@gmail.com
 baseurl: "/popper.js" # the subpath of your site, e.g. /blog
-url: "http://fezvrasta.github.io/popper.js/" # the base hostname & protocol for your site
+url: "http://fezvrasta.github.io" # the base hostname & protocol for your site
 github: https://github.com/FezVrasta/popper.js
 social:
   twitter: https://twitter.com/FezVr4sta
