@@ -1,6 +1,6 @@
-## v0.2.5-dev
+## v0.2.5
 
-- round top and left coordinates to prevent blur effect;
+- 77677f0: round top and left coordinates to prevent blur effect;
 
 ## v0.2.4
 

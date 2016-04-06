@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.2.4
+ * @version 0.2.5
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -230,18 +230,22 @@
             position: data.offsets.popper.position
         };
 
+        // round top and left to avoid blurry text
+        var left = Math.round(data.offsets.popper.left);
+        var top = Math.round(data.offsets.popper.top);
+
         // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
         // we automatically use the supported prefixed version if needed
         var prefixedProperty;
         if (this._options.gpuAcceleration && (prefixedProperty = getSupportedPropertyName('transform'))) {
-            styles[prefixedProperty] = 'translate3d(' + data.offsets.popper.left + 'px, ' + data.offsets.popper.top + 'px, 0)';
+            styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
             styles.top = 0;
             styles.left = 0;
         }
         // othwerise, we use the standard `left` and `top` properties
         else {
-            styles.left = data.offsets.popper.left;
-            styles.top = data.offsets.popper.top;
+            styles.left =left;
+            styles.top = top;
         }
 
         setStyle(this._popper, styles);
