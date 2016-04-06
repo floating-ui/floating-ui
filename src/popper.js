@@ -184,6 +184,8 @@
         }
     }
 
+    Popper.prototype.state = {};
+
     //
     // Methods
     //
@@ -364,6 +366,7 @@
         // If the trigger is inside a fixed context, the popper will be fixed as well to allow them to scroll together
         var isParentFixed = isFixed(trigger, container);
         popperOffsets.position = isParentFixed ? 'fixed' : 'absolute';
+        this.state.position = popperOffsets.position;
 
 
         //
@@ -420,7 +423,8 @@
         // NOTE: 1 DOM access here
         _updateBound = this.update.bind(this);
         root.addEventListener('resize', _updateBound);
-        if (this._options.boundariesElement !== 'window') {
+        // if the boundariesElement is window or the popper position is fixed, we don't need to listen for the scroll event
+        if (this._options.boundariesElement !== 'window' && this.state.position !== 'fixed') {
             var target = getScrollParent(this._trigger);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
@@ -439,7 +443,7 @@
     Popper.prototype._removeEventListeners = function() {
         // NOTE: 1 DOM access here
         root.removeEventListener('resize', _updateBound);
-        if (this._options.boundariesElement !== 'window') {
+        if (this._options.boundariesElement !== 'window' && this.state.position !== 'fixed') {
             var target = getScrollParent(this._trigger);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
