@@ -16,31 +16,17 @@
 
 <script>
 
-function attachPopper(evt) {
-    var position = evt.target.value;
-    
-    //Some changes in the code example
-    document.getElementById('example11Title').textContent = "You placed the popper, you wrote this code:";
-    document.getElementById('example11code').className = "";
-    
-    //Position of the popper
-    document.getElementById('example11currentPosition').textContent = position;
-    
-    //Position for the code example
-    document.getElementById('example11code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
-
-    var popper = new Popper(example11reference1, example11popper1, {
-        placement: position,
-        boundariesElement: example11reference1.parentNode
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function(){
-    $('#example11positionSelector').on('change', attachPopper);
-
     var index = 0;
 
-    setInterval(function() {
+    $('#example11positionSelector').on('change', attachPopper);
+    
+    // Stop autoflip popper when the user click on the dropdown
+    $('#example11positionSelector').on('click', function() {
+        clearInterval(autoPopperFunctionTimer);
+    });
+
+    var autoPopperFunctionTimer = setInterval(function() {
         if (index === 0) {
             $('#example11positionSelector').val('top');
             $('#example11positionSelector').trigger('change');
@@ -58,6 +44,26 @@ document.addEventListener('DOMContentLoaded', function(){
             $('#example11positionSelector').trigger('change');
             index = 0;
         }
-    }, 3000);
+    }, 4000);
+
+    function attachPopper(evt) {
+        var position = evt.target.value;
+
+        //Some changes in the code example
+        document.getElementById('example11Title').textContent = "You placed the popper, you wrote this code:";
+        document.getElementById('example11code').className = "";
+
+        //Position of the popper
+        document.getElementById('example11currentPosition').textContent = position;
+
+        //Position for the code example
+        document.getElementById('example11code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
+
+        var popper = new Popper(example11reference1, example11popper1, {
+            placement: position,
+            boundariesElement: example11reference1.parentNode
+        });
+    }
 });
+
 </script>
