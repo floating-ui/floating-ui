@@ -112,7 +112,7 @@ describe('Popper.js', function() {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
-        relative.style.height = '200vh';
+        relative.style.height = '300vh';
         jasmineWrapper.appendChild(relative);
         document.body.scrollTop = 800;
 
@@ -231,6 +231,17 @@ describe('Popper.js', function() {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
+            done();
+        });
+    });
+
+    it('creates a popper when content is undefined', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference, undefined, function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('');
+            document.body.removeChild(instance._popper);
             done();
         });
     });
