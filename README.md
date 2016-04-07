@@ -53,7 +53,7 @@ var thePopper = new Popper(
     {
         // popper options here
     }
-});
+);
 ```
 
 ### "Advanced" usage
@@ -68,7 +68,7 @@ var anotherPopper = new Popper(
     {
         // popper options here
     }
-});
+);
 ```
 
 If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
