@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.2.5
+ * @version 0.2.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -139,6 +139,7 @@
      */
     function Popper(trigger, popper, options/*, callback*/) {
         this._trigger = trigger;
+        this.state = {};
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
         // generate a default popper if is not defined
@@ -184,7 +185,6 @@
         }
     }
 
-    Popper.prototype.state = {};
 
     //
     // Methods

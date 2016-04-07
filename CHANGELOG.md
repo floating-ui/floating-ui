@@ -1,3 +1,7 @@
+## v0.2.6
+
+- 6732353: removed shared state;
+
 ## v0.2.5
 
 - 77677f0: round top and left coordinates to prevent blur effect;
