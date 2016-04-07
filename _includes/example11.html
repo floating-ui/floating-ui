@@ -1,7 +1,8 @@
 <div class="rel" id="example11reference1">
-    <p class="bold">Choose</p>
-    <p class="thin">where put your popper</p>
+    <p class="bold">Hey!</p>
+    <p class="thin">Choose where put your popper!</p>
     <select id="example11positionSelector">
+        <option selected="true" disabled="disabled">Positions</option> 
         <option value="top">Top</option>
         <option value="right">Right</option>
         <option value="bottom">Bottom</option>
@@ -10,7 +11,7 @@
 </div>
 
 <div class="popper" width="200" id="example11popper1">
-    <p class="bold">Popper on <b id="example11currentPosition"></b></p>
+    <p class="bold">Popper on <b id="example11currentPosition" class="currentPosition"></b></p>
     <div class="popper__arrow" x-arrow></div>
 </div>
 
@@ -20,7 +21,7 @@ document.getElementById('example11positionSelector').addEventListener('change', 
     
 function attachPopper(evt) {
     var position = evt.target.value;
-    document.getElementById('example11currentPosition').textContent = position;
+    document.getElementById('example11currentPosition').textContent = position.toUpperCase();;
 
     var popper = new Popper(example11reference1, example11popper1, {
         placement: position,

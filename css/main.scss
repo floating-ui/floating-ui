@@ -1946,3 +1946,12 @@ $baseurl: '{{ site.baseurl }}/images';
 		max-width: 52%;
 	}
 }
+b.currentPosition {
+	color: red;
+	font-weight: 900;
+}
+
+#example11positionSelector {
+	margin-top: 20px;
+}
+
