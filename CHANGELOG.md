@@ -1,3 +1,7 @@
+## v0.3.0-dev
+
+- 5521b0d: added support for integration with React.js and Ember.js
+
 ## v0.2.6
 
 - 6732353: removed shared state;
