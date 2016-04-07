@@ -100,7 +100,7 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', relative);
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper, function(pop) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             expect(popper.getBoundingClientRect().top).toBeApprox(63);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             pop.destroy();
@@ -120,7 +120,7 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper, function(pop) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             expect(popper.getBoundingClientRect().top).toBeApprox(-800 + 263);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             pop.destroy();
@@ -152,7 +152,7 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper, function(pop) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
@@ -180,7 +180,7 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new TestPopper(ref, popper, function(pop) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
@@ -195,7 +195,7 @@ describe('Popper.js', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
-        new TestPopper(reference, popper, function(pop) {
+        new TestPopper(reference, popper).onCreate(function(pop) {
             pop.destroy();
             expect(popper.style.top).toBe('');
             done();
@@ -205,7 +205,7 @@ describe('Popper.js', function() {
     it('creates a popper using the default configuration', function(done) {
         var reference = appendNewRef(1);
 
-        new TestPopper(reference, function(instance) {
+        new TestPopper(reference).onCreate(function(instance) {
             expect(document.querySelectorAll('.popper').length).toBe(1);
             document.body.removeChild(instance._popper);
             done();
@@ -217,9 +217,20 @@ describe('Popper.js', function() {
 
         new TestPopper(reference, {
             content: 'something'
-        }, function(instance) {
+        }).onCreate(function(instance) {
             expect(instance._popper.innerText).toBe('something');
             document.body.removeChild(instance._popper);
+            done();
+        });
+    });
+
+    it('creates a popper and sets an onUpdate callback', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference, {content: 'react'}, {
+            modifiersIgnored: ['applyStyle']
+        }).onUpdate(function(data) {
+            expect(data.offsets.popper.top).toBeApprox(46);
             done();
         });
     });
