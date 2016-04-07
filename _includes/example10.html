@@ -1,44 +1,69 @@
-<div class="rel" id="example1reference1">
-    <p class="bold">Pop</p>
-    <p class="thin">on 4 sides</p>
+<div class="rel" id="example10reference1">
+    <p class="bold">Hey!</p>
+    <p class="thin">Choose where put your popper!</p>
+    <select id="example10positionSelector">
+        <option value="top">Top</option>
+        <option value="right">Right</option>
+        <option value="bottom">Bottom</option>
+        <option value="left">Left</option>
+    </select>
 </div>
 
-<div class="popper" width="200" id="example1popper1">
-    <p class="bold">Popper on top</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example1popper2">
-    <p class="bold">Popper on bottom</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example1popper3">
-    <p class="bold">Popper on left</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example1popper4">
-    <p class="bold">Popper on right</p>
+<div class="popper" width="200" id="example10popper1">
+    <p class="bold">Popper on <b id="example10currentPosition" class="currentPosition"></b></p>
     <div class="popper__arrow" x-arrow></div>
 </div>
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function(){
-    setTimeout(function() {
-        var popperOnTop = new Popper(example1reference1, example1popper1, {
-            placement: 'top',
-            boundariesElement: example1reference1.parentNode
+    var index = 0;
+
+    $('#example10positionSelector').on('change', attachPopper);
+    
+    // Stop autoflip popper when the user click on the dropdown
+    $('#example10positionSelector').on('click', function() {
+        clearInterval(autoPopperFunctionTimer);
+    });
+
+    var autoPopperFunctionTimer = setInterval(function() {
+        if (index === 0) {
+            $('#example10positionSelector').val('top');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else if (index === 1) {
+            $('#example10positionSelector').val('right');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else if (index === 2) {
+            $('#example10positionSelector').val('bottom');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else {
+            $('#example10positionSelector').val('left');
+            $('#example10positionSelector').trigger('change');
+            index = 0;
+        }
+    }, 4000);
+
+    function attachPopper(evt) {
+        var position = evt.target.value;
+
+        //Some changes in the code example
+        document.getElementById('example10Title').textContent = "Placing poppers around elements is just that easy!";
+        document.getElementById('example10code').className = "";
+
+        //Position of the popper
+        document.getElementById('example10currentPosition').textContent = position;
+
+        //Position for the code example
+        document.getElementById('example10code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
+
+        var popper = new Popper(example10reference1, example10popper1, {
+            placement: position,
+            boundariesElement: example10reference1.parentNode
         });
-        var popperOnBottom = new Popper(example1reference1, example1popper2, {
-            placement: 'bottom',
-            boundariesElement: example1reference1.parentNode
-        });
-        var popperOnLeft = new Popper(example1reference1, example1popper3, {
-            placement: 'left',
-            boundariesElement: example1reference1.parentNode
-        });
-        var popperOnRight = new Popper(example1reference1, example1popper4, {
-            placement: 'right',
-            boundariesElement: example1reference1.parentNode
-        });
-    }, 1000);
+    }
 });
+
 </script>
