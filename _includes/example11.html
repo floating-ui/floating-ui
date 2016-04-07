@@ -2,7 +2,6 @@
     <p class="bold">Hey!</p>
     <p class="thin">Choose where put your popper!</p>
     <select id="example11positionSelector">
-        <option selected="true" disabled="disabled">Positions</option> 
         <option value="top">Top</option>
         <option value="right">Right</option>
         <option value="bottom">Bottom</option>
@@ -16,9 +15,7 @@
 </div>
 
 <script>
-    
-document.getElementById('example11positionSelector').addEventListener('change', attachPopper);
-    
+
 function attachPopper(evt) {
     var position = evt.target.value;
     
@@ -37,4 +34,30 @@ function attachPopper(evt) {
         boundariesElement: example11reference1.parentNode
     });
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+    $('#example11positionSelector').on('change', attachPopper);
+
+    var index = 0;
+
+    setInterval(function() {
+        if (index === 0) {
+            $('#example11positionSelector').val('top');
+            $('#example11positionSelector').trigger('change');
+            index++;
+        } else if (index === 1) {
+            $('#example11positionSelector').val('right');
+            $('#example11positionSelector').trigger('change');
+            index++;
+        } else if (index === 2) {
+            $('#example11positionSelector').val('bottom');
+            $('#example11positionSelector').trigger('change');
+            index++;
+        } else {
+            $('#example11positionSelector').val('left');
+            $('#example11positionSelector').trigger('change');
+            index = 0;
+        }
+    }, 3000);
+});
 </script>
