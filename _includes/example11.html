@@ -1,0 +1,41 @@
+<div class="rel" id="example11reference1">
+    <p class="bold">Choose</p>
+    <p class="thin">where put your popper</p>
+    <select id="example11positionSelector">
+        <option value="top">Top</option>
+        <option value="right">Right</option>
+        <option value="bottom">Bottom</option>
+        <option value="left">Left</option>
+    </select>
+</div>
+
+<div class="popper" width="200" id="example11popper1">
+    <p class="bold">Popper on top</p>
+    <div class="popper__arrow" x-arrow></div>
+</div>
+<div class="popper" width="200" id="example11popper2">
+    <p class="bold">Popper on bottom</p>
+    <div class="popper__arrow" x-arrow></div>
+</div>
+<div class="popper" width="200" id="example11popper3">
+    <p class="bold">Popper on left</p>
+    <div class="popper__arrow" x-arrow></div>
+</div>
+<div class="popper" width="200" id="example11popper4">
+    <p class="bold">Popper on right</p>
+    <div class="popper__arrow" x-arrow></div>
+</div>
+
+<script>
+    
+document.getElementById('example11positionSelector').addEventListener('change', attachPopper);
+    
+function attachPopper(evt) {
+    var position = evt.target.value;
+
+    var popper = new Popper(example11reference1, example11popper1, {
+        placement: position,
+        boundariesElement: example11reference1.parentNode
+    });
+}
+</script>
