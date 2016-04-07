@@ -10,19 +10,7 @@
 </div>
 
 <div class="popper" width="200" id="example11popper1">
-    <p class="bold">Popper on top</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example11popper2">
-    <p class="bold">Popper on bottom</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example11popper3">
-    <p class="bold">Popper on left</p>
-    <div class="popper__arrow" x-arrow></div>
-</div>
-<div class="popper" width="200" id="example11popper4">
-    <p class="bold">Popper on right</p>
+    <p class="bold">Popper on <b id="example11currentPosition"></b></p>
     <div class="popper__arrow" x-arrow></div>
 </div>
 
@@ -32,6 +20,7 @@ document.getElementById('example11positionSelector').addEventListener('change', 
     
 function attachPopper(evt) {
     var position = evt.target.value;
+    document.getElementById('example11currentPosition').textContent = position;
 
     var popper = new Popper(example11reference1, example11popper1, {
         placement: position,
