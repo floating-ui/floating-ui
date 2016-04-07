@@ -22,11 +22,15 @@ document.getElementById('example11positionSelector').addEventListener('change', 
 function attachPopper(evt) {
     var position = evt.target.value;
     
+    //Some changes in the code example
+    document.getElementById('example11Title').textContent = "You placed the popper, you wrote this code:";
+    document.getElementById('example11code').className = "";
+    
     //Position of the popper
     document.getElementById('example11currentPosition').textContent = position.toUpperCase();
     
     //Position for the code example
-    document.getElementById('examle11code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
+    document.getElementById('example11code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
 
     var popper = new Popper(example11reference1, example11popper1, {
         placement: position,
