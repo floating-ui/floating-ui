@@ -1177,13 +1177,13 @@
                     throw new TypeError('Cannot convert first argument to object');
                 }
 
-                var to = target;
+                var to = Object(target);
                 for (var i = 1; i < arguments.length; i++) {
                     var nextSource = arguments[i];
                     if (nextSource === undefined || nextSource === null) {
                         continue;
                     }
-                    nextSource = nextSource;
+                    nextSource = Object(nextSource);
 
                     var keysArray = Object.keys(nextSource);
                     for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
