@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "",
   "main": "src/popper.js",
   "scripts": {
