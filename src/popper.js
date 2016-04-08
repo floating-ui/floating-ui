@@ -80,7 +80,7 @@
     /**
      * Create a new Popper.js instance
      * @constructor Popper
-     * @param {HTMLElement} triger
+     * @param {HTMLElement} trigger
      * @param {HTMLElement|Object} popper
      *      The HTML element used as popper, or a configuration used to generate the popper.
      * @param {String} [popper.tagName='div'] The tag name of the generated popper.
