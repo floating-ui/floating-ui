@@ -1,6 +1,6 @@
 ## v0.3.0
 
-- 5521b0d: added support for integration with React.js and Ember.js.
+- 5521b0d: added support for integration with React.js and Ember.js.  
     Now popper.js will allow you to disable DOM modifications and exposes an `onUpdate` callback you can use to export the
     popper coordinates in your framework.
 
