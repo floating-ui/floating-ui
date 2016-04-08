@@ -72,7 +72,7 @@
         arrowElement: '[x-arrow]',
 
         // list of functions used to modify the offsets before they are applied to the popper
-        modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip'],
+        modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle'],
 
         modifiersIgnored: [],
     };
@@ -124,7 +124,7 @@
      *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
      *      then, if even in its new placement, the popper is overlapping its trigger, it will be moved to top)
      *
-     * @param {Array} [options.modifiers=[ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip']]
+     * @param {Array} [options.modifiers=[ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle']]
      *      List of functions used to modify the data before they are applied to the popper, add your custom functions
      *      to this array to edit the offsets and placement.
      *      The function should reflect the @params and @returns of preventOverflow
@@ -132,21 +132,16 @@
      * @param {Array} [options.modifiersIgnored=[]]
      *      Put here any built-in modifier name you want to exclude from the modifiers list
      *      The function should reflect the @params and @returns of preventOverflow
-     *
-     * @param {Function}
-     *      If the last argument of Popper.js is a function, it will be executed after the initialization of the popper
-     *      it's scope will be window, the first argument will be the Popper.js instance.
      */
-    function Popper(trigger, popper, options/*, callback*/) {
+    function Popper(trigger, popper, options) {
         this._trigger = trigger;
         this.state = {};
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
         // generate a default popper if is not defined
         var isNotDefined = popper === undefined || popper === null;
-        var isFunction = typeof popper === 'function';
         var isConfig = popper && popper.constructor.name === 'Object';
-        if (  isNotDefined || isFunction || isConfig) {
+        if (  isNotDefined || isConfig) {
             this._popper = this.parse(isConfig ? popper : {});
         }
         // otherwise, use the given HTMLElement as popper
@@ -179,10 +174,6 @@
 
         // setup event listeners, they will take care of update the position in specific situations
         this._setupEventListeners();
-
-        if (typeof arguments[arguments.length -1] === 'function') {
-            arguments[arguments.length -1].call(root, this);
-        }
     }
 
 
@@ -224,35 +215,32 @@
 
         data = this.runModifiers(data, this._options.modifiers);
 
-        // apply the final offsets to the popper
-        // NOTE: 1 DOM access here
-        var styles = {
-            position: data.offsets.popper.position
-        };
-
-        // round top and left to avoid blurry text
-        var left = Math.round(data.offsets.popper.left);
-        var top = Math.round(data.offsets.popper.top);
-
-        // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
-        // we automatically use the supported prefixed version if needed
-        var prefixedProperty;
-        if (this._options.gpuAcceleration && (prefixedProperty = getSupportedPropertyName('transform'))) {
-            styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
-            styles.top = 0;
-            styles.left = 0;
-        }
-        // othwerise, we use the standard `left` and `top` properties
-        else {
-            styles.left =left;
-            styles.top = top;
+        if (typeof this.state.updateCallback === 'function') {
+            this.state.updateCallback(data);
         }
 
-        setStyle(this._popper, styles);
+    };
 
-        // set an attribute which will be useful to style the tooltip (use it to properly position its arrow)
-        // NOTE: 1 DOM access here
-        this._popper.setAttribute('x-placement', data.placement);
+    /**
+     * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
+     * @method
+     * @memberof Popper
+     * @param {Function} callback
+     */
+    Popper.prototype.onCreate = function(callback) {
+        // the createCallbacks return as first argument the popper instance
+        callback(this);
+    };
+
+    /**
+     * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
+     * used to style popper and its arrow.
+     * @method
+     * @memberof Popper
+     * @param {Function} callback
+     */
+    Popper.prototype.onUpdate = function(callback) {
+        this.state.updateCallback = callback;
     };
 
     /**
@@ -564,6 +552,52 @@
      * @type {Object}
      */
     Popper.prototype.modifiers = {};
+
+    /**
+     * Apply the computed styles to the popper element
+     * @method
+     * @memberof Popper.modifiers
+     * @argument {Object} data - The data object generated by `update` method
+     * @returns {Object} The same data object
+     */
+    Popper.prototype.modifiers.applyStyle = function(data) {
+        // apply the final offsets to the popper
+        // NOTE: 1 DOM access here
+        var styles = {
+            position: data.offsets.popper.position
+        };
+
+        // round top and left to avoid blurry text
+        var left = Math.round(data.offsets.popper.left);
+        var top = Math.round(data.offsets.popper.top);
+
+        // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
+        // we automatically use the supported prefixed version if needed
+        var prefixedProperty;
+        if (this._options.gpuAcceleration && (prefixedProperty = getSupportedPropertyName('transform'))) {
+            styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
+            styles.top = 0;
+            styles.left = 0;
+        }
+        // othwerise, we use the standard `left` and `top` properties
+        else {
+            styles.left =left;
+            styles.top = top;
+        }
+
+        setStyle(this._popper, styles);
+
+        // set an attribute which will be useful to style the tooltip (use it to properly position its arrow)
+        // NOTE: 1 DOM access here
+        this._popper.setAttribute('x-placement', data.placement);
+
+        // if the arrow modifier is required and the arrow style has been computed, apply the arrow style
+        if (this.isModifierRequired(this.modifiers.applyStyle, this.modifiers.arrow) && data.offsets.arrow) {
+            setStyle(data.arrowElement, data.offsets.arrow);
+        }
+
+        return data;
+    };
 
     /**
      * Modifier used to shift the popper on the start or end of its reference element side
@@ -889,8 +923,8 @@
             arrowStyle.left  = left;
             arrowStyle.top = ''; // make sure to remove any old style from the arrow
         }
-
-        setStyle(arrow, arrowStyle);
+        data.offsets.arrow = arrowStyle;
+        data.arrowElement = arrow;
 
         return data;
     };

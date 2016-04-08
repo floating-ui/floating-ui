@@ -8,18 +8,18 @@
 Popper.js is a library used to create **poppers** in web applications.
 
 ## Wut? Poppers?
-A popper is an element on the screen which "pops out" from the natural flow of your application.  
+A popper is an element on the screen which "pops out" from the natural flow of your application.
 Common examples of poppers are tooltips and popovers.
 
 ## So, yet another tooltip library?
-Well, basically, **no**.  
-Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
-It supports a **plugin system** you can use to add particular behaviors to your poppers.  
+Well, basically, **no**.
+Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.
+It supports a **plugin system** you can use to add particular behaviors to your poppers.
 It's **AMD** and **CommonJS** compatible and it's well documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
 
 
 ## The Library
-Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).  
+Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).
 Additionally, it provides an easy way to generate your popper element if you don't want to use one already in your DOM.
 
 ### Installation
@@ -71,9 +71,33 @@ var anotherPopper = new Popper(
 );
 ```
 
+### Callbacks
+```js
+var reference = document.querySelector('.my-button');
+var popper = document.querySelector('.my-popper');
+var anotherPopper = new Popper(reference, popper).onCreate(instance) {
+  // instance is Popper.js instance
+}).onUpdate(function(data) {
+  // data is an object containing all the informations computed by Popper.js and used to style the popper and its arrow
+});
+```
+
+### React.js and Ember.js integration
+If you prefer to let your framework apply the styles to your DOM objects, you can follow an approach like the one below:
+```js
+var reference = document.querySelector('.my-button');
+var popper = document.querySelector('.my-popper');
+var anotherPopper = new Popper(reference, popper, {
+    modifiersIgnored: ['applyStyle'] // prevent Popper.js from applying styles to your DOM
+}).onUpdate(function(data) {
+  // export data in your framework and use its content to apply the style to your popper
+});
+```
+
+
 If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
 
-Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can already do right now!
+Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do right now!
 
 
 ## Notes
