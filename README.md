@@ -1,11 +1,11 @@
 # Popper.js
+Popper.js is a library used to create **poppers** in web applications.
 
 [![Build Status](https://travis-ci.org/FezVrasta/popper.js.svg?branch=master)](https://travis-ci.org/FezVrasta/popper.js)
 [![npm version](https://badge.fury.io/js/popper.js.svg)](https://badge.fury.io/js/popper.js)
 [![Join the chat!](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FezVrasta/popper.js)
 
-<img src="https://github.com/FezVrasta/popper.js/blob/master/popperjs.png" align="right" width=250>
-Popper.js is a library used to create **poppers** in web applications.
+<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
 
 ## Wut? Poppers?
 A popper is an element on the screen which "pops out" from the natural flow of your application.
