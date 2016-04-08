@@ -4,7 +4,7 @@
 **Kind**: global class  
 
 * [Popper](#Popper)
-    * [new Popper(triger, popper, options)](#new_Popper_new)
+    * [new Popper(trigger, popper, options)](#new_Popper_new)
     * _instance_
         * [.destroy()](#Popper+destroy)
         * [.update()](#Popper+update)
@@ -25,13 +25,13 @@
 
 <a name="new_Popper_new"></a>
 
-### new Popper(triger, popper, options)
+### new Popper(trigger, popper, options)
 Create a new Popper.js instance
 
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| triger | <code>HTMLElement</code> |  |  |
+| trigger | <code>HTMLElement</code> |  |  |
 | popper | <code>HTMLElement</code> &#124; <code>Object</code> |  | The HTML element used as popper, or a configuration used to generate the popper. |
 | [popper.tagName] | <code>String</code> | <code>&#x27;div&#x27;</code> | The tag name of the generated popper. |
 | [popper.classNames] | <code>Array</code> | <code>[&#x27;popper&#x27;]</code> | Array of classes to apply to the generated popper. |
