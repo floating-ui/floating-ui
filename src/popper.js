@@ -80,14 +80,14 @@
     /**
      * Create a new Popper.js instance
      * @constructor Popper
-     * @param {HTMLElement} trigger
+     * @param {HTMLElement} trigger - The reference element used to position the popper
      * @param {HTMLElement|Object} popper
      *      The HTML element used as popper, or a configuration used to generate the popper.
      * @param {String} [popper.tagName='div'] The tag name of the generated popper.
      * @param {Array} [popper.classNames=['popper']] Array of classes to apply to the generated popper.
      * @param {Array} [popper.attributes] Array of attributes to apply, specify `attr:value` to assign a value to it.
      * @param {HTMLElement|String} [popper.parent=window.document.body] The parent element, given as HTMLElement or as query string.
-     * @param {String} [popper.content] The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.
+     * @param {String} [popper.content=''] The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.
      * @param {Boolean} [popper.allowHtml=false] If set to true, the `content` will be parsed as HTML.
      * @param {String} [popper.arrow.tagName='div'] Same as `popper.tagName` but for the arrow element.
      * @param {Array} [popper.arrow.classNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
@@ -247,6 +247,7 @@
      * Helper used to generate poppers from a configuration file
      * @method
      * @memberof Popper
+     * @returns {HTMLElement} popper
      */
     Popper.prototype.parse = function(config) {
         var defaultConfig = {
@@ -532,6 +533,7 @@
      * Helper used to know if the given modifier depends from another one.
      * @method
      * @memberof Popper
+     * @returns {Boolean}
      */
 
     Popper.prototype.isModifierRequired = function(requesting, requested) {

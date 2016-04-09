@@ -7,7 +7,7 @@ var version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-copy');
-grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
+grunt.loadNpmTasks('grunt-jsdoc');
 grunt.loadNpmTasks('grunt-karma');
 grunt.loadNpmTasks('grunt-contrib-jshint');
 grunt.loadNpmTasks('grunt-serve');
@@ -41,10 +41,14 @@ module.exports = function(grunt) {
                 dest: 'build/popper.js',
             }
         },
-        jsdoc2md: {
-            oneOutputFile: {
+        jsdoc : {
+            dist : {
                 src: 'src/*.js',
-                dest: 'doc/documentation.md'
+                dest: 'doc',
+                options: {
+                    template: 'doc/template',
+                    query: 'json'
+                }
             }
         },
         karma: {
@@ -106,7 +110,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('doc', ['jsdoc2md']);
+    grunt.registerTask('doc', ['jsdoc']);
     grunt.registerTask('dist', [ 'copy:dist', 'usebanner:dist', 'uglify:dist']);
     grunt.registerTask('test', ['jshint', 'karma:local']);
     grunt.registerTask('test-ci', ['jshint', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);

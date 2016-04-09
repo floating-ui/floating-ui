@@ -28,7 +28,7 @@
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-env": "^0.4.4",
-    "grunt-jsdoc-to-markdown": "^1.2.0",
+    "grunt-jsdoc": "^1.1.0",
     "grunt-karma": "^0.12.2",
     "grunt-serve": "^0.1.6",
     "grunt-shell-spawn": "^0.3.10",
