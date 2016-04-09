@@ -45,23 +45,25 @@ describe('Popper.js', function() {
         pop.destroy();
     });
 
-    it('inits a right popper', function() {
+    it('inits a right popper', function(done) {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
-        var pop = new TestPopper(reference, popper, {
+        new TestPopper(reference, popper, {
             placement: 'right'
+        }).onUpdate(function(data) {
+            var left    = popper.getBoundingClientRect().left;
+            var local   = 92;
+            var ci      = 110;
+            expect([local, ci]).toContain(left);
+
+            data.instance.destroy();
+            done();
         });
 
-        var left    = popper.getBoundingClientRect().left;
-        var local   = 92;
-        var ci      = 110;
-        expect([local, ci]).toContain(left);
-
-        pop.destroy();
     });
 
-    it('inits a popper inside a scrolling div, contained in a relative div', function() {
+    it('inits a popper inside a scrolling div, contained in a relative div', function(done) {
         var relative = document.createElement('div');
         relative.style.height = '800px';
         relative.style.width = '800px';
@@ -81,17 +83,17 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', superHigh);
         var popper = appendNewPopper(2, 'popper', superHigh);
 
-
         scrolling.scrollTop = 500;
-        var pop = new TestPopper(ref, popper);
-
-        var top     = popper.getBoundingClientRect().top;
-        expect(top).toBeApprox(-449);
-        pop.destroy();
+        new TestPopper(ref, popper).onUpdate(function(data) {
+            var top = popper.getBoundingClientRect().top;
+            expect(top).toBeApprox(-449);
+            data.instance.destroy();
+            done();
+        });
 
     });
 
-    it('inits a popper inside a body, with its reference element inside a relative div', function() {
+    it('inits a popper inside a body, with its reference element inside a relative div', function(done) {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
@@ -100,15 +102,16 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', relative);
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onCreate(function(pop) {
+        new TestPopper(ref, popper).onUpdate(function(data) {
             expect(popper.getBoundingClientRect().top).toBeApprox(63);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            pop.destroy();
+            data.instance.destroy();
+            done();
         });
 
     });
 
-    it('inits a popper inside a scrolled body, with its reference element inside a relative div', function() {
+    it('inits a popper inside a scrolled body, with its reference element inside a relative div', function(done) {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
@@ -120,14 +123,15 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onCreate(function(pop) {
+        new TestPopper(ref, popper).onUpdate(function(data) {
             expect(popper.getBoundingClientRect().top).toBeApprox(-800 + 263);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            pop.destroy();
+            data.instance.destroy();
+            done();
         });
     });
 
-    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function() {
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function(done) {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
@@ -152,13 +156,14 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onCreate(function(pop) {
+        new TestPopper(ref, popper).onUpdate(function(data) {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
             expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            pop.destroy();
+            data.instance.destroy();
+            done();
         });
     });
 
@@ -180,13 +185,10 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new TestPopper(ref, popper).onCreate(function(pop) {
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
+        new TestPopper(ref, popper).onUpdate(function(data) {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            pop.destroy();
+            //data.instance.destroy();
             done();
         });
     });

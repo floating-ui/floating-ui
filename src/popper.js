@@ -200,25 +200,34 @@
      * @memberof Popper
      */
     Popper.prototype.update = function() {
-        var data = {};
+        // to avoid useless computations we throttle the popper position refresh to 60fps
+        root.requestAnimationFrame(function() {
+            var now = root.performance.now();
+            if(now - this.state.lastFrame <= 16) {
+                // this update fired to early! drop it
+                return;
+            }
+            this.state.lastFrame = now;
 
-        // store placement inside the data object, modifiers will be able to edit `placement` if needed
-        // and refer to _originalPlacement to know the original value
-        data.placement = this._options.placement;
-        data._originalPlacement = this._options.placement;
+            var data = { instance: this };
 
-        // compute the popper and trigger offsets and put them inside data.offsets
-        data.offsets = this._getOffsets(this._popper, this._trigger, data.placement);
+            // store placement inside the data object, modifiers will be able to edit `placement` if needed
+            // and refer to _originalPlacement to know the original value
+            data.placement = this._options.placement;
+            data._originalPlacement = this._options.placement;
 
-        // get boundaries
-        data.boundaries = this._getBoundaries(data, this._options.boundariesPadding, this._options.boundariesElement);
+            // compute the popper and trigger offsets and put them inside data.offsets
+            data.offsets = this._getOffsets(this._popper, this._trigger, data.placement);
 
-        data = this.runModifiers(data, this._options.modifiers);
+            // get boundaries
+            data.boundaries = this._getBoundaries(data, this._options.boundariesPadding, this._options.boundariesElement);
 
-        if (typeof this.state.updateCallback === 'function') {
-            this.state.updateCallback(data);
-        }
+            data = this.runModifiers(data, this._options.modifiers);
 
+            if (typeof this.state.updateCallback === 'function') {
+                this.state.updateCallback(data);
+            }
+        }.bind(this));
     };
 
     /**
@@ -598,6 +607,7 @@
             setStyle(data.arrowElement, data.offsets.arrow);
         }
 
+        // return the data object to allow chaining of other modifiers
         return data;
     };
 
@@ -1233,6 +1243,34 @@
                 return to;
             }
         });
+    }
+
+    if (!root.requestAnimationFrame) {
+        /* jshint ignore:start */
+        var lastTime = 0;
+        var vendors = ['ms', 'moz', 'webkit', 'o'];
+        for(var x = 0; x < vendors.length && !root.requestAnimationFrame; ++x) {
+            root.requestAnimationFrame = root[vendors[x]+'RequestAnimationFrame'];
+            root.cancelAnimationFrame = root[vendors[x]+'CancelAnimationFrame'] || root[vendors[x]+'CancelRequestAnimationFrame'];
+        }
+
+        if (!root.requestAnimationFrame) {
+            root.requestAnimationFrame = function(callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = root.setTimeout(function() { callback(currTime + timeToCall); },
+                                           timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+            };
+        }
+
+        if (!root.cancelAnimationFrame) {
+            root.cancelAnimationFrame = function(id) {
+                clearTimeout(id);
+            };
+        }
+        /* jshint ignore:end */
     }
 
     return Popper;
