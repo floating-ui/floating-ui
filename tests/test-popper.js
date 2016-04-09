@@ -238,7 +238,7 @@ describe('Popper.js', function() {
     it('creates a popper when content is undefined', function(done) {
         var reference = appendNewRef(1);
 
-        new TestPopper(reference, undefined, function(instance) {
+        new TestPopper(reference).onCreate(function(instance) {
             expect(instance._popper).toBeDefined();
             expect(instance._popper.innerText).toBe('');
             document.body.removeChild(instance._popper);
