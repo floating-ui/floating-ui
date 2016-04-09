@@ -11,13 +11,14 @@ Feature requests are welcome!
 
 ## Setup
 
-In order to properly work on the development environment, run:
+Make sure to have `grunt-cli` and `bower` installed globally.
+
+Then run:
 
 ```js
 npm install
+bower install
 ```
-
-and make sure to have `grunt-cli` and `bower` installed globally.
 
 ## Developing
 
