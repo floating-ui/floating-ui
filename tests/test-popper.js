@@ -188,7 +188,7 @@ describe('Popper.js', function() {
         new TestPopper(ref, popper).onUpdate(function(data) {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            //data.instance.destroy();
+            data.instance.destroy();
             done();
         });
     });
