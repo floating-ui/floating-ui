@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.3.0
+ * @version 0.3.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -139,9 +139,9 @@
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
         // generate a default popper if is not defined
-        var isNotDefined = popper === undefined || popper === null;
+        var isNotDefined = typeof popper === 'undefined' || popper === null;
         var isConfig = popper && popper.constructor.name === 'Object';
-        if (  isNotDefined || isConfig) {
+        if (isNotDefined || isConfig) {
             this._popper = this.parse(isConfig ? popper : {});
         }
         // otherwise, use the given HTMLElement as popper
@@ -167,7 +167,9 @@
 
         // set the x-placement attribute before everything else because it could be used to add margins to the popper
         // margins needs to be calculated to get the correct popper offsets
-        this._popper.setAttribute('x-placement', this._options.placement);
+        if (this._options.modifiers.indexOf('applyStyle') !== -1) {
+            this._popper.setAttribute('x-placement', this._options.placement);
+        }
 
         // fire the first update to position the popper in the right place
         this.update();

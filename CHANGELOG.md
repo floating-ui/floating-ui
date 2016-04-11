@@ -1,3 +1,7 @@
+## v0.3.1
+
+- b0d77ff: don't apply x-placement attr if applyStyles modifier is disabled
+
 ## v0.3.0
 
 - 5521b0d: added support for integration with React.js and Ember.js.  
