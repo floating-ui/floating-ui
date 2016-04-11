@@ -167,7 +167,9 @@
 
         // set the x-placement attribute before everything else because it could be used to add margins to the popper
         // margins needs to be calculated to get the correct popper offsets
-        this._popper.setAttribute('x-placement', this._options.placement);
+        if (this._options.modifiers.indexOf('applyStyle') !== -1) {
+            this._popper.setAttribute('x-placement', this._options.placement);
+        }
 
         // fire the first update to position the popper in the right place
         this.update();
