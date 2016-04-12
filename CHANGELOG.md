@@ -1,3 +1,7 @@
+## v0.3.3
+
+- 1782c39: fixed #21, problem with position of poppers when inside `fixed` parent.
+
 ## v0.3.2
 
 - 592f4c7: revert iOS fix (it wasn't effective) - it should have fixed the repaint problems of fixed poppers during scroll  
