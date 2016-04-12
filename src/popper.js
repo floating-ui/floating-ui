@@ -481,11 +481,15 @@
             var scrollParent = getScrollParent(this._popper);
             var offsetParentRect = getOffsetRect(offsetParent);
 
+            // if the popper is fixed we don't have to substract scrolling from the boundaries
+            var scrollTop = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollTop;
+            var scrollLeft = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollLeft;
+
             boundaries = {
-                top: 0 - (offsetParentRect.top - scrollParent.scrollTop),
-                right: root.document.documentElement.clientWidth - offsetParentRect.left,
-                bottom: root.document.documentElement.clientHeight - (offsetParentRect.top - scrollParent.scrollTop),
-                left: 0 - offsetParentRect.left
+                top: 0 - (offsetParentRect.top - scrollTop),
+                right: root.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
+                bottom: root.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
+                left: 0 - (offsetParentRect.left - scrollLeft)
             };
         } else {
             if (getOffsetParent(this._popper) === boundariesElement) {

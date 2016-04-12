@@ -191,6 +191,36 @@ describe('Popper.js', function() {
         });
     });
 
+    it('inits a popper near a reference element, both inside a fixed element on bottom of viewport, inside a scrolled body', function(done) {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.bottom = '0';
+        fixed.style.height = '38px';
+        fixed.style.width = '100%';
+        jasmineWrapper.appendChild(fixed);
+
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', fixed);
+        var popper = appendNewPopper(2, 'popper', fixed);
+
+        new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(729);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            expect(popper.getAttribute('x-placement')).toBe('top');
+            pop.destroy();
+            done();
+        });
+    });
+
     it('inits a popper and destroy it using its callback', function(done) {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
