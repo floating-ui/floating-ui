@@ -1,3 +1,8 @@
+## v0.3.2
+
+- 592f4c7: revert iOS fix (it wasn't effective) - it should have fixed the repaint problems of fixed poppers during scroll  
+    I'm still looking for a working fix.
+
 ## v0.3.1
 
 - b0d77ff: don't apply x-placement attr if applyStyles modifier is disabled
