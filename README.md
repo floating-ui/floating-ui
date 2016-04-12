@@ -1,5 +1,5 @@
 # Popper.js
-Popper.js is a library used to create **poppers** in web applications.
+Popper.js is a library used to create poppers in web applications.
 
 [![Build Status](https://travis-ci.org/FezVrasta/popper.js.svg?branch=master)](https://travis-ci.org/FezVrasta/popper.js)
 [![npm version](https://badge.fury.io/js/popper.js.svg)](https://badge.fury.io/js/popper.js)
