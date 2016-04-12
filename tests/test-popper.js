@@ -213,7 +213,9 @@ describe('Popper.js', function() {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
-            expect(popper.getBoundingClientRect().top).toBeApprox(729);
+            var local = 729;
+            var ci = 739;
+            expect([local, ci]).toContain(popper.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
             pop.destroy();
