@@ -277,4 +277,46 @@ describe('Popper.js', function() {
             done();
         });
     });
+
+    // EXPERIMENTAL
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function() {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        relative.style.paddingTop = '100px';
+        relative.style.backgroundColor = 'yellow';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 100;
+
+        var scrolling = document.createElement('div');
+        scrolling.style.width = '100%';
+        scrolling.style.height = '100vh';
+        scrolling.style.overflow = 'auto';
+        scrolling.style.backgroundColor = 'green';
+        relative.appendChild(scrolling);
+
+        var superHigh = document.createElement('div');
+        superHigh.style.width = '1px';
+        superHigh.style.float = 'right';
+        superHigh.style.height = '300vh';
+        scrolling.appendChild(superHigh);
+
+        scrolling.scrollTop = 100;
+
+        var ref = appendNewRef(1, 'ref', scrolling);
+        ref.style.width = '100px';
+        ref.style.height = '100px';
+        ref.style.marginTop = '100px';
+        var popper = appendNewPopper(2, 'popper', scrolling);
+
+        new TestPopper(ref, popper, { placement: 'right'}).onCreate(function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            pop.destroy();
+        });
+    });
 });
