@@ -8,37 +8,28 @@ Popper.js is a library used to create poppers in web applications.
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
 
 ## Wut? Poppers?
-A popper is an element on the screen which "pops out" from the natural flow of your application.
+A popper is an element on the screen which "pops out" from the natural flow of your application.  
 Common examples of poppers are tooltips and popovers.
 
 ## So, yet another tooltip library?
 Well, basically, **no**.
-Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.
-It supports a **plugin system** you can use to add particular behaviors to your poppers.
+Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
+It supports a **plugin system** you can use to add particular behaviors to your poppers.  
 It's **AMD** and **CommonJS** compatible and it's well documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
 
 
 ## The Library
-Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).
+Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).  
 Additionally, it provides an easy way to generate your popper element if you don't want to use one already in your DOM.
 
 ### Installation
 Popper.js is available on NPM and Bower:
 
-**NPM**
-```bash
-npm install popper.js --save
-```
-
-**Bower**
-```bash
-bower install popper.js --save
-```
-
-**jsDelivr**
-```
-http://www.jsdelivr.com/projects/popper.js
-```
+| Source      |                                              |
+|-------------|----------------------------------------------|
+|NPM          | `npm install popper.js --save`               |
+|Bower        | `bower install popper.js --save`             |
+|jsDelivr     | `http://www.jsdelivr.com/projects/popper.js` |
 
 ### Basic usage
 Create a popper near a button:
@@ -93,6 +84,8 @@ var anotherPopper = new Popper(reference, popper, {
   // export data in your framework and use its content to apply the style to your popper
 });
 ```
+You can find a fully working React.js component visiting this gist:  
+https://gist.github.com/FezVrasta/6533adf4358a6927b48f7478706a5f23
 
 
 If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
