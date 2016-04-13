@@ -102,7 +102,7 @@ I want to thank some friends and projects for the work they did:
 - [@vampolo](https://github.com/vampolo) for the original idea and for the name of the library;
 - [Sysdig](https://github.com/Draios) for all the awesome things I learned during these years that made possible for me to write this library;
 - [Tether.js](http://github.hubspot.com/tether/) for having inspired me in writing a positioning library ready for the real world;
-- **you** for the star you'll give to this project and for beeing so awesome to give this project a try :)
+- **you** for the star you'll give to this project and for being so awesome to give this project a try :)
 
 ### Copyright and license
 Code and documentation copyright 2016 **Federico Zivolo**. Code released under the [MIT license](LICENSE.md). Docs released under Creative Commons.
