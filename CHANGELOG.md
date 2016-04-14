@@ -1,5 +1,5 @@
 ## v0.3.4-dev
-
+- 7e98c14: fixed destroy method
 - d811684: **BREAKING CHANGE**, renamed `trigger` to `reference`, you can now access `data.offsets.reference` instead of
     `data.offsets.trigger`, and `this._reference` instead of `this._trigger`.
 
