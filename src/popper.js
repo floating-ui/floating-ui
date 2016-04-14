@@ -89,9 +89,9 @@
      * @param {HTMLElement|String} [popper.parent=window.document.body] The parent element, given as HTMLElement or as query string.
      * @param {String} [popper.content=''] The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.
      * @param {Boolean} [popper.allowHtml=false] If set to true, the `content` will be parsed as HTML.
-     * @param {String} [popper.arrow.tagName='div'] Same as `popper.tagName` but for the arrow element.
-     * @param {Array} [popper.arrow.classNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
-     * @param {String} [popper.arrow.attributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
+     * @param {String} [popper.arrowTagName='div'] Same as `popper.tagName` but for the arrow element.
+     * @param {Array} [popper.arrowClassNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
+     * @param {String} [popper.arrowAttributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
      *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
@@ -153,7 +153,7 @@
         }
 
         // with {} we create a new object with the options inside it
-        this._options = mergeDeep(DEFAULTS, options);
+        this._options = Object.assign({}, DEFAULTS, options);
 
         // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
         // so we return the corresponding method
@@ -257,6 +257,7 @@
      * Helper used to generate poppers from a configuration file
      * @method
      * @memberof Popper
+     * @param config {Object} configuration
      * @returns {HTMLElement} popper
      */
     Popper.prototype.parse = function(config) {
@@ -267,13 +268,11 @@
             parent: root.document.body,
             content: '',
             allowHtml: false,
-            arrow: {
-                tagName: 'div',
-                classNames: [ 'popper__arrow' ],
-                attributes: [ 'x-arrow']
-            }
+            arrowTagName: 'div',
+            arrowClassNames: [ 'popper__arrow' ],
+            arrowAttributes: [ 'x-arrow']
         };
-        config = mergeDeep(defaultConfig, config);
+        config = Object.assign({}, defaultConfig, config);
 
         var d = root.document;
 
@@ -1207,40 +1206,6 @@
             }
         }
         return null;
-    }
-
-    function isObject(item) {
-        return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
-    }
-
-    /**
-     * Deep merge two objects returning a new one
-     * @function
-     * @ignore
-     * @param target
-     * @param source
-     * @returns target
-     */
-    function mergeDeep(target, source) {
-        target = Object.assign({}, target);
-        var obj;
-        if (isObject(target) && isObject(source)) {
-            Object.keys(source).forEach(function(key) {
-                if (isObject(source[key])) {
-                    if (!target[key]) {
-                        obj = {};
-                        obj[key] = {};
-                        Object.assign(target, obj);
-                    }
-                    mergeDeep(target[key], source[key]);
-                } else {
-                    obj = {};
-                    obj[key] = source[key];
-                    Object.assign(target, obj);
-                }
-            });
-        }
-        return target;
     }
 
     /**
