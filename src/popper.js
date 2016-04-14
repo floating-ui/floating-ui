@@ -273,7 +273,7 @@
                 attributes: [ 'x-arrow']
             }
         };
-        config = Object.assign({}, defaultConfig, config);
+        config = mergeDeep(defaultConfig, config);
 
         var d = root.document;
 
