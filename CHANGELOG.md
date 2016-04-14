@@ -1,3 +1,8 @@
+## v0.3.4-dev
+
+- d811684: **BREAKING CHANGE**, renamed `trigger` to `reference`, you can now access `data.offsets.reference` instead of
+    `data.offsets.trigger`, and `this._reference` instead of `this._trigger`.
+
 ## v0.3.3
 
 - 1782c39: fixed #21, problem with position of poppers when inside `fixed` parent.
