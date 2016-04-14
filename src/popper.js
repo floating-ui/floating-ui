@@ -281,7 +281,7 @@
         addClassNames(popper, config.classNames);
         addAttributes(popper, config.attributes);
         if (config.contentType === 'node') {
-            popper.appendChild(config.content);
+            popper.appendChild(config.content.jquery ? config.content[0] : config.content);
         }else if (config.contentType === 'html') {
             popper.innerHTML = config.content;
         } else {
