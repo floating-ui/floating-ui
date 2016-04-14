@@ -87,8 +87,8 @@
      * @param {Array} [popper.classNames=['popper']] Array of classes to apply to the generated popper.
      * @param {Array} [popper.attributes] Array of attributes to apply, specify `attr:value` to assign a value to it.
      * @param {HTMLElement|String} [popper.parent=window.document.body] The parent element, given as HTMLElement or as query string.
-     * @param {String} [popper.content=''] The content of the popper, it can be text, html, or node; if it is not text, set `allow` to `html` or `node`.
-     * @param {String} [popper.allow=text] If `html`, the `content` will be parsed as HTML. If `node`, it will be appended as-is.
+     * @param {String} [popper.content=''] The content of the popper, it can be text, html, or node; if it is not text, set `contentType` to `html` or `node`.
+     * @param {String} [popper.contentType='text'] If `html`, the `content` will be parsed as HTML. If `node`, it will be appended as-is.
      * @param {String} [popper.arrow.tagName='div'] Same as `popper.tagName` but for the arrow element.
      * @param {Array} [popper.arrow.classNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
      * @param {String} [popper.arrow.attributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
@@ -258,7 +258,7 @@
             attributes: [],
             parent: root.document.body,
             content: '',
-            allow: 'text',
+            contentType: 'text',
             arrow: {
                 tagName: 'div',
                 classNames: [ 'popper__arrow' ],
@@ -272,9 +272,9 @@
         var popper = d.createElement(config.tagName);
         addClassNames(popper, config.classNames);
         addAttributes(popper, config.attributes);
-        if (config.allow === 'node') {
+        if (config.contentType === 'node') {
             popper.appendChild(config.content);
-        }else if (config.allow === 'html') {
+        }else if (config.contentType === 'html') {
             popper.innerHTML = config.content;
         } else {
             popper.textContent = config.content;
