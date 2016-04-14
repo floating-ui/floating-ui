@@ -132,6 +132,9 @@
      * @param {Array} [options.modifiersIgnored=[]]
      *      Put here any built-in modifier name you want to exclude from the modifiers list
      *      The function should reflect the @params and @returns of preventOverflow
+     *
+     * @param {Boolean} [options.removeOnDestroy=false]
+     *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
      */
     function Popper(trigger, popper, options) {
         this._trigger = trigger;
@@ -194,6 +197,11 @@
         this._popper.style.top = '';
         this._popper.style[getSupportedPropertyName('transform')] = '';
         this._removeEventListeners();
+
+        // remove the popper if user explicity asked for the deletion on destroy
+        if (this._options.removeOnDestroy) {
+            this._popper.remove();
+        }
     };
 
     /**
