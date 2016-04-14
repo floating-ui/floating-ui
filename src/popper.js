@@ -153,7 +153,7 @@
         }
 
         // with {} we create a new object with the options inside it
-        this._options = Object.assign({}, DEFAULTS, options);
+        this._options = mergeDeep(DEFAULTS, options);
 
         // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
         // so we return the corresponding method
@@ -1207,6 +1207,40 @@
             }
         }
         return null;
+    }
+
+    function isObject(item) {
+        return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
+    }
+
+    /**
+     * Deep merge two objects returning a new one
+     * @function
+     * @ignore
+     * @param target
+     * @param source
+     * @returns target
+     */
+    function mergeDeep(target, source) {
+        target = Object.assign({}, target);
+        var obj;
+        if (isObject(target) && isObject(source)) {
+            Object.keys(source).forEach(function(key) {
+                if (isObject(source[key])) {
+                    if (!target[key]) {
+                        obj = {};
+                        obj[key] = {};
+                        Object.assign(target, obj);
+                    }
+                    mergeDeep(target[key], source[key]);
+                } else {
+                    obj = {};
+                    obj[key] = source[key];
+                    Object.assign(target, obj);
+                }
+            });
+        }
+        return target;
     }
 
     /**
