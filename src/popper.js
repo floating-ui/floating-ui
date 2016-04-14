@@ -80,7 +80,7 @@
     /**
      * Create a new Popper.js instance
      * @constructor Popper
-     * @param {HTMLElement} trigger - The reference element used to position the popper
+     * @param {HTMLElement} reference - The reference element used to position the popper
      * @param {HTMLElement|Object} popper
      *      The HTML element used as popper, or a configuration used to generate the popper.
      * @param {String} [popper.tagName='div'] The tag name of the generated popper.
@@ -118,11 +118,11 @@
      *
      * @param {String|Array} [options.flipBehavior='flip']
      *      The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to
-     *      overlap its trigger element. Defining `flip` as value, the placement will be flipped on
+     *      overlap its reference element. Defining `flip` as value, the placement will be flipped on
      *      its axis (`right - left`, `top - bottom`).
      *      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify
      *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
-     *      then, if even in its new placement, the popper is overlapping its trigger, it will be moved to top)
+     *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
      *
      * @param {Array} [options.modifiers=[ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle']]
      *      List of functions used to modify the data before they are applied to the popper, add your custom functions
@@ -136,8 +136,8 @@
      * @param {Boolean} [options.removeOnDestroy=false]
      *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
      */
-    function Popper(trigger, popper, options) {
-        this._trigger = trigger.jquery ? trigger[0] : trigger;
+    function Popper(reference, popper, options) {
+        this._reference = reference.jquery ? reference[0] : reference;
         this.state = {};
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
@@ -217,8 +217,8 @@
         data.placement = this._options.placement;
         data._originalPlacement = this._options.placement;
 
-        // compute the popper and trigger offsets and put them inside data.offsets
-        data.offsets = this._getOffsets(this._popper, this._trigger, data.placement);
+        // compute the popper and reference offsets and put them inside data.offsets
+        data.offsets = this._getOffsets(this._popper, this._reference, data.placement);
 
         // get boundaries
         data.boundaries = this._getBoundaries(data, this._options.boundariesPadding, this._options.boundariesElement);
@@ -356,26 +356,26 @@
      * @memberof Popper
      * @access private
      * @param {Element} popper - the popper element
-     * @param {Element} trigger - the trigger element (the popper will be relative to this)
+     * @param {Element} reference - the reference element (the popper will be relative to this)
      * @returns {Object} An object containing the offsets which will be applied to the popper
      */
-    Popper.prototype._getOffsets = function(popper, trigger, placement) {
+    Popper.prototype._getOffsets = function(popper, reference, placement) {
         placement = placement.split('-')[0];
         var popperOffsets = {};
 
-        var container = getOffsetParent(trigger);
+        var container = getOffsetParent(reference);
 
         // Decide if the popper will be fixed
-        // If the trigger is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-        var isParentFixed = isFixed(trigger, container);
+        // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
+        var isParentFixed = isFixed(reference, container);
         popperOffsets.position = isParentFixed ? 'fixed' : 'absolute';
         this.state.position = popperOffsets.position;
 
 
         //
-        // Get trigger position
+        // Get reference element position
         //
-        var triggerOffsets = getOffsetRectRelativeToCustomParent(trigger, getOffsetParent(popper), isParentFixed);
+        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, getOffsetParent(popper), isParentFixed);
 
         //
         // Get popper sizes
@@ -388,18 +388,18 @@
 
         // depending by the popper placement we have to compute its offsets slightly differently
         if (['right', 'left'].indexOf(placement) !== -1) {
-            popperOffsets.top = triggerOffsets.top + triggerOffsets.height / 2 - popperRect.height / 2;
+            popperOffsets.top = referenceOffsets.top + referenceOffsets.height / 2 - popperRect.height / 2;
             if (placement === 'left') {
-                popperOffsets.left = triggerOffsets.left - popperRect.width;
+                popperOffsets.left = referenceOffsets.left - popperRect.width;
             } else {
-                popperOffsets.left = triggerOffsets.right;
+                popperOffsets.left = referenceOffsets.right;
             }
         } else {
-            popperOffsets.left = triggerOffsets.left + triggerOffsets.width / 2 - popperRect.width / 2;
+            popperOffsets.left = referenceOffsets.left + referenceOffsets.width / 2 - popperRect.width / 2;
             if (placement === 'top') {
-                popperOffsets.top = triggerOffsets.top - popperRect.height;
+                popperOffsets.top = referenceOffsets.top - popperRect.height;
             } else {
-                popperOffsets.top = triggerOffsets.bottom;
+                popperOffsets.top = referenceOffsets.bottom;
             }
         }
 
@@ -410,7 +410,7 @@
 
         return {
             popper: popperOffsets,
-            trigger: triggerOffsets
+            reference: referenceOffsets
         };
     };
 
@@ -428,7 +428,7 @@
         root.addEventListener('resize', _updateBound);
         // if the boundariesElement is window we don't need to listen for the scroll event
         if (this._options.boundariesElement !== 'window') {
-            var target = getScrollParent(this._trigger);
+            var target = getScrollParent(this._reference);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
@@ -447,7 +447,7 @@
         // NOTE: 1 DOM access here
         root.removeEventListener('resize', _updateBound);
         if (this._options.boundariesElement !== 'window') {
-            var target = getScrollParent(this._trigger);
+            var target = getScrollParent(this._reference);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
@@ -629,17 +629,17 @@
 
         // if shift shiftVariation is specified, run the modifier
         if (shiftVariation) {
-            var trigger = data.offsets.trigger;
+            var reference = data.offsets.reference;
             var popper = getPopperClientRect(data.offsets.popper);
 
             var shiftOffsets = {
                 y: {
-                    start:  { top: trigger.top },
-                    end:    { top: trigger.top + trigger.height - popper.height }
+                    start:  { top: reference.top },
+                    end:    { top: reference.top + reference.height - popper.height }
                 },
                 x: {
-                    start:  { left: trigger.left },
-                    end:    { left: trigger.left + trigger.width - popper.width }
+                    start:  { left: reference.left },
+                    end:    { left: reference.left + reference.width - popper.width }
                 }
             };
 
@@ -702,7 +702,7 @@
     };
 
     /**
-     * Modifier used to make sure the popper is always near its trigger
+     * Modifier used to make sure the popper is always near its reference
      * @method
      * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
@@ -710,27 +710,27 @@
      */
     Popper.prototype.modifiers.keepTogether = function(data) {
         var popper  = getPopperClientRect(data.offsets.popper);
-        var trigger = data.offsets.trigger;
+        var reference = data.offsets.reference;
         var f = Math.floor;
 
-        if (popper.right < f(trigger.left)) {
-            data.offsets.popper.left = f(trigger.left) - popper.width;
+        if (popper.right < f(reference.left)) {
+            data.offsets.popper.left = f(reference.left) - popper.width;
         }
-        if (popper.left > f(trigger.right)) {
-            data.offsets.popper.left = f(trigger.right);
+        if (popper.left > f(reference.right)) {
+            data.offsets.popper.left = f(reference.right);
         }
-        if (popper.bottom < f(trigger.top)) {
-            data.offsets.popper.top = f(trigger.top) - popper.height;
+        if (popper.bottom < f(reference.top)) {
+            data.offsets.popper.top = f(reference.top) - popper.height;
         }
-        if (popper.top > f(trigger.bottom)) {
-            data.offsets.popper.top = f(trigger.bottom);
+        if (popper.top > f(reference.bottom)) {
+            data.offsets.popper.top = f(reference.bottom);
         }
 
         return data;
     };
 
     /**
-     * Modifier used to flip the placement of the popper when the latter is starting overlapping its trigger.
+     * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
      * Requires the `preventOverflow` modifier before it in order to work.
      * **NOTE:** This modifier will run all its previous modifiers everytime it tries to flip the popper!
      * @method
@@ -779,10 +779,10 @@
             // they need different computations to get flipped
             var a = ['right', 'bottom'].indexOf(placement) !== -1;
 
-            // using Math.floor because the trigger offsets may contain decimals we are not going to consider here
+            // using Math.floor because the reference offsets may contain decimals we are not going to consider here
             if (
-                a && Math.floor(data.offsets.trigger[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
-                !a && Math.floor(data.offsets.trigger[placement]) < Math.floor(popperOffsets[placementOpposite])
+                a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
+                !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite])
             ) {
                 // we'll use this boolean to detect any flip loop
                 data.flipped = true;
@@ -790,7 +790,7 @@
                 if (variation) {
                     data.placement += '-' + variation;
                 }
-                data.offsets.popper = this._getOffsets(this._popper, this._trigger, data.placement).popper;
+                data.offsets.popper = this._getOffsets(this._popper, this._reference, data.placement).popper;
 
                 data = this.runModifiers(data, this._options.modifiers, this._flip);
             }
@@ -800,7 +800,7 @@
 
     /**
      * Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
-     * The offsets will shift the popper on the side of its trigger element.
+     * The offsets will shift the popper on the side of its reference element.
      * @method
      * @memberof Popper.modifiers
      * @argument {Object} data - The data object generated by _update method
@@ -826,7 +826,7 @@
     };
 
     /**
-     * Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the trigger
+     * Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the reference element
      * It will use the CSS outer size of the arrow element to know how many pixels of conjuction are needed
      * @method
      * @memberof Popper.modifiers
@@ -861,7 +861,7 @@
         var arrowStyle  = {};
         var placement   = data.placement.split('-')[0];
         var popper      = getPopperClientRect(data.offsets.popper);
-        var trigger     = data.offsets.trigger;
+        var reference   = data.offsets.reference;
         var isVertical  = ['left', 'right'].indexOf(placement) !== -1;
 
         var len         = isVertical ? 'height' : 'width';
@@ -871,20 +871,20 @@
         var arrowSize   = getOuterSizes(arrow)[len];
 
         //
-        // extends keepTogether behavior making sure the popper and its trigger have enough pixels in conjuction
+        // extends keepTogether behavior making sure the popper and its reference have enough pixels in conjuction
         //
 
         // top/left side
-        if (trigger[opSide] - arrowSize < popper[side]) {
-            data.offsets.popper[side] -= popper[side] - (trigger[opSide] - arrowSize);
+        if (reference[opSide] - arrowSize < popper[side]) {
+            data.offsets.popper[side] -= popper[side] - (reference[opSide] - arrowSize);
         }
         // bottom/right side
-        if (trigger[side] + arrowSize > popper[opSide]) {
-            data.offsets.popper[side] += (trigger[side] + arrowSize) - popper[opSide];
+        if (reference[side] + arrowSize > popper[opSide]) {
+            data.offsets.popper[side] += (reference[side] + arrowSize) - popper[opSide];
         }
 
         // compute center of the popper
-        var center = trigger[side] + (trigger[len] / 2) - (arrowSize / 2);
+        var center = reference[side] + (reference[len] / 2) - (arrowSize / 2);
 
         var sideValue = center - popper[side];
 
