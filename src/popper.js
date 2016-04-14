@@ -415,7 +415,6 @@
     };
 
 
-    var _updateBound = null;
     /**
      * Setup needed event listeners used to update the popper position
      * @method
@@ -424,8 +423,8 @@
      */
     Popper.prototype._setupEventListeners = function() {
         // NOTE: 1 DOM access here
-        _updateBound = this.update.bind(this);
-        root.addEventListener('resize', _updateBound);
+        this.state.updateBound = this.update.bind(this);
+        root.addEventListener('resize', this.state.updateBound);
         // if the boundariesElement is window we don't need to listen for the scroll event
         if (this._options.boundariesElement !== 'window') {
             var target = getScrollParent(this._reference);
@@ -433,7 +432,7 @@
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
             }
-            target.addEventListener('scroll', _updateBound);
+            target.addEventListener('scroll', this.state.updateBound);
         }
     };
 
@@ -445,16 +444,16 @@
      */
     Popper.prototype._removeEventListeners = function() {
         // NOTE: 1 DOM access here
-        root.removeEventListener('resize', _updateBound);
+        root.removeEventListener('resize', this.state.updateBound);
         if (this._options.boundariesElement !== 'window') {
             var target = getScrollParent(this._reference);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
             }
-            target.removeEventListener('scroll', _updateBound);
+            target.removeEventListener('scroll', this.state.updateBound);
         }
-        _updateBound = null;
+        this.state.updateBound = null;
     };
 
     /**
