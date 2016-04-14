@@ -45,6 +45,18 @@ describe('Popper.js', function() {
         pop.destroy();
     });
 
+    it('inits a bottom-start popper', function() {
+        var reference = appendNewRef(1);
+        reference.style.marginLeft = '200px';
+        var popper    = appendNewPopper(2);
+
+        var pop = new TestPopper(reference, popper, {placement: 'bottom-start'});
+
+        expect(popper.getBoundingClientRect().left).toBeApprox(reference.getBoundingClientRect().left);
+
+        pop.destroy();
+    });
+
     it('inits a right popper', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
@@ -240,6 +252,7 @@ describe('Popper.js', function() {
         new TestPopper(reference).onCreate(function(instance) {
             expect(document.querySelectorAll('.popper').length).toBe(1);
             document.body.removeChild(instance._popper);
+            instance.destroy();
             done();
         });
     });
@@ -252,6 +265,7 @@ describe('Popper.js', function() {
         }).onCreate(function(instance) {
             expect(instance._popper.innerText).toBe('something');
             document.body.removeChild(instance._popper);
+            instance.destroy();
             done();
         });
     });
@@ -263,6 +277,7 @@ describe('Popper.js', function() {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
+            data.instance.destroy();
             done();
         });
     });
@@ -274,6 +289,7 @@ describe('Popper.js', function() {
             expect(instance._popper).toBeDefined();
             expect(instance._popper.innerText).toBe('');
             document.body.removeChild(instance._popper);
+            instance.destroy();
             done();
         });
     });

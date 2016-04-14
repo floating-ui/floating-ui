@@ -210,7 +210,7 @@
      * @memberof Popper
      */
     Popper.prototype.update = function() {
-        var data = {};
+        var data = { instance: this };
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
@@ -623,53 +623,31 @@
      * @returns {Object} The data object, properly modified
      */
     Popper.prototype.modifiers.shift = function(data) {
-        var trigger = data.offsets.trigger;
-        var popper = getPopperClientRect(data.offsets.popper);
         var placement = data.placement;
+        var basePlacement = placement.split('-')[0];
         var shiftVariation = placement.split('-')[1];
 
-        // if no shift shiftVariation is specified, don't run the modifier
-        if (!shiftVariation) {
-            return data;
+        // if shift shiftVariation is specified, run the modifier
+        if (shiftVariation) {
+            var trigger = data.offsets.trigger;
+            var popper = getPopperClientRect(data.offsets.popper);
+
+            var shiftOffsets = {
+                y: {
+                    start:  { top: trigger.top },
+                    end:    { top: trigger.top + trigger.height - popper.height }
+                },
+                x: {
+                    start:  { left: trigger.left },
+                    end:    { left: trigger.left + trigger.width - popper.width }
+                }
+            };
+
+            var axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
+
+            data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftVariation]);
         }
 
-        var shiftOffsets = {
-            y: {
-                start:  trigger.top,
-                end:    trigger.top + trigger.height - popper.height
-            },
-            x: {
-                start:  trigger.left,
-                end:    trigger.left + trigger.width - popper.width
-            }
-        };
-
-        var shiftOffsetsMap = {
-            bottom: function() {
-                return {
-                    left: shiftOffsets.x[shiftVariation]
-                };
-            },
-            top: function() {
-                return {
-                    left: shiftOffsets.x[shiftVariation]
-                };
-            },
-            left: function() {
-                return {
-                    top:  shiftOffsets.y[shiftVariation]
-                };
-            },
-            right: function() {
-                return {
-                    top:  shiftOffsets.y[shiftVariation]
-                };
-            }
-        };
-
-        popper = Object.assign(popper, shiftOffsetsMap[placement.split('-')[0]]());
-
-        data.offsets.popper = popper;
         return data;
     };
 
@@ -880,65 +858,41 @@
             return data;
         }
 
-        var arrowStyle = {};
-        var placement  = data.placement.split('-')[0];
-        var popper     = getPopperClientRect(data.offsets.popper);
-        var trigger    = data.offsets.trigger;
+        var arrowStyle  = {};
+        var placement   = data.placement.split('-')[0];
+        var popper      = getPopperClientRect(data.offsets.popper);
+        var trigger     = data.offsets.trigger;
+        var isVertical  = ['left', 'right'].indexOf(placement) !== -1;
 
-        var isVertical = ['left', 'right'].indexOf(placement) !== -1;
+        var len         = isVertical ? 'height' : 'width';
+        var side        = isVertical ? 'top' : 'left';
+        var altSide     = isVertical ? 'left' : 'top';
+        var opSide      = isVertical ? 'bottom' : 'right';
+        var arrowSize   = getOuterSizes(arrow)[len];
 
-        var center;
-        if (isVertical) {
-            var arrowHeight = getOuterSizes(arrow).height;
+        //
+        // extends keepTogether behavior making sure the popper and its trigger have enough pixels in conjuction
+        //
 
-            //
-            // extends keepTogether behavior making sure the popper and its trigger have enough pixels in conjuction
-            //
-
-            // top side
-            if (trigger.bottom - arrowHeight < popper.top) {
-                data.offsets.popper.top -= popper.top - (trigger.bottom - arrowHeight);
-            }
-            // bottom side
-            if (trigger.top + arrowHeight > popper.bottom) {
-                data.offsets.popper.top += (trigger.top + arrowHeight) - popper.bottom;
-            }
-
-            // compute center of the popper
-            center = trigger.top + (trigger.height / 2) - (arrowHeight / 2);
-
-            var top = center - popper.top;
-
-            // prevent arrow from being placed not contiguously to its popper
-            top = Math.max(Math.min(popper.height - arrowHeight, top), 0);
-            arrowStyle.top  = top;
-            arrowStyle.left = ''; // make sure to remove any old style from the arrow
-        } else {
-            var arrowWidth  = getOuterSizes(arrow).width;
-
-            //
-            // extends keepTogether behavior making sure the popper and its trigger have enough pixels in conjuction
-            //
-
-            // left side
-            if (trigger.right - arrowWidth < popper.left) {
-                data.offsets.popper.left -= popper.left - (trigger.right - arrowWidth);
-            }
-            // right side
-            if (trigger.left + arrowWidth > popper.right) {
-                data.offsets.popper.left += (trigger.left + arrowWidth) - popper.right;
-            }
-
-            // compute center of the popper
-            center = trigger.left + (trigger.width / 2) - (arrowWidth / 2);
-
-            var left = center - popper.left;
-
-            // prevent arrow from being placed not contiguously to its popper
-            left = Math.max(Math.min(popper.width - arrowWidth, left), 0);
-            arrowStyle.left  = left;
-            arrowStyle.top = ''; // make sure to remove any old style from the arrow
+        // top/left side
+        if (trigger[opSide] - arrowSize < popper[side]) {
+            data.offsets.popper[side] -= popper[side] - (trigger[opSide] - arrowSize);
         }
+        // bottom/right side
+        if (trigger[side] + arrowSize > popper[opSide]) {
+            data.offsets.popper[side] += (trigger[side] + arrowSize) - popper[opSide];
+        }
+
+        // compute center of the popper
+        var center = trigger[side] + (trigger[len] / 2) - (arrowSize / 2);
+
+        var sideValue = center - popper[side];
+
+        // prevent arrow from being placed not contiguously to its popper
+        sideValue = Math.max(Math.min(popper[len] - arrowSize, sideValue), 0);
+        arrowStyle[side] = sideValue;
+        arrowStyle[altSide] = ''; // make sure to remove any old style from the arrow
+
         data.offsets.arrow = arrowStyle;
         data.arrowElement = arrow;
 
@@ -1035,7 +989,8 @@
      */
     function getOffsetParent(element) {
         // NOTE: 1 DOM access here
-        return element.offsetParent === root.document.body || !element.offsetParent ? root.document.documentElement : element.offsetParent;
+        var offsetParent = element.offsetParent;
+        return offsetParent === root.document.body || !offsetParent ? root.document.documentElement : offsetParent;
     }
 
     /**
