@@ -137,7 +137,7 @@
      *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
      */
     function Popper(trigger, popper, options) {
-        this._trigger = trigger;
+        this._trigger = trigger.jquery ? trigger[0] : trigger;
         this.state = {};
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
@@ -149,7 +149,7 @@
         }
         // otherwise, use the given HTMLElement as popper
         else {
-            this._popper = popper;
+            this._popper = popper.jquery ? popper[0] : popper;
         }
 
         // with {} we create a new object with the options inside it
