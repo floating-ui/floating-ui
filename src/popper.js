@@ -301,7 +301,7 @@
         if (typeof parent === 'string') {
             parent = d.querySelectorAll(config.parent);
             if (parent.length > 1) {
-                console.warning('WARNING: the given `parent` query(' + config.parent + ') matched more than one element, the first one will be used');
+                console.warn('WARNING: the given `parent` query(' + config.parent + ') matched more than one element, the first one will be used');
             }
             if (parent.length === 0) {
                 throw 'ERROR: the given `parent` doesn\'t exists!';
@@ -310,8 +310,8 @@
         }
         // if the given parent is a DOM nodes list or an array of nodes with more than one element,
         // the first one will be used as parent
-        if (parent.length > 1) {
-            console.warning('WARNING: you have passed as parent a list of elements, the first one will be used');
+        if (parent.length > 1 && parent instanceof Element === false) {
+            console.warn('WARNING: you have passed as parent a list of elements, the first one will be used');
             parent = parent[0];
         }
 
