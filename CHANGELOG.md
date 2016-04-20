@@ -1,3 +1,7 @@
+## v0.3.6
+
+- 83a990b: fixed #34
+
 ## v0.3.5
 
 - c1c4168: fixed #33, error when trying to create a popper inside a `form` element.

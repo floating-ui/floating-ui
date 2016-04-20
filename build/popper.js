@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.3.5
+ * @version 0.3.6
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -285,10 +285,10 @@
             popper.textContent = config.content;
         }
 
-        if (config.arrow) {
-            var arrow = d.createElement(config.arrow.tagName);
-            addClassNames(arrow, config.arrow.classNames);
-            addAttributes(arrow, config.arrow.attributes);
+        if (config.arrowTagName) {
+            var arrow = d.createElement(config.arrowTagName);
+            addClassNames(arrow, config.arrowClassNames);
+            addAttributes(arrow, config.arrowAttributes);
             popper.appendChild(arrow);
         }
 
