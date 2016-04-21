@@ -143,7 +143,7 @@
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
         // generate a default popper if is not defined
         var isNotDefined = typeof popper === 'undefined' || popper === null;
-        var isConfig = popper && popper.constructor.name === 'Object';
+        var isConfig = popper && Object.prototype.toString.call(popper) === '[object Object]';
         if (isNotDefined || isConfig) {
             this._popper = this.parse(isConfig ? popper : {});
         }
