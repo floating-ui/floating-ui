@@ -240,6 +240,7 @@
     Popper.prototype.onCreate = function(callback) {
         // the createCallbacks return as first argument the popper instance
         callback(this);
+        return this;
     };
 
     /**
@@ -251,6 +252,7 @@
      */
     Popper.prototype.onUpdate = function(callback) {
         this.state.updateCallback = callback;
+        return this;
     };
 
     /**
