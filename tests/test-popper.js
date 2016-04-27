@@ -324,4 +324,15 @@ describe('Popper.js', function() {
             done();
         });
     });
+
+    it('uses onCreate and onUpdate chained', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+        }).onUpdate(function(data) {
+            expect(data.offsets.popper.top).toBeApprox(63);
+            done();
+        });
+    });
 });
