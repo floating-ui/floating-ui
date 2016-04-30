@@ -1,4 +1,17 @@
+## v0.3.7
+- 80aa0df: fixed #25 and #36
+- 70411fd: fix object check in ie (#35) (thanks @judge)
+
+## v0.3.6
+
+- 83a990b: fixed #34
+
+## v0.3.5
+
+- c1c4168: fixed #33, error when trying to create a popper inside a `form` element.
+
 ## v0.3.4
+
 - 7e98c14: fixed destroy method
 - d811684: **BREAKING CHANGE**, renamed `trigger` to `reference`, you can now access `data.offsets.reference` instead of
     `data.offsets.trigger`, and `this._reference` instead of `this._trigger`.

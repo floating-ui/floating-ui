@@ -225,7 +225,7 @@ describe('Popper.js', function() {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
-            var local = 729;
+            var local = 730;
             var ci = 739;
             expect([local, ci]).toContain(popper.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
@@ -277,8 +277,11 @@ describe('Popper.js', function() {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
+            document.body.removeChild(data.instance._popper);
             data.instance.destroy();
             done();
+        }).onCreate(function(instance) {
+            instance.update();
         });
     });
 
@@ -289,6 +292,53 @@ describe('Popper.js', function() {
             expect(instance._popper).toBeDefined();
             expect(instance._popper.innerText).toBe('');
             document.body.removeChild(instance._popper);
+            instance.destroy();
+            done();
+        });
+    });
+
+    it('creates a popper with an empty form as parent, then auto remove it on destroy', function(done) {
+        var form = document.createElement('form');
+        var reference = appendNewRef(1, 'ref', form);
+        jasmineWrapper.appendChild(form);
+
+        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('test');
+            instance.destroy();
+            expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+
+    it('creates a popper with a not empty form as parent, then auto remove it on destroy', function(done) {
+        var form = document.createElement('form');
+        var input = document.createElement('input');
+        form.appendChild(input);
+        var reference = appendNewRef(1, 'ref', form);
+        jasmineWrapper.appendChild(form);
+
+        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('test');
+            instance.destroy();
+            expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+
+    it('creates a popper and make sure it\'s position is correct on init', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(
+            reference,
+            { content: 'popper', classNames: ['none'] },
+            { placement: 'right', removeOnDestroy: true }
+        ).onCreate(function(instance) {
+            instance.update();
+            var local = 87;
+            var ci = 105;
+            expect([local, ci]).toContain(instance._popper.getBoundingClientRect().left);
             instance.destroy();
             done();
         });
