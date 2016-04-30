@@ -179,6 +179,7 @@
 
         // setup event listeners, they will take care of update the position in specific situations
         this._setupEventListeners();
+        return this;
     }
 
 
@@ -202,6 +203,7 @@
         if (this._options.removeOnDestroy) {
             this._popper.remove();
         }
+        return this;
     };
 
     /**
@@ -211,6 +213,10 @@
      */
     Popper.prototype.update = function() {
         var data = { instance: this };
+
+        // make sure to apply the popper position before any computation
+        this.state.position = this._getPosition(this._popper, this._reference);
+        setStyle(this._popper, { position: this.state.position});
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
@@ -240,17 +246,20 @@
     Popper.prototype.onCreate = function(callback) {
         // the createCallbacks return as first argument the popper instance
         callback(this);
+        return this;
     };
 
     /**
      * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
      * used to style popper and its arrow.
+     * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
      * @method
      * @memberof Popper
      * @param {Function} callback
      */
     Popper.prototype.onUpdate = function(callback) {
         this.state.updateCallback = callback;
+        return this;
     };
 
     /**
@@ -350,6 +359,22 @@
     };
 
     /**
+     * Helper used to get the position which will be applied to the popper
+     * @method
+     * @memberof Popper
+     * @param config {HTMLElement} popper element
+     * @returns {HTMLElement} reference element
+     */
+    Popper.prototype._getPosition = function(popper, reference) {
+        var container = getOffsetParent(reference);
+
+        // Decide if the popper will be fixed
+        // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
+        var isParentFixed = isFixed(reference, container);
+        return isParentFixed ? 'fixed' : 'absolute';
+    };
+
+    /**
      * Get offsets to the popper
      * @method
      * @memberof Popper
@@ -362,14 +387,8 @@
         placement = placement.split('-')[0];
         var popperOffsets = {};
 
-        var container = getOffsetParent(reference);
-
-        // Decide if the popper will be fixed
-        // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-        var isParentFixed = isFixed(reference, container);
-        popperOffsets.position = isParentFixed ? 'fixed' : 'absolute';
-        this.state.position = popperOffsets.position;
-
+        popperOffsets.position = this.state.position;
+        var isParentFixed = popperOffsets.position === 'fixed';
 
         //
         // Get reference element position

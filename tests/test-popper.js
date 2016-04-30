@@ -280,6 +280,8 @@ describe('Popper.js', function() {
             document.body.removeChild(data.instance._popper);
             data.instance.destroy();
             done();
+        }).onCreate(function(instance) {
+            instance.update();
         });
     });
 
@@ -321,6 +323,21 @@ describe('Popper.js', function() {
             expect(instance._popper.innerText).toBe('test');
             instance.destroy();
             expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+
+    it('creates a popper and make sure it\'s position is correct on init', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(
+            reference,
+            { content: 'popper', classNames: ['none'] },
+            { placement: 'right', removeOnDestroy: true }
+        ).onCreate(function(instance) {
+            instance.update();
+            expect(instance._popper.getBoundingClientRect().left).toBeApprox(87);
+            instance.destroy();
             done();
         });
     });
