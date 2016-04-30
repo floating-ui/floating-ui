@@ -1,3 +1,6 @@
+## v0.3.8
+- fixed problem with NPM release
+
 ## v0.3.7
 - 80aa0df: fixed #25 and #36
 - 70411fd: fix object check in ie (#35) (thanks @judge)
