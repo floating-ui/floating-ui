@@ -1,3 +1,7 @@
+## v0.3.7
+- 80aa0df: fixed #25 and #36
+- 70411fd: fix object check in ie (#35) (thanks @judge)
+
 ## v0.3.6
 
 - 83a990b: fixed #34
