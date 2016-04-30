@@ -45,7 +45,19 @@ describe('Popper.js', function() {
         pop.destroy();
     });
 
-    it('inits a right popper', function(done) {
+    it('inits a bottom-start popper', function() {
+        var reference = appendNewRef(1);
+        reference.style.marginLeft = '200px';
+        var popper    = appendNewPopper(2);
+
+        var pop = new TestPopper(reference, popper, {placement: 'bottom-start'});
+
+        expect(popper.getBoundingClientRect().left).toBeApprox(reference.getBoundingClientRect().left);
+
+        pop.destroy();
+    });
+
+    it('inits a right popper', function() {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -115,7 +127,7 @@ describe('Popper.js', function() {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
-        relative.style.height = '200vh';
+        relative.style.height = '300vh';
         jasmineWrapper.appendChild(relative);
         document.body.scrollTop = 800;
 
@@ -193,6 +205,38 @@ describe('Popper.js', function() {
         });
     });
 
+    it('inits a popper near a reference element, both inside a fixed element on bottom of viewport, inside a scrolled body', function(done) {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.bottom = '0';
+        fixed.style.height = '38px';
+        fixed.style.width = '100%';
+        jasmineWrapper.appendChild(fixed);
+
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', fixed);
+        var popper = appendNewPopper(2, 'popper', fixed);
+
+        new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            var local = 730;
+            var ci = 739;
+            expect([local, ci]).toContain(popper.getBoundingClientRect().top);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            expect(popper.getAttribute('x-placement')).toBe('top');
+            pop.destroy();
+            done();
+        });
+    });
+
     it('inits a popper and destroy it using its callback', function(done) {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
@@ -210,6 +254,7 @@ describe('Popper.js', function() {
         new TestPopper(reference).onCreate(function(instance) {
             expect(document.querySelectorAll('.popper').length).toBe(1);
             document.body.removeChild(instance._popper);
+            instance.destroy();
             done();
         });
     });
@@ -222,6 +267,7 @@ describe('Popper.js', function() {
         }).onCreate(function(instance) {
             expect(instance._popper.innerText).toBe('something');
             document.body.removeChild(instance._popper);
+            instance.destroy();
             done();
         });
     });
@@ -233,6 +279,69 @@ describe('Popper.js', function() {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
+            document.body.removeChild(data.instance._popper);
+            data.instance.destroy();
+            done();
+        }).onCreate(function(instance) {
+            instance.update();
+        });
+    });
+
+    it('creates a popper when content is undefined', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(reference).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('');
+            document.body.removeChild(instance._popper);
+            instance.destroy();
+            done();
+        });
+    });
+
+    it('creates a popper with an empty form as parent, then auto remove it on destroy', function(done) {
+        var form = document.createElement('form');
+        var reference = appendNewRef(1, 'ref', form);
+        jasmineWrapper.appendChild(form);
+
+        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('test');
+            instance.destroy();
+            expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+
+    it('creates a popper with a not empty form as parent, then auto remove it on destroy', function(done) {
+        var form = document.createElement('form');
+        var input = document.createElement('input');
+        form.appendChild(input);
+        var reference = appendNewRef(1, 'ref', form);
+        jasmineWrapper.appendChild(form);
+
+        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+            expect(instance._popper.innerText).toBe('test');
+            instance.destroy();
+            expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+
+    it('creates a popper and make sure it\'s position is correct on init', function(done) {
+        var reference = appendNewRef(1);
+
+        new TestPopper(
+            reference,
+            { content: 'popper', classNames: ['none'] },
+            { placement: 'right', removeOnDestroy: true }
+        ).onCreate(function(instance) {
+            instance.update();
+            var local = 87;
+            var ci = 105;
+            expect([local, ci]).toContain(instance._popper.getBoundingClientRect().left);
+            instance.destroy();
             done();
         });
     });
