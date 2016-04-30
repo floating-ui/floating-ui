@@ -338,7 +338,7 @@ describe('Popper.js', function() {
             instance.update();
             var local = 87;
             var ci = 105;
-            expect([local, ci].toContain(instance._popper.getBoundingClientRect().left);
+            expect([local, ci]).toContain(instance._popper.getBoundingClientRect().left);
             instance.destroy();
             done();
         });
