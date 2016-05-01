@@ -12,7 +12,7 @@
                 "description": "Create a new Popper.js instance",
                 "parameters": [
                     {
-                        "name": "trigger",
+                        "name": "reference",
                         "type": [
                             "HTMLElement"
                         ],
@@ -94,7 +94,7 @@
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.tagName",
+                        "name": "popper.arrowTagName",
                         "type": [
                             "String"
                         ],
@@ -104,7 +104,7 @@
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.classNames",
+                        "name": "popper.arrowClassNames",
                         "type": [
                             "Array"
                         ],
@@ -114,7 +114,7 @@
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.attributes",
+                        "name": "popper.arrowAttributes",
                         "type": [
                             "String"
                         ],
@@ -200,7 +200,7 @@
                             "String",
                             "Array"
                         ],
-                        "description": "The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to\n     overlap its trigger element. Defining `flip` as value, the placement will be flipped on\n     its axis (`right - left`, `top - bottom`).\n     You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify\n     how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,\n     then, if even in its new placement, the popper is overlapping its trigger, it will be moved to top)",
+                        "description": "The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to\n     overlap its reference element. Defining `flip` as value, the placement will be flipped on\n     its axis (`right - left`, `top - bottom`).\n     You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify\n     how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,\n     then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)",
                         "default": "'flip'",
                         "optional": true,
                         "nullable": ""
@@ -222,6 +222,16 @@
                         ],
                         "description": "Put here any built-in modifier name you want to exclude from the modifiers list\n     The function should reflect the @params and @returns of preventOverflow",
                         "default": "[]",
+                        "optional": true,
+                        "nullable": ""
+                    },
+                    {
+                        "name": "options.removeOnDestroy",
+                        "type": [
+                            "Boolean"
+                        ],
+                        "description": "Set to true if you want to automatically remove the popper when you call the `destroy` method.",
+                        "default": "false",
                         "optional": true,
                         "nullable": ""
                     }
@@ -268,7 +278,7 @@
                     "name": "onUpdate",
                     "access": "",
                     "virtual": false,
-                    "description": "If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations\nused to style popper and its arrow.",
+                    "description": "If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations\nused to style popper and its arrow.\nNOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!",
                     "parameters": [
                         {
                             "name": "callback",
@@ -288,13 +298,49 @@
                     "access": "",
                     "virtual": false,
                     "description": "Helper used to generate poppers from a configuration file",
-                    "parameters": [],
+                    "parameters": [
+                        {
+                            "name": "config",
+                            "type": [
+                                "Object"
+                            ],
+                            "description": "configuration",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
                     "examples": [],
                     "returns": {
                         "type": [
                             "HTMLElement"
                         ],
                         "description": "popper"
+                    }
+                },
+                {
+                    "name": "_getPosition",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Helper used to get the position which will be applied to the popper",
+                    "parameters": [
+                        {
+                            "name": "config",
+                            "type": [
+                                "HTMLElement"
+                            ],
+                            "description": "popper element",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": [
+                            "HTMLElement"
+                        ],
+                        "description": "reference element"
                     }
                 },
                 {
@@ -314,11 +360,11 @@
                             "nullable": ""
                         },
                         {
-                            "name": "trigger",
+                            "name": "reference",
                             "type": [
                                 "Element"
                             ],
-                            "description": "the trigger element (the popper will be relative to this)",
+                            "description": "the reference element (the popper will be relative to this)",
                             "default": "",
                             "optional": "",
                             "nullable": ""
@@ -533,7 +579,7 @@
                             "name": "Popper#modifiers.keepTogether",
                             "access": "",
                             "virtual": false,
-                            "description": "Modifier used to make sure the popper is always near its trigger",
+                            "description": "Modifier used to make sure the popper is always near its reference",
                             "parameters": [
                                 {
                                     "name": "data",
@@ -558,7 +604,7 @@
                             "name": "Popper#modifiers.flip",
                             "access": "",
                             "virtual": false,
-                            "description": "Modifier used to flip the placement of the popper when the latter is starting overlapping its trigger.\nRequires the `preventOverflow` modifier before it in order to work.\n**NOTE:** This modifier will run all its previous modifiers everytime it tries to flip the popper!",
+                            "description": "Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.\nRequires the `preventOverflow` modifier before it in order to work.\n**NOTE:** This modifier will run all its previous modifiers everytime it tries to flip the popper!",
                             "parameters": [
                                 {
                                     "name": "data",
@@ -583,7 +629,7 @@
                             "name": "Popper#modifiers.offset",
                             "access": "",
                             "virtual": false,
-                            "description": "Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.\nThe offsets will shift the popper on the side of its trigger element.",
+                            "description": "Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.\nThe offsets will shift the popper on the side of its reference element.",
                             "parameters": [
                                 {
                                     "name": "data",
@@ -608,7 +654,7 @@
                             "name": "Popper#modifiers.arrow",
                             "access": "",
                             "virtual": false,
-                            "description": "Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the trigger\nIt will use the CSS outer size of the arrow element to know how many pixels of conjuction are needed",
+                            "description": "Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the reference element\nIt will use the CSS outer size of the arrow element to know how many pixels of conjuction are needed",
                             "parameters": [
                                 {
                                     "name": "data",
