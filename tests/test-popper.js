@@ -343,4 +343,22 @@ describe('Popper.js', function() {
             done();
         });
     });
+
+    it('creates a popper with an HTML node as content', function(done) {
+        var reference = appendNewRef(1);
+        reference.style.marginLeft = '700px';
+        var popperContent = document.createElement('div');
+        popperContent.style.width = '700px';
+        popperContent.innerText = 'popper';
+
+        new TestPopper(
+            reference,
+            { contentType: 'node', content: popperContent },
+            { placement: 'left', removeOnDestroy: true }
+        ).onCreate(function(instance) {
+            expect(instance._popper.getBoundingClientRect().left).toBe(548);
+            instance.destroy();
+            done();
+        });
+    });
 });
