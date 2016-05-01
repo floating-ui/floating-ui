@@ -174,6 +174,10 @@
             this._popper.setAttribute('x-placement', this._options.placement);
         }
 
+        // make sure to apply the popper position before any computation
+        this.state.position = this._getPosition(this._popper, this._reference);
+        setStyle(this._popper, { position: this.state.position});
+
         // fire the first update to position the popper in the right place
         this.update();
 
@@ -213,10 +217,6 @@
      */
     Popper.prototype.update = function() {
         var data = { instance: this };
-
-        // make sure to apply the popper position before any computation
-        this.state.position = this._getPosition(this._popper, this._reference);
-        setStyle(this._popper, { position: this.state.position});
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
