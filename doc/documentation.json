@@ -78,18 +78,18 @@
                         "type": [
                             "String"
                         ],
-                        "description": "The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.",
+                        "description": "The content of the popper, it can be text, html, or node; if it is not text, set `contentType` to `html` or `node`.",
                         "default": "''",
                         "optional": true,
                         "nullable": ""
                     },
                     {
-                        "name": "popper.allowHtml",
+                        "name": "popper.contentType",
                         "type": [
-                            "Boolean"
+                            "String"
                         ],
-                        "description": "If set to true, the `content` will be parsed as HTML.",
-                        "default": "false",
+                        "description": "If `html`, the `content` will be parsed as HTML. If `node`, it will be appended as-is.",
+                        "default": "'text'",
                         "optional": true,
                         "nullable": ""
                     },

@@ -1,3 +1,8 @@
+## v0.4.0
+- 201636a: added feature to use HTML Node as popper content. Use it defining `contentType: 'node'` and `content: yourHTMLNode` (thanks @rosskevin)
+- 9503e09: make sure to not add `="undefined"` when setting attributes (#39)
+- minor performance improvements
+
 ## v0.3.8
 - fixed problem with NPM release
 
