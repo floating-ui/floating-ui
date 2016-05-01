@@ -352,7 +352,7 @@
          */
         function addAttributes(element, attributes) {
             attributes.forEach(function(attribute) {
-                element.setAttribute(attribute.split(':')[0], attribute.split(':')[1]);
+                element.setAttribute(attribute.split(':')[0], attribute.split(':')[1] || '');
             });
         }
 
