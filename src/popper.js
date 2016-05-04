@@ -303,7 +303,7 @@
             popper.appendChild(arrow);
         }
 
-        var parent = config.parent;
+        var parent = config.parent.jquery ? config.parent[0] : config.parent;
 
         // if the given parent is a string, use it to match an element
         // if more than one element is matched, the first one will be used as parent
