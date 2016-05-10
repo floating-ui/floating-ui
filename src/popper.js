@@ -155,17 +155,9 @@
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
 
-        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
-        // so we return the corresponding method
-        this._options.modifiers = this._options.modifiers.map(function(modifier) {
-            if (typeof modifier === 'string') {
-                if (this._options.modifiersIgnored.indexOf(modifier) !== -1) {
-                    return;
-                }
-                return this.modifiers[modifier];
-            } else {
-                return modifier;
-            }
+        // remove ignored modifiers
+        this._options.modifiers = this._options.modifiers.filter(function(modifier){
+            return this._options.modifiersIgnored.indexOf(modifier) === -1;
         }.bind(this));
 
         // set the x-placement attribute before everything else because it could be used to add margins to the popper
@@ -173,6 +165,16 @@
         if (this._options.modifiers.indexOf('applyStyle') !== -1) {
             this._popper.setAttribute('x-placement', this._options.placement);
         }
+
+        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
+        // so we return the corresponding method
+        this._options.modifiers = this._options.modifiers.map(function(modifier) {
+            if (typeof modifier === 'string') {
+                return this.modifiers[modifier];
+            } else {
+                return modifier;
+            }
+        }.bind(this));
 
         // make sure to apply the popper position before any computation
         this.state.position = this._getPosition(this._popper, this._reference);
@@ -934,8 +936,7 @@
         // NOTE: 1 DOM access here
         var _display = element.style.display, _visibility = element.style.visibility;
         element.style.display = 'block'; element.style.visibility = 'hidden';
-        // force repaint
-        element.offsetWidth;
+        var calcWidthToForceRepaint = element.offsetWidth;
         
         // original method
         var styles = root.getComputedStyle(element);
