@@ -104,6 +104,16 @@ function fixToTop(data) {
 }
 ```
 
+Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
+
+```
+// note that the built-in modifiers are referenced using strings
+// instead, your custom modifiers are passed directly as functions
+new Popper(a, b, {
+  modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle', fixToTop]
+})
+```
+
 Here is the `data` object content:
 
 ```
