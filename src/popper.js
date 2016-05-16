@@ -155,25 +155,19 @@
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
 
-        // remove ignored modifiers
-        this._options.modifiers = this._options.modifiers.filter(function(modifier){
-            return this._options.modifiersIgnored.indexOf(modifier) === -1;
-        }.bind(this));
+        // refactoring modifiers' list
+        this._options.modifiers = this._options.modifiers.map(function(modifier){
+            // remove ignored modifiers
+            if (this._options.modifiersIgnored.indexOf(modifier) >= 0) return;
 
-        // set the x-placement attribute before everything else because it could be used to add margins to the popper
-        // margins needs to be calculated to get the correct popper offsets
-        if (this._options.modifiers.indexOf('applyStyle') !== -1) {
-            this._popper.setAttribute('x-placement', this._options.placement);
-        }
-
-        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
-        // so we return the corresponding method
-        this._options.modifiers = this._options.modifiers.map(function(modifier) {
-            if (typeof modifier === 'string') {
-                return this.modifiers[modifier];
-            } else {
-                return modifier;
+            // set the x-placement attribute before everything else because it could be used to add margins to the popper
+            // margins needs to be calculated to get the correct popper offsets
+            if (modifier === 'applyStyle') {
+                this._popper.setAttribute('x-placement', this._options.placement);
             }
+
+            // return predefined modifier identified by string or keep the custom one
+	    return this.modifiers[modifier] || modifier;
         }.bind(this));
 
         // make sure to apply the popper position before any computation
