@@ -158,7 +158,7 @@
         // refactoring modifiers' list
         this._options.modifiers = this._options.modifiers.map(function(modifier){
             // remove ignored modifiers
-            if (this._options.modifiersIgnored.indexOf(modifier) >= 0) return;
+            if (this._options.modifiersIgnored.indexOf(modifier) !== -1) return;
 
             // set the x-placement attribute before everything else because it could be used to add margins to the popper
             // margins needs to be calculated to get the correct popper offsets
@@ -167,7 +167,7 @@
             }
 
             // return predefined modifier identified by string or keep the custom one
-	    return this.modifiers[modifier] || modifier;
+            return this.modifiers[modifier] || modifier;
         }.bind(this));
 
         // make sure to apply the popper position before any computation
@@ -931,13 +931,13 @@
         var _display = element.style.display, _visibility = element.style.visibility;
         element.style.display = 'block'; element.style.visibility = 'hidden';
         var calcWidthToForceRepaint = element.offsetWidth;
-        
+
         // original method
         var styles = root.getComputedStyle(element);
         var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
         var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
         var result = { width: element.offsetWidth + y, height: element.offsetHeight + x };
-        
+
         // reset element styles
         element.style.display = _display; element.style.visibility = _visibility;
         return result;
