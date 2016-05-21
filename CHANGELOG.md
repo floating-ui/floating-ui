@@ -1,3 +1,6 @@
+## v0.4.2
+- b4c46aa: Forgot to update the build, sorry
+
 ## v0.4.1
 - 660849a: Fix calculation of popper elements' outerSizes (thanks @rafaelverger)
 

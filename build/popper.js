@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.4.0
+ * @version 0.4.2
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -155,24 +155,20 @@
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
 
-        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
-        // so we return the corresponding method
-        this._options.modifiers = this._options.modifiers.map(function(modifier) {
-            if (typeof modifier === 'string') {
-                if (this._options.modifiersIgnored.indexOf(modifier) !== -1) {
-                    return;
-                }
-                return this.modifiers[modifier];
-            } else {
-                return modifier;
-            }
-        }.bind(this));
+        // refactoring modifiers' list
+        this._options.modifiers = this._options.modifiers.map(function(modifier){
+            // remove ignored modifiers
+            if (this._options.modifiersIgnored.indexOf(modifier) !== -1) return;
 
-        // set the x-placement attribute before everything else because it could be used to add margins to the popper
-        // margins needs to be calculated to get the correct popper offsets
-        if (this._options.modifiers.indexOf('applyStyle') !== -1) {
-            this._popper.setAttribute('x-placement', this._options.placement);
-        }
+            // set the x-placement attribute before everything else because it could be used to add margins to the popper
+            // margins needs to be calculated to get the correct popper offsets
+            if (modifier === 'applyStyle') {
+                this._popper.setAttribute('x-placement', this._options.placement);
+            }
+
+            // return predefined modifier identified by string or keep the custom one
+            return this.modifiers[modifier] || modifier;
+        }.bind(this));
 
         // make sure to apply the popper position before any computation
         this.state.position = this._getPosition(this._popper, this._reference);
@@ -303,7 +299,7 @@
             popper.appendChild(arrow);
         }
 
-        var parent = config.parent;
+        var parent = config.parent.jquery ? config.parent[0] : config.parent;
 
         // if the given parent is a string, use it to match an element
         // if more than one element is matched, the first one will be used as parent
@@ -932,11 +928,19 @@
      */
     function getOuterSizes(element) {
         // NOTE: 1 DOM access here
+        var _display = element.style.display, _visibility = element.style.visibility;
+        element.style.display = 'block'; element.style.visibility = 'hidden';
+        var calcWidthToForceRepaint = element.offsetWidth;
+
+        // original method
         var styles = root.getComputedStyle(element);
         var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
         var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
+        var result = { width: element.offsetWidth + y, height: element.offsetHeight + x };
 
-        return { width: element.offsetWidth + y, height: element.offsetHeight + x };
+        // reset element styles
+        element.style.display = _display; element.style.visibility = _visibility;
+        return result;
     }
 
     /**
