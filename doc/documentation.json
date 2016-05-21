@@ -78,23 +78,23 @@
                         "type": [
                             "String"
                         ],
-                        "description": "The content of the popper, it can be text or HTML, in case of HTML, enable `allowHtml`.",
+                        "description": "The content of the popper, it can be text, html, or node; if it is not text, set `contentType` to `html` or `node`.",
                         "default": "''",
                         "optional": true,
                         "nullable": ""
                     },
                     {
-                        "name": "popper.allowHtml",
+                        "name": "popper.contentType",
                         "type": [
-                            "Boolean"
+                            "String"
                         ],
-                        "description": "If set to true, the `content` will be parsed as HTML.",
-                        "default": "false",
+                        "description": "If `html`, the `content` will be parsed as HTML. If `node`, it will be appended as-is.",
+                        "default": "'text'",
                         "optional": true,
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.tagName",
+                        "name": "popper.arrowTagName",
                         "type": [
                             "String"
                         ],
@@ -104,7 +104,7 @@
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.classNames",
+                        "name": "popper.arrowClassNames",
                         "type": [
                             "Array"
                         ],
@@ -114,7 +114,7 @@
                         "nullable": ""
                     },
                     {
-                        "name": "popper.arrow.attributes",
+                        "name": "popper.arrowAttributes",
                         "type": [
                             "String"
                         ],
@@ -278,7 +278,7 @@
                     "name": "onUpdate",
                     "access": "",
                     "virtual": false,
-                    "description": "If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations\nused to style popper and its arrow.",
+                    "description": "If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations\nused to style popper and its arrow.\nNOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!",
                     "parameters": [
                         {
                             "name": "callback",
@@ -298,13 +298,49 @@
                     "access": "",
                     "virtual": false,
                     "description": "Helper used to generate poppers from a configuration file",
-                    "parameters": [],
+                    "parameters": [
+                        {
+                            "name": "config",
+                            "type": [
+                                "Object"
+                            ],
+                            "description": "configuration",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
                     "examples": [],
                     "returns": {
                         "type": [
                             "HTMLElement"
                         ],
                         "description": "popper"
+                    }
+                },
+                {
+                    "name": "_getPosition",
+                    "access": "",
+                    "virtual": false,
+                    "description": "Helper used to get the position which will be applied to the popper",
+                    "parameters": [
+                        {
+                            "name": "config",
+                            "type": [
+                                "HTMLElement"
+                            ],
+                            "description": "popper element",
+                            "default": "",
+                            "optional": "",
+                            "nullable": ""
+                        }
+                    ],
+                    "examples": [],
+                    "returns": {
+                        "type": [
+                            "HTMLElement"
+                        ],
+                        "description": "reference element"
                     }
                 },
                 {

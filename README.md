@@ -92,6 +92,77 @@ If you are wondering about the available options of the third argument, check ou
 
 Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do right now!
 
+### Writing your own modifiers
+Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
+A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
+
+```
+// this little modifier forces the popper `top` value to be `0`
+function fixToTop(data) {
+    data.popper.offsets.top = 0
+    return data;
+}
+```
+
+Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
+
+```
+// note that the built-in modifiers are referenced using strings
+// instead, your custom modifiers are passed directly as functions
+new Popper(a, b, {
+  modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle', fixToTop]
+})
+```
+
+Here is the `data` object content:
+
+```
+let data = {
+  // popper and reference elements positions
+  offsets: {
+    popper: {
+      top: Number,
+      left: Number,
+      width: Number,
+      height: Number
+    },
+    reference: {
+      top: Number,
+      left: Number,
+      width: Number,
+      height: Number
+    },
+    // here, only one of the two values will be different from `0`, depending by the placement
+    arrow: {
+      left: Number,
+      top: Number
+    }
+  },
+  // the result of the _getBoundaries method, these are the limits between the popper can be placed
+  boundaries: {
+    top: Number,
+    right: Number,
+    bottom: Number,
+    left: Number
+  },
+  // `top`, `left`, `bottom`, `right` + optional `end` or `start` variations
+  placement: String,
+  // the placement defined at the beginning, before any edit made by modifiers
+  _originalPlacement: String,
+  // allows you to know if the `flip` modifier have flipped the placement of the popper
+  flipped: Boolean,
+  // the node of the arrow (if any)
+  arrowElement: HTMLElement
+  
+}
+```
+
+### Internet Explorer
+Exactly, we are in 2016, and we still talk about workarounds for IE...
+
+If you need the `removeOnDestroy` option in IE 11 and below, please make sure to add this polyfill before Popper.js:
+https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
+
 
 ## Notes
 
