@@ -356,7 +356,7 @@ describe('Popper.js', function() {
             { contentType: 'node', content: popperContent },
             { placement: 'left', removeOnDestroy: true }
         ).onCreate(function(instance) {
-            expect(instance._popper.getBoundingClientRect().left).toBe(548);
+            expect(instance._popper.getBoundingClientRect().left).toBe(543);
             instance.destroy();
             done();
         });
