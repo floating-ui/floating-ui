@@ -94,8 +94,8 @@
      * @param {String} [popper.arrowAttributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
-     *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
-     *      left(-left, -right)`
+     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+     *      left(-start, -end)`
      *
      * @param {Boolean} [options.gpuAcceleration=true]
      *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the

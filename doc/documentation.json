@@ -138,7 +138,7 @@
                         "type": [
                             "String"
                         ],
-                        "description": "Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),\n     left(-left, -right)`",
+                        "description": "Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),\n     left(-start, -end)`",
                         "default": "bottom",
                         "optional": true,
                         "nullable": ""
