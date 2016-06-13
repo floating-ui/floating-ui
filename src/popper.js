@@ -97,6 +97,12 @@
      *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
      *      left(-start, -end)`
      *
+     * @param {HTMLElement|String} [options.arrowElement='[x-arrow]']
+     *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
+     *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
+     *      reference element.
+     *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
+     *
      * @param {Boolean} [options.gpuAcceleration=true]
      *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
      *      browser to use the GPU to accelerate the rendering.
