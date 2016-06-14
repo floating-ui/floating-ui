@@ -361,4 +361,45 @@ describe('Popper.js', function() {
             done();
         });
     });
+
+    it('creates a popper with a custom modifier that should hide it', function(done) {
+        var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2);
+
+        function hidePopper(data) {
+            data.styles.display = 'none';
+            return data;
+        }
+
+        var options = {
+            modifiers: [hidePopper, 'applyStyle'],
+        };
+
+        new TestPopper(reference, popper, options).onCreate(function(pop) {
+            expect(popper.style.display).toBe('none');
+            pop.destroy();
+            done();
+        });
+    });
+
+
+    it('creates a popper with a custom modifier that set its top to 3px', function(done) {
+        var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2);
+
+        function hidePopper(data) {
+            data.styles.top = '3px';
+            return data;
+        }
+
+        var options = {
+            modifiers: [hidePopper, 'applyStyle'],
+        };
+
+        new TestPopper(reference, popper, options).onCreate(function(pop) {
+            expect(popper.style.top).toBe('3px');
+            pop.destroy();
+            done();
+        });
+    });
 });
