@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.4.2
+ * @version 0.5.0
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -94,8 +94,14 @@
      * @param {String} [popper.arrowAttributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
-     *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
-     *      left(-left, -right)`
+     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+     *      left(-start, -end)`
+     *
+     * @param {HTMLElement|String} [options.arrowElement='[x-arrow]']
+     *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
+     *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
+     *      reference element.
+     *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
      *
      * @param {Boolean} [options.gpuAcceleration=true]
      *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
@@ -212,7 +218,7 @@
      * @memberof Popper
      */
     Popper.prototype.update = function() {
-        var data = { instance: this };
+        var data = { instance: this, styles: {} };
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
@@ -615,6 +621,12 @@
             styles.left =left;
             styles.top = top;
         }
+
+        // any property present in `data.styles` will be applied to the popper,
+        // in this way we can make the 3rd party modifiers add custom styles to it
+        // Be aware, modifiers could override the properties defined in the previous
+        // lines of this modifier!
+        Object.assign(styles, data.styles);
 
         setStyle(this._popper, styles);
 

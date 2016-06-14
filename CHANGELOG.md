@@ -1,3 +1,6 @@
+## v0.5.0
+- f4e3659: 3rd party modifiers now can set custom styling to poppers (prep for #52)
+
 ## v0.4.2
 - 566d4e6: Forgot to update the build, sorry
 

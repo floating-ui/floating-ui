@@ -1,7 +1,7 @@
 {
   "name": "popper.js",
-  "version": "0.4.2",
-  "description": "",
+  "version": "0.5.0",
+  "description": "A kickass library to manage your poppers",
   "main": "src/popper.js",
   "scripts": {
     "test": "grunt test"
