@@ -218,7 +218,7 @@
      * @memberof Popper
      */
     Popper.prototype.update = function() {
-        var data = { instance: this };
+        var data = { instance: this, styles: {} };
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
@@ -621,6 +621,12 @@
             styles.left =left;
             styles.top = top;
         }
+
+        // any property present in `data.styles` will be applied to the popper,
+        // in this way we can make the 3rd party modifiers add custom styles to it
+        // Be aware, modifiers could override the properties defined in the previous
+        // lines of this modifier!
+        Object.assign(styles, data.styles);
 
         setStyle(this._popper, styles);
 
