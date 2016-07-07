@@ -1,3 +1,6 @@
+## v0.5.1
+- 0a79027: Added support for a reference el that is both fixed and transformed. (thanks @hgascoigne)
+
 ## v0.5.0
 - f4e3659: 3rd party modifiers now can set custom styling to poppers (prep for #52)
 
