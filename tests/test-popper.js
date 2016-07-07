@@ -203,6 +203,36 @@ describe('Popper.js', function() {
         });
     });
 
+    it('inits a popper near a reference element, both inside a fixed element with CSS transforms, inside a scrolled body', function(done) {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.margin = '20px';
+        fixed.style.height = '50px';
+        fixed.style.width = '100%';
+        fixed.style.transform = 'translateX(0)'
+        jasmineWrapper.appendChild(fixed);
+
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', fixed);
+        var popper = appendNewPopper(2, 'popper', fixed);
+
+        new TestPopper(ref, popper).onCreate(function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(83);
+            expect(popper.getBoundingClientRect().left).toBeApprox(33);
+            pop.destroy();
+            done();
+        });
+    });
+
     it('inits a popper near a reference element, both inside a fixed element on bottom of viewport, inside a scrolled body', function(done) {
         var fixed = document.createElement('div');
         fixed.style.position = 'fixed';

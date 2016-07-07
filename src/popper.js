@@ -180,6 +180,9 @@
         this.state.position = this._getPosition(this._popper, this._reference);
         setStyle(this._popper, { position: this.state.position});
 
+        // determine how we should set the origin of offsets
+        this.state.isParentTransformed = this._getIsParentTransformed(this._popper);
+
         // fire the first update to position the popper in the right place
         this.update();
 
@@ -379,6 +382,15 @@
     };
 
     /**
+     * Helper used to determine if the popper's parent is transformed.
+     * @param  {[type]} popper [description]
+     * @return {[type]}        [description]
+     */
+    Popper.prototype._getIsParentTransformed = function(popper) {
+      return isTransformed(popper.parentNode);
+    };
+
+    /**
      * Get offsets to the popper
      * @method
      * @memberof Popper
@@ -394,10 +406,13 @@
         popperOffsets.position = this.state.position;
         var isParentFixed = popperOffsets.position === 'fixed';
 
+        var isParentTransformed = this.state.isParentTransformed;
+
         //
         // Get reference element position
         //
-        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, getOffsetParent(popper), isParentFixed);
+        var offsetParent = (isParentFixed && isParentTransformed) ? getOffsetParent(reference) : getOffsetParent(popper);
+        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, offsetParent, isParentFixed, isParentTransformed);
 
         //
         // Get popper sizes
@@ -1076,6 +1091,21 @@
     }
 
     /**
+     * Check if the given element has transforms applied to itself or a parent
+     * @param  {Element} element
+     * @return {Boolean} answer to "isTransformed?"
+     */
+    function isTransformed(element) {
+      if (element === root.document.body) {
+          return false;
+      }
+      if (getStyleComputedProperty(element, 'transform') !== 'none') {
+          return true;
+      }
+      return element.parentNode ? isTransformed(element.parentNode) : element;
+    }
+
+    /**
      * Set the style to the given popper
      * @function
      * @ignore
@@ -1157,11 +1187,11 @@
      * @param {HTMLElement} parent
      * @return {Object} rect
      */
-    function getOffsetRectRelativeToCustomParent(element, parent, fixed) {
+    function getOffsetRectRelativeToCustomParent(element, parent, fixed, transformed) {
         var elementRect = getBoundingClientRect(element);
         var parentRect = getBoundingClientRect(parent);
 
-        if (fixed) {
+        if (fixed && !transformed) {
             var scrollParent = getScrollParent(parent);
             parentRect.top += scrollParent.scrollTop;
             parentRect.bottom += scrollParent.scrollTop;
