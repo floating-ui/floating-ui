@@ -1,3 +1,6 @@
+## v0.5.2
+- 6691354: fixed arrow position in particular cases
+
 ## v0.5.1
 - 0a79027: Added support for a reference el that is both fixed and transformed. (thanks @hgascoigne)
 
