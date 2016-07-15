@@ -928,7 +928,8 @@
         // compute center of the popper
         var center = reference[side] + (reference[len] / 2) - (arrowSize / 2);
 
-        var sideValue = center - popper[side];
+        // Compute the sideValue using the updated popper offsets
+        var sideValue = center - getPopperClientRect(data.offsets.popper)[side];
 
         // prevent arrow from being placed not contiguously to its popper
         sideValue = Math.max(Math.min(popper[len] - arrowSize, sideValue), 0);
