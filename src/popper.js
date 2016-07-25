@@ -75,6 +75,10 @@
         modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle'],
 
         modifiersIgnored: [],
+        
+        //limit the max repaint and computation framerate to achieve more performance and less resource usage on the user browser and even save some trees ;)
+        maxFps: 60,
+        afterUpdateTriggerDelayMs: 200
     };
 
     /**
@@ -191,6 +195,94 @@
         return this;
     }
 
+    //
+    // Utils
+    // 
+    /** 
+     * 
+     * Some utility functions ported from underscore.js v1.8.3
+     *
+     * Underscore.js as a permissive open source license and very good decoupling level in its code,
+     * so we can port here just some tiny bits it as we need just some utils functions: a 'dep' that's as tiny
+     * to be considered a 'no-dep'
+     * 
+     * @license https://github.com/jashkenas/underscore/blob/master/LICENSE
+     * @external 
+     * @see {@link http://underscorejs.org/}
+     *
+     * 
+    */
+    Popper.prototype._ = {
+          // A (possibly faster) way to get the current timestamp as an integer.
+          now : Date.now || function() {
+              return new Date().getTime();
+          },
+          // Returns a function, that, when invoked, will only be triggered at most once
+          // during a given window of time. Normally, the throttled function will run
+          // as much as it can, without ever going more than once per `wait` duration;
+          // but if you'd like to disable the execution on the leading edge, pass
+          // `{leading: false}`. To disable execution on the trailing edge, ditto.
+          throttle : function(func, wait, options) {
+            var timeout, context, args, result;
+            var previous = 0;
+            if (!options) options = {};
+        
+            var later = function() {
+              previous = options.leading === false ? 0 :  Popper.prototype._.now();
+              timeout = null;
+              result = func.apply(context, args);
+              if (!timeout) context = args = null;
+            };
+        
+            var throttled = function() {
+              var now = Popper.prototype._.now();
+              if (!previous && options.leading === false) previous = now;
+              var remaining = wait - (now - previous);
+              context = this;
+              args = arguments;
+              if (remaining <= 0 || remaining > wait) {
+                if (timeout) {
+                  clearTimeout(timeout);
+                  timeout = null;
+                }
+                previous = now;
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+              } else if (!timeout && options.trailing !== false) {
+                timeout = setTimeout(later, remaining);
+              }
+              return result;
+            };
+        
+            throttled.cancel = function() {
+              clearTimeout(timeout);
+              previous = 0;
+              timeout = context = args = null;
+            };
+        
+            return throttled;
+          },
+          // Returns a function, that, as long as it continues to be invoked, will not
+          // be triggered. The function will be called after it stops being called for
+          // N milliseconds. If `immediate` is passed, trigger the function on the
+          // leading edge, instead of the trailing.
+          debounce : function(func, wait, immediate) {
+            	var timeout;
+            	return function() {
+            		var context = this, args = arguments;
+            		var later = function() {
+            			timeout = null;
+            			if (!immediate) func.apply(context, args);
+            		};
+            		var callNow = immediate && !timeout;
+            		clearTimeout(timeout);
+            		timeout = setTimeout(later, wait);
+            		if (callNow) func.apply(context, args);
+            	};
+          }
+         
+    };
+        
 
     //
     // Methods
@@ -239,7 +331,14 @@
         if (typeof this.state.updateCallback === 'function') {
             this.state.updateCallback(data);
         }
-
+        if (typeof this.state.afterUpdateCallback === 'function') {
+            if (typeof this.state.debouncedCallback === 'undefined'){
+             this.state.debouncedCallback = this._.debounce(this.state.afterUpdateCallback,this._options.afterUpdateTriggerDelayMs,false,data);
+            }else{
+                this.state.debouncedCallback();
+            }
+        }
+        
     };
 
     /**
@@ -257,13 +356,28 @@
     /**
      * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
      * used to style popper and its arrow.
-     * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
+     * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor! 
+     * This event is fired for each animation frame (e.g. multiple times during scrolling and resizing)
      * @method
      * @memberof Popper
      * @param {Function} callback
      */
     Popper.prototype.onUpdate = function(callback) {
         this.state.updateCallback = callback;
+        return this;
+    };
+    
+    /**
+     * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
+     * used to style popper and its arrow.
+     * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor! 
+     * NOTE: it will be triggered with <options.afterUpdateTriggerDelayMs> milliseconds of delay after any update() 
+     * @method
+     * @memberof Popper
+     * @param {Function} callback
+     */
+    Popper.prototype.onAfterUpdate = function(callback) {
+        this.state.afterUpdateCallback = callback;
         return this;
     };
 
@@ -284,7 +398,8 @@
             contentType: 'text',
             arrowTagName: 'div',
             arrowClassNames: [ 'popper__arrow' ],
-            arrowAttributes: [ 'x-arrow']
+            arrowAttributes: [ 'x-arrow'],
+            maxFps: 60
         };
         config = Object.assign({}, defaultConfig, config);
 
@@ -460,8 +575,10 @@
      */
     Popper.prototype._setupEventListeners = function() {
         // NOTE: 1 DOM access here
+        var minWaitMs  = 1000/ this._options.maxFps || 1; 
         this.state.updateBound = this.update.bind(this);
-        root.addEventListener('resize', this.state.updateBound);
+        this.state.throttledUpdateBound = this._.throttle(this.state.updateBound,minWaitMs,{leading:false,trailing: true});
+        root.addEventListener('resize', this.state.throttledUpdateBound);
         // if the boundariesElement is window we don't need to listen for the scroll event
         if (this._options.boundariesElement !== 'window') {
             var target = getScrollParent(this._reference);
@@ -469,7 +586,9 @@
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
             }
-            target.addEventListener('scroll', this.state.updateBound);
+
+            target.addEventListener('scroll', this.state.throttledUpdateBound);
+            
         }
     };
 
@@ -481,14 +600,14 @@
      */
     Popper.prototype._removeEventListeners = function() {
         // NOTE: 1 DOM access here
-        root.removeEventListener('resize', this.state.updateBound);
+        root.removeEventListener('resize', this.state.throttledUpdateBound);
         if (this._options.boundariesElement !== 'window') {
             var target = getScrollParent(this._reference);
             // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
             if (target === root.document.body || target === root.document.documentElement) {
                 target = root;
             }
-            target.removeEventListener('scroll', this.state.updateBound);
+            target.removeEventListener('scroll', this.state.throttledUpdateBound);
         }
         this.state.updateBound = null;
     };
