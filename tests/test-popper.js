@@ -209,7 +209,7 @@ describe('Popper.js', function() {
         fixed.style.margin = '20px';
         fixed.style.height = '50px';
         fixed.style.width = '100%';
-        fixed.style.transform = 'translateX(0)'
+        fixed.style.transform = 'translateX(0)';
         jasmineWrapper.appendChild(fixed);
 
         var relative = document.createElement('div');
@@ -276,38 +276,15 @@ describe('Popper.js', function() {
         });
     });
 
-    it('creates a popper using the default configuration', function(done) {
-        var reference = appendNewRef(1);
-
-        new TestPopper(reference).onCreate(function(instance) {
-            expect(document.querySelectorAll('.popper').length).toBe(1);
-            document.body.removeChild(instance._popper);
-            instance.destroy();
-            done();
-        });
-    });
-
-    it('creates a popper using a custom configuration', function(done) {
-        var reference = appendNewRef(1);
-
-        new TestPopper(reference, {
-            content: 'something'
-        }).onCreate(function(instance) {
-            expect(instance._popper.innerText).toBe('something');
-            document.body.removeChild(instance._popper);
-            instance.destroy();
-            done();
-        });
-    });
-
     it('creates a popper and sets an onUpdate callback', function(done) {
         var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2, 'react');
 
-        new TestPopper(reference, {content: 'react'}, {
+        new TestPopper(reference, popper, {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
-            document.body.removeChild(data.instance._popper);
+            jasmineWrapper.removeChild(data.instance._popper);
             data.instance.destroy();
             done();
         }).onCreate(function(instance) {
@@ -315,24 +292,13 @@ describe('Popper.js', function() {
         });
     });
 
-    it('creates a popper when content is undefined', function(done) {
-        var reference = appendNewRef(1);
-
-        new TestPopper(reference).onCreate(function(instance) {
-            expect(instance._popper).toBeDefined();
-            expect(instance._popper.innerText).toBe('');
-            document.body.removeChild(instance._popper);
-            instance.destroy();
-            done();
-        });
-    });
-
     it('creates a popper with an empty form as parent, then auto remove it on destroy', function(done) {
-        var form = document.createElement('form');
+        var form      = document.createElement('form');
         var reference = appendNewRef(1, 'ref', form);
+        var popper    = appendNewPopper(2, 'test', form);
         jasmineWrapper.appendChild(form);
 
-        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+        new TestPopper(reference, popper, { removeOnDestroy: true }).onCreate(function(instance) {
             expect(instance._popper).toBeDefined();
             expect(instance._popper.innerText).toBe('test');
             instance.destroy();
@@ -342,13 +308,14 @@ describe('Popper.js', function() {
     });
 
     it('creates a popper with a not empty form as parent, then auto remove it on destroy', function(done) {
-        var form = document.createElement('form');
-        var input = document.createElement('input');
+        var form   = document.createElement('form');
+        var input  = document.createElement('input');
+        var popper = appendNewPopper(2, 'test', form);
         form.appendChild(input);
         var reference = appendNewRef(1, 'ref', form);
         jasmineWrapper.appendChild(form);
 
-        new TestPopper(reference, { parent: form, content: 'test'}, { removeOnDestroy: true }).onCreate(function(instance) {
+        new TestPopper(reference, popper, { removeOnDestroy: true }).onCreate(function(instance) {
             expect(instance._popper).toBeDefined();
             expect(instance._popper.innerText).toBe('test');
             instance.destroy();
@@ -359,34 +326,17 @@ describe('Popper.js', function() {
 
     it('creates a popper and make sure it\'s position is correct on init', function(done) {
         var reference = appendNewRef(1);
+        var popper = appendNewPopper(2, 'popper');
 
         new TestPopper(
             reference,
-            { content: 'popper', classNames: ['none'] },
+            popper,
             { placement: 'right', removeOnDestroy: true }
         ).onCreate(function(instance) {
             instance.update();
-            var local = 87;
-            var ci = 105;
+            var local = 92;
+            var ci = 110;
             expect([local, ci]).toContain(instance._popper.getBoundingClientRect().left);
-            instance.destroy();
-            done();
-        });
-    });
-
-    it('creates a popper with an HTML node as content', function(done) {
-        var reference = appendNewRef(1);
-        reference.style.marginLeft = '700px';
-        var popperContent = document.createElement('div');
-        popperContent.style.width = '700px';
-        popperContent.innerText = 'popper';
-
-        new TestPopper(
-            reference,
-            { contentType: 'node', content: popperContent },
-            { placement: 'left', removeOnDestroy: true }
-        ).onCreate(function(instance) {
-            expect(instance._popper.getBoundingClientRect().left).toBe(543);
             instance.destroy();
             done();
         });

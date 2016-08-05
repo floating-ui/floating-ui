@@ -81,17 +81,7 @@
      * Create a new Popper.js instance
      * @constructor Popper
      * @param {HTMLElement} reference - The reference element used to position the popper
-     * @param {HTMLElement|Object} popper
-     *      The HTML element used as popper, or a configuration used to generate the popper.
-     * @param {String} [popper.tagName='div'] The tag name of the generated popper.
-     * @param {Array} [popper.classNames=['popper']] Array of classes to apply to the generated popper.
-     * @param {Array} [popper.attributes] Array of attributes to apply, specify `attr:value` to assign a value to it.
-     * @param {HTMLElement|String} [popper.parent=window.document.body] The parent element, given as HTMLElement or as query string.
-     * @param {String} [popper.content=''] The content of the popper, it can be text, html, or node; if it is not text, set `contentType` to `html` or `node`.
-     * @param {String} [popper.contentType='text'] If `html`, the `content` will be parsed as HTML. If `node`, it will be appended as-is.
-     * @param {String} [popper.arrowTagName='div'] Same as `popper.tagName` but for the arrow element.
-     * @param {Array} [popper.arrowClassNames='popper__arrow'] Same as `popper.classNames` but for the arrow element.
-     * @param {String} [popper.arrowAttributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
+     * @param {HTMLElement} popper - The HTML element used as popper.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
      *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
@@ -146,17 +136,7 @@
         this._reference = reference.jquery ? reference[0] : reference;
         this.state = {};
 
-        // if the popper variable is a configuration object, parse it to generate an HTMLElement
-        // generate a default popper if is not defined
-        var isNotDefined = typeof popper === 'undefined' || popper === null;
-        var isConfig = popper && Object.prototype.toString.call(popper) === '[object Object]';
-        if (isNotDefined || isConfig) {
-            this._popper = this.parse(isConfig ? popper : {});
-        }
-        // otherwise, use the given HTMLElement as popper
-        else {
-            this._popper = popper.jquery ? popper[0] : popper;
-        }
+        this._popper = popper.jquery ? popper[0] : popper;
 
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
@@ -164,7 +144,7 @@
         // refactoring modifiers' list
         this._options.modifiers = this._options.modifiers.map(function(modifier){
             // remove ignored modifiers
-            if (this._options.modifiersIgnored.indexOf(modifier) !== -1) return;
+            if (this._options.modifiersIgnored.indexOf(modifier) !== -1) return; // jshint ignore:line
 
             // set the x-placement attribute before everything else because it could be used to add margins to the popper
             // margins needs to be calculated to get the correct popper offsets
@@ -265,104 +245,6 @@
     Popper.prototype.onUpdate = function(callback) {
         this.state.updateCallback = callback;
         return this;
-    };
-
-    /**
-     * Helper used to generate poppers from a configuration file
-     * @method
-     * @memberof Popper
-     * @param config {Object} configuration
-     * @returns {HTMLElement} popper
-     */
-    Popper.prototype.parse = function(config) {
-        var defaultConfig = {
-            tagName: 'div',
-            classNames: [ 'popper' ],
-            attributes: [],
-            parent: root.document.body,
-            content: '',
-            contentType: 'text',
-            arrowTagName: 'div',
-            arrowClassNames: [ 'popper__arrow' ],
-            arrowAttributes: [ 'x-arrow']
-        };
-        config = Object.assign({}, defaultConfig, config);
-
-        var d = root.document;
-
-        var popper = d.createElement(config.tagName);
-        addClassNames(popper, config.classNames);
-        addAttributes(popper, config.attributes);
-        if (config.contentType === 'node') {
-            popper.appendChild(config.content.jquery ? config.content[0] : config.content);
-        }else if (config.contentType === 'html') {
-            popper.innerHTML = config.content;
-        } else {
-            popper.textContent = config.content;
-        }
-
-        if (config.arrowTagName) {
-            var arrow = d.createElement(config.arrowTagName);
-            addClassNames(arrow, config.arrowClassNames);
-            addAttributes(arrow, config.arrowAttributes);
-            popper.appendChild(arrow);
-        }
-
-        var parent = config.parent.jquery ? config.parent[0] : config.parent;
-
-        // if the given parent is a string, use it to match an element
-        // if more than one element is matched, the first one will be used as parent
-        // if no elements are matched, the script will throw an error
-        if (typeof parent === 'string') {
-            parent = d.querySelectorAll(config.parent);
-            if (parent.length > 1) {
-                console.warn('WARNING: the given `parent` query(' + config.parent + ') matched more than one element, the first one will be used');
-            }
-            if (parent.length === 0) {
-                throw 'ERROR: the given `parent` doesn\'t exists!';
-            }
-            parent = parent[0];
-        }
-        // if the given parent is a DOM nodes list or an array of nodes with more than one element,
-        // the first one will be used as parent
-        if (parent.length > 1 && parent instanceof Element === false) {
-            console.warn('WARNING: you have passed as parent a list of elements, the first one will be used');
-            parent = parent[0];
-        }
-
-        // append the generated popper to its parent
-        parent.appendChild(popper);
-
-        return popper;
-
-        /**
-         * Adds class names to the given element
-         * @function
-         * @ignore
-         * @param {HTMLElement} target
-         * @param {Array} classes
-         */
-        function addClassNames(element, classNames) {
-            classNames.forEach(function(className) {
-                element.classList.add(className);
-            });
-        }
-
-        /**
-         * Adds attributes to the given element
-         * @function
-         * @ignore
-         * @param {HTMLElement} target
-         * @param {Array} attributes
-         * @example
-         * addAttributes(element, [ 'data-info:foobar' ]);
-         */
-        function addAttributes(element, attributes) {
-            attributes.forEach(function(attribute) {
-                element.setAttribute(attribute.split(':')[0], attribute.split(':')[1] || '');
-            });
-        }
-
     };
 
     /**
