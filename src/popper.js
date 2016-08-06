@@ -37,16 +37,14 @@ var DEFAULTS = {
 
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: [
-        { name: 'shift', enabled: true },
-        { name: 'offset', enabled: true},
-        { name: 'preventOverflow', enabled: true},
-        { name: 'keepTogether', enabled: true},
-        { name: 'arrow', enabled: true},
-        { name: 'flip', enabled: true},
-        { name: 'applyStyle', enabled: true}
+        { name: 'shift', enabled: true, function: modifiersFunctions.shift },
+        { name: 'offset', enabled: true, function: modifiersFunctions.offset },
+        { name: 'preventOverflow', enabled: true, function: modifiersFunctions.preventOverflow },
+        { name: 'keepTogether', enabled: true, function: modifiersFunctions.keepTogether },
+        { name: 'arrow', enabled: true, function: modifiersFunctions.arrow },
+        { name: 'flip', enabled: true, function: modifiersFunctions.flip },
+        { name: 'applyStyle', enabled: true, function: modifiersFunctions.applyStyle }
     ],
-
-    modifiersIgnored: [],
 };
 
 /**
@@ -92,9 +90,8 @@ var DEFAULTS = {
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
  *
- * @param {Array} [options.modifiers=[{ modifier: 'shift', enabled: true }, { modifier: 'offset', enabled: true}, { modifier: 'preventOverflow', enabled: true}, { modifier: 'keepTogether', enabled: true}, { modifier: 'arrow', enabled: true}, { modifier: 'flip', enabled: true}, { modifier: 'applyStyle', enabled: true}]]
- *      List of functions used to modify the data before they are applied to the popper, add your custom modifier functions
- *      to the `Popper.modifiers` property, then add your modifier to this list to enable it.
+ * @param {Array} [options.modifiers=[{ name: 'foobar', enabled: true, function: fn }, ... ]]
+ *      List of functions used to modify the data before they are applied to the popper.
  *      When `enabled` is set to `undefined`, it will use the default value (`true` for built-in modifiers, `false` for custom modifiers)
  *
  * @param {Boolean} [options.removeOnDestroy=false]
@@ -102,22 +99,20 @@ var DEFAULTS = {
  */
 export default class Popper {
     constructor(reference, popper, options) {
-        this._reference = reference.jquery ? reference[0] : reference;
+        this.reference = reference.jquery ? reference[0] : reference;
         this.state = {};
 
-        this._popper = popper.jquery ? popper[0] : popper;
-
-        this.modifiers = modifiersFunctions;
+        this.popper = popper.jquery ? popper[0] : popper;
 
         // with {} we create a new object with the options inside it
-        this._options = Object.assign({}, DEFAULTS, options);
+        this.options = Object.assign({}, DEFAULTS, options);
 
         // refactoring modifiers' list
-        this._options.modifiers = this._options.modifiers.map((modifier) => {
+        this.options.modifiers = this.options.modifiers.map((modifier) => {
             // set the x-placement attribute before everything else because it could be used to add margins to the popper
             // margins needs to be calculated to get the correct popper offsets
             if (modifier === 'applyStyle') {
-                this._popper.setAttribute('x-placement', this._options.placement);
+                this.popper.setAttribute('x-placement', this.options.placement);
             }
 
             // return the modifier
@@ -125,17 +120,17 @@ export default class Popper {
         });
 
         // make sure to apply the popper position before any computation
-        this.state.position = getPosition(this._popper, this._reference);
-        setStyle(this._popper, { position: this.state.position});
+        this.state.position = getPosition(this.popper, this.reference);
+        setStyle(this.popper, { position: this.state.position});
 
         // determine how we should set the origin of offsets
-        this.state.isParentTransformed = isTransformed(this._popper.parentNode);
+        this.state.isParentTransformed = isTransformed(this.popper.parentNode);
 
         // fire the first update to position the popper in the right place
         this.update();
 
         // setup event listeners, they will take care of update the position in specific situations
-        setupEventListeners(this._reference, this._options, this.state, () => this.update);
+        setupEventListeners(this.reference, this.options, this.state, () => this.update);
         return this;
     }
 
@@ -153,16 +148,16 @@ export default class Popper {
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
-        data.placement = this._options.placement;
-        data._originalPlacement = this._options.placement;
+        data.placement = this.options.placement;
+        data.originalPlacement = this.options.placement;
 
         // compute the popper and reference offsets and put them inside data.offsets
-        data.offsets = getOffsets(this.state, this._popper, this._reference, data.placement);
+        data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
 
         // get boundaries
-        data.boundaries = getBoundaries(this._popper, data, this._options.boundariesPadding, this._options.boundariesElement);
+        data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
 
-        data = runModifiers(this._options, data, this.modifiers);
+        data = runModifiers(this.options, data);
 
         if (typeof this.state.updateCallback === 'function') {
             this.state.updateCallback(data);
@@ -200,16 +195,16 @@ export default class Popper {
      * @memberof Popper
      */
     destroy() {
-        this._popper.removeAttribute('x-placement');
-        this._popper.style.left = '';
-        this._popper.style.position = '';
-        this._popper.style.top = '';
-        this._popper.style[getSupportedPropertyName('transform')] = '';
-        this.state = removeEventListeners(this._reference, this.state, this._options);
+        this.popper.removeAttribute('x-placement');
+        this.popper.style.left = '';
+        this.popper.style.position = '';
+        this.popper.style.top = '';
+        this.popper.style[getSupportedPropertyName('transform')] = '';
+        this.state = removeEventListeners(this.reference, this.state, this.options);
 
         // remove the popper if user explicity asked for the deletion on destroy
-        if (this._options.removeOnDestroy) {
-            this._popper.remove();
+        if (this.options.removeOnDestroy) {
+            this.popper.remove();
         }
         return this;
     }

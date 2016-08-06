@@ -8,9 +8,9 @@ import getPopperClientRect from '../utils/getPopperClientRect';
  * @returns {Object} The data object, properly modified
  */
 export default function keepTogether(data) {
-    var popper  = getPopperClientRect(data.offsets.popper);
-    var reference = data.offsets.reference;
-    var f = Math.floor;
+    const popper  = getPopperClientRect(data.offsets.popper);
+    const reference = data.offsets.reference;
+    const f = Math.floor;
 
     if (popper.right < f(reference.left)) {
         data.offsets.popper.left = f(reference.left) - popper.width;

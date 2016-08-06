@@ -10,7 +10,7 @@ export default function setStyle(element, styles) {
         return (n !== '' && !isNaN(parseFloat(n)) && isFinite(n));
     }
     Object.keys(styles).forEach(function(prop) {
-        var unit = '';
+        let unit = '';
         // add unit if the value is numeric and is one of the following
         if (['width', 'height', 'top', 'right', 'bottom', 'left'].indexOf(prop) !== -1 && is_numeric(styles[prop])) {
             unit = 'px';

@@ -12,18 +12,18 @@ import isModifierRequired from '../utils/isModifierRequired';
 export default function applyStyle(data) {
     // apply the final offsets to the popper
     // NOTE: 1 DOM access here
-    var styles = {
+    const styles = {
         position: data.offsets.popper.position
     };
 
     // round top and left to avoid blurry text
-    var left = Math.round(data.offsets.popper.left);
-    var top = Math.round(data.offsets.popper.top);
+    const left = Math.round(data.offsets.popper.left);
+    const top = Math.round(data.offsets.popper.top);
 
     // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
     // we automatically use the supported prefixed version if needed
-    var prefixedProperty = getSupportedPropertyName('transform');
-    if (data.instance._options.gpuAcceleration && prefixedProperty) {
+    const prefixedProperty = getSupportedPropertyName('transform');
+    if (data.instance.options.gpuAcceleration && prefixedProperty) {
         styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
         styles.top = 0;
         styles.left = 0;
@@ -40,14 +40,14 @@ export default function applyStyle(data) {
     // lines of data.instance modifier!
     Object.assign(styles, data.styles);
 
-    setStyle(data.instance._popper, styles);
+    setStyle(data.instance.popper, styles);
 
     // set an attribute which will be useful to style the tooltip (use it to properly position its arrow)
     // NOTE: 1 DOM access here
-    data.instance._popper.setAttribute('x-placement', data.placement);
+    data.instance.popper.setAttribute('x-placement', data.placement);
 
     // if the arrow modifier is required and the arrow style has been computed, apply the arrow style
-    if (isModifierRequired(data.instance._options, 'applyStyle', 'arrow') && data.offsets.arrow) {
+    if (isModifierRequired(data.instance.options, 'applyStyle', 'arrow') && data.offsets.arrow) {
         setStyle(data.arrowElement, data.offsets.arrow);
     }
 

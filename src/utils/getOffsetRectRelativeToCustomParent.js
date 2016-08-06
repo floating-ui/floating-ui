@@ -10,18 +10,18 @@ import getScrollParent from './getScrollParent';
  * @return {Object} rect
  */
 export default function getOffsetRectRelativeToCustomParent(element, parent, fixed, transformed) {
-    var elementRect = getBoundingClientRect(element);
-    var parentRect = getBoundingClientRect(parent);
+    const elementRect = getBoundingClientRect(element);
+    const parentRect = getBoundingClientRect(parent);
 
     if (fixed && !transformed) {
-        var scrollParent = getScrollParent(parent);
+        const scrollParent = getScrollParent(parent);
         parentRect.top += scrollParent.scrollTop;
         parentRect.bottom += scrollParent.scrollTop;
         parentRect.left += scrollParent.scrollLeft;
         parentRect.right += scrollParent.scrollLeft;
     }
 
-    var rect = {
+    const rect = {
         top: elementRect.top - parentRect.top ,
         left: elementRect.left - parentRect.left ,
         bottom: (elementRect.top - parentRect.top) + elementRect.height,

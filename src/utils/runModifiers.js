@@ -10,15 +10,14 @@ import findIndex from './findIndex';
  * @param {Array} modifiers
  * @param {Function} ends
  */
-export default function runModifiers(options, data, modifiers, ends) {
-    var modifiersToRun = options.modifiers.slice();
-    if (ends !== undefined) {
-        modifiersToRun = options.modifiers.slice(0, findIndex(options.modifiers, 'name', ends));
-    }
+export default function runModifiers(options, data, ends) {
+    const modifiersToRun = (ends === undefined) ?
+          options.modifiers.slice() :
+          options.modifiers.slice(0, findIndex(options.modifiers, 'name', ends));
 
     modifiersToRun.forEach((modifier) => {
-        if (isFunction(modifiers[modifier.name])) {
-            data = modifiers[modifier.name].call(this, data);
+        if (modifier.enabled && isFunction(modifier.function)) {
+            data = modifier.function(data);
         }
     });
 

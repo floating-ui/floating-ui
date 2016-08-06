@@ -284,7 +284,7 @@ describe('Popper.js', function() {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
-            jasmineWrapper.removeChild(data.instance._popper);
+            jasmineWrapper.removeChild(data.instance.popper);
             data.instance.destroy();
             done();
         }).onCreate(function(instance) {
@@ -299,10 +299,10 @@ describe('Popper.js', function() {
         jasmineWrapper.appendChild(form);
 
         new TestPopper(reference, popper, { removeOnDestroy: true }).onCreate(function(instance) {
-            expect(instance._popper).toBeDefined();
-            expect(instance._popper.innerText).toBe('test');
+            expect(instance.popper).toBeDefined();
+            expect(instance.popper.innerText).toBe('test');
             instance.destroy();
-            expect(document.contains(instance._popper)).toBeFalsy();
+            expect(document.contains(instance.popper)).toBeFalsy();
             done();
         });
     });
@@ -316,10 +316,10 @@ describe('Popper.js', function() {
         jasmineWrapper.appendChild(form);
 
         new TestPopper(reference, popper, { removeOnDestroy: true }).onCreate(function(instance) {
-            expect(instance._popper).toBeDefined();
-            expect(instance._popper.innerText).toBe('test');
+            expect(instance.popper).toBeDefined();
+            expect(instance.popper.innerText).toBe('test');
             instance.destroy();
-            expect(document.contains(instance._popper)).toBeFalsy();
+            expect(document.contains(instance.popper)).toBeFalsy();
             done();
         });
     });
@@ -336,7 +336,7 @@ describe('Popper.js', function() {
             instance.update();
             var local = 92;
             var ci = 110;
-            expect([local, ci]).toContain(instance._popper.getBoundingClientRect().left);
+            expect([local, ci]).toContain(instance.popper.getBoundingClientRect().left);
             instance.destroy();
             done();
         });

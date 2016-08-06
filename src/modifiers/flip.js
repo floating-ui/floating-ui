@@ -16,31 +16,31 @@ import isModifierRequired from '../utils/isModifierRequired';
 export default function flip(data) {
     // check if preventOverflow is in the list of modifiers before the flip modifier.
     // otherwise flip would not work as expected.
-    if (!isModifierRequired(data.instance._options, 'flip', 'preventOverflow')) {
+    if (!isModifierRequired(data.instance.options, 'flip', 'preventOverflow')) {
         console.warn('WARNING: preventOverflow modifier is required by flip modifier in order to work, be sure to include it before flip!');
         return data;
     }
 
-    if (data.flipped && data.placement === data._originalPlacement) {
+    if (data.flipped && data.placement === data.originalPlacement) {
         // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
         return data;
     }
 
-    var placement = data.placement.split('-')[0];
-    var placementOpposite = getOppositePlacement(placement);
-    var variation = data.placement.split('-')[1] || '';
+    let placement = data.placement.split('-')[0];
+    let placementOpposite = getOppositePlacement(placement);
+    const constiation = data.placement.split('-')[1] || '';
 
-    var flipOrder = [];
-    if(data.instance._options.flipBehavior === 'flip') {
+    let flipOrder = [];
+    if(data.instance.options.flipBehavior === 'flip') {
         flipOrder = [
             placement,
             placementOpposite
         ];
     } else {
-        flipOrder = data.instance._options.flipBehavior;
+        flipOrder = data.instance.options.flipBehavior;
     }
 
-    flipOrder.forEach(function(step, index) {
+    flipOrder.forEach((step, index) => {
         if (placement !== step || flipOrder.length === index + 1) {
             return data;
         }
@@ -48,11 +48,11 @@ export default function flip(data) {
         placement = data.placement.split('-')[0];
         placementOpposite = getOppositePlacement(placement);
 
-        var popperOffsets = getPopperClientRect(data.offsets.popper);
+        const popperOffsets = getPopperClientRect(data.offsets.popper);
 
         // data.instance boolean is used to distinguish right and bottom from top and left
         // they need different computations to get flipped
-        var a = ['right', 'bottom'].indexOf(placement) !== -1;
+        const a = ['right', 'bottom'].indexOf(placement) !== -1;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
         if (
@@ -62,13 +62,13 @@ export default function flip(data) {
             // we'll use data.instance boolean to detect any flip loop
             data.flipped = true;
             data.placement = flipOrder[index + 1];
-            if (variation) {
-                data.placement += '-' + variation;
+            if (constiation) {
+                data.placement += '-' + constiation;
             }
-            data.offsets.popper = getOffsets(data.instance.state, data.instance._popper, data.instance._reference, data.placement).popper;
+            data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
-            data = runModifiers(data.instance._options, data, data.instance.modifiers, 'flip');
+            data = runModifiers(data.instance.options, data, 'flip');
         }
-    }.bind(data.instance));
+    });
     return data;
 }

@@ -7,17 +7,26 @@
  */
 export default function getOuterSizes(element) {
     // NOTE: 1 DOM access here
-    var _display = element.style.display, _visibility = element.style.visibility;
-    element.style.display = 'block'; element.style.visibility = 'hidden';
-    var calcWidthToForceRepaint = element.offsetWidth; // eslint-disable-line no-unused-vars
+    const display = element.style.display;
+    const visibility = element.style.visibility;
+
+    element.style.display = 'block';
+    element.style.visibility = 'hidden';
+
+    const calcWidthToForceRepaint = element.offsetWidth; // eslint-disable-line no-unused-vars
 
     // original method
-    var styles = window.getComputedStyle(element);
-    var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
-    var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
-    var result = { width: element.offsetWidth + y, height: element.offsetHeight + x };
+    const styles = window.getComputedStyle(element);
+    const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
+    const y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
+    const result = {
+        width: element.offsetWidth + y,
+        height: element.offsetHeight + x
+    };
 
     // reset element styles
-    element.style.display = _display; element.style.visibility = _visibility;
+    element.style.display = display;
+    element.style.visibility = visibility;
+
     return result;
 }

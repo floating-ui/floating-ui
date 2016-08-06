@@ -7,8 +7,8 @@
  * @returns {Object} The data object, properly modified
  */
 export default function offset(data) {
-    var offset = data.instance._options.offset;
-    var popper  = data.offsets.popper;
+    const offset = data.instance.options.offset;
+    const popper  = data.offsets.popper;
 
     if (data.placement.indexOf('left') !== -1) {
         popper.top -= offset;

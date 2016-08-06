@@ -13,23 +13,23 @@ import getOuterSizes from './getOuterSizes';
  */
 export default function getOffsets(state, popper, reference, placement) {
     placement = placement.split('-')[0];
-    var popperOffsets = {};
 
+    const popperOffsets = {};
     popperOffsets.position = state.position;
-    var isParentFixed = popperOffsets.position === 'fixed';
 
-    var isParentTransformed = state.isParentTransformed;
+    const isParentFixed = popperOffsets.position === 'fixed';
+    const isParentTransformed = state.isParentTransformed;
 
     //
     // Get reference element position
     //
-    var offsetParent = (isParentFixed && isParentTransformed) ? getOffsetParent(reference) : getOffsetParent(popper);
-    var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, offsetParent, isParentFixed, isParentTransformed);
+    const offsetParent = getOffsetParent((isParentFixed && isParentTransformed) ? reference : popper);
+    const referenceOffsets = getOffsetRectRelativeToCustomParent(reference, offsetParent, isParentFixed, isParentTransformed);
 
     //
     // Get popper sizes
     //
-    var popperRect = getOuterSizes(popper);
+    const popperRect = getOuterSizes(popper);
 
     //
     // Compute offsets of popper

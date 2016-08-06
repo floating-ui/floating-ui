@@ -8,33 +8,33 @@ import getPopperClientRect from '../utils/getPopperClientRect';
  * @returns {Object} The data object, properly modified
  */
 export default function preventOverflow(data) {
-    var order = data.instance._options.preventOverflowOrder;
-    var popper = getPopperClientRect(data.offsets.popper);
+    const order = data.instance.options.preventOverflowOrder;
+    const popper = getPopperClientRect(data.offsets.popper);
 
-    var check = {
-        left: function() {
-            var left = popper.left;
+    const check = {
+        left() {
+            let left = popper.left;
             if (popper.left < data.boundaries.left) {
                 left = Math.max(popper.left, data.boundaries.left);
             }
             return { left: left };
         },
-        right: function() {
-            var left = popper.left;
+        right() {
+            let left = popper.left;
             if (popper.right > data.boundaries.right) {
                 left = Math.min(popper.left, data.boundaries.right - popper.width);
             }
             return { left: left };
         },
-        top: function() {
-            var top = popper.top;
+        top() {
+            let top = popper.top;
             if (popper.top < data.boundaries.top) {
                 top = Math.max(popper.top, data.boundaries.top);
             }
             return { top: top };
         },
-        bottom: function() {
-            var top = popper.top;
+        bottom() {
+            let top = popper.top;
             if (popper.bottom > data.boundaries.bottom) {
                 top = Math.min(popper.top, data.boundaries.bottom - popper.height);
             }
@@ -42,7 +42,7 @@ export default function preventOverflow(data) {
         }
     };
 
-    order.forEach(function(direction) {
+    order.forEach((direction) => {
         data.offsets.popper = Object.assign(popper, check[direction]());
     });
 

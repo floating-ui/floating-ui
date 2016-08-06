@@ -6,7 +6,7 @@
  * @return {Object} client rect
  */
 export default function getBoundingClientRect(element) {
-    var rect = element.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     return {
         left: rect.left,
         top: rect.top,

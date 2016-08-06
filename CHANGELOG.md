@@ -1,3 +1,12 @@
+## v1.0.0
+- BREAKING CHANGE: removed all the underscores `_` prefixes from properties
+- converted source code to ES2015
+- build now uses Rollup
+- moved from JSHint to ESLint
+- updated npm dependencies
+- BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core
+- BREAKING CHANGE: simplified modifiers API, see #62 for migration instructions
+
 ## v0.5.2
 - 6691354: fixed arrow position in particular cases
 

@@ -8,16 +8,16 @@ import getPopperClientRect from '../utils/getPopperClientRect';
  * @returns {Object} The data object, properly modified
  */
 export default function shift(data) {
-    var placement = data.placement;
-    var basePlacement = placement.split('-')[0];
-    var shiftVariation = placement.split('-')[1];
+    const placement = data.placement;
+    const basePlacement = placement.split('-')[0];
+    const shiftconstiation = placement.split('-')[1];
 
-    // if shift shiftVariation is specified, run the modifier
-    if (shiftVariation) {
-        var reference = data.offsets.reference;
-        var popper = getPopperClientRect(data.offsets.popper);
+    // if shift shiftconstiation is specified, run the modifier
+    if (shiftconstiation) {
+        const reference = data.offsets.reference;
+        const popper = getPopperClientRect(data.offsets.popper);
 
-        var shiftOffsets = {
+        const shiftOffsets = {
             y: {
                 start:  { top: reference.top },
                 end:    { top: reference.top + reference.height - popper.height }
@@ -28,9 +28,9 @@ export default function shift(data) {
             }
         };
 
-        var axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
+        const axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
 
-        data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftVariation]);
+        data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftconstiation]);
     }
 
     return data;

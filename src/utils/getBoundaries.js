@@ -14,14 +14,12 @@ import getOffsetRect from './getOffsetRect';
  */
 export default function getBoundaries(popper, data, padding, boundariesElement) {
     // NOTE: 1 DOM access here
-    var boundaries = {};
-    var width, height;
+    let boundaries = {};
     if (boundariesElement === 'window') {
-        var body = window.document.body,
-            html = window.document.documentElement;
-
-        height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
-        width = Math.max( body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth );
+        const body = window.document.body;
+        const html = window.document.documentElement;
+        const height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+        const width = Math.max( body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth );
 
         boundaries = {
             top: 0,
@@ -30,13 +28,13 @@ export default function getBoundaries(popper, data, padding, boundariesElement) 
             left: 0
         };
     } else if (boundariesElement === 'viewport') {
-        var offsetParent = getOffsetParent(popper);
-        var scrollParent = getScrollParent(popper);
-        var offsetParentRect = getOffsetRect(offsetParent);
+        const offsetParent = getOffsetParent(popper);
+        const scrollParent = getScrollParent(popper);
+        const offsetParentRect = getOffsetRect(offsetParent);
 
         // if the popper is fixed we don't have to substract scrolling from the boundaries
-        var scrollTop = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollTop;
-        var scrollLeft = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollLeft;
+        const scrollTop = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollTop;
+        const scrollLeft = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollLeft;
 
         boundaries = {
             top: 0 - (offsetParentRect.top - scrollTop),

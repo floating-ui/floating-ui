@@ -6,7 +6,7 @@
  * @return {Object} position - Coordinates of the element and its `scrollTop`
  */
 export default function getOffsetRect(element) {
-    var elementRect = {
+    const elementRect = {
         width: element.offsetWidth,
         height: element.offsetHeight,
         left: element.offsetLeft,

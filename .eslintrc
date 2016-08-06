@@ -16,6 +16,7 @@
         'no-caller': 2,
         'dot-notation': 0,
         'no-undef': 2,
-        'no-unused-vars': 2
+        'no-unused-vars': 2,
+        'no-const-assign': 2
     }
 }

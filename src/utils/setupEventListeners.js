@@ -12,7 +12,7 @@ export default function setupEventListeners(reference, options, state, updateBou
     window.addEventListener('resize', state.updateBound);
     // if the boundariesElement is window we don't need to listen for the scroll event
     if (options.boundariesElement !== 'window') {
-        var target = getScrollParent(reference);
+        let target = getScrollParent(reference);
         // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
         if (target === window.document.body || target === window.document.documentElement) {
             target = window;
