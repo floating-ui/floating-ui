@@ -30,6 +30,7 @@
     "grunt-env": "^0.4.4",
     "grunt-jsdoc": "^1.1.0",
     "grunt-karma": "^0.12.2",
+    "grunt-rollup": "^0.7.1",
     "grunt-serve": "^0.1.6",
     "grunt-shell-spawn": "^0.3.10",
     "jasmine-core": "^2.4.1",

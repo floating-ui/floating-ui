@@ -2,7 +2,7 @@ describe('Popper.js', function() {
     // define modules paths
     require.config({
         paths: {
-            popper: 'base/src/popper'
+            popper: 'base/build/popper'
         }
     });
 

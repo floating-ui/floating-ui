@@ -14,6 +14,7 @@ grunt.loadNpmTasks('grunt-serve');
 grunt.loadNpmTasks('grunt-banner');
 grunt.loadNpmTasks('grunt-shell-spawn');
 grunt.loadNpmTasks('grunt-env');
+grunt.loadNpmTasks('grunt-rollup');
 
 module.exports = function(grunt) {
 
@@ -22,6 +23,17 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
+        rollup: {
+            dist: {
+                options: {
+                    format: 'umd',
+                    moduleName: 'Popper'
+                },
+                files: {
+                    'build/popper.js': ['src/popper.js']
+                }
+            }
+        },
         uglify: {
             dist: {
                 options: {
@@ -32,13 +44,6 @@ module.exports = function(grunt) {
                 files: {
                     'build/popper.min.js': ['build/popper.js']
                 }
-            }
-        },
-        copy: {
-            dist: {
-                nonull: true,
-                src: 'src/popper.js',
-                dest: 'build/popper.js',
             }
         },
         jsdoc : {
@@ -65,7 +70,7 @@ module.exports = function(grunt) {
                 files: [
                     { pattern: 'bower_components/**/*.js', included: false },
                     { pattern: 'node_modules/requirejs/require.js', included: true },
-                    { pattern: 'src/**/*.js', included: false },
+                    { pattern: 'build/**/*.js', included: false },
                     'tests/*.js',
                     'tests/styles/*.css'
                 ]
@@ -76,7 +81,10 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
-            default: ['src/**/*.js']
+            default: ['src/**/*.js'],
+            options: {
+                jshintrc : '.jshintrc'
+            }
         },
         serve: {
             options: {
@@ -111,7 +119,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('doc', ['jsdoc']);
-    grunt.registerTask('dist', [ 'copy:dist', 'usebanner:dist', 'uglify:dist']);
+    grunt.registerTask('dist', [ 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
     grunt.registerTask('test', ['jshint', 'karma:local']);
     grunt.registerTask('test-ci', ['jshint', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
 };
