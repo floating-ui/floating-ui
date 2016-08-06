@@ -10,7 +10,6 @@ var version = JSON.parse(fs.readFileSync('./package.json')).version; // jshint i
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeTest'];
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
-grunt.loadNpmTasks('grunt-contrib-copy');
 grunt.loadNpmTasks('grunt-jsdoc');
 grunt.loadNpmTasks('grunt-karma');
 grunt.loadNpmTasks('grunt-contrib-jshint');
