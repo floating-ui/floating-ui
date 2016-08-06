@@ -3,7 +3,11 @@ language: node_js
 node_js: 6.2
 
 before_script:
-    - sudo apt-get install -y chromium-browser xvfb
+    - sudo apt-get install -y wget xvfb
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    - sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
     - npm install -g grunt-cli bower
     - bower install
 
