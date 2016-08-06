@@ -4,7 +4,7 @@ var grunt = require('grunt');
 var fs = require('fs');
 var babel = require('rollup-plugin-babel');
 
-var version = JSON.parse(fs.readFileSync('./package.json')).version; // jshint ignore:line
+var version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 // comma separated list of browsers to run tests inside
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeTest'];
