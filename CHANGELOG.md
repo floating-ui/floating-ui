@@ -1,3 +1,6 @@
+## v0.5.3
+- 3924aa4: fixed scroll detection on Internet Explorer 11 (and probably below)
+
 ## v0.5.2
 - 6691354: fixed arrow position in particular cases
 
