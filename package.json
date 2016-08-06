@@ -26,6 +26,7 @@
     "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
     "babel-plugin-transform-es2015-block-scoping": "^6.10.1",
     "babel-plugin-transform-es2015-classes": "^6.9.0",
+    "babel-plugin-transform-es2015-parameters": "^6.11.4",
     "babel-plugin-transform-es2015-shorthand-properties": "^6.8.0",
     "eslint": "^3.2.2",
     "eslint-plugin-jasmine": "^1.8.1",

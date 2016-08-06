@@ -33,7 +33,8 @@ module.exports = function Gruntfile(grunt) {
                                 'transform-es2015-arrow-functions',
                                 'transform-es2015-block-scoping',
                                 'transform-es2015-shorthand-properties',
-                                'transform-es2015-classes'
+                                'transform-es2015-classes',
+                                'transform-es2015-parameters'
                             ],
                             babelrc: false
                         })
