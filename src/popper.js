@@ -36,15 +36,15 @@ var DEFAULTS = {
     arrowElement: '[x-arrow]',
 
     // list of functions used to modify the offsets before they are applied to the popper
-    modifiers: [
-        { name: 'shift', enabled: true, function: modifiersFunctions.shift },
-        { name: 'offset', enabled: true, function: modifiersFunctions.offset },
-        { name: 'preventOverflow', enabled: true, function: modifiersFunctions.preventOverflow },
-        { name: 'keepTogether', enabled: true, function: modifiersFunctions.keepTogether },
-        { name: 'arrow', enabled: true, function: modifiersFunctions.arrow },
-        { name: 'flip', enabled: true, function: modifiersFunctions.flip },
-        { name: 'applyStyle', enabled: true, function: modifiersFunctions.applyStyle }
-    ],
+    modifiers: {
+        shift:              { order: 100, enabled: true, function: modifiersFunctions.shift },
+        offset:             { order: 200, enabled: true, function: modifiersFunctions.offset },
+        preventOverflow:    { order: 300, enabled: true, function: modifiersFunctions.preventOverflow },
+        keepTogether:       { order: 400, enabled: true, function: modifiersFunctions.keepTogether },
+        arrow:              { order: 500, enabled: true, function: modifiersFunctions.arrow },
+        flip:               { order: 600, enabled: true, function: modifiersFunctions.flip },
+        applyStyle:         { order: 700, enabled: true, function: modifiersFunctions.applyStyle }
+    },
 };
 
 /**
@@ -92,13 +92,12 @@ var DEFAULTS = {
  *
  * @param {Array} [options.modifiers=[{ name: 'foobar', enabled: true, function: fn }, ... ]]
  *      List of functions used to modify the data before they are applied to the popper.
- *      When `enabled` is set to `undefined`, it will use the default value (`true` for built-in modifiers, `false` for custom modifiers)
  *
  * @param {Boolean} [options.removeOnDestroy=false]
  *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
  */
 export default class Popper {
-    constructor(reference, popper, options) {
+    constructor(reference, popper, options = {}) {
         this.reference = reference.jquery ? reference[0] : reference;
         this.state = {};
 
@@ -106,12 +105,18 @@ export default class Popper {
 
         // with {} we create a new object with the options inside it
         this.options = Object.assign({}, DEFAULTS, options);
+        this.options.modifiers = Object.assign({}, DEFAULTS.modifiers, options.modifiers);
 
         // refactoring modifiers' list
-        this.options.modifiers = this.options.modifiers.map((modifier) => {
+
+        this.modifiers = Object.keys(this.options.modifiers)
+                               .map((name) => Object.assign({ name }, this.options.modifiers[name]))
+                               .sort(sortModifiers);
+
+        this.modifiers = this.modifiers.map((modifier) => {
             // set the x-placement attribute before everything else because it could be used to add margins to the popper
             // margins needs to be calculated to get the correct popper offsets
-            if (modifier === 'applyStyle') {
+            if (modifier.name === 'applyStyle' && modifier.enabled) {
                 this.popper.setAttribute('x-placement', this.options.placement);
             }
 
@@ -157,7 +162,7 @@ export default class Popper {
         // get boundaries
         data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
 
-        data = runModifiers(this.options, data);
+        data = runModifiers(this.modifiers, this.options, data);
 
         if (typeof this.state.updateCallback === 'function') {
             this.state.updateCallback(data);
@@ -208,6 +213,18 @@ export default class Popper {
         }
         return this;
     }
+}
+
+//
+// Sorts the modifiers based on their order property
+//
+function sortModifiers(a, b) {
+    if (a.order < b.order) {
+        return -1;
+    } else if (a.order > b.order) {
+        return 1;
+    }
+    return 0;
 }
 
 /**

@@ -47,7 +47,7 @@ export default function applyStyle(data) {
     data.instance.popper.setAttribute('x-placement', data.placement);
 
     // if the arrow modifier is required and the arrow style has been computed, apply the arrow style
-    if (isModifierRequired(data.instance.options, 'applyStyle', 'arrow') && data.offsets.arrow) {
+    if (isModifierRequired(data.instance.modifiers, 'applyStyle', 'arrow') && data.offsets.arrow) {
         setStyle(data.arrowElement, data.offsets.arrow);
     }
 

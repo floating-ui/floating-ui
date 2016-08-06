@@ -4,8 +4,8 @@
  * @memberof Popper
  * @returns {Boolean}
  */
-export default function isModifierRequired(options, requesting, requested) {
-    return !!options.modifiers.filter(modifier => {
+export default function isModifierRequired(modifiers, requesting, requested) {
+    return !!modifiers.filter(modifier => {
         if (modifier.name === requested) {
             return true;
         } else if (modifier.name === requesting) {

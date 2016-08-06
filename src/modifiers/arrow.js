@@ -30,7 +30,7 @@ export default function arrow(data) {
     }
 
     // arrow depends on keepTogether in order to work
-    if (!isModifierRequired(data.instance.options, 'arrow', 'keepTogether')) {
+    if (!isModifierRequired(data.instance.modifiers, 'arrow', 'keepTogether')) {
         console.warn('WARNING: keepTogether modifier is required by arrow modifier in order to work, be sure to include it before arrow!');
         return data;
     }

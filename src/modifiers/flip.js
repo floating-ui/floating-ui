@@ -16,7 +16,7 @@ import isModifierRequired from '../utils/isModifierRequired';
 export default function flip(data) {
     // check if preventOverflow is in the list of modifiers before the flip modifier.
     // otherwise flip would not work as expected.
-    if (!isModifierRequired(data.instance.options, 'flip', 'preventOverflow')) {
+    if (!isModifierRequired(data.instance.modifiers, 'flip', 'preventOverflow')) {
         console.warn('WARNING: preventOverflow modifier is required by flip modifier in order to work, be sure to include it before flip!');
         return data;
     }
@@ -67,7 +67,7 @@ export default function flip(data) {
             }
             data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
-            data = runModifiers(data.instance.options, data, 'flip');
+            data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');
         }
     });
     return data;
