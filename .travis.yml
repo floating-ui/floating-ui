@@ -1,6 +1,6 @@
 language: node_js
 
-node_js: 5.9.1
+node_js: 6.2
 
 before_script:
     - sudo apt-get install -y chromium-browser xvfb
