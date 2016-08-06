@@ -1,7 +1,6 @@
+sudo: required
 dist: xenial
-
 language: node_js
-
 node_js: 6.2
 
 before_script:
