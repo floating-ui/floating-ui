@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "0.5.2",
+  "version": "1.0.0",
   "description": "A kickass library to manage your poppers",
   "main": "src/popper.js",
   "scripts": {
@@ -20,11 +20,14 @@
   "bugs": {
     "url": "https://github.com/FezVrasta/popper.js/issues"
   },
-  "homepage": "https://fezvrasta.github.com/popper.js",
+  "homepage": "https://popper.js.org",
   "devDependencies": {
+    "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.10.1",
+    "babel-plugin-transform-es2015-classes": "^6.9.0",
+    "babel-plugin-transform-es2015-shorthand-properties": "^6.8.0",
     "grunt": "^0.4.5",
     "grunt-banner": "^0.6.0",
-    "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.0",
     "grunt-env": "^0.4.4",
@@ -37,6 +40,7 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.2",
     "karma-jasmine": "^0.3.8",
-    "requirejs": "^2.2.0"
+    "requirejs": "^2.2.0",
+    "rollup-plugin-babel": "^2.6.1"
   }
 }
