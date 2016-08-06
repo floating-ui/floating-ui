@@ -9,7 +9,7 @@ export default function getOuterSizes(element) {
     // NOTE: 1 DOM access here
     var _display = element.style.display, _visibility = element.style.visibility;
     element.style.display = 'block'; element.style.visibility = 'hidden';
-    var calcWidthToForceRepaint = element.offsetWidth; // jshint ignore:line
+    var calcWidthToForceRepaint = element.offsetWidth; // eslint-disable-line no-unused-vars
 
     // original method
     var styles = window.getComputedStyle(element);

@@ -12,11 +12,11 @@ var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : 
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-jsdoc');
 grunt.loadNpmTasks('grunt-karma');
-grunt.loadNpmTasks('grunt-contrib-jshint');
 grunt.loadNpmTasks('grunt-banner');
 grunt.loadNpmTasks('grunt-shell-spawn');
 grunt.loadNpmTasks('grunt-env');
 grunt.loadNpmTasks('grunt-rollup');
+grunt.loadNpmTasks('gruntify-eslint');
 
 module.exports = function Gruntfile(grunt) {
     // Project configuration.
@@ -97,16 +97,9 @@ module.exports = function Gruntfile(grunt) {
                 singleRun: false,
             }
         },
-        jshint: {
-            default: ['src/**/*.js'],
-            options: {
-                jshintrc : '.jshintrc'
-            }
-        },
-        serve: {
-            options: {
-                port: 9000
-            }
+        eslint: {
+            src: ['src/**/*.js'],
+            test: ['tests/**/*.js']
         },
         usebanner: {
             dist: {
@@ -160,7 +153,7 @@ module.exports = function Gruntfile(grunt) {
     });
 
     grunt.registerTask('doc', ['jsdoc']);
-    grunt.registerTask('dist', [ 'jshint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
-    grunt.registerTask('test', ['jshint', 'rollup:test', 'karma:local']);
-    grunt.registerTask('test-ci', ['jshint', 'rollup:test', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
+    grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
+    grunt.registerTask('test', ['eslint', 'rollup:test', 'karma:local']);
+    grunt.registerTask('test-ci', ['eslint', 'rollup:test', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
 };
