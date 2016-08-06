@@ -13,12 +13,12 @@ var fs = require('jsdoc/fs');
 
 var hasOwnProp = Object.prototype.hasOwnProperty;
 
-function graft(parentNode, childNodes, parentLongname, parentName) {
+function graft(parentNode, childNodes, parentLongname) {
     childNodes
     .filter(function (element) {
         return (element.memberof === parentLongname);
     })
-    .forEach(function (element, index) {
+    .forEach(function (element) {
         var i,
             len;
 
