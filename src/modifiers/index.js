@@ -6,7 +6,7 @@ import offset from './offset';
 import preventOverflow from './preventOverflow';
 import shift from './shift';
 
-const modifiers = {
+export default {
     applyStyle,
     arrow,
     flip,
@@ -16,4 +16,8 @@ const modifiers = {
     shift
 };
 
-export default modifiers;
+import { applyStyleOnLoad } from './applyStyle';
+
+export const modifiersOnLoad = {
+    applyStyleOnLoad
+};

@@ -7,8 +7,10 @@ import getBoundaries from './utils/getBoundaries';
 import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
+import isFunction from './utils/isFunction';
 
 import modifiersFunctions from './modifiers/index';
+import { modifiersOnLoad as modifiersOnLoadFunctions } from './modifiers/index';
 
 // default options
 var DEFAULTS = {
@@ -43,7 +45,7 @@ var DEFAULTS = {
         keepTogether:       { order: 400, enabled: true, function: modifiersFunctions.keepTogether },
         arrow:              { order: 500, enabled: true, function: modifiersFunctions.arrow },
         flip:               { order: 600, enabled: true, function: modifiersFunctions.flip },
-        applyStyle:         { order: 700, enabled: true, function: modifiersFunctions.applyStyle }
+        applyStyle:         { order: 700, enabled: true, function: modifiersFunctions.applyStyle, onLoad: modifiersOnLoadFunctions.applyStyleOnLoad }
     },
 };
 
@@ -90,7 +92,7 @@ var DEFAULTS = {
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
  *
- * @param {Array} [options.modifiers=[{ name: 'foobar', enabled: true, function: fn }, ... ]]
+ * @param {Object} [options.modifiers={ foobar: { order: 100, enabled: true, function: fn, onLoad: fn }, ... }]
  *      List of functions used to modify the data before they are applied to the popper.
  *
  * @param {Boolean} [options.removeOnDestroy=false]
@@ -114,10 +116,10 @@ export default class Popper {
                                .sort(sortModifiers);
 
         this.modifiers = this.modifiers.map((modifier) => {
-            // set the x-placement attribute before everything else because it could be used to add margins to the popper
-            // margins needs to be calculated to get the correct popper offsets
-            if (modifier.name === 'applyStyle' && modifier.enabled) {
-                this.popper.setAttribute('x-placement', this.options.placement);
+            // Modifiers have the ability to execute arbitrary code when Popper.js get inited
+            // such code is executed in the same order of its modifier
+            if (modifier.enabled && isFunction(modifier.onLoad)) {
+                modifier.onLoad(this.reference, this.popper, this.options);
             }
 
             // return the modifier

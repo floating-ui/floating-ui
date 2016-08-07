@@ -80,13 +80,19 @@ Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of e
 
 ### Writing your own modifiers
 Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
-A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
+A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.  
+Some modifiers may need to execute particular functions when the Popper instance is created, in this case, define your custom function and assign it to
+the `onLoad` property.
 
 ```js
 // this little modifier forces the popper `top` value to be `0`
 function fixToTop(data) {
     data.popper.offsets.top = 0
     return data;
+}
+
+function fixToTopOnLoad(reference, popper, options) {
+    popper.style.position = 'absolute';
 }
 ```
 
@@ -98,7 +104,8 @@ new Popper(a, b, {
         fixToTop: {
             order: 800, // define the order of execution of your modifier*
             enabled: true, // remember to enable your modifier
-            function: fixToTop // define your modifier here
+            function: fixToTop // define your modifier here,
+            onLoad: fixToTopOnLoad // define your onLoad function here
         }
     }
 })
