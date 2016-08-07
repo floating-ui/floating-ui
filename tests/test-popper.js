@@ -165,9 +165,6 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper');
 
         new TestPopper(ref, popper).onCreate(function(pop) {
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
             expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             pop.destroy();
@@ -193,9 +190,6 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper', fixed);
 
         new TestPopper(ref, popper).onCreate(function(pop) {
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             pop.destroy();
@@ -223,9 +217,6 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper', fixed);
 
         new TestPopper(ref, popper).onCreate(function(pop) {
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(33);
             pop.destroy();
@@ -252,9 +243,6 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper', fixed);
 
         new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(pop) {
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
             var local = 727;
             var ci = 740;
             expect([local, ci]).toContain(popper.getBoundingClientRect().top);
