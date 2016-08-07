@@ -248,7 +248,6 @@ describe('Popper.js', function() {
             expect([local, ci]).toContain(popper.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
-            debugger;
             pop.destroy();
             done();
         });
