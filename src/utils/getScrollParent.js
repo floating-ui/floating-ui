@@ -27,7 +27,7 @@ export default function getScrollParent(element) {
         // If the detected scrollParent is body, we perform an additional check on its parentNode
         // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
         // fixes issue #65
-        return element === root.document.body ? getScrollParent(element.parentNode) : element;
+        return element === window.document.body ? getScrollParent(element.parentNode) : element;
     }
     return element.parentNode ? getScrollParent(element.parentNode) : element;
 }
