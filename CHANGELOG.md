@@ -7,6 +7,9 @@
 - BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core
 - BREAKING CHANGE: simplified modifiers API, see #62 for migration instructions
 
+## v0.5.3
+- 3924aa4: fixed scroll detection on Internet Explorer 11 (and probably below)
+
 ## v0.5.2
 - 6691354: fixed arrow position in particular cases
 

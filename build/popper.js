@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.5.2
+ * @version 0.5.3
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1068,7 +1068,10 @@
             ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-x')) !== -1 ||
             ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-y')) !== -1
         ) {
-            return element;
+            // If the detected scrollParent is body, we perform an additional check on its parentNode
+            // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
+            // fixes issue #65
+            return element === root.document.body ? getScrollParent(element.parentNode) : element;
         }
         return element.parentNode ? getScrollParent(element.parentNode) : element;
     }
