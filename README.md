@@ -15,12 +15,13 @@ Common examples of poppers are tooltips and popovers.
 Well, basically, **no**.
 Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
 It supports a **plugin system** you can use to add particular behaviors to your poppers.  
-It's **AMD** and **CommonJS** compatible and it's well documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
+It's written with ES2015 and it's **AMD** and **CommonJS** compatible, every line is documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
 
 
 ## The Library
-Popper.js is mostly a library with the job of making sure your popper stays near the defined reference element (if you want so).  
-Additionally, it provides an easy way to generate your popper element if you don't want to use one already in your DOM.
+Popper.js is a library with the job of making sure your popper stays near the defined reference element (if you want so).  
+One of the key points is the ability to position elements even if they are not direct descendants of `body`, this means that
+it can position an element relative to another one even if they are placed inside different parents.
 
 ### Installation
 Popper.js is available on NPM and Bower:
@@ -31,23 +32,8 @@ Popper.js is available on NPM and Bower:
 | Bower    | `bower install popper.js --save`             |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
-### Basic usage
-Create a popper near a button:
 
-```js
-var reference = document.querySelector('.my-button');
-var thePopper = new Popper(
-    reference,
-    {
-        content: 'My awesome popper!'
-    },
-    {
-        // popper options here
-    }
-);
-```
-
-### "Advanced" usage
+### Usage
 Given an existing popper, ask Popper.js to position it near its button
 
 ```js
@@ -66,9 +52,9 @@ var anotherPopper = new Popper(
 ```js
 var reference = document.querySelector('.my-button');
 var popper = document.querySelector('.my-popper');
-var anotherPopper = new Popper(reference, popper).onCreate(instance) {
+var anotherPopper = new Popper(reference, popper).onCreate((instance) => {
   // instance is Popper.js instance
-}).onUpdate(function(data) {
+}).onUpdate((data) => {
   // data is an object containing all the informations computed by Popper.js and used to style the popper and its arrow
 });
 ```
@@ -79,8 +65,8 @@ If you prefer to let your framework apply the styles to your DOM objects, you ca
 var reference = document.querySelector('.my-button');
 var popper = document.querySelector('.my-popper');
 var anotherPopper = new Popper(reference, popper, {
-    modifiersIgnored: ['applyStyle'] // prevent Popper.js from applying styles to your DOM
-}).onUpdate(function(data) {
+    modifiers: { applyStyle: { enabled: false } } // prevent Popper.js from applying styles to your DOM
+}).onUpdate((data) => {
   // export data in your framework and use its content to apply the style to your popper
 });
 ```
@@ -107,11 +93,18 @@ function fixToTop(data) {
 Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
 
 ```
-// note that the built-in modifiers are referenced using strings
-// instead, your custom modifiers are passed directly as functions
 new Popper(a, b, {
-  modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle', fixToTop]
+    modifiers: {
+        fixToTop: {
+            order: 800, // define the order of execution of your modifier*
+            enabled: true, // remember to enable your modifier
+            function: fixToTop // define your modifier here
+        }
+    }
 })
+
+// *: Check out https://github.com/FezVrasta/popper.js/blob/master/src/popper.js#L39
+//    for the default orders of the built-in modifiers
 ```
 
 Here is the `data` object content:
@@ -148,7 +141,7 @@ let data = {
   // `top`, `left`, `bottom`, `right` + optional `end` or `start` variations
   placement: String,
   // the placement defined at the beginning, before any edit made by modifiers
-  _originalPlacement: String,
+  originalPlacement: String,
   // allows you to know if the `flip` modifier have flipped the placement of the popper
   flipped: Boolean,
   // the node of the arrow (if any)
