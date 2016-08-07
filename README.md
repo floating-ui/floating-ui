@@ -82,7 +82,7 @@ Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of e
 Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
 
-```
+```js
 // this little modifier forces the popper `top` value to be `0`
 function fixToTop(data) {
     data.popper.offsets.top = 0
@@ -92,7 +92,7 @@ function fixToTop(data) {
 
 Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
 
-```
+```js
 new Popper(a, b, {
     modifiers: {
         fixToTop: {
@@ -109,7 +109,7 @@ new Popper(a, b, {
 
 Here is the `data` object content:
 
-```
+```js
 let data = {
   // popper and reference elements positions
   offsets: {
