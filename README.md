@@ -12,7 +12,7 @@ A popper is an element on the screen which "pops out" from the natural flow of y
 Common examples of poppers are tooltips and popovers.
 
 ## So, yet another tooltip library?
-Well, basically, **no**.
+Well, basically, **no**.  
 Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
 It supports a **plugin system** you can use to add particular behaviors to your poppers.  
 It's written with ES2015 and it's **AMD** and **CommonJS** compatible, every line is documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
