@@ -17,6 +17,7 @@ grunt.loadNpmTasks('grunt-shell-spawn');
 grunt.loadNpmTasks('grunt-env');
 grunt.loadNpmTasks('grunt-rollup');
 grunt.loadNpmTasks('gruntify-eslint');
+grunt.loadNpmTasks('grunt-gh-pages');
 
 module.exports = function Gruntfile(grunt) {
     // Project configuration.
@@ -73,6 +74,13 @@ module.exports = function Gruntfile(grunt) {
                     query: 'json'
                 }
             }
+        },
+        'gh-pages': {
+            options: {
+                base: 'doc',
+                branch: 'gh-pages-v1'
+            },
+            src: ['**']
         },
         karma: {
             options: {

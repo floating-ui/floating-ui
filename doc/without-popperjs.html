@@ -1,0 +1,11 @@
+---
+layout: page-hashtag
+title: withoutPopperJS
+description: What happens when you don't use Popper.js?
+---
+
+<div class="tweets-list">
+    {% for tweet in site.data.withoutpopperjs.tweets %}
+    <div class="twitter-tweet tweets-list__item" id="{{tweet}}"></div>
+    {% endfor %}
+</div>

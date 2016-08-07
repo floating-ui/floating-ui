@@ -34,6 +34,7 @@
     "grunt-banner": "^0.6.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-env": "^0.4.4",
+    "grunt-gh-pages": "^1.1.0",
     "grunt-jsdoc": "^2.1.0",
     "grunt-karma": "^2.0.0",
     "grunt-rollup": "^0.7.1",
