@@ -1,4 +1,4 @@
-import getScrollParent from '../utils/getScrollParent';
+import getScrollParent from './getScrollParent';
 
 /**
  * Remove event listeners used to update the popper position

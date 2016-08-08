@@ -10,12 +10,10 @@ import getPosition from './utils/getPosition';
 import getOffsets from './utils/getOffsets';
 import getBoundaries from './utils/getBoundaries';
 import isFunction from './utils/isFunction';
-
-// Helpers
-import setupEventListeners from './helpers/setupEventListeners';
-import removeEventListeners from './helpers/removeEventListeners';
-import runModifiers from './helpers/runModifiers';
-import sortModifiers from './helpers/sortModifiers';
+import setupEventListeners from './utils/setupEventListeners';
+import removeEventListeners from './utils/removeEventListeners';
+import runModifiers from './utils/runModifiers';
+import sortModifiers from './utils/sortModifiers';
 
 // Modifiers
 import modifiersFunctions from './modifiers/index';

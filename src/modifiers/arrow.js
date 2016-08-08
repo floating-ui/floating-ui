@@ -1,6 +1,6 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOuterSizes from '../utils/getOuterSizes';
-import isModifierRequired from '../helpers/isModifierRequired';
+import isModifierRequired from '../utils/isModifierRequired';
 
 /**
  * Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the reference element
