@@ -92,6 +92,16 @@ If you are wondering about the available options of the third argument, check ou
 
 Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do right now!
 
+### Libraries using Popper.js
+
+Popper.js will never winthe prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
+With it you can create awesome libraries without worring about the positioning problems! Some great ones using Popper.js are listed here:
+
+- [intro-guide-js](https://github.com/johanlahti/intro-guide-js): Create guided tours of your web pages;
+- [picker.js](https://github.com/GeekAb/picker.js): Modern date picker;
+
+_Want to see your library here? Open an issue and report it._
+
 ### Writing your own modifiers
 Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
