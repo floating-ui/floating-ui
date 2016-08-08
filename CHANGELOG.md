@@ -1,3 +1,18 @@
+## v0.5.3
+- 3924aa4: fixed scroll detection on Internet Explorer 11 (and probably below)
+
+## v0.5.2
+- 6691354: fixed arrow position in particular cases
+
+## v0.5.1
+- 0a79027: Added support for a reference el that is both fixed and transformed. (thanks @hgascoigne)
+
+## v0.5.0
+- f4e3659: 3rd party modifiers now can set custom styling to poppers (prep for #52)
+
+## v0.4.2
+- 566d4e6: Forgot to update the build, sorry
+
 ## v0.4.1
 - 660849a: Fix calculation of popper elements' outerSizes (thanks @rafaelverger)
 

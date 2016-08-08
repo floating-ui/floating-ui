@@ -205,6 +205,36 @@ describe('Popper.js', function() {
         });
     });
 
+    it('inits a popper near a reference element, both inside a fixed element with CSS transforms, inside a scrolled body', function(done) {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.margin = '20px';
+        fixed.style.height = '50px';
+        fixed.style.width = '100%';
+        fixed.style.transform = 'translateX(0)'
+        jasmineWrapper.appendChild(fixed);
+
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 800;
+
+        var ref = appendNewRef(1, 'ref', fixed);
+        var popper = appendNewPopper(2, 'popper', fixed);
+
+        new TestPopper(ref, popper).onCreate(function(pop) {
+            // force redraw
+            window.dispatchEvent(new Event('resize'));
+
+            expect(popper.getBoundingClientRect().top).toBeApprox(83);
+            expect(popper.getBoundingClientRect().left).toBeApprox(33);
+            pop.destroy();
+            done();
+        });
+    });
+
     it('inits a popper near a reference element, both inside a fixed element on bottom of viewport, inside a scrolled body', function(done) {
         var fixed = document.createElement('div');
         fixed.style.position = 'fixed';
@@ -360,6 +390,47 @@ describe('Popper.js', function() {
         ).onCreate(function(instance) {
             expect(instance._popper.getBoundingClientRect().left).toBe(543);
             instance.destroy();
+            done();
+        });
+    });
+
+    it('creates a popper with a custom modifier that should hide it', function(done) {
+        var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2);
+
+        function hidePopper(data) {
+            data.styles.display = 'none';
+            return data;
+        }
+
+        var options = {
+            modifiers: [hidePopper, 'applyStyle'],
+        };
+
+        new TestPopper(reference, popper, options).onCreate(function(pop) {
+            expect(popper.style.display).toBe('none');
+            pop.destroy();
+            done();
+        });
+    });
+
+
+    it('creates a popper with a custom modifier that set its top to 3px', function(done) {
+        var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2);
+
+        function hidePopper(data) {
+            data.styles.top = '3px';
+            return data;
+        }
+
+        var options = {
+            modifiers: [hidePopper, 'applyStyle'],
+        };
+
+        new TestPopper(reference, popper, options).onCreate(function(pop) {
+            expect(popper.style.top).toBe('3px');
+            pop.destroy();
             done();
         });
     });

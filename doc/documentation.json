@@ -138,8 +138,19 @@
                         "type": [
                             "String"
                         ],
-                        "description": "Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),\n     left(-left, -right)`",
+                        "description": "Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),\n     left(-start, -end)`",
                         "default": "bottom",
+                        "optional": true,
+                        "nullable": ""
+                    },
+                    {
+                        "name": "options.arrowElement",
+                        "type": [
+                            "HTMLElement",
+                            "String"
+                        ],
+                        "description": "The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of\n     its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its\n     reference element.\n     By default, it will look for a child node of the popper with the `x-arrow` attribute.",
+                        "default": "'[x-arrow]'",
                         "optional": true,
                         "nullable": ""
                     },

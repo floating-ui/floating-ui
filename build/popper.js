@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.4.0
+ * @version 0.5.3
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -94,8 +94,14 @@
      * @param {String} [popper.arrowAttributes=['x-arrow']] Same as `popper.attributes` but for the arrow element.
      * @param {Object} options
      * @param {String} [options.placement=bottom]
-     *      Placement of the popper accepted values: `top(-left, -right), right(-left, -right), bottom(-left, -right),
-     *      left(-left, -right)`
+     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+     *      left(-start, -end)`
+     *
+     * @param {HTMLElement|String} [options.arrowElement='[x-arrow]']
+     *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
+     *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
+     *      reference element.
+     *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
      *
      * @param {Boolean} [options.gpuAcceleration=true]
      *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
@@ -155,28 +161,27 @@
         // with {} we create a new object with the options inside it
         this._options = Object.assign({}, DEFAULTS, options);
 
-        // iterate trough the list of modifiers, the ones defined as strings refers to internal methods of Popper.js
-        // so we return the corresponding method
-        this._options.modifiers = this._options.modifiers.map(function(modifier) {
-            if (typeof modifier === 'string') {
-                if (this._options.modifiersIgnored.indexOf(modifier) !== -1) {
-                    return;
-                }
-                return this.modifiers[modifier];
-            } else {
-                return modifier;
-            }
-        }.bind(this));
+        // refactoring modifiers' list
+        this._options.modifiers = this._options.modifiers.map(function(modifier){
+            // remove ignored modifiers
+            if (this._options.modifiersIgnored.indexOf(modifier) !== -1) return;
 
-        // set the x-placement attribute before everything else because it could be used to add margins to the popper
-        // margins needs to be calculated to get the correct popper offsets
-        if (this._options.modifiers.indexOf('applyStyle') !== -1) {
-            this._popper.setAttribute('x-placement', this._options.placement);
-        }
+            // set the x-placement attribute before everything else because it could be used to add margins to the popper
+            // margins needs to be calculated to get the correct popper offsets
+            if (modifier === 'applyStyle') {
+                this._popper.setAttribute('x-placement', this._options.placement);
+            }
+
+            // return predefined modifier identified by string or keep the custom one
+            return this.modifiers[modifier] || modifier;
+        }.bind(this));
 
         // make sure to apply the popper position before any computation
         this.state.position = this._getPosition(this._popper, this._reference);
         setStyle(this._popper, { position: this.state.position});
+
+        // determine how we should set the origin of offsets
+        this.state.isParentTransformed = this._getIsParentTransformed(this._popper);
 
         // fire the first update to position the popper in the right place
         this.update();
@@ -216,7 +221,7 @@
      * @memberof Popper
      */
     Popper.prototype.update = function() {
-        var data = { instance: this };
+        var data = { instance: this, styles: {} };
 
         // store placement inside the data object, modifiers will be able to edit `placement` if needed
         // and refer to _originalPlacement to know the original value
@@ -303,7 +308,7 @@
             popper.appendChild(arrow);
         }
 
-        var parent = config.parent;
+        var parent = config.parent.jquery ? config.parent[0] : config.parent;
 
         // if the given parent is a string, use it to match an element
         // if more than one element is matched, the first one will be used as parent
@@ -377,6 +382,15 @@
     };
 
     /**
+     * Helper used to determine if the popper's parent is transformed.
+     * @param  {[type]} popper [description]
+     * @return {[type]}        [description]
+     */
+    Popper.prototype._getIsParentTransformed = function(popper) {
+      return isTransformed(popper.parentNode);
+    };
+
+    /**
      * Get offsets to the popper
      * @method
      * @memberof Popper
@@ -392,10 +406,13 @@
         popperOffsets.position = this.state.position;
         var isParentFixed = popperOffsets.position === 'fixed';
 
+        var isParentTransformed = this.state.isParentTransformed;
+
         //
         // Get reference element position
         //
-        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, getOffsetParent(popper), isParentFixed);
+        var offsetParent = (isParentFixed && isParentTransformed) ? getOffsetParent(reference) : getOffsetParent(popper);
+        var referenceOffsets = getOffsetRectRelativeToCustomParent(reference, offsetParent, isParentFixed, isParentTransformed);
 
         //
         // Get popper sizes
@@ -619,6 +636,12 @@
             styles.left =left;
             styles.top = top;
         }
+
+        // any property present in `data.styles` will be applied to the popper,
+        // in this way we can make the 3rd party modifiers add custom styles to it
+        // Be aware, modifiers could override the properties defined in the previous
+        // lines of this modifier!
+        Object.assign(styles, data.styles);
 
         setStyle(this._popper, styles);
 
@@ -905,7 +928,8 @@
         // compute center of the popper
         var center = reference[side] + (reference[len] / 2) - (arrowSize / 2);
 
-        var sideValue = center - popper[side];
+        // Compute the sideValue using the updated popper offsets
+        var sideValue = center - getPopperClientRect(data.offsets.popper)[side];
 
         // prevent arrow from being placed not contiguously to its popper
         sideValue = Math.max(Math.min(popper[len] - arrowSize, sideValue), 0);
@@ -932,11 +956,19 @@
      */
     function getOuterSizes(element) {
         // NOTE: 1 DOM access here
+        var _display = element.style.display, _visibility = element.style.visibility;
+        element.style.display = 'block'; element.style.visibility = 'hidden';
+        var calcWidthToForceRepaint = element.offsetWidth;
+
+        // original method
         var styles = root.getComputedStyle(element);
         var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
         var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
+        var result = { width: element.offsetWidth + y, height: element.offsetHeight + x };
 
-        return { width: element.offsetWidth + y, height: element.offsetHeight + x };
+        // reset element styles
+        element.style.display = _display; element.style.visibility = _visibility;
+        return result;
     }
 
     /**
@@ -1036,7 +1068,10 @@
             ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-x')) !== -1 ||
             ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-y')) !== -1
         ) {
-            return element;
+            // If the detected scrollParent is body, we perform an additional check on its parentNode
+            // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
+            // fixes issue #65
+            return element === root.document.body ? getScrollParent(element.parentNode) : element;
         }
         return element.parentNode ? getScrollParent(element.parentNode) : element;
     }
@@ -1057,6 +1092,21 @@
             return true;
         }
         return element.parentNode ? isFixed(element.parentNode) : element;
+    }
+
+    /**
+     * Check if the given element has transforms applied to itself or a parent
+     * @param  {Element} element
+     * @return {Boolean} answer to "isTransformed?"
+     */
+    function isTransformed(element) {
+      if (element === root.document.body) {
+          return false;
+      }
+      if (getStyleComputedProperty(element, 'transform') !== 'none') {
+          return true;
+      }
+      return element.parentNode ? isTransformed(element.parentNode) : element;
     }
 
     /**
@@ -1141,11 +1191,11 @@
      * @param {HTMLElement} parent
      * @return {Object} rect
      */
-    function getOffsetRectRelativeToCustomParent(element, parent, fixed) {
+    function getOffsetRectRelativeToCustomParent(element, parent, fixed, transformed) {
         var elementRect = getBoundingClientRect(element);
         var parentRect = getBoundingClientRect(parent);
 
-        if (fixed) {
+        if (fixed && !transformed) {
             var scrollParent = getScrollParent(parent);
             parentRect.top += scrollParent.scrollTop;
             parentRect.bottom += scrollParent.scrollTop;

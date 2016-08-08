@@ -25,11 +25,11 @@ Additionally, it provides an easy way to generate your popper element if you don
 ### Installation
 Popper.js is available on NPM and Bower:
 
-| Source      |                                              |
-|-------------|----------------------------------------------|
-|NPM          | `npm install popper.js --save`               |
-|Bower        | `bower install popper.js --save`             |
-|jsDelivr     | `http://www.jsdelivr.com/projects/popper.js` |
+| Source   |                                              |
+|:---------|:---------------------------------------------|
+| NPM      | `npm install popper.js --save`               |
+| Bower    | `bower install popper.js --save`             |
+| jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
 ### Basic usage
 Create a popper near a button:
@@ -152,8 +152,10 @@ let data = {
   // allows you to know if the `flip` modifier have flipped the placement of the popper
   flipped: Boolean,
   // the node of the arrow (if any)
-  arrowElement: HTMLElement
-  
+  arrowElement: HTMLElement,
+  // any property defined in this object will be applied to the popper element
+  // here you can even override the default styles applied by Popper.js
+  styles: {}
 }
 ```
 
