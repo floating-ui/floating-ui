@@ -45,31 +45,31 @@ describe('Popper.js', function() {
         pop.destroy();
     });
 
-    it('inits a bottom-start popper', function() {
+    it('inits a bottom-start popper', function(done) {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '200px';
         var popper    = appendNewPopper(2);
 
-        var pop = new TestPopper(reference, popper, {placement: 'bottom-start'});
-
-        expect(popper.getBoundingClientRect().left).toBeApprox(reference.getBoundingClientRect().left);
-
-        pop.destroy();
+        var pop = new TestPopper(reference, popper, {placement: 'bottom-start'}).onCreate(function() {
+            expect(popper.getBoundingClientRect().left).toBeApprox(reference.getBoundingClientRect().left);
+            pop.destroy();
+            done();
+        });
     });
 
-    it('inits a right popper', function() {
+    it('inits a right popper', function(done) {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
         new TestPopper(reference, popper, {
             placement: 'right'
-        }).onUpdate(function(data) {
+        }).onCreate(function(pop) {
             var left    = popper.getBoundingClientRect().left;
             var local   = 92;
             var ci      = 110;
             expect([local, ci]).toContain(left);
 
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
 
@@ -96,10 +96,10 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper', superHigh);
 
         scrolling.scrollTop = 500;
-        new TestPopper(ref, popper).onUpdate(function(data) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             var top = popper.getBoundingClientRect().top;
             expect(top).toBeApprox(-449);
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
 
@@ -114,10 +114,10 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', relative);
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onUpdate(function(data) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             expect(popper.getBoundingClientRect().top).toBeApprox(63);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
 
@@ -135,10 +135,10 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onUpdate(function(data) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             expect(popper.getBoundingClientRect().top).toBeApprox(-800 + 263);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
     });
@@ -168,13 +168,13 @@ describe('Popper.js', function() {
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
 
-        new TestPopper(ref, popper).onUpdate(function(data) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             // force redraw
             window.dispatchEvent(new Event('resize'));
 
             expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
     });
@@ -197,10 +197,10 @@ describe('Popper.js', function() {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new TestPopper(ref, popper).onUpdate(function(data) {
+        new TestPopper(ref, popper).onCreate(function(pop) {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            data.instance.destroy();
+            pop.destroy();
             done();
         });
     });
@@ -211,7 +211,7 @@ describe('Popper.js', function() {
         fixed.style.margin = '20px';
         fixed.style.height = '50px';
         fixed.style.width = '100%';
-        fixed.style.transform = 'translateX(0)'
+        fixed.style.transform = 'translateX(0)';
         jasmineWrapper.appendChild(fixed);
 
         var relative = document.createElement('div');
@@ -305,16 +305,20 @@ describe('Popper.js', function() {
     it('creates a popper and sets an onUpdate callback', function(done) {
         var reference = appendNewRef(1);
 
-        new TestPopper(reference, {content: 'react'}, {
+        var pop = new TestPopper(reference, {content: 'react'}, {
             modifiersIgnored: ['applyStyle']
         }).onUpdate(function(data) {
             expect(data.offsets.popper.top).toBeApprox(46);
             document.body.removeChild(data.instance._popper);
             data.instance.destroy();
             done();
-        }).onCreate(function(instance) {
-            instance.update();
         });
+
+        window.setTimeout(function() {
+            pop.update();
+            // simulates update
+            window.dispatchEvent(new Event('resize'));
+        }, 3000);
     });
 
     it('creates a popper when content is undefined', function(done) {

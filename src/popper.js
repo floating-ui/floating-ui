@@ -144,7 +144,7 @@
      */
     function Popper(reference, popper, options) {
         this._reference = reference.jquery ? reference[0] : reference;
-        this.state = {};
+        this.state = { onCreateCalled: false };
 
         // if the popper variable is a configuration object, parse it to generate an HTMLElement
         // generate a default popper if is not defined
@@ -242,14 +242,22 @@
             data._originalPlacement = this._options.placement;
 
             // compute the popper and trigger offsets and put them inside data.offsets
-            data.offsets = this._getOffsets(this._popper, this._trigger, data.placement);
+            data.offsets = this._getOffsets(this._popper, this._reference, data.placement);
 
             // get boundaries
             data.boundaries = this._getBoundaries(data, this._options.boundariesPadding, this._options.boundariesElement);
 
             data = this.runModifiers(data, this._options.modifiers);
 
-            if (typeof this.state.updateCallback === 'function') {
+            if (!isFunction(this.state.createCalback)) {
+                this.state.onCreateCalled = true;
+            }
+            if (!this.state.onCreateCalled) {
+                this.state.onCreateCalled = true;
+                if (isFunction(this.state.createCalback)) {
+                    this.state.createCalback(this);
+                }
+            } else if (isFunction(this.state.updateCallback)) {
                 this.state.updateCallback(data);
             }
         }.bind(this));
@@ -263,7 +271,7 @@
      */
     Popper.prototype.onCreate = function(callback) {
         // the createCallbacks return as first argument the popper instance
-        callback(this);
+        this.state.createCalback = callback;
         return this;
     };
 
