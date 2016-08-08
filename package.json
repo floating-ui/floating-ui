@@ -1,7 +1,7 @@
 {
   "name": "popper.js",
-  "version": "0.3.8",
-  "description": "",
+  "version": "0.6.0",
+  "description": "A kickass library to manage your poppers",
   "main": "src/popper.js",
   "scripts": {
     "test": "grunt test"
@@ -35,6 +35,7 @@
     "jasmine-core": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.2",
-    "karma-jasmine": "^0.3.8"
+    "karma-jasmine": "^0.3.8",
+    "requirejs": "^2.2.0"
   }
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.target {
+  background:#ff0000;
+  width:50px;
+  height:50px;
+  border:1px solid red;
+}
+
+.popper {
+  background:yellow;
+  width:120px;
+  height:120px;
+}
+
+.scrollable {
+  width:400px;
+  height:300px;
+  overflow:auto;
+  border:1px solid red;
+}
+
+.scrollable-for-scroll {
+  content:" ";
+  height:100px;
+  width:200px;
+  border:1px solid red;
+}
+
+</style>
+</head>
+<body>
+    <div class="scrollable" id="boundaries">
+      <div class="scrollable-for-scroll">some content before</div>
+      <div class="target"></div>
+      <div class="popper">test popper</div>
+     <div class="scrollable-for-scroll" style="height:500px">some content after</div>
+    </div>
+
+    <script src="../src/popper.js"></script>
+    <script>
+    var reference = document.querySelector('.target');
+    var popperElem = document.querySelector('.popper');
+    var thePopper = new Popper(
+        reference,
+        popperElem,
+        {
+            placement: 'right',
+            boundariesElement: boundaries
+        }
+    );
+
+    </script>
+</body>
+</html>

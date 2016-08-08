@@ -22,9 +22,18 @@ bower install
 
 ## Developing
 
-We develop following a test driven development approach.
+## Adopt an issue
+
+The issues with the `PR WELCOME` label are the preferred ones to adopt if you want to contribute to this project.  
+These issues are most likely new features or enhancements that would be nice to have but that will not be implemened by the maintainer due to lack of free time.
+
+Other issues labelled by `HELP WANTED` should be fixed by the maintainer, but for any reason, he has problems with it and needs help from the community to continue the work on it.
+
+When you adopt an issue, please write a comment on it to make sure that multiple people don't work on the same one.
 
 ## Test
+
+We develop following a test driven development approach.
 
 We have a grunt + karma + jasmine environment to unit test Popper.js
 Feel free to add tests to the `/tests` folder, any JavaScript file in that folder will be executed as test.

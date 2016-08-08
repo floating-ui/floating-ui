@@ -1,3 +1,29 @@
+## v0.6.0
+- 0bd967e: big performance improvements (more info at #17)
+
+## v0.5.3
+- 3924aa4: fixed scroll detection on Internet Explorer 11 (and probably below)
+
+## v0.5.2
+- 6691354: fixed arrow position in particular cases
+
+## v0.5.1
+- 0a79027: Added support for a reference el that is both fixed and transformed. (thanks @hgascoigne)
+
+## v0.5.0
+- f4e3659: 3rd party modifiers now can set custom styling to poppers (prep for #52)
+
+## v0.4.2
+- 566d4e6: Forgot to update the build, sorry
+
+## v0.4.1
+- 660849a: Fix calculation of popper elements' outerSizes (thanks @rafaelverger)
+
+## v0.4.0
+- 201636a: added feature to use HTML Node as popper content. Use it defining `contentType: 'node'` and `content: yourHTMLNode` (thanks @rosskevin)
+- 9503e09: make sure to not add `="undefined"` when setting attributes (#39)
+- minor performance improvements
+
 ## v0.3.8
 - fixed problem with NPM release
 

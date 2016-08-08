@@ -25,11 +25,11 @@ Additionally, it provides an easy way to generate your popper element if you don
 ### Installation
 Popper.js is available on NPM and Bower:
 
-| Source      |                                              |
-|-------------|----------------------------------------------|
-|NPM          | `npm install popper.js --save`               |
-|Bower        | `bower install popper.js --save`             |
-|jsDelivr     | `http://www.jsdelivr.com/projects/popper.js` |
+| Source   |                                              |
+|:---------|:---------------------------------------------|
+| NPM      | `npm install popper.js --save`               |
+| Bower    | `bower install popper.js --save`             |
+| jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
 ### Basic usage
 Create a popper near a button:
@@ -91,6 +91,91 @@ https://gist.github.com/FezVrasta/6533adf4358a6927b48f7478706a5f23
 If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
 
 Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do right now!
+
+### Writing your own modifiers
+Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
+A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
+
+```
+// this little modifier forces the popper `top` value to be `0`
+function fixToTop(data) {
+    data.popper.offsets.top = 0
+    return data;
+}
+```
+
+Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
+
+```
+// note that the built-in modifiers are referenced using strings
+// instead, your custom modifiers are passed directly as functions
+new Popper(a, b, {
+  modifiers: [ 'shift', 'offset', 'preventOverflow', 'keepTogether', 'arrow', 'flip', 'applyStyle', fixToTop]
+})
+```
+
+Here is the `data` object content:
+
+```
+let data = {
+  // popper and reference elements positions
+  offsets: {
+    popper: {
+      top: Number,
+      left: Number,
+      width: Number,
+      height: Number
+    },
+    reference: {
+      top: Number,
+      left: Number,
+      width: Number,
+      height: Number
+    },
+    // here, only one of the two values will be different from `0`, depending by the placement
+    arrow: {
+      left: Number,
+      top: Number
+    }
+  },
+  // the result of the _getBoundaries method, these are the limits between the popper can be placed
+  boundaries: {
+    top: Number,
+    right: Number,
+    bottom: Number,
+    left: Number
+  },
+  // `top`, `left`, `bottom`, `right` + optional `end` or `start` variations
+  placement: String,
+  // the placement defined at the beginning, before any edit made by modifiers
+  _originalPlacement: String,
+  // allows you to know if the `flip` modifier have flipped the placement of the popper
+  flipped: Boolean,
+  // the node of the arrow (if any)
+  arrowElement: HTMLElement,
+  // any property defined in this object will be applied to the popper element
+  // here you can even override the default styles applied by Popper.js
+  styles: {}
+}
+```
+
+### Internet Explorer
+Exactly, we are in 2016, and we still talk about workarounds for IE...
+
+If you need the `removeOnDestroy` option in IE 11 and below, please make sure to add this polyfill before Popper.js:
+https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
+
+
+
+## Libraries using Popper.js
+
+Popper.js will never winthe prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
+With it you can create awesome libraries without worring about the positioning problems! Some great ones using Popper.js are listed here:
+
+- [intro-guide-js](https://github.com/johanlahti/intro-guide-js): Create guided tours of your web pages;
+- [picker.js](https://github.com/GeekAb/picker.js): Modern date picker;
+
+_Want to see your library here? Open an issue and report it._
 
 
 ## Notes
