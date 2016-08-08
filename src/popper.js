@@ -1,14 +1,23 @@
+// Polyfills
+import './polyfills/objectAssign';
+import './polyfills/requestAnimationFrame';
+
+// Utils
 import setStyle from './utils/setStyle';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getPosition from './utils/getPosition';
 import getOffsets from './utils/getOffsets';
 import getBoundaries from './utils/getBoundaries';
-import setupEventListeners from './utils/setupEventListeners';
-import removeEventListeners from './utils/removeEventListeners';
-import runModifiers from './utils/runModifiers';
 import isFunction from './utils/isFunction';
 
+// Helpers
+import setupEventListeners from './helpers/setupEventListeners';
+import removeEventListeners from './helpers/removeEventListeners';
+import runModifiers from './helpers/runModifiers';
+import sortModifiers from './helpers/sortModifiers';
+
+// Modifiers
 import modifiersFunctions from './modifiers/index';
 import { modifiersOnLoad as modifiersOnLoadFunctions } from './modifiers/index';
 
@@ -236,83 +245,5 @@ export default class Popper {
             this.popper.remove();
         }
         return this;
-    }
-}
-
-//
-// Sorts the modifiers based on their order property
-//
-function sortModifiers(a, b) {
-    if (a.order < b.order) {
-        return -1;
-    } else if (a.order > b.order) {
-        return 1;
-    }
-    return 0;
-}
-
-/**
- * The Object.assign() method is used to copy the values of all enumerable own properties from one or more source
- * objects to a target object. It will return the target object.
- * This polyfill doesn't support symbol properties, since ES5 doesn't have symbols anyway
- * Source: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
- * @function
- * @ignore
- */
-if (!Object.assign) {
-    Object.defineProperty(Object, 'assign', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function(target) {
-            if (target === undefined || target === null) {
-                throw new TypeError('Cannot convert first argument to object');
-            }
-
-            var to = Object(target);
-            for (var i = 1; i < arguments.length; i++) {
-                var nextSource = arguments[i];
-                if (nextSource === undefined || nextSource === null) {
-                    continue;
-                }
-                nextSource = Object(nextSource);
-
-                var keysArray = Object.keys(nextSource);
-                for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-                    var nextKey = keysArray[nextIndex];
-                    var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-                    if (desc !== undefined && desc.enumerable) {
-                        to[nextKey] = nextSource[nextKey];
-                    }
-                }
-            }
-            return to;
-        }
-    });
-}
-
-if (!window.requestAnimationFrame) {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame) {
-        window.requestAnimationFrame = function(callback) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-                                       timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-    }
-
-    if (!window.cancelAnimationFrame) {
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
     }
 }

@@ -1,8 +1,9 @@
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOffsets from '../utils/getOffsets';
-import runModifiers from '../utils/runModifiers';
-import isModifierRequired from '../utils/isModifierRequired';
+import isModifierRequired from '../helpers/isModifierRequired';
+
+import runModifiers from '../helpers/runModifiers';
 
 /**
  * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.

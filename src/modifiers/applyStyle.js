@@ -1,6 +1,6 @@
 import getSupportedPropertyName from '../utils/getSupportedPropertyName';
 import setStyle from '../utils/setStyle';
-import isModifierRequired from '../utils/isModifierRequired';
+import isModifierRequired from '../helpers/isModifierRequired';
 
 /**
  * Apply the computed styles to the popper element
