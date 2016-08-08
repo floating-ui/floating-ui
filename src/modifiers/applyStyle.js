@@ -35,9 +35,9 @@ export default function applyStyle(data) {
     }
 
     // any property present in `data.styles` will be applied to the popper,
-    // in data.instance way we can make the 3rd party modifiers add custom styles to it
+    // in this way we can make the 3rd party modifiers add custom styles to it
     // Be aware, modifiers could override the properties defined in the previous
-    // lines of data.instance modifier!
+    // lines of this modifier!
     Object.assign(styles, data.styles);
 
     setStyle(data.instance.popper, styles);

@@ -50,7 +50,7 @@ export default function flip(data) {
 
         const popperOffsets = getPopperClientRect(data.offsets.popper);
 
-        // data.instance boolean is used to distinguish right and bottom from top and left
+        // this boolean is used to distinguish right and bottom from top and left
         // they need different computations to get flipped
         const a = ['right', 'bottom'].indexOf(placement) !== -1;
 
@@ -59,7 +59,7 @@ export default function flip(data) {
             a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
             !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite])
         ) {
-            // we'll use data.instance boolean to detect any flip loop
+            // this boolean to detect any flip loop
             data.flipped = true;
             data.placement = flipOrder[index + 1];
             if (constiation) {

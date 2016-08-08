@@ -10,10 +10,10 @@ import getPopperClientRect from '../utils/getPopperClientRect';
 export default function shift(data) {
     const placement = data.placement;
     const basePlacement = placement.split('-')[0];
-    const shiftconstiation = placement.split('-')[1];
+    const shiftvariation = placement.split('-')[1];
 
-    // if shift shiftconstiation is specified, run the modifier
-    if (shiftconstiation) {
+    // if shift shiftvariation is specified, run the modifier
+    if (shiftvariation) {
         const reference = data.offsets.reference;
         const popper = getPopperClientRect(data.offsets.popper);
 
@@ -30,7 +30,7 @@ export default function shift(data) {
 
         const axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
 
-        data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftconstiation]);
+        data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftvariation]);
     }
 
     return data;
