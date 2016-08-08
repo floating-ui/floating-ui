@@ -101,7 +101,7 @@ var DEFAULTS = {
 export default class Popper {
     constructor(reference, popper, options = {}) {
         this.reference = reference.jquery ? reference[0] : reference;
-        this.state = {};
+        this.state = { onCreateCalled: false };
 
         this.popper = popper.jquery ? popper[0] : popper;
 
@@ -153,22 +153,44 @@ export default class Popper {
     update() {
         var data = { instance: this, styles: {} };
 
-        // store placement inside the data object, modifiers will be able to edit `placement` if needed
-        // and refer to _originalPlacement to know the original value
-        data.placement = this.options.placement;
-        data.originalPlacement = this.options.placement;
+        // make sure to apply the popper position before any computation
+        this.state.position = getPosition(this.popper, this.reference);
+        setStyle(this.popper, { position: this.state.position});
 
-        // compute the popper and reference offsets and put them inside data.offsets
-        data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
+        // to avoid useless computations we throttle the popper position refresh to 60fps
+        window.requestAnimationFrame(() => {
+            const now = window.performance.now();
+            if (now - this.state.lastFrame <= 16) {
+                // this update fired to early! drop it
+                return;
+            }
+            this.state.lastFrame = now;
 
-        // get boundaries
-        data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
+            // store placement inside the data object, modifiers will be able to edit `placement` if needed
+            // and refer to _originalPlacement to know the original value
+            data.placement = this.options.placement;
+            data._originalPlacement = this.options.placement;
 
-        data = runModifiers(this.modifiers, this.options, data);
+            // compute the popper and reference offsets and put them inside data.offsets
+            data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
 
-        if (typeof this.state.updateCallback === 'function') {
-            this.state.updateCallback(data);
-        }
+            // get boundaries
+            data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
+
+            // run the modifiers
+            data = runModifiers(this.modifiers, this.options, data);
+
+            // the first `update` will call `onCreate` callback
+            // the other ones will call `onUpdate` callback
+            if (this.state.onCreateCalled === false && isFunction(this.state.createCalback)) {
+                this.state.onCreateCalled = true;
+                this.state.createCalback(data.instance);
+            } else if (this.state.onCreateCalled === true && isFunction(this.state.updateCallback)) {
+                this.state.updateCallback(data);
+            } else {
+                this.state.onCreateCalled = true;
+            }
+        });
     }
 
     /**
@@ -179,7 +201,7 @@ export default class Popper {
      */
     onCreate(callback) {
         // the createCallbacks return as first argument the popper instance
-        callback(this);
+        this.state.createCalback = callback;
         return this;
     }
 
@@ -267,4 +289,30 @@ if (!Object.assign) {
             return to;
         }
     });
+}
+
+if (!window.requestAnimationFrame) {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+                                       timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+    }
+
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+    }
 }
