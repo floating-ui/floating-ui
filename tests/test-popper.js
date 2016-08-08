@@ -371,8 +371,7 @@ describe('Popper.js', function() {
         });
     });
 
-    // EXPERIMENTAL
-    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function() {
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function(done) {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
@@ -403,10 +402,12 @@ describe('Popper.js', function() {
         ref.style.marginTop = '100px';
         var popper = appendNewPopper(2, 'popper', scrolling);
 
-        new TestPopper(ref, popper, { placement: 'right'}).onCreate(function(pop) {
-            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+        new TestPopper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate(function(pop) {
+            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().top + 5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(153);
+
             pop.destroy();
+            done();
         });
     });
 
