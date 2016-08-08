@@ -286,9 +286,7 @@ describe('Popper.js', function() {
 
         window.setTimeout(function() {
             pop.update();
-            // simulates update
-            window.dispatchEvent(new Event('resize'));
-        }, 500);
+        }, 200);
     });
 
     it('creates a popper with an empty form as parent, then auto remove it on destroy', function(done) {
@@ -332,11 +330,50 @@ describe('Popper.js', function() {
             popper,
             { placement: 'right', removeOnDestroy: true }
         ).onCreate(function(instance) {
-            instance.update();
             var local = 92;
             var ci = 110;
             expect([local, ci]).toContain(instance.popper.getBoundingClientRect().left);
             instance.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', function(done) {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        relative.style.paddingTop = '100px';
+        relative.style.backgroundColor = 'yellow';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 100;
+
+        var scrolling = document.createElement('div');
+        scrolling.style.width = '100%';
+        scrolling.style.height = '100vh';
+        scrolling.style.overflow = 'auto';
+        scrolling.style.backgroundColor = 'green';
+        relative.appendChild(scrolling);
+
+        var superHigh = document.createElement('div');
+        superHigh.style.width = '1px';
+        superHigh.style.float = 'right';
+        superHigh.style.height = '300vh';
+        scrolling.appendChild(superHigh);
+
+        scrolling.scrollTop = 100;
+
+        var ref = appendNewRef(1, 'ref', scrolling);
+        ref.style.width = '100px';
+        ref.style.height = '100px';
+        ref.style.marginTop = '100px';
+        var popper = appendNewPopper(2, 'popper', scrolling);
+
+        new TestPopper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate(function(pop) {
+            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().top + 5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(153);
+
+            pop.destroy();
             done();
         });
     });
@@ -362,7 +399,6 @@ describe('Popper.js', function() {
             done();
         });
     });
-
 
     it('creates a popper with a custom modifier that set its top to 3px', function(done) {
         var reference = appendNewRef(1);
