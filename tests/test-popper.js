@@ -249,12 +249,7 @@ describe('Popper.js', function() {
 
         new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(pop) {
             var local = 727;
-            var ci = 739;
-            // force redraw
-            window.dispatchEvent(new Event('resize'));
-
-            var local = 727;
-            var ci = 739;
+            var ci = 740;
             expect([local, ci]).toContain(popper.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
