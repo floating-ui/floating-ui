@@ -28,8 +28,8 @@ Popper.js is available on NPM and Bower:
 
 | Source   |                                              |
 |:---------|:---------------------------------------------|
-| NPM      | `npm install popper.js --save`               |
-| Bower    | `bower install popper.js --save`             |
+| npm      | `npm install popper.js@1 --save`             |
+| Bower    | `bower install popper.js#~1 --save`          |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
 
