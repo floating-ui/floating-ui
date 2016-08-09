@@ -84,10 +84,11 @@ new Popper(reference, popper)
 ### React, AngularJS and Ember.js integration
 
 Integrate 3rd party libraries in React or other libraries can be a pain because
-they usually alert the DOM and drives the libraries crazy.  
+they usually alter the DOM and drives the libraries crazy.  
 Popper.js limits all its DOM modifications inside the `applyStyle` modifier,
 you can simply disable it and manually apply the popper coordinates using
-your library of choice.
+your library of choice.  
+Alternatively, you may even override `applyStyles` with your custom function!
 
 ```js
 function applyReactStyle(data) {

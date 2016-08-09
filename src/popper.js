@@ -124,7 +124,7 @@ var DEFAULTS = {
  *      Amount of pixels the popper will be shifted (can be negative).
  *
  * @param {Object} options.modifiers.preventOverflow - PreventOverflow modifier configuration
- * @param {Array} options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']
+ * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
  *

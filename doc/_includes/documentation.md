@@ -85,7 +85,7 @@ Create a new Popper.js instance
 | options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
 | options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
 | options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
-| options.modifiers.preventOverflow.priority | <code>Array</code> | <code>[&#x27;left&#x27;,</code> | 'right', 'top', 'bottom']      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
+| [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
 | options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
 | options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
 
@@ -451,7 +451,7 @@ needed by the library.
 Each modifier is an object containing several properties listed below.
 
 **Kind**: global namespace  
-**Returns**: <code>Object</code> - data - Each modifier must return the modifier `data` object.  
+**Returns**: <code>Object</code> - data - Each modifier must return the modified `data` object.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -594,7 +594,7 @@ Access Popper.js instance with `data.instance`.
 
 | Param | Type |
 | --- | --- |
-| data | <code>Object</code> | 
+| data | <code>[dataObject](#dataObject)</code> | 
 
 <a name="updateCallback"></a>
 
@@ -608,5 +608,5 @@ Access Popper.js instance with `data.instance`.
 
 | Param | Type |
 | --- | --- |
-| data | <code>Object</code> | 
+| data | <code>[dataObject](#dataObject)</code> | 
 
