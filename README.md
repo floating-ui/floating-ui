@@ -1,3 +1,6 @@
+> **Documentation** on the official website you'll find the v0 documentation, for the
+v1 documentation plase [click here](doc/_includes/documentation.md)
+
 # Popper.js
 Popper.js is a library used to create poppers in web applications.
 
