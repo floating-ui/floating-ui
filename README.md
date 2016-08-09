@@ -1,7 +1,9 @@
 > **Documentation** on the official website you'll find the v0 documentation, for the
 v1 documentation plase [click here](doc/_includes/documentation.md)
 
+
 # Popper.js
+
 Popper.js is a library used to create poppers in web applications.
 
 [![Build Status](https://travis-ci.org/FezVrasta/popper.js.svg?branch=master)](https://travis-ci.org/FezVrasta/popper.js)
@@ -10,11 +12,15 @@ Popper.js is a library used to create poppers in web applications.
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
 
+
 ## Wut? Poppers?
+
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
 Common examples of poppers are tooltips and popovers.
 
+
 ## So, yet another tooltip library?
+
 Well, basically, **no**.  
 Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
 It supports a **plugin system** you can use to add particular behaviors to your poppers.  
@@ -22,9 +28,13 @@ It's written with ES2015 and it's **AMD** and **CommonJS** compatible, every lin
 
 
 ## The Library
+
 Popper.js is a library with the job of making sure your popper stays near the defined reference element (if you want so).  
 One of the key points is the ability to position elements even if they are not direct descendants of `body`, this means that
 it can position an element relative to another one even if they are placed inside different parents.
+
+Visit our  [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
+
 
 ### Installation
 Popper.js is available on NPM and Bower:
@@ -37,6 +47,7 @@ Popper.js is available on NPM and Bower:
 
 
 ### Usage
+
 Given an existing popper, ask Popper.js to position it near its button
 
 ```js
@@ -52,6 +63,10 @@ var anotherPopper = new Popper(
 ```
 
 ### Callbacks
+
+Popper.js supports two kind of callbacks, the `onCreate` callback is called after
+the popper has been initalized. The `onUpdate` one is called on any subsequent update.
+
 ```js
 const reference = document.querySelector('.my-button');
 const popper = document.querySelector('.my-popper');
@@ -59,6 +74,7 @@ new Popper(reference, popper)
 .onCreate((data) => {
     // data is an object containing all the informations computed
     // by Popper.js and used to style the popper and its arrow
+    // The complete description is available in Popper.js documentation
 })
 .onUpdate((data) => {
   // same as `onCreate` but called on subsequent updates
@@ -66,7 +82,13 @@ new Popper(reference, popper)
 ```
 
 ### React, AngularJS and Ember.js integration
-If you prefer to let your framework apply the styles to your DOM objects, you can follow an approach like the one below:
+
+Integrate 3rd party libraries in React or other libraries can be a pain because
+they usually alert the DOM and drives the libraries crazy.  
+Popper.js limits all its DOM modifications inside the `applyStyle` modifier,
+you can simply disable it and manually apply the popper coordinates using
+your library of choice.
+
 ```js
 function applyReactStyle(data) {
     // export data in your framework and use its content to apply the style to your popper
@@ -82,96 +104,30 @@ new Popper(reference, popper, {
 .onUpdate(applyReactStyle);
 
 ```
-You can find a fully working React.js component visiting this gist:  
+
+You can find a fully working React component visiting this gist:  
 https://gist.github.com/FezVrasta/6533adf4358a6927b48f7478706a5f23
 
 
-If you are wondering about the available options of the third argument, check out [our documentation](http://fezvrasta.github.io/popper.js/documentation.html#new_Popper_new)
+### Documentation
 
-Visit our [GitHub Page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do right now!
+The whole library is commented line-by-line using JSDocs comments exported into
+an easy to follow markdown document.  
+To read the full documentation [visit this link](doc/_includes/documentation.md).
+
 
 ### Writing your own modifiers
+
 Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.  
-Some modifiers may need to execute particular functions when the Popper instance is created, in this case, define your custom function and assign it to
-the `onLoad` property.
 
-```js
-// this little modifier forces the popper `top` value to be `0`
-function fixToTop(data) {
-    data.popper.offsets.top = 0
-    return data;
-}
+To learn how to create a modifier, [read the modifiers documentaton](doc/_includes/documentation.md#modifiers--object)
 
-function fixToTopOnLoad(reference, popper, options) {
-    popper.style.position = 'absolute';
-}
-```
 
-Then, you can add your modifier to your Popper.js instance, adding it to the `modifiers` list in the options:
 
-```js
-new Popper(a, b, {
-    modifiers: {
-        fixToTop: {
-            order: 800, // define the order of execution of your modifier*
-            enabled: true, // remember to enable your modifier
-            function: fixToTop // define your modifier here,
-            onLoad: fixToTopOnLoad // define your onLoad function here
-        }
-    }
-})
+## Notes
 
-// *: Check out https://github.com/FezVrasta/popper.js/blob/master/src/popper.js#L39
-//    for the default orders of the built-in modifiers
-```
-
-Here is the `data` object content:
-
-```js
-let data = {
-  // popper and reference elements positions
-  offsets: {
-    popper: {
-      top: Number,
-      left: Number,
-      width: Number,
-      height: Number
-    },
-    reference: {
-      top: Number,
-      left: Number,
-      width: Number,
-      height: Number
-    },
-    // here, only one of the two values will be different from `0`, depending by the placement
-    arrow: {
-      left: Number,
-      top: Number
-    }
-  },
-  // the result of the _getBoundaries method, these are the limits between the popper can be placed
-  boundaries: {
-    top: Number,
-    right: Number,
-    bottom: Number,
-    left: Number
-  },
-  // `top`, `left`, `bottom`, `right` + optional `end` or `start` variations
-  placement: String,
-  // the placement defined at the beginning, before any edit made by modifiers
-  originalPlacement: String,
-  // allows you to know if the `flip` modifier have flipped the placement of the popper
-  flipped: Boolean,
-  // the node of the arrow (if any)
-  arrowElement: HTMLElement,
-  // any property defined in this object will be applied to the popper element
-  // here you can even override the default styles applied by Popper.js
-  styles: {}
-}
-```
-
-## Libraries using Popper.js
+### Libraries using Popper.js
 
 Popper.js will never winthe prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
 With it you can create awesome libraries without worring about the positioning problems! Some great ones using Popper.js are listed here:
@@ -181,8 +137,6 @@ With it you can create awesome libraries without worring about the positioning p
 
 _Want to see your library here? Open an issue and report it._
 
-
-## Notes
 
 ### Credits
 I want to thank some friends and projects for the work they did:
