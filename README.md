@@ -27,9 +27,11 @@ Popper.js is available on NPM and Bower:
 
 | Source   |                                              |
 |:---------|:---------------------------------------------|
-| NPM      | `npm install popper.js --save`               |
+| NPM      | `npm install popper.js@0 --save`               |
 | Bower    | `bower install popper.js --save`             |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
+
+> **Heads up!** We are working on the v1.0.0 release of Popper.js, make sure to install the latest v0.* if you want to stay on the stable version!
 
 ### Basic usage
 Create a popper near a button:
