@@ -2,8 +2,8 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 
 /**
  * Check if the given element is fixed or is inside a fixed parent
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element
  * @argument {Element} customContainer
  * @returns {Boolean} answer to "isFixed?"

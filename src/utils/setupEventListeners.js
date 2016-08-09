@@ -3,8 +3,8 @@ import getScrollParent from './getScrollParent';
 /**
  * Setup needed event listeners used to update the popper position
  * @method
- * @memberof Popper
- * @access private
+ * @memberof Popper.Utils
+ * @private
  */
 export default function setupEventListeners(reference, options, state, updateBound) {
     // NOTE: 1 DOM access here

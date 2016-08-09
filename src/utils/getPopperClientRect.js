@@ -1,7 +1,7 @@
 /**
  * Given the popper offsets, generate an output similar to getBoundingClientRect
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Object} popperOffsets
  * @returns {Object} ClientRect like output
  */

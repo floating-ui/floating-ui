@@ -2,8 +2,8 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 
 /**
  * Returns the scrolling parent of the given element
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element
  * @returns {Element} offset parent
  */

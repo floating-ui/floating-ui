@@ -3,6 +3,7 @@ import './polyfills/objectAssign';
 import './polyfills/requestAnimationFrame';
 
 // Utils
+import Utils from './utils/index';
 import setStyle from './utils/setStyle';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
@@ -24,10 +25,8 @@ var DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
+    // if true, it uses the CSS 3d transformation to position the popper
     gpuAcceleration: true,
-
-    // shift popper from its origin by the given amount of pixels (can be negative)
-    offset: 0,
 
     // the element which will act as boundary of the popper
     boundariesElement: 'viewport',
@@ -35,24 +34,53 @@ var DEFAULTS = {
     // amount of pixel used to define a minimum distance between the boundaries and the popper
     boundariesPadding: 5,
 
-    // popper will try to prevent overflow following this order,
-    // by default, then, it could overflow on the left and on top of the boundariesElement
-    preventOverflowOrder: ['left', 'right', 'top', 'bottom'],
-
-    // the behavior used by flip to change the placement of the popper
-    flipBehavior: 'flip',
-
-    arrowElement: '[x-arrow]',
-
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: {
-        shift:              { order: 100, enabled: true, function: modifiersFunctions.shift },
-        offset:             { order: 200, enabled: true, function: modifiersFunctions.offset },
-        preventOverflow:    { order: 300, enabled: true, function: modifiersFunctions.preventOverflow },
-        keepTogether:       { order: 400, enabled: true, function: modifiersFunctions.keepTogether },
-        arrow:              { order: 500, enabled: true, function: modifiersFunctions.arrow },
-        flip:               { order: 600, enabled: true, function: modifiersFunctions.flip },
-        applyStyle:         { order: 700, enabled: true, function: modifiersFunctions.applyStyle, onLoad: modifiersOnLoadFunctions.applyStyleOnLoad }
+        shift: {
+            order: 100,
+            enabled: true,
+            function: modifiersFunctions.shift,
+        },
+        offset: {
+            order: 200,
+            enabled: true,
+            function: modifiersFunctions.offset,
+            // nudges popper from its origin by the given amount of pixels (can be negative)
+            offset: 0,
+        },
+        preventOverflow: {
+            order: 300,
+            enabled: true,
+            function: modifiersFunctions.preventOverflow,
+            // popper will try to prevent overflow following these priorities
+            //  by default, then, it could overflow on the left and on top of the boundariesElement
+            priority: ['left', 'right', 'top', 'bottom'],
+        },
+        keepTogether: {
+            order: 400,
+            enabled: true,
+            function: modifiersFunctions.keepTogether
+        },
+        arrow: {
+            order: 500,
+            enabled: true,
+            function: modifiersFunctions.arrow,
+            // selector or node used as arrow
+            element: '[x-arrow]'
+        },
+        flip: {
+            order: 600,
+            enabled: true,
+            function: modifiersFunctions.flip,
+            // the behavior used to change the popper's placement
+            behavior: 'flip'
+        },
+        applyStyle: {
+            order: 700,
+            enabled: true,
+            function: modifiersFunctions.applyStyle,
+            onLoad: modifiersOnLoadFunctions.applyStyleOnLoad
+        }
     },
 };
 
@@ -66,19 +94,10 @@ var DEFAULTS = {
  *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
  *      left(-start, -end)`
  *
- * @param {HTMLElement|String} [options.arrowElement='[x-arrow]']
- *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
- *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
- *      reference element.
- *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
- *
  * @param {Boolean} [options.gpuAcceleration=true]
  *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
  *      browser to use the GPU to accelerate the rendering.
  *      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU.
- *
- * @param {Number} [options.offset=0]
- *      Amount of pixels the popper will be shifted (can be negative).
  *
  * @param {String|Element} [options.boundariesElement='viewport']
  *      The element which will define the boundaries of the popper position, the popper will never be placed outside
@@ -87,11 +106,30 @@ var DEFAULTS = {
  * @param {Number} [options.boundariesPadding=5]
  *      Additional padding for the boundaries
  *
- * @param {Array} [options.preventOverflowOrder=['left', 'right', 'top', 'bottom']]
- *      Order used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
- *      this means that the last ones will never overflow
+ * @param {Boolean} [options.removeOnDestroy=false]
+ *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
  *
- * @param {String|Array} [options.flipBehavior='flip']
+ * @param {Object} [options.modifiers]
+ *      List of functions used to modify the data before they are applied to the popper (see source code for default values)
+ *
+ * @param {Object} [options.modifiers.arrow] - Arrow modifier configuration
+ * @param {HTMLElement|String} [options.modifiers.arrow.element='[x-arrow]']
+ *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
+ *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
+ *      reference element.
+ *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
+ *
+ * @param {Object} [options.modifiers.offset] - Offset modifier configuration
+ * @param {Number} [options.modifiers.offset.offset=0]
+ *      Amount of pixels the popper will be shifted (can be negative).
+ *
+ * @param {Object} [options.modifiers.preventOverflow] - PreventOverflow modifier configuration
+ * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
+ *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
+ *      this means that the last one will never overflow
+ *
+ * @param {Object} [options.modifiers.flip] - Flip modifier configuration
+ * @param {String|Array} [options.modifiers.flip.behavior='flip']
  *      The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to
  *      overlap its reference element. Defining `flip` as value, the placement will be flipped on
  *      its axis (`right - left`, `top - bottom`).
@@ -99,16 +137,11 @@ var DEFAULTS = {
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
  *
- * @param {Object} [options.modifiers={ foobar: { order: 100, enabled: true, function: fn, onLoad: fn }, ... }]
- *      List of functions used to modify the data before they are applied to the popper.
- *
- * @param {Boolean} [options.removeOnDestroy=false]
- *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
  */
 export default class Popper {
     constructor(reference, popper, options = {}) {
         this.reference = reference.jquery ? reference[0] : reference;
-        this.state = { onCreateCalled: false };
+        this.state = {};
 
         this.popper = popper.jquery ? popper[0] : popper;
 
@@ -117,34 +150,32 @@ export default class Popper {
         this.options.modifiers = Object.assign({}, DEFAULTS.modifiers, options.modifiers);
 
         // refactoring modifiers' list
-
         this.modifiers = Object.keys(this.options.modifiers)
                                .map((name) => Object.assign({ name }, this.options.modifiers[name]))
                                .sort(sortModifiers);
 
-        this.modifiers = this.modifiers.map((modifier) => {
+        // loop trough the modifiers and run their `onLoad` functions if present
+        this.modifiers.forEach((modifier) => {
             // Modifiers have the ability to execute arbitrary code when Popper.js get inited
             // such code is executed in the same order of its modifier
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 modifier.onLoad(this.reference, this.popper, this.options);
             }
-
-            // return the modifier
-            return modifier;
         });
 
-        // make sure to apply the popper position before any computation
+        // get the popper position type
         this.state.position = getPosition(this.popper, this.reference);
-        setStyle(this.popper, { position: this.state.position});
 
         // determine how we should set the origin of offsets
         this.state.isParentTransformed = isTransformed(this.popper.parentNode);
 
         // fire the first update to position the popper in the right place
-        this.update();
+        this.update(true);
 
         // setup event listeners, they will take care of update the position in specific situations
         setupEventListeners(this.reference, this.options, this.state, () => this.update);
+
+        // make it chainable
         return this;
     }
 
@@ -155,9 +186,11 @@ export default class Popper {
     /**
      * Updates the position of the popper, computing the new offsets and applying the new style
      * @method
+     * @param {Boolean} isFirstCall
+     *      When true, the onCreate callback is called, otherwise it calls the onUpdate callback
      * @memberof Popper
      */
-    update() {
+    update(isFirstCall) {
         var data = { instance: this, styles: {} };
 
         // make sure to apply the popper position before any computation
@@ -174,9 +207,9 @@ export default class Popper {
             this.state.lastFrame = now;
 
             // store placement inside the data object, modifiers will be able to edit `placement` if needed
-            // and refer to _originalPlacement to know the original value
+            // and refer to originalPlacement to know the original value
             data.placement = this.options.placement;
-            data._originalPlacement = this.options.placement;
+            data.originalPlacement = this.options.placement;
 
             // compute the popper and reference offsets and put them inside data.offsets
             data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
@@ -189,13 +222,10 @@ export default class Popper {
 
             // the first `update` will call `onCreate` callback
             // the other ones will call `onUpdate` callback
-            if (this.state.onCreateCalled === false && isFunction(this.state.createCalback)) {
-                this.state.onCreateCalled = true;
+            if (isFirstCall && isFunction(this.state.createCalback)) {
                 this.state.createCalback(data.instance);
-            } else if (this.state.onCreateCalled === true && isFunction(this.state.updateCallback)) {
+            } else if (!isFirstCall && isFunction(this.state.updateCallback)) {
                 this.state.updateCallback(data);
-            } else {
-                this.state.onCreateCalled = true;
             }
         });
     }
@@ -239,9 +269,12 @@ export default class Popper {
         this.state = removeEventListeners(this.reference, this.state, this.options);
 
         // remove the popper if user explicity asked for the deletion on destroy
+        // do not use `remove` because IE11 doesn't support it
         if (this.options.removeOnDestroy) {
-            this.popper.remove();
+            this.popper.parentNode.removeChild(this.popper);
         }
         return this;
     }
+
+    static Utils = Utils
 }

@@ -1,6 +1,8 @@
 /**
  * Tells if a given input is a number
- * @param {anything} input to check
+ * @method
+ * @memberof Popper.Utils
+ * @param {*} input to check
  * @return {Boolean}
  */
 export default function isNumeric(n) {

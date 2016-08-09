@@ -1,7 +1,7 @@
 /**
  * Get bounding client rect of given element
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @param {HTMLElement} element
  * @return {Object} client rect
  */

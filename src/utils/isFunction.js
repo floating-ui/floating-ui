@@ -1,7 +1,7 @@
 /**
  * Check if the given variable is a function
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element - Element to check
  * @returns {Boolean} answer to: is a function?
  */

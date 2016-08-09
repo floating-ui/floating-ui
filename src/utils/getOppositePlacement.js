@@ -1,7 +1,7 @@
 /**
  * Get the opposite placement of the given one/
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {String} placement
  * @returns {String} flipped placement
  */

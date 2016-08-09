@@ -1,7 +1,7 @@
 /**
  * Get the prefixed supported property name
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {String} property (camelCase)
  * @returns {String} prefixed property (camelCase)
  */

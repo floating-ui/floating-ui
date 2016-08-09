@@ -3,8 +3,8 @@ import getScrollParent from './getScrollParent';
 /**
  * Remove event listeners used to update the popper position
  * @method
- * @memberof Popper
- * @access private
+ * @memberof Popper.Utils
+ * @private
  */
 export default function removeEventListeners(reference, state, options) {
     // NOTE: 1 DOM access here

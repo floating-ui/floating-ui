@@ -23,11 +23,8 @@
   "homepage": "https://popper.js.org",
   "devDependencies": {
     "babel-eslint": "^6.1.2",
-    "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.10.1",
-    "babel-plugin-transform-es2015-classes": "^6.9.0",
-    "babel-plugin-transform-es2015-parameters": "^6.11.4",
-    "babel-plugin-transform-es2015-shorthand-properties": "^6.8.0",
+    "babel-preset-es2015-loose-rollup": "^7.0.0",
+    "babel-preset-stage-0": "^6.5.0",
     "eslint": "^3.2.2",
     "eslint-plugin-jasmine": "^1.8.1",
     "grunt": "^1.0.1",

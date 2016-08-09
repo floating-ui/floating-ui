@@ -5,8 +5,7 @@ import getOuterSizes from './getOuterSizes';
 /**
  * Get offsets to the popper
  * @method
- * @memberof Popper
- * @access private
+ * @memberof Popper.Utils
  * @param {Element} popper - the popper element
  * @param {Element} reference - the reference element (the popper will be relative to this)
  * @returns {Object} An object containing the offsets which will be applied to the popper

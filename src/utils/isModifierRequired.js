@@ -1,7 +1,7 @@
 /**
  * Helper used to know if the given modifier depends from another one.
  * @method
- * @memberof Popper
+ * @memberof Popper.Utils
  * @returns {Boolean}
  */
 export default function isModifierRequired(modifiers, requesting, requested) {

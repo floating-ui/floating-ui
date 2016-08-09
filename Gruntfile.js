@@ -30,13 +30,7 @@ module.exports = function Gruntfile(grunt) {
                     return [
                         babel({
                             exclude: './node_modules/**',
-                            plugins: [
-                                'transform-es2015-arrow-functions',
-                                'transform-es2015-block-scoping',
-                                'transform-es2015-shorthand-properties',
-                                'transform-es2015-classes',
-                                'transform-es2015-parameters'
-                            ],
+                            presets: [ 'es2015-loose-rollup', 'stage-0' ],
                             babelrc: false
                         })
                     ];

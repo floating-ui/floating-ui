@@ -1,7 +1,7 @@
 /**
  * Get CSS computed property of the given element
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Eement} element
  * @argument {String} property
  */

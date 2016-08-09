@@ -2,8 +2,8 @@ import isNumeric from './isNumeric';
 
 /**
  * Set the style to the given popper
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element - Element to apply the style to
  * @argument {Object} styles - Object with a list of properties and values which will be applied to the element
  */

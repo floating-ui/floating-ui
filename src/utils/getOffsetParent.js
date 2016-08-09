@@ -1,7 +1,7 @@
 /**
  * Returns the offset parent of the given element
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element
  * @returns {Element} offset parent
  */

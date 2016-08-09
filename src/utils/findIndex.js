@@ -1,7 +1,7 @@
 /**
  * Return the index of the matching object
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Array} arr
  * @argument prop
  * @argument value

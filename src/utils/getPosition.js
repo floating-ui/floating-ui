@@ -4,7 +4,7 @@ import isFixed from './isFixed';
 /**
  * Helper used to get the position which will be applied to the popper
  * @method
- * @memberof Popper
+ * @memberof Popper.Utils
  * @param config {HTMLElement} popper element
  * @returns {HTMLElement} reference element
  */

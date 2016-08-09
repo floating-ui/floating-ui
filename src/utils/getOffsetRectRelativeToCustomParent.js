@@ -3,8 +3,8 @@ import getScrollParent from './getScrollParent';
 
 /**
  * Given an element and one of its parents, return the offset
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @param {HTMLElement} element
  * @param {HTMLElement} parent
  * @return {Object} rect

@@ -1,7 +1,7 @@
 /**
  * Get the outer sizes of the given element (offset size + margins)
- * @function
- * @ignore
+ * @method
+ * @memberof Popper.Utils
  * @argument {Element} element
  * @returns {Object} object containing width and height properties
  */
