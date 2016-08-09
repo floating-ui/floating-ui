@@ -10,7 +10,7 @@ var version = JSON.parse(fs.readFileSync('./package.json')).version;
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeTest'];
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
-grunt.loadNpmTasks('grunt-jsdoc');
+grunt.loadNpmTasks('grunt-jsdoc-to-markdown')
 grunt.loadNpmTasks('grunt-karma');
 grunt.loadNpmTasks('grunt-banner');
 grunt.loadNpmTasks('grunt-shell-spawn');
@@ -59,14 +59,10 @@ module.exports = function Gruntfile(grunt) {
                 }
             }
         },
-        jsdoc : {
+        jsdoc2md : {
             dist : {
                 src: '.tmp/popper.js',
-                dest: 'doc',
-                options: {
-                    template: 'doc/template',
-                    query: 'json'
-                }
+                dest: 'doc/_includes/documentation.md'
             }
         },
         'gh-pages': {
@@ -155,7 +151,7 @@ module.exports = function Gruntfile(grunt) {
         }
     });
 
-    grunt.registerTask('doc', ['eslint', 'rollup:test', 'jsdoc']);
+    grunt.registerTask('doc', ['eslint', 'rollup:test', 'jsdoc2md']);
     grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
     grunt.registerTask('test', ['eslint', 'rollup:test', 'karma:local']);
     grunt.registerTask('test-ci', ['eslint', 'rollup:test', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);

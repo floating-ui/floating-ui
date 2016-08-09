@@ -86,7 +86,7 @@ var DEFAULTS = {
 
 /**
  * Create a new Popper.js instance
- * @constructor Popper
+ * @class Popper
  * @param {HTMLElement} reference - The reference element used to position the popper
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options
@@ -137,6 +137,7 @@ var DEFAULTS = {
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
  *
+ * @return {Object} instance - The generated Popper.js instance
  */
 export default class Popper {
     constructor(reference, popper, options = {}) {
@@ -223,7 +224,7 @@ export default class Popper {
             // the first `update` will call `onCreate` callback
             // the other ones will call `onUpdate` callback
             if (isFirstCall && isFunction(this.state.createCalback)) {
-                this.state.createCalback(data.instance);
+                this.state.createCalback(data);
             } else if (!isFirstCall && isFunction(this.state.updateCallback)) {
                 this.state.updateCallback(data);
             }
@@ -234,7 +235,7 @@ export default class Popper {
      * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
      * @method
      * @memberof Popper
-     * @param {Function} callback
+     * @param {createCallback} callback
      */
     onCreate(callback) {
         // the createCallbacks return as first argument the popper instance
@@ -243,17 +244,35 @@ export default class Popper {
     }
 
     /**
+     * Callback called when the popper is created.
+     * Access Popper.js instance with `data.instance`.
+     * @callback createCallback
+     * @static
+     * @param {Object} data
+     */
+
+    /**
      * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
      * used to style popper and its arrow.
      * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
      * @method
      * @memberof Popper
-     * @param {Function} callback
+     * @param {updateCallback} callback
      */
     onUpdate(callback) {
         this.state.updateCallback = callback;
         return this;
     }
+
+    /**
+     * Callback called when the popper is updated, this callback is not called
+     * on the initialization/creation of the popper, but only on subsequent
+     * updates.
+     * Access Popper.js instance with `data.instance`.
+     * @callback updateCallback
+     * @static
+     * @param {Object} data
+     */
 
     /**
      * Destroy the popper
