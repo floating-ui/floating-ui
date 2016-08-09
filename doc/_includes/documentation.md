@@ -5,6 +5,26 @@
 <dd></dd>
 </dl>
 
+## Members
+
+<dl>
+<dt><a href="#dataObject">dataObject</a></dt>
+<dd><p>The <code>dataObject</code> is an object containing all the informations used by Popper.js
+this object get passed to modifiers and to the <code>onCreate</code> and <code>onUpdate</code> callbacks.</p>
+</dd>
+</dl>
+
+## Objects
+
+<dl>
+<dt><a href="#Modifiers">Modifiers</a> ⇒ <code>Object</code></dt>
+<dd><p>Modifiers are plugins used to alter the behavior of your poppers.
+Popper.js uses a set of 7 modifiers to provide all the basic functionalities
+needed by the library.</p>
+<p>Each modifier is an object containing several properties listed below.</p>
+</dd>
+</dl>
+
 <a name="Popper"></a>
 
 ## Popper
@@ -54,20 +74,20 @@ Create a new Popper.js instance
 | reference | <code>HTMLElement</code> |  | The reference element used to position the popper |
 | popper | <code>HTMLElement</code> |  | The HTML element used as popper. |
 | options | <code>Object</code> |  |  |
-| [options.placement] | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
-| [options.gpuAcceleration] | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
-| [options.boundariesElement] | <code>String</code> &#124; <code>Element</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
-| [options.boundariesPadding] | <code>Number</code> | <code>5</code> | Additional padding for the boundaries |
-| [options.removeOnDestroy] | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
-| [options.modifiers] | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
-| [options.modifiers.arrow] | <code>Object</code> |  | Arrow modifier configuration |
-| [options.modifiers.arrow.element] | <code>HTMLElement</code> &#124; <code>String</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
-| [options.modifiers.offset] | <code>Object</code> |  | Offset modifier configuration |
-| [options.modifiers.offset.offset] | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
-| [options.modifiers.preventOverflow] | <code>Object</code> |  | PreventOverflow modifier configuration |
-| [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
-| [options.modifiers.flip] | <code>Object</code> |  | Flip modifier configuration |
-| [options.modifiers.flip.behavior] | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
+| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
+| options.gpuAcceleration | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
+| options.boundariesElement | <code>String</code> &#124; <code>Element</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
+| options.boundariesPadding | <code>Number</code> | <code>5</code> | Additional padding for the boundaries |
+| options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
+| options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
+| options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
+| options.modifiers.arrow.element | <code>HTMLElement</code> &#124; <code>String</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
+| options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
+| options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
+| options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
+| options.modifiers.preventOverflow.priority | <code>Array</code> | <code>[&#x27;left&#x27;,</code> | 'right', 'top', 'bottom']      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
+| options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
+| options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
 
 <a name="Popper+update"></a>
 
@@ -397,6 +417,172 @@ Get the opposite placement of the given one/
 | Param | Type |
 | --- | --- |
 | placement | <code>String</code> | 
+
+<a name="dataObject"></a>
+
+## dataObject
+The `dataObject` is an object containing all the informations used by Popper.js
+this object get passed to modifiers and to the `onCreate` and `onUpdate` callbacks.
+
+**Kind**: global variable  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data.instance | <code>Object</code> | The Popper.js instance |
+| data.placement | <code>String</code> | Placement applied to popper |
+| data.originalPlacement | <code>String</code> | Placement originally defined on init |
+| data.flipped | <code>Boolean</code> | True if popper has been flipped by flip modifier |
+| data.arrowElement | <code>HTMLElement</code> | Node used as arrow by arrow modifier |
+| data.styles | <code>Object</code> | Any CSS property defined here will be applied to the popper, it expects the JavaScript nomenclature (eg. `marginBottom`) |
+| data.boundaries | <code>Object</code> | Offsets of the popper boundaries |
+| data.offsets | <code>Object</code> | The measurements of popper, reference and arrow elements. |
+| data.offsets.popper | <code>Object</code> | `top`, `left`, `width`, `height` values |
+| data.offsets.reference | <code>Object</code> | `top`, `left`, `width`, `height` values |
+| data.offsets.arro | <code>Object</code> | `top` and `left` offsets, only one of them will be different from 0 |
+
+<a name="Modifiers"></a>
+
+## Modifiers ⇒ <code>Object</code>
+Modifiers are plugins used to alter the behavior of your poppers.
+Popper.js uses a set of 7 modifiers to provide all the basic functionalities
+needed by the library.
+
+Each modifier is an object containing several properties listed below.
+
+**Kind**: global namespace  
+**Returns**: <code>Object</code> - data - Each modifier must return the modifier `data` object.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modifier | <code>Object</code> | Modifier descriptor |
+| modifier.order | <code>Integer</code> | The `order` property defines the execution order of the modifiers.      The built-in modifiers have orders with a gap of 100 units in between,      this allows you to inject additional modifiers between the existing ones      without having to redefine the order of all of them.      The modifiers are executed starting from the one with the lowest order. |
+| modifier.enabled | <code>Boolean</code> | When `true`, the modifier will be used. |
+| modifier.function | <code>[modifier](#Modifiers..modifier)</code> | Modifier function. |
+| modifier.onLoad | <code>Modifiers~onLoad</code> | Function executed on popper initalization |
+
+
+* [Modifiers](#Modifiers) ⇒ <code>Object</code>
+    * _static_
+        * [.applyStyle(data, options)](#Modifiers.applyStyle) ⇒ <code>Object</code>
+        * [.arrow(data, options)](#Modifiers.arrow) ⇒ <code>Object</code>
+        * [.flip(data, options)](#Modifiers.flip) ⇒ <code>Object</code>
+        * [.keepTogether(data, options)](#Modifiers.keepTogether) ⇒ <code>Object</code>
+        * [.offset(data, options)](#Modifiers.offset) ⇒ <code>Object</code>
+        * [.preventOverflow(data, options)](#Modifiers.preventOverflow) ⇒ <code>Object</code>
+        * [.shift(data, options)](#Modifiers.shift) ⇒ <code>Object</code>
+    * _inner_
+        * [~modifier](#Modifiers..modifier) ⇒ <code>[dataObject](#dataObject)</code>
+
+<a name="Modifiers.applyStyle"></a>
+
+### Modifiers.applyStyle(data, options) ⇒ <code>Object</code>
+Apply the computed styles to the popper element
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The same data object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by `update` method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.arrow"></a>
+
+### Modifiers.arrow(data, options) ⇒ <code>Object</code>
+Modifier used to move the arrows on the edge of the popper to make sure them are always between the popper and the reference element
+It will use the CSS outer size of the arrow element to know how many pixels of conjuction are needed
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by update method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.flip"></a>
+
+### Modifiers.flip(data, options) ⇒ <code>Object</code>
+Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
+Requires the `preventOverflow` modifier before it in order to work.
+**NOTE:** data.instance modifier will run all its previous modifiers everytime it tries to flip the popper!
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by update method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.keepTogether"></a>
+
+### Modifiers.keepTogether(data, options) ⇒ <code>Object</code>
+Modifier used to make sure the popper is always near its reference
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by update method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.offset"></a>
+
+### Modifiers.offset(data, options) ⇒ <code>Object</code>
+Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
+The offsets will shift the popper on the side of its reference element.
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by update method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.preventOverflow"></a>
+
+### Modifiers.preventOverflow(data, options) ⇒ <code>Object</code>
+Modifier used to make sure the popper does not overflows from it's boundaries
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by `update` method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers.shift"></a>
+
+### Modifiers.shift(data, options) ⇒ <code>Object</code>
+Modifier used to shift the popper on the start or end of its reference element side
+
+**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>Object</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>Object</code> | The data object generated by `update` method |
+| options | <code>Object</code> | Modifiers configuration and options |
+
+<a name="Modifiers..modifier"></a>
+
+### Modifiers~modifier ⇒ <code>[dataObject](#dataObject)</code>
+Modifiers can edit the `data` object to change the beheavior of the popper.
+This object contains all the informations used by Popper.js to compute the
+popper position.
+The modifier can edit the data as needed, and then `return` it as result.
+
+**Kind**: inner typedef of <code>[Modifiers](#Modifiers)</code>  
+**Returns**: <code>[dataObject](#dataObject)</code> - modified data  
+
+| Param | Type |
+| --- | --- |
+| data | <code>[dataObject](#dataObject)</code> | 
 
 <a name="createCallback"></a>
 

@@ -90,46 +90,46 @@ var DEFAULTS = {
  * @param {HTMLElement} reference - The reference element used to position the popper
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options
- * @param {String} [options.placement=bottom]
+ * @param {String} options.placement=bottom
  *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
  *      left(-start, -end)`
  *
- * @param {Boolean} [options.gpuAcceleration=true]
+ * @param {Boolean} options.gpuAcceleration=true
  *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
  *      browser to use the GPU to accelerate the rendering.
  *      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU.
  *
- * @param {String|Element} [options.boundariesElement='viewport']
+ * @param {String|Element} options.boundariesElement='viewport'
  *      The element which will define the boundaries of the popper position, the popper will never be placed outside
  *      of the defined boundaries (except if `keepTogether` is enabled)
  *
- * @param {Number} [options.boundariesPadding=5]
+ * @param {Number} options.boundariesPadding=5
  *      Additional padding for the boundaries
  *
- * @param {Boolean} [options.removeOnDestroy=false]
+ * @param {Boolean} options.removeOnDestroy=false
  *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
  *
- * @param {Object} [options.modifiers]
+ * @param {Object} options.modifiers
  *      List of functions used to modify the data before they are applied to the popper (see source code for default values)
  *
- * @param {Object} [options.modifiers.arrow] - Arrow modifier configuration
- * @param {HTMLElement|String} [options.modifiers.arrow.element='[x-arrow]']
+ * @param {Object} options.modifiers.arrow - Arrow modifier configuration
+ * @param {HTMLElement|String} options.modifiers.arrow.element='[x-arrow]'
  *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
  *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
  *      reference element.
  *      By default, it will look for a child node of the popper with the `x-arrow` attribute.
  *
- * @param {Object} [options.modifiers.offset] - Offset modifier configuration
- * @param {Number} [options.modifiers.offset.offset=0]
+ * @param {Object} options.modifiers.offset - Offset modifier configuration
+ * @param {Number} options.modifiers.offset.offset=0
  *      Amount of pixels the popper will be shifted (can be negative).
  *
- * @param {Object} [options.modifiers.preventOverflow] - PreventOverflow modifier configuration
- * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
+ * @param {Object} options.modifiers.preventOverflow - PreventOverflow modifier configuration
+ * @param {Array} options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
  *
- * @param {Object} [options.modifiers.flip] - Flip modifier configuration
- * @param {String|Array} [options.modifiers.flip.behavior='flip']
+ * @param {Object} options.modifiers.flip - Flip modifier configuration
+ * @param {String|Array} options.modifiers.flip.behavior='flip'
  *      The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to
  *      overlap its reference element. Defining `flip` as value, the placement will be flipped on
  *      its axis (`right - left`, `top - bottom`).
@@ -248,7 +248,7 @@ export default class Popper {
      * Access Popper.js instance with `data.instance`.
      * @callback createCallback
      * @static
-     * @param {Object} data
+     * @param {dataObject} data
      */
 
     /**
@@ -271,7 +271,7 @@ export default class Popper {
      * Access Popper.js instance with `data.instance`.
      * @callback updateCallback
      * @static
-     * @param {Object} data
+     * @param {dataObject} data
      */
 
     /**
