@@ -276,5 +276,10 @@ export default class Popper {
         return this;
     }
 
-    static Utils = Utils
+    /**
+     * Collection of utilities useful when writing custom modifiers
+     * @method
+     * @memberof Popper
+     */
+    static Utils = Utils;
 }

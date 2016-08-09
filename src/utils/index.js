@@ -17,6 +17,7 @@ import isTransformed from './isTransformed';
 import runModifiers from './runModifiers';
 import setStyle from './setStyle';
 
+/** @namespace Popper.Utils */
 export default {
     findIndex,
     getBoundaries,

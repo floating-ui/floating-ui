@@ -61,7 +61,7 @@ module.exports = function Gruntfile(grunt) {
         },
         jsdoc : {
             dist : {
-                src: 'src/*.js',
+                src: '.tmp/popper.js',
                 dest: 'doc',
                 options: {
                     template: 'doc/template',
@@ -155,7 +155,7 @@ module.exports = function Gruntfile(grunt) {
         }
     });
 
-    grunt.registerTask('doc', ['jsdoc']);
+    grunt.registerTask('doc', ['eslint', 'rollup:test', 'jsdoc']);
     grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
     grunt.registerTask('test', ['eslint', 'rollup:test', 'karma:local']);
     grunt.registerTask('test-ci', ['eslint', 'rollup:test', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);

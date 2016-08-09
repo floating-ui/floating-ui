@@ -219,5 +219,5 @@ exports.publish = function(data, opts) {
     else {
         output = require('jsdoc/util/dumper').dump(root);
     }
-    fs.writeFileSync(path.join(opts.destination, 'documentation.' + (opts.query.format || 'json')), output, 'utf8');
+    fs.writeFileSync(path.join(opts.destination, '_data/documentation.' + (opts.query.format || 'json')), output, 'utf8');
 };
