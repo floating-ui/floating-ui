@@ -28,8 +28,8 @@ Popper.js is available on NPM and Bower:
 
 | Source   |                                              |
 |:---------|:---------------------------------------------|
-| npm      | `npm install popper.js@1 --save`             |
-| Bower    | `bower install popper.js#~1 --save`          |
+| npm      | `npm install popper.js@2 --save`             |
+| Bower    | `bower install popper.js#~2 --save`          |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
 
@@ -50,25 +50,34 @@ var anotherPopper = new Popper(
 
 ### Callbacks
 ```js
-var reference = document.querySelector('.my-button');
-var popper = document.querySelector('.my-popper');
-var anotherPopper = new Popper(reference, popper).onCreate((instance) => {
-  // instance is Popper.js instance
-}).onUpdate((data) => {
-  // data is an object containing all the informations computed by Popper.js and used to style the popper and its arrow
+const reference = document.querySelector('.my-button');
+const popper = document.querySelector('.my-popper');
+new Popper(reference, popper)
+.onCreate((data) => {
+    // data is an object containing all the informations computed
+    // by Popper.js and used to style the popper and its arrow
+})
+.onUpdate((data) => {
+  // same as `onCreate` but called on subsequent updates
 });
 ```
 
-### React.js and Ember.js integration
+### React, AngularJS and Ember.js integration
 If you prefer to let your framework apply the styles to your DOM objects, you can follow an approach like the one below:
 ```js
-var reference = document.querySelector('.my-button');
-var popper = document.querySelector('.my-popper');
-var anotherPopper = new Popper(reference, popper, {
-    modifiers: { applyStyle: { enabled: false } } // prevent Popper.js from applying styles to your DOM
-}).onUpdate((data) => {
-  // export data in your framework and use its content to apply the style to your popper
-});
+function applyReactStyle(data) {
+    // export data in your framework and use its content to apply the style to your popper
+}
+
+const reference = document.querySelector('.my-button');
+const popper = document.querySelector('.my-popper');
+new Popper(reference, popper, {
+    // prevent Popper.js from applying styles to your DOM disabling `applyStyle`
+    modifiers: { applyStyle: { enabled: false } }
+})
+.onCreate(applyReactStyle)
+.onUpdate(applyReactStyle);
+
 ```
 You can find a fully working React.js component visiting this gist:  
 https://gist.github.com/FezVrasta/6533adf4358a6927b48f7478706a5f23
