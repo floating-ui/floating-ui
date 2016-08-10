@@ -6,6 +6,9 @@
  * @argument {String} property
  */
 export default function getStyleComputedProperty(element, property) {
+    if (element.nodeType !== 1) {
+        return [];
+    }
     // NOTE: 1 DOM access here
     const css = window.getComputedStyle(element, null);
     return css[property];
