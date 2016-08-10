@@ -251,7 +251,7 @@ describe('Popper.js', function() {
 
         new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(data) {
             var local = 727;
-            var ci = 740;
+            var ci = 735;
             expect([local, ci]).toContain(popper.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
