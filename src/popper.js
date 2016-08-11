@@ -148,21 +148,41 @@ export default class Popper {
 
         // with {} we create a new object with the options inside it
         this.options = Object.assign({}, DEFAULTS, options);
-        this.options.modifiers = Object.assign({}, DEFAULTS.modifiers, options.modifiers);
 
-        // refactoring modifiers' list
-        this.modifiers = Object.keys(this.options.modifiers)
-                               .map((name) => Object.assign({ name }, this.options.modifiers[name]))
-                               .sort(sortModifiers);
+        // refactoring modifiers' list (Object => Array)
+        this.modifiers = Object.keys(DEFAULTS.modifiers)
+                               .map((name) => Object.assign({ name }, DEFAULTS.modifiers[name]));
 
-        // loop trough the modifiers and run their `onLoad` functions if present
+        // assign default values to modifiers, making sure to override them with
+        // the ones defined by user
+        this.modifiers = this.modifiers.map((defaultConfig) => {
+            const userConfig = (options.modifiers && options.modifiers[defaultConfig.name]) || {};
+            const finalConfig = Object.assign({}, defaultConfig, userConfig);
+            return finalConfig;
+        });
+
+        // add custom modifiers to the modifiers list
+        if (options.modifiers) {
+            Object.keys(options.modifiers).forEach((name) => {
+                // take in account only custom modifiers
+                if (DEFAULTS.modifiers[name] === undefined) {
+                    const modifier = options.modifiers[name];
+                    modifier.name = name;
+                    this.modifiers.push(modifier);
+                }
+            });
+        }
+
+        // Modifiers have the ability to execute arbitrary code when Popper.js get inited
+        // such code is executed in the same order of its modifier
         this.modifiers.forEach((modifier) => {
-            // Modifiers have the ability to execute arbitrary code when Popper.js get inited
-            // such code is executed in the same order of its modifier
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 modifier.onLoad(this.reference, this.popper, this.options);
             }
         });
+
+        // Finally sort the modifiers by order
+        this.modifiers = this.modifiers.sort(sortModifiers)
 
         // get the popper position type
         this.state.position = getPosition(this.popper, this.reference);
@@ -174,7 +194,7 @@ export default class Popper {
         this.update(true);
 
         // setup event listeners, they will take care of update the position in specific situations
-        setupEventListeners(this.reference, this.options, this.state, () => this.update);
+        setupEventListeners(this.reference, this.options, this.state, () => this.update());
 
         // make it chainable
         return this;
@@ -297,8 +317,13 @@ export default class Popper {
 
     /**
      * Collection of utilities useful when writing custom modifiers
-     * @method
      * @memberof Popper
      */
     static Utils = Utils;
+
+    /**
+     * Default Popper.js options
+     * @memberof Popper
+     */
+    Defaults = DEFAULTS;
 }

@@ -87,8 +87,9 @@ module.exports = function Gruntfile(grunt) {
                     { pattern: 'bower_components/**/*.js', included: false },
                     { pattern: 'node_modules/requirejs/require.js', included: true },
                     { pattern: '.tmp/*.js', included: false },
-                    'tests/*.js',
-                    'tests/styles/*.css'
+                    'tests/styles/*.css',
+                    'tests/utils/*.js',
+                    'tests/unit/*.js'
                 ]
             },
             unit: {},

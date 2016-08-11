@@ -19,6 +19,10 @@ function appendNewRef(id, text, container) {
     return popper;
 }
 
+function getRect(element) {
+    return element.getBoundingClientRect();
+}
+
 
 /**
  * Get the prefixed supported property name
