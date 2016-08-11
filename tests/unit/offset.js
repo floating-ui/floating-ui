@@ -1,36 +1,25 @@
-describe('Popper.js - offset', function() {
-    // define modules paths
-    require.config({
-        paths: {
-            popper: 'base/.tmp/popper'
-        }
-    });
+import Popper from '../../src/popper';
 
-    var TestPopper;
+// Utils
+import appendNewPopper from '../utils/appendNewPopper';
+import appendNewRef from '../utils/appendNewRef';
 
-    beforeEach((done) => {
-        require(['popper'], function(Popper) {
-            TestPopper = Popper;
-            expect(Popper).toBeDefined();
-            done();
-        });
-    });
-
-    it('creates a popper with single implicit px offset', function(done) {
+describe('Popper.js - offset', () => {
+    it('creates a popper with single implicit px offset', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '100px';
         var popper    = appendNewPopper(2);
 
         var offset = 10;
 
-        new TestPopper(reference, popper, {
+        new Popper(reference, popper, {
             placement: 'bottom',
             modifiers: {
                 offset: {
                     offset: offset
                 }
             }
-        }).onCreate(function(data) {
+        }).onCreate(() => {
             var refLeft = reference.getBoundingClientRect().left;
             var refWidth = reference.offsetWidth;
             var popperLeft = popper.getBoundingClientRect().left;
@@ -42,7 +31,7 @@ describe('Popper.js - offset', function() {
         });
     });
 
-    it('creates a popper with double implicit px offset', function(done) {
+    it('creates a popper with double implicit px offset', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '100px';
         var popper    = appendNewPopper(2);
@@ -50,14 +39,14 @@ describe('Popper.js - offset', function() {
         var offset = '10 10';
         var arrowHeight = 5;
 
-        new TestPopper(reference, popper, {
+        new Popper(reference, popper, {
             placement: 'bottom',
             modifiers: {
                 offset: {
                     offset: offset
                 }
             }
-        }).onCreate(function(data) {
+        }).onCreate(() => {
             var refLeft = reference.getBoundingClientRect().left;
             var refBottom = reference.getBoundingClientRect().bottom;
             var refWidth = reference.offsetWidth;
@@ -72,21 +61,21 @@ describe('Popper.js - offset', function() {
         });
     });
 
-    it('creates a popper with single explicit % offset', function(done) {
+    it('creates a popper with single explicit % offset', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '100px';
         var popper    = appendNewPopper(2);
 
         var offset = '25%';
 
-        new TestPopper(reference, popper, {
+        new Popper(reference, popper, {
             placement: 'bottom',
             modifiers: {
                 offset: {
                     offset: offset
                 }
             }
-        }).onCreate(function(data) {
+        }).onCreate(() => {
             var refLeft = reference.getBoundingClientRect().left;
             var refWidth = reference.offsetWidth;
             var popperLeft = popper.getBoundingClientRect().left;
@@ -98,7 +87,7 @@ describe('Popper.js - offset', function() {
         });
     });
 
-    it('creates a popper with double explicit % offset', function(done) {
+    it('creates a popper with double explicit % offset', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '100px';
         var popper    = appendNewPopper(2);
@@ -106,14 +95,14 @@ describe('Popper.js - offset', function() {
         var offset = '25% 25%';
         var arrowHeight = 5;
 
-        new TestPopper(reference, popper, {
+        new Popper(reference, popper, {
             placement: 'bottom',
             modifiers: {
                 offset: {
                     offset: offset
                 }
             }
-        }).onCreate(function(data) {
+        }).onCreate(() => {
             var refLeft = reference.getBoundingClientRect().left;
             var refBottom = reference.getBoundingClientRect().bottom;
             var refWidth = reference.offsetWidth;

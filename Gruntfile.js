@@ -8,6 +8,7 @@ var version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 // comma separated list of browsers to run tests inside
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeTest'];
+var babelOptions = { exclude: './node_modules/**' };
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-jsdoc-to-markdown')
@@ -28,11 +29,7 @@ module.exports = function Gruntfile(grunt) {
                 moduleName: 'Popper',
                 plugins: function() {
                     return [
-                        babel({
-                            exclude: './node_modules/**',
-                            presets: [ 'es2015-loose-rollup', 'stage-0' ],
-                            babelrc: false
-                        })
+                        babel(babelOptions)
                     ];
                 }
             },
@@ -41,7 +38,7 @@ module.exports = function Gruntfile(grunt) {
                     'build/popper.js': ['src/popper.js']
                 }
             },
-            test: {
+            tmp: {
                 files: {
                     '.tmp/popper.js': ['src/popper.js']
                 }
@@ -83,12 +80,19 @@ module.exports = function Gruntfile(grunt) {
                         flags: ['--window-size=800,872'] // 800x800 plus karma shell
                     }
                 },
+                preprocessors: {
+                    'tests/**/*.js': ['rollup']
+                },
+                rollupPreprocessor: {
+                    plugins: [
+                        babel(babelOptions)
+                    ],
+                    format: 'iife',
+                    sourceMap: 'inline'
+                },
                 files: [
-                    { pattern: 'bower_components/**/*.js', included: false },
-                    { pattern: 'node_modules/requirejs/require.js', included: true },
-                    { pattern: '.tmp/*.js', included: false },
                     'tests/styles/*.css',
-                    'tests/utils/*.js',
+                    'tests/setup.js',
                     'tests/unit/*.js'
                 ]
             },
@@ -152,8 +156,8 @@ module.exports = function Gruntfile(grunt) {
         }
     });
 
-    grunt.registerTask('doc', ['eslint', 'rollup:test', 'jsdoc2md']);
+    grunt.registerTask('doc', ['eslint', 'rollup:tmp', 'jsdoc2md']);
     grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
-    grunt.registerTask('test', ['eslint', 'rollup:test', 'karma:local']);
-    grunt.registerTask('test-ci', ['eslint', 'rollup:test', 'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
+    grunt.registerTask('test', ['eslint', 'karma:local']);
+    grunt.registerTask('test-ci', ['eslint',  'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
 };

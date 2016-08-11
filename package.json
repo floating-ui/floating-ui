@@ -41,7 +41,7 @@
     "karma": "^1.1.2",
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "requirejs": "^2.2.0",
+    "karma-rollup-plugin": "^0.2.1",
     "rollup-plugin-babel": "^2.6.1"
   }
 }
