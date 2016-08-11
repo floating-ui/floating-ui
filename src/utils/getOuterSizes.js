@@ -13,8 +13,6 @@ export default function getOuterSizes(element) {
     element.style.display = 'block';
     element.style.visibility = 'hidden';
 
-    const calcWidthToForceRepaint = element.offsetWidth; // eslint-disable-line no-unused-vars
-
     // original method
     const styles = window.getComputedStyle(element);
     const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
