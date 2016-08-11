@@ -49,7 +49,18 @@ module.exports = function Gruntfile(grunt) {
                 options: {
                     sourceMap: true,
                     sourceMapName: 'build/popper.min.js.map',
-                    preserveComments: /(?:license|version)/
+                    preserveComments: /(?:license|version)/,
+                    mangleToplevel: true,
+                    compress: {
+                        sequences: true,
+                        dead_code: true,
+                        conditionals: true,
+                        booleans: true,
+                        unused: true,
+                        if_return: true,
+                        join_vars: true,
+                        drop_console: true
+                    }
                 },
                 files: {
                     'build/popper.min.js': ['build/popper.js']
