@@ -390,7 +390,7 @@ describe('Popper.js - core', () => {
 
         var options = {
             modifiers: {
-                hidePopper: { order: 690, enabled: true, function: hidePopper }
+                hidePopper: { order: 790, enabled: true, function: hidePopper }
             },
         };
 
