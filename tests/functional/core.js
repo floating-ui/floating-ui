@@ -274,7 +274,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    it('creates a popper and sets an onUpdate callback', (done) => {
+    it('inits a popper and sets an onUpdate callback', (done) => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2, 'react');
 
@@ -292,7 +292,7 @@ describe('Popper.js - core', () => {
         window.setTimeout(() => pop.update(), 200);
     });
 
-    it('creates a popper with an empty form as parent, then auto remove it on destroy', (done) => {
+    it('inits a popper with an empty form as parent, then auto remove it on destroy', (done) => {
         var form      = document.createElement('form');
         var reference = appendNewRef(1, 'ref', form);
         var popper    = appendNewPopper(2, 'test', form);
@@ -307,7 +307,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    it('creates a popper with a not empty form as parent, then auto remove it on destroy', (done) => {
+    it('inits a popper with a not empty form as parent, then auto remove it on destroy', (done) => {
         var form   = document.createElement('form');
         var input  = document.createElement('input');
         var popper = appendNewPopper(2, 'test', form);
@@ -324,7 +324,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    it('creates a popper and make sure it\'s position is correct on init', (done) => {
+    it('inits a popper and make sure its position is correct on init', (done) => {
         var reference = appendNewRef(1);
         var popper = appendNewPopper(2, 'popper');
 
@@ -379,7 +379,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    it('creates a popper with a custom modifier that should hide it', (done) => {
+    it('inits a popper with a custom modifier that should hide it', (done) => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -401,7 +401,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    it('creates a popper with a custom modifier that set its top to 3px', (done) => {
+    it('inits a popper with a custom modifier that set its top to 3px', (done) => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2);
 
@@ -418,6 +418,74 @@ describe('Popper.js - core', () => {
 
         new Popper(reference, popper, options).onCreate((data) => {
             expect(popper.style.top).toBe('3px');
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper inside a Shadow DOM with its reference element inside DOM', (done) => {
+        const reference = appendNewRef(1);
+
+        const shadowParent = document.createElement('div');
+        jasmineWrapper.appendChild(shadowParent);
+        const shadow = shadowParent.createShadowRoot();
+
+        var popper = appendNewPopper(2, 'popper', shadow);
+
+        new Popper(
+            reference,
+            popper,
+            { placement: 'right' }
+        ).onCreate((data) => {
+            expect(getRect(popper).left).toBeApprox(getRect(reference).right);
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    fit('inits a popper inside DOM with its reference element inside Shadow DOM', (done) => {
+        const shadowParent1 = document.createElement('div');
+        jasmineWrapper.appendChild(shadowParent1);
+        const shadow1 = shadowParent1.createShadowRoot();
+
+        const reference = appendNewRef(1, 'reference', shadow1);
+        reference.style.display = 'block';
+        reference.style.width = '100px';
+
+        var popper = appendNewPopper(2, 'popper');
+
+        new Popper(
+            reference,
+            popper,
+            { placement: 'right' }
+        ).onCreate((data) => {
+            expect(getRect(popper).left + arrowSize).toBeApprox(getRect(reference).right);
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper inside a Shadow DOM with its reference element inside different Shadow DOM', (done) => {
+        const shadowParent1 = document.createElement('div');
+        jasmineWrapper.appendChild(shadowParent1);
+        const shadow1 = shadowParent1.createShadowRoot();
+
+        const reference = appendNewRef(1, 'reference', shadow1);
+        reference.style.display = 'block';
+        reference.style.width = '100px';
+
+        const shadowParent2 = document.createElement('div');
+        jasmineWrapper.appendChild(shadowParent2);
+        const shadow2 = shadowParent2.createShadowRoot();
+
+        var popper = appendNewPopper(2, 'popper', shadow2);
+
+        new Popper(
+            reference,
+            popper,
+            { placement: 'right' }
+        ).onCreate((data) => {
+            expect(getRect(popper).left).toBeApprox(getRect(reference).right);
             data.instance.destroy();
             done();
         });
