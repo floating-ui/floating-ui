@@ -122,7 +122,9 @@ module.exports = function Gruntfile(grunt) {
                     'tests/functional/*.js'
                 ],
                 sauceLabs: {
-                    testName: 'Popper.js Functional Tests'
+                    testName: 'Popper.js Functional Tests',
+                    startConnect: false,
+                    tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
                 },
                 reporters: ['dots', 'saucelabs']
             },
