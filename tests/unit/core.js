@@ -103,7 +103,7 @@ describe('Popper.js - core', function() {
         scrolling.appendChild(superHigh2);
 
         scrolling.scrollTop = 400;
-        new TestPopper(ref, popper, { placement: 'top' })
+        new TestPopper(ref, popper, { placement: 'top', boundariesElement: scrolling })
         .onCreate(function(data) {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
