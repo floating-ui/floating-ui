@@ -443,7 +443,7 @@ describe('Popper.js - core', () => {
         });
     });
 
-    fit('inits a popper inside DOM with its reference element inside Shadow DOM', (done) => {
+    it('inits a popper inside DOM with its reference element inside Shadow DOM', (done) => {
         const shadowParent1 = document.createElement('div');
         jasmineWrapper.appendChild(shadowParent1);
         const shadow1 = shadowParent1.createShadowRoot();
@@ -459,7 +459,7 @@ describe('Popper.js - core', () => {
             popper,
             { placement: 'right' }
         ).onCreate((data) => {
-            expect(getRect(popper).left + arrowSize).toBeApprox(getRect(reference).right);
+            expect(getRect(popper).left - arrowSize).toBeApprox(getRect(reference).right);
             data.instance.destroy();
             done();
         });
