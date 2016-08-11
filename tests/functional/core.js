@@ -424,6 +424,10 @@ describe('Popper.js - core', () => {
     });
 
     it('inits a popper inside a Shadow DOM with its reference element inside DOM', (done) => {
+        if (!document.head.createShadowRoot) {
+            return done();
+        }
+
         const reference = appendNewRef(1);
 
         const shadowParent = document.createElement('div');
@@ -444,6 +448,10 @@ describe('Popper.js - core', () => {
     });
 
     it('inits a popper inside DOM with its reference element inside Shadow DOM', (done) => {
+        if (!document.head.createShadowRoot) {
+            return done();
+        }
+
         const shadowParent1 = document.createElement('div');
         jasmineWrapper.appendChild(shadowParent1);
         const shadow1 = shadowParent1.createShadowRoot();
@@ -466,6 +474,10 @@ describe('Popper.js - core', () => {
     });
 
     it('inits a popper inside a Shadow DOM with its reference element inside different Shadow DOM', (done) => {
+        if (!document.head.createShadowRoot) {
+            return done();
+        }
+
         const shadowParent1 = document.createElement('div');
         jasmineWrapper.appendChild(shadowParent1);
         const shadow1 = shadowParent1.createShadowRoot();
