@@ -86,10 +86,25 @@ module.exports = function Gruntfile(grunt) {
                 singleRun: true,
                 browsers: browsers,
                 customLaunchers: {
-                    'ChromeTest': {
+                    ChromeTest: {
                         base: 'Chrome',
                         flags: ['--window-size=800,872'] // 800x800 plus karma shell
-                    }
+                    },
+                    SLChromeWin: {
+                        base: 'SauceLabs',
+                        browserName: 'chrome',
+                        platform: 'Windows 10'
+                    },
+                    SLFirefoxWin: {
+                        base: 'SauceLabs',
+                        browserName: 'firefox',
+                        platform: 'Windows 10'
+                    },
+                    SLEdgeWin: {
+                        base: 'SauceLabs',
+                        browserName: 'edge',
+                        platform: 'Windows 10'
+                    },
                 },
                 preprocessors: {
                     'tests/**/*.js': ['rollup']
@@ -105,7 +120,11 @@ module.exports = function Gruntfile(grunt) {
                     'tests/styles/*.css',
                     'tests/setup.js',
                     'tests/functional/*.js'
-                ]
+                ],
+                sauceLabs: {
+                    testName: 'Popper.js Functional Tests'
+                },
+                reporters: ['dots', 'saucelabs']
             },
             unit: {},
             local: {
