@@ -93,7 +93,7 @@ module.exports = function Gruntfile(grunt) {
                 files: [
                     'tests/styles/*.css',
                     'tests/setup.js',
-                    'tests/unit/*.js'
+                    'tests/functional/*.js'
                 ]
             },
             unit: {},
