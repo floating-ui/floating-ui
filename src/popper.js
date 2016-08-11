@@ -226,7 +226,7 @@ export default class Popper {
         window.requestAnimationFrame(() => {
             // if popper is destroyed, don't perform any further update
             if (this.state.isDestroyed) { return; }
-
+            
             const now = window.performance.now();
             if (now - this.state.lastFrame <= 16) {
                 // this update fired to early! drop it
