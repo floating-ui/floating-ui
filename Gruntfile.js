@@ -102,7 +102,7 @@ module.exports = function Gruntfile(grunt) {
                     },
                     SLEdgeWin: {
                         base: 'SauceLabs',
-                        browserName: 'edge',
+                        browserName: 'microsoftedge',
                         platform: 'Windows 10'
                     },
                 },
