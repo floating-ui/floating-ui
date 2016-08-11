@@ -100,7 +100,7 @@ describe('Popper.js - core', () => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
-            setTimeout(() => scrolling.scrollTop = 100, 200);
+            scrolling.scrollTop = 100;
         })
         .onUpdate((data) => {
             // placement should be top
@@ -289,7 +289,7 @@ describe('Popper.js - core', () => {
             done();
         });
 
-        window.setTimeout(() => pop.update(), 200);
+        pop.update();
     });
 
     it('inits a popper with an empty form as parent, then auto remove it on destroy', (done) => {

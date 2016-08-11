@@ -141,9 +141,13 @@ var DEFAULTS = {
  */
 export default class Popper {
     constructor(reference, popper, options = {}) {
-        this.reference = reference.jquery ? reference[0] : reference;
-        this.state = {};
+        // init state
+        this.state = {
+            isDestroyed: false
+        };
 
+        // get reference and popper elements (allow jQuery wrappers)
+        this.reference = reference.jquery ? reference[0] : reference;
         this.popper = popper.jquery ? popper[0] : popper;
 
         // with {} we create a new object with the options inside it
@@ -173,16 +177,16 @@ export default class Popper {
             });
         }
 
-        // Modifiers have the ability to execute arbitrary code when Popper.js get inited
+        // sort the modifiers by order
+        this.modifiers = this.modifiers.sort(sortModifiers)
+
+        // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
         this.modifiers.forEach((modifier) => {
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 modifier.onLoad(this.reference, this.popper, this.options);
             }
         });
-
-        // Finally sort the modifiers by order
-        this.modifiers = this.modifiers.sort(sortModifiers)
 
         // get the popper position type
         this.state.position = getPosition(this.popper, this.reference);
@@ -220,10 +224,15 @@ export default class Popper {
 
         // to avoid useless computations we throttle the popper position refresh to 60fps
         window.requestAnimationFrame(() => {
+            // if popper is destroyed, don't perform any further update
+            if (this.state.isDestroyed) { return; }
+
             const now = window.performance.now();
             if (now - this.state.lastFrame <= 16) {
                 // this update fired to early! drop it
-                return;
+                // but schedule a new one that will be ran at the end of the updates
+                // chain to make sure everything is proper updated
+                return this.update();
             }
             this.state.lastFrame = now;
 
@@ -300,6 +309,7 @@ export default class Popper {
      * @memberof Popper
      */
     destroy() {
+        this.state.isDestroyed = true;
         this.popper.removeAttribute('x-placement');
         this.popper.style.left = '';
         this.popper.style.position = '';
