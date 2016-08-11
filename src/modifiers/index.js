@@ -5,6 +5,7 @@ import keepTogether from './keepTogether';
 import offset from './offset';
 import preventOverflow from './preventOverflow';
 import shift from './shift';
+import hide from './hide';
 
 /**
  * Modifiers are plugins used to alter the behavior of your poppers.
@@ -33,7 +34,8 @@ export default {
     keepTogether,
     offset,
     preventOverflow,
-    shift
+    shift,
+    hide
 };
 
 import { applyStyleOnLoad } from './applyStyle';

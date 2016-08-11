@@ -75,8 +75,13 @@ var DEFAULTS = {
             // the behavior used to change the popper's placement
             behavior: 'flip'
         },
-        applyStyle: {
+        flip: {
             order: 700,
+            enabled: true,
+            function: modifiersFunctions.hide
+        },
+        applyStyle: {
+            order: 800,
             enabled: true,
             function: modifiersFunctions.applyStyle,
             onLoad: modifiersOnLoadFunctions.applyStyleOnLoad
@@ -226,7 +231,7 @@ export default class Popper {
         window.requestAnimationFrame(() => {
             // if popper is destroyed, don't perform any further update
             if (this.state.isDestroyed) { return; }
-            
+
             const now = window.performance.now();
             if (now - this.state.lastFrame <= 16) {
                 // this update fired to early! drop it
