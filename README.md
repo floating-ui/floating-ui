@@ -29,9 +29,14 @@ It's written with ES2015 and it's **AMD** and **CommonJS** compatible, every lin
 
 ## The Library
 
-Popper.js is a library with the job of making sure your popper stays near the defined reference element (if you want so).  
-One of the key points is the ability to position elements even if they are not direct descendants of `body`, this means that
-it can position an element relative to another one even if they are placed inside different parents.
+Popper.js is a library that makes sure your popper stays near the defined reference element.  
+
+Some of the key points are:
+
+- Position elements keeping them in their original DOM context (doesn't mess with your DOM!);
+- Allows to export the computed informations to integrate with React and other view libraries;
+- Supports Shadow DOM elements;
+- Completely customizable thanks to the modifiers (plugins) based structure;
 
 Visit our  [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
 
