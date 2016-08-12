@@ -26,7 +26,7 @@ describe('Popper.js - offset', () => {
             var popperWidth = popper.offsetWidth;
             var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + offset;
 
-            expect(popperLeft).toBe(expectedPopperLeft);
+            expect(popperLeft).toBeApprox(expectedPopperLeft);
             done();
         });
     });
@@ -55,8 +55,8 @@ describe('Popper.js - offset', () => {
             var popperWidth = popper.offsetWidth;
             var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + +offset.split(' ')[0];
 
-            expect(popperLeft).toBe(expectedPopperLeft);
-            expect(popperTop - arrowHeight).toBe(refBottom + +offset.split(' ')[1]);
+            expect(popperLeft).toBeApprox(expectedPopperLeft);
+            expect(popperTop - arrowHeight).toBeApprox(refBottom + +offset.split(' ')[1]);
             done();
         });
     });
@@ -82,7 +82,7 @@ describe('Popper.js - offset', () => {
             var popperWidth = popper.offsetWidth;
             var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
 
-            expect(popperLeft).toBe(expectedPopperLeft);
+            expect(popperLeft).toBeApprox(expectedPopperLeft);
             done();
         });
     });
@@ -112,8 +112,8 @@ describe('Popper.js - offset', () => {
             var popperWidth = popper.offsetWidth;
             var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
 
-            expect(popperLeft).toBe(expectedPopperLeft);
-            expect(popperTop - arrowHeight).toBe(Math.round(refBottom + (refHeight / 4)));
+            expect(popperLeft).toBeApprox(expectedPopperLeft);
+            expect(popperTop - arrowHeight).toBeApprox(refBottom + (refHeight / 4));
             done();
         });
     });
