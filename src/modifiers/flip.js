@@ -29,7 +29,7 @@ export default function flip(data, options) {
 
     let placement = data.placement.split('-')[0];
     let placementOpposite = getOppositePlacement(placement);
-    const constiation = data.placement.split('-')[1] || '';
+    const variation = data.placement.split('-')[1] || '';
 
     let flipOrder = [];
     if(options.behavior === 'flip') {
@@ -63,8 +63,8 @@ export default function flip(data, options) {
             // this boolean to detect any flip loop
             data.flipped = true;
             data.placement = flipOrder[index + 1];
-            if (constiation) {
-                data.placement += '-' + constiation;
+            if (variation) {
+                data.placement += '-' + variation;
             }
             data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
