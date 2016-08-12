@@ -37,8 +37,9 @@ Some of the key points are:
 - Allows to export the computed informations to integrate with React and other view libraries;
 - Supports Shadow DOM elements;
 - Completely customizable thanks to the modifiers (plugins) based structure;
+- The whole code base is automatically tested across the latest versions of Chrome, Firefox, Safari and Edge;
 
-Visit our  [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
+Visit our [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
 
 
 ### Installation
