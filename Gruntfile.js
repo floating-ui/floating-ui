@@ -90,21 +90,22 @@ module.exports = function Gruntfile(grunt) {
                         base: 'Chrome',
                         flags: ['--window-size=800,872'] // 800x800 plus karma shell
                     },
-                    SLChromeWin: {
+                    SLChrome: {
                         base: 'SauceLabs',
-                        browserName: 'chrome',
-                        platform: 'Windows 10'
+                        browserName: 'chrome'
                     },
-                    SLFirefoxWin: {
+                    SLFirefox: {
                         base: 'SauceLabs',
-                        browserName: 'firefox',
-                        platform: 'Windows 10'
+                        browserName: 'firefox'
                     },
-                    SLEdgeWin: {
+                    SLEdge: {
                         base: 'SauceLabs',
-                        browserName: 'microsoftedge',
-                        platform: 'Windows 10'
+                        browserName: 'microsoftedge'
                     },
+                    SLSafari: {
+                        base: 'SauceLabs',
+                        browserName: 'safari'
+                    }
                 },
                 preprocessors: {
                     'tests/**/*.js': ['rollup']
