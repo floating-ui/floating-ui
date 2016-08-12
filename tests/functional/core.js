@@ -5,7 +5,7 @@ import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
 
-describe('Popper.js - core', () => {
+describe('[core]', () => {
     const arrowSize = 5;
 
     it('can access the AMD module to create a new instance', () => {
@@ -155,6 +155,7 @@ describe('Popper.js - core', () => {
         relative.style.position = 'relative';
         relative.style.margin = '20px';
         relative.style.height = '200vh';
+        relative.style.backgroundColor = 'green';
         jasmineWrapper.appendChild(relative);
         document.body.scrollTop = 800;
 
@@ -162,18 +163,25 @@ describe('Popper.js - core', () => {
         scrolling.style.width = '800px';
         scrolling.style.height = '800px';
         scrolling.style.overflow = 'auto';
+        scrolling.style.backgroundColor = 'blue';
         relative.appendChild(scrolling);
 
-        var superHigh = document.createElement('div');
-        superHigh.style.width = '800px';
-        superHigh.style.height = '1600px';
-        scrolling.appendChild(superHigh);
+        var superHigh1 = document.createElement('div');
+        superHigh1.style.width = '800px';
+        superHigh1.style.height = '500px';
+        scrolling.appendChild(superHigh1);
 
         scrolling.scrollTop = 500;
 
         var ref = appendNewRef(1, 'ref', scrolling);
         ref.style.marginTop = '200px';
         var popper = appendNewPopper(2, 'popper');
+
+
+        var superHigh2 = document.createElement('div');
+        superHigh2.style.width = '800px';
+        superHigh2.style.height = '500px';
+        scrolling.appendChild(superHigh2);
 
         new Popper(ref, popper).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
@@ -215,13 +223,15 @@ describe('Popper.js - core', () => {
         fixed.style.margin = '20px';
         fixed.style.height = '50px';
         fixed.style.width = '100%';
-        fixed.style.transform = 'translateX(0)';
+        fixed.style.transform = 'translateX(0.1)';
+        fixed.style.background = 'green';
         jasmineWrapper.appendChild(fixed);
 
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
         relative.style.height = '200vh';
+        relative.style.background = 'rgba(100, 100, 100, 0.5)';
         jasmineWrapper.appendChild(relative);
         document.body.scrollTop = 800;
 
@@ -230,7 +240,7 @@ describe('Popper.js - core', () => {
 
         new Popper(ref, popper).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
-            expect(popper.getBoundingClientRect().left).toBeApprox(33);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
             done();
         });

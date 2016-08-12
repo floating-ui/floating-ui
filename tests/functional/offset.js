@@ -4,7 +4,7 @@ import Popper from '../../src/popper';
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
 
-describe('Popper.js - offset', () => {
+describe('[offset]', () => {
     it('creates a popper with single implicit px offset', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '100px';
