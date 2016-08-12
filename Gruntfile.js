@@ -88,15 +88,20 @@ module.exports = function Gruntfile(grunt) {
                 customLaunchers: {
                     SLChrome: {
                         base: 'SauceLabs',
-                        browserName: 'chrome'
+                        browserName: 'chrome',
+                        version: 'latest'
                     },
                     SLFirefox: {
                         base: 'SauceLabs',
-                        browserName: 'firefox'
+                        browserName: 'firefox',
+                        version: 'latest',
+                        platform: 'OS X 10.11'
+
                     },
                     SLEdge: {
                         base: 'SauceLabs',
-                        browserName: 'microsoftedge'
+                        browserName: 'microsoftedge',
+                        version: 'latest'
                     },
                     SLSafari: {
                         base: 'SauceLabs',
