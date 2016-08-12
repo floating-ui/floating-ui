@@ -103,6 +103,16 @@ module.exports = function Gruntfile(grunt) {
                         base: 'SauceLabs',
                         browserName: 'safari',
                         platform: 'OS X 10.11'
+                    },
+                    SLInternetExplorer10: {
+                        base: 'SauceLabs',
+                        browserName: 'internetexplorer',
+                        version: '10'
+                    },
+                    SLInternetExplorer11: {
+                        base: 'SauceLabs',
+                        browserName: 'internetexplorer',
+                        version: '11'
                     }
                 },
                 preprocessors: {

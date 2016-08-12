@@ -1,7 +1,7 @@
 language: node_js
 node_js: 6.2
 before_script: npm install -g grunt-cli
-script: grunt test-ci --browsers=SLChrome,SLFirefox,SLEdge,SLSafari
+script: grunt test-ci --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
 
 addons:
   sauce_connect:

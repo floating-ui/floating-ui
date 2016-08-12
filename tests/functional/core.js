@@ -271,7 +271,7 @@ describe('[core]', () => {
             expect(data.instance.popper).toBeDefined();
             expect(data.instance.popper.innerText).toBe('test');
             data.instance.destroy();
-            expect(document.contains(data.instance.popper)).toBeFalsy();
+            expect(document.body.contains(data.instance.popper)).toBeFalsy();
             done();
         });
     });
@@ -288,7 +288,7 @@ describe('[core]', () => {
             expect(data.instance.popper).toBeDefined();
             expect(data.instance.popper.innerText).toBe('test');
             data.instance.destroy();
-            expect(document.contains(data.instance.popper)).toBeFalsy();
+            expect(document.body.contains(data.instance.popper)).toBeFalsy();
             done();
         });
     });
