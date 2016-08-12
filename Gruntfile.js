@@ -7,7 +7,7 @@ var babel = require('rollup-plugin-babel');
 var version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 // comma separated list of browsers to run tests inside
-var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeTest'];
+var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['Chrome'];
 var babelOptions = { exclude: './node_modules/**' };
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -86,10 +86,6 @@ module.exports = function Gruntfile(grunt) {
                 singleRun: true,
                 browsers: browsers,
                 customLaunchers: {
-                    ChromeTest: {
-                        base: 'Chrome',
-                        flags: ['--window-size=800,872'] // 800x800 plus karma shell
-                    },
                     SLChrome: {
                         base: 'SauceLabs',
                         browserName: 'chrome'

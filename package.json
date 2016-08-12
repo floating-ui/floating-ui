@@ -40,8 +40,10 @@
     "jasmine-core": "^2.4.1",
     "karma": "^1.1.2",
     "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-rollup-plugin": "^0.2.1",
+    "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.0.0",
     "rollup-plugin-babel": "^2.6.1"
   }

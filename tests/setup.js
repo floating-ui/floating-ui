@@ -9,7 +9,7 @@ beforeEach(function() {
         toBeApprox: function() {
             return {
                 compare: function(actual, expected, within) {
-                    within = within || 1;
+                    within = within || 1.5;
                     return { pass: (actual >= (expected - within)) && (actual <= (expected + within)) };
                 }
             };
