@@ -75,7 +75,7 @@ var DEFAULTS = {
             // the behavior used to change the popper's placement
             behavior: 'flip'
         },
-        flip: {
+        hide: {
             order: 700,
             enabled: true,
             function: modifiersFunctions.hide
