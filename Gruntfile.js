@@ -89,19 +89,17 @@ module.exports = function Gruntfile(grunt) {
                     SLChrome: {
                         base: 'SauceLabs',
                         browserName: 'chrome',
-                        version: 'latest'
+                        platform: 'OS X 10.11'
                     },
                     SLFirefox: {
                         base: 'SauceLabs',
                         browserName: 'firefox',
-                        version: 'latest',
                         platform: 'OS X 10.11'
 
                     },
                     SLEdge: {
                         base: 'SauceLabs',
-                        browserName: 'microsoftedge',
-                        version: 'latest'
+                        browserName: 'microsoftedge'
                     },
                     SLSafari: {
                         base: 'SauceLabs',
@@ -125,13 +123,13 @@ module.exports = function Gruntfile(grunt) {
                     'tests/functional/*.js'
                 ],
                 sauceLabs: {
-                    testName: 'Popper.js Functional Tests',
+                    testName: 'Popper.js',
                     startConnect: false,
                     tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
                 },
                 reporters: ['dots', 'saucelabs']
             },
-            unit: {},
+            ci: {},
             local: {
                 singleRun: false,
             }
@@ -175,24 +173,11 @@ module.exports = function Gruntfile(grunt) {
                     src: [ 'build/popper.js' ]
                 }
             }
-        },
-        shell: {
-            xvfb: {
-                command: 'Xvfb :99 -ac -screen 0 1600x1200x24',
-                options: {
-                    async: true
-                }
-            }
-        },
-        env: {
-            xvfb: {
-                DISPLAY: ':99'
-            }
         }
     });
 
     grunt.registerTask('doc', ['eslint', 'rollup:tmp', 'jsdoc2md']);
     grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
     grunt.registerTask('test', ['eslint', 'karma:local']);
-    grunt.registerTask('test-ci', ['eslint',  'shell:xvfb', 'env:xvfb', 'karma:unit', 'shell:xvfb:kill']);
+    grunt.registerTask('test-ci', ['eslint', 'karma:ci']);
 };
