@@ -106,12 +106,12 @@ module.exports = function Gruntfile(grunt) {
                     },
                     SLInternetExplorer10: {
                         base: 'SauceLabs',
-                        browserName: 'internetexplorer',
+                        browserName: 'internet explorer',
                         version: '10'
                     },
                     SLInternetExplorer11: {
                         base: 'SauceLabs',
-                        browserName: 'internetexplorer',
+                        browserName: 'internet explorer',
                         version: '11'
                     }
                 },
