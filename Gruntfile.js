@@ -14,8 +14,6 @@ grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-jsdoc-to-markdown')
 grunt.loadNpmTasks('grunt-karma');
 grunt.loadNpmTasks('grunt-banner');
-grunt.loadNpmTasks('grunt-shell-spawn');
-grunt.loadNpmTasks('grunt-env');
 grunt.loadNpmTasks('grunt-rollup');
 grunt.loadNpmTasks('gruntify-eslint');
 grunt.loadNpmTasks('grunt-gh-pages');
