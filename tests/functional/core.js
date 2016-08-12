@@ -150,47 +150,6 @@ describe('[core]', () => {
         });
     });
 
-    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', (done) => {
-        var relative = document.createElement('div');
-        relative.style.position = 'relative';
-        relative.style.margin = '20px';
-        relative.style.height = '200vh';
-        relative.style.backgroundColor = 'green';
-        jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 800;
-
-        var scrolling = document.createElement('div');
-        scrolling.style.width = '800px';
-        scrolling.style.height = '800px';
-        scrolling.style.overflow = 'auto';
-        scrolling.style.backgroundColor = 'blue';
-        relative.appendChild(scrolling);
-
-        var superHigh1 = document.createElement('div');
-        superHigh1.style.width = '800px';
-        superHigh1.style.height = '500px';
-        scrolling.appendChild(superHigh1);
-
-        scrolling.scrollTop = 500;
-
-        var ref = appendNewRef(1, 'ref', scrolling);
-        ref.style.marginTop = '200px';
-        var popper = appendNewPopper(2, 'popper');
-
-
-        var superHigh2 = document.createElement('div');
-        superHigh2.style.width = '800px';
-        superHigh2.style.height = '500px';
-        scrolling.appendChild(superHigh2);
-
-        new Popper(ref, popper).onCreate((data) => {
-            expect(popper.getBoundingClientRect().top).toBeApprox(ref.getBoundingClientRect().bottom + 5);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5);
-            data.instance.destroy();
-            done();
-        });
-    });
-
     it('inits a popper near a reference element, both inside a fixed element, inside a scrolled body', (done) => {
         var fixed = document.createElement('div');
         fixed.style.position = 'fixed';
