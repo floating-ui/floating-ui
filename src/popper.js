@@ -398,7 +398,7 @@
 
         // Decide if the popper will be fixed
         // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-        var isParentFixed = isFixed(reference, container);
+        var isParentFixed = isFixed(container);
         return isParentFixed ? 'fixed' : 'absolute';
     };
 
