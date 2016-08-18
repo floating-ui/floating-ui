@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.6.1
+ * @version 0.6.2
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -1107,7 +1107,7 @@
      * @returns {Boolean} answer to "isFixed?"
      */
     function isFixed(element) {
-        if (element === root.document.body) {
+        if (element === root.document.body || element.nodeName === 'HTML') {
             return false;
         }
         if (getStyleComputedProperty(element, 'position') === 'fixed') {

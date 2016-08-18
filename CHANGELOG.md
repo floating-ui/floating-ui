@@ -1,3 +1,7 @@
+## v0.6.1 and v0.6.2
+- v0.6.1 was bugged, DO NOT use it
+- v0.6.2 fixed the previous version fixing the problem with the positioning inside fixed containers
+
 ## v0.6.0
 - 0bd967e: big performance improvements (more info at #17)
 

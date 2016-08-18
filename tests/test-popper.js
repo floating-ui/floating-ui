@@ -248,9 +248,7 @@ describe('Popper.js', function() {
         var popper = appendNewPopper(2, 'popper', fixed);
 
         new TestPopper(ref, popper, { placement: 'top' }).onCreate(function(pop) {
-            var local = 727;
-            var ci = 739;
-            expect([local, ci]).toContain(popper.getBoundingClientRect().top);
+            expect(popper.getBoundingClientRect().bottom + 5).toBeApprox(ref.getBoundingClientRect().top);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
             pop.destroy();
