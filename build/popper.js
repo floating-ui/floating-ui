@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.6.0
+ * @version 0.6.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -398,7 +398,7 @@
 
         // Decide if the popper will be fixed
         // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-        var isParentFixed = isFixed(reference, container);
+        var isParentFixed = isFixed(container);
         return isParentFixed ? 'fixed' : 'absolute';
     };
 
