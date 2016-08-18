@@ -13,6 +13,6 @@ export default function getPosition(popper, reference) {
 
     // Decide if the popper will be fixed
     // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-    const isParentFixed = isFixed(reference, container);
+    const isParentFixed = isFixed(container);
     return isParentFixed ? 'fixed' : 'absolute';
 }
