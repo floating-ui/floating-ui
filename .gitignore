@@ -4,6 +4,7 @@
 /bower_components/
 /node_modules/
 .DS_Store
+.tmp
 
 # When you switch branches, things can get messy
 _site
