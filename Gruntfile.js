@@ -16,7 +16,6 @@ grunt.loadNpmTasks('grunt-karma');
 grunt.loadNpmTasks('grunt-banner');
 grunt.loadNpmTasks('grunt-rollup');
 grunt.loadNpmTasks('gruntify-eslint');
-grunt.loadNpmTasks('grunt-gh-pages');
 
 module.exports = function Gruntfile(grunt) {
     // Project configuration.
@@ -70,13 +69,6 @@ module.exports = function Gruntfile(grunt) {
                 src: '.tmp/popper.js',
                 dest: 'doc/_includes/documentation.md'
             }
-        },
-        'gh-pages': {
-            options: {
-                base: 'doc',
-                branch: 'gh-pages-v1'
-            },
-            src: ['**']
         },
         karma: {
             options: {

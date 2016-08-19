@@ -30,7 +30,6 @@
     "grunt": "^1.0.1",
     "grunt-banner": "^0.6.0",
     "grunt-contrib-uglify": "^2.0.0",
-    "grunt-gh-pages": "^2.0.0",
     "grunt-jsdoc-to-markdown": "^1.2.1",
     "grunt-karma": "^2.0.0",
     "grunt-rollup": "^0.7.1",
