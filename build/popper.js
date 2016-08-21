@@ -1,6 +1,6 @@
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 0.6.2
+ * @version 0.6.3
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -670,8 +670,8 @@
         // NOTE: 1 DOM access here
         this._popper.setAttribute('x-placement', data.placement);
 
-        // if the arrow modifier is required and the arrow style has been computed, apply the arrow style
-        if (this.isModifierRequired(this.modifiers.applyStyle, this.modifiers.arrow) && data.offsets.arrow) {
+        // if the arrow style has been computed, apply the arrow style
+        if (data.offsets.arrow) {
             setStyle(data.arrowElement, data.offsets.arrow);
         }
 
