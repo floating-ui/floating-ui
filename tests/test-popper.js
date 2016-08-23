@@ -336,6 +336,20 @@ describe('Popper.js', function() {
         });
     });
 
+    it('creates a popper without remove method, then assert it\'s gone after calling destroy', function(done) {
+        var form = document.createElement('form');
+        var reference = appendNewRef(1, 'ref', form);
+        jasmineWrapper.appendChild(form);
+
+        new TestPopper(reference, { parent: form }, { removeOnDestroy: true }).onCreate(function(instance) {
+            expect(instance._popper).toBeDefined();
+	    instance._popper.remove = undefined;
+            instance.destroy();
+            expect(document.contains(instance._popper)).toBeFalsy();
+            done();
+        });
+    });
+    
     it('creates a popper with a not empty form as parent, then auto remove it on destroy', function(done) {
         var form = document.createElement('form');
         var input = document.createElement('input');
