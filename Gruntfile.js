@@ -23,7 +23,6 @@ module.exports = function Gruntfile(grunt) {
         rollup: {
             options: {
                 format: 'umd',
-                moduleName: 'Popper',
                 plugins: function() {
                     return [
                         babel(babelOptions)
@@ -31,21 +30,33 @@ module.exports = function Gruntfile(grunt) {
                 }
             },
             popper: {
+                options: {
+                    moduleName: 'Popper'
+                },
                 files: {
                     'build/popper.js': ['src/popper.js']
                 }
             },
             'popperTmp': {
+                options: {
+                    moduleName: 'Popper'
+                },
                 files: {
                     '.tmp/popper.js': ['src/popper.js']
                 }
             },
             tooltip: {
+                options: {
+                    moduleName: 'Tooltip'
+                },
                 files: {
                     'build/tooltip.js': ['src/tooltip.js']
                 }
             },
             'tooltipTmp': {
+                options: {
+                    moduleName: 'Tooltip'
+                },
                 files: {
                     '.tmp/tooltip.js': ['src/tooltip.js']
                 }
