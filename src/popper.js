@@ -210,11 +210,7 @@
 
         // remove the popper if user explicity asked for the deletion on destroy
         if (this._options.removeOnDestroy) {
-            if (this._popper.remove) {
-                this._popper.remove();
-            } else {
-                this._popper.parentNode.removeChild(this._popper);
-            }
+            this._popper.parentNode.removeChild(this._popper);
         }
         return this;
     };
