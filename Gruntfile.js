@@ -30,37 +30,52 @@ module.exports = function Gruntfile(grunt) {
                     ];
                 }
             },
-            dist: {
+            popper: {
                 files: {
                     'build/popper.js': ['src/popper.js']
                 }
             },
-            tmp: {
+            'popperTmp': {
                 files: {
                     '.tmp/popper.js': ['src/popper.js']
+                }
+            },
+            tooltip: {
+                files: {
+                    'build/tooltip.js': ['src/tooltip.js']
+                }
+            },
+            'tooltipTmp': {
+                files: {
+                    '.tmp/tooltip.js': ['src/tooltip.js']
                 }
             }
         },
         uglify: {
-            dist: {
-                options: {
-                    sourceMap: true,
-                    sourceMapName: 'build/popper.min.js.map',
-                    preserveComments: /(?:license|version)/,
-                    mangleToplevel: true,
-                    compress: {
-                        sequences: true,
-                        dead_code: true,
-                        conditionals: true,
-                        booleans: true,
-                        unused: true,
-                        if_return: true,
-                        join_vars: true,
-                        drop_console: true
-                    }
-                },
+            options: {
+                sourceMap: true,
+                sourceMapName: 'build/popper.min.js.map',
+                preserveComments: /(?:license|version)/,
+                mangleToplevel: true,
+                compress: {
+                    sequences: true,
+                    dead_code: true,
+                    conditionals: true,
+                    booleans: true,
+                    unused: true,
+                    if_return: true,
+                    join_vars: true,
+                    drop_console: true
+                }
+            },
+            popper: {
                 files: {
                     'build/popper.min.js': ['build/popper.js']
+                }
+            },
+            tooltip: {
+                files: {
+                    'build/tooltip.min.js': ['build/tooltip.js']
                 }
             }
         },
@@ -139,7 +154,7 @@ module.exports = function Gruntfile(grunt) {
             test: ['tests/**/*.js']
         },
         usebanner: {
-            dist: {
+            popper: {
                 options: {
                     position: 'top',
                     banner: `
@@ -172,12 +187,17 @@ module.exports = function Gruntfile(grunt) {
                 files: {
                     src: [ 'build/popper.js' ]
                 }
+            },
+            tooltip: {
+
             }
         }
     });
 
-    grunt.registerTask('doc', ['eslint', 'rollup:tmp', 'jsdoc2md']);
-    grunt.registerTask('dist', [ 'eslint', 'rollup:dist', 'usebanner:dist', 'uglify:dist']);
+    grunt.registerTask('doc', ['eslint', 'rollup:popperTmp', 'rollup:tooltipTmp', 'jsdoc2md']);
+    grunt.registerTask('dist:popper', [ 'eslint', 'rollup:popper', 'usebanner:popper', 'uglify:popper']);
+    grunt.registerTask('dist:tooltip', [ 'eslint', 'rollup:tooltip', 'usebanner:tooltip', 'uglify:tooltip']);
+    grunt.registerTask('dist', [ 'dist:popper', 'dist:tooltip']);
     grunt.registerTask('test', ['eslint', 'karma:local']);
     grunt.registerTask('test-ci', ['eslint', 'karma:ci']);
 };
