@@ -49,8 +49,10 @@ export default class Tooltip {
         // create tooltip node
         const tooltipNode = this._create(target, options.template, options.title, options.html);
 
-        // append tooltip to container
-        this._append(tooltipNode, options.container);
+        // append tooltip to container: container = false we pick the parent node of the target
+        var container = options.container === false ? target.parentNode : options.container;
+
+        this._append(tooltipNode, container);
 
         this.popperInstance = new Popper(target, tooltipNode, {
             placement: options.placement,
@@ -91,7 +93,7 @@ export default class Tooltip {
         const tooltipNode = tooltipGenerator.childNodes;
 
         // add title to tooltip
-        const titleNode = tooltipNode.querySelector(this.innerSelector);
+        const titleNode = tooltipGenerator.querySelector(this.innerSelector);
         if (title.nodeType === 1) {
             // if title is a node, append it only if allowHtml is true
             allowHtml && titleNode.appendChild(title);
