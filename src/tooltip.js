@@ -143,28 +143,34 @@ export default class Tooltip {
                 default:
                     return;
             }
-        }).filter(event => !!event).join(' ');
+        }).filter(event => !!event);
 
         // schedule show tooltip
-        target.addEventListener(events, () => {
-            this.scheduleShow(target, options.delay, options);
+        var me = this;
+
+        events.forEach(function(event) {
+            target.addEventListener(event, function() {
+                me._scheduleShow(target, options.delay, options);
+            });
         });
 
         // schedule hide tooltip
-        target.addEventListener(oppositeEvents, () => {
-            this.scheduleHide(target, options.delay, options);
+        oppositeEvents.forEach(function(event) {
+            target.addEventListener(event, function() {
+                me._scheduleHide(target, options.delay, options);
+            });
         });
     }
 
     _scheduleShow(target, delay, options) {
         // defaults to 0
-        const computedDelay = delay.show || delay || 0;
+        const computedDelay = (delay && delay.show) || delay || 0
         window.setTimeout(() => this.show(target, options), computedDelay);
     }
 
     _scheduleHide(target, delay, options) {
         // defaults to 0
-        const computedDelay = delay.hide || delay || 0;
+        const computedDelay = (delay && delay.hide) || delay || 0
         window.setTimeout(() => this.hide(target, options), computedDelay);
     }
 }
