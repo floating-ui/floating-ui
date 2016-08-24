@@ -90,7 +90,7 @@ export default class Tooltip {
         // create tooltip element
         const tooltipGenerator = window.document.createElement('div');
         tooltipGenerator.innerHTML = template;
-        const tooltipNode = tooltipGenerator.childNodes;
+        const tooltipNode = tooltipGenerator.childNodes[0];
 
         // add title to tooltip
         const titleNode = tooltipGenerator.querySelector(this.innerSelector);
