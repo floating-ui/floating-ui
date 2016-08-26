@@ -1,3 +1,6 @@
+## v0.6.4
+- 30a781e: Remove necessity of `remove` polyfill on IE
+
 ## v0.6.3
 - 2e96b0e: removed arrow modifier dependency from applyStyle modifier
 
