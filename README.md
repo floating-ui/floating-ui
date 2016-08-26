@@ -161,13 +161,6 @@ let data = {
 }
 ```
 
-### Internet Explorer
-Exactly, we are in 2016, and we still talk about workarounds for IE...
-
-If you need the `removeOnDestroy` option in IE 11 and below, please make sure to add this polyfill before Popper.js:
-https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/remove
-
-
 
 ## Libraries using Popper.js
 
