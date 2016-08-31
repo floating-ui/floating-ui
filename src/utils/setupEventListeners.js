@@ -9,7 +9,7 @@ import getScrollParent from './getScrollParent';
 export default function setupEventListeners(reference, options, state, updateBound) {
     // NOTE: 1 DOM access here
     state.updateBound = updateBound;
-    window.addEventListener('resize', state.updateBound);
+    window.addEventListener('resize', state.updateBound, { passive: true });
     // if the boundariesElement is window we don't need to listen for the scroll event
     if (options.boundariesElement !== 'window') {
         let target = getScrollParent(reference);
@@ -17,6 +17,6 @@ export default function setupEventListeners(reference, options, state, updateBou
         if (target === window.document.body || target === window.document.documentElement) {
             target = window;
         }
-        target.addEventListener('scroll', state.updateBound);
+        target.addEventListener('scroll', state.updateBound, { passive: true });
     }
 }
