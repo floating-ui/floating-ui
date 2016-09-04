@@ -1,4 +1,5 @@
 import getOppositePlacement from '../utils/getOppositePlacement';
+import getOppositeVariation from '../utils/getOppositeVariation';
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOffsets from '../utils/getOffsets';
 import isModifierRequired from '../utils/isModifierRequired';
@@ -14,6 +15,7 @@ import runModifiers from '../utils/runModifiers';
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The data object, properly modified
  */
+
 export default function flip(data, options) {
     // check if preventOverflow is in the list of modifiers before the flip modifier.
     // otherwise flip would not work as expected.
@@ -29,9 +31,10 @@ export default function flip(data, options) {
 
     let placement = data.placement.split('-')[0];
     let placementOpposite = getOppositePlacement(placement);
-    const variation = data.placement.split('-')[1] || '';
+    let variation = data.placement.split('-')[1] || '';
 
     let flipOrder = [];
+
     if(options.behavior === 'flip') {
         flipOrder = [
             placement,
@@ -54,18 +57,32 @@ export default function flip(data, options) {
         // this boolean is used to distinguish right and bottom from top and left
         // they need different computations to get flipped
         const a = ['right', 'bottom'].indexOf(placement) !== -1;
+        const b = ['top', 'bottom'].indexOf(placement) !== -1;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
+        const flippedPosition = a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
+            !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite]);
+
+        const flippedVariation = options.flipVariations && (
+            b && (variation === 'start') && popperOffsets.left < data.boundaries.left ||
+            b && (variation === 'end') && popperOffsets.right > data.boundaries.right ||
+            !b && (variation === 'start') && popperOffsets.top < data.boundaries.top ||
+            !b && (variation === 'end') && popperOffsets.bottom > data.boundaries.bottom);
+
         if (
-            a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
-            !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite])
+            flippedPosition || flippedVariation
         ) {
             // this boolean to detect any flip loop
             data.flipped = true;
-            data.placement = flipOrder[index + 1];
-            if (variation) {
-                data.placement += '-' + variation;
+
+            if (flippedPosition) {
+                placement = flipOrder[index + 1];
             }
+            if (flippedVariation) {
+                variation = getOppositeVariation(variation);
+            }
+
+            data.placement = placement + (variation ? '-' + variation : '');
             data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
             data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');

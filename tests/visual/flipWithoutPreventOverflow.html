@@ -50,13 +50,16 @@
         reference,
         popperElem,
         {
-            placement: 'top-start',
+            placement: 'right-start',
             boundariesElement: boundaries,
             modifiers: {
                 preventOverflow: {
                     enabled: true,
                     moveWithTarget: true
                 },
+                flip: {
+                    flipVariations: true
+                }
             }
         }
     );

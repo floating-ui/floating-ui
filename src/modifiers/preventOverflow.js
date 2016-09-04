@@ -10,7 +10,9 @@ import getOppositePlacement from '../utils/getOppositePlacement';
  */
 export default function preventOverflow(data, options) {
     function shouldMoveWithTarget(direction) {
-        if (!options.moveWithTarget) return false;
+        if (!options.moveWithTarget) {
+            return false;
+        }
         let placement = data.originalPlacement.split('-')[0];
 
         if (data.flipped && placement === direction || placement === getOppositePlacement(direction)) {
@@ -19,7 +21,7 @@ export default function preventOverflow(data, options) {
         if (placement !== direction && placement !== getOppositePlacement(direction)) {
             return true;
         }
-        
+
         return false;
     }
     const order = options.priority;
