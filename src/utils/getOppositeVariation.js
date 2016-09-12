@@ -6,6 +6,10 @@
  * @returns {String} flipped placement variation
  */
 export default function getOppositeVariation(variation) {
-    const hash = {start: 'end', end: 'start'};
-    return variation.replace(/start|end/g, (matched) => hash[matched]);
+    if (variation === 'end') {
+        return 'start';
+    } else if (variation === 'start') {
+        return 'end';
+    }
+    return variation;
 }

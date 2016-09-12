@@ -15,7 +15,6 @@ import runModifiers from '../utils/runModifiers';
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The data object, properly modified
  */
-
 export default function flip(data, options) {
     // check if preventOverflow is in the list of modifiers before the flip modifier.
     // otherwise flip would not work as expected.
@@ -64,10 +63,10 @@ export default function flip(data, options) {
             !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite]);
 
         const flippedVariation = options.flipVariations && (
-            b && (variation === 'start') && popperOffsets.left < data.boundaries.left ||
-            b && (variation === 'end') && popperOffsets.right > data.boundaries.right ||
-            !b && (variation === 'start') && popperOffsets.top < data.boundaries.top ||
-            !b && (variation === 'end') && popperOffsets.bottom > data.boundaries.bottom);
+            b && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(data.boundaries.left) ||
+            b && (variation === 'end') && Math.floor(popperOffsets.right) > Math.floor(data.boundaries.right) ||
+            !b && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(data.boundaries.top) ||
+            !b && (variation === 'end') && Math.floor(popperOffsets.bottom) > Math.floor(data.boundaries.bottom));
 
         if (
             flippedPosition || flippedVariation

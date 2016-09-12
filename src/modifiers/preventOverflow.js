@@ -1,5 +1,6 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
+
 /**
  * Modifier used to make sure the popper does not overflows from it's boundaries
  * @method
