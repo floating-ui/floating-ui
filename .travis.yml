@@ -4,7 +4,4 @@ before_script: npm install -g grunt-cli
 script: grunt test-ci --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
 
 addons:
-  sauce_connect:
-    username: "popperjs"
-  jwt:
-    secure: Epi87VLNTX4E4qRfSqvdoRwgIYdZA1gvmczXPyY3DpILmOsZrWfjvNsw1+iJ8MS+Wu+Rivnsf/YnnliaEPGAV3CivcnKVHyfXa8gUJlB7LZMoXRev7FDxuWSQ0SP1KF85AA56JD4aGZb7wAO2qy5/Mz9c1mUn1MU5NhMZJ4oNkE0rQC6jkNa9hi99/+trdz95MXr1O9k2Axwzqk9G/1NruQrR93PoN/4S0j0t28oUvOfg3VdH9drUxU5ozRGM0TRZ5KoVyqjeZtdRV8hARlIdH/7sn+bYTSLYlrStY0v/NidaXYCK5iqqtt835LQSkS1FPNwnndm4heJLq0Nvthl+80dEHDnVLRQ+E8R2SlOdZhhTTGTWX3H4ffHyQyptJE/FNAZwpbGefYVFbHom6DogyLTe5lyzB92z658BHGKKf8Blgk2+cZIIEDDOXbayK8iPRWZgGt5NV6V6864k8M9vsuJS6ZRL4jU0/obSwcc2Fktn239Qk+SfFupiqUmXiGDKNV4k5YWxeMD5hsoyssR7awRZGDJDMMxG2q+1Xg+SamOlnlABNrj9qGaTxR6ffNdPOH8qwvdusI4d57+d0cLdFAY80o5vFSUhoVL52L/wb1JFdwB6VGnRhub1sF6YmqxP8Qx6Ui1e1VRw3rIxaFlX8hdnf+7SbemExpW13RNLYo=
+  sauce_connect: true
