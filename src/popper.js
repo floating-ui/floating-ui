@@ -36,20 +36,25 @@ var DEFAULTS = {
 
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: {
-        shift: {
+        autoPlacement: {
             order: 100,
+            enabled: true,
+            function: modifiersFunctions.autoPlacement,
+        },
+        shift: {
+            order: 200,
             enabled: true,
             function: modifiersFunctions.shift,
         },
         offset: {
-            order: 200,
+            order: 300,
             enabled: true,
             function: modifiersFunctions.offset,
             // nudges popper from its origin by the given amount of pixels (can be negative)
             offset: 0,
         },
         preventOverflow: {
-            order: 300,
+            order: 400,
             enabled: true,
             function: modifiersFunctions.preventOverflow,
             // popper will try to prevent overflow following these priorities
@@ -57,31 +62,31 @@ var DEFAULTS = {
             priority: ['left', 'right', 'top', 'bottom'],
         },
         keepTogether: {
-            order: 400,
+            order: 500,
             enabled: true,
             function: modifiersFunctions.keepTogether
         },
         arrow: {
-            order: 500,
+            order: 600,
             enabled: true,
             function: modifiersFunctions.arrow,
             // selector or node used as arrow
             element: '[x-arrow]'
         },
         flip: {
-            order: 600,
+            order: 700,
             enabled: true,
             function: modifiersFunctions.flip,
             // the behavior used to change the popper's placement
             behavior: 'flip'
         },
         hide: {
-            order: 700,
+            order: 800,
             enabled: true,
             function: modifiersFunctions.hide
         },
         applyStyle: {
-            order: 800,
+            order: 900,
             enabled: true,
             function: modifiersFunctions.applyStyle,
             onLoad: modifiersOnLoadFunctions.applyStyleOnLoad

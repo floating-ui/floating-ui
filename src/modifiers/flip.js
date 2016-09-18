@@ -23,8 +23,16 @@ export default function flip(data, options) {
         return data;
     }
 
-    if (data.flipped && data.placement === data.originalPlacement) {
-        // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
+    // we need to get the computed original placement (not `auto`)
+    // in order to properly detect flip loops
+    let originalPlacement = data.originalPlacement;
+    if (originalPlacement.indexOf('auto') !== -1) {
+        console.log(originalPlacement, data.originalComputedPlacement);
+        originalPlacement = data.originalComputedPlacement;
+    }
+
+    // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
+    if (data.flipped && data.placement === originalPlacement) {
         return data;
     }
 

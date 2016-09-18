@@ -1,3 +1,4 @@
+import autoPlacement from './autoPlacement';
 import applyStyle from './applyStyle';
 import arrow from './arrow';
 import flip from './flip';
@@ -28,6 +29,7 @@ import hide from './hide';
  */
 
 export default {
+    autoPlacement,
     applyStyle,
     arrow,
     flip,
