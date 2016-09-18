@@ -145,7 +145,6 @@ module.exports = function Gruntfile(grunt) {
                 },
                 files: [
                     'tests/styles/*.css',
-                    'tests/setup.js',
                     'tests/functional/*.js'
                 ],
                 sauceLabs: {
