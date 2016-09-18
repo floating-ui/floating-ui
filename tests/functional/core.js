@@ -1,5 +1,8 @@
 import Popper from '../../src/popper';
 
+import '../setup';
+const jasmineWrapper = document.getElementById('jasmineWrapper');
+
 // Utils
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';

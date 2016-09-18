@@ -3,8 +3,6 @@ wrapper.id = 'jasmineWrapper';
 document.body.appendChild(wrapper);
 
 beforeEach(function() {
-    jasmineWrapper.innerHTML = '';
-
     jasmine.addMatchers({
         toBeApprox: function() {
             return {
@@ -15,4 +13,7 @@ beforeEach(function() {
             };
         }
     });
+    
+    const jasmineWrapper = document.getElementById('jasmineWrapper');
+    jasmineWrapper.innerHTML = '';
 });
