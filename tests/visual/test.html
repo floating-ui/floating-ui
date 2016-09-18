@@ -48,7 +48,10 @@
         popperElem,
         {
             placement: 'auto',
-            boundariesElement: boundaries
+            boundariesElement: boundaries,
+            modifiers: {
+                flip: { enabled: false }
+            }
         }
     );
 

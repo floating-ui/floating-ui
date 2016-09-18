@@ -36,7 +36,6 @@ export default function autoPlacement(data) {
                 return 0;
             }
         });
-        console.log(orderedDirections);
 
         // get the direction name
         const newPlacement = orderedDirections[0].direction;

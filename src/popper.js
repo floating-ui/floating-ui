@@ -41,20 +41,25 @@ var DEFAULTS = {
             enabled: true,
             function: modifiersFunctions.autoPlacement,
         },
-        shift: {
+        getPopperOffsets: {
             order: 200,
+            enabled: true,
+            function: modifiersFunctions.getPopperOffsets,
+        },
+        shift: {
+            order: 300,
             enabled: true,
             function: modifiersFunctions.shift,
         },
         offset: {
-            order: 300,
+            order: 400,
             enabled: true,
             function: modifiersFunctions.offset,
             // nudges popper from its origin by the given amount of pixels (can be negative)
             offset: 0,
         },
         preventOverflow: {
-            order: 400,
+            order: 500,
             enabled: true,
             function: modifiersFunctions.preventOverflow,
             // popper will try to prevent overflow following these priorities
@@ -62,31 +67,31 @@ var DEFAULTS = {
             priority: ['left', 'right', 'top', 'bottom'],
         },
         keepTogether: {
-            order: 500,
+            order: 600,
             enabled: true,
             function: modifiersFunctions.keepTogether
         },
         arrow: {
-            order: 600,
+            order: 700,
             enabled: true,
             function: modifiersFunctions.arrow,
             // selector or node used as arrow
             element: '[x-arrow]'
         },
         flip: {
-            order: 700,
+            order: 800,
             enabled: true,
             function: modifiersFunctions.flip,
             // the behavior used to change the popper's placement
             behavior: 'flip'
         },
         hide: {
-            order: 800,
+            order: 900,
             enabled: true,
             function: modifiersFunctions.hide
         },
         applyStyle: {
-            order: 900,
+            order: 1000,
             enabled: true,
             function: modifiersFunctions.applyStyle,
             onLoad: modifiersOnLoadFunctions.applyStyleOnLoad
@@ -252,7 +257,7 @@ export default class Popper {
             data.originalPlacement = this.options.placement;
 
             // compute the popper and reference offsets and put them inside data.offsets
-            data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
+            data.offsets = getOffsets(this.state, this.popper, this.reference);
 
             // get boundaries
             data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);

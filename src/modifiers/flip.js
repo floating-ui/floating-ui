@@ -27,7 +27,6 @@ export default function flip(data, options) {
     // in order to properly detect flip loops
     let originalPlacement = data.originalPlacement;
     if (originalPlacement.indexOf('auto') !== -1) {
-        console.log(originalPlacement, data.originalComputedPlacement);
         originalPlacement = data.originalComputedPlacement;
     }
 
@@ -88,10 +87,6 @@ export default function flip(data, options) {
             if (flippedVariation) {
                 variation = getOppositeVariation(variation);
             }
-
-            data.placement = placement + (variation ? '-' + variation : '');
-            data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
-
             data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');
         }
     });
