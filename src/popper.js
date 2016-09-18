@@ -9,7 +9,6 @@ import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getPosition from './utils/getPosition';
 import getOffsets from './utils/getOffsets';
-import getBoundaries from './utils/getBoundaries';
 import isFunction from './utils/isFunction';
 import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
@@ -258,9 +257,6 @@ export default class Popper {
 
             // compute the popper and reference offsets and put them inside data.offsets
             data.offsets = getOffsets(this.state, this.popper, this.reference);
-
-            // get boundaries
-            data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
 
             // run the modifiers
             data = runModifiers(this.modifiers, this.options, data);
