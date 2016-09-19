@@ -1,5 +1,4 @@
 import getOuterSizes from '../utils/getOuterSizes';
-import getBoundaries from '../utils/getBoundaries';
 
 export default function getPopperOffsets(data) {
 
@@ -41,11 +40,6 @@ export default function getPopperOffsets(data) {
     popperOffsets.height  = popperRect.height;
 
     data.offsets.popper = popperOffsets;
-
-
-    // get boundaries
-    data.boundaries = getBoundaries(data.instance.popper, data, data.instance.options.boundariesPadding, data.instance.options.boundariesElement);
-
 
     return data;
 };

@@ -14,6 +14,7 @@ import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
 import sortModifiers from './utils/sortModifiers';
+import getBoundaries from './utils/getBoundaries';
 
 // Modifiers
 import modifiersFunctions from './modifiers/index';
@@ -257,6 +258,9 @@ export default class Popper {
 
             // compute the popper and reference offsets and put them inside data.offsets
             data.offsets = getOffsets(this.state, this.popper, this.reference);
+
+            // get boundaries
+            data.boundaries = getBoundaries(data.instance.popper, data.instance.options.boundariesPadding, data.instance.options.boundariesElement);
 
             // run the modifiers
             data = runModifiers(this.modifiers, this.options, data);
