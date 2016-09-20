@@ -1,4 +1,5 @@
 import Popper from '../../src/popper';
+import '../setup';
 
 // Utils
 import appendNewPopper from '../utils/appendNewPopper';
