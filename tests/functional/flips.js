@@ -4,6 +4,7 @@ import getOppositePlacement from '../../src/utils/getOppositePlacement';
 // Utils
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
+const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 describe('[flipping]', () => {
     const flippingDefault = [
