@@ -1,4 +1,5 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
+import getParentNode from './getParentNode';
 
 /**
  * Check if the given element has transforms applied to itself or a parent
@@ -14,5 +15,5 @@ export default function isTransformed(element) {
   if (getStyleComputedProperty(element, 'transform') !== 'none') {
       return true;
   }
-  return element.parentNode ? isTransformed(element.parentNode) : element;
+  return getParentNode(element) ? isTransformed(getParentNode(element)) : element;
 }

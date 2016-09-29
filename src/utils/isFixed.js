@@ -1,4 +1,5 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
+import getParentNode from './getParentNode';
 
 /**
  * Check if the given element is fixed or is inside a fixed parent
@@ -15,5 +16,5 @@ export default function isFixed(element) {
     if (getStyleComputedProperty(element, 'position') === 'fixed') {
         return true;
     }
-    return element.parentNode ? isFixed(element.parentNode) : element;
+    return getParentNode(element) ? isFixed(getParentNode(element)) : element;
 }
