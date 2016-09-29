@@ -1,7 +1,7 @@
 
 /*
 * @fileOverview Kickass library to create and place poppers near their reference elements.
-* @version 1.0.0-alpha.2
+* @version 1.0.0-alpha.3
 * @license
 * Copyright (c) 2016 Federico Zivolo and contributors
 *
@@ -43,7 +43,7 @@
           enumerable: false,
           configurable: true,
           writable: true,
-          value: function (target) {
+          value: function value(target) {
               if (target === undefined || target === null) {
                   throw new TypeError('Cannot convert first argument to object');
               }
@@ -149,6 +149,17 @@
   }
 
   /**
+   * Returns the parentNode or the host of the element
+   * @method
+   * @memberof Popper.Utils
+   * @argument {Element} element
+   * @returns {Element} parent
+   */
+  function getParentNode(element) {
+    return element.parentNode || element.host;
+  }
+
+  /**
    * Returns the scrolling parent of the given element
    * @method
    * @memberof Popper.Utils
@@ -171,9 +182,9 @@
           // If the detected scrollParent is body, we perform an additional check on its parentNode
           // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
           // fixes issue #65
-          return element === window.document.body ? getScrollParent(element.parentNode) : element;
+          return element === window.document.body ? getScrollParent(getParentNode(element)) : element;
       }
-      return element.parentNode ? getScrollParent(element.parentNode) : element;
+      return getParentNode(element) ? getScrollParent(getParentNode(element)) : element;
   }
 
   /**
@@ -366,7 +377,7 @@
       if (getStyleComputedProperty(element, 'position') === 'fixed') {
           return true;
       }
-      return element.parentNode ? isFixed(element.parentNode) : element;
+      return getParentNode(element) ? isFixed(getParentNode(element)) : element;
   }
 
   /**
@@ -381,7 +392,7 @@
 
     // Decide if the popper will be fixed
     // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-    var isParentFixed = isFixed(reference, container);
+    var isParentFixed = isFixed(container);
     return isParentFixed ? 'fixed' : 'absolute';
   }
 
@@ -458,7 +469,7 @@
       if (getStyleComputedProperty(element, 'transform') !== 'none') {
           return true;
       }
-      return element.parentNode ? isTransformed(element.parentNode) : element;
+      return getParentNode(element) ? isTransformed(getParentNode(element)) : element;
   }
 
   /**
@@ -589,7 +600,7 @@
   function setupEventListeners(reference, options, state, updateBound) {
       // NOTE: 1 DOM access here
       state.updateBound = updateBound;
-      window.addEventListener('resize', state.updateBound);
+      window.addEventListener('resize', state.updateBound, { passive: true });
       // if the boundariesElement is window we don't need to listen for the scroll event
       if (options.boundariesElement !== 'window') {
           var target = getScrollParent(reference);
@@ -597,7 +608,7 @@
           if (target === window.document.body || target === window.document.documentElement) {
               target = window;
           }
-          target.addEventListener('scroll', state.updateBound);
+          target.addEventListener('scroll', state.updateBound, { passive: true });
       }
   }
 
@@ -681,8 +692,8 @@
       // NOTE: 1 DOM access here
       data.instance.popper.setAttribute('x-placement', data.placement);
 
-      // if the arrow modifier is required and the arrow style has been computed, apply the arrow style
-      if (isModifierRequired(data.instance.modifiers, 'applyStyle', 'arrow') && data.offsets.arrow) {
+      // if the arrow style has been computed, apply the arrow style
+      if (data.offsets.arrow) {
           setStyle(data.arrowElement, data.offsets.arrow);
       }
 
@@ -793,6 +804,22 @@
   }
 
   /**
+   * Get the opposite placement variation of the given one/
+   * @method
+   * @memberof Popper.Utils
+   * @argument {String} placement variation
+   * @returns {String} flipped placement variation
+   */
+  function getOppositeVariation(variation) {
+      if (variation === 'end') {
+          return 'start';
+      } else if (variation === 'start') {
+          return 'end';
+      }
+      return variation;
+  }
+
+  /**
    * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
    * Requires the `preventOverflow` modifier before it in order to work.
    * **NOTE:** data.instance modifier will run all its previous modifiers everytime it tries to flip the popper!
@@ -817,9 +844,10 @@
 
       var placement = data.placement.split('-')[0];
       var placementOpposite = getOppositePlacement(placement);
-      var constiation = data.placement.split('-')[1] || '';
+      var variation = data.placement.split('-')[1] || '';
 
       var flipOrder = [];
+
       if (options.behavior === 'flip') {
           flipOrder = [placement, placementOpposite];
       } else {
@@ -839,15 +867,25 @@
           // this boolean is used to distinguish right and bottom from top and left
           // they need different computations to get flipped
           var a = ['right', 'bottom'].indexOf(placement) !== -1;
+          var b = ['top', 'bottom'].indexOf(placement) !== -1;
 
           // using Math.floor because the reference offsets may contain decimals we are not going to consider here
-          if (a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) || !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite])) {
+          var flippedPosition = a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) || !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite]);
+
+          var flippedVariation = options.flipVariations && (b && variation === 'start' && Math.floor(popperOffsets.left) < Math.floor(data.boundaries.left) || b && variation === 'end' && Math.floor(popperOffsets.right) > Math.floor(data.boundaries.right) || !b && variation === 'start' && Math.floor(popperOffsets.top) < Math.floor(data.boundaries.top) || !b && variation === 'end' && Math.floor(popperOffsets.bottom) > Math.floor(data.boundaries.bottom));
+
+          if (flippedPosition || flippedVariation) {
               // this boolean to detect any flip loop
               data.flipped = true;
-              data.placement = flipOrder[index + 1];
-              if (constiation) {
-                  data.placement += '-' + constiation;
+
+              if (flippedPosition) {
+                  placement = flipOrder[index + 1];
               }
+              if (flippedVariation) {
+                  variation = getOppositeVariation(variation);
+              }
+
+              data.placement = placement + (variation ? '-' + variation : '');
               data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
               data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');
@@ -1008,34 +1046,49 @@
    * @returns {Object} The data object, properly modified
    */
   function preventOverflow(data, options) {
+      function shouldMoveWithTarget(direction) {
+          if (!options.moveWithTarget) {
+              return false;
+          }
+          var placement = data.originalPlacement.split('-')[0];
+
+          if (data.flipped && placement === direction || placement === getOppositePlacement(direction)) {
+              return true;
+          }
+          if (placement !== direction && placement !== getOppositePlacement(direction)) {
+              return true;
+          }
+
+          return false;
+      }
       var order = options.priority;
       var popper = getPopperClientRect(data.offsets.popper);
 
       var check = {
-          left: function () {
+          left: function left() {
               var left = popper.left;
-              if (popper.left < data.boundaries.left) {
+              if (popper.left < data.boundaries.left && !shouldMoveWithTarget('left')) {
                   left = Math.max(popper.left, data.boundaries.left);
               }
               return { left: left };
           },
-          right: function () {
+          right: function right() {
               var left = popper.left;
-              if (popper.right > data.boundaries.right) {
+              if (popper.right > data.boundaries.right && !shouldMoveWithTarget('right')) {
                   left = Math.min(popper.left, data.boundaries.right - popper.width);
               }
               return { left: left };
           },
-          top: function () {
+          top: function top() {
               var top = popper.top;
-              if (popper.top < data.boundaries.top) {
+              if (popper.top < data.boundaries.top && !shouldMoveWithTarget('top')) {
                   top = Math.max(popper.top, data.boundaries.top);
               }
               return { top: top };
           },
-          bottom: function () {
+          bottom: function bottom() {
               var top = popper.top;
-              if (popper.bottom > data.boundaries.bottom) {
+              if (popper.bottom > data.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
                   top = Math.min(popper.top, data.boundaries.bottom - popper.height);
               }
               return { top: top };
@@ -1087,6 +1140,31 @@
   }
 
   /**
+   * Modifier used to hide the popper when its reference element is outside of the
+   * popper boundaries. It will set an x-hidden attribute which can be used to hide
+   * the popper when its reference is out of boundaries.
+   * @method
+   * @memberof Modifiers
+   * @argument {Object} data - The data object generated by update method
+   * @argument {Object} options - Modifiers configuration and options
+   * @returns {Object} The data object, properly modified
+   */
+  function hide(data) {
+      var refRect = data.offsets.reference;
+      var bound = data.boundaries;
+
+      if (refRect.bottom < bound.top || refRect.left > bound.right || refRect.top > bound.bottom || refRect.right < bound.left) {
+          data.hide = true;
+          data.instance.popper.setAttribute('x-out-of-boundaries', '');
+      } else {
+          data.hide = false;
+          data.instance.popper.removeAttribute('x-out-of-boundaries');
+      }
+
+      return data;
+  }
+
+  /**
    * Modifiers are plugins used to alter the behavior of your poppers.
    * Popper.js uses a set of 7 modifiers to provide all the basic functionalities
    * needed by the library.
@@ -1113,7 +1191,8 @@
     keepTogether: keepTogether,
     offset: offset,
     preventOverflow: preventOverflow,
-    shift: shift
+    shift: shift,
+    hide: hide
   };
 
   var modifiersOnLoad = {
@@ -1139,6 +1218,7 @@
    * @property {String} data.placement Placement applied to popper
    * @property {String} data.originalPlacement Placement originally defined on init
    * @property {Boolean} data.flipped True if popper has been flipped by flip modifier
+   * @property {Boolean} data.hide True if the reference element is out of boundaries, useful to know when to hide the popper.
    * @property {HTMLElement} data.arrowElement Node used as arrow by arrow modifier
    * @property {Object} data.styles Any CSS property defined here will be applied to the popper, it expects the JavaScript nomenclature (eg. `marginBottom`)
    * @property {Object} data.boundaries Offsets of the popper boundaries
@@ -1153,6 +1233,24 @@
       throw new TypeError("Cannot call a class as a function");
     }
   };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
 
   // default options
   var DEFAULTS = {
@@ -1209,8 +1307,13 @@
               // the behavior used to change the popper's placement
               behavior: 'flip'
           },
-          applyStyle: {
+          hide: {
               order: 700,
+              enabled: true,
+              function: modifiersFunctions.hide
+          },
+          applyStyle: {
+              order: 800,
               enabled: true,
               function: modifiersFunctions.applyStyle,
               onLoad: modifiersOnLoad.applyStyleOnLoad
@@ -1361,138 +1464,143 @@
        */
 
 
-      Popper.prototype.update = function update(isFirstCall) {
-          var _this2 = this;
+      createClass(Popper, [{
+          key: 'update',
+          value: function update(isFirstCall) {
+              var _this2 = this;
 
-          var data = { instance: this, styles: {} };
+              var data = { instance: this, styles: {} };
 
-          // make sure to apply the popper position before any computation
-          this.state.position = getPosition(this.popper, this.reference);
-          setStyle(this.popper, { position: this.state.position });
+              // make sure to apply the popper position before any computation
+              this.state.position = getPosition(this.popper, this.reference);
+              setStyle(this.popper, { position: this.state.position });
 
-          // to avoid useless computations we throttle the popper position refresh to 60fps
-          window.requestAnimationFrame(function () {
-              // if popper is destroyed, don't perform any further update
-              if (_this2.state.isDestroyed) {
-                  return;
-              }
+              // to avoid useless computations we throttle the popper position refresh to 60fps
+              window.requestAnimationFrame(function () {
+                  // if popper is destroyed, don't perform any further update
+                  if (_this2.state.isDestroyed) {
+                      return;
+                  }
 
-              var now = window.performance.now();
-              if (now - _this2.state.lastFrame <= 16) {
-                  // this update fired to early! drop it
-                  // but schedule a new one that will be ran at the end of the updates
-                  // chain to make sure everything is proper updated
-                  return _this2.update();
-              }
-              _this2.state.lastFrame = now;
+                  var now = window.performance.now();
+                  if (now - _this2.state.lastFrame <= 16) {
+                      // this update fired to early! drop it
+                      // but schedule a new one that will be ran at the end of the updates
+                      // chain to make sure everything is proper updated
+                      return _this2.update();
+                  }
+                  _this2.state.lastFrame = now;
 
-              // store placement inside the data object, modifiers will be able to edit `placement` if needed
-              // and refer to originalPlacement to know the original value
-              data.placement = _this2.options.placement;
-              data.originalPlacement = _this2.options.placement;
+                  // store placement inside the data object, modifiers will be able to edit `placement` if needed
+                  // and refer to originalPlacement to know the original value
+                  data.placement = _this2.options.placement;
+                  data.originalPlacement = _this2.options.placement;
 
-              // compute the popper and reference offsets and put them inside data.offsets
-              data.offsets = getOffsets(_this2.state, _this2.popper, _this2.reference, data.placement);
+                  // compute the popper and reference offsets and put them inside data.offsets
+                  data.offsets = getOffsets(_this2.state, _this2.popper, _this2.reference, data.placement);
 
-              // get boundaries
-              data.boundaries = getBoundaries(_this2.popper, data, _this2.options.boundariesPadding, _this2.options.boundariesElement);
+                  // get boundaries
+                  data.boundaries = getBoundaries(_this2.popper, data, _this2.options.boundariesPadding, _this2.options.boundariesElement);
 
-              // run the modifiers
-              data = runModifiers(_this2.modifiers, _this2.options, data);
+                  // run the modifiers
+                  data = runModifiers(_this2.modifiers, _this2.options, data);
 
-              // the first `update` will call `onCreate` callback
-              // the other ones will call `onUpdate` callback
-              if (isFirstCall && isFunction(_this2.state.createCalback)) {
-                  _this2.state.createCalback(data);
-              } else if (!isFirstCall && isFunction(_this2.state.updateCallback)) {
-                  _this2.state.updateCallback(data);
-              }
-          });
-      };
-
-      /**
-       * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
-       * @method
-       * @memberof Popper
-       * @param {createCallback} callback
-       */
-
-
-      Popper.prototype.onCreate = function onCreate(callback) {
-          // the createCallbacks return as first argument the popper instance
-          this.state.createCalback = callback;
-          return this;
-      };
-
-      /**
-       * Callback called when the popper is created.
-       * Access Popper.js instance with `data.instance`.
-       * @callback createCallback
-       * @static
-       * @param {dataObject} data
-       */
-
-      /**
-       * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
-       * used to style popper and its arrow.
-       * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
-       * @method
-       * @memberof Popper
-       * @param {updateCallback} callback
-       */
-
-
-      Popper.prototype.onUpdate = function onUpdate(callback) {
-          this.state.updateCallback = callback;
-          return this;
-      };
-
-      /**
-       * Callback called when the popper is updated, this callback is not called
-       * on the initialization/creation of the popper, but only on subsequent
-       * updates.
-       * Access Popper.js instance with `data.instance`.
-       * @callback updateCallback
-       * @static
-       * @param {dataObject} data
-       */
-
-      /**
-       * Destroy the popper
-       * @method
-       * @memberof Popper
-       */
-
-
-      Popper.prototype.destroy = function destroy() {
-          this.state.isDestroyed = true;
-          this.popper.removeAttribute('x-placement');
-          this.popper.style.left = '';
-          this.popper.style.position = '';
-          this.popper.style.top = '';
-          this.popper.style[getSupportedPropertyName('transform')] = '';
-          this.state = removeEventListeners(this.reference, this.state, this.options);
-
-          // remove the popper if user explicity asked for the deletion on destroy
-          // do not use `remove` because IE11 doesn't support it
-          if (this.options.removeOnDestroy) {
-              this.popper.parentNode.removeChild(this.popper);
+                  // the first `update` will call `onCreate` callback
+                  // the other ones will call `onUpdate` callback
+                  if (isFirstCall && isFunction(_this2.state.createCalback)) {
+                      _this2.state.createCalback(data);
+                  } else if (!isFirstCall && isFunction(_this2.state.updateCallback)) {
+                      _this2.state.updateCallback(data);
+                  }
+              });
           }
-          return this;
-      };
 
-      /**
-       * Collection of utilities useful when writing custom modifiers
-       * @memberof Popper
-       */
+          /**
+           * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
+           * @method
+           * @memberof Popper
+           * @param {createCallback} callback
+           */
+
+      }, {
+          key: 'onCreate',
+          value: function onCreate(callback) {
+              // the createCallbacks return as first argument the popper instance
+              this.state.createCalback = callback;
+              return this;
+          }
+
+          /**
+           * Callback called when the popper is created.
+           * Access Popper.js instance with `data.instance`.
+           * @callback createCallback
+           * @static
+           * @param {dataObject} data
+           */
+
+          /**
+           * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
+           * used to style popper and its arrow.
+           * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
+           * @method
+           * @memberof Popper
+           * @param {updateCallback} callback
+           */
+
+      }, {
+          key: 'onUpdate',
+          value: function onUpdate(callback) {
+              this.state.updateCallback = callback;
+              return this;
+          }
+
+          /**
+           * Callback called when the popper is updated, this callback is not called
+           * on the initialization/creation of the popper, but only on subsequent
+           * updates.
+           * Access Popper.js instance with `data.instance`.
+           * @callback updateCallback
+           * @static
+           * @param {dataObject} data
+           */
+
+          /**
+           * Destroy the popper
+           * @method
+           * @memberof Popper
+           */
+
+      }, {
+          key: 'destroy',
+          value: function destroy() {
+              this.state.isDestroyed = true;
+              this.popper.removeAttribute('x-placement');
+              this.popper.style.left = '';
+              this.popper.style.position = '';
+              this.popper.style.top = '';
+              this.popper.style[getSupportedPropertyName('transform')] = '';
+              this.state = removeEventListeners(this.reference, this.state, this.options);
+
+              // remove the popper if user explicity asked for the deletion on destroy
+              // do not use `remove` because IE11 doesn't support it
+              if (this.options.removeOnDestroy) {
+                  this.popper.parentNode.removeChild(this.popper);
+              }
+              return this;
+          }
+
+          /**
+           * Collection of utilities useful when writing custom modifiers
+           * @memberof Popper
+           */
 
 
-      /**
-       * Default Popper.js options
-       * @memberof Popper
-       */
+          /**
+           * Default Popper.js options
+           * @memberof Popper
+           */
 
-
+      }]);
       return Popper;
   }();
 
