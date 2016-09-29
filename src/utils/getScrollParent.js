@@ -1,5 +1,6 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getParentNode from './getParentNode';
+
 /**
  * Returns the scrolling parent of the given element
  * @method
