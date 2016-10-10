@@ -13,8 +13,12 @@
 document.addEventListener('DOMContentLoaded', function(){
     var example3popper1inst = new Popper(example3reference1, example3popper1, {
         placement: 'left',
-        flipBehavior: ['left', 'bottom', 'top'],
-        boundariesElement: example3reference1.parentNode
+        boundariesElement: example3reference1.parentNode,
+        modifiers: {
+            flip: {
+                behavior: ['left', 'bottom', 'top']
+            }
+        }
     });
     interact('#example3reference1')
         .draggable({
