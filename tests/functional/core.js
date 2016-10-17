@@ -252,14 +252,22 @@ describe('[core]', () => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2, 'react');
 
-        var pop = new Popper(reference, popper).onUpdate((data) => {
-            expect(data.offsets.popper.top).toBeApprox(data.offsets.reference.bottom);
+        var pop = new Popper(reference, popper, {
+            modifiers: {
+                applyStyle: { enabled: false }
+            }
+        })
+        .onCreate(() => {
+            setTimeout(() => {
+                pop.update();
+            });
+        })
+        .onUpdate((data) => {
+            expect(data.offsets.popper.top).toBeApprox(46);
             jasmineWrapper.removeChild(data.instance.popper);
             data.instance.destroy();
             done();
         });
-
-        pop.update();
     });
 
     it('inits a popper with an empty form as parent, then auto remove it on destroy', (done) => {
