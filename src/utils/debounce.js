@@ -1,3 +1,5 @@
+import isNative from './isNative';
+
 const longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 let timeoutDuration = 0;
 for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
@@ -8,19 +10,23 @@ for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 }
 
 function microtaskDebounce(fn) {
-  let called = false;
+  let scheduled = false;
   let i = 0;
   const elem = document.createElement('span');
+
+  // MutationObserver provides a mechanism for scheduling microtasks, which
+  // are scheduled *before* the next task. This gives us a way to debounce
+  // a function but ensure it's called *before* the next paint.
   const observer = new MutationObserver(() => {
     fn();
-    called = false;
+    scheduled = false;
   });
 
   observer.observe(elem, { childList: true });
 
   return () => {
-    if (!called) {
-      called = true;
+    if (!scheduled) {
+      scheduled = true;
       elem.textContent = `${i}`;
       i += 1;
     }
@@ -28,17 +34,23 @@ function microtaskDebounce(fn) {
 }
 
 function taskDebounce(fn) {
-  let called = false;
+  let scheduled = false;
   return () => {
-    if (!called) {
-      called = true;
+    if (!scheduled) {
+      scheduled = true;
       setTimeout(() => {
-        called = false;
+        scheduled = false;
         fn();
       }, timeoutDuration);
     }
   };
 }
+
+// It's common for MutationObserver polyfills to be seen in the wild, however
+// these rely on Mutation Events which only occur when an element is connected
+// to the DOM. The algorithm used in this module does not use a connected element,
+// and so we must ensure that a *native* MutationObserver is available.
+const supportsNativeMutationObserver = isNative(window.MutationObserver);
 
 /**
  * Create a debounced version of a method, that's asynchronously deferred
@@ -49,4 +61,4 @@ function taskDebounce(fn) {
  * @argument {Function} fn
  * @returns {Function}
  */
-export default window.MutationObserver ? microtaskDebounce : taskDebounce;
+export default supportsNativeMutationObserver ? microtaskDebounce : taskDebounce;

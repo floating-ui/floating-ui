@@ -145,7 +145,8 @@ module.exports = function Gruntfile(grunt) {
                 },
                 files: [
                     'tests/styles/*.css',
-                    'tests/functional/*.js'
+                    'tests/functional/*.js',
+                    'tests/unit/*.js',
                 ],
                 sauceLabs: {
                     testName: 'Popper.js',
