@@ -1,3 +1,4 @@
+import autoPlacement from './autoPlacement';
 import applyStyle from './applyStyle';
 import arrow from './arrow';
 import flip from './flip';
@@ -6,6 +7,7 @@ import offset from './offset';
 import preventOverflow from './preventOverflow';
 import shift from './shift';
 import hide from './hide';
+import getPopperOffsets from './getPopperOffsets';
 
 /**
  * Modifiers are plugins used to alter the behavior of your poppers.
@@ -28,6 +30,7 @@ import hide from './hide';
  */
 
 export default {
+    autoPlacement,
     applyStyle,
     arrow,
     flip,
@@ -35,7 +38,8 @@ export default {
     offset,
     preventOverflow,
     shift,
-    hide
+    hide,
+    getPopperOffsets,
 };
 
 import { applyStyleOnLoad } from './applyStyle';

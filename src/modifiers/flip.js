@@ -1,7 +1,6 @@
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getOppositeVariation from '../utils/getOppositeVariation';
 import getPopperClientRect from '../utils/getPopperClientRect';
-import getOffsets from '../utils/getOffsets';
 import isModifierRequired from '../utils/isModifierRequired';
 import runModifiers from '../utils/runModifiers';
 
@@ -23,8 +22,15 @@ export default function flip(data, options) {
         return data;
     }
 
-    if (data.flipped && data.placement === data.originalPlacement) {
-        // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
+    // we need to get the computed original placement (not `auto`)
+    // in order to properly detect flip loops
+    let originalPlacement = data.originalPlacement;
+    if (originalPlacement.indexOf('auto') !== -1) {
+        originalPlacement = data.originalComputedPlacement;
+    }
+
+    // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
+    if (data.flipped && data.placement === originalPlacement) {
         return data;
     }
 
@@ -80,10 +86,6 @@ export default function flip(data, options) {
             if (flippedVariation) {
                 variation = getOppositeVariation(variation);
             }
-
-            data.placement = placement + (variation ? '-' + variation : '');
-            data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
-
             data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');
         }
     });
