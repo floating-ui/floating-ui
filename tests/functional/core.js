@@ -351,7 +351,7 @@ describe('[core]', () => {
         });
     });
 
-    fit('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
+    it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
