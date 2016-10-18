@@ -289,7 +289,7 @@ describe('[core]', () => {
 
         new Popper(reference, popper, { removeOnDestroy: true }).onCreate((data) => {
             expect(data.instance.popper).toBeDefined();
-            expect(data.instance.popper.innerText).toBe('test');
+            expect(data.instance.popper.innerText.trim()).toBe('test');
             data.instance.destroy();
             expect(document.body.contains(data.instance.popper)).toBeFalsy();
             done();
