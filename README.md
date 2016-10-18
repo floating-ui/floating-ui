@@ -138,9 +138,10 @@ To learn how to create a modifier, [read the modifiers documentaton](doc/_includ
 
 ### Libraries using Popper.js
 
-Popper.js will never winthe prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
+Popper.js will never win the prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
 With it you can create awesome libraries without worring about the positioning problems! Some great ones using Popper.js are listed here:
 
+- [react-popper](https://github.com/souporserious/react-popper): Component to use Popper.js with React;
 - [intro-guide-js](https://github.com/johanlahti/intro-guide-js): Create guided tours of your web pages;
 - [picker.js](https://github.com/GeekAb/picker.js): Modern date picker;
 
