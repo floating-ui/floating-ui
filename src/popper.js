@@ -31,7 +31,6 @@ var DEFAULTS = {
     // the element which will act as boundary of the popper
     boundariesElement: 'viewport',
 
-    // amount of pixel used to define a minimum distance between the boundaries and the popper
     boundariesPadding: 5,
 
     // list of functions used to modify the offsets before they are applied to the popper
@@ -52,9 +51,13 @@ var DEFAULTS = {
             order: 300,
             enabled: true,
             function: modifiersFunctions.preventOverflow,
+            onLoad: modifiersOnLoadFunctions.preventOverflowOnLoad,
             // popper will try to prevent overflow following these priorities
             //  by default, then, it could overflow on the left and on top of the boundariesElement
             priority: ['left', 'right', 'top', 'bottom'],
+            // amount of pixel used to define a minimum distance between the boundaries and the popper
+            // this makes sure the popper has always a little padding between the edges of its container
+            padding: 5,
         },
         keepTogether: {
             order: 400,
@@ -73,7 +76,10 @@ var DEFAULTS = {
             enabled: true,
             function: modifiersFunctions.flip,
             // the behavior used to change the popper's placement
-            behavior: 'flip'
+            behavior: 'flip',
+            // the popper will flip if it hits the edges of the boundariesElement - padding
+            padding: 5,
+            boundariesElement: 'viewport'
         },
         hide: {
             order: 700,
@@ -104,10 +110,6 @@ var DEFAULTS = {
  *      browser to use the GPU to accelerate the rendering.
  *      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU.
  *
- * @param {String|Element} options.boundariesElement='viewport'
- *      The element which will define the boundaries of the popper position, the popper will never be placed outside
- *      of the defined boundaries (except if `keepTogether` is enabled)
- *
  * @param {Number} options.boundariesPadding=5
  *      Additional padding for the boundaries
  *
@@ -132,6 +134,9 @@ var DEFAULTS = {
  * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
+ * @param {Number} options.modifiers.preventOverflow.padding=5
+ *      Amount of pixel used to define a minimum distance between the boundaries and the popper
+ *      this makes sure the popper has always a little padding between the edges of its container.
  *
  * @param {Object} options.modifiers.flip - Flip modifier configuration
  * @param {String|Array} options.modifiers.flip.behavior='flip'
@@ -141,6 +146,13 @@ var DEFAULTS = {
  *      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
+ * @param {String|Element} options.modifiers.flip.boundariesElement='viewport'
+ *      The element which will define the boundaries of the popper position, the popper will never be placed outside
+ *      of the defined boundaries (except if `keepTogether` is enabled)
+ *
+ * @param {Number} options.modifiers.flip.padding=5
+ *      Amount of pixel used to define a minimum distance between the boundaries and the popper
+ *      this makes sure the popper has always a little padding between the edges of its container.
  *
  * @return {Object} instance - The generated Popper.js instance
  */
@@ -172,6 +184,7 @@ export default class Popper {
 
         // add custom modifiers to the modifiers list
         if (options.modifiers) {
+            this.options.modifiers = Object.assign({}, DEFAULTS.modifiers, options.modifiers);
             Object.keys(options.modifiers).forEach((name) => {
                 // take in account only custom modifiers
                 if (DEFAULTS.modifiers[name] === undefined) {
@@ -187,11 +200,15 @@ export default class Popper {
 
         // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
+        // they could add new properties to their options configuration
+        // BE AWAARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
         this.modifiers.forEach((modifier) => {
             if (modifier.enabled && isFunction(modifier.onLoad)) {
-                modifier.onLoad(this.reference, this.popper, this.options);
+                //              reference       popper       options       modifierOptions
+                modifier.onLoad(this.reference, this.popper, this.options, modifier);
             }
         });
+
 
         // get the popper position type
         this.state.position = getPosition(this.popper, this.reference);
@@ -253,7 +270,7 @@ export default class Popper {
             data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
 
             // run the modifiers
-            data = runModifiers(this.modifiers, this.options, data);
+            data = runModifiers(this.modifiers, data);
 
             // the first `update` will call `onCreate` callback
             // the other ones will call `onUpdate` callback

@@ -250,12 +250,8 @@ describe('[core]', () => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2, 'react');
 
-        var pop = new Popper(reference, popper, {
-            modifiers: {
-                applyStyle: { enabled: false }
-            }
-        }).onUpdate((data) => {
-            expect(data.offsets.popper.top).toBeApprox(46);
+        var pop = new Popper(reference, popper).onUpdate((data) => {
+            expect(data.offsets.popper.top).toBeApprox(data.offsets.reference.bottom);
             jasmineWrapper.removeChild(data.instance.popper);
             data.instance.destroy();
             done();
@@ -351,11 +347,10 @@ describe('[core]', () => {
         });
     });
 
-    fit('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
+    it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
-        relative.style.height = '200vh';
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
@@ -365,10 +360,11 @@ describe('[core]', () => {
         ref.style.width = '100px';
         ref.style.height = '100px';
         ref.style.marginTop = '2000px';
+        ref.style.marginBottom = '200px';
         var popper = appendNewPopper(2, 'popper', relative);
 
         new Popper(ref, popper, { placement: 'bottom', boundariesElement: 'viewport' }).onCreate((data) => {
-            expect(getRect(popper).bottom + 5).toBeApprox(getRect(ref).top, 'Popper should stay near its reference element'); // 5 is the arrow size
+            expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
             data.instance.destroy();
             done();

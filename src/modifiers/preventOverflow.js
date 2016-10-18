@@ -1,5 +1,7 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
+import getScrollParent from '../utils/getScrollParent';
+import getOffsetRect from '../utils/getOffsetRect';
 
 /**
  * Modifier used to make sure the popper does not overflows from it's boundaries
@@ -31,29 +33,29 @@ export default function preventOverflow(data, options) {
     const check = {
         left() {
             let left = popper.left;
-            if (popper.left < data.boundaries.left && !shouldMoveWithTarget('left')) {
-                left = Math.max(popper.left, data.boundaries.left);
+            if (popper.left < options.boundaries.left && !shouldMoveWithTarget('left')) {
+                left = Math.max(popper.left, options.boundaries.left);
             }
             return { left: left };
         },
         right() {
             let left = popper.left;
-            if (popper.right > data.boundaries.right && !shouldMoveWithTarget('right')) {
-                left = Math.min(popper.left, data.boundaries.right - popper.width);
+            if (popper.right > options.boundaries.right && !shouldMoveWithTarget('right')) {
+                left = Math.min(popper.left, options.boundaries.right - popper.width);
             }
             return { left: left };
         },
         top() {
             let top = popper.top;
-            if (popper.top < data.boundaries.top && !shouldMoveWithTarget('top')) {
-                top = Math.max(popper.top, data.boundaries.top);
+            if (popper.top < options.boundaries.top && !shouldMoveWithTarget('top')) {
+                top = Math.max(popper.top, options.boundaries.top);
             }
             return { top: top };
         },
         bottom() {
             let top = popper.top;
-            if (popper.bottom > data.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
-                top = Math.min(popper.top, data.boundaries.bottom - popper.height);
+            if (popper.bottom > options.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
+                top = Math.min(popper.top, options.boundaries.bottom - popper.height);
             }
             return { top: top };
         }
@@ -64,4 +66,17 @@ export default function preventOverflow(data, options) {
     });
 
     return data;
+}
+
+export function preventOverflowOnLoad(reference, popper, options, modifierOptions) {
+    const padding = options.modifiers.preventOverflow.padding;
+    const scrollParent = getScrollParent(popper);
+    const scrollParentRect = getOffsetRect(scrollParent);
+
+    scrollParentRect.left += padding;
+    scrollParentRect.top += padding;
+    scrollParentRect.right -= padding;
+    scrollParentRect.bottom -= padding;
+
+    modifierOptions.boundaries = scrollParentRect;
 }

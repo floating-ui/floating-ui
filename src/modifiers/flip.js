@@ -2,7 +2,6 @@ import getOppositePlacement from '../utils/getOppositePlacement';
 import getOppositeVariation from '../utils/getOppositeVariation';
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOffsets from '../utils/getOffsets';
-import isModifierRequired from '../utils/isModifierRequired';
 import runModifiers from '../utils/runModifiers';
 
 /**
@@ -16,13 +15,6 @@ import runModifiers from '../utils/runModifiers';
  * @returns {Object} The data object, properly modified
  */
 export default function flip(data, options) {
-    // check if preventOverflow is in the list of modifiers before the flip modifier.
-    // otherwise flip would not work as expected.
-    if (!isModifierRequired(data.instance.modifiers, 'flip', 'preventOverflow')) {
-        console.warn('WARNING: preventOverflow modifier is required by flip modifier in order to work, be sure to include it before flip!');
-        return data;
-    }
-
     if (data.flipped && data.placement === data.originalPlacement) {
         // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
         return data;
@@ -59,8 +51,8 @@ export default function flip(data, options) {
         const b = ['top', 'bottom'].indexOf(placement) !== -1;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
-        const flippedPosition = a && Math.floor(data.offsets.reference[placement]) > Math.floor(popperOffsets[placementOpposite]) ||
-            !a && Math.floor(data.offsets.reference[placement]) < Math.floor(popperOffsets[placementOpposite]);
+        const flippedPosition = a && Math.floor(popperOffsets[placement] > data.boundaries[placement]) ||
+            !a && Math.floor(popperOffsets[placement] < data.boundaries[placement]);
 
         const flippedVariation = options.flipVariations && (
             b && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(data.boundaries.left) ||
@@ -84,7 +76,7 @@ export default function flip(data, options) {
             data.placement = placement + (variation ? '-' + variation : '');
             data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
 
-            data = runModifiers(data.instance.modifiers, data.instance.options, data, 'flip');
+            data = runModifiers(data.instance.modifiers, data, 'flip');
         }
     });
     return data;

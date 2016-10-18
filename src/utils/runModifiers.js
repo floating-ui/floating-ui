@@ -9,7 +9,7 @@ import findIndex from './findIndex';
  * @param {Array} modifiers
  * @param {Function} ends
  */
-export default function runModifiers(modifiers, options, data, ends) {
+export default function runModifiers(modifiers, data, ends) {
     const modifiersToRun = (ends === undefined) ?
           modifiers :
           modifiers.slice(0, findIndex(modifiers, 'name', ends));

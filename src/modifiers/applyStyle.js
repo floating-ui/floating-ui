@@ -65,4 +65,5 @@ export default function applyStyle(data) {
  */
 export function applyStyleOnLoad(reference, popper, options) {
     popper.setAttribute('x-placement', options.placement);
+    return options;
 }
