@@ -1,0 +1,11 @@
+{
+    plugins: [
+        'jasmine'
+    ],
+    env: {
+        jasmine: true
+    },
+    globals: {
+        jasmineWrapper: false
+    }
+}

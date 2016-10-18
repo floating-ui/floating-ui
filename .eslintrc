@@ -1,0 +1,22 @@
+{
+    parser: 'babel-eslint',
+    env: {
+        browser: true,
+        node: true
+    },
+    globals: {},
+    rules: {
+        'no-cond-assign': [ 2, 'except-parens' ],
+        curly: 2,
+        eqeqeq: 2,
+        'no-eq-null': 2,
+        'wrap-iife': [ 2, 'any' ],
+        'no-use-before-define': 0,
+        'new-cap': 2,
+        'no-caller': 2,
+        'dot-notation': 0,
+        'no-undef': 2,
+        'no-unused-vars': 2,
+        'no-const-assign': 2
+    }
+}

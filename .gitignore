@@ -5,6 +5,7 @@
 /node_modules/
 .DS_Store
 .tmp
+.grunt
 
 # When you switch branches, things can get messy
 _site

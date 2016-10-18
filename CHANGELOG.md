@@ -1,5 +1,18 @@
+## v1.0.0
+- BREAKING CHANGE: removed all the underscores `_` prefixes from properties
+- converted source code to ES2015
+- build now uses Rollup
+- moved from JSHint to ESLint
+- updated npm dependencies
+- BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core
+- BREAKING CHANGE: simplified modifiers API, see #62 for migration instructions
+- BREAKING CHANGE: modifiers options are now stored inside the modifiers configurations, see #62
+- Full support for HTML5 shadow root and HTML5 components (#88) (thanks @nadiam84)
+- Improved flip detection strategy (#82) (thanks @nadiam84)
+- BREAKING CHANGE: boundariesElement has been deprecated in favor to new options of `preventOverflow` and `flip` modifiers (#75)
+
 ## v0.6.4
-- 30a781e: Remove necessity of `remove` polyfill on IE
+- 30a781e: Remove necessity of remove polyfill on IE (thanks @rafaelverger)
 
 ## v0.6.3
 - 2e96b0e: removed arrow modifier dependency from applyStyle modifier
