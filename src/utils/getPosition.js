@@ -8,8 +8,8 @@ import isFixed from './isFixed';
  * @param config {HTMLElement} popper element
  * @returns {HTMLElement} reference element
  */
-export default function getPosition(popper, reference) {
-    const container = getOffsetParent(reference);
+export default function getPosition(element) {
+    const container = getOffsetParent(element);
 
     // Decide if the popper will be fixed
     // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together

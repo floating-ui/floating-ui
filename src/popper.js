@@ -9,7 +9,6 @@ import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getPosition from './utils/getPosition';
 import getOffsets from './utils/getOffsets';
-import getBoundaries from './utils/getBoundaries';
 import isFunction from './utils/isFunction';
 import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
@@ -27,11 +26,6 @@ var DEFAULTS = {
 
     // if true, it uses the CSS 3d transformation to position the popper
     gpuAcceleration: true,
-
-    // the element which will act as boundary of the popper
-    boundariesElement: 'viewport',
-
-    boundariesPadding: 5,
 
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: {
@@ -75,6 +69,7 @@ var DEFAULTS = {
             order: 600,
             enabled: true,
             function: modifiersFunctions.flip,
+            onLoad: modifiersOnLoadFunctions.flipOnLoad,
             // the behavior used to change the popper's placement
             behavior: 'flip',
             // the popper will flip if it hits the edges of the boundariesElement - padding
@@ -211,7 +206,7 @@ export default class Popper {
 
 
         // get the popper position type
-        this.state.position = getPosition(this.popper, this.reference);
+        this.state.position = getPosition(this.reference);
 
         // determine how we should set the origin of offsets
         this.state.isParentTransformed = isTransformed(this.popper.parentNode);
@@ -241,7 +236,7 @@ export default class Popper {
         var data = { instance: this, styles: {} };
 
         // make sure to apply the popper position before any computation
-        this.state.position = getPosition(this.popper, this.reference);
+        this.state.position = getPosition(this.reference);
         setStyle(this.popper, { position: this.state.position});
 
         // to avoid useless computations we throttle the popper position refresh to 60fps
@@ -265,9 +260,6 @@ export default class Popper {
 
             // compute the popper and reference offsets and put them inside data.offsets
             data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
-
-            // get boundaries
-            data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
 
             // run the modifiers
             data = runModifiers(this.modifiers, data);

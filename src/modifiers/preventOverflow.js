@@ -1,7 +1,7 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getScrollParent from '../utils/getScrollParent';
-import getOffsetRect from '../utils/getOffsetRect';
+import getBoundaries from '../utils/getBoundaries';
 
 /**
  * Modifier used to make sure the popper does not overflows from it's boundaries
@@ -69,14 +69,14 @@ export default function preventOverflow(data, options) {
 }
 
 export function preventOverflowOnLoad(reference, popper, options, modifierOptions) {
-    const padding = options.modifiers.preventOverflow.padding;
-    const scrollParent = getScrollParent(popper);
-    const scrollParentRect = getOffsetRect(scrollParent);
+    const padding = modifierOptions.padding;
+    let scrollParent = getScrollParent(popper);
 
-    scrollParentRect.left += padding;
-    scrollParentRect.top += padding;
-    scrollParentRect.right -= padding;
-    scrollParentRect.bottom -= padding;
+    // To get informations about the scroll position on Firefox we need documentElement.
+    // But obviously, Firefox doesn't give us the real document height if we read documentElement
+    // it returns the window height. To fix this, always make sure to use body instead.
+    scrollParent === window.document.documentElement && (scrollParent = window.document.body);
+    const scrollParentRect = getBoundaries(popper, padding, scrollParent);
 
     modifierOptions.boundaries = scrollParentRect;
 }

@@ -1,6 +1,7 @@
 import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getOffsetRect from './getOffsetRect';
+import getPosition from './getPosition';
 
 /**
  * Computed the boundaries limits and return them
@@ -11,7 +12,7 @@ import getOffsetRect from './getOffsetRect';
  * @param {Element} boundariesElement - Element used to define the boundaries
  * @returns {Object} Coordinates of the boundaries
  */
-export default function getBoundaries(popper, data, padding, boundariesElement) {
+export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     let boundaries = {};
     if (boundariesElement === 'window') {
@@ -30,10 +31,11 @@ export default function getBoundaries(popper, data, padding, boundariesElement) 
         const offsetParent = getOffsetParent(popper);
         const scrollParent = getScrollParent(popper);
         const offsetParentRect = getOffsetRect(offsetParent);
+        const position = getPosition(popper);
 
         // if the popper is fixed we don't have to substract scrolling from the boundaries
-        const scrollTop = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollTop;
-        const scrollLeft = data.offsets.popper.position === 'fixed' ? 0 : scrollParent.scrollLeft;
+        const scrollTop = position === 'fixed' ? 0 : scrollParent.scrollTop;
+        const scrollLeft = position === 'fixed' ? 0 : scrollParent.scrollLeft;
 
         boundaries = {
             top: 0 - (offsetParentRect.top - scrollTop),

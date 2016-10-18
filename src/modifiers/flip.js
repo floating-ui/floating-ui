@@ -3,6 +3,7 @@ import getOppositeVariation from '../utils/getOppositeVariation';
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOffsets from '../utils/getOffsets';
 import runModifiers from '../utils/runModifiers';
+import getBoundaries from '../utils/getBoundaries';
 
 /**
  * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
@@ -51,14 +52,14 @@ export default function flip(data, options) {
         const b = ['top', 'bottom'].indexOf(placement) !== -1;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
-        const flippedPosition = a && Math.floor(popperOffsets[placement] > data.boundaries[placement]) ||
-            !a && Math.floor(popperOffsets[placement] < data.boundaries[placement]);
+        const flippedPosition = a && Math.floor(popperOffsets[placement]) > Math.floor(options.boundaries[placement]) ||
+            !a && Math.floor(popperOffsets[placement]) < Math.floor(options.boundaries[placement]);
 
         const flippedVariation = options.flipVariations && (
-            b && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(data.boundaries.left) ||
-            b && (variation === 'end') && Math.floor(popperOffsets.right) > Math.floor(data.boundaries.right) ||
-            !b && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(data.boundaries.top) ||
-            !b && (variation === 'end') && Math.floor(popperOffsets.bottom) > Math.floor(data.boundaries.bottom));
+            b && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(options.boundaries.left) ||
+            b && (variation === 'end') && Math.floor(popperOffsets.right) > Math.floor(options.boundaries.right) ||
+            !b && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(options.boundaries.top) ||
+            !b && (variation === 'end') && Math.floor(popperOffsets.bottom) > Math.floor(options.boundaries.bottom));
 
         if (
             flippedPosition || flippedVariation
@@ -80,4 +81,9 @@ export default function flip(data, options) {
         }
     });
     return data;
+}
+
+export function flipOnLoad(reference, popper, options, modifierOptions) {
+    // get boundaries
+    modifierOptions.boundaries = getBoundaries(popper, modifierOptions.padding, modifierOptions.boundariesElement);
 }

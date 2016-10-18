@@ -98,7 +98,9 @@ describe('[core]', () => {
         scrolling.appendChild(superHigh2);
 
         scrolling.scrollTop = 400;
-        new Popper(ref, popper, { placement: 'top', boundariesElement: scrolling })
+        new Popper(ref, popper, {
+            placement: 'top'
+        })
         .onCreate(() => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
@@ -338,7 +340,9 @@ describe('[core]', () => {
         ref.style.marginTop = '100px';
         var popper = appendNewPopper(2, 'popper', scrolling);
 
-        new Popper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate((data) => {
+        new Popper(ref, popper, {
+            placement: 'right-start'
+        }).onCreate((data) => {
             expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
             expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
 
@@ -363,7 +367,14 @@ describe('[core]', () => {
         ref.style.marginBottom = '200px';
         var popper = appendNewPopper(2, 'popper', relative);
 
-        new Popper(ref, popper, { placement: 'bottom', boundariesElement: 'viewport' }).onCreate((data) => {
+        new Popper(ref, popper,{
+            placement: 'bottom',
+            modifiers: {
+                flip: {
+                    boundariesElemeent:'viewport'
+                }
+            }
+        }).onCreate((data) => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
             data.instance.destroy();
