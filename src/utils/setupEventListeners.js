@@ -18,5 +18,6 @@ export default function setupEventListeners(reference, options, state, updateBou
             target = window;
         }
         target.addEventListener('scroll', state.updateBound, { passive: true });
+        state.scrollElement = target;
     }
 }
