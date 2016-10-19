@@ -276,7 +276,7 @@ describe('[core]', () => {
 
         new Popper(reference, popper, { removeOnDestroy: true }).onCreate((data) => {
             expect(data.instance.popper).toBeDefined();
-            expect(data.instance.popper.innerText).toBe('test');
+            expect(data.instance.popper.innerText.trim()).toBe('test');
             data.instance.destroy();
             expect(document.body.contains(data.instance.popper)).toBeFalsy();
             done();
@@ -293,7 +293,7 @@ describe('[core]', () => {
 
         new Popper(reference, popper, { removeOnDestroy: true }).onCreate((data) => {
             expect(data.instance.popper).toBeDefined();
-            expect(data.instance.popper.innerText).toBe('test');
+            expect(data.instance.popper.innerText.trim()).toBe('test');
             data.instance.destroy();
             expect(document.body.contains(data.instance.popper)).toBeFalsy();
             done();
@@ -349,6 +349,30 @@ describe('[core]', () => {
         new Popper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate((data) => {
             expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
             expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
+
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
+        var relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        relative.style.paddingTop = '100px';
+        relative.style.backgroundColor = 'yellow';
+        jasmineWrapper.appendChild(relative);
+        document.body.scrollTop = 100;
+
+        var ref = appendNewRef(1, 'ref', relative);
+        ref.style.width = '100px';
+        ref.style.height = '100px';
+        ref.style.marginTop = '2000px';
+        var popper = appendNewPopper(2, 'popper', relative);
+
+        new Popper(ref, popper, { placement: 'bottom', boundariesElement: 'viewport' }).onCreate((data) => {
+            expect(getRect(popper).bottom + 5).toBeApprox(getRect(ref).top, 'Popper should stay near its reference element'); // 5 is the arrow size
 
             data.instance.destroy();
             done();
