@@ -1,12 +1,10 @@
-import getScrollParent from './getScrollParent';
-
 /**
  * Remove event listeners used to update the popper position
  * @method
  * @memberof Popper.Utils
  * @private
  */
-export default function removeEventListeners(reference, state, options) {
+export default function removeEventListeners(reference, state) {
     // NOTE: 1 DOM access here
     window.removeEventListener('resize', state.updateBound);
     if (state.scrollElement) {

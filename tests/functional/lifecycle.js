@@ -21,7 +21,7 @@ describe('[lifecycle]', () => {
         it('does not add a scroll event listener to window when boundariesElement is window', () => {
             spyOn(window, 'addEventListener');
 
-            const { state } = makePopper(makeConnectedElement(), makeConnectedElement(), { boundariesElement: 'window' });
+            makePopper(makeConnectedElement(), makeConnectedElement(), { boundariesElement: 'window' });
 
             expect(window.addEventListener.calls.count()).toEqual(1);
             expect(window.addEventListener.calls.argsFor(0)[0]).not.toEqual('scroll');
