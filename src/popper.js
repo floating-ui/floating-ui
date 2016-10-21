@@ -4,6 +4,7 @@ import './polyfills/requestAnimationFrame';
 
 // Utils
 import Utils from './utils/index';
+import debounce from './utils/debounce';
 import setStyle from './utils/setStyle';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
@@ -146,9 +147,15 @@ var DEFAULTS = {
  */
 export default class Popper {
     constructor(reference, popper, options = {}) {
+        // make update() debounced, so that it only runs at most once-per-tick
+        this.update = debounce(this.update.bind(this));
+        // create a throttled version of update() that is scheduled based on UI updates
+        this.scheduleUpdate = () => requestAnimationFrame(this.update);
+
         // init state
         this.state = {
-            isDestroyed: false
+            isDestroyed: false,
+            isCreated: false,
         };
 
         // get reference and popper elements (allow jQuery wrappers)
@@ -200,10 +207,10 @@ export default class Popper {
         this.state.isParentTransformed = isTransformed(this.popper.parentNode);
 
         // fire the first update to position the popper in the right place
-        this.update(true);
+        this.update();
 
         // setup event listeners, they will take care of update the position in specific situations
-        setupEventListeners(this.reference, this.options, this.state, () => this.update());
+        setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
 
         // make it chainable
         return this;
@@ -216,53 +223,42 @@ export default class Popper {
     /**
      * Updates the position of the popper, computing the new offsets and applying the new style
      * @method
-     * @param {Boolean} isFirstCall
-     *      When true, the onCreate callback is called, otherwise it calls the onUpdate callback
      * @memberof Popper
      */
-    update(isFirstCall) {
+    update() {
         var data = { instance: this, styles: {} };
 
         // make sure to apply the popper position before any computation
         this.state.position = getPosition(this.popper, this.reference);
         setStyle(this.popper, { position: this.state.position});
 
-        // to avoid useless computations we throttle the popper position refresh to 60fps
-        window.requestAnimationFrame(() => {
-            // if popper is destroyed, don't perform any further update
-            if (this.state.isDestroyed) { return; }
+        // if popper is destroyed, don't perform any further update
+        if (this.state.isDestroyed) { return; }
 
-            const now = window.performance.now();
-            if (now - this.state.lastFrame <= 16) {
-                // this update fired to early! drop it
-                // but schedule a new one that will be ran at the end of the updates
-                // chain to make sure everything is proper updated
-                return this.update();
+        // store placement inside the data object, modifiers will be able to edit `placement` if needed
+        // and refer to originalPlacement to know the original value
+        data.placement = this.options.placement;
+        data.originalPlacement = this.options.placement;
+
+        // compute the popper and reference offsets and put them inside data.offsets
+        data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
+
+        // get boundaries
+        data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
+
+        // run the modifiers
+        data = runModifiers(this.modifiers, this.options, data);
+
+        // the first `update` will call `onCreate` callback
+        // the other ones will call `onUpdate` callback
+        if (!this.state.isCreated) {
+            this.state.isCreated = true;
+            if (isFunction(this.state.createCallback)) {
+                this.state.createCallback(data);
             }
-            this.state.lastFrame = now;
-
-            // store placement inside the data object, modifiers will be able to edit `placement` if needed
-            // and refer to originalPlacement to know the original value
-            data.placement = this.options.placement;
-            data.originalPlacement = this.options.placement;
-
-            // compute the popper and reference offsets and put them inside data.offsets
-            data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
-
-            // get boundaries
-            data.boundaries = getBoundaries(this.popper, data, this.options.boundariesPadding, this.options.boundariesElement);
-
-            // run the modifiers
-            data = runModifiers(this.modifiers, this.options, data);
-
-            // the first `update` will call `onCreate` callback
-            // the other ones will call `onUpdate` callback
-            if (isFirstCall && isFunction(this.state.createCalback)) {
-                this.state.createCalback(data);
-            } else if (!isFirstCall && isFunction(this.state.updateCallback)) {
-                this.state.updateCallback(data);
-            }
-        });
+        } else if (isFunction(this.state.updateCallback)) {
+            this.state.updateCallback(data);
+        }
     }
 
     /**
@@ -273,7 +269,7 @@ export default class Popper {
      */
     onCreate(callback) {
         // the createCallbacks return as first argument the popper instance
-        this.state.createCalback = callback;
+        this.state.createCallback = callback;
         return this;
     }
 
@@ -320,7 +316,7 @@ export default class Popper {
         this.popper.style.position = '';
         this.popper.style.top = '';
         this.popper.style[getSupportedPropertyName('transform')] = '';
-        this.state = removeEventListeners(this.reference, this.state, this.options);
+        this.state = removeEventListeners(this.reference, this.state);
 
         // remove the popper if user explicity asked for the deletion on destroy
         // do not use `remove` because IE11 doesn't support it
