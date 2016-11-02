@@ -1,0 +1,43 @@
+<div class="example2__fake-body">
+    <div class="example2__scroll-box">
+        <div class="rel" id="example2reference1">
+            <p class="bold">Scroll me</p>
+            <p class="thin">up and down</p>
+        </div>
+
+        <div class="popper" id="example2popper1">
+            <p class="bold">I follow it</p>
+            <p class="thin">staying between boundaries</p>
+            <div class="popper__arrow" x-arrow></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+    var fakeBody = document.querySelector('.example2__fake-body');
+    fakeBody.scrollTop = fakeBody.scrollHeight / 2 - fakeBody.clientHeight / 2;
+
+    setTimeout(function() {
+        var pop1 = new Popper(example2reference1, example2popper1, {
+            placement: 'left',
+            boundariesElement: example2reference1.parentNode.parentNode
+        });
+    }, 1000);
+}, false);
+</script>
+
+<style>
+    .example2__fake-body {
+        overflow-x: scroll;
+        height: 450px;
+        flex: 1;
+    }
+    .example2__scroll-box {
+        height: 200%;
+        display: flex;
+        align-content: center;
+        align-items: center;
+    }
+</style>

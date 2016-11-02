@@ -1,0 +1,77 @@
+<div class="rel" id="example10reference1">
+    <p class="bold">Hey!</p>
+    <p class="thin">Choose where to put your popper!</p>
+    <select id="example10positionSelector">
+        <option value="top">Top</option>
+        <option value="right">Right</option>
+        <option value="bottom">Bottom</option>
+        <option value="left">Left</option>
+    </select>
+</div>
+
+<div class="popper" width="200" id="example10popper1">
+    <p class="bold">Popper on <b id="example10currentPosition" class="currentPosition"></b></p>
+    <div class="popper__arrow" x-arrow></div>
+</div>
+
+<style>
+    #example10positionSelector {
+        margin-top: 1em;
+    }
+</style>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function(){
+    var index = 0;
+    var popper;
+
+    $('#example10positionSelector').on('change', attachPopper).trigger('change');
+
+    // Stop autoflip popper when the user click on the dropdown
+    $('#example10positionSelector').on('click', function() {
+        clearInterval(autoPopperFunctionTimer);
+    });
+
+    var autoPopperFunctionTimer = setInterval(function() {
+        if (index === 0) {
+            $('#example10positionSelector').val('top');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else if (index === 1) {
+            $('#example10positionSelector').val('right');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else if (index === 2) {
+            $('#example10positionSelector').val('bottom');
+            $('#example10positionSelector').trigger('change');
+            index++;
+        } else {
+            $('#example10positionSelector').val('left');
+            $('#example10positionSelector').trigger('change');
+            index = 0;
+        }
+    }, 4000);
+
+    function attachPopper(evt) {
+        var position = evt.target.value;
+
+        //Some changes in the code example
+        document.getElementById('example10Title').textContent = "Placing poppers around elements is just that easy!";
+        document.getElementById('example10code').className = "";
+
+        //Position of the popper
+        document.getElementById('example10currentPosition').textContent = position;
+
+        //Position for the code example
+        document.getElementById('example10code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
+
+        popper && popper.destroy();
+        popper = new Popper(example10reference1, example10popper1, {
+            placement: position,
+            boundariesElement: example10reference1.parentNode
+        });
+    }
+});
+
+</script>
