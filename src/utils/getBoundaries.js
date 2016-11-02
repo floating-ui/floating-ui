@@ -51,11 +51,24 @@ export default function getBoundaries(popper, data, padding, boundariesElement) 
             };
         } else {
             boundaries = getOffsetRect(boundariesElement);
+            if (data.offsets.popper.position === 'fixed') {
+                // Fixed positions are relative to the parent of the offsetElement outside of the Bounding Element.
+                let offsetParent = popper.parentNode;
+                while (boundariesElement.contains(offsetParent)) {
+                    offsetParent = offsetParent.offsetParent;
+                }
+                boundaries.width += offsetParent.offsetLeft;
+                boundaries.right += offsetParent.offsetLeft;
+            } else {
+                // Absolute positions are relative to the position of the scroll parent.
+                boundaries.width = getScrollParent(popper).offsetWidth - getOffsetParent(popper).offsetLeft;
+                boundaries.right = boundaries.width;
+            }
         }
     }
     boundaries.left += padding;
     boundaries.right -= padding;
-    boundaries.top = boundaries.top + padding;
-    boundaries.bottom = boundaries.bottom - padding;
+    boundaries.top = boundaries.top + (padding * 2);
+    boundaries.bottom = boundaries.bottom - (padding * 2);
     return boundaries;
 }
