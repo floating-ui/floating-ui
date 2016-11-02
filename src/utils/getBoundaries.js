@@ -50,12 +50,43 @@ export default function getBoundaries(popper, data, padding, boundariesElement) 
                 bottom: boundariesElement.clientHeight
             };
         } else {
-            boundaries = getOffsetRect(boundariesElement);
+            if (data.offsets.popper.position === 'fixed') {
+                // Fixed positions are relative to the parent of the offsetElement outside of the Bounding Element.
+                const offsetParent = getOffsetParent(boundariesElement);
+
+                if (offsetParent === window.document.documentElement) {
+                    return getBoundaries(popper, data, padding, 'viewport');
+                } else {
+                    boundaries = getOffsetRect(boundariesElement);
+                    const offsetParentRect = getOffsetRect(offsetParent);
+                    boundaries.width += offsetParentRect.left;
+                    boundaries.right += offsetParentRect.left;
+                    boundaries.height += offsetParentRect.top;
+                    boundaries.bottom += offsetParentRect.top;
+                }
+            } else {
+                // Absolute positions are relative to the position of the scroll parent.
+                const scrollParent = getScrollParent(popper);
+                const offsetParent = getOffsetParent(popper);
+                const offsetParentRect = getOffsetRect(offsetParent);
+                const scrollTop = scrollParent.scrollTop;
+                const scrollHeight = scrollParent.offsetHeight;
+                const scrollLeft = scrollParent.scrollLeft;
+                const scrollWidth = scrollParent.offsetWidth;
+                boundaries = {
+                    top: Math.max(offsetParentRect.top, 0 - offsetParentRect.top + Math.min(0, scrollTop - scrollHeight)),
+                    left: Math.max(offsetParentRect.left, 0 - offsetParentRect.left + Math.min(0, scrollLeft - scrollWidth)),
+                    width: scrollWidth - offsetParentRect.left,
+                    height: scrollHeight - offsetParentRect.top,
+                }
+                boundaries.right = boundaries.width;
+                boundaries.bottom = boundaries.height;
+            }
         }
     }
-    boundaries.left += padding;
-    boundaries.right -= padding;
-    boundaries.top = boundaries.top + padding;
-    boundaries.bottom = boundaries.bottom - padding;
+    boundaries.left = Math.min(boundaries.left + padding, padding);
+    boundaries.right -= (2 * padding);
+    boundaries.top = Math.min(boundaries.top + padding, padding);
+    boundaries.bottom -= (2 * padding);
     return boundaries;
 }
