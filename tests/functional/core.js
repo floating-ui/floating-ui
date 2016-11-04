@@ -343,7 +343,7 @@ describe('[core]', () => {
         var popper = appendNewPopper(2, 'popper', scrolling);
 
         new Popper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate((data) => {
-            expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
+            expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5, 5); // 5 is the boundaries margin
             expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
 
             data.instance.destroy();
