@@ -98,7 +98,9 @@ describe('[core]', () => {
         scrolling.appendChild(superHigh2);
 
         scrolling.scrollTop = 400;
-        new Popper(ref, popper, { placement: 'top', boundariesElement: scrolling })
+        new Popper(ref, popper, {
+            placement: 'top'
+        })
         .onCreate(() => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
@@ -250,12 +252,8 @@ describe('[core]', () => {
         var reference = appendNewRef(1);
         var popper    = appendNewPopper(2, 'react');
 
-        var pop = new Popper(reference, popper, {
-            modifiers: {
-                applyStyle: { enabled: false }
-            }
-        }).onUpdate((data) => {
-            expect(data.offsets.popper.top).toBeApprox(46);
+        var pop = new Popper(reference, popper).onUpdate((data) => {
+            expect(data.offsets.popper.top).toBeApprox(data.offsets.reference.bottom);
             jasmineWrapper.removeChild(data.instance.popper);
             data.instance.destroy();
             done();
@@ -342,7 +340,9 @@ describe('[core]', () => {
         ref.style.marginTop = '100px';
         var popper = appendNewPopper(2, 'popper', scrolling);
 
-        new Popper(ref, popper, { placement: 'right-start', boundariesElement: scrolling }).onCreate((data) => {
+        new Popper(ref, popper, {
+            placement: 'right-start'
+        }).onCreate((data) => {
             expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
             expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
 
@@ -355,7 +355,6 @@ describe('[core]', () => {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
-        relative.style.height = '200vh';
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
@@ -365,10 +364,18 @@ describe('[core]', () => {
         ref.style.width = '100px';
         ref.style.height = '100px';
         ref.style.marginTop = '2000px';
+        ref.style.marginBottom = '200px';
         var popper = appendNewPopper(2, 'popper', relative);
 
-        new Popper(ref, popper, { placement: 'bottom', boundariesElement: 'viewport' }).onCreate((data) => {
-            expect(getRect(popper).bottom + 5).toBeApprox(getRect(ref).top, 'Popper should stay near its reference element'); // 5 is the arrow size
+        new Popper(ref, popper,{
+            placement: 'bottom',
+            modifiers: {
+                flip: {
+                    boundariesElemeent:'viewport'
+                }
+            }
+        }).onCreate((data) => {
+            expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
             data.instance.destroy();
             done();

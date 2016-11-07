@@ -13,7 +13,8 @@ beforeEach(function() {
             };
         }
     });
-    
+
     const jasmineWrapper = document.getElementById('jasmineWrapper');
     jasmineWrapper.innerHTML = '';
+    jasmineWrapper.style.minHeight = '100vh';
 });

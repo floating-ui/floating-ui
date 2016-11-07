@@ -41,7 +41,7 @@ describe('[flipping]', () => {
             var popper = appendNewPopper(2, 'popper');
 
             new Popper(ref, popper,
-                { placement: val, boundariesElement: relative }).onCreate((data) => {
+                { placement: val, modifiers: { flip: { boundariesElement: relative } } }).onCreate((data) => {
                 expect(data.flipped).toBe(true);
                 expect(data.placement).toBe(getOppositePlacement(val));
                 expect(data.originalPlacement).toBe(val);
@@ -119,14 +119,15 @@ describe('[flipping]', () => {
             var popper = appendNewPopper(2, 'popper');
 
             new Popper(ref, popper,
-                { placement: val, boundariesElement: relative,
+                { placement: val,
                     modifiers: {
                         preventOverflow: {
                             enabled: true,
                             moveWithTarget: true
                         },
                         flip: {
-                            flipVariations: true
+                            flipVariations: true,
+                            boundariesElement: relative
                         }
                     } }).onCreate((data) => {
                 expect(data.flipped).toBe(true);

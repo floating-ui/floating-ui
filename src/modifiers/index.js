@@ -35,13 +35,17 @@ export default {
     offset,
     preventOverflow,
     shift,
-    hide
+    hide,
 };
 
 import { applyStyleOnLoad } from './applyStyle';
+import { preventOverflowOnLoad } from './preventOverflow';
+import { flipOnLoad } from './flip';
 
 export const modifiersOnLoad = {
-    applyStyleOnLoad
+    applyStyleOnLoad,
+    preventOverflowOnLoad,
+    flipOnLoad,
 };
 
 

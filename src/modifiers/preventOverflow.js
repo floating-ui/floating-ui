@@ -1,5 +1,7 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
+import getScrollParent from '../utils/getScrollParent';
+import getBoundaries from '../utils/getBoundaries';
 
 /**
  * Modifier used to make sure the popper does not overflows from it's boundaries
@@ -31,29 +33,29 @@ export default function preventOverflow(data, options) {
     const check = {
         left() {
             let left = popper.left;
-            if (popper.left < data.boundaries.left && !shouldMoveWithTarget('left')) {
-                left = Math.max(popper.left, data.boundaries.left);
+            if (popper.left < options.boundaries.left && !shouldMoveWithTarget('left')) {
+                left = Math.max(popper.left, options.boundaries.left);
             }
             return { left: left };
         },
         right() {
             let left = popper.left;
-            if (popper.right > data.boundaries.right && !shouldMoveWithTarget('right')) {
-                left = Math.min(popper.left, data.boundaries.right - popper.width);
+            if (popper.right > options.boundaries.right && !shouldMoveWithTarget('right')) {
+                left = Math.min(popper.left, options.boundaries.right - popper.width);
             }
             return { left: left };
         },
         top() {
             let top = popper.top;
-            if (popper.top < data.boundaries.top && !shouldMoveWithTarget('top')) {
-                top = Math.max(popper.top, data.boundaries.top);
+            if (popper.top < options.boundaries.top && !shouldMoveWithTarget('top')) {
+                top = Math.max(popper.top, options.boundaries.top);
             }
             return { top: top };
         },
         bottom() {
             let top = popper.top;
-            if (popper.bottom > data.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
-                top = Math.min(popper.top, data.boundaries.bottom - popper.height);
+            if (popper.bottom > options.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
+                top = Math.min(popper.top, options.boundaries.bottom - popper.height);
             }
             return { top: top };
         }
@@ -64,4 +66,17 @@ export default function preventOverflow(data, options) {
     });
 
     return data;
+}
+
+export function preventOverflowOnLoad(reference, popper, options, modifierOptions) {
+    const padding = modifierOptions.padding;
+    let scrollParent = getScrollParent(popper);
+
+    // To get informations about the scroll position on Firefox we need documentElement.
+    // But obviously, Firefox doesn't give us the real document height if we read documentElement
+    // it returns the window height. To fix this, always make sure to use body instead.
+    scrollParent === window.document.documentElement && (scrollParent = window.document.body);
+    const scrollParentRect = getBoundaries(popper, padding, scrollParent);
+
+    modifierOptions.boundaries = scrollParentRect;
 }

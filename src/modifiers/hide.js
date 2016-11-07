@@ -1,3 +1,5 @@
+import isModifierRequired from '../utils/isModifierRequired';
+
 /**
  * Modifier used to hide the popper when its reference element is outside of the
  * popper boundaries. It will set an x-hidden attribute which can be used to hide
@@ -9,8 +11,13 @@
  * @returns {Object} The data object, properly modified
  */
 export default function hide(data) {
+    if (!isModifierRequired(data.instance.modifiers, 'hide', 'preventOverflow')) {
+        console.warn('WARNING: preventOverflow modifier is required by hide modifier in order to work, be sure to include it before hide!');
+        return data;
+    }
+
     const refRect = data.offsets.reference;
-    const bound = data.boundaries;
+    const bound = data.instance.modifiers.filter((modifier) => modifier.name ==='preventOverflow')[0].boundaries;
 
     if (
         refRect.bottom < bound.top ||
@@ -18,9 +25,15 @@ export default function hide(data) {
         refRect.top > bound.bottom ||
         refRect.right < bound.left
     ) {
+        // Avoid unnecessary DOM access if visibility hasn't changed
+        if (data.hide === true) { return data; }
+
         data.hide = true;
         data.instance.popper.setAttribute('x-out-of-boundaries', '');
     } else {
+        // Avoid unnecessary DOM access if visibility hasn't changed
+        if (data.hide === false) { return data; }
+
         data.hide = false;
         data.instance.popper.removeAttribute('x-out-of-boundaries');
     }
