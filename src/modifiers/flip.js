@@ -27,7 +27,7 @@ export default function flip(data, options) {
 
     let flipOrder = [];
 
-    if(options.behavior === 'flip') {
+    if (options.behavior === 'flip') {
         flipOrder = [
             placement,
             placementOpposite
@@ -46,30 +46,33 @@ export default function flip(data, options) {
 
         const popperOffsets = getPopperClientRect(data.offsets.popper);
 
-        // this boolean is used to distinguish right and bottom from top and left
-        // they need different computations to get flipped
-        const a = ['right', 'bottom'].indexOf(placement) !== -1;
-        const b = ['top', 'bottom'].indexOf(placement) !== -1;
+        console.log({ ...{}, boundaries: options.boundaries, popperOffsets });
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
-        const flippedPosition = a && Math.floor(popperOffsets[placement]) > Math.floor(options.boundaries[placement]) ||
-            !a && Math.floor(popperOffsets[placement]) < Math.floor(options.boundaries[placement]);
+        const flippedPosition = (
+            Math.floor(popperOffsets.right) > Math.floor(options.boundaries.right) ||
+            Math.floor(popperOffsets.left) < Math.floor(options.boundaries.left) ||
+            Math.floor(popperOffsets.top) < Math.floor(options.boundaries.top) ||
+            Math.floor(popperOffsets.bottom) > Math.floor(options.boundaries.bottom)
+        );
 
+        // flip the variation if required
+        const isVertical = ['top', 'bottom'].includes(placement);
         const flippedVariation = options.flipVariations && (
-            b && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(options.boundaries.left) ||
-            b && (variation === 'end') && Math.floor(popperOffsets.right) > Math.floor(options.boundaries.right) ||
-            !b && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(options.boundaries.top) ||
-            !b && (variation === 'end') && Math.floor(popperOffsets.bottom) > Math.floor(options.boundaries.bottom));
+            isVertical  && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(options.boundaries.left) ||
+            isVertical  && (variation === 'end')   && Math.floor(popperOffsets.right) > Math.floor(options.boundaries.right) ||
+            !isVertical && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(options.boundaries.top) ||
+            !isVertical && (variation === 'end')   && Math.floor(popperOffsets.bottom) > Math.floor(options.boundaries.bottom)
+        );
 
-        if (
-            flippedPosition || flippedVariation
-        ) {
+        if (flippedPosition || flippedVariation) {
             // this boolean to detect any flip loop
             data.flipped = true;
 
             if (flippedPosition) {
                 placement = flipOrder[index + 1];
             }
+
             if (flippedVariation) {
                 variation = getOppositeVariation(variation);
             }

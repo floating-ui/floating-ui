@@ -53,6 +53,7 @@ var DEFAULTS = {
             // amount of pixel used to define a minimum distance between the boundaries and the popper
             // this makes sure the popper has always a little padding between the edges of its container
             padding: 5,
+            boundariesElement: 'offsetParent',
         },
         keepTogether: {
             order: 400,
