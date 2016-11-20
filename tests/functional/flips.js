@@ -123,7 +123,7 @@ describe('[flipping]', () => {
                     modifiers: {
                         preventOverflow: {
                             enabled: true,
-                            moveWithTarget: true
+                            escapeWithReference: true
                         },
                         flip: {
                             flipVariations: true,
