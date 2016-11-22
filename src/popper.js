@@ -320,11 +320,16 @@ export default class Popper {
      */
     destroy() {
         this.state.isDestroyed = true;
-        this.popper.removeAttribute('x-placement');
-        this.popper.style.left = '';
-        this.popper.style.position = '';
-        this.popper.style.top = '';
-        this.popper.style[getSupportedPropertyName('transform')] = '';
+        if (this.options.modifiers &&
+            this.options.modifiers.applyStyle &&
+            this.options.modifiers.applyStyle.enabled
+        ) {
+            this.popper.removeAttribute('x-placement');
+            this.popper.style.left = '';
+            this.popper.style.position = '';
+            this.popper.style.top = '';
+            this.popper.style[getSupportedPropertyName('transform')] = '';
+        }
         this.state = removeEventListeners(this.reference, this.state);
 
         // remove the popper if user explicity asked for the deletion on destroy
