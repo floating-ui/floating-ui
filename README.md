@@ -101,7 +101,7 @@ A modifier is a function that is called each time Popper.js needs to compute the
 ```
 // this little modifier forces the popper `top` value to be `0`
 function fixToTop(data) {
-    data.popper.offsets.top = 0
+    data.offsets.popper.top = 0
     return data;
 }
 ```
