@@ -50,19 +50,19 @@ export default function flip(data, options) {
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
         const flippedPosition = (
-            Math.floor(popperOffsets.right) > Math.floor(boundaries.right) ||
-            Math.floor(popperOffsets.left) < Math.floor(boundaries.left) ||
-            Math.floor(popperOffsets.top) < Math.floor(boundaries.top) ||
-            Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom)
+            (placement === 'left'   && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
+            (placement === 'right'  && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||
+            (placement === 'top'    && Math.floor(popperOffsets.top) < Math.floor(boundaries.top)) ||
+            (placement === 'bottom' && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom))
         );
 
         // flip the variation if required
         const isVertical = ['top', 'bottom'].includes(placement);
-        const flippedVariation = options.flipVariations && (
-            isVertical  && (variation === 'start') && Math.floor(popperOffsets.left) < Math.floor(boundaries.left) ||
-            isVertical  && (variation === 'end')   && Math.floor(popperOffsets.right) > Math.floor(boundaries.right) ||
-            !isVertical && (variation === 'start') && Math.floor(popperOffsets.top) < Math.floor(boundaries.top) ||
-            !isVertical && (variation === 'end')   && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom)
+        const flippedVariation = !!options.flipVariations && (
+            (isVertical  && variation === 'start' && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
+            (isVertical  && variation === 'end'   && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||
+            (!isVertical && variation === 'start' && Math.floor(popperOffsets.top) < Math.floor(boundaries.top)) ||
+            (!isVertical && variation === 'end'   && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom))
         );
 
         if (flippedPosition || flippedVariation) {
