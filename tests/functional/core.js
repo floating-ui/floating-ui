@@ -110,7 +110,7 @@ describe('[core]', () => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
-            // scrolling.scrollTop = 100;
+            scrolling.scrollTop = 100;
         })
         .onUpdate((data) => {
             // placement should be top

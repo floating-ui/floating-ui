@@ -57,7 +57,7 @@ export default function flip(data, options) {
         );
 
         // flip the variation if required
-        const isVertical = ['top', 'bottom'].includes(placement);
+        const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
         const flippedVariation = !!options.flipVariations && (
             (isVertical  && variation === 'start' && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
             (isVertical  && variation === 'end'   && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||

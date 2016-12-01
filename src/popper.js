@@ -237,7 +237,11 @@ export default class Popper {
      * @memberof Popper
      */
     update() {
-        var data = { instance: this, styles: {} };
+        var data = {
+            instance: this,
+            styles: {},
+            flipped: false,
+        };
 
         // make sure to apply the popper position before any computation
         this.state.position = getPosition(this.reference);
