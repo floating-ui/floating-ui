@@ -9,6 +9,10 @@ import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
 
 describe('[core]', () => {
+    afterEach(function() {
+        jasmineWrapper.scrollTop = 0;
+    });
+
     const arrowSize = 5;
 
     it('can access the AMD module to create a new instance', () => {
@@ -106,7 +110,7 @@ describe('[core]', () => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
-            scrolling.scrollTop = 100;
+            // scrolling.scrollTop = 100;
         })
         .onUpdate((data) => {
             // placement should be top
@@ -149,7 +153,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper).onCreate((data) => {
             expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
             data.instance.destroy();
             done();
         });
@@ -176,7 +180,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper, { modifiers: { flip: { enabled: false }}}).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
             data.instance.destroy();
             done();
         });
@@ -205,7 +209,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5);
+            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
             data.instance.destroy();
             done();
         });
@@ -231,7 +235,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper, { placement: 'top', modifiers: { flip: { enabled: !false }} }).onCreate((data) => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-            expect(getRect(popper).left).toBeApprox(5);
+            expect(getRect(popper).left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
             expect(popper.getAttribute('x-placement')).toBe('top');
             data.instance.destroy();
             done();
@@ -314,7 +318,7 @@ describe('[core]', () => {
         });
     });
 
-    fit('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', (done) => {
+    it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', (done) => {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
@@ -351,7 +355,7 @@ describe('[core]', () => {
             expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
             expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
 
-            // data.instance.destroy();
+            data.instance.destroy();
             done();
         });
     });

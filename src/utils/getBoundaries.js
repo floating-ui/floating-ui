@@ -2,6 +2,7 @@ import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
+import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
 
 /**
  * Computed the boundaries limits and return them
@@ -15,10 +16,11 @@ import getPosition from './getPosition';
 export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     let boundaries = {};
+    const offsetParent = getOffsetParent(popper);
+    const scrollParent = getScrollParent(popper);
 
     if (boundariesElement === 'window') {
         // WINDOW
-        console.log('WINDOW');
         const body = window.document.body;
         const html = window.document.documentElement;
         const height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
@@ -32,9 +34,6 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         };
     } else if (boundariesElement === 'viewport') {
         // VIEWPORT
-        console.log('VIEWPORT');
-        const offsetParent = getOffsetParent(popper);
-        const scrollParent = getScrollParent(popper);
         const offsetParentRect = getOffsetRect(offsetParent);
         const position = getPosition(popper);
 
@@ -46,29 +45,19 @@ export default function getBoundaries(popper, padding, boundariesElement) {
                 left: 0,
             }
         } else {
-            const scrollTop = scrollParent.scrollTop;
-            const scrollLeft =scrollParent.scrollLeft;
-
             boundaries = {
-                top: 0 - (offsetParentRect.top - scrollTop),
-                right: window.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
-                bottom: window.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
-                left: 0 - (offsetParentRect.left - scrollLeft)
+                top: 0 - offsetParentRect.top,
+                right: window.document.documentElement.clientWidth - offsetParentRect.left,
+                bottom: window.document.documentElement.clientHeight - offsetParentRect.top,
+                left: 0 - offsetParentRect.left
             };
         }
 
-    } else if (getOffsetParent(popper) === boundariesElement || boundariesElement === 'offsetParent') {
-        // OFFSET PARENT IS BOUNDARIES ELEMENT
-        console.log('OFFSET PARENT IS BOUNDARIES ELEMENT OR OFFSET PARENT EXPLICIT');
-        boundaries = {
-            top: 0,
-            left: 0,
-            right: boundariesElement.clientWidth,
-            bottom: boundariesElement.clientHeight,
-        };
+    } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
+        // SCROLL PARENT IS BOUNDARIES ELEMENT
+        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
     } else {
         // BOUNDARIES ELEMENT
-        console.log('BOUNDARIES ELEMENT');
         boundaries = getOffsetRect(boundariesElement);
     }
 
