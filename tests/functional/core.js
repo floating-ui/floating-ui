@@ -41,7 +41,7 @@ describe('[core]', () => {
         var pop = new Popper(reference, popper);
 
         var top = popper.getBoundingClientRect().top;
-        expect(top).toBeApprox(51);
+        expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
 
         pop.destroy();
     });
@@ -153,7 +153,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper).onCreate((data) => {
             expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
             done();
         });
@@ -180,7 +180,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper, { modifiers: { flip: { enabled: false }}}).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
             done();
         });
@@ -209,7 +209,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
-            expect(popper.getBoundingClientRect().left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
+            expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
             done();
         });
@@ -235,7 +235,7 @@ describe('[core]', () => {
 
         new Popper(ref, popper, { placement: 'top', modifiers: { flip: { enabled: !false }} }).onCreate((data) => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-            expect(getRect(popper).left).toBeApprox(5 + 8); // 5px popper padding + 8px body margin
+            expect(getRect(popper).left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
             data.instance.destroy();
             done();
