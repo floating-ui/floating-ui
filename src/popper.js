@@ -46,13 +46,13 @@ var DEFAULTS = {
             order: 300,
             enabled: true,
             function: modifiersFunctions.preventOverflow,
-            onLoad: modifiersOnLoadFunctions.preventOverflowOnLoad,
             // popper will try to prevent overflow following these priorities
             //  by default, then, it could overflow on the left and on top of the boundariesElement
             priority: ['left', 'right', 'top', 'bottom'],
             // amount of pixel used to define a minimum distance between the boundaries and the popper
             // this makes sure the popper has always a little padding between the edges of its container
             padding: 5,
+            boundariesElement: 'scrollParent',
         },
         keepTogether: {
             order: 400,
@@ -70,7 +70,6 @@ var DEFAULTS = {
             order: 600,
             enabled: true,
             function: modifiersFunctions.flip,
-            onLoad: modifiersOnLoadFunctions.flipOnLoad,
             // the behavior used to change the popper's placement
             behavior: 'flip',
             // the popper will flip if it hits the edges of the boundariesElement - padding
@@ -238,7 +237,11 @@ export default class Popper {
      * @memberof Popper
      */
     update() {
-        var data = { instance: this, styles: {} };
+        var data = {
+            instance: this,
+            styles: {},
+            flipped: false,
+        };
 
         // make sure to apply the popper position before any computation
         this.state.position = getPosition(this.reference);

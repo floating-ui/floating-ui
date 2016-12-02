@@ -9,7 +9,7 @@ import getScrollParent from './getScrollParent';
  * @param {HTMLElement} parent
  * @return {Object} rect
  */
-export default function getOffsetRectRelativeToCustomParent(element, parent, fixed, transformed) {
+export default function getOffsetRectRelativeToCustomParent(element, parent, fixed = false, transformed = false) {
     const elementRect = getBoundingClientRect(element);
     const parentRect = getBoundingClientRect(parent);
 

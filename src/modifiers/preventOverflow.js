@@ -1,6 +1,6 @@
 import getPopperClientRect from '../utils/getPopperClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
-import getScrollParent from '../utils/getScrollParent';
+import getOffsetParent from '../utils/getOffsetParent';
 import getBoundaries from '../utils/getBoundaries';
 
 /**
@@ -12,71 +12,66 @@ import getBoundaries from '../utils/getBoundaries';
  * @returns {Object} The data object, properly modified
  */
 export default function preventOverflow(data, options) {
-    function shouldMoveWithTarget(direction) {
+    function shouldNotMoveWithTarget(direction) {
         if (!options.moveWithTarget) {
-            return false;
+            return true;
         }
-        let placement = data.originalPlacement.split('-')[0];
+        const placement = data.originalPlacement.split('-')[0];
 
         if (data.flipped && placement === direction || placement === getOppositePlacement(direction)) {
-            return true;
+            return false;
         }
         if (placement !== direction && placement !== getOppositePlacement(direction)) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
+
+    const boundariesElement = options.boundariesElement || getOffsetParent(data.instance.popper);
+    const boundaries = getBoundaries(data.instance.popper, options.padding, boundariesElement);
+    options.boundaries = boundaries;
+
     const order = options.priority;
     const popper = getPopperClientRect(data.offsets.popper);
 
     const check = {
         left() {
             let left = popper.left;
-            if (popper.left < options.boundaries.left && !shouldMoveWithTarget('left')) {
-                left = Math.max(popper.left, options.boundaries.left);
+            if (popper.left < boundaries.left && shouldNotMoveWithTarget('left')) {
+                left = Math.max(popper.left, boundaries.left);
             }
-            return { left: left };
+            return { left };
         },
         right() {
             let left = popper.left;
-            if (popper.right > options.boundaries.right && !shouldMoveWithTarget('right')) {
-                left = Math.min(popper.left, options.boundaries.right - popper.width);
+            if (popper.right > boundaries.right && shouldNotMoveWithTarget('right')) {
+                left = Math.min(popper.left, boundaries.right - popper.width);
             }
-            return { left: left };
+            return { left };
         },
         top() {
             let top = popper.top;
-            if (popper.top < options.boundaries.top && !shouldMoveWithTarget('top')) {
-                top = Math.max(popper.top, options.boundaries.top);
+            if (popper.top < boundaries.top && shouldNotMoveWithTarget('top')) {
+                top = Math.max(popper.top, boundaries.top);
             }
-            return { top: top };
+            return { top };
         },
         bottom() {
             let top = popper.top;
-            if (popper.bottom > options.boundaries.bottom && !shouldMoveWithTarget('bottom')) {
-                top = Math.min(popper.top, options.boundaries.bottom - popper.height);
+            if (popper.bottom > boundaries.bottom && shouldNotMoveWithTarget('bottom')) {
+                top = Math.min(popper.top, boundaries.bottom - popper.height);
             }
-            return { top: top };
+            return { top };
         }
     };
 
     order.forEach((direction) => {
-        data.offsets.popper = Object.assign(popper, check[direction]());
+        data.offsets.popper = Object.assign(
+            popper,
+            check[direction]()
+        );
     });
 
     return data;
-}
-
-export function preventOverflowOnLoad(reference, popper, options, modifierOptions) {
-    const padding = modifierOptions.padding;
-    let scrollParent = getScrollParent(popper);
-
-    // To get informations about the scroll position on Firefox we need documentElement.
-    // But obviously, Firefox doesn't give us the real document height if we read documentElement
-    // it returns the window height. To fix this, always make sure to use body instead.
-    scrollParent === window.document.documentElement && (scrollParent = window.document.body);
-    const scrollParentRect = getBoundaries(popper, padding, scrollParent);
-
-    modifierOptions.boundaries = scrollParentRect;
 }

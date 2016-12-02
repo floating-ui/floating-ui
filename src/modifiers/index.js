@@ -39,13 +39,9 @@ export default {
 };
 
 import { applyStyleOnLoad } from './applyStyle';
-import { preventOverflowOnLoad } from './preventOverflow';
-import { flipOnLoad } from './flip';
 
 export const modifiersOnLoad = {
     applyStyleOnLoad,
-    preventOverflowOnLoad,
-    flipOnLoad,
 };
 
 

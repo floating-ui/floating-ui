@@ -9,6 +9,10 @@ import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
 
 describe('[core]', () => {
+    afterEach(function() {
+        jasmineWrapper.scrollTop = 0;
+    });
+
     const arrowSize = 5;
 
     it('can access the AMD module to create a new instance', () => {
@@ -37,7 +41,7 @@ describe('[core]', () => {
         var pop = new Popper(reference, popper);
 
         var top = popper.getBoundingClientRect().top;
-        expect(top).toBeApprox(51);
+        expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
 
         pop.destroy();
     });
@@ -70,52 +74,52 @@ describe('[core]', () => {
     });
 
     // Commented, waiting for https://github.com/FezVrasta/popper.js/pull/97
-    // it('inits a popper inside a scrolling div, contained in a relative div', (done) => {
-    //     var relative = document.createElement('div');
-    //     relative.style.width = '800px';
-    //     relative.style.height = '700px';
-    //     relative.style.position = 'relative';
-    //     relative.style.backgroundColor = 'green';
-    //     jasmineWrapper.appendChild(relative);
-    //
-    //     var scrolling = document.createElement('div');
-    //     scrolling.style.width = '800px';
-    //     scrolling.style.height = '500px';
-    //     scrolling.style.overflow = 'auto';
-    //     scrolling.style.backgroundColor = 'blue';
-    //     relative.appendChild(scrolling);
-    //
-    //     var superHigh1 = document.createElement('div');
-    //     superHigh1.style.width = '800px';
-    //     superHigh1.style.height = '500px';
-    //     scrolling.appendChild(superHigh1);
-    //
-    //     var ref = appendNewRef(1, 'ref', scrolling);
-    //     var popper = appendNewPopper(2, 'popper', scrolling);
-    //
-    //     var superHigh2 = document.createElement('div');
-    //     superHigh2.style.width = '800px';
-    //     superHigh2.style.height = '500px';
-    //     scrolling.appendChild(superHigh2);
-    //
-    //     scrolling.scrollTop = 400;
-    //     new Popper(ref, popper, {
-    //         placement: 'top'
-    //     })
-    //     .onCreate(() => {
-    //         // placement should be top
-    //         expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-    //
-    //         scrolling.scrollTop = 100;
-    //     })
-    //     .onUpdate((data) => {
-    //         // placement should be top
-    //         expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-    //
-    //         data.instance.destroy();
-    //         done();
-    //     });
-    // });
+    it('inits a popper inside a scrolling div, contained in a relative div', (done) => {
+        var relative = document.createElement('div');
+        relative.style.width = '800px';
+        relative.style.height = '700px';
+        relative.style.position = 'relative';
+        relative.style.backgroundColor = 'green';
+        jasmineWrapper.appendChild(relative);
+
+        var scrolling = document.createElement('div');
+        scrolling.style.width = '800px';
+        scrolling.style.height = '500px';
+        scrolling.style.overflow = 'auto';
+        scrolling.style.backgroundColor = 'blue';
+        relative.appendChild(scrolling);
+
+        var superHigh1 = document.createElement('div');
+        superHigh1.style.width = '800px';
+        superHigh1.style.height = '500px';
+        scrolling.appendChild(superHigh1);
+
+        var ref = appendNewRef(1, 'ref', scrolling);
+        var popper = appendNewPopper(2, 'popper', scrolling);
+
+        var superHigh2 = document.createElement('div');
+        superHigh2.style.width = '800px';
+        superHigh2.style.height = '500px';
+        scrolling.appendChild(superHigh2);
+
+        scrolling.scrollTop = 400;
+        new Popper(ref, popper, {
+            placement: 'top'
+        })
+        .onCreate(() => {
+            // placement should be top
+            expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
+
+            scrolling.scrollTop = 100;
+        })
+        .onUpdate((data) => {
+            // placement should be top
+            expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
+
+            data.instance.destroy();
+            done();
+        });
+    });
 
     it('inits a popper inside a body, with its reference element inside a relative div', (done) => {
         var relative = document.createElement('div');
@@ -161,6 +165,7 @@ describe('[core]', () => {
         fixed.style.margin = '20px';
         fixed.style.height = '50px';
         fixed.style.width = '100%';
+        fixed.style.backgroundColor = 'grey';
         jasmineWrapper.appendChild(fixed);
 
         var relative = document.createElement('div');
@@ -173,7 +178,7 @@ describe('[core]', () => {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new Popper(ref, popper).onCreate((data) => {
+        new Popper(ref, popper, { modifiers: { flip: { enabled: false }}}).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
@@ -213,7 +218,7 @@ describe('[core]', () => {
     it('inits a popper near a reference element, both inside a fixed element on bottom of viewport, inside a scrolled body', (done) => {
         var fixed = document.createElement('div');
         fixed.style.position = 'fixed';
-        fixed.style.bottom = '0';
+        fixed.style.bottom = '5px';
         fixed.style.height = '38px';
         fixed.style.width = '100%';
         jasmineWrapper.appendChild(fixed);
@@ -228,7 +233,7 @@ describe('[core]', () => {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new Popper(ref, popper, { placement: 'top' }).onCreate((data) => {
+        new Popper(ref, popper, { placement: 'top', modifiers: { flip: { enabled: !false }} }).onCreate((data) => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
             expect(getRect(popper).left).toBeApprox(5);
             expect(popper.getAttribute('x-placement')).toBe('top');
@@ -356,6 +361,11 @@ describe('[core]', () => {
     });
 
     it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
+        // FIXME: Skip IE10 for now
+        if (navigator.appVersion.indexOf("MSIE 10") !== -1) {
+            return done();
+        }
+
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
