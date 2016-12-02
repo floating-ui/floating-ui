@@ -22,12 +22,18 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
     }
 
     const rect = {
-        top: elementRect.top - parentRect.top ,
-        left: elementRect.left - parentRect.left ,
+        top: elementRect.top - parentRect.top,
+        left: elementRect.left - parentRect.left,
         bottom: (elementRect.top - parentRect.top) + elementRect.height,
         right: (elementRect.left - parentRect.left) + elementRect.width,
         width: elementRect.width,
-        height: elementRect.height
+        height: elementRect.height,
     };
+
+    const { scrollTop, scrollLeft } = parent;
+    rect.top += scrollTop;
+    rect.bottom += scrollTop;
+    rect.left += scrollLeft;
+    rect.right += scrollLeft;
     return rect;
 }
