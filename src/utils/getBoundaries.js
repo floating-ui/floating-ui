@@ -56,15 +56,15 @@ export default function getBoundaries(popper, padding, boundariesElement) {
     } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
-
-        if (scrollParent === offsetParent) {
-            const { scrollLeft, scrollTop } = scrollParent;
-            boundaries.right += scrollLeft;
-            boundaries.bottom += scrollTop;
-        }
     } else {
         // BOUNDARIES ELEMENT
         boundaries = getOffsetRect(boundariesElement);
+    }
+
+    if (offsetParent.contains(scrollParent)) {
+        const { scrollLeft, scrollTop } = scrollParent;
+        boundaries.right += scrollLeft;
+        boundaries.bottom += scrollTop;
     }
 
     // Add paddings

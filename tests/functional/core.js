@@ -521,7 +521,7 @@ describe('[core]', () => {
         });
     });
 
-    fit('init a popper near the right side of its container and make sure it stays between boundaries', (done) => {
+    it('init a popper near the right side of its container and make sure it stays between boundaries', (done) => {
         const container = document.createElement('div');
         container.style.width = '800px';
         container.style.height = '600px';
@@ -562,8 +562,108 @@ describe('[core]', () => {
             expect(getRect(dropdown).right).toBe(getRect(container).right - 5);
             container.scrollLeft = scrollLeft;
         }).onUpdate((data) => {
-            //expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
-            //data.instance.destroy();
+            expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('init a popper near the right side of its container and make sure it stays between custom boundaries', (done) => {
+        const container = document.createElement('div');
+        container.style.width = '800px';
+        container.style.height = '600px';
+        container.style.background = 'grey';
+        container.style.position = 'relative';
+        container.style.overflow = 'scroll'
+
+        const scroller = document.createElement('div');
+        scroller.style.width = '2000px';
+        scroller.style.height = '1px';
+
+        const button = document.createElement('div');
+        button.style.width ='20px';
+        button.style.height = '50px';
+        button.style.position = 'absolute';
+        button.style.top = 0;
+        button.style.right = 0;
+        button.style.background = 'green';
+
+        const dropdown = document.createElement('div');
+        dropdown.style.background = 'yellow';
+        dropdown.style.position = 'absolute';
+        dropdown.style.height = '200px';
+        dropdown.style.width = '150px';
+
+        container.appendChild(button);
+        container.appendChild(dropdown);
+        container.appendChild(scroller);
+        jasmineWrapper.appendChild(container);
+
+        const scrollLeft = 50;
+
+        new Popper(
+            button,
+            dropdown,
+            {
+                placement: 'bottom-end',
+                modifiers: { preventOverflow: { boundariesElement: container }}
+            }
+        ).onCreate(() => {
+            expect(getRect(dropdown).right).toBe(getRect(container).right - 5);
+            container.scrollLeft = scrollLeft;
+        }).onUpdate((data) => {
+            expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('init a popper  near the right side of a custom container and make sure it stays between boundaries', (done) => {
+        const container = document.createElement('div');
+        container.style.width = '800px';
+        container.style.height = '600px';
+        container.style.background = 'grey';
+        container.style.position = 'relative';
+        container.style.overflow = 'scroll'
+
+        const scroller = document.createElement('div');
+        scroller.style.width = '2000px';
+        scroller.style.height = '1px';
+
+        const button = document.createElement('div');
+        button.style.width ='20px';
+        button.style.height = '50px';
+        button.style.position = 'absolute';
+        button.style.top = 0;
+        button.style.right = 0;
+        button.style.background = 'green';
+
+        const dropdown = document.createElement('div');
+        dropdown.style.background = 'yellow';
+        dropdown.style.position = 'absolute';
+        dropdown.style.height = '200px';
+        dropdown.style.width = '150px';
+
+        container.appendChild(button);
+        container.appendChild(scroller);
+        jasmineWrapper.appendChild(container);
+        jasmineWrapper.appendChild(dropdown);
+
+        const scrollLeft = 50;
+
+        new Popper(
+            button,
+            dropdown,
+            {
+                placement: 'bottom-end',
+                modifiers: { preventOverflow: { boundariesElement: container }}
+            }
+        ).onCreate(() => {
+            expect(getRect(dropdown).right).toBe(getRect(container).right - 5);
+            container.scrollLeft = scrollLeft;
+        }).onUpdate((data) => {
+            expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            data.instance.destroy();
             done();
         });
     });
