@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
     (global.Tooltip = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
     /**
      * Check if the given variable is a function
@@ -40,6 +40,77 @@
       };
     }();
 
+
+
+
+
+
+
+    var get = function get(object, property, receiver) {
+      if (object === null) object = Function.prototype;
+      var desc = Object.getOwnPropertyDescriptor(object, property);
+
+      if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+
+        if (parent === null) {
+          return undefined;
+        } else {
+          return get(parent, property, receiver);
+        }
+      } else if ("value" in desc) {
+        return desc.value;
+      } else {
+        var getter = desc.get;
+
+        if (getter === undefined) {
+          return undefined;
+        }
+
+        return getter.call(receiver);
+      }
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var set = function set(object, property, value, receiver) {
+      var desc = Object.getOwnPropertyDescriptor(object, property);
+
+      if (desc === undefined) {
+        var parent = Object.getPrototypeOf(object);
+
+        if (parent !== null) {
+          set(parent, property, value, receiver);
+        }
+      } else if ("value" in desc && desc.writable) {
+        desc.value = value;
+      } else {
+        var setter = desc.set;
+
+        if (setter !== undefined) {
+          setter.call(receiver, value);
+        }
+      }
+
+      return value;
+    };
+
+    /* global Popper */
+
     var Tooltip = function () {
         /**
          * @param {HTMLElement} target - The DOM node used as target of the tooltip (it can be a jQuery element).
@@ -68,7 +139,7 @@
          * @return {Object} instance - The generated tooltip instance
          */
         function Tooltip(target) {
-            var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+            var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             classCallCheck(this, Tooltip);
             this.arrowSelector = '.tooltip-arrow, .tooltip__arrow';
             this.innerSelector = '.tooltip-inner, .tooltip__inner';
@@ -242,4 +313,4 @@
 
     return Tooltip;
 
-}));
+})));
