@@ -12,6 +12,7 @@ import getSupportedPropertyName from './getSupportedPropertyName';
 import isFixed from './isFixed';
 import isFunction from './isFunction';
 import isModifierRequired from './isModifierRequired';
+import isModifierEnabled from './isModifierEnabled';
 import isNumeric from './isNumeric';
 import isTransformed from './isTransformed';
 import runModifiers from './runModifiers';
@@ -33,6 +34,7 @@ export default {
     isFixed,
     isFunction,
     isModifierRequired,
+    isModifierEnabled,
     isNumeric,
     isTransformed,
     runModifiers,
