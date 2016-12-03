@@ -386,7 +386,7 @@ describe('[core]', () => {
             placement: 'bottom',
             modifiers: {
                 flip: {
-                    boundariesElemeent:'viewport'
+                    boundariesElement:'viewport'
                 }
             }
         }).onCreate((data) => {
