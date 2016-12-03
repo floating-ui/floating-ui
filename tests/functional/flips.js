@@ -11,7 +11,8 @@ describe('[flipping]', () => {
         'top', 'top-start', 'top-end',
         'bottom', 'bottom-start', 'bottom-end',
         'left', 'left-start', 'left-end',
-        'right', 'right-start', 'right-end',];
+        'right', 'right-start', 'right-end',
+    ];
 
     const flippingVariations = {
         'top-start' : 'top-end',
@@ -40,8 +41,10 @@ describe('[flipping]', () => {
             // ref.style.marginTop = '100px';
             var popper = appendNewPopper(2, 'popper');
 
-            new Popper(ref, popper,
-                { placement: val, modifiers: { flip: { boundariesElement: relative } } }).onCreate((data) => {
+            new Popper(ref, popper, {
+                placement: val,
+                modifiers: { flip: { boundariesElement: relative } }
+            }).onCreate((data) => {
                 expect(data.flipped).toBe(true);
                 expect(data.placement).toBe(getOppositePlacement(val));
                 expect(data.originalPlacement).toBe(val);
@@ -65,8 +68,7 @@ describe('[flipping]', () => {
             // ref.style.marginTop = '100px';
             var popper = appendNewPopper(3, 'popper');
 
-            new Popper(ref, popper,
-                { placement: val }).onCreate((data) => {
+            new Popper(ref, popper, { placement: val }).onCreate((data) => {
                 expect(data.flipped).not.toBe(true);
                 expect(data.placement).toBe(val);
                 expect(data.originalPlacement).toBe(val);
@@ -118,18 +120,19 @@ describe('[flipping]', () => {
 
             var popper = appendNewPopper(2, 'popper');
 
-            new Popper(ref, popper,
-                { placement: val,
-                    modifiers: {
-                        preventOverflow: {
-                            enabled: true,
-                            moveWithTarget: true
-                        },
-                        flip: {
-                            flipVariations: true,
-                            boundariesElement: relative
-                        }
-                    } }).onCreate((data) => {
+            new Popper(ref, popper, {
+                placement: val,
+                modifiers: {
+                    preventOverflow: {
+                        enabled: true,
+                        escapeWithReference: true
+                    },
+                    flip: {
+                        flipVariations: true,
+                        boundariesElement: relative
+                    }
+                }
+            }).onCreate((data) => {
                 expect(data.flipped).toBe(true);
                 expect(data.placement).toBe(flippingVariations[val]);
                 expect(data.originalPlacement).toBe(val);

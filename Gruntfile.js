@@ -101,6 +101,7 @@ module.exports = function Gruntfile(grunt) {
                 frameworks: ['jasmine'],
                 singleRun: true,
                 browsers: browsers,
+                autoWatch: true,
                 customLaunchers: {
                     SLChrome: {
                         base: 'SauceLabs',

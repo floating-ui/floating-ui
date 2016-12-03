@@ -2,6 +2,7 @@ import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
+import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
 
 /**
  * Computed the boundaries limits and return them
@@ -15,7 +16,11 @@ import getPosition from './getPosition';
 export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     let boundaries = {};
+    const offsetParent = getOffsetParent(popper);
+    const scrollParent = getScrollParent(popper);
+
     if (boundariesElement === 'window') {
+        // WINDOW
         const body = window.document.body;
         const html = window.document.documentElement;
         const height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
@@ -28,36 +33,45 @@ export default function getBoundaries(popper, padding, boundariesElement) {
             left: 0
         };
     } else if (boundariesElement === 'viewport') {
-        const offsetParent = getOffsetParent(popper);
-        const scrollParent = getScrollParent(popper);
+        // VIEWPORT
         const offsetParentRect = getOffsetRect(offsetParent);
         const position = getPosition(popper);
 
-        // if the popper is fixed we don't have to substract scrolling from the boundaries
-        const scrollTop = position === 'fixed' ? 0 : scrollParent.scrollTop;
-        const scrollLeft = position === 'fixed' ? 0 : scrollParent.scrollLeft;
-
-        boundaries = {
-            top: 0 - (offsetParentRect.top - scrollTop),
-            right: window.document.documentElement.clientWidth - (offsetParentRect.left - scrollLeft),
-            bottom: window.document.documentElement.clientHeight - (offsetParentRect.top - scrollTop),
-            left: 0 - (offsetParentRect.left - scrollLeft)
-        };
-    } else {
-        if (getOffsetParent(popper) === boundariesElement) {
+        if (position === 'fixed') {
             boundaries = {
                 top: 0,
+                right: window.document.documentElement.clientWidth,
+                bottom: window.document.documentElement.clientHeight,
                 left: 0,
-                right: boundariesElement.clientWidth,
-                bottom: boundariesElement.clientHeight
-            };
+            }
         } else {
-            boundaries = getOffsetRect(boundariesElement);
+            boundaries = {
+                top: 0 - offsetParentRect.top,
+                right: window.document.documentElement.clientWidth - offsetParentRect.left,
+                bottom: window.document.documentElement.clientHeight - offsetParentRect.top,
+                left: 0 - offsetParentRect.left
+            };
         }
+
+    } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
+        // SCROLL PARENT IS BOUNDARIES ELEMENT
+        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
+    } else {
+        // BOUNDARIES ELEMENT
+        boundaries = getOffsetRect(boundariesElement);
     }
+
+    if (offsetParent.contains(scrollParent)) {
+        const { scrollLeft, scrollTop } = scrollParent;
+        boundaries.right += scrollLeft;
+        boundaries.bottom += scrollTop;
+    }
+
+    // Add paddings
     boundaries.left += padding;
+    boundaries.top += padding;
     boundaries.right -= padding;
-    boundaries.top = boundaries.top + padding;
-    boundaries.bottom = boundaries.bottom - padding;
+    boundaries.bottom -= padding;
+
     return boundaries;
 }

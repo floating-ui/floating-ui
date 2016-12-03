@@ -15,6 +15,7 @@ beforeEach(function() {
     });
 
     const jasmineWrapper = document.getElementById('jasmineWrapper');
+    document.body.style.margin = 0;
     jasmineWrapper.innerHTML = '';
     jasmineWrapper.style.minHeight = '100vh';
 });
