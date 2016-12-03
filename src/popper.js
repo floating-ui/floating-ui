@@ -15,6 +15,7 @@ import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
 import sortModifiers from './utils/sortModifiers';
+import isModifierEnabled from './utils/isModifierEnabled';
 
 // Modifiers
 import modifiersFunctions from './modifiers/index';
@@ -320,10 +321,7 @@ export default class Popper {
      */
     destroy() {
         this.state.isDestroyed = true;
-        if (this.options.modifiers &&
-            this.options.modifiers.applyStyle &&
-            this.options.modifiers.applyStyle.enabled
-        ) {
+        if (isModifierEnabled(this.modifiers, 'applyStyle')) {
             this.popper.removeAttribute('x-placement');
             this.popper.style.left = '';
             this.popper.style.position = '';
