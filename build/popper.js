@@ -1,7 +1,7 @@
 
 /*
 * @fileOverview Kickass library to create and place poppers near their reference elements.
-* @version 1.0.0-alpha.6
+* @version 1.0.0-alpha.7
 * @license
 * Copyright (c) 2016 Federico Zivolo and contributors
 *
@@ -305,6 +305,14 @@
           width: elementRect.width,
           height: elementRect.height
       };
+
+      var scrollTop = parent.scrollTop,
+          scrollLeft = parent.scrollLeft;
+
+      rect.top += scrollTop;
+      rect.bottom += scrollTop;
+      rect.left += scrollLeft;
+      rect.right += scrollLeft;
       return rect;
   }
 
@@ -361,13 +369,22 @@
           boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
       } else {
           // BOUNDARIES ELEMENT
-          boundaries = getOffsetRect(boundariesElement);
+          boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
       }
 
+      if (offsetParent.contains(scrollParent)) {
+          var scrollLeft = scrollParent.scrollLeft,
+              scrollTop = scrollParent.scrollTop;
+
+          boundaries.right += scrollLeft;
+          boundaries.bottom += scrollTop;
+      }
+
+      // Add paddings
       boundaries.left += padding;
+      boundaries.top += padding;
       boundaries.right -= padding;
-      boundaries.top = boundaries.top + padding;
-      boundaries.bottom = boundaries.bottom - padding;
+      boundaries.bottom -= padding;
 
       return boundaries;
   }
