@@ -2,12 +2,13 @@
 
 var grunt = require('grunt');
 var fs = require('fs');
+var path = require('path');
 var babel = require('rollup-plugin-babel');
 
 var version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 // comma separated list of browsers to run tests inside
-var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['Chrome'];
+var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeDebug'];
 var babelOptions = { exclude: './node_modules/**' };
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -103,6 +104,10 @@ module.exports = function Gruntfile(grunt) {
                 browsers: browsers,
                 autoWatch: true,
                 customLaunchers: {
+                    ChromeDebug: {
+                        base: 'Chrome',
+                        chromeDataDir: path.resolve(__dirname, '.chrome')
+                    },
                     SLChrome: {
                         base: 'SauceLabs',
                         browserName: 'chrome',

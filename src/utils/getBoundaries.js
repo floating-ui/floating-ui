@@ -58,7 +58,7 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
     } else {
         // BOUNDARIES ELEMENT
-        boundaries = getOffsetRect(boundariesElement);
+        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
     }
 
     if (offsetParent.contains(scrollParent)) {

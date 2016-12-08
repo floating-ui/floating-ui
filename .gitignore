@@ -6,6 +6,7 @@
 .DS_Store
 .tmp
 .grunt
+.chrome
 
 # When you switch branches, things can get messy
 _site

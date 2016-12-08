@@ -618,7 +618,7 @@ describe('[core]', () => {
         });
     });
 
-    it('init a popper  near the right side of a custom container and make sure it stays between boundaries', (done) => {
+    it('init a popper near the right side of a custom container and make sure it stays between boundaries', (done) => {
         const container = document.createElement('div');
         container.style.width = '800px';
         container.style.height = '600px';
@@ -663,6 +663,57 @@ describe('[core]', () => {
             container.scrollLeft = scrollLeft;
         }).onUpdate((data) => {
             expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            data.instance.destroy();
+            done();
+        });
+    });
+
+    it('inits a popper near the left side of a custom absolute container contained in a relative parent', (done) => {
+        const parent = document.createElement('div');
+        parent.style.width = '600px';
+        parent.style.height = '300px';
+        parent.style.top = '50px';
+        parent.style.left = '80px';
+        parent.style.background = 'grey';
+        parent.style.position = 'relative';
+        parent.style.overflow = 'scroll';
+
+        const container = document.createElement('div');
+        container.style.top = 0;
+        container.style.right = 0;
+        container.style.bottom = 0;
+        container.style.left = 0;
+        container.style.position = 'absolute';
+
+        const button = document.createElement('div');
+        button.style.width ='20px';
+        button.style.height = '50px';
+        button.style.position = 'absolute';
+        button.style.top = 0;
+        button.style.left = 0;
+        button.style.background = 'green';
+
+        const dropdown = document.createElement('div');
+        dropdown.style.background = 'yellow';
+        dropdown.style.position = 'absolute';
+        dropdown.style.height = '200px';
+        dropdown.style.width = '150px';
+
+        container.appendChild(button);
+        parent.appendChild(container);
+        jasmineWrapper.appendChild(parent);
+        jasmineWrapper.appendChild(dropdown);
+
+        new Popper(
+            button,
+            dropdown,
+            {
+                placement: 'bottom-end',
+                modifiers: { preventOverflow: { boundariesElement: container }}
+            }
+        ).onCreate((data) => {
+            expect(getRect(dropdown).left).toBe(getRect(container).left + 5);
+
             data.instance.destroy();
             done();
         });
