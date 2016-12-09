@@ -4,7 +4,9 @@
   "description": "A kickass library to manage your poppers",
   "main": "build/popper.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "docs": "grunt doc",
+    "dist": "grunt dist"
   },
   "repository": {
     "type": "git",

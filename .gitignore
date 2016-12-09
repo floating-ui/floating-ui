@@ -11,3 +11,5 @@
 # When you switch branches, things can get messy
 _site
 .sass-cache
+
+npm-debug.log
