@@ -15,6 +15,7 @@ import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
 import sortModifiers from './utils/sortModifiers';
+import isModifierEnabled from './utils/isModifierEnabled';
 
 // Modifiers
 import modifiersFunctions from './modifiers/index';
@@ -323,11 +324,13 @@ export default class Popper {
      */
     destroy() {
         this.state.isDestroyed = true;
-        this.popper.removeAttribute('x-placement');
-        this.popper.style.left = '';
-        this.popper.style.position = '';
-        this.popper.style.top = '';
-        this.popper.style[getSupportedPropertyName('transform')] = '';
+        if (isModifierEnabled(this.modifiers, 'applyStyle')) {
+            this.popper.removeAttribute('x-placement');
+            this.popper.style.left = '';
+            this.popper.style.position = '';
+            this.popper.style.top = '';
+            this.popper.style[getSupportedPropertyName('transform')] = '';
+        }
         this.state = removeEventListeners(this.reference, this.state);
 
         // remove the popper if user explicity asked for the deletion on destroy

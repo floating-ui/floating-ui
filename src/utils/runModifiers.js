@@ -12,7 +12,7 @@ import findIndex from './findIndex';
 export default function runModifiers(modifiers, data, ends) {
     const modifiersToRun = (ends === undefined) ?
           modifiers :
-          modifiers.slice(0, findIndex(modifiers, 'name', ends));
+          modifiers.slice(0, findIndex(modifiers, mod => mod.name === ends));
 
     modifiersToRun.forEach((modifier) => {
         if (modifier.enabled && isFunction(modifier.function)) {
