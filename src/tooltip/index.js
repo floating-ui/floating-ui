@@ -15,7 +15,15 @@ const DEFAULT_OPTIONS = {
 
 export default class Tooltip {
     /**
-     * @param {HTMLElement} target - The DOM node used as target of the tooltip (it can be a jQuery element).
+     * Create a new Tooltip.js instance
+     * @class Tooltip
+     * @param {HTMLElement} reference - The reference element used to position the tooltip
+     * @param {Object} options
+     * @param {String} options.placement=bottom
+     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+     *      left(-start, -end)`
+     *
+     * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
      * @param {Object} options - Configuration of the tooltip
      * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
      * @param {Number|Object} options.delay=0
@@ -36,15 +44,15 @@ export default class Tooltip {
      * @param {HTMLElement} options.boundariesElement
      *      The element used as boundaries for the tooltip. For more information refer to Popper.js'
      *      [boundariesElement docs](https://popper.js.org/documentation.html)
-     * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its target. For more information refer to Popper.js'
+     * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
      *      [offset docs](https://popper.js.org/documentation.html)
      * @return {Object} instance - The generated tooltip instance
      */
-    constructor(target, options = {}) {
+    constructor(reference, options) {
         // apply user options over default ones
         options = Object.assign({}, DEFAULT_OPTIONS, options);
 
-        target.jquery && (target = target[0]);
+        reference.jquery && (reference = reference[0]);
 
         // get events list
         const events = typeof options.trigger === 'string' ? options.trigger.split(' ').filter((trigger) => {
@@ -55,22 +63,22 @@ export default class Tooltip {
         this._isOpen = false;
 
         // set event listeners
-        this._setEventListeners(target, events, options);
+        this._setEventListeners(reference, events, options);
     }
 
     //
     // Public methods
     //
 
-    show(target, options) {
+    show(reference, options) {
         // get title
-        const title = target.getAttribute('title') || options.title;
+        const title = reference.getAttribute('title') || options.title;
 
         // create tooltip node
-        const tooltipNode = this._create(target, options.template, title, options.html);
+        const tooltipNode = this._create(reference, options.template, title, options.html);
 
-        // append tooltip to container: container = false we pick the parent node of the target
-        var container = options.container === false ? target.parentNode : options.container;
+        // append tooltip to container: container = false we pick the parent node of the reference
+        var container = options.container === false ? reference.parentNode : options.container;
 
         this._append(tooltipNode, container);
 
@@ -84,7 +92,7 @@ export default class Tooltip {
             popperOptions.boundariesElement = options.boundariesElement;
         }
 
-        this.popperInstance = new Popper(target, tooltipNode, popperOptions);
+        this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
 
         this._isOpen = true;
         this._tooltipNode = tooltipNode;
@@ -92,7 +100,7 @@ export default class Tooltip {
         return this;
     }
 
-    hide(/*target, options*/) {
+    hide(/*reference, options*/) {
         this.popperInstance.destroy();
         this._isOpen = false;
         this._tooltipNode = null;
@@ -111,13 +119,15 @@ export default class Tooltip {
 
     /**
      * Creates a new tooltip node
-     * @param {HTMLElement} target
+     * @memberof Tooltip
+     * @private
+     * @param {HTMLElement} reference
      * @param {String} template
      * @param {String|HTMLElement|TitleFunction} title
      * @param {Boolean} allowHtml
      * @return {HTMLelement} tooltipNode
      */
-    _create(target, template, title, allowHtml) {
+    _create(reference, template, title, allowHtml) {
         // create tooltip element
         const tooltipGenerator = window.document.createElement('div');
         tooltipGenerator.innerHTML = template;
@@ -131,7 +141,7 @@ export default class Tooltip {
         }
         else if (isFunction(title)) {
             // if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
-            const titleText = title.call(target);
+            const titleText = title.call(reference);
             allowHtml ? (titleNode.innerHTML = titleText) : (titleNode.innerText = titleText);
         }
         else {
@@ -157,6 +167,8 @@ export default class Tooltip {
 
     /**
      * Append tooltip to container
+     * @memberof Tooltip
+     * @private
      * @param {HTMLElement} tooltip
      * @param {HTMLElement|String|false} container
      */
@@ -164,7 +176,7 @@ export default class Tooltip {
         container.appendChild(tooltipNode);
     }
 
-    _setEventListeners(target, events, options) {
+    _setEventListeners(reference, events, options) {
         const directEvents = events.map((event) => {
             switch(event) {
                 case 'hover':
@@ -193,29 +205,29 @@ export default class Tooltip {
 
         // schedule show tooltip
         directEvents.forEach((event) => {
-            target.addEventListener(event, (evt)  => {
+            reference.addEventListener(event, (evt)  => {
                 if (this._isOpen === true) { return; }
                 evt.usedByTooltip = true;
-                this._scheduleShow(target, options.delay, options, evt);
+                this._scheduleShow(reference, options.delay, options, evt);
             });
         });
 
         // schedule hide tooltip
         oppositeEvents.forEach((event) => {
-            target.addEventListener(event, (evt) => {
+            reference.addEventListener(event, (evt) => {
                 if (evt.usedByTooltip === true) { return; }
-                this._scheduleHide(target, options.delay, options, evt);
+                this._scheduleHide(reference, options.delay, options, evt);
             });
         });
     }
 
-    _scheduleShow(target, delay, options/*, evt */) {
+    _scheduleShow(reference, delay, options/*, evt */) {
         // defaults to 0
         const computedDelay = (delay && delay.show) || delay || 0;
-        window.setTimeout(() => this.show(target, options), computedDelay);
+        window.setTimeout(() => this.show(reference, options), computedDelay);
     }
 
-    _scheduleHide(target, delay, options, evt) {
+    _scheduleHide(reference, delay, options, evt) {
         // defaults to 0
         const computedDelay = (delay && delay.hide) || delay || 0;
         window.setTimeout(() => {
@@ -224,35 +236,35 @@ export default class Tooltip {
             if (!document.body.contains(this._tooltipNode)) { return; }
 
             // if we are hiding because of a mouseleave, we must check that the new
-            // target isn't the tooltip, because in this case we don't want to hide it
+            // reference isn't the tooltip, because in this case we don't want to hide it
             if (evt.type === 'mouseleave') {
-                const isSet = this._setTooltipNodeEvent(evt, target, delay, options);
+                const isSet = this._setTooltipNodeEvent(evt, reference, delay, options);
 
                 // if we set the new event, don't hide the tooltip yet
                 // the new event will take care to hide it if necessary
                 if (isSet) { return; }
             }
 
-            this.hide(target, options);
+            this.hide(reference, options);
         }, computedDelay);
     }
 
-    _setTooltipNodeEvent(evt,  target, delay, options) {
-        const relatedTarget = evt.relatedTarget || evt.toElement;
+    _setTooltipNodeEvent(evt,  reference, delay, options) {
+        const relatedreference = evt.relatedreference || evt.toElement;
 
         const callback = (evt2) => {
-            const relatedTarget2 = evt2.relatedTarget || evt2.toElement;
+            const relatedreference2 = evt2.relatedreference || evt2.toElement;
 
             // Remove event listener after call
-            evt2.target.removeEventListener(evt2.type, callback);
+            evt2.reference.removeEventListener(evt2.type, callback);
 
-            // If the new target is not the reference element, we schedule to hide tooltip
-            if (!this._isElOrChildOfEl(relatedTarget2, target)) {
-                this._scheduleHide(target, options.delay, options, evt2);
+            // If the new reference is not the reference element, we schedule to hide tooltip
+            if (!this._isElOrChildOfEl(relatedreference2, reference)) {
+                this._scheduleHide(reference, options.delay, options, evt2);
             }
         };
 
-        if (this._isElOrChildOfEl(relatedTarget, this._tooltipNode)) {
+        if (this._isElOrChildOfEl(relatedreference, this._tooltipNode)) {
             // listen to mouseleave on the tooltip element to be able to hide the tooltip
             this._tooltipNode.addEventListener(evt.type, callback);
             return true;
@@ -269,14 +281,16 @@ export default class Tooltip {
 
 /**
  * Placement function, its context is the Tooltip instance.
+ * @memberof Tooltip
  * @callback PlacementFunction
  * @param {HTMLElement} tooltip - tooltip DOM node.
- * @param {HTMLElement} target - target DOM node.
+ * @param {HTMLElement} reference - reference DOM node.
  * @return {String} placement - One of the allowed placement options.
  */
 
 /**
  * Title function, its context is the Tooltip instance.
+ * @memberof Tooltip
  * @callback TitleFunction
  * @return {String} placement - The desired title.
  */

@@ -100,11 +100,15 @@ module.exports = function Gruntfile(grunt) {
                 }
             }
         },
-        jsdoc2md : {
-            dist : {
+        jsdoc2md: {
+            popper: {
                 src: '.tmp/popper.js',
-                dest: 'doc/_includes/documentation.md'
-            }
+                dest: 'doc/_includes/popper-documentation.md',
+            },
+            tooltip: {
+                src: '.tmp/tooltip.js',
+                dest: 'doc/_includes/tooltip-documentation.md',
+            },
         },
         karma: {
             options: {
