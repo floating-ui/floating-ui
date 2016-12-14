@@ -66,7 +66,6 @@ module.exports = function Gruntfile(grunt) {
         uglify: {
             options: {
                 sourceMap: true,
-                sourceMapName: 'build/popper.min.js.map',
                 preserveComments: /(?:license|version)/,
                 mangleToplevel: true,
                 compress: {
@@ -81,11 +80,13 @@ module.exports = function Gruntfile(grunt) {
                 }
             },
             popper: {
+                sourceMapName: 'build/popper.min.js.map',
                 files: {
                     'build/popper.min.js': ['build/popper.js']
                 }
             },
             tooltip: {
+                sourceMapName: 'build/tooltip.min.js.map',
                 files: {
                     'build/tooltip.min.js': ['build/tooltip.js']
                 }
@@ -171,13 +172,50 @@ module.exports = function Gruntfile(grunt) {
             test: ['tests/**/*.js']
         },
         usebanner: {
+            options: {
+                position: 'top',
+            },
             popper: {
                 options: {
-                    position: 'top',
-                    banner: `
+                    banner: `\
 /*
 * @fileOverview Kickass library to create and place poppers near their reference elements.
 * @version ${version}
+${license}
+*/\
+                    `,
+                },
+                files: {
+                    src: [ 'build/popper.js', 'build/popper.min.js' ],
+                },
+            },
+            tooltip: {
+                options: {
+                    banner: `\
+/*
+* @fileOverview Kickass library to create tooltips in your applications.
+* @version popper.js@${version}
+${license}
+*/\
+                    `,
+                },
+                files: {
+                    src: [ 'build/tooltip.js', 'build/tooltip.min.js' ]
+                },
+            },
+        },
+    });
+
+    grunt.registerTask('doc', ['eslint', 'rollup:popperTmp', 'rollup:tooltipTmp', 'jsdoc2md']);
+    grunt.registerTask('dist:popper', [ 'eslint', 'rollup:popper', 'usebanner:popper', 'uglify:popper']);
+    grunt.registerTask('dist:tooltip', [ 'eslint', 'rollup:tooltip', 'usebanner:tooltip', 'uglify:tooltip']);
+    grunt.registerTask('dist', [ 'dist:popper', 'dist:tooltip']);
+    grunt.registerTask('test', ['eslint', 'karma:local']);
+    grunt.registerTask('test-ci', ['eslint', 'karma:ci']);
+};
+
+
+var license = `\
 * @license
 * Copyright (c) 2016 Federico Zivolo and contributors
 *
@@ -197,24 +235,4 @@ module.exports = function Gruntfile(grunt) {
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
-*/
-                    `,
-                },
-                files: {
-                    src: [ 'build/popper.js' ]
-                }
-            },
-            tooltip: {
-
-            }
-        }
-    });
-
-    grunt.registerTask('doc', ['eslint', 'rollup:popperTmp', 'rollup:tooltipTmp', 'jsdoc2md']);
-    grunt.registerTask('dist:popper', [ 'eslint', 'rollup:popper', 'usebanner:popper', 'uglify:popper']);
-    grunt.registerTask('dist:tooltip', [ 'eslint', 'rollup:tooltip', 'usebanner:tooltip', 'uglify:tooltip']);
-    grunt.registerTask('dist', [ 'dist:popper', 'dist:tooltip']);
-    grunt.registerTask('test', ['eslint', 'karma:local']);
-    grunt.registerTask('test-ci', ['eslint', 'karma:ci']);
-};
+* SOFTWARE.`;
