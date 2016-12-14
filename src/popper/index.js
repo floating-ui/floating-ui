@@ -351,6 +351,25 @@ export default class Popper {
     static Utils = Utils;
 
     /**
+     * List of accepted placements to use as values of the `placement` option
+     * @memberof Popper
+     */
+     static placements = [
+         'top',
+         'top-start',
+         'top-end',
+         'right',
+         'right-start',
+         'right-end',
+         'bottom',
+         'bottom-start',
+         'bottom-end',
+         'left',
+         'left-start',
+         'left-end',
+     ];
+
+    /**
      * Default Popper.js options
      * @memberof Popper
      */
