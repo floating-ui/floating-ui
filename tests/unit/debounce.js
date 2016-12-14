@@ -1,4 +1,4 @@
-import debounce from '../../src/utils/debounce';
+import debounce from '../../src/popper/utils/debounce';
 
 describe('utils/debounce', () => {
   it('should be called only once', (done) => {

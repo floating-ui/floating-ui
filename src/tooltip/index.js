@@ -1,6 +1,6 @@
-/* global Popper */
-
-import isFunction from './utils/isFunction';
+// import Popper from 'popper.js';
+/* globals Popper */
+import isFunction from '../popper/utils/isFunction';
 
 const DEFAULT_OPTIONS = {
     container: false,

@@ -1,4 +1,4 @@
-import Popper from '../../src/popper';
+import Popper from '../../src/popper/index.js';
 import makePopperFactory from '../utils/makePopperFactory';
 import makeConnectedElement from '../utils/makeConnectedElement';
 import makeConnectedScrollElement from '../utils/makeConnectedScrollElement';

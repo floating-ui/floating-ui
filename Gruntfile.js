@@ -5,7 +5,8 @@ var fs = require('fs');
 var path = require('path');
 var babel = require('rollup-plugin-babel');
 
-var version = JSON.parse(fs.readFileSync('./package.json')).version;
+var popperVersion = JSON.parse(fs.readFileSync('./package.json')).version;
+var tooltipVersion = JSON.parse(fs.readFileSync('./src/tooltip/package.json')).version;
 
 // comma separated list of browsers to run tests inside
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeDebug'];
@@ -24,6 +25,7 @@ module.exports = function Gruntfile(grunt) {
         rollup: {
             options: {
                 format: 'umd',
+                sourceMap: true,
                 plugins: function() {
                     return [
                         babel(babelOptions)
@@ -32,34 +34,38 @@ module.exports = function Gruntfile(grunt) {
             },
             popper: {
                 options: {
-                    moduleName: 'Popper'
+                    moduleName: 'Popper',
+                    sourceMapFile: 'build/popper.js.map',
                 },
                 files: {
-                    'build/popper.js': ['src/popper.js']
+                    'build/popper.js': ['src/popper/index.js']
                 }
             },
             'popperTmp': {
                 options: {
-                    moduleName: 'Popper'
+                    moduleName: 'Popper',
+                    sourceMapFile: 'build/popper.js.map',
                 },
                 files: {
-                    '.tmp/popper.js': ['src/popper.js']
+                    '.tmp/popper.js': ['src/popper/index.js']
                 }
             },
             tooltip: {
                 options: {
-                    moduleName: 'Tooltip'
+                    moduleName: 'Tooltip',
+                    sourceMapFile: 'build/tooltip.js.map',
                 },
                 files: {
-                    'build/tooltip.js': ['src/tooltip.js']
+                    'build/tooltip.js': ['src/tooltip/index.js']
                 }
             },
             'tooltipTmp': {
                 options: {
-                    moduleName: 'Tooltip'
+                    moduleName: 'Tooltip',
+                    sourceMapFile: 'build/tooltip.js.map',
                 },
                 files: {
-                    '.tmp/tooltip.js': ['src/tooltip.js']
+                    '.tmp/tooltip.js': ['src/tooltip/index.js']
                 }
             }
         },
@@ -80,12 +86,14 @@ module.exports = function Gruntfile(grunt) {
                 }
             },
             popper: {
+                sourceMapIn: 'build/popper.min.js.map',
                 sourceMapName: 'build/popper.min.js.map',
                 files: {
                     'build/popper.min.js': ['build/popper.js']
                 }
             },
             tooltip: {
+                sourceMapIn: 'build/tooltip.min.js.map',
                 sourceMapName: 'build/tooltip.min.js.map',
                 files: {
                     'build/tooltip.min.js': ['build/tooltip.js']
@@ -168,6 +176,9 @@ module.exports = function Gruntfile(grunt) {
             }
         },
         eslint: {
+            options: {
+
+            },
             src: ['src/**/*.js'],
             test: ['tests/**/*.js']
         },
@@ -180,7 +191,7 @@ module.exports = function Gruntfile(grunt) {
                     banner: `\
 /*
 * @fileOverview Kickass library to create and place poppers near their reference elements.
-* @version ${version}
+* @version ${popperVersion}
 ${license}
 */\
                     `,
@@ -194,7 +205,7 @@ ${license}
                     banner: `\
 /*
 * @fileOverview Kickass library to create tooltips in your applications.
-* @version popper.js@${version}
+* @version ${tooltipVersion}
 ${license}
 */\
                     `,

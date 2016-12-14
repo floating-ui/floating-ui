@@ -1,4 +1,4 @@
-import isNative from '../../src/utils/isNative';
+import isNative from '../../src/popper/utils/isNative';
 import makePopperFactory from '../utils/makePopperFactory';
 import makeConnectedElement from '../utils/makeConnectedElement';
 import '../setup';

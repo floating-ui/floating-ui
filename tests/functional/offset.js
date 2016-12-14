@@ -1,4 +1,4 @@
-import Popper from '../../src/popper';
+import Popper from '../../src/popper/index.js';
 import '../setup';
 
 // Utils
