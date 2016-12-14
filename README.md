@@ -26,12 +26,14 @@ Common examples of poppers are tooltips and popovers.
 Well, basically, **no**.  
 Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
 It supports a **plugin system** you can use to add particular behaviors to your poppers.  
-It's written with ES2015 and it's **AMD** and **CommonJS** compatible, every line is documented thanks to our [JSDoc page](https://fezvrasta.github.io/popper.js/documentation.html).
+It's written with ES2015 and it's **AMD** and **CommonJS** compatible, the whole code is documented thanks to our [JSDoc page](https://popper.js.org/popper-documentation.html).
 
 
 ## The Library
 
-Popper.js is a library that makes sure your popper stays near the defined reference element.  
+Popper.js is a library that makes sure your popper stays near the defined reference element.
+We call it, **positioning library**. It's only purpose is to calculate and optionally apply
+the needed CSS properties to make sure a given element stays near a different one.  
 
 Some of the key points are:
 
@@ -43,6 +45,14 @@ Some of the key points are:
 
 Visit our [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
 
+## Tooltip.js
+
+Since lot of users just need a simple way to integrate powerful tooltips in their projects,
+we created **Tooltip.js**.  
+It's a small library that makes it easy to automatically create tooltips using as engine Popper.js.  
+It's API is almost identical to the famous tooltip system of Bootstrap, in this way it will be
+easy to integrate it in your projects.
+
 
 ### Installation
 Popper.js is available on NPM and Bower:
@@ -52,6 +62,15 @@ Popper.js is available on NPM and Bower:
 | npm      | `npm install popper.js@2 --save`             |
 | Bower    | `bower install popper.js#~2 --save`          |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
+
+
+Tooltip.js as well:
+
+| Source   |                                               |
+|:---------|:----------------------------------------------|
+| npm      | `npm install tooltip.js@2 --save`             |
+| Bower    | `bower install tooltip.js#~2 --save`          |
+| jsDelivr | `http://www.jsdelivr.com/projects/tooltip.js` |
 
 
 ### Usage
