@@ -75,6 +75,32 @@ describe('[lifecycle]', () => {
             expect(window.removeEventListener.calls.argsFor(1)).toEqual(['scroll', updateBound]);
         });
 
+        it('should clean up the popper element\'s styles if modifiers.applyStyle is enabled', () => {
+            const popperElement = makeConnectedElement();
+            popperElement.style.top = '100px';
+
+            const instance = new Popper(makeConnectedElement(), popperElement, {
+                modifiers: { applyStyle: { enabled: true }}
+            });
+
+            instance.destroy();
+            expect(popperElement.style.top).toBe('');
+
+        });
+
+        it('should not modify the popper element\'s styles if modifiers.applyStyle is disabled', () => {
+            const popperElement = makeConnectedElement();
+            popperElement.style.top = '100px';
+
+            const instance = new Popper(makeConnectedElement(), popperElement, {
+                modifiers: { applyStyle: { enabled: false }}
+            });
+
+            instance.destroy();
+            expect(popperElement.style.top).toBe('100px');
+
+        });
+
         describe('when boundariesElement is not `window` and the scroll parent is not `window`', () => {
             it('removes the scroll event listener from the scroll parent', () => {
                 const boundariesElement = makeConnectedScrollElement();
