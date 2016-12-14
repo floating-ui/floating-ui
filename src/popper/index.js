@@ -157,7 +157,7 @@ export default class Popper {
         // make update() debounced, so that it only runs at most once-per-tick
         this.update = debounce(this.update.bind(this));
         // create a throttled version of update() that is scheduled based on UI updates
-        this.scheduleUpdate = () => requestAnimationFrame(this.update);
+        this.scheduleUpdate = () => this.scheduledUpdate = requestAnimationFrame(this.update);
 
         // init state
         this.state = {
@@ -334,6 +334,7 @@ export default class Popper {
             this.popper.style[getSupportedPropertyName('transform')] = '';
         }
 
+        cancelAnimationFrame(this.scheduledUpdate);
         this.state = removeEventListeners(this.reference, this.state);
 
         // remove the popper if user explicity asked for the deletion on destroy

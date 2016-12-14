@@ -85,7 +85,6 @@ describe('[lifecycle]', () => {
 
             instance.destroy();
             expect(popperElement.style.top).toBe('');
-
         });
 
         it('should not modify the popper element\'s styles if modifiers.applyStyle is disabled', () => {
@@ -98,7 +97,20 @@ describe('[lifecycle]', () => {
 
             instance.destroy();
             expect(popperElement.style.top).toBe('100px');
+        });
 
+        it('should not call update after destroy', () => {
+            let isUpdateCalled = false;
+
+            const popperElement = makeConnectedElement();
+
+            const instance = new Popper(makeConnectedElement(), popperElement);
+            instance.onUpdate(() => {
+                isUpdateCalled = true;
+            });
+            instance.update();
+            instance.destroy();
+            expect(isUpdateCalled).toBe(false);
         });
 
         describe('when boundariesElement is not `window` and the scroll parent is not `window`', () => {
