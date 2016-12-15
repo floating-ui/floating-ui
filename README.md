@@ -158,6 +158,15 @@ A modifier is a function that is called each time Popper.js needs to compute the
 To learn how to create a modifier, [read the modifiers documentaton](doc/_includes/documentation.md#modifiers--object)
 
 
+### Migration from Popper.js v0
+
+Since the API changed, we prepared some migration instructions to make it easy to upgrade to
+Popper.js v1.  
+
+https://github.com/FezVrasta/popper.js/issues/62
+
+Feel free to comment inside the issue if you have any questions.
+
 ## Notes
 
 ### Libraries using Popper.js
