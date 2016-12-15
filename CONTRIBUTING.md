@@ -11,7 +11,7 @@ Feature requests are welcome!
 
 ## Setup
 
-Make sure to have `grunt-cli` and `bower` installed globally.
+Make sure to have `grunt-cli` installed globally.
 
 Then run `npm install` or `yarn` to install the needed dependencies.
 
