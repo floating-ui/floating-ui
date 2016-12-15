@@ -13,12 +13,7 @@ Feature requests are welcome!
 
 Make sure to have `grunt-cli` and `bower` installed globally.
 
-Then run:
-
-```js
-npm install
-bower install
-```
+Then run `npm install` or `yarn` to install the needed dependencies.
 
 ## Developing
 
@@ -44,11 +39,6 @@ To run tests:
 npm test
 ```
 
-**Note:** we use Chrome even for the tests on Travis CI, despite this, the CSS offsets of the page elements seem to be different when the tests are ran on Travis CI or on your local machine.
-Due to this problem, right now we make assertions checking both the local and CI offsets.
-
-Any suggestion to get rid of this problem is more than welcome tho.
-
 ## Build
 
 To create a new release of Popper.js, run:
@@ -59,4 +49,4 @@ grunt dist
 
 The files will be automatically minified and copied in the `build` directory.
 
-**Note:** never commit changes and builds together! Each build should have its own dedicated commit.
+**Note:** never commit builds! We take care to compile the source code when we release a new version.
