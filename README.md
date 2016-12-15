@@ -24,28 +24,28 @@ Common examples of poppers are tooltips and popovers.
 ## So, yet another tooltip library?
 
 Well, basically, **no**.  
-Popper.js is built from the ground up to being modular and fully ~~hackable~~ **customizable**.  
-It supports a **plugin system** you can use to add particular behaviors to your poppers.  
-It's written with ES2015 and it's **AMD** and **CommonJS** compatible, the whole code is documented thanks to our [JSDoc page](https://popper.js.org/popper-documentation.html).
+Popper.js is a **positioning engine**, its purpose is to calculate the position of an element
+to make it possible to position it near a given reference element.  
 
+The engine is completely modular and most of its features are implemented as **modifiers**
+(similar to middlewars or plugins).  
+The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to SauceLabs and TravisCI.
 
-## The Library
+### Popper.js
 
-Popper.js is a library that makes sure your popper stays near the defined reference element.
-We call it, **positioning library**. It's only purpose is to calculate and optionally apply
-the needed CSS properties to make sure a given element stays near a different one.  
+This is the engine, the library that computes and, optionally, applies the styles to
+the poppers.
 
 Some of the key points are:
 
 - Position elements keeping them in their original DOM context (doesn't mess with your DOM!);
 - Allows to export the computed informations to integrate with React and other view libraries;
 - Supports Shadow DOM elements;
-- Completely customizable thanks to the modifiers (plugins) based structure;
-- The whole code base is automatically tested across the latest versions of Chrome, Firefox, Safari and Edge;
+- Completely customizable thanks to the modifiers based structure;
 
 Visit our [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
 
-## Tooltip.js
+### Tooltip.js
 
 Since lot of users just need a simple way to integrate powerful tooltips in their projects,
 we created **Tooltip.js**.  
@@ -54,13 +54,14 @@ It's API is almost identical to the famous tooltip system of Bootstrap, in this 
 easy to integrate it in your projects.
 
 
-### Installation
-Popper.js is available on NPM and Bower:
+## Installation
+Popper.js is available on the following package managers and CDNs:
 
 | Source   |                                              |
 |:---------|:---------------------------------------------|
-| npm      | `npm install popper.js@2 --save`             |
-| Bower    | `bower install popper.js#~2 --save`          |
+| npm      | `npm install popper.js --save`               |
+| yarn     | `yarn add popper.js`                         |
+| Bower    | `bower install popper.js --save`             |
 | jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
 
 
@@ -68,12 +69,13 @@ Tooltip.js as well:
 
 | Source   |                                               |
 |:---------|:----------------------------------------------|
-| npm      | `npm install tooltip.js@2 --save`             |
-| Bower    | `bower install tooltip.js#~2 --save`          |
+| npm      | `npm install tooltip.js --save`               |
+| yarn     | `yarn add tooltip.js`                         |
+| Bower    | `bower install tooltip.js --save`             |
 | jsDelivr | `http://www.jsdelivr.com/projects/tooltip.js` |
 
 
-### Usage
+## Usage
 
 Given an existing popper, ask Popper.js to position it near its button
 
@@ -108,14 +110,22 @@ new Popper(reference, popper)
 });
 ```
 
-### React, AngularJS and Ember.js integration
+### React, Vue.js, AngularJS, Ember.js (etc...) integration
 
 Integrate 3rd party libraries in React or other libraries can be a pain because
 they usually alter the DOM and drives the libraries crazy.  
 Popper.js limits all its DOM modifications inside the `applyStyle` modifier,
 you can simply disable it and manually apply the popper coordinates using
 your library of choice.  
-Alternatively, you may even override `applyStyles` with your custom function!
+
+This made possible to some great developers to create libraries based on Popper.js
+that integrate in popular frameworks:
+
+- [**react-popper**](https://github.com/souporserious/react-popper) by [@souporserious](https://github.com/souporserious) for [React](https://facebook.github.io/react/)
+- [**ak-layer**](http://aui-cdn.atlassian.com/atlaskit/registry/ak-layer/latest/index.html) by [@Atlassian](https://github.com/atlassian) for [React](https://facebook.github.io/react/)
+- [**vue-popper-component**](https://github.com/antongorodezkiy/vue-popper-component) by [@antongorodezkiy](https://github.com/antongorodezkiy) for [Vue.js](https://vuejs.org/)
+
+Alternatively, you may even override `applyStyles` with your custom function and integrate Popper.js by yourself!
 
 ```js
 function applyReactStyle(data) {
@@ -133,10 +143,6 @@ new Popper(reference, popper, {
 
 ```
 
-You can find a fully working React component visiting this gist:  
-https://gist.github.com/FezVrasta/6533adf4358a6927b48f7478706a5f23
-
-
 ### Documentation
 
 The whole library is commented line-by-line using JSDocs comments exported into
@@ -152,20 +158,14 @@ A modifier is a function that is called each time Popper.js needs to compute the
 To learn how to create a modifier, [read the modifiers documentaton](doc/_includes/documentation.md#modifiers--object)
 
 
-
 ## Notes
 
 ### Libraries using Popper.js
 
-Popper.js will never win the prize for "easiest to use tooltip library", well, probably because it's not a tooltip lib. 😅  
-With it you can create awesome libraries without worring about the positioning problems! Some great ones using Popper.js are listed here:
-
-- [react-popper](https://github.com/souporserious/react-popper): Component to use Popper.js with React;
-- [intro-guide-js](https://github.com/johanlahti/intro-guide-js): Create guided tours of your web pages;
-- [picker.js](https://github.com/GeekAb/picker.js): Modern date picker;
-
-_Want to see your library here? Open an issue and report it._
-
+The aim of Popper.js is to provide a stable and powerful positioning engine ready to
+be used in 3rd party libraries.  
+Lot of projects are already using Popper.js, you can see the complete list visiting
+[the related npm page](https://www.npmjs.com/browse/depended/popper.js).
 
 ### Credits
 I want to thank some friends and projects for the work they did:
@@ -174,6 +174,7 @@ I want to thank some friends and projects for the work they did:
 - [@vampolo](https://github.com/vampolo) for the original idea and for the name of the library;
 - [Sysdig](https://github.com/Draios) for all the awesome things I learned during these years that made possible for me to write this library;
 - [Tether.js](http://github.hubspot.com/tether/) for having inspired me in writing a positioning library ready for the real world;
+- [The Contributors](https://github.com/FezVrasta/popper.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
 - **you** for the star you'll give to this project and for being so awesome to give this project a try :)
 
 ### Copyright and license
