@@ -10,9 +10,9 @@ Popper.js is a library used to create poppers in web applications.
 [![npm version](https://badge.fury.io/js/popper.js.svg)](https://badge.fury.io/js/popper.js)
 [![Join the chat!](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/FezVrasta/popper.js)
 
-![Build Status](https://saucelabs.com/browser-matrix/popperjs.svg?auth=b28bea6e52e761cdd54d8783d59b4f04)
+[![Build Status](https://saucelabs.com/browser-matrix/popperjs.svg?auth=b28bea6e52e761cdd54d8783d59b4f04)](https://travis-ci.org/FezVrasta/popper.js)
 
-[<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>](https://travis-ci.org/FezVrasta/popper.js)
+<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
 
 
 ## Wut? Poppers?
