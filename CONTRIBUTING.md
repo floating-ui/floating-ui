@@ -20,7 +20,7 @@ Then run `npm install` or `yarn` to install the needed dependencies.
 ## Adopt an issue
 
 The issues with the `PR WELCOME` label are the preferred ones to adopt if you want to contribute to this project.  
-These issues are most likely new features or enhancements that would be nice to have but that will not be implemened by the maintainer due to lack of free time.
+These issues are most likely new features or enhancements that would be nice to have but that will not be implemented by the maintainer due to lack of free time.
 
 Other issues labelled by `HELP WANTED` should be fixed by the maintainer, but for any reason, he has problems with it and needs help from the community to continue the work on it.
 
