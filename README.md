@@ -31,6 +31,8 @@ The engine is completely modular and most of its features are implemented as **m
 (similar to middlewars or plugins).  
 The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to SauceLabs and TravisCI.
 
+Additionally, Popper.js has zero dependencies. No jQuery, no LoDash, nothing.
+
 ### Popper.js
 
 This is the engine, the library that computes and, optionally, applies the styles to
