@@ -47,6 +47,9 @@ Some of the key points are:
 
 Visit our [project page](https://fezvrasta.github.io/popper.js) to see a lot of examples of what you can do with Popper.js!
 
+Find [the documentation here](doc/_includes/popper-documentation.md).
+
+
 ### Tooltip.js
 
 Since lot of users just need a simple way to integrate powerful tooltips in their projects,
@@ -54,6 +57,8 @@ we created **Tooltip.js**.
 It's a small library that makes it easy to automatically create tooltips using as engine Popper.js.  
 It's API is almost identical to the famous tooltip system of Bootstrap, in this way it will be
 easy to integrate it in your projects.
+
+Find [the documentation here](doc/_includes/tooltip-documentation.md).
 
 
 ## Installation
@@ -144,13 +149,6 @@ new Popper(reference, popper, {
 .onUpdate(applyReactStyle);
 
 ```
-
-### Documentation
-
-The whole library is commented line-by-line using JSDocs comments exported into
-an easy to follow markdown document.  
-To read the full documentation [visit this link](doc/_includes/documentation.md).
-
 
 ### Writing your own modifiers
 
