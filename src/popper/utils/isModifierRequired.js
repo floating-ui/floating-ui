@@ -6,7 +6,8 @@
  * @returns {Boolean}
  */
 export default function isModifierRequired(modifiers, requestingName, requestedName) {
-    const requesting = modifiers.find(({ name }) => name === requestingName);
+    // find is not supported by IE
+    const requesting = modifiers.filter(({ name }) => name === requestingName)[0];
 
     return !!requesting && modifiers.some((modifier) => {
       return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;

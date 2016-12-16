@@ -56,6 +56,9 @@ export default function getBoundaries(popper, padding, boundariesElement) {
     } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
+        // subtract scrollbars size
+        // boundaries.right -= scrollParent.offsetWidth - scrollParent.clientWidth;
+        // boundaries.bottom -= scrollParent.offsetHeight - scrollParent.clientHeight;
     } else {
         // BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);

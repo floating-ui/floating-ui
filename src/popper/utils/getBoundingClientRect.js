@@ -7,12 +7,17 @@
  */
 export default function getBoundingClientRect(element) {
     const rect = element.getBoundingClientRect();
+
+    // subtract scrollbar size from sizes
+    const horizScrollbar = element.offsetWidth - element.clientWidth;
+    const vertScrollbar = element.offsetHeight - element.clientHeight;
+
     return {
         left: rect.left,
         top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom,
-        width: rect.right - rect.left,
-        height: rect.bottom - rect.top
+        right: rect.right - horizScrollbar,
+        bottom: rect.bottom - vertScrollbar,
+        width: rect.right - rect.left - horizScrollbar,
+        height: rect.bottom - rect.top - vertScrollbar,
     };
 }

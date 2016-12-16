@@ -362,11 +362,6 @@ describe('[core]', () => {
     });
 
     it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
-        // FIXME: Skip IE10 for now
-        if (navigator.appVersion.indexOf("MSIE 10") !== -1) {
-            return done();
-        }
-
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';

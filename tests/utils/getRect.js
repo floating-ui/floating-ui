@@ -1,3 +1,3 @@
-export default function getRect(element) {
-    return element.getBoundingClientRect();
-}
+import getBoundingClientRect from '../../src/popper/utils/getBoundingClientRect';
+
+export default getBoundingClientRect;
