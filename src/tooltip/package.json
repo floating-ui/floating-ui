@@ -4,7 +4,7 @@
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "../../build/tooltip.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "karma start ../../scripts/karma.conf.js"
   },
   "repository": {
     "type": "git",

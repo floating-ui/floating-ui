@@ -2,6 +2,12 @@
 
 ## Tooltip
 **Kind**: global class  
+
+* [Tooltip](#Tooltip)
+    * [new Tooltip(reference, options, reference, options)](#new_Tooltip_new)
+    * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
+    * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
+
 <a name="new_Tooltip_new"></a>
 
 ### new Tooltip(reference, options, reference, options)
@@ -23,6 +29,26 @@ Create a new Tooltip.js instance
 | options.template | <code>String</code> | <code>&#x27;&lt;div</code> | class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>'      Base HTML to used when creating the tooltip.      The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.      `.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.      The outermost wrapper element should have the `.tooltip` class. |
 | options.title | <code>String</code> &#124; <code>HTMLElement</code> &#124; <code>TitleFunction</code> | <code>&#x27;&#x27;</code> | Default title value if `title` attribute isn't present. |
 | options.trigger | <code>String</code> | <code>&#x27;hover</code> | focus'      How tooltip is triggered - click | hover | focus | manual.      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger. |
-| options.boundariesElement | <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/documentation.html) |
-| options.offset | <code>Number</code> &#124; <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/documentation.html) |
+| options.boundariesElement | <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
+| options.offset | <code>Number</code> &#124; <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/popper-documentation.html) |
 
+<a name="Tooltip.PlacementFunction"></a>
+
+### Tooltip.PlacementFunction ⇒ <code>String</code>
+Placement function, its context is the Tooltip instance.
+
+**Kind**: static typedef of <code>[Tooltip](#Tooltip)</code>  
+**Returns**: <code>String</code> - placement - One of the allowed placement options.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tooltip | <code>HTMLElement</code> | tooltip DOM node. |
+| reference | <code>HTMLElement</code> | reference DOM node. |
+
+<a name="Tooltip.TitleFunction"></a>
+
+### Tooltip.TitleFunction ⇒ <code>String</code>
+Title function, its context is the Tooltip instance.
+
+**Kind**: static typedef of <code>[Tooltip](#Tooltip)</code>  
+**Returns**: <code>String</code> - placement - The desired title.  

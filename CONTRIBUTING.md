@@ -11,8 +11,6 @@ Feature requests are welcome!
 
 ## Setup
 
-Make sure to have `grunt-cli` installed globally.
-
 Then run `npm install` or `yarn` to install the needed dependencies.
 
 ## Developing
@@ -30,21 +28,24 @@ When you adopt an issue, please write a comment on it to make sure that multiple
 
 We develop following a test driven development approach.
 
-We have a grunt + karma + jasmine environment to unit test Popper.js
+We have a karma + jasmine environment to unit test Popper.js
 Feel free to add tests to the `/tests` folder, any JavaScript file in that folder will be executed as test.
 
 To run tests:
 
 ```bash
-npm test
+npm run test:dev # watch
+npm run test # single run
 ```
 
 ## Build
 
-To create a new release of Popper.js, run:
+To create a new release run:
 
 ```js
-grunt dist
+npm run build:popper # popper.js
+npm run build:tooltip # tooltip.js
+npm run build # both
 ```
 
 The files will be automatically minified and copied in the `build` directory.
