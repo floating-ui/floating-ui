@@ -1,5 +1,4 @@
-// import Popper from 'popper.js';
-/* globals Popper */
+import Popper from 'popper.js';
 import isFunction from '../popper/utils/isFunction';
 
 const DEFAULT_OPTIONS = {
@@ -43,16 +42,24 @@ export default class Tooltip {
      *      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
      * @param {HTMLElement} options.boundariesElement
      *      The element used as boundaries for the tooltip. For more information refer to Popper.js'
-     *      [boundariesElement docs](https://popper.js.org/documentation.html)
+     *      [boundariesElement docs](https://popper.js.org/popper-documentation.html)
      * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
-     *      [offset docs](https://popper.js.org/documentation.html)
+     *      [offset docs](https://popper.js.org/popper-documentation.html)
      * @return {Object} instance - The generated tooltip instance
      */
     constructor(reference, options) {
+        if (!Popper) {
+            throw Error(`Popper.js is required.`);
+        }
+
         // apply user options over default ones
         options = Object.assign({}, DEFAULT_OPTIONS, options);
 
         reference.jquery && (reference = reference[0]);
+
+        // cache reference and options
+        this.reference = reference;
+        this.options = options;
 
         // get events list
         const events = typeof options.trigger === 'string' ? options.trigger.split(' ').filter((trigger) => {
@@ -70,41 +77,35 @@ export default class Tooltip {
     // Public methods
     //
 
-    show(reference, options) {
-        // get title
-        const title = reference.getAttribute('title') || options.title;
+    /**
+     * Reveals an element's tooltip. This is considered a "manual" triggering of the tooltip.
+     * Tooltips with zero-length titles are never displayed.
+     * @memberof Tooltip
+     */
+    show = () => this._show(this.reference, this.options);
 
-        // create tooltip node
-        const tooltipNode = this._create(reference, options.template, title, options.html);
+    /**
+     * Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+     * @memberof Tooltip
+     */
+    hide = () => this._hide();
 
-        // append tooltip to container: container = false we pick the parent node of the reference
-        var container = options.container === false ? reference.parentNode : options.container;
+    /**
+     * Hides and destroys an element’s tooltip.
+     * @memberof Tooltip
+     */
+    dispose = () => this._dispose();
 
-        this._append(tooltipNode, container);
-
-        const popperOptions = {
-            placement: options.placement,
-            removeOnDestroy: true,
-            arrowElement: this.arrowSelector,
-        };
-
-        if (options.boundariesElement) {
-            popperOptions.boundariesElement = options.boundariesElement;
+    /**
+     * Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+     * @memberof Tooltip
+     */
+    toggle = () => {
+        if (this._isOpen) {
+            return this.hide();
+        } else {
+            return this.show();
         }
-
-        this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
-
-        this._isOpen = true;
-        this._tooltipNode = tooltipNode;
-
-        return this;
-    }
-
-    hide(/*reference, options*/) {
-        this.popperInstance.destroy();
-        this._isOpen = false;
-        this._tooltipNode = null;
-        return this;
     }
 
     //
@@ -151,6 +152,72 @@ export default class Tooltip {
 
         // return the generated tooltip node
         return tooltipNode;
+    }
+
+    _show(reference, options) {
+        // don't show if it's already visible
+        if (this._isOpen) { return this; }
+
+        // if the tooltipNode already exists, just show it
+        if (this._tooltipNode) {
+            this._tooltipNode.styles.display = '';
+            return this;
+        }
+
+        // get title
+        const title = reference.getAttribute('title') || options.title;
+
+        // don't show tooltip if no title is defined
+        if (!title) { return this; }
+
+        // create tooltip node
+        const tooltipNode = this._create(reference, options.template, title, options.html);
+
+        // append tooltip to container: container = false we pick the parent node of the reference
+        var container = options.container === false ? reference.parentNode : options.container;
+
+        this._append(tooltipNode, container);
+
+        const popperOptions = {
+            placement: options.placement,
+            arrowElement: this.arrowSelector,
+        };
+
+        if (options.boundariesElement) {
+            popperOptions.boundariesElement = options.boundariesElement;
+        }
+
+        this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
+
+        this._isOpen = true;
+        this._tooltipNode = tooltipNode;
+
+        return this;
+    }
+
+
+    _hide(/*reference, options*/) {
+        // don't hide if it's already hidden
+        if (!this._isOpen) { return this; }
+
+        this.popperInstance.destroy();
+        this._isOpen = false;
+
+        // hide tooltipNode
+        this._tooltipNode.styles.display = 'none';
+
+        return this;
+    }
+
+    _dispose() {
+        if (this._tooltipNode) {
+            this._hide();
+
+            // destroy tooltipNode
+            this._tooltipNode.parentNode.removeChild(this._tooltipNode);
+            this._tooltipNode = null;
+        }
+        return this;
     }
 
     _findContainer(container) {
@@ -224,7 +291,7 @@ export default class Tooltip {
     _scheduleShow(reference, delay, options/*, evt */) {
         // defaults to 0
         const computedDelay = (delay && delay.show) || delay || 0;
-        window.setTimeout(() => this.show(reference, options), computedDelay);
+        window.setTimeout(() => this._show(reference, options), computedDelay);
     }
 
     _scheduleHide(reference, delay, options, evt) {
@@ -245,7 +312,7 @@ export default class Tooltip {
                 if (isSet) { return; }
             }
 
-            this.hide(reference, options);
+            this._hide(reference, options);
         }, computedDelay);
     }
 
