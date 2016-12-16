@@ -126,7 +126,7 @@ Popper.js limits all its DOM modifications inside the `applyStyle` modifier,
 you can simply disable it and manually apply the popper coordinates using
 your library of choice.  
 
-This made possible to some great developers to create libraries based on Popper.js
+This made possible for some great developers to create libraries based on Popper.js
 that integrate in popular frameworks:
 
 - [**react-popper**](https://github.com/souporserious/react-popper) by [@souporserious](https://github.com/souporserious) for [React](https://facebook.github.io/react/)
