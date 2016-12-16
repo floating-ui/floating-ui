@@ -65,22 +65,22 @@ Find [the documentation here](doc/_includes/tooltip-documentation.md).
 ## Installation
 Popper.js is available on the following package managers and CDNs:
 
-| Source   |                                              |
-|:---------|:---------------------------------------------|
-| npm      | `npm install popper.js --save`               |
-| yarn     | `yarn add popper.js`                         |
-| Bower    | `bower install popper.js --save`             |
-| jsDelivr | `http://www.jsdelivr.com/projects/popper.js` |
+| Source   |                                                                                            |
+|:---------|:-------------------------------------------------------------------------------------------|
+| npm      | `npm install popper.js --save`                                                             |
+| yarn     | `yarn add popper.js`                                                                       |
+| Bower    | `bower install popper.js --save`                                                           |
+| jsDelivr | [`http://www.jsdelivr.com/projects/popper.js`](http://www.jsdelivr.com/projects/popper.js) |
 
 
 Tooltip.js as well:
 
-| Source   |                                               |
-|:---------|:----------------------------------------------|
-| npm      | `npm install tooltip.js --save`               |
-| yarn     | `yarn add tooltip.js`                         |
-| Bower    | `bower install tooltip.js --save`             |
-| jsDelivr | `http://www.jsdelivr.com/projects/tooltip.js` |
+| Source   |                                                                                              |
+|:---------|:---------------------------------------------------------------------------------------------|
+| npm      | `npm install tooltip.js --save`                                                              |
+| yarn     | `yarn add tooltip.js`                                                                        |
+| Bower    | `bower install tooltip.js --save`                                                            |
+| jsDelivr | [`http://www.jsdelivr.com/projects/tooltip.js`](http://www.jsdelivr.com/projects/tooltip.js) |
 
 
 ## Usage
