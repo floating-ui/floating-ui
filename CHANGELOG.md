@@ -10,6 +10,7 @@
 - Full support for HTML5 shadow root and HTML5 components (#88) (thanks @nadiam84)
 - Improved flip detection strategy (#82) (thanks @nadiam84)
 - BREAKING CHANGE: boundariesElement has been deprecated in favor to new options of `preventOverflow` and `flip` modifiers (#75)
+- You can now set attributes defining them in `data.attributes`, properties with `false` values will be removed
 
 ## v0.6.4
 - 30a781e: Remove necessity of remove polyfill on IE (thanks @rafaelverger)
