@@ -5,6 +5,7 @@
 - moved from JSHint to ESLint
 - updated npm dependencies
 - BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core
+- Added Tooltip.js library to replace the `parse` method
 - BREAKING CHANGE: simplified modifiers API, see #62 for migration instructions
 - BREAKING CHANGE: modifiers options are now stored inside the modifiers configurations, see #62
 - Full support for HTML5 shadow root and HTML5 components (#88) (thanks @nadiam84)
