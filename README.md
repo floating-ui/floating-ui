@@ -156,7 +156,7 @@ new Popper(reference, popper, {
 Popper.js is based on a "plugin-like" architecture, most of the features of it are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.  
 
-To learn how to create a modifier, [read the modifiers documentaton](doc/_includes/documentation.md#modifiers--object)
+To learn how to create a modifier, [read the modifiers documentaton](doc/_includes/popper-documentation.md#modifiers--object)
 
 
 ### Migration from Popper.js v0
