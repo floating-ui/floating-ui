@@ -13,5 +13,13 @@
     ],
     "ignore": [
         "node_modules/**"
-    ]
+    ],
+    "env": {
+        "production": {
+            "presets": ["babili"],
+            "comments": false,
+            "minified": true,
+            "compact": true
+        }
+    }
 }

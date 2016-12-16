@@ -4,7 +4,7 @@ const version = JSON.parse(fs.readFileSync('./package.json')).version;
 
 module.exports = function() {
     return `\
-/**
+/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version ${version}
  * @license

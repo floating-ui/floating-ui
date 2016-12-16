@@ -4,7 +4,7 @@ const version = JSON.parse(fs.readFileSync('./src/tooltip/package.json')).versio
 
 module.exports = function() {
     return `\
-/**
+/**!
  * @fileOverview Kickass library to create tooltips in your applications.
  * @version ${version}
  * @license
