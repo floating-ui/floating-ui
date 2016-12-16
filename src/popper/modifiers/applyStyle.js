@@ -1,5 +1,6 @@
 import getSupportedPropertyName from '../utils/getSupportedPropertyName';
-import setStyle from '../utils/setStyle';
+import setStyles from '../utils/setStyles';
+import setAttributes from '../utils/setAttributes';
 
 /**
  * Apply the computed styles to the popper element
@@ -14,6 +15,10 @@ export default function applyStyle(data) {
     // NOTE: 1 DOM access here
     const styles = {
         position: data.offsets.popper.position
+    };
+
+    const attributes = {
+        'x-placement': data.placement,
     };
 
     // round top and left to avoid blurry text
@@ -39,16 +44,16 @@ export default function applyStyle(data) {
     // Be aware, modifiers could override the properties defined in the previous
     // lines of this modifier!
     Object.assign(styles, data.styles);
+    setStyles(data.instance.popper, styles);
 
-    setStyle(data.instance.popper, styles);
-
-    // set an attribute which will be useful to style the tooltip (use it to properly position its arrow)
-    // NOTE: 1 DOM access here
-    data.instance.popper.setAttribute('x-placement', data.placement);
+    // any property present in `data.attributes` will be applied to the popper,
+    // they will be set as HTML attributes of the element
+    Object.assign(attributes, data.attributes);
+    setAttributes(data.instance.popper, attributes);
 
     // if the arrow style has been computed, apply the arrow style
     if (data.offsets.arrow) {
-        setStyle(data.arrowElement, data.offsets.arrow);
+        setStyles(data.arrowElement, data.offsets.arrow);
     }
 
     return data;

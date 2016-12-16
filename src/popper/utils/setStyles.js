@@ -7,7 +7,7 @@ import isNumeric from './isNumeric';
  * @argument {Element} element - Element to apply the style to
  * @argument {Object} styles - Object with a list of properties and values which will be applied to the element
  */
-export default function setStyle(element, styles) {
+export default function setStyles(element, styles) {
     Object.keys(styles).forEach(function(prop) {
         let unit = '';
         // add unit if the value is numeric and is one of the following

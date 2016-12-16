@@ -15,7 +15,7 @@ import isModifierRequired from './isModifierRequired';
 import isNumeric from './isNumeric';
 import isTransformed from './isTransformed';
 import runModifiers from './runModifiers';
-import setStyle from './setStyle';
+import setStyles from './setStyles';
 
 /** @namespace Popper.Utils */
 export default {
@@ -36,5 +36,5 @@ export default {
     isNumeric,
     isTransformed,
     runModifiers,
-    setStyle
+    setStyles,
 };

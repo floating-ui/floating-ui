@@ -29,13 +29,13 @@ export default function hide(data) {
         if (data.hide === true) { return data; }
 
         data.hide = true;
-        data.instance.popper.setAttribute('x-out-of-boundaries', '');
+        data.attributes['x-out-of-boundaries'] = '';
     } else {
         // Avoid unnecessary DOM access if visibility hasn't changed
         if (data.hide === false) { return data; }
 
         data.hide = false;
-        data.instance.popper.removeAttribute('x-out-of-boundaries');
+        data.attributes['x-out-of-boundaries'] = false;
     }
 
     return data;

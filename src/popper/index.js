@@ -5,7 +5,7 @@ import './polyfills/requestAnimationFrame';
 // Utils
 import Utils from './utils/index';
 import debounce from './utils/debounce';
-import setStyle from './utils/setStyle';
+import setStyles from './utils/setStyles';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getPosition from './utils/getPosition';
@@ -238,15 +238,16 @@ export default class Popper {
      * @memberof Popper
      */
     update() {
-        var data = {
+        let data = {
             instance: this,
             styles: {},
+            attributes: {},
             flipped: false,
         };
 
         // make sure to apply the popper position before any computation
         this.state.position = getPosition(this.reference);
-        setStyle(this.popper, { position: this.state.position});
+        setStyles(this.popper, { position: this.state.position});
 
         // if popper is destroyed, don't perform any further update
         if (this.state.isDestroyed) { return; }
