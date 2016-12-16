@@ -176,6 +176,8 @@ be used in 3rd party libraries.
 Lot of projects are already using Popper.js, you can see the complete list visiting
 [the related npm page](https://www.npmjs.com/browse/depended/popper.js).
 
+Another useful list is provided by [NPM-Graph](https://npm-graph.com/NpmPackage/popper.js).
+
 ### Credits
 I want to thank some friends and projects for the work they did:
 
