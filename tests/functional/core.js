@@ -361,14 +361,14 @@ describe('[core]', () => {
         });
     });
 
-    it('inits a popper with boundariesElement set to viewport, the popper is not in the viewport', (done) => {
+    it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', (done) => {
         var relative = document.createElement('div');
         relative.style.position = 'relative';
         relative.style.margin = '20px';
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 100;
+        // document.body.scrollTop = 100;
 
         var ref = appendNewRef(1, 'ref', relative);
         ref.style.width = '100px';
@@ -386,7 +386,6 @@ describe('[core]', () => {
             }
         }).onCreate((data) => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-
             data.instance.destroy();
             done();
         });
