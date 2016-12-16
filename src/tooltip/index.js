@@ -48,10 +48,6 @@ export default class Tooltip {
      * @return {Object} instance - The generated tooltip instance
      */
     constructor(reference, options) {
-        if (!Popper) {
-            throw Error(`Popper.js is required.`);
-        }
-
         // apply user options over default ones
         options = Object.assign({}, DEFAULT_OPTIONS, options);
 
@@ -118,6 +114,8 @@ export default class Tooltip {
     // Private methods
     //
 
+    _events = [];
+
     /**
      * Creates a new tooltip node
      * @memberof Tooltip
@@ -157,10 +155,12 @@ export default class Tooltip {
     _show(reference, options) {
         // don't show if it's already visible
         if (this._isOpen) { return this; }
+        this._isOpen = true;
 
         // if the tooltipNode already exists, just show it
         if (this._tooltipNode) {
-            this._tooltipNode.styles.display = '';
+            this._tooltipNode.style.display = '';
+            this.popperInstance.update();
             return this;
         }
 
@@ -189,7 +189,6 @@ export default class Tooltip {
 
         this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
 
-        this._isOpen = true;
         this._tooltipNode = tooltipNode;
 
         return this;
@@ -200,11 +199,10 @@ export default class Tooltip {
         // don't hide if it's already hidden
         if (!this._isOpen) { return this; }
 
-        this.popperInstance.destroy();
         this._isOpen = false;
 
         // hide tooltipNode
-        this._tooltipNode.styles.display = 'none';
+        this._tooltipNode.style.display = 'none';
 
         return this;
     }
@@ -212,6 +210,15 @@ export default class Tooltip {
     _dispose() {
         if (this._tooltipNode) {
             this._hide();
+
+            // destroy instance
+            this.popperInstance.destroy();
+
+            // remove event listeners
+            this._events.forEach(({func, event }) => {
+                this._tooltipNode.removeEventListener(event, func);
+            });
+            this._events = [];
 
             // destroy tooltipNode
             this._tooltipNode.parentNode.removeChild(this._tooltipNode);
@@ -272,19 +279,23 @@ export default class Tooltip {
 
         // schedule show tooltip
         directEvents.forEach((event) => {
-            reference.addEventListener(event, (evt)  => {
+            const func = (evt)  => {
                 if (this._isOpen === true) { return; }
                 evt.usedByTooltip = true;
                 this._scheduleShow(reference, options.delay, options, evt);
-            });
+            };
+            this._events.push({ event, func });
+            reference.addEventListener(event, func);
         });
 
         // schedule hide tooltip
         oppositeEvents.forEach((event) => {
-            reference.addEventListener(event, (evt) => {
+            const func = (evt) => {
                 if (evt.usedByTooltip === true) { return; }
                 this._scheduleHide(reference, options.delay, options, evt);
-            });
+            };
+            this._events.push({ event, func });
+            reference.addEventListener(event, func);
         });
     }
 
@@ -298,7 +309,6 @@ export default class Tooltip {
         // defaults to 0
         const computedDelay = (delay && delay.hide) || delay || 0;
         window.setTimeout(() => {
-
             if (this._isOpen === false) { return; }
             if (!document.body.contains(this._tooltipNode)) { return; }
 
@@ -316,17 +326,19 @@ export default class Tooltip {
         }, computedDelay);
     }
 
-    _setTooltipNodeEvent(evt,  reference, delay, options) {
+    _setTooltipNodeEvent = (evt, reference, delay, options) => {
         const relatedreference = evt.relatedreference || evt.toElement;
 
         const callback = (evt2) => {
             const relatedreference2 = evt2.relatedreference || evt2.toElement;
 
             // Remove event listener after call
-            evt2.reference.removeEventListener(evt2.type, callback);
+            this._tooltipNode.removeEventListener(evt.type, callback);
 
-            // If the new reference is not the reference element, we schedule to hide tooltip
+            // If the new reference is not the reference element
             if (!this._isElOrChildOfEl(relatedreference2, reference)) {
+
+                // Schedule to hide tooltip
                 this._scheduleHide(reference, options.delay, options, evt2);
             }
         };

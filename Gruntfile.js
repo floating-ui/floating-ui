@@ -10,7 +10,6 @@ var tooltipVersion = JSON.parse(fs.readFileSync('./src/tooltip/package.json')).v
 
 // comma separated list of browsers to run tests inside
 var browsers = grunt.option('browsers') ? grunt.option('browsers').split(',') : ['ChromeDebug'];
-var babelOptions = { exclude: './node_modules/**' };
 
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-jsdoc-to-markdown')
@@ -26,11 +25,12 @@ module.exports = function Gruntfile(grunt) {
             options: {
                 format: 'umd',
                 sourceMap: true,
-                plugins: function() {
-                    return [
-                        babel(babelOptions)
-                    ];
-                }
+                plugins: () => [
+                    babel(),
+                ],
+                globals: {
+                    'popper.js': 'Popper',
+                },
             },
             popper: {
                 options: {
@@ -157,10 +157,10 @@ module.exports = function Gruntfile(grunt) {
                 },
                 rollupPreprocessor: {
                     plugins: [
-                        babel(babelOptions)
+                        babel()
                     ],
                     format: 'iife',
-                    sourceMap: 'inline'
+                    sourceMap: 'inline',
                 },
                 files: [
                     'tests/styles/*.css',
