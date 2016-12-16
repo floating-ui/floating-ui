@@ -1,8 +1,9 @@
+import deepAssign from 'deep-assign';
 import base from './rollup.config.base.js';
 
 const root = `${__dirname}/..`;
 
-export default Object.assign(base, {
+export default deepAssign(base, {
     entry: `${root}/src/tooltip/index.js`,
     dest: `${root}/build/tooltip.js`,
     moduleName: 'Tooltip',
