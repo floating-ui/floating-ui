@@ -57,6 +57,7 @@ const supportsNativeMutationObserver = isNative(window.MutationObserver);
  * but called in the minimum time possible.
  *
  * @method
+ * @memberof Popper.Utils
  * @argument {Function} fn
  * @returns {Function}
  */
