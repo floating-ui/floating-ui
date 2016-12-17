@@ -1,3 +1,4 @@
+import path from 'path';
 import deepAssign from 'deep-assign';
 import base from './rollup.config.base.js';
 
@@ -9,4 +10,5 @@ export default deepAssign(base, {
     moduleName: 'Tooltip',
     sourceMapFile: `${root}/build/tooltip.js.map`,
     banner: require('./addTooltipHeader.js')(),
+    external: [path.resolve(root, 'src/popper/index.js')]
 });

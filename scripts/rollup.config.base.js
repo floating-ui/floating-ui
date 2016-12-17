@@ -4,8 +4,4 @@ export default {
     format: 'umd',
     sourceMap: true,
     plugins: [babel()],
-    globals: {
-        'popper.js': 'Popper',
-        'tooltip.js': 'Tooltip',
-    },
 }

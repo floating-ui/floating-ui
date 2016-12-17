@@ -1,27 +1,141 @@
-// import '../setup.js';
-// const jasmineWrapper = document.getElementById('jasmineWrapper');
-//
-// //import '../../src/popper/index.js';
-// import Popper from '../../src/popper/index.js';
-// import Tooltip from '../../src/tooltip/index.js';
-//
-// Tooltip.Popper = Popper;
-//
-// fdescribe('[tooltip.js]', () => {
-//     describe('events', () => {
-//         let reference;
-//
-//         beforeAll(() => {
-//             reference = document.createElement('div');
-//             reference.style.width = '100px';
-//             reference.style.height = '100px';
-//             jasmineWrapper.appendChild(reference);
-//         });
-//
-//         it('should show a tooltip when hovered', () => {
-//             new Tooltip(reference, {
-//                 trigger: 'hover',
-//             });
-//         });
-//     });
-// });
+import '../setup.js';
+import then from '../utils/then.js';
+
+const jasmineWrapper = document.getElementById('jasmineWrapper');
+
+import Tooltip from '../../src/tooltip/index.js';
+
+let reference;
+let instance;
+function createReference() {
+    reference = document.createElement('div');
+    reference.style.width = '100px';
+    reference.style.height = '100px';
+    reference.style.margin = '100px';
+    jasmineWrapper.appendChild(reference);
+}
+
+fdescribe('[tooltip.js]', () => {
+    describe('manual', () => {
+        beforeEach(() => {
+            createReference()
+        });
+
+        it('should show tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).not.toBeNull();
+                done();
+            });
+        });
+
+        it('should hide tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+            then(() => instance.hide());
+
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            });
+        });
+
+
+        it('should dispose tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+            then(() => instance.dispose());
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).toBeNull();
+                done();
+            });
+        });
+    });
+
+    describe('events', () => {
+        beforeEach(() => {
+            createReference();
+        });
+
+        afterEach(() => {
+            instance.dispose();
+            jasmineWrapper.innerHTML = '';
+        });
+
+        it('should show a tooltip when hovered', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'hover',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new Event('mouseenter'));
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).not.toBeNull();
+                done();
+            });
+        });
+
+        it('should hide a tooltip on mouseleave', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'hover',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new Event('mouseenter'));
+            then(() => reference.dispatchEvent(new Event('mouseleave')));
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            });
+        });
+
+        it('should show a tooltip on click', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'click',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new Event('click'));
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).not.toBeNull();
+                done();
+            });
+        });
+
+        it('should hide a tooltip on click while open', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'click',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new Event('click'));
+            then(() => reference.dispatchEvent(new Event('click')));
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            });
+        });
+    });
+});

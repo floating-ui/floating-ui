@@ -23,24 +23,12 @@
  * SOFTWARE.
  */    
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('popper.js')) :
-    typeof define === 'function' && define.amd ? define(['popper.js'], factory) :
-    (global.Tooltip = factory(global.Popper));
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('../popper/index.js')) :
+  typeof define === 'function' && define.amd ? define(['../popper/index.js'], factory) :
+  (global.Tooltip = factory(global.Popper));
 }(this, (function (Popper) { 'use strict';
 
 Popper = 'default' in Popper ? Popper['default'] : Popper;
-
-/**
- * Check if the given variable is a function
- * @method
- * @memberof Popper.Utils
- * @argument {Element} element - Element to check
- * @returns {Boolean} answer to: is a function?
- */
-function isFunction(functionToCheck) {
-  var getType = {};
-  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-}
 
 var classCallCheck = function (instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -270,7 +258,7 @@ var Tooltip = function () {
             if (title.nodeType === 1) {
                 // if title is a node, append it only if allowHtml is true
                 allowHtml && titleNode.appendChild(title);
-            } else if (isFunction(title)) {
+            } else if (Popper.Utils.isFunction(title)) {
                 // if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value
                 var titleText = title.call(reference);
                 allowHtml ? titleNode.innerHTML = titleText : titleNode.innerText = titleText;
