@@ -368,7 +368,7 @@ describe('[core]', () => {
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
-        // document.body.scrollTop = 100;
+        document.body.scrollTop = 100;
 
         var ref = appendNewRef(1, 'ref', relative);
         ref.style.width = '100px';
