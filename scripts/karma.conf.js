@@ -55,6 +55,7 @@ module.exports = function(config) {
             sourceMap: 'inline',
         },
         files: [
+            { pattern:`${root}/src/**/*.js`, included: false, watched: true },
             `${root}/tests/styles/*.css`,
             `${root}/tests/functional/*.js`,
             `${root}/tests/unit/*.js`,
