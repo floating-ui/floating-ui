@@ -4,7 +4,7 @@
   "description": "A kickass library to manage your poppers",
   "main": "build/popper.js",
   "scripts": {
-    "prepublish": "npm run test && npm run build",
+    "prepublish": "npm run build",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
     "build": "npm run build:popper && npm run build:tooltip",
