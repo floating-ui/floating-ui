@@ -1,5 +1,6 @@
 import '../setup.js';
 import then from '../utils/then.js';
+import '../utils/customEventPolyfill.js';
 
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
@@ -82,7 +83,7 @@ describe('[tooltip.js]', () => {
 
             expect(document.querySelector('.tooltip')).toBeNull();
 
-            reference.dispatchEvent(new Event('mouseenter'));
+            reference.dispatchEvent(new CustomEvent('mouseenter'));
 
             then(() => {
                 expect(document.querySelector('.tooltip')).not.toBeNull();
@@ -98,8 +99,8 @@ describe('[tooltip.js]', () => {
 
             expect(document.querySelector('.tooltip')).toBeNull();
 
-            reference.dispatchEvent(new Event('mouseenter'));
-            then(() => reference.dispatchEvent(new Event('mouseleave')));
+            reference.dispatchEvent(new CustomEvent('mouseenter'));
+            then(() => reference.dispatchEvent(new CustomEvent('mouseleave')));
             then(() => {
                 expect(document.querySelector('.tooltip').style.display).toBe('none');
                 done();
@@ -114,7 +115,7 @@ describe('[tooltip.js]', () => {
 
             expect(document.querySelector('.tooltip')).toBeNull();
 
-            reference.dispatchEvent(new Event('click'));
+            reference.dispatchEvent(new CustomEvent('click'));
 
             then(() => {
                 expect(document.querySelector('.tooltip')).not.toBeNull();
@@ -130,8 +131,8 @@ describe('[tooltip.js]', () => {
 
             expect(document.querySelector('.tooltip')).toBeNull();
 
-            reference.dispatchEvent(new Event('click'));
-            then(() => reference.dispatchEvent(new Event('click')));
+            reference.dispatchEvent(new CustomEvent('click'));
+            then(() => reference.dispatchEvent(new CustomEvent('click')));
             then(() => {
                 expect(document.querySelector('.tooltip').style.display).toBe('none');
                 done();
