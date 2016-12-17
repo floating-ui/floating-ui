@@ -1,6 +1,6 @@
-/**
+/**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.0.0-alpha.7
+ * @version 1.0.0-alpha.8
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -370,9 +370,6 @@ function getBoundaries(popper, padding, boundariesElement) {
     } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
-        // subtract scrollbars size
-        // boundaries.right -= scrollParent.offsetWidth - scrollParent.clientWidth;
-        // boundaries.bottom -= scrollParent.offsetHeight - scrollParent.clientHeight;
     } else {
         // BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
@@ -649,6 +646,7 @@ var supportsNativeMutationObserver = isNative(window.MutationObserver);
  * but called in the minimum time possible.
  *
  * @method
+ * @memberof Popper.Utils
  * @argument {Function} fn
  * @returns {Function}
  */

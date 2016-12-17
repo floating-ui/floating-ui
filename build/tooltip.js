@@ -1,4 +1,4 @@
-/**
+/**!
  * @fileOverview Kickass library to create tooltips in your applications.
  * @version 1.0.0-alpha.1
  * @license

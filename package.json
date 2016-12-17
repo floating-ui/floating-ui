@@ -1,9 +1,10 @@
 {
   "name": "popper.js",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "description": "A kickass library to manage your poppers",
   "main": "build/popper.js",
   "scripts": {
+    "prepublish": "npm run test && npm run build",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
     "build": "npm run build:popper && npm run build:tooltip",
