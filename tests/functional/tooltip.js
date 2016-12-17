@@ -15,7 +15,7 @@ function createReference() {
     jasmineWrapper.appendChild(reference);
 }
 
-fdescribe('[tooltip.js]', () => {
+describe('[tooltip.js]', () => {
     describe('manual', () => {
         beforeEach(() => {
             createReference()
