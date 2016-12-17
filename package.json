@@ -38,6 +38,16 @@
   "bugs": {
     "url": "https://github.com/FezVrasta/popper.js/issues"
   },
+
+  "keywords": [
+    "popperjs",
+    "component",
+    "drop",
+    "tooltip",
+    "popover",
+    "position",
+    "attached"
+  ],
   "homepage": "https://popper.js.org",
   "devDependencies": {
     "babel-cli": "^6.18.0",
