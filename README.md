@@ -7,6 +7,11 @@ Popper.js is a library used to create poppers in web applications.
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
 
+## We are close to [v1 release](https://github.com/FezVrasta/popper.js/tree/v1-dev)!
+It took 5 months to reach this point, but now, after [8 alpha releases](https://github.com/FezVrasta/popper.js/releases/tag/v1.0.0-alpha.8), we are close to the
+first stable beta!  
+I need help with the [remaining high priority issues](https://github.com/FezVrasta/popper.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22HIGH+PRIORITY%22+milestone%3Av1.0.0). If you use this project, and you like it, please consider to give me some help.
+
 ## Wut? Poppers?
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
 Common examples of poppers are tooltips and popovers.
