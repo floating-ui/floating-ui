@@ -3,6 +3,7 @@ import getScrollParent from './getScrollParent';
 import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
 import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
+import getTotalScroll from './getTotalScroll';
 
 /**
  * Computed the boundaries limits and return them
@@ -52,8 +53,8 @@ export default function getBoundaries(popper, padding, boundariesElement) {
                 left: 0 - offsetParentRect.left
             };
 
-            const scrollTop = body.scrollTop || html.scrollTop;
-            const scrollLeft = body.scrollLeft || html.scrollLeft;
+            const scrollTop = getTotalScroll(popper, 'top');
+            const scrollLeft = getTotalScroll(popper, 'left');
             boundaries.top += scrollTop;
             boundaries.bottom += scrollTop;
             boundaries.left += scrollLeft;
