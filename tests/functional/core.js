@@ -74,7 +74,6 @@ describe('[core]', () => {
         });
     });
 
-    // Commented, waiting for https://github.com/FezVrasta/popper.js/pull/97
     it('inits a popper inside a scrolling div, contained in a relative div', (done) => {
         var relative = document.createElement('div');
         relative.style.width = '800px';

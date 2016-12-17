@@ -52,15 +52,7 @@ export default function getBoundaries(popper, padding, boundariesElement) {
                 bottom: window.document.documentElement.clientHeight - offsetParentRect.top,
                 left: 0 - offsetParentRect.left
             };
-
-            const scrollTop = getTotalScroll(popper, 'top');
-            const scrollLeft = getTotalScroll(popper, 'left');
-            boundaries.top += scrollTop;
-            boundaries.bottom += scrollTop;
-            boundaries.left += scrollLeft;
-            boundaries.right += scrollLeft;
         }
-
     } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
@@ -70,7 +62,8 @@ export default function getBoundaries(popper, padding, boundariesElement) {
     }
 
     if (offsetParent.contains(scrollParent)) {
-        const { scrollLeft, scrollTop } = scrollParent;
+        const scrollLeft = getTotalScroll(scrollParent, 'left');
+        const scrollTop = getTotalScroll(scrollParent, 'top');
         boundaries.right += scrollLeft;
         boundaries.bottom += scrollTop;
     }
