@@ -6,6 +6,7 @@ node_modules
 .tmp
 .chrome
 *.log
+.jekyll-metadata
 
 # When you switch branches, things can get messy
 _site

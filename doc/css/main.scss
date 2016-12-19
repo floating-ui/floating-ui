@@ -998,6 +998,10 @@ button,
 		align-items: center;
 	}
 
+    &.half-height .example {
+        min-height: 350px;
+    }
+
 	.content {
 		@include padding(2em, 4em);
 		@include vendor('order', '2');
@@ -1267,6 +1271,7 @@ button,
 	}
 
 	&.style2 {
+        color: _palette(accent1, fg-light);
 		background-color: _palette(bg);
 	}
 
@@ -1899,6 +1904,7 @@ body.is-mobile {
 	width: 400px;
 	border-radius: 2px;
 	background: rgba(0, 0, 0, 0.035);
+	margin-bottom: 1rem;
 }
 
 #carbonads span {

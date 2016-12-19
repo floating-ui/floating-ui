@@ -21,7 +21,8 @@ p.bold {
     border-width: medium;
 }
 
-.popper {
+.popper,
+.tooltip {
     position: absolute;
     background: #FFC107;
     color: black;
@@ -31,17 +32,20 @@ p.bold {
     padding: 10px;
     text-align: center;
 }
-.popper .popper__arrow {
+.popper .popper__arrow,
+.tooltip .tooltip__arrow {
     width: 0;
     height: 0;
     border-style: solid;
     position: absolute;
     margin: 5px;
 }
-.popper[x-placement^="top"] {
+.popper[x-placement^="top"],
+.tooltip[x-placement^="top"] {
     margin-bottom: 5px;
 }
-.popper[x-placement^="top"] .popper__arrow {
+.popper[x-placement^="top"] .popper__arrow,
+.tooltip[x-placement^="top"] .tooltip-arrow {
     border-width: 5px 5px 0 5px;
     border-color: #FFC107 transparent transparent transparent;
     bottom: -5px;
@@ -49,10 +53,12 @@ p.bold {
     margin-top: 0;
     margin-bottom: 0;
 }
-.popper[x-placement^="bottom"] {
+.popper[x-placement^="bottom"],
+.tooltip[x-placement^="bottom"] {
     margin-top: 5px;
 }
-.popper[x-placement^="bottom"] .popper__arrow {
+.tooltip[x-placement^="bottom"] .tooltip__arrow,
+.popper[x-placement^="bottom"] .popper-arrow {
     border-width: 0 5px 5px 5px;
     border-color: transparent transparent #FFC107 transparent;
     top: -5px;
@@ -60,10 +66,12 @@ p.bold {
     margin-top: 0;
     margin-bottom: 0;
 }
+.tooltip[x-placement^="right"],
 .popper[x-placement^="right"] {
     margin-left: 5px;
 }
-.popper[x-placement^="right"] .popper__arrow {
+.popper[x-placement^="right"] .popper__arrow,
+.tooltip[x-placement^="right"] .tooltip-arrow {
     border-width: 5px 5px 5px 0;
     border-color: transparent #FFC107 transparent transparent;
     left: -5px;
@@ -71,10 +79,12 @@ p.bold {
     margin-left: 0;
     margin-right: 0;
 }
-.popper[x-placement^="left"] {
+.popper[x-placement^="left"],
+.tooltip[x-placement^="left"] {
     margin-right: 5px;
 }
-.popper[x-placement^="left"] .popper__arrow {
+.popper[x-placement^="left"] .popper__arrow,
+.tooltip[x-placement^="left"] .tooltip-arrow {
     border-width: 5px 0 5px 5px;
     border-color: transparent transparent transparent #FFC107;
     right: -5px;
