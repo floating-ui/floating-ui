@@ -1,7 +1,8 @@
+const argv = require('yargs');
 const path = require('path');
 const babel = require('rollup-plugin-babel');
-const browsers = (process.env.BROWSERS || 'Chrome').split(',');
-const singleRun = process.env.NODE_ENV === 'DEVELOPMENT' ? false : true;
+const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
+const singleRun = process.env.NODE_ENV === 'development' ? false : true;
 
 const root = `${__dirname}/..`;
 
