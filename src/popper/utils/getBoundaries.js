@@ -61,12 +61,10 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
     }
 
-    if (offsetParent.contains(scrollParent)) {
-        const scrollLeft = getTotalScroll(scrollParent, 'left');
-        const scrollTop = getTotalScroll(scrollParent, 'top');
-        boundaries.right += scrollLeft;
-        boundaries.bottom += scrollTop;
-    }
+    const scrollLeft = getTotalScroll(scrollParent, 'left');
+    const scrollTop = getTotalScroll(scrollParent, 'top');
+    boundaries.right += scrollLeft;
+    boundaries.bottom += scrollTop;
 
     // Add paddings
     boundaries.left += padding;

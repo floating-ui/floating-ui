@@ -383,8 +383,11 @@ describe('[core]', () => {
                     boundariesElement:'viewport'
                 }
             }
-        }).onCreate((data) => {
+        }).onCreate(() => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
+            document.body.scrollTop = 1200;
+        }).onUpdate((data) => {
+            expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
             data.instance.destroy();
             done();
         });
