@@ -10,13 +10,10 @@ import getParentNode from './getParentNode';
  */
 export default function getScrollParent(element) {
     if (element === window.document) {
-        // Firefox puts the scrollTOp value on `documentElement` instead of `body`, we then check which of them is
-        // greater than 0 and return the proper element
-        if (window.document.body.scrollTop) {
-            return window.document.body;
-        } else {
-            return window.document.documentElement;
-        }
+        // Firefox puts the scrollTop value on `documentElement` instead of `body`
+        // we can use the `scrollingElement` property if supported, or, we fallback to
+        // `documentElement` otherwise
+        return document.scrollingElement || document.documentElement;
     }
 
     // Firefox want us to check `-x` and `-y` variations as well
