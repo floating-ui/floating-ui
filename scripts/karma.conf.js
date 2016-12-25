@@ -1,4 +1,4 @@
-const argv = require('yargs');
+const argv = require('yargs').argv;
 const path = require('path');
 const babel = require('rollup-plugin-babel');
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');

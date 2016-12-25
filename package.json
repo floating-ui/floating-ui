@@ -19,7 +19,7 @@
     "build:tooltip:min": "cross-env NODE_ENV=production babel ./build/tooltip.js --inputSourceMap=./build/tooltip.js.map --sourceMapTarget=./build/tooltip.min.js.map -s -o ./build/tooltip.min.js && gzipped ./build/tooltip.min.js",
     "lint": "eslint .",
     "test": "karma start ./scripts/karma.conf.js",
-    "test:dev": "cross-env NODE_ENV=development npm test",
+    "test:dev": "cross-env NODE_ENV=development karma start ./scripts/karma.conf.js",
     "doc": "npm run doc:popper && npm run doc:tooltip",
     "doc:popper": "rollup -c ./scripts/rollup.config.popper.js -o ./.tmp/popper.js && jsdoc2md ./.tmp/popper.js > ./doc/_includes/popper-documentation.md",
     "doc:tooltip": "rollup -c ./scripts/rollup.config.tooltip.js -o ./.tmp/tooltip.js && jsdoc2md ./.tmp/tooltip.js > ./doc/_includes/tooltip-documentation.md"
