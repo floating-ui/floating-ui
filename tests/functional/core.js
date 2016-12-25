@@ -552,10 +552,10 @@ describe('[core]', () => {
             dropdown,
             { placement: 'bottom-end' }
         ).onCreate(() => {
-            expect(getRect(dropdown).right).toBe(getRect(container).right - 5);
+            expect(getRect(dropdown).right).toBeApprox(getRect(container).right - 5);
             container.scrollLeft = scrollLeft;
         }).onUpdate((data) => {
-            expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            expect(getRect(dropdown).right).toBeApprox(getRect(container).right - scrollLeft);
             data.instance.destroy();
             done();
         });
@@ -602,10 +602,10 @@ describe('[core]', () => {
                 modifiers: { preventOverflow: { boundariesElement: container }}
             }
         ).onCreate(() => {
-            expect(getRect(dropdown).right).toBe(getRect(container).right - 5);
+            expect(getRect(dropdown).right).toBeApprox(getRect(container).right - 5);
             container.scrollLeft = scrollLeft;
         }).onUpdate((data) => {
-            expect(getRect(dropdown).right).toBe(getRect(container).right - scrollLeft);
+            expect(getRect(dropdown).right).toBeApprox(getRect(container).right - scrollLeft);
             data.instance.destroy();
             done();
         });
