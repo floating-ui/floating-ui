@@ -7,6 +7,7 @@ const jasmineWrapper = document.getElementById('jasmineWrapper');
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
+import simulateScroll from '../utils/simulateScroll';
 
 describe('[core]', () => {
     afterEach(function() {
@@ -91,7 +92,7 @@ describe('[core]', () => {
 
         var superHigh1 = document.createElement('div');
         superHigh1.style.width = '800px';
-        superHigh1.style.height = '500px';
+        superHigh1.style.height = '450px';
         scrolling.appendChild(superHigh1);
 
         var ref = appendNewRef(1, 'ref', scrolling);
@@ -102,7 +103,7 @@ describe('[core]', () => {
         superHigh2.style.height = '500px';
         scrolling.appendChild(superHigh2);
 
-        scrolling.scrollTop = 400;
+        simulateScroll(scrolling, { scrollTop:  400 });
         new Popper(ref, popper, {
             placement: 'top'
         })
@@ -110,7 +111,7 @@ describe('[core]', () => {
             // placement should be top
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
-            scrolling.scrollTop = 100;
+            simulateScroll(scrolling, { scrollTop: 100, delay: 10 });
         })
         .onUpdate((data) => {
             // placement should be top
@@ -145,7 +146,7 @@ describe('[core]', () => {
         relative.style.margin = '20px';
         relative.style.height = '300vh';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 300;
+        simulateScroll(document.body, { scrollTop: 300 });
 
         var ref = appendNewRef(1, 'ref', relative);
         ref.style.marginTop = '300px';
@@ -173,7 +174,7 @@ describe('[core]', () => {
         relative.style.margin = '20px';
         relative.style.height = '200vh';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 800;
+        simulateScroll(document.body, { scrollTop: 800 });
 
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
@@ -202,7 +203,7 @@ describe('[core]', () => {
         relative.style.height = '200vh';
         relative.style.background = 'rgba(100, 100, 100, 0.5)';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 800;
+        simulateScroll(document.body, { scrollTop: 800 });
 
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
@@ -228,7 +229,7 @@ describe('[core]', () => {
         relative.style.margin = '20px';
         relative.style.height = '200vh';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 800;
+        simulateScroll(document.body, { scrollTop: 800 });
 
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
@@ -326,7 +327,7 @@ describe('[core]', () => {
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 100;
+        simulateScroll(document.body, { scrollTop: 100 });
 
         var scrolling = document.createElement('div');
         scrolling.style.width = '100%';
@@ -341,7 +342,7 @@ describe('[core]', () => {
         superHigh.style.height = '300vh';
         scrolling.appendChild(superHigh);
 
-        scrolling.scrollTop = 100;
+        simulateScroll(scrolling, { scrollTop: 100 });
 
         var ref = appendNewRef(1, 'ref', scrolling);
         ref.style.width = '100px';
@@ -367,7 +368,7 @@ describe('[core]', () => {
         relative.style.paddingTop = '100px';
         relative.style.backgroundColor = 'yellow';
         jasmineWrapper.appendChild(relative);
-        document.body.scrollTop = 100;
+        simulateScroll(document.body, { scrollTop: 100 });
 
         var ref = appendNewRef(1, 'ref', relative);
         ref.style.width = '100px';
@@ -385,7 +386,7 @@ describe('[core]', () => {
             }
         }).onCreate(() => {
             expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-            document.body.scrollTop = 1200;
+            simulateScroll(document.body, { scrollTop:  3000 });
         }).onUpdate((data) => {
             expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
             data.instance.destroy();
