@@ -18,15 +18,6 @@ describe('[lifecycle]', () => {
             expect(window.addEventListener.calls.argsFor(0)).toEqual(['resize', state.updateBound, { passive: true }]);
         });
 
-        it('does not add a scroll event listener to window when boundariesElement is window', () => {
-            spyOn(window, 'addEventListener');
-
-            makePopper(makeConnectedElement(), makeConnectedElement(), { boundariesElement: 'window' });
-
-            expect(window.addEventListener.calls.count()).toEqual(1);
-            expect(window.addEventListener.calls.argsFor(0)[0]).not.toEqual('scroll');
-        });
-
         it('adds a scroll event listener to window when boundariesElement is viewport', () => {
             spyOn(window, 'addEventListener');
 

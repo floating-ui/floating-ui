@@ -1,15 +1,16 @@
 import getScrollParent from './getScrollParent';
+import getScroll from './getScroll';
+import getParentNode from './getParentNode';
 
 export default function getTotalScroll(element, side = 'top') {
     const body = window.document.body;
     const html = window.document.documentElement;
 
     const scrollParent = getScrollParent(element);
-    const upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
-    const scroll = scrollParent[upperSide];
+    const scroll = getScroll(scrollParent, side);
 
-    if (scrollParent !== html && scrollParent !== body) {
-        return scroll + getTotalScroll(scrollParent.parentNode);
+    if (scrollParent !== body && scrollParent !== html) {
+        return scroll + getTotalScroll(getParentNode(scrollParent), side);
     }
     return scroll;
 }

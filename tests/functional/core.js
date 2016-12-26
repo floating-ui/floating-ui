@@ -178,7 +178,7 @@ describe('[core]', () => {
         var ref = appendNewRef(1, 'ref', fixed);
         var popper = appendNewPopper(2, 'popper', fixed);
 
-        new Popper(ref, popper, { modifiers: { flip: { enabled: false }}}).onCreate((data) => {
+        new Popper(ref, popper).onCreate((data) => {
             expect(popper.getBoundingClientRect().top).toBeApprox(83);
             expect(popper.getBoundingClientRect().left).toBeApprox(5);
             data.instance.destroy();
@@ -380,7 +380,7 @@ describe('[core]', () => {
             placement: 'bottom',
             modifiers: {
                 flip: {
-                    boundariesElement:'viewport'
+                    boundariesElement: 'viewport'
                 }
             }
         }).onCreate(() => {

@@ -7,6 +7,8 @@ import getOuterSizes from './getOuterSizes';
 import getPopperClientRect from './getPopperClientRect';
 import getPosition from './getPosition';
 import getScrollParent from './getScrollParent';
+import getScroll from './getScroll';
+import getTotalScroll from './getTotalScroll';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getSupportedPropertyName from './getSupportedPropertyName';
 import isFixed from './isFixed';
@@ -28,6 +30,8 @@ export default {
     getPopperClientRect,
     getPosition,
     getScrollParent,
+    getScroll,
+    getTotalScroll,
     getStyleComputedProperty,
     getSupportedPropertyName,
     isFixed,

@@ -4,6 +4,7 @@ import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
 import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
 import getTotalScroll from './getTotalScroll';
+import isFixed from './isFixed';
 
 /**
  * Computed the boundaries limits and return them
@@ -24,8 +25,8 @@ export default function getBoundaries(popper, padding, boundariesElement) {
 
     if (boundariesElement === 'window') {
         // WINDOW
-        const height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
-        const width = Math.max( body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth );
+        const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+        const width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
 
         boundaries = {
             top: 0,
@@ -53,16 +54,16 @@ export default function getBoundaries(popper, padding, boundariesElement) {
                 left: 0 - offsetParentRect.left
             };
         }
-    } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
+    } else if (boundariesElement === 'scrollParent' || scrollParent === boundariesElement) {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
+        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
     } else {
         // BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
+        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent, isFixed(popper));
     }
 
-    const scrollLeft = getTotalScroll(scrollParent, 'left');
-    const scrollTop = getTotalScroll(scrollParent, 'top');
+    const scrollLeft = getTotalScroll(popper, 'left');
+    const scrollTop = getTotalScroll(popper, 'top');
     boundaries.right += scrollLeft;
     boundaries.bottom += scrollTop;
 

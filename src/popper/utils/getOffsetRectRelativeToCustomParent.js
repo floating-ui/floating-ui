@@ -1,5 +1,7 @@
 import getBoundingClientRect from './getBoundingClientRect';
 import getScrollParent from './getScrollParent';
+import getScroll from './getScroll';
+import getOffsetParent from './getOffsetParent';
 
 /**
  * Given an element and one of its parents, return the offset
@@ -10,16 +12,10 @@ import getScrollParent from './getScrollParent';
  * @return {Object} rect
  */
 export default function getOffsetRectRelativeToCustomParent(element, parent, fixed = false, transformed = false) {
+    const offsetParent = getOffsetParent(element);
+    const scrollParent = getScrollParent(parent);
     const elementRect = getBoundingClientRect(element);
     const parentRect = getBoundingClientRect(parent);
-
-    if (fixed && !transformed) {
-        const scrollParent = getScrollParent(parent);
-        parentRect.top += scrollParent.scrollTop;
-        parentRect.bottom += scrollParent.scrollTop;
-        parentRect.left += scrollParent.scrollLeft;
-        parentRect.right += scrollParent.scrollLeft;
-    }
 
     const rect = {
         top: elementRect.top - parentRect.top,
@@ -30,10 +26,21 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
         height: elementRect.height,
     };
 
-    const { scrollTop, scrollLeft } = parent;
-    rect.top += scrollTop;
-    rect.bottom += scrollTop;
-    rect.left += scrollLeft;
-    rect.right += scrollLeft;
+    if (fixed && !transformed) {
+        const scrollTop = getScroll(scrollParent, 'top');
+        const scrollLeft = getScroll(scrollParent, 'left');
+        rect.top -= scrollTop;
+        rect.bottom -= scrollTop;
+        rect.left -= scrollLeft;
+        rect.right -= scrollLeft;
+    } else if (offsetParent.contains(scrollParent)) {
+        const scrollTop = getScroll(parent, 'top');
+        const scrollLeft = getScroll(parent, 'left');
+        rect.top += scrollTop;
+        rect.bottom += scrollTop;
+        rect.left += scrollLeft;
+        rect.right += scrollLeft;
+    }
+
     return rect;
 }

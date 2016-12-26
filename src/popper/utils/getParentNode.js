@@ -6,5 +6,6 @@
  * @returns {Element} parent
  */
 export default function getParentNode(element) {
-    return element.parentNode || element.host;
+    const parentNode = element.parentNode || element.host;
+    return (parentNode === window.document) ? window.document.documentElement : parentNode;
 }
