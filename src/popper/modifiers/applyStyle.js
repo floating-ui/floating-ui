@@ -12,7 +12,7 @@ import setAttributes from '../utils/setAttributes';
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The same data object
  */
-export default function applyStyle(data) {
+export default function applyStyle(data, options) {
     // apply the final offsets to the popper
     // NOTE: 1 DOM access here
     const styles = {
@@ -27,10 +27,11 @@ export default function applyStyle(data) {
     const left = Math.round(data.offsets.popper.left);
     const top = Math.round(data.offsets.popper.top);
 
-    // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
-    // we automatically use the supported prefixed version if needed
+    // if gpuAcceleration is set to true and transform is supported,
+    //  we use `translate3d` to apply the position to the popper we
+    // automatically use the supported prefixed version if needed
     const prefixedProperty = getSupportedPropertyName('transform');
-    if (data.instance.options.gpuAcceleration && prefixedProperty) {
+    if (options.gpuAcceleration && prefixedProperty) {
         styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
         styles.top = 0;
         styles.left = 0;

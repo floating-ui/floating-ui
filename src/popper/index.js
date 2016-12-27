@@ -26,9 +26,6 @@ var DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
-    // if true, it uses the CSS 3d transformation to position the popper
-    gpuAcceleration: true,
-
     /**
      * Callback called when the popper is created.
      * By default, is set to no-op.
@@ -107,6 +104,8 @@ var DEFAULTS = {
         applyStyle: {
             order: 800,
             enabled: true,
+            // if true, it uses the CSS 3d transformation to position the popper
+            gpuAcceleration: true,
             function: modifiersFunctions.applyStyle,
             onLoad: modifiersOnLoadFunctions.applyStyleOnLoad
         }
