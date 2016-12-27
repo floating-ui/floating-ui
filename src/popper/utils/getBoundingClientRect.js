@@ -6,7 +6,16 @@
  * @return {Object} client rect
  */
 export default function getBoundingClientRect(element) {
-    const rect = element.getBoundingClientRect();
+    let rect;
+
+    // IE10 FIX: `getBoundingClientRect`, when executed on `documentElement`
+    // will not take in account the `scrollTop` and `scrollLeft`,
+    // use `body` instead to avoid these problems (only in IE10!)
+    if (element === window.document.documentElement && navigator.appVersion.indexOf('MSIE 10') !== -1) {
+        rect = window.document.body.getBoundingClientRect();
+    } else {
+        rect = element.getBoundingClientRect();
+    }
 
     // subtract scrollbar size from sizes
     const horizScrollbar = element.offsetWidth - element.clientWidth;
