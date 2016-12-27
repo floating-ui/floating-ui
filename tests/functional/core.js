@@ -262,10 +262,10 @@ describe('[core]', () => {
         .onCreate(() => {
             setTimeout(() => {
                 pop.update();
-            });
+            }, 20);
         })
         .onUpdate((data) => {
-            expect(data.offsets.popper.top).toBeApprox(reference.getBoundingClientRect().bottom);
+            expect(data.offsets.popper.top).toBeApprox(getRect(reference).bottom);
             jasmineWrapper.removeChild(data.instance.popper);
             data.instance.destroy();
             done();
