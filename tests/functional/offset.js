@@ -19,16 +19,17 @@ describe('[offset]', () => {
                 offset: {
                     offset: offset
                 }
-            }
-        }).onCreate(() => {
-            var refLeft = reference.getBoundingClientRect().left;
-            var refWidth = reference.offsetWidth;
-            var popperLeft = popper.getBoundingClientRect().left;
-            var popperWidth = popper.offsetWidth;
-            var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + offset;
+            },
+            onCreate: () => {
+                var refLeft = reference.getBoundingClientRect().left;
+                var refWidth = reference.offsetWidth;
+                var popperLeft = popper.getBoundingClientRect().left;
+                var popperWidth = popper.offsetWidth;
+                var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + offset;
 
-            expect(popperLeft).toBeApprox(expectedPopperLeft);
-            done();
+                expect(popperLeft).toBeApprox(expectedPopperLeft);
+                done();
+            },
         });
     });
 
@@ -46,19 +47,20 @@ describe('[offset]', () => {
                 offset: {
                     offset: offset
                 }
-            }
-        }).onCreate(() => {
-            var refLeft = reference.getBoundingClientRect().left;
-            var refBottom = reference.getBoundingClientRect().bottom;
-            var refWidth = reference.offsetWidth;
-            var popperLeft = popper.getBoundingClientRect().left;
-            var popperTop = popper.getBoundingClientRect().top;
-            var popperWidth = popper.offsetWidth;
-            var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + +offset.split(' ')[0];
+            },
+            onCreate: () => {
+                var refLeft = reference.getBoundingClientRect().left;
+                var refBottom = reference.getBoundingClientRect().bottom;
+                var refWidth = reference.offsetWidth;
+                var popperLeft = popper.getBoundingClientRect().left;
+                var popperTop = popper.getBoundingClientRect().top;
+                var popperWidth = popper.offsetWidth;
+                var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + +offset.split(' ')[0];
 
-            expect(popperLeft).toBeApprox(expectedPopperLeft);
-            expect(popperTop - arrowHeight).toBeApprox(refBottom + +offset.split(' ')[1]);
-            done();
+                expect(popperLeft).toBeApprox(expectedPopperLeft);
+                expect(popperTop - arrowHeight).toBeApprox(refBottom + +offset.split(' ')[1]);
+                done();
+            },
         });
     });
 
@@ -75,16 +77,17 @@ describe('[offset]', () => {
                 offset: {
                     offset: offset
                 }
-            }
-        }).onCreate(() => {
-            var refLeft = reference.getBoundingClientRect().left;
-            var refWidth = reference.offsetWidth;
-            var popperLeft = popper.getBoundingClientRect().left;
-            var popperWidth = popper.offsetWidth;
-            var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
+            },
+            onCreate: () => {
+                var refLeft = reference.getBoundingClientRect().left;
+                var refWidth = reference.offsetWidth;
+                var popperLeft = popper.getBoundingClientRect().left;
+                var popperWidth = popper.offsetWidth;
+                var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
 
-            expect(popperLeft).toBeApprox(expectedPopperLeft);
-            done();
+                expect(popperLeft).toBeApprox(expectedPopperLeft);
+                done();
+            },
         });
     });
 
@@ -102,20 +105,21 @@ describe('[offset]', () => {
                 offset: {
                     offset: offset
                 }
-            }
-        }).onCreate(() => {
-            var refLeft = reference.getBoundingClientRect().left;
-            var refBottom = reference.getBoundingClientRect().bottom;
-            var refWidth = reference.offsetWidth;
-            var refHeight = reference.offsetHeight;
-            var popperLeft = popper.getBoundingClientRect().left;
-            var popperTop = popper.getBoundingClientRect().top;
-            var popperWidth = popper.offsetWidth;
-            var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
+            },
+            onCreate: () => {
+                var refLeft = reference.getBoundingClientRect().left;
+                var refBottom = reference.getBoundingClientRect().bottom;
+                var refWidth = reference.offsetWidth;
+                var refHeight = reference.offsetHeight;
+                var popperLeft = popper.getBoundingClientRect().left;
+                var popperTop = popper.getBoundingClientRect().top;
+                var popperWidth = popper.offsetWidth;
+                var expectedPopperLeft = refLeft + (refWidth / 2) - (popperWidth / 2) + (refWidth / 4);
 
-            expect(popperLeft).toBeApprox(expectedPopperLeft);
-            expect(popperTop - arrowHeight).toBeApprox(refBottom + (refHeight / 4));
-            done();
+                expect(popperLeft).toBeApprox(expectedPopperLeft);
+                expect(popperTop - arrowHeight).toBeApprox(refBottom + (refHeight / 4));
+                done();
+            },
         });
     });
 });

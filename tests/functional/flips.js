@@ -43,13 +43,16 @@ describe('[flipping]', () => {
 
             new Popper(ref, popper, {
                 placement: val,
-                modifiers: { flip: { boundariesElement: relative } }
-            }).onCreate((data) => {
-                expect(data.flipped).toBe(true);
-                expect(data.placement).toBe(getOppositePlacement(val));
-                expect(data.originalPlacement).toBe(val);
-                data.instance.destroy();
-                done();
+                modifiers: {
+                    flip: { boundariesElement: relative },
+                },
+                onCreate: (data) => {
+                    expect(data.flipped).toBe(true);
+                    expect(data.placement).toBe(getOppositePlacement(val));
+                    expect(data.originalPlacement).toBe(val);
+                    data.instance.destroy();
+                    done();
+                },
             });
         });
 
@@ -68,12 +71,15 @@ describe('[flipping]', () => {
             // ref.style.marginTop = '100px';
             var popper = appendNewPopper(3, 'popper');
 
-            new Popper(ref, popper, { placement: val }).onCreate((data) => {
-                expect(data.flipped).not.toBe(true);
-                expect(data.placement).toBe(val);
-                expect(data.originalPlacement).toBe(val);
-                data.instance.destroy();
-                done();
+            new Popper(ref, popper, {
+                placement: val,
+                onCreate: (data) => {
+                    expect(data.flipped).not.toBe(true);
+                    expect(data.placement).toBe(val);
+                    expect(data.originalPlacement).toBe(val);
+                    data.instance.destroy();
+                    done();
+                },
             });
         });
     });
@@ -131,13 +137,14 @@ describe('[flipping]', () => {
                         flipVariations: true,
                         boundariesElement: relative
                     }
-                }
-            }).onCreate((data) => {
-                expect(data.flipped).toBe(true);
-                expect(data.placement).toBe(flippingVariations[val]);
-                expect(data.originalPlacement).toBe(val);
-                data.instance.destroy();
-                done();
+                },
+                onCreate: (data) => {
+                    expect(data.flipped).toBe(true);
+                    expect(data.placement).toBe(flippingVariations[val]);
+                    expect(data.originalPlacement).toBe(val);
+                    data.instance.destroy();
+                    done();
+                },
             });
         });
     })

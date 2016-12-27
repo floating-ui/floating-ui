@@ -45,6 +45,27 @@ describe('[lifecycle]', () => {
         });
     });
 
+    describe('on update', () => {
+        it('should call update callback', (done) => {
+            const popperElement = makeConnectedElement();
+
+            let isOnCreateCalled = false;
+
+            new Popper(makeConnectedElement(), popperElement, {
+                onCreate: (data) => {
+                    isOnCreateCalled = true;
+                    data.instance.scheduleUpdate();
+                },
+                onUpdate: () => {
+                    // makes sure it's executed after `onCreate`
+                    expect(isOnCreateCalled).toBe(true);
+                    // makes sure it's executed
+                    done();
+                },
+            });
+        });
+    });
+
     describe('on destroy', () => {
         it('removes the resize event listener from window', () => {
             spyOn(window, 'removeEventListener');
@@ -95,9 +116,10 @@ describe('[lifecycle]', () => {
 
             const popperElement = makeConnectedElement();
 
-            const instance = new Popper(makeConnectedElement(), popperElement);
-            instance.onUpdate(() => {
-                isUpdateCalled = true;
+            const instance = new Popper(makeConnectedElement(), popperElement, {
+                onUpdate: () => {
+                    isUpdateCalled = true;
+                },
             });
             instance.update();
             instance.destroy();

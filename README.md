@@ -107,14 +107,15 @@ the popper has been initalized. The `onUpdate` one is called on any subsequent u
 ```js
 const reference = document.querySelector('.my-button');
 const popper = document.querySelector('.my-popper');
-new Popper(reference, popper)
-.onCreate((data) => {
-    // data is an object containing all the informations computed
-    // by Popper.js and used to style the popper and its arrow
-    // The complete description is available in Popper.js documentation
-})
-.onUpdate((data) => {
-  // same as `onCreate` but called on subsequent updates
+new Popper(reference, popper, {
+    onCreate: (data) => {
+        // data is an object containing all the informations computed
+        // by Popper.js and used to style the popper and its arrow
+        // The complete description is available in Popper.js documentation
+    },
+    onUpdate: (data) => {
+        // same as `onCreate` but called on subsequent updates
+    }
 });
 ```
 
@@ -144,10 +145,12 @@ const reference = document.querySelector('.my-button');
 const popper = document.querySelector('.my-popper');
 new Popper(reference, popper, {
     // prevent Popper.js from applying styles to your DOM disabling `applyStyle`
-    modifiers: { applyStyle: { enabled: false } }
-})
-.onCreate(applyReactStyle)
-.onUpdate(applyReactStyle);
+    modifiers: {
+        applyStyle: { enabled: false }
+    },
+    onCreate: applyReactStyle,
+    onUpdate: applyReactStyle
+});
 
 ```
 

@@ -16,11 +16,11 @@ describe('[rendering]', () => {
         const spy = jasmine.createSpy('paint watcher');
         requestAnimationFrame(spy);
 
-        const instance = makePopper(makeConnectedElement(), makeConnectedElement());
-
-        instance.onCreate(() => {
-            expect(spy).not.toHaveBeenCalled();
-            done();
+        makePopper(makeConnectedElement(), makeConnectedElement(), {
+            onCreate: () => {
+                expect(spy).not.toHaveBeenCalled();
+                done();
+            },
         });
     });
 });

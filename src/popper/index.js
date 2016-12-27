@@ -29,6 +29,28 @@ var DEFAULTS = {
     // if true, it uses the CSS 3d transformation to position the popper
     gpuAcceleration: true,
 
+    /**
+     * Callback called when the popper is created.
+     * By default, is set to no-op.
+     * Access Popper.js instance with `data.instance`.
+     * @callback createCallback
+     * @static
+     * @param {dataObject} data
+     */
+    onCreate: () => {},
+
+    /**
+     * Callback called when the popper is updated, this callback is not called
+     * on the initialization/creation of the popper, but only on subsequent
+     * updates.
+     * By default, is set to no-op.
+     * Access Popper.js instance with `data.instance`.
+     * @callback updateCallback
+     * @static
+     * @param {dataObject} data
+     */
+    onUpdate: () => {},
+
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: {
         shift: {
@@ -156,8 +178,6 @@ export default class Popper {
     constructor(reference, popper, options = {}) {
         // make update() debounced, so that it only runs at most once-per-tick
         this.update = debounce(this.update.bind(this));
-        // create a throttled version of update() that is scheduled based on UI updates
-        this.scheduleUpdate = () => this.scheduledUpdate = requestAnimationFrame(this.update);
 
         // init state
         this.state = {
@@ -203,7 +223,7 @@ export default class Popper {
         // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
         // they could add new properties to their options configuration
-        // BE AWAARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
+        // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
         this.modifiers.forEach((modifier) => {
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 //              reference       popper       options       modifierOptions
@@ -223,9 +243,6 @@ export default class Popper {
 
         // setup event listeners, they will take care of update the position in specific situations
         setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
-
-        // make it chainable
-        return this;
     }
 
     //
@@ -234,6 +251,7 @@ export default class Popper {
 
     /**
      * Updates the position of the popper, computing the new offsets and applying the new style
+     * Prefer `scheduleUpdate` over `update` because of performance reasons
      * @method
      * @memberof Popper
      */
@@ -265,58 +283,21 @@ export default class Popper {
 
         // the first `update` will call `onCreate` callback
         // the other ones will call `onUpdate` callback
+        debugger;
         if (!this.state.isCreated) {
             this.state.isCreated = true;
-            if (isFunction(this.state.createCallback)) {
-                this.state.createCallback(data);
-            }
-        } else if (isFunction(this.state.updateCallback)) {
-            this.state.updateCallback(data);
+            this.options.onCreate(data);
+        } else {
+            this.options.onUpdate(data);
         }
     }
 
     /**
-     * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
+     * Schedule an update, it will run on the next UI update available
      * @method
      * @memberof Popper
-     * @param {createCallback} callback
      */
-    onCreate(callback) {
-        // the createCallbacks return as first argument the popper instance
-        this.state.createCallback = callback;
-        return this;
-    }
-
-    /**
-     * Callback called when the popper is created.
-     * Access Popper.js instance with `data.instance`.
-     * @callback createCallback
-     * @static
-     * @param {dataObject} data
-     */
-
-    /**
-     * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
-     * used to style popper and its arrow.
-     * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
-     * @method
-     * @memberof Popper
-     * @param {updateCallback} callback
-     */
-    onUpdate(callback) {
-        this.state.updateCallback = callback;
-        return this;
-    }
-
-    /**
-     * Callback called when the popper is updated, this callback is not called
-     * on the initialization/creation of the popper, but only on subsequent
-     * updates.
-     * Access Popper.js instance with `data.instance`.
-     * @callback updateCallback
-     * @static
-     * @param {dataObject} data
-     */
+    scheduleUpdate = () => this.scheduledUpdate = requestAnimationFrame(this.update);
 
     /**
      * Destroy the popper

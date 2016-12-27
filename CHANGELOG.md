@@ -12,6 +12,8 @@
 - Improved flip detection strategy (#82) (thanks @nadiam84)
 - BREAKING CHANGE: boundariesElement has been deprecated in favor to new options of `preventOverflow` and `flip` modifiers (#75)
 - You can now set attributes defining them in `data.attributes`, properties with `false` values will be removed
+- BREAKING CHANGE: `onCreate` and `onUpdate` methods have been converted to properties of the `options` object
+  you can now use them with `new Popper(a, b, { ...otherOptions, onCreate: () => {}, onUpdate: () => {} })`
 
 ## v0.6.4
 - 30a781e: Remove necessity of remove polyfill on IE (thanks @rafaelverger)
