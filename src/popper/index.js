@@ -283,7 +283,6 @@ export default class Popper {
 
         // the first `update` will call `onCreate` callback
         // the other ones will call `onUpdate` callback
-        debugger;
         if (!this.state.isCreated) {
             this.state.isCreated = true;
             this.options.onCreate(data);
