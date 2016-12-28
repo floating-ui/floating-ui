@@ -48,6 +48,23 @@ describe('[core]', () => {
         pop.destroy();
     });
 
+    it('inits a bottom popper attached to an inline reference', (done) => {
+        var reference = appendNewRef(1);
+        reference.style.display = 'inline';
+        var popper    = appendNewPopper(2);
+
+        var pop = new Popper(reference, popper);
+
+        // give some time to the browser to render...
+        // otherwise `getBoundingClientRect` returns wrong values
+        setTimeout(() => {
+            var top = popper.getBoundingClientRect().top;
+            expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
+            pop.destroy();
+            done();
+        }, 10);
+    });
+
     it('inits a bottom-start popper', (done) => {
         var reference = appendNewRef(1);
         reference.style.marginLeft = '200px';
