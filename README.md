@@ -15,6 +15,7 @@ v1 documentation plase [click here](doc/_includes/documentation.md)
     <a href="https://www.npmjs.com/package/popper.js" target="_blank">
         <img src="https://badge.fury.io/js/popper.js.svg" />
     </a>
+    <img src="http://img.badgesize.io/FezVrasta/popper.js/master/build/popper.min.js?compression=gzip" />
     <a href="https://gitter.im/FezVrasta/popper.js" target="_blank">
         <img src="https://badges.gitter.im/Join%20Chat.svg" />
     </a>
