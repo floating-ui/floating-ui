@@ -1,6 +1,6 @@
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.0.0-alpha.8
+ * @version 1.0.0-beta.1
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -154,7 +154,8 @@ function getStyleComputedProperty(element, property) {
  * @returns {Element} parent
  */
 function getParentNode(element) {
-  return element.parentNode || element.host;
+  var parentNode = element.parentNode || element.host;
+  return parentNode === window.document ? window.document.documentElement : parentNode;
 }
 
 /**
@@ -165,24 +166,17 @@ function getParentNode(element) {
  * @returns {Element} offset parent
  */
 function getScrollParent(element) {
-    if (element === window.document) {
-        // Firefox puts the scrollTOp value on `documentElement` instead of `body`, we then check which of them is
-        // greater than 0 and return the proper element
-        if (window.document.body.scrollTop) {
-            return window.document.body;
-        } else {
-            return window.document.documentElement;
-        }
+    // Return body, `getScroll` will take care to get the correct `scrollTop` from it
+    if (element === window.document.scrollingElement || element === window.document.documentElement || element === window.document.body) {
+        return window.document.body;
     }
 
     // Firefox want us to check `-x` and `-y` variations as well
     if (['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow')) !== -1 || ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-x')) !== -1 || ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-y')) !== -1) {
-        // If the detected scrollParent is body, we perform an additional check on its parentNode
-        // in this way we'll get body if the browser is Chrome-ish, or documentElement otherwise
-        // fixes issue #65
-        return element === window.document.body ? getScrollParent(getParentNode(element)) : element;
+        return element;
     }
-    return getParentNode(element) ? getScrollParent(getParentNode(element)) : element;
+
+    return getScrollParent(getParentNode(element));
 }
 
 /**
@@ -228,13 +222,13 @@ function getOffsetRect(element) {
  * @returns {Boolean} answer to "isFixed?"
  */
 function isFixed(element) {
-    if (element === window.document.body) {
+    if (element === window.document.body || element === window.document.documentElement) {
         return false;
     }
     if (getStyleComputedProperty(element, 'position') === 'fixed') {
         return true;
     }
-    return getParentNode(element) ? isFixed(getParentNode(element)) : element;
+    return isFixed(getParentNode(element));
 }
 
 /**
@@ -261,7 +255,16 @@ function getPosition(element) {
  * @return {Object} client rect
  */
 function getBoundingClientRect(element) {
-    var rect = element.getBoundingClientRect();
+    var rect = void 0;
+
+    // IE10 FIX: `getBoundingClientRect`, when executed on `documentElement`
+    // will not take in account the `scrollTop` and `scrollLeft`,
+    // use `body` instead to avoid these problems (only in IE10!)
+    if (element === window.document.documentElement && navigator.appVersion.indexOf('MSIE 10') !== -1) {
+        rect = window.document.body.getBoundingClientRect();
+    } else {
+        rect = element.getBoundingClientRect();
+    }
 
     // subtract scrollbar size from sizes
     var horizScrollbar = element.offsetWidth - element.clientWidth;
@@ -277,6 +280,20 @@ function getBoundingClientRect(element) {
     };
 }
 
+function getScroll(element) {
+    var side = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top';
+
+    var body = window.document.body;
+    var html = window.document.documentElement;
+    var scrollingElement = window.document.scrollingElement || html;
+
+    var upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
+    if (element === body || element === html) {
+        return scrollingElement[upperSide];
+    }
+    return element[upperSide];
+}
+
 /**
  * Given an element and one of its parents, return the offset
  * @method
@@ -289,16 +306,10 @@ function getOffsetRectRelativeToCustomParent(element, parent) {
     var fixed = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
     var transformed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
+    var offsetParent = getOffsetParent(element);
+    var scrollParent = getScrollParent(parent);
     var elementRect = getBoundingClientRect(element);
     var parentRect = getBoundingClientRect(parent);
-
-    if (fixed && !transformed) {
-        var scrollParent = getScrollParent(parent);
-        parentRect.top += scrollParent.scrollTop;
-        parentRect.bottom += scrollParent.scrollTop;
-        parentRect.left += scrollParent.scrollLeft;
-        parentRect.right += scrollParent.scrollLeft;
-    }
 
     var rect = {
         top: elementRect.top - parentRect.top,
@@ -309,13 +320,22 @@ function getOffsetRectRelativeToCustomParent(element, parent) {
         height: elementRect.height
     };
 
-    var scrollTop = parent.scrollTop,
-        scrollLeft = parent.scrollLeft;
+    if (fixed && !transformed) {
+        var scrollTop = getScroll(scrollParent, 'top');
+        var scrollLeft = getScroll(scrollParent, 'left');
+        rect.top -= scrollTop;
+        rect.bottom -= scrollTop;
+        rect.left -= scrollLeft;
+        rect.right -= scrollLeft;
+    } else if (offsetParent.contains(scrollParent)) {
+        var _scrollTop = getScroll(parent, 'top');
+        var _scrollLeft = getScroll(parent, 'left');
+        rect.top += _scrollTop;
+        rect.bottom += _scrollTop;
+        rect.left += _scrollLeft;
+        rect.right += _scrollLeft;
+    }
 
-    rect.top += scrollTop;
-    rect.bottom += scrollTop;
-    rect.left += scrollLeft;
-    rect.right += scrollLeft;
     return rect;
 }
 
@@ -326,11 +346,10 @@ function getTotalScroll(element) {
     var html = window.document.documentElement;
 
     var scrollParent = getScrollParent(element);
-    var upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
-    var scroll = scrollParent[upperSide];
+    var scroll = getScroll(scrollParent, side);
 
-    if (scrollParent !== html && scrollParent !== body) {
-        return scroll + getTotalScroll(scrollParent.parentNode);
+    if (scrollParent !== body && scrollParent !== html) {
+        return scroll + getTotalScroll(getParentNode(scrollParent), side);
     }
     return scroll;
 }
@@ -383,20 +402,18 @@ function getBoundaries(popper, padding, boundariesElement) {
                 left: 0 - offsetParentRect.left
             };
         }
-    } else if (scrollParent === boundariesElement || boundariesElement === 'scrollParent') {
+    } else if (boundariesElement === 'scrollParent' || scrollParent === boundariesElement) {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent);
+        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
     } else {
         // BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent);
+        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent, isFixed(popper));
     }
 
-    if (offsetParent.contains(scrollParent)) {
-        var scrollLeft = getTotalScroll(scrollParent, 'left');
-        var scrollTop = getTotalScroll(scrollParent, 'top');
-        boundaries.right += scrollLeft;
-        boundaries.bottom += scrollTop;
-    }
+    var scrollLeft = getTotalScroll(popper, 'left');
+    var scrollTop = getTotalScroll(popper, 'top');
+    boundaries.right += scrollLeft;
+    boundaries.bottom += scrollTop;
 
     // Add paddings
     boundaries.left += padding;
@@ -579,6 +596,8 @@ var Utils = {
     getPopperClientRect: getPopperClientRect,
     getPosition: getPosition,
     getScrollParent: getScrollParent,
+    getScroll: getScroll,
+    getTotalScroll: getTotalScroll,
     getStyleComputedProperty: getStyleComputedProperty,
     getSupportedPropertyName: getSupportedPropertyName,
     isFixed: isFixed,
@@ -736,16 +755,12 @@ function setupEventListeners(reference, options, state, updateBound) {
     // NOTE: 1 DOM access here
     state.updateBound = updateBound;
     window.addEventListener('resize', state.updateBound, { passive: true });
-    // if the boundariesElement is window we don't need to listen for the scroll event
-    if (options.boundariesElement !== 'window') {
-        var target = getScrollParent(reference);
-        // here it could be both `body` or `documentElement` thanks to Firefox, we then check both
-        if (target === window.document.body || target === window.document.documentElement) {
-            target = window;
-        }
-        target.addEventListener('scroll', state.updateBound, { passive: true });
-        state.scrollElement = target;
+    var target = getScrollParent(reference);
+    if (target === window.document.body) {
+        target = window;
     }
+    target.addEventListener('scroll', state.updateBound, { passive: true });
+    state.scrollElement = target;
 }
 
 /**
@@ -821,7 +836,7 @@ function setAttributes(element, attributes) {
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The same data object
  */
-function applyStyle(data) {
+function applyStyle(data, options) {
     // apply the final offsets to the popper
     // NOTE: 1 DOM access here
     var styles = {
@@ -836,10 +851,11 @@ function applyStyle(data) {
     var left = Math.round(data.offsets.popper.left);
     var top = Math.round(data.offsets.popper.top);
 
-    // if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
-    // we automatically use the supported prefixed version if needed
+    // if gpuAcceleration is set to true and transform is supported,
+    //  we use `translate3d` to apply the position to the popper we
+    // automatically use the supported prefixed version if needed
     var prefixedProperty = getSupportedPropertyName('transform');
-    if (data.instance.options.gpuAcceleration && prefixedProperty) {
+    if (options.gpuAcceleration && prefixedProperty) {
         styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
         styles.top = 0;
         styles.left = 0;
@@ -1545,8 +1561,27 @@ var DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
-    // if true, it uses the CSS 3d transformation to position the popper
-    gpuAcceleration: true,
+    /**
+     * Callback called when the popper is created.
+     * By default, is set to no-op.
+     * Access Popper.js instance with `data.instance`.
+     * @callback createCallback
+     * @static
+     * @param {dataObject} data
+     */
+    onCreate: function onCreate() {},
+
+    /**
+     * Callback called when the popper is updated, this callback is not called
+     * on the initialization/creation of the popper, but only on subsequent
+     * updates.
+     * By default, is set to no-op.
+     * Access Popper.js instance with `data.instance`.
+     * @callback updateCallback
+     * @static
+     * @param {dataObject} data
+     */
+    onUpdate: function onUpdate() {},
 
     // list of functions used to modify the offsets before they are applied to the popper
     modifiers: {
@@ -1604,6 +1639,8 @@ var DEFAULTS = {
         applyStyle: {
             order: 800,
             enabled: true,
+            // if true, it uses the CSS 3d transformation to position the popper
+            gpuAcceleration: true,
             function: modifiersFunctions.applyStyle,
             onLoad: modifiersOnLoad.applyStyleOnLoad
         }
@@ -1678,14 +1715,15 @@ var Popper = function () {
 
         var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
         classCallCheck(this, Popper);
+
+        this.scheduleUpdate = function () {
+            return _this.scheduledUpdate = requestAnimationFrame(_this.update);
+        };
+
         this.Defaults = DEFAULTS;
 
         // make update() debounced, so that it only runs at most once-per-tick
         this.update = debounce(this.update.bind(this));
-        // create a throttled version of update() that is scheduled based on UI updates
-        this.scheduleUpdate = function () {
-            return _this.scheduledUpdate = requestAnimationFrame(_this.update);
-        };
 
         // init state
         this.state = {
@@ -1732,7 +1770,7 @@ var Popper = function () {
         // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
         // they could add new properties to their options configuration
-        // BE AWAARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
+        // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
         this.modifiers.forEach(function (modifier) {
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 //              reference       popper       options       modifierOptions
@@ -1751,9 +1789,6 @@ var Popper = function () {
 
         // setup event listeners, they will take care of update the position in specific situations
         setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
-
-        // make it chainable
-        return this;
     }
 
     //
@@ -1762,6 +1797,7 @@ var Popper = function () {
 
     /**
      * Updates the position of the popper, computing the new offsets and applying the new style
+     * Prefer `scheduleUpdate` over `update` because of performance reasons
      * @method
      * @memberof Popper
      */
@@ -1801,71 +1837,27 @@ var Popper = function () {
             // the other ones will call `onUpdate` callback
             if (!this.state.isCreated) {
                 this.state.isCreated = true;
-                if (isFunction(this.state.createCallback)) {
-                    this.state.createCallback(data);
-                }
-            } else if (isFunction(this.state.updateCallback)) {
-                this.state.updateCallback(data);
+                this.options.onCreate(data);
+            } else {
+                this.options.onUpdate(data);
             }
         }
 
         /**
-         * If a function is passed, it will be executed after the initialization of popper with as first argument the Popper instance.
-         * @method
-         * @memberof Popper
-         * @param {createCallback} callback
-         */
-
-    }, {
-        key: 'onCreate',
-        value: function onCreate(callback) {
-            // the createCallbacks return as first argument the popper instance
-            this.state.createCallback = callback;
-            return this;
-        }
-
-        /**
-         * Callback called when the popper is created.
-         * Access Popper.js instance with `data.instance`.
-         * @callback createCallback
-         * @static
-         * @param {dataObject} data
-         */
-
-        /**
-         * If a function is passed, it will be executed after each update of popper with as first argument the set of coordinates and informations
-         * used to style popper and its arrow.
-         * NOTE: it doesn't get fired on the first call of the `Popper.update()` method inside the `Popper` constructor!
-         * @method
-         * @memberof Popper
-         * @param {updateCallback} callback
-         */
-
-    }, {
-        key: 'onUpdate',
-        value: function onUpdate(callback) {
-            this.state.updateCallback = callback;
-            return this;
-        }
-
-        /**
-         * Callback called when the popper is updated, this callback is not called
-         * on the initialization/creation of the popper, but only on subsequent
-         * updates.
-         * Access Popper.js instance with `data.instance`.
-         * @callback updateCallback
-         * @static
-         * @param {dataObject} data
-         */
-
-        /**
-         * Destroy the popper
+         * Schedule an update, it will run on the next UI update available
          * @method
          * @memberof Popper
          */
 
     }, {
         key: 'destroy',
+
+
+        /**
+         * Destroy the popper
+         * @method
+         * @memberof Popper
+         */
         value: function destroy() {
             this.state.isDestroyed = true;
 

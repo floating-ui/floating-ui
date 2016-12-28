@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "1.0.0-alpha.8",
+  "version": "1.0.0-beta.1",
   "description": "A kickass library to manage your poppers",
   "main": "build/popper.js",
   "scripts": {
