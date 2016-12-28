@@ -1,6 +1,6 @@
 /**!
  * @fileOverview Kickass library to create and place poppers near their reference elements.
- * @version 1.0.0-beta.1
+ * @version 1.0.0-beta.2
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -267,8 +267,8 @@ function getBoundingClientRect(element) {
     }
 
     // subtract scrollbar size from sizes
-    var horizScrollbar = element.offsetWidth - element.clientWidth;
-    var vertScrollbar = element.offsetHeight - element.clientHeight;
+    var horizScrollbar = element.offsetWidth - (element.clientWidth || rect.right - rect.left);
+    var vertScrollbar = element.offsetHeight - (element.clientHeight || rect.bottom - rect.top);
 
     return {
         left: rect.left,
