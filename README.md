@@ -21,7 +21,9 @@ v1 documentation plase [click here](doc/_includes/documentation.md)
 </p>
 
 <p align="center">
-    [![Build Status](https://saucelabs.com/browser-matrix/popperjs.svg?auth=b28bea6e52e761cdd54d8783d59b4f04)](https://travis-ci.org/FezVrasta/popper.js)
+    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank">
+        <img src="https://saucelabs.com/browser-matrix/popperjs.svg?auth=b28bea6e52e761cdd54d8783d59b4f04" />
+    </a>
 </p>
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
