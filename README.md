@@ -44,10 +44,10 @@ to make it possible to position it near a given reference element.
 
 The engine is completely modular and most of its features are implemented as **modifiers**
 (similar to middlewars or plugins).  
-The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to SauceLabs and TravisCI.
+The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to [SauceLabs](https://saucelabs.com/) and [TravisCI](travis-ci.org).
 
 Popper.js has zero dependencies. No jQuery, no LoDash, nothing.  
-It's used by big companies like Microsoft in [WebClipper](https://github.com/OneNoteDev/WebClipper) and Atlassian in [AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
+It's used by big companies like [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
 
 ### Popper.js
 
@@ -149,22 +149,24 @@ that integrate in popular frameworks:
 - [**ak-layer**](http://aui-cdn.atlassian.com/atlaskit/registry/ak-layer/latest/index.html) by [@Atlassian](https://github.com/atlassian) for [React](https://facebook.github.io/react/)
 - [**vue-popper-component**](https://github.com/antongorodezkiy/vue-popper-component) by [@antongorodezkiy](https://github.com/antongorodezkiy) for [Vue.js](https://vuejs.org/)
 
-Alternatively, you may even override `applyStyles` with your custom function and integrate Popper.js by yourself!
+Alternatively, you may even override [`applyStyles` modifier](https://github.com/FezVrasta/popper.js/blob/master/src/popper/modifiers/applyStyle.js) with your custom function and integrate Popper.js by yourself!
 
 ```js
 function applyReactStyle(data) {
     // export data in your framework and use its content to apply the style to your popper
-}
+};
 
 const reference = document.querySelector('.my-button');
 const popper = document.querySelector('.my-popper');
 new Popper(reference, popper, {
-    // prevent Popper.js from applying styles to your DOM disabling `applyStyle`
     modifiers: {
-        applyStyle: { enabled: false }
+        applyStyle: {
+            // override built-in DOM based modifier
+            function: applyReactStyle,
+            // disable the DOM based onLoad function
+            onLoad: null,
+        },
     },
-    onCreate: applyReactStyle,
-    onUpdate: applyReactStyle
 });
 
 ```
