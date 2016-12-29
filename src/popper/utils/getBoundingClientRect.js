@@ -11,22 +11,29 @@ export default function getBoundingClientRect(element) {
     // IE10 FIX: `getBoundingClientRect`, when executed on `documentElement`
     // will not take in account the `scrollTop` and `scrollLeft`,
     // use `body` instead to avoid these problems (only in IE10!)
-    if (element === window.document.documentElement && navigator.appVersion.indexOf('MSIE 10') !== -1) {
+    if (element.nodeName === 'HTML' && navigator.appVersion.indexOf('MSIE 10') !== -1) {
         rect = window.document.body.getBoundingClientRect();
     } else {
         rect = element.getBoundingClientRect();
     }
 
-    // subtract scrollbar size from sizes
-    const horizScrollbar = element.offsetWidth - (element.clientWidth || rect.right - rect.left);
-    const vertScrollbar = element.offsetHeight - (element.clientHeight || rect.bottom - rect.top);
-
-    return {
+    const result = {
         left: rect.left,
         top: rect.top,
-        right: rect.right - horizScrollbar,
-        bottom: rect.bottom - vertScrollbar,
-        width: rect.right - rect.left - horizScrollbar,
-        height: rect.bottom - rect.top - vertScrollbar,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.right - rect.left,
+        height: rect.bottom - rect.top,
     };
+
+    // subtract scrollbar size from sizes
+    const horizScrollbar = rect.width - (element.clientWidth || rect.right - rect.left);
+    const vertScrollbar = rect.height - (element.clientHeight || rect.bottom - rect.top);
+
+    result.right -= horizScrollbar;
+    result.width -= horizScrollbar;
+    result.bottom -= vertScrollbar;
+    result.height -= vertScrollbar;
+
+    return result;
 }

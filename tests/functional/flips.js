@@ -88,7 +88,7 @@ describe('[flipping]', () => {
     }
 
     Object.keys(flippingVariations).forEach((val) => {
-        it(`should flip from ${val} to ${flippingVariations[val]} if boundariesElement is set`, (done) => {
+        it(`(variations) should flip from ${val} to ${flippingVariations[val]} if boundariesElement is set`, (done) => {
             var relative = document.createElement('div');
             relative.style.margin = '100px 300px';
             relative.style.height = '300px';

@@ -56,7 +56,18 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         }
     } else if (boundariesElement === 'scrollParent' || scrollParent === boundariesElement) {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
+        if (scrollParent.nodeName === 'BODY') {
+            const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
+            const width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
+            boundaries = {
+                top: 0,
+                left: 0,
+                right: width,
+                bottom: height,
+            }
+        } else {
+            boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
+        }
     } else {
         // BOUNDARIES ELEMENT
         boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent, isFixed(popper));
