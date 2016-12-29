@@ -12,8 +12,9 @@ export default function getScrollParent(element) {
     // Return body, `getScroll` will take care to get the correct `scrollTop` from it
     if (
         element === window.document.scrollingElement ||
-        element === window.document.documentElement ||
-        element === window.document.body
+        element.nodeName === 'HTML' ||
+        element.nodeName === 'BODY' ||
+        element.nodeName === '#document'
     ) {
         return window.document.body;
     }

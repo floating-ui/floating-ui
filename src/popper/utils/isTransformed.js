@@ -9,7 +9,7 @@ import getParentNode from './getParentNode';
  * @return {Boolean} answer to "isTransformed?"
  */
 export default function isTransformed(element) {
-  if (element === window.document.body) {
+  if (element.nodeName === 'BODY') {
       return false;
   }
   if (getStyleComputedProperty(element, 'transform') !== 'none') {

@@ -17,7 +17,7 @@ import isFixed from './isFixed';
  */
 export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
-    let boundaries = {};
+    let boundaries;
     const offsetParent = getOffsetParent(popper);
     const scrollParent = getScrollParent(popper);
     const body = window.document.body;
@@ -49,8 +49,8 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         } else {
             boundaries = {
                 top: 0 - offsetParentRect.top,
-                right: window.document.documentElement.clientWidth - offsetParentRect.left,
-                bottom: window.document.documentElement.clientHeight - offsetParentRect.top,
+                right: html.clientWidth - offsetParentRect.left,
+                bottom: html.clientHeight - offsetParentRect.top,
                 left: 0 - offsetParentRect.left
             };
         }

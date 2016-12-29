@@ -11,7 +11,7 @@ export default function setupEventListeners(reference, options, state, updateBou
     state.updateBound = updateBound;
     window.addEventListener('resize', state.updateBound, { passive: true });
     let target = getScrollParent(reference);
-    if (target === window.document.body) {
+    if (target.nodeName === 'BODY') {
         target = window;
     }
     target.addEventListener('scroll', state.updateBound, { passive: true });

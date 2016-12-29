@@ -6,13 +6,11 @@
  * @return {Object} position - Coordinates of the element and its `scrollTop`
  */
 export default function getOffsetRect(element) {
-    const html = window.document.documentElement;
-
     let elementRect;
-    if (element === html) {
+    if (element.nodeName === 'HTML') {
         elementRect = {
-            width: Math.max(html.clientWidth, window.innerWidth || 0),
-            height: Math.max(html.clientHeight, window.innerHeight || 0),
+            width: Math.max(element.clientWidth, window.innerWidth || 0),
+            height: Math.max(element.clientHeight, window.innerHeight || 0),
             left: 0,
             top: 0,
         };
