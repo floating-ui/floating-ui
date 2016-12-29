@@ -9,13 +9,15 @@ import setStyles from './utils/setStyles';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getPosition from './utils/getPosition';
-import getOffsets from './utils/getOffsets';
+import getReferenceOffsets from './utils/getReferenceOffsets';
+import getPopperOffsets from './utils/getPopperOffsets';
 import isFunction from './utils/isFunction';
 import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
 import sortModifiers from './utils/sortModifiers';
 import isModifierEnabled from './utils/isModifierEnabled';
+import computeAutoPlacement from './utils/computeAutoPlacement';
 
 // Modifiers
 import modifiersFunctions from './modifiers/index';
@@ -216,8 +218,11 @@ export default class Popper {
             });
         }
 
+        // get the popper position type
+        this.state.position = getPosition(this.reference);
+
         // sort the modifiers by order
-        this.modifiers = this.modifiers.sort(sortModifiers)
+        this.modifiers = this.modifiers.sort(sortModifiers);
 
         // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
@@ -226,13 +231,9 @@ export default class Popper {
         this.modifiers.forEach((modifier) => {
             if (modifier.enabled && isFunction(modifier.onLoad)) {
                 //              reference       popper       options       modifierOptions
-                modifier.onLoad(this.reference, this.popper, this.options, modifier);
+                modifier.onLoad(this.reference, this.popper, this.options, modifier, this.state);
             }
         });
-
-
-        // get the popper position type
-        this.state.position = getPosition(this.reference);
 
         // determine how we should set the origin of offsets
         this.state.isParentTransformed = isTransformed(this.popper.parentNode);
@@ -260,6 +261,7 @@ export default class Popper {
             styles: {},
             attributes: {},
             flipped: false,
+            offsets: {},
         };
 
         // make sure to apply the popper position before any computation
@@ -269,13 +271,19 @@ export default class Popper {
         // if popper is destroyed, don't perform any further update
         if (this.state.isDestroyed) { return; }
 
-        // store placement inside the data object, modifiers will be able to edit `placement` if needed
+        // compute reference element offsets
+        data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference);
+
+        // compute auto placement, store placement inside the data object,
+        // modifiers will be able to edit `placement` if needed
         // and refer to originalPlacement to know the original value
-        data.placement = this.options.placement;
+        data.placement = computeAutoPlacement(this.options.placement, data.offsets.reference, this.popper);
+
+        // store the computed placement inside `originalPlacement`
         data.originalPlacement = this.options.placement;
 
-        // compute the popper and reference offsets and put them inside data.offsets
-        data.offsets = getOffsets(this.state, this.popper, this.reference, data.placement);
+        // compute the popper offsets
+        data.offsets.popper = getPopperOffsets(this.state, this.popper, data.offsets.reference, data.placement);
 
         // run the modifiers
         data = runModifiers(this.modifiers, data);
@@ -336,6 +344,9 @@ export default class Popper {
      * @memberof Popper
      */
      static placements = [
+         'auto',
+         'auto-start',
+         'auto-end',
          'top',
          'top-start',
          'top-end',

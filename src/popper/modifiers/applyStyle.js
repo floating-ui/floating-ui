@@ -1,6 +1,8 @@
 import getSupportedPropertyName from '../utils/getSupportedPropertyName';
 import setStyles from '../utils/setStyles';
 import setAttributes from '../utils/setAttributes';
+import getReferenceOffsets from '../utils/getReferenceOffsets';
+import computeAutoPlacement from '../utils/computeAutoPlacement';
 
 /**
  * Apply the computed styles to the popper element
@@ -71,7 +73,15 @@ export default function applyStyle(data, options) {
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options - Popper.js options
  */
-export function applyStyleOnLoad(reference, popper, options) {
+export function applyStyleOnLoad(reference, popper, options, modifierOptions, state) {
+    // compute reference element offsets
+    const referenceOffsets = getReferenceOffsets(state, popper, reference);
+
+    // compute auto placement, store placement inside the data object,
+    // modifiers will be able to edit `placement` if needed
+    // and refer to originalPlacement to know the original value
+    options.placement = computeAutoPlacement(options.placement, referenceOffsets, popper);
+
     popper.setAttribute('x-placement', options.placement);
     return options;
 }

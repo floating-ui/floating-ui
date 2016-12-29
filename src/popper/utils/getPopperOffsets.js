@@ -1,5 +1,3 @@
-import getOffsetParent from './getOffsetParent';
-import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
 import getOuterSizes from './getOuterSizes';
 
 /**
@@ -10,20 +8,11 @@ import getOuterSizes from './getOuterSizes';
  * @param {Element} reference - the reference element (the popper will be relative to this)
  * @returns {Object} An object containing the offsets which will be applied to the popper
  */
-export default function getOffsets(state, popper, reference, placement) {
+export default function getPopperOffsets(state, popper, referenceOffsets, placement) {
     placement = placement.split('-')[0];
 
     const popperOffsets = {};
     popperOffsets.position = state.position;
-
-    const isParentFixed = popperOffsets.position === 'fixed';
-    const isParentTransformed = state.isParentTransformed;
-
-    //
-    // Get reference element position
-    //
-    const offsetParent = getOffsetParent((isParentFixed && isParentTransformed) ? reference : popper);
-    const referenceOffsets = getOffsetRectRelativeToCustomParent(reference, offsetParent, isParentFixed, isParentTransformed);
 
     //
     // Get popper sizes
@@ -56,8 +45,5 @@ export default function getOffsets(state, popper, reference, placement) {
     popperOffsets.height  = popperRect.height;
 
 
-    return {
-        popper: popperOffsets,
-        reference: referenceOffsets
-    };
+    return popperOffsets;
 }

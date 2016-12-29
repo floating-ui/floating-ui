@@ -15,6 +15,7 @@
 - BREAKING CHANGE: `onCreate` and `onUpdate` methods have been converted to properties of the `options` object
   you can now use them with `new Popper(a, b, { ...otherOptions, onCreate: () => {}, onUpdate: () => {} })`
 - BREAKING CHANGE: `gpuAcceleration` is now an option of the `applyStyle` modifier (`modifiers.applyStyle.gpuAcceleration`)
+- FEATURE: added `auto` placement, it will automatically get converted to the placement with more free space available (addresses #1)
 
 ## v0.6.4
 - 30a781e: Remove necessity of remove polyfill on IE (thanks @rafaelverger)

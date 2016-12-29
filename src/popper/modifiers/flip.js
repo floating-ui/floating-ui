@@ -1,7 +1,7 @@
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getOppositeVariation from '../utils/getOppositeVariation';
 import getPopperClientRect from '../utils/getPopperClientRect';
-import getOffsets from '../utils/getOffsets';
+import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
 import getBoundaries from '../utils/getBoundaries';
 
@@ -78,7 +78,7 @@ export default function flip(data, options) {
             }
 
             data.placement = placement + (variation ? '-' + variation : '');
-            data.offsets.popper = getOffsets(data.instance.state, data.instance.popper, data.instance.reference, data.placement).popper;
+            data.offsets.popper = getPopperOffsets(data.instance.state, data.instance.popper, data.offsets.reference, data.placement);
 
             data = runModifiers(data.instance.modifiers, data, 'flip');
         }

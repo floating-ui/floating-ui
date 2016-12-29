@@ -48,6 +48,77 @@ describe('[core]', () => {
         pop.destroy();
     });
 
+    describe('[auto placement]', () => {
+        it('should be computed to `top`', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.marginTop = '90vh';
+            reference.style.marginLeft = '50vh';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'auto',
+                onCreate: () => {
+                    var bottom = popper.getBoundingClientRect().bottom + arrowSize;
+                    expect(bottom).toBeApprox(reference.getBoundingClientRect().top);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('should be computed to `right`', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.marginTop = '50vh';
+            reference.style.marginLeft = '0px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'auto',
+                onCreate: () => {
+                    var left = popper.getBoundingClientRect().left - arrowSize;
+                    expect(left).toBeApprox(reference.getBoundingClientRect().right);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('should be computed to `bottom`', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.marginTop = '0px';
+            reference.style.marginLeft = '50vw';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'auto',
+                onCreate: () => {
+                    var top = popper.getBoundingClientRect().top - arrowSize;
+                    expect(top).toBeApprox(reference.getBoundingClientRect().bottom);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('should be computed to `left`', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.position = 'absolute';
+            reference.style.marginTop = '50vh';
+            reference.style.right = '0px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'auto',
+                onCreate: () => {
+                    var right = popper.getBoundingClientRect().right + arrowSize;
+                    expect(right).toBeApprox(reference.getBoundingClientRect().left);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+    });
+
     it('inits a bottom popper attached to an inline reference', (done) => {
         var reference = appendNewRef(1);
         reference.style.display = 'inline';
