@@ -50,10 +50,18 @@ describe('[core]', () => {
 
     describe('[auto placement]', () => {
         it('should be computed to `top`', (done) => {
-            var reference = appendNewRef(1);
-            reference.style.marginTop = '90vh';
-            reference.style.marginLeft = '50vh';
-            var popper    = appendNewPopper(2);
+            var parent = document.createElement('div');
+            parent.style.overflow = 'auto';
+            parent.style.position = 'relative';
+            parent.style.width = '500px';
+            parent.style.height = '500px';
+            parent.style.backgroundColor = 'green';
+            var reference = appendNewRef(1, 'ref', parent);
+            reference.style.position = 'absolute';
+            reference.style.bottom = '0';
+            reference.style.left = '50%';
+            var popper    = appendNewPopper(2, 'pop', parent);
+            jasmineWrapper.appendChild(parent);
 
             var pop = new Popper(reference, popper, {
                 placement: 'auto',
@@ -67,10 +75,18 @@ describe('[core]', () => {
         });
 
         it('should be computed to `right`', (done) => {
-            var reference = appendNewRef(1);
-            reference.style.marginTop = '50vh';
-            reference.style.marginLeft = '0px';
-            var popper    = appendNewPopper(2);
+            var parent = document.createElement('div');
+            parent.style.overflow = 'auto';
+            parent.style.position = 'relative';
+            parent.style.width = '500px';
+            parent.style.height = '500px';
+            parent.style.backgroundColor = 'green';
+            var reference = appendNewRef(1, 'ref', parent);
+            reference.style.position = 'absolute';
+            reference.style.left = '0';
+            reference.style.top = '50%';
+            var popper    = appendNewPopper(2, 'pop', parent);
+            jasmineWrapper.appendChild(parent);
 
             var pop = new Popper(reference, popper, {
                 placement: 'auto',
@@ -84,10 +100,18 @@ describe('[core]', () => {
         });
 
         it('should be computed to `bottom`', (done) => {
-            var reference = appendNewRef(1);
-            reference.style.marginTop = '0px';
-            reference.style.marginLeft = '50vw';
-            var popper    = appendNewPopper(2);
+            var parent = document.createElement('div');
+            parent.style.overflow = 'auto';
+            parent.style.position = 'relative';
+            parent.style.width = '500px';
+            parent.style.height = '500px';
+            parent.style.backgroundColor = 'green';
+            var reference = appendNewRef(1, 'ref', parent);
+            reference.style.position = 'absolute';
+            reference.style.top = '0';
+            reference.style.left = '50%';
+            var popper    = appendNewPopper(2, 'pop', parent);
+            jasmineWrapper.appendChild(parent);
 
             var pop = new Popper(reference, popper, {
                 placement: 'auto',
@@ -101,11 +125,18 @@ describe('[core]', () => {
         });
 
         it('should be computed to `left`', (done) => {
-            var reference = appendNewRef(1);
+            var parent = document.createElement('div');
+            parent.style.overflow = 'auto';
+            parent.style.position = 'relative';
+            parent.style.width = '500px';
+            parent.style.height = '500px';
+            parent.style.backgroundColor = 'green';
+            var reference = appendNewRef(1, 'ref', parent);
             reference.style.position = 'absolute';
-            reference.style.marginTop = '50vh';
-            reference.style.right = '0px';
-            var popper    = appendNewPopper(2);
+            reference.style.right = '0';
+            reference.style.top = '50%';
+            var popper    = appendNewPopper(2, 'pop', parent);
+            jasmineWrapper.appendChild(parent);
 
             var pop = new Popper(reference, popper, {
                 placement: 'auto',
