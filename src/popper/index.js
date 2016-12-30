@@ -1,6 +1,3 @@
-// Polyfills
-import './polyfills/requestAnimationFrame';
-
 // Utils
 import Utils from './utils/index';
 import debounce from './utils/debounce';
@@ -23,7 +20,7 @@ import modifiersFunctions from './modifiers/index';
 import { modifiersOnLoad as modifiersOnLoadFunctions } from './modifiers/index';
 
 // default options
-var DEFAULTS = {
+const DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
