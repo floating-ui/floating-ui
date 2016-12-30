@@ -1,4 +1,5 @@
 import getOuterSizes from './getOuterSizes';
+import getOppositePlacement from './getOppositePlacement';
 
 /**
  * Get offsets to the popper
@@ -11,39 +12,29 @@ import getOuterSizes from './getOuterSizes';
 export default function getPopperOffsets(state, popper, referenceOffsets, placement) {
     placement = placement.split('-')[0];
 
-    const popperOffsets = {};
-    popperOffsets.position = state.position;
-
-    //
-    // Get popper sizes
-    //
+    // Get popper node sizes
     const popperRect = getOuterSizes(popper);
 
-    //
-    // Compute offsets of popper
-    //
+    // Add position, width and height to our offsets object
+    const popperOffsets = {
+        position: state.position,
+        width: popperRect.width,
+        height: popperRect.height,
+    };
 
     // depending by the popper placement we have to compute its offsets slightly differently
-    if (['right', 'left'].indexOf(placement) !== -1) {
-        popperOffsets.top = referenceOffsets.top + referenceOffsets.height / 2 - popperRect.height / 2;
-        if (placement === 'left') {
-            popperOffsets.left = referenceOffsets.left - popperRect.width;
-        } else {
-            popperOffsets.left = referenceOffsets.right;
-        }
+    let mainSide, secondarySide, measurement;
+    const isHoriz = ['right', 'left'].indexOf(placement) !== -1;
+    mainSide = isHoriz ? 'top' : 'left';
+    secondarySide = isHoriz ? 'left' : 'top';
+    measurement = isHoriz ? 'height' : 'width';
+
+    popperOffsets[mainSide] = referenceOffsets[mainSide] + referenceOffsets[measurement] / 2 - popperRect[measurement] / 2;
+    if (placement === secondarySide) {
+        popperOffsets[secondarySide] = referenceOffsets[secondarySide] - popperRect[isHoriz ? 'width' : 'height'];
     } else {
-        popperOffsets.left = referenceOffsets.left + referenceOffsets.width / 2 - popperRect.width / 2;
-        if (placement === 'top') {
-            popperOffsets.top = referenceOffsets.top - popperRect.height;
-        } else {
-            popperOffsets.top = referenceOffsets.bottom;
-        }
+        popperOffsets[secondarySide] = referenceOffsets[getOppositePlacement(secondarySide)];
     }
-
-    // Add width and height to our offsets object
-    popperOffsets.width   = popperRect.width;
-    popperOffsets.height  = popperRect.height;
-
 
     return popperOffsets;
 }
