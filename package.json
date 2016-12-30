@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "A kickass library to manage your poppers",
   "main": "build/popper.js",
   "scripts": {
@@ -30,9 +30,7 @@
   },
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "contributors": [
-    {
-      "name": "Andrea Scianò"
-    }
+    "Contributors (https://github.com/FezVrasta/popper.js/graphs/contributors)"
   ],
   "license": "MIT",
   "bugs": {
