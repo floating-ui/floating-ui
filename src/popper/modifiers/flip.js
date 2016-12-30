@@ -47,9 +47,17 @@ export default function flip(data, options) {
         placementOpposite = getOppositePlacement(placement);
 
         const popperOffsets = getPopperClientRect(data.offsets.popper);
+        const refOffsets = data.offsets.reference;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here
-        const flippedPosition = (
+        const overlapsRef = (
+            (placement === 'left'   && Math.floor(popperOffsets.right) > Math.floor(refOffsets.left)) ||
+            (placement === 'right'  && Math.floor(popperOffsets.left) < Math.floor(refOffsets.right)) ||
+            (placement === 'top'    && Math.floor(popperOffsets.bottom) > Math.floor(refOffsets.top)) ||
+            (placement === 'bottom' && Math.floor(popperOffsets.top) < Math.floor(refOffsets.bottom))
+        );
+
+        const overflowsBoundaries = (
             (placement === 'left'   && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
             (placement === 'right'  && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||
             (placement === 'top'    && Math.floor(popperOffsets.top) < Math.floor(boundaries.top)) ||
@@ -65,11 +73,11 @@ export default function flip(data, options) {
             (!isVertical && variation === 'end'   && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom))
         );
 
-        if (flippedPosition || flippedVariation) {
+        if (overlapsRef || overflowsBoundaries || flippedVariation) {
             // this boolean to detect any flip loop
             data.flipped = true;
 
-            if (flippedPosition) {
+            if (overlapsRef || overflowsBoundaries) {
                 placement = flipOrder[index + 1];
             }
 
