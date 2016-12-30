@@ -1,5 +1,4 @@
 // Polyfills
-import './polyfills/objectAssign';
 import './polyfills/requestAnimationFrame';
 
 // Utils
@@ -191,23 +190,22 @@ export default class Popper {
         this.popper = popper.jquery ? popper[0] : popper;
 
         // with {} we create a new object with the options inside it
-        this.options = Object.assign({}, DEFAULTS, options);
+        this.options = {...DEFAULTS, ...options};
 
         // refactoring modifiers' list (Object => Array)
         this.modifiers = Object.keys(DEFAULTS.modifiers)
-                               .map((name) => Object.assign({ name }, DEFAULTS.modifiers[name]));
+                               .map((name) => ({name, ...DEFAULTS.modifiers[name]}));
 
         // assign default values to modifiers, making sure to override them with
         // the ones defined by user
         this.modifiers = this.modifiers.map((defaultConfig) => {
             const userConfig = (options.modifiers && options.modifiers[defaultConfig.name]) || {};
-            const finalConfig = Object.assign({}, defaultConfig, userConfig);
-            return finalConfig;
+            return {...defaultConfig, ...userConfig};
         });
 
         // add custom modifiers to the modifiers list
         if (options.modifiers) {
-            this.options.modifiers = Object.assign({}, DEFAULTS.modifiers, options.modifiers);
+            this.options.modifiers = {...{}, ...DEFAULTS.modifiers, ...options.modifiers};
             Object.keys(options.modifiers).forEach((name) => {
                 // take in account only custom modifiers
                 if (DEFAULTS.modifiers[name] === undefined) {

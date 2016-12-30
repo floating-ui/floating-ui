@@ -48,13 +48,11 @@ export default function applyStyle(data, options) {
     // in this way we can make the 3rd party modifiers add custom styles to it
     // Be aware, modifiers could override the properties defined in the previous
     // lines of this modifier!
-    Object.assign(styles, data.styles);
-    setStyles(data.instance.popper, styles);
+    setStyles(data.instance.popper, {...styles, ...data.styles});
 
     // any property present in `data.attributes` will be applied to the popper,
     // they will be set as HTML attributes of the element
-    Object.assign(attributes, data.attributes);
-    setAttributes(data.instance.popper, attributes);
+    setAttributes(data.instance.popper, {...attributes, ...data.attributes});
 
     // if the arrow style has been computed, apply the arrow style
     if (data.offsets.arrow) {

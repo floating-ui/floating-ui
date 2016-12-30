@@ -31,7 +31,7 @@ export default function shift(data) {
 
         const axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
 
-        data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftvariation]);
+        data.offsets.popper = {...popper, ...shiftOffsets[axis][shiftvariation]};
     }
 
     return data;

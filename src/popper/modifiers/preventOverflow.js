@@ -29,7 +29,7 @@ export default function preventOverflow(data, options) {
     options.boundaries = boundaries;
 
     const order = options.priority;
-    const popper = getPopperClientRect(data.offsets.popper);
+    let popper = getPopperClientRect(data.offsets.popper);
 
     const check = {
         left() {
@@ -63,11 +63,10 @@ export default function preventOverflow(data, options) {
     };
 
     order.forEach((direction) => {
-        data.offsets.popper = Object.assign(
-            popper,
-            check[direction]()
-        );
+        popper = {...popper, ...check[direction]()};
     });
+
+    data.offsets.popper = popper;
 
     return data;
 }
