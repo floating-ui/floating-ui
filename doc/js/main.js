@@ -107,6 +107,8 @@ ga('send', 'pageview');
 	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 	if (!iOS) {
 		new Popper(document.getElementById('header-title'), document.getElementById('title-popper'));
-	}
+	} else {
+        document.getElementById('title-popper').remove();
+    }
 
 })(jQuery);
