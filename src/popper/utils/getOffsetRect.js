@@ -1,3 +1,5 @@
+import getWindowSizes from './getWindowSizes';
+
 /**
  * Get the position of the given element, relative to its offset parent
  * @method
@@ -8,9 +10,10 @@
 export default function getOffsetRect(element) {
     let elementRect;
     if (element.nodeName === 'HTML') {
+        const { width, height } = getWindowSizes();
         elementRect = {
-            width: Math.max(element.clientWidth, window.innerWidth || 0),
-            height: Math.max(element.clientHeight, window.innerHeight || 0),
+            width,
+            height,
             left: 0,
             top: 0,
         };

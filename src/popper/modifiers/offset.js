@@ -38,8 +38,7 @@ export default function offset(data, options) {
             const value = +split[1];
             const unit = split[2];
 
-            // use height if placement is left or right and index is 0
-            // otherwise use height
+            // use height if placement is left or right and index is 0 otherwise use width
             // in this way the first offset will use an axis and the second one
             // will use the other one
             let useHeight = placement.indexOf('right') !== -1 || placement.indexOf('left') !== -1;
@@ -48,28 +47,20 @@ export default function offset(data, options) {
                 useHeight = !useHeight;
             }
 
+            const measurement = useHeight ? 'height' : 'width';
+
             // if is a percentage, we calculate the value of it using as base the
             // sizes of the reference element
             if (unit === '%' || unit === '%r') {
                 const referenceRect = getPopperClientRect(data.offsets.reference);
-                let len;
-                if (useHeight) {
-                    len = referenceRect.height;
-                } else {
-                    len = referenceRect.width;
-                }
+                let len = referenceRect[measurement];
                 return (len / 100) * value;
             }
             // if is a percentage relative to the popper, we calculate the value of it using
             // as base the sizes of the popper
             else if (unit === '%p') {
                 const popperRect = getPopperClientRect(data.offsets.popper);
-                let len;
-                if (useHeight) {
-                    len = popperRect.height;
-                } else {
-                    len = popperRect.width;
-                }
+                let len = popperRect[measurement];
                 return (len / 100) * value;
             }
             // if is a vh or vw, we calculate the size based on the viewport

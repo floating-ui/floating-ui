@@ -5,6 +5,7 @@ import getPosition from './getPosition';
 import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
 import getTotalScroll from './getTotalScroll';
 import isFixed from './isFixed';
+import getWindowSizes from './getWindowSizes';
 
 /**
  * Computed the boundaries limits and return them
@@ -17,17 +18,14 @@ import isFixed from './isFixed';
  */
 export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
-    let boundaries;
+    let boundaries = { top: 0, left: 0 };
     const offsetParent = getOffsetParent(popper);
     const scrollParent = getScrollParent(popper);
-    const body = window.document.body;
     const html = window.document.documentElement;
 
     if (boundariesElement === 'window') {
         // WINDOW
-        const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-        const width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
-
+        const { height, width } = getWindowSizes();
         boundaries = {
             top: 0,
             right: width,
@@ -36,35 +34,26 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         };
     } else if (boundariesElement === 'viewport') {
         // VIEWPORT
-        const offsetParentRect = getOffsetRect(offsetParent);
-        const position = getPosition(popper);
+        const { left, top } = getOffsetRect(offsetParent);
+        const { clientWidth: width, clientHeight: height } = html;
 
-        if (position === 'fixed') {
-            boundaries = {
-                top: 0,
-                right: window.document.documentElement.clientWidth,
-                bottom: window.document.documentElement.clientHeight,
-                left: 0,
-            }
+        if (getPosition(popper) === 'fixed') {
+            boundaries.right = width;
+            boundaries.bottom = height;
         } else {
             boundaries = {
-                top: 0 - offsetParentRect.top,
-                right: html.clientWidth - offsetParentRect.left,
-                bottom: html.clientHeight - offsetParentRect.top,
-                left: 0 - offsetParentRect.left
+                top: 0 - top,
+                right: width - left,
+                bottom: height - top,
+                left: 0 - left
             };
         }
     } else if (boundariesElement === 'scrollParent' || scrollParent === boundariesElement) {
         // SCROLL PARENT IS BOUNDARIES ELEMENT
         if (scrollParent.nodeName === 'BODY') {
-            const height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-            const width = Math.max(body.scrollWidth, body.offsetWidth, html.clientWidth, html.scrollWidth, html.offsetWidth);
-            boundaries = {
-                top: 0,
-                left: 0,
-                right: width,
-                bottom: height,
-            }
+            const { height, width } = getWindowSizes();
+            boundaries.right = width;
+            boundaries.bottom = height;
         } else {
             boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
         }
