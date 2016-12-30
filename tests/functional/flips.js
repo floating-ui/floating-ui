@@ -7,12 +7,16 @@ import appendNewRef from '../utils/appendNewRef';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 describe('[flipping]', () => {
-    it('should flip from top to bottom', () => {
-        var ref = appendNewRef(1);
+    it('should flip from top to bottom', (done) => {
+        var ref = appendNewRef(1, 'ref', jasmineWrapper);
         ref.style.marginLeft = '100px';
-        var popper = appendNewPopper(2);
+        var popper = appendNewPopper(2, 'popper');
         new Popper(ref, popper, {
             placement: 'top',
+            onCreate: (data) => {
+                expect(data.placement).toBe('bottom');
+                done();
+            },
         });
     });
 
