@@ -187,11 +187,11 @@ export default class Popper {
         this.popper = popper.jquery ? popper[0] : popper;
 
         // with {} we create a new object with the options inside it
-        this.options = {...DEFAULTS, ...options};
+        this.options = {...Popper.Defaults, ...options};
 
         // refactoring modifiers' list (Object => Array)
-        this.modifiers = Object.keys(DEFAULTS.modifiers)
-                               .map((name) => ({name, ...DEFAULTS.modifiers[name]}));
+        this.modifiers = Object.keys(Popper.Defaults.modifiers)
+                               .map((name) => ({name, ...Popper.Defaults.modifiers[name]}));
 
         // assign default values to modifiers, making sure to override them with
         // the ones defined by user
@@ -202,10 +202,10 @@ export default class Popper {
 
         // add custom modifiers to the modifiers list
         if (options.modifiers) {
-            this.options.modifiers = {...{}, ...DEFAULTS.modifiers, ...options.modifiers};
+            this.options.modifiers = {...{}, ...Popper.Defaults.modifiers, ...options.modifiers};
             Object.keys(options.modifiers).forEach((name) => {
                 // take in account only custom modifiers
-                if (DEFAULTS.modifiers[name] === undefined) {
+                if (Popper.Defaults.modifiers[name] === undefined) {
                     const modifier = options.modifiers[name];
                     modifier.name = name;
                     this.modifiers.push(modifier);
@@ -360,5 +360,5 @@ export default class Popper {
      * Default Popper.js options
      * @memberof Popper
      */
-    Defaults = DEFAULTS;
+    static Defaults = DEFAULTS;
 }
