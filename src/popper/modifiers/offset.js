@@ -1,5 +1,5 @@
 import isNumeric from '../utils/isNumeric';
-import getPopperClientRect from '../utils/getPopperClientRect';
+import getClientRect from '../utils/getClientRect';
 
 /**
  * Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
@@ -52,14 +52,14 @@ export default function offset(data, options) {
             // if is a percentage, we calculate the value of it using as base the
             // sizes of the reference element
             if (unit === '%' || unit === '%r') {
-                const referenceRect = getPopperClientRect(data.offsets.reference);
+                const referenceRect = getClientRect(data.offsets.reference);
                 let len = referenceRect[measurement];
                 return (len / 100) * value;
             }
             // if is a percentage relative to the popper, we calculate the value of it using
             // as base the sizes of the popper
             else if (unit === '%p') {
-                const popperRect = getPopperClientRect(data.offsets.popper);
+                const popperRect = getClientRect(data.offsets.popper);
                 let len = popperRect[measurement];
                 return (len / 100) * value;
             }

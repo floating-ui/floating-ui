@@ -10,11 +10,7 @@ import getParentNode from './getParentNode';
  */
 export default function getScrollParent(element) {
     // Return body, `getScroll` will take care to get the correct `scrollTop` from it
-    if (
-        element.nodeName === 'HTML' ||
-        element.nodeName === 'BODY' ||
-        element.nodeName === '#document'
-    ) {
+    if (['HTML', 'BODY', '#document'].indexOf(element.nodeName) !== -1) {
         return window.document.body;
     }
 

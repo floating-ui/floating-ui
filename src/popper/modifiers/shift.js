@@ -1,4 +1,4 @@
-import getPopperClientRect from '../utils/getPopperClientRect';
+import getClientRect from '../utils/getClientRect';
 
 /**
  * Modifier used to shift the popper on the start or end of its reference element side
@@ -16,7 +16,7 @@ export default function shift(data) {
     // if shift shiftvariation is specified, run the modifier
     if (shiftvariation) {
         const reference = data.offsets.reference;
-        const popper = getPopperClientRect(data.offsets.popper);
+        const popper = getClientRect(data.offsets.popper);
 
         const shiftOffsets = {
             y: {

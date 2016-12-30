@@ -7,12 +7,13 @@
  */
 export default function getSupportedPropertyName(property) {
     const prefixes = ['', 'ms', 'webkit', 'moz', 'o'];
+    const upperProp = property.charAt(0).toUpperCase() + property.slice(1);
 
-    for (let i = 0; i < prefixes.length; i++) {
-        const toCheck = prefixes[i] ? prefixes[i] + property.charAt(0).toUpperCase() + property.slice(1) : property;
+    prefixes.forEach((prefix) => {
+        const toCheck = prefix ? `${prefix}${upperProp}` : property;
         if (typeof window.document.body.style[toCheck] !== 'undefined') {
             return toCheck;
         }
-    }
+    });
     return null;
 }

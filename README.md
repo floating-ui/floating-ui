@@ -149,7 +149,8 @@ that integrate in popular frameworks:
 - [**ak-layer**](http://aui-cdn.atlassian.com/atlaskit/registry/ak-layer/latest/index.html) by [@Atlassian](https://github.com/atlassian) for [React](https://facebook.github.io/react/)
 - [**vue-popper-component**](https://github.com/antongorodezkiy/vue-popper-component) by [@antongorodezkiy](https://github.com/antongorodezkiy) for [Vue.js](https://vuejs.org/)
 
-Alternatively, you may even override [`applyStyles` modifier](https://github.com/FezVrasta/popper.js/blob/master/src/popper/modifiers/applyStyle.js) with your custom function and integrate Popper.js by yourself!
+Alternatively, you may even define your won `applyStyles` with your custom one and
+integrate Popper.js by yourself!
 
 ```js
 function applyReactStyle(data) {
@@ -160,11 +161,11 @@ const reference = document.querySelector('.my-button');
 const popper = document.querySelector('.my-popper');
 new Popper(reference, popper, {
     modifiers: {
-        applyStyle: {
-            // override built-in DOM based modifier
+        applyStyle: { enabled: false },
+        applyReactStyle: {
+            enabled: true,
             function: applyReactStyle,
-            // disable the DOM based onLoad function
-            onLoad: null,
+            order: 800,
         },
     },
 });

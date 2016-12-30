@@ -1,4 +1,4 @@
-import getPopperClientRect from '../utils/getPopperClientRect';
+import getClientRect from '../utils/getClientRect';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getOffsetParent from '../utils/getOffsetParent';
 import getBoundaries from '../utils/getBoundaries';
@@ -29,7 +29,7 @@ export default function preventOverflow(data, options) {
     options.boundaries = boundaries;
 
     const order = options.priority;
-    let popper = getPopperClientRect(data.offsets.popper);
+    let popper = getClientRect(data.offsets.popper);
 
     const check = {
         left() {

@@ -1,4 +1,4 @@
-import getPopperClientRect from '../utils/getPopperClientRect';
+import getClientRect from '../utils/getClientRect';
 import getOuterSizes from '../utils/getOuterSizes';
 import isModifierRequired from '../utils/isModifierRequired';
 
@@ -38,7 +38,7 @@ export default function arrow(data, options) {
 
     const arrowElStyle  = {};
     const placement     = data.placement.split('-')[0];
-    const popper        = getPopperClientRect(data.offsets.popper);
+    const popper        = getClientRect(data.offsets.popper);
     const reference     = data.offsets.reference;
     const isVertical    = ['left', 'right'].indexOf(placement) !== -1;
 
@@ -65,7 +65,7 @@ export default function arrow(data, options) {
     const center = reference[side] + (reference[len] / 2) - (arrowElSize / 2);
 
     // Compute the sideValue using the updated popper offsets
-    let sideValue = center - getPopperClientRect(data.offsets.popper)[side];
+    let sideValue = center - getClientRect(data.offsets.popper)[side];
 
     // prevent arrowEl from being placed not contiguously to its popper
     sideValue = Math.max(Math.min(popper[len] - arrowElSize, sideValue), 0);

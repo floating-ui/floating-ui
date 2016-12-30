@@ -1,6 +1,6 @@
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getOppositeVariation from '../utils/getOppositeVariation';
-import getPopperClientRect from '../utils/getPopperClientRect';
+import getClientRect from '../utils/getClientRect';
 import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
 import getBoundaries from '../utils/getBoundaries';
@@ -46,7 +46,7 @@ export default function flip(data, options) {
         placement = data.placement.split('-')[0];
         placementOpposite = getOppositePlacement(placement);
 
-        const popperOffsets = getPopperClientRect(data.offsets.popper);
+        const popperOffsets = getClientRect(data.offsets.popper);
         const refOffsets = data.offsets.reference;
 
         // using Math.floor because the reference offsets may contain decimals we are not going to consider here

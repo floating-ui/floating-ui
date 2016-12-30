@@ -251,6 +251,9 @@ export default class Popper {
      * @memberof Popper
      */
     update() {
+        // if popper is destroyed, don't perform any further update
+        if (this.state.isDestroyed) { return; }
+
         let data = {
             instance: this,
             styles: {},
@@ -262,9 +265,6 @@ export default class Popper {
         // make sure to apply the popper position before any computation
         this.state.position = getPosition(this.reference);
         setStyles(this.popper, { position: this.state.position});
-
-        // if popper is destroyed, don't perform any further update
-        if (this.state.isDestroyed) { return; }
 
         // compute reference element offsets
         data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference);
