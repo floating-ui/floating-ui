@@ -20,22 +20,11 @@ export default function getBoundaries(popper, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     let boundaries = { top: 0, left: 0 };
     const offsetParent = getOffsetParent(popper);
-    const scrollParent = getScrollParent(popper);
-    const html = window.document.documentElement;
 
-    if (boundariesElement === 'window') {
-        // WINDOW
-        const { height, width } = getWindowSizes();
-        boundaries = {
-            top: 0,
-            right: width,
-            bottom: height,
-            left: 0
-        };
-    } else if (boundariesElement === 'viewport') {
-        // VIEWPORT
+    // Handle viewport case
+    if (boundariesElement === 'viewport') {
         const { left, top } = getOffsetRect(offsetParent);
-        const { clientWidth: width, clientHeight: height } = html;
+        const { clientWidth: width, clientHeight: height } = window.document.documentElement;
 
         if (getPosition(popper) === 'fixed') {
             boundaries.right = width;
@@ -48,18 +37,28 @@ export default function getBoundaries(popper, padding, boundariesElement) {
                 left: 0 - left
             };
         }
-    } else if (boundariesElement === 'scrollParent' || scrollParent === boundariesElement) {
-        // SCROLL PARENT IS BOUNDARIES ELEMENT
-        if (scrollParent.nodeName === 'BODY') {
+    }
+    // Handle other cases based on DOM element used as boundaries
+    else {
+        let boundariesNode;
+        if (boundariesElement === 'scrollParent') {
+            boundariesNode = getScrollParent(popper);
+        } else if (boundariesElement === 'window') {
+            boundariesNode = window.document.body;
+        } else {
+            boundariesNode = boundariesElement;
+        }
+
+        // In case of BODY, we need a different computation
+        if (boundariesNode.nodeName === 'BODY') {
             const { height, width } = getWindowSizes();
             boundaries.right = width;
             boundaries.bottom = height;
-        } else {
-            boundaries = getOffsetRectRelativeToCustomParent(scrollParent, offsetParent, isFixed(popper));
         }
-    } else {
-        // BOUNDARIES ELEMENT
-        boundaries = getOffsetRectRelativeToCustomParent(boundariesElement, offsetParent, isFixed(popper));
+        // for all the other DOM elements, this one is good
+        else {
+            boundaries = getOffsetRectRelativeToCustomParent(boundariesNode, offsetParent, isFixed(popper));
+        }
     }
 
     const scrollLeft = getTotalScroll(popper, 'left');
