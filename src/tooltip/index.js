@@ -48,7 +48,7 @@ export default class Tooltip {
      */
     constructor(reference, options) {
         // apply user options over default ones
-        options = Object.assign({}, DEFAULT_OPTIONS, options);
+        options = {...DEFAULT_OPTIONS, ...options};
 
         reference.jquery && (reference = reference[0]);
 
