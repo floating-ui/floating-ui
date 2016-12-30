@@ -104,7 +104,9 @@ ga('send', 'pageview');
 			}
 
 	});
-
-	new Popper(document.getElementById('header-title'), document.getElementById('title-popper'));
+	var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+	if (!iOS) {
+		new Popper(document.getElementById('header-title'), document.getElementById('title-popper'));
+	}
 
 })(jQuery);
