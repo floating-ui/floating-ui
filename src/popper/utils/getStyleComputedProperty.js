@@ -11,5 +11,8 @@ export default function getStyleComputedProperty(element, property) {
     }
     // NOTE: 1 DOM access here
     const css = window.getComputedStyle(element, null);
-    return css[property];
+    if (property) {
+        return css[property];
+    }
+    return css;
 }

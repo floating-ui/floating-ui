@@ -19,11 +19,8 @@ export default function getScrollParent(element) {
     }
 
     // Firefox want us to check `-x` and `-y` variations as well
-    if (
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow')) !== -1 ||
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-x')) !== -1 ||
-        ['scroll', 'auto'].indexOf(getStyleComputedProperty(element, 'overflow-y')) !== -1
-    ) {
+    const { overflow, overflowX, overflowY } = getStyleComputedProperty(element);
+    if (/(auto|scroll)/.test(overflow + overflowY + overflowX)) {
         return element;
     }
 
