@@ -5,8 +5,8 @@ const root = `${__dirname}/..`;
 
 export default deepAssign(base, {
     entry: `${root}/src/popper/index.js`,
-    dest: `${root}/build/popper.js`,
+    dest: `${root}/dist/popper.js`,
     moduleName: 'Popper',
-    sourceMapFile: `${root}/build/popper.js.map`,
+    sourceMapFile: `${root}/dist/popper.js.map`,
     banner: require('./addPopperHeader.js')(),
 });

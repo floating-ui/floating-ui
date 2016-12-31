@@ -1,25 +1,9 @@
 {
-    "presets": [
-        [
-            "es2015",
-            {
-                "modules": false
-            }
-        ],
-        "stage-2"
-    ],
+    "presets": ["stage-2"],
     "plugins": [
         "external-helpers"
     ],
     "ignore": [
         "node_modules/**"
-    ],
-    "env": {
-        "production": {
-            "presets": ["babili"],
-            "comments": false,
-            "minified": true,
-            "compact": true
-        }
-    }
+    ]
 }
