@@ -43,6 +43,14 @@ describe('[lifecycle]', () => {
 
             expect(scrollAncestor.addEventListener.calls.allArgs()).toEqual([['scroll', state.updateBound, { passive: true }]]);
         });
+
+        it('should not add resize/scroll event if enabled option is set to false', () => {
+            const { state } = makePopper(makeConnectedElement(), makeConnectedElement(), { enabled: false });
+
+            expect(state.isEnabled).toBe(false);
+            expect(state.updateBound).toBeUndefined();
+            expect(state.target).toBeUndefined();
+        });
     });
 
     describe('on update', () => {
@@ -161,4 +169,23 @@ describe('[lifecycle]', () => {
         });
     });
 
+    it('methods: enable/disable', () => {
+        const removeEventListener = spyOn(window, 'removeEventListener');
+        const instance = makePopper(makeConnectedElement(), makeConnectedElement());
+        let { updateBound } = instance.state;
+
+        // disable
+        instance.disable();
+        expect(removeEventListener.calls.argsFor(0)).toEqual(['resize', updateBound]);
+        expect(removeEventListener.calls.argsFor(1)).toEqual(['scroll', updateBound]);
+        expect(instance.state.isEnabled).toBe(false);
+        expect(instance.state.updateBound).toBe(null);
+
+        // enable
+        const addEventListener = spyOn(window, 'addEventListener');
+        instance.enable();
+        expect(addEventListener.calls.argsFor(0)).toEqual(['resize', instance.state.updateBound, { passive: true }]);
+        expect(addEventListener.calls.argsFor(1)).toEqual(['scroll', instance.state.updateBound, { passive: true }]);
+        expect(instance.state.isEnabled).toBe(true);
+    });
 });
