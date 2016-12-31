@@ -1,6 +1,6 @@
 {
   "name": "tooltip.js",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-beta.3",
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "../../build/tooltip.js",
   "scripts": {
@@ -11,6 +11,6 @@
     "url": "git+https://github.com/FezVrasta/popper.js.git"
   },
   "peerDependencies": {
-    "popper.js": "1.0.0-alpha.8"
+    "popper.js": "1.0.0-beta.3"
   }
 }
