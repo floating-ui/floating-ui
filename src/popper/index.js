@@ -24,8 +24,8 @@ const DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
-    // is initially enabled or not
-    enabled: true,
+    // whether events (resize, scroll) are initially enabled
+    eventsEnabled: true,
 
     /**
      * Callback called when the popper is created.
@@ -123,8 +123,8 @@ const DEFAULTS = {
  *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
  *      left(-start, -end)`
  *
- * @param {Boolean} options.enabled=true
- *      Whether popper is initially enabled or not
+ * @param {Boolean} options.eventsEnabled=true
+ *      Whether events (resize, scroll) are initially enabled
  * @param {Boolean} options.gpuAcceleration=true
  *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
  *      browser to use the GPU to accelerate the rendering.
@@ -188,7 +188,7 @@ export default class Popper {
         this.state = {
             isDestroyed: false,
             isCreated: false,
-            isEnabled: this.options.enabled,
+            isEnabled: this.options.eventsEnabled,
         };
 
         // get reference and popper elements (allow jQuery wrappers)
@@ -244,7 +244,7 @@ export default class Popper {
 
         if (this.state.isEnabled) {
             // setup event listeners, they will take care of update the position in specific situations
-           setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
+            this.enable(true);
         }
     }
 
@@ -336,19 +336,22 @@ export default class Popper {
     }
 
     /**
-     * Enables popper
+     * Enables popper - it will add resize/scroll events and start
+     * recalculating position of the popper element when they are triggered
      * @method
      * @memberof Popper
      */
-    enable() {
-        if (!this.state.isEnabled) {
+    enable(initial) {
+        if (!this.state.isEnabled || initial) {
             setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
             this.state.isEnabled = true;
         }
     }
 
     /**
-     * Disables popper
+     * Disables popper - it will remove resize/scroll events and won't recalculate
+     * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
+     * unless you call 'update' method manually.
      * @method
      * @memberof Popper
      */
