@@ -47,7 +47,7 @@ describe('[lifecycle]', () => {
         it('should not add resize/scroll event if eventsEnabled option is set to false', () => {
             const { state } = makePopper(makeConnectedElement(), makeConnectedElement(), { eventsEnabled: false });
 
-            expect(state.isEnabled).toBe(false);
+            expect(state.eventsEnabled).toBe(false);
             expect(state.updateBound).toBeUndefined();
             expect(state.scrollElement).toBeUndefined();
         });
@@ -169,27 +169,27 @@ describe('[lifecycle]', () => {
         });
     });
 
-    describe('methods: enable/disable', () => {
-        it('enable', () => {
+    describe('methods: enableEventListeners/disableEventListeners', () => {
+        it('enableEventListeners', () => {
             spyOn(window, 'addEventListener');
             const instance = makePopper(makeConnectedElement(), makeConnectedElement(), { eventsEnabled: false });
 
-            instance.enable();
+            instance.enableEventListeners();
             expect(window.addEventListener.calls.count()).toEqual(2);
             expect(window.addEventListener.calls.argsFor(0)).toEqual(['resize', instance.state.updateBound, { passive: true }]);
             expect(window.addEventListener.calls.argsFor(1)).toEqual(['scroll', instance.state.updateBound, { passive: true }]);
-            expect(instance.state.isEnabled).toBe(true);
+            expect(instance.state.eventsEnabled).toBe(true);
         });
 
-        it('disable', () => {
+        it('disableEventListeners', () => {
             spyOn(window, 'removeEventListener');
             const instance = makePopper(makeConnectedElement(), makeConnectedElement());
             const { updateBound } = instance.state;
 
-            instance.disable();
+            instance.disableEventListeners();
             expect(window.removeEventListener.calls.argsFor(0)).toEqual(['resize', updateBound]);
             expect(window.removeEventListener.calls.argsFor(1)).toEqual(['scroll', updateBound]);
-            expect(instance.state.isEnabled).toBe(false);
+            expect(instance.state.eventsEnabled).toBe(false);
             expect(instance.state.updateBound).toBe(null);
             expect(instance.state.scrollElement).toBe(null);
         });

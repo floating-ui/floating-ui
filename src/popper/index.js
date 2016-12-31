@@ -244,10 +244,10 @@ export default class Popper {
         const eventsEnabled = this.options.eventsEnabled;
         if (eventsEnabled) {
             // setup event listeners, they will take care of update the position in specific situations
-            this.enable();
+            this.enableEventListeners();
         }
 
-        this.state.isEnabled = eventsEnabled;
+        this.state.eventsEnabled = eventsEnabled;
     }
 
     //
@@ -327,7 +327,7 @@ export default class Popper {
             this.popper.style[getSupportedPropertyName('transform')] = '';
         }
 
-        this.disable();
+        this.disableEventListeners();
 
         // remove the popper if user explicity asked for the deletion on destroy
         // do not use `remove` because IE11 doesn't support it
@@ -338,30 +338,30 @@ export default class Popper {
     }
 
     /**
-     * Enables popper - it will add resize/scroll events and start
-     * recalculating position of the popper element when they are triggered
+     * it will add resize/scroll events and start recalculating
+     * position of the popper element when they are triggered
      * @method
      * @memberof Popper
      */
-    enable() {
-        if (!this.state.isEnabled) {
+    enableEventListeners() {
+        if (!this.state.eventsEnabled) {
             setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
-            this.state.isEnabled = true;
+            this.state.eventsEnabled = true;
         }
     }
 
     /**
-     * Disables popper - it will remove resize/scroll events and won't recalculate
+     * it will remove resize/scroll events and won't recalculate
      * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
      * unless you call 'update' method manually.
      * @method
      * @memberof Popper
      */
-    disable() {
-        if (this.state.isEnabled) {
+    disableEventListeners() {
+        if (this.state.eventsEnabled) {
             cancelAnimationFrame(this.scheduledUpdate);
             this.state = removeEventListeners(this.reference, this.state);
-            this.state.isEnabled = false;
+            this.state.eventsEnabled = false;
         }
     }
 
