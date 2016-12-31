@@ -188,7 +188,6 @@ export default class Popper {
         this.state = {
             isDestroyed: false,
             isCreated: false,
-            isEnabled: this.options.eventsEnabled,
         };
 
         // get reference and popper elements (allow jQuery wrappers)
@@ -242,10 +241,13 @@ export default class Popper {
         // fire the first update to position the popper in the right place
         this.update();
 
-        if (this.state.isEnabled) {
+        const eventsEnabled = this.options.eventsEnabled;
+        if (eventsEnabled) {
             // setup event listeners, they will take care of update the position in specific situations
-            this.enable(true);
+            this.enable();
         }
+
+        this.state.isEnabled = eventsEnabled;
     }
 
     //
@@ -341,8 +343,8 @@ export default class Popper {
      * @method
      * @memberof Popper
      */
-    enable(initial) {
-        if (!this.state.isEnabled || initial) {
+    enable() {
+        if (!this.state.isEnabled) {
             setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
             this.state.isEnabled = true;
         }
