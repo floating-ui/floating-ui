@@ -49,7 +49,7 @@ describe('[lifecycle]', () => {
 
             expect(state.isEnabled).toBe(false);
             expect(state.updateBound).toBeUndefined();
-            expect(state.target).toBeUndefined();
+            expect(state.scrollElement).toBeUndefined();
         });
     });
 
@@ -172,7 +172,7 @@ describe('[lifecycle]', () => {
     it('methods: enable/disable', () => {
         const removeEventListener = spyOn(window, 'removeEventListener');
         const instance = makePopper(makeConnectedElement(), makeConnectedElement());
-        let { updateBound } = instance.state;
+        const { updateBound } = instance.state;
 
         // disable
         instance.disable();
@@ -180,6 +180,7 @@ describe('[lifecycle]', () => {
         expect(removeEventListener.calls.argsFor(1)).toEqual(['scroll', updateBound]);
         expect(instance.state.isEnabled).toBe(false);
         expect(instance.state.updateBound).toBe(null);
+        expect(instance.state.scrollElement).toBe(null);
 
         // enable
         const addEventListener = spyOn(window, 'addEventListener');
