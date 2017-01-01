@@ -1,8 +1,10 @@
 const argv = require('yargs').argv;
 const path = require('path');
 const babel = require('rollup-plugin-babel');
+const deepAssign = require('deep-assign');
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
+const es5 = require('./rollup.config.es5');
 
 const root = `${__dirname}/..`;
 
@@ -50,11 +52,9 @@ module.exports = function(config) {
         preprocessors: {
             [`${root}/tests/**/*.js`]: ['rollup'],
         },
-        rollupPreprocessor: {
-            plugins: [babel()],
-            format: 'iife',
+        rollupPreprocessor: deepAssign(es5, {
             sourceMap: 'inline',
-        },
+        }),
         files: [
             { pattern:`${root}/src/**/*.js`, included: false, watched: true },
             `${root}/tests/styles/*.css`,
