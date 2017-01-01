@@ -16,8 +16,7 @@ import isModifierEnabled from './utils/isModifierEnabled';
 import computeAutoPlacement from './utils/computeAutoPlacement';
 
 // Modifiers
-import modifiersFunctions from './modifiers/index';
-import { modifiersOnLoad as modifiersOnLoadFunctions } from './modifiers/index';
+import modifiers from './modifiers/index';
 
 // default options
 const DEFAULTS = {
@@ -50,67 +49,7 @@ const DEFAULTS = {
     onUpdate: () => {},
 
     // list of functions used to modify the offsets before they are applied to the popper
-    modifiers: {
-        shift: {
-            order: 100,
-            enabled: true,
-            function: modifiersFunctions.shift,
-        },
-        offset: {
-            order: 200,
-            enabled: true,
-            function: modifiersFunctions.offset,
-            // nudges popper from its origin by the given amount of pixels (can be negative)
-            offset: 0,
-        },
-        preventOverflow: {
-            order: 300,
-            enabled: true,
-            function: modifiersFunctions.preventOverflow,
-            // popper will try to prevent overflow following these priorities
-            //  by default, then, it could overflow on the left and on top of the boundariesElement
-            priority: ['left', 'right', 'top', 'bottom'],
-            // amount of pixel used to define a minimum distance between the boundaries and the popper
-            // this makes sure the popper has always a little padding between the edges of its container
-            padding: 5,
-            boundariesElement: 'scrollParent',
-        },
-        keepTogether: {
-            order: 400,
-            enabled: true,
-            function: modifiersFunctions.keepTogether
-        },
-        arrow: {
-            order: 500,
-            enabled: true,
-            function: modifiersFunctions.arrow,
-            // selector or node used as arrow
-            element: '[x-arrow]'
-        },
-        flip: {
-            order: 600,
-            enabled: true,
-            function: modifiersFunctions.flip,
-            // the behavior used to change the popper's placement
-            behavior: 'flip',
-            // the popper will flip if it hits the edges of the boundariesElement - padding
-            padding: 5,
-            boundariesElement: 'viewport'
-        },
-        hide: {
-            order: 700,
-            enabled: true,
-            function: modifiersFunctions.hide
-        },
-        applyStyle: {
-            order: 800,
-            enabled: true,
-            // if true, it uses the CSS 3d transformation to position the popper
-            gpuAcceleration: true,
-            function: modifiersFunctions.applyStyle,
-            onLoad: modifiersOnLoadFunctions.applyStyleOnLoad
-        }
-    },
+    modifiers,
 };
 
 /**
@@ -228,10 +167,15 @@ export default class Popper {
         // such code is executed in the same order of its modifier
         // they could add new properties to their options configuration
         // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
-        this.modifiers.forEach((modifier) => {
-            if (modifier.enabled && isFunction(modifier.onLoad)) {
-                //              reference       popper       options       modifierOptions
-                modifier.onLoad(this.reference, this.popper, this.options, modifier, this.state);
+        this.modifiers.forEach((modifierOptions) => {
+            if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
+                modifierOptions.onLoad(
+                    this.reference,
+                    this.popper,
+                    this.options,
+                    modifierOptions,
+                    this.state
+                );
             }
         });
 
@@ -345,8 +289,7 @@ export default class Popper {
      */
     enableEventListeners() {
         if (!this.state.eventsEnabled) {
-            setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
-            this.state.eventsEnabled = true;
+            this.state = setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
         }
     }
 
@@ -361,7 +304,6 @@ export default class Popper {
         if (this.state.eventsEnabled) {
             cancelAnimationFrame(this.scheduledUpdate);
             this.state = removeEventListeners(this.reference, this.state);
-            this.state.eventsEnabled = false;
         }
     }
 

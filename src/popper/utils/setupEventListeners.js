@@ -16,4 +16,7 @@ export default function setupEventListeners(reference, options, state, updateBou
     }
     target.addEventListener('scroll', state.updateBound, { passive: true });
     state.scrollElement = target;
+    state.eventsEnabled = true;
+
+    return state;
 }

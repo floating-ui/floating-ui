@@ -12,5 +12,6 @@ export default function removeEventListeners(reference, state) {
     }
     state.updateBound = null;
     state.scrollElement = null;
+    state.eventsEnabled = false;
     return state;
 }
