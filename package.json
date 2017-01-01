@@ -69,7 +69,7 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
-    "karma-rollup-preprocessor": "^3.0.1",
+    "karma-rollup-preprocessor": "^3.0.2",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.0.0",
     "rollup": "0.39.2",

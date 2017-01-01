@@ -2502,7 +2502,7 @@ karma-jasmine@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.0.tgz#22e4c06bf9a182e5294d1f705e3733811b810acf"
 
-karma-rollup-preprocessor@^3.0.1:
+karma-rollup-preprocessor:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/karma-rollup-preprocessor/-/karma-rollup-preprocessor-3.0.2.tgz#cf822b4b2bf865d5c90feeaee2370040e781115e"
   dependencies:

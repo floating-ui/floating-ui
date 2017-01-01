@@ -48,9 +48,12 @@ module.exports = function(config) {
             }
         },
         preprocessors: {
+            [`${root}/src/**/*.js`]: ['rollup'],
             [`${root}/tests/**/*.js`]: ['rollup'],
         },
         rollupPreprocessor: {
+            moduleName: 'test',
+            exports: 'named',
             format: 'umd',
             sourceMap: 'inline',
             plugins: [babel({
