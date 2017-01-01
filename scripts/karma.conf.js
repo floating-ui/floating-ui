@@ -1,6 +1,5 @@
 const argv = require('yargs').argv;
 const path = require('path');
-const babel = require('rollup-plugin-babel');
 const deepAssign = require('deep-assign');
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
