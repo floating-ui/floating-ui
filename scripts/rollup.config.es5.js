@@ -6,8 +6,9 @@ export default deepAssign(base, {
     plugins: [
         babel({
             presets: [
-            ['es2015', { modules: false }],
-            'stage-2',
-        ]}),
+                ['es2015', { modules: false }],
+                'stage-2',
+            ],
+        }),
     ],
 });
