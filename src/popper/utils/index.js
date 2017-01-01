@@ -30,7 +30,6 @@ import runModifiers from './runModifiers';
 import setAttributes from './setAttributes';
 import setStyles from './setStyles';
 import setupEventListeners from './setupEventListeners';
-import sortModifiers from './sortModifiers';
 
 /** @namespace Popper.Utils */
 export default {
@@ -66,5 +65,4 @@ export default {
     setAttributes,
     setStyles,
     setupEventListeners,
-    sortModifiers,
 };

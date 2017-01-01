@@ -11,7 +11,6 @@ import isFunction from './utils/isFunction';
 import setupEventListeners from './utils/setupEventListeners';
 import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
-import sortModifiers from './utils/sortModifiers';
 import isModifierEnabled from './utils/isModifierEnabled';
 import computeAutoPlacement from './utils/computeAutoPlacement';
 
@@ -161,7 +160,7 @@ export default class Popper {
         this.state.position = getPosition(this.reference);
 
         // sort the modifiers by order
-        this.modifiers = this.modifiers.sort(sortModifiers);
+        this.modifiers = this.modifiers.sort((a, b) => a.order - b.order);
 
         // modifiers have the ability to execute arbitrary code when Popper.js get inited
         // such code is executed in the same order of its modifier
