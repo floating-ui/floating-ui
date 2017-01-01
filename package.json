@@ -5,7 +5,7 @@
   "main": "dist/popper.es5.js",
   "jsnext:main": "dist/popper.js",
   "scripts": {
-    "prepublish": "npm run build",
+    "prepublish": "in-publish && npm run build || exit 0 ",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
     "build": "npm run build:popper && npm run build:tooltip",
@@ -62,6 +62,7 @@
     "eslint": "^3.2.2",
     "eslint-plugin-jasmine": "^2.1.0",
     "gzipped": "^0.0.5",
+    "in-publish": "https://github.com/igorklopov/in-publish.git",
     "jasmine-core": "^2.4.1",
     "jsdoc-to-markdown": "^2.0.1",
     "karma": "^1.1.2",
