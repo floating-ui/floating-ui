@@ -69,6 +69,7 @@ module.exports = function(config) {
         sauceLabs: {
             testName: 'Popper.js',
             startConnect: false,
+            recordVideo: true,
             tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
         },
         reporters: ['dots', 'saucelabs'],
