@@ -1,0 +1,23 @@
+# Don't exclude the transpiled files because they are used by npm
+#================================================================
+# dist
+
+# Don't exclude this file because it's used when the library is imported
+# into an ES6 source that gets transpiled by Babel
+#=======================================================================
+# .babelrc
+
+# Exclude everything else
+#========================
+.github
+doc
+scripts
+src
+tests
+.editorconfig
+.eslintignore
+.eslintrc
+.jsdoc
+.travis.yml
+bower.json
+popperjs.png

@@ -1,6 +1,6 @@
 language: node_js
 node_js: 6.2
-script: $(npm bin)/cross-env BROWSERS=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11 npm run test
+script: npm run test -- --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
 addons:
   sauce_connect:
     username: "popperjs"
