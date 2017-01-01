@@ -33,7 +33,7 @@ p.bold {
     text-align: center;
 }
 .popper .popper__arrow,
-.tooltip .tooltip__arrow {
+.tooltip .tooltip-arrow {
     width: 0;
     height: 0;
     border-style: solid;
@@ -57,8 +57,8 @@ p.bold {
 .tooltip[x-placement^="bottom"] {
     margin-top: 5px;
 }
-.tooltip[x-placement^="bottom"] .tooltip__arrow,
-.popper[x-placement^="bottom"] .popper-arrow {
+.tooltip[x-placement^="bottom"] .tooltip-arrow,
+.popper[x-placement^="bottom"] .popper__arrow {
     border-width: 0 5px 5px 5px;
     border-color: transparent transparent #FFC107 transparent;
     top: -5px;
