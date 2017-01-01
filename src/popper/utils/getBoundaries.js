@@ -30,11 +30,14 @@ export default function getBoundaries(popper, padding, boundariesElement) {
             boundaries.right = width;
             boundaries.bottom = height;
         } else {
+            const scrollLeft = getTotalScroll(popper, 'left');
+            const scrollTop = getTotalScroll(popper, 'top');
+
             boundaries = {
                 top: 0 - top,
-                right: width - left,
-                bottom: height - top,
-                left: 0 - left
+                right: width - left + scrollLeft,
+                bottom: height - top + scrollTop,
+                left: 0 - left,
             };
         }
     }
@@ -60,11 +63,6 @@ export default function getBoundaries(popper, padding, boundariesElement) {
             boundaries = getOffsetRectRelativeToCustomParent(boundariesNode, offsetParent, isFixed(popper));
         }
     }
-
-    const scrollLeft = getTotalScroll(popper, 'left');
-    const scrollTop = getTotalScroll(popper, 'top');
-    boundaries.right += scrollLeft;
-    boundaries.bottom += scrollTop;
 
     // Add paddings
     boundaries.left += padding;

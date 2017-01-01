@@ -12,7 +12,6 @@ import getOffsetParent from './getOffsetParent';
  * @return {Object} rect
  */
 export default function getOffsetRectRelativeToCustomParent(element, parent, fixed = false, transformed = false) {
-    const offsetParent = getOffsetParent(element);
     const scrollParent = getScrollParent(parent);
     const elementRect = getBoundingClientRect(element);
     const parentRect = getBoundingClientRect(parent);
@@ -33,7 +32,7 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
         rect.bottom -= scrollTop;
         rect.left -= scrollLeft;
         rect.right -= scrollLeft;
-    } else if (offsetParent.contains(scrollParent)) {
+    } else if (getOffsetParent(element).contains(scrollParent)) {
         const scrollTop = getScroll(parent, 'top');
         const scrollLeft = getScroll(parent, 'left');
         rect.top += scrollTop;
