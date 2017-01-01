@@ -24,6 +24,9 @@ const DEFAULTS = {
     // placement of the popper
     placement: 'bottom',
 
+    // whether events (resize, scroll) are initially enabled
+    eventsEnabled: true,
+
     /**
      * Callback called when the popper is created.
      * By default, is set to no-op.
@@ -120,6 +123,8 @@ const DEFAULTS = {
  *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
  *      left(-start, -end)`
  *
+ * @param {Boolean} options.eventsEnabled=true
+ *      Whether events (resize, scroll) are initially enabled
  * @param {Boolean} options.gpuAcceleration=true
  *      When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the
  *      browser to use the GPU to accelerate the rendering.
@@ -176,6 +181,9 @@ export default class Popper {
         // make update() debounced, so that it only runs at most once-per-tick
         this.update = debounce(this.update.bind(this));
 
+        // with {} we create a new object with the options inside it
+        this.options = {...Popper.Defaults, ...options};
+
         // init state
         this.state = {
             isDestroyed: false,
@@ -185,9 +193,6 @@ export default class Popper {
         // get reference and popper elements (allow jQuery wrappers)
         this.reference = reference.jquery ? reference[0] : reference;
         this.popper = popper.jquery ? popper[0] : popper;
-
-        // with {} we create a new object with the options inside it
-        this.options = {...Popper.Defaults, ...options};
 
         // refactoring modifiers' list (Object => Array)
         this.modifiers = Object.keys(Popper.Defaults.modifiers)
@@ -236,8 +241,13 @@ export default class Popper {
         // fire the first update to position the popper in the right place
         this.update();
 
-        // setup event listeners, they will take care of update the position in specific situations
-        setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
+        const eventsEnabled = this.options.eventsEnabled;
+        if (eventsEnabled) {
+            // setup event listeners, they will take care of update the position in specific situations
+            this.enableEventListeners();
+        }
+
+        this.state.eventsEnabled = eventsEnabled;
     }
 
     //
@@ -317,8 +327,7 @@ export default class Popper {
             this.popper.style[getSupportedPropertyName('transform')] = '';
         }
 
-        cancelAnimationFrame(this.scheduledUpdate);
-        this.state = removeEventListeners(this.reference, this.state);
+        this.disableEventListeners();
 
         // remove the popper if user explicity asked for the deletion on destroy
         // do not use `remove` because IE11 doesn't support it
@@ -326,6 +335,34 @@ export default class Popper {
             this.popper.parentNode.removeChild(this.popper);
         }
         return this;
+    }
+
+    /**
+     * it will add resize/scroll events and start recalculating
+     * position of the popper element when they are triggered
+     * @method
+     * @memberof Popper
+     */
+    enableEventListeners() {
+        if (!this.state.eventsEnabled) {
+            setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
+            this.state.eventsEnabled = true;
+        }
+    }
+
+    /**
+     * it will remove resize/scroll events and won't recalculate
+     * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
+     * unless you call 'update' method manually.
+     * @method
+     * @memberof Popper
+     */
+    disableEventListeners() {
+        if (this.state.eventsEnabled) {
+            cancelAnimationFrame(this.scheduledUpdate);
+            this.state = removeEventListeners(this.reference, this.state);
+            this.state.eventsEnabled = false;
+        }
     }
 
     /**
