@@ -10,5 +10,8 @@ export default deepAssign(base, {
     moduleName: 'Tooltip',
     sourceMapFile: `${root}/dist/tooltip.js.map`,
     banner: require('./addTooltipHeader.js')(),
-    external: [path.resolve(root, 'src/popper/index.js')]
+    external: [path.resolve(root, 'src/popper/index.js')],
+    globals: {
+        [path.resolve(root, 'src/popper/index.js')]: 'Popper',
+    },
 });
