@@ -17,7 +17,7 @@
     "build:popper:es5": "rollup -c ./scripts/rollup.config.popper.es5.js",
     "build:popper:es5:min": "node ./scripts/minify -i ./dist/popper.es5.js -o ./dist/popper.es5.min.js --es5=true && gzipped ./dist/popper.es5.min.js",
     "build:tooltip": "npm run build:tooltip:next && npm run build:tooltip:es5 && npm run build:tooltip:next:min && npm run build:tooltip:es5:min",
-    "build:tooltip:dev": "npm run build:tooltip:max -- --watch",
+    "build:tooltip:dev": "npm run build:tooltip:next -- --watch",
     "build:tooltip:next": "rollup -c ./scripts/rollup.config.tooltip.js",
     "build:tooltip:next:min": "node ./scripts/minify -i ./dist/tooltip.js -o ./dist/tooltip.min.js && gzipped ./dist/tooltip.min.js",
     "build:tooltip:es5": "rollup -c ./scripts/rollup.config.tooltip.es5.js",
