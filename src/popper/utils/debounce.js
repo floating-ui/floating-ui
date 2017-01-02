@@ -28,7 +28,7 @@ function microtaskDebounce(fn) {
     if (!scheduled) {
       scheduled = true;
       elem.textContent = `${i}`;
-      i += 1;
+      i = i + 1; // don't use compund (+=) because it doesn't get optimized in V8
     }
   };
 }
