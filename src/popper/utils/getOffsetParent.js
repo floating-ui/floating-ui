@@ -10,7 +10,7 @@ export default function getOffsetParent(element) {
     const offsetParent = element.offsetParent;
     const nodeName = offsetParent && offsetParent.nodeName;
 
-    if(nodeName === 'BODY' || nodeName === 'HTML') {
+    if(!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
         return window.document.documentElement;
     }
 
