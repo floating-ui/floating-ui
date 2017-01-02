@@ -27,7 +27,7 @@ v1 documentation plase [click here](doc/_includes/documentation.md)
     </a>
 </p>
 
-<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250>
+<img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
 
 
 ## Wut? Poppers?
@@ -149,7 +149,7 @@ that integrate in popular frameworks:
 - [**ak-layer**](http://aui-cdn.atlassian.com/atlaskit/registry/ak-layer/latest/index.html) by [@Atlassian](https://github.com/atlassian) for [React](https://facebook.github.io/react/)
 - [**vue-popper-component**](https://github.com/antongorodezkiy/vue-popper-component) by [@antongorodezkiy](https://github.com/antongorodezkiy) for [Vue.js](https://vuejs.org/)
 
-Alternatively, you may even define your won `applyStyles` with your custom one and
+Alternatively, you may even define your own `applyStyles` with your custom one and
 integrate Popper.js by yourself!
 
 ```js
