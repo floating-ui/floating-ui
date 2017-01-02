@@ -92,6 +92,8 @@ const DEFAULTS = {
  * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
+ * @param {Number} options.modifiers.preventOverflow.boundariesElement='scrollParent'
+ *      Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element.
  * @param {Number} options.modifiers.preventOverflow.padding=5
  *      Amount of pixel used to define a minimum distance between the boundaries and the popper
  *      this makes sure the popper has always a little padding between the edges of its container.
@@ -107,6 +109,10 @@ const DEFAULTS = {
  * @param {String|Element} options.modifiers.flip.boundariesElement='viewport'
  *      The element which will define the boundaries of the popper position, the popper will never be placed outside
  *      of the defined boundaries (except if `keepTogether` is enabled)
+ *
+ * @param {Object} options.modifiers.inner - Inner modifier configuration
+ * @param {Number} options.modifiers.innner.enabled=false
+ *      Set to `true` to make the popper flow toward the inner of the reference element.
  *
  * @param {Number} options.modifiers.flip.padding=5
  *      Amount of pixel used to define a minimum distance between the boundaries and the popper
@@ -225,13 +231,22 @@ export default class Popper {
         // compute auto placement, store placement inside the data object,
         // modifiers will be able to edit `placement` if needed
         // and refer to originalPlacement to know the original value
-        data.placement = computeAutoPlacement(this.options.placement, data.offsets.reference, this.popper);
+        data.placement = computeAutoPlacement(
+            this.options.placement,
+            data.offsets.reference,
+            this.popper
+        );
 
         // store the computed placement inside `originalPlacement`
         data.originalPlacement = this.options.placement;
 
         // compute the popper offsets
-        data.offsets.popper = getPopperOffsets(this.state, this.popper, data.offsets.reference, data.placement);
+        data.offsets.popper = getPopperOffsets(
+            this.state,
+            this.popper,
+            data.offsets.reference,
+            data.placement
+        );
 
         // run the modifiers
         data = runModifiers(this.modifiers, data);

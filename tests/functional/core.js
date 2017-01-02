@@ -48,6 +48,77 @@ describe('[core]', () => {
         pop.destroy();
     });
 
+    describe(['inner modifier'], () => {
+        it('inits a bottom inner popper', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.height = '200px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                modifiers: { inner: { enabled: true } },
+                onCreate() {
+                    var bottom = popper.getBoundingClientRect().bottom + arrowSize;
+                    expect(bottom).toBeApprox(reference.getBoundingClientRect().bottom);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('inits a top inner popper', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.height = '200px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'top',
+                modifiers: { inner: { enabled: true } },
+                onCreate() {
+                    var top = popper.getBoundingClientRect().top - arrowSize;
+                    expect(top).toBeApprox(reference.getBoundingClientRect().top);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('inits a right inner popper', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.height = '200px';
+            reference.style.width = '200px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'right',
+                modifiers: { inner: { enabled: true } },
+                onCreate() {
+                    var right = popper.getBoundingClientRect().right + arrowSize;
+                    expect(right).toBeApprox(reference.getBoundingClientRect().right);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+
+        it('inits a left inner popper', (done) => {
+            var reference = appendNewRef(1);
+            reference.style.height = '200px';
+            reference.style.width = '200px';
+            var popper    = appendNewPopper(2);
+
+            var pop = new Popper(reference, popper, {
+                placement: 'left',
+                modifiers: { inner: { enabled: true } },
+                onCreate() {
+                    var left = popper.getBoundingClientRect().left - arrowSize;
+                    expect(left).toBeApprox(reference.getBoundingClientRect().left);
+                    pop.destroy();
+                    done();
+                }
+            });
+        });
+    });
+
     describe('[auto placement]', () => {
         it('should be computed to `top`', (done) => {
             var parent = document.createElement('div');

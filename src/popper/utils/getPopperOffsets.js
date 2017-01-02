@@ -23,15 +23,15 @@ export default function getPopperOffsets(state, popper, referenceOffsets, placem
     };
 
     // depending by the popper placement we have to compute its offsets slightly differently
-    let mainSide, secondarySide, measurement;
     const isHoriz = ['right', 'left'].indexOf(placement) !== -1;
-    mainSide = isHoriz ? 'top' : 'left';
-    secondarySide = isHoriz ? 'left' : 'top';
-    measurement = isHoriz ? 'height' : 'width';
+    const mainSide = isHoriz ? 'top' : 'left';
+    const secondarySide = isHoriz ? 'left' : 'top';
+    const measurement = isHoriz ? 'height' : 'width';
+    const secondaryMeasurement = !isHoriz ? 'height' : 'width';
 
     popperOffsets[mainSide] = referenceOffsets[mainSide] + referenceOffsets[measurement] / 2 - popperRect[measurement] / 2;
     if (placement === secondarySide) {
-        popperOffsets[secondarySide] = referenceOffsets[secondarySide] - popperRect[isHoriz ? 'width' : 'height'];
+        popperOffsets[secondarySide] = referenceOffsets[secondarySide] - popperRect[secondaryMeasurement];
     } else {
         popperOffsets[secondarySide] = referenceOffsets[getOppositePlacement(secondarySide)];
     }

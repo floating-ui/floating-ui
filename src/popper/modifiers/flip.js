@@ -4,6 +4,7 @@ import getClientRect from '../utils/getClientRect';
 import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
 import getBoundaries from '../utils/getBoundaries';
+import isModifierEnabled from '../utils/isModifierEnabled';
 
 /**
  * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
@@ -16,6 +17,11 @@ import getBoundaries from '../utils/getBoundaries';
  * @returns {Object} The data object, properly modified
  */
 export default function flip(data, options) {
+    // if `inner` modifier is enabled, we can't use the `flip` modifier
+    if (isModifierEnabled(data.instance.modifiers, 'inner')) {
+        return data;
+    }
+
     if (data.flipped && data.placement === data.originalPlacement) {
         // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
         return data;

@@ -6,6 +6,7 @@ import offset from './offset';
 import preventOverflow from './preventOverflow';
 import shift from './shift';
 import hide from './hide';
+import inner from './inner';
 
 /**
  * Modifiers are plugins used to alter the behavior of your poppers.
@@ -73,13 +74,18 @@ export default {
          padding: 5,
          boundariesElement: 'viewport'
      },
-     hide: {
+     inner: {
          order: 700,
+         enabled: false,
+         function: inner,
+     },
+     hide: {
+         order: 800,
          enabled: true,
          function: hide
      },
      applyStyle: {
-         order: 800,
+         order: 900,
          enabled: true,
          // if true, it uses the CSS 3d transformation to position the popper
          gpuAcceleration: true,
