@@ -9,5 +9,5 @@ export default function getParentNode(element) {
     if (element.nodeName === 'HTML') {
         return element;
     }
-    return element.parentNode || element.host || element;
+    return element.parentNode || element.host;
 }
