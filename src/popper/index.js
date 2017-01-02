@@ -118,6 +118,12 @@ const DEFAULTS = {
  *      Amount of pixel used to define a minimum distance between the boundaries and the popper
  *      this makes sure the popper has always a little padding between the edges of its container.
  *
+ * @param {createCallback} options.onCreate - onCreate callback
+ *      Function called after the Popper has been instantiated.
+ *
+ * @param {updateCallback} options.onUpdate - onUpdate callback
+ *      Function called on subsequent updates of Popper.
+ *
  * @return {Object} instance - The generated Popper.js instance
  */
 export default class Popper {

@@ -8,8 +8,9 @@
 export default function getOffsetParent(element) {
     // NOTE: 1 DOM access here
     const offsetParent = element.offsetParent;
+    const nodeName = offsetParent && offsetParent.nodeName;
 
-    if(!offsetParent || offsetParent.nodeName === 'BODY' || offsetParent.nodeName === 'HTML') {
+    if(nodeName === 'BODY' || nodeName === 'HTML') {
         return window.document.documentElement;
     }
 
