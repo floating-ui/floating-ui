@@ -4,7 +4,7 @@
 - build now uses Rollup
 - moved from JSHint to ESLint
 - updated npm dependencies
-- BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core
+- BREAKING CHANGE: removed `parse` method from core library, you can't automatically create popper's markup using Popper.js core. If you need the feature, here you can find a custom modifier that reintroduces the feature. https://gist.github.com/FezVrasta/075d228ffb855688c75a69c6d1d6afce
 - Added Tooltip.js library to replace the `parse` method
 - BREAKING CHANGE: simplified modifiers API, see #62 for migration instructions
 - BREAKING CHANGE: modifiers options are now stored inside the modifiers configurations, see #62
