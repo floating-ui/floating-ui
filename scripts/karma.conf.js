@@ -40,11 +40,13 @@ module.exports = function(config) {
                 base: 'SauceLabs',
                 browserName: 'internet explorer',
                 version: '10',
+                platform: 'Windows 8',
             },
             SLInternetExplorer11: {
                 base: 'SauceLabs',
                 browserName: 'internet explorer',
                 version: '11',
+                platform: 'Windows 10',
             }
         },
         preprocessors: {
