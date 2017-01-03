@@ -18,12 +18,20 @@
 document.addEventListener('DOMContentLoaded', function(){
     var shiftStart = new Popper(example4reference1, example4popper1, {
         placement: 'left-start',
-        boundariesElement: example4reference1.parentNode
+        modifiers: {
+            flip: {
+                boundariesElement: example4reference1.parentNode,
+            },
+        },
     });
 
     var shiftEnd = new Popper(example4reference1, example4popper2, {
         placement: 'bottom-end',
-        boundariesElement: example4reference1.parentNode
+        modifiers: {
+            flip: {
+                boundariesElement: example4reference1.parentNode,
+            },
+        },
     });
 
 }, false);

@@ -11,6 +11,10 @@ var shiftStart = new Popper(referenceElement, shiftStartPopper, {
 
 var shiftEnd = new Popper(referenceElement, shiftEndPopper, {
     placement: 'bottom-end',
-    boundariesElement: container
+    modifiers: {
+        flip: {
+            boundariesElement: container,
+        },
+    },
 });
 {% endhighlight %}

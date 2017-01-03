@@ -6,11 +6,13 @@
 {% highlight javascript %}
 var popper = new Popper(referenceElement, onLeftPopper, {
     placement: 'left',
-    boundariesElement: container,
     modifiers: {
         flip: {
             behavior: ['left', 'bottom', 'top']
-        }
-    }
+        },
+        preventOverflow: {
+            boundariesElement: container,
+        },
+    },
 });
 {% endhighlight %}
