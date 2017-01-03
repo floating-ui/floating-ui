@@ -135,7 +135,7 @@ export default class Tooltip {
         tooltipNode.id = `tooltip_${Math.random().toString(36).substr(2, 10)}`;
 
         // set initial `aria-hidden` state to `false` (it's visible!)
-        this._tooltipNode.setAttribute('aria-hidden', 'false');
+        tooltipNode.setAttribute('aria-hidden', 'false');
 
         // add title to tooltip
         const titleNode = tooltipGenerator.querySelector(this.innerSelector);
