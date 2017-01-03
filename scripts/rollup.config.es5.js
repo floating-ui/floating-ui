@@ -1,8 +1,7 @@
-import deepAssign from 'deep-assign';
 import base from './rollup.config.base.js';
 import babel from 'rollup-plugin-babel';
 
-export default deepAssign(base, {
+export default Object.assign(base, {
     plugins: [
         babel({
             presets: [
