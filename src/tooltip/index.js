@@ -131,6 +131,12 @@ export default class Tooltip {
         tooltipGenerator.innerHTML = template;
         const tooltipNode = tooltipGenerator.childNodes[0];
 
+        // add unique ID to our tooltip (needed for accessibility reasons)
+        tooltipNode.id = `tooltip_${Math.random().toString(36).substr(2, 10)}`;
+
+        // set initial `aria-hidden` state to `false` (it's visible!)
+        this._tooltipNode.setAttribute('aria-hidden', 'false');
+
         // add title to tooltip
         const titleNode = tooltipGenerator.querySelector(this.innerSelector);
         if (title.nodeType === 1) {
@@ -159,6 +165,7 @@ export default class Tooltip {
         // if the tooltipNode already exists, just show it
         if (this._tooltipNode) {
             this._tooltipNode.style.display = '';
+            this._tooltipNode.setAttribute('aria-hidden', 'false');
             this.popperInstance.update();
             return this;
         }
@@ -171,6 +178,9 @@ export default class Tooltip {
 
         // create tooltip node
         const tooltipNode = this._create(reference, options.template, title, options.html);
+
+        // Add `aria-describedby` to our reference element for accessibility reasons
+        tooltipNode.setAttribute('aria-describedby', tooltipNode.id);
 
         // append tooltip to container: container = false we pick the parent node of the reference
         var container = options.container === false ? reference.parentNode : options.container;
@@ -202,6 +212,7 @@ export default class Tooltip {
 
         // hide tooltipNode
         this._tooltipNode.style.display = 'none';
+        this._tooltipNode.setAttribute('aria-hidden', 'true');
 
         return this;
     }
