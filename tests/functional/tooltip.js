@@ -100,11 +100,11 @@ describe('[tooltip.js]', () => {
             expect(document.querySelector('.tooltip')).toBeNull();
 
             reference.dispatchEvent(new CustomEvent('mouseenter'));
-            then(() => reference.dispatchEvent(new CustomEvent('mouseleave')));
+            then(() => reference.dispatchEvent(new CustomEvent('mouseleave')), 200);
             then(() => {
                 expect(document.querySelector('.tooltip').style.display).toBe('none');
                 done();
-            });
+            }, 200);
         });
 
         it('should show a tooltip on click', (done) => {
