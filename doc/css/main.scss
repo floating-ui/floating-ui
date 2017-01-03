@@ -2003,3 +2003,51 @@ iframe.twitter-tweet {
 	border-radius: 4px;
 	border: 1px solid #E1E8ED !important;
 }
+
+
+// nanoscroller
+/** initial setup **/
+.nano {
+  position : relative;
+  width    : 100%;
+  height   : 100%;
+  overflow : hidden;
+}
+.nano > .nano-content {
+  position      : absolute;
+  overflow      : scroll;
+  overflow-x    : hidden;
+  top           : 0;
+  right         : 0;
+  bottom        : 0;
+  left          : 0;
+}
+.nano > .nano-content:focus {
+  outline: thin dotted;
+}
+.nano > .nano-content::-webkit-scrollbar {
+  display: none;
+}
+.has-scrollbar > .nano-content::-webkit-scrollbar {
+  display: block;
+}
+.nano > .nano-pane {
+  position   : absolute;
+  width      : 10px;
+  right       : 0;
+  top        : 0;
+  bottom     : 0;
+	border-radius: 5px;
+	opacity: .5;
+	transition: all .1s ease-in-out;
+}
+.nano:hover .nano-pane {
+	opacity: 1;
+}
+.nano > .nano-pane > .nano-slider {
+  background: #444;
+  background: rgba(255,255,255,.5);
+  position: relative;
+  margin: 0 1px;
+  border-radius: 3px;
+}

@@ -1,16 +1,11 @@
-<h2 id="example3" tabindex="0">Custom flip behavior</h2>
+<h2 id="example2" tabindex="0">Popper on scrolling container</h2>
 <p>
-    Try dragging the reference element on the left side, its popper will move on its bottom edge.
-    Then, try to move the reference element on the bottom left corner, it will move on its top edge.
+    In this example we have a relative div which contains a div with <code>overflow: scroll</code>.<br>
+    Inside it, there are our popper and reference elements.
 </p>
 {% highlight javascript %}
 var popper = new Popper(referenceElement, onLeftPopper, {
     placement: 'left',
-    boundariesElement: container,
-    modifiers: {
-        flip: {
-            behavior: ['left', 'bottom', 'top']
-        }
-    }
+    boundariesElement: container
 });
 {% endhighlight %}
