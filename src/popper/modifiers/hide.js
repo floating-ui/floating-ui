@@ -1,4 +1,5 @@
 import isModifierRequired from '../utils/isModifierRequired';
+import find from '../utils/find';
 
 /**
  * Modifier used to hide the popper when its reference element is outside of the
@@ -17,7 +18,7 @@ export default function hide(data) {
     }
 
     const refRect = data.offsets.reference;
-    const bound = data.instance.modifiers.filter((modifier) => modifier.name ==='preventOverflow')[0].boundaries;
+    const bound = find(data.instance.modifiers, (modifier) => modifier.name ==='preventOverflow').boundaries;
 
     if (
         refRect.bottom < bound.top ||
