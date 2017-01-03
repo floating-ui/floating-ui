@@ -6,7 +6,21 @@
  * @return {Object} client rect
  */
 export default function getBoundingClientRect(element) {
-    let rect = element.getBoundingClientRect();
+    const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+    let rect;
+
+    // IE10 10 FIX: Please, don't ask, the element isn't
+    // considered in DOM in some circumstances...
+    // This isn't reproducible in IE10 compatibility mode of IE11
+    if (isIE10) {
+        try {
+            rect = element.getBoundingClientRect();
+        } catch(err) {
+            rect = {};
+        }
+    } else {
+        rect = element.getBoundingClientRect();
+    }
 
     const result = {
         left: rect.left,
@@ -19,7 +33,7 @@ export default function getBoundingClientRect(element) {
 
     // IE10 FIX: `getBoundingClientRect`, when executed on `documentElement`
     // will not take in account the `scrollTop` and `scrollLeft`
-    if (element.nodeName === 'HTML' && navigator.appVersion.indexOf('MSIE 10') !== -1) {
+    if (element.nodeName === 'HTML' && isIE10) {
         const { scrollTop, scrollLeft } = window.document.documentElement;
         result.top -= scrollTop;
         result.bottom -= scrollTop;
