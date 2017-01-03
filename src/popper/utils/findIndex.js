@@ -8,6 +8,11 @@
  * @returns index or -1
  */
 export default function findIndex(arr, prop, value) {
+    // use native findIndex if supported
+    if (Array.prototype.findIndex) {
+        return arr.findIndex((cur) => cur[prop] === value);
+    }
+
     // use filter instead of find because find has less cross-browser support
     const match = arr.filter((obj) => (obj[prop] === value))[0];
     return arr.indexOf(match);
