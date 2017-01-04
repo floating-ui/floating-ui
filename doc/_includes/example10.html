@@ -25,6 +25,7 @@
 document.addEventListener('DOMContentLoaded', function(){
     var index = 0;
     var popper;
+    var code = $('#example10code').html();
 
     $('#example10positionSelector').on('change', attachPopper).trigger('change');
 
@@ -54,23 +55,17 @@ document.addEventListener('DOMContentLoaded', function(){
     }, 4000);
 
     function attachPopper(evt) {
-        var position = evt.target.value;
-
-        //Some changes in the code example
-        document.getElementById('example10Title').textContent = "Placing poppers around elements is just that easy!";
-        document.getElementById('example10code').className = "";
+        position = evt.target.value;
 
         //Position of the popper
-        document.getElementById('example10currentPosition').textContent = position;
-
-        //Position for the code example
-        document.getElementById('example10code').getElementsByClassName('s1')[0].textContent = "'" + position + "'";
+        $('#example10code').html(code.replace('position', position));
 
         popper && popper.destroy();
         popper = new Popper(example10reference1, example10popper1, {
             placement: position,
             boundariesElement: example10reference1.parentNode
         });
+
     }
 });
 
