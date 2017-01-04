@@ -112,6 +112,7 @@ ga('send', 'pageview');
     }
 
 	new Tooltip(document.querySelector('#tooltip-learn-more'), {
-		title: 'You really should 🔥'
+		title: 'You really should 🔥',
+        container:document.querySelector('#tooltip-learn-more').parentNode,
 	})
 })(jQuery);

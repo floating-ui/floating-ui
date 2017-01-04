@@ -32,7 +32,7 @@ p.bold {
     padding: 10px;
     text-align: center;
 }
-.tooltip {
+.style5 .tooltip {
     background: #1E252B;
     color: #FFFFFF;
     max-width: 200px;
@@ -48,10 +48,12 @@ p.bold {
     position: absolute;
     margin: 5px;
 }
+
+.tooltip .tooltip-arrow,
 .popper .popper__arrow {
     border-color: #FFC107;
 }
-.tooltip .tooltip-arrow {
+.style5 .tooltip .tooltip-arrow {
     border-color: #1E252B;
 }
 .popper[x-placement^="top"],
