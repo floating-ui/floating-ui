@@ -111,4 +111,7 @@ ga('send', 'pageview');
         document.getElementById('title-popper').remove();
     }
 
+	new Tooltip(document.querySelector('#tooltip-learn-more'), {
+		title: 'You really should 🔥'
+	})
 })(jQuery);

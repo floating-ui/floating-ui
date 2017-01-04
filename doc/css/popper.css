@@ -32,6 +32,14 @@ p.bold {
     padding: 10px;
     text-align: center;
 }
+.tooltip {
+    background: #1E252B;
+    color: #FFFFFF;
+    max-width: 200px;
+    width: auto;
+    font-size: .8rem;
+    padding: .5em 1em;
+}
 .popper .popper__arrow,
 .tooltip .tooltip-arrow {
     width: 0;
@@ -40,6 +48,12 @@ p.bold {
     position: absolute;
     margin: 5px;
 }
+.popper .popper__arrow {
+    border-color: #FFC107;
+}
+.tooltip .tooltip-arrow {
+    border-color: #1E252B;
+}
 .popper[x-placement^="top"],
 .tooltip[x-placement^="top"] {
     margin-bottom: 5px;
@@ -47,7 +61,9 @@ p.bold {
 .popper[x-placement^="top"] .popper__arrow,
 .tooltip[x-placement^="top"] .tooltip-arrow {
     border-width: 5px 5px 0 5px;
-    border-color: #FFC107 transparent transparent transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
     bottom: -5px;
     left: calc(50% - 5px);
     margin-top: 0;
@@ -60,7 +76,9 @@ p.bold {
 .tooltip[x-placement^="bottom"] .tooltip-arrow,
 .popper[x-placement^="bottom"] .popper__arrow {
     border-width: 0 5px 5px 5px;
-    border-color: transparent transparent #FFC107 transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
     top: -5px;
     left: calc(50% - 5px);
     margin-top: 0;
@@ -73,7 +91,9 @@ p.bold {
 .popper[x-placement^="right"] .popper__arrow,
 .tooltip[x-placement^="right"] .tooltip-arrow {
     border-width: 5px 5px 5px 0;
-    border-color: transparent #FFC107 transparent transparent;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
     left: -5px;
     top: calc(50% - 5px);
     margin-left: 0;
@@ -86,7 +106,9 @@ p.bold {
 .popper[x-placement^="left"] .popper__arrow,
 .tooltip[x-placement^="left"] .tooltip-arrow {
     border-width: 5px 0 5px 5px;
-    border-color: transparent transparent transparent #FFC107;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
     right: -5px;
     top: calc(50% - 5px);
     margin-left: 0;
