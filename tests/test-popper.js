@@ -335,7 +335,7 @@ describe('Popper.js', function() {
             done();
         });
     });
-
+    
     it('creates a popper with a not empty form as parent, then auto remove it on destroy', function(done) {
         var form = document.createElement('form');
         var input = document.createElement('input');
