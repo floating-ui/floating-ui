@@ -2134,9 +2134,9 @@ imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
 
-in-publish:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/in-publish/-/in-publish-2.0.0.tgz#e20ff5e3a2afc2690320b6dc552682a9c7fadf51"
+"in-publish@https://github.com/igorklopov/in-publish.git":
+  version "2.0.1"
+  resolved "https://github.com/igorklopov/in-publish.git#749d3151b11bc33d0e2dcd91f33a5e0a2f03a1ed"
 
 indexof@0.0.1:
   version "0.0.1"
@@ -2323,8 +2323,8 @@ isarray@0.0.1:
   resolved "https://registry.yarnpkg.com/isarray/-/isarray-0.0.1.tgz#8a18acfca9a8f4177e09abfc6038939b05d1eedf"
 
 isbinaryfile@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/isbinaryfile/-/isbinaryfile-3.0.1.tgz#6e99573675372e841a0520c036b41513d783e79e"
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/isbinaryfile/-/isbinaryfile-3.0.2.tgz#4a3e974ec0cba9004d3fc6cde7209ea69368a621"
 
 isexe@^1.1.1:
   version "1.1.2"
@@ -2502,9 +2502,9 @@ karma-jasmine@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/karma-jasmine/-/karma-jasmine-1.1.0.tgz#22e4c06bf9a182e5294d1f705e3733811b810acf"
 
-karma-rollup-preprocessor:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/karma-rollup-preprocessor/-/karma-rollup-preprocessor-3.0.2.tgz#cf822b4b2bf865d5c90feeaee2370040e781115e"
+karma-rollup-preprocessor@^3.0.2:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/karma-rollup-preprocessor/-/karma-rollup-preprocessor-3.0.3.tgz#9042eb9c1d573f53b061a605c3209f2116aa7bb7"
   dependencies:
     debounce "^1.0.0"
     rollup "^0.x"
@@ -2615,8 +2615,8 @@ lodash@^3.8.0, lodash@3.10.1:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@^4.0.0, lodash@^4.14.0, lodash@^4.2.0, lodash@^4.3.0, lodash@^4.5.0, lodash@^4.8.0:
-  version "4.17.3"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.3.tgz#557ed7d2a9438cac5fd5a43043ca60cb455e01f7"
+  version "4.17.4"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
 lodash@4.16.2:
   version "4.16.2"
@@ -3341,7 +3341,13 @@ rollup-watch@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/rollup-watch/-/rollup-watch-3.1.0.tgz#d74bad7b1e5103a35038dc16ca77af2d7f5a5bfc"
 
-rollup@^0.x, rollup@0.39.2:
+rollup@^0.x:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.40.0.tgz#20cfa6ff15687c2c4ddc5caaca3020485d5bc3d2"
+  dependencies:
+    source-map-support "^0.4.0"
+
+rollup@0.39.2:
   version "0.39.2"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.39.2.tgz#858cf3020027cf74e0c5d7faa1c18275faf00df4"
   dependencies:
@@ -3942,8 +3948,8 @@ y18n@^3.2.1:
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
 
 yargs-parser@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-4.2.0.tgz#6ced869cd05a3dca6a1eaee38b68aeed4b0b4101"
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-4.2.1.tgz#29cceac0dc4f03c6c87b4a9f217dd18c9f74871c"
   dependencies:
     camelcase "^3.0.0"
 
