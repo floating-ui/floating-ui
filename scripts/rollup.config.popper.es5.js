@@ -7,6 +7,5 @@ const config = Object.assign(popper, es5, {
     dest: `${root}/dist/popper.es5.js`,
     sourceMapFile: `${root}/dist/popper.es5.js.map`,
 });
-console.log(JSON.stringify(config));
 
 export default config;
