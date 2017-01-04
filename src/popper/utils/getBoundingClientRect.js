@@ -41,14 +41,5 @@ export default function getBoundingClientRect(element) {
         result.right -= scrollLeft;
     }
 
-    // subtract scrollbar size from sizes
-    const horizScrollbar = rect.width - (element.clientWidth || rect.right - rect.left);
-    const vertScrollbar = rect.height - (element.clientHeight || rect.bottom - rect.top);
-
-    result.right -= horizScrollbar;
-    result.width -= horizScrollbar;
-    result.bottom -= vertScrollbar;
-    result.height -= vertScrollbar;
-
     return result;
 }
