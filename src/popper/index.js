@@ -272,7 +272,7 @@ export default class Popper {
      * @method
      * @memberof Popper
      */
-    scheduleUpdate = () => this.scheduledUpdate = requestAnimationFrame(this.update);
+    scheduleUpdate = () => requestAnimationFrame(this.update);
 
     /**
      * Destroy the popper
