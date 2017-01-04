@@ -37,6 +37,7 @@ export default function applyStyle(data, options) {
         styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
         styles.top = 0;
         styles.left = 0;
+        styles.willChange = 'transform';
     }
     // othwerise, we use the standard `left` and `top` properties
     else {
