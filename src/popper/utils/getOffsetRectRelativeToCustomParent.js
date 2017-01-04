@@ -2,6 +2,7 @@ import getBoundingClientRect from './getBoundingClientRect';
 import getScrollParent from './getScrollParent';
 import getScroll from './getScroll';
 import getOffsetParent from './getOffsetParent';
+import getStyleComputedProperty from './getStyleComputedProperty';
 
 /**
  * Given an element and one of its parents, return the offset
@@ -40,6 +41,16 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
         rect.left += scrollLeft;
         rect.right += scrollLeft;
     }
+
+    // subtract borderTopWidth and borderTopWidth from final result
+    const styles = getStyleComputedProperty(parent);
+    const borderTopWidth = Number(styles.borderTopWidth.split('px')[0]);
+    const borderLeftWidth = Number(styles.borderLeftWidth.split('px')[0]);
+
+    rect.top -= borderTopWidth;
+    rect.bottom -= borderTopWidth;
+    rect.left -= borderLeftWidth;
+    rect.right -= borderLeftWidth;
 
     return rect;
 }
