@@ -26,6 +26,7 @@
     "test": "karma start ./scripts/karma.conf.js",
     "test:dev": "NODE_ENV=development karma start ./scripts/karma.conf.js",
     "doc": "npm run doc:popper && npm run doc:tooltip",
+    "doc:serve": "cd doc && jekyll serve & open http://localhost:4000",
     "doc:popper": "rollup -c ./scripts/rollup.config.popper.js -o ./.tmp/popper.js && jsdoc2md ./.tmp/popper.js > ./doc/_includes/popper-documentation.md",
     "doc:tooltip": "rollup -c ./scripts/rollup.config.tooltip.js -o ./.tmp/tooltip.js && jsdoc2md ./.tmp/tooltip.js > ./doc/_includes/tooltip-documentation.md"
   },
