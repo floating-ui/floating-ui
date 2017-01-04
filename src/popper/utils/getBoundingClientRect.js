@@ -1,3 +1,5 @@
+import getStyleComputedProperty from './getStyleComputedProperty';
+
 /**
  * Get bounding client rect of given element
  * @method
@@ -40,6 +42,23 @@ export default function getBoundingClientRect(element) {
         result.left -= scrollLeft;
         result.right -= scrollLeft;
     }
+
+    // subtract scrollbar size from sizes
+    let horizScrollbar = rect.width - (element.clientWidth || rect.right - rect.left);
+    let vertScrollbar = rect.height - (element.clientHeight || rect.bottom - rect.top);
+
+    // if an hypothetical scrollbar is detected, we must be sure it's not a `border`
+    // we make this check conditional for performance reasons
+    if (horizScrollbar || vertScrollbar) {
+        const styles = getStyleComputedProperty(element);
+        horizScrollbar -= Number(styles.borderLeftWidth.split('px')[0]) + Number(styles.borderRightWidth.split('px')[0]);
+        vertScrollbar -= Number(styles.borderTopWidth.split('px')[0]) + Number(styles.borderBottomWidth.split('px')[0]);
+    }
+
+    result.right -= horizScrollbar;
+    result.width -= horizScrollbar;
+    result.bottom -= vertScrollbar;
+    result.height -= vertScrollbar;
 
     return result;
 }
