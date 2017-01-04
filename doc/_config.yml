@@ -4,7 +4,7 @@
 # Site settings
 title: Popper.js
 encoding: utf-8
-description: A kickass library<br> used to create poppers in web applications
+description: A kickass library<br> used to manage poppers in web applications<br>Now much more powerful!
 owner: Federico Zivolo & contributors # or company name
 first_published: 2016 # if migrating another site, the year of your first publish
 email: federico.zivolo@gmail.com
