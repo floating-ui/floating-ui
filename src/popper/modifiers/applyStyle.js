@@ -43,6 +43,7 @@ export default function applyStyle(data, options) {
     else {
         styles.left =left;
         styles.top = top;
+        styles.willChange = 'top, left';
     }
 
     // any property present in `data.styles` will be applied to the popper,
