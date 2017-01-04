@@ -192,7 +192,7 @@ Feel free to comment inside the issue if you have any questions.
 
 ### Performances
 
-Popper.js is very performant. It usually takes 1.6ms to compute a popper's position (on an iMac with 3.5G GHz Intel Core i5).  
+Popper.js is very performant. It usually takes 0.5ms to compute a popper's position (on an iMac with 3.5G GHz Intel Core i5).  
 This means that it will not cause any [jank](https://www.chromium.org/developers/how-tos/trace-event-profiling-tool/anatomy-of-jank), leading to a smooth user experience.
 
 ## Notes
