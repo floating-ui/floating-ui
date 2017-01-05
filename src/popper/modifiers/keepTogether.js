@@ -13,22 +13,22 @@ import getClientRect from '../utils/getClientRect';
 export default function keepTogether(data) {
     const popper  = getClientRect(data.offsets.popper);
     const reference = data.offsets.reference;
-    const f = Math.floor;
     const placement = data.placement.split('-')[0];
+    const floor = Math.floor;
 
     if (['top', 'bottom'].indexOf(placement) !== -1) {
-        if (popper.right < f(reference.left)) {
-            data.offsets.popper.left = f(reference.left) - popper.width;
+        if (popper.right < floor(reference.left)) {
+            data.offsets.popper.left = floor(reference.left) - popper.width;
         }
-        if (popper.left > f(reference.right)) {
-            data.offsets.popper.left = f(reference.right);
+        if (popper.left > floor(reference.right)) {
+            data.offsets.popper.left = floor(reference.right);
         }
     } else {
-        if (popper.bottom < f(reference.top)) {
-            data.offsets.popper.top = f(reference.top) - popper.height;
+        if (popper.bottom < floor(reference.top)) {
+            data.offsets.popper.top = floor(reference.top) - popper.height;
         }
-        if (popper.top > f(reference.bottom)) {
-            data.offsets.popper.top = f(reference.bottom);
+        if (popper.top > floor(reference.bottom)) {
+            data.offsets.popper.top = floor(reference.bottom);
         }
     }
 

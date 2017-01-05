@@ -68,9 +68,6 @@ const DEFAULTS = {
  *      browser to use the GPU to accelerate the rendering.
  *      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU.
  *
- * @param {Number} options.boundariesPadding=5
- *      Additional padding for the boundaries
- *
  * @param {Boolean} options.removeOnDestroy=false
  *      Set to true if you want to automatically remove the popper when you call the `destroy` method.
  *
