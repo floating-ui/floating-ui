@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         //Position of the popper
         $('#example10code').html(code.replace('position', position));
+        $('.currentPosition').text(position);
 
         popper && popper.destroy();
         popper = new Popper(example10reference1, example10popper1, {
