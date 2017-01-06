@@ -1,0 +1,5 @@
+{
+    "presets": ["stage-2"],
+    "plugins": ["external-helpers"],
+    "ignore": ["node_modules/**"]
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<title>Tooltip.js test page</title>
+<script src="../../dist/popper.js"></script>
+<script src="../../dist/tooltip.js"></script>
+<style>
+    body {
+        min-height: 100vh;
+        margin: 0;
+    }
+    .reference {
+        background: yellow;
+        width: 200px;
+    }
+    .tooltip {
+        color: white;
+        background: black;
+        border-radius: 2px;
+        display: inline-block;
+    }
+</style>
+
+<div class="reference" title="Tooltip text">Reference element</div>
+
+<script>
+    new Tooltip(
+        document.querySelector(".reference"),
+        { placement: "bottom", trigger: "click" }
+    );
+</script>

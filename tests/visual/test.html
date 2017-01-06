@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.heatmap {
+    width: 800px;
+    height: 600px;
+    background: grey;
+    position: relative;
+
+    overflow: auto;
+}
+.scroller {
+    width: 1600px;
+    height: 1px;
+}
+.button {
+    width: 20px;
+    height: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: green;
+}
+.dropdown {
+    background: yellow;
+    position: absolute;
+    height: 200px;
+    width: 150px;
+}
+</style>
+</head>
+<body>
+    <div class="heatmap">
+        <div class="scroller"></div>
+        <div class="button">btn</div>
+        <div class="dropdown">dropdown</div>
+    </div>
+
+    <script src="../../dist/popper.js"></script>
+    <script>
+    var heatmap = document.querySelector('.heatmap');
+    var reference = document.querySelector('.button');
+    var popperElem = document.querySelector('.dropdown');
+    var thePopper = new Popper(
+        reference,
+        popperElem,
+        {
+            placement: 'bottom-start',
+        }
+    );
+
+    </script>
+</body>
+</html>

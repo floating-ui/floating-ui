@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .reference {
+            background:#ff0000;
+            width:150px;
+            height:150px;
+            border:1px solid red;
+        }
+
+        .popper {
+            background:black;
+            width:50px;
+            height:50px;
+            color:#fff;
+        }
+
+        .scrollable {
+            width:400px;
+            height:300px;
+            overflow:scroll;
+            border:1px solid red;
+        }
+
+        .reference-container {
+            width:300%;
+            height:300%;
+            background:yellow;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="scrollable" id="boundaries">
+    <div class="reference-container">
+        <div class="reference"></div>
+    </div>
+</div>
+<div class="popper">test popper</div>
+
+<script src="../../dist/popper.js"></script>
+<script>
+    var reference = document.querySelector('.reference');
+    var popperElem = document.querySelector('.popper');
+    var thePopper = new Popper(
+        reference,
+        popperElem,
+        {
+            placement: 'right-start',
+            boundariesElement: boundaries,
+            modifiers: {
+                preventOverflow: {
+                    enabled: true,
+                    escapeWithReference: true
+                },
+                flip: {
+                    flipVariations: true
+                }
+            }
+        }
+    );
+</script>
+</body>
+</html>

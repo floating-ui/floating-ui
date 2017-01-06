@@ -1,6 +1,0 @@
-{
-    "extends":  "../.jshintrc",
-    "jasmine":  true,
-    "debug":    true,
-    "undef":    false
-}
