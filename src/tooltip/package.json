@@ -1,8 +1,8 @@
 {
   "name": "tooltip.js",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0",
   "description": "A kickass library to create tooltips, based on Popper.js",
-  "main": "../../build/tooltip.js",
+  "main": "../../dist/tooltip.js",
   "scripts": {
     "test": "karma start ../../scripts/karma.conf.js"
   },
@@ -11,6 +11,6 @@
     "url": "git+https://github.com/FezVrasta/popper.js.git"
   },
   "peerDependencies": {
-    "popper.js": "1.0.0-beta.3"
+    "popper.js": "^1.0.0"
   }
 }
