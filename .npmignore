@@ -19,5 +19,4 @@ tests
 .eslintrc
 .jsdoc
 .travis.yml
-bower.json
 popperjs.png
