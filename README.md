@@ -1,7 +1,3 @@
-> **Documentation**: on the official website you'll find the v0 documentation, for the
-v1 documentation plase [click here](doc/_includes/documentation.md)
-
-
 <h1 align="center">Popper.js</h1>
 
 <p align="center">
