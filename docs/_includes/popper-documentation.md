@@ -51,6 +51,7 @@ needed by the library.</p>
             * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
             * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
             * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
+            * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
             * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
             * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
             * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
@@ -83,7 +84,6 @@ Create a new Popper.js instance
 | options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
 | options.eventsEnabled | <code>Boolean</code> | <code>true</code> | Whether events (resize, scroll) are initially enabled |
 | options.gpuAcceleration | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
-| options.boundariesPadding | <code>Number</code> | <code>5</code> | Additional padding for the boundaries |
 | options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
 | options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
 | options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
@@ -100,6 +100,8 @@ Create a new Popper.js instance
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
 | options.modifiers.innner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
 | options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
+| options.onCreate | <code>[createCallback](#createCallback)</code> |  | onCreate callback      Function called after the Popper has been instantiated. |
+| options.onUpdate | <code>[updateCallback](#updateCallback)</code> |  | onUpdate callback      Function called on subsequent updates of Popper. |
 
 <a name="Popper+update"></a>
 
@@ -147,6 +149,7 @@ unless you call 'update' method manually.
     * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
+    * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
     * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
     * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
     * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
@@ -313,6 +316,20 @@ but called in the minimum time possible.
 | Param | Type |
 | --- | --- |
 | fn | <code>function</code> | 
+
+<a name="Popper.Utils.findIndex$1"></a>
+
+#### Utils.findIndex$1(arr, prop, value) ⇒
+Mimics the `find` method of Array
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: index or -1  
+
+| Param | Type |
+| --- | --- |
+| arr | <code>Array</code> | 
+| prop |  | 
+| value |  | 
 
 <a name="Popper.Utils.findIndex"></a>
 

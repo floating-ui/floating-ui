@@ -10,7 +10,7 @@
 # Exclude everything else
 #========================
 .github
-doc
+docs
 scripts
 src
 tests
