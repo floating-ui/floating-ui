@@ -50,7 +50,7 @@ module.exports = function(config) {
             }
         },
         preprocessors: {
-            [`${root}/src/**/*.js`]: ['rollup'],
+            [`${root}/src/(!dist|**)/*.js`]: ['rollup'],
             [`${root}/tests/**/*.js`]: ['rollup'],
         },
         rollupPreprocessor: {
