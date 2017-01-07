@@ -89,7 +89,7 @@ const DEFAULTS = {
  * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
- * @param {Number} options.modifiers.preventOverflow.boundariesElement='scrollParent'
+ * @param {String|Element} options.modifiers.preventOverflow.boundariesElement='scrollParent'
  *      Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element.
  * @param {Number} options.modifiers.preventOverflow.padding=5
  *      Amount of pixel used to define a minimum distance between the boundaries and the popper
