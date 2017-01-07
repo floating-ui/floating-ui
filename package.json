@@ -59,6 +59,7 @@
     "babel-preset-babili": "^0.0.9",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-2": "^6.18.0",
+    "chai": "^3.5.0",
     "deep-assign": "^2.0.0",
     "eslint": "^3.2.2",
     "eslint-plugin-jasmine": "^2.1.0",
@@ -67,16 +68,19 @@
     "jasmine-core": "^2.4.1",
     "jsdoc-to-markdown": "^2.0.1",
     "karma": "^1.1.2",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
     "karma-rollup-preprocessor": "^3.0.2",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.0.0",
+    "karma-sinon": "^1.0.5",
     "rollup": "0.39.2",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-real-babili": "1.0.0-alpha3",
     "rollup-watch": "3.1.0",
+    "sinon": "^1.17.7",
     "yargs": "^6.5.0"
   }
 }

@@ -8,7 +8,7 @@ const root = `${__dirname}/..`;
 
 module.exports = function(config) {
     config.set({
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'chai', 'sinon'],
         singleRun,
         browsers: browsers,
         autoWatch: true,
