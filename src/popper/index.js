@@ -75,7 +75,7 @@ const DEFAULTS = {
  *      List of functions used to modify the data before they are applied to the popper (see source code for default values)
  *
  * @param {Object} options.modifiers.arrow - Arrow modifier configuration
- * @param {HTMLElement|String} options.modifiers.arrow.element='[x-arrow]'
+ * @param {String|HTMLElement} options.modifiers.arrow.element='[x-arrow]'
  *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
  *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
  *      reference element.
@@ -89,7 +89,7 @@ const DEFAULTS = {
  * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
- * @param {String|Element} options.modifiers.preventOverflow.boundariesElement='scrollParent'
+ * @param {String|HTMLElement} options.modifiers.preventOverflow.boundariesElement='scrollParent'
  *      Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element.
  * @param {Number} options.modifiers.preventOverflow.padding=5
  *      Amount of pixel used to define a minimum distance between the boundaries and the popper
@@ -103,7 +103,7 @@ const DEFAULTS = {
  *      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
- * @param {String|Element} options.modifiers.flip.boundariesElement='viewport'
+ * @param {String|HTMLElement} options.modifiers.flip.boundariesElement='viewport'
  *      The element which will define the boundaries of the popper position, the popper will never be placed outside
  *      of the defined boundaries (except if `keepTogether` is enabled)
  *
