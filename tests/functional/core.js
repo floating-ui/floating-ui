@@ -375,7 +375,21 @@ describe('[core]', () => {
                 done();
             },
         });
+    });
 
+    it('inits a popper inside a body without any positioned or scrollable parents and scrolls the body', (done) => {
+        var ref = appendNewRef(1, 'ref');
+        var popper = appendNewPopper(2, 'popper');
+        document.body.scrollTop = 100;
+
+        new Popper(ref, popper, {
+            onCreate: (data) => {
+                expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
+                expect(getRect(popper).left).toBeApprox(5);
+                data.instance.destroy();
+                done();
+            },
+        });
     });
 
     it('inits a popper inside a scrolled body, with its reference element inside a relative div', (done) => {

@@ -29,7 +29,7 @@
 ## Wut? Poppers?
 
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
-Common examples of poppers are tooltips and popovers.
+Common examples of poppers are tooltips, popovers and drop-downs.
 
 
 ## So, yet another tooltip library?
@@ -77,24 +77,22 @@ Find [the documentation here](docs/_includes/tooltip-documentation.md).
 ## Installation
 Popper.js is available on the following package managers and CDNs:
 
-| Source   |                                                                                            |
-|:---------|:-------------------------------------------------------------------------------------------|
-| npm      | `npm install popper.js --save`                                                             |
-| yarn     | `yarn add popper.js`                                                                       |
-| Bower    | `bower install popper.js=https://unpkg.com/popper.js --save`                               |
-| jsDelivr | [`http://www.jsdelivr.com/projects/popper.js`](http://www.jsdelivr.com/projects/popper.js) |
-| unpkg    | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                               |
+| Source |                                                              |
+|:-------|:-------------------------------------------------------------|
+| npm    | `npm install popper.js --save`                               |
+| yarn   | `yarn add popper.js`                                         |
+| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save` |
+| unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js) |
 
 
 Tooltip.js as well:
 
-| Source   |                                                                                              |
-|:---------|:---------------------------------------------------------------------------------------------|
-| npm      | `npm install tooltip.js --save`                                                              |
-| yarn     | `yarn add tooltip.js`                                                                        |
-| Bower    | `bower install popper.js=https://unpkg.com/tooltip.js --save`                                |
-| jsDelivr | [`http://www.jsdelivr.com/projects/tooltip.js`](http://www.jsdelivr.com/projects/tooltip.js) |
-| unpkg    | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                               |
+| Source |                                                                |
+|:-------|:---------------------------------------------------------------|
+| npm    | `npm install tooltip.js --save`                                |
+| yarn   | `yarn add tooltip.js`                                          |
+| Bower  | `bower install popper.js=https://unpkg.com/tooltip.js --save`  |
+| unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js) |
 
 
 ## Usage
