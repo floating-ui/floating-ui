@@ -29,7 +29,7 @@
 ## Wut? Poppers?
 
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
-Common examples of poppers are tooltips and popovers.
+Common examples of poppers are tooltips, popovers and drop-downs.
 
 
 ## So, yet another tooltip library?
