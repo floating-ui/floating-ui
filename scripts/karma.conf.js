@@ -58,6 +58,9 @@ module.exports = function(config) {
             exports: 'named',
             format: 'umd',
             sourceMap: 'inline',
+            globals: {
+                'chai': 'chai',
+            },
             plugins: [babel({
                 presets: [
                     ['es2015', { modules: false }],
