@@ -33,7 +33,11 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
         rect.bottom -= scrollTop;
         rect.left -= scrollLeft;
         rect.right -= scrollLeft;
-    } else if (getOffsetParent(element).contains(scrollParent)) {
+    }
+    // When a popper doesn't have any positioned or scrollable parents, `offsetParent.contains(scrollParent)`
+    // will return a "false positive". This is happening because `getOffsetParent` returns `html` node,
+    // and `scrollParent` is the `body` node. Hence the additional check.
+    else if (getOffsetParent(element).contains(scrollParent) && scrollParent.nodeName !== 'BODY') {
         const scrollTop = getScroll(parent, 'top');
         const scrollLeft = getScroll(parent, 'left');
         rect.top += scrollTop;
