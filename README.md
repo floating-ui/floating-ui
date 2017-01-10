@@ -5,25 +5,13 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank">
-        <img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" />
-    </a>
-    <a href="https://www.npmjs.com/package/popper.js" target="_blank">
-        <img src="https://badge.fury.io/js/popper.js.svg" />
-    </a>
-    <a href="https://cdnjs.com/libraries/popper.js" target="_blank">
-        <img src="https://img.shields.io/cdnjs/v/popper.js.svg" />
-    </a>
+    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" /></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" /></a>
+    <br />
+    <a href="https://www.npmjs.com/package/popper.js" target="_blank"><img src="https://badge.fury.io/js/popper.js.svg" /></a>
     <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" />
-    <a href="https://gitter.im/FezVrasta/popper.js" target="_blank">
-        <img src="https://badges.gitter.im/Join%20Chat.svg" />
-    </a>
-</p>
-
-<p align="center">
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank">
-        <img src="https://saucelabs.com/browser-matrix/popperjs.svg?auth=b28bea6e52e761cdd54d8783d59b4f04" />
-    </a>
+    <a href="https://cdnjs.com/libraries/popper.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/popper.js.svg" /></a>
+    <a href="https://gitter.im/FezVrasta/popper.js" target="_blank"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" /></a>
 </p>
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
@@ -80,23 +68,23 @@ Find [the documentation here](docs/_includes/tooltip-documentation.md).
 ## Installation
 Popper.js is available on the following package managers and CDNs:
 
-| Source |                                                              |
-|:-------|:-------------------------------------------------------------|
-| npm    | `npm install popper.js --save`                               |
-| yarn   | `yarn add popper.js`                                         |
-| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save` |
-| unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js) |
-| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js)|
+| Source |                                                                                  |
+|:-------|:---------------------------------------------------------------------------------|
+| npm    | `npm install popper.js --save`                                                   |
+| yarn   | `yarn add popper.js`                                                             |
+| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save`                     |
+| unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
+| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
 Tooltip.js as well:
 
-| Source |                                                                |
-|:-------|:---------------------------------------------------------------|
-| npm    | `npm install tooltip.js --save`                                |
-| yarn   | `yarn add tooltip.js`                                          |
-| Bower  | `bower install popper.js=https://unpkg.com/tooltip.js --save`  |
-| unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js) |
-| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js)|
+| Source |                                                                                  |
+|:-------|:---------------------------------------------------------------------------------|
+| npm    | `npm install tooltip.js --save`                                                  |
+| yarn   | `yarn add tooltip.js`                                                            |
+| Bower  | `bower install popper.js=https://unpkg.com/tooltip.js --save`                    |
+| unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                   |
+| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
 ## Usage
 
