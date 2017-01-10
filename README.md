@@ -10,7 +10,7 @@
     <br />
     <a href="https://www.npmjs.com/package/popper.js" target="_blank"><img src="https://badge.fury.io/js/popper.js.svg" /></a>
     <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" />
-    <a href="https://cdnjs.com/libraries/popper.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/popper.js.svg" /></a>
+    <a href="https://cdnjs.com/libraries/popper.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/popper.js.svg?colorB=brightgreen" /></a>
     <a href="https://gitter.im/FezVrasta/popper.js" target="_blank"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" /></a>
 </p>
 
