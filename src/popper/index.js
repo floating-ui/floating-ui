@@ -319,7 +319,7 @@ export default class Popper {
      */
     disableEventListeners() {
         if (this.state.eventsEnabled) {
-            cancelAnimationFrame(this.scheduledUpdate);
+            window.cancelAnimationFrame(this.scheduleUpdate);
             this.state = removeEventListeners(this.reference, this.state);
         }
     }
