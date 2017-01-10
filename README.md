@@ -11,6 +11,9 @@
     <a href="https://www.npmjs.com/package/popper.js" target="_blank">
         <img src="https://badge.fury.io/js/popper.js.svg" />
     </a>
+    <a href="https://cdnjs.com/libraries/popper.js" target="_blank">
+        <img src="https://img.shields.io/cdnjs/v/popper.js.svg" />
+    </a>
     <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" />
     <a href="https://gitter.im/FezVrasta/popper.js" target="_blank">
         <img src="https://badges.gitter.im/Join%20Chat.svg" />
@@ -83,7 +86,7 @@ Popper.js is available on the following package managers and CDNs:
 | yarn   | `yarn add popper.js`                                         |
 | Bower  | `bower install popper.js=https://unpkg.com/popper.js --save` |
 | unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js) |
-
+| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js)|
 
 Tooltip.js as well:
 
@@ -93,7 +96,7 @@ Tooltip.js as well:
 | yarn   | `yarn add tooltip.js`                                          |
 | Bower  | `bower install popper.js=https://unpkg.com/tooltip.js --save`  |
 | unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js) |
-
+| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js)|
 
 ## Usage
 
