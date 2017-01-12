@@ -19,7 +19,7 @@ Create a new Tooltip.js instance
 | --- | --- | --- | --- |
 | reference | <code>HTMLElement</code> |  | The reference element used to position the tooltip |
 | options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
+| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
 | reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
 | options | <code>Object</code> |  | Configuration of the tooltip |
 | options.container | <code>HTMLElement</code> &#124; <code>String</code> &#124; <code>false</code> | <code>false</code> | Append the tooltip to a specific element. |

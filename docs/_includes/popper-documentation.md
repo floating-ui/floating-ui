@@ -81,7 +81,7 @@ Create a new Popper.js instance
 | reference | <code>HTMLElement</code> |  | The reference element used to position the popper |
 | popper | <code>HTMLElement</code> |  | The HTML element used as popper. |
 | options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
+| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
 | options.eventsEnabled | <code>Boolean</code> | <code>true</code> | Whether events (resize, scroll) are initially enabled |
 | options.gpuAcceleration | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
 | options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |

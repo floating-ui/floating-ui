@@ -58,7 +58,7 @@ const DEFAULTS = {
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options
  * @param {String} options.placement=bottom
- *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+ *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
  *      left(-start, -end)`
  *
  * @param {Boolean} options.eventsEnabled=true
