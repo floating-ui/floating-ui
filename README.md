@@ -7,12 +7,10 @@
 <p align="center">
     <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" /></a>
     <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" /></a>
-    <a href="https://codeclimate.com/github/FezVrasta/popper.js"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/gpa.svg" /></a>
     <br />
+    <a href="https://codeclimate.com/github/FezVrasta/popper.js"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/gpa.svg" /></a>
     <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" /></a>
-    <a href="https://www.npmjs.com/package/popper.js" target="_blank"><img src="https://badge.fury.io/js/popper.js.svg" /></a>
     <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" />
-    <a href="https://cdnjs.com/libraries/popper.js" target="_blank"><img src="https://img.shields.io/cdnjs/v/popper.js.svg?colorB=44CC11" /></a>
     <a href="https://gitter.im/FezVrasta/popper.js" target="_blank"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" /></a>
 </p>
 
