@@ -244,6 +244,10 @@ aws4@^1.2.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.5.0.tgz#0a29ffb79c31c9e712eeb087e8e7a64b4a56d755"
 
+babel:
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/babel/-/babel-6.5.2.tgz#59140607438270920047ff56f02b2d8630c2d129"
+
 babel-cli@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babel-cli/-/babel-cli-6.18.0.tgz#92117f341add9dead90f6fa7d0a97c0cc08ec186"
@@ -542,6 +546,10 @@ babel-plugin-minify-type-constructors@^0.0.2:
   resolved "https://registry.yarnpkg.com/babel-plugin-minify-type-constructors/-/babel-plugin-minify-type-constructors-0.0.2.tgz#4f9a28951e776f31ac11a29cd58cf9eef8b2e292"
   dependencies:
     babel-helper-is-void-0 "^0.0.1"
+
+babel-plugin-module-alias:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-module-alias/-/babel-plugin-module-alias-1.6.0.tgz#df7e3aaba3544f4c06a9d3314a26bbbff6d87b61"
 
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"

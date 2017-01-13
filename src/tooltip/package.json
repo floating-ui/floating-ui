@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/FezVrasta/popper.js.git"
   },
-  "peerDependencies": {
-    "popper.js": "^1.0.0"
+  "dependencies": {
+    "popper.js": "^1.0.2"
   }
 }

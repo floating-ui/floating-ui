@@ -1,4 +1,4 @@
-import Popper from '../popper/index.js';
+import Popper from 'popper.js';
 
 const DEFAULT_OPTIONS = {
     container: false,
