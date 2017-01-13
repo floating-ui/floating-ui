@@ -87,7 +87,7 @@ module.exports = function(config) {
     };
 
     if (coverage) {
-        configuration.preprocessors['${root}/src/**/*.js'] = 'coverage';
+        configuration.preprocessors[`${root}/src/(!dist|**)/*.js`] = ['coverage'];
         configuration.coverageReporter = {
             dir: `${root}/.tmp/coverage`,
             reporters: [
