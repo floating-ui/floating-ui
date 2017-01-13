@@ -11,6 +11,7 @@ module.exports = function(config) {
         frameworks: ['jasmine', 'chai', 'sinon'],
         singleRun,
         browserNoActivityTimeout: 60000,
+        browserDisconnectTolerance: 10,
         browsers: browsers,
         autoWatch: true,
         customLaunchers: {
