@@ -4,10 +4,11 @@ const babel = require('rollup-plugin-babel');
 
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
+const coverage = process.env.COVERAGE;
 const root = `${__dirname}/..`;
 
 module.exports = function(config) {
-    config.set({
+    const configuration = {
         frameworks: ['jasmine', 'chai', 'sinon'],
         singleRun,
         browserNoActivityTimeout: 60000,
@@ -54,7 +55,6 @@ module.exports = function(config) {
         preprocessors: {
             [`${root}/src/(!dist|**)/*.js`]: ['rollup'],
             [`${root}/tests/**/*.js`]: ['rollup'],
-            ['${root}/src/**/*.js']: 'coverage',
         },
         rollupPreprocessor: {
             moduleName: 'test',
@@ -83,13 +83,20 @@ module.exports = function(config) {
             recordVideo: true,
             tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
         },
-        reporters: ['dots', 'saucelabs', 'coverage'],
-        coverageReporter: {
+        reporters: ['dots', 'saucelabs'],
+    };
+
+    if (coverage) {
+        configuration.preprocessors['${root}/src/**/*.js'] = 'coverage';
+        configuration.coverageReporter = {
             dir: `${root}/.tmp/coverage`,
             reporters: [
                 { type: 'html', subdir: 'report-html' },
                 { type: 'lcov', subdir: 'report-lcov' },
             ]
-        },
-    });
+        };
+        configuration.reporters.push('coverage');
+    }
+
+    config.set(configuration);
 };

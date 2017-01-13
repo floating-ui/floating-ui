@@ -25,6 +25,7 @@
     "lint": "eslint .",
     "test": "NODE_ENV=test karma start ./scripts/karma.conf.js",
     "test:dev": "NODE_ENV=development karma start ./scripts/karma.conf.js",
+    "coverage": "COVERAGE=true npm run test",
     "docs": "npm run docs:popper && npm run docs:tooltip",
     "docs:serve": "cd docs && jekyll serve & open http://localhost:4000",
     "docs:popper": "rollup -c ./scripts/rollup.config.popper.js -o ./.tmp/popper.js && jsdoc2md ./.tmp/popper.js > ./docs/_includes/popper-documentation.md",
