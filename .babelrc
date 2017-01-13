@@ -6,4 +6,13 @@
             { "src": "./src/popper/index.js", "expose": "popper.js" }
         ]]
     ]
+    "ignore": ["node_modules/**"],
+    "env": {
+        "test": {
+            "plugins": [ "istanbul" ]
+        },
+        "development": {
+            "plugins": [ "istanbul" ]
+        }
+    }
 }

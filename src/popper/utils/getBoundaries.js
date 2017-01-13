@@ -1,5 +1,6 @@
 import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
+import getParentNode from './getParentNode';
 import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
 import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
@@ -45,7 +46,7 @@ export default function getBoundaries(popper, padding, boundariesElement) {
     else {
         let boundariesNode;
         if (boundariesElement === 'scrollParent') {
-            boundariesNode = getScrollParent(popper);
+            boundariesNode = getScrollParent(getParentNode(popper));
         } else if (boundariesElement === 'window') {
             boundariesNode = window.document.body;
         } else {
