@@ -4,4 +4,4 @@ Please, make sure to fulfill the following conditions before submitting your Pul
 ### Make sure to
 
 1. Make sure the tests are passing, you can check it running `npm test` with Google Chrome installed;
-3. Add any relevant test to cover the code you have changed and/or added;
+2. Add any relevant test to cover the code you have changed and/or added;
