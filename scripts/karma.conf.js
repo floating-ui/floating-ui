@@ -4,7 +4,7 @@ const babel = require('rollup-plugin-babel');
 
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
-const coverage = process.env.COVERAGE;
+const coverage = process.env.NODE_ENV === 'coverage';
 const root = `${__dirname}/..`;
 
 module.exports = function(config) {

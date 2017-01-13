@@ -3,10 +3,7 @@
     "plugins": ["external-helpers"],
     "ignore": ["node_modules/**"],
     "env": {
-        "test": {
-            "plugins": [ "istanbul" ]
-        },
-        "development": {
+        "coverage": {
             "plugins": [ "istanbul" ]
         }
     }
