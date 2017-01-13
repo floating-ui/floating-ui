@@ -48,6 +48,25 @@ describe('[core]', () => {
         pop.destroy();
     });
 
+    it('inits a right scrollable popper ', (done) => {
+        var reference = appendNewRef(1);
+        var popper    = appendNewPopper(2);
+        popper.style.overflow = 'auto';
+
+        var pop = new Popper(reference, popper, {
+            placement: 'right',
+            onCreate() {
+                var left = popper.getBoundingClientRect().left;
+                expect(left).toBeApprox(reference.getBoundingClientRect().right + arrowSize);
+
+                pop.destroy();
+
+                done();
+            }
+        });
+
+    });
+
     describe(['inner modifier'], () => {
         it('inits a bottom inner popper', (done) => {
             var reference = appendNewRef(1);
