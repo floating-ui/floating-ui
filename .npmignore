@@ -2,6 +2,10 @@
 #================================================================
 # dist
 
+# Exclude the tooltip dist files
+#===============================
+dist/tooltip*
+
 # Don't exclude this file because it's used when the library is imported
 # into an ES6 source that gets transpiled by Babel
 #=======================================================================
