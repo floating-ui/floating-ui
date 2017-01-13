@@ -3,8 +3,9 @@ node_js: 7.3
 script:
   - npm run test -- --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
   - npm run coverage -- -- --browsers=SLChrome
-after_script:
-  - codeclimate < .tmp/coverage/**/lcov.info
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < .tmp/coverage/**/lcov.info
 addons:
   sauce_connect:
     username: "popperjs"
