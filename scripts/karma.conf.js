@@ -10,6 +10,7 @@ module.exports = function(config) {
     config.set({
         frameworks: ['jasmine', 'chai', 'sinon'],
         singleRun,
+        browserNoActivityTimeout: 60000,
         browsers: browsers,
         autoWatch: true,
         customLaunchers: {
