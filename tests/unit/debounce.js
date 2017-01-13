@@ -1,7 +1,13 @@
 import { microtaskDebounce, taskDebounce } from '../../src/popper/utils/debounce';
+import isNative from '../../src/popper/utils/isNative';
+const microTasksAvailable = isNative(window.MutationObserver);
 
 describe('utils/debounce', () => {
     it('microtaskDebounce: should be called only once', (done) => {
+        if (!microTasksAvailable) {
+            pending();
+        }
+
         let i = 0;
         const debounced = microtaskDebounce(() => (i++));
         debounced();
