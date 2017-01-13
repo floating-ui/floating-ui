@@ -8,7 +8,13 @@
     ],
     "env": {
         "coverage": {
-            "plugins": [ "istanbul" ]
+            "plugins": [
+                ["istanbul", {
+                    "exclude": [
+                        "tests/**"
+                    ]
+                }]
+            ]
         }
     }
 }
