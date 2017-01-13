@@ -16,7 +16,7 @@ function createReference() {
     jasmineWrapper.appendChild(reference);
 }
 
-describe('[tooltip.js]', () => {
+fdescribe('[tooltip.js]', () => {
     describe('manual', () => {
         beforeEach(() => {
             createReference()
@@ -49,12 +49,43 @@ describe('[tooltip.js]', () => {
             });
         });
 
-        it('should toggle tooltip', (done) => {
+        it('should toggle (show) tooltip', (done) => {
             instance = new Tooltip(reference, {
                 title: 'foobar',
             });
 
             instance.toggle();
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).not.toBeNull();
+                done();
+            });
+        });
+
+
+        it('should toggle (hide) tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+            then(() => instance.toggle());
+
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            });
+        });
+
+
+        it('should show, hide and show again a tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+            then(() => instance.hide());
+            then(() => instance.show());
 
             then(() => {
                 expect(document.querySelector('.tooltip')).not.toBeNull();
@@ -78,6 +109,27 @@ describe('[tooltip.js]', () => {
         });
     });
 
+    describe('container', () => {
+        beforeEach(() => {
+            createReference()
+        });
+
+        it('should show tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                container: 'body',
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip').parentNode).toBe(document.body);
+                instance.dispose();
+                done();
+            });
+        });
+    })
+
     describe('content', () => {
         beforeEach(() => {
             createReference()
@@ -96,7 +148,6 @@ describe('[tooltip.js]', () => {
             });
         });
 
-
         it('should show HTML tooltip', (done) => {
             instance = new Tooltip(reference, {
                 title: '<strong>foobar</strong>',
@@ -110,7 +161,6 @@ describe('[tooltip.js]', () => {
                 done();
             });
         });
-
 
         it('should show stripped out HTML tooltip', (done) => {
             instance = new Tooltip(reference, {
@@ -126,6 +176,34 @@ describe('[tooltip.js]', () => {
             });
         });
 
+        it('should use a DOM node as tooltip content', (done) => {
+            const content = document.createElement('div');
+            content.innerText = 'foobar';
+            instance = new Tooltip(reference, {
+                title: content,
+                html: true,
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip .tooltip-inner').innerHTML).toBe('<div>foobar</div>');
+                done();
+            });
+        });
+
+        it('should use a function result as tooltip content', (done) => {
+            instance = new Tooltip(reference, {
+                title: () => 'foobar',
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip .tooltip-inner').textContent).toBe('foobar');
+                done();
+            });
+        });
     });
 
     describe('events', () => {
