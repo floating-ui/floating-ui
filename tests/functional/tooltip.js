@@ -62,7 +62,6 @@ fdescribe('[tooltip.js]', () => {
             });
         });
 
-
         it('should toggle (hide) tooltip', (done) => {
             instance = new Tooltip(reference, {
                 title: 'foobar',
@@ -114,7 +113,7 @@ fdescribe('[tooltip.js]', () => {
             createReference()
         });
 
-        it('should show tooltip', (done) => {
+        it('should show tooltip as child of body', (done) => {
             instance = new Tooltip(reference, {
                 title: 'foobar',
                 container: 'body',
