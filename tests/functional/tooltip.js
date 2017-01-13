@@ -49,6 +49,19 @@ describe('[tooltip.js]', () => {
             });
         });
 
+        it('should toggle tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.toggle();
+
+            then(() => {
+                expect(document.querySelector('.tooltip')).not.toBeNull();
+                done();
+            });
+        });
+
 
         it('should dispose tooltip', (done) => {
             instance = new Tooltip(reference, {
@@ -63,6 +76,56 @@ describe('[tooltip.js]', () => {
                 done();
             });
         });
+    });
+
+    describe('content', () => {
+        beforeEach(() => {
+            createReference()
+        });
+
+        it('should show text tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip .tooltip-inner').textContent).toBe('foobar');
+                done();
+            });
+        });
+
+
+        it('should show HTML tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: '<strong>foobar</strong>',
+                html: true,
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip .tooltip-inner').innerHTML).toBe('<strong>foobar</strong>');
+                done();
+            });
+        });
+
+
+        it('should show stripped out HTML tooltip', (done) => {
+            instance = new Tooltip(reference, {
+                title: '<strong>foobar</strong>',
+                html: true,
+            });
+
+            instance.show();
+
+            then(() => {
+                expect(document.querySelector('.tooltip .tooltip-inner').textContent).toBe('foobar');
+                done();
+            });
+        });
+
     });
 
     describe('events', () => {
