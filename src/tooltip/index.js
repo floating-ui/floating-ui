@@ -182,8 +182,8 @@ export default class Tooltip {
         // Add `aria-describedby` to our reference element for accessibility reasons
         tooltipNode.setAttribute('aria-describedby', tooltipNode.id);
 
-        // append tooltip to container: container = false we pick the parent node of the reference
-        var container = options.container === false ? reference.parentNode : options.container;
+        // append tooltip to container
+        let container = this._findContainer(options.container, reference);
 
         this._append(tooltipNode, container);
 
@@ -237,14 +237,14 @@ export default class Tooltip {
         return this;
     }
 
-    _findContainer(container) {
+    _findContainer(container, reference) {
         // if container is a query, get the relative element
         if (typeof container === 'string') {
             container = window.document.querySelector(container);
         }
-        // if container is `false`, set it to body
+        // if container is `false`, set it to reference parent
         else if (container === false) {
-            container = window.document.body;
+            container = reference.parentNode;
         }
         return container;
     }
@@ -346,24 +346,20 @@ export default class Tooltip {
             this._tooltipNode.removeEventListener(evt.type, callback);
 
             // If the new reference is not the reference element
-            if (!this._isElOrChildOfEl(relatedreference2, reference)) {
+            if (!reference.contains(relatedreference2)) {
 
                 // Schedule to hide tooltip
                 this._scheduleHide(reference, options.delay, options, evt2);
             }
         };
 
-        if (this._isElOrChildOfEl(relatedreference, this._tooltipNode)) {
+        if (this._tooltipNode.contains(relatedreference)) {
             // listen to mouseleave on the tooltip element to be able to hide the tooltip
             this._tooltipNode.addEventListener(evt.type, callback);
             return true;
         }
 
         return false;
-    }
-
-    _isElOrChildOfEl(a, b) {
-        return a === b || b.contains(a);
     }
 }
 

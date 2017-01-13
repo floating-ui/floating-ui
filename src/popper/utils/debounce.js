@@ -9,7 +9,7 @@ for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
     }
 }
 
-function microtaskDebounce(fn) {
+export function microtaskDebounce(fn) {
     let scheduled = false;
     let i = 0;
     let elem = document.createElement('span');
@@ -33,7 +33,7 @@ function microtaskDebounce(fn) {
     };
 }
 
-function taskDebounce(fn) {
+export function taskDebounce(fn) {
     let scheduled = false;
     return () => {
         if (!scheduled) {
