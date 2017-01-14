@@ -69,6 +69,11 @@ module.exports = function(config) {
                     ['es2015', { modules: false }],
                     'stage-2',
                 ],
+                plugins: [
+                    ['module-alias', [
+                        { src: './src/popper/index.js', expose: 'popper.js' },
+                    ]],
+                ],
             })],
         },
         files: [
