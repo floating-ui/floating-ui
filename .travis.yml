@@ -1,8 +1,8 @@
 language: node_js
 node_js: 7.3
 script:
-  - npm run test -- --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
-  - npm run coverage -- -- --browsers=SLChrome
+  - npm run coverage -- -- --browsers=SLChrome,SLInternetExplorer10
+  - npm run test -- --browsers=SLFirefox,SLEdge,SLSafari,SLInternetExplorer11
 after_success:
   - npm install -g codeclimate-test-reporter
   - codeclimate-test-reporter < .tmp/coverage/**/lcov.info
