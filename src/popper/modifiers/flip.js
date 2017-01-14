@@ -55,28 +55,34 @@ export default function flip(data, options) {
         const popperOffsets = getClientRect(data.offsets.popper);
         const refOffsets = data.offsets.reference;
 
-        // using Math.floor because the reference offsets may contain decimals we are not going to consider here
+        // using floor because the reference offsets may contain decimals we are not going to consider here
+        const floor = Math.floor;
         const overlapsRef = (
-            (placement === 'left'   && Math.floor(popperOffsets.right) > Math.floor(refOffsets.left)) ||
-            (placement === 'right'  && Math.floor(popperOffsets.left) < Math.floor(refOffsets.right)) ||
-            (placement === 'top'    && Math.floor(popperOffsets.bottom) > Math.floor(refOffsets.top)) ||
-            (placement === 'bottom' && Math.floor(popperOffsets.top) < Math.floor(refOffsets.bottom))
+            (placement === 'left'   && floor(popperOffsets.right) > floor(refOffsets.left)) ||
+            (placement === 'right'  && floor(popperOffsets.left) < floor(refOffsets.right)) ||
+            (placement === 'top'    && floor(popperOffsets.bottom) > floor(refOffsets.top)) ||
+            (placement === 'bottom' && floor(popperOffsets.top) < floor(refOffsets.bottom))
         );
 
+        const overflowsLeft = floor(popperOffsets.left) < floor(boundaries.left);
+        const overflowsRight = floor(popperOffsets.right) > floor(boundaries.right);
+        const overflowsTop = floor(popperOffsets.top) < floor(boundaries.top);
+        const overflowsBottom = floor(popperOffsets.bottom) > floor(boundaries.bottom);
+
         const overflowsBoundaries = (
-            (placement === 'left'   && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
-            (placement === 'right'  && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||
-            (placement === 'top'    && Math.floor(popperOffsets.top) < Math.floor(boundaries.top)) ||
-            (placement === 'bottom' && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom))
+            (placement === 'left'   && overflowsLeft) ||
+            (placement === 'right'  && overflowsRight) ||
+            (placement === 'top'    && overflowsTop) ||
+            (placement === 'bottom' && overflowsBottom)
         );
 
         // flip the variation if required
         const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
         const flippedVariation = !!options.flipVariations && (
-            (isVertical  && variation === 'start' && Math.floor(popperOffsets.left) < Math.floor(boundaries.left)) ||
-            (isVertical  && variation === 'end'   && Math.floor(popperOffsets.right) > Math.floor(boundaries.right)) ||
-            (!isVertical && variation === 'start' && Math.floor(popperOffsets.top) < Math.floor(boundaries.top)) ||
-            (!isVertical && variation === 'end'   && Math.floor(popperOffsets.bottom) > Math.floor(boundaries.bottom))
+            (isVertical  && variation === 'start' && overflowsLeft) ||
+            (isVertical  && variation === 'end'   && overflowsRight) ||
+            (!isVertical && variation === 'start' && overflowsTop) ||
+            (!isVertical && variation === 'end'   && overflowsBottom)
         );
 
         if (overlapsRef || overflowsBoundaries || flippedVariation) {
