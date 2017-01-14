@@ -5,7 +5,7 @@
   "main": "./dist/tooltip.es5.js",
   "jsnext:main": "./dist/tooltip.js",
   "scripts": {
-    "prepublish": "mkdir -p ./dist && cp -R ../../dist/tooltip.* ./dist/",
+    "prepublish": "(cd ../../; npm run build:tooltip) && mkdir -p ./dist && cp -R ../../dist/tooltip.* ./dist/",
     "test": "karma start ../../scripts/karma.conf.js"
   },
   "repository": {
