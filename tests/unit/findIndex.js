@@ -14,11 +14,11 @@ describe('utils/findIndex', () => {
     expect(findIndex(arr, 'id', 1)).to.equal(0);
   });
 
-  it('should return the fist found element', () => {
+  it('should return index of the fist found element', () => {
     expect(findIndex(arr, 'value', '2v')).to.equal(1);
   });
 
-  it('should return undefined if nothing is found', () => {
+  it('should return -1 if nothing is found', () => {
     expect(findIndex(arr, 'value', '3v')).to.equal(-1);
   });
 });
