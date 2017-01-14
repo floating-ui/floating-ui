@@ -17,21 +17,16 @@ export default function shift(data) {
     if (shiftvariation) {
         const reference = data.offsets.reference;
         const popper = getClientRect(data.offsets.popper);
+        const isVertical = ['bottom', 'top'].indexOf(basePlacement) !== -1
+        const side = isVertical ? 'left' : 'top';
+        const measurement = isVertical ? 'width' : 'height';
 
         const shiftOffsets = {
-            y: {
-                start:  { top: reference.top },
-                end:    { top: reference.top + reference.height - popper.height }
-            },
-            x: {
-                start:  { left: reference.left },
-                end:    { left: reference.left + reference.width - popper.width }
-            }
+            start:  { [side]: reference[side] },
+            end:    { [side]: reference[side] + reference[measurement] - popper[measurement] },
         };
 
-        const axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y';
-
-        data.offsets.popper = {...popper, ...shiftOffsets[axis][shiftvariation]};
+        data.offsets.popper = {...popper, ...shiftOffsets[shiftvariation]};
     }
 
     return data;

@@ -1,6 +1,6 @@
 import getBoundingClientRect from './getBoundingClientRect';
 import getScrollParent from './getScrollParent';
-import getScroll from './getScroll';
+import includeScroll from './includeScroll';
 import getOffsetParent from './getOffsetParent';
 import getStyleComputedProperty from './getStyleComputedProperty';
 
@@ -17,7 +17,7 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
     const elementRect = getBoundingClientRect(element);
     const parentRect = getBoundingClientRect(parent);
 
-    const rect = {
+    let rect = {
         top: elementRect.top - parentRect.top,
         left: elementRect.left - parentRect.left,
         bottom: (elementRect.top - parentRect.top) + elementRect.height,
@@ -27,23 +27,13 @@ export default function getOffsetRectRelativeToCustomParent(element, parent, fix
     };
 
     if (fixed && !transformed) {
-        const scrollTop = getScroll(scrollParent, 'top');
-        const scrollLeft = getScroll(scrollParent, 'left');
-        rect.top -= scrollTop;
-        rect.bottom -= scrollTop;
-        rect.left -= scrollLeft;
-        rect.right -= scrollLeft;
+        rect = includeScroll(rect, scrollParent, true)
     }
     // When a popper doesn't have any positioned or scrollable parents, `offsetParent.contains(scrollParent)`
     // will return a "false positive". This is happening because `getOffsetParent` returns `html` node,
     // and `scrollParent` is the `body` node. Hence the additional check.
     else if (getOffsetParent(element).contains(scrollParent) && scrollParent.nodeName !== 'BODY') {
-        const scrollTop = getScroll(parent, 'top');
-        const scrollLeft = getScroll(parent, 'left');
-        rect.top += scrollTop;
-        rect.bottom += scrollTop;
-        rect.left += scrollLeft;
-        rect.right += scrollLeft;
+        rect = includeScroll(rect, parent)
     }
 
     // subtract borderTopWidth and borderTopWidth from final result
