@@ -1,6 +1,6 @@
 {
   "name": "tooltip.js",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "./dist/tooltip.es5.js",
   "jsnext:main": "./dist/tooltip.js",
