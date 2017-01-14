@@ -18,6 +18,9 @@
         'dot-notation': 0,
         'no-undef': 2,
         'no-unused-vars': 2,
-        'no-const-assign': 2
+        'no-const-assign': 2,
+        'prefer-const': 2,
+        'no-var': 2,
+        'comma-dangle': ['error', 'only-multiline']
     }
 }

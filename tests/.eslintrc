@@ -9,6 +9,7 @@
         jasmineWrapper: false
     },
     rules: {
-        "no-unused-vars": 1
+        "no-unused-vars": 1,
+        'no-var': 0,
     }
 }

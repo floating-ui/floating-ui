@@ -183,7 +183,7 @@ export default class Tooltip {
         tooltipNode.setAttribute('aria-describedby', tooltipNode.id);
 
         // append tooltip to container
-        let container = this._findContainer(options.container, reference);
+        const container = this._findContainer(options.container, reference);
 
         this._append(tooltipNode, container);
 

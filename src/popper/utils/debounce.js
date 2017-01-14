@@ -12,7 +12,7 @@ for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 export function microtaskDebounce(fn) {
     let scheduled = false;
     let i = 0;
-    let elem = document.createElement('span');
+    const elem = document.createElement('span');
 
     // MutationObserver provides a mechanism for scheduling microtasks, which
     // are scheduled *before* the next task. This gives us a way to debounce
