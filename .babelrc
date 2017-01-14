@@ -1,10 +1,7 @@
 {
     "presets": ["stage-2"],
     "plugins": [
-        "external-helpers",
-        ["module-alias", [
-            { "src": "./src/popper/index.js", "expose": "popper.js" }
-        ]]
+        "external-helpers"
     ],
     "env": {
         "coverage": {
