@@ -13,6 +13,7 @@ function createReference() {
     reference.style.width = '100px';
     reference.style.height = '100px';
     reference.style.margin = '100px';
+    reference.innerText = 'reference';
     jasmineWrapper.appendChild(reference);
 }
 
@@ -231,7 +232,7 @@ describe('[tooltip.js]', () => {
             });
         });
 
-        it('should hide a tooltip on mouseleave', (done) => {
+        it('should hide a tooltip on reference mouseleave', (done) => {
             instance = new Tooltip(reference, {
                 title: 'foobar',
                 trigger: 'hover',
@@ -243,6 +244,44 @@ describe('[tooltip.js]', () => {
             then(() => reference.dispatchEvent(new CustomEvent('mouseleave')), 200);
             then(() => {
                 expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            }, 200);
+        });
+
+        it('should hide a tooltip on tooltip mouseleave', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'hover',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new CustomEvent('mouseenter'));
+            then(() => reference.dispatchEvent(new CustomEvent('mouseleave')));
+            then(() => document.querySelector('.tooltip').dispatchEvent(new CustomEvent('mouseenter')));
+            then(() => document.querySelector('.tooltip').dispatchEvent(new CustomEvent('mouseleave')));
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('none');
+                done();
+            }, 200);
+        });
+
+
+        it('should not hide a tooltip if user mouseenter tooltip and then mouseenter reference element again', (done) => {
+            instance = new Tooltip(reference, {
+                title: 'foobar',
+                trigger: 'hover',
+            });
+
+            expect(document.querySelector('.tooltip')).toBeNull();
+
+            reference.dispatchEvent(new CustomEvent('mouseenter'));
+            then(() => reference.dispatchEvent(new CustomEvent('mouseleave')));
+            then(() => document.querySelector('.tooltip').dispatchEvent(new CustomEvent('mouseenter')));
+            then(() => document.querySelector('.tooltip').dispatchEvent(new CustomEvent('mouseleave')));
+            then(() => reference.dispatchEvent(new CustomEvent('mouseenter')));
+            then(() => {
+                expect(document.querySelector('.tooltip').style.display).toBe('');
                 done();
             }, 200);
         });
