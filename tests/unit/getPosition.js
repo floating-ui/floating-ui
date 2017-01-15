@@ -1,6 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import getPosition from '../../src/popper/utils/getPosition';
+import getPosition from 'src/popper/utils/getPosition';
 
 describe('utils/getPosition', () => {
   let node;

@@ -1,6 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import getScrollParent from '../../src/popper/utils/getScrollParent';
+import getScrollParent from 'src/popper/utils/getScrollParent';
 
 describe('utils/getOffsetParent', () => {
   let node;

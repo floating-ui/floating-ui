@@ -1,4 +1,4 @@
-import Popper from '../../src/popper/index.js';
+import Popper from 'src/popper/index.js';
 import getOppositePlacement from '../../src/popper/utils/getOppositePlacement';
 
 // Utils

@@ -72,6 +72,7 @@ module.exports = function(config) {
                 plugins: [
                     ['module-alias', [
                         { src: './src/popper/index.js', expose: 'popper.js' },
+                        { src: './src', expose: 'src' },
                     ]],
                 ],
             })],

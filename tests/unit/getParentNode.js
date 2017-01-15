@@ -1,6 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import getParentNode from '../../src/popper/utils/getParentNode';
+import getParentNode from 'src/popper/utils/getParentNode';
 
 describe('utils/getParentNode', () => {
   let node;

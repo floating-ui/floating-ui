@@ -1,6 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import getClientRect from '../../src/popper/utils/getClientRect';
+import getClientRect from 'src/popper/utils/getClientRect';
 
 describe('utils/getClientRect', () => {
   it('should calculate right and bottom', () => {

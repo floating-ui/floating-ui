@@ -1,6 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import isFixed from '../../src/popper/utils/isFixed';
+import isFixed from 'src/popper/utils/isFixed';
 
 describe('utils/isFixed', () => {
   let node;

@@ -1,10 +1,9 @@
+import Tooltip from 'src/tooltip/index.js';
 import '../setup.js';
 import then from '../utils/then.js';
 import '../utils/customEventPolyfill.js';
 
 const jasmineWrapper = document.getElementById('jasmineWrapper');
-
-import Tooltip from '../../src/tooltip/index.js';
 
 let reference;
 let instance;
