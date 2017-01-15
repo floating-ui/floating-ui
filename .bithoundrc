@@ -1,6 +1,8 @@
-"dependencies": {
-    "mute": [
-        "jsdoc-to-markdown",
-        "babel"
-    ]
+{
+    "dependencies": {
+        "mute": [
+            "jsdoc-to-markdown",
+            "babel"
+        ]
+    }
 }
