@@ -1,5 +1,4 @@
 import getClientRect from '../utils/getClientRect';
-import getOppositePlacement from '../utils/getOppositePlacement';
 import getOffsetParent from '../utils/getOffsetParent';
 import getBoundaries from '../utils/getBoundaries';
 
@@ -34,7 +33,7 @@ export default function preventOverflow(data, options) {
     const check = {
         primary(placement) {
             let value = popper[placement];
-            if (popper[placement] < boundaries[placement] && !shouldOverflowBoundary(data, options, placement)) {
+            if (popper[placement] < boundaries[placement] && !options.escapeWithReference) {
                 value = Math.max(popper[placement], boundaries[placement]);
             }
             return { [placement]: value };
@@ -42,7 +41,7 @@ export default function preventOverflow(data, options) {
         secondary(placement) {
             const mainSide = placement === 'right' ? 'left' : 'top';
             let value = popper[mainSide];
-            if (popper[placement] > boundaries[placement] && !shouldOverflowBoundary(data, options, placement)) {
+            if (popper[placement] > boundaries[placement] && !options.escapeWithReference) {
                 value = Math.min(popper[mainSide], boundaries[placement] - (placement === 'right' ? popper.width : popper.height));
             }
             return { [mainSide]: value };
@@ -57,38 +56,4 @@ export default function preventOverflow(data, options) {
     data.offsets.popper = popper;
 
     return data;
-}
-
-/**
- * Determine if the popper should overflow a boundary edge to stay together with the reference.
- */
-function shouldOverflowBoundary(data, options, overflowDirection) {
-    if (!options.escapeWithReference) {
-        return false;
-    }
-
-    if (data.flipped && isSameAxis(data.originalPlacement, overflowDirection)) {
-        return true;
-    }
-
-    if (!isSameAxis(data.originalPlacement, overflowDirection)) {
-        return true;
-    }
-
-    return true;
-}
-
-/**
- * Determine if two placement values are on the same axis.
- */
-function isSameAxis(a, b) {
-    // placement syntax:
-    //
-    //     ( "top" | "right" | "bottom" | "left" ) ( "-start" | "" | "-end" )
-    //     |------------- Direction -------------|
-    //
-    const aDirection = a.split('-')[0];
-    const bDirection = b.split('-')[0];
-
-    return aDirection === bDirection || aDirection === getOppositePlacement(b);
 }
