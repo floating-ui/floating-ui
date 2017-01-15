@@ -4,5 +4,12 @@
             "jsdoc-to-markdown",
             "babel"
         ]
-    }
+    },
+    "ignore": [
+        "**/docs/**",
+        "**/scripts/**"
+    ],
+    "test": [
+        "**/tests/**"
+    ]
 }
