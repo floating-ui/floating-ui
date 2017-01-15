@@ -1,0 +1,6 @@
+"dependencies": {
+    "mute": [
+        "jsdoc-to-markdown",
+        "babel"
+    ]
+}
