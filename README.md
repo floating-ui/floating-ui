@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" /></a>
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" /></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" /></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" /></a>
     <br />
     <a href="https://codeclimate.com/github/FezVrasta/popper.js"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/gpa.svg" /></a>
     <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" /></a>
