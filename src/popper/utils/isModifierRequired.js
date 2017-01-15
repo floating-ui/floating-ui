@@ -11,6 +11,6 @@ export default function isModifierRequired(modifiers, requestingName, requestedN
     const requesting = find(modifiers, ({ name }) => name === requestingName);
 
     return !!requesting && modifiers.some((modifier) => {
-      return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
+        return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
     });
 }
