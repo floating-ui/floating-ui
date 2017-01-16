@@ -1,4 +1,4 @@
-import isNative from '../../src/popper/utils/isNative';
+import isNative from 'src/popper/utils/isNative';
 
 describe('utils/isNative', () => {
     it('should return true for Chrome native MutationObserver', () => {

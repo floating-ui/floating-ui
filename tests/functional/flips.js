@@ -1,4 +1,4 @@
-import Popper from '../../src/popper/index.js';
+import Popper from 'src/popper/index.js';
 import getOppositePlacement from '../../src/popper/utils/getOppositePlacement';
 
 // Utils
@@ -8,9 +8,9 @@ const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 describe('[flipping]', () => {
     it('should flip from top to bottom', (done) => {
-        var ref = appendNewRef(1, 'ref', jasmineWrapper);
+        const ref = appendNewRef(1, 'ref', jasmineWrapper);
         ref.style.marginLeft = '100px';
-        var popper = appendNewPopper(2, 'popper');
+        const popper = appendNewPopper(2, 'popper');
         new Popper(ref, popper, {
             placement: 'top',
             onCreate: (data) => {
@@ -40,19 +40,19 @@ describe('[flipping]', () => {
 
     flippingDefault.forEach((val) => {
         it(`should flip from ${val} to ${getOppositePlacement(val)} if boundariesElement is set`, (done) => {
-            var relative = document.createElement('div');
+            const relative = document.createElement('div');
             relative.style.margin = '100px 300px';
             relative.style.height = '100px';
             relative.style.width = '100px';
             relative.style.background = '#ffff00';
             jasmineWrapper.appendChild(relative);
 
-            var ref = appendNewRef(1, 'ref', relative);
+            const ref = appendNewRef(1, 'ref', relative);
             ref.style.width = '70px';
             ref.style.height = '70px';
             ref.style.background = "green";
             // ref.style.marginTop = '100px';
-            var popper = appendNewPopper(2, 'popper');
+            const popper = appendNewPopper(2, 'popper');
 
             new Popper(ref, popper, {
                 placement: val,
@@ -70,19 +70,19 @@ describe('[flipping]', () => {
         });
 
         it(`should NOT flip if there is no boundariesElement`, (done) => {
-            var relative = document.createElement('div');
+            const relative = document.createElement('div');
             relative.style.margin = '100px 300px';
             relative.style.height = '100px';
             relative.style.width = '100px';
             relative.style.background = '#ffff00';
             jasmineWrapper.appendChild(relative);
 
-            var ref = appendNewRef(1, 'ref', relative);
+            const ref = appendNewRef(1, 'ref', relative);
             ref.style.width = '70px';
             ref.style.height = '70px';
             ref.style.background = "green";
             // ref.style.marginTop = '100px';
-            var popper = appendNewPopper(3, 'popper');
+            const popper = appendNewPopper(3, 'popper');
 
             new Popper(ref, popper, {
                 placement: val,
@@ -102,7 +102,7 @@ describe('[flipping]', () => {
 
     Object.keys(flippingVariations).forEach((val) => {
         it(`(variations) should flip from ${val} to ${flippingVariations[val]} if boundariesElement is set`, (done) => {
-            var relative = document.createElement('div');
+            const relative = document.createElement('div');
             relative.style.margin = '100px 300px';
             relative.style.height = '300px';
             relative.style.width = '300px';
@@ -110,13 +110,13 @@ describe('[flipping]', () => {
             relative.style.position = 'relative';
             jasmineWrapper.appendChild(relative);
 
-            var ref = appendNewRef(1, 'ref', relative);
+            const ref = appendNewRef(1, 'ref', relative);
             ref.style.width = '200px';
             ref.style.height = '200px';
             ref.style.background = "green";
             ref.style.position = "absolute";
             ref.style.zIndex = "10";
-            var valElems = val.split('-');
+            const valElems = val.split('-');
 
             switch(valElems[0]) {
                 case 'top':
@@ -137,7 +137,7 @@ describe('[flipping]', () => {
                     break;
             };
 
-            var popper = appendNewPopper(2, 'popper');
+            const popper = appendNewPopper(2, 'popper');
 
             new Popper(ref, popper, {
                 placement: val,

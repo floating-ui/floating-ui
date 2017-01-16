@@ -5,13 +5,14 @@
 </p>
 
 <p align="center">
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" /></a>
-    <a href="https://travis-ci.org/FezVrasta/popper.js" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" /></a>
+    <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" alt="Build Status"/></a>
+    <a href="https://saucelabs.com/u/popperjs" target="_blank"><img src="https://badges.herokuapp.com/sauce/popperjs?labels=none" alt="SauceLabs Reports"/></a>
+    <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
     <br />
-    <a href="https://codeclimate.com/github/FezVrasta/popper.js"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/gpa.svg" /></a>
-    <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" /></a>
-    <img src="http://img.badgesize.io/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" />
-    <a href="https://gitter.im/FezVrasta/popper.js" target="_blank"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" /></a>
+    <a href="https://www.bithound.io/github/FezVrasta/popper.js"><img src="https://www.bithound.io/github/FezVrasta/popper.js/badges/score.svg" alt="bitHound Overall Score"></a>
+    <a href="https://codeclimate.com/github/FezVrasta/popper.js"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/gpa.svg" alt="Code Climate Score"/></a>
+    <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
+    <a href="https://gitter.im/FezVrasta/popper.js" target="_blank"><img src="https://img.shields.io/gitter/room/nwjs/nw.js.svg" alt="Get support or discuss"/></a>
 </p>
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />

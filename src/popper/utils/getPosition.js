@@ -5,8 +5,8 @@ import isFixed from './isFixed';
  * Helper used to get the position which will be applied to the popper
  * @method
  * @memberof Popper.Utils
- * @param config {HTMLElement} popper element
- * @returns {HTMLElement} reference element
+ * @param {HTMLElement} element - popper element
+ * @returns {String} position
  */
 export default function getPosition(element) {
     const container = getOffsetParent(element);

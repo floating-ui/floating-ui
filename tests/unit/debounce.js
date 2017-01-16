@@ -1,5 +1,5 @@
-import { microtaskDebounce, taskDebounce } from '../../src/popper/utils/debounce';
-import isNative from '../../src/popper/utils/isNative';
+import { microtaskDebounce, taskDebounce } from 'src/popper/utils/debounce';
+import isNative from 'src/popper/utils/isNative';
 const microTasksAvailable = isNative(window.MutationObserver);
 
 describe('utils/debounce', () => {

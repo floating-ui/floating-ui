@@ -1,4 +1,4 @@
-var wrapper = document.createElement('div');
+const wrapper = document.createElement('div');
 wrapper.id = 'jasmineWrapper';
 document.body.appendChild(wrapper);
 

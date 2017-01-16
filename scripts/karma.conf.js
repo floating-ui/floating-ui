@@ -70,9 +70,12 @@ module.exports = function(config) {
                     'stage-2',
                 ],
                 plugins: [
-                    ['module-alias', [
-                        { src: './src/popper/index.js', expose: 'popper.js' },
-                    ]],
+                    ['module-resolver', {
+                        alias: {
+                            'popper.js': './src/popper/index.js',
+                            'src': './src',
+                        },
+                    }],
                 ],
             })],
         },
