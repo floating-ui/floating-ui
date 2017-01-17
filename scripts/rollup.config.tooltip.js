@@ -1,4 +1,3 @@
-import path from 'path';
 import base from './rollup.config.base.js';
 
 const root = `${__dirname}/..`;
@@ -9,8 +8,8 @@ export default Object.assign(base, {
     moduleName: 'Tooltip',
     sourceMapFile: `${root}/dist/tooltip.js.map`,
     banner: require('./addTooltipHeader.js')(),
-    external: [path.resolve(root, 'src/popper/index.js')],
+    external: ['popper.js'],
     globals: {
-        [path.resolve(root, 'src/popper/index.js')]: 'Popper',
+        'popper.js': 'Popper',
     },
 });
