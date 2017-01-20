@@ -108,7 +108,7 @@ const DEFAULTS = {
  *      of the defined boundaries (except if `keepTogether` is enabled)
  *
  * @param {Object} options.modifiers.inner - Inner modifier configuration
- * @param {Number} options.modifiers.innner.enabled=false
+ * @param {Number} options.modifiers.inner.enabled=false
  *      Set to `true` to make the popper flow toward the inner of the reference element.
  *
  * @param {Number} options.modifiers.flip.padding=5
