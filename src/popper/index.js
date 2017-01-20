@@ -266,7 +266,7 @@ export default class Popper {
 
     /**
      * Schedule an update, it will run on the next UI update available
-     * @method
+     * @method scheduleUpdate
      * @memberof Popper
      */
     scheduleUpdate = () => requestAnimationFrame(this.update);
