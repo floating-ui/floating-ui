@@ -490,7 +490,6 @@ describe('[core]', () => {
         const [ reference, popper ] = nodes[0].children;
         attachElements(nodes);
 
-
         new Popper(reference, popper, {
             placement: 'top',
             onCreate: (data) => {
@@ -504,12 +503,12 @@ describe('[core]', () => {
     });
 
     it('inits a popper and destroy it using its callback', (done) => {
-        const reference = appendNewRef(1);
-        const popper    = appendNewPopper(2);
+        nodes = createElements([ {...simpleRef}, {...arrowPopper}]);
+        const [ popper, reference ] = nodes;
+        attachElements(nodes);
 
         new Popper(reference, popper, {
             onCreate: (data) => {
-                data.instance.destroy();
                 expect(popper.style.top).toBe('');
                 done();
             },
@@ -517,10 +516,17 @@ describe('[core]', () => {
     });
 
     it('inits a popper with an empty form as parent, then auto remove it on destroy', (done) => {
-        const form      = document.createElement('form');
-        const reference = appendNewRef(1, 'ref', form);
-        const popper    = appendNewPopper(2, 'test', form);
-        jasmineWrapper.appendChild(form);
+        nodes = createElements([
+            {
+                node: 'form',
+                children: [
+                    {...simpleRef},
+                    {...arrowPopper},
+                ]
+            }
+        ]);
+        const [ reference, popper ] = nodes[0].children;
+        attachElements(nodes);
 
         new Popper(reference, popper, {
             removeOnDestroy: true,
@@ -535,12 +541,18 @@ describe('[core]', () => {
     });
 
     it('inits a popper with a not empty form as parent, then auto remove it on destroy', (done) => {
-        const form   = document.createElement('form');
-        const input  = document.createElement('input');
-        const popper = appendNewPopper(2, 'test', form);
-        form.appendChild(input);
-        const reference = appendNewRef(1, 'ref', form);
-        jasmineWrapper.appendChild(form);
+        nodes = createElements([
+            {
+                node: 'form',
+                children: [
+                    {...simpleRef},
+                    {...arrowPopper},
+                    { node: 'input' }
+                ]
+            }
+        ]);
+        const [ reference, popper ] = nodes[0].children;
+        attachElements(nodes);
 
         new Popper(reference, popper, {
             removeOnDestroy: true,
@@ -555,8 +567,9 @@ describe('[core]', () => {
     });
 
     it('inits a popper and make sure its position is correct on init', (done) => {
-        const reference = appendNewRef(1);
-        const popper = appendNewPopper(2, 'popper');
+        nodes = createElements([ {...simpleRef}, {...arrowPopper}]);
+        const [ popper, reference ] = nodes;
+        attachElements(nodes);
 
         new Popper(reference, popper, {
             placement: 'right',
@@ -570,65 +583,65 @@ describe('[core]', () => {
     });
 
     it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', (done) => {
-        const relative = document.createElement('div');
-        relative.style.position = 'relative';
-        relative.style.margin = '20px';
-        relative.style.height = '200vh';
-        relative.style.paddingTop = '100px';
-        relative.style.backgroundColor = 'yellow';
-        jasmineWrapper.appendChild(relative);
+        nodes = createElements([
+            {
+                attrs: { id: 'relative' },
+                styles: { margin: '20px', height: '200vh', position: 'relative', paddingTop: '100px', backgroundColor: 'yellow' },
+                children: [
+                    {
+                        attrs: { id: 'scrolling' },
+                        styles: {  width: '100%', height: '100vh', overflow: 'auto', backgroundColor: 'green' },
+                        children: [
+                            { attrs: { id: 'superHigh' }, styles: {  width: '1px', height: '300vh', float: 'right' } },
+                            {...simpleRef, styles: { width: '100px', height: '100px', marginTop: '100px' }},
+                            {...arrowPopper},
+                        ]
+                    }
+                ]
+            }
+        ]);
+
+        attachElements(nodes);
+        const relative = nodes[0];
+        const scrolling = relative.querySelector('#scrolling');
+        const reference = relative.querySelector('#simpleRef');
+        const popper = relative.querySelector('#arrowPopper');
+
+        simulateScroll(scrolling, { scrollTop:  100 });
         simulateScroll(document.body, { scrollTop: 100 });
 
-        const scrolling = document.createElement('div');
-        scrolling.style.width = '100%';
-        scrolling.style.height = '100vh';
-        scrolling.style.overflow = 'auto';
-        scrolling.style.backgroundColor = 'green';
-        relative.appendChild(scrolling);
-
-        const superHigh = document.createElement('div');
-        superHigh.style.width = '1px';
-        superHigh.style.float = 'right';
-        superHigh.style.height = '300vh';
-        scrolling.appendChild(superHigh);
-
-        simulateScroll(scrolling, { scrollTop: 100 });
-
-        const ref = appendNewRef(1, 'ref', scrolling);
-        ref.style.width = '100px';
-        ref.style.height = '100px';
-        ref.style.marginTop = '100px';
-        const popper = appendNewPopper(2, 'popper', scrolling);
-
-        new Popper(ref, popper, {
+        new Popper(reference, popper, {
             placement: 'right-start',
             onCreate: (data) => {
-                expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
-                expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
+                expect(getRect(popper).top).toBeApprox(getRect(reference).top + 5); // 5 is the boundaries margin
+                expect(getRect(popper).left - arrowSize).toBeApprox(getRect(reference).right);
 
-                data.instance.destroy();
+                simulateScroll(document.body, { scrollTop: 0 });
                 done();
             },
         });
     });
 
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', (done) => {
-        const relative = document.createElement('div');
-        relative.style.position = 'relative';
-        relative.style.margin = '20px';
-        relative.style.paddingTop = '100px';
-        relative.style.backgroundColor = 'yellow';
-        jasmineWrapper.appendChild(relative);
+        nodes = createElements([
+            {
+                attrs: { id: 'relative' },
+                styles: { margin: '20px', position: 'relative', paddingTop: '100px', backgroundColor: 'yellow' },
+                children: [
+                    {...simpleRef, styles: { width: '100px', height: '100px', marginTop: '100px', marginBottom: '200px' }},
+                    {...arrowPopper},
+                ]
+            }
+        ]);
+
+        attachElements(nodes);
+        const relative = nodes[0];
+        const scrolling = relative.querySelector('#scrolling');
+        const reference = relative.querySelector('#simpleRef');
+        const popper = relative.querySelector('#arrowPopper');
         simulateScroll(document.body, { scrollTop: 100 });
 
-        const ref = appendNewRef(1, 'ref', relative);
-        ref.style.width = '100px';
-        ref.style.height = '100px';
-        ref.style.marginTop = '2000px';
-        ref.style.marginBottom = '200px';
-        const popper = appendNewPopper(2, 'popper', relative);
-
-        new Popper(ref, popper,{
+        new Popper(reference, popper,{
             placement: 'bottom',
             modifiers: {
                 flip: {
@@ -636,20 +649,24 @@ describe('[core]', () => {
                 }
             },
             onCreate: () => {
-                expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
+                expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(reference).top);
                 simulateScroll(document.body, { scrollTop:  3000 });
             },
             onUpdate: (data) => {
-                expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-                data.instance.destroy();
+                expect(getRect(popper).top - arrowSize).toBeApprox(getRect(reference).bottom);
+                simulateScroll(document.body, { scrollTop: 0 });
                 done();
             },
         });
     });
 
     it('inits a popper with a custom modifier that should hide it', (done) => {
-        const reference = appendNewRef(1);
-        const popper    = appendNewPopper(2);
+        nodes = createElements([
+            {...simpleRef},
+            {...arrowPopper},
+        ]);
+        const [ reference, popper ] = nodes[0].children;
+        attachElements(nodes);
 
         function hidePopper(data) {
             data.styles.display = 'none';
@@ -663,15 +680,18 @@ describe('[core]', () => {
             },
             onCreate: (data) => {
                 expect(popper.style.display).toBe('none');
-                data.instance.destroy();
                 done();
             },
         });
     });
 
     it('inits a popper with a custom modifier that set its top to 3px', (done) => {
-        const reference = appendNewRef(1);
-        const popper    = appendNewPopper(2);
+        nodes = createElements([
+            {...simpleRef},
+            {...arrowPopper},
+        ]);
+        const [ reference, popper ] = nodes[0].children;
+        attachElements(nodes);
 
         function movePopper(data) {
             data.styles.top = '3px';
