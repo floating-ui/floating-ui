@@ -7,7 +7,7 @@
  * @argument value
  * @returns index or -1
  */
-export default function findIndex(arr, check) {
+export default function find(arr, check) {
     // use native find if supported
     if (Array.prototype.find) {
         return arr.find(check);

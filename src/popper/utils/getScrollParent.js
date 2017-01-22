@@ -6,7 +6,7 @@ import getParentNode from './getParentNode';
  * @method
  * @memberof Popper.Utils
  * @argument {Element} element
- * @returns {Element} offset parent
+ * @returns {Element} scroll parent
  */
 export default function getScrollParent(element) {
     // Return body, `getScroll` will take care to get the correct `scrollTop` from it

@@ -54,8 +54,7 @@
   ],
   "homepage": "https://popper.js.org",
   "devDependencies": {
-    "babel": "^6.5.2",
-    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.0",
     "babel-plugin-external-helpers": "^6.8.0",
     "babel-plugin-istanbul": "^3.1.2",

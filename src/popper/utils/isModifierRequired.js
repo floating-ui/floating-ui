@@ -5,6 +5,9 @@ import find from './find';
  * It checks if the needed modifier is listed and enabled.
  * @method
  * @memberof Popper.Utils
+ * @param {Array} modifiers - list of modifiers
+ * @param {String} requestingName - name of requesting modifier
+ * @param {String} requestedName - name of requested modifier
  * @returns {Boolean}
  */
 export default function isModifierRequired(modifiers, requestingName, requestedName) {

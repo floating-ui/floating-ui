@@ -45,29 +45,30 @@ needed by the library.</p>
             * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
             * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-            * [.getPosition(config)](#Popper.Utils.getPosition) ⇒ <code>HTMLElement</code>
+            * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
             * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
             * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
             * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
             * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
             * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
-            * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
+            * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
             * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
             * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
             * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
             * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
-            * [.getPopperOffsets(popper, reference)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
+            * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
             * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
             * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
             * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
             * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
-            * [.isModifierRequired()](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
+            * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
             * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
             * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
             * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
             * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
             * [.setStyles(element, styles)](#Popper.Utils.setStyles)
             * [.getOppositeVariation(placement)](#Popper.Utils.getOppositeVariation) ⇒ <code>String</code>
+        * [.scheduleUpdate()](#Popper.scheduleUpdate)
 
 <a name="new_Popper_new"></a>
 
@@ -143,23 +144,23 @@ unless you call 'update' method manually.
     * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
     * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-    * [.getPosition(config)](#Popper.Utils.getPosition) ⇒ <code>HTMLElement</code>
+    * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
     * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
     * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
-    * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
+    * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
     * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
     * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
     * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
     * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
-    * [.getPopperOffsets(popper, reference)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
+    * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
     * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
     * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
     * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
     * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
-    * [.isModifierRequired()](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
+    * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
     * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
     * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
     * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
@@ -209,7 +210,7 @@ Returns the parentNode or the host of the element
 Returns the scrolling parent of the given element
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Element</code> - offset parent  
+**Returns**: <code>Element</code> - scroll parent  
 
 | Param | Type |
 | --- | --- |
@@ -242,15 +243,15 @@ Check if the given element is fixed or is inside a fixed parent
 
 <a name="Popper.Utils.getPosition"></a>
 
-#### Utils.getPosition(config) ⇒ <code>HTMLElement</code>
+#### Utils.getPosition(element) ⇒ <code>String</code>
 Helper used to get the position which will be applied to the popper
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>HTMLElement</code> - reference element  
+**Returns**: <code>String</code> - position  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>HTMLElement</code> | popper element |
+| element | <code>HTMLElement</code> | popper element |
 
 <a name="Popper.Utils.getBoundingClientRect"></a>
 
@@ -317,9 +318,9 @@ but called in the minimum time possible.
 | --- | --- |
 | fn | <code>function</code> | 
 
-<a name="Popper.Utils.findIndex$1"></a>
+<a name="Popper.Utils.find"></a>
 
-#### Utils.findIndex$1(arr, prop, value) ⇒
+#### Utils.find(arr, prop, value) ⇒
 Mimics the `find` method of Array
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -383,16 +384,18 @@ Get the opposite placement of the given one/
 
 <a name="Popper.Utils.getPopperOffsets"></a>
 
-#### Utils.getPopperOffsets(popper, reference) ⇒ <code>Object</code>
+#### Utils.getPopperOffsets(position, popper, referenceOffsets, placement) ⇒ <code>Object</code>
 Get offsets to the popper
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - An object containing the offsets which will be applied to the popper  
+**Returns**: <code>Object</code> - popperOffsets - An object containing the offsets which will be applied to the popper  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| popper | <code>Element</code> | the popper element |
-| reference | <code>Element</code> | the reference element (the popper will be relative to this) |
+| position | <code>Object</code> | CSS position the Popper will get applied |
+| popper | <code>HTMLElement</code> | the popper element |
+| referenceOffsets | <code>Object</code> | the reference offsets (the popper will be relative to this) |
+| placement | <code>String</code> | one of the valid placement options |
 
 <a name="Popper.Utils.getReferenceOffsets"></a>
 
@@ -440,11 +443,18 @@ Helper used to know if the given modifier is enabled.
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 <a name="Popper.Utils.isModifierRequired"></a>
 
-#### Utils.isModifierRequired() ⇒ <code>Boolean</code>
+#### Utils.isModifierRequired(modifiers, requestingName, requestedName) ⇒ <code>Boolean</code>
 Helper used to know if the given modifier depends from another one.
 It checks if the needed modifier is listed and enabled.
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modifiers | <code>Array</code> | list of modifiers |
+| requestingName | <code>String</code> | name of requesting modifier |
+| requestedName | <code>String</code> | name of requested modifier |
+
 <a name="Popper.Utils.isNumeric"></a>
 
 #### Utils.isNumeric(input) ⇒ <code>Boolean</code>
@@ -517,6 +527,12 @@ Get the opposite placement variation of the given one/
 | --- | --- | --- |
 | placement | <code>String</code> | variation |
 
+<a name="Popper.scheduleUpdate"></a>
+
+### Popper.scheduleUpdate()
+Schedule an update, it will run on the next UI update available
+
+**Kind**: static method of <code>[Popper](#Popper)</code>  
 <a name="dataObject"></a>
 
 ## dataObject
@@ -594,8 +610,8 @@ Apply the computed styles to the popper element
 <a name="Modifiers.arrow"></a>
 
 ### Modifiers.arrow(data, options) ⇒ <code>Object</code>
-Modifier used to move the arrowEls on the edge of the popper to make sure them are always between the popper and the reference element
-It will use the CSS outer size of the arrowEl element to know how many pixels of conjuction are needed
+Modifier used to move the arrowElements on the edge of the popper to make sure them are always between the popper and the reference element
+It will use the CSS outer size of the arrowElement element to know how many pixels of conjuction are needed
 
 **Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
 **Returns**: <code>Object</code> - The data object, properly modified  

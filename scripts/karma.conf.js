@@ -64,6 +64,9 @@ module.exports = function(config) {
             globals: {
                 'chai': 'chai',
             },
+            external: [
+                'chai',
+            ],
             plugins: [babel({
                 presets: [
                     ['es2015', { modules: false }],

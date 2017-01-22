@@ -5,11 +5,13 @@ import getOppositePlacement from './getOppositePlacement';
  * Get offsets to the popper
  * @method
  * @memberof Popper.Utils
- * @param {Element} popper - the popper element
- * @param {Element} reference - the reference element (the popper will be relative to this)
- * @returns {Object} An object containing the offsets which will be applied to the popper
+ * @param {Object} position - CSS position the Popper will get applied
+ * @param {HTMLElement} popper - the popper element
+ * @param {Object} referenceOffsets - the reference offsets (the popper will be relative to this)
+ * @param {String} placement - one of the valid placement options
+ * @returns {Object} popperOffsets - An object containing the offsets which will be applied to the popper
  */
-export default function getPopperOffsets(state, popper, referenceOffsets, placement) {
+export default function getPopperOffsets(position, popper, referenceOffsets, placement) {
     placement = placement.split('-')[0];
 
     // Get popper node sizes
@@ -17,7 +19,7 @@ export default function getPopperOffsets(state, popper, referenceOffsets, placem
 
     // Add position, width and height to our offsets object
     const popperOffsets = {
-        position: state.position,
+        position,
         width: popperRect.width,
         height: popperRect.height,
     };
