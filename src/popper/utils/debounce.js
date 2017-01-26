@@ -1,9 +1,10 @@
 import isNative from './isNative';
 
+const isBrowser = typeof window !== 'undefined';
 const longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
 let timeoutDuration = 0;
 for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
-    if (navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
+    if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
         timeoutDuration = 1;
         break;
     }
@@ -50,7 +51,7 @@ export function taskDebounce(fn) {
 // these rely on Mutation Events which only occur when an element is connected
 // to the DOM. The algorithm used in this module does not use a connected element,
 // and so we must ensure that a *native* MutationObserver is available.
-const supportsNativeMutationObserver = isNative(window.MutationObserver);
+const supportsNativeMutationObserver = isBrowser && isNative(window.MutationObserver);
 
 /**
 * Create a debounced version of a method, that's asynchronously deferred
