@@ -32,7 +32,7 @@ to make it possible to position it near a given reference element.
 
 The engine is completely modular and most of its features are implemented as **modifiers**
 (similar to middlewares or plugins).  
-The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to [SauceLabs](https://saucelabs.com/) and [TravisCI](travis-ci.org).
+The whole code base is written in ES2015 and its features are automatically tested on real browsers thank to [SauceLabs](https://saucelabs.com/) and [TravisCI](travis-ci.org).
 
 Popper.js has zero dependencies. No jQuery, no LoDash, nothing.  
 It's used by big companies like [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
