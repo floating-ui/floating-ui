@@ -59,7 +59,7 @@ needed by the library.</p>
             * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
             * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
             * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
-            * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
+            * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
             * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
             * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
             * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
@@ -99,7 +99,7 @@ Create a new Popper.js instance
 | options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
 | options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
-| options.modifiers.innner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
+| options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
 | options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
 | options.onCreate | <code>[createCallback](#createCallback)</code> |  | onCreate callback      Function called after the Popper has been instantiated. |
 | options.onUpdate | <code>[updateCallback](#updateCallback)</code> |  | onUpdate callback      Function called on subsequent updates of Popper. |
@@ -158,7 +158,7 @@ unless you call 'update' method manually.
     * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
     * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
     * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
-    * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
+    * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
     * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
     * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
     * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
@@ -425,7 +425,7 @@ Get the prefixed supported property name
 
 <a name="Popper.Utils.isFunction"></a>
 
-#### Utils.isFunction(element) ⇒ <code>Boolean</code>
+#### Utils.isFunction(functionToCheck) ⇒ <code>Boolean</code>
 Check if the given variable is a function
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -433,7 +433,7 @@ Check if the given variable is a function
 
 | Param | Type | Description |
 | --- | --- | --- |
-| element | <code>Element</code> | Element to check |
+| functionToCheck | <code>\*</code> | variable to check |
 
 <a name="Popper.Utils.isModifierEnabled"></a>
 
