@@ -6,11 +6,6 @@
 #===============================
 dist/tooltip*
 
-# Don't exclude this file because it's used when the library is imported
-# into an ES6 source that gets transpiled by Babel
-#=======================================================================
-# .babelrc
-
 # Exclude everything else
 #========================
 .github
@@ -24,3 +19,4 @@ tests
 .jsdoc
 .travis.yml
 popperjs.png
+.babelrc
