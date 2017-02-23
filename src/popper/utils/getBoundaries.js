@@ -1,9 +1,9 @@
 import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
-import getOffsetRect from './getOffsetRect';
 import getPosition from './getPosition';
 import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
+import getOffsetRectRelativeToViewport from './getOffsetRectRelativeToViewport';
 import getTotalScroll from './getTotalScroll';
 import isFixed from './isFixed';
 import getWindowSizes from './getWindowSizes';
@@ -24,7 +24,7 @@ export default function getBoundaries(popper, padding, boundariesElement) {
 
     // Handle viewport case
     if (boundariesElement === 'viewport') {
-        const { left, top } = getOffsetRect(offsetParent);
+        const { left, top } = getOffsetRectRelativeToViewport(offsetParent);
         const { clientWidth: width, clientHeight: height } = window.document.documentElement;
 
         if (getPosition(popper) === 'fixed') {
