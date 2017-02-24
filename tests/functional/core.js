@@ -632,6 +632,45 @@ describe('[core]', () => {
         });
     });
 
+    it('inits a popper and its reference element inside of an offsetParent, which is inside of an offsetParent', (done) => {
+        const outterWrapper = document.createElement('div');
+        outterWrapper.style.position = 'relative';
+        outterWrapper.style.left = '90vw';
+        outterWrapper.style.backgroundColor = 'yellow';
+        jasmineWrapper.appendChild(outterWrapper);
+
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.left = '5vw';
+        wrapper.style.backgroundColor = 'green';
+        outterWrapper.appendChild(wrapper);
+
+        const ref = appendNewRef(1, 'ref', wrapper);
+        ref.style.width = '100px';
+        ref.style.height = '100px';
+        ref.style.marginTop = '100px';
+        wrapper.appendChild(ref);
+
+        const popper = document.createElement('div');
+        popper.style.width = '100px';
+        popper.style.height = '100px';
+        wrapper.appendChild(popper);
+
+        new Popper(ref, popper, {
+            modifiers: {
+                preventOverflow: {
+                    boundariesElement: 'viewport',
+                }
+            },
+            onCreate: (data) => {
+                expect(getRect(popper).right).toBeApprox(window.innerWidth - 5); // 5 is the boundaries margin
+
+                data.instance.destroy();
+                done();
+            },
+        });
+    });
+
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', (done) => {
         const relative = document.createElement('div');
         relative.style.position = 'relative';
