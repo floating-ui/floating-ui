@@ -73,9 +73,9 @@ Popper.js is available on the following package managers and CDNs:
 |:-------|:---------------------------------------------------------------------------------|
 | npm    | `npm install popper.js --save`                                                   |
 | yarn   | `yarn add popper.js`                                                             |
-| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save`                     |
+| Bower  | `bower install popper.js --save`                                                 |
 | unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
-| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
+| cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
 Tooltip.js as well:
 
@@ -83,9 +83,9 @@ Tooltip.js as well:
 |:-------|:---------------------------------------------------------------------------------|
 | npm    | `npm install tooltip.js --save`                                                  |
 | yarn   | `yarn add tooltip.js`                                                            |
-| Bower  | `bower install popper.js=https://unpkg.com/tooltip.js --save`                    |
+| Bower  | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                   |
 | unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                   |
-| CDNJS  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
+| cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
 ## Usage
 
