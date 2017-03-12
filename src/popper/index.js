@@ -92,7 +92,7 @@ const DEFAULTS = {
  * @param {String|HTMLElement} options.modifiers.preventOverflow.boundariesElement='scrollParent'
  *      Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element.
  * @param {Number} options.modifiers.preventOverflow.padding=5
- *      Amount of pixel used to define a minimum distance between the boundaries and the popper
+ *      Amount of pixels used to define a minimum distance between the boundaries and the popper
  *      this makes sure the popper has always a little padding between the edges of its container.
  *
  * @param {Object} options.modifiers.flip - Flip modifier configuration
@@ -112,8 +112,9 @@ const DEFAULTS = {
  *      Set to `true` to make the popper flow toward the inner of the reference element.
  *
  * @param {Number} options.modifiers.flip.padding=5
- *      Amount of pixel used to define a minimum distance between the boundaries and the popper
- *      this makes sure the popper has always a little padding between the edges of its container.
+ *      Amount of pixels used to define a minimum distance between the boundaries and the popper
+ *      this makes sure the popper will flip before it touches the edge of the boundaries,
+ *      making it have always a little padding between the edges of its container.
  *
  * @param {createCallback} options.onCreate - onCreate callback
  *      Function called after the Popper has been instantiated.
