@@ -43,11 +43,11 @@ needed by the library.</p>
             * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
             * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
             * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
             * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
             * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
             * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
+            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
             * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
             * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
@@ -94,13 +94,13 @@ Create a new Popper.js instance
 | options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
 | [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
 | options.modifiers.preventOverflow.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
-| options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
+| options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
 | options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
 | options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
 | options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
 | options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
-| options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
+| options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper will flip before it touches the edge of the boundaries,      making it have always a little padding between the edges of its container. |
 | options.onCreate | <code>[createCallback](#createCallback)</code> |  | onCreate callback      Function called after the Popper has been instantiated. |
 | options.onUpdate | <code>[updateCallback](#updateCallback)</code> |  | onUpdate callback      Function called on subsequent updates of Popper. |
 
@@ -142,11 +142,11 @@ unless you call 'update' method manually.
     * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
     * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
     * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
     * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
     * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
+    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
@@ -216,18 +216,6 @@ Returns the scrolling parent of the given element
 | --- | --- |
 | element | <code>Element</code> | 
 
-<a name="Popper.Utils.getOffsetRect"></a>
-
-#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
-Get the position of the given element, relative to its offset parent
-
-**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
-
-| Param | Type |
-| --- | --- |
-| element | <code>Element</code> | 
-
 <a name="Popper.Utils.isFixed"></a>
 
 #### Utils.isFixed(element, customContainer) ⇒ <code>Boolean</code>
@@ -277,6 +265,18 @@ Given an element and one of its parents, return the offset
 | --- | --- |
 | element | <code>HTMLElement</code> | 
 | parent | <code>HTMLElement</code> | 
+
+<a name="Popper.Utils.getOffsetRect"></a>
+
+#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
+Get the position of the given element, relative to its offset parent
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
+
+| Param | Type |
+| --- | --- |
+| element | <code>Element</code> | 
 
 <a name="Popper.Utils.getBoundaries"></a>
 
