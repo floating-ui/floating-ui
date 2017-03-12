@@ -1073,4 +1073,33 @@ describe('[core]', () => {
             },
         });
     });
+
+    it('checks that all the scrollable parents have an event listener attached', (done) => {
+        jasmineWrapper.innerHTML = `
+            <div id="s1" style="overflow: scroll; height: 300px; background: red;">
+                <div id="s2" style="overflow: scroll; height: 300px; margin-top: 50px; background: green;">
+                    <div style="overflow: scroll; height: 300px; margin-top: 50px; background: yellow;">
+                        <div id="reference" style="background: pink">popper</div>
+                    </div>
+                </div>
+            </div>
+            <div id="popper" style="background: purple">popper</div>
+        `;
+
+        const reference = document.getElementById('reference');
+        const popper = document.getElementById('popper');
+        const s1 = document.getElementById('s1');
+        const s2 = document.getElementById('s2');
+
+        new Popper(reference, popper, {
+            onCreate() {
+                simulateScroll(s1, { scrollTop:  50 });
+                simulateScroll(s2, { scrollTop:  50 });
+            },
+            onUpdate() {
+                expect(getRect(reference).bottom).toBe(getRect(popper).top);
+                done();
+            },
+        });
+    });
 });

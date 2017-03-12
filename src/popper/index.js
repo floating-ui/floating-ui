@@ -135,6 +135,7 @@ export default class Popper {
         this.state = {
             isDestroyed: false,
             isCreated: false,
+            scrollParents: [],
         };
 
         // get reference and popper elements (allow jQuery wrappers)
