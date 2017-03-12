@@ -261,31 +261,22 @@ export default class Tooltip {
     }
 
     _setEventListeners(reference, events, options) {
-        const directEvents = events.map((event) => {
+        const directEvents = [];
+        const oppositeEvents = [];
+
+        events.forEach((event) => {
             switch(event) {
                 case 'hover':
-                    return 'mouseenter';
+                    directEvents.push('mouseenter');
+                    oppositeEvents.push('mouseleave');
                 case 'focus':
-                    return 'focus';
+                    directEvents.push('focus');
+                    oppositeEvents.push('blur');
                 case 'click':
-                    return 'click';
-                default:
-                    return;
+                    directEvents.push('click');
+                    oppositeEvents.push('click');
             }
         });
-
-        const oppositeEvents = events.map((event) => {
-            switch(event) {
-                case 'hover':
-                    return 'mouseleave';
-                case 'focus':
-                    return 'blur';
-                case 'click':
-                    return 'click';
-                default:
-                    return;
-            }
-        }).filter(event => !!event);
 
         // schedule show tooltip
         directEvents.forEach((event) => {
