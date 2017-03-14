@@ -4,6 +4,7 @@ import getOppositePlacement from '../../src/popper/utils/getOppositePlacement';
 // Utils
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
+import simulateScroll from '../utils/simulateScroll';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 describe('[flipping]', () => {
@@ -161,4 +162,38 @@ describe('[flipping]', () => {
             });
         });
     })
+
+    xit('flips to opposite side when rendered inside a positioned parent', (done) => {
+        const page = document.createElement('div');
+        page.className = 'page';
+        page.style.paddingTop = '110vh'; // Simulates page content
+        page.style.background = 'lightskyblue';
+        jasmineWrapper.appendChild(page);
+
+        const parent = document.createElement('div');
+        parent.className = 'parent';
+        parent.style.position = 'relative'; // Also fails if absolute. Comment out for test to pass.
+        parent.style.background = 'yellow';
+        page.appendChild(parent);
+
+        const ref = appendNewRef(1, 'reference', parent);
+        const popper = appendNewPopper(2, 'popper', parent);
+
+        new Popper(ref, popper, {
+            onCreate: (data) => {
+                simulateScroll(page, { scrollTop: '110vh', delay: 10 });
+
+                const popperRect = popper.getBoundingClientRect();
+                const refRect = ref.getBoundingClientRect();
+                const arrowSize = 5;
+
+                expect(data.flipped).toBe(true);
+                expect(popperRect.bottom + arrowSize).toBeApprox(refRect.top);
+
+                data.instance.destroy();
+                jasmineWrapper.removeChild(page);
+                done();
+            },
+        });
+    });
 });
