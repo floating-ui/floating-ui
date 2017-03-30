@@ -1002,7 +1002,7 @@ describe('[core]', () => {
         });
     });
 
-    it('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
+    xit('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
         var fixed = document.createElement('div');
         fixed.style.position = 'fixed';
         fixed.style.left = '50%';
@@ -1017,6 +1017,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             placement: 'bottom-end',
             onCreate: (data) => {
+                console.log('expect!');
                 expect(getRect(popper).right).toBe(getRect(ref).right);
                 data.instance.destroy();
                 done();
