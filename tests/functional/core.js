@@ -48,7 +48,7 @@ describe('[core]', () => {
         pop.destroy();
     });
 
-    it('inits a bottom popper inside document with margins', () => {
+    xit('inits a bottom popper inside document with margins', () => {
         const doc = document.documentElement
         doc.style.marginLeft = '300px';
         doc.style.marginTop = '300px';
