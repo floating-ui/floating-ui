@@ -1091,7 +1091,7 @@ describe('[core]', () => {
     });
 
     xit('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
-        var fixed = document.createElement('div');
+        const fixed = document.createElement('div');
         fixed.style.position = 'fixed';
         fixed.style.left = '50%';
         fixed.style.top = '20px';
@@ -1099,8 +1099,8 @@ describe('[core]', () => {
         fixed.style.background = 'green';
         jasmineWrapper.appendChild(fixed);
 
-        var popper = appendNewPopper(2, 'popper', fixed);
-        var ref = appendNewRef(1, 'ref', fixed);
+        const popper = appendNewPopper(2, 'popper', fixed);
+        const ref = appendNewRef(1, 'ref', fixed);
 
         new Popper(ref, popper, {
             placement: 'bottom-end',
@@ -1108,7 +1108,7 @@ describe('[core]', () => {
                 console.log('expect!');
                 expect(getRect(popper).right).toBe(getRect(ref).right);
                 data.instance.destroy();
-              
+
                 done();
             },
         });
