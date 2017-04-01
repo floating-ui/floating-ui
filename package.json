@@ -82,7 +82,7 @@
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^3.1.0",
-    "sinon": "^1.17.7",
+    "sinon": "^2.1.0",
     "yargs": "^7.0.2"
   }
 }
