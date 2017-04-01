@@ -1074,6 +1074,30 @@ describe('[core]', () => {
         });
     });
 
+    xit('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
+        var fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.left = '50%';
+        fixed.style.top = '20px';
+        fixed.style.transform = 'translateX(0)';
+        fixed.style.background = 'green';
+        jasmineWrapper.appendChild(fixed);
+
+        var popper = appendNewPopper(2, 'popper', fixed);
+        var ref = appendNewRef(1, 'ref', fixed);
+
+        new Popper(ref, popper, {
+            placement: 'bottom-end',
+            onCreate: (data) => {
+                console.log('expect!');
+                expect(getRect(popper).right).toBe(getRect(ref).right);
+                data.instance.destroy();
+              
+                done();
+            },
+        });
+    });
+
     it('checks that all the scrollable parents have an event listener attached', (done) => {
         jasmineWrapper.innerHTML = `
             <div id="s1" style="overflow: scroll; height: 300px; background: red;">
