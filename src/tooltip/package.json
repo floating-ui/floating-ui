@@ -1,18 +1,18 @@
 {
   "name": "tooltip.js",
-  "version": "1.0.2",
+  "version": "1.0.5",
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "./dist/tooltip.es5.js",
   "jsnext:main": "./dist/tooltip.js",
   "scripts": {
-    "prepublish": "mkdir -p ./dist && cp -R ../../dist/tooltip.* ./dist/",
+    "prepublish": "(cd ../../; npm run build:tooltip) && mkdir -p ./dist && cp -R ../../dist/tooltip.* ./dist/",
     "test": "karma start ../../scripts/karma.conf.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FezVrasta/popper.js.git"
   },
-  "peerDependencies": {
-    "popper.js": "^1.0.0"
+  "dependencies": {
+    "popper.js": "^1.0.2"
   }
 }

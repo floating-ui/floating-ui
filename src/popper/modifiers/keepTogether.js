@@ -15,21 +15,16 @@ export default function keepTogether(data) {
     const reference = data.offsets.reference;
     const placement = data.placement.split('-')[0];
     const floor = Math.floor;
+    const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
+    const side = isVertical ? 'right' : 'bottom';
+    const opSide = isVertical ? 'left' : 'top';
+    const measurement = isVertical ? 'width' : 'height';
 
-    if (['top', 'bottom'].indexOf(placement) !== -1) {
-        if (popper.right < floor(reference.left)) {
-            data.offsets.popper.left = floor(reference.left) - popper.width;
-        }
-        if (popper.left > floor(reference.right)) {
-            data.offsets.popper.left = floor(reference.right);
-        }
-    } else {
-        if (popper.bottom < floor(reference.top)) {
-            data.offsets.popper.top = floor(reference.top) - popper.height;
-        }
-        if (popper.top > floor(reference.bottom)) {
-            data.offsets.popper.top = floor(reference.bottom);
-        }
+    if (popper[side] < floor(reference[opSide])) {
+        data.offsets.popper[opSide] = floor(reference[opSide]) - popper[measurement];
+    }
+    if (popper[opSide] > floor(reference[side])) {
+        data.offsets.popper[opSide] = floor(reference[side]);
     }
 
     return data;

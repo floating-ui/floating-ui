@@ -58,7 +58,7 @@ const DEFAULTS = {
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options
  * @param {String} options.placement=bottom
- *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+ *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
  *      left(-start, -end)`
  *
  * @param {Boolean} options.eventsEnabled=true
@@ -75,7 +75,7 @@ const DEFAULTS = {
  *      List of functions used to modify the data before they are applied to the popper (see source code for default values)
  *
  * @param {Object} options.modifiers.arrow - Arrow modifier configuration
- * @param {HTMLElement|String} options.modifiers.arrow.element='[x-arrow]'
+ * @param {String|HTMLElement} options.modifiers.arrow.element='[x-arrow]'
  *      The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of
  *      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its
  *      reference element.
@@ -89,10 +89,10 @@ const DEFAULTS = {
  * @param {Array} [options.modifiers.preventOverflow.priority=['left', 'right', 'top', 'bottom']]
  *      Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,
  *      this means that the last one will never overflow
- * @param {Number} options.modifiers.preventOverflow.boundariesElement='scrollParent'
+ * @param {String|HTMLElement} options.modifiers.preventOverflow.boundariesElement='scrollParent'
  *      Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element.
  * @param {Number} options.modifiers.preventOverflow.padding=5
- *      Amount of pixel used to define a minimum distance between the boundaries and the popper
+ *      Amount of pixels used to define a minimum distance between the boundaries and the popper
  *      this makes sure the popper has always a little padding between the edges of its container.
  *
  * @param {Object} options.modifiers.flip - Flip modifier configuration
@@ -103,17 +103,18 @@ const DEFAULTS = {
  *      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify
  *      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,
  *      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top)
- * @param {String|Element} options.modifiers.flip.boundariesElement='viewport'
+ * @param {String|HTMLElement} options.modifiers.flip.boundariesElement='viewport'
  *      The element which will define the boundaries of the popper position, the popper will never be placed outside
  *      of the defined boundaries (except if `keepTogether` is enabled)
  *
  * @param {Object} options.modifiers.inner - Inner modifier configuration
- * @param {Number} options.modifiers.innner.enabled=false
+ * @param {Number} options.modifiers.inner.enabled=false
  *      Set to `true` to make the popper flow toward the inner of the reference element.
  *
  * @param {Number} options.modifiers.flip.padding=5
- *      Amount of pixel used to define a minimum distance between the boundaries and the popper
- *      this makes sure the popper has always a little padding between the edges of its container.
+ *      Amount of pixels used to define a minimum distance between the boundaries and the popper
+ *      this makes sure the popper will flip before it touches the edge of the boundaries,
+ *      making it have always a little padding between the edges of its container.
  *
  * @param {createCallback} options.onCreate - onCreate callback
  *      Function called after the Popper has been instantiated.
@@ -135,6 +136,7 @@ export default class Popper {
         this.state = {
             isDestroyed: false,
             isCreated: false,
+            scrollParents: [],
         };
 
         // get reference and popper elements (allow jQuery wrappers)
@@ -266,7 +268,7 @@ export default class Popper {
 
     /**
      * Schedule an update, it will run on the next UI update available
-     * @method
+     * @method scheduleUpdate
      * @memberof Popper
      */
     scheduleUpdate = () => requestAnimationFrame(this.update);
@@ -319,7 +321,7 @@ export default class Popper {
      */
     disableEventListeners() {
         if (this.state.eventsEnabled) {
-            cancelAnimationFrame(this.scheduledUpdate);
+            window.cancelAnimationFrame(this.scheduleUpdate);
             this.state = removeEventListeners(this.reference, this.state);
         }
     }
@@ -334,23 +336,23 @@ export default class Popper {
      * List of accepted placements to use as values of the `placement` option
      * @memberof Popper
      */
-     static placements = [
-         'auto',
-         'auto-start',
-         'auto-end',
-         'top',
-         'top-start',
-         'top-end',
-         'right',
-         'right-start',
-         'right-end',
-         'bottom',
-         'bottom-start',
-         'bottom-end',
-         'left',
-         'left-start',
-         'left-end',
-     ];
+    static placements = [
+        'auto',
+        'auto-start',
+        'auto-end',
+        'top',
+        'top-start',
+        'top-end',
+        'right',
+        'right-start',
+        'right-end',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+        'left',
+        'left-start',
+        'left-end',
+    ];
 
     /**
      * Default Popper.js options

@@ -1,4 +1,5 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
+import getBordersSize from './getBordersSize';
 
 /**
  * Get bounding client rect of given element
@@ -51,8 +52,8 @@ export default function getBoundingClientRect(element) {
     // we make this check conditional for performance reasons
     if (horizScrollbar || vertScrollbar) {
         const styles = getStyleComputedProperty(element);
-        horizScrollbar -= Number(styles.borderLeftWidth.split('px')[0]) + Number(styles.borderRightWidth.split('px')[0]);
-        vertScrollbar -= Number(styles.borderTopWidth.split('px')[0]) + Number(styles.borderBottomWidth.split('px')[0]);
+        horizScrollbar -= getBordersSize(styles, 'x');
+        vertScrollbar -= getBordersSize(styles, 'y');
     }
 
     result.right -= horizScrollbar;

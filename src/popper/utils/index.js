@@ -1,6 +1,7 @@
 import computeAutoPlacement from './computeAutoPlacement';
 import debounce from './debounce';
 import findIndex from './findIndex';
+import getBordersSize from './getBordersSize';
 import getBoundaries from './getBoundaries';
 import getBoundingClientRect from './getBoundingClientRect';
 import getClientRect from './getClientRect';
@@ -18,6 +19,7 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 import getSupportedPropertyName from './getSupportedPropertyName';
 import getTotalScroll from './getTotalScroll';
 import getWindowSizes from './getWindowSizes';
+import includeScroll from './includeScroll';
 import isFixed from './isFixed';
 import isFunction from './isFunction';
 import isModifierEnabled from './isModifierEnabled';
@@ -36,6 +38,7 @@ export default {
     computeAutoPlacement,
     debounce,
     findIndex,
+    getBordersSize,
     getBoundaries,
     getBoundingClientRect,
     getClientRect,
@@ -53,6 +56,7 @@ export default {
     getSupportedPropertyName,
     getTotalScroll,
     getWindowSizes,
+    includeScroll,
     isFixed,
     isFunction,
     isModifierEnabled,

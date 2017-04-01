@@ -1,5 +1,16 @@
 import getScrollParent from './getScrollParent';
 
+function attachToScrollParents(scrollParent, event, callback, scrollParents) {
+    const isBody = scrollParent.nodeName === 'BODY';
+    const target = isBody ? window : scrollParent;
+    target.addEventListener(event, callback, { passive: true });
+
+    if (!isBody) {
+        attachToScrollParents(getScrollParent(target.parentNode), event, callback, scrollParents);
+    }
+    scrollParents.push(target);
+}
+
 /**
  * Setup needed event listeners used to update the popper position
  * @method
@@ -7,15 +18,19 @@ import getScrollParent from './getScrollParent';
  * @private
  */
 export default function setupEventListeners(reference, options, state, updateBound) {
-    // NOTE: 1 DOM access here
+    // Resize event listener on window
     state.updateBound = updateBound;
     window.addEventListener('resize', state.updateBound, { passive: true });
-    let target = getScrollParent(reference);
-    if (target.nodeName === 'BODY') {
-        target = window;
-    }
-    target.addEventListener('scroll', state.updateBound, { passive: true });
-    state.scrollElement = target;
+
+    // Scroll event listener on scroll parents
+    const scrollElement = getScrollParent(reference);
+    attachToScrollParents(
+        scrollElement,
+        'scroll',
+        state.updateBound,
+        state.scrollParents
+    );
+    state.scrollElement = scrollElement;
     state.eventsEnabled = true;
 
     return state;

@@ -22,6 +22,8 @@ These issues are most likely new features or enhancements that would be nice to 
 
 Other issues labelled by `HELP WANTED` should be fixed by the maintainer, but for any reason, he has problems with it and needs help from the community to continue the work on it.
 
+Issues with `NEEDS TEST CASE` need a PR that integrates a test in the test suite to reproduce the bug, this is very useful because it allows other developers to try to fix the bug having a feedback.
+
 When you adopt an issue, please write a comment on it to make sure that multiple people don't work on the same one.
 
 ## Test

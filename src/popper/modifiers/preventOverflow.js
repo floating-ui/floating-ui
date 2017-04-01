@@ -1,5 +1,4 @@
 import getClientRect from '../utils/getClientRect';
-import getOppositePlacement from '../utils/getOppositePlacement';
 import getOffsetParent from '../utils/getOffsetParent';
 import getBoundaries from '../utils/getBoundaries';
 
@@ -32,75 +31,29 @@ export default function preventOverflow(data, options) {
     let popper = getClientRect(data.offsets.popper);
 
     const check = {
-        left() {
-            let left = popper.left;
-            if (popper.left < boundaries.left && !shouldOverflowBoundary(data, options, 'left')) {
-                left = Math.max(popper.left, boundaries.left);
+        primary(placement) {
+            let value = popper[placement];
+            if (popper[placement] < boundaries[placement] && !options.escapeWithReference) {
+                value = Math.max(popper[placement], boundaries[placement]);
             }
-            return { left };
+            return { [placement]: value };
         },
-        right() {
-            let left = popper.left;
-            if (popper.right > boundaries.right && !shouldOverflowBoundary(data, options, 'right')) {
-                left = Math.min(popper.left, boundaries.right - popper.width);
+        secondary(placement) {
+            const mainSide = placement === 'right' ? 'left' : 'top';
+            let value = popper[mainSide];
+            if (popper[placement] > boundaries[placement] && !options.escapeWithReference) {
+                value = Math.min(popper[mainSide], boundaries[placement] - (placement === 'right' ? popper.width : popper.height));
             }
-            return { left };
-        },
-        top() {
-            let top = popper.top;
-            if (popper.top < boundaries.top && !shouldOverflowBoundary(data, options, 'top')) {
-                top = Math.max(popper.top, boundaries.top);
-            }
-            return { top };
-        },
-        bottom() {
-            let top = popper.top;
-            if (popper.bottom > boundaries.bottom && !shouldOverflowBoundary(data, options, 'bottom')) {
-                top = Math.min(popper.top, boundaries.bottom - popper.height);
-            }
-            return { top };
+            return { [mainSide]: value };
         }
-    };
+    }
 
-    order.forEach((direction) => {
-        popper = {...popper, ...check[direction]()};
+    order.forEach((placement) => {
+        const side = ['left', 'top'].indexOf(placement) !== -1 ? 'primary' : 'secondary';
+        popper = {...popper, ...check[side](placement)};
     });
 
     data.offsets.popper = popper;
 
     return data;
-}
-
-/**
- * Determine if the popper should overflow a boundary edge to stay together with the reference.
- */
-function shouldOverflowBoundary(data, options, overflowDirection) {
-    if (!options.escapeWithReference) {
-        return false;
-    }
-
-    if (data.flipped && isSameAxis(data.originalPlacement, overflowDirection)) {
-        return true;
-    }
-
-    if (!isSameAxis(data.originalPlacement, overflowDirection)) {
-        return true;
-    }
-
-    return true;
-}
-
-/**
- * Determine if two placement values are on the same axis.
- */
-function isSameAxis(a, b) {
-    // placement syntax:
-    //
-    //     ( "top" | "right" | "bottom" | "left" ) ( "-start" | "" | "-end" )
-    //     |------------- Direction -------------|
-    //
-    const aDirection = a.split('-')[0];
-    const bDirection = b.split('-')[0];
-
-    return aDirection === bDirection || aDirection === getOppositePlacement(b);
 }

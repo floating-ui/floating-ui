@@ -1341,35 +1341,51 @@ button,
 }
 
 #menu {
-	@include vendor('transform', 'translateX(20em)');
-	@include vendor('transition', 'transform #{_duration(menu)} ease');
-	-webkit-overflow-scrolling: touch;
-	background: _palette(accent1, bg);
-	color: _palette(accent1, fg-bold);
-	height: 100%;
-	max-width: 80%;
-	overflow-y: auto;
-	padding: 3em 2em;
-	position: fixed;
-	right: 0;
-	top: 0;
-	width: 20em;
-	z-index: _misc(z-index-base) + 2;
+    @include vendor('transform', 'translateX(-50%)');
+    color: _palette(accent1, fg-bold);
+    left: 50%;
+    position: fixed;
+    top: 0;
+    white-space: nowrap;
+    z-index: _misc(z-index-base) + 2;
+
+    @include breakpoint(large) {
+        @include vendor('transform', 'translateX(20em)');
+    	@include vendor('transition', 'transform #{_duration(menu)} ease');
+    	-webkit-overflow-scrolling: touch;
+        left: auto;
+    	background: _palette(accent1, bg);
+        height: 100%;
+        max-width: 80%;
+        overflow-y: auto;
+        padding: 3em 2em;
+        right: 0;
+        white-space: normal;
+        width: 20em;
+    }
 
 	ul {
+        display: flex;
 		list-style: none;
+        margin: 0;
 		padding: 0;
 
-		> li {
-			border-top: solid 1px _palette(accent1, border);
-			margin: 0.5em 0 0 0;
-			padding: 0.5em 0 0 0;
+        @include breakpoint(large) {
+            display: block;
+        }
 
-			&:first-child {
-				border-top: 0 !important;
-				margin-top: 0 !important;
-				padding-top: 0 !important;
-			}
+		> li {
+            @include breakpoint(large) {
+                border-top: solid 1px _palette(accent1, border);
+                margin: 0.5em 0 0 0;
+                padding: 0.5em 0 0 0;
+
+                &:first-child {
+                    border-top: 0 !important;
+                    margin-top: 0 !important;
+                    padding-top: 0 !important;
+                }
+            }
 
 			> a {
 				border: 0;
@@ -1378,29 +1394,38 @@ button,
 				font-size: 0.8em;
 				letter-spacing: _size(letter-spacing-alt);
 				outline: 0;
+                padding: 0.9em 1em;
 				text-decoration: none;
 				text-transform: uppercase;
 
 				@include breakpoint(small) {
 					line-height: 3em;
 				}
+
+                @include breakpoint(large) {
+                    padding: 0;
+                }
 			}
 		}
 	}
 
 	.close {
-		background-image: url('images/close.svg');
-		background-position: 4.85em 1em;
-		background-repeat: no-repeat;
-		border: 0;
-		cursor: pointer;
-		display: block;
-		height: 3em;
-		position: absolute;
-		right: 0;
-		top: 0;
-		vertical-align: middle;
-		width: 7em;
+        display: none;
+
+        @include breakpoint(large) {
+            background-image: url('images/close.svg');
+    		background-position: 4.85em 1em;
+    		background-repeat: no-repeat;
+    		border: 0;
+    		cursor: pointer;
+    		display: block;
+    		height: 3em;
+    		position: absolute;
+    		right: 0;
+    		top: 0;
+    		vertical-align: middle;
+    		width: 7em;
+        }
 	}
 
 	@include breakpoint(small) {
@@ -1418,7 +1443,9 @@ body.is-menu-visible {
 	}
 
 	#menu {
-		@include vendor('transform', 'translateX(0)');
+        @include breakpoint(large) {
+            @include vendor('transform', 'translateX(0)');
+        }
 	}
 }
 
@@ -1482,19 +1509,7 @@ body.is-menu-visible {
 					text-transform: uppercase;
 
 					&.menuToggle {
-						outline: 0;
-						position: relative;
-
-						&:after {
-							background-image: url('images/bars.svg');
-							background-position: right center;
-							background-repeat: no-repeat;
-							content: '';
-							display: inline-block;
-							height: 3.75em;
-							vertical-align: top;
-							width: 2em;
-						}
+                        display: none;
 
 						@include breakpoint(small) {
 							padding: 0 1.5em;
@@ -1503,6 +1518,23 @@ body.is-menu-visible {
 								display: none;
 							}
 						}
+
+                        @include breakpoint(large) {
+                            display: block;
+                            outline: 0;
+    						position: relative;
+
+    						&:after {
+    							background-image: url('images/bars.svg');
+    							background-position: right center;
+    							background-repeat: no-repeat;
+    							content: '';
+    							display: inline-block;
+    							height: 3.75em;
+    							vertical-align: top;
+    							width: 2em;
+    						}
+                        }
 					}
 
 					@include breakpoint(small) {

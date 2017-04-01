@@ -1,4 +1,4 @@
-import Popper from '../popper/index.js';
+import Popper from 'popper.js';
 
 const DEFAULT_OPTIONS = {
     container: false,
@@ -18,7 +18,7 @@ export default class Tooltip {
      * @param {HTMLElement} reference - The reference element used to position the tooltip
      * @param {Object} options
      * @param {String} options.placement=bottom
-     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),
+     *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
      *      left(-start, -end)`
      *
      * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
@@ -182,8 +182,8 @@ export default class Tooltip {
         // Add `aria-describedby` to our reference element for accessibility reasons
         tooltipNode.setAttribute('aria-describedby', tooltipNode.id);
 
-        // append tooltip to container: container = false we pick the parent node of the reference
-        var container = options.container === false ? reference.parentNode : options.container;
+        // append tooltip to container
+        const container = this._findContainer(options.container, reference);
 
         this._append(tooltipNode, container);
 
@@ -237,14 +237,14 @@ export default class Tooltip {
         return this;
     }
 
-    _findContainer(container) {
+    _findContainer(container, reference) {
         // if container is a query, get the relative element
         if (typeof container === 'string') {
             container = window.document.querySelector(container);
         }
-        // if container is `false`, set it to body
+        // if container is `false`, set it to reference parent
         else if (container === false) {
-            container = window.document.body;
+            container = reference.parentNode;
         }
         return container;
     }
@@ -261,31 +261,22 @@ export default class Tooltip {
     }
 
     _setEventListeners(reference, events, options) {
-        const directEvents = events.map((event) => {
+        const directEvents = [];
+        const oppositeEvents = [];
+
+        events.forEach((event) => {
             switch(event) {
                 case 'hover':
-                    return 'mouseenter';
+                    directEvents.push('mouseenter');
+                    oppositeEvents.push('mouseleave');
                 case 'focus':
-                    return 'focus';
+                    directEvents.push('focus');
+                    oppositeEvents.push('blur');
                 case 'click':
-                    return 'click';
-                default:
-                    return;
+                    directEvents.push('click');
+                    oppositeEvents.push('click');
             }
         });
-
-        const oppositeEvents = events.map((event) => {
-            switch(event) {
-                case 'hover':
-                    return 'mouseleave';
-                case 'focus':
-                    return 'blur';
-                case 'click':
-                    return 'click';
-                default:
-                    return;
-            }
-        }).filter(event => !!event);
 
         // schedule show tooltip
         directEvents.forEach((event) => {
@@ -346,24 +337,20 @@ export default class Tooltip {
             this._tooltipNode.removeEventListener(evt.type, callback);
 
             // If the new reference is not the reference element
-            if (!this._isElOrChildOfEl(relatedreference2, reference)) {
+            if (!reference.contains(relatedreference2)) {
 
                 // Schedule to hide tooltip
                 this._scheduleHide(reference, options.delay, options, evt2);
             }
         };
 
-        if (this._isElOrChildOfEl(relatedreference, this._tooltipNode)) {
+        if (this._tooltipNode.contains(relatedreference)) {
             // listen to mouseleave on the tooltip element to be able to hide the tooltip
             this._tooltipNode.addEventListener(evt.type, callback);
             return true;
         }
 
         return false;
-    }
-
-    _isElOrChildOfEl(a, b) {
-        return a === b || b.contains(a);
     }
 }
 

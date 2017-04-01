@@ -2,10 +2,9 @@
 #================================================================
 # dist
 
-# Don't exclude this file because it's used when the library is imported
-# into an ES6 source that gets transpiled by Babel
-#=======================================================================
-# .babelrc
+# Exclude the tooltip dist files
+#===============================
+dist/tooltip*
 
 # Exclude everything else
 #========================
@@ -20,3 +19,4 @@ tests
 .jsdoc
 .travis.yml
 popperjs.png
+.babelrc

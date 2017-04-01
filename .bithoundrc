@@ -1,0 +1,14 @@
+{
+    "dependencies": {
+        "mute": [
+            "jsdoc-to-markdown"
+        ]
+    },
+    "ignore": [
+        "**/docs/**",
+        "**/scripts/**"
+    ],
+    "test": [
+        "**/tests/**"
+    ]
+}

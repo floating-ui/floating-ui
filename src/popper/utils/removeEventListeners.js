@@ -5,12 +5,17 @@
  * @private
  */
 export default function removeEventListeners(reference, state) {
-    // NOTE: 1 DOM access here
+    // Remove resize event listener on window
     window.removeEventListener('resize', state.updateBound);
-    if (state.scrollElement) {
-        state.scrollElement.removeEventListener('scroll', state.updateBound);
-    }
+
+    // Remove scroll event listener on scroll parents
+    state.scrollParents.forEach(target => {
+        target.removeEventListener('scroll', state.updateBound);
+    });
+
+    // Reset state
     state.updateBound = null;
+    state.scrollParents = [];
     state.scrollElement = null;
     state.eventsEnabled = false;
     return state;

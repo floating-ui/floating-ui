@@ -43,31 +43,32 @@ needed by the library.</p>
             * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
             * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
             * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-            * [.getPosition(config)](#Popper.Utils.getPosition) ⇒ <code>HTMLElement</code>
+            * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
             * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
             * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
+            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
             * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
             * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
-            * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
+            * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
             * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
             * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
             * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
             * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
-            * [.getPopperOffsets(popper, reference)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
+            * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
             * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
             * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
-            * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
+            * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
             * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
-            * [.isModifierRequired()](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
+            * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
             * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
             * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
             * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
             * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
             * [.setStyles(element, styles)](#Popper.Utils.setStyles)
             * [.getOppositeVariation(placement)](#Popper.Utils.getOppositeVariation) ⇒ <code>String</code>
+        * [.scheduleUpdate()](#Popper.scheduleUpdate)
 
 <a name="new_Popper_new"></a>
 
@@ -81,25 +82,25 @@ Create a new Popper.js instance
 | reference | <code>HTMLElement</code> |  | The reference element used to position the popper |
 | popper | <code>HTMLElement</code> |  | The HTML element used as popper. |
 | options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -right),      left(-start, -end)` |
+| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
 | options.eventsEnabled | <code>Boolean</code> | <code>true</code> | Whether events (resize, scroll) are initially enabled |
 | options.gpuAcceleration | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
 | options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
 | options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
 | options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
-| options.modifiers.arrow.element | <code>HTMLElement</code> &#124; <code>String</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
+| options.modifiers.arrow.element | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
 | options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
 | options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
 | options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
 | [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
-| options.modifiers.preventOverflow.boundariesElement | <code>Number</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
-| options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
+| options.modifiers.preventOverflow.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
+| options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
 | options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
 | options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
-| options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>Element</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
+| options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
-| options.modifiers.innner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
-| options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
+| options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
+| options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper will flip before it touches the edge of the boundaries,      making it have always a little padding between the edges of its container. |
 | options.onCreate | <code>[createCallback](#createCallback)</code> |  | onCreate callback      Function called after the Popper has been instantiated. |
 | options.onUpdate | <code>[updateCallback](#updateCallback)</code> |  | onUpdate callback      Function called on subsequent updates of Popper. |
 
@@ -141,25 +142,25 @@ unless you call 'update' method manually.
     * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
     * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
     * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-    * [.getPosition(config)](#Popper.Utils.getPosition) ⇒ <code>HTMLElement</code>
+    * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
     * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
+    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
-    * [.findIndex$1(arr, prop, value)](#Popper.Utils.findIndex$1) ⇒
+    * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
     * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
     * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
     * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
     * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
-    * [.getPopperOffsets(popper, reference)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
+    * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
     * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
     * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
-    * [.isFunction(element)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
+    * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
     * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
-    * [.isModifierRequired()](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
+    * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
     * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
     * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
     * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
@@ -209,19 +210,7 @@ Returns the parentNode or the host of the element
 Returns the scrolling parent of the given element
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Element</code> - offset parent  
-
-| Param | Type |
-| --- | --- |
-| element | <code>Element</code> | 
-
-<a name="Popper.Utils.getOffsetRect"></a>
-
-#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
-Get the position of the given element, relative to its offset parent
-
-**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
+**Returns**: <code>Element</code> - scroll parent  
 
 | Param | Type |
 | --- | --- |
@@ -242,15 +231,15 @@ Check if the given element is fixed or is inside a fixed parent
 
 <a name="Popper.Utils.getPosition"></a>
 
-#### Utils.getPosition(config) ⇒ <code>HTMLElement</code>
+#### Utils.getPosition(element) ⇒ <code>String</code>
 Helper used to get the position which will be applied to the popper
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>HTMLElement</code> - reference element  
+**Returns**: <code>String</code> - position  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| config | <code>HTMLElement</code> | popper element |
+| element | <code>HTMLElement</code> | popper element |
 
 <a name="Popper.Utils.getBoundingClientRect"></a>
 
@@ -276,6 +265,18 @@ Given an element and one of its parents, return the offset
 | --- | --- |
 | element | <code>HTMLElement</code> | 
 | parent | <code>HTMLElement</code> | 
+
+<a name="Popper.Utils.getOffsetRect"></a>
+
+#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
+Get the position of the given element, relative to its offset parent
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
+
+| Param | Type |
+| --- | --- |
+| element | <code>Element</code> | 
 
 <a name="Popper.Utils.getBoundaries"></a>
 
@@ -317,9 +318,9 @@ but called in the minimum time possible.
 | --- | --- |
 | fn | <code>function</code> | 
 
-<a name="Popper.Utils.findIndex$1"></a>
+<a name="Popper.Utils.find"></a>
 
-#### Utils.findIndex$1(arr, prop, value) ⇒
+#### Utils.find(arr, prop, value) ⇒
 Mimics the `find` method of Array
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -383,16 +384,18 @@ Get the opposite placement of the given one/
 
 <a name="Popper.Utils.getPopperOffsets"></a>
 
-#### Utils.getPopperOffsets(popper, reference) ⇒ <code>Object</code>
+#### Utils.getPopperOffsets(position, popper, referenceOffsets, placement) ⇒ <code>Object</code>
 Get offsets to the popper
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - An object containing the offsets which will be applied to the popper  
+**Returns**: <code>Object</code> - popperOffsets - An object containing the offsets which will be applied to the popper  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| popper | <code>Element</code> | the popper element |
-| reference | <code>Element</code> | the reference element (the popper will be relative to this) |
+| position | <code>Object</code> | CSS position the Popper will get applied |
+| popper | <code>HTMLElement</code> | the popper element |
+| referenceOffsets | <code>Object</code> | the reference offsets (the popper will be relative to this) |
+| placement | <code>String</code> | one of the valid placement options |
 
 <a name="Popper.Utils.getReferenceOffsets"></a>
 
@@ -422,7 +425,7 @@ Get the prefixed supported property name
 
 <a name="Popper.Utils.isFunction"></a>
 
-#### Utils.isFunction(element) ⇒ <code>Boolean</code>
+#### Utils.isFunction(functionToCheck) ⇒ <code>Boolean</code>
 Check if the given variable is a function
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -430,7 +433,7 @@ Check if the given variable is a function
 
 | Param | Type | Description |
 | --- | --- | --- |
-| element | <code>Element</code> | Element to check |
+| functionToCheck | <code>\*</code> | variable to check |
 
 <a name="Popper.Utils.isModifierEnabled"></a>
 
@@ -440,11 +443,18 @@ Helper used to know if the given modifier is enabled.
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 <a name="Popper.Utils.isModifierRequired"></a>
 
-#### Utils.isModifierRequired() ⇒ <code>Boolean</code>
+#### Utils.isModifierRequired(modifiers, requestingName, requestedName) ⇒ <code>Boolean</code>
 Helper used to know if the given modifier depends from another one.
 It checks if the needed modifier is listed and enabled.
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| modifiers | <code>Array</code> | list of modifiers |
+| requestingName | <code>String</code> | name of requesting modifier |
+| requestedName | <code>String</code> | name of requested modifier |
+
 <a name="Popper.Utils.isNumeric"></a>
 
 #### Utils.isNumeric(input) ⇒ <code>Boolean</code>
@@ -517,6 +527,12 @@ Get the opposite placement variation of the given one/
 | --- | --- | --- |
 | placement | <code>String</code> | variation |
 
+<a name="Popper.scheduleUpdate"></a>
+
+### Popper.scheduleUpdate()
+Schedule an update, it will run on the next UI update available
+
+**Kind**: static method of <code>[Popper](#Popper)</code>  
 <a name="dataObject"></a>
 
 ## dataObject
@@ -594,8 +610,8 @@ Apply the computed styles to the popper element
 <a name="Modifiers.arrow"></a>
 
 ### Modifiers.arrow(data, options) ⇒ <code>Object</code>
-Modifier used to move the arrowEls on the edge of the popper to make sure them are always between the popper and the reference element
-It will use the CSS outer size of the arrowEl element to know how many pixels of conjuction are needed
+Modifier used to move the arrowElements on the edge of the popper to make sure them are always between the popper and the reference element
+It will use the CSS outer size of the arrowElement element to know how many pixels of conjuction are needed
 
 **Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
 **Returns**: <code>Object</code> - The data object, properly modified  

@@ -49,18 +49,24 @@ export default function offset(data, options) {
 
             const measurement = useHeight ? 'height' : 'width';
 
-            // if is a percentage, we calculate the value of it using as base the
-            // sizes of the reference element
-            if (unit === '%' || unit === '%r') {
-                const referenceRect = getClientRect(data.offsets.reference);
-                let len = referenceRect[measurement];
-                return (len / 100) * value;
-            }
-            // if is a percentage relative to the popper, we calculate the value of it using
+            // if is a percentage relative to the popper (%p), we calculate the value of it using
             // as base the sizes of the popper
-            else if (unit === '%p') {
-                const popperRect = getClientRect(data.offsets.popper);
-                let len = popperRect[measurement];
+            // if is a percentage (% or %r), we calculate the value of it using as base the
+            // sizes of the reference element
+            if (unit.indexOf('%') === 0) {
+                let element;
+                switch(unit) {
+                    case '%p':
+                        element = data.offsets.popper;
+                        break;
+                    case '%':
+                    case '$r':
+                    default:
+                        element = data.offsets.reference;
+                }
+
+                const rect = getClientRect(element);
+                const len = rect[measurement];
                 return (len / 100) * value;
             }
             // if is a vh or vw, we calculate the size based on the viewport

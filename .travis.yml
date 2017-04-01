@@ -1,9 +1,16 @@
 language: node_js
 node_js: 7.3
-script: npm run test -- --browsers=SLChrome,SLFirefox,SLEdge,SLSafari,SLInternetExplorer10,SLInternetExplorer11
+script:
+  - npm run coverage -- -- --browsers=SLChrome,SLInternetExplorer10
+  - npm run test -- --browsers=SLFirefox,SLEdge,SLSafari,SLInternetExplorer11
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < .tmp/coverage/**/lcov.info
 addons:
   sauce_connect:
     username: "popperjs"
+  code_climate:
+    repo_token: 5d692bc0fbeb0e2141bba54efdb6aa8f941b10c7f8c4ac95de781e706cf44de1
   jwt:
     secure: "lRwBWS0UOdrcqmZupsMP7cCtrm1YOXxJMxu6qejzhLwasfvmtc6oSVUrEeaxBg2KTc8YM9l5faRPYSKcjy8fTfiCIT6SbB1/F/PFCim3KZc9QxEUNXuIkpPSLOxzNN+tYQdZJobkar8dLonqpn1jrsoLMz2wyFp5ze03hdhqa3/Itt6r3LAQMNaIdXzbgwZY7CIQ5BZWqopFWjRRzBCYXWev5Su695+AFEGt7G32d8m9z66383aZ0xFF6f9nsgu17LY+2Fw+0G7ts3MG+bcN7RtEhiWax5q4kM+8ud7Q9qs/bmdz8eQ3uXVKcOeddNat5S4QATiDB/fayo54rYWfPLNOkZkIS9JiWDN3Z0psJzROyaKgwmdBrDgOmEcaq8kcL8iWM9nRkNjrHdVyooob5J70oHHkB/Swz0vVowK4Q1hXxcFiwC8w43baOotMIFMcixHtFNsaEWg7J+CGIm852bVFPvFZCD+tw9UoP2BJcg/MpA/uvxvLL0U5wO5ZZjS9618U1Kn/DNCg+4NC6vTNT9htny9KBAKn70JNFZrKcfHWgv8cnyhhS9sJKjuyvYz1IF8eQ4CHX9klG1N1JGwFKAfSToySIcBs1ra1m+jG9c3zdJwLc+sfPKnfvF5t4kTLRpM3oENsFR2oIBsV0Tu2npb5wUVZ+YWIBVgLMj0xNaI="
 cache:
