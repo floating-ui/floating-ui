@@ -1,5 +1,7 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getBordersSize from './getBordersSize';
+import getWindowSizes from './getWindowSizes';
+import getScroll from './getScroll';
 
 /**
  * Get bounding client rect of given element
@@ -9,44 +11,54 @@ import getBordersSize from './getBordersSize';
  * @return {Object} client rect
  */
 export default function getBoundingClientRect(element) {
-    const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
-    let rect;
+    let result;
+    if (element.nodeName === 'HTML') {
+        const { width, height } = getWindowSizes();
+        result = {
+            left: 0,
+            top: 0,
+            right: width,
+            bottom: height,
+            width,
+            height,
+        };
 
-    // IE10 10 FIX: Please, don't ask, the element isn't
-    // considered in DOM in some circumstances...
-    // This isn't reproducible in IE10 compatibility mode of IE11
-    if (isIE10) {
-        try {
-            rect = element.getBoundingClientRect();
-        } catch(err) {
-            rect = {};
-        }
-    } else {
-        rect = element.getBoundingClientRect();
-    }
-
-    const result = {
-        left: rect.left,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom,
-        width: rect.right - rect.left,
-        height: rect.bottom - rect.top,
-    };
-
-    // IE10 FIX: `getBoundingClientRect`, when executed on `documentElement`
-    // will not take in account the `scrollTop` and `scrollLeft`
-    if (element.nodeName === 'HTML' && isIE10) {
-        const { scrollTop, scrollLeft } = window.document.documentElement;
+        const scrollTop = getScroll(element, 'top');
+        const scrollLeft = getScroll(element, 'left');
         result.top -= scrollTop;
         result.bottom -= scrollTop;
         result.left -= scrollLeft;
         result.right -= scrollLeft;
+    } else {
+        const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+        let rect;
+
+        // IE10 10 FIX: Please, don't ask, the element isn't
+        // considered in DOM in some circumstances...
+        // This isn't reproducible in IE10 compatibility mode of IE11
+        if (isIE10) {
+            try {
+                rect = element.getBoundingClientRect();
+            } catch(err) {
+                rect = {};
+            }
+        } else {
+            rect = element.getBoundingClientRect();
+        }
+
+        result = {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.right - rect.left,
+            height: rect.bottom - rect.top,
+        };
     }
 
     // subtract scrollbar size from sizes
-    let horizScrollbar = rect.width - (element.clientWidth || rect.right - rect.left);
-    let vertScrollbar = rect.height - (element.clientHeight || rect.bottom - rect.top);
+    let horizScrollbar = result.width - (element.clientWidth || result.right - result.left);
+    let vertScrollbar = result.height - (element.clientHeight || result.bottom - result.top);
 
     // if an hypothetical scrollbar is detected, we must be sure it's not a `border`
     // we make this check conditional for performance reasons

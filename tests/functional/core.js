@@ -48,7 +48,7 @@ describe('[core]', () => {
         pop.destroy();
     });
 
-    xit('inits a bottom popper inside document with margins', () => {
+    it('inits a bottom popper inside document with margins', (done) => {
         const doc = document.documentElement
         doc.style.marginLeft = '300px';
         doc.style.marginTop = '300px';
@@ -56,12 +56,17 @@ describe('[core]', () => {
         const reference = appendNewRef(1);
         const popper    = appendNewPopper(2);
 
-        const pop = new Popper(reference, popper);
+        new Popper(reference, popper, {
+            onCreate(data) {
+                const top = getRect(popper).top;
+                expect(top).toBeApprox(getRect(reference).bottom + arrowSize);
 
-        const top = popper.getBoundingClientRect().top;
-        expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
+                data.instance.destroy();
+                doc.style.cssText = null;
+                done();
+            }
+        });
 
-        pop.destroy();
     });
 
     it('inits a right scrollable popper ', (done) => {
