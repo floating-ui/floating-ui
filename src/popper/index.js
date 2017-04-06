@@ -14,6 +14,9 @@ import runModifiers from './utils/runModifiers';
 import isModifierEnabled from './utils/isModifierEnabled';
 import computeAutoPlacement from './utils/computeAutoPlacement';
 
+import ReferenceClass from './ReferenceClass';
+export { ReferenceClass };
+
 // Modifiers
 import modifiers from './modifiers/index';
 
