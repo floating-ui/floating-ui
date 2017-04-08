@@ -5,6 +5,7 @@ import getOppositePlacement from '../../src/popper/utils/getOppositePlacement';
 import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
 import simulateScroll from '../utils/simulateScroll';
+import getRect from '../utils/getRect';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 describe('[flipping]', () => {
@@ -192,6 +193,29 @@ describe('[flipping]', () => {
 
                 data.instance.destroy();
                 jasmineWrapper.removeChild(page);
+                done();
+            },
+        });
+    });
+
+    xit('flips to bottom when hits top viewport edge', (done) => {
+        jasmineWrapper.innerHTML = `
+            <div id="s1" style="height: 3000px; background: red;">
+                <div id="reference" style="background: pink; margin-top: 200px">reference</div>
+                <div id="popper" style="background: purple">popper</div>
+            </div>
+        `;
+
+        const reference = document.getElementById('reference');
+        const popper = document.getElementById('popper');
+
+        new Popper(reference, popper, {
+            placement: 'top',
+            onCreate() {
+                simulateScroll(document.body, { scrollTop:  200, delay: 50 });
+            },
+            onUpdate() {
+                expect(getRect(popper).top).toBe(getRect(reference).bottom);
                 done();
             },
         });
