@@ -1,6 +1,12 @@
 ## Classes
 
 <dl>
+<dt><a href="#Reference">Reference</a></dt>
+<dd><p>This class can provided to Popper.js as <code>reference</code> argument instead of
+an actual DOM node.
+This is useful if you need to position a popper knowing only the coordinates
+of the target area, such as elements drawn on a canvas element.</p>
+</dd>
 <dt><a href="#Popper">Popper</a></dt>
 <dd></dd>
 </dl>
@@ -24,6 +30,32 @@ needed by the library.</p>
 <p>Each modifier is an object containing several properties listed below.</p>
 </dd>
 </dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#getBoundingClientRect">getBoundingClientRect</a> ⇒ <code>DOMRect</code></dt>
+<dd><p>This function must return the same data of a real Element.getBoundingClientRect()
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect">https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect</a></p>
+</dd>
+</dl>
+
+<a name="Reference"></a>
+
+## Reference
+This class can provided to Popper.js as `reference` argument instead of
+an actual DOM node.
+This is useful if you need to position a popper knowing only the coordinates
+of the target area, such as elements drawn on a canvas element.
+
+**Kind**: global class  
+<a name="new_Reference_new"></a>
+
+### new Reference(getBoundingClientRect)
+
+| Param | Type |
+| --- | --- |
+| getBoundingClientRect | <code>[getBoundingClientRect](#getBoundingClientRect)</code> | 
 
 <a name="Popper"></a>
 
@@ -88,16 +120,16 @@ Create a new Popper.js instance
 | options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
 | options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
 | options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
-| options.modifiers.arrow.element | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
+| options.modifiers.arrow.element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
 | options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
 | options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
 | options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
 | [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
-| options.modifiers.preventOverflow.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
+| options.modifiers.preventOverflow.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
 | options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
 | options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
-| options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
-| options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
+| options.modifiers.flip.behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
+| options.modifiers.flip.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
 | options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
 | options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper will flip before it touches the edge of the boundaries,      making it have always a little padding between the edges of its container. |
@@ -664,7 +696,7 @@ The offsets will shift the popper on the side of its reference element.
 | --- | --- | --- | --- |
 | data | <code>Object</code> |  | The data object generated by update method |
 | options | <code>Object</code> |  | Modifiers configuration and options |
-| options.offset | <code>Number</code> &#124; <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels.      You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)      Other supported units are `vh` and `vw` (relative to viewport)      Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper      on both axis.      A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,      use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.      > **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
+| options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels.      You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)      Other supported units are `vh` and `vw` (relative to viewport)      Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper      on both axis.      A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,      use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.      > **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
 
 <a name="Modifiers.preventOverflow"></a>
 
@@ -748,6 +780,14 @@ The modifier can edit the data as needed, and then `return` it as result.
 | --- | --- |
 | data | <code>[dataObject](#dataObject)</code> | 
 
+<a name="getBoundingClientRect"></a>
+
+## getBoundingClientRect ⇒ <code>DOMRect</code>
+This function must return the same data of a real Element.getBoundingClientRect()
+https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+
+**Kind**: global typedef  
+**Returns**: <code>DOMRect</code> - It doesn't have to be a real DOMRect, it must have the same properties  
 <a name="createCallback"></a>
 
 ## .createCallback : <code>function</code>
