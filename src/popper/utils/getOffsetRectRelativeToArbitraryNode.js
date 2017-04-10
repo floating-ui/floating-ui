@@ -12,17 +12,22 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
         height: childrenRect.height,
     };
 
-    // subtract borderTopWidth and borderTopWidth from final result
-    const styles = getStyleComputedProperty(parent);
-    const borderTopWidth = Number(styles.borderTopWidth.split('px')[0]);
-    const borderLeftWidth = Number(styles.borderLeftWidth.split('px')[0]);
-    const marginTop = Number(styles.marginTop.split('px')[0]);
-    const marginLeft = Number(styles.marginLeft.split('px')[0]);
+    // Subtract margins of documentElement in case it's being used as parent
+    // we do this only on HTML because it's the only element that behaves
+    // differently when margins are applied to it. The margins are included in
+    // the box of the documentElement, in the other cases not.
+    if (parent.nodeName === 'HTML') {
+        const styles = getStyleComputedProperty(parent);
+        const borderTopWidth = Number(styles.borderTopWidth.split('px')[0]);
+        const borderLeftWidth = Number(styles.borderLeftWidth.split('px')[0]);
+        const marginTop = Number(styles.marginTop.split('px')[0]);
+        const marginLeft = Number(styles.marginLeft.split('px')[0]);
 
-    offsets.top -= borderTopWidth - marginTop;
-    offsets.bottom -= borderTopWidth - marginTop;
-    offsets.left -= borderLeftWidth - marginLeft;
-    offsets.right -= borderLeftWidth - marginLeft;
+        offsets.top -= borderTopWidth - marginTop;
+        offsets.bottom -= borderTopWidth - marginTop;
+        offsets.left -= borderLeftWidth - marginLeft;
+        offsets.right -= borderLeftWidth - marginLeft;
+    }
 
     return offsets;
 }

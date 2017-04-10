@@ -4,7 +4,6 @@ import debounce from './utils/debounce';
 import setStyles from './utils/setStyles';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
-import getPosition from './utils/getPosition';
 import getReferenceOffsets from './utils/getReferenceOffsets';
 import getPopperOffsets from './utils/getPopperOffsets';
 import isFunction from './utils/isFunction';
@@ -167,9 +166,6 @@ export default class Popper {
             });
         }
 
-        // get the popper position type
-        this.state.position = getPosition(this.reference);
-
         // sort the modifiers by order
         this.modifiers = this.modifiers.sort((a, b) => a.order - b.order);
 
@@ -227,8 +223,7 @@ export default class Popper {
         };
 
         // make sure to apply the popper position before any computation
-        this.state.position = getPosition(this.reference);
-        setStyles(this.popper, { position: this.state.position});
+        setStyles(this.popper, { position: 'absolute' });
 
         // compute reference element offsets
         data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference);
