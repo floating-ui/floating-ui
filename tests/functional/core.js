@@ -476,7 +476,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             onCreate: (data) => {
                 expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-                expect(getRect(popper).left).toBeApprox(getRect(ref).left);
+                expect(getRect(popper).left).toBeApprox(5);
                 data.instance.destroy();
                 done();
             },
@@ -507,7 +507,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             onCreate: (data) => {
                 expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-                expect(getRect(popper).left).toBeApprox(getRect(ref).left);
+                expect(getRect(popper).left).toBeApprox(5);
                 data.instance.destroy();
                 done();
             },

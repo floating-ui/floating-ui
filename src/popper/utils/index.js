@@ -19,7 +19,6 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 import getSupportedPropertyName from './getSupportedPropertyName';
 import getTotalScroll from './getTotalScroll';
 import getWindowSizes from './getWindowSizes';
-import includeScroll from './includeScroll';
 import isFixed from './isFixed';
 import isFunction from './isFunction';
 import isModifierEnabled from './isModifierEnabled';
@@ -56,7 +55,6 @@ export default {
     getSupportedPropertyName,
     getTotalScroll,
     getWindowSizes,
-    includeScroll,
     isFixed,
     isFunction,
     isModifierEnabled,

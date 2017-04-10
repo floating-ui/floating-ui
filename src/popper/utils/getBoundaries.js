@@ -1,10 +1,11 @@
 import getScrollParent from './getScrollParent';
+import getTotalScroll from './getTotalScroll';
 import getParentNode from './getParentNode';
-import getPosition from './getPosition';
 import findCommonOffsetParent from './findCommonOffsetParent';
 import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
 import getOffsetRectRelativeToViewport from './getOffsetRectRelativeToViewport';
 import getWindowSizes from './getWindowSizes';
+import isFixed from './isFixed';
 
 /**
  * Computed the boundaries limits and return them
@@ -24,32 +25,34 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
     if (boundariesElement === 'viewport') {
         const { left, top } = getOffsetRectRelativeToViewport(offsetParent);
         const { clientWidth: width, clientHeight: height } = window.document.documentElement;
+        const scrollLeft = getTotalScroll(popper, offsetParent, 'left');
+        const scrollTop = getTotalScroll(popper, offsetParent, 'top');
 
-        if (getPosition(popper) === 'fixed') {
-            boundaries.right = width;
-            boundaries.bottom = height;
-        } else {
-            boundaries = {
-                top: 0 - top,
-                right: width - left,
-                bottom: height - top,
-                left: 0 - left,
-            };
-        }
+        boundaries = {
+            top: 0 - top,
+            right: width - left + scrollLeft,
+            bottom: height - top + scrollTop,
+            left: 0 - left,
+        };
+        console.log('viewport', {...boundaries});
     }
     // Handle other cases based on DOM element used as boundaries
     else {
         let boundariesNode;
         if (boundariesElement === 'scrollParent') {
             boundariesNode = getScrollParent(getParentNode(popper));
+            if (boundariesNode.nodeName === 'BODY') {
+                boundariesNode = window.document.documentElement;
+            }
+            console.log('scrollParent', boundariesNode);
         } else if (boundariesElement === 'window') {
-            boundariesNode = window.document.body;
+            boundariesNode = window.document.documentElement;
         } else {
             boundariesNode = boundariesElement;
         }
 
-        // In case of BODY, we need a different computation
-        if (boundariesNode.nodeName === 'BODY') {
+        // In case of HTML, we need a different computation
+        if (boundariesNode.nodeName === 'HTML' && !isFixed(offsetParent)) {
             const { height, width } = getWindowSizes();
             boundaries.right = width;
             boundaries.bottom = height;
@@ -57,8 +60,8 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
         // for all the other DOM elements, this one is good
         else {
             boundaries = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent);
-            console.log(boundaries);
         }
+        console.log('node', {...boundaries});
     }
 
     // Add paddings
