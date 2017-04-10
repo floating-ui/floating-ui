@@ -42,8 +42,8 @@ describe('[core]', () => {
 
         const pop = new Popper(reference, popper);
 
-        const top = popper.getBoundingClientRect().top;
-        expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
+        const top = getRect(popper).top;
+        expect(top).toBeApprox(getRect(reference).bottom + arrowSize);
 
         pop.destroy();
     });
@@ -77,8 +77,8 @@ describe('[core]', () => {
         const pop = new Popper(reference, popper, {
             placement: 'right',
             onCreate() {
-                const left = popper.getBoundingClientRect().left;
-                expect(left).toBeApprox(reference.getBoundingClientRect().right + arrowSize);
+                const left = getRect(popper).left;
+                expect(left).toBeApprox(getRect(reference).right + arrowSize);
 
                 pop.destroy();
 
@@ -97,8 +97,8 @@ describe('[core]', () => {
             const pop = new Popper(reference, popper, {
                 modifiers: { inner: { enabled: true } },
                 onCreate() {
-                    const bottom = popper.getBoundingClientRect().bottom + arrowSize;
-                    expect(bottom).toBeApprox(reference.getBoundingClientRect().bottom);
+                    const bottom = getRect(popper).bottom + arrowSize;
+                    expect(bottom).toBeApprox(getRect(reference).bottom);
                     pop.destroy();
                     done();
                 }
@@ -114,8 +114,8 @@ describe('[core]', () => {
                 placement: 'top',
                 modifiers: { inner: { enabled: true } },
                 onCreate() {
-                    const top = popper.getBoundingClientRect().top - arrowSize;
-                    expect(top).toBeApprox(reference.getBoundingClientRect().top);
+                    const top = getRect(popper).top - arrowSize;
+                    expect(top).toBeApprox(getRect(reference).top);
                     pop.destroy();
                     done();
                 }
@@ -132,8 +132,8 @@ describe('[core]', () => {
                 placement: 'right',
                 modifiers: { inner: { enabled: true } },
                 onCreate() {
-                    const right = popper.getBoundingClientRect().right + arrowSize;
-                    expect(right).toBeApprox(reference.getBoundingClientRect().right);
+                    const right = getRect(popper).right + arrowSize;
+                    expect(right).toBeApprox(getRect(reference).right);
                     pop.destroy();
                     done();
                 }
@@ -150,8 +150,8 @@ describe('[core]', () => {
                 placement: 'left',
                 modifiers: { inner: { enabled: true } },
                 onCreate() {
-                    const left = popper.getBoundingClientRect().left - arrowSize;
-                    expect(left).toBeApprox(reference.getBoundingClientRect().left);
+                    const left = getRect(popper).left - arrowSize;
+                    expect(left).toBeApprox(getRect(reference).left);
                     pop.destroy();
                     done();
                 }
@@ -177,8 +177,8 @@ describe('[core]', () => {
             const pop = new Popper(reference, popper, {
                 placement: 'auto',
                 onCreate: () => {
-                    const bottom = popper.getBoundingClientRect().bottom + arrowSize;
-                    expect(bottom).toBeApprox(reference.getBoundingClientRect().top);
+                    const bottom = getRect(popper).bottom + arrowSize;
+                    expect(bottom).toBeApprox(getRect(reference).top);
                     pop.destroy();
                     done();
                 }
@@ -202,8 +202,8 @@ describe('[core]', () => {
             const pop = new Popper(reference, popper, {
                 placement: 'auto',
                 onCreate: () => {
-                    const left = popper.getBoundingClientRect().left - arrowSize;
-                    expect(left).toBeApprox(reference.getBoundingClientRect().right);
+                    const left = getRect(popper).left - arrowSize;
+                    expect(left).toBeApprox(getRect(reference).right);
                     pop.destroy();
                     done();
                 }
@@ -227,8 +227,8 @@ describe('[core]', () => {
             const pop = new Popper(reference, popper, {
                 placement: 'auto',
                 onCreate: () => {
-                    const top = popper.getBoundingClientRect().top - arrowSize;
-                    expect(top).toBeApprox(reference.getBoundingClientRect().bottom);
+                    const top = getRect(popper).top - arrowSize;
+                    expect(top).toBeApprox(getRect(reference).bottom);
                     pop.destroy();
                     done();
                 }
@@ -252,8 +252,8 @@ describe('[core]', () => {
             const pop = new Popper(reference, popper, {
                 placement: 'auto',
                 onCreate: () => {
-                    const right = popper.getBoundingClientRect().right + arrowSize;
-                    expect(right).toBeApprox(reference.getBoundingClientRect().left);
+                    const right = getRect(popper).right + arrowSize;
+                    expect(right).toBeApprox(getRect(reference).left);
                     pop.destroy();
                     done();
                 }
@@ -271,8 +271,8 @@ describe('[core]', () => {
         // give some time to the browser to render...
         // otherwise `getBoundingClientRect` returns wrong values
         setTimeout(() => {
-            const top = popper.getBoundingClientRect().top;
-            expect(top).toBeApprox(reference.getBoundingClientRect().bottom + arrowSize);
+            const top = getRect(popper).top;
+            expect(top).toBeApprox(getRect(reference).bottom + arrowSize);
             pop.destroy();
             done();
         }, 10);
@@ -286,7 +286,7 @@ describe('[core]', () => {
         new Popper(reference, popper, {
             placement: 'bottom-start',
             onCreate: (data) => {
-                expect(popper.getBoundingClientRect().left).toBeApprox(reference.getBoundingClientRect().left);
+                expect(getRect(popper).left).toBeApprox(getRect(reference).left);
 
                 data.instance.destroy();
                 done();
@@ -301,7 +301,7 @@ describe('[core]', () => {
         new Popper(reference, popper, {
             placement: 'right',
             onCreate: (data) => {
-                expect(popper.getBoundingClientRect().left - arrowSize).toBeApprox(reference.getBoundingClientRect().right);
+                expect(getRect(popper).left - arrowSize).toBeApprox(getRect(reference).right);
 
                 data.instance.destroy();
                 done();
@@ -447,7 +447,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             onCreate: (data) => {
                 expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
-                expect(popper.getBoundingClientRect().left).toBeApprox(5);
+                expect(getRect(popper).left).toBeApprox(5);
                 data.instance.destroy();
                 done();
             },
@@ -1095,7 +1095,7 @@ describe('[core]', () => {
         });
     });
 
-    xit('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
+    it('inits a popper near a reference element, both inside an element with CSS translateX', (done) => {
         const fixed = document.createElement('div');
         fixed.style.position = 'fixed';
         fixed.style.left = '50%';
@@ -1112,7 +1112,6 @@ describe('[core]', () => {
             onCreate: (data) => {
                 expect(getRect(popper).right).toBe(getRect(ref).right);
                 data.instance.destroy();
-
                 done();
             },
         });
@@ -1140,8 +1139,9 @@ describe('[core]', () => {
                 simulateScroll(s1, { scrollTop:  50 });
                 simulateScroll(s2, { scrollTop:  50 });
             },
-            onUpdate() {
+            onUpdate(data) {
                 expect(getRect(reference).bottom).toBe(getRect(popper).top);
+                data.instance.destroy();
                 done();
             },
         });

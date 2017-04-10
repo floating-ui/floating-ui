@@ -15,6 +15,11 @@ export default function findCommonOffsetParent(element1, element2) {
         return commonAncestorContainer;
     }
 
+    // This is probably very stupid, fix me please
+    if (!commonAncestorContainer) {
+        return window.document.documentElement;
+    }
+
     const offsetParent = commonAncestorContainer.offsetParent;
 
     return offsetParent.nodeName === 'BODY' ? document.documentElement : offsetParent;

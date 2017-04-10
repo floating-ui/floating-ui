@@ -166,13 +166,11 @@ describe('[flipping]', () => {
 
     xit('flips to opposite side when rendered inside a positioned parent', (done) => {
         const page = document.createElement('div');
-        page.className = 'page';
         page.style.paddingTop = '110vh'; // Simulates page content
         page.style.background = 'lightskyblue';
         jasmineWrapper.appendChild(page);
 
         const parent = document.createElement('div');
-        parent.className = 'parent';
         parent.style.position = 'relative'; // Also fails if absolute. Comment out for test to pass.
         parent.style.background = 'yellow';
         page.appendChild(parent);
@@ -192,7 +190,6 @@ describe('[flipping]', () => {
                 expect(popperRect.bottom + arrowSize).toBeApprox(refRect.top);
 
                 data.instance.destroy();
-                jasmineWrapper.removeChild(page);
                 done();
             },
         });
@@ -214,8 +211,9 @@ describe('[flipping]', () => {
             onCreate() {
                 simulateScroll(document.body, { scrollTop:  200, delay: 50 });
             },
-            onUpdate() {
+            onUpdate(data) {
                 expect(getRect(popper).top).toBe(getRect(reference).bottom);
+                data.instance.destroy();
                 done();
             },
         });
