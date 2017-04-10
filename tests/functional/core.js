@@ -383,7 +383,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             placement: 'top',
             onCreate: () => {
-                // placement should be top
+                //placement should be top
                 expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
 
                 simulateScroll(scrolling, { scrollTop: 100, delay: 10 });
@@ -1110,7 +1110,6 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             placement: 'bottom-end',
             onCreate: (data) => {
-                console.log('expect!');
                 expect(getRect(popper).right).toBe(getRect(ref).right);
                 data.instance.destroy();
 

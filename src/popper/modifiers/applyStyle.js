@@ -80,7 +80,7 @@ export function applyStyleOnLoad(reference, popper, options, modifierOptions, st
     // compute auto placement, store placement inside the data object,
     // modifiers will be able to edit `placement` if needed
     // and refer to originalPlacement to know the original value
-    options.placement = computeAutoPlacement(options.placement, referenceOffsets, popper);
+    options.placement = computeAutoPlacement(options.placement, referenceOffsets, popper, reference);
 
     popper.setAttribute('x-placement', options.placement);
     return options;

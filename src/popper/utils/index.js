@@ -7,7 +7,7 @@ import getBoundingClientRect from './getBoundingClientRect';
 import getClientRect from './getClientRect';
 import getOffsetParent from './getOffsetParent';
 import getOffsetRect from './getOffsetRect';
-import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
+import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
 import getOuterSizes from './getOuterSizes';
 import getParentNode from './getParentNode';
 import getPopperOffsets from './getPopperOffsets';
@@ -44,7 +44,7 @@ export default {
     getClientRect,
     getOffsetParent,
     getOffsetRect,
-    getOffsetRectRelativeToCustomParent,
+    getOffsetRectRelativeToArbitraryNode,
     getOuterSizes,
     getParentNode,
     getPopperOffsets,

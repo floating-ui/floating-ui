@@ -9,12 +9,12 @@ import getBoundaries from '../utils/getBoundaries';
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The data object, properly modified
  */
-export default function computeAutoPlacement(placement, refRect, popper) {
+export default function computeAutoPlacement(placement, refRect, popper, reference) {
     if (placement.indexOf('auto') === -1) {
         return placement;
     }
 
-    const boundaries = getBoundaries(popper, 0, 'scrollParent');
+    const boundaries = getBoundaries(popper, reference, 0, 'scrollParent');
 
     const sides = {
         top: refRect.top - boundaries.top,

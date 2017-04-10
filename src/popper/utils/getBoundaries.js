@@ -1,11 +1,9 @@
-import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
 import getPosition from './getPosition';
-import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
+import findCommonOffsetParent from './findCommonOffsetParent';
+import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
 import getOffsetRectRelativeToViewport from './getOffsetRectRelativeToViewport';
-import getTotalScroll from './getTotalScroll';
-import isFixed from './isFixed';
 import getWindowSizes from './getWindowSizes';
 
 /**
@@ -17,10 +15,10 @@ import getWindowSizes from './getWindowSizes';
  * @param {Element} boundariesElement - Element used to define the boundaries
  * @returns {Object} Coordinates of the boundaries
  */
-export default function getBoundaries(popper, padding, boundariesElement) {
+export default function getBoundaries(popper, reference, padding, boundariesElement) {
     // NOTE: 1 DOM access here
     let boundaries = { top: 0, left: 0 };
-    const offsetParent = getOffsetParent(popper);
+    const offsetParent = findCommonOffsetParent(popper, reference);
 
     // Handle viewport case
     if (boundariesElement === 'viewport') {
@@ -31,13 +29,10 @@ export default function getBoundaries(popper, padding, boundariesElement) {
             boundaries.right = width;
             boundaries.bottom = height;
         } else {
-            const scrollLeft = getTotalScroll(popper, 'left');
-            const scrollTop = getTotalScroll(popper, 'top');
-
             boundaries = {
                 top: 0 - top,
-                right: width - left + scrollLeft,
-                bottom: height - top + scrollTop,
+                right: width - left,
+                bottom: height - top,
                 left: 0 - left,
             };
         }
@@ -61,7 +56,8 @@ export default function getBoundaries(popper, padding, boundariesElement) {
         }
         // for all the other DOM elements, this one is good
         else {
-            boundaries = getOffsetRectRelativeToCustomParent(boundariesNode, offsetParent, isFixed(popper));
+            boundaries = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent);
+            console.log(boundaries);
         }
     }
 

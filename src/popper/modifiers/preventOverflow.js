@@ -24,7 +24,7 @@ import getBoundaries from '../utils/getBoundaries';
  */
 export default function preventOverflow(data, options) {
     const boundariesElement = options.boundariesElement || getOffsetParent(data.instance.popper);
-    const boundaries = getBoundaries(data.instance.popper, options.padding, boundariesElement);
+    const boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, boundariesElement);
     options.boundaries = boundaries;
 
     const order = options.priority;

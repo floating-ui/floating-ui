@@ -239,7 +239,8 @@ export default class Popper {
         data.placement = computeAutoPlacement(
             this.options.placement,
             data.offsets.reference,
-            this.popper
+            this.popper,
+            this.reference
         );
 
         // store the computed placement inside `originalPlacement`

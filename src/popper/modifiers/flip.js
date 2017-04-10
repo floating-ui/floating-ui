@@ -27,7 +27,8 @@ export default function flip(data, options) {
         return data;
     }
 
-    const boundaries = getBoundaries(data.instance.popper, options.padding, options.boundariesElement);
+    const boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, options.boundariesElement);
+    console.log(boundaries);
 
     let placement = data.placement.split('-')[0];
     let placementOpposite = getOppositePlacement(placement);
