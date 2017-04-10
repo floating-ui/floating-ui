@@ -1,9 +1,12 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
+import includeScroll from './includeScroll';
+import getScrollParent from './getScrollParent';
 
 export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
     const childrenRect = children.getBoundingClientRect();
     const parentRect = parent.getBoundingClientRect();
-    const offsets = {
+    const scrollParent = getScrollParent(children);
+    let offsets = {
         top: childrenRect.top - parentRect.top,
         left: childrenRect.left - parentRect.left,
         bottom: childrenRect.top - parentRect.top + childrenRect.height,
@@ -27,6 +30,10 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
         offsets.bottom -= borderTopWidth - marginTop;
         offsets.left -= borderLeftWidth - marginLeft;
         offsets.right -= borderLeftWidth - marginLeft;
+    }
+
+    if (parent.contains(scrollParent) && scrollParent.nodeName !== 'BODY') {
+        offsets = includeScroll(offsets, parent);
     }
 
     return offsets;
