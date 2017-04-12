@@ -11,20 +11,26 @@ export default function findCommonOffsetParent(element1, element2) {
     }
 
     const { commonAncestorContainer } = range;
-    if (isOffsetContainer(commonAncestorContainer)) {
-        return commonAncestorContainer;
+
+    // Both nodes are inside #document
+    if (![element1, element2].includes(commonAncestorContainer)) {
+        if (isOffsetContainer(commonAncestorContainer)) {
+            return commonAncestorContainer;
+        }
+
+        const offsetParent = commonAncestorContainer && commonAncestorContainer.offsetParent;
+
+        if (!offsetParent || offsetParent && offsetParent.nodeName === 'BODY') {
+            return window.document.documentElement;
+        }
+
+        return offsetParent;
     }
 
-    // This is probably very stupid, fix me please
-    if (!commonAncestorContainer) {
-        return window.document.documentElement;
+    // one of the nodes is inside shadowDOM
+    if (element1.getRootNode().host) {
+        return findCommonOffsetParent(element1.getRootNode().host, element2);
+    } else {
+        return findCommonOffsetParent(element1, element2.getRootNode().host);
     }
-
-    const offsetParent = commonAncestorContainer.offsetParent;
-
-    if (!offsetParent || offsetParent && offsetParent.nodeName === 'BODY') {
-        return document.documentElement;
-    }
-
-    return offsetParent;
 }
