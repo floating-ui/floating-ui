@@ -1,4 +1,5 @@
 import isOffsetContainer from './isOffsetContainer';
+import getRoot from './getRoot';
 
 export default function findCommonOffsetParent(element1, element2) {
     const range = document.createRange();
@@ -33,10 +34,11 @@ export default function findCommonOffsetParent(element1, element2) {
         return offsetParent;
     }
 
-    // one of the nodes is inside shadowDOM
-    if (element1.getRootNode().host) {
-        return findCommonOffsetParent(element1.getRootNode().host, element2);
+    // one of the nodes is inside shadowDOM, find which one
+    const element1root = getRoot(element1);
+    if (element1root.host) {
+        return findCommonOffsetParent(element1root.host, element2);
     } else {
-        return findCommonOffsetParent(element1, element2.getRootNode().host);
+        return findCommonOffsetParent(element1, getRoot(element2).host);
     }
 }
