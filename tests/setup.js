@@ -14,6 +14,13 @@ beforeEach(function() {
         }
     });
 
+    const reporterCurrentSpec = {
+        specStarted: function(result) {
+            window.testName = result.fullName;
+        }
+    };
+    jasmine.getEnv().addReporter(reporterCurrentSpec);
+
     const jasmineWrapper = document.getElementById('jasmineWrapper');
     jasmineWrapper.innerHTML = '';
 });

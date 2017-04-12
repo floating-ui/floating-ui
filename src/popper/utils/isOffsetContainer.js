@@ -1,3 +1,3 @@
 export default function isOffsetContainer(element) {
-    return element.firstElementChild.offsetParent === element
+    return element.nodeName === 'HTML' || element.firstElementChild.offsetParent === element;
 }

@@ -29,12 +29,11 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
         const scrollTop = getTotalScroll(popper, offsetParent, 'top');
 
         boundaries = {
-            top: 0 - top,
+            top: 0 - top + scrollTop,
             right: width - left + scrollLeft,
             bottom: height - top + scrollTop,
-            left: 0 - left,
+            left: 0 - left + scrollLeft,
         };
-        console.log('viewport', {...boundaries});
     }
     // Handle other cases based on DOM element used as boundaries
     else {
@@ -44,7 +43,6 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
             if (boundariesNode.nodeName === 'BODY') {
                 boundariesNode = window.document.documentElement;
             }
-            console.log('scrollParent', boundariesNode);
         } else if (boundariesElement === 'window') {
             boundariesNode = window.document.documentElement;
         } else {
@@ -61,7 +59,6 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
         else {
             boundaries = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent);
         }
-        console.log('node', {...boundaries});
     }
 
     // Add paddings

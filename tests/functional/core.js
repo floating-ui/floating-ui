@@ -315,6 +315,7 @@ describe('[core]', () => {
         relative.style.height = '700px';
         relative.style.position = 'relative';
         relative.style.backgroundColor = 'green';
+        relative.style.border = '1px solid';
         jasmineWrapper.appendChild(relative);
 
         const scrolling = document.createElement('div');
@@ -322,6 +323,7 @@ describe('[core]', () => {
         scrolling.style.height = '500px';
         scrolling.style.overflow = 'auto';
         scrolling.style.backgroundColor = 'blue';
+        scrolling.style.marginTop = '100px';
         relative.appendChild(scrolling);
 
         const superHigh1 = document.createElement('div');

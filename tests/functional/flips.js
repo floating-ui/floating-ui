@@ -17,6 +17,7 @@ describe('[flipping]', () => {
             placement: 'top',
             onCreate: (data) => {
                 expect(data.placement).toBe('bottom');
+                data.instance.destroy();
                 done();
             },
         });
@@ -195,7 +196,7 @@ describe('[flipping]', () => {
         });
     });
 
-    xit('flips to bottom when hits top viewport edge', (done) => {
+    it('flips to bottom when hits top viewport edge', (done) => {
         jasmineWrapper.innerHTML = `
             <div id="s1" style="height: 3000px; background: red;">
                 <div id="reference" style="background: pink; margin-top: 200px">reference</div>
