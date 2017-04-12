@@ -22,5 +22,9 @@ export default function findCommonOffsetParent(element1, element2) {
 
     const offsetParent = commonAncestorContainer.offsetParent;
 
-    return offsetParent.nodeName === 'BODY' ? document.documentElement : offsetParent;
+    if (!offsetParent || offsetParent && offsetParent.nodeName === 'BODY') {
+        return document.documentElement;
+    }
+
+    return offsetParent;
 }
