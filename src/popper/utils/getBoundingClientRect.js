@@ -45,8 +45,8 @@ export default function getBoundingClientRect(element) {
         width = element.clientWidth || result.right - result.left;
         height = element.clientHeight || result.bottom - result.top;
     }
-    let horizScrollbar = Math.round(result.width - width);
-    let vertScrollbar = Math.round(result.height - height);
+    let horizScrollbar = result.width - width;
+    let vertScrollbar = result.height - height;
 
     // if an hypothetical scrollbar is detected, we must be sure it's not a `border`
     // we make this check conditional for performance reasons
