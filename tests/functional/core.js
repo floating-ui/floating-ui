@@ -1133,7 +1133,7 @@ describe('[core]', () => {
         new Popper(ref, popper, {
             placement: 'bottom-end',
             onCreate: (data) => {
-                expect(getRect(popper).right).toBe(getRect(ref).right);
+                expect(getRect(popper).right).toBeApprox(getRect(ref).right);
                 data.instance.destroy();
                 done();
             },

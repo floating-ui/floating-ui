@@ -10,8 +10,6 @@ export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
     const scrollTop = getScroll(html);
     const scrollLeft = getScroll(html, 'left');
 
-    console.log(relativeOffset, scrollTop, scrollLeft);
-
     return {
         top: scrollTop - relativeOffset.top + relativeOffset.marginTop,
         bottom: scrollTop - relativeOffset.top + relativeOffset.marginTop + height,

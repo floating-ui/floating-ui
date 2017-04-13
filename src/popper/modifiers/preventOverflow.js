@@ -27,9 +27,6 @@ export default function preventOverflow(data, options) {
     const boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, boundariesElement);
     options.boundaries = boundaries;
 
-    console.log('boundaries', {...boundaries}, boundariesElement);
-
-
     const order = options.priority;
     let popper = getClientRect(data.offsets.popper);
 
