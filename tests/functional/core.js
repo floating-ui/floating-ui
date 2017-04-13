@@ -486,6 +486,12 @@ describe('[core]', () => {
     });
 
     it('inits a popper near a reference element, both inside a fixed element with CSS transforms, inside a scrolled body', (done) => {
+        const relative = document.createElement('div');
+        relative.style.position = 'relative';
+        relative.style.margin = '20px';
+        relative.style.height = '200vh';
+        relative.style.background = 'rgba(100, 100, 100, 0.5)';
+
         const fixed = document.createElement('div');
         fixed.style.position = 'fixed';
         fixed.style.margin = '20px';
@@ -493,18 +499,14 @@ describe('[core]', () => {
         fixed.style.width = '100%';
         fixed.style.transform = 'translateX(0.1)';
         fixed.style.background = 'green';
-        jasmineWrapper.appendChild(fixed);
+        relative.appendChild(fixed);
 
-        const relative = document.createElement('div');
-        relative.style.position = 'relative';
-        relative.style.margin = '20px';
-        relative.style.height = '200vh';
-        relative.style.background = 'rgba(100, 100, 100, 0.5)';
         jasmineWrapper.appendChild(relative);
-        simulateScroll(document.body, { scrollTop: 800 });
 
         const ref = appendNewRef(1, 'ref', fixed);
         const popper = appendNewPopper(2, 'popper', fixed);
+
+        simulateScroll(document.body, { scrollTop: 800 });
 
         new Popper(ref, popper, {
             onCreate: (data) => {
