@@ -1,6 +1,7 @@
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
+import getScroll from './getScroll';
 
 /**
  * Get bounding client rect of given element
@@ -22,6 +23,12 @@ export default function getBoundingClientRect(element) {
         } catch(err) {
             rect = {};
         }
+        const scrollTop = getScroll(element, 'top');
+        const scrollLeft = getScroll(element, 'left');
+        rect.top += scrollTop;
+        rect.bottom += scrollTop;
+        rect.left += scrollLeft;
+        rect.right += scrollLeft;
     } else {
         rect = element.getBoundingClientRect();
     }
