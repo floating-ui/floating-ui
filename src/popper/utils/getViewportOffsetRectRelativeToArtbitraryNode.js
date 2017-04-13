@@ -1,23 +1,21 @@
-import getOffsetRect from './getOffsetRect';
-import getOffsetParent from './getOffsetParent';
+import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
+import getScroll from './getScroll';
 
 export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-    // Offset relative to offsetParent
-    const relativeOffset = getOffsetRect(element);
+    const html = window.document.documentElement;
+    const relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
+    const width = Math.max(html.clientWidth, window.innerWidth || 0);
+    const height = Math.max(html.clientHeight, window.innerHeight || 0);
 
-    if (element.nodeName !== 'HTML') {
-        const offsetParent = getOffsetParent(element);
-        const parentOffset = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
-        const offset = {
-            width: relativeOffset.offsetWidth,
-            height: relativeOffset.offsetHeight,
-            left: relativeOffset.left + parentOffset.left,
-            top: relativeOffset.top + parentOffset.top,
-            right: relativeOffset.right - parentOffset.right,
-            bottom: relativeOffset.bottom - parentOffset.bottom,
-        };
-        return offset;
-    }
+    const scrollTop = getScroll(html);
+    const scrollLeft = getScroll(html, 'left');
 
-    return relativeOffset;
+    console.log(relativeOffset, scrollTop, scrollLeft);
+
+    return {
+        top: scrollTop - relativeOffset.top ,
+        bottom: scrollTop - relativeOffset.top + height,
+        left: scrollLeft - relativeOffset.left,
+        right: scrollLeft - relativeOffset.left + width,
+    };
 }
