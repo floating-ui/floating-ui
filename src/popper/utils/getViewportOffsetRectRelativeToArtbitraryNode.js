@@ -13,9 +13,9 @@ export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
     console.log(relativeOffset, scrollTop, scrollLeft);
 
     return {
-        top: scrollTop - relativeOffset.top ,
-        bottom: scrollTop - relativeOffset.top + height,
-        left: scrollLeft - relativeOffset.left,
-        right: scrollLeft - relativeOffset.left + width,
+        top: scrollTop - relativeOffset.top + relativeOffset.marginTop,
+        bottom: scrollTop - relativeOffset.top + relativeOffset.marginTop + height,
+        left: scrollLeft - relativeOffset.left + relativeOffset.marginLeft,
+        right: scrollLeft - relativeOffset.left + relativeOffset.marginLeft + width,
     };
 }
