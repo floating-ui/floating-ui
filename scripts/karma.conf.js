@@ -23,12 +23,12 @@ module.exports = function(config) {
             SLChrome: {
                 base: 'SauceLabs',
                 browserName: 'chrome',
-                platform: 'OS X 10.11',
+                platform: 'macOS 10.12',
             },
             SLFirefox: {
                 base: 'SauceLabs',
                 browserName: 'firefox',
-                platform: 'OS X 10.11',
+                platform: 'macOS 10.12',
             },
             SLEdge: {
                 base: 'SauceLabs',
@@ -37,7 +37,7 @@ module.exports = function(config) {
             SLSafari: {
                 base: 'SauceLabs',
                 browserName: 'safari',
-                platform: 'OS X 10.11',
+                platform: 'macOS 10.12',
             },
             SLInternetExplorer10: {
                 base: 'SauceLabs',
