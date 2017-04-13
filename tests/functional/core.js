@@ -88,6 +88,43 @@ describe('[core]', () => {
         });
     });
 
+    xit('inits a top popper inside body with margins relative to absolute reference rotated by 90 degs', (done) => {
+        const body = document.body
+        body.style.marginLeft = '300px';
+        body.style.marginTop = '300px';
+
+        jasmineWrapper.innerHTML = `
+            <div id="reference" style="
+                position: absolute;
+                top: 100px;
+                width: 100px;
+                height: 50px;
+                border: 1px solid;
+                margin-left: 50px;
+                -ms-transform: rotate(90deg);
+                -webkit-transform: rotate(90deg);
+                transform: rotate(90deg);
+            "></div>
+            <div id="popper" style="background: black; color: white;">1</div>
+        `;
+
+        const popper = document.querySelector('#popper');
+        const reference = document.querySelector('#reference');
+
+        new Popper(reference, popper, {
+            placement: 'top',
+            onCreate(data) {
+                const { bottom, left } = getRect(popper);
+                expect(bottom).toBeApprox(getRect(reference).top);
+                expect(left).toBeApprox(getRect(reference).left + reference.offsetHeight / 2);
+
+                data.instance.destroy();
+                body.style.cssText = null;
+                done();
+            }
+        });
+    });
+
     it('inits a right scrollable popper ', (done) => {
         const reference = appendNewRef(1);
         const popper    = appendNewPopper(2);
