@@ -66,7 +66,26 @@ describe('[core]', () => {
                 done();
             }
         });
+    });
 
+    it('inits a bottom popper inside document with margins, it should correctly flip', (done) => {
+        const doc = document.documentElement
+        doc.style.marginLeft = '300px';
+        doc.style.marginTop = '100vh';
+
+        const reference = appendNewRef(1);
+        const popper    = appendNewPopper(2);
+
+        new Popper(reference, popper, {
+            onCreate(data) {
+                const bottom = getRect(popper).bottom;
+                expect(bottom).toBeApprox(getRect(reference).top - arrowSize);
+
+                data.instance.destroy();
+                doc.style.cssText = null;
+                done();
+            }
+        });
     });
 
     it('inits a right scrollable popper ', (done) => {

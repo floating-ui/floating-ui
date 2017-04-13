@@ -46,9 +46,9 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
 
             const offsets = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent);
 
-            boundaries.top += offsets.top;
+            boundaries.top += offsets.top - offsets.marginTop;
             boundaries.bottom += offsets.top;
-            boundaries.left += offsets.left;
+            boundaries.left += offsets.left - offsets.marginLeft;
             boundaries.right += offsets.left;
         }
         // for all the other DOM elements, this one is good

@@ -30,6 +30,10 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
         offsets.bottom -= borderTopWidth - marginTop;
         offsets.left -= borderLeftWidth - marginLeft;
         offsets.right -= borderLeftWidth - marginLeft;
+
+        // Attach marginTop and marginLeft because in some circumstances we may need them
+        offsets.marginTop = marginTop;
+        offsets.marginLeft = marginLeft;
     }
 
     if (parent.contains(scrollParent) && scrollParent.nodeName !== 'BODY') {
