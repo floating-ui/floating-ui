@@ -165,7 +165,7 @@ describe('[flipping]', () => {
         });
     })
 
-    xit('flips to opposite side when rendered inside a positioned parent', (done) => {
+    it('flips to opposite side when rendered inside a positioned parent', (done) => {
         const page = document.createElement('div');
         page.style.paddingTop = '110vh'; // Simulates page content
         page.style.background = 'lightskyblue';

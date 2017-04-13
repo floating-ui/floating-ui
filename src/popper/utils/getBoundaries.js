@@ -1,9 +1,8 @@
 import getScrollParent from './getScrollParent';
-import getTotalScroll from './getTotalScroll';
 import getParentNode from './getParentNode';
 import findCommonOffsetParent from './findCommonOffsetParent';
 import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
-import getOffsetRectRelativeToViewport from './getOffsetRectRelativeToViewport';
+import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
 
@@ -23,17 +22,7 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
 
     // Handle viewport case
     if (boundariesElement === 'viewport') {
-        const { left, top } = getOffsetRectRelativeToViewport(offsetParent);
-        const { clientWidth: width, clientHeight: height } = window.document.documentElement;
-        const scrollLeft = getTotalScroll(popper, offsetParent, 'left');
-        const scrollTop = getTotalScroll(popper, offsetParent, 'top');
-
-        boundaries = {
-            top: 0 - top + scrollTop,
-            right: width - left + scrollLeft,
-            bottom: height - top + scrollTop,
-            left: 0 - left + scrollLeft,
-        };
+        boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
     }
     // Handle other cases based on DOM element used as boundaries
     else {
@@ -54,6 +43,13 @@ export default function getBoundaries(popper, reference, padding, boundariesElem
             const { height, width } = getWindowSizes();
             boundaries.right = width;
             boundaries.bottom = height;
+
+            const offsets = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent);
+
+            boundaries.top += offsets.top;
+            boundaries.bottom += offsets.top;
+            boundaries.left += offsets.left;
+            boundaries.right += offsets.left;
         }
         // for all the other DOM elements, this one is good
         else {
