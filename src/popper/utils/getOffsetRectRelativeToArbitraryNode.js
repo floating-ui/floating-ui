@@ -6,8 +6,6 @@ import getBoundingClientRect from './getBoundingClientRect';
 export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
     const childrenRect = getBoundingClientRect(children);
     const parentRect = getBoundingClientRect(parent);
-    // const childrenRect = children.getBoundingClientRect();
-    // const parentRect = parent.getBoundingClientRect();
     const scrollParent = getScrollParent(children);
     let offsets = {
         top: childrenRect.top - parentRect.top,
