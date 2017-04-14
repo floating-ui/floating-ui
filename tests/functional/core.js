@@ -88,7 +88,7 @@ describe('[core]', () => {
     });
   });
 
-  xit(
+  it(
     'inits a top popper inside body with margins relative to absolute reference rotated by 90 degs',
     done => {
       const body = document.body;
@@ -116,10 +116,11 @@ describe('[core]', () => {
       new Popper(reference, popper, {
         placement: 'top',
         onCreate(data) {
-          const { bottom, left } = getRect(popper);
-          expect(bottom).toBeApprox(getRect(reference).top);
-          expect(left).toBeApprox(
-            getRect(reference).left + reference.offsetHeight / 2
+          const pop = getRect(popper);
+          const ref = getRect(reference);
+          expect(pop.bottom).toBeApprox(ref.top);
+          expect(pop.left + pop.width / 2).toBeApprox(
+            ref.left + ref.width / 2
           );
 
           data.instance.destroy();
@@ -1192,7 +1193,7 @@ describe('[core]', () => {
     new Popper(ref, popper, {
       placement: 'bottom-end',
       onCreate: data => {
-        expect(getRect(popper).right).toBe(getRect(ref).right);
+        expect(getRect(popper).right).toBeApprox(getRect(ref).right);
         data.instance.destroy();
         done();
       },
