@@ -9,10 +9,10 @@ import isFixed from './isFixed';
  * @returns {String} position
  */
 export default function getPosition(element) {
-    const container = getOffsetParent(element);
+  const container = getOffsetParent(element);
 
-    // Decide if the popper will be fixed
-    // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-    const isParentFixed = isFixed(container);
-    return isParentFixed ? 'fixed' : 'absolute';
+  // Decide if the popper will be fixed
+  // If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
+  const isParentFixed = isFixed(container);
+  return isParentFixed ? 'fixed' : 'absolute';
 }

@@ -9,22 +9,29 @@ import getBoundaries from '../utils/getBoundaries';
  * @argument {Object} options - Modifiers configuration and options
  * @returns {Object} The data object, properly modified
  */
-export default function computeAutoPlacement(placement, refRect, popper) {
-    if (placement.indexOf('auto') === -1) {
-        return placement;
-    }
+export default function computeAutoPlacement(
+  placement,
+  refRect,
+  popper,
+  reference
+) {
+  if (placement.indexOf('auto') === -1) {
+    return placement;
+  }
 
-    const boundaries = getBoundaries(popper, 0, 'scrollParent');
+  const boundaries = getBoundaries(popper, reference, 0, 'scrollParent');
 
-    const sides = {
-        top: refRect.top - boundaries.top,
-        right: boundaries.right - refRect.right,
-        bottom: boundaries.bottom - refRect.bottom,
-        left: refRect.left - boundaries.left,
-    };
+  const sides = {
+    top: refRect.top - boundaries.top,
+    right: boundaries.right - refRect.right,
+    bottom: boundaries.bottom - refRect.bottom,
+    left: refRect.left - boundaries.left,
+  };
 
-    const computedPlacement = Object.keys(sides).sort((a, b) => sides[b] - sides[a])[0];
-    const variation = placement.split('-')[1];
+  const computedPlacement = Object.keys(sides).sort(
+    (a, b) => sides[b] - sides[a]
+  )[0];
+  const variation = placement.split('-')[1];
 
-    return computedPlacement + (variation ? `-${variation}` : '');
+  return computedPlacement + (variation ? `-${variation}` : '');
 }

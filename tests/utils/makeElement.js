@@ -2,5 +2,5 @@
  * Create an element.
  */
 export default function makeElement() {
-    return document.createElement('div');
+  return document.createElement('div');
 }

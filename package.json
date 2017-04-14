@@ -6,6 +6,7 @@
   "jsnext:main": "dist/popper.js",
   "scripts": {
     "prepublish": "in-publish && npm run build || exit 0 ",
+    "precommit": "lint-staged && opt --in pre-commit --exec \"npm start validate\"",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
     "build": "npm run build:popper && npm run build:tooltip",
@@ -54,14 +55,14 @@
   ],
   "homepage": "https://popper.js.org",
   "devDependencies": {
-    "babel-core": "^6.21.0",
+    "babel-core": "^6.24.1",
     "babel-eslint": "^7.1.0",
     "babel-plugin-external-helpers": "^6.8.0",
     "babel-plugin-istanbul": "^4.0.0",
     "babel-plugin-module-resolver": "^2.4.0",
     "babel-preset-babili": "0.0.12",
-    "babel-preset-es2015": "^6.13.2",
-    "babel-preset-stage-2": "^6.18.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "chai": "^3.5.0",
     "eslint": "^3.17.1",
     "eslint-plugin-jasmine": "^2.1.0",
@@ -75,14 +76,24 @@
     "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
-    "karma-rollup-preprocessor": "^3.0.2",
+    "karma-rollup-preprocessor": "^4.0.0",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.0.0",
     "karma-sinon": "^1.0.5",
+    "lint-staged": "^3.4.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.1.0",
+    "prettier-eslint": "^5.1.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^3.1.0",
     "sinon": "^2.1.0",
     "yargs": "^7.0.2"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier-eslint --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.js\"",
+      "git add"
+    ]
   }
 }

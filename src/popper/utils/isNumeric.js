@@ -6,5 +6,5 @@
  * @return {Boolean}
  */
 export default function isNumeric(n) {
-    return (n !== '' && !isNaN(parseFloat(n)) && isFinite(n));
+  return n !== '' && !isNaN(parseFloat(n)) && isFinite(n);
 }

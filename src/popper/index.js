@@ -4,7 +4,6 @@ import debounce from './utils/debounce';
 import setStyles from './utils/setStyles';
 import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
-import getPosition from './utils/getPosition';
 import getReferenceOffsets from './utils/getReferenceOffsets';
 import getPopperOffsets from './utils/getPopperOffsets';
 import isFunction from './utils/isFunction';
@@ -19,13 +18,13 @@ import modifiers from './modifiers/index';
 
 // default options
 const DEFAULTS = {
-    // placement of the popper
-    placement: 'bottom',
+  // placement of the popper
+  placement: 'bottom',
 
-    // whether events (resize, scroll) are initially enabled
-    eventsEnabled: true,
+  // whether events (resize, scroll) are initially enabled
+  eventsEnabled: true,
 
-    /**
+  /**
      * Callback called when the popper is created.
      * By default, is set to no-op.
      * Access Popper.js instance with `data.instance`.
@@ -33,9 +32,9 @@ const DEFAULTS = {
      * @static
      * @param {dataObject} data
      */
-    onCreate: () => {},
+  onCreate: () => {},
 
-    /**
+  /**
      * Callback called when the popper is updated, this callback is not called
      * on the initialization/creation of the popper, but only on subsequent
      * updates.
@@ -45,10 +44,10 @@ const DEFAULTS = {
      * @static
      * @param {dataObject} data
      */
-    onUpdate: () => {},
+  onUpdate: () => {},
 
-    // list of functions used to modify the offsets before they are applied to the popper
-    modifiers,
+  // list of functions used to modify the offsets before they are applied to the popper
+  modifiers,
 };
 
 /**
@@ -125,238 +124,253 @@ const DEFAULTS = {
  * @return {Object} instance - The generated Popper.js instance
  */
 export default class Popper {
-    constructor(reference, popper, options = {}) {
-        // make update() debounced, so that it only runs at most once-per-tick
-        this.update = debounce(this.update.bind(this));
+  constructor(reference, popper, options = {}) {
+    // make update() debounced, so that it only runs at most once-per-tick
+    this.update = debounce(this.update.bind(this));
 
-        // with {} we create a new object with the options inside it
-        this.options = {...Popper.Defaults, ...options};
+    // with {} we create a new object with the options inside it
+    this.options = { ...Popper.Defaults, ...options };
 
-        // init state
-        this.state = {
-            isDestroyed: false,
-            isCreated: false,
-            scrollParents: [],
-        };
+    // init state
+    this.state = {
+      isDestroyed: false,
+      isCreated: false,
+      scrollParents: [],
+    };
 
-        // get reference and popper elements (allow jQuery wrappers)
-        this.reference = reference.jquery ? reference[0] : reference;
-        this.popper = popper.jquery ? popper[0] : popper;
+    // get reference and popper elements (allow jQuery wrappers)
+    this.reference = reference.jquery ? reference[0] : reference;
+    this.popper = popper.jquery ? popper[0] : popper;
 
-        // refactoring modifiers' list (Object => Array)
-        this.modifiers = Object.keys(Popper.Defaults.modifiers)
-                               .map((name) => ({name, ...Popper.Defaults.modifiers[name]}));
+    // refactoring modifiers' list (Object => Array)
+    this.modifiers = Object.keys(Popper.Defaults.modifiers).map(name => ({
+      name,
+      ...Popper.Defaults.modifiers[name],
+    }));
 
-        // assign default values to modifiers, making sure to override them with
-        // the ones defined by user
-        this.modifiers = this.modifiers.map((defaultConfig) => {
-            const userConfig = (options.modifiers && options.modifiers[defaultConfig.name]) || {};
-            return {...defaultConfig, ...userConfig};
-        });
+    // assign default values to modifiers, making sure to override them with
+    // the ones defined by user
+    this.modifiers = this.modifiers.map(defaultConfig => {
+      const userConfig = (options.modifiers &&
+        options.modifiers[defaultConfig.name]) || {};
+      return { ...defaultConfig, ...userConfig };
+    });
 
-        // add custom modifiers to the modifiers list
-        if (options.modifiers) {
-            this.options.modifiers = {...{}, ...Popper.Defaults.modifiers, ...options.modifiers};
-            Object.keys(options.modifiers).forEach((name) => {
-                // take in account only custom modifiers
-                if (Popper.Defaults.modifiers[name] === undefined) {
-                    const modifier = options.modifiers[name];
-                    modifier.name = name;
-                    this.modifiers.push(modifier);
-                }
-            });
+    // add custom modifiers to the modifiers list
+    if (options.modifiers) {
+      this.options.modifiers = {
+        ...{},
+        ...Popper.Defaults.modifiers,
+        ...options.modifiers,
+      };
+      Object.keys(options.modifiers).forEach(name => {
+        // take in account only custom modifiers
+        if (Popper.Defaults.modifiers[name] === undefined) {
+          const modifier = options.modifiers[name];
+          modifier.name = name;
+          this.modifiers.push(modifier);
         }
-
-        // get the popper position type
-        this.state.position = getPosition(this.reference);
-
-        // sort the modifiers by order
-        this.modifiers = this.modifiers.sort((a, b) => a.order - b.order);
-
-        // modifiers have the ability to execute arbitrary code when Popper.js get inited
-        // such code is executed in the same order of its modifier
-        // they could add new properties to their options configuration
-        // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
-        this.modifiers.forEach((modifierOptions) => {
-            if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
-                modifierOptions.onLoad(
-                    this.reference,
-                    this.popper,
-                    this.options,
-                    modifierOptions,
-                    this.state
-                );
-            }
-        });
-
-        // determine how we should set the origin of offsets
-        this.state.isParentTransformed = isTransformed(this.popper.parentNode);
-
-        // fire the first update to position the popper in the right place
-        this.update();
-
-        const eventsEnabled = this.options.eventsEnabled;
-        if (eventsEnabled) {
-            // setup event listeners, they will take care of update the position in specific situations
-            this.enableEventListeners();
-        }
-
-        this.state.eventsEnabled = eventsEnabled;
+      });
     }
 
-    //
-    // Methods
-    //
+    // sort the modifiers by order
+    this.modifiers = this.modifiers.sort((a, b) => a.order - b.order);
 
-    /**
+    // modifiers have the ability to execute arbitrary code when Popper.js get inited
+    // such code is executed in the same order of its modifier
+    // they could add new properties to their options configuration
+    // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
+    this.modifiers.forEach(modifierOptions => {
+      if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
+        modifierOptions.onLoad(
+          this.reference,
+          this.popper,
+          this.options,
+          modifierOptions,
+          this.state
+        );
+      }
+    });
+
+    // determine how we should set the origin of offsets
+    this.state.isParentTransformed = isTransformed(this.popper.parentNode);
+
+    // fire the first update to position the popper in the right place
+    this.update();
+
+    const eventsEnabled = this.options.eventsEnabled;
+    if (eventsEnabled) {
+      // setup event listeners, they will take care of update the position in specific situations
+      this.enableEventListeners();
+    }
+
+    this.state.eventsEnabled = eventsEnabled;
+  }
+
+  //
+  // Methods
+  //
+
+  /**
      * Updates the position of the popper, computing the new offsets and applying the new style
      * Prefer `scheduleUpdate` over `update` because of performance reasons
      * @method
      * @memberof Popper
      */
-    update() {
-        // if popper is destroyed, don't perform any further update
-        if (this.state.isDestroyed) { return; }
-
-        let data = {
-            instance: this,
-            styles: {},
-            attributes: {},
-            flipped: false,
-            offsets: {},
-        };
-
-        // make sure to apply the popper position before any computation
-        this.state.position = getPosition(this.reference);
-        setStyles(this.popper, { position: this.state.position});
-
-        // compute reference element offsets
-        data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference);
-
-        // compute auto placement, store placement inside the data object,
-        // modifiers will be able to edit `placement` if needed
-        // and refer to originalPlacement to know the original value
-        data.placement = computeAutoPlacement(
-            this.options.placement,
-            data.offsets.reference,
-            this.popper
-        );
-
-        // store the computed placement inside `originalPlacement`
-        data.originalPlacement = this.options.placement;
-
-        // compute the popper offsets
-        data.offsets.popper = getPopperOffsets(
-            this.state,
-            this.popper,
-            data.offsets.reference,
-            data.placement
-        );
-
-        // run the modifiers
-        data = runModifiers(this.modifiers, data);
-
-        // the first `update` will call `onCreate` callback
-        // the other ones will call `onUpdate` callback
-        if (!this.state.isCreated) {
-            this.state.isCreated = true;
-            this.options.onCreate(data);
-        } else {
-            this.options.onUpdate(data);
-        }
+  update() {
+    // if popper is destroyed, don't perform any further update
+    if (this.state.isDestroyed) {
+      return;
     }
 
-    /**
+    let data = {
+      instance: this,
+      styles: {},
+      attributes: {},
+      flipped: false,
+      offsets: {},
+    };
+
+    // make sure to apply the popper position before any computation
+    setStyles(this.popper, { position: 'absolute' });
+
+    // compute reference element offsets
+    data.offsets.reference = getReferenceOffsets(
+      this.state,
+      this.popper,
+      this.reference
+    );
+
+    // compute auto placement, store placement inside the data object,
+    // modifiers will be able to edit `placement` if needed
+    // and refer to originalPlacement to know the original value
+    data.placement = computeAutoPlacement(
+      this.options.placement,
+      data.offsets.reference,
+      this.popper,
+      this.reference
+    );
+
+    // store the computed placement inside `originalPlacement`
+    data.originalPlacement = this.options.placement;
+
+    // compute the popper offsets
+    data.offsets.popper = getPopperOffsets(
+      this.state,
+      this.popper,
+      data.offsets.reference,
+      data.placement
+    );
+
+    // run the modifiers
+    data = runModifiers(this.modifiers, data);
+
+    // the first `update` will call `onCreate` callback
+    // the other ones will call `onUpdate` callback
+    if (!this.state.isCreated) {
+      this.state.isCreated = true;
+      this.options.onCreate(data);
+    } else {
+      this.options.onUpdate(data);
+    }
+  }
+
+  /**
      * Schedule an update, it will run on the next UI update available
      * @method scheduleUpdate
      * @memberof Popper
      */
-    scheduleUpdate = () => requestAnimationFrame(this.update);
+  scheduleUpdate = () => requestAnimationFrame(this.update);
 
-    /**
+  /**
      * Destroy the popper
      * @method
      * @memberof Popper
      */
-    destroy() {
-        this.state.isDestroyed = true;
+  destroy() {
+    this.state.isDestroyed = true;
 
-        // touch DOM only if `applyStyle` modifier is enabled
-        if (isModifierEnabled(this.modifiers, 'applyStyle')) {
-            this.popper.removeAttribute('x-placement');
-            this.popper.style.left = '';
-            this.popper.style.position = '';
-            this.popper.style.top = '';
-            this.popper.style[getSupportedPropertyName('transform')] = '';
-        }
-
-        this.disableEventListeners();
-
-        // remove the popper if user explicity asked for the deletion on destroy
-        // do not use `remove` because IE11 doesn't support it
-        if (this.options.removeOnDestroy) {
-            this.popper.parentNode.removeChild(this.popper);
-        }
-        return this;
+    // touch DOM only if `applyStyle` modifier is enabled
+    if (isModifierEnabled(this.modifiers, 'applyStyle')) {
+      this.popper.removeAttribute('x-placement');
+      this.popper.style.left = '';
+      this.popper.style.position = '';
+      this.popper.style.top = '';
+      this.popper.style[getSupportedPropertyName('transform')] = '';
     }
 
-    /**
+    this.disableEventListeners();
+
+    // remove the popper if user explicity asked for the deletion on destroy
+    // do not use `remove` because IE11 doesn't support it
+    if (this.options.removeOnDestroy) {
+      this.popper.parentNode.removeChild(this.popper);
+    }
+    return this;
+  }
+
+  /**
      * it will add resize/scroll events and start recalculating
      * position of the popper element when they are triggered
      * @method
      * @memberof Popper
      */
-    enableEventListeners() {
-        if (!this.state.eventsEnabled) {
-            this.state = setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
-        }
+  enableEventListeners() {
+    if (!this.state.eventsEnabled) {
+      this.state = setupEventListeners(
+        this.reference,
+        this.options,
+        this.state,
+        this.scheduleUpdate
+      );
     }
+  }
 
-    /**
+  /**
      * it will remove resize/scroll events and won't recalculate
      * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
      * unless you call 'update' method manually.
      * @method
      * @memberof Popper
      */
-    disableEventListeners() {
-        if (this.state.eventsEnabled) {
-            window.cancelAnimationFrame(this.scheduleUpdate);
-            this.state = removeEventListeners(this.reference, this.state);
-        }
+  disableEventListeners() {
+    if (this.state.eventsEnabled) {
+      window.cancelAnimationFrame(this.scheduleUpdate);
+      this.state = removeEventListeners(this.reference, this.state);
     }
+  }
 
-    /**
+  /**
      * Collection of utilities useful when writing custom modifiers
      * @memberof Popper
      */
-    static Utils = Utils;
+  static Utils = Utils;
 
-    /**
+  /**
      * List of accepted placements to use as values of the `placement` option
      * @memberof Popper
      */
-    static placements = [
-        'auto',
-        'auto-start',
-        'auto-end',
-        'top',
-        'top-start',
-        'top-end',
-        'right',
-        'right-start',
-        'right-end',
-        'bottom',
-        'bottom-start',
-        'bottom-end',
-        'left',
-        'left-start',
-        'left-end',
-    ];
+  static placements = [
+    'auto',
+    'auto-start',
+    'auto-end',
+    'top',
+    'top-start',
+    'top-end',
+    'right',
+    'right-start',
+    'right-end',
+    'bottom',
+    'bottom-start',
+    'bottom-end',
+    'left',
+    'left-start',
+    'left-end',
+  ];
 
-    /**
+  /**
      * Default Popper.js options
      * @memberof Popper
      */
-    static Defaults = DEFAULTS;
+  static Defaults = DEFAULTS;
 }

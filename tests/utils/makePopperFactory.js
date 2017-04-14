@@ -7,16 +7,16 @@ import Popper from '../../src/popper/index.js';
  * the `afterEach` API to schedule cleanup.
  */
 export default function makePopperFactory() {
-    let poppers = [];
+  let poppers = [];
 
-    afterEach(() => {
-        poppers.forEach((instance) => instance.destroy());
-        poppers = [];
-    });
+  afterEach(() => {
+    poppers.forEach(instance => instance.destroy());
+    poppers = [];
+  });
 
-    return function factory(...args) {
-        const popper = new Popper(...args);
-        poppers.push(popper);
-        return popper;
-    };
+  return function factory(...args) {
+    const popper = new Popper(...args);
+    poppers.push(popper);
+    return popper;
+  };
 }

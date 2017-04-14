@@ -7,7 +7,8 @@ import getBoundingClientRect from './getBoundingClientRect';
 import getClientRect from './getClientRect';
 import getOffsetParent from './getOffsetParent';
 import getOffsetRect from './getOffsetRect';
-import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
+import getOffsetRectRelativeToArbitraryNode
+  from './getOffsetRectRelativeToArbitraryNode';
 import getOuterSizes from './getOuterSizes';
 import getParentNode from './getParentNode';
 import getPopperOffsets from './getPopperOffsets';
@@ -19,7 +20,6 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 import getSupportedPropertyName from './getSupportedPropertyName';
 import getTotalScroll from './getTotalScroll';
 import getWindowSizes from './getWindowSizes';
-import includeScroll from './includeScroll';
 import isFixed from './isFixed';
 import isFunction from './isFunction';
 import isModifierEnabled from './isModifierEnabled';
@@ -35,38 +35,37 @@ import setupEventListeners from './setupEventListeners';
 
 /** @namespace Popper.Utils */
 export default {
-    computeAutoPlacement,
-    debounce,
-    findIndex,
-    getBordersSize,
-    getBoundaries,
-    getBoundingClientRect,
-    getClientRect,
-    getOffsetParent,
-    getOffsetRect,
-    getOffsetRectRelativeToCustomParent,
-    getOuterSizes,
-    getParentNode,
-    getPopperOffsets,
-    getPosition,
-    getReferenceOffsets,
-    getScroll,
-    getScrollParent,
-    getStyleComputedProperty,
-    getSupportedPropertyName,
-    getTotalScroll,
-    getWindowSizes,
-    includeScroll,
-    isFixed,
-    isFunction,
-    isModifierEnabled,
-    isModifierRequired,
-    isNative,
-    isNumeric,
-    isTransformed,
-    removeEventListeners,
-    runModifiers,
-    setAttributes,
-    setStyles,
-    setupEventListeners,
+  computeAutoPlacement,
+  debounce,
+  findIndex,
+  getBordersSize,
+  getBoundaries,
+  getBoundingClientRect,
+  getClientRect,
+  getOffsetParent,
+  getOffsetRect,
+  getOffsetRectRelativeToArbitraryNode,
+  getOuterSizes,
+  getParentNode,
+  getPopperOffsets,
+  getPosition,
+  getReferenceOffsets,
+  getScroll,
+  getScrollParent,
+  getStyleComputedProperty,
+  getSupportedPropertyName,
+  getTotalScroll,
+  getWindowSizes,
+  isFixed,
+  isFunction,
+  isModifierEnabled,
+  isModifierRequired,
+  isNative,
+  isNumeric,
+  isTransformed,
+  removeEventListeners,
+  runModifiers,
+  setAttributes,
+  setStyles,
+  setupEventListeners,
 };

@@ -1,12 +1,12 @@
-import getOffsetParent from './getOffsetParent';
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
-import getPosition from './getPosition';
-import getOffsetRectRelativeToCustomParent from './getOffsetRectRelativeToCustomParent';
-import getOffsetRectRelativeToViewport from './getOffsetRectRelativeToViewport';
-import getTotalScroll from './getTotalScroll';
-import isFixed from './isFixed';
+import findCommonOffsetParent from './findCommonOffsetParent';
+import getOffsetRectRelativeToArbitraryNode
+  from './getOffsetRectRelativeToArbitraryNode';
+import getViewportOffsetRectRelativeToArtbitraryNode
+  from './getViewportOffsetRectRelativeToArtbitraryNode';
 import getWindowSizes from './getWindowSizes';
+import isFixed from './isFixed';
 
 /**
  * Computed the boundaries limits and return them
@@ -17,59 +17,62 @@ import getWindowSizes from './getWindowSizes';
  * @param {Element} boundariesElement - Element used to define the boundaries
  * @returns {Object} Coordinates of the boundaries
  */
-export default function getBoundaries(popper, padding, boundariesElement) {
-    // NOTE: 1 DOM access here
-    let boundaries = { top: 0, left: 0 };
-    const offsetParent = getOffsetParent(popper);
+export default function getBoundaries(
+  popper,
+  reference,
+  padding,
+  boundariesElement
+) {
+  // NOTE: 1 DOM access here
+  let boundaries = { top: 0, left: 0 };
+  const offsetParent = findCommonOffsetParent(popper, reference);
 
-    // Handle viewport case
-    if (boundariesElement === 'viewport') {
-        const { left, top } = getOffsetRectRelativeToViewport(offsetParent);
-        const { clientWidth: width, clientHeight: height } = window.document.documentElement;
-
-        if (getPosition(popper) === 'fixed') {
-            boundaries.right = width;
-            boundaries.bottom = height;
-        } else {
-            const scrollLeft = getTotalScroll(popper, 'left');
-            const scrollTop = getTotalScroll(popper, 'top');
-
-            boundaries = {
-                top: 0 - top,
-                right: width - left + scrollLeft,
-                bottom: height - top + scrollTop,
-                left: 0 - left,
-            };
-        }
-    }
+  // Handle viewport case
+  if (boundariesElement === 'viewport') {
+    boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
+  } else {
     // Handle other cases based on DOM element used as boundaries
-    else {
-        let boundariesNode;
-        if (boundariesElement === 'scrollParent') {
-            boundariesNode = getScrollParent(getParentNode(popper));
-        } else if (boundariesElement === 'window') {
-            boundariesNode = window.document.body;
-        } else {
-            boundariesNode = boundariesElement;
-        }
-
-        // In case of BODY, we need a different computation
-        if (boundariesNode.nodeName === 'BODY') {
-            const { height, width } = getWindowSizes();
-            boundaries.right = width;
-            boundaries.bottom = height;
-        }
-        // for all the other DOM elements, this one is good
-        else {
-            boundaries = getOffsetRectRelativeToCustomParent(boundariesNode, offsetParent, isFixed(popper));
-        }
+    let boundariesNode;
+    if (boundariesElement === 'scrollParent') {
+      boundariesNode = getScrollParent(getParentNode(popper));
+      if (boundariesNode.nodeName === 'BODY') {
+        boundariesNode = window.document.documentElement;
+      }
+    } else if (boundariesElement === 'window') {
+      boundariesNode = window.document.documentElement;
+    } else {
+      boundariesNode = boundariesElement;
     }
 
-    // Add paddings
-    boundaries.left += padding;
-    boundaries.top += padding;
-    boundaries.right -= padding;
-    boundaries.bottom -= padding;
+    // In case of HTML, we need a different computation
+    if (boundariesNode.nodeName === 'HTML' && !isFixed(offsetParent)) {
+      const { height, width } = getWindowSizes();
+      boundaries.right = width;
+      boundaries.bottom = height;
 
-    return boundaries;
+      const offsets = getOffsetRectRelativeToArbitraryNode(
+        boundariesNode,
+        offsetParent
+      );
+
+      boundaries.top += offsets.top - offsets.marginTop;
+      boundaries.bottom += offsets.top;
+      boundaries.left += offsets.left - offsets.marginLeft;
+      boundaries.right += offsets.left;
+    } else {
+      // for all the other DOM elements, this one is good
+      boundaries = getOffsetRectRelativeToArbitraryNode(
+        boundariesNode,
+        offsetParent
+      );
+    }
+  }
+
+  // Add paddings
+  boundaries.left += padding;
+  boundaries.top += padding;
+  boundaries.right -= padding;
+  boundaries.bottom -= padding;
+
+  return boundaries;
 }

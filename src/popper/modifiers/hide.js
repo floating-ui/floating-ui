@@ -12,32 +12,41 @@ import find from '../utils/find';
  * @returns {Object} The data object, properly modified
  */
 export default function hide(data) {
-    if (!isModifierRequired(data.instance.modifiers, 'hide', 'preventOverflow')) {
-        console.warn('WARNING: preventOverflow modifier is required by hide modifier in order to work, be sure to include it before hide!');
-        return data;
-    }
-
-    const refRect = data.offsets.reference;
-    const bound = find(data.instance.modifiers, (modifier) => modifier.name ==='preventOverflow').boundaries;
-
-    if (
-        refRect.bottom < bound.top ||
-        refRect.left > bound.right ||
-        refRect.top > bound.bottom ||
-        refRect.right < bound.left
-    ) {
-        // Avoid unnecessary DOM access if visibility hasn't changed
-        if (data.hide === true) { return data; }
-
-        data.hide = true;
-        data.attributes['x-out-of-boundaries'] = '';
-    } else {
-        // Avoid unnecessary DOM access if visibility hasn't changed
-        if (data.hide === false) { return data; }
-
-        data.hide = false;
-        data.attributes['x-out-of-boundaries'] = false;
-    }
-
+  if (!isModifierRequired(data.instance.modifiers, 'hide', 'preventOverflow')) {
+    console.warn(
+      'WARNING: preventOverflow modifier is required by hide modifier in order to work, be sure to include it before hide!'
+    );
     return data;
+  }
+
+  const refRect = data.offsets.reference;
+  const bound = find(
+    data.instance.modifiers,
+    modifier => modifier.name === 'preventOverflow'
+  ).boundaries;
+
+  if (
+    refRect.bottom < bound.top ||
+    refRect.left > bound.right ||
+    refRect.top > bound.bottom ||
+    refRect.right < bound.left
+  ) {
+    // Avoid unnecessary DOM access if visibility hasn't changed
+    if (data.hide === true) {
+      return data;
+    }
+
+    data.hide = true;
+    data.attributes['x-out-of-boundaries'] = '';
+  } else {
+    // Avoid unnecessary DOM access if visibility hasn't changed
+    if (data.hide === false) {
+      return data;
+    }
+
+    data.hide = false;
+    data.attributes['x-out-of-boundaries'] = false;
+  }
+
+  return data;
 }

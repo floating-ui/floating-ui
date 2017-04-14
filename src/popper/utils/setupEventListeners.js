@@ -1,14 +1,19 @@
 import getScrollParent from './getScrollParent';
 
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
-    const isBody = scrollParent.nodeName === 'BODY';
-    const target = isBody ? window : scrollParent;
-    target.addEventListener(event, callback, { passive: true });
+  const isBody = scrollParent.nodeName === 'BODY';
+  const target = isBody ? window : scrollParent;
+  target.addEventListener(event, callback, { passive: true });
 
-    if (!isBody) {
-        attachToScrollParents(getScrollParent(target.parentNode), event, callback, scrollParents);
-    }
-    scrollParents.push(target);
+  if (!isBody) {
+    attachToScrollParents(
+      getScrollParent(target.parentNode),
+      event,
+      callback,
+      scrollParents
+    );
+  }
+  scrollParents.push(target);
 }
 
 /**
@@ -17,21 +22,26 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
  * @memberof Popper.Utils
  * @private
  */
-export default function setupEventListeners(reference, options, state, updateBound) {
-    // Resize event listener on window
-    state.updateBound = updateBound;
-    window.addEventListener('resize', state.updateBound, { passive: true });
+export default function setupEventListeners(
+  reference,
+  options,
+  state,
+  updateBound
+) {
+  // Resize event listener on window
+  state.updateBound = updateBound;
+  window.addEventListener('resize', state.updateBound, { passive: true });
 
-    // Scroll event listener on scroll parents
-    const scrollElement = getScrollParent(reference);
-    attachToScrollParents(
-        scrollElement,
-        'scroll',
-        state.updateBound,
-        state.scrollParents
-    );
-    state.scrollElement = scrollElement;
-    state.eventsEnabled = true;
+  // Scroll event listener on scroll parents
+  const scrollElement = getScrollParent(reference);
+  attachToScrollParents(
+    scrollElement,
+    'scroll',
+    state.updateBound,
+    state.scrollParents
+  );
+  state.scrollElement = scrollElement;
+  state.eventsEnabled = true;
 
-    return state;
+  return state;
 }
