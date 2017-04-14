@@ -11,21 +11,22 @@ import getClientRect from '../utils/getClientRect';
  * @returns {Object} The data object, properly modified
  */
 export default function keepTogether(data) {
-    const popper  = getClientRect(data.offsets.popper);
-    const reference = data.offsets.reference;
-    const placement = data.placement.split('-')[0];
-    const floor = Math.floor;
-    const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
-    const side = isVertical ? 'right' : 'bottom';
-    const opSide = isVertical ? 'left' : 'top';
-    const measurement = isVertical ? 'width' : 'height';
+  const popper = getClientRect(data.offsets.popper);
+  const reference = data.offsets.reference;
+  const placement = data.placement.split('-')[0];
+  const floor = Math.floor;
+  const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
+  const side = isVertical ? 'right' : 'bottom';
+  const opSide = isVertical ? 'left' : 'top';
+  const measurement = isVertical ? 'width' : 'height';
 
-    if (popper[side] < floor(reference[opSide])) {
-        data.offsets.popper[opSide] = floor(reference[opSide]) - popper[measurement];
-    }
-    if (popper[opSide] > floor(reference[side])) {
-        data.offsets.popper[opSide] = floor(reference[side]);
-    }
+  if (popper[side] < floor(reference[opSide])) {
+    data.offsets.popper[opSide] =
+      floor(reference[opSide]) - popper[measurement];
+  }
+  if (popper[opSide] > floor(reference[side])) {
+    data.offsets.popper[opSide] = floor(reference[side]);
+  }
 
-    return data;
+  return data;
 }

@@ -1,9 +1,10 @@
 const fs = require('fs');
 
-const version = JSON.parse(fs.readFileSync('./src/tooltip/package.json')).version;
+const version = JSON.parse(fs.readFileSync('./src/tooltip/package.json'))
+  .version;
 
 module.exports = function() {
-    return `\
+  return `\
 /**!
  * @fileOverview Kickass library to create tooltips in your applications.
  * @version ${version}
@@ -29,4 +30,4 @@ module.exports = function() {
  * SOFTWARE.
  */\
     `;
-}
+};

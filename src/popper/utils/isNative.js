@@ -1,6 +1,6 @@
 const nativeHints = [
-    'native code',
-    '[object MutationObserverConstructor]' // for mobile safari iOS 9.0
+  'native code',
+  '[object MutationObserverConstructor]', // for mobile safari iOS 9.0
 ];
 
 /**
@@ -8,4 +8,5 @@ const nativeHints = [
  * @argument {Function | undefined} fn the function to check
  * @returns {boolean}
  */
-export default fn => nativeHints.some(hint => (fn || '').toString().indexOf(hint) > -1);
+export default fn =>
+  nativeHints.some(hint => (fn || '').toString().indexOf(hint) > -1);

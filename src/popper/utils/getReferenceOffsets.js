@@ -1,5 +1,6 @@
 import findCommonOffsetParent from './findCommonOffsetParent';
-import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
+import getOffsetRectRelativeToArbitraryNode
+  from './getOffsetRectRelativeToArbitraryNode';
 
 /**
  * Get offsets to the reference element
@@ -11,6 +12,6 @@ import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbit
  * @returns {Object} An object containing the offsets which will be applied to the popper
  */
 export default function getReferenceOffsets(state, popper, reference) {
-    const commonOffsetParent = findCommonOffsetParent(popper, reference);
-    return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent);
+  const commonOffsetParent = findCommonOffsetParent(popper, reference);
+  return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent);
 }

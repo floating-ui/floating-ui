@@ -6,6 +6,9 @@
  * @returns {Boolean} answer to: is a function?
  */
 export default function isFunction(functionToCheck) {
-    const getType = {};
-    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+  const getType = {};
+  return (
+    functionToCheck &&
+    getType.toString.call(functionToCheck) === '[object Function]'
+  );
 }

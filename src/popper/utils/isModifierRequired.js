@@ -10,10 +10,21 @@ import find from './find';
  * @param {String} requestedName - name of requested modifier
  * @returns {Boolean}
  */
-export default function isModifierRequired(modifiers, requestingName, requestedName) {
-    const requesting = find(modifiers, ({ name }) => name === requestingName);
+export default function isModifierRequired(
+  modifiers,
+  requestingName,
+  requestedName
+) {
+  const requesting = find(modifiers, ({ name }) => name === requestingName);
 
-    return !!requesting && modifiers.some((modifier) => {
-        return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
-    });
+  return (
+    !!requesting &&
+    modifiers.some(modifier => {
+      return (
+        modifier.name === requestedName &&
+        modifier.enabled &&
+        modifier.order < requesting.order
+      );
+    })
+  );
 }

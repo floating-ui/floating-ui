@@ -10,12 +10,12 @@ import getScroll from './getScroll';
  * @return {Object} rect - The modifier rect object
  */
 export default function includeScroll(rect, element, subtract = false) {
-    const scrollTop = getScroll(element, 'top');
-    const scrollLeft = getScroll(element, 'left');
-    const modifier = subtract ? -1 : 1;
-    rect.top += scrollTop * modifier;
-    rect.bottom += scrollTop * modifier;
-    rect.left += scrollLeft * modifier;
-    rect.right += scrollLeft * modifier;
-    return rect;
+  const scrollTop = getScroll(element, 'top');
+  const scrollLeft = getScroll(element, 'left');
+  const modifier = subtract ? -1 : 1;
+  rect.top += scrollTop * modifier;
+  rect.bottom += scrollTop * modifier;
+  rect.left += scrollLeft * modifier;
+  rect.right += scrollLeft * modifier;
+  return rect;
 }

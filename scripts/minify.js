@@ -20,21 +20,19 @@ console.info(`MINIFY: ${path.basename(input)}`);
 // Read input code and its source map
 //===================================
 const inputCode = fs.readFileSync(input, { encoding: 'utf8' });
-const inputSourceMap = JSON.parse(fs.readFileSync(inputMap, { encoding: 'utf8' }));
+const inputSourceMap = JSON.parse(
+  fs.readFileSync(inputMap, { encoding: 'utf8' })
+);
 
 // Generate options
 //=================
 const options = {
-    presets: [
-        'babili',
-        !!argv.es5 && ['es2015', { modules: false }],
-        'stage-2',
-    ],
-    comments: false,
-    minified: true,
-    compact: true,
-    sourceMaps: true,
-    inputSourceMap,
+  presets: ['babili', !!argv.es5 && ['es2015', { modules: false }], 'stage-2'],
+  comments: false,
+  minified: true,
+  compact: true,
+  sourceMaps: true,
+  inputSourceMap,
 };
 
 options.presets = options.presets.filter(a => !!a);

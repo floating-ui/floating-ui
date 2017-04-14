@@ -6,9 +6,9 @@
  * @returns {Object} ClientRect like output
  */
 export default function getClientRect(popperOffsets) {
-    return {
-        ...popperOffsets,
-        right: popperOffsets.left + popperOffsets.width,
-        bottom: popperOffsets.top + popperOffsets.height,
-    };
+  return {
+    ...popperOffsets,
+    right: popperOffsets.left + popperOffsets.width,
+    bottom: popperOffsets.top + popperOffsets.height,
+  };
 }
