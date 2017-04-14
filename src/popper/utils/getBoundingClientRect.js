@@ -3,7 +3,6 @@ import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
 import getScroll from './getScroll';
 
-const round = Math.round;
 /**
  * Get bounding client rect of given element
  * @method
@@ -53,12 +52,12 @@ export default function getBoundingClientRect(element) {
     width = element.clientWidth || result.right - result.left;
     height = element.clientHeight || result.bottom - result.top;
   }
-  let horizScrollbar = result.width - width;
-  let vertScrollbar = result.height - height;
+  let horizScrollbar = element.offsetWidth - width;
+  let vertScrollbar = element.offsetHeight - height;
 
   // if an hypothetical scrollbar is detected, we must be sure it's not a `border`
   // we make this check conditional for performance reasons
-  if (round(horizScrollbar) || round(vertScrollbar)) {
+  if (horizScrollbar || vertScrollbar) {
     const styles = getStyleComputedProperty(element);
     horizScrollbar -= getBordersSize(styles, 'x');
     vertScrollbar -= getBordersSize(styles, 'y');
