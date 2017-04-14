@@ -142,6 +142,9 @@ export default class Popper {
     this.reference = reference.jquery ? reference[0] : reference;
     this.popper = popper.jquery ? popper[0] : popper;
 
+    // make sure to apply the popper position before any computation
+    setStyles(this.popper, { position: 'absolute' });
+
     // refactoring modifiers' list (Object => Array)
     this.modifiers = Object.keys(Popper.Defaults.modifiers).map(name => ({
       name,
@@ -230,9 +233,6 @@ export default class Popper {
       flipped: false,
       offsets: {},
     };
-
-    // make sure to apply the popper position before any computation
-    setStyles(this.popper, { position: 'absolute' });
 
     // compute reference element offsets
     data.offsets.reference = getReferenceOffsets(

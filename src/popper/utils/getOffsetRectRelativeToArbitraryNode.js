@@ -21,12 +21,13 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
   // we do this only on HTML because it's the only element that behaves
   // differently when margins are applied to it. The margins are included in
   // the box of the documentElement, in the other cases not.
-  if (parent.nodeName === 'HTML') {
+  const isHTML = parent.nodeName === 'HTML';
+  if (isHTML || parent.nodeName === 'BODY') {
     const styles = getStyleComputedProperty(parent);
-    const borderTopWidth = isIE10 ? 0 : +styles.borderTopWidth.split('px')[0];
-    const borderLeftWidth = isIE10 ? 0 : +styles.borderLeftWidth.split('px')[0];
-    const marginTop = isIE10 ? 0 : +styles.marginTop.split('px')[0];
-    const marginLeft = isIE10 ? 0 : +styles.marginLeft.split('px')[0];
+    const borderTopWidth = isIE10 && isHTML ? 0 : +styles.borderTopWidth.split('px')[0];
+    const borderLeftWidth = isIE10 && isHTML ? 0 : +styles.borderLeftWidth.split('px')[0];
+    const marginTop = isIE10 && isHTML ? 0 : +styles.marginTop.split('px')[0];
+    const marginLeft = isIE10 && isHTML ? 0 : +styles.marginLeft.split('px')[0];
 
     offsets.top -= borderTopWidth - marginTop;
     offsets.bottom -= borderTopWidth - marginTop;

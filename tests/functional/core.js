@@ -8,6 +8,7 @@ import appendNewPopper from '../utils/appendNewPopper';
 import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
 import simulateScroll from '../utils/simulateScroll';
+import prepend from '../utils/prepend';
 
 describe('[core]', () => {
   afterEach(function() {
@@ -91,27 +92,24 @@ describe('[core]', () => {
   it(
     'inits a top popper inside body with margins relative to absolute reference rotated by 90 degs',
     done => {
-      const body = document.body;
-      body.style.marginLeft = '300px';
-      body.style.marginTop = '300px';
-
-      jasmineWrapper.innerHTML = `
-            <div id="reference" style="
-                position: absolute;
-                top: 100px;
-                width: 100px;
-                height: 50px;
-                border: 1px solid;
-                margin-left: 50px;
-                -ms-transform: rotate(90deg);
-                -webkit-transform: rotate(90deg);
-                transform: rotate(90deg);
-            "></div>
-            <div id="popper" style="background: black; color: white;">1</div>
-        `;
-
-      const popper = document.querySelector('#popper');
-      const reference = document.querySelector('#reference');
+      const wrp = document.createElement('div');
+      wrp.innerHTML = `
+          <div id="reference" style="
+              position: absolute;
+              top: 100px;
+              width: 100px;
+              height: 50px;
+              background-color: red;
+              margin-left: 50px;
+              -ms-transform: rotate(90deg);
+              -webkit-transform: rotate(90deg);
+              transform: rotate(90deg);
+          "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
+      `.trim();
+      const popper = wrp.childNodes[1];
+      const reference = wrp.childNodes[0];
+      prepend(reference, document.body);
+      prepend(popper, document.body);
 
       new Popper(reference, popper, {
         placement: 'top',
@@ -119,12 +117,12 @@ describe('[core]', () => {
           const pop = getRect(popper);
           const ref = getRect(reference);
           expect(pop.bottom).toBeApprox(ref.top);
-          expect(pop.left + pop.width / 2).toBeApprox(
-            ref.left + ref.width / 2
-          );
+          expect(pop.left).toBe(ref.left);
 
           data.instance.destroy();
-          body.style.cssText = null;
+          document.body.style.cssText = null;
+          document.body.removeChild(popper);
+          document.body.removeChild(reference);
           done();
         },
       });
