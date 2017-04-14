@@ -221,7 +221,7 @@ describe('[flipping]', () => {
         simulateScroll(document.body, { scrollTop: 200, delay: 50 });
       },
       onUpdate(data) {
-        expect(getRect(popper).top).toBe(getRect(reference).bottom);
+        expect(getRect(popper).top).toBeApprox(getRect(reference).bottom);
         data.instance.destroy();
         done();
       },

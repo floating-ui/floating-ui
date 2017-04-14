@@ -1223,7 +1223,7 @@ describe('[core]', () => {
         simulateScroll(s2, { scrollTop: 50 });
       },
       onUpdate(data) {
-        expect(getRect(reference).bottom).toBe(getRect(popper).top);
+        expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
         data.instance.destroy();
         done();
       },

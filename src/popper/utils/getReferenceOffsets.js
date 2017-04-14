@@ -13,5 +13,6 @@ import getOffsetRectRelativeToArbitraryNode
  */
 export default function getReferenceOffsets(state, popper, reference) {
   const commonOffsetParent = findCommonOffsetParent(popper, reference);
+  console.log(getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent));
   return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent);
 }
