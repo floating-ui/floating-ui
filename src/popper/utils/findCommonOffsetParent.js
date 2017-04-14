@@ -1,6 +1,14 @@
 import isOffsetContainer from './isOffsetContainer';
 import getRoot from './getRoot';
 
+/**
+ * Finds the offset parent common to the two provided nodes
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element1
+ * @argument {Element} element2
+ * @returns {Element} common offset parent
+ */
 export default function findCommonOffsetParent(element1, element2) {
   const range = document.createRange();
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason

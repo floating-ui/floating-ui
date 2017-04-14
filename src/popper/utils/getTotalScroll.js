@@ -4,6 +4,16 @@ import getParentNode from './getParentNode';
 import isOffsetContainer from './isOffsetContainer';
 import isFixed from './isFixed';
 
+/**
+ * Gets the scroll value of the given element relative to the given parent/
+ * It will not include the scroll values of elements that aren't positioned.
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @argument {Element} parent
+ * @argument {String} side `top` or `left`
+ * @returns {Number} amount of scrolled pixels
+ */
 export default function getTotalScroll(element, parent, side = 'top') {
   const scrollParent = getScrollParent(element);
   let scroll = 0;
