@@ -4,6 +4,7 @@ import getScrollParent from './getScrollParent';
 import getBoundingClientRect from './getBoundingClientRect';
 
 export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
+    const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
     const childrenRect = getBoundingClientRect(children);
     const parentRect = getBoundingClientRect(parent);
     const scrollParent = getScrollParent(children);
@@ -22,10 +23,10 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
     // the box of the documentElement, in the other cases not.
     if (parent.nodeName === 'HTML') {
         const styles = getStyleComputedProperty(parent);
-        const borderTopWidth = Number(styles.borderTopWidth.split('px')[0]);
-        const borderLeftWidth = Number(styles.borderLeftWidth.split('px')[0]);
-        const marginTop = Number(styles.marginTop.split('px')[0]);
-        const marginLeft = Number(styles.marginLeft.split('px')[0]);
+        const borderTopWidth = isIE10 ? 0 : +(styles.borderTopWidth.split('px')[0]);
+        const borderLeftWidth = isIE10 ? 0 : +(styles.borderLeftWidth.split('px')[0]);
+        const marginTop = isIE10 ? 0 : +(styles.marginTop.split('px')[0]);
+        const marginLeft = isIE10 ? 0 : +(styles.marginLeft.split('px')[0]);
 
         offsets.top -= borderTopWidth - marginTop;
         offsets.bottom -= borderTopWidth - marginTop;
@@ -37,11 +38,8 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
         offsets.marginLeft = marginLeft;
     }
 
-    if (parent.contains(scrollParent)) {
-        const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
-        if (isIE10 || scrollParent.nodeName !== 'BODY') {
-            offsets = includeScroll(offsets, parent);
-        }
+    if (parent.contains(scrollParent) && (isIE10 || scrollParent.nodeName !== 'BODY')) {
+        offsets = includeScroll(offsets, parent);
     }
 
     return offsets;
