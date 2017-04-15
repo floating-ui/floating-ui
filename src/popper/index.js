@@ -2,7 +2,6 @@
 import Utils from './utils/index';
 import debounce from './utils/debounce';
 import setStyles from './utils/setStyles';
-import isTransformed from './utils/isTransformed';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
 import getReferenceOffsets from './utils/getReferenceOffsets';
 import getPopperOffsets from './utils/getPopperOffsets';
@@ -194,9 +193,6 @@ export default class Popper {
         );
       }
     });
-
-    // determine how we should set the origin of offsets
-    this.state.isParentTransformed = isTransformed(this.popper.parentNode);
 
     // fire the first update to position the popper in the right place
     this.update();

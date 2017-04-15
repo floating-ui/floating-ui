@@ -12,7 +12,6 @@ import getOffsetRectRelativeToArbitraryNode
 import getOuterSizes from './getOuterSizes';
 import getParentNode from './getParentNode';
 import getPopperOffsets from './getPopperOffsets';
-import getPosition from './getPosition';
 import getReferenceOffsets from './getReferenceOffsets';
 import getScroll from './getScroll';
 import getScrollParent from './getScrollParent';
@@ -26,7 +25,6 @@ import isModifierEnabled from './isModifierEnabled';
 import isModifierRequired from './isModifierRequired';
 import isNative from './isNative';
 import isNumeric from './isNumeric';
-import isTransformed from './isTransformed';
 import removeEventListeners from './removeEventListeners';
 import runModifiers from './runModifiers';
 import setAttributes from './setAttributes';
@@ -48,7 +46,6 @@ export default {
   getOuterSizes,
   getParentNode,
   getPopperOffsets,
-  getPosition,
   getReferenceOffsets,
   getScroll,
   getScrollParent,
@@ -62,7 +59,6 @@ export default {
   isModifierRequired,
   isNative,
   isNumeric,
-  isTransformed,
   removeEventListeners,
   runModifiers,
   setAttributes,

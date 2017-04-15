@@ -44,27 +44,21 @@ export default function getBoundaries(
       boundariesNode = boundariesElement;
     }
 
+    const offsets = getOffsetRectRelativeToArbitraryNode(
+      boundariesNode,
+      offsetParent
+    );
+
     // In case of HTML, we need a different computation
     if (boundariesNode.nodeName === 'HTML' && !isFixed(offsetParent)) {
       const { height, width } = getWindowSizes();
-      boundaries.right = width;
-      boundaries.bottom = height;
-
-      const offsets = getOffsetRectRelativeToArbitraryNode(
-        boundariesNode,
-        offsetParent
-      );
-
       boundaries.top += offsets.top - offsets.marginTop;
-      boundaries.bottom += offsets.top;
+      boundaries.bottom = height + offsets.top;
       boundaries.left += offsets.left - offsets.marginLeft;
-      boundaries.right += offsets.left;
+      boundaries.right = width + offsets.left;
     } else {
       // for all the other DOM elements, this one is good
-      boundaries = getOffsetRectRelativeToArbitraryNode(
-        boundariesNode,
-        offsetParent
-      );
+      boundaries = offsets;
     }
   }
 

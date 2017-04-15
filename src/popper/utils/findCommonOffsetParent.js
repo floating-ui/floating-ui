@@ -1,5 +1,6 @@
 import isOffsetContainer from './isOffsetContainer';
 import getRoot from './getRoot';
+import getOffsetParent from './getOffsetParent';
 
 /**
  * Finds the offset parent common to the two provided nodes
@@ -10,24 +11,20 @@ import getRoot from './getRoot';
  * @returns {Element} common offset parent
  */
 export default function findCommonOffsetParent(element1, element2) {
-  const range = document.createRange();
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
-  if (element1 && element2) {
-    // Here we make sure to give as "start" the element that comes first in the DOM
-    if (
-      element1.compareDocumentPosition(element2) &
-      Node.DOCUMENT_POSITION_FOLLOWING
-    ) {
-      range.setStart(element1, 0);
-      range.setEnd(element2, 0);
-    } else {
-      range.setStart(element2, 0);
-      range.setEnd(element1, 0);
-    }
-  } else {
+  if (!element1 || !element2) {
     return window.document.documentElement;
   }
 
+  // Here we make sure to give as "start" the element that comes first in the DOM
+  const order = element1.compareDocumentPosition(element2) & Node.DOCUMENT_POSITION_FOLLOWING;
+  const start = order ? element1 : element2;
+  const end = order ? element2 : element1;
+
+  // Get common ancestor container
+  const range = document.createRange();
+  range.setStart(start, 0);
+  range.setEnd(end, 0);
   const { commonAncestorContainer } = range;
 
   // Both nodes are inside #document
@@ -38,14 +35,7 @@ export default function findCommonOffsetParent(element1, element2) {
       return commonAncestorContainer;
     }
 
-    const offsetParent =
-      commonAncestorContainer && commonAncestorContainer.offsetParent;
-
-    if (!offsetParent || (offsetParent && offsetParent.nodeName === 'BODY')) {
-      return window.document.documentElement;
-    }
-
-    return offsetParent;
+    return getOffsetParent(commonAncestorContainer);
   }
 
   // one of the nodes is inside shadowDOM, find which one
