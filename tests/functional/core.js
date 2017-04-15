@@ -10,6 +10,8 @@ import getRect from '../utils/getRect';
 import simulateScroll from '../utils/simulateScroll';
 import prepend from '../utils/prepend';
 
+const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+
 describe('[core]', () => {
   afterEach(function() {
     jasmineWrapper.scrollTop = 0;
@@ -1225,6 +1227,45 @@ describe('[core]', () => {
         data.instance.destroy();
         done();
       },
+    });
+  });
+
+  it('uses an object instead of the reference element to position its popper', done => {
+    // Skip IE10 here because the current implementation doesn't work with it and
+    // I don't want to add extra logic to support a "nice to have" feature on an
+    // ancient browser
+    if (isIE10) {
+      pending();
+    }
+
+    jasmineWrapper.innerHTML = `
+      <div id="popper" style="background: purple;">popper</div>
+    `;
+
+    const popper = document.getElementById('popper');
+
+    const reference = {
+      getBoundingClientRect() {
+        return {
+          top: 10,
+          left: 100,
+          right: 150,
+          bottom: 90,
+          width: 50,
+          height: 80,
+        };
+      },
+      clientWidth: 50,
+      clientHeight: 80,
+    };
+
+    new Popper(reference, popper, {
+      placement: 'bottom-start',
+      onCreate() {
+        expect(getRect(popper).top).toBe(reference.getBoundingClientRect().bottom);
+        expect(getRect(popper).left).toBe(reference.getBoundingClientRect().left);
+        done();
+      }
     });
   });
 });

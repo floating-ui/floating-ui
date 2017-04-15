@@ -52,7 +52,7 @@ const DEFAULTS = {
 /**
  * Create a new Popper.js instance
  * @class Popper
- * @param {HTMLElement} reference - The reference element used to position the popper
+ * @param {HTMLElement|referenceObject} reference - The reference element used to position the popper
  * @param {HTMLElement} popper - The HTML element used as popper.
  * @param {Object} options
  * @param {String} options.placement=bottom
@@ -370,3 +370,16 @@ export default class Popper {
      */
   static Defaults = DEFAULTS;
 }
+
+
+/**
+  * The `referenceObject` is an object that provides an interface compatible with Popper.js
+  * and lets you use it as replacement of a real DOM node.
+  * You can use this method to position a popper relatively to a set of coordinates
+  * in case you don't have a DOM node to use as reference.
+  * NB: This feature isn't supported in Internet Explorer 10
+  * @name referenceObject
+  * @property {Function} data.getBoundingClientRect A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method.
+  * @property {Number} data.clientWidth An ES6 getter that will return the width of the virtual reference element.
+  * @property {Number} data.clientHeight An ES6 getter that will return the height of the virtual reference element.
+  */
