@@ -39,31 +39,32 @@ needed by the library.</p>
         * [.disableEventListeners()](#Popper+disableEventListeners)
     * _static_
         * [.Utils](#Popper.Utils) : <code>object</code>
-            * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
             * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
             * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
             * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-            * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-            * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
+            * [.getRoot(node)](#Popper.Utils.getRoot) ⇒ <code>Element</code>
+            * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
+            * [.findCommonOffsetParent(element1, element2)](#Popper.Utils.findCommonOffsetParent) ⇒ <code>Element</code>
+            * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>Number</code>
+            * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
             * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
-            * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
-            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
+            * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
             * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
             * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
             * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
             * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
             * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
-            * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
+            * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
             * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
             * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
             * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
             * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
             * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
+            * [.getTotalScroll(element, parent, side)](#Popper.Utils.getTotalScroll) ⇒ <code>Number</code>
             * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
             * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
             * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
             * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
-            * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
             * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
             * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
             * [.setStyles(element, styles)](#Popper.Utils.setStyles)
@@ -88,16 +89,16 @@ Create a new Popper.js instance
 | options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
 | options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
 | options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
-| options.modifiers.arrow.element | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
+| options.modifiers.arrow.element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
 | options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
 | options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
 | options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
 | [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
-| options.modifiers.preventOverflow.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
+| options.modifiers.preventOverflow.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
 | options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
 | options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
-| options.modifiers.flip.behavior | <code>String</code> &#124; <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
-| options.modifiers.flip.boundariesElement | <code>String</code> &#124; <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
+| options.modifiers.flip.behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
+| options.modifiers.flip.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
 | options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
 | options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
 | options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper will flip before it touches the edge of the boundaries,      making it have always a little padding between the edges of its container. |
@@ -138,47 +139,36 @@ unless you call 'update' method manually.
 **Kind**: static namespace of <code>[Popper](#Popper)</code>  
 
 * [.Utils](#Popper.Utils) : <code>object</code>
-    * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
     * [.getStyleComputedProperty(element, property)](#Popper.Utils.getStyleComputedProperty)
     * [.getParentNode(element)](#Popper.Utils.getParentNode) ⇒ <code>Element</code>
     * [.getScrollParent(element)](#Popper.Utils.getScrollParent) ⇒ <code>Element</code>
-    * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-    * [.getPosition(element)](#Popper.Utils.getPosition) ⇒ <code>String</code>
+    * [.getRoot(node)](#Popper.Utils.getRoot) ⇒ <code>Element</code>
+    * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
+    * [.findCommonOffsetParent(element1, element2)](#Popper.Utils.findCommonOffsetParent) ⇒ <code>Element</code>
+    * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>Number</code>
+    * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
-    * [.getOffsetRectRelativeToCustomParent(element, parent)](#Popper.Utils.getOffsetRectRelativeToCustomParent) ⇒ <code>Object</code>
-    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
+    * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
     * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
     * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
     * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
-    * [.getClientRect(popperOffsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
+    * [.getOffsetRect(element)](#Popper.Utils.getOffsetRect) ⇒ <code>Object</code>
     * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
     * [.getOppositePlacement(placement)](#Popper.Utils.getOppositePlacement) ⇒ <code>String</code>
     * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
     * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
     * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
+    * [.getTotalScroll(element, parent, side)](#Popper.Utils.getTotalScroll) ⇒ <code>Number</code>
     * [.isFunction(functionToCheck)](#Popper.Utils.isFunction) ⇒ <code>Boolean</code>
     * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
     * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
     * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
-    * [.isTransformed(element)](#Popper.Utils.isTransformed) ⇒ <code>Boolean</code>
     * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
     * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
     * [.setStyles(element, styles)](#Popper.Utils.setStyles)
     * [.getOppositeVariation(placement)](#Popper.Utils.getOppositeVariation) ⇒ <code>String</code>
-
-<a name="Popper.Utils.getOffsetParent"></a>
-
-#### Utils.getOffsetParent(element) ⇒ <code>Element</code>
-Returns the offset parent of the given element
-
-**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Element</code> - offset parent  
-
-| Param | Type |
-| --- | --- |
-| element | <code>Element</code> | 
 
 <a name="Popper.Utils.getStyleComputedProperty"></a>
 
@@ -216,30 +206,67 @@ Returns the scrolling parent of the given element
 | --- | --- |
 | element | <code>Element</code> | 
 
-<a name="Popper.Utils.isFixed"></a>
+<a name="Popper.Utils.getRoot"></a>
 
-#### Utils.isFixed(element, customContainer) ⇒ <code>Boolean</code>
-Check if the given element is fixed or is inside a fixed parent
+#### Utils.getRoot(node) ⇒ <code>Element</code>
+Finds the root node (document, shadowDOM root) of the given element
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Boolean</code> - answer to "isFixed?"  
+**Returns**: <code>Element</code> - root node  
+
+| Param | Type |
+| --- | --- |
+| node | <code>Element</code> | 
+
+<a name="Popper.Utils.getOffsetParent"></a>
+
+#### Utils.getOffsetParent(element) ⇒ <code>Element</code>
+Returns the offset parent of the given element
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Element</code> - offset parent  
 
 | Param | Type |
 | --- | --- |
 | element | <code>Element</code> | 
-| customContainer | <code>Element</code> | 
 
-<a name="Popper.Utils.getPosition"></a>
+<a name="Popper.Utils.findCommonOffsetParent"></a>
 
-#### Utils.getPosition(element) ⇒ <code>String</code>
-Helper used to get the position which will be applied to the popper
+#### Utils.findCommonOffsetParent(element1, element2) ⇒ <code>Element</code>
+Finds the offset parent common to the two provided nodes
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>String</code> - position  
+**Returns**: <code>Element</code> - common offset parent  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| element | <code>HTMLElement</code> | popper element |
+| Param | Type |
+| --- | --- |
+| element1 | <code>Element</code> | 
+| element2 | <code>Element</code> | 
+
+<a name="Popper.Utils.getScroll"></a>
+
+#### Utils.getScroll(element, side) ⇒ <code>Number</code>
+Gets the scroll value of the given element in the given side (top and left)
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Number</code> - amount of scrolled pixels  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| element | <code>Element</code> |  |  |
+| side | <code>String</code> | <code>top</code> | `top` or `left` |
+
+<a name="Popper.Utils.getClientRect"></a>
+
+#### Utils.getClientRect(popperOffsets) ⇒ <code>Object</code>
+Given the popper offsets, generate an output similar to getBoundingClientRect
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Object</code> - ClientRect like output  
+
+| Param | Type |
+| --- | --- |
+| popperOffsets | <code>Object</code> | 
 
 <a name="Popper.Utils.getBoundingClientRect"></a>
 
@@ -253,30 +280,18 @@ Get bounding client rect of given element
 | --- | --- |
 | element | <code>HTMLElement</code> | 
 
-<a name="Popper.Utils.getOffsetRectRelativeToCustomParent"></a>
+<a name="Popper.Utils.isFixed"></a>
 
-#### Utils.getOffsetRectRelativeToCustomParent(element, parent) ⇒ <code>Object</code>
-Given an element and one of its parents, return the offset
-
-**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - rect  
-
-| Param | Type |
-| --- | --- |
-| element | <code>HTMLElement</code> | 
-| parent | <code>HTMLElement</code> | 
-
-<a name="Popper.Utils.getOffsetRect"></a>
-
-#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
-Get the position of the given element, relative to its offset parent
+#### Utils.isFixed(element, customContainer) ⇒ <code>Boolean</code>
+Check if the given element is fixed or is inside a fixed parent
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
+**Returns**: <code>Boolean</code> - answer to "isFixed?"  
 
 | Param | Type |
 | --- | --- |
 | element | <code>Element</code> | 
+| customContainer | <code>Element</code> | 
 
 <a name="Popper.Utils.getBoundaries"></a>
 
@@ -346,17 +361,17 @@ Return the index of the matching object
 | prop |  | 
 | value |  | 
 
-<a name="Popper.Utils.getClientRect"></a>
+<a name="Popper.Utils.getOffsetRect"></a>
 
-#### Utils.getClientRect(popperOffsets) ⇒ <code>Object</code>
-Given the popper offsets, generate an output similar to getBoundingClientRect
+#### Utils.getOffsetRect(element) ⇒ <code>Object</code>
+Get the position of the given element, relative to its offset parent
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Object</code> - ClientRect like output  
+**Returns**: <code>Object</code> - position - Coordinates of the element and its `scrollTop`  
 
 | Param | Type |
 | --- | --- |
-| popperOffsets | <code>Object</code> | 
+| element | <code>Element</code> | 
 
 <a name="Popper.Utils.getOuterSizes"></a>
 
@@ -423,6 +438,21 @@ Get the prefixed supported property name
 | --- | --- | --- |
 | property | <code>String</code> | (camelCase) |
 
+<a name="Popper.Utils.getTotalScroll"></a>
+
+#### Utils.getTotalScroll(element, parent, side) ⇒ <code>Number</code>
+Gets the scroll value of the given element relative to the given parent/
+It will not include the scroll values of elements that aren't positioned.
+
+**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
+**Returns**: <code>Number</code> - amount of scrolled pixels  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| element | <code>Element</code> |  |  |
+| parent | <code>Element</code> |  |  |
+| side | <code>String</code> | <code>top</code> | `top` or `left` |
+
 <a name="Popper.Utils.isFunction"></a>
 
 #### Utils.isFunction(functionToCheck) ⇒ <code>Boolean</code>
@@ -465,18 +495,6 @@ Tells if a given input is a number
 | Param | Type | Description |
 | --- | --- | --- |
 | input | <code>\*</code> | to check |
-
-<a name="Popper.Utils.isTransformed"></a>
-
-#### Utils.isTransformed(element) ⇒ <code>Boolean</code>
-Check if the given element has transforms applied to itself or a parent
-
-**Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Boolean</code> - answer to "isTransformed?"  
-
-| Param | Type |
-| --- | --- |
-| element | <code>Element</code> | 
 
 <a name="Popper.Utils.runModifiers"></a>
 
@@ -664,7 +682,7 @@ The offsets will shift the popper on the side of its reference element.
 | --- | --- | --- | --- |
 | data | <code>Object</code> |  | The data object generated by update method |
 | options | <code>Object</code> |  | Modifiers configuration and options |
-| options.offset | <code>Number</code> &#124; <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels.      You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)      Other supported units are `vh` and `vw` (relative to viewport)      Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper      on both axis.      A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,      use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.      > **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
+| options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels.      You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)      Other supported units are `vh` and `vw` (relative to viewport)      Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper      on both axis.      A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,      use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.      > **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
 
 <a name="Modifiers.preventOverflow"></a>
 
