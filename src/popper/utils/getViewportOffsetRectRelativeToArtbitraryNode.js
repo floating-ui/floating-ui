@@ -1,6 +1,7 @@
 import getOffsetRectRelativeToArbitraryNode
   from './getOffsetRectRelativeToArbitraryNode';
 import getScroll from './getScroll';
+import getClientRect from './getClientRect';
 
 export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
   const html = window.document.documentElement;
@@ -11,10 +12,12 @@ export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
   const scrollTop = getScroll(html);
   const scrollLeft = getScroll(html, 'left');
 
-  return {
+  const offset = {
     top: scrollTop - relativeOffset.top + relativeOffset.marginTop,
-    bottom: scrollTop - relativeOffset.top + relativeOffset.marginTop + height,
     left: scrollLeft - relativeOffset.left + relativeOffset.marginLeft,
-    right: scrollLeft - relativeOffset.left + relativeOffset.marginLeft + width,
-  };
+    width,
+    height,
+  }
+
+  return getClientRect(offset);
 }

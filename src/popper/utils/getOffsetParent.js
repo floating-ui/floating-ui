@@ -7,7 +7,7 @@
  */
 export default function getOffsetParent(element) {
   // NOTE: 1 DOM access here
-  const offsetParent = element.offsetParent;
+  const offsetParent = element && element.offsetParent;
   const nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {

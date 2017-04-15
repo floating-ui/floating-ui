@@ -2,6 +2,7 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
 import getScroll from './getScroll';
+import getClientRect from './getClientRect';
 
 /**
  * Get bounding client rect of given element
@@ -12,7 +13,7 @@ import getScroll from './getScroll';
  */
 export default function getBoundingClientRect(element) {
   const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
-  let rect;
+  let rect = {};
 
   // IE10 10 FIX: Please, don't ask, the element isn't
   // considered in DOM in some circumstances...
@@ -20,15 +21,11 @@ export default function getBoundingClientRect(element) {
   if (isIE10) {
     try {
       rect = element.getBoundingClientRect();
-    } catch (err) {
-      rect = {};
-    }
+    } catch (err) {}
     const scrollTop = getScroll(element, 'top');
     const scrollLeft = getScroll(element, 'left');
     rect.top += scrollTop;
-    rect.bottom += scrollTop;
     rect.left += scrollLeft;
-    rect.right += scrollLeft;
   } else {
     rect = element.getBoundingClientRect();
   }
@@ -36,8 +33,6 @@ export default function getBoundingClientRect(element) {
   const result = {
     left: rect.left,
     top: rect.top,
-    right: rect.right,
-    bottom: rect.bottom,
     width: rect.right - rect.left,
     height: rect.bottom - rect.top,
   };
@@ -62,11 +57,9 @@ export default function getBoundingClientRect(element) {
     horizScrollbar -= getBordersSize(styles, 'x');
     vertScrollbar -= getBordersSize(styles, 'y');
 
-    result.right -= horizScrollbar;
     result.width -= horizScrollbar;
-    result.bottom -= vertScrollbar;
     result.height -= vertScrollbar;
   }
 
-  return result;
+  return getClientRect(result);
 }

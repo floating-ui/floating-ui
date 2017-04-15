@@ -1,4 +1,5 @@
 import getWindowSizes from './getWindowSizes';
+import getClientRect from './getClientRect';
 
 /**
  * Get the position of the given element, relative to its offset parent
@@ -26,9 +27,6 @@ export default function getOffsetRect(element) {
     };
   }
 
-  elementRect.right = elementRect.left + elementRect.width;
-  elementRect.bottom = elementRect.top + elementRect.height;
-
   // position
-  return elementRect;
+  return getClientRect(elementRect);
 }
