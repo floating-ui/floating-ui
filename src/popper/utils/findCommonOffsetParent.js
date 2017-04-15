@@ -12,7 +12,7 @@ import getOffsetParent from './getOffsetParent';
  */
 export default function findCommonOffsetParent(element1, element2) {
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
-  if (!element1 || !element2) {
+  if (!element1 || !element1.nodeType || !element2 || !element2.nodeType) {
     return window.document.documentElement;
   }
 

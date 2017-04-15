@@ -12,6 +12,13 @@
 <dd><p>The <code>dataObject</code> is an object containing all the informations used by Popper.js
 this object get passed to modifiers and to the <code>onCreate</code> and <code>onUpdate</code> callbacks.</p>
 </dd>
+<dt><a href="#referenceObject">referenceObject</a></dt>
+<dd><p>The <code>referenceObject</code> is an object that provides an interface compatible with Popper.js
+and lets you use it as replacement of a real DOM node.
+You can use this method to position a popper relatively to a set of coordinates
+in case you don&#39;t have a DOM node to use as reference.
+NB: This feature isn&#39;t supported in Internet Explorer 10</p>
+</dd>
 </dl>
 
 ## Objects
@@ -80,7 +87,7 @@ Create a new Popper.js instance
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| reference | <code>HTMLElement</code> |  | The reference element used to position the popper |
+| reference | <code>HTMLElement</code> \| <code>[referenceObject](#referenceObject)</code> |  | The reference element used to position the popper |
 | popper | <code>HTMLElement</code> |  | The HTML element used as popper. |
 | options | <code>Object</code> |  |  |
 | options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
@@ -574,6 +581,24 @@ this object get passed to modifiers and to the `onCreate` and `onUpdate` callbac
 | data.offsets.popper | <code>Object</code> | `top`, `left`, `width`, `height` values |
 | data.offsets.reference | <code>Object</code> | `top`, `left`, `width`, `height` values |
 | data.offsets.arro | <code>Object</code> | `top` and `left` offsets, only one of them will be different from 0 |
+
+<a name="referenceObject"></a>
+
+## referenceObject
+The `referenceObject` is an object that provides an interface compatible with Popper.js
+and lets you use it as replacement of a real DOM node.
+You can use this method to position a popper relatively to a set of coordinates
+in case you don't have a DOM node to use as reference.
+NB: This feature isn't supported in Internet Explorer 10
+
+**Kind**: global variable  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| data.getBoundingClientRect | <code>function</code> | A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method. |
+| data.clientWidth | <code>Number</code> | An ES6 getter that will return the width of the virtual reference element. |
+| data.clientHeight | <code>Number</code> | An ES6 getter that will return the height of the virtual reference element. |
 
 <a name="Modifiers"></a>
 
