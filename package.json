@@ -56,7 +56,7 @@
   "homepage": "https://popper.js.org",
   "devDependencies": {
     "babel-core": "^6.24.1",
-    "babel-eslint": "^7.1.0",
+    "babel-eslint": "^7.2.2",
     "babel-plugin-external-helpers": "^6.8.0",
     "babel-plugin-istanbul": "^4.0.0",
     "babel-plugin-module-resolver": "^2.4.0",
@@ -70,7 +70,7 @@
     "in-publish": "^2.0.0",
     "jasmine-core": "^2.4.1",
     "jsdoc-to-markdown": "^3.0.0",
-    "karma": "^1.5.0",
+    "karma": "^1.6.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
@@ -88,7 +88,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^3.1.0",
     "sinon": "^2.1.0",
-    "yargs": "^7.0.2"
+    "yargs": "^7.1.0"
   },
   "lint-staged": {
     "*.js": [
