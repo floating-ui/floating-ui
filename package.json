@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "A kickass library to manage your poppers",
   "main": "dist/popper.es5.js",
   "module": "dist/popper.js",
