@@ -26,7 +26,7 @@ switch (BUILD) {
     sourceMapFile = `${ROOT}/dist/popper-utils${es5Ext}.js.map`;
     break;
   case 'tooltip':
-    moduleName = 'Popper';
+    moduleName = 'Tooltip';
     entry = `${ROOT}/src/tooltip/index.js`;
     dest = `${ROOT}/dist/tooltip${es5Ext}.js`;
     sourceMapFile = `${ROOT}/dist/tooltip${es5Ext}.js.map`;
