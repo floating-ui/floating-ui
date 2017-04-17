@@ -38,15 +38,12 @@ export default function getBoundingClientRect(element) {
   };
 
   // subtract scrollbar size from sizes
-  let width, height;
-  if (element.nodeName === 'HTML') {
-    const sizes = getWindowSizes();
-    width = sizes.width;
-    height = sizes.height;
-  } else {
-    width = element.clientWidth || result.right - result.left;
-    height = element.clientHeight || result.bottom - result.top;
-  }
+  const sizes = element.nodeName === 'HTML' ? getWindowSizes() : {};
+  const width =
+    sizes.width || element.clientWidth || result.right - result.left;
+  const height =
+    sizes.height || element.clientHeight || result.bottom - result.top;
+
   let horizScrollbar = element.offsetWidth - width;
   let vertScrollbar = element.offsetHeight - height;
 

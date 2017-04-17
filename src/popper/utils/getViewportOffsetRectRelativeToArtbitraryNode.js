@@ -17,7 +17,7 @@ export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
     left: scrollLeft - relativeOffset.left + relativeOffset.marginLeft,
     width,
     height,
-  }
+  };
 
   return getClientRect(offset);
 }

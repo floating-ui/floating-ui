@@ -1,5 +1,4 @@
 // Utils
-import Utils from './utils/index';
 import debounce from './utils/debounce';
 import setStyles from './utils/setStyles';
 import getSupportedPropertyName from './utils/getSupportedPropertyName';
@@ -337,10 +336,12 @@ export default class Popper {
   }
 
   /**
-     * Collection of utilities useful when writing custom modifiers
+     * Collection of utilities useful when writing custom modifiers.
+     * Starting from version 1.7, this method is available only if you
+     * include `popper-utils.js` before `popper.js`.
      * @memberof Popper
      */
-  static Utils = Utils;
+  static Utils = window.PopperUtils;
 
   /**
      * List of accepted placements to use as values of the `placement` option
@@ -370,7 +371,6 @@ export default class Popper {
      */
   static Defaults = DEFAULTS;
 }
-
 
 /**
   * The `referenceObject` is an object that provides an interface compatible with Popper.js

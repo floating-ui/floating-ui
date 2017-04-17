@@ -91,11 +91,9 @@ describe('[core]', () => {
     });
   });
 
-  it(
-    'inits a top popper inside body with margins relative to absolute reference rotated by 90 degs',
-    done => {
-      const wrp = document.createElement('div');
-      wrp.innerHTML = `
+  it('inits a top popper inside body with margins relative to absolute reference rotated by 90 degs', done => {
+    const wrp = document.createElement('div');
+    wrp.innerHTML = `
           <div id="reference" style="
               position: absolute;
               top: 100px;
@@ -108,28 +106,27 @@ describe('[core]', () => {
               transform: rotate(90deg);
           "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
       `.trim();
-      const popper = wrp.childNodes[1];
-      const reference = wrp.childNodes[0];
-      prepend(reference, document.body);
-      prepend(popper, document.body);
+    const popper = wrp.childNodes[1];
+    const reference = wrp.childNodes[0];
+    prepend(reference, document.body);
+    prepend(popper, document.body);
 
-      new Popper(reference, popper, {
-        placement: 'top',
-        onCreate(data) {
-          const pop = getRect(popper);
-          const ref = getRect(reference);
-          expect(pop.bottom).toBeApprox(ref.top);
-          expect(pop.left).toBe(ref.left);
+    new Popper(reference, popper, {
+      placement: 'top',
+      onCreate(data) {
+        const pop = getRect(popper);
+        const ref = getRect(reference);
+        expect(pop.bottom).toBeApprox(ref.top);
+        expect(pop.left).toBe(ref.left);
 
-          data.instance.destroy();
-          document.body.style.cssText = null;
-          document.body.removeChild(popper);
-          document.body.removeChild(reference);
-          done();
-        },
-      });
-    }
-  );
+        data.instance.destroy();
+        document.body.style.cssText = null;
+        document.body.removeChild(popper);
+        document.body.removeChild(reference);
+        done();
+      },
+    });
+  });
 
   it('inits a right scrollable popper ', done => {
     const reference = appendNewRef(1);
@@ -1262,10 +1259,14 @@ describe('[core]', () => {
     new Popper(reference, popper, {
       placement: 'bottom-start',
       onCreate() {
-        expect(getRect(popper).top).toBe(reference.getBoundingClientRect().bottom);
-        expect(getRect(popper).left).toBe(reference.getBoundingClientRect().left);
+        expect(getRect(popper).top).toBe(
+          reference.getBoundingClientRect().bottom
+        );
+        expect(getRect(popper).left).toBe(
+          reference.getBoundingClientRect().left
+        );
         done();
-      }
+      },
     });
   });
 });

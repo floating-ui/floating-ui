@@ -1,36 +1,26 @@
 {
   "name": "popper.js",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "A kickass library to manage your poppers",
   "main": "dist/popper.es5.js",
-  "jsnext:main": "dist/popper.js",
+  "module": "dist/popper.js",
   "scripts": {
     "prepublish": "in-publish && npm run build || exit 0 ",
     "precommit": "lint-staged && opt --in pre-commit --exec \"npm start validate\"",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
-    "build": "npm run build:popper && npm run build:tooltip",
-    "build:dev": "npm run build:popper:dev & npm run build:tooltip:dev",
-    "build:popper": "npm run build:popper:next && npm run build:popper:es5 && npm run build:popper:next:min && npm run build:popper:es5:min",
-    "build:popper:dev": "npm run build:popper:next -- --watch",
-    "build:popper:next": "rollup -c ./scripts/rollup.config.popper.js",
-    "build:popper:next:min": "node ./scripts/minify -i ./dist/popper.js -o ./dist/popper.min.js && gzipped ./dist/popper.min.js",
-    "build:popper:es5": "rollup -c ./scripts/rollup.config.popper.es5.js",
-    "build:popper:es5:min": "node ./scripts/minify -i ./dist/popper.es5.js -o ./dist/popper.es5.min.js --es5=true && gzipped ./dist/popper.es5.min.js",
-    "build:tooltip": "npm run build:tooltip:next && npm run build:tooltip:es5 && npm run build:tooltip:next:min && npm run build:tooltip:es5:min",
-    "build:tooltip:dev": "npm run build:tooltip:next -- --watch",
-    "build:tooltip:next": "rollup -c ./scripts/rollup.config.tooltip.js",
-    "build:tooltip:next:min": "node ./scripts/minify -i ./dist/tooltip.js -o ./dist/tooltip.min.js && gzipped ./dist/tooltip.min.js",
-    "build:tooltip:es5": "rollup -c ./scripts/rollup.config.tooltip.es5.js",
-    "build:tooltip:es5:min": "node ./scripts/minify -i ./dist/tooltip.es5.js -o ./dist/tooltip.es5.min.js --es5=true && gzipped ./dist/tooltip.es5.min.js",
+    "build": "npm run build:popper && npm run build:tooltip && npm run build:popper-utils",
+    "build:popper": "node ./scripts/bundle.js --build=popper",
+    "build:popper-utils": "node ./scripts/bundle.js --build=popper-utils",
+    "build:tooltip": "node ./scripts/bundle.js --build=tooltip",
     "lint": "eslint .",
     "test": "karma start ./scripts/karma.conf.js",
     "test:dev": "NODE_ENV=development karma start ./scripts/karma.conf.js",
     "coverage": "NODE_ENV=coverage npm run test",
     "docs": "npm run docs:popper && npm run docs:tooltip",
     "docs:serve": "cd docs && jekyll serve & open http://localhost:4000",
-    "docs:popper": "rollup -c ./scripts/rollup.config.popper.js -o ./.tmp/popper.js && jsdoc2md ./.tmp/popper.js > ./docs/_includes/popper-documentation.md",
-    "docs:tooltip": "rollup -c ./scripts/rollup.config.tooltip.js -o ./.tmp/tooltip.js && jsdoc2md ./.tmp/tooltip.js > ./docs/_includes/tooltip-documentation.md"
+    "docs:popper": "npm run build:popper && jsdoc2md ./dist/popper.js > ./docs/_includes/popper-documentation.md",
+    "docs:tooltip": "npm run build:tooltip && jsdoc2md ./dist/tooltip.js > ./docs/_includes/tooltip-documentation.md"
   },
   "repository": {
     "type": "git",
@@ -55,6 +45,7 @@
   ],
   "homepage": "https://popper.js.org",
   "devDependencies": {
+    "async": "^2.3.0",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.2",
     "babel-plugin-external-helpers": "^6.8.0",
@@ -64,6 +55,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^3.5.0",
+    "colors": "^1.1.2",
     "eslint": "^3.17.1",
     "eslint-plugin-jasmine": "^2.1.0",
     "gzipped": "^0.0.5",
@@ -83,7 +75,7 @@
     "lint-staged": "^3.4.0",
     "pre-commit": "^1.2.2",
     "prettier": "^1.1.0",
-    "prettier-eslint": "^5.1.0",
+    "prettier-eslint-cli": "^3.3.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^3.1.0",
@@ -92,7 +84,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "prettier-eslint --single-quote --trailing-comma es5 --write \"{src,scripts,tests}/**/*.js\"",
+      "prettier-eslint --write \"{src,scripts,tests}/**/*.js\"",
       "git add"
     ]
   }
