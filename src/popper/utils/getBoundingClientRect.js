@@ -3,6 +3,8 @@ import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
 import getScroll from './getScroll';
 import getClientRect from './getClientRect';
+import runIsIE10 from './isIE10';
+const isIE10 = runIsIE10();
 
 /**
  * Get bounding client rect of given element
@@ -12,7 +14,6 @@ import getClientRect from './getClientRect';
  * @return {Object} client rect
  */
 export default function getBoundingClientRect(element) {
-  const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
   let rect = {};
 
   // IE10 10 FIX: Please, don't ask, the element isn't
