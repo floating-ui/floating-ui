@@ -13,7 +13,7 @@ export default function computeAutoPlacement(
   placement,
   refRect,
   popper,
-  reference,
+  reference
 ) {
   if (placement.indexOf('auto') === -1) {
     return placement;
@@ -29,7 +29,7 @@ export default function computeAutoPlacement(
   };
 
   const computedPlacement = Object.keys(sides).sort(
-    (a, b) => sides[b] - sides[a],
+    (a, b) => sides[b] - sides[a]
   )[0];
   const variation = placement.split('-')[1];
 

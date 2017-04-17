@@ -17,7 +17,9 @@ export default function findCommonOffsetParent(element1, element2) {
   }
 
   // Here we make sure to give as "start" the element that comes first in the DOM
-  const order = element1.compareDocumentPosition(element2) & Node.DOCUMENT_POSITION_FOLLOWING;
+  const order =
+    element1.compareDocumentPosition(element2) &
+    Node.DOCUMENT_POSITION_FOLLOWING;
   const start = order ? element1 : element2;
   const end = order ? element2 : element1;
 
