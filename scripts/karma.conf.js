@@ -2,6 +2,7 @@ const { argv } = require('yargs');
 const path = require('path');
 const babel = require('rollup-plugin-babel');
 
+const IS_PR = process.env.BRANCH !== 'master';
 const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
 const coverage = process.env.NODE_ENV === 'coverage';
@@ -89,7 +90,12 @@ module.exports = function(config) {
       `${root}/tests/unit/*.js`,
     ],
     sauceLabs: {
-      testName: 'Popper.js',
+      // If we are testing a PR we don't want to update the results of the badge
+      // displayed in home page
+      username: IS_PR ? 'popperjs_pr' : 'popperjs',
+      accessKey: IS_PR
+        ? process.env.SAUCE_ACCESS_KEY2
+        : process.env.SAUCE_ACCESS_KEY,
       startConnect: false,
       recordVideo: true,
       tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
