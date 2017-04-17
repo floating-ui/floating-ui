@@ -1,6 +1,9 @@
 export default function isOffsetContainer(element) {
+  const { nodeName } = element;
+  if (nodeName === 'BODY') {
+    return false;
+  }
   return (
-    element.nodeName === 'HTML' ||
-    element.firstElementChild.offsetParent === element
+    nodeName === 'HTML' || element.firstElementChild.offsetParent === element
   );
 }

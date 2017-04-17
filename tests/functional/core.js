@@ -56,15 +56,28 @@ describe('[core]', () => {
     doc.style.marginLeft = '300px';
     doc.style.marginTop = '300px';
 
-    const reference = appendNewRef(1);
-    const popper = appendNewPopper(2);
+    const wrp = document.createElement('div');
+    wrp.innerHTML = `
+        <div id="reference" style="
+            width: 100px;
+            height: 50px;
+            background-color: red;
+        "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
+    `.trim();
+    const popper = wrp.childNodes[1];
+    const reference = wrp.childNodes[0];
+    prepend(reference, document.body);
+    prepend(popper, document.body);
 
     new Popper(reference, popper, {
+      placement: 'top',
       onCreate(data) {
-        const top = getRect(popper).top;
-        expect(top).toBeApprox(getRect(reference).bottom + arrowSize);
+        const bottom = getRect(popper).bottom;
+        expect(bottom).toBeApprox(getRect(reference).top);
 
         data.instance.destroy();
+        document.body.removeChild(popper);
+        document.body.removeChild(reference);
         doc.style.cssText = null;
         done();
       },
@@ -76,15 +89,27 @@ describe('[core]', () => {
     doc.style.marginLeft = '300px';
     doc.style.marginTop = '100vh';
 
-    const reference = appendNewRef(1);
-    const popper = appendNewPopper(2);
+    const wrp = document.createElement('div');
+    wrp.innerHTML = `
+        <div id="reference" style="
+            width: 100px;
+            height: 50px;
+            background-color: red;
+        "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
+    `.trim();
+    const popper = wrp.childNodes[1];
+    const reference = wrp.childNodes[0];
+    prepend(reference, document.body);
+    prepend(popper, document.body);
 
     new Popper(reference, popper, {
       onCreate(data) {
         const bottom = getRect(popper).bottom;
-        expect(bottom).toBeApprox(getRect(reference).top - arrowSize);
+        expect(bottom).toBeApprox(getRect(reference).top);
 
         data.instance.destroy();
+        document.body.removeChild(popper);
+        document.body.removeChild(reference);
         doc.style.cssText = null;
         done();
       },
