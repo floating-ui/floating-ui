@@ -10,6 +10,7 @@ import removeEventListeners from './utils/removeEventListeners';
 import runModifiers from './utils/runModifiers';
 import isModifierEnabled from './utils/isModifierEnabled';
 import computeAutoPlacement from './utils/computeAutoPlacement';
+import placements from './utils/placements';
 
 // Modifiers
 import modifiers from './modifiers/index';
@@ -347,23 +348,7 @@ export default class Popper {
      * List of accepted placements to use as values of the `placement` option
      * @memberof Popper
      */
-  static placements = [
-    'auto',
-    'auto-start',
-    'auto-end',
-    'top',
-    'top-start',
-    'top-end',
-    'right',
-    'right-start',
-    'right-end',
-    'bottom',
-    'bottom-start',
-    'bottom-end',
-    'left',
-    'left-start',
-    'left-end',
-  ];
+  static placements = placements;
 
   /**
      * Default Popper.js options

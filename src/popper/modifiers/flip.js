@@ -5,6 +5,13 @@ import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
 import getBoundaries from '../utils/getBoundaries';
 import isModifierEnabled from '../utils/isModifierEnabled';
+import clockwise from '../utils/clockwise';
+
+const BEHAVIORS = {
+  FLIP: 'flip',
+  CLOCKWISE: 'clockwise',
+  COUNTERCLOCKWISE: 'counterclockwise',
+};
 
 /**
  * Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
@@ -40,10 +47,18 @@ export default function flip(data, options) {
 
   let flipOrder = [];
 
-  if (options.behavior === 'flip') {
-    flipOrder = [placement, placementOpposite];
-  } else {
-    flipOrder = options.behavior;
+  switch (options.behavior) {
+    case BEHAVIORS.FLIP:
+      flipOrder = [placement, placementOpposite];
+      break;
+    case BEHAVIORS.CLOCKWISE:
+      flipOrder = clockwise(placement);
+      break;
+    case BEHAVIORS.COUNTERCLOCKWISE:
+      flipOrder = clockwise(placement, true);
+      break;
+    default:
+      flipOrder = options.behavior;
   }
 
   flipOrder.forEach((step, index) => {
