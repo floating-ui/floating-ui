@@ -309,9 +309,9 @@ The offsets will shift the popper on the side of its reference element.
 **Kind**: static property of <code>[offset](#modifiers..offset)</code>  
 **Properties**
 
-| Name | Type | Description |
-| --- | --- | --- |
-| Basic | <code>Number</code> \| <code>String</code> | usage allows a number used to nudge the popper by the given amount of pixels. You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size) Other supported units are `vh` and `vw` (relative to viewport) Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper on both axis. A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size, use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`. **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels. You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size) Other supported units are `vh` and `vw` (relative to viewport) Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper on both axis. A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size, use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`. **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
 
 <a name="modifiers..preventOverflow"></a>
 

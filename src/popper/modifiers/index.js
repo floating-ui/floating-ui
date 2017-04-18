@@ -45,7 +45,7 @@ export default {
     enabled: true,
     /** @prop {Function} */
     function: offset,
-    /** @prop {Number|String}
+    /** @prop {Number|String} offset=0
      * Basic usage allows a number used to nudge the popper by the given amount of pixels.
      * You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)
      * Other supported units are `vh` and `vw` (relative to viewport)
