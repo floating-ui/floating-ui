@@ -24,12 +24,33 @@ NB: This feature isn&#39;t supported in Internet Explorer 10</p>
 ## Objects
 
 <dl>
-<dt><a href="#Modifiers">Modifiers</a> ⇒ <code>Object</code></dt>
+<dt><a href="#modifiers">modifiers</a> : <code>object</code></dt>
 <dd><p>Modifiers are plugins used to alter the behavior of your poppers.
-Popper.js uses a set of 7 modifiers to provide all the basic functionalities
+Popper.js uses a set of 9 modifiers to provide all the basic functionalities
 needed by the library.</p>
-<p>Each modifier is an object containing several properties listed below.</p>
+<p>Usually you don&#39;t want to override the <code>order</code>, <code>function</code> and <code>onLoad</code> props.
+All the other properties are configurations that could be tweaked.</p>
 </dd>
+<dt><a href="#defaults">defaults</a> : <code>object</code></dt>
+<dd><p>Default options provided to Popper.js constructor.
+These can be overriden using the <code>options</code> argument of Popper.js.
+To override an option, simply pass as 3rd argument an object with the same
+structure of {defaults}, example:</p>
+<pre><code>new Popper(ref, pop, {
+  modifiers: {
+    preventOverflow: { enabled: false }
+  }
+})
+</code></pre></dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#onCreateCallback">onCreateCallback</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#onUpdateCallback">onUpdateCallback</a> : <code>function</code></dt>
+<dd></dd>
 </dl>
 
 <a name="Popper"></a>
@@ -54,32 +75,11 @@ Create a new Popper.js instance
 
 **Returns**: <code>Object</code> - instance - The generated Popper.js instance  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| reference | <code>HTMLElement</code> \| <code>[referenceObject](#referenceObject)</code> |  | The reference element used to position the popper |
-| popper | <code>HTMLElement</code> |  | The HTML element used as popper. |
-| options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
-| options.eventsEnabled | <code>Boolean</code> | <code>true</code> | Whether events (resize, scroll) are initially enabled |
-| options.gpuAcceleration | <code>Boolean</code> | <code>true</code> | When this property is set to true, the popper position will be applied using CSS3 translate3d, allowing the      browser to use the GPU to accelerate the rendering.      If set to false, the popper will be placed using `top` and `left` properties, not using the GPU. |
-| options.removeOnDestroy | <code>Boolean</code> | <code>false</code> | Set to true if you want to automatically remove the popper when you call the `destroy` method. |
-| options.modifiers | <code>Object</code> |  | List of functions used to modify the data before they are applied to the popper (see source code for default values) |
-| options.modifiers.arrow | <code>Object</code> |  | Arrow modifier configuration |
-| options.modifiers.arrow.element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | The DOM Node used as arrow for the popper, or a CSS selector used to get the DOM node. It must be child of      its parent Popper. Popper.js will apply to the given element the style required to align the arrow with its      reference element.      By default, it will look for a child node of the popper with the `x-arrow` attribute. |
-| options.modifiers.offset | <code>Object</code> |  | Offset modifier configuration |
-| options.modifiers.offset.offset | <code>Number</code> | <code>0</code> | Amount of pixels the popper will be shifted (can be negative). |
-| options.modifiers.preventOverflow | <code>Object</code> |  | PreventOverflow modifier configuration |
-| [options.modifiers.preventOverflow.priority] | <code>Array</code> | <code>[&#x27;left&#x27;, &#x27;right&#x27;, &#x27;top&#x27;, &#x27;bottom&#x27;]</code> | Priority used when Popper.js tries to avoid overflows from the boundaries, they will be checked in order,      this means that the last one will never overflow |
-| options.modifiers.preventOverflow.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
-| options.modifiers.preventOverflow.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper has always a little padding between the edges of its container. |
-| options.modifiers.flip | <code>Object</code> |  | Flip modifier configuration |
-| options.modifiers.flip.behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used by the `flip` modifier to change the placement of the popper when the latter is trying to      overlap its reference element. Defining `flip` as value, the placement will be flipped on      its axis (`right - left`, `top - bottom`).      You can even pass an array of placements (eg: `['right', 'left', 'top']` ) to manually specify      how alter the placement when a flip is needed. (eg. in the above example, it would first flip from right to left,      then, if even in its new placement, the popper is overlapping its reference element, it will be moved to top) |
-| options.modifiers.flip.boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside      of the defined boundaries (except if `keepTogether` is enabled) |
-| options.modifiers.inner | <code>Object</code> |  | Inner modifier configuration |
-| options.modifiers.inner.enabled | <code>Number</code> | <code>false</code> | Set to `true` to make the popper flow toward the inner of the reference element. |
-| options.modifiers.flip.padding | <code>Number</code> | <code>5</code> | Amount of pixels used to define a minimum distance between the boundaries and the popper      this makes sure the popper will flip before it touches the edge of the boundaries,      making it have always a little padding between the edges of its container. |
-| options.onCreate | <code>[createCallback](#createCallback)</code> |  | onCreate callback      Function called after the Popper has been instantiated. |
-| options.onUpdate | <code>[updateCallback](#updateCallback)</code> |  | onUpdate callback      Function called on subsequent updates of Popper. |
+| Param | Type | Description |
+| --- | --- | --- |
+| reference | <code>HTMLElement</code> \| <code>[referenceObject](#referenceObject)</code> | The reference element used to position the popper |
+| popper | <code>HTMLElement</code> | The HTML element used as popper. |
+| options | <code>Object</code> | Your custom options to override the ones defined in [DEFAULTS](#defaults) |
 
 <a name="Popper+update"></a>
 
@@ -157,121 +157,168 @@ NB: This feature isn't supported in Internet Explorer 10
 | data.clientWidth | <code>Number</code> | An ES6 getter that will return the width of the virtual reference element. |
 | data.clientHeight | <code>Number</code> | An ES6 getter that will return the height of the virtual reference element. |
 
-<a name="Modifiers"></a>
+<a name="modifiers"></a>
 
-## Modifiers ⇒ <code>Object</code>
+## modifiers : <code>object</code>
 Modifiers are plugins used to alter the behavior of your poppers.
-Popper.js uses a set of 7 modifiers to provide all the basic functionalities
+Popper.js uses a set of 9 modifiers to provide all the basic functionalities
 needed by the library.
 
-Each modifier is an object containing several properties listed below.
+Usually you don't want to override the `order`, `function` and `onLoad` props.
+All the other properties are configurations that could be tweaked.
 
 **Kind**: global namespace  
-**Returns**: <code>Object</code> - data - Each modifier must return the modified `data` object.  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| modifier | <code>Object</code> | Modifier descriptor |
-| modifier.order | <code>Integer</code> | The `order` property defines the execution order of the modifiers.      The built-in modifiers have orders with a gap of 100 units in between,      this allows you to inject additional modifiers between the existing ones      without having to redefine the order of all of them.      The modifiers are executed starting from the one with the lowest order. |
-| modifier.enabled | <code>Boolean</code> | When `true`, the modifier will be used. |
-| modifier.function | <code>[modifier](#Modifiers..modifier)</code> | Modifier function. |
-| modifier.onLoad | <code>Modifiers~onLoad</code> | Function executed on popper initalization |
+* [modifiers](#modifiers) : <code>object</code>
+    * [~shift](#modifiers..shift)
+        * [.order](#modifiers..shift.order)
+        * [.enabled](#modifiers..shift.enabled)
+        * [.function](#modifiers..shift.function)
+    * [~offset](#modifiers..offset)
+        * [.order](#modifiers..offset.order)
+        * [.enabled](#modifiers..offset.enabled)
+        * [.function](#modifiers..offset.function)
+        * [.offset](#modifiers..offset.offset)
+    * [~preventOverflow](#modifiers..preventOverflow)
+        * [.order](#modifiers..preventOverflow.order)
+        * [.enabled](#modifiers..preventOverflow.enabled)
+        * [.function](#modifiers..preventOverflow.function)
+        * [.priority](#modifiers..preventOverflow.priority)
+        * [.padding](#modifiers..preventOverflow.padding)
+        * [.boundariesElement](#modifiers..preventOverflow.boundariesElement)
+    * [~keepTogether](#modifiers..keepTogether)
+        * [.order](#modifiers..keepTogether.order)
+        * [.enabled](#modifiers..keepTogether.enabled)
+        * [.function](#modifiers..keepTogether.function)
+    * [~arrow](#modifiers..arrow)
+        * [.order](#modifiers..arrow.order)
+        * [.enabled](#modifiers..arrow.enabled)
+        * [.function](#modifiers..arrow.function)
+        * [.element](#modifiers..arrow.element)
+    * [~flip](#modifiers..flip)
+        * [.order](#modifiers..flip.order)
+        * [.enabled](#modifiers..flip.enabled)
+        * [.function](#modifiers..flip.function)
+        * [.behavior](#modifiers..flip.behavior)
+        * [.padding](#modifiers..flip.padding)
+        * [.boundariesElement](#modifiers..flip.boundariesElement)
+    * [~inner](#modifiers..inner)
+        * [.order](#modifiers..inner.order)
+        * [.enabled](#modifiers..inner.enabled)
+        * [.function](#modifiers..inner.function)
+    * [~hide](#modifiers..hide)
+        * [.order](#modifiers..hide.order)
+        * [.enabled](#modifiers..hide.enabled)
+        * [.function](#modifiers..hide.function)
+    * [~applyStyle](#modifiers..applyStyle)
+        * [.order](#modifiers..applyStyle.order)
+        * [.enabled](#modifiers..applyStyle.enabled)
+        * [.function](#modifiers..applyStyle.function)
+        * [.onLoad](#modifiers..applyStyle.onLoad)
+        * [.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)
 
+<a name="modifiers..shift"></a>
 
-* [Modifiers](#Modifiers) ⇒ <code>Object</code>
-    * _static_
-        * [.applyStyle(data, options)](#Modifiers.applyStyle) ⇒ <code>Object</code>
-        * [.arrow(data, options)](#Modifiers.arrow) ⇒ <code>Object</code>
-        * [.flip(data, options)](#Modifiers.flip) ⇒ <code>Object</code>
-        * [.keepTogether(data, options)](#Modifiers.keepTogether) ⇒ <code>Object</code>
-        * [.offset(data, options)](#Modifiers.offset) ⇒ <code>Object</code>
-        * [.preventOverflow(data, options)](#Modifiers.preventOverflow) ⇒ <code>Object</code>
-        * [.shift(data, options)](#Modifiers.shift) ⇒ <code>Object</code>
-        * [.hide(data, options)](#Modifiers.hide) ⇒ <code>Object</code>
-        * [.inner(data, options)](#Modifiers.inner) ⇒ <code>Object</code>
-    * _inner_
-        * [~modifier](#Modifiers..modifier) ⇒ <code>[dataObject](#dataObject)</code>
+### modifiers~shift
+Modifier used to shift the popper on the start or end of its reference element side
 
-<a name="Modifiers.applyStyle"></a>
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
 
-### Modifiers.applyStyle(data, options) ⇒ <code>Object</code>
-Apply the computed styles to the popper element
+* [~shift](#modifiers..shift)
+    * [.order](#modifiers..shift.order)
+    * [.enabled](#modifiers..shift.enabled)
+    * [.function](#modifiers..shift.function)
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The same data object  
+<a name="modifiers..shift.order"></a>
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by `update` method |
-| data.styles | <code>Object</code> | List of style properties - values to apply to popper element |
-| data.attributes | <code>Object</code> | List of attribute properties - values to apply to popper element |
-| options | <code>Object</code> | Modifiers configuration and options |
+#### shift.order
+**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Properties**
 
-<a name="Modifiers.arrow"></a>
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>100</code> | Index used to define the order of execution |
 
-### Modifiers.arrow(data, options) ⇒ <code>Object</code>
-Modifier used to move the arrowElements on the edge of the popper to make sure them are always between the popper and the reference element
-It will use the CSS outer size of the arrowElement element to know how many pixels of conjuction are needed
+<a name="modifiers..shift.enabled"></a>
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+#### shift.enabled
+**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Properties**
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by update method |
-| options | <code>Object</code> | Modifiers configuration and options |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
 
-<a name="Modifiers.flip"></a>
+<a name="modifiers..shift.function"></a>
 
-### Modifiers.flip(data, options) ⇒ <code>Object</code>
-Modifier used to flip the placement of the popper when the latter is starting overlapping its reference element.
-Requires the `preventOverflow` modifier before it in order to work.
-**NOTE:** data.instance modifier will run all its previous modifiers everytime it tries to flip the popper!
+#### shift.function
+**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Properties**
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+| Type |
+| --- |
+| <code>function</code> | 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by update method |
-| options | <code>Object</code> | Modifiers configuration and options |
+<a name="modifiers..offset"></a>
 
-<a name="Modifiers.keepTogether"></a>
-
-### Modifiers.keepTogether(data, options) ⇒ <code>Object</code>
-Modifier used to make sure the popper is always near its reference element
-It cares only about the first axis, you can still have poppers with margin
-between the popper and its reference element.
-
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by update method |
-| options | <code>Object</code> | Modifiers configuration and options |
-
-<a name="Modifiers.offset"></a>
-
-### Modifiers.offset(data, options) ⇒ <code>Object</code>
+### modifiers~offset
 Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
 The offsets will shift the popper on the side of its reference element.
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
 
-| Param | Type | Default | Description |
+* [~offset](#modifiers..offset)
+    * [.order](#modifiers..offset.order)
+    * [.enabled](#modifiers..offset.enabled)
+    * [.function](#modifiers..offset.function)
+    * [.offset](#modifiers..offset.offset)
+
+<a name="modifiers..offset.order"></a>
+
+#### offset.order
+**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| data | <code>Object</code> |  | The data object generated by update method |
-| options | <code>Object</code> |  | Modifiers configuration and options |
-| options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Basic usage allows a number used to nudge the popper by the given amount of pixels.      You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)      Other supported units are `vh` and `vw` (relative to viewport)      Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper      on both axis.      A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,      use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.      > **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
+| order | <code>Number</code> | <code>200</code> | Index used to define the order of execution |
 
-<a name="Modifiers.preventOverflow"></a>
+<a name="modifiers..offset.enabled"></a>
 
-### Modifiers.preventOverflow(data, options) ⇒ <code>Object</code>
+#### offset.enabled
+**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..offset.function"></a>
+
+#### offset.function
+**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..offset.offset"></a>
+
+#### offset.offset
+**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| Basic | <code>Number</code> \| <code>String</code> | usage allows a number used to nudge the popper by the given amount of pixels. You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size) Other supported units are `vh` and `vw` (relative to viewport) Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper on both axis. A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size, use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`. **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X` |
+
+<a name="modifiers..preventOverflow"></a>
+
+### modifiers~preventOverflow
 Modifier used to prevent the popper from being positioned outside the boundary.
 
-An scenario exists where the reference itself is not within the boundaries. We can
+A scenario exists where the reference itself is not within the boundaries. We can
 say it has "escaped the boundaries" — or just "escaped". In this case we need to
 decide whether the popper should either:
 
@@ -282,95 +329,529 @@ When `escapeWithReference` is `true`, and reference is completely outside the
 boundaries, the popper will overflow (or completely leave) the boundaries in order
 to remain attached to the edge of the reference.
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by `update` method |
-| options | <code>Object</code> | Modifiers configuration and options |
+* [~preventOverflow](#modifiers..preventOverflow)
+    * [.order](#modifiers..preventOverflow.order)
+    * [.enabled](#modifiers..preventOverflow.enabled)
+    * [.function](#modifiers..preventOverflow.function)
+    * [.priority](#modifiers..preventOverflow.priority)
+    * [.padding](#modifiers..preventOverflow.padding)
+    * [.boundariesElement](#modifiers..preventOverflow.boundariesElement)
 
-<a name="Modifiers.shift"></a>
+<a name="modifiers..preventOverflow.order"></a>
 
-### Modifiers.shift(data, options) ⇒ <code>Object</code>
-Modifier used to shift the popper on the start or end of its reference element side
+#### preventOverflow.order
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>300</code> | Index used to define the order of execution |
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by `update` method |
-| options | <code>Object</code> | Modifiers configuration and options |
+<a name="modifiers..preventOverflow.enabled"></a>
 
-<a name="Modifiers.hide"></a>
+#### preventOverflow.enabled
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
 
-### Modifiers.hide(data, options) ⇒ <code>Object</code>
-Modifier used to hide the popper when its reference element is outside of the
-popper boundaries. It will set an x-hidden attribute which can be used to hide
-the popper when its reference is out of boundaries.
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+<a name="modifiers..preventOverflow.function"></a>
 
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>Object</code> | The data object generated by update method |
-| options | <code>Object</code> | Modifiers configuration and options |
+#### preventOverflow.function
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
 
-<a name="Modifiers.inner"></a>
+| Type |
+| --- |
+| <code>function</code> | 
 
-### Modifiers.inner(data, options) ⇒ <code>Object</code>
+<a name="modifiers..preventOverflow.priority"></a>
+
+#### preventOverflow.priority
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| priority | <code>Array</code> | <code>[&#x27;left&#x27;,</code> | 'right', 'top', 'bottom'] Popper will try to prevent overflow following these priorities by default, then, it could overflow on the left and on top of the `boundariesElement` |
+
+<a name="modifiers..preventOverflow.padding"></a>
+
+#### preventOverflow.padding
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper this makes sure the popper has always a little padding between the edges of its container |
+
+<a name="modifiers..preventOverflow.boundariesElement"></a>
+
+#### preventOverflow.boundariesElement
+**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
+
+<a name="modifiers..keepTogether"></a>
+
+### modifiers~keepTogether
+Modifier used to make sure the reference and its popper stay near eachothers
+without leaving any gap between the two. Expecially useful when the arrow is
+enabled and you want to assure it to point to its reference element.
+It cares only about the first axis, you can still have poppers with margin
+between the popper and its reference element.
+
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+
+* [~keepTogether](#modifiers..keepTogether)
+    * [.order](#modifiers..keepTogether.order)
+    * [.enabled](#modifiers..keepTogether.enabled)
+    * [.function](#modifiers..keepTogether.function)
+
+<a name="modifiers..keepTogether.order"></a>
+
+#### keepTogether.order
+**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>400</code> | Index used to define the order of execution |
+
+<a name="modifiers..keepTogether.enabled"></a>
+
+#### keepTogether.enabled
+**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..keepTogether.function"></a>
+
+#### keepTogether.function
+**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..arrow"></a>
+
+### modifiers~arrow
+Modifier used to move the `arrowElement` on the edge of the popper to make
+sure it's always between the popper and its reference element.
+It will use the CSS outer size of the `arrowElement` element to know how
+many pixels of conjuction are needed.
+
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+
+* [~arrow](#modifiers..arrow)
+    * [.order](#modifiers..arrow.order)
+    * [.enabled](#modifiers..arrow.enabled)
+    * [.function](#modifiers..arrow.function)
+    * [.element](#modifiers..arrow.element)
+
+<a name="modifiers..arrow.order"></a>
+
+#### arrow.order
+**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>500</code> | Index used to define the order of execution |
+
+<a name="modifiers..arrow.enabled"></a>
+
+#### arrow.enabled
+**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..arrow.function"></a>
+
+#### arrow.function
+**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..arrow.element"></a>
+
+#### arrow.element
+**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | Selector or node used as arrow |
+
+<a name="modifiers..flip"></a>
+
+### modifiers~flip
+Modifier used to flip the placement of the popper when the latter starts
+overlapping its reference element.
+Requires the `preventOverflow` modifier before it in order to work.
+**NOTE:** this modifier will run all its previous modifiers everytime it
+tries to flip the popper!
+
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+
+* [~flip](#modifiers..flip)
+    * [.order](#modifiers..flip.order)
+    * [.enabled](#modifiers..flip.enabled)
+    * [.function](#modifiers..flip.function)
+    * [.behavior](#modifiers..flip.behavior)
+    * [.padding](#modifiers..flip.padding)
+    * [.boundariesElement](#modifiers..flip.boundariesElement)
+
+<a name="modifiers..flip.order"></a>
+
+#### flip.order
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>600</code> | Index used to define the order of execution |
+
+<a name="modifiers..flip.enabled"></a>
+
+#### flip.enabled
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..flip.function"></a>
+
+#### flip.function
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..flip.behavior"></a>
+
+#### flip.behavior
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used to change the popper's placement. It can be one of `flip`, `clockwise`, `counterclockwise` or an array with a list of valid placements (with optional variations). |
+
+<a name="modifiers..flip.padding"></a>
+
+#### flip.padding
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| padding | <code>Number</code> | <code>5</code> | The popper will flip if it hits the edges of the `boundariesElement` |
+
+<a name="modifiers..flip.boundariesElement"></a>
+
+#### flip.boundariesElement
+**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside of the defined boundaries (except if keepTogether is enabled) |
+
+<a name="modifiers..inner"></a>
+
+### modifiers~inner
 Modifier used to make the popper flow toward the inner of the reference element.
 By default, when this modifier is disabled, the popper will be placed outside
 the reference element.
 
-**Kind**: static method of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>Object</code> - The data object, properly modified  
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
 
-| Param | Type | Description |
+* [~inner](#modifiers..inner)
+    * [.order](#modifiers..inner.order)
+    * [.enabled](#modifiers..inner.enabled)
+    * [.function](#modifiers..inner.function)
+
+<a name="modifiers..inner.order"></a>
+
+#### inner.order
+**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>700</code> | Index used to define the order of execution |
+
+<a name="modifiers..inner.enabled"></a>
+
+#### inner.enabled
+**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>false</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..inner.function"></a>
+
+#### inner.function
+**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..hide"></a>
+
+### modifiers~hide
+Modifier used to hide the popper when its reference element is outside of the
+popper boundaries. It will set an x-hidden attribute which can be used to hide
+the popper when its reference is out of boundaries.
+
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+
+* [~hide](#modifiers..hide)
+    * [.order](#modifiers..hide.order)
+    * [.enabled](#modifiers..hide.enabled)
+    * [.function](#modifiers..hide.function)
+
+<a name="modifiers..hide.order"></a>
+
+#### hide.order
+**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>800</code> | Index used to define the order of execution |
+
+<a name="modifiers..hide.enabled"></a>
+
+#### hide.enabled
+**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..hide.function"></a>
+
+#### hide.function
+**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..applyStyle"></a>
+
+### modifiers~applyStyle
+Applies the computed styles to the popper element, disabling this modifier,
+no DOM changes will be performed by Popper.js. You may want to disble it
+while working with view librararies like React.
+
+**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+
+* [~applyStyle](#modifiers..applyStyle)
+    * [.order](#modifiers..applyStyle.order)
+    * [.enabled](#modifiers..applyStyle.enabled)
+    * [.function](#modifiers..applyStyle.function)
+    * [.onLoad](#modifiers..applyStyle.onLoad)
+    * [.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)
+
+<a name="modifiers..applyStyle.order"></a>
+
+#### applyStyle.order
+**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>Number</code> | <code>900</code> | Index used to define the order of execution |
+
+<a name="modifiers..applyStyle.enabled"></a>
+
+#### applyStyle.enabled
+**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..applyStyle.function"></a>
+
+#### applyStyle.function
+**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..applyStyle.onLoad"></a>
+
+#### applyStyle.onLoad
+**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>function</code> | 
+
+<a name="modifiers..applyStyle.gpuAcceleration"></a>
+
+#### applyStyle.gpuAcceleration
+**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+
+<a name="defaults"></a>
+
+## defaults : <code>object</code>
+Default options provided to Popper.js constructor.
+These can be overriden using the `options` argument of Popper.js.
+To override an option, simply pass as 3rd argument an object with the same
+structure of {defaults}, example:
+```
+new Popper(ref, pop, {
+  modifiers: {
+    preventOverflow: { enabled: false }
+  }
+})
+```
+
+**Kind**: global namespace  
+
+* [defaults](#defaults) : <code>object</code>
+    * [.placement](#defaults.placement)
+    * [.eventsEnabled](#defaults.eventsEnabled)
+    * [.removeOnDestroy](#defaults.removeOnDestroy)
+    * [.modifiers](#defaults.modifiers)
+    * [.onCreate()](#defaults.onCreate)
+    * [.onUpdate()](#defaults.onUpdate)
+
+<a name="defaults.placement"></a>
+
+### defaults.placement
+Popper's placement
+
+**Kind**: static property of <code>[defaults](#defaults)</code>  
+**Properties**
+
+| Name | Type | Default |
 | --- | --- | --- |
-| data | <code>Object</code> | The data object generated by `update` method |
-| options | <code>Object</code> | Modifiers configuration and options |
+| placement | <code>String</code> | <code>&#x27;bottom&#x27;</code> | 
 
-<a name="Modifiers..modifier"></a>
+<a name="defaults.eventsEnabled"></a>
 
-### Modifiers~modifier ⇒ <code>[dataObject](#dataObject)</code>
-Modifiers can edit the `data` object to change the beheavior of the popper.
-This object contains all the informations used by Popper.js to compute the
-popper position.
-The modifier can edit the data as needed, and then `return` it as result.
+### defaults.eventsEnabled
+Whether events (resize, scroll) are initially enabled
 
-**Kind**: inner typedef of <code>[Modifiers](#Modifiers)</code>  
-**Returns**: <code>[dataObject](#dataObject)</code> - modified data  
+**Kind**: static property of <code>[defaults](#defaults)</code>  
+**Properties**
 
-| Param | Type |
-| --- | --- |
-| data | <code>[dataObject](#dataObject)</code> | 
+| Name | Type | Default |
+| --- | --- | --- |
+| eventsEnabled | <code>Boolean</code> | <code>true</code> | 
 
-<a name="createCallback"></a>
+<a name="defaults.removeOnDestroy"></a>
 
-## .createCallback : <code>function</code>
+### defaults.removeOnDestroy
+Set to true if you want to automatically remove the popper when
+you call the `destroy` method.
+
+**Kind**: static property of <code>[defaults](#defaults)</code>  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| removeOnDestroy | <code>Boolean</code> | <code>false</code> | 
+
+<a name="defaults.modifiers"></a>
+
+### defaults.modifiers
+List of modifiers used to modify the offsets before they are applied to the popper.
+They provide most of the functionalities of Popper.js
+
+**Kind**: static property of <code>[defaults](#defaults)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>[modifiers](#modifiers)</code> | 
+
+<a name="defaults.onCreate"></a>
+
+### defaults.onCreate()
 Callback called when the popper is created.
 By default, is set to no-op.
 Access Popper.js instance with `data.instance`.
 
-**Kind**: static typedef  
+**Kind**: static method of <code>[defaults](#defaults)</code>  
+**Properties**
 
-| Param | Type |
-| --- | --- |
-| data | <code>[dataObject](#dataObject)</code> | 
+| Type |
+| --- |
+| <code>[onCreateCallback](#onCreateCallback)</code> | 
 
-<a name="updateCallback"></a>
+<a name="defaults.onUpdate"></a>
 
-## .updateCallback : <code>function</code>
+### defaults.onUpdate()
 Callback called when the popper is updated, this callback is not called
 on the initialization/creation of the popper, but only on subsequent
 updates.
 By default, is set to no-op.
 Access Popper.js instance with `data.instance`.
 
-**Kind**: static typedef  
+**Kind**: static method of <code>[defaults](#defaults)</code>  
+**Properties**
+
+| Type |
+| --- |
+| <code>[onUpdateCallback](#onUpdateCallback)</code> | 
+
+<a name="onCreateCallback"></a>
+
+## onCreateCallback : <code>function</code>
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| data | <code>[dataObject](#dataObject)</code> | 
+
+<a name="onUpdateCallback"></a>
+
+## onUpdateCallback : <code>function</code>
+**Kind**: global typedef  
 
 | Param | Type |
 | --- | --- |
