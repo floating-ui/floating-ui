@@ -4,7 +4,7 @@
 
 # Exclude the tooltip dist files
 #===============================
-dist/tooltip*
+dist/**/tooltip*
 
 # Exclude everything else
 #========================
