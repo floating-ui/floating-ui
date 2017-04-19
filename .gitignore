@@ -9,6 +9,7 @@ node_modules
 .jekyll-metadata
 dist
 .idea/
+*.log
 
 # When you switch branches, things can get messy
 _site

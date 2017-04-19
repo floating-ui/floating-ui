@@ -1,5 +1,5 @@
 const { exec, execSync } = require('child_process');
-const { waterfall } = require('async');
+const { parallel } = require('async');
 const { argv } = require('yargs');
 const colors = require('colors');
 const { build } = argv;
@@ -8,53 +8,39 @@ const rollup = 'rollup -c ./scripts/rollup.config.js';
 const minify = 'node ./scripts/minify.js';
 const gzipped = '$(npm bin)/gzipped';
 
-console.log(colors.green(`⚙️  Compiling target '${build}'...`));
-const next = done =>
-  exec(`${rollup} --environment BUILD:${build}`, error => {
+const bundleFactory = (es5, ext, format) => done => {
+  const ES5 = es5 || false;
+  const EXT = ext || '';
+  const FORMAT = format || 'es';
+  const TARGET = `${EXT ? EXT + '/' : ''}${build}`;
+
+  exec(`${rollup} --environment BUILD:${build},EXT:"${EXT}",FORMAT:${FORMAT}${ES5 ? ',ES5' : ''}`, error => {
     if (error) {
-      console.error(`${build}: ${error}`);
+      return console.error(`${TARGET}: ${error}`);
     }
-    exec(`${minify} -i ./dist/${build}.js -o ./dist/${build}.min.js`, error => {
+    exec(`${minify} -i ./dist/${EXT}/${build}.js -o ./dist/${EXT}/${build}.min.js`, error => {
       if (error) {
-        console.error(`${build}.minify: ${error}`);
+        return console.error(`${build}${EXT}.minify: ${error}`);
       }
       console.info(
-        colors.yellow(`${build}`),
-        `\n${execSync(`${gzipped} ./dist/${build}.js`).toString()}`
+        colors.yellow(`${TARGET}`),
+        `\n${execSync(`${gzipped} ./dist/${EXT}/${build}.js`).toString()}`
       );
       console.info(
-        colors.yellow(`${build}.min`),
-        `\n${execSync(`${gzipped} ./dist/${build}.min.js`).toString()}`
+        colors.yellow(`${TARGET}.min`),
+        `\n${execSync(`${gzipped} ./dist/${EXT}/${build}.min.js`).toString()}`
       );
       done();
     });
   });
+}
 
-const es5 = done =>
-  exec(`${rollup} --environment BUILD:${build},ES5`, error => {
-    if (error) {
-      console.error(`${build}.es5: ${error}`);
-    }
-    exec(
-      `${minify} -i ./dist/${build}.es5.js -o ./dist/${build}.es5.min.js`,
-      error => {
-        if (error) {
-          console.error(`${build}.es5.minify: ${error}`);
-        }
-        console.info(
-          colors.yellow(`${build}.es5`),
-          `\n${execSync(`${gzipped} ./dist/${build}.es5.js`).toString()}`
-        );
-        console.info(
-          colors.yellow(`${build}.es5.min`),
-          `\n${execSync(`${gzipped} ./dist/${build}.es5.min.js`).toString()}`
-        );
-        done();
-      }
-    );
-  });
+const umd_es5 = bundleFactory(true, 'umd', 'umd');
+const esm_es5 = bundleFactory(true, 'esm', 'es');
+const esm_es6 = bundleFactory(false, '', 'es');
 
-waterfall([next, es5], error => {
+console.info(colors.green(`⚙️  Compiling target '${build}'...`));
+parallel([umd_es5, esm_es5, esm_es6], error => {
   if (error) {
     console.error(`${build}: ${error}`);
   }

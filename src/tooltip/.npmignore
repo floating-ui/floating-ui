@@ -4,4 +4,4 @@
 
 # Except the dist files
 #======================
-!dist/tooltip*
+!dist/**/tooltip*

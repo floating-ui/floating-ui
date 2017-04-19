@@ -1,9 +1,9 @@
 {
   "name": "popper.js",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "A kickass library to manage your poppers",
-  "main": "dist/popper.es5.js",
-  "module": "dist/popper.js",
+  "main": "dist/umd/popper.js",
+  "module": "dist/esm/popper.js",
   "scripts": {
     "prepublish": "in-publish && npm run build || exit 0 ",
     "precommit": "lint-staged && opt --in pre-commit --exec \"npm start validate\"",
