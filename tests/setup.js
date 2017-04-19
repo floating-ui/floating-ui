@@ -1,3 +1,5 @@
+import simulateScroll from './utils/simulateScroll';
+
 const wrapper = document.createElement('div');
 wrapper.id = 'jasmineWrapper';
 document.body.appendChild(wrapper);
@@ -25,4 +27,5 @@ beforeEach(function() {
 
   const jasmineWrapper = document.getElementById('jasmineWrapper');
   jasmineWrapper.innerHTML = '';
+  simulateScroll(document.body, 0);
 });
