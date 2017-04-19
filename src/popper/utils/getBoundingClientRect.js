@@ -22,11 +22,13 @@ export default function getBoundingClientRect(element) {
   if (isIE10) {
     try {
       rect = element.getBoundingClientRect();
+      const scrollTop = getScroll(element, 'top');
+      const scrollLeft = getScroll(element, 'left');
+      rect.top += scrollTop;
+      rect.left += scrollLeft;
+      rect.bottom += scrollTop;
+      rect.right += scrollLeft;
     } catch (err) {}
-    const scrollTop = getScroll(element, 'top');
-    const scrollLeft = getScroll(element, 'left');
-    rect.top += scrollTop;
-    rect.left += scrollLeft;
   } else {
     rect = element.getBoundingClientRect();
   }
