@@ -51,6 +51,19 @@ module.exports = function(config) {
         version: '11',
         platform: 'Windows 10',
       },
+      SLiOS9: {
+        base: 'SauceLabs',
+        browserName: 'iphone',
+        version: '9.3',
+        platform: 'macOS 10.12',
+      },
+      SLChromeMobile: {
+        base: 'SauceLabs',
+        browserName: 'Chrome',
+        version: '7.0',
+        platform: 'Android',
+        device: 'Android GoogleAPI Emulator',
+      },
     },
     preprocessors: {
       [`${root}/src/(!dist|**)/*.js`]: ['rollup'],

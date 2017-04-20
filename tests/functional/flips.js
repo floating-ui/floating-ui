@@ -8,6 +8,8 @@ import simulateScroll from '../utils/simulateScroll';
 import getRect from '../utils/getRect';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
+const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
+
 describe('[flipping]', () => {
   it('should flip from top to bottom', done => {
     const ref = appendNewRef(1, 'ref', jasmineWrapper);
@@ -205,6 +207,8 @@ describe('[flipping]', () => {
   });
 
   it('flips to bottom when hits top viewport edge', done => {
+    if (isIPHONE) { pending(); }
+
     jasmineWrapper.innerHTML = `
             <div id="s1" style="height: 3000px; background: red;">
                 <div id="reference" style="background: pink; margin-top: 200px">reference</div>

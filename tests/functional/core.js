@@ -11,6 +11,8 @@ import simulateScroll from '../utils/simulateScroll';
 import prepend from '../utils/prepend';
 
 const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
+const arrowSize = 5;
 
 describe('[core]', () => {
   afterEach(function() {
@@ -18,7 +20,6 @@ describe('[core]', () => {
     jasmineWrapper.scrollLeft = 0;
   });
 
-  const arrowSize = 5;
 
   it('can access the AMD module to create a new instance', () => {
     // append popper element
@@ -85,17 +86,19 @@ describe('[core]', () => {
   });
 
   it('inits a bottom popper inside document with margins, it should correctly flip', done => {
+    if (isIPHONE) { pending(); }
+
     const doc = document.documentElement;
-    doc.style.marginLeft = '300px';
-    doc.style.marginTop = '100vh';
+    doc.style.marginLeft = '50vw';
+    doc.style.marginTop = `100vh`;
 
     const wrp = document.createElement('div');
     wrp.innerHTML = `
-        <div id="reference" style="
-            width: 100px;
-            height: 50px;
-            background-color: red;
-        "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
+      <div id="reference" style="
+          width: 100px;
+          height: 50px;
+          background-color: red;
+      "></div><div id="popper" style="background: black; color: white; width: 50px;">1</div>
     `.trim();
     const popper = wrp.childNodes[1];
     const reference = wrp.childNodes[0];
@@ -783,6 +786,8 @@ describe('[core]', () => {
   });
 
   it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
+    if (isIPHONE) { pending(); }
+
     const relative = document.createElement('div');
     relative.style.position = 'relative';
     relative.style.margin = '20px';
@@ -807,7 +812,7 @@ describe('[core]', () => {
       },
       onCreate: () => {
         expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
-        simulateScroll(document.body, { scrollTop: 3000 });
+        simulateScroll(document.body, { scrollTop: getRect(ref).top });
       },
       onUpdate: data => {
         expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
