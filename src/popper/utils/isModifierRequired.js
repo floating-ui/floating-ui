@@ -17,7 +17,7 @@ export default function isModifierRequired(
 ) {
   const requesting = find(modifiers, ({ name }) => name === requestingName);
 
-  return (
+  const isRequired = (
     !!requesting &&
     modifiers.some(modifier => {
       return (
@@ -27,4 +27,13 @@ export default function isModifierRequired(
       );
     })
   );
+
+  if (isRequired) {
+    const requesting = `\`${requestingName}\``;
+    const requested = `\`${requestedName}\``;
+    console.warn(
+      `${requested} modifier is required by ${requesting} modifier in order to work, be sure to include it before ${requesting}!`
+    );
+  }
+  return isRequired;
 }

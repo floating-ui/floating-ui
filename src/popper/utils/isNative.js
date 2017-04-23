@@ -5,6 +5,8 @@ const nativeHints = [
 
 /**
  * Determine if a function is implemented natively (as opposed to a polyfill).
+ * @method
+ * @memberof Popper.Utils
  * @argument {Function | undefined} fn the function to check
  * @returns {boolean}
  */

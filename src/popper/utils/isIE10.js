@@ -1,5 +1,7 @@
 /**
  * Tells if you are running Internet Explorer 10
+ * @method
+ * @memberof Popper.Utils
  * @returns {Boolean} isIE10
  */
 export default function() {

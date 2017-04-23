@@ -19,7 +19,9 @@ import inner from './inner';
  */
 export default {
   /**
-   * Modifier used to shift the popper on the start or end of its reference element side
+   * Modifier used to shift the popper on the start or end of its reference element.
+   * It will read the variation of the `placement` property.
+   * It can be one either `-end` or `-start`.
    * @memberof modifiers
    * @inner
    */
@@ -33,8 +35,27 @@ export default {
   },
 
   /**
-   * Modifier used to add an offset to the popper, useful if you more granularity positioning your popper.
-   * The offsets will shift the popper on the side of its reference element.
+   * The `offset` modifier can shift your popper on both its axis.
+   *
+   * It accepts the following units:
+   * - unitless, interpreted as pixels
+   * - `%` or `%r`, percentage relative to the length of the reference element
+   * - `%p`, percentage relative to the length of the popper element
+   * - `vw`, CSS viewport width unit
+   * - `vh`, CSS viewport height unit
+   *
+   * For length is intended the main axis relative to the placement of the popper.
+   * This means that if the placement is `top` or `bottom`, the length will be the
+   * `width`. In case of `left` or `right`, it will be the height.
+   *
+   * You can provide a single value (as `Number` or `String`), or a pair of values
+   * as `String` divided by one white space.
+   *
+   * Valid examples are:
+   * - offset: 10
+   * - offset: '10%'
+   * - offset: '10 10'
+   * - offset: '10% 10'
    * @memberof modifiers
    * @inner
    */
@@ -46,14 +67,7 @@ export default {
     /** @prop {Function} */
     function: offset,
     /** @prop {Number|String} offset=0
-     * Basic usage allows a number used to nudge the popper by the given amount of pixels.
-     * You can pass a percentage value as string (eg. `20%`) to nudge by the given percentage (relative to reference element size)
-     * Other supported units are `vh` and `vw` (relative to viewport)
-     * Additionally, you can pass a pair of values (eg. `10 20` or `2vh 20%`) to nudge the popper
-     * on both axis.
-     * A note about percentage values, if you want to refer a percentage to the popper size instead of the reference element size,
-     * use `%p` instead of `%` (eg: `20%p`). To make it clearer, you can replace `%` with `%r` and use eg.`10%p 25%r`.
-     * **Heads up!** The order of the axis is relative to the popper placement: `bottom` or `top` are `X,Y`, the other are `Y,X`
+     * The offset value as described in the modifier description
      */
     offset: 0,
   },
@@ -61,16 +75,17 @@ export default {
   /**
    * Modifier used to prevent the popper from being positioned outside the boundary.
    *
-   * A scenario exists where the reference itself is not within the boundaries. We can
-   * say it has "escaped the boundaries" — or just "escaped". In this case we need to
-   * decide whether the popper should either:
+   * An scenario exists where the reference itself is not within the boundaries.
+   * We can say it has "escaped the boundaries" — or just "escaped".
+   * In this case we need to decide whether the popper should either:
    *
    * - detach from the reference and remain "trapped" in the boundaries, or
-   * - if it should be ignore the boundary and "escape with the reference"
+   * - if it should ignore the boundary and "escape with its reference"
    *
-   * When `escapeWithReference` is `true`, and reference is completely outside the
-   * boundaries, the popper will overflow (or completely leave) the boundaries in order
-   * to remain attached to the edge of the reference.
+   * When `escapeWithReference` is set to`true` and reference is completely
+   * outside its boundaries, the popper will overflow (or completely leave)
+   * the boundaries in order to remain attached to the edge of the reference.
+   *
    * @memberof modifiers
    * @inner
    */
@@ -121,10 +136,12 @@ export default {
   },
 
   /**
-   * Modifier used to move the `arrowElement` on the edge of the popper to make
-   * sure it's always between the popper and its reference element.
-   * It will use the CSS outer size of the `arrowElement` element to know how
-   * many pixels of conjuction are needed.
+   * This modifier is used to move the `arrowElement` of the popper to make
+   * sure it is positioned between the reference element and its popper element.
+   * It will read the outer size of the `arrowElement` node to detect how many
+   * pixels of conjuction are needed.
+   *
+   * It has no effect if no `arrowElement` is provided.
    * @memberof modifiers
    * @inner
    */
@@ -140,11 +157,13 @@ export default {
   },
 
   /**
-   * Modifier used to flip the placement of the popper when the latter starts
-   * overlapping its reference element.
+   * Modifier used to flip the popper's placement when it starts to overlap its
+   * reference element.
+   *
    * Requires the `preventOverflow` modifier before it in order to work.
-   * **NOTE:** this modifier will run all its previous modifiers everytime it
-   * tries to flip the popper!
+   *
+   * **NOTE:** this modifier will interrupt the current update cycle and will
+   * restart it if it detects the need to flip the placement.
    * @memberof modifiers
    * @inner
    */
@@ -194,8 +213,11 @@ export default {
 
   /**
    * Modifier used to hide the popper when its reference element is outside of the
-   * popper boundaries. It will set an x-hidden attribute which can be used to hide
-   * the popper when its reference is out of boundaries.
+   * popper boundaries. It will set a `x-out-of-boundaries` attribute which can
+   * be used to hide with a CSS selector the popper when its reference is
+   * out of boundaries.
+   *
+   * Requires the `preventOverflow` modifier before it in order to work.
    * @memberof modifiers
    * @inner
    */
@@ -209,9 +231,14 @@ export default {
   },
 
   /**
-   * Applies the computed styles to the popper element, disabling this modifier,
-   * no DOM changes will be performed by Popper.js. You may want to disble it
-   * while working with view librararies like React.
+   * Applies the computed styles to the popper element.
+   *
+   * All the DOM manipulations are limited to this modifier. This is useful in case
+   * you want to integrate Popper.js inside a framework or view library and you
+   * want to delegate all the DOM manipulations to it.
+   *
+   * Just disable this modifier and define you own to achieve the desired effect.
+   *
    * @memberof modifiers
    * @inner
    */
