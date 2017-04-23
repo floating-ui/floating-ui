@@ -6,11 +6,11 @@ In this page we try to collect a list of libraries built with it:
 
 # Integration in frameworks and view libraries
 
-You can easily use Popper.js inside your application written using one of the most common frameworks or view libraries thank to the following projects.
+You can easily use Popper.js inside your application written using one of the
+most common frameworks or view libraries thank to the following projects.
 
-> We are looking for awesome libraries to integrate Popper.js into other frameworks and libraries!
-> Especially, we'd like to see integrations into [Inferno](https://infernojs.org/), [Preact](https://preactjs.com/) and [Glimmer.js](https://glimmerjs.com). But any other integration is super welcome.
-
+> We are looking for awesome libraries to integrate Popper.js into other
+  frameworks and libraries!
 
 ## React
 
@@ -30,7 +30,8 @@ This component is in alpha base, you can contribute to it!
 
 ## Vue.js
 
-The Vue.js situation is particular, there are several UI frameworks that use Popper.js internally, but only few "basic" components that let you use Popper.js with it.
+The Vue.js situation is particular, there are several UI frameworks that use
+Popper.js internally, but only few "basic" components that let you use Popper.js with it.
 
 ### [vue-popper-component](https://github.com/antongorodezkiy/vue-popper-component)
 
@@ -46,7 +47,12 @@ Vue.js tooltip directive (based on Popper.js)
 
 An Ember-centric wrapper around Popper.js.
 
+## Preact and Inferno
 
+### [react-popper](https://github.com/souporserious/react-popper)
+
+It is developed for React but it works fine with both Preact and Inferno if
+you alias `react` and `react-dom` to `preact-compat` or `inferno-compat`.
 
 # Other projects
 
