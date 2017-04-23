@@ -10,7 +10,8 @@ You can easily use Popper.js inside your application written using one of the
 most common frameworks or view libraries thank to the following projects.
 
 > We are looking for awesome libraries to integrate Popper.js into other
-  frameworks and libraries!
+  frameworks and libraries.
+> Have you written an integration library for your favourite framework? Let us know!
 
 ## React
 
