@@ -34,7 +34,7 @@ export default function offset(data, options) {
     // itherate through each offset to compute them in case they are percentages
     offsets = offsets.map((offset, index) => {
       // separate value from unit
-      const split = offset.match(/(\d*\.?\d*)(.*)/);
+      const split = offset.match(/(\-?\d*\.?\d*)(.*)/);
       const value = +split[1];
       const unit = split[2];
 
