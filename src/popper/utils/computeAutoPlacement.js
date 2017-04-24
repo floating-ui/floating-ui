@@ -13,13 +13,14 @@ export default function computeAutoPlacement(
   placement,
   refRect,
   popper,
-  reference
+  reference,
+  boundariesElement
 ) {
   if (placement.indexOf('auto') === -1) {
     return placement;
   }
 
-  const boundaries = getBoundaries(popper, reference, 0, 'scrollParent');
+  const boundaries = getBoundaries(popper, reference, 0, boundariesElement);
 
   const sides = {
     top: refRect.top - boundaries.top,
