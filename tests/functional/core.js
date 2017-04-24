@@ -20,7 +20,6 @@ describe('[core]', () => {
     jasmineWrapper.scrollLeft = 0;
   });
 
-
   it('can access the AMD module to create a new instance', () => {
     // append popper element
     const popper = document.createElement('div');
@@ -86,7 +85,9 @@ describe('[core]', () => {
   });
 
   it('inits a bottom popper inside document with margins, it should correctly flip', done => {
-    if (isIPHONE) { pending(); }
+    if (isIPHONE) {
+      pending();
+    }
 
     const doc = document.documentElement;
     doc.style.marginLeft = '50vw';
@@ -262,6 +263,7 @@ describe('[core]', () => {
 
       const pop = new Popper(reference, popper, {
         placement: 'auto',
+        modifiers: { flip: { boundariesElement: 'scrollParent' } },
         onCreate: () => {
           const bottom = getRect(popper).bottom + arrowSize;
           expect(bottom).toBeApprox(getRect(reference).top);
@@ -287,6 +289,7 @@ describe('[core]', () => {
 
       const pop = new Popper(reference, popper, {
         placement: 'auto',
+        modifiers: { flip: { boundariesElement: 'scrollParent' } },
         onCreate: () => {
           const left = getRect(popper).left - arrowSize;
           expect(left).toBeApprox(getRect(reference).right);
@@ -312,6 +315,7 @@ describe('[core]', () => {
 
       const pop = new Popper(reference, popper, {
         placement: 'auto',
+        modifiers: { flip: { boundariesElement: 'scrollParent' } },
         onCreate: () => {
           const top = getRect(popper).top - arrowSize;
           expect(top).toBeApprox(getRect(reference).bottom);
@@ -337,6 +341,7 @@ describe('[core]', () => {
 
       const pop = new Popper(reference, popper, {
         placement: 'auto',
+        modifiers: { flip: { boundariesElement: 'scrollParent' } },
         onCreate: () => {
           const right = getRect(popper).right + arrowSize;
           expect(right).toBeApprox(getRect(reference).left);
@@ -786,7 +791,9 @@ describe('[core]', () => {
   });
 
   it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
-    if (isIPHONE) { pending(); }
+    if (isIPHONE) {
+      pending();
+    }
 
     const relative = document.createElement('div');
     relative.style.position = 'relative';

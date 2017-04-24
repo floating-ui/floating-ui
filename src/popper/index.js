@@ -223,11 +223,12 @@ export default class Popper {
       this.options.placement,
       data.offsets.reference,
       this.popper,
-      this.reference
+      this.reference,
+      this.options.modifiers.flip.boundariesElement
     );
 
     // store the computed placement inside `originalPlacement`
-    data.originalPlacement = this.options.placement;
+    data.originalPlacement = data.placement;
 
     // compute the popper offsets
     data.offsets.popper = getPopperOffsets(
