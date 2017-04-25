@@ -1,15 +1,21 @@
+<!--
 Thanks for your interest in contributing to Popper.js!  
-Please, make sure to fill all the sections of the template before submitting any issue.  
-
+Please, make sure to fill all the sections of the template before submitting any issue. 
+ 
 Issues without the required informations will be closed.
 
-----------------
+Want your issue to be fixed earlier? Create a PR that introduces a CI test that fails
+because of the bug you found!
+-->
+
 
 ### CodePen demo
 
-Edit this CodePen to allow the contributors to easily reproduce your problem.  
-http://codepen.io/FezVrasta/pen/wGqJEz
+<!--
+Fork and edit this CodePen to allow the contributors to easily reproduce your problem.  
+-->
 
+http://codepen.io/FezVrasta/pen/wGqJEz
 
 ### Steps to reproduce the problem
 
