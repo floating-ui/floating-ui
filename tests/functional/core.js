@@ -1234,6 +1234,46 @@ describe('[core]', () => {
     });
   });
 
+  it('inits a popper near the reference element when it is a child of ref and a parent is relatively positioned', done => {
+    const relative = document.createElement('div');
+    relative.style.position = 'relative';
+    relative.style.left = '50%';
+    relative.style.top = '20px';
+    relative.style.background = 'green';
+    jasmineWrapper.appendChild(relative);
+
+    const ref = appendNewRef(1, 'ref', relative);
+    const popper = appendNewPopper(2, 'popper', ref);
+
+    new Popper(ref, popper, {
+      placement: 'bottom-end',
+      onCreate: data => {
+        expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
+
+  it('inits a popper near the reference element when it is a child of ref and the ref is relatively positioned', done => {
+    const ref = appendNewRef(1, 'ref');
+    ref.style.position = 'relative';
+    ref.style.left = '50px';
+    ref.style.top = '20px';
+    ref.style.background = 'green';
+
+    const popper = appendNewPopper(2, 'popper', ref);
+
+    new Popper(ref, popper, {
+      placement: 'bottom-end',
+      onCreate: data => {
+        expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
+
   it('checks that all the scrollable parents have an event listener attached', done => {
     jasmineWrapper.innerHTML = `
             <div id="s1" style="overflow: scroll; height: 300px; background: red;">
