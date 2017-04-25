@@ -39,7 +39,8 @@ export default function update() {
     data.offsets.reference,
     this.popper,
     this.reference,
-    this.options.modifiers.flip.boundariesElement
+    this.options.modifiers.flip.boundariesElement,
+    this.options.modifiers.flip.padding
   );
 
   // store the computed placement inside `originalPlacement`

@@ -232,6 +232,39 @@ describe('[flipping]', () => {
     });
   });
 
+  it('flip properly with large popper width', done => {
+    jasmineWrapper.innerHTML = `
+      <style>body { margin: 0; }</style>
+      <div style="background: grey; height: 100vh;">
+        <div
+          id="reference"
+          style="background: yellow; width: 200px; height: 80vh;"
+        >
+          ref
+        </div>
+        <div
+          id="popper"
+          style="background: purple; width: 95vw; height: 30px;"
+        >
+          popper
+        </div>
+      </div>
+    `;
+
+    const reference = document.getElementById('reference');
+    const popper = document.getElementById('popper');
+
+    new Popper(reference, popper, {
+      placement: 'auto',
+      onCreate(data) {
+        expect(data.placement).toBe('bottom');
+        expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
+
   // This one will fail on IE10 - See #211
   xit('properly positions a bottom popper inside very high body', done => {
     jasmineWrapper.innerHTML = `
