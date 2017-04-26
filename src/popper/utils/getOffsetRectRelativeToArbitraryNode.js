@@ -4,9 +4,9 @@ import getScrollParent from './getScrollParent';
 import getBoundingClientRect from './getBoundingClientRect';
 import runIsIE10 from './isIE10';
 import getClientRect from './getClientRect';
-const isIE10 = runIsIE10();
 
 export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
+  const isIE10 = runIsIE10();
   const isHTML = parent.nodeName === 'HTML';
   const childrenRect = getBoundingClientRect(children);
   const parentRect = getBoundingClientRect(parent);
