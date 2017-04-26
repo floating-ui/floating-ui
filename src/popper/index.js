@@ -190,11 +190,11 @@ export default class Popper {
   //
 
   /**
-     * Updates the position of the popper, computing the new offsets and applying the new style
-     * Prefer `scheduleUpdate` over `update` because of performance reasons
-     * @method
-     * @memberof Popper
-     */
+   * Updates the position of the popper, computing the new offsets and applying the new style
+   * Prefer `scheduleUpdate` over `update` because of performance reasons
+   * @method
+   * @memberof Popper
+   */
   update() {
     // if popper is destroyed, don't perform any further update
     if (this.state.isDestroyed) {
@@ -252,17 +252,17 @@ export default class Popper {
   }
 
   /**
-     * Schedule an update, it will run on the next UI update available
-     * @method scheduleUpdate
-     * @memberof Popper
-     */
+   * Schedule an update, it will run on the next UI update available
+   * @method scheduleUpdate
+   * @memberof Popper
+   */
   scheduleUpdate = () => requestAnimationFrame(this.update);
 
   /**
-     * Destroy the popper
-     * @method
-     * @memberof Popper
-     */
+   * Destroy the popper
+   * @method
+   * @memberof Popper
+   */
   destroy() {
     this.state.isDestroyed = true;
 
@@ -286,11 +286,11 @@ export default class Popper {
   }
 
   /**
-     * it will add resize/scroll events and start recalculating
-     * position of the popper element when they are triggered
-     * @method
-     * @memberof Popper
-     */
+   * it will add resize/scroll events and start recalculating
+   * position of the popper element when they are triggered
+   * @method
+   * @memberof Popper
+   */
   enableEventListeners() {
     if (!this.state.eventsEnabled) {
       this.state = setupEventListeners(
@@ -303,12 +303,12 @@ export default class Popper {
   }
 
   /**
-     * it will remove resize/scroll events and won't recalculate
-     * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
-     * unless you call 'update' method manually.
-     * @method
-     * @memberof Popper
-     */
+   * it will remove resize/scroll events and won't recalculate
+   * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
+   * unless you call 'update' method manually.
+   * @method
+   * @memberof Popper
+   */
   disableEventListeners() {
     if (this.state.eventsEnabled) {
       window.cancelAnimationFrame(this.scheduleUpdate);
@@ -317,26 +317,36 @@ export default class Popper {
   }
 
   /**
-     * Collection of utilities useful when writing custom modifiers.
-     * Starting from version 1.7, this method is available only if you
-     * include `popper-utils.js` before `popper.js`.
-     *
-     * **DEPRECATION**: This way to access PopperUtils is deprecated
-     * and will be removed in v2! Use the PopperUtils module directly instead.
-     * @memberof Popper
-     */
+   * Collection of utilities useful when writing custom modifiers.
+   * Starting from version 1.7, this method is available only if you
+   * include `popper-utils.js` before `popper.js`.
+   *
+   * **DEPRECATION**: This way to access PopperUtils is deprecated
+   * and will be removed in v2! Use the PopperUtils module directly instead.
+   * @static
+   * @type {Object}
+   * @deprecated since version 1.8
+   * @member Utils
+   * @memberof Popper
+   */
   static Utils = (typeof window !== 'undefined' ? window : global).PopperUtils;
 
   /**
-     * List of accepted placements to use as values of the `placement` option
-     * @memberof Popper
-     */
+   * List of accepted placements to use as values of the `placement` option
+   * @static
+   * @type {Array}
+   * @member placements
+   * @memberof Popper
+   */
   static placements = placements;
 
   /**
-     * Default Popper.js options
-     * @memberof Popper
-     */
+   * Default Popper.js options
+   * @static
+   * @type {Object}
+   * @member Defaults
+   * @memberof Popper
+   */
   static Defaults = DEFAULTS;
 }
 
