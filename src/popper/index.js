@@ -322,7 +322,7 @@ export default class Popper {
      * include `popper-utils.js` before `popper.js`.
      * @memberof Popper
      */
-  static Utils = window.PopperUtils;
+  static Utils = window && window.PopperUtils;
 
   /**
      * List of accepted placements to use as values of the `placement` option
