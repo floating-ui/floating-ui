@@ -320,9 +320,12 @@ export default class Popper {
      * Collection of utilities useful when writing custom modifiers.
      * Starting from version 1.7, this method is available only if you
      * include `popper-utils.js` before `popper.js`.
+     *
+     * **DEPRECATION**: This way to access PopperUtils is deprecated
+     * and will be removed in v2! Use the PopperUtils module directly instead.
      * @memberof Popper
      */
-  static Utils = window && window.PopperUtils;
+  static Utils = (typeof window !== 'undefined' ? window : global).PopperUtils;
 
   /**
      * List of accepted placements to use as values of the `placement` option
