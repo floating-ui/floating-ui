@@ -15,8 +15,12 @@ export default function runModifiers(modifiers, data, ends) {
     : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(modifier => {
-    if (modifier.enabled && isFunction(modifier.function)) {
-      data = modifier.function(data, modifier);
+    if (modifier.function) {
+      console.warn('`modifier.function` is deprecated, use `modifier.fn`!')
+    }
+    const fn = modifier.function || modifier.fn;
+    if (modifier.enabled && isFunction(fn)) {
+      data = fn(data, modifier);
     }
   });
 

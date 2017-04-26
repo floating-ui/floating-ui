@@ -13,7 +13,7 @@ import inner from './inner';
  * Popper.js uses a set of 9 modifiers to provide all the basic functionalities
  * needed by the library.
  *
- * Usually you don't want to override the `order`, `function` and `onLoad` props.
+ * Usually you don't want to override the `order`, `fn` and `onLoad` props.
  * All the other properties are configurations that could be tweaked.
  * @namespace modifiers
  */
@@ -31,7 +31,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: shift,
+    fn: shift,
   },
 
   /**
@@ -65,7 +65,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: offset,
+    fn: offset,
     /** @prop {Number|String} offset=0
      * The offset value as described in the modifier description
      */
@@ -95,7 +95,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: preventOverflow,
+    fn: preventOverflow,
     /**
      * @prop {Array} priority=['left', 'right', 'top', 'bottom']
      * Popper will try to prevent overflow following these priorities by default,
@@ -132,7 +132,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: keepTogether,
+    fn: keepTogether,
   },
 
   /**
@@ -151,7 +151,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: arrow,
+    fn: arrow,
     /** @prop {String|HTMLElement} element='[x-arrow]' - Selector or node used as arrow */
     element: '[x-arrow]',
   },
@@ -173,7 +173,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: flip,
+    fn: flip,
     /**
      * @prop {String|Array} behavior='flip'
      * The behavior used to change the popper's placement. It can be one of
@@ -208,7 +208,7 @@ export default {
     /** @prop {Boolean} enabled=false - Whether the modifier is enabled or not */
     enabled: false,
     /** @prop {Function} */
-    function: inner,
+    fn: inner,
   },
 
   /**
@@ -227,7 +227,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: hide,
+    fn: hide,
   },
 
   /**
@@ -248,7 +248,7 @@ export default {
     /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
     enabled: true,
     /** @prop {Function} */
-    function: applyStyle,
+    fn: applyStyle,
     /** @prop {Function} */
     onLoad: applyStyleOnLoad,
     /**

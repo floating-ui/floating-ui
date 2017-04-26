@@ -840,7 +840,7 @@ describe('[core]', () => {
 
     new Popper(reference, popper, {
       modifiers: {
-        hidePopper: { order: 790, enabled: true, function: hidePopper },
+        hidePopper: { order: 790, enabled: true, fn: hidePopper },
       },
       onCreate: data => {
         expect(popper.style.display).toBe('none');
@@ -861,7 +861,7 @@ describe('[core]', () => {
 
     new Popper(reference, popper, {
       modifiers: {
-        movePopper: { order: 690, enabled: true, function: movePopper },
+        movePopper: { order: 690, enabled: true, fn: movePopper },
       },
       onCreate: data => {
         expect(popper.style.top).toBe('3px');

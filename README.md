@@ -157,7 +157,7 @@ new Popper(reference, popper, {
         applyStyle: { enabled: false },
         applyReactStyle: {
             enabled: true,
-            function: applyReactStyle,
+            fn: applyReactStyle,
             order: 800,
         },
     },
