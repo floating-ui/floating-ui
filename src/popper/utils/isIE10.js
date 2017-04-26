@@ -4,6 +4,11 @@
  * @memberof Popper.Utils
  * @returns {Boolean} isIE10
  */
+let isIE10 = undefined;
+
 export default function() {
-  return navigator.appVersion.indexOf('MSIE 10') !== -1;
+  if (isIE10 === undefined) {
+    isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+  }
+  return isIE10;
 }

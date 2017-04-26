@@ -3,8 +3,7 @@ import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
 import getScroll from './getScroll';
 import getClientRect from './getClientRect';
-import runIsIE10 from './isIE10';
-const isIE10 = runIsIE10();
+import isIE10 from './isIE10';
 
 /**
  * Get bounding client rect of given element
@@ -19,7 +18,7 @@ export default function getBoundingClientRect(element) {
   // IE10 10 FIX: Please, don't ask, the element isn't
   // considered in DOM in some circumstances...
   // This isn't reproducible in IE10 compatibility mode of IE11
-  if (isIE10) {
+  if (isIE10()) {
     try {
       rect = element.getBoundingClientRect();
       const scrollTop = getScroll(element, 'top');
