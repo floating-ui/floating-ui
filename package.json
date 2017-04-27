@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "description": "A kickass library to manage your poppers",
   "main": "dist/umd/popper.js",
   "module": "dist/esm/popper.js",
