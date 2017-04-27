@@ -14,24 +14,61 @@ export default function computeAutoPlacement(
   refRect,
   popper,
   reference,
-  boundariesElement
+  boundariesElement,
+  padding = 0
 ) {
   if (placement.indexOf('auto') === -1) {
     return placement;
   }
 
-  const boundaries = getBoundaries(popper, reference, 0, boundariesElement);
+  const boundaries = getBoundaries(popper, reference, padding, boundariesElement);
 
-  const sides = {
-    top: refRect.top - boundaries.top,
-    right: boundaries.right - refRect.right,
-    bottom: boundaries.bottom - refRect.bottom,
-    left: refRect.left - boundaries.left,
+  const rects = {
+    top: {
+      width: boundaries.width,
+      height: refRect.top - boundaries.top,
+      getArea: function() { return this.width * this.height; },
+    },
+    right: {
+      width: boundaries.right - refRect.right,
+      height: boundaries.height,
+      getArea: function() { return this.width * this.height; },
+    },
+    bottom: {
+      width: boundaries.width,
+      height: boundaries.bottom - refRect.bottom,
+      getArea: function() { return this.width * this.height; },
+    },
+    left: {
+      width: refRect.left - boundaries.left,
+      height: boundaries.height,
+      getArea: function() { return this.width * this.height; },
+    },
   };
+  
+  const sortedRects = [];
+  for (const rect in rects) {
+    sortedRects.push([rect, rects[rect]]);
+  }
 
-  const computedPlacement = Object.keys(sides).sort(
-    (a, b) => sides[b] - sides[a]
-  )[0];
+  sortedRects.sort(function(a, b) {
+    return b[1].getArea() - a[1].getArea();
+  });
+
+  const resultRects = sortedRects.filter(function(rect) {
+    if (rect[1].width >= popper.clientWidth && rect[1].height >= popper.clientHeight) {
+      return rect;
+    }
+  });
+
+
+  let computedPlacement = '';
+  if (resultRects.length > 0) {
+    computedPlacement = resultRects[0][0];
+  } else {
+    computedPlacement = sortedRects[0][0];
+  }
+
   const variation = placement.split('-')[1];
 
   return computedPlacement + (variation ? `-${variation}` : '');
