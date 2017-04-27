@@ -60,9 +60,10 @@ module.exports = function(config) {
       SLChromeMobile: {
         base: 'SauceLabs',
         browserName: 'Chrome',
-        version: '7.0',
-        platform: 'Android',
-        device: 'Android GoogleAPI Emulator',
+        appiumVersion: '1.6.3',
+        platformVersion: '7.0',
+        platformName: 'Android',
+        deviceName: 'Android GoogleAPI Emulator',
       },
     },
     preprocessors: {
