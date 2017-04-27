@@ -6,7 +6,7 @@ const { build } = argv;
 
 const rollup = 'rollup -c ./scripts/rollup.config.js';
 const minify = 'node ./scripts/minify.js';
-const gzipped = 'gzipped';
+const gzipped = '$(npm bin)/gzipped';
 
 const bundleFactory = (es5, ext, format) => done => {
   const ES5 = es5 || false;
