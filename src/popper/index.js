@@ -237,6 +237,7 @@ export default class Popper {
       data.offsets.reference,
       data.placement
     );
+    data.offsets.popper.position = 'absolute';
 
     // run the modifiers
     data = runModifiers(this.modifiers, data);
