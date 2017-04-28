@@ -63,8 +63,9 @@ export default function applyStyle(data, options) {
 }
 
 /**
- * Set the x-placement attribute before everything else because it could be used to add margins to the popper
- * margins needs to be calculated to get the correct popper offsets
+ * Set the x-placement attribute before everything else because it could be used
+ * to add margins to the popper margins needs to be calculated to get the
+ * correct popper offsets.
  * @method
  * @memberof Popper.modifiers
  * @param {HTMLElement} reference - The reference element used to position the popper

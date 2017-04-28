@@ -5,7 +5,8 @@ import isNumeric from './isNumeric';
  * @method
  * @memberof Popper.Utils
  * @argument {Element} element - Element to apply the style to
- * @argument {Object} styles - Object with a list of properties and values which will be applied to the element
+ * @argument {Object} styles
+ * Object with a list of properties and values which will be applied to the element
  */
 export default function setStyles(element, styles) {
   Object.keys(styles).forEach(prop => {

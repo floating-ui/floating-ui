@@ -1,5 +1,5 @@
 /**
- * Get the opposite placement of the given one/
+ * Get the opposite placement of the given one
  * @method
  * @memberof Popper.Utils
  * @argument {String} placement

@@ -1,10 +1,10 @@
 import modifiers from '../modifiers/index';
 
 /**
- * Default options provided to Popper.js constructor.
- * These can be overriden using the `options` argument of Popper.js.
+ * Default options provided to Popper.js constructor.<br />
+ * These can be overriden using the `options` argument of Popper.js.<br />
  * To override an option, simply pass as 3rd argument an object with the same
- * structure of {defaults}, example:
+ * structure of this object, example:
  * ```
  * new Popper(ref, pop, {
  *   modifiers: {
@@ -37,8 +37,8 @@ export default {
   removeOnDestroy: false,
 
   /**
-   * Callback called when the popper is created.
-   * By default, is set to no-op.
+   * Callback called when the popper is created.<br />
+   * By default, is set to no-op.<br />
    * Access Popper.js instance with `data.instance`.
    * @prop {onCreateCallback}
    */
@@ -47,8 +47,8 @@ export default {
   /**
    * Callback called when the popper is updated, this callback is not called
    * on the initialization/creation of the popper, but only on subsequent
-   * updates.
-   * By default, is set to no-op.
+   * updates.<br />
+   * By default, is set to no-op.<br />
    * Access Popper.js instance with `data.instance`.
    * @prop {onUpdateCallback}
    */

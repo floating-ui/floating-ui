@@ -4,8 +4,9 @@ import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
 
 /**
- * Updates the position of the popper, computing the new offsets and applying the new style
- * Prefer `scheduleUpdate` over `update` because of performance reasons
+ * Updates the position of the popper, computing the new offsets and applying
+ * the new style.<br />
+ * Prefer `scheduleUpdate` over `update` because of performance reasons.
  * @method
  * @memberof Popper
  */

@@ -2,7 +2,8 @@ import isFunction from './isFunction';
 import findIndex from './findIndex';
 
 /**
- * Loop trough the list of modifiers and run them in order, each of them will then edit the data object
+ * Loop trough the list of modifiers and run them in order,
+ * each of them will then edit the data object.
  * @method
  * @memberof Popper.Utils
  * @param {dataObject} data

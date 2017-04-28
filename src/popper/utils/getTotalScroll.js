@@ -5,7 +5,7 @@ import isOffsetContainer from './isOffsetContainer';
 import isFixed from './isFixed';
 
 /**
- * Gets the scroll value of the given element relative to the given parent/
+ * Gets the scroll value of the given element relative to the given parent.<br />
  * It will not include the scroll values of elements that aren't positioned.
  * @method
  * @memberof Popper.Utils

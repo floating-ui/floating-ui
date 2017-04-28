@@ -14,7 +14,7 @@ this object get passed to modifiers and to the <code>onCreate</code> and <code>o
 </dd>
 <dt><a href="#referenceObject">referenceObject</a></dt>
 <dd><p>The <code>referenceObject</code> is an object that provides an interface compatible with Popper.js
-and lets you use it as replacement of a real DOM node.
+and lets you use it as replacement of a real DOM node.<br />
 You can use this method to position a popper relatively to a set of coordinates
 in case you don&#39;t have a DOM node to use as reference.</p>
 <pre><code>new Popper(referenceObject, popperNode);
@@ -26,7 +26,7 @@ in case you don&#39;t have a DOM node to use as reference.</p>
 
 <dl>
 <dt><a href="#modifiers">modifiers</a> : <code>object</code></dt>
-<dd><p>Modifiers are plugins used to alter the behavior of your poppers.
+<dd><p>Modifiers are plugins used to alter the behavior of your poppers.<br />
 Popper.js uses a set of 9 modifiers to provide all the basic functionalities
 needed by the library.</p>
 <p>Usually you don&#39;t want to override the <code>order</code>, <code>fn</code> and <code>onLoad</code> props.
@@ -39,7 +39,7 @@ All the other properties are configurations that could be tweaked.</p>
 <dl>
 <dt><a href="#ModifierFn">ModifierFn(data, options)</a> ⇒ <code><a href="#dataObject">dataObject</a></code></dt>
 <dd><p>Modifier function, each modifier can have a function of this type assigned
-to its <code>fn</code> property.
+to its <code>fn</code> property.<br />
 These functions will be called on each update, this means that you must
 make sure they are performant enough to avoid performance bottlenecks.</p>
 </dd>
@@ -86,7 +86,7 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
         * [.isIE10()](#Popper.Utils.isIE10) ⇒ <code>Boolean</code>
         * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
         * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-        * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
+        * [.getBoundaries(popper, reference, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
         * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
         * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
         * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
@@ -129,10 +129,10 @@ List of accepted placements to use as values of the `placement` option
 <a name="Popper.DEFAULTS"></a>
 
 ### Popper.DEFAULTS : <code>Object</code>
-Default options provided to Popper.js constructor.
-These can be overriden using the `options` argument of Popper.js.
+Default options provided to Popper.js constructor.<br />
+These can be overriden using the `options` argument of Popper.js.<br />
 To override an option, simply pass as 3rd argument an object with the same
-structure of {defaults}, example:
+structure of this object, example:
 ```
 new Popper(ref, pop, {
   modifiers: {
@@ -204,8 +204,8 @@ They provide most of the functionalities of Popper.js
 <a name="Popper.DEFAULTS.onCreate"></a>
 
 #### DEFAULTS.onCreate()
-Callback called when the popper is created.
-By default, is set to no-op.
+Callback called when the popper is created.<br />
+By default, is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
 **Kind**: static method of <code>[DEFAULTS](#Popper.DEFAULTS)</code>  
@@ -220,8 +220,8 @@ Access Popper.js instance with `data.instance`.
 #### DEFAULTS.onUpdate()
 Callback called when the popper is updated, this callback is not called
 on the initialization/creation of the popper, but only on subsequent
-updates.
-By default, is set to no-op.
+updates.<br />
+By default, is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
 **Kind**: static method of <code>[DEFAULTS](#Popper.DEFAULTS)</code>  
@@ -262,7 +262,7 @@ and will be removed in v2! Use the PopperUtils module directly instead.
     * [.isIE10()](#Popper.Utils.isIE10) ⇒ <code>Boolean</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
     * [.isFixed(element, customContainer)](#Popper.Utils.isFixed) ⇒ <code>Boolean</code>
-    * [.getBoundaries(data, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
+    * [.getBoundaries(popper, reference, padding, boundariesElement)](#Popper.Utils.getBoundaries) ⇒ <code>Object</code>
     * [.computeAutoPlacement(data, options)](#Popper.Utils.computeAutoPlacement) ⇒ <code>Object</code>
     * [.getReferenceOffsets(state, popper, reference)](#Popper.Utils.getReferenceOffsets) ⇒ <code>Object</code>
     * [.getOuterSizes(element)](#Popper.Utils.getOuterSizes) ⇒ <code>Object</code>
@@ -334,7 +334,7 @@ Check if the given variable is a function
 
 | Param | Type | Description |
 | --- | --- | --- |
-| functionToCheck | <code>\*</code> | variable to check |
+| functionToCheck | <code>Any</code> | variable to check |
 
 <a name="Popper.Utils.getStyleComputedProperty"></a>
 
@@ -468,7 +468,7 @@ Check if the given element is fixed or is inside a fixed parent
 
 <a name="Popper.Utils.getBoundaries"></a>
 
-#### Utils.getBoundaries(data, padding, boundariesElement) ⇒ <code>Object</code>
+#### Utils.getBoundaries(popper, reference, padding, boundariesElement) ⇒ <code>Object</code>
 Computed the boundaries limits and return them
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -476,9 +476,10 @@ Computed the boundaries limits and return them
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>Object</code> | Object containing the property "offsets" generated by `_getOffsets` |
-| padding | <code>number</code> | Boundaries padding |
-| boundariesElement | <code>Element</code> | Element used to define the boundaries |
+| popper | <code>HTMLElement</code> |  |
+| reference | <code>HTMLElement</code> |  |
+| padding | <code>number</code> |  |
+| boundariesElement | <code>HTMLElement</code> | Element used to define the boundaries |
 
 <a name="Popper.Utils.computeAutoPlacement"></a>
 
@@ -523,7 +524,7 @@ Get the outer sizes of the given element (offset size + margins)
 <a name="Popper.Utils.getOppositePlacement"></a>
 
 #### Utils.getOppositePlacement(placement) ⇒ <code>String</code>
-Get the opposite placement of the given one/
+Get the opposite placement of the given one
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 **Returns**: <code>String</code> - flipped placement  
@@ -578,7 +579,8 @@ Return the index of the matching object
 <a name="Popper.Utils.runModifiers"></a>
 
 #### Utils.runModifiers(data, modifiers, ends) ⇒ <code>[dataObject](#dataObject)</code>
-Loop trough the list of modifiers and run them in order, each of them will then edit the data object
+Loop trough the list of modifiers and run them in order,
+each of them will then edit the data object.
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 
@@ -621,7 +623,7 @@ Set the attributes to the given popper
 <a name="Popper.Utils.isModifierRequired"></a>
 
 #### Utils.isModifierRequired(modifiers, requestingName, requestedName) ⇒ <code>Boolean</code>
-Helper used to know if the given modifier depends from another one.
+Helper used to know if the given modifier depends from another one.<br />
 It checks if the needed modifier is listed and enabled.
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -635,7 +637,7 @@ It checks if the needed modifier is listed and enabled.
 <a name="Popper.Utils.getOppositeVariation"></a>
 
 #### Utils.getOppositeVariation(placement) ⇒ <code>String</code>
-Get the opposite placement variation of the given one/
+Get the opposite placement variation of the given one
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 **Returns**: <code>String</code> - flipped placement variation  
@@ -661,8 +663,9 @@ clockwise (or counter-clockwise).
 <a name="Popper.update"></a>
 
 ### Popper.update()
-Updates the position of the popper, computing the new offsets and applying the new style
-Prefer `scheduleUpdate` over `update` because of performance reasons
+Updates the position of the popper, computing the new offsets and applying
+the new style.<br />
+Prefer `scheduleUpdate` over `update` because of performance reasons.
 
 **Kind**: static method of <code>[Popper](#Popper)</code>  
 <a name="Popper.destroy"></a>
@@ -674,16 +677,16 @@ Destroy the popper
 <a name="Popper.enableEventListeners"></a>
 
 ### Popper.enableEventListeners()
-it will add resize/scroll events and start recalculating
-position of the popper element when they are triggered
+It will add resize/scroll events and start recalculating
+position of the popper element when they are triggered.
 
 **Kind**: static method of <code>[Popper](#Popper)</code>  
 <a name="Popper.disableEventListeners"></a>
 
 ### Popper.disableEventListeners()
-it will remove resize/scroll events and won't recalculate
-popper position when they are triggered. It also won't trigger onUpdate callback anymore,
-unless you call 'update' method manually.
+It will remove resize/scroll events and won't recalculate popper position
+when they are triggered. It also won't trigger onUpdate callback anymore,
+unless you call `update` method manually.
 
 **Kind**: static method of <code>[Popper](#Popper)</code>  
 <a name="Popper.scheduleUpdate"></a>
@@ -720,7 +723,7 @@ this object get passed to modifiers and to the `onCreate` and `onUpdate` callbac
 
 ## referenceObject
 The `referenceObject` is an object that provides an interface compatible with Popper.js
-and lets you use it as replacement of a real DOM node.
+and lets you use it as replacement of a real DOM node.<br />
 You can use this method to position a popper relatively to a set of coordinates
 in case you don't have a DOM node to use as reference.
 
@@ -742,7 +745,7 @@ NB: This feature isn't supported in Internet Explorer 10
 <a name="modifiers"></a>
 
 ## modifiers : <code>object</code>
-Modifiers are plugins used to alter the behavior of your poppers.
+Modifiers are plugins used to alter the behavior of your poppers.<br />
 Popper.js uses a set of 9 modifiers to provide all the basic functionalities
 needed by the library.
 
@@ -802,8 +805,9 @@ All the other properties are configurations that could be tweaked.
 <a name="modifiers..shift"></a>
 
 ### modifiers~shift
-Modifier used to shift the popper on the start or end of its reference element.
-It will read the variation of the `placement` property.
+Modifier used to shift the popper on the start or end of its reference
+element.<br />
+It will read the variation of the `placement` property.<br />
 It can be one either `-end` or `-start`.
 
 **Kind**: inner property of <code>[modifiers](#modifiers)</code>  
@@ -855,14 +859,14 @@ It accepts the following units:
 - `vw`, CSS viewport width unit
 - `vh`, CSS viewport height unit
 
-For length is intended the main axis relative to the placement of the popper.
+For length is intended the main axis relative to the placement of the popper.<br />
 This means that if the placement is `top` or `bottom`, the length will be the
 `width`. In case of `left` or `right`, it will be the height.
 
 You can provide a single value (as `Number` or `String`), or a pair of values
-as `String` divided by a comma or one (or more) white spaces.
+as `String` divided by a comma or one (or more) white spaces.<br />
 The latter is a deprecated method because it leads to confusion and will be
-removed in v2.
+removed in v2.<br />
 Additionally, it accepts additions and subtractions between different units.
 Note that multiplications and divisions aren't supported.
 
@@ -930,8 +934,8 @@ Valid examples are:
 ### modifiers~preventOverflow
 Modifier used to prevent the popper from being positioned outside the boundary.
 
-An scenario exists where the reference itself is not within the boundaries.
-We can say it has "escaped the boundaries" — or just "escaped".
+An scenario exists where the reference itself is not within the boundaries.<br />
+We can say it has "escaped the boundaries" — or just "escaped".<br />
 In this case we need to decide whether the popper should either:
 
 - detach from the reference and remain "trapped" in the boundaries, or
@@ -1361,7 +1365,7 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 ## ModifierFn(data, options) ⇒ <code>[dataObject](#dataObject)</code>
 Modifier function, each modifier can have a function of this type assigned
-to its `fn` property.
+to its `fn` property.<br />
 These functions will be called on each update, this means that you must
 make sure they are performant enough to avoid performance bottlenecks.
 

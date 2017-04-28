@@ -1,9 +1,9 @@
 import removeEventListeners from '../utils/removeEventListeners';
 
 /**
- * it will remove resize/scroll events and won't recalculate
- * popper position when they are triggered. It also won't trigger onUpdate callback anymore,
- * unless you call 'update' method manually.
+ * It will remove resize/scroll events and won't recalculate popper position
+ * when they are triggered. It also won't trigger onUpdate callback anymore,
+ * unless you call `update` method manually.
  * @method
  * @memberof Popper
  */

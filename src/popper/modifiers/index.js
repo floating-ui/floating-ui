@@ -10,7 +10,7 @@ import inner from './inner';
 
 /**
  * Modifier function, each modifier can have a function of this type assigned
- * to its `fn` property.
+ * to its `fn` property.<br />
  * These functions will be called on each update, this means that you must
  * make sure they are performant enough to avoid performance bottlenecks.
  *
@@ -21,7 +21,7 @@ import inner from './inner';
  */
 
 /**
- * Modifiers are plugins used to alter the behavior of your poppers.
+ * Modifiers are plugins used to alter the behavior of your poppers.<br />
  * Popper.js uses a set of 9 modifiers to provide all the basic functionalities
  * needed by the library.
  *
@@ -31,8 +31,9 @@ import inner from './inner';
  */
 export default {
   /**
-   * Modifier used to shift the popper on the start or end of its reference element.
-   * It will read the variation of the `placement` property.
+   * Modifier used to shift the popper on the start or end of its reference
+   * element.<br />
+   * It will read the variation of the `placement` property.<br />
    * It can be one either `-end` or `-start`.
    * @memberof modifiers
    * @inner
@@ -56,14 +57,14 @@ export default {
    * - `vw`, CSS viewport width unit
    * - `vh`, CSS viewport height unit
    *
-   * For length is intended the main axis relative to the placement of the popper.
+   * For length is intended the main axis relative to the placement of the popper.<br />
    * This means that if the placement is `top` or `bottom`, the length will be the
    * `width`. In case of `left` or `right`, it will be the height.
    *
    * You can provide a single value (as `Number` or `String`), or a pair of values
-   * as `String` divided by a comma or one (or more) white spaces.
+   * as `String` divided by a comma or one (or more) white spaces.<br />
    * The latter is a deprecated method because it leads to confusion and will be
-   * removed in v2.
+   * removed in v2.<br />
    * Additionally, it accepts additions and subtractions between different units.
    * Note that multiplications and divisions aren't supported.
    *
@@ -97,8 +98,8 @@ export default {
   /**
    * Modifier used to prevent the popper from being positioned outside the boundary.
    *
-   * An scenario exists where the reference itself is not within the boundaries.
-   * We can say it has "escaped the boundaries" — or just "escaped".
+   * An scenario exists where the reference itself is not within the boundaries.<br />
+   * We can say it has "escaped the boundaries" — or just "escaped".<br />
    * In this case we need to decide whether the popper should either:
    *
    * - detach from the reference and remain "trapped" in the boundaries, or

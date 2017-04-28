@@ -1,8 +1,8 @@
 import setupEventListeners from '../utils/setupEventListeners';
 
 /**
- * it will add resize/scroll events and start recalculating
- * position of the popper element when they are triggered
+ * It will add resize/scroll events and start recalculating
+ * position of the popper element when they are triggered.
  * @method
  * @memberof Popper
  */
