@@ -16,8 +16,9 @@ this object get passed to modifiers and to the <code>onCreate</code> and <code>o
 <dd><p>The <code>referenceObject</code> is an object that provides an interface compatible with Popper.js
 and lets you use it as replacement of a real DOM node.
 You can use this method to position a popper relatively to a set of coordinates
-in case you don&#39;t have a DOM node to use as reference.
-NB: This feature isn&#39;t supported in Internet Explorer 10</p>
+in case you don&#39;t have a DOM node to use as reference.</p>
+<pre><code>new Popper(referenceObject, popperNode);
+</code></pre><p>NB: This feature isn&#39;t supported in Internet Explorer 10</p>
 </dd>
 </dl>
 
@@ -711,6 +712,11 @@ The `referenceObject` is an object that provides an interface compatible with Po
 and lets you use it as replacement of a real DOM node.
 You can use this method to position a popper relatively to a set of coordinates
 in case you don't have a DOM node to use as reference.
+
+```
+new Popper(referenceObject, popperNode);
+```
+
 NB: This feature isn't supported in Internet Explorer 10
 
 **Kind**: global variable  
