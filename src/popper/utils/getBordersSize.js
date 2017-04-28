@@ -4,7 +4,7 @@
  * @memberof Popper.Utils
  * @param {CSSStyleDeclaration} styles - result of `getStyleComputedProperty` on the given element
  * @param {String} axis - `x` or `y`
- * @return {Number} borders - the borders size of the given axis
+ * @return {number} borders - the borders size of the given axis
  */
 
 export default function getBordersSize(styles, axis) {

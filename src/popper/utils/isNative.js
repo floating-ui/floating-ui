@@ -8,7 +8,7 @@ const nativeHints = [
  * @method
  * @memberof Popper.Utils
  * @argument {Function | undefined} fn the function to check
- * @returns {boolean}
+ * @returns {Boolean}
  */
 export default fn =>
   nativeHints.some(hint => (fn || '').toString().indexOf(hint) > -1);

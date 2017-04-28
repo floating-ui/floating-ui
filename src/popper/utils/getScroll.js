@@ -4,7 +4,7 @@
  * @memberof Popper.Utils
  * @argument {Element} element
  * @argument {String} side `top` or `left`
- * @returns {Number} amount of scrolled pixels
+ * @returns {number} amount of scrolled pixels
  */
 export default function getScroll(element, side = 'top') {
   const upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';

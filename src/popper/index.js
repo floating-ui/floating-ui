@@ -148,6 +148,6 @@ export default class Popper {
  * NB: This feature isn't supported in Internet Explorer 10
  * @name referenceObject
  * @property {Function} data.getBoundingClientRect A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method.
- * @property {Number} data.clientWidth An ES6 getter that will return the width of the virtual reference element.
- * @property {Number} data.clientHeight An ES6 getter that will return the height of the virtual reference element.
+ * @property {number} data.clientWidth An ES6 getter that will return the width of the virtual reference element.
+ * @property {number} data.clientHeight An ES6 getter that will return the height of the virtual reference element.
  */

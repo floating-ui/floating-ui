@@ -34,6 +34,17 @@ All the other properties are configurations that could be tweaked.</p>
 </dd>
 </dl>
 
+## Functions
+
+<dl>
+<dt><a href="#ModifierFn">ModifierFn(data, options)</a> ⇒ <code><a href="#dataObject">dataObject</a></code></dt>
+<dd><p>Modifier function, each modifier can have a function of this type assigned
+to its <code>fn</code> property.
+These functions will be called on each update, this means that you must
+make sure they are performant enough to avoid performance bottlenecks.</p>
+</dd>
+</dl>
+
 ## Typedefs
 
 <dl>
@@ -59,7 +70,7 @@ All the other properties are configurations that could be tweaked.</p>
         * [.onCreate()](#Popper.DEFAULTS.onCreate)
         * [.onUpdate()](#Popper.DEFAULTS.onUpdate)
     * ~~[.Utils](#Popper.Utils) : <code>Object</code>~~
-        * [.isNative(fn)](#Popper.Utils.isNative) ⇒ <code>boolean</code>
+        * [.isNative(fn)](#Popper.Utils.isNative) ⇒ <code>Boolean</code>
         * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
         * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
         * [.setStyles(element, styles)](#Popper.Utils.setStyles)
@@ -70,7 +81,7 @@ All the other properties are configurations that could be tweaked.</p>
         * [.getRoot(node)](#Popper.Utils.getRoot) ⇒ <code>Element</code>
         * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
         * [.findCommonOffsetParent(element1, element2)](#Popper.Utils.findCommonOffsetParent) ⇒ <code>Element</code>
-        * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>Number</code>
+        * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>number</code>
         * [.getClientRect(offsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
         * [.isIE10()](#Popper.Utils.isIE10) ⇒ <code>Boolean</code>
         * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
@@ -83,7 +94,7 @@ All the other properties are configurations that could be tweaked.</p>
         * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
         * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
         * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
-        * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
+        * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers) ⇒ <code>[dataObject](#dataObject)</code>
         * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
         * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
         * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
@@ -235,7 +246,7 @@ and will be removed in v2! Use the PopperUtils module directly instead.
 **Kind**: static property of <code>[Popper](#Popper)</code>  
 
 * ~~[.Utils](#Popper.Utils) : <code>Object</code>~~
-    * [.isNative(fn)](#Popper.Utils.isNative) ⇒ <code>boolean</code>
+    * [.isNative(fn)](#Popper.Utils.isNative) ⇒ <code>Boolean</code>
     * [.debounce(fn)](#Popper.Utils.debounce) ⇒ <code>function</code>
     * [.isNumeric(input)](#Popper.Utils.isNumeric) ⇒ <code>Boolean</code>
     * [.setStyles(element, styles)](#Popper.Utils.setStyles)
@@ -246,7 +257,7 @@ and will be removed in v2! Use the PopperUtils module directly instead.
     * [.getRoot(node)](#Popper.Utils.getRoot) ⇒ <code>Element</code>
     * [.getOffsetParent(element)](#Popper.Utils.getOffsetParent) ⇒ <code>Element</code>
     * [.findCommonOffsetParent(element1, element2)](#Popper.Utils.findCommonOffsetParent) ⇒ <code>Element</code>
-    * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>Number</code>
+    * [.getScroll(element, side)](#Popper.Utils.getScroll) ⇒ <code>number</code>
     * [.getClientRect(offsets)](#Popper.Utils.getClientRect) ⇒ <code>Object</code>
     * [.isIE10()](#Popper.Utils.isIE10) ⇒ <code>Boolean</code>
     * [.getBoundingClientRect(element)](#Popper.Utils.getBoundingClientRect) ⇒ <code>Object</code>
@@ -259,7 +270,7 @@ and will be removed in v2! Use the PopperUtils module directly instead.
     * [.getPopperOffsets(position, popper, referenceOffsets, placement)](#Popper.Utils.getPopperOffsets) ⇒ <code>Object</code>
     * [.find(arr, prop, value)](#Popper.Utils.find) ⇒
     * [.findIndex(arr, prop, value)](#Popper.Utils.findIndex) ⇒
-    * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers)
+    * [.runModifiers(data, modifiers, ends)](#Popper.Utils.runModifiers) ⇒ <code>[dataObject](#dataObject)</code>
     * [.isModifierEnabled()](#Popper.Utils.isModifierEnabled) ⇒ <code>Boolean</code>
     * [.getSupportedPropertyName(property)](#Popper.Utils.getSupportedPropertyName) ⇒ <code>String</code>
     * [.setAttributes(element, styles)](#Popper.Utils.setAttributes)
@@ -269,7 +280,7 @@ and will be removed in v2! Use the PopperUtils module directly instead.
 
 <a name="Popper.Utils.isNative"></a>
 
-#### Utils.isNative(fn) ⇒ <code>boolean</code>
+#### Utils.isNative(fn) ⇒ <code>Boolean</code>
 Determine if a function is implemented natively (as opposed to a polyfill).
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
@@ -400,11 +411,11 @@ Finds the offset parent common to the two provided nodes
 
 <a name="Popper.Utils.getScroll"></a>
 
-#### Utils.getScroll(element, side) ⇒ <code>Number</code>
+#### Utils.getScroll(element, side) ⇒ <code>number</code>
 Gets the scroll value of the given element in the given side (top and left)
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
-**Returns**: <code>Number</code> - amount of scrolled pixels  
+**Returns**: <code>number</code> - amount of scrolled pixels  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -466,7 +477,7 @@ Computed the boundaries limits and return them
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Object</code> | Object containing the property "offsets" generated by `_getOffsets` |
-| padding | <code>Number</code> | Boundaries padding |
+| padding | <code>number</code> | Boundaries padding |
 | boundariesElement | <code>Element</code> | Element used to define the boundaries |
 
 <a name="Popper.Utils.computeAutoPlacement"></a>
@@ -566,16 +577,16 @@ Return the index of the matching object
 
 <a name="Popper.Utils.runModifiers"></a>
 
-#### Utils.runModifiers(data, modifiers, ends)
+#### Utils.runModifiers(data, modifiers, ends) ⇒ <code>[dataObject](#dataObject)</code>
 Loop trough the list of modifiers and run them in order, each of them will then edit the data object
 
 **Kind**: static method of <code>[Utils](#Popper.Utils)</code>  
 
-| Param | Type |
-| --- | --- |
-| data | <code>Object</code> | 
-| modifiers | <code>Array</code> | 
-| ends | <code>function</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>[dataObject](#dataObject)</code> |  |
+| modifiers | <code>Array</code> |  |
+| ends | <code>String</code> | Optional modifier name used as stopper |
 
 <a name="Popper.Utils.isModifierEnabled"></a>
 
@@ -725,8 +736,8 @@ NB: This feature isn't supported in Internet Explorer 10
 | Name | Type | Description |
 | --- | --- | --- |
 | data.getBoundingClientRect | <code>function</code> | A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method. |
-| data.clientWidth | <code>Number</code> | An ES6 getter that will return the width of the virtual reference element. |
-| data.clientHeight | <code>Number</code> | An ES6 getter that will return the height of the virtual reference element. |
+| data.clientWidth | <code>number</code> | An ES6 getter that will return the width of the virtual reference element. |
+| data.clientHeight | <code>number</code> | An ES6 getter that will return the height of the virtual reference element. |
 
 <a name="modifiers"></a>
 
@@ -810,7 +821,7 @@ It can be one either `-end` or `-start`.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>100</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>100</code> | Index used to define the order of execution |
 
 <a name="modifiers..shift.enabled"></a>
 
@@ -830,7 +841,7 @@ It can be one either `-end` or `-start`.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..offset"></a>
 
@@ -882,7 +893,7 @@ Valid examples are:
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>200</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>200</code> | Index used to define the order of execution |
 
 <a name="modifiers..offset.enabled"></a>
 
@@ -902,7 +913,7 @@ Valid examples are:
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..offset.offset"></a>
 
@@ -948,7 +959,7 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>300</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>300</code> | Index used to define the order of execution |
 
 <a name="modifiers..preventOverflow.enabled"></a>
 
@@ -968,7 +979,7 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..preventOverflow.priority"></a>
 
@@ -988,7 +999,7 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| padding | <code>Number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper this makes sure the popper has always a little padding between the edges of its container |
+| padding | <code>number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper this makes sure the popper has always a little padding between the edges of its container |
 
 <a name="modifiers..preventOverflow.boundariesElement"></a>
 
@@ -1024,7 +1035,7 @@ between the popper and its reference element.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>400</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>400</code> | Index used to define the order of execution |
 
 <a name="modifiers..keepTogether.enabled"></a>
 
@@ -1044,7 +1055,7 @@ between the popper and its reference element.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..arrow"></a>
 
@@ -1072,7 +1083,7 @@ It has no effect if no `arrowElement` is provided.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>500</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>500</code> | Index used to define the order of execution |
 
 <a name="modifiers..arrow.enabled"></a>
 
@@ -1092,7 +1103,7 @@ It has no effect if no `arrowElement` is provided.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..arrow.element"></a>
 
@@ -1133,7 +1144,7 @@ restart it if it detects the need to flip the placement.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>600</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>600</code> | Index used to define the order of execution |
 
 <a name="modifiers..flip.enabled"></a>
 
@@ -1153,7 +1164,7 @@ restart it if it detects the need to flip the placement.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..flip.behavior"></a>
 
@@ -1173,7 +1184,7 @@ restart it if it detects the need to flip the placement.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| padding | <code>Number</code> | <code>5</code> | The popper will flip if it hits the edges of the `boundariesElement` |
+| padding | <code>number</code> | <code>5</code> | The popper will flip if it hits the edges of the `boundariesElement` |
 
 <a name="modifiers..flip.boundariesElement"></a>
 
@@ -1207,7 +1218,7 @@ the reference element.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>700</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>700</code> | Index used to define the order of execution |
 
 <a name="modifiers..inner.enabled"></a>
 
@@ -1227,7 +1238,7 @@ the reference element.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..hide"></a>
 
@@ -1254,7 +1265,7 @@ Requires the `preventOverflow` modifier before it in order to work.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>800</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>800</code> | Index used to define the order of execution |
 
 <a name="modifiers..hide.enabled"></a>
 
@@ -1274,7 +1285,7 @@ Requires the `preventOverflow` modifier before it in order to work.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..applyStyle"></a>
 
@@ -1304,7 +1315,7 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| order | <code>Number</code> | <code>900</code> | Index used to define the order of execution |
+| order | <code>number</code> | <code>900</code> | Index used to define the order of execution |
 
 <a name="modifiers..applyStyle.enabled"></a>
 
@@ -1324,7 +1335,7 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 | Type |
 | --- |
-| <code>function</code> | 
+| <code>[ModifierFn](#ModifierFn)</code> | 
 
 <a name="modifiers..applyStyle.onLoad"></a>
 
@@ -1345,6 +1356,22 @@ Just disable this modifier and define you own to achieve the desired effect.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+
+<a name="ModifierFn"></a>
+
+## ModifierFn(data, options) ⇒ <code>[dataObject](#dataObject)</code>
+Modifier function, each modifier can have a function of this type assigned
+to its `fn` property.
+These functions will be called on each update, this means that you must
+make sure they are performant enough to avoid performance bottlenecks.
+
+**Kind**: global function  
+**Returns**: <code>[dataObject](#dataObject)</code> - The data object, properly modified  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>[dataObject](#dataObject)</code> | The data object generated by `update` method |
+| options | <code>Object</code> | Modifiers configuration and options |
 
 <a name="onUpdateCallback"></a>
 

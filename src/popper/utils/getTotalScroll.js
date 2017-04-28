@@ -12,7 +12,7 @@ import isFixed from './isFixed';
  * @argument {Element} element
  * @argument {Element} parent
  * @argument {String} side `top` or `left`
- * @returns {Number} amount of scrolled pixels
+ * @returns {number} amount of scrolled pixels
  */
 export default function getTotalScroll(element, parent, side = 'top') {
   const scrollParent = getScrollParent(element);
