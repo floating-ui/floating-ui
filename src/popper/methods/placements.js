@@ -1,4 +1,11 @@
-const placements = [
+/**
+ * List of accepted placements to use as values of the `placement` option
+ * @static
+ * @type {Array}
+ * @member placements
+ * @memberof Popper
+ */
+export default [
   'auto-start',
   'auto',
   'auto-end',
@@ -15,5 +22,3 @@ const placements = [
   'left',
   'left-start',
 ];
-
-export default placements;
