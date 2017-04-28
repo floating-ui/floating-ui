@@ -19,7 +19,7 @@ import modifiers from '../modifiers/index';
 export default {
   /**
    * Popper's placement
-   * @prop {String} placement='bottom'
+   * @prop {Popper.placements} placement='bottom'
    */
   placement: 'bottom',
 

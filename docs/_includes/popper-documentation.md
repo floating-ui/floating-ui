@@ -61,7 +61,6 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
 
 * [Popper](#Popper)
     * [new Popper(reference, popper, options)](#new_Popper_new)
-    * [.placements](#Popper.placements) : <code>Array</code>
     * [.DEFAULTS](#Popper.DEFAULTS) : <code>Object</code>
         * [.placement](#Popper.DEFAULTS.placement)
         * [.eventsEnabled](#Popper.DEFAULTS.eventsEnabled)
@@ -101,6 +100,7 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
         * [.isModifierRequired(modifiers, requestingName, requestedName)](#Popper.Utils.isModifierRequired) ⇒ <code>Boolean</code>
         * [.getOppositeVariation(placement)](#Popper.Utils.getOppositeVariation) ⇒ <code>String</code>
         * [.clockwise(placement, counter)](#Popper.Utils.clockwise) ⇒ <code>Array</code>
+    * [.placements](#Popper.placements) : <code>enum</code>
     * [.update()](#Popper.update)
     * [.destroy()](#Popper.destroy)
     * [.enableEventListeners()](#Popper.enableEventListeners)
@@ -120,12 +120,6 @@ Create a new Popper.js instance
 | popper | <code>HTMLElement</code> | The HTML element used as popper. |
 | options | <code>Object</code> | Your custom options to override the ones defined in [DEFAULTS](#defaults) |
 
-<a name="Popper.placements"></a>
-
-### Popper.placements : <code>Array</code>
-List of accepted placements to use as values of the `placement` option
-
-**Kind**: static property of <code>[Popper](#Popper)</code>  
 <a name="Popper.DEFAULTS"></a>
 
 ### Popper.DEFAULTS : <code>Object</code>
@@ -161,7 +155,7 @@ Popper's placement
 
 | Name | Type | Default |
 | --- | --- | --- |
-| placement | <code>String</code> | <code>&#x27;bottom&#x27;</code> | 
+| placement | <code>[placements](#Popper.placements)</code> | <code>&#x27;bottom&#x27;</code> | 
 
 <a name="Popper.DEFAULTS.eventsEnabled"></a>
 
@@ -660,6 +654,34 @@ clockwise (or counter-clockwise).
 | placement | <code>String</code> |  | A valid placement (it accepts variations) |
 | counter | <code>Boolean</code> | <code>false</code> | Set to true to walk the placements counterclockwise |
 
+<a name="Popper.placements"></a>
+
+### Popper.placements : <code>enum</code>
+List of accepted placements to use as values of the `placement` option.<br />
+Valid placements are:
+- `auto`
+- `top`
+- `right`
+- `bottom`
+- `left`
+
+Each placement can have a variation from this list:
+- `-start`
+- `-end`
+
+Variations are interpreted easily if you think of them as the left to right
+written languages. Horizontally (`top` and `bottom`), `start` is left and `end`
+is right.<br />
+Vertically (`left` and `right`), `start` is top and `end` is bottom.
+
+Some valid examples are:
+- `top-end` (on top of reference, right aligned)
+- `right-start` (on right of reference, top aligned)
+- `bottom` (on bottom, centered)
+- `auto-right` (on the side with more space available, alignment depends by placement)
+
+**Kind**: static enum of <code>[Popper](#Popper)</code>  
+**Read only**: true  
 <a name="Popper.update"></a>
 
 ### Popper.update()
