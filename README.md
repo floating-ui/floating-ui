@@ -73,7 +73,7 @@ Popper.js is available on the following package managers and CDNs:
 |:-------|:---------------------------------------------------------------------------------|
 | npm    | `npm install popper.js --save`                                                   |
 | yarn   | `yarn add popper.js`                                                             |
-| Bower  | `bower install popper.js --save`                                                 |
+| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save`                     |
 | unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
 | cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
