@@ -17,14 +17,14 @@ Then run `npm install` or `yarn` to install the needed dependencies.
 
 ## Adopt an issue
 
-The issues with the `PR WELCOME` label are the preferred ones to adopt if you want to contribute to this project.  
-These issues are most likely new features or enhancements that would be nice to have but that will not be implemented by the maintainer due to lack of free time.
+All the issues, if not assigned to someone, can be adopted by anyone. Just make sure to comment on the issue to let know
+other users about your intention to work on it.  
+Also, remember to comment again in case you end up abandoning the issue.
 
-Other issues labelled by `HELP WANTED` should be fixed by the maintainer, but for any reason, he has problems with it and needs help from the community to continue the work on it.
+Each issue has a `DIFFICULTY` label to help you pick the one with the difficulty level adapt to you.  
+Additionally, check out the `PRIORITY` label to see which issues should take precedence over the others. If possible, prefer issues with an higher priority, but if you want to adopt an issue with lower priority, it's not a problem!
 
-Issues with `NEEDS TEST CASE` need a PR that integrates a test in the test suite to reproduce the bug, this is very useful because it allows other developers to try to fix the bug having a feedback.
-
-When you adopt an issue, please write a comment on it to make sure that multiple people don't work on the same one.
+Issues with `NEEDS: CI test` need a PR that integrates a test in the test suite to reproduce the bug, this is very useful because it allows other developers to try to fix the bug having a feedback.
 
 ## Test
 
