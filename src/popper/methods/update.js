@@ -47,7 +47,6 @@ export default function update() {
 
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(
-    this.state,
     this.popper,
     data.offsets.reference,
     data.placement

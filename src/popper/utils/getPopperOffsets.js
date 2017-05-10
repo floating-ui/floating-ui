@@ -12,7 +12,6 @@ import getOppositePlacement from './getOppositePlacement';
  * @returns {Object} popperOffsets - An object containing the offsets which will be applied to the popper
  */
 export default function getPopperOffsets(
-  position,
   popper,
   referenceOffsets,
   placement
@@ -24,7 +23,6 @@ export default function getPopperOffsets(
 
   // Add position, width and height to our offsets object
   const popperOffsets = {
-    position,
     width: popperRect.width,
     height: popperRect.height,
   };

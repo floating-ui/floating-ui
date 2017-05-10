@@ -116,7 +116,6 @@ export default function flip(data, options) {
 
       data.placement = placement + (variation ? '-' + variation : '');
       data.offsets.popper = getPopperOffsets(
-        data.instance.state.position,
         data.instance.popper,
         data.offsets.reference,
         data.placement
