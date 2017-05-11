@@ -241,7 +241,7 @@ export default class Tooltip {
 
       // remove event listeners
       this._events.forEach(({ func, event }) => {
-        this._tooltipNode.removeEventListener(event, func);
+        this.reference.removeEventListener(event, func);
       });
       this._events = [];
 
