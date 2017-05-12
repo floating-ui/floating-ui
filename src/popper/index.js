@@ -103,10 +103,12 @@ export default class Popper {
     this.state.eventsEnabled = eventsEnabled;
   }
 
-  update = update;
-  destroy = destroy;
-  enableEventListeners = enableEventListeners;
-  disableEventListeners = disableEventListeners;
+  // We can't use class properties because they don't get listed in the
+  // class prototype and break stuff like Sinon stubs
+  update() { return update.call(this); }
+  destroy() { return destroy.call(this); }
+  enableEventListeners() { return enableEventListeners.call(this); }
+  disableEventListeners() { return disableEventListeners.call(this); }
 
   /**
    * Schedule an update, it will run on the next UI update available
