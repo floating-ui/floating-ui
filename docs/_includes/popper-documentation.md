@@ -739,7 +739,7 @@ this object get passed to modifiers and to the `onCreate` and `onUpdate` callbac
 | data.offsets | <code>Object</code> | The measurements of popper, reference and arrow elements. |
 | data.offsets.popper | <code>Object</code> | `top`, `left`, `width`, `height` values |
 | data.offsets.reference | <code>Object</code> | `top`, `left`, `width`, `height` values |
-| data.offsets.arro | <code>Object</code> | `top` and `left` offsets, only one of them will be different from 0 |
+| data.offsets.arrow | <code>Object</code> | `top` and `left` offsets, only one of them will be different from 0 |
 
 <a name="referenceObject"></a>
 
