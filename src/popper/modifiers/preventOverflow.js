@@ -1,6 +1,8 @@
 import getClientRect from '../utils/getClientRect';
 import getOffsetParent from '../utils/getOffsetParent';
 import getBoundaries from '../utils/getBoundaries';
+import mathMin from '../utils/mathMin';
+import mathMax from '../utils/mathMax';
 
 /**
  * @function
@@ -30,7 +32,7 @@ export default function preventOverflow(data, options) {
         popper[placement] < boundaries[placement] &&
         !options.escapeWithReference
       ) {
-        value = Math.max(popper[placement], boundaries[placement]);
+        value = mathMax(popper[placement], boundaries[placement]);
       }
       return { [placement]: value };
     },
@@ -41,7 +43,7 @@ export default function preventOverflow(data, options) {
         popper[placement] > boundaries[placement] &&
         !options.escapeWithReference
       ) {
-        value = Math.min(
+        value = mathMin(
           popper[mainSide],
           boundaries[placement] -
             (placement === 'right' ? popper.width : popper.height)

@@ -6,6 +6,7 @@ import runModifiers from '../utils/runModifiers';
 import getBoundaries from '../utils/getBoundaries';
 import isModifierEnabled from '../utils/isModifierEnabled';
 import clockwise from '../utils/clockwise';
+import mathFloor from '../utils/mathFloor';
 
 const BEHAVIORS = {
   FLIP: 'flip',
@@ -70,22 +71,21 @@ export default function flip(data, options) {
     const refOffsets = data.offsets.reference;
 
     // using floor because the reference offsets may contain decimals we are not going to consider here
-    const floor = Math.floor;
     const overlapsRef =
       (placement === 'left' &&
-        floor(popperOffsets.right) > floor(refOffsets.left)) ||
+        mathFloor(popperOffsets.right) > mathFloor(refOffsets.left)) ||
       (placement === 'right' &&
-        floor(popperOffsets.left) < floor(refOffsets.right)) ||
+        mathFloor(popperOffsets.left) < mathFloor(refOffsets.right)) ||
       (placement === 'top' &&
-        floor(popperOffsets.bottom) > floor(refOffsets.top)) ||
+        mathFloor(popperOffsets.bottom) > mathFloor(refOffsets.top)) ||
       (placement === 'bottom' &&
-        floor(popperOffsets.top) < floor(refOffsets.bottom));
+        mathFloor(popperOffsets.top) < mathFloor(refOffsets.bottom));
 
-    const overflowsLeft = floor(popperOffsets.left) < floor(boundaries.left);
-    const overflowsRight = floor(popperOffsets.right) > floor(boundaries.right);
-    const overflowsTop = floor(popperOffsets.top) < floor(boundaries.top);
+    const overflowsLeft = mathFloor(popperOffsets.left) < mathFloor(boundaries.left);
+    const overflowsRight = mathFloor(popperOffsets.right) > mathFloor(boundaries.right);
+    const overflowsTop = mathFloor(popperOffsets.top) < mathFloor(boundaries.top);
     const overflowsBottom =
-      floor(popperOffsets.bottom) > floor(boundaries.bottom);
+      mathFloor(popperOffsets.bottom) > mathFloor(boundaries.bottom);
 
     const overflowsBoundaries =
       (placement === 'left' && overflowsLeft) ||

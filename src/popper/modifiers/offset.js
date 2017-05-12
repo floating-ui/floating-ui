@@ -1,6 +1,7 @@
 import isNumeric from '../utils/isNumeric';
 import getClientRect from '../utils/getClientRect';
 import find from '../utils/find';
+import mathMax from '../utils/mathMax';
 
 /**
  * Converts a string containing value + unit into a px value number
@@ -43,12 +44,12 @@ export function toValue(str, measurement, popperOffsets, referenceOffsets) {
     // if is a vh or vw, we calculate the size based on the viewport
     let size;
     if (unit === 'vh') {
-      size = Math.max(
+      size = mathMax(
         document.documentElement.clientHeight,
         window.innerHeight || 0
       );
     } else {
-      size = Math.max(
+      size = mathMax(
         document.documentElement.clientWidth,
         window.innerWidth || 0
       );
