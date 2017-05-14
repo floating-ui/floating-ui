@@ -35,7 +35,7 @@ The engine is completely modular and most of its features are implemented as **m
 The whole code base is written in ES2015 and its features are automatically tested on real browsers thank to [SauceLabs](https://saucelabs.com/) and [TravisCI](travis-ci.org).
 
 Popper.js has zero dependencies. No jQuery, no LoDash, nothing.  
-It's used by big companies like [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
+It's used by big companies like [Twitter in Bootstrap v4](https://getbootstrap.com/), [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
 
 ### Popper.js
 
