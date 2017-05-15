@@ -101,6 +101,14 @@ describe('[tooltip.js]', () => {
 
       then(() => {
         expect(document.querySelector('.tooltip')).toBeNull();
+      });
+
+      then(() => {
+        reference.click();
+      });
+
+      then(() => {
+        expect(document.querySelector('.tooltip')).toBeNull();
         done();
       });
     });
