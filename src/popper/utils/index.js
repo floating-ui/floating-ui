@@ -30,6 +30,10 @@ import runModifiers from './runModifiers';
 import setAttributes from './setAttributes';
 import setStyles from './setStyles';
 import setupEventListeners from './setupEventListeners';
+import mathMin from './mathMin';
+import mathMax from './mathMax';
+import mathFloor from './mathFloor';
+import mathRound from './mathRound';
 
 /** @namespace Popper.Utils */
 export default {
@@ -64,4 +68,8 @@ export default {
   setAttributes,
   setStyles,
   setupEventListeners,
+  mathMin,
+  mathMax,
+  mathFloor,
+  mathRound,
 };

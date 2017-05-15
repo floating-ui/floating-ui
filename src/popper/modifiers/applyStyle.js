@@ -3,6 +3,7 @@ import setStyles from '../utils/setStyles';
 import setAttributes from '../utils/setAttributes';
 import getReferenceOffsets from '../utils/getReferenceOffsets';
 import computeAutoPlacement from '../utils/computeAutoPlacement';
+import mathRound from '../utils/mathRound';
 
 /**
  * @function
@@ -25,8 +26,8 @@ export default function applyStyle(data, options) {
   };
 
   // round top and left to avoid blurry text
-  const left = Math.round(data.offsets.popper.left);
-  const top = Math.round(data.offsets.popper.top);
+  const left = mathRound(data.offsets.popper.left);
+  const top = mathRound(data.offsets.popper.top);
 
   // if gpuAcceleration is set to true and transform is supported,
   //  we use `translate3d` to apply the position to the popper we

@@ -1,6 +1,8 @@
 import getClientRect from '../utils/getClientRect';
 import getOuterSizes from '../utils/getOuterSizes';
 import isModifierRequired from '../utils/isModifierRequired';
+import mathMin from '../utils/mathMin';
+import mathMax from '../utils/mathMax';
 
 /**
  * @function
@@ -69,7 +71,7 @@ export default function arrow(data, options) {
   let sideValue = center - getClientRect(data.offsets.popper)[side];
 
   // prevent arrowElement from being placed not contiguously to its popper
-  sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
+  sideValue = mathMax(mathMin(popper[len] - arrowElementSize, sideValue), 0);
 
   data.arrowElement = arrowElement;
   data.offsets.arrow = {};
