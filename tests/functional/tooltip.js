@@ -213,6 +213,27 @@ describe('[tooltip.js]', () => {
         done();
       });
     });
+
+    it('should use a custom template with empty leading&trailing spaces', done => {
+      instance = new Tooltip(reference, {
+        title: 'foobar',
+        template: `
+          <div class="tooltip" role="tooltip">
+            <div class="tooltip-arrow"></div>
+            <div class="foobar"><div class="tooltip-inner"></div></div>
+          </div>
+        `,
+      });
+
+      instance.show();
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .foobar').textContent
+        ).toBe('foobar');
+        done();
+      });
+    });
   });
 
   describe('events', () => {
