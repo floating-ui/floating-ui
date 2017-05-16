@@ -133,7 +133,7 @@ export default class Tooltip {
   _create(reference, template, title, allowHtml) {
     // create tooltip element
     const tooltipGenerator = window.document.createElement('div');
-    tooltipGenerator.innerHTML = template;
+    tooltipGenerator.innerHTML = template.trim();
     const tooltipNode = tooltipGenerator.childNodes[0];
 
     // add unique ID to our tooltip (needed for accessibility reasons)
