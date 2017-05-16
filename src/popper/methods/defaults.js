@@ -40,7 +40,7 @@ export default {
    * Callback called when the popper is created.<br />
    * By default, is set to no-op.<br />
    * Access Popper.js instance with `data.instance`.
-   * @prop {onCreateCallback}
+   * @prop {onCreate}
    */
   onCreate: () => {},
 
@@ -50,7 +50,7 @@ export default {
    * updates.<br />
    * By default, is set to no-op.<br />
    * Access Popper.js instance with `data.instance`.
-   * @prop {onUpdateCallback}
+   * @prop {onUpdate}
    */
   onUpdate: () => {},
 
@@ -63,11 +63,11 @@ export default {
 };
 
 /**
- * @callback onCreateCallback
+ * @callback onCreate
  * @param {dataObject} data
  */
 
 /**
- * @callback onUpdateCallback
+ * @callback onUpdate
  * @param {dataObject} data
  */
