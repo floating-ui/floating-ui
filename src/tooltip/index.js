@@ -7,7 +7,7 @@ const DEFAULT_OPTIONS = {
   html: false,
   placement: 'top',
   title: '',
-  template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+  template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow" x-arrow></div><div class="tooltip-inner"></div></div>',
   trigger: 'hover focus',
   offset: 0,
 };
