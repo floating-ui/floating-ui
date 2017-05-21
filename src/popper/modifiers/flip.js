@@ -115,11 +115,17 @@ export default function flip(data, options) {
       }
 
       data.placement = placement + (variation ? '-' + variation : '');
-      data.offsets.popper = getPopperOffsets(
-        data.instance.popper,
-        data.offsets.reference,
-        data.placement
-      );
+
+      // this object contains `position`, we want to preserve it along with
+      // any additional property we may add in the future
+      data.offsets.popper = {
+        ...data.offsets.popper,
+        ...getPopperOffsets(
+          data.instance.popper,
+          data.offsets.reference,
+          data.placement
+        ),
+      };
 
       data = runModifiers(data.instance.modifiers, data, 'flip');
     }
