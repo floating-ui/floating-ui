@@ -1348,7 +1348,7 @@ describe('[core]', () => {
   });
 
   // test for #224
-  xit(
+  it(
     'checks that only the needed parents scroll offsets are included',
     done => {
       jasmineWrapper.innerHTML = `
