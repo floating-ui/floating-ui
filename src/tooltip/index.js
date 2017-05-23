@@ -203,11 +203,17 @@ export default class Tooltip {
 
     const popperOptions = {
       placement: options.placement,
-      arrowElement: this.arrowSelector,
+      modifiers: {
+        arrow: {
+          element: this.arrowSelector,
+        },
+      },
     };
 
     if (options.boundariesElement) {
-      popperOptions.boundariesElement = options.boundariesElement;
+      popperOptions.modifiers.preventOverflow = {
+        boundariesElement: options.boundariesElement,
+      };
     }
 
     this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
