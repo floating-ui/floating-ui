@@ -43,8 +43,11 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
     offsets.marginLeft = marginLeft;
   }
 
-  if ((!isIE10 && parent === scrollParent && scrollParent.nodeName !== 'BODY') ||
-    (isIE10 && parent.contains(scrollParent))) {
+  if (
+    isIE10
+      ? parent.contains(scrollParent)
+      : parent === scrollParent && scrollParent.nodeName !== 'BODY'
+  ) {
     offsets = includeScroll(offsets, parent);
   }
 
