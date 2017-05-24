@@ -4,24 +4,22 @@
 **Kind**: global class  
 
 * [Tooltip](#Tooltip)
-    * [new Tooltip(reference, options, reference, options)](#new_Tooltip_new)
+    * [new Tooltip(reference, options)](#new_Tooltip_new)
     * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
     * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
 
 <a name="new_Tooltip_new"></a>
 
-### new Tooltip(reference, options, reference, options)
+### new Tooltip(reference, options)
 Create a new Tooltip.js instance
 
 **Returns**: <code>Object</code> - instance - The generated tooltip instance  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| reference | <code>HTMLElement</code> |  | The reference element used to position the tooltip |
+| reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
 | options | <code>Object</code> |  |  |
 | options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
-| reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
-| options | <code>Object</code> |  | Configuration of the tooltip |
 | options.container | <code>HTMLElement</code> \| <code>String</code> \| <code>false</code> | <code>false</code> | Append the tooltip to a specific element. |
 | options.delay | <code>Number</code> \| <code>Object</code> | <code>0</code> | Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.      If a number is supplied, delay is applied to both hide/show.      Object structure is: `{ show: 500, hide: 100 }` |
 | options.html | <code>Boolean</code> | <code>false</code> | Insert HTML into the tooltip. If false, the content will inserted with `innerText`. |
