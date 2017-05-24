@@ -120,7 +120,7 @@ export default {
     /** @prop {ModifierFn} */
     fn: preventOverflow,
     /**
-     * @prop {Array} priority=['left', 'right', 'top', 'bottom']
+     * @prop {Array} [priority=['left','right','top','bottom']]
      * Popper will try to prevent overflow following these priorities by default,
      * then, it could overflow on the left and on top of the `boundariesElement`
      */

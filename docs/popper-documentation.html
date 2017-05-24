@@ -11,7 +11,9 @@ description: Learn how to create awesome poppers
 {% endcapture %}
 {{
     documentation |
-    replace: '<code>[', '[' |
-    replace: ')</code>', ')' |
-    markdownify
+    replace: '<code>', '^^code^^' |
+    replace: '</code>', '^^/code^^' |
+    markdownify |
+    replace: '^^code^^', '<code>' |
+    replace: '^^/code^^', '</code>'
 }}

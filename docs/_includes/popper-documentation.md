@@ -554,7 +554,7 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| priority | <code>Array</code> | <code>[&#x27;left&#x27;,</code> | 'right', 'top', 'bottom'] Popper will try to prevent overflow following these priorities by default, then, it could overflow on the left and on top of the `boundariesElement` |
+| priority | <code>Array</code> | <code>[&#x27;left&#x27;,&#x27;right&#x27;,&#x27;top&#x27;,&#x27;bottom&#x27;]</code> | Popper will try to prevent overflow following these priorities by default, then, it could overflow on the left and on top of the `boundariesElement` |
 
 <a name="modifiers..preventOverflow.padding"></a>
 
