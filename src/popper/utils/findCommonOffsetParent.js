@@ -31,8 +31,9 @@ export default function findCommonOffsetParent(element1, element2) {
 
   // Both nodes are inside #document
   if (
-    (element1 !== commonAncestorContainer && element2 !== commonAncestorContainer)
-    || start.contains(end)
+    (element1 !== commonAncestorContainer &&
+      element2 !== commonAncestorContainer) ||
+    start.contains(end)
   ) {
     if (isOffsetContainer(commonAncestorContainer)) {
       return commonAncestorContainer;

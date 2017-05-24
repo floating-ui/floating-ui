@@ -207,7 +207,9 @@ describe('[flipping]', () => {
   });
 
   it('flips to bottom when hits top viewport edge', done => {
-    if (isIPHONE) { pending(); }
+    if (isIPHONE) {
+      pending();
+    }
 
     jasmineWrapper.innerHTML = `
             <div id="s1" style="height: 3000px; background: red;">
@@ -278,7 +280,10 @@ describe('[flipping]', () => {
 
     new Popper(reference, popper, {
       onCreate() {
-        simulateScroll(document.body, { scrollTop: getRect(document.body).height, delay: 50 });
+        simulateScroll(document.body, {
+          scrollTop: getRect(document.body).height,
+          delay: 50,
+        });
       },
       onUpdate(data) {
         expect(getRect(popper).top).toBeApprox(getRect(reference).bottom);

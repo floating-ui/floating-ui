@@ -11,11 +11,7 @@ import getOppositePlacement from './getOppositePlacement';
  * @param {String} placement - one of the valid placement options
  * @returns {Object} popperOffsets - An object containing the offsets which will be applied to the popper
  */
-export default function getPopperOffsets(
-  popper,
-  referenceOffsets,
-  placement
-) {
+export default function getPopperOffsets(popper, referenceOffsets, placement) {
   placement = placement.split('-')[0];
 
   // Get popper node sizes

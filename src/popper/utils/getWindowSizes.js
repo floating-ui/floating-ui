@@ -10,7 +10,7 @@ function getSize(axis, body, html, computedStyle) {
           computedStyle[`margin${axis === 'Height' ? 'Top' : 'Left'}`] +
           computedStyle[`margin${axis === 'Height' ? 'Bottom' : 'Right'}`]
       : 0
-  )
+  );
 }
 
 export default function getWindowSizes() {

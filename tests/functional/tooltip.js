@@ -236,9 +236,9 @@ describe('[tooltip.js]', () => {
       instance.show();
 
       then(() => {
-        expect(
-          document.querySelector('.tooltip .foobar').textContent
-        ).toBe('foobar');
+        expect(document.querySelector('.tooltip .foobar').textContent).toBe(
+          'foobar'
+        );
         done();
       });
     });

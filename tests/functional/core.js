@@ -1348,10 +1348,8 @@ describe('[core]', () => {
   });
 
   // test for #224
-  it(
-    'checks that only the needed parents scroll offsets are included',
-    done => {
-      jasmineWrapper.innerHTML = `
+  it('checks that only the needed parents scroll offsets are included', done => {
+    jasmineWrapper.innerHTML = `
       <div id="s1" style="overflow: scroll; height: 300px; background: red;">
         <div style="height: 100px;">
           <div id="reference" style="background: pink; margin-top: 100px; margin-bottom: 400px;">reference</div>
@@ -1361,21 +1359,20 @@ describe('[core]', () => {
       <div id="popper" style="background: purple">popper</div>
     `;
 
-      const reference = document.getElementById('reference');
-      const popper = document.getElementById('popper');
-      const s1 = document.getElementById('s1');
+    const reference = document.getElementById('reference');
+    const popper = document.getElementById('popper');
+    const s1 = document.getElementById('s1');
 
-      new Popper(reference, popper, {
-        onCreate() {
-          simulateScroll(s1, { scrollTop: 20 });
-          simulateScroll(document.body, { scrollTop: 50 });
-        },
-        onUpdate(data) {
-          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
-          data.instance.destroy();
-          done();
-        },
-      });
-    }
-  );
+    new Popper(reference, popper, {
+      onCreate() {
+        simulateScroll(s1, { scrollTop: 20 });
+        simulateScroll(document.body, { scrollTop: 50 });
+      },
+      onUpdate(data) {
+        expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
 });
