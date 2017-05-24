@@ -1,18 +1,15 @@
-.anchorjs-link {
-  border: none;
-  margin-right: -26px;
+.link-anchor {
+  position: relative;
+  width: 0;
+  font-size: .8em;
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
 }
-
-section h1[id],
-section h2[id],
-section h3[id],
-section h4[id],
-section h5[id] {
-    height: 100px;
-    top: -50px;
-    position: relative;
-    padding-top: 50px;
-    margin-bottom: -50px;
+.anchor-wrapper {
+  border: none;
+}
+.anchor-wrapper:hover .link-anchor {
+  opacity: 1;
 }
 
 section h1[id]:focus,

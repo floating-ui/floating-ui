@@ -2000,18 +2000,18 @@ b.currentPosition {
 .hidden {
 	display: none;
 }
-
+a[name]:not([href]) {
+  top: -50px;
+  position: relative;
+  display: block;
+  border: 0;
+}
 .page-layout {
 	h3, h4 {
 		text-transform: none;
 		letter-spacing: initial;
 	}
-	a[name]:not([href]) {
-		top: -120px;
-		position: relative;
-		display: block;
-		border: 0;
-	}
+
 	.anchor {
 		position: absolute;
 		margin-left: -25px;
