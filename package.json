@@ -18,7 +18,7 @@
     "test:dev": "NODE_ENV=development karma start ./scripts/karma.conf.js",
     "coverage": "NODE_ENV=coverage npm run test",
     "docs": "npm run docs:popper && npm run docs:tooltip",
-    "docs:serve": "cd docs && jekyll serve & open http://localhost:4000",
+    "docs:serve": "cd docs; { wait-on http://localhost:4000; open http://localhost:4000; } & jekyll serve",
     "docs:popper": "npm run build:popper && jsdoc2md ./dist/popper.js > ./docs/_includes/popper-documentation.md",
     "docs:tooltip": "npm run build:tooltip && jsdoc2md ./dist/tooltip.js > ./docs/_includes/tooltip-documentation.md"
   },
@@ -80,6 +80,7 @@
     "rollup-plugin-babel": "^2.6.1",
     "rollup-watch": "^3.1.0",
     "sinon": "^2.1.0",
+    "wait-on": "^2.0.2",
     "yargs": "^7.1.0"
   },
   "lint-staged": {

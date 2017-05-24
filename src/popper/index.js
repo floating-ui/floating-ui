@@ -8,7 +8,7 @@ import update from './methods/update';
 import destroy from './methods/destroy';
 import enableEventListeners from './methods/enableEventListeners';
 import disableEventListeners from './methods/disableEventListeners';
-import DEFAULTS from './methods/defaults';
+import Defaults from './methods/defaults';
 import placements from './methods/placements';
 
 export default class Popper {
@@ -17,7 +17,7 @@ export default class Popper {
    * @class Popper
    * @param {HTMLElement|referenceObject} reference - The reference element used to position the popper
    * @param {HTMLElement} popper - The HTML element used as popper.
-   * @param {Object} options - Your custom options to override the ones defined in [DEFAULTS](#defaults)
+   * @param {Object} options - Your custom options to override the ones defined in [Defaults](#defaults)
    * @return {Object} instance - The generated Popper.js instance
    */
   constructor(reference, popper, options = {}) {
@@ -118,7 +118,10 @@ export default class Popper {
    *
    * **DEPRECATION**: This way to access PopperUtils is deprecated
    * and will be removed in v2! Use the PopperUtils module directly instead.
+   * Due to the high instability of the methods contained in Utils, we can't
+   * guarantee them to follow semver. Use them at your own risk!
    * @static
+   * @private
    * @type {Object}
    * @deprecated since version 1.8
    * @member Utils
@@ -128,7 +131,7 @@ export default class Popper {
 
   static placements = placements;
 
-  static Defaults = DEFAULTS;
+  static Defaults = Defaults;
 }
 
 /**
