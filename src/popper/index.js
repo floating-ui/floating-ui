@@ -41,39 +41,25 @@ export default class Popper {
     // make sure to apply the popper position before any computation
     setStyles(this.popper, { position: 'absolute' });
 
-    // refactoring modifiers' list (Object => Array)
-    this.modifiers = Object.keys(Popper.Defaults.modifiers).map(name => ({
-      name,
-      ...Popper.Defaults.modifiers[name],
-    }));
-
-    // assign default values to modifiers, making sure to override them with
-    // the ones defined by user
-    this.modifiers = this.modifiers.map(defaultConfig => {
-      const userConfig = (options.modifiers &&
-        options.modifiers[defaultConfig.name]) || {};
-      return { ...defaultConfig, ...userConfig };
+    // Deep merge modifiers options
+    this.options.modifiers = {};
+    Object.keys({ ...Popper.Defaults.modifiers, ...options.modifiers }).forEach(name => {
+      this.options.modifiers[name] = {
+        // If it's a built-in modifier, use it as base
+        ...(Popper.Defaults.modifiers[name] || {}),
+        // If there are custom options, override and merge with default ones
+        ...(options.modifiers ? options.modifiers[name] : {}),
+      };
     });
 
-    // add custom modifiers to the modifiers list
-    if (options.modifiers) {
-      this.options.modifiers = {
-        ...{},
-        ...Popper.Defaults.modifiers,
-        ...options.modifiers,
-      };
-      Object.keys(options.modifiers).forEach(name => {
-        // take in account only custom modifiers
-        if (Popper.Defaults.modifiers[name] === undefined) {
-          const modifier = options.modifiers[name];
-          modifier.name = name;
-          this.modifiers.push(modifier);
-        }
-      });
-    }
-
-    // sort the modifiers by order
-    this.modifiers = this.modifiers.sort((a, b) => a.order - b.order);
+    // Refactoring modifiers' list (Object => Array)
+    this.modifiers = Object.keys(this.options.modifiers)
+      .map(name => ({
+        name,
+        ...this.options.modifiers[name],
+      }))
+      // sort the modifiers by order
+      .sort((a, b) => a.order - b.order);
 
     // modifiers have the ability to execute arbitrary code when Popper.js get inited
     // such code is executed in the same order of its modifier
