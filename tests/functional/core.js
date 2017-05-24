@@ -9,6 +9,7 @@ import appendNewRef from '../utils/appendNewRef';
 import getRect from '../utils/getRect';
 import simulateScroll from '../utils/simulateScroll';
 import prepend from '../utils/prepend';
+import isMSBrowser from '../utils/isMSBrowser';
 
 const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
 const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
@@ -1371,6 +1372,36 @@ describe('[core]', () => {
       onUpdate(data) {
         expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
         data.instance.destroy();
+        done();
+      },
+    });
+  });
+
+  // Test for #253
+  xit('sticky parent', done => {
+    // MS Browsers (IE and Edge) don't support Sticky position
+    if (isMSBrowser()) {
+      pending();
+    }
+    jasmineWrapper.innerHTML = `
+      <div id="s1" style="background: blue; height: 400px; overflow-y: scroll;">
+        <div style="background: green; height: 50px; position: sticky; top: 0;">
+          <div id="reference" style="background: orange; width: 50px; height: 50px;">ref</div>
+          <div id="popper" style="background: steelblue; width: 50px; height: 50px;">pop</div>
+        </div>
+        <div style="height: 1000px;"></div>
+      </div>
+    `;
+    const s1 = document.getElementById('s1');
+    const reference = document.getElementById('reference');
+    const popper = document.getElementById('popper');
+
+    simulateScroll(s1, { scrollTop: 100 });
+
+    new Popper(reference, popper, {
+      onCreate(data) {
+        expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+        //data.instance.destroy();
         done();
       },
     });
