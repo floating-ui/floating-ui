@@ -15,5 +15,7 @@ description: Learn how to create awesome tooltips
     replace: '</code>', '^^/code^^' |
     markdownify |
     replace: '^^code^^', '<code>' |
-    replace: '^^/code^^', '</code>'
+    replace: '^^/code^^', '</code>' |
+    replace: '<code><code>', '<code>' |
+    replace: '</code></code>', '</code>'
 }}
