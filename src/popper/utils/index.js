@@ -17,7 +17,6 @@ import getScroll from './getScroll';
 import getScrollParent from './getScrollParent';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getSupportedPropertyName from './getSupportedPropertyName';
-import getTotalScroll from './getTotalScroll';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
 import isFunction from './isFunction';
@@ -51,7 +50,6 @@ export default {
   getScrollParent,
   getStyleComputedProperty,
   getSupportedPropertyName,
-  getTotalScroll,
   getWindowSizes,
   isFixed,
   isFunction,
