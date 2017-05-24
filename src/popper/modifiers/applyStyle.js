@@ -90,7 +90,8 @@ export function applyStyleOnLoad(
     referenceOffsets,
     popper,
     reference,
-    options.modifiers.flip.boundariesElement
+    options.modifiers.flip.boundariesElement,
+    options.modifiers.flip.padding
   );
 
   popper.setAttribute('x-placement', placement);
