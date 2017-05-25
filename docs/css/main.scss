@@ -1509,7 +1509,22 @@ body.is-menu-visible {
 					text-transform: uppercase;
 
 					&.menuToggle {
-                        display: none;
+            opacity: 0;
+            pointer-events: none;
+            display: block;
+            outline: 0;
+            position: relative;
+
+            &:after {
+              background-image: url('images/bars.svg');
+              background-position: right center;
+              background-repeat: no-repeat;
+              content: '';
+              display: inline-block;
+              height: 3.75em;
+              vertical-align: top;
+              width: 2em;
+            }
 
 						@include breakpoint(small) {
 							padding: 0 1.5em;
@@ -1519,22 +1534,10 @@ body.is-menu-visible {
 							}
 						}
 
-                        @include breakpoint(large) {
-                            display: block;
-                            outline: 0;
-    						position: relative;
-
-    						&:after {
-    							background-image: url('images/bars.svg');
-    							background-position: right center;
-    							background-repeat: no-repeat;
-    							content: '';
-    							display: inline-block;
-    							height: 3.75em;
-    							vertical-align: top;
-    							width: 2em;
-    						}
-                        }
+            @include breakpoint(large) {
+              opacity: 1;
+              pointer-events: auto;
+            }
 					}
 
 					@include breakpoint(small) {
