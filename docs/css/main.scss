@@ -1453,7 +1453,8 @@ body.is-menu-visible {
 
 #header {
 	@include vendor('transition', 'background-color #{_duration(transitions)} ease');
-	background: _palette(bg);
+	background-color: _palette(bg);
+  background-image: linear-gradient(to bottom, rgba(46, 56, 66, 1) 0%, rgba(46, 56, 66, 0) 100%);
 	height: 3em;
 	left: 0;
 	line-height: 3em;
@@ -1553,7 +1554,7 @@ body.is-menu-visible {
 	}
 
 	&.alt {
-		background: transparent;
+    background-color: transparent;
 
 		h1 {
 			@include vendor('pointer-events', 'none');
