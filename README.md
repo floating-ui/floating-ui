@@ -131,7 +131,7 @@ A modifier is a function that is called each time Popper.js needs to compute the
 To learn how to create a modifier, [read the modifiers documentaton](docs/_includes/popper-documentation.md#modifiers--object)
 
 
-### React, Vue.js, AngularJS, Ember.js (etc...) integration
+### React, Vue.js, Angular, AngularJS, Ember.js (etc...) integration
 
 Integrating 3rd party libraries in React or other libraries can be a pain because
 they usually alter the DOM and drive the libraries crazy.  
