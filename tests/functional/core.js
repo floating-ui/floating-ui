@@ -1401,7 +1401,7 @@ describe('[core]', () => {
     new Popper(reference, popper, {
       onCreate(data) {
         expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
-        //data.instance.destroy();
+        data.instance.destroy();
         done();
       },
     });
