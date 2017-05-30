@@ -19,3 +19,4 @@ _site
 # during the npm publish step, this to avoid duplication
 #===============================================================
 package.nuspec
+*.nupkg
