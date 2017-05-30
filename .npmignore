@@ -1,22 +1,7 @@
-# Don't exclude the transpiled files because they are used by npm
-#================================================================
-# dist
+# Ignore everything
+#==================
+*
 
-# Exclude the tooltip dist files
-#===============================
-dist/**/tooltip*
-
-# Exclude everything else
-#========================
-.github
-docs
-scripts
-src
-tests
-.editorconfig
-.eslintignore
-.eslintrc
-.jsdoc
-.travis.yml
-popperjs.png
-.babelrc
+# Except the dist files
+#======================
+!dist/**/popper*
