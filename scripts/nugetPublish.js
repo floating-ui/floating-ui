@@ -1,18 +1,26 @@
 const fs = require('fs');
 const path = require('path');
 const xml = require('xml');
-const ignoreToGlob = require('gitignore-to-glob');
 const nuget = require('nuget');
 const pkg = require('../package.json');
 
 const nuspecPath = path.resolve(__dirname, '../package.nuspec');
 
-// Convert npmignore to list of glob patterns
-// We have to invert any negation (!) because we are going to use this
-// in the `exclude` attribute of nuspec
-const npmignore = ignoreToGlob(path.resolve(__dirname, '../.npmignore')).map(
-  pattern => (pattern.indexOf('!') === 0 ? pattern.slice(1) : `!${pattern}`)
-);
+const distPath = path.resolve(__dirname, '../dist/');
+const distFiles = [];
+fs.readdirSync(distPath).forEach(file => {
+  const filePath = path.join(distPath, file);
+  const stat = fs.statSync(filePath);
+  if (stat.isFile()) {
+    distFiles.push({
+      file: {
+        _attr: {
+          src: 'dist/' + file ,
+        },
+      },
+    });
+  }
+});
 
 // Generate nuspec file
 const nuspec = xml(
@@ -34,17 +42,7 @@ const nuspec = xml(
           ],
         },
         {
-          files: [
-            {
-              file: {
-                _attr: {
-                  src: '*',
-                  target: 'content\\Scripts',
-                  exclude: npmignore.join(';'),
-                },
-              },
-            },
-          ],
+          files: distFiles,
         },
       ],
     },
