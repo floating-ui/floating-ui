@@ -23,6 +23,13 @@ React wrapper around Popper.js.
 
 React wrapper around Popper.js, maintained by [Atlassian](https://www.atlassian.com/).
 
+## Angular
+
+### [ngx-popper](https://github.com/MrFrankel/ngx-popper)
+
+Angular wrapper for Popper.js
+In Alpha
+
 ## AngularJS
 
 ### [angular-popper](https://www.npmjs.com/package/angular-popper)
