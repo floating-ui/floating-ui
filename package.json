@@ -55,7 +55,7 @@
     "babel-preset-babili": "0.0.12",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "chai": "^3.5.0",
+    "chai": "^4.0.0",
     "colors": "^1.1.2",
     "eslint": "^3.17.1",
     "eslint-plugin-jasmine": "^2.1.0",
