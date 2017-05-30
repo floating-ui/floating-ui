@@ -14,3 +14,9 @@ dist
 # When you switch branches, things can get messy
 _site
 .sass-cache
+
+# Exclude Nuget .nuspec because we generate it from package.json
+# during the npm publish step, this to avoid duplication
+#===============================================================
+package.nuspec
+*.nupkg
