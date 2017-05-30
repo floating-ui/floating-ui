@@ -38,6 +38,10 @@ Popper.js internally, but only few "basic" components that let you use Popper.js
 
 Simple Vue.js component for Popper.js.
 
+### [vue-popperjs](https://github.com/RobinCK/vue-popper) 
+
+VueJS 2.x popover component based [popper.js](https://popper.js.org/)
+
 ### [vue-directive-tooltip](https://www.npmjs.com/package/vue-directive-tooltip)
 
 Vue.js tooltip directive (based on Popper.js)
