@@ -78,7 +78,7 @@
     "lint-staged": "^3.6.0",
     "nuget-in-path": "^2.0.1",
     "pre-commit": "^1.2.2",
-    "prettier": "^1.4.1",
+    "prettier": "^1.4.2",
     "prettier-eslint-cli": "^4.0.2",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
