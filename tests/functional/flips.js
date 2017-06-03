@@ -52,7 +52,9 @@ describe('[flipping]', () => {
   };
 
   flippingDefault.forEach(val => {
-    it(`should flip from ${val} to ${getOppositePlacement(val)} if boundariesElement is set`, done => {
+    it(`should flip from ${val} to ${getOppositePlacement(
+      val
+    )} if boundariesElement is set`, done => {
       const relative = document.createElement('div');
       relative.style.margin = '100px 300px';
       relative.style.height = '100px';
@@ -114,7 +116,9 @@ describe('[flipping]', () => {
   }
 
   Object.keys(flippingVariations).forEach(val => {
-    it(`(variations) should flip from ${val} to ${flippingVariations[val]} if boundariesElement is set`, done => {
+    it(`(variations) should flip from ${val} to ${flippingVariations[
+      val
+    ]} if boundariesElement is set`, done => {
       const relative = document.createElement('div');
       relative.style.margin = '100px 300px';
       relative.style.height = '300px';
@@ -182,7 +186,7 @@ describe('[flipping]', () => {
     jasmineWrapper.appendChild(page);
 
     const parent = document.createElement('div');
-    parent.style.position = 'relative'; // Also fails if absolute. Comment out for test to pass.
+    parent.style.position = 'relative';
     parent.style.background = 'yellow';
     page.appendChild(parent);
 
@@ -212,11 +216,11 @@ describe('[flipping]', () => {
     }
 
     jasmineWrapper.innerHTML = `
-            <div id="s1" style="height: 3000px; background: red;">
-                <div id="reference" style="background: pink; margin-top: 200px">reference</div>
-                <div id="popper" style="background: purple">popper</div>
-            </div>
-        `;
+      <div id="s1" style="height: 3000px; background: red;">
+        <div id="reference" style="background: pink; margin-top: 200px">reference</div>
+        <div id="popper" style="background: purple">popper</div>
+      </div>
+    `;
 
     const reference = document.getElementById('reference');
     const popper = document.getElementById('popper');
@@ -224,7 +228,7 @@ describe('[flipping]', () => {
     new Popper(reference, popper, {
       placement: 'top',
       onCreate() {
-        simulateScroll(document.body, { scrollTop: 200, delay: 50 });
+        simulateScroll(document.body, { scrollTop: 200 });
       },
       onUpdate(data) {
         expect(getRect(popper).top).toBeApprox(getRect(reference).bottom);
