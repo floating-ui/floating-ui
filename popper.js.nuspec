@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>popper.js</id>
+    <version>1.9.9</version>
+    <title>Popper.js</title>
+    <authors>Federico Zivolo (federico.zivolo@gmail.com)</authors>
+    <owners>Federico Zivolo</owners>
+    <description>A kickass library to manage your poppers</description>
+    <releaseNotes>https://github.com/FezVrasta/popper.js/releases</releaseNotes>
+    <summary>A kickass library to manage your poppers</summary>
+    <language>en-us</language>
+    <projectUrl>https://popper.js.org</projectUrl>
+    <iconUrl>https://popper.js.org/favicon-32x32.png</iconUrl>
+    <licenseUrl>https://github.com/FezVrasta/popper.js/blob/master/LICENSE.md</licenseUrl>
+    <copyright>Copyright 2017</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>popperjs component drop tooltip popover position attached</tags>
+  </metadata>
+  <files>
+    <file src="dist/*/popper*.js" target="content\Scripts" />
+  </files>
+</package>
