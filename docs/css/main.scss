@@ -1927,6 +1927,7 @@ body.is-mobile {
 	opacity: 0;
 	transition: 0.3s opacity ease-out;
 	z-index: 10001;
+  line-height: 0;
 }
 #header:not(.alt) #title-popper {
 	opacity: 1;
