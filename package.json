@@ -91,7 +91,7 @@
   "lint-staged": {
     "*.js": [
       "prettier-eslint --write \"{src,scripts,tests}/**/*.js\"",
-      "git add"
+      "git adds"
     ]
   }
 }
