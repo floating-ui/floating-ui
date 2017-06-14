@@ -1,5 +1,7 @@
 import isFunction from './isFunction';
 import findIndex from './findIndex';
+import getClientRect from '../utils/getClientRect';
+
 
 /**
  * Loop trough the list of modifiers and run them in order,
@@ -22,6 +24,12 @@ export default function runModifiers(modifiers, data, ends) {
     }
     const fn = modifier.function || modifier.fn;
     if (modifier.enabled && isFunction(fn)) {
+      // Add properties to offsets to make them a complete clientRect object
+      // we do this before each modifier to make sure the previous one doesn't
+      // mess with these values
+      data.offsets.popper = getClientRect(data.offsets.popper);
+      data.offsets.reference = getClientRect(data.offsets.reference);
+
       data = fn(data, modifier);
     }
   });

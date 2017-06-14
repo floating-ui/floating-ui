@@ -37,8 +37,7 @@ export default function arrow(data, options) {
   }
 
   const placement = data.placement.split('-')[0];
-  const popper = getClientRect(data.offsets.popper);
-  const reference = data.offsets.reference;
+  const { popper, reference } = data.offsets;
   const isVertical = ['left', 'right'].indexOf(placement) !== -1;
 
   const len = isVertical ? 'height' : 'width';
