@@ -11,8 +11,7 @@ import getOppositePlacement from '../utils/getOppositePlacement';
 export default function inner(data) {
   const placement = data.placement;
   const basePlacement = placement.split('-')[0];
-  const popper = getClientRect(data.offsets.popper);
-  const reference = getClientRect(data.offsets.reference);
+  const { popper, reference } = data.offsets;
   const isHoriz = ['left', 'right'].indexOf(basePlacement) !== -1;
 
   const subtractLength = ['top', 'left'].indexOf(basePlacement) === -1;

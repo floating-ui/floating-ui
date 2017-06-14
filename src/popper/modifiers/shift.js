@@ -1,5 +1,3 @@
-import getClientRect from '../utils/getClientRect';
-
 /**
  * @function
  * @memberof Modifiers
@@ -14,8 +12,7 @@ export default function shift(data) {
 
   // if shift shiftvariation is specified, run the modifier
   if (shiftvariation) {
-    const reference = data.offsets.reference;
-    const popper = getClientRect(data.offsets.popper);
+    const { reference, popper } = data.offsets;
     const isVertical = ['bottom', 'top'].indexOf(basePlacement) !== -1;
     const side = isVertical ? 'left' : 'top';
     const measurement = isVertical ? 'width' : 'height';

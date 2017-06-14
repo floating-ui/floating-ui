@@ -1,5 +1,3 @@
-import getClientRect from '../utils/getClientRect';
-
 /**
  * @function
  * @memberof Modifiers
@@ -8,8 +6,7 @@ import getClientRect from '../utils/getClientRect';
  * @returns {Object} The data object, properly modified
  */
 export default function keepTogether(data) {
-  const popper = getClientRect(data.offsets.popper);
-  const reference = data.offsets.reference;
+  const { popper, reference } = data.offsets;
   const placement = data.placement.split('-')[0];
   const floor = Math.floor;
   const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
