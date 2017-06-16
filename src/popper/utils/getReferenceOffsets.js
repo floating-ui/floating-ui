@@ -1,6 +1,5 @@
 import findCommonOffsetParent from './findCommonOffsetParent';
-import getOffsetRectRelativeToArbitraryNode
-  from './getOffsetRectRelativeToArbitraryNode';
+import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
 
 /**
  * Get offsets to the reference element

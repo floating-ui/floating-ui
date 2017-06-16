@@ -8,11 +8,11 @@ const FORMAT = process.env.FORMAT || 'es';
 
 const babelConfig = ES5
   ? {
-    presets: [['es2015', { modules: false }], 'stage-2'],
-  }
+      presets: [['es2015', { modules: false }], 'stage-2'],
+    }
   : {
-    presets: ['stage-2'],
-  };
+      presets: ['stage-2'],
+    };
 
 let entry, dest, moduleName, sourceMapFile;
 switch (BUILD) {

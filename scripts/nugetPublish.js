@@ -30,7 +30,7 @@ const files = glob
   )
   .filter(f => f);
 
-console.log()
+console.log();
 
 // Generate nuspec file
 const nuspec = xml(

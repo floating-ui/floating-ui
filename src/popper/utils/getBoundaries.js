@@ -1,10 +1,8 @@
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
 import findCommonOffsetParent from './findCommonOffsetParent';
-import getOffsetRectRelativeToArbitraryNode
-  from './getOffsetRectRelativeToArbitraryNode';
-import getViewportOffsetRectRelativeToArtbitraryNode
-  from './getViewportOffsetRectRelativeToArtbitraryNode';
+import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
+import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
 

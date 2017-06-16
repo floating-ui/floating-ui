@@ -2,7 +2,6 @@ import isFunction from './isFunction';
 import findIndex from './findIndex';
 import getClientRect from '../utils/getClientRect';
 
-
 /**
  * Loop trough the list of modifiers and run them in order,
  * each of them will then edit the data object.

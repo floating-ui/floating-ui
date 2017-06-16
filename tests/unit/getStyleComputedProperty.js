@@ -1,7 +1,6 @@
 import chai from 'chai';
 const { expect } = chai;
-import getStyleComputedProperty
-  from 'src/popper/utils/getStyleComputedProperty';
+import getStyleComputedProperty from 'src/popper/utils/getStyleComputedProperty';
 
 describe('utils/getStyleComputedProperty', () => {
   let node;

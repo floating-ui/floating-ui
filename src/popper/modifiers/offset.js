@@ -106,13 +106,13 @@ export function parseOffset(
   const splitRegex = /\s*,\s*|\s+/;
   let ops = divider !== -1
     ? [
-      fragments
+        fragments
           .slice(0, divider)
           .concat([fragments[divider].split(splitRegex)[0]]),
-      [fragments[divider].split(splitRegex)[1]].concat(
+        [fragments[divider].split(splitRegex)[1]].concat(
           fragments.slice(divider + 1)
         ),
-    ]
+      ]
     : [fragments];
 
   // Convert the values with units to absolute pixels to allow our computations
