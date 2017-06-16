@@ -1256,24 +1256,27 @@ describe('[core]', () => {
     });
   });
 
-  it('inits a popper near the reference element when it is a child of ref and the ref is relatively positioned', done => {
-    const ref = appendNewRef(1, 'ref');
-    ref.style.position = 'relative';
-    ref.style.left = '50px';
-    ref.style.top = '20px';
-    ref.style.background = 'green';
+  it(
+    'inits a popper near the reference element when it is a child of ref and the ref is relatively positioned',
+    done => {
+      const ref = appendNewRef(1, 'ref');
+      ref.style.position = 'relative';
+      ref.style.left = '300px';
+      ref.style.top = '20px';
+      ref.style.background = 'green';
 
-    const popper = appendNewPopper(2, 'popper', ref);
+      const popper = appendNewPopper(2, 'popper', ref);
 
-    new Popper(ref, popper, {
-      placement: 'bottom-end',
-      onCreate: data => {
-        expect(getRect(popper).right).toBeApprox(getRect(ref).right);
-        data.instance.destroy();
-        done();
-      },
-    });
-  });
+      new Popper(ref, popper, {
+        placement: 'bottom-end',
+        onCreate: data => {
+          expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+          data.instance.destroy();
+          done();
+        },
+      });
+    }
+  );
 
   it('checks that all the scrollable parents have an event listener attached', done => {
     jasmineWrapper.innerHTML = `
@@ -1371,6 +1374,48 @@ describe('[core]', () => {
       },
       onUpdate(data) {
         expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
+
+  // test for #310
+  it('properly avoids overflow when parent is transformed', done => {
+    jasmineWrapper.innerHTML = `
+      <style>
+        .transform {
+          will-change: transform;
+        }
+        #reference {
+          width: 50px;
+          height: 50px;
+          background: lightgrey;
+        }
+        #popper {
+          background: cyan;
+          width: 200px;
+          height: 100px;
+        }
+      </style>
+      <div class="transform">
+        <div id="reference">
+          Box 2
+        </div>
+        <div id="popper">
+          My Tooltip Content
+        </div>
+      </div>
+    `;
+
+    const reference = document.getElementById('reference');
+    const popper = document.getElementById('popper');
+
+    new Popper(reference, popper, {
+      placement: 'bottom',
+      onCreate(data) {
+        expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+        expect(getRect(popper).left).toBeApprox(5);
         data.instance.destroy();
         done();
       },
