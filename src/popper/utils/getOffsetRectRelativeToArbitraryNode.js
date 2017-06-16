@@ -17,6 +17,8 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
     width: childrenRect.width,
     height: childrenRect.height,
   });
+  offsets.marginTop = 0;
+  offsets.marginLeft = 0;
 
   // Subtract margins of documentElement in case it's being used as parent
   // we do this only on HTML because it's the only element that behaves

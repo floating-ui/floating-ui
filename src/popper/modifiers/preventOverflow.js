@@ -9,8 +9,16 @@ import getBoundaries from '../utils/getBoundaries';
  * @returns {Object} The data object, properly modified
  */
 export default function preventOverflow(data, options) {
-  const boundariesElement =
+  let boundariesElement =
     options.boundariesElement || getOffsetParent(data.instance.popper);
+
+  // If offsetParent is the reference element, we really want to
+  // go one step up and use the next offsetParent as reference to
+  // avoid to make this modifier completely useless and look like broken
+  if (data.instance.reference === boundariesElement) {
+    boundariesElement = getOffsetParent(boundariesElement);
+  }
+
   const boundaries = getBoundaries(
     data.instance.popper,
     data.instance.reference,
