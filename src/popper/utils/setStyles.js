@@ -14,7 +14,8 @@ export default function setStyles(element, styles) {
     // add unit if the value is numeric and is one of the following
     if (
       ['width', 'height', 'top', 'right', 'bottom', 'left'].indexOf(prop) !==
-        -1 && isNumeric(styles[prop])
+        -1 &&
+      isNumeric(styles[prop])
     ) {
       unit = 'px';
     }

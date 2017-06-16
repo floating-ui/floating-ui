@@ -3,4 +3,4 @@ export default function then(callback, delay = 100) {
   jasmine.THEN_DELAY += delay;
 }
 
-beforeEach(() => jasmine.THEN_DELAY = 0);
+beforeEach(() => (jasmine.THEN_DELAY = 0));

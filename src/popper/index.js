@@ -43,7 +43,10 @@ export default class Popper {
 
     // Deep merge modifiers options
     this.options.modifiers = {};
-    Object.keys({ ...Popper.Defaults.modifiers, ...options.modifiers }).forEach(name => {
+    Object.keys({
+      ...Popper.Defaults.modifiers,
+      ...options.modifiers,
+    }).forEach(name => {
       this.options.modifiers[name] = {
         // If it's a built-in modifier, use it as base
         ...(Popper.Defaults.modifiers[name] || {}),

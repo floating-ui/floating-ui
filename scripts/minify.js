@@ -42,7 +42,9 @@ options.presets = options.presets.filter(a => !!a);
 const result = babel.transform(inputCode, options);
 
 // Add sourcemap URL to transformed code
-const outputCode = `${result.code}\n\n//# sourceMappingURL=${path.basename(outputMap)}`;
+const outputCode = `${result.code}\n\n//# sourceMappingURL=${path.basename(
+  outputMap
+)}`;
 
 // Write output files
 //===================

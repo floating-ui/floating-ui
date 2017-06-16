@@ -15,7 +15,9 @@ const bundleFactory = (es5, ext, format) => done => {
   const TARGET = `${EXT ? EXT + '/' : ''}${build}`;
 
   exec(
-    `${rollup} --environment BUILD:${build},EXT:"${EXT}",FORMAT:${FORMAT}${ES5 ? ',ES5' : ''}`,
+    `${rollup} --environment BUILD:${build},EXT:"${EXT}",FORMAT:${FORMAT}${ES5
+      ? ',ES5'
+      : ''}`,
     error => {
       if (error) {
         return console.error(`${TARGET}: ${error}`);
@@ -32,7 +34,9 @@ const bundleFactory = (es5, ext, format) => done => {
           );
           console.info(
             colors.yellow(`${TARGET}.min`),
-            `\n${execSync(`${gzipped} ./dist/${EXT}/${build}.min.js`).toString()}`
+            `\n${execSync(
+              `${gzipped} ./dist/${EXT}/${build}.min.js`
+            ).toString()}`
           );
           done();
         }

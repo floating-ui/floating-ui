@@ -1,5 +1,8 @@
 {
     "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "module"
+    },
     "env": {
         "browser": true,
         "node": true,
@@ -7,7 +10,6 @@
     },
     "globals": {},
     "rules": {
-        "indent": ["error", 2, {"SwitchCase": 1}],
         "no-cond-assign": [ "error", "except-parens" ],
         "curly": "error",
         "eqeqeq": "error",
