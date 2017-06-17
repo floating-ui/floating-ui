@@ -4,9 +4,13 @@
             "jsdoc-to-markdown"
         ]
     },
+    "critics": {
+      "lint": { "engine": "none" }
+    },
     "ignore": [
         "**/docs/**",
-        "**/scripts/**"
+        "packages/scripts/**",
+        "packages/test-utils/**"
     ],
     "test": [
         "**/tests/**"
