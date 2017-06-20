@@ -206,12 +206,12 @@ export default class Tooltip {
     this._append(tooltipNode, container);
 
     const popperOptions = {
-      ...options.popperOptions || {},
+      ...options.popperOptions,
       placement: options.placement,
     }
 
     popperOptions.modifiers = {
-      ...popperOptions.modifiers || {},
+      ...popperOptions.modifiers,
       arrow: {
         element: this.arrowSelector,
       },
