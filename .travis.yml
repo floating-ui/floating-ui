@@ -1,11 +1,12 @@
 language: node_js
-node_js: 7.3
+node_js: 8.1.1
 script:
-  - travis_retry npm run coverage -- -- --browsers=SLChrome,SLInternetExplorer10
-  - travis_retry npm run test -- --browsers=SLFirefox,SLEdge,SLSafari,SLInternetExplorer11,SLiOS9
+  - COVERAGE=true travis_retry npm run test -- -- -- --browsers=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11,SLiOS9
+  - travis_retry npm run test -- -- -- --browsers=SLEdge,SLSafari
 after_success:
-  - npm install -g codeclimate-test-reporter
-  - codeclimate-test-reporter < .tmp/coverage/**/lcov.info
+  - npm install -g codeclimate-test-reporter lcov-result-merger
+  - lcov-result-merger "packages/**/.tmp/coverage/report-lcov/lcov.info" > coverage.info
+  - codeclimate-test-reporter < coverage.info
 addons:
   sauce_connect:
     username: "popperjs"

@@ -1,0 +1,18 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "plugins": [
+        "jasmine"
+    ],
+    "env": {
+        "jasmine": true
+    },
+    "globals": {
+        "jasmineWrapper": false
+    },
+    "rules": {
+        "no-unused-vars": 1
+    }
+}
