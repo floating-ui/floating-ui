@@ -192,7 +192,7 @@ export default class Tooltip {
     );
 
     // Add `aria-describedby` to our reference element for accessibility reasons
-    tooltipNode.setAttribute('aria-describedby', tooltipNode.id);
+    reference.setAttribute('aria-describedby', tooltipNode.id);
 
     // append tooltip to container
     const container = this._findContainer(options.container, reference);
