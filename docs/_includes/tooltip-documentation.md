@@ -5,8 +5,13 @@
 
 * [Tooltip](#Tooltip)
     * [new Tooltip(reference, options)](#new_Tooltip_new)
-    * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
-    * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
+    * _instance_
+        * [.show()](#Tooltip+show)
+        * [.hide()](#Tooltip+hide)
+        * [.toggle()](#Tooltip+toggle)
+    * _static_
+        * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
+        * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
 
 <a name="new_Tooltip_new"></a>
 
@@ -30,12 +35,31 @@ Create a new Tooltip.js instance
 | options.boundariesElement | <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
 | options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/popper-documentation.html) |
 
+<a name="Tooltip+show"></a>
+
+### tooltip.show()
+Reveals an element's tooltip. This is considered a "manual" triggering of the tooltip.
+Tooltips with zero-length titles are never displayed.
+
+**Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
+<a name="Tooltip+hide"></a>
+
+### tooltip.hide()
+Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+
+**Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
+<a name="Tooltip+toggle"></a>
+
+### tooltip.toggle()
+Toggles an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+
+**Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
 <a name="Tooltip.PlacementFunction"></a>
 
 ### Tooltip.PlacementFunction ⇒ <code>String</code>
 Placement function, its context is the Tooltip instance.
 
-**Kind**: static typedef of <code>[Tooltip](#Tooltip)</code>  
+**Kind**: static typedef of [<code>Tooltip</code>](#Tooltip)  
 **Returns**: <code>String</code> - placement - One of the allowed placement options.  
 
 | Param | Type | Description |
@@ -48,5 +72,5 @@ Placement function, its context is the Tooltip instance.
 ### Tooltip.TitleFunction ⇒ <code>String</code>
 Title function, its context is the Tooltip instance.
 
-**Kind**: static typedef of <code>[Tooltip](#Tooltip)</code>  
+**Kind**: static typedef of [<code>Tooltip</code>](#Tooltip)  
 **Returns**: <code>String</code> - placement - The desired title.  

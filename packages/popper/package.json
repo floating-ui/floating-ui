@@ -1,0 +1,47 @@
+{
+  "name": "popper.js",
+  "version": "1.10.2",
+  "description": "A kickass library to manage your poppers",
+  "homepage": "https://popper.js.org",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FezVrasta/popper.js.git"
+  },
+  "author": "Federico Zivolo <federico.zivolo@gmail.com>",
+  "contributors": [
+    "Contributors (https://github.com/FezVrasta/popper.js/graphs/contributors)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FezVrasta/popper.js/issues"
+  },
+  "keywords": [
+    "popperjs",
+    "component",
+    "drop",
+    "tooltip",
+    "popover",
+    "position",
+    "attached"
+  ],
+  "main": "dist/umd/popper.js",
+  "module": "dist/esm/popper.js",
+  "scripts": {
+    "prepublish": "in-publish && npm run build || exit 0 ",
+    "postpublish": "node ./scripts/nugetPublish.js",
+    "prebuild": "npm run lint",
+    "pretest": "npm run lint",
+    "build": "npm run build:popper && npm run build:popper-utils",
+    "build:popper": "popper-bundle --build=popper",
+    "build:popper-utils": "popper-bundle --build=popper-utils",
+    "lint": "popper-lint .",
+    "test": "popper-karma",
+    "test:dev": "NODE_ENV=development npm run test",
+    "coverage": "NODE_ENV=coverage npm run test"
+  },
+  "devDependencies": {
+    "scripts": "^1.0.0",
+    "test-utils": "^1.0.0",
+    "eslint-config-popper": "^1.0.0"
+  }
+}

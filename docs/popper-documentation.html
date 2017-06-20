@@ -10,12 +10,5 @@ description: Learn how to create awesome poppers
 {% include popper-documentation.md %}
 {% endcapture %}
 {{
-    documentation |
-    replace: '<code>', '^^code^^' |
-    replace: '</code>', '^^/code^^' |
-    markdownify |
-    replace: '^^code^^', '<code>' |
-    replace: '^^/code^^', '</code>' |
-    replace: '<code><code>', '<code>' |
-    replace: '</code></code>', '</code>'
+    documentation | markdownify
 }}

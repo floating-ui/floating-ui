@@ -48,9 +48,9 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
 ## Typedefs
 
 <dl>
-<dt><a href="#onUpdate">onUpdate</a> : <code>function</code></dt>
-<dd></dd>
 <dt><a href="#onCreate">onCreate</a> : <code>function</code></dt>
+<dd></dd>
+<dt><a href="#onUpdate">onUpdate</a> : <code>function</code></dt>
 <dd></dd>
 </dl>
 
@@ -84,7 +84,7 @@ Create a new Popper.js instance
 
 | Param | Type | Description |
 | --- | --- | --- |
-| reference | <code>HTMLElement</code> \| <code>[referenceObject](#referenceObject)</code> | The reference element used to position the popper |
+| reference | <code>HTMLElement</code> \| [<code>referenceObject</code>](#referenceObject) | The reference element used to position the popper |
 | popper | <code>HTMLElement</code> | The HTML element used as popper. |
 | options | <code>Object</code> | Your custom options to override the ones defined in [Defaults](#defaults) |
 
@@ -103,7 +103,7 @@ new Popper(ref, pop, {
 })
 ```
 
-**Kind**: static property of <code>[Popper](#Popper)</code>  
+**Kind**: static property of [<code>Popper</code>](#Popper)  
 
 * [.Defaults](#Popper.Defaults) : <code>Object</code>
     * [.placement](#Popper.Defaults.placement)
@@ -118,19 +118,19 @@ new Popper(ref, pop, {
 #### Defaults.placement
 Popper's placement
 
-**Kind**: static property of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Name | Type | Default |
 | --- | --- | --- |
-| placement | <code>[placements](#Popper.placements)</code> | <code>&#x27;bottom&#x27;</code> | 
+| placement | [<code>placements</code>](#Popper.placements) | <code>&#x27;bottom&#x27;</code> | 
 
 <a name="Popper.Defaults.eventsEnabled"></a>
 
 #### Defaults.eventsEnabled
 Whether events (resize, scroll) are initially enabled
 
-**Kind**: static property of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Name | Type | Default |
@@ -143,7 +143,7 @@ Whether events (resize, scroll) are initially enabled
 Set to true if you want to automatically remove the popper when
 you call the `destroy` method.
 
-**Kind**: static property of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Name | Type | Default |
@@ -156,12 +156,12 @@ you call the `destroy` method.
 List of modifiers used to modify the offsets before they are applied to the popper.
 They provide most of the functionalities of Popper.js
 
-**Kind**: static property of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[modifiers](#modifiers)</code> | 
+| [<code>modifiers</code>](#modifiers) | 
 
 <a name="Popper.Defaults.onCreate"></a>
 
@@ -170,12 +170,12 @@ Callback called when the popper is created.<br />
 By default, is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
-**Kind**: static method of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static method of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[onCreate](#onCreate)</code> | 
+| [<code>onCreate</code>](#onCreate) | 
 
 <a name="Popper.Defaults.onUpdate"></a>
 
@@ -186,12 +186,12 @@ updates.<br />
 By default, is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
-**Kind**: static method of <code>[Defaults](#Popper.Defaults)</code>  
+**Kind**: static method of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[onUpdate](#onUpdate)</code> | 
+| [<code>onUpdate</code>](#onUpdate) | 
 
 <a name="Popper.placements"></a>
 
@@ -219,7 +219,7 @@ Some valid examples are:
 - `bottom` (on bottom, centered)
 - `auto-right` (on the side with more space available, alignment depends by placement)
 
-**Kind**: static enum of <code>[Popper](#Popper)</code>  
+**Kind**: static enum of [<code>Popper</code>](#Popper)  
 **Read only**: true  
 <a name="Popper.update"></a>
 
@@ -228,20 +228,20 @@ Updates the position of the popper, computing the new offsets and applying
 the new style.<br />
 Prefer `scheduleUpdate` over `update` because of performance reasons.
 
-**Kind**: static method of <code>[Popper](#Popper)</code>  
+**Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.destroy"></a>
 
 ### Popper.destroy()
 Destroy the popper
 
-**Kind**: static method of <code>[Popper](#Popper)</code>  
+**Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.enableEventListeners"></a>
 
 ### Popper.enableEventListeners()
 It will add resize/scroll events and start recalculating
 position of the popper element when they are triggered.
 
-**Kind**: static method of <code>[Popper](#Popper)</code>  
+**Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.disableEventListeners"></a>
 
 ### Popper.disableEventListeners()
@@ -249,13 +249,13 @@ It will remove resize/scroll events and won't recalculate popper position
 when they are triggered. It also won't trigger onUpdate callback anymore,
 unless you call `update` method manually.
 
-**Kind**: static method of <code>[Popper](#Popper)</code>  
+**Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.scheduleUpdate"></a>
 
 ### Popper.scheduleUpdate()
 Schedule an update, it will run on the next UI update available
 
-**Kind**: static method of <code>[Popper](#Popper)</code>  
+**Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="dataObject"></a>
 
 ## dataObject
@@ -356,12 +356,19 @@ All the other properties are configurations that could be tweaked.
         * [.order](#modifiers..hide.order)
         * [.enabled](#modifiers..hide.enabled)
         * [.fn](#modifiers..hide.fn)
+    * [~computeStyle](#modifiers..computeStyle)
+        * [.order](#modifiers..computeStyle.order)
+        * [.enabled](#modifiers..computeStyle.enabled)
+        * [.fn](#modifiers..computeStyle.fn)
+        * [.gpuAcceleration](#modifiers..computeStyle.gpuAcceleration)
+        * [.x](#modifiers..computeStyle.x)
+        * [.y](#modifiers..computeStyle.y)
     * [~applyStyle](#modifiers..applyStyle)
         * [.order](#modifiers..applyStyle.order)
         * [.enabled](#modifiers..applyStyle.enabled)
         * [.fn](#modifiers..applyStyle.fn)
         * [.onLoad](#modifiers..applyStyle.onLoad)
-        * [.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)
+        * ~~[.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)~~
 
 <a name="modifiers..shift"></a>
 
@@ -371,7 +378,7 @@ element.<br />
 It will read the variation of the `placement` property.<br />
 It can be one either `-end` or `-start`.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~shift](#modifiers..shift)
     * [.order](#modifiers..shift.order)
@@ -381,7 +388,7 @@ It can be one either `-end` or `-start`.
 <a name="modifiers..shift.order"></a>
 
 #### shift.order
-**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Kind**: static property of [<code>shift</code>](#modifiers..shift)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -391,7 +398,7 @@ It can be one either `-end` or `-start`.
 <a name="modifiers..shift.enabled"></a>
 
 #### shift.enabled
-**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Kind**: static property of [<code>shift</code>](#modifiers..shift)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -401,12 +408,12 @@ It can be one either `-end` or `-start`.
 <a name="modifiers..shift.fn"></a>
 
 #### shift.fn
-**Kind**: static property of <code>[shift](#modifiers..shift)</code>  
+**Kind**: static property of [<code>shift</code>](#modifiers..shift)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..offset"></a>
 
@@ -442,7 +449,7 @@ Valid examples are:
 '-10px + 5vh, 5px - 6%'
 ```
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~offset](#modifiers..offset)
     * [.order](#modifiers..offset.order)
@@ -453,7 +460,7 @@ Valid examples are:
 <a name="modifiers..offset.order"></a>
 
 #### offset.order
-**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Kind**: static property of [<code>offset</code>](#modifiers..offset)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -463,7 +470,7 @@ Valid examples are:
 <a name="modifiers..offset.enabled"></a>
 
 #### offset.enabled
-**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Kind**: static property of [<code>offset</code>](#modifiers..offset)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -473,17 +480,17 @@ Valid examples are:
 <a name="modifiers..offset.fn"></a>
 
 #### offset.fn
-**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Kind**: static property of [<code>offset</code>](#modifiers..offset)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..offset.offset"></a>
 
 #### offset.offset
-**Kind**: static property of <code>[offset](#modifiers..offset)</code>  
+**Kind**: static property of [<code>offset</code>](#modifiers..offset)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -506,7 +513,7 @@ When `escapeWithReference` is set to`true` and reference is completely
 outside its boundaries, the popper will overflow (or completely leave)
 the boundaries in order to remain attached to the edge of the reference.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~preventOverflow](#modifiers..preventOverflow)
     * [.order](#modifiers..preventOverflow.order)
@@ -519,7 +526,7 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..preventOverflow.order"></a>
 
 #### preventOverflow.order
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -529,7 +536,7 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..preventOverflow.enabled"></a>
 
 #### preventOverflow.enabled
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -539,17 +546,17 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..preventOverflow.fn"></a>
 
 #### preventOverflow.fn
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..preventOverflow.priority"></a>
 
 #### preventOverflow.priority
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -559,7 +566,7 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..preventOverflow.padding"></a>
 
 #### preventOverflow.padding
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -569,7 +576,7 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..preventOverflow.boundariesElement"></a>
 
 #### preventOverflow.boundariesElement
-**Kind**: static property of <code>[preventOverflow](#modifiers..preventOverflow)</code>  
+**Kind**: static property of [<code>preventOverflow</code>](#modifiers..preventOverflow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -585,7 +592,7 @@ enabled and you want to assure it to point to its reference element.
 It cares only about the first axis, you can still have poppers with margin
 between the popper and its reference element.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~keepTogether](#modifiers..keepTogether)
     * [.order](#modifiers..keepTogether.order)
@@ -595,7 +602,7 @@ between the popper and its reference element.
 <a name="modifiers..keepTogether.order"></a>
 
 #### keepTogether.order
-**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Kind**: static property of [<code>keepTogether</code>](#modifiers..keepTogether)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -605,7 +612,7 @@ between the popper and its reference element.
 <a name="modifiers..keepTogether.enabled"></a>
 
 #### keepTogether.enabled
-**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Kind**: static property of [<code>keepTogether</code>](#modifiers..keepTogether)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -615,12 +622,12 @@ between the popper and its reference element.
 <a name="modifiers..keepTogether.fn"></a>
 
 #### keepTogether.fn
-**Kind**: static property of <code>[keepTogether](#modifiers..keepTogether)</code>  
+**Kind**: static property of [<code>keepTogether</code>](#modifiers..keepTogether)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..arrow"></a>
 
@@ -632,7 +639,7 @@ pixels of conjuction are needed.
 
 It has no effect if no `arrowElement` is provided.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~arrow](#modifiers..arrow)
     * [.order](#modifiers..arrow.order)
@@ -643,7 +650,7 @@ It has no effect if no `arrowElement` is provided.
 <a name="modifiers..arrow.order"></a>
 
 #### arrow.order
-**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Kind**: static property of [<code>arrow</code>](#modifiers..arrow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -653,7 +660,7 @@ It has no effect if no `arrowElement` is provided.
 <a name="modifiers..arrow.enabled"></a>
 
 #### arrow.enabled
-**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Kind**: static property of [<code>arrow</code>](#modifiers..arrow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -663,17 +670,17 @@ It has no effect if no `arrowElement` is provided.
 <a name="modifiers..arrow.fn"></a>
 
 #### arrow.fn
-**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Kind**: static property of [<code>arrow</code>](#modifiers..arrow)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..arrow.element"></a>
 
 #### arrow.element
-**Kind**: static property of <code>[arrow](#modifiers..arrow)</code>  
+**Kind**: static property of [<code>arrow</code>](#modifiers..arrow)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -691,7 +698,7 @@ Requires the `preventOverflow` modifier before it in order to work.
 **NOTE:** this modifier will interrupt the current update cycle and will
 restart it if it detects the need to flip the placement.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~flip](#modifiers..flip)
     * [.order](#modifiers..flip.order)
@@ -704,7 +711,7 @@ restart it if it detects the need to flip the placement.
 <a name="modifiers..flip.order"></a>
 
 #### flip.order
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -714,7 +721,7 @@ restart it if it detects the need to flip the placement.
 <a name="modifiers..flip.enabled"></a>
 
 #### flip.enabled
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -724,17 +731,17 @@ restart it if it detects the need to flip the placement.
 <a name="modifiers..flip.fn"></a>
 
 #### flip.fn
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..flip.behavior"></a>
 
 #### flip.behavior
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -744,7 +751,7 @@ restart it if it detects the need to flip the placement.
 <a name="modifiers..flip.padding"></a>
 
 #### flip.padding
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -754,7 +761,7 @@ restart it if it detects the need to flip the placement.
 <a name="modifiers..flip.boundariesElement"></a>
 
 #### flip.boundariesElement
-**Kind**: static property of <code>[flip](#modifiers..flip)</code>  
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -768,7 +775,7 @@ Modifier used to make the popper flow toward the inner of the reference element.
 By default, when this modifier is disabled, the popper will be placed outside
 the reference element.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~inner](#modifiers..inner)
     * [.order](#modifiers..inner.order)
@@ -778,7 +785,7 @@ the reference element.
 <a name="modifiers..inner.order"></a>
 
 #### inner.order
-**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Kind**: static property of [<code>inner</code>](#modifiers..inner)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -788,7 +795,7 @@ the reference element.
 <a name="modifiers..inner.enabled"></a>
 
 #### inner.enabled
-**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Kind**: static property of [<code>inner</code>](#modifiers..inner)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -798,12 +805,12 @@ the reference element.
 <a name="modifiers..inner.fn"></a>
 
 #### inner.fn
-**Kind**: static property of <code>[inner](#modifiers..inner)</code>  
+**Kind**: static property of [<code>inner</code>](#modifiers..inner)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..hide"></a>
 
@@ -815,7 +822,7 @@ out of boundaries.
 
 Requires the `preventOverflow` modifier before it in order to work.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~hide](#modifiers..hide)
     * [.order](#modifiers..hide.order)
@@ -825,7 +832,7 @@ Requires the `preventOverflow` modifier before it in order to work.
 <a name="modifiers..hide.order"></a>
 
 #### hide.order
-**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Kind**: static property of [<code>hide</code>](#modifiers..hide)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -835,7 +842,7 @@ Requires the `preventOverflow` modifier before it in order to work.
 <a name="modifiers..hide.enabled"></a>
 
 #### hide.enabled
-**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Kind**: static property of [<code>hide</code>](#modifiers..hide)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -845,12 +852,96 @@ Requires the `preventOverflow` modifier before it in order to work.
 <a name="modifiers..hide.fn"></a>
 
 #### hide.fn
-**Kind**: static property of <code>[hide](#modifiers..hide)</code>  
+**Kind**: static property of [<code>hide</code>](#modifiers..hide)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
+
+<a name="modifiers..computeStyle"></a>
+
+### modifiers~computeStyle
+Computes the style that will be applied to the popper element to gets
+properly positioned.
+
+Note that this modifier will not touch the DOM, it just prepares the styles
+so that `applyStyle` modifier can apply it. This separation is useful
+in case you need to replace `applyStyle` with a custom implementation.
+
+This modifier has `850` as `order` value to maintain backward compatibility
+with previous versions of Popper.js. Expect the modifiers ordering method
+to change in future major versions of the library.
+
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
+
+* [~computeStyle](#modifiers..computeStyle)
+    * [.order](#modifiers..computeStyle.order)
+    * [.enabled](#modifiers..computeStyle.enabled)
+    * [.fn](#modifiers..computeStyle.fn)
+    * [.gpuAcceleration](#modifiers..computeStyle.gpuAcceleration)
+    * [.x](#modifiers..computeStyle.x)
+    * [.y](#modifiers..computeStyle.y)
+
+<a name="modifiers..computeStyle.order"></a>
+
+#### computeStyle.order
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| order | <code>number</code> | <code>850</code> | Index used to define the order of execution |
+
+<a name="modifiers..computeStyle.enabled"></a>
+
+#### computeStyle.enabled
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| enabled | <code>Boolean</code> | <code>true</code> | Whether the modifier is enabled or not |
+
+<a name="modifiers..computeStyle.fn"></a>
+
+#### computeStyle.fn
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Type |
+| --- |
+| [<code>ModifierFn</code>](#ModifierFn) | 
+
+<a name="modifiers..computeStyle.gpuAcceleration"></a>
+
+#### computeStyle.gpuAcceleration
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+
+<a name="modifiers..computeStyle.x"></a>
+
+#### computeStyle.x
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| x | <code>string</code> | <code>&quot;&#x27;bottom&#x27;&quot;</code> | Where to anchor the X axis (`bottom` or `top`). AKA X offset origin. Change this if your popper should grow in a direction different from `bottom` |
+
+<a name="modifiers..computeStyle.y"></a>
+
+#### computeStyle.y
+**Kind**: static property of [<code>computeStyle</code>](#modifiers..computeStyle)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| x | <code>string</code> | <code>&quot;&#x27;left&#x27;&quot;</code> | Where to anchor the Y axis (`left` or `right`). AKA Y offset origin. Change this if your popper should grow in a direction different from `right` |
 
 <a name="modifiers..applyStyle"></a>
 
@@ -863,19 +954,19 @@ want to delegate all the DOM manipulations to it.
 
 Just disable this modifier and define you own to achieve the desired effect.
 
-**Kind**: inner property of <code>[modifiers](#modifiers)</code>  
+**Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
 * [~applyStyle](#modifiers..applyStyle)
     * [.order](#modifiers..applyStyle.order)
     * [.enabled](#modifiers..applyStyle.enabled)
     * [.fn](#modifiers..applyStyle.fn)
     * [.onLoad](#modifiers..applyStyle.onLoad)
-    * [.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)
+    * ~~[.gpuAcceleration](#modifiers..applyStyle.gpuAcceleration)~~
 
 <a name="modifiers..applyStyle.order"></a>
 
 #### applyStyle.order
-**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Kind**: static property of [<code>applyStyle</code>](#modifiers..applyStyle)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -885,7 +976,7 @@ Just disable this modifier and define you own to achieve the desired effect.
 <a name="modifiers..applyStyle.enabled"></a>
 
 #### applyStyle.enabled
-**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Kind**: static property of [<code>applyStyle</code>](#modifiers..applyStyle)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -895,17 +986,17 @@ Just disable this modifier and define you own to achieve the desired effect.
 <a name="modifiers..applyStyle.fn"></a>
 
 #### applyStyle.fn
-**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Kind**: static property of [<code>applyStyle</code>](#modifiers..applyStyle)  
 **Properties**
 
 | Type |
 | --- |
-| <code>[ModifierFn](#ModifierFn)</code> | 
+| [<code>ModifierFn</code>](#ModifierFn) | 
 
 <a name="modifiers..applyStyle.onLoad"></a>
 
 #### applyStyle.onLoad
-**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+**Kind**: static property of [<code>applyStyle</code>](#modifiers..applyStyle)  
 **Properties**
 
 | Type |
@@ -914,8 +1005,10 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 <a name="modifiers..applyStyle.gpuAcceleration"></a>
 
-#### applyStyle.gpuAcceleration
-**Kind**: static property of <code>[applyStyle](#modifiers..applyStyle)</code>  
+#### ~~applyStyle.gpuAcceleration~~
+***Deprecated***
+
+**Kind**: static property of [<code>applyStyle</code>](#modifiers..applyStyle)  
 **Properties**
 
 | Name | Type | Default | Description |
@@ -924,28 +1017,19 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 <a name="ModifierFn"></a>
 
-## ModifierFn(data, options) ⇒ <code>[dataObject](#dataObject)</code>
+## ModifierFn(data, options) ⇒ [<code>dataObject</code>](#dataObject)
 Modifier function, each modifier can have a function of this type assigned
 to its `fn` property.<br />
 These functions will be called on each update, this means that you must
 make sure they are performant enough to avoid performance bottlenecks.
 
 **Kind**: global function  
-**Returns**: <code>[dataObject](#dataObject)</code> - The data object, properly modified  
+**Returns**: [<code>dataObject</code>](#dataObject) - The data object, properly modified  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>[dataObject](#dataObject)</code> | The data object generated by `update` method |
+| data | [<code>dataObject</code>](#dataObject) | The data object generated by `update` method |
 | options | <code>Object</code> | Modifiers configuration and options |
-
-<a name="onUpdate"></a>
-
-## onUpdate : <code>function</code>
-**Kind**: global typedef  
-
-| Param | Type |
-| --- | --- |
-| data | <code>[dataObject](#dataObject)</code> | 
 
 <a name="onCreate"></a>
 
@@ -954,5 +1038,14 @@ make sure they are performant enough to avoid performance bottlenecks.
 
 | Param | Type |
 | --- | --- |
-| data | <code>[dataObject](#dataObject)</code> | 
+| data | [<code>dataObject</code>](#dataObject) | 
+
+<a name="onUpdate"></a>
+
+## onUpdate : <code>function</code>
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| data | [<code>dataObject</code>](#dataObject) | 
 

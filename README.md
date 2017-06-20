@@ -90,7 +90,7 @@ Tooltip.js as well:
 
 ## Usage
 
-Given an existing popper, ask Popper.js to position it near its button
+Given an existing popper DOM node, ask Popper.js to position it near its button
 
 ```js
 var reference = document.querySelector('.my-button');
