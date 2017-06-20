@@ -1,0 +1,12 @@
+{
+  "name": "test-utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "setup.js",
+  "description": "Test utils for Popper.js tests",
+  "author": "Federico Zivolo <federico.zivolo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "exit 0"
+  }
+}

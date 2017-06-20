@@ -1,0 +1,7 @@
+# Ignore everything
+#==================
+*
+
+# Except the dist files
+#======================
+!dist/**/*
