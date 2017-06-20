@@ -201,15 +201,17 @@ export default class Tooltip {
 
     this._append(tooltipNode, container);
 
-    const popperOptions = Object.assign(options.popperOptions || {}, {
+    const popperOptions = {
+      ...options.popperOptions || {},
       placement: options.placement,
-    });
+    }
 
-    popperOptions.modifiers = Object.assign(popperOptions.modifiers || {}, {
+    popperOptions.modifiers = {
+      ...popperOptions.modifiers || {},
       arrow: {
         element: this.arrowSelector,
       },
-    });
+    }
 
     if (options.boundariesElement) {
       popperOptions.modifiers.preventOverflow = {
