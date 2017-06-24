@@ -104,12 +104,13 @@ module.exports = function(config) {
     },
 
     rollupPreprocessor: {
-      format: 'iife',
+      format: 'umd',
       sourceMap: 'inline',
       globals: {
         chai: 'chai',
+        'popper-utils': 'PopperUtils',
       },
-      external: ['chai'],
+      external: ['chai', 'popper-utils'],
       plugins: [resolve(), babel(babelrc)],
     },
     files: [
