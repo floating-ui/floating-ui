@@ -8,6 +8,7 @@
     * _instance_
         * [.show()](#Tooltip+show)
         * [.hide()](#Tooltip+hide)
+        * [.dispose()](#Tooltip+dispose)
         * [.toggle()](#Tooltip+toggle)
     * _static_
         * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
@@ -34,6 +35,7 @@ Create a new Tooltip.js instance
 | [options.trigger] | <code>String</code> | <code>&#x27;hover focus&#x27;</code> | How tooltip is triggered - click, hover, focus, manual.      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger. |
 | options.boundariesElement | <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
 | options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/popper-documentation.html) |
+| options.popperOptions | <code>Object</code> | <code>{}</code> | Popper options, will be passed directly to popper instance. For more information refer to Popper.js'      [options docs](https://popper.js.org/popper-documentation.html) |
 
 <a name="Tooltip+show"></a>
 
@@ -46,6 +48,12 @@ Tooltips with zero-length titles are never displayed.
 
 ### tooltip.hide()
 Hides an element’s tooltip. This is considered a “manual” triggering of the tooltip.
+
+**Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
+<a name="Tooltip+dispose"></a>
+
+### tooltip.dispose()
+Hides and destroys an element’s tooltip.
 
 **Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
 <a name="Tooltip+toggle"></a>
