@@ -64,5 +64,10 @@ export function applyStyleOnLoad(
   );
 
   popper.setAttribute('x-placement', placement);
+
+  // Apply `position` to popper before anything else because
+  // without the position applied we can't guarantee correct computations
+  setStyles(popper, { position: 'absolute' });
+
   return options;
 }

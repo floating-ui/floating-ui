@@ -1,6 +1,5 @@
 // Utils
 import debounce from './utils/debounce';
-import setStyles from './utils/setStyles';
 import isFunction from './utils/isFunction';
 
 // Methods
@@ -37,9 +36,6 @@ export default class Popper {
     // get reference and popper elements (allow jQuery wrappers)
     this.reference = reference.jquery ? reference[0] : reference;
     this.popper = popper.jquery ? popper[0] : popper;
-
-    // make sure to apply the popper position before any computation
-    setStyles(this.popper, { position: 'absolute' });
 
     // Deep merge modifiers options
     this.options.modifiers = {};
