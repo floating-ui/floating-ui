@@ -1,4 +1,5 @@
 // Utils
+import * as PopperUtils from 'popper-utils';
 import debounce from './utils/debounce';
 import isFunction from './utils/isFunction';
 
@@ -126,7 +127,7 @@ export default class Popper {
    * @member Utils
    * @memberof Popper
    */
-  static Utils = (typeof window !== 'undefined' ? window : global).PopperUtils;
+  static Utils = PopperUtils;
 
   static placements = placements;
 

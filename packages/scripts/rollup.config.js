@@ -44,4 +44,7 @@ export default {
   sourceMap: true,
   sourceMapFile,
   plugins: [babel(babelConfig)],
+  external: [
+    'popper-utils',
+  ],
 };
