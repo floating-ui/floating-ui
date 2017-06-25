@@ -36,12 +36,12 @@ export default function computeStyle(data, options) {
     position: popper.position,
   };
 
-  // round sides to avoid blurry text
+  // floor sides to avoid blurry text
   const offsets = {
-    left: Math.round(popper.left),
-    top: Math.round(popper.top),
-    bottom: Math.round(popper.bottom),
-    right: Math.round(popper.right),
+    left: Math.floor(popper.left),
+    top: Math.floor(popper.top),
+    bottom: Math.floor(popper.bottom),
+    right: Math.floor(popper.right),
   };
 
   const sideA = x === 'bottom' ? 'top' : 'bottom';
