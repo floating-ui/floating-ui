@@ -9,9 +9,11 @@ const FORMAT = process.env.FORMAT || 'es';
 const babelConfig = ES5
   ? {
       presets: [['es2015', { modules: false }], 'stage-2'],
+      plugins: ['babel-plugin-external-helpers']
     }
   : {
       presets: ['stage-2'],
+      plugins: ['babel-plugin-external-helpers']
     };
 
 let entry, dest, moduleName, sourceMapFile;
