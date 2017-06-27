@@ -1,9 +1,9 @@
 import Popper from '../../src/index.js';
-import 'test-utils/setup';
+import '@popperjs/test-utils/setup';
 
 // Utils
-import appendNewPopper from 'test-utils/utils/appendNewPopper';
-import appendNewRef from 'test-utils/utils/appendNewRef';
+import appendNewPopper from '@popperjs/test-utils/utils/appendNewPopper';
+import appendNewRef from '@popperjs/test-utils/utils/appendNewRef';
 
 describe('[offset]', () => {
   it('creates a popper with single implicit px offset', done => {

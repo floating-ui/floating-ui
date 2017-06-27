@@ -5,11 +5,11 @@
   "main": "./dist/umd/tooltip.js",
   "module": "./dist/esm/tooltip.js",
   "scripts": {
-    "build": "popper-bundle --build=tooltip",
+    "build": "node bundle.js",
     "prepublish": "npm run build",
     "pretest": "npm run lint",
     "test": "popper-karma",
-    "lint": "popper-lint .",
+    "lint": "eslint .",
     "coverage": "NODE_ENV=coverage npm run test"
   },
   "repository": {
@@ -20,8 +20,10 @@
     "popper.js": "^1.0.2"
   },
   "devDependencies": {
-    "scripts": "^1.0.0",
-    "test-utils": "^1.0.0",
-    "eslint-config-popper": "^1.0.0"
+    "@popperjs/bundle": "^1.0.0",
+    "@popperjs/eslint-config-popper": "^1.0.0",
+    "@popperjs/test": "^1.0.0",
+    "@popperjs/test-utils": "^1.0.0",
+    "eslint-plugin-jasmine": "^2.6.2"
   }
 }

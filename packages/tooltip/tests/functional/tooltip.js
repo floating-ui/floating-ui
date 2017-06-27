@@ -1,7 +1,7 @@
 import Tooltip from '../../src/index.js';
-import 'test-utils';
-import then from 'test-utils/utils/then.js';
-import 'test-utils/utils/customEventPolyfill.js';
+import '@popperjs/test-utils';
+import then from '@popperjs/test-utils/utils/then.js';
+import '@popperjs/test-utils/utils/customEventPolyfill.js';
 
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 

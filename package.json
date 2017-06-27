@@ -1,5 +1,7 @@
 {
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint-plugin-jasmine": "^2.6.2",
     "jsdoc-to-markdown": "^3.0.0",
     "lerna": "^2.0.0-rc.5",
     "lint-staged": "^4.0.0",
@@ -12,14 +14,14 @@
     "precommit": "lint-staged && opt --in pre-commit --exec \"npm start validate\"",
     "postinstall": "lerna bootstrap",
     "bootstrap": "lerna bootstrap",
-    "test": "lerna run  --stream test",
+    "test": "lerna run --parallel test",
     "build": "lerna run build",
     "docs": "npm run build && for dest in popper tooltip; do jsdoc2md ./packages/$dest/dist/$dest.js > ./docs/_includes/$dest-documentation.md; done",
     "docs:serve": "cd docs; { wait-on http://localhost:4000; open http://localhost:4000; } & jekyll serve"
   },
   "lint-staged": {
     "*.js": [
-      "prettier-eslint --write \"{src,scripts,tests}/**/*.js\"",
+      "prettier-eslint --write \"**/src/**/*.js\"",
       "git add"
     ]
   }

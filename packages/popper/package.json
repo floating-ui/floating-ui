@@ -27,21 +27,21 @@
   "main": "dist/umd/popper.js",
   "module": "dist/esm/popper.js",
   "scripts": {
-    "prepublish": "in-publish && npm run build || exit 0 ",
-    "postpublish": "node ./scripts/nugetPublish.js",
+    "prepare": "npm run build",
+    "postpublish": "nuget-publish",
     "prebuild": "npm run lint",
     "pretest": "npm run lint",
-    "build": "npm run build:popper && npm run build:popper-utils",
-    "build:popper": "popper-bundle --build=popper",
-    "build:popper-utils": "popper-bundle --build=popper-utils",
-    "lint": "popper-lint .",
+    "build": "node bundle.js",
+    "lint": "eslint .",
     "test": "popper-karma",
     "test:dev": "NODE_ENV=development npm run test",
     "coverage": "NODE_ENV=coverage npm run test"
   },
   "devDependencies": {
-    "scripts": "^1.0.0",
-    "test-utils": "^1.0.0",
-    "eslint-config-popper": "^1.0.0"
+    "@popperjs/bundle": "^1.0.0",
+    "@popperjs/nuget-publish": "^1.0.0",
+    "@popperjs/eslint-config-popper": "^1.0.0",
+    "@popperjs/test": "^1.0.0",
+    "@popperjs/test-utils": "^1.0.0"
   }
 }

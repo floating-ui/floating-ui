@@ -10,6 +10,7 @@ node_modules
 dist
 .idea/
 *.log
+package-lock.json
 
 # When you switch branches, things can get messy
 _site

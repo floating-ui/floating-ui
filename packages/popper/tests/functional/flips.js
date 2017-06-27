@@ -2,9 +2,9 @@ import Popper from '../../src/index.js';
 import getOppositePlacement from '../../src/utils/getOppositePlacement';
 
 // Utils
-import appendNewPopper from 'test-utils/utils/appendNewPopper';
-import appendNewRef from 'test-utils/utils/appendNewRef';
-import simulateScroll from 'test-utils/utils/simulateScroll';
+import appendNewPopper from '@popperjs/test-utils/utils/appendNewPopper';
+import appendNewRef from '@popperjs/test-utils/utils/appendNewRef';
+import simulateScroll from '@popperjs/test-utils/utils/simulateScroll';
 import getRect from '../utils/getRect';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
