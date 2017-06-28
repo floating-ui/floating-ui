@@ -3,7 +3,7 @@ const path = require('path');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 
-const browsers = (argv.browsers || process.env.BROWSERS || 'Chrome').split(',');
+const browsers = (argv.browsers || process.env.BROWSERS || 'ChromeHeadless').split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
 const coverage = process.env.COVERAGE === true;
 const basePath = process.cwd();
@@ -47,6 +47,17 @@ module.exports = function(config) {
       terminal: true,
     },
     customLaunchers: {
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: [
+          '--no-sandbox',
+          // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+          '--headless',
+          '--disable-gpu',
+          // Without a remote debugging port, Google Chrome exits immediately.
+          ' --remote-debugging-port=9222',
+        ],
+      },
       ChromeDebug: {
         base: 'Chrome',
         chromeDataDir: path.resolve(__dirname, '.chrome'),

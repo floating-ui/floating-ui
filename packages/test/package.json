@@ -1,12 +1,9 @@
 {
-  "name": "scripts",
-  "version": "1.0.0",
-  "private": true,
-  "description": "This package is a list of scripts used by Popper.js and Tooltip.js to compile their sources and publish them on npm, NuGet and so on.",
+  "name": "@popperjs/test",
+  "version": "1.0.1",
+  "description": "This package is a list of scripts used by Popper.js and Tooltip.js to test them.",
   "bin": {
-    "popper-bundle": "./bin/bundle.sh",
-    "popper-karma": "./bin/karma.sh",
-    "popper-lint": "./bin/lint.sh"
+    "popper-karma": "./bin/karma.js"
   },
   "scripts": {
     "test": "exit 0"
@@ -26,7 +23,7 @@
     "chai": "^4.0.1",
     "colors": "^1.1.2",
     "eslint": "^4.0.0",
-    "eslint-plugin-jasmine": "^2.2.0",
+    "eslint-plugin-jasmine": "^2.6.2",
     "gitignore-to-glob": "^0.3.0",
     "glob-fs": "^0.1.6",
     "gzipped": "^0.0.5",

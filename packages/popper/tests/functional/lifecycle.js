@@ -1,9 +1,9 @@
 import Popper from '../../src/index.js';
 import makePopperFactory from '../utils/makePopperFactory';
-import makeConnectedElement from 'test-utils/utils/makeConnectedElement';
-import makeConnectedScrollElement from 'test-utils/utils/makeConnectedScrollElement';
-import makeElement from 'test-utils/utils/makeElement';
-import 'test-utils/setup';
+import makeConnectedElement from '@popperjs/test-utils/utils/makeConnectedElement';
+import makeConnectedScrollElement from '@popperjs/test-utils/utils/makeConnectedScrollElement';
+import makeElement from '@popperjs/test-utils/utils/makeElement';
+import '@popperjs/test-utils/setup';
 
 describe('[lifecycle]', () => {
   const makePopper = makePopperFactory();

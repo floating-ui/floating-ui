@@ -1,13 +1,8 @@
-const fs = require('fs');
+const bundle = require('@popperjs/bundle');
 
-const version = JSON.parse(fs.readFileSync('./src/tooltip/package.json'))
-  .version;
-
-module.exports = function() {
-  return `\
-/**!
- * @fileOverview Kickass library to create tooltips in your applications.
- * @version ${version}
+const banner = `/**!
+ * @fileOverview Kickass library to create and place poppers near their reference elements.
+ * @version ${require('./package.json').version}
  * @license
  * Copyright (c) 2016 Federico Zivolo and contributors
  *
@@ -28,6 +23,25 @@ module.exports = function() {
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- */\
-    `;
-};
+ */`;
+
+const miniBanner = `/*
+ Copyright (C) Federico Zivolo ${new Date().getFullYear()}
+ Distributed under the MIT License (license terms are at http://opensource.org/licenses/MIT).
+ */`
+
+bundle({
+  moduleName: 'Popper',
+  entry: 'src/index.js',
+  dest: 'popper.js',
+  banner,
+  miniBanner,
+});
+
+bundle({
+  moduleName: 'PopperUtils',
+  entry: 'src/utils/index.js',
+  dest: 'popper-utils.js',
+  banner,
+  miniBanner,
+});

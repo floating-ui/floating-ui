@@ -1,23 +1,24 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 const path = require('path');
 const xml = require('xml');
 const ignoreToGlob = require('gitignore-to-glob');
-const glob = require('glob-fs')();
+const glob = require('glob-fs')({ gitignore: false });
 const nuget = require('nuget-in-path');
-const pkg = require('../package.json');
+const pkg = require(path.resolve(process.cwd(), 'package.json'));
 
-const nuspecPath = path.resolve(__dirname, '../package.nuspec');
+const nuspecPath = path.resolve(process.cwd(), 'package.nuspec');
 
 // Convert npmignore to list of glob patterns
-const npmignore = ['!**/node_modules/**', '!**/package.nuspec'].concat(
-  ignoreToGlob(path.resolve(__dirname, '../.npmignore'))
-);
+const npmignore = ['!**/node_modules/**', '!**/package.nuspec']
+  .concat(ignoreToGlob(path.resolve(process.cwd(), '.npmignore')))
+  .filter(pattern => !(pattern.indexOf('/*/**') === pattern.length - 5));
 
 // Use these patterns to match all the files that should get included
 // and generate a list of XML `file`
 const files = glob
   .readdirSync(`(${npmignore.join('|')})`)
-  .map(file => file.split('/').slice(1).join('/'))
   .map(
     file =>
       fs.statSync(file).isFile() && {
@@ -29,8 +30,6 @@ const files = glob
       }
   )
   .filter(f => f);
-
-console.log();
 
 // Generate nuspec file
 const nuspec = xml(
@@ -65,6 +64,7 @@ nuget.pack(nuspecPath, (err, nupkg) => {
     return console.error(err);
   }
   nuget.push(nupkg, err => {
+    fs.unlinkSync(nuspecPath);
     if (err) {
       return console.error(err);
     }

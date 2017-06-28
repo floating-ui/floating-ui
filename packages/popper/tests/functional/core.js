@@ -1,14 +1,14 @@
 import Popper from '../../src/index.js';
 
-import 'test-utils';
+import '@popperjs/test-utils';
 const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 // Utils
-import appendNewPopper from 'test-utils/utils/appendNewPopper';
-import appendNewRef from 'test-utils/utils/appendNewRef';
-import simulateScroll from 'test-utils/utils/simulateScroll';
-import prepend from 'test-utils/utils/prepend';
-import isMSBrowser from 'test-utils/utils/isMSBrowser';
+import appendNewPopper from '@popperjs/test-utils/utils/appendNewPopper';
+import appendNewRef from '@popperjs/test-utils/utils/appendNewRef';
+import simulateScroll from '@popperjs/test-utils/utils/simulateScroll';
+import prepend from '@popperjs/test-utils/utils/prepend';
+import isMSBrowser from '@popperjs/test-utils/utils/isMSBrowser';
 import getRect from '../utils/getRect';
 
 const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;

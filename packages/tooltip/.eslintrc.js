@@ -1,3 +1,3 @@
 module.exports = {
-  extends: require.resolve('eslint-config-popper'),
+  extends: require.resolve('@popperjs/eslint-config-popper'),
 };
