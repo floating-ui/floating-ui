@@ -1,7 +1,7 @@
 language: node_js
 node_js: 8.1.1
 script:
-  - COVERAGE=true travis_retry npm run test -- -- -- --browsers=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11,SLiOS9
+  - COVERAGE=true travis_retry npm run test -- -- -- --browsers=SLChrome,SLInternetExplorer9
   - travis_retry npm run test -- -- -- --browsers=SLEdge,SLSafari
 after_success:
   - npm install -g codeclimate-test-reporter lcov-result-merger
