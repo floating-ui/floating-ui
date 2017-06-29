@@ -81,11 +81,11 @@ module.exports = function(config) {
         browserName: 'safari',
         platform: 'macOS 10.12',
       },
-      SLInternetExplorer10: {
+      SLInternetExplorer9: {
         base: 'SauceLabs',
         browserName: 'internet explorer',
-        version: '10',
-        platform: 'Windows 8',
+        version: '9',
+        platform: 'Windows 7',
       },
       SLInternetExplorer11: {
         base: 'SauceLabs',
