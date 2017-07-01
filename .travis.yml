@@ -1,8 +1,8 @@
 language: node_js
 node_js: 8.1.1
 script:
-  - COVERAGE=true travis_retry npm run test -- -- -- --browsers=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11,SLiOS9
-  - travis_retry npm run test -- -- -- --browsers=SLEdge,SLSafari
+  - COVERAGE=true BROWSERS=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11,SLiOS9 travis_retry npm run test
+  - BROWSERS=SLEdge,SLSafari travis_retry npm run test
 after_success:
   - npm install -g codeclimate-test-reporter lcov-result-merger
   - lcov-result-merger "packages/**/.tmp/coverage/report-lcov/lcov.info" > coverage.info
