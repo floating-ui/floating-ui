@@ -24,9 +24,10 @@ export default function computeStyle(data, options) {
       'WARNING: `gpuAcceleration` option moved to `computeStyle` modifier and will not be supported in future versions of Popper.js!'
     );
   }
-  const gpuAcceleration = legacyGpuAccelerationOption !== undefined
-    ? legacyGpuAccelerationOption
-    : options.gpuAcceleration;
+  const gpuAcceleration =
+    legacyGpuAccelerationOption !== undefined
+      ? legacyGpuAccelerationOption
+      : options.gpuAcceleration;
 
   const offsetParent = getOffsetParent(data.instance.popper);
   const offsetParentRect = getBoundingClientRect(offsetParent);
@@ -92,7 +93,7 @@ export default function computeStyle(data, options) {
   };
 
   // Update attributes and styles of `data`
-  data.attributes = attributes;
+  data.attributes = { ...attributes, ...data.attributes };
   data.styles = { ...styles, ...data.styles };
 
   return data;
