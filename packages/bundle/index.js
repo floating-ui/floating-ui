@@ -50,7 +50,6 @@ function bundle({ entry, dest, moduleName, banner, miniBanner }) {
       globals,
       moduleName,
       banner,
-      exports: 'named',
     });
     bundle.write({
       format: 'es',
@@ -72,7 +71,6 @@ function bundle({ entry, dest, moduleName, banner, miniBanner }) {
       sourceMap,
       globals,
       moduleName,
-      exports: 'named',
     });
     bundle.write({
       format: 'es',
