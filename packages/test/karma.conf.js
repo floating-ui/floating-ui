@@ -9,6 +9,7 @@ const coverage = process.env.COVERAGE === true;
 const basePath = process.cwd();
 
 const babelrc = {
+  babelrc: false,
   presets: [
     [require.resolve('babel-preset-es2015'), { modules: false }],
     require.resolve('babel-preset-stage-2'),
