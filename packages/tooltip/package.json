@@ -24,6 +24,7 @@
     "@popperjs/eslint-config-popper": "^1.0.0",
     "@popperjs/test": "^1.0.0",
     "@popperjs/test-utils": "^1.0.0",
+    "eslint": "^4.1.1",
     "eslint-plugin-jasmine": "^2.6.2"
   }
 }

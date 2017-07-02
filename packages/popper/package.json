@@ -39,9 +39,10 @@
   },
   "devDependencies": {
     "@popperjs/bundle": "^1.0.0",
-    "@popperjs/nuget-publish": "^1.0.0",
     "@popperjs/eslint-config-popper": "^1.0.0",
+    "@popperjs/nuget-publish": "^1.0.0",
     "@popperjs/test": "^1.0.0",
-    "@popperjs/test-utils": "^1.0.0"
+    "@popperjs/test-utils": "^1.0.0",
+    "eslint": "^4.1.1"
   }
 }
