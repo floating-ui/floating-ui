@@ -7,7 +7,7 @@ Please, make sure to fulfill the following conditions before submitting your Pul
 
 2. Add any relevant tests to cover the code you have changed and/or added.
 
-3. If you change the public API, update the Typescript definitions accordingly:
+3. If you change the public API, try to update the Typescript definitions accordingly:
   https://github.com/FezVrasta/popper.js/blob/master/packages/popper/index.d.ts
-  (mention @giladgray for help if needed)
+  This is not required but will help a lot. Mention @giladgray for help as needed.
 -->
