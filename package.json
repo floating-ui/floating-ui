@@ -1,15 +1,17 @@
 {
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "bundlesize": "^0.5.8",
-    "eslint-plugin-jasmine": "^2.6.2",
+    "bundlesize": "^0.6.1",
+    "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
-    "lerna": "^2.0.0-rc.5",
-    "lint-staged": "^4.0.0",
+    "lerna": "^2.0.0",
+    "lint-staged": "^4.0.1",
     "opt-cli": "^1.5.1",
     "pre-commit": "^1.2.2",
     "prettier-eslint-cli": "^4.1.1",
-    "wait-on": "^2.0.2"
+    "wait-on": "^2.0.2",
+    "async": "^2.5.0",
+    "wide-align": "^1.1.2"
   },
   "scripts": {
     "precommit": "lint-staged",
