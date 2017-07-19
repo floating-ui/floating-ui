@@ -26,6 +26,7 @@
   ],
   "main": "dist/umd/popper.js",
   "module": "dist/esm/popper.js",
+  "types": "index.d.ts",
   "scripts": {
     "prepare": "npm run build",
     "postpublish": "nuget-publish",
