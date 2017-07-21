@@ -182,7 +182,7 @@ export default class Tooltip {
     }
 
     // get title
-    const title = reference.getAttribute('title') || options.title;
+    const title = options.title || reference.getAttribute('title');
 
     // don't show tooltip if no title is defined
     if (!title) {
