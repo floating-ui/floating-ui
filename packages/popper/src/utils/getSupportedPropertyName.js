@@ -3,10 +3,10 @@
  * @method
  * @memberof Popper.Utils
  * @argument {String} property (camelCase)
- * @returns {String} prefixed property (camelCase)
+ * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
  */
 export default function getSupportedPropertyName(property) {
-  const prefixes = [false, 'ms', 'webkit', 'moz', 'o'];
+  const prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
   const upperProp = property.charAt(0).toUpperCase() + property.slice(1);
 
   for (let i = 0; i < prefixes.length - 1; i++) {
