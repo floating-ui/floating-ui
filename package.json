@@ -1,7 +1,11 @@
 {
+  "name": "popperjs-monorepo",
+  "version": "0.0.0",
+  "license": "MIT",
   "devDependencies": {
+    "async": "^2.5.0",
     "babel-eslint": "^7.2.3",
-    "bundlesize": "^0.6.1",
+    "bundlesize": "^0.12.1",
     "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
     "lerna": "^2.0.0",
@@ -10,16 +14,17 @@
     "pre-commit": "^1.2.2",
     "prettier-eslint-cli": "^4.1.1",
     "wait-on": "^2.0.2",
-    "async": "^2.5.0",
     "wide-align": "^1.1.2"
   },
   "scripts": {
     "precommit": "lint-staged",
     "postinstall": "lerna bootstrap",
     "bootstrap": "lerna bootstrap",
-    "test": "lerna run --parallel test && npm run build && bundlesize",
+    "pretest": "$BUNDLESIZE && bundlesize-init",
+    "test": "lerna run --parallel test && yarn build",
+    "posttest": "$BUNDLESIZE && bundlesize",
     "build": "lerna run build",
-    "docs": "npm run build && for dest in popper tooltip; do jsdoc2md ./packages/$dest/dist/$dest.js > ./docs/_includes/$dest-documentation.md; done",
+    "docs": "yarn build && for dest in popper tooltip; do jsdoc2md ./packages/$dest/dist/$dest.js > ./docs/_includes/$dest-documentation.md; done",
     "docs:serve": "cd docs; { wait-on http://localhost:4000; open http://localhost:4000; } & jekyll serve"
   },
   "lint-staged": {
