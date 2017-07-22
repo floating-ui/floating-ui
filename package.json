@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "babel-eslint": "^7.2.3",
-    "bundlesize": "^0.6.1",
+    "bundlesize": "^0.12.0",
     "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
     "lerna": "^2.0.0",
