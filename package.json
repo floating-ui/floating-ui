@@ -22,7 +22,7 @@
     "bootstrap": "lerna bootstrap",
     "pretest": "$BUNDLESIZE && bundlesize-init",
     "test": "lerna run --parallel test && yarn build",
-    "posttest": "$BUNDLESIZE && bundlesize",
+    "posttest": "$BUNDLESIZE && bundlesize --debug",
     "build": "lerna run build",
     "docs": "yarn build && for dest in popper tooltip; do jsdoc2md ./packages/$dest/dist/$dest.js > ./docs/_includes/$dest-documentation.md; done",
     "docs:serve": "cd docs; { wait-on http://localhost:4000; open http://localhost:4000; } & jekyll serve"
