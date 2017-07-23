@@ -35,7 +35,7 @@
     "build": "node bundle.js",
     "lint": "eslint .",
     "test": "popper-karma",
-    "test:dev": "NODE_ENV=development npm run test",
+    "test:dev": "BROWSERS=Chrome NODE_ENV=development npm run test",
     "coverage": "NODE_ENV=coverage npm run test"
   },
   "devDependencies": {

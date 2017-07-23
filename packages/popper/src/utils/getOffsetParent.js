@@ -1,3 +1,4 @@
+import getStyleComputedProperty from './getStyleComputedProperty';
 /**
  * Returns the offset parent of the given element
  * @method
@@ -12,6 +13,15 @@ export default function getOffsetParent(element) {
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
     return window.document.documentElement;
+  }
+
+  // .offsetParent will return the closest TD or TABLE in case
+  // no offsetParent is present, I hate this job...
+  if (
+    ['TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 &&
+    getStyleComputedProperty(offsetParent, 'position') === 'static'
+  ) {
+    return getOffsetParent(offsetParent);
   }
 
   return offsetParent;
