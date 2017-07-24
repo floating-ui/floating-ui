@@ -1256,27 +1256,24 @@ describe('[core]', () => {
     });
   });
 
-  it(
-    'inits a popper near the reference element when it is a child of ref and the ref is relatively positioned',
-    done => {
-      const ref = appendNewRef(1, 'ref');
-      ref.style.position = 'relative';
-      ref.style.left = '300px';
-      ref.style.top = '20px';
-      ref.style.background = 'green';
+  it('inits a popper near the reference element when it is a child of ref and the ref is relatively positioned', done => {
+    const ref = appendNewRef(1, 'ref');
+    ref.style.position = 'relative';
+    ref.style.left = '300px';
+    ref.style.top = '20px';
+    ref.style.background = 'green';
 
-      const popper = appendNewPopper(2, 'popper', ref);
+    const popper = appendNewPopper(2, 'popper', ref);
 
-      new Popper(ref, popper, {
-        placement: 'bottom-end',
-        onCreate: data => {
-          expect(getRect(popper).right).toBeApprox(getRect(ref).right);
-          data.instance.destroy();
-          done();
-        },
-      });
-    }
-  );
+    new Popper(ref, popper, {
+      placement: 'bottom-end',
+      onCreate: data => {
+        expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+        data.instance.destroy();
+        done();
+      },
+    });
+  });
 
   it('checks that all the scrollable parents have an event listener attached', done => {
     jasmineWrapper.innerHTML = `
@@ -1422,7 +1419,6 @@ describe('[core]', () => {
     });
   });
 
-
   // test for #305
   it('correct position if offset parent has borders', done => {
     jasmineWrapper.innerHTML = `
@@ -1498,4 +1494,59 @@ describe('[core]', () => {
       },
     });
   });
+
+  // test for #302
+  xit(
+    'correct position on height:100% scrolled body with fixed popper parent',
+    done => {
+      jasmineWrapper.innerHTML = `
+      <style>
+        html, body {
+          height: 100%;
+        }
+        .padder {
+          height: 120vh;
+          width: 10px;
+          background-color: yellow;
+        }
+        .wrapper {
+          position: fixed;
+          bottom: 10px;
+          left: 0px;
+          right: 0px;
+        }
+        #reference {
+          background: orange;
+          width: 50px;
+          height: 50px;
+        }
+        #popper {
+          background: green;
+          width: 50px;
+          height: 50px;
+        }
+      </style>
+      <div class="padder"></div>
+      <div class="wrapper">
+        <div id="reference">ref</div>
+        <div id="popper">pop</div>
+      </div>
+    `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'top',
+        onCreate() {
+          simulateScroll(document.body, { scrollTop: 400 });
+        },
+        onUpdate(data) {
+          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+          data.instance.destroy();
+          done();
+        },
+      });
+    }
+  );
 });
