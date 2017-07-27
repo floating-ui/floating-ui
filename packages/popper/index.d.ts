@@ -1,11 +1,11 @@
 // Type definitions for popper.js 1.10
 // Project: https://github.com/FezVrasta/popper.js/
-// Definitions by: ggray <https://github.com/giladgray>, rhysd <https://rhysd.github.io>, joscha <https://github.com/joscha>, seckardt <https://github.com/seckardt>, marcfallows <https://github.com/marcfallows>
+// Definitions by: edcarroll <https://github.com/edcarroll>, ggray <https://github.com/giladgray>, rhysd <https://rhysd.github.io>, joscha <https://github.com/joscha>, seckardt <https://github.com/seckardt>, marcfallows <https://github.com/marcfallows>
 
 // This file only declares the public portions of the API.
 // It should not define internal pieces such as utils or modifier details.
 
-declare module 'popper.js' {
+declare namespace Popper {
   export type Position = 'top' | 'right' | 'bottom' | 'left';
 
   export type Placement = 'auto-start'
@@ -26,7 +26,7 @@ declare module 'popper.js' {
 
   export type Boundary = 'scrollParent' | 'viewport' | 'window';
 
-  export type ModifierFn = (data: PopperData, options: Object) => PopperData;
+  export type ModifierFn = (data: Data, options: Object) => Data;
 
   export interface BaseModifier {
     order?: number;
@@ -43,6 +43,7 @@ declare module 'popper.js' {
       priority?: Position[],
       padding?: number,
       boundariesElement?: Boundary | Element,
+      escapeWithReference?: boolean
     };
     keepTogether?: BaseModifier;
     arrow?: BaseModifier & {
@@ -59,7 +60,12 @@ declare module 'popper.js' {
       onLoad?: Function,
       gpuAcceleration?: boolean,
     };
-    [name: string]: BaseModifier & Record<string, any>;
+    computeStyle?: BaseModifier & {
+        gpuAcceleration?: boolean;
+        x?: 'bottom' | 'top',
+        y?: 'left' | 'right'
+    };
+    [name: string]: (BaseModifier & Record<string, any>) | undefined;
   }
 
   export interface Offset {
@@ -69,7 +75,7 @@ declare module 'popper.js' {
     height: number;
   }
 
-  export interface PopperData {
+  export interface Data {
     instance: Popper;
     placement: Placement;
     originalPlacement: Placement;
@@ -93,8 +99,8 @@ declare module 'popper.js' {
     eventsEnabled?: boolean;
     modifiers?: Modifiers;
     removeOnDestroy?: boolean;
-    onCreate?(data: PopperData): void;
-    onUpdate?(data: PopperData): void;
+    onCreate?(data: Data): void;
+    onUpdate?(data: Data): void;
   }
 
   export interface ReferenceObject {
@@ -102,18 +108,24 @@ declare module 'popper.js' {
     clientWidth: number;
     getBoundingClientRect(): ClientRect;
   }
+}
 
-  export default class Popper {
-    static modifiers: (BaseModifier & { name: string })[];
-    static placements: Placement[];
-    static Defaults: PopperOptions;
+declare class Popper {
+  static modifiers: (Popper.BaseModifier & { name: string })[];
+  static placements: Popper.Placement[];
+  static Defaults: Popper.PopperOptions;
 
-    constructor(reference: Element | ReferenceObject, popper: Element, options?: PopperOptions);
+  options: Popper.PopperOptions;
 
-    destroy(): void;
-    update(): void;
-    scheduleUpdate(): void;
-    enableEventListeners(): void;
-    disableEventListeners(): void;
-  }
+  constructor(reference: Element | Popper.ReferenceObject, popper: Element, options?: Popper.PopperOptions);
+
+  destroy(): void;
+  update(): void;
+  scheduleUpdate(): void;
+  enableEventListeners(): void;
+  disableEventListeners(): void;
+}
+
+declare module 'popper.js' {
+  export default Popper;
 }
