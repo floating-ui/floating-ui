@@ -1,6 +1,7 @@
 import getClientRect from '../utils/getClientRect';
 import getOuterSizes from '../utils/getOuterSizes';
 import isModifierRequired from '../utils/isModifierRequired';
+import getStyleComputedProperty from '../utils/getStyleComputedProperty';
 
 /**
  * @function
@@ -41,13 +42,15 @@ export default function arrow(data, options) {
   const isVertical = ['left', 'right'].indexOf(placement) !== -1;
 
   const len = isVertical ? 'height' : 'width';
-  const side = isVertical ? 'top' : 'left';
+  const sideCapitalized = isVertical ? 'Top' : 'Left';
+  const side = sideCapitalized.toLowerCase();
   const altSide = isVertical ? 'left' : 'top';
   const opSide = isVertical ? 'bottom' : 'right';
   const arrowElementSize = getOuterSizes(arrowElement)[len];
 
   //
-  // extends keepTogether behavior making sure the popper and its reference have enough pixels in conjuction
+  // extends keepTogether behavior making sure the popper and its
+  // reference have enough pixels in conjuction
   //
 
   // top/left side
@@ -65,7 +68,13 @@ export default function arrow(data, options) {
   const center = reference[side] + reference[len] / 2 - arrowElementSize / 2;
 
   // Compute the sideValue using the updated popper offsets
-  let sideValue = center - getClientRect(data.offsets.popper)[side];
+  // take popper margin in account because we don't have this info available
+  const popperMarginSide = getStyleComputedProperty(
+    data.instance.popper,
+    `margin${sideCapitalized}`
+  ).replace('px', '');
+  let sideValue =
+    center - getClientRect(data.offsets.popper)[side] - popperMarginSide;
 
   // prevent arrowElement from being placed not contiguously to its popper
   sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
