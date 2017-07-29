@@ -35,6 +35,7 @@
     "karma-coverage": "^1.1.1",
     "karma-firefox-launcher": "^1.0.1",
     "karma-jasmine": "^1.1.0",
+    "karma-mocha-reporter": "^2.2.3",
     "karma-rollup-preprocessor": "^4.0.0",
     "karma-safari-launcher": "^1.0.0",
     "karma-sauce-launcher": "^1.1.0",
