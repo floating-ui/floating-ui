@@ -143,7 +143,7 @@ module.exports = function(config) {
         { type: 'lcov', subdir: 'report-lcov' },
       ],
     },
-    reporters: ['dots', 'saucelabs', 'coverage'],
+    reporters: ['mocha', 'saucelabs', 'coverage'],
   };
 
   config.set(configuration);
