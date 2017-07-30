@@ -92,9 +92,10 @@ export default function computeStyle(data, options) {
     'x-placement': data.placement,
   };
 
-  // Update attributes and styles of `data`
+  // Update `data` attributes, styles and arrowStyles
   data.attributes = { ...attributes, ...data.attributes };
   data.styles = { ...styles, ...data.styles };
+  data.arrowStyles = { ...data.offsets.arrow, ...data.arrowStyles };
 
   return data;
 }

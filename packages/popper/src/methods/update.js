@@ -19,6 +19,7 @@ export default function update() {
   let data = {
     instance: this,
     styles: {},
+    arrowStyles: {},
     attributes: {},
     flipped: false,
     offsets: {},
