@@ -5,9 +5,9 @@
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@popperjs/babel-config": "^1.0.0",
     "rollup": "^0.43.0",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-babili": "^3.1.0",
-    "@popperjs/babel-config": "^1.0.0"
+    "rollup-plugin-babili": "^3.1.0"
   }
 }
