@@ -2,7 +2,7 @@ import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
 import findCommonOffsetParent from './findCommonOffsetParent';
 import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
-import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
+import getViewportOffsetRectRelativeToArbitraryNode from './getViewportOffsetRectRelativeToArbitraryNode';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
 
@@ -28,7 +28,7 @@ export default function getBoundaries(
 
   // Handle viewport case
   if (boundariesElement === 'viewport') {
-    boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
+    boundaries = getViewportOffsetRectRelativeToArbitraryNode(offsetParent);
   } else {
     // Handle other cases based on DOM element used as boundaries
     let boundariesNode;
