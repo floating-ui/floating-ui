@@ -74,7 +74,12 @@ export default function computeStyle(data, options) {
     left = offsets.left;
   }
   if (gpuAcceleration && prefixedProperty) {
-    styles[prefixedProperty] = `translate3d(${left}px, ${top}px, 0)`;
+    // IE9 doesn't support translate3d
+    if (navigator.userAgent.indexOf('MSIE 9.0') >= 0) {
+      styles[prefixedProperty] = 'translate(' + left + 'px, ' + top + 'px)';
+    } else {
+      styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
+    }
     styles[sideA] = 0;
     styles[sideB] = 0;
     styles.willChange = 'transform';
