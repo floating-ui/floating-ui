@@ -128,7 +128,7 @@ new Popper(reference, popper, {
 Popper.js is based on a "plugin-like" architecture, most of its features are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.  
 
-To learn how to create a modifier, [read the modifiers documentaton](docs/_includes/popper-documentation.md#modifiers--object)
+To learn how to create a modifier, [read the modifiers documentation](docs/_includes/popper-documentation.md#modifiers--object)
 
 
 ### React, Vue.js, Angular, AngularJS, Ember.js (etc...) integration
@@ -139,7 +139,7 @@ Popper.js limits all its DOM modifications inside the `applyStyle` modifier,
 you can simply disable it and manually apply the popper coordinates using
 your library of choice.  
 
-For a comphrensive list of libraries that let you use Popper.js into existing
+For a comprehensive list of libraries that let you use Popper.js into existing
 frameworks, visit the [MENTIONS](MENTIONS.md) page.
 
 Alternatively, you may even override your own `applyStyles` with your custom one and
