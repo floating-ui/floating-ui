@@ -73,7 +73,7 @@ Popper.js is available on the following package managers and CDNs:
 | npm    | `npm install popper.js --save`                                                   |
 | yarn   | `yarn add popper.js`                                                             |
 | NuGet  | `PM> Install-Package popper.js`                                                  |
-| Bower  | `bower install popper.js=https://unpkg.com/popper.js --save`                     |
+| Bower* | `bower install popper.js=https://unpkg.com/popper.js --save`                     |
 | unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
 | cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
 
@@ -83,9 +83,11 @@ Tooltip.js as well:
 |:-------|:---------------------------------------------------------------------------------|
 | npm    | `npm install tooltip.js --save`                                                  |
 | yarn   | `yarn add tooltip.js`                                                            |
-| Bower  | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                   |
+| Bower* | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                   |
 | unpkg  | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                   |
 | cdnjs  | [`https://cdnjs.com/libraries/popper.js`](https://cdnjs.com/libraries/popper.js) |
+
+\*: Bower isn't officially supported, it can be used to install both libraries only trough the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggests to use npm or Yarn for your projects.
 
 ## Usage
 
