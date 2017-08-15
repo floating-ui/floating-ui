@@ -44,8 +44,5 @@
       "threshold": "2 Kb"
     }
   ],
-  "dependencies": {},
-  "workspaces": [
-    "packages/*"
-  ]
+  "dependencies": {}
 }

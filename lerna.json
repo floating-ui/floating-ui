@@ -5,7 +5,6 @@
   ],
   "version": "0.0.0",
   "npmClient": "npm",
-  "useWorkspaces": false,
   "commands": {
     "run": {
       "ignore": "\\@popperjs/*"
