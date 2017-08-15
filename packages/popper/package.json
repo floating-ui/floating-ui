@@ -39,11 +39,14 @@
     "coverage": "NODE_ENV=coverage npm run test"
   },
   "devDependencies": {
-    "@popperjs/bundle": "^1.0.0",
+    "@popperjs/bundle": "^1.0.2",
     "@popperjs/eslint-config-popper": "^1.0.0",
     "nuget-publish": "^1.0.0",
     "@popperjs/test": "^1.0.0",
     "@popperjs/test-utils": "^1.0.0",
     "eslint": "^4.1.1"
+  },
+  "resolutions": {
+    "micromatch": "^3.0.3"
   }
 }

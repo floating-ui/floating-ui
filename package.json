@@ -43,5 +43,9 @@
       "path": "./packages/tooltip/dist/tooltip.min.js",
       "threshold": "2 Kb"
     }
+  ],
+  "dependencies": {},
+  "workspaces": [
+    "packages/*"
   ]
 }

@@ -2,7 +2,7 @@ const { rollup } = require('rollup');
 
 // Plugins
 const babel = require('rollup-plugin-babel');
-const babili = require('rollup-plugin-babili');
+const babili = require('rollup-plugin-babel-minify');
 
 // Configs
 const babelConfig = require('@popperjs/babel-config');
