@@ -9,5 +9,6 @@ git add ../../bower.json
 git commit --no-verify -m "chore(automatic): v${version} (dist files)"
 git tag -a v${version} -m "chore(automatic): v${version} (tag release)"
 git rm ../../dist/**/*
+git rm ../../dist/*
 git rm ../../bower.json
 git commit --no-verify -m "chore(automatic): v${version} (dist files cleanup)"
