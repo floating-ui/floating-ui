@@ -245,6 +245,24 @@ describe('[core]', () => {
         },
       });
     });
+
+    it('inits a right-start inner popper', done => {
+      const reference = appendNewRef(1);
+      reference.style.height = '200px';
+      reference.style.width = '200px';
+      const popper = appendNewPopper(2);
+
+      const pop = new Popper(reference, popper, {
+        placement: 'right-start',
+        modifiers: { inner: { enabled: true } },
+        onCreate() {
+          const right = getRect(popper).right + arrowSize;
+          expect(right).toBeApprox(getRect(reference).right);
+          pop.destroy();
+          done();
+        },
+      });
+    });
   });
 
   describe('[auto placement]', () => {

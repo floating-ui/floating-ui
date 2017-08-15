@@ -17,7 +17,7 @@ export default function inner(data) {
   const subtractLength = ['top', 'left'].indexOf(basePlacement) === -1;
 
   popper[isHoriz ? 'left' : 'top'] =
-    reference[placement] -
+    reference[basePlacement] -
     (subtractLength ? popper[isHoriz ? 'width' : 'height'] : 0);
 
   data.placement = getOppositePlacement(placement);
