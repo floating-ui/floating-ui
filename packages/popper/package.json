@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "A kickass library to manage your poppers",
   "homepage": "https://popper.js.org",
   "repository": {
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@popperjs/bundle": "^1.0.2",
     "@popperjs/eslint-config-popper": "^1.0.0",
-    "nuget-publish": "^1.0.0",
+    "nuget-publish": "^1.0.3",
     "@popperjs/test": "^1.0.0",
     "@popperjs/test-utils": "^1.0.0",
     "eslint": "^4.1.1"
