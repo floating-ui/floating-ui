@@ -1514,7 +1514,7 @@ describe('[core]', () => {
   });
 
   // test for #302
-  xit(
+  it(
     'correct position on height:100% scrolled body with fixed popper parent',
     done => {
       jasmineWrapper.innerHTML = `
@@ -1557,10 +1557,10 @@ describe('[core]', () => {
       new Popper(reference, popper, {
         placement: 'top',
         onCreate() {
-          simulateScroll(document.body, { scrollTop: 400 });
+          simulateScroll(document.body, { scrollTop: 400, delay: 100 });
         },
         onUpdate(data) {
-          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+          expect(getRect(reference).top).toBeApprox(getRect(popper).bottom);
           data.instance.destroy();
           done();
         },
