@@ -2,7 +2,7 @@ import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbit
 import getScroll from './getScroll';
 import getClientRect from './getClientRect';
 
-export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
+export default function getViewportOffsetRectRelativeToArbitraryNode(element) {
   const html = window.document.documentElement;
   const relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   const width = Math.max(html.clientWidth, window.innerWidth || 0);
