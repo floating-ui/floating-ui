@@ -31,7 +31,7 @@ to make it possible to position it near a given reference element.
 
 The engine is completely modular and most of its features are implemented as **modifiers**
 (similar to middlewares or plugins).  
-The whole code base is written in ES2015 and its features are automatically tested on real browsers thank to [SauceLabs](https://saucelabs.com/) and [TravisCI](https://travis-ci.org/).
+The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to [SauceLabs](https://saucelabs.com/) and [TravisCI](https://travis-ci.org/).
 
 Popper.js has zero dependencies. No jQuery, no LoDash, nothing.  
 It's used by big companies like [Twitter in Bootstrap v4](https://getbootstrap.com/), [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
@@ -118,7 +118,7 @@ var anotherPopper = new Popper(
 
 ### Callbacks
 
-Popper.js supports two kind of callbacks, the `onCreate` callback is called after
+Popper.js supports two kinds of callbacks, the `onCreate` callback is called after
 the popper has been initalized. The `onUpdate` one is called on any subsequent update.
 
 ```js
