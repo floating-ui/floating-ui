@@ -117,7 +117,7 @@ module.exports = function(config) {
 
     rollupPreprocessor: {
       format: 'umd',
-      sourceMap: 'inline',
+      sourcemap: 'inline',
       globals: {
         chai: 'chai',
         'popper-utils': 'PopperUtils',
