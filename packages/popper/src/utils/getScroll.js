@@ -7,14 +7,9 @@
  * @returns {number} amount of scrolled pixels
  */
 export default function getScroll(element, side = 'top') {
-  const upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
-  const nodeName = element.nodeName;
-
-  if (nodeName === 'BODY' || nodeName === 'HTML') {
-    const html = window.document.documentElement;
-    const scrollingElement = window.document.scrollingElement || html;
-    return scrollingElement[upperSide];
+  if (['BODY', 'HTML'].indexOf(element.nodeName) !== -1) {
+    element = document.scrollingElement || document.documentElement;
   }
 
-  return element[upperSide];
+  return !side ? element : element[side === 'top' ? 'scrollTop' : 'scrollLeft'];
 }

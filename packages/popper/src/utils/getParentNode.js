@@ -6,8 +6,7 @@
  * @returns {Element} parent
  */
 export default function getParentNode(element) {
-  if (element.nodeName === 'HTML') {
-    return element;
-  }
-  return element.parentNode || element.host;
+  return element.nodeName === 'HTML'
+    ? element
+    : element.parentNode || element.host;
 }

@@ -10,7 +10,7 @@
 
 export default function getBordersSize(styles, axis) {
   const sideA = axis === 'x' ? 'Left' : 'Top';
-  const sideB = sideA === 'Left' ? 'Right' : 'Bottom';
+  const sideB = axis === 'x' ? 'Right' : 'Bottom';
 
   return (
     +styles[`border${sideA}Width`].split('px')[0] +

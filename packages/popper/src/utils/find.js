@@ -8,11 +8,6 @@
  * @returns index or -1
  */
 export default function find(arr, check) {
-  // use native find if supported
-  if (Array.prototype.find) {
-    return arr.find(check);
-  }
-
-  // use `filter` to obtain the same behavior of `find`
-  return arr.filter(check)[0];
+  // use native find if supported or use `filter` to obtain the same behavior of `find`
+  return Array.prototype.find ? arr.find(check) : arr.filter(check)[0];
 }
