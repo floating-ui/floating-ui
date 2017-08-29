@@ -5,6 +5,7 @@ import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbit
 import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
+import getScroll from './getScroll';
 
 /**
  * Computed the boundaries limits and return them
@@ -35,10 +36,10 @@ export default function getBoundaries(
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(popper));
       if (boundariesNode.nodeName === 'BODY') {
-        boundariesNode = window.document.documentElement;
+        boundariesNode = document.documentElement;
       }
     } else if (boundariesElement === 'window') {
-      boundariesNode = window.document.documentElement;
+      boundariesNode = document.documentElement;
     } else {
       boundariesNode = boundariesElement;
     }
@@ -51,10 +52,11 @@ export default function getBoundaries(
     // In case of HTML, we need a different computation
     if (boundariesNode.nodeName === 'HTML' && !isFixed(offsetParent)) {
       const { height, width } = getWindowSizes(false);
-      boundaries.top += offsets.top - offsets.marginTop;
-      boundaries.bottom = height + offsets.top;
-      boundaries.left += offsets.left - offsets.marginLeft;
-      boundaries.right = width + offsets.left;
+      const { scrollTop, scrollLeft } = getScroll(boundariesNode, false);
+      boundaries.top += offsets.top - offsets.marginTop + scrollTop;
+      boundaries.bottom = height + offsets.top + scrollTop;
+      boundaries.left += offsets.left - offsets.marginLeft + scrollLeft;
+      boundaries.right = width + offsets.left + scrollLeft;
     } else {
       // for all the other DOM elements, this one is good
       boundaries = offsets;

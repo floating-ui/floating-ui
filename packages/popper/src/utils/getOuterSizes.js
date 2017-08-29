@@ -9,9 +9,8 @@ export default function getOuterSizes(element) {
   const styles = window.getComputedStyle(element);
   const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   const y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
-  const result = {
+  return {
     width: element.offsetWidth + y,
     height: element.offsetHeight + x,
   };
-  return result;
 }

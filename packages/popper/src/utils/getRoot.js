@@ -6,9 +6,5 @@
  * @returns {Element} root node
  */
 export default function getRoot(node) {
-  if (node.parentNode !== null) {
-    return getRoot(node.parentNode);
-  }
-
-  return node;
+  return node.parentNode !== null ? getRoot(node.parentNode) : node;
 }

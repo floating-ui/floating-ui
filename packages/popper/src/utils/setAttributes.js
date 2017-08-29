@@ -10,7 +10,7 @@ export default function setAttributes(element, attributes) {
   Object.keys(attributes).forEach(function(prop) {
     const value = attributes[prop];
     if (value !== false) {
-      element.setAttribute(prop, attributes[prop]);
+      element.setAttribute(prop, value);
     } else {
       element.removeAttribute(prop);
     }

@@ -1,0 +1,74 @@
+<head>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      border: 5px solid #ffa200;
+      overflow: visible;
+    }
+
+    header,
+    footer {
+      min-height: 50px;
+      flex-shrink: 0;
+      background: black;
+      color: white;
+    }
+
+    main {
+      flex: 1 0 auto;
+    }
+
+    .row {
+      margin-top: 350px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="../../dist/umd/popper.js"></script>
+  <script>//Popper.Defaults.modifiers.preventOverflow.enabled = false;</script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <header class="text-center">Header</header>
+  <main>
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Popover Example"
+          data-content="Popover Example">Popover Example</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Tooltip on left">Tooltip on left</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Popover Example"
+          data-content="Popover Example">Popover Example</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="left" title="Tooltip on left">Tooltip on left</button>
+      </div>
+    </div>
+  </main>
+  <footer class="text-center">Footer</footer>
+
+  <script>
+    $('body').popover({
+      selector: '[data-toggle="popover"]'
+    });
+
+    $('body').tooltip({
+      selector: '[data-toggle="tooltip"]'
+    });
+  </script>
+</body>

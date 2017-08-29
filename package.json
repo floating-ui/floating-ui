@@ -37,7 +37,7 @@
   "bundlesize": [
     {
       "path": "./packages/popper/dist/popper.min.js",
-      "threshold": "7 Kb"
+      "threshold": "7.1 Kb"
     },
     {
       "path": "./packages/tooltip/dist/tooltip.min.js",
