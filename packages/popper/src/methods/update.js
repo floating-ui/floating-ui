@@ -2,6 +2,7 @@ import computeAutoPlacement from '../utils/computeAutoPlacement';
 import getReferenceOffsets from '../utils/getReferenceOffsets';
 import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
+import isFunction from '../utils/isFunction';
 
 /**
  * Updates the position of the popper, computing the new offsets and applying
@@ -68,7 +69,7 @@ export default function update(callback) {
     this.options.onUpdate(data);
   }
 
-  if (typeof callback === 'function') {
+  if (isFunction(callback)) {
 		callback();
 	}
 }
