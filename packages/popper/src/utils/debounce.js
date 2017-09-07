@@ -13,19 +13,21 @@ for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
 export function microtaskDebounce(fn) {
   let scheduled = false;
   let i = 0;
+  let _args = [];
   const elem = document.createElement('span');
 
   // MutationObserver provides a mechanism for scheduling microtasks, which
   // are scheduled *before* the next task. This gives us a way to debounce
   // a function but ensure it's called *before* the next paint.
   const observer = new MutationObserver(() => {
-    fn();
+    fn(..._args);
     scheduled = false;
   });
 
   observer.observe(elem, { attributes: true });
 
-  return () => {
+  return (...args) => {
+    _args = args
     if (!scheduled) {
       scheduled = true;
       elem.setAttribute('x-index', i);
@@ -36,12 +38,12 @@ export function microtaskDebounce(fn) {
 
 export function taskDebounce(fn) {
   let scheduled = false;
-  return () => {
+  return (...args) => {
     if (!scheduled) {
       scheduled = true;
       setTimeout(() => {
         scheduled = false;
-        fn();
+        fn(...args);
       }, timeoutDuration);
     }
   };

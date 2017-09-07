@@ -2,15 +2,17 @@ import computeAutoPlacement from '../utils/computeAutoPlacement';
 import getReferenceOffsets from '../utils/getReferenceOffsets';
 import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
+import isFunction from '../utils/isFunction';
 
 /**
  * Updates the position of the popper, computing the new offsets and applying
  * the new style.<br />
  * Prefer `scheduleUpdate` over `update` because of performance reasons.
  * @method
+ * @param {Function} callback - Callback to run once position has updated
  * @memberof Popper
  */
-export default function update() {
+export default function update(callback) {
   // if popper is destroyed, don't perform any further update
   if (this.state.isDestroyed) {
     return;
@@ -66,4 +68,8 @@ export default function update() {
   } else {
     this.options.onUpdate(data);
   }
+
+  if (isFunction(callback)) {
+		callback();
+	}
 }
