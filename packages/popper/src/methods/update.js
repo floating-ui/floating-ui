@@ -8,9 +8,10 @@ import runModifiers from '../utils/runModifiers';
  * the new style.<br />
  * Prefer `scheduleUpdate` over `update` because of performance reasons.
  * @method
+ * @param {Function} callback - Callback to run once position has updated
  * @memberof Popper
  */
-export default function update() {
+export default function update(callback) {
   // if popper is destroyed, don't perform any further update
   if (this.state.isDestroyed) {
     return;
@@ -66,4 +67,8 @@ export default function update() {
   } else {
     this.options.onUpdate(data);
   }
+
+  if (typeof callback === 'function') {
+		callback();
+	}
 }

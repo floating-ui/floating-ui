@@ -90,8 +90,8 @@ export default class Popper {
 
   // We can't use class properties because they don't get listed in the
   // class prototype and break stuff like Sinon stubs
-  update() {
-    return update.call(this);
+  update(callback) {
+    return update.call(this, callback);
   }
   destroy() {
     return destroy.call(this);
@@ -108,7 +108,7 @@ export default class Popper {
    * @method scheduleUpdate
    * @memberof Popper
    */
-  scheduleUpdate = () => requestAnimationFrame(this.update);
+  scheduleUpdate = callback => requestAnimationFrame(() => this.update(callback));
 
   /**
    * Collection of utilities useful when writing custom modifiers.
