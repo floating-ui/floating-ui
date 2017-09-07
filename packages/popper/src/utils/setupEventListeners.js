@@ -2,7 +2,7 @@ import getScrollParent from './getScrollParent';
 
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   const isBody = scrollParent.nodeName === 'BODY';
-  const target = isBody ? window : scrollParent;
+  const target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 
   if (!isBody) {
