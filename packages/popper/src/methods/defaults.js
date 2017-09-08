@@ -42,7 +42,7 @@ export default {
    * Access Popper.js instance with `data.instance`.
    * @prop {onCreate}
    */
-  onCreate: () => {},
+  onCreate: null,
 
   /**
    * Callback called when the popper is updated, this callback is not called
@@ -52,7 +52,7 @@ export default {
    * Access Popper.js instance with `data.instance`.
    * @prop {onUpdate}
    */
-  onUpdate: () => {},
+  onUpdate: null,
 
   /**
    * List of modifiers used to modify the offsets before they are applied to the popper.

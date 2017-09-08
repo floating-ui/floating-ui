@@ -62,8 +62,10 @@ export default function update() {
   // the other ones will call `onUpdate` callback
   if (!this.state.isCreated) {
     this.state.isCreated = true;
-    this.options.onCreate(data);
-  } else {
+    if (this.options.onCreate) {
+      this.options.onCreate(data);
+    }
+  } else if (this.options.onUpdate) {
     this.options.onUpdate(data);
   }
 }
