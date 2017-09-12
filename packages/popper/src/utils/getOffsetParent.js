@@ -12,6 +12,10 @@ export default function getOffsetParent(element) {
   const nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    if (element) {
+      return element.ownerDocument.documentElement
+    }
+
     return window.document.documentElement;
   }
 

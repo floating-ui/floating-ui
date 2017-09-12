@@ -28,9 +28,12 @@ export default function setupEventListeners(
   state,
   updateBound
 ) {
+  const ownerDocument = reference.ownerDocument
+  const view = ownerDocument ? ownerDocument.defaultView : window;
+
   // Resize event listener on window
   state.updateBound = updateBound;
-  window.addEventListener('resize', state.updateBound, { passive: true });
+  view.addEventListener('resize', state.updateBound, { passive: true });
 
   // Scroll event listener on scroll parents
   const scrollElement = getScrollParent(reference);

@@ -5,8 +5,11 @@
  * @private
  */
 export default function removeEventListeners(reference, state) {
+  const ownerDocument = reference.ownerDocument
+  const view = ownerDocument ? ownerDocument.defaultView : window;
+
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  view.removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(target => {
