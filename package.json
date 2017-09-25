@@ -6,16 +6,15 @@
   "devDependencies": {
     "async": "^2.5.0",
     "babel-eslint": "^7.2.3",
-    "bundlesize": "^0.12.1",
+    "bundlesize": "^0.14.4",
+    "chalk": "^2.1.0",
     "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
-    "lerna": "^2.0.0",
+    "lerna": "^2.2.0",
     "lint-staged": "^4.0.1",
-    "opt-cli": "^1.5.1",
     "pre-commit": "^1.2.2",
     "prettier-eslint-cli": "^4.1.1",
-    "wait-on": "^2.0.2",
-    "wide-align": "^1.1.2"
+    "wait-on": "^2.0.2"
   },
   "scripts": {
     "precommit": "lint-staged",
@@ -44,5 +43,8 @@
       "threshold": "2 Kb"
     }
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "workspaces": [
+    "packages/*"
+  ]
 }

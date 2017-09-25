@@ -3,7 +3,10 @@ const path = require('path');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 
-const browsers = (argv.browsers || process.env.BROWSERS || 'ChromeHeadless').split(',');
+const browsers = (argv.browsers ||
+  process.env.BROWSERS ||
+  'ChromeHeadless'
+).split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
 const coverage = process.env.COVERAGE === true;
 const basePath = process.cwd();
@@ -144,6 +147,18 @@ module.exports = function(config) {
       ],
     },
     reporters: ['mocha', 'saucelabs', 'coverage'],
+    plugins: [
+      require('karma-chai'),
+      require('karma-chrome-launcher'),
+      require('karma-coverage'),
+      require('karma-firefox-launcher'),
+      require('karma-jasmine'),
+      require('karma-mocha-reporter'),
+      require('karma-rollup-preprocessor'),
+      require('karma-safari-launcher'),
+      require('karma-sauce-launcher'),
+      require('karma-sinon'),
+    ],
   };
 
   config.set(configuration);

@@ -1,3 +1,5 @@
+<!-- IGNORE THE HTML BLOCK BELOW, THE INTERESTING PART IS AFTER IT -->
+
 <h1 align="center">Popper.js</h1>
 
 <p align="center">
@@ -16,6 +18,7 @@
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
 
+<!-- 🚨 HEY! HERE BEGINS THE INTERESTING STUFF 🚨 -->
 
 ## Wut? Poppers?
 
