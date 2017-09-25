@@ -1,5 +1,8 @@
 language: node_js
 node_js: 8.1.1
+before_install:
+    - 'curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.0.1'
+    - export PATH="$HOME/.yarn/bin:$PATH"
 script:
   - COVERAGE=true BROWSERS=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11,SLiOS9 BUNDLESIZE=true travis_retry npm run test
   - BROWSERS=SLEdge,SLSafari travis_retry npm run test
