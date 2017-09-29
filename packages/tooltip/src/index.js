@@ -252,16 +252,17 @@ export default class Tooltip {
       // destroy instance
       this.popperInstance.destroy();
 
-      // remove event listeners
-      this._events.forEach(({ func, event }) => {
-        this.reference.removeEventListener(event, func);
-      });
-      this._events = [];
-
       // destroy tooltipNode
       this._tooltipNode.parentNode.removeChild(this._tooltipNode);
       this._tooltipNode = null;
     }
+    
+    // remove event listeners
+    this._events.forEach(({ func, event }) => {
+      this.reference.removeEventListener(event, func);
+    });
+    this._events = [];
+    
     return this;
   }
 
