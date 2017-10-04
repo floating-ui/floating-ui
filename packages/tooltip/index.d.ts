@@ -35,8 +35,8 @@ declare namespace Tooltip {
     template?: string;
     trigger?: string;
     boundariesElement?: Element;
-    offset: number | string;
-    popperOptions: Popper.PopperOptions;
+    offset?: number | string;
+    popperOptions?: Popper.PopperOptions;
   }
 
   export interface TooltipDelayOptions {
