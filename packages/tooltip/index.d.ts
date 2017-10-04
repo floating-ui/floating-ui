@@ -22,12 +22,16 @@ declare namespace Tooltip {
   | 'left'
   | 'left-start';
 
+  export type PlacementFunction = (tooltip: Element, reference: Element) => string;
+
+  export type TitleFunction = () => string;
+
   export interface TooltipOptions {
-    placement?: Placement | ((tooltip: Element, reference: Element) => string);
+    placement?: Placement | PlacementFunction;
     container?: Element | string | false;
     delay?: number | TooltipDelayOptions;
     html?: boolean;
-    title?: Element | string | (() => string);
+    title?: Element | string | TitleFunction;
     template?: string;
     trigger?: string;
     boundariesElement?: Element;
