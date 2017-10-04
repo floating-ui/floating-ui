@@ -18,10 +18,10 @@ export default function runModifiers(modifiers, data, ends) {
     : modifiers.slice(0, findIndex(modifiers, 'name', ends));
 
   modifiersToRun.forEach(modifier => {
-    if (modifier.function) {
+    if (modifier['function']) { // eslint-disable-line dot-notation
       console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
     }
-    const fn = modifier.function || modifier.fn;
+    const fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
     if (modifier.enabled && isFunction(fn)) {
       // Add properties to offsets to make them a complete clientRect object
       // we do this before each modifier to make sure the previous one doesn't
