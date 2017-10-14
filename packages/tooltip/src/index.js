@@ -152,8 +152,8 @@ export default class Tooltip {
 
     // add title to tooltip
     const titleNode = tooltipGenerator.querySelector(this.innerSelector);
-    if (title.nodeType === 1) {
-      // if title is a node, append it only if allowHtml is true
+    if (title.nodeType === 1 || title.nodeType === 11) {
+      // if title is a element node or document fragment, append it only if allowHtml is true
       allowHtml && titleNode.appendChild(title);
     } else if (isFunction(title)) {
       // if title is a function, call it and set innerText or innerHtml depending by `allowHtml` value

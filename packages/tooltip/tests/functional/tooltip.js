@@ -228,6 +228,26 @@ describe('[tooltip.js]', () => {
       });
     });
 
+    it('should use a document fragment as tooltip content', done => {
+      const content = document.createDocumentFragment();
+      const inner = document.createElement('div');
+      inner.innerText = 'test';
+      content.appendChild(inner);
+      instance = new Tooltip(reference, {
+        title: content,
+        html: true,
+      });
+
+      instance.show();
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').innerHTML
+        ).toBe('<div>test</div>');
+        done();
+      });
+    });
+
     it('should use a function result as tooltip content', done => {
       instance = new Tooltip(reference, {
         title: () => 'foobar',
