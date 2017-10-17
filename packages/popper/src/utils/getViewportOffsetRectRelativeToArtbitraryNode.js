@@ -3,7 +3,7 @@ import getScroll from './getScroll';
 import getClientRect from './getClientRect';
 
 export default function getViewportOffsetRectRelativeToArtbitraryNode(element) {
-  const html = window.document.documentElement;
+  const html = element.ownerDocument.documentElement;
   const relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
   const width = Math.max(html.clientWidth, window.innerWidth || 0);
   const height = Math.max(html.clientHeight, window.innerHeight || 0);

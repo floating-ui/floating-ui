@@ -1,3 +1,5 @@
+import getWindow from './getWindow';
+
 /**
  * Remove event listeners used to update the popper position
  * @method
@@ -6,7 +8,7 @@
  */
 export default function removeEventListeners(reference, state) {
   // Remove resize event listener on window
-  window.removeEventListener('resize', state.updateBound);
+  getWindow(reference).removeEventListener('resize', state.updateBound);
 
   // Remove scroll event listener on scroll parents
   state.scrollParents.forEach(target => {
