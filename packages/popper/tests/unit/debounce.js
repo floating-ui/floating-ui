@@ -1,6 +1,5 @@
 import { microtaskDebounce, taskDebounce } from '../../src/utils/debounce';
-import isNative from '../../src/utils/isNative';
-const microTasksAvailable = isNative(window.MutationObserver);
+const microTasksAvailable = window.Promise
 
 describe('utils/debounce', () => {
   it('microtaskDebounce: should be called only once', done => {
