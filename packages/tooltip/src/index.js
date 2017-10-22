@@ -246,17 +246,17 @@ export default class Tooltip {
   }
 
   _dispose() {
+    // remove event listeners first to prevent any unexpected behaviour
+    this._events.forEach(({ func, event }) => {
+      this.reference.removeEventListener(event, func);
+    });
+    this._events = [];
+
     if (this._tooltipNode) {
       this._hide();
 
       // destroy instance
       this.popperInstance.destroy();
-
-      // remove event listeners
-      this._events.forEach(({ func, event }) => {
-        this.reference.removeEventListener(event, func);
-      });
-      this._events = [];
 
       // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
       if(!this.popperInstance.options.removeOnDestroy){
