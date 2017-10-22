@@ -6,7 +6,7 @@
   "devDependencies": {
     "async": "^2.5.0",
     "babel-eslint": "^7.2.3",
-    "bundlesize": "^0.14.4",
+    "bundlesize": "^0.15.3",
     "chalk": "^2.1.0",
     "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
