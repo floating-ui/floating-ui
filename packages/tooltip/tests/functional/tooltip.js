@@ -112,6 +112,27 @@ describe('[tooltip.js]', () => {
         done();
       });
     });
+
+    it('should dispose tooltip despite never being shown', done => {
+      instance = new Tooltip(reference, {
+        title: 'foobar',
+      });
+
+      instance.dispose();
+
+      then(() => {
+        expect(document.querySelector('.tooltip')).toBeNull();
+      });
+
+      then(() => {
+        reference.dispatchEvent(new CustomEvent('mouseenter'));
+      });
+
+      then(() => {
+        expect(document.querySelector('.tooltip')).toBeNull();
+        done();
+      });
+    });
   });
 
   describe('container', () => {
