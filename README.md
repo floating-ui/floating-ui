@@ -174,7 +174,7 @@ new Popper(reference, popper, {
         applyReactStyle: {
             enabled: true,
             fn: applyReactStyle,
-            order: 800,
+            order: 900,
         },
     },
 });
