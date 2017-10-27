@@ -52,6 +52,10 @@ VueJS 2.x popover component based [popper.js](https://popper.js.org/)
 
 Vue.js tooltip directive (based on Popper.js)
 
+### [v-tooltip](https://github.com/Akryum/v-tooltip)
+
+Vue.js 2.x directive
+
 ## Ember.js
 
 ### [ember-popper](https://github.com/kybishop/ember-popper)
