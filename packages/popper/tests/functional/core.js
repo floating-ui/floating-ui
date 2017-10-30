@@ -1615,4 +1615,77 @@ describe('[core]', () => {
       },
     });
   });
+
+  // test for #453
+  // When the reference is inside a scrollParent, it should be used as the
+  // source for choosing the scrollParent rather than the popper.
+  // This is particularly useful when the popper lives outside of the
+  // scrollParent, e.g. in the body. In such cases, this allows the popper to
+  // adjust (e.g. hide) based on the actual scrollParent boundaries rather than
+  // that of the body.
+  it(
+    'reference is used as source for choosing scrollParent',
+    done => {
+      jasmineWrapper.innerHTML = `
+      <style>
+        body {
+          padding: 100px;
+        }
+
+        .scrollParent {
+          height: 300px;
+          width: 300px;
+          overflow: auto;
+          position: relative;
+        }
+
+        .scrollContent {
+          background: gray;
+          padding: 1000px;
+        }
+
+        #reference {
+          background: lightgrey;
+          height: 25px;
+          width: 100px;
+        }
+
+        #popper {
+          background: cyan;
+          height: 150px;
+          width: 150px;
+        }
+
+        [x-out-of-boundaries] {
+          visibility: hidden;
+        }
+      </style>
+
+      <div class="scrollParent">
+        <div class="scrollContent">
+          <div id="reference">ref</div>
+        </div>
+      </div>
+      <div id="popper">pop</div>
+    `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+      const scrollParent = document.querySelector('.scrollParent');
+
+      new Popper(reference, popper, {
+        onCreate() {
+          // Scroll reference just out of view to the right
+          simulateScroll(scrollParent, { scrollTop: 950, scrollLeft: 700, delay: 100 });
+        },
+        onUpdate(data) {
+          // Popper is hidden when reference is out of view in scrollParent
+          expect(data.hide).toBe(true);
+
+          data.instance.destroy();
+          done();
+        },
+      });
+    }
+  );
 });
