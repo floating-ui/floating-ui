@@ -10,6 +10,7 @@
     "chalk": "^2.1.0",
     "eslint-plugin-jasmine": "^2.7.1",
     "jsdoc-to-markdown": "^3.0.0",
+    "lcov-result-merger": "^1.2.0",
     "lerna": "^2.2.0",
     "lint-staged": "^4.0.1",
     "pre-commit": "^1.2.2",
@@ -18,11 +19,7 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "postinstall": "lerna bootstrap",
-    "bootstrap": "lerna bootstrap",
-    "pretest": "$BUNDLESIZE && bundlesize-init",
     "test": "lerna run --parallel test && yarn build",
-    "posttest": "$BUNDLESIZE && bundlesize",
     "build": "lerna run build",
     "docs": "yarn build && for dest in popper tooltip; do jsdoc2md ./packages/$dest/dist/$dest.js > ./docs/_includes/$dest-documentation.md; done",
     "docs:serve": "cd docs; { wait-on http://localhost:4000; open http://localhost:4000; } & jekyll serve"

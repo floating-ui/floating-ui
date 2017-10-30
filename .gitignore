@@ -11,6 +11,7 @@ dist
 .idea/
 *.log
 package-lock.json
+coverage.info
 
 # When you switch branches, things can get messy
 _site
