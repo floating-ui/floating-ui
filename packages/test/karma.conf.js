@@ -144,14 +144,7 @@ module.exports = function(config) {
       recordVideo: true,
       tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
     },
-    coverageReporter: {
-      dir: './.tmp/coverage',
-      reporters: [
-        { type: 'html', subdir: 'report-html' },
-        { type: 'lcov', subdir: 'report-lcov' },
-      ],
-    },
-    reporters: ['mocha', 'saucelabs', 'coverage'],
+    reporters: ['mocha', 'saucelabs'],
     plugins: [
       require('karma-chai'),
       require('karma-chrome-launcher'),
@@ -165,6 +158,17 @@ module.exports = function(config) {
       require('karma-sinon'),
     ],
   };
+
+  if (coverage) {
+    configuration.coverageReporter = {
+      dir: './.tmp/coverage',
+      reporters: [
+        { type: 'html', subdir: 'report-html' },
+        { type: 'lcov', subdir: 'report-lcov' },
+      ],
+    };
+    configuration.reporters.push('coverage');
+  }
 
   config.set(configuration);
 };
