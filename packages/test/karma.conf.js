@@ -97,11 +97,16 @@ module.exports = function(config) {
         version: '11',
         platform: 'Windows 10',
       },
-      SLiOS9: {
+      // Currently not used because the iOS emulator isn't reliable and
+      // most of the times it times out
+      SLiOS11: {
         base: 'SauceLabs',
-        browserName: 'iphone',
-        version: '9.3',
-        platform: 'macOS 10.12',
+        browserName: 'Safari',
+        deviceName: 'iPhone 8 Plus Simulator',
+        deviceOrientation: 'portrait',
+        platformVersion: '11.0',
+        platformName: 'iOS',
+        appiumVersion: '1.7.1',
       },
       SLChromeMobile: {
         base: 'SauceLabs',
