@@ -36,7 +36,7 @@
     "lint": "eslint .",
     "test": "popper-karma",
     "test:dev": "BROWSERS=Chrome NODE_ENV=development npm run test",
-    "coverage": "NODE_ENV=coverage npm run test"
+    "coverage": "COVERAGE=true npm run test"
   },
   "devDependencies": {
     "@popperjs/bundle": "^1.0.2",

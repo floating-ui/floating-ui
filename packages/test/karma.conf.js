@@ -8,7 +8,7 @@ const browsers = (argv.browsers ||
   'ChromeHeadless'
 ).split(',');
 const singleRun = process.env.NODE_ENV === 'development' ? false : true;
-const coverage = process.env.COVERAGE === true;
+const coverage = process.env.COVERAGE === 'true';
 const basePath = process.cwd();
 
 const babelrc = {

@@ -10,7 +10,7 @@
     "pretest": "npm run lint",
     "test": "popper-karma",
     "lint": "eslint .",
-    "coverage": "NODE_ENV=coverage npm run test"
+    "coverage": "COVERAGE=true npm run test"
   },
   "repository": {
     "type": "git",
