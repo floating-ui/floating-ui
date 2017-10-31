@@ -15,9 +15,11 @@
     "lint-staged": "^4.0.1",
     "pre-commit": "^1.2.2",
     "prettier-eslint-cli": "^4.1.1",
-    "wait-on": "^2.0.2"
+    "wait-on": "^2.0.2",
+    "which-pm-runs-cli": "^1.0.4"
   },
   "scripts": {
+    "preinstall": "which-pm-runs --is yarn",
     "precommit": "lint-staged",
     "test": "lerna run --parallel test && yarn build",
     "build": "lerna run build",

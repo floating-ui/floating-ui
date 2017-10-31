@@ -11,7 +11,9 @@ Feature requests are welcome!
 
 ## Setup
 
-Then run `npm install` or `yarn` to install the needed dependencies.
+Then run `yarn` to install the needed dependencies.
+
+Note that `npm` is not supported because this projects makes use of the Yarn workspaces.
 
 ## Developing
 
@@ -36,8 +38,8 @@ Feel free to add tests to the `/tests` folder, any JavaScript file in that folde
 To run tests:
 
 ```bash
-npm run test:dev # watch
-npm run test # single run
+yarn test:dev # watch
+yarn test # single run
 ```
 
 ## Build
@@ -45,9 +47,9 @@ npm run test # single run
 To create a new release run:
 
 ```js
-npm run build:popper # popper.js
-npm run build:tooltip # tooltip.js
-npm run build # both
+yarn build:popper # popper.js
+yarn build:tooltip # tooltip.js
+yarn build # both
 ```
 
 The files will be automatically minified and copied in the `build` directory.
