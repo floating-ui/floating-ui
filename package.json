@@ -19,7 +19,7 @@
     "which-pm-runs-cli": "^1.0.4"
   },
   "scripts": {
-    "preinstall": "which-pm-runs --is yarn",
+    "postinstall": "which-pm-runs --is yarn",
     "precommit": "lint-staged",
     "test": "lerna run --parallel test && yarn build",
     "build": "lerna run build",
