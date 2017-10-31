@@ -11,7 +11,7 @@ Feature requests are welcome!
 
 ## Setup
 
-Then run `yarn` to install the needed dependencies.
+Run `yarn` to install the needed dependencies.
 
 Note that `npm` is not supported because this projects makes use of the Yarn workspaces.
 
