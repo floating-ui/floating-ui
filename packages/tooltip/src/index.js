@@ -58,13 +58,14 @@ export default class Tooltip {
     this.options = options;
 
     // get events list
-    const events = typeof options.trigger === 'string'
-      ? options.trigger
-          .split(' ')
-          .filter(
-            trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
-          )
-      : [];
+    const events =
+      typeof options.trigger === 'string'
+        ? options.trigger
+            .split(' ')
+            .filter(
+              trigger => ['click', 'hover', 'focus'].indexOf(trigger) !== -1
+            )
+        : [];
 
     // set initial state
     this._isOpen = false;
@@ -141,7 +142,9 @@ export default class Tooltip {
     const tooltipNode = tooltipGenerator.childNodes[0];
 
     // add unique ID to our tooltip (needed for accessibility reasons)
-    tooltipNode.id = `tooltip_${Math.random().toString(36).substr(2, 10)}`;
+    tooltipNode.id = `tooltip_${Math.random()
+      .toString(36)
+      .substr(2, 10)}`;
 
     // set initial `aria-hidden` state to `false` (it's visible!)
     tooltipNode.setAttribute('aria-hidden', 'false');
@@ -168,7 +171,8 @@ export default class Tooltip {
 
   _show(reference, options) {
     // don't show if it's already visible
-    if (this._isOpen) {
+    // or if it's not being showed
+    if (this._isOpen && !this._isOpening) {
       return this;
     }
     this._isOpen = true;
@@ -208,14 +212,14 @@ export default class Tooltip {
     const popperOptions = {
       ...options.popperOptions,
       placement: options.placement,
-    }
+    };
 
     popperOptions.modifiers = {
       ...popperOptions.modifiers,
       arrow: {
         element: this.arrowSelector,
       },
-    }
+    };
 
     if (options.boundariesElement) {
       popperOptions.modifiers.preventOverflow = {
@@ -259,9 +263,9 @@ export default class Tooltip {
       this.popperInstance.destroy();
 
       // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-      if(!this.popperInstance.options.removeOnDestroy){
-          this._tooltipNode.parentNode.removeChild(this._tooltipNode);
-          this._tooltipNode = null;
+      if (!this.popperInstance.options.removeOnDestroy) {
+        this._tooltipNode.parentNode.removeChild(this._tooltipNode);
+        this._tooltipNode = null;
       }
     }
     return this;
@@ -313,7 +317,7 @@ export default class Tooltip {
     // schedule show tooltip
     directEvents.forEach(event => {
       const func = evt => {
-        if (this._isOpen === true) {
+        if (this._isOpening === true) {
           return;
         }
         evt.usedByTooltip = true;
@@ -337,15 +341,21 @@ export default class Tooltip {
   }
 
   _scheduleShow(reference, delay, options /*, evt */) {
+    this._isOpening = true;
     // defaults to 0
     const computedDelay = (delay && delay.show) || delay || 0;
-    window.setTimeout(() => this._show(reference, options), computedDelay);
+    this._showTimeout = window.setTimeout(
+      () => this._show(reference, options),
+      computedDelay
+    );
   }
 
   _scheduleHide(reference, delay, options, evt) {
+    this._isOpening = false;
     // defaults to 0
     const computedDelay = (delay && delay.hide) || delay || 0;
     window.setTimeout(() => {
+      window.clearTimeout(this._showTimeout);
       if (this._isOpen === false) {
         return;
       }
