@@ -380,10 +380,10 @@ export default class Tooltip {
   }
 
   _setTooltipNodeEvent = (evt, reference, delay, options) => {
-    const relatedreference = evt.relatedreference || evt.toElement;
+    const relatedreference = evt.relatedreference || evt.toElement || evt.relatedTarget;
 
     const callback = evt2 => {
-      const relatedreference2 = evt2.relatedreference || evt2.toElement;
+      const relatedreference2 = evt2.relatedreference || evt2.toElement || evt2.relatedTarget;
 
       // Remove event listener after call
       this._tooltipNode.removeEventListener(evt.type, callback);
