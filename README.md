@@ -218,3 +218,7 @@ I want to thank some friends and projects for the work they did:
 
 ### Copyright and license
 Code and documentation copyright 2016 **Federico Zivolo**. Code released under the [MIT license](LICENSE.md). Docs released under Creative Commons.
+
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/b4EfpdBkBvHcfDMUuTZi8c8e/FezVrasta/popper.js'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/b4EfpdBkBvHcfDMUuTZi8c8e/FezVrasta/popper.js.svg' />
+</a>
