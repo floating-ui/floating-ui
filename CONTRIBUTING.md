@@ -17,41 +17,77 @@ Note that `npm` is not supported because this projects makes use of the Yarn wor
 
 ## Developing
 
-## Adopt an issue
+The repository is a monorepo managed by [Lerna](https://github.com/lerna/lerna), this makes it
+possible to manage multiple projects on the same repository.
 
-All the issues, if not assigned to someone, can be adopted by anyone. Just make sure to comment on the issue to let know
-other users about your intention to work on it.  
+In our case, the main projects are `popper` and `tooltip`, which are the home of Popper.js and Tooltip.js  
+All our packages are stored in the `packages/` folder.
+
+
+### Adopt an issue
+
+All the issues, if not assigned to someone, can be adopted by anyone. Just make sure to comment on
+the issue to let know other users about your intention to work on it.  
 Also, remember to comment again in case you end up abandoning the issue.
 
-Each issue has a `DIFFICULTY` label to help you pick the one with the difficulty level adapt to you.  
-Additionally, check out the `PRIORITY` label to see which issues should take precedence over the others. If possible, prefer issues with an higher priority, but if you want to adopt an issue with lower priority, it's not a problem!
+Each issue has a `DIFFICULTY: *` label to help you pick the one with the difficulty level adapt to you.  
+Additionally, check out the `PRIORITY: *` label to see which issues should take precedence over the others.
+If possible, prefer issues with an higher priority, but if you want to adopt an issue with lower priority,
+it's not a problem!
 
-Issues with `NEEDS: CI test` need a PR that integrates a test in the test suite to reproduce the bug, this is very useful because it allows other developers to try to fix the bug having a feedback.
+Issues with `NEEDS: CI test` need a PR that integrates a test in the test suite to reproduce the bug,
+this is very useful because it allows other developers to try to fix the bug having a feedback.
 
-## Test
 
-We develop following a test driven development approach.
+### Style conventions
 
-We have a karma + jasmine environment to unit test Popper.js
-Feel free to add tests to the `/tests` folder, any JavaScript file in that folder will be executed as test.
+You don't have to worry about code style conventions, [prettier](https://github.com/prettier/prettier)
+will automatically format your code once you commit your changes.
 
-To run tests:
+### Test
+
+We strive to keep the code coverage as high as possible, but above all, we want to avoid
+to introduce or reintroduce bugs in our code base.
+
+For this reason, every time a code change is made, we must make sure that a test is covering
+the code we just changed.  
+If we fix a bug, we add a test to avoid that this bug pops up again in the future.
+
+To help us with this process, we have a karma + jasmine environment to test Popper.js and Tooltip.js
+
+The tests are located in the `tests/` folder of the two projects. (e.g. `packages/popper/tests/`)
+
 
 ```bash
-yarn test:dev # watch
-yarn test # single run
+# You can run all the repositories tests running
+yarn test
+
+# or a single project's tests with 
+$(yarn bin)/lerna run test --scope=popper.js # or tooltip.js
 ```
 
-## Build
+If you want to run the tests in watch mode:
+
+```bash
+# You can run all the repositories tests running
+yarn test:dev
+
+# or a single project's tests with 
+$(yarn bin)/lerna run test:dev --scope=popper.js # or tooltip.js
+```
+
+Do you want to test your changes against all the supported browsers? Feel free to send a PR
+and your changes will get automatically tested.
+
+
+### Build
 
 To create a new release run:
 
-```js
-yarn build:popper # popper.js
-yarn build:tooltip # tooltip.js
-yarn build # both
+```bash
+# to build both projects
+yarn build 
+
+# or to build a single project
+$(yarn bin)/lerna run build --scope=popper.js # or tooltip.js
 ```
-
-The files will be automatically minified and copied in the `build` directory.
-
-**Note:** never commit builds! We take care to compile the source code when we release a new version.
