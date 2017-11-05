@@ -4,7 +4,6 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
     "bundlesize": "^0.15.3",
     "jsdoc-to-markdown": "^3.0.0",
     "lcov-result-merger": "^1.2.0",
