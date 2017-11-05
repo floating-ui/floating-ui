@@ -5,8 +5,9 @@ before_install:
     - export PATH="$HOME/.yarn/bin:$PATH"
 script:
   - bundlesize-init
-  - COVERAGE=true BROWSERS=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11 travis_retry npm run test
-  - BROWSERS=SLEdge,SLSafari travis_retry npm run test
+  - COVERAGE=true BROWSERS=SLChrome,SLInternetExplorer10,SLFirefox,SLInternetExplorer11 travis_retry yarn test
+  - BROWSERS=SLEdge,SLSafari travis_retry yarn test # coverage leads to problems with these browsers
+  - yarn build # make sure build works fine
 after_success:
   - bundlesize
   - yarn global add codeclimate-test-reporter lcov-result-merger

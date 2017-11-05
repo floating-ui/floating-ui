@@ -63,7 +63,7 @@ The tests are located in the `tests/` folder of the two projects. (e.g. `package
 yarn test
 
 # or a single project's tests with 
-$(yarn bin)/lerna run test --scope=popper.js # or tooltip.js
+yarn test --scope=popper.js # or tooltip.js
 ```
 
 If you want to run the tests in watch mode:
@@ -73,7 +73,7 @@ If you want to run the tests in watch mode:
 yarn test:dev
 
 # or a single project's tests with 
-$(yarn bin)/lerna run test:dev --scope=popper.js # or tooltip.js
+yarn test:dev --scope=popper.js # or tooltip.js
 ```
 
 Do you want to test your changes against all the supported browsers? Feel free to send a PR
@@ -89,5 +89,5 @@ To create a new release run:
 yarn build 
 
 # or to build a single project
-$(yarn bin)/lerna run build --scope=popper.js # or tooltip.js
+yarn build --scope=popper.js # or tooltip.js
 ```

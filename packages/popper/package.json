@@ -28,15 +28,15 @@
   "module": "dist/esm/popper.js",
   "types": "index.d.ts",
   "scripts": {
-    "prepare": "npm run build",
+    "prepare": "yarn build",
     "postpublish": "nuget-publish && ./bower-publish.sh",
-    "prebuild": "npm run lint",
-    "pretest": "npm run lint",
+    "prebuild": "yarn lint",
+    "pretest": "yarn lint",
     "build": "node bundle.js",
     "lint": "eslint .",
     "test": "popper-karma",
-    "test:dev": "BROWSERS=Chrome NODE_ENV=development npm run test",
-    "coverage": "COVERAGE=true npm run test"
+    "test:dev": "BROWSERS=Chrome NODE_ENV=development yarn test",
+    "coverage": "COVERAGE=true yarn test"
   },
   "devDependencies": {
     "@popperjs/bundle": "^1.0.2",

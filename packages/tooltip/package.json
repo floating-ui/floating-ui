@@ -6,11 +6,12 @@
   "module": "./dist/esm/tooltip.js",
   "scripts": {
     "build": "node bundle.js",
-    "prepublish": "npm run build",
-    "pretest": "npm run lint",
+    "prepublish": "yarn build",
+    "pretest": "yarn lint",
     "test": "popper-karma",
+    "test:dev": "BROWSERS=Chrome NODE_ENV=development yarn test",
     "lint": "eslint .",
-    "coverage": "COVERAGE=true npm run test"
+    "coverage": "COVERAGE=true yarn test"
   },
   "repository": {
     "type": "git",
