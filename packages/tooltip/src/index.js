@@ -227,6 +227,21 @@ export default class Tooltip {
       };
     }
 
+    if (options.offset) {
+      let offset = options.offset;
+
+  		// One value -> switch to offset from tooltip target
+      const typeofOffset = typeof options.offset
+  		if (typeofOffset === 'number' || (typeofOffset === 'string' && offset.indexOf(',') === -1)) {
+  			offset = `0, ${offset}`;
+  		}
+
+      // Offset modifier
+  		popperOptions.modifiers.offset = {
+  			offset,
+  		};
+  	}
+
     this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
 
     this._tooltipNode = tooltipNode;
