@@ -69,6 +69,7 @@ export default class Tooltip {
 
     // set initial state
     this._isOpen = false;
+    this._popperOptions = {};
 
     // set event listeners
     this._setEventListeners(reference, events, options);
@@ -209,25 +210,32 @@ export default class Tooltip {
 
     this._append(tooltipNode, container);
 
-    const popperOptions = {
+    this._popperOptions = {
       ...options.popperOptions,
       placement: options.placement,
     };
 
-    popperOptions.modifiers = {
-      ...popperOptions.modifiers,
+    this._popperOptions.modifiers = {
+      ...this._popperOptions.modifiers,
       arrow: {
         element: this.arrowSelector,
+      },
+      offset: {
+        offset: options.offset,
       },
     };
 
     if (options.boundariesElement) {
-      popperOptions.modifiers.preventOverflow = {
+      this._popperOptions.modifiers.preventOverflow = {
         boundariesElement: options.boundariesElement,
       };
     }
 
-    this.popperInstance = new Popper(reference, tooltipNode, popperOptions);
+    this.popperInstance = new Popper(
+      reference,
+      tooltipNode,
+      this._popperOptions
+    );
 
     this._tooltipNode = tooltipNode;
 
@@ -380,10 +388,12 @@ export default class Tooltip {
   }
 
   _setTooltipNodeEvent = (evt, reference, delay, options) => {
-    const relatedreference = evt.relatedreference || evt.toElement || evt.relatedTarget;
+    const relatedreference =
+      evt.relatedreference || evt.toElement || evt.relatedTarget;
 
     const callback = evt2 => {
-      const relatedreference2 = evt2.relatedreference || evt2.toElement || evt2.relatedTarget;
+      const relatedreference2 =
+        evt2.relatedreference || evt2.toElement || evt2.relatedTarget;
 
       // Remove event listener after call
       this._tooltipNode.removeEventListener(evt.type, callback);

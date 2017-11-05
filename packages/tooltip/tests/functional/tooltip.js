@@ -410,4 +410,19 @@ describe('[tooltip.js]', () => {
       });
     });
   });
+
+  describe('options', () => {
+    beforeEach(() => {
+      createReference();
+    });
+
+    it('should proxy the `options.offset` value to the Popper.js instance', done => {
+      instance = new Tooltip(reference, {
+        title: 'test',
+        offset: 10,
+      }).show();
+      expect(instance._popperOptions.modifiers.offset.offset).toBe(10);
+      done();
+    });
+  });
 });
