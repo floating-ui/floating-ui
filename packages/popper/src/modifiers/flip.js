@@ -34,7 +34,8 @@ export default function flip(data, options) {
     data.instance.popper,
     data.instance.reference,
     options.padding,
-    options.boundariesElement
+    options.boundariesElement,
+    options.positionFixed ? window.document.documentElement : undefined
   );
 
   let placement = data.placement.split('-')[0];

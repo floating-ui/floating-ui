@@ -29,7 +29,8 @@ export default function computeAutoPlacement(
     popper,
     reference,
     padding,
-    boundariesElement
+    boundariesElement,
+    null
   );
 
   const rects = {

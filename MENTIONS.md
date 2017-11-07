@@ -17,7 +17,7 @@ most common frameworks or view libraries thank to the following projects.
 
 ### [react-popper](https://github.com/souporserious/react-popper)
 
-React wrapper around Popper.js.
+React wrapper around Popper.js. (@FezVrasta approved! 👍)
 
 ### [ak-layer](https://www.npmjs.com/package/ak-layer)
 

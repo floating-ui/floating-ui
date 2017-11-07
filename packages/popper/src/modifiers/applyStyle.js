@@ -49,7 +49,7 @@ export function applyStyleOnLoad(
   state
 ) {
   // compute reference element offsets
-  const referenceOffsets = getReferenceOffsets(state, popper, reference);
+  const referenceOffsets = getReferenceOffsets(state, popper, reference, options.positionFixed ? window.document.documentElement : undefined);
 
   // compute auto placement, store placement inside the data object,
   // modifiers will be able to edit `placement` if needed
@@ -67,7 +67,7 @@ export function applyStyleOnLoad(
 
   // Apply `position` to popper before anything else because
   // without the position applied we can't guarantee correct computations
-  setStyles(popper, { position: 'absolute' });
+  setStyles(popper, { position: options.positionFixed ? 'fixed' : 'absolute' });
 
   return options;
 }
