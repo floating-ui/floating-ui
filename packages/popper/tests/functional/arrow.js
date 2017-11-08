@@ -5,8 +5,13 @@ const jasmineWrapper = document.getElementById('jasmineWrapper');
 
 // Utils
 import getRect from '../utils/getRect';
+[true, false].forEach((positionFixed) => {
+describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
 
-describe('[core]', () => {
+  beforeEach(function(){
+    Popper.Defaults.positionFixed = positionFixed;
+  });
+
   afterEach(function() {
     jasmineWrapper.scrollTop = 0;
     jasmineWrapper.scrollLeft = 0;
@@ -108,4 +113,5 @@ describe('[core]', () => {
       },
     });
   });
+});
 });

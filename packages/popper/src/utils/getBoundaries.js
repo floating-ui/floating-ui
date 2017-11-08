@@ -14,17 +14,19 @@ import isFixed from './isFixed';
  * @param {HTMLElement} reference
  * @param {number} padding
  * @param {HTMLElement} boundariesElement - Element used to define the boundaries
+ * @param {HTMLElement} fixedParent - Force this element as the parent
  * @returns {Object} Coordinates of the boundaries
  */
 export default function getBoundaries(
   popper,
   reference,
   padding,
-  boundariesElement
+  boundariesElement,
+  fixedParent = null
 ) {
   // NOTE: 1 DOM access here
   let boundaries = { top: 0, left: 0 };
-  const offsetParent = findCommonOffsetParent(popper, reference);
+  const offsetParent = fixedParent || findCommonOffsetParent(popper, reference);
 
   // Handle viewport case
   if (boundariesElement === 'viewport') {

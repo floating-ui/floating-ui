@@ -29,7 +29,8 @@ export default function update() {
   data.offsets.reference = getReferenceOffsets(
     this.state,
     this.popper,
-    this.reference
+    this.reference,
+    this.options.positionFixed ? window.document.documentElement : undefined
   );
 
   // compute auto placement, store placement inside the data object,
@@ -47,13 +48,15 @@ export default function update() {
   // store the computed placement inside `originalPlacement`
   data.originalPlacement = data.placement;
 
+  data.positionFixed = this.options.positionFixed;
+
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(
     this.popper,
     data.offsets.reference,
     data.placement
   );
-  data.offsets.popper.position = 'absolute';
+  data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
   // run the modifiers
   data = runModifiers(this.modifiers, data);
