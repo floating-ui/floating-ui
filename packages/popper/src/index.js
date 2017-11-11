@@ -23,6 +23,9 @@ export default class Popper {
     // make update() debounced, so that it only runs at most once-per-tick
     this.update = debounce(this.update.bind(this));
 
+    // with {} we create a new object with the options inside it
+    this.options = { ...Popper.Defaults, ...options };
+
     // init state
     this.state = {
       isDestroyed: false,
@@ -34,29 +37,28 @@ export default class Popper {
     this.reference = reference && reference.jquery ? reference[0] : reference;
     this.popper = popper && popper.jquery ? popper[0] : popper;
 
-    // with {} we create a new object with the options inside it
-    this.options = { ...Popper.Defaults, ...options };
-
     // Deep merge modifiers options
-    this.options.modifiers = Object.keys({
+    this.options.modifiers = {};
+    Object.keys({
       ...Popper.Defaults.modifiers,
       ...options.modifiers,
-    }).reduce((modifiers, name) => {
-      modifiers[name] = {
+    }).forEach(name => {
+      this.options.modifiers[name] = {
         // If it's a built-in modifier, use it as base
         ...(Popper.Defaults.modifiers[name] || {}),
         // If there are custom options, override and merge with default ones
         ...(options.modifiers ? options.modifiers[name] : {}),
-        name,
       };
-      return modifiers;
-    }, {});
+    });
 
-    // convert the list into an Array
-    // sort by order
-    this.modifiers = Object.values(this.options.modifiers).sort(
-      (a, b) => a.order - b.order
-    );
+    // Refactoring modifiers' list (Object => Array)
+    this.modifiers = Object.keys(this.options.modifiers)
+      .map(name => ({
+        name,
+        ...this.options.modifiers[name],
+      }))
+      // sort the modifiers by order
+      .sort((a, b) => a.order - b.order);
 
     // modifiers have the ability to execute arbitrary code when Popper.js get inited
     // such code is executed in the same order of its modifier
@@ -77,12 +79,13 @@ export default class Popper {
     // fire the first update to position the popper in the right place
     this.update();
 
-    if (this.options.eventsEnabled) {
+    const eventsEnabled = this.options.eventsEnabled;
+    if (eventsEnabled) {
       // setup event listeners, they will take care of update the position in specific situations
       this.enableEventListeners();
     }
 
-    this.state.eventsEnabled = this.options.eventsEnabled;
+    this.state.eventsEnabled = eventsEnabled;
   }
 
   // We can't use class properties because they don't get listed in the
