@@ -134,6 +134,7 @@ module.exports = function(config) {
       plugins: [resolve(), babel(babelrc)],
     },
     files: [
+      './node_modules/babel-polyfill/dist/polyfill.js',
       './tests/styles/*.css',
       './tests/functional/*.js',
       './tests/unit/*.js',
