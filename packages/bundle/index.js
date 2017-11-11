@@ -11,6 +11,12 @@ const external = ['popper.js'];
 const globals = { 'popper.js': 'Popper' };
 
 function bundle({ entry, dest, moduleName, banner, miniBanner }) {
+  const minifyOptions = {
+    comments: false,
+    banner: miniBanner,
+    mangle: { topLevel: true },
+  };
+
   rollup({
     entry,
     plugins: [babel(babelConfig.es6)],
@@ -27,7 +33,7 @@ function bundle({ entry, dest, moduleName, banner, miniBanner }) {
 
   rollup({
     entry,
-    plugins: [babili({ comments: false, banner: miniBanner }), babel(babelConfig.es6)],
+    plugins: [babili(minifyOptions), babel(babelConfig.es6)],
     external,
   }).then(bundle => {
     bundle.write({
@@ -62,7 +68,7 @@ function bundle({ entry, dest, moduleName, banner, miniBanner }) {
 
   rollup({
     entry,
-    plugins: [babili({ comments: false, banner: miniBanner }), babel(babelConfig.es5)],
+    plugins: [babili(minifyOptions), babel(babelConfig.es5)],
     external,
   }).then(bundle => {
     bundle.write({
