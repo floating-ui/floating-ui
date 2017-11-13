@@ -1,4 +1,5 @@
 const { rollup } = require('rollup');
+const rimraf = require('rimraf');
 
 // Plugins
 const babel = require('rollup-plugin-babel');
@@ -11,6 +12,7 @@ const external = ['popper.js'];
 const globals = { 'popper.js': 'Popper' };
 
 function bundle({ entry, dest, moduleName, banner, miniBanner }) {
+  rimraf.sync('dist');
   const minifyOptions = {
     comments: false,
     banner: miniBanner,
