@@ -5,7 +5,8 @@ version="$(cat package.json | jq -r '.version')"
 
 # Bower doesn't support Lerna multi-packages, we sacrificy flexibity
 # making Bower use the whole repository just for the Popper.js release
-cp -R dist ../../dist
+rm -rf ../../dist
+cp -R dist ../../
 cp bower.json ../../bower.json
 git add -f ../../dist/*
 git add ../../bower.json
