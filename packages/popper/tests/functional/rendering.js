@@ -4,7 +4,7 @@ import '@popperjs/test-utils/setup';
 
 describe('[rendering]', () => {
   const makePopper = makePopperFactory();
-  const microTasksAvailable = window.Promise
+  const microTasksAvailable = window.Promise;
 
   it('renders to the DOM before the first paint when microtasks are available', done => {
     if (!microTasksAvailable) {

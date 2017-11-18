@@ -96,6 +96,7 @@ declare namespace Popper {
 
   export interface PopperOptions {
     placement?: Placement;
+    positionFixed: boolean;
     eventsEnabled?: boolean;
     modifiers?: Modifiers;
     removeOnDestroy?: boolean;
