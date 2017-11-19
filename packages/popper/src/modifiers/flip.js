@@ -30,7 +30,6 @@ export default function flip(data, options) {
     return data;
   }
 
-
   const boundaries = getBoundaries(
     data.instance.popper,
     data.instance.reference,
