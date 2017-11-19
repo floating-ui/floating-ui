@@ -30,7 +30,8 @@ export default function update() {
     this.state,
     this.popper,
     this.reference,
-    this.options.positionFixed ? window.document.documentElement : undefined
+    this.options.positionFixed ? window.document.documentElement : undefined,
+    this.options.positionFixed
   );
 
   // compute auto placement, store placement inside the data object,
@@ -58,7 +59,7 @@ export default function update() {
   );
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
-  // run the modifiers
+   // run the modifiers
   data = runModifiers(this.modifiers, data);
 
   // the first `update` will call `onCreate` callback

@@ -116,6 +116,7 @@ const arrowSize = 5;
       prepend(popper, document.body);
 
       new Popper(reference, popper, {
+        positionFixed: false,
         onCreate(data) {
           const bottom = getRect(popper).bottom;
           expect(bottom).toBeApprox(getRect(reference).top);
