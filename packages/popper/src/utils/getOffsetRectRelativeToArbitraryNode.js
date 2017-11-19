@@ -5,7 +5,7 @@ import getBoundingClientRect from './getBoundingClientRect';
 import runIsIE10 from './isIE10';
 import getClientRect from './getClientRect';
 
-export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
+export default function getOffsetRectRelativeToArbitraryNode(children, parent, ignoreNegativeParentScroll = false) {
   const isIE10 = runIsIE10();
   const isHTML = parent.nodeName === 'HTML';
   const childrenRect = getBoundingClientRect(children);
@@ -16,6 +16,10 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent) {
   const borderTopWidth = parseFloat(styles.borderTopWidth, 10);
   const borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
 
+  if(ignoreNegativeParentScroll) {
+    parentRect.top = parentRect.top > 0 ? parentRect.top : 0;
+    parentRect.left = parentRect.left > 0 ? parentRect.left : 0;
+  }
   let offsets = getClientRect({
     top: childrenRect.top - parentRect.top - borderTopWidth,
     left: childrenRect.left - parentRect.left - borderLeftWidth,

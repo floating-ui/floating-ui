@@ -200,6 +200,7 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
       const popper = appendNewPopper(2, 'popper', parent);
 
       new Popper(ref, popper, {
+        positionFixed: false,
         onCreate: data => {
           simulateScroll(page, { scrollTop: '110vh', delay: 10 });
 

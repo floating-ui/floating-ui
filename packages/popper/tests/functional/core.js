@@ -115,10 +115,10 @@ const arrowSize = 5;
       prepend(reference, document.body);
       prepend(popper, document.body);
 
-      new Popper(reference, popper, {
-        onCreate(data) {
-          const bottom = getRect(popper).bottom;
-          expect(bottom).toBeApprox(getRect(reference).top);
+    new Popper(reference, popper, {
+      positionFixed: false,onCreate(data) {
+        const bottom = getRect(popper).bottom;
+        expect(bottom).toBeApprox(getRect(reference).top);
 
           data.instance.destroy();
           document.body.removeChild(popper);
