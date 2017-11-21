@@ -49,7 +49,7 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   }
 
   if (
-    isIE10
+    isIE10 && !fixedParent
       ? parent.contains(scrollParent)
       : parent === scrollParent && scrollParent.nodeName !== 'BODY'
   ) {

@@ -1242,31 +1242,33 @@ const arrowSize = 5;
       });
     });
 
-    //Not relevant for positionFixed cases
-    if(!positionFixed) {
-      it('inits a popper near a reference element, both inside an element with CSS translateX', done => {
 
-        const fixed = document.createElement('div');
-        fixed.style.position = 'fixed';
-        fixed.style.left = '50%';
-        fixed.style.top = '20px';
-        fixed.style.transform = 'translateX(0)';
-        fixed.style.background = 'green';
-        jasmineWrapper.appendChild(fixed);
+    it('inits a popper near a reference element, both inside an element with CSS translateX', done => {
+      //Not relevant for positionFixed cases
+      if(positionFixed) {
+        pending();
+      }
+      const fixed = document.createElement('div');
+      fixed.style.position = 'fixed';
+      fixed.style.left = '50%';
+      fixed.style.top = '20px';
+      fixed.style.transform = 'translateX(0)';
+      fixed.style.background = 'green';
+      jasmineWrapper.appendChild(fixed);
 
-        const popper = appendNewPopper(2, 'popper', fixed);
-        const ref = appendNewRef(1, 'ref', fixed);
+      const popper = appendNewPopper(2, 'popper', fixed);
+      const ref = appendNewRef(1, 'ref', fixed);
 
-        new Popper(ref, popper, {
-          placement: 'bottom-end',
-          onCreate: data => {
-            expect(getRect(popper).right).toBeApprox(getRect(ref).right);
-            data.instance.destroy();
-            done();
-          },
-        });
+      new Popper(ref, popper, {
+        placement: 'bottom-end',
+        onCreate: data => {
+          expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+          data.instance.destroy();
+          done();
+        },
       });
-    }
+    });
+
 
     it('inits a popper near the reference element when it is a child of ref and a parent is relatively positioned', done => {
       const relative = document.createElement('div');
@@ -1437,51 +1439,51 @@ const arrowSize = 5;
       });
     });
 
-    //Not relevant for positionFixed cases
-    if(!positionFixed) {
-      // test for #310
-      it('properly avoids overflow when parent is transformed', done => {
-
-        jasmineWrapper.innerHTML = `
-        <style>
-          .transform {
-            will-change: transform;
-          }
-          #reference {
-            width: 50px;
-            height: 50px;
-            background: lightgrey;
-          }
-          #popper {
-            background: cyan;
-            width: 200px;
-            height: 100px;
-          }
-        </style>
-        <div class="transform">
-          <div id="reference">
-            Box 2
-          </div>
-          <div id="popper">
-            My Tooltip Content
-          </div>
+    // test for #310
+    it('properly avoids overflow when parent is transformed', done => {
+      //Not relevant for positionFixed cases
+      if (positionFixed) {
+        pending();
+      }
+      jasmineWrapper.innerHTML = `
+      <style>
+        .transform {
+          will-change: transform;
+        }
+        #reference {
+          width: 50px;
+          height: 50px;
+          background: lightgrey;
+        }
+        #popper {
+          background: cyan;
+          width: 200px;
+          height: 100px;
+        }
+      </style>
+      <div class="transform">
+        <div id="reference">
+          Box 2
         </div>
-      `;
+        <div id="popper">
+          My Tooltip Content
+        </div>
+      </div>
+    `;
 
-        const reference = document.getElementById('reference');
-        const popper = document.getElementById('popper');
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
 
-        new Popper(reference, popper, {
-          placement: 'bottom',
-          onCreate(data) {
-            expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
-            expect(getRect(popper).left).toBeApprox(5);
-            data.instance.destroy();
-            done();
-          },
-        });
+      new Popper(reference, popper, {
+        placement: 'bottom',
+        onCreate(data) {
+          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+          expect(getRect(popper).left).toBeApprox(5);
+          data.instance.destroy();
+          done();
+        },
       });
-    }
+    });
 
     // test for #305
     it('correct position if offset parent has borders', done => {
