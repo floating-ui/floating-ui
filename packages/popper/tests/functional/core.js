@@ -115,10 +115,10 @@ const arrowSize = 5;
       prepend(reference, document.body);
       prepend(popper, document.body);
 
-      new Popper(reference, popper, {
-        onCreate(data) {
-          const bottom = getRect(popper).bottom;
-          expect(bottom).toBeApprox(getRect(reference).top);
+    new Popper(reference, popper, {
+      onCreate(data) {
+        const bottom = getRect(popper).bottom;
+        expect(bottom).toBeApprox(getRect(reference).top);
 
           data.instance.destroy();
           document.body.removeChild(popper);
@@ -566,7 +566,6 @@ const arrowSize = 5;
       const popper = appendNewPopper(2, 'popper');
 
       new Popper(ref, popper, {
-        positionFixed: false,
         onCreate: data => {
           expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
           expect(getRect(popper).left).toBeApprox(5);
@@ -596,7 +595,6 @@ const arrowSize = 5;
       const popper = appendNewPopper(2, 'popper', fixed);
 
       new Popper(ref, popper, {
-        positionFixed: false,
         onCreate: data => {
           expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
           expect(getRect(popper).left).toBeApprox(5);
@@ -630,7 +628,6 @@ const arrowSize = 5;
       simulateScroll(document.body, { scrollTop: 800 });
 
       new Popper(ref, popper, {
-        positionFixed: false,
         onCreate: data => {
           expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
           expect(getRect(popper).left).toBeApprox(5);
@@ -660,7 +657,6 @@ const arrowSize = 5;
 
       new Popper(ref, popper, {
         placement: 'top',
-        positionFixed: false,
         onCreate: data => {
           expect(getRect(popper).bottom + arrowSize).toBeApprox(getRect(ref).top);
           expect(getRect(popper).left).toBeApprox(5);
@@ -740,6 +736,7 @@ const arrowSize = 5;
     });
 
     it('inits a popper inside a scrolled body, with its reference element inside a scrolling div, wrapped in a relative div', done => {
+
       const relative = document.createElement('div');
       relative.style.position = 'relative';
       relative.style.margin = '20px';
@@ -772,7 +769,6 @@ const arrowSize = 5;
 
       new Popper(ref, popper, {
         placement: 'right-start',
-        positionFixed: false,
         onCreate: data => {
           expect(getRect(popper).top).toBeApprox(getRect(ref).top + 5); // 5 is the boundaries margin
           expect(getRect(popper).left - arrowSize).toBeApprox(getRect(ref).right);
@@ -822,6 +818,7 @@ const arrowSize = 5;
       });
     });
 
+
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
       if (isIPHONE) {
         pending();
@@ -844,7 +841,6 @@ const arrowSize = 5;
 
       new Popper(ref, popper, {
         placement: 'bottom',
-        positionFixed: false,
         modifiers: {
           flip: {
             boundariesElement: 'viewport',
@@ -861,6 +857,7 @@ const arrowSize = 5;
         },
       });
     });
+
 
     it('inits a popper with a custom modifier that should hide it', done => {
       const reference = appendNewRef(1);
@@ -1245,28 +1242,31 @@ const arrowSize = 5;
       });
     });
 
-    it('inits a popper near a reference element, both inside an element with CSS translateX', done => {
-      const fixed = document.createElement('div');
-      fixed.style.position = 'fixed';
-      fixed.style.left = '50%';
-      fixed.style.top = '20px';
-      fixed.style.transform = 'translateX(0)';
-      fixed.style.background = 'green';
-      jasmineWrapper.appendChild(fixed);
+    //Not relevant for positionFixed cases
+    if(!positionFixed) {
+      it('inits a popper near a reference element, both inside an element with CSS translateX', done => {
 
-      const popper = appendNewPopper(2, 'popper', fixed);
-      const ref = appendNewRef(1, 'ref', fixed);
+        const fixed = document.createElement('div');
+        fixed.style.position = 'fixed';
+        fixed.style.left = '50%';
+        fixed.style.top = '20px';
+        fixed.style.transform = 'translateX(0)';
+        fixed.style.background = 'green';
+        jasmineWrapper.appendChild(fixed);
 
-      new Popper(ref, popper, {
-        placement: 'bottom-end',
-        positionFixed: false,
-        onCreate: data => {
-          expect(getRect(popper).right).toBeApprox(getRect(ref).right);
-          data.instance.destroy();
-          done();
-        },
+        const popper = appendNewPopper(2, 'popper', fixed);
+        const ref = appendNewRef(1, 'ref', fixed);
+
+        new Popper(ref, popper, {
+          placement: 'bottom-end',
+          onCreate: data => {
+            expect(getRect(popper).right).toBeApprox(getRect(ref).right);
+            data.instance.destroy();
+            done();
+          },
+        });
       });
-    });
+    }
 
     it('inits a popper near the reference element when it is a child of ref and a parent is relatively positioned', done => {
       const relative = document.createElement('div');
@@ -1425,7 +1425,6 @@ const arrowSize = 5;
       const s1 = document.getElementById('s1');
 
       new Popper(reference, popper, {
-        positionFixed: false,
         onCreate() {
           simulateScroll(s1, { scrollTop: 20 });
           simulateScroll(document.body, { scrollTop: 50 });
@@ -1438,9 +1437,12 @@ const arrowSize = 5;
       });
     });
 
-    // test for #310
-    it('properly avoids overflow when parent is transformed', done => {
-      jasmineWrapper.innerHTML = `
+    //Not relevant for positionFixed cases
+    if(!positionFixed) {
+      // test for #310
+      it('properly avoids overflow when parent is transformed', done => {
+
+        jasmineWrapper.innerHTML = `
         <style>
           .transform {
             will-change: transform;
@@ -1466,20 +1468,20 @@ const arrowSize = 5;
         </div>
       `;
 
-      const reference = document.getElementById('reference');
-      const popper = document.getElementById('popper');
+        const reference = document.getElementById('reference');
+        const popper = document.getElementById('popper');
 
-      new Popper(reference, popper, {
-        placement: 'bottom',
-        positionFixed: false,
-        onCreate(data) {
-          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
-          expect(getRect(popper).left).toBeApprox(5);
-          data.instance.destroy();
-          done();
-        },
+        new Popper(reference, popper, {
+          placement: 'bottom',
+          onCreate(data) {
+            expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+            expect(getRect(popper).left).toBeApprox(5);
+            data.instance.destroy();
+            done();
+          },
+        });
       });
-    });
+    }
 
     // test for #305
     it('correct position if offset parent has borders', done => {
@@ -1600,7 +1602,6 @@ const arrowSize = 5;
 
         new Popper(reference, popper, {
           placement: 'top',
-          positionFixed: false,
           onCreate() {
             simulateScroll(document.body, { scrollTop: 400, delay: 100 });
           },

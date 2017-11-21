@@ -34,8 +34,8 @@ export default function flip(data, options) {
     data.instance.popper,
     data.instance.reference,
     options.padding,
-    options.boundariesElement,
-    options.positionFixed ? window.document.documentElement : undefined
+    data.positionFixed && options.boundariesElement === 'viewport' ? 'absoluteViewport' : options.boundariesElement,
+    data.positionFixed
   );
 
   let placement = data.placement.split('-')[0];

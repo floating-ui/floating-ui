@@ -233,7 +233,6 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
 
       new Popper(reference, popper, {
         placement: 'top',
-        positionFixed: false,
         onCreate() {
           simulateScroll(document.body, { scrollTop: 200 });
         },
