@@ -58,7 +58,7 @@ export default function update() {
   );
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
-   // run the modifiers
+  // run the modifiers
   data = runModifiers(this.modifiers, data);
 
   // the first `update` will call `onCreate` callback

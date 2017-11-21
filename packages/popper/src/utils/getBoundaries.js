@@ -33,6 +33,7 @@ export default function getBoundaries(
   if (boundariesElement === 'viewport' ) {
     boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
   }
+  //Handle absolute viewport, i.e complete edges ignoring scrolls and padding s
   else if (boundariesElement === 'absoluteViewport') {
     const winSize = getViewportOffsetRectRelativeToArtbitraryNode(popper.ownerDocument.documentElement);
     boundaries = { ...boundaries, bottom: winSize.height, right: winSize.width };
