@@ -277,6 +277,98 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
       });
     });
 
+    it('init popper on fixed reference aligned to left and flips to right', done => {
+      jasmineWrapper.innerHTML = `             
+                <div id="reference" style="position: fixed; top: 50px; left: 1px; background: pink">reference</div>
+                <div id="popper" style="background: purple; width: 5px">popper</div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'left-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().top).toBeApprox(
+            reference.getBoundingClientRect().top
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().right
+          );
+          done();
+        },
+      });
+    });
+
+    it('init popper on fixed reference aligned to right and flips to left', done => {
+      jasmineWrapper.innerHTML = `             
+                <div id="reference" style="position: fixed; top: 50px; right: 1px; background: pink">reference</div>
+                <div id="popper" style="background: purple;">popper</div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'right-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().top).toBeApprox(
+            reference.getBoundingClientRect().top
+          );
+          expect(popper.getBoundingClientRect().right).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
+    it('init popper on fixed reference aligned to top and flips to bottom', done => {
+      jasmineWrapper.innerHTML = `             
+                <div id="reference" style="position: fixed; top: 1px; left: 50px; background: pink">reference</div>
+                <div id="popper" style="background: purple;">popper</div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'top-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().top).toBeApprox(
+            reference.getBoundingClientRect().bottom
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
+    it('init popper on fixed reference aligned to bottom and flips to top', done => {
+      jasmineWrapper.innerHTML = `             
+                <div id="reference" style="position: fixed; bottom: 1px; right: 50px; background: pink">reference</div>
+                <div id="popper" style="background: purple;">popper</div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'bottom-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().bottom).toBeApprox(
+            reference.getBoundingClientRect().top
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
     // This one will fail on IE10 - See #211
     xit('properly positions a bottom popper inside very high body', done => {
       jasmineWrapper.innerHTML = `

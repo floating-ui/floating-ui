@@ -1383,9 +1383,63 @@ const arrowSize = 5;
       });
     });
 
+    it('checks cases where the reference element is fixed', done => {
+      jasmineWrapper.innerHTML = `
+            <div id="reference" style="position: fixed; top: 100px; left: 100px; background: pink">reference</div>
+            <div id="popper" style="background: purple">popper</div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        positionFixed: true,
+        placement: 'bottom-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().top).toBeApprox(
+            reference.getBoundingClientRect().bottom
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
+    it('checks cases where the reference element is fixed in scrolling parent', done => {
+      jasmineWrapper.innerHTML = `
+            <div id="scroll" style="height: 100vh; overflow: scroll">                
+                <div id="reference" style="position: fixed; top: 100px; left: 100px; background: pink">reference</div>
+                <div id="popper" style="background: purple">popper</div>
+                <div style="height: 200vh"></div>
+            </div>                
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+      const scrolling = document.getElementById('scroll');
+
+      new Popper(reference, popper, {
+        placement: 'bottom-start',
+        onCreate() {
+          simulateScroll(scrolling, { scrollTop: 50 });
+        },
+        onUpdate() {
+          expect(popper.getBoundingClientRect().top).toBeApprox(
+            reference.getBoundingClientRect().bottom
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
     it('checks that positionFixed works correctly', done => {
       jasmineWrapper.innerHTML = `
-                <div id="reference" style="background: pink">popper</div>
+                <div id="reference" style="background: pink">reference</div>
                 <div id="popper" style="background: purple">popper</div>
             `;
 
@@ -1398,12 +1452,10 @@ const arrowSize = 5;
         onCreate() {
           expect(popper.style.position).toEqual('fixed');
           expect(getRect(popper).top).toBeApprox(
-            reference.getBoundingClientRect().bottom,
-            10
+            reference.getBoundingClientRect().bottom
           );
           expect(getRect(popper).left).toBeApprox(
-            reference.getBoundingClientRect().left,
-            10
+            reference.getBoundingClientRect().left
           );
           done();
         },
