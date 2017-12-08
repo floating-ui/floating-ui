@@ -31,7 +31,7 @@ export default function hide(data) {
     }
 
     data.hide = true;
-    data.attributes['x-out-of-boundaries'] = '';
+    data.attributes['data-popper-out-of-boundaries'] = '';
   } else {
     // Avoid unnecessary DOM access if visibility hasn't changed
     if (data.hide === false) {
@@ -39,7 +39,7 @@ export default function hide(data) {
     }
 
     data.hide = false;
-    data.attributes['x-out-of-boundaries'] = false;
+    data.attributes['data-popper-out-of-boundaries'] = false;
   }
 
   return data;

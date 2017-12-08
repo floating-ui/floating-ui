@@ -7,7 +7,7 @@ export default function appendNewPopper(id, text, container) {
   popper.textContent = text || 'popper';
   const arrow = document.createElement('div');
   arrow.className = 'popper__arrow';
-  arrow.setAttribute('x-arrow', '');
+  arrow.setAttribute('data-popper-arrow', '');
   popper.appendChild(arrow);
   (container || jasmineWrapper).appendChild(popper);
   return popper;

@@ -11,7 +11,7 @@ export default function destroy() {
 
   // touch DOM only if `applyStyle` modifier is enabled
   if (isModifierEnabled(this.modifiers, 'applyStyle')) {
-    this.popper.removeAttribute('x-placement');
+    this.popper.removeAttribute('data-popper-placement');
     this.popper.style.left = '';
     this.popper.style.position = '';
     this.popper.style.top = '';

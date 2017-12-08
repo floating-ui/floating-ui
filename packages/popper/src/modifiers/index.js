@@ -179,8 +179,8 @@ export default {
     enabled: true,
     /** @prop {ModifierFn} */
     fn: arrow,
-    /** @prop {String|HTMLElement} element='[x-arrow]' - Selector or node used as arrow */
-    element: '[x-arrow]',
+    /** @prop {String|HTMLElement} element='[data-popper-arrow]' - Selector or node used as arrow */
+    element: '[data-popper-arrow]',
   },
 
   /**
@@ -240,7 +240,7 @@ export default {
 
   /**
    * Modifier used to hide the popper when its reference element is outside of the
-   * popper boundaries. It will set a `x-out-of-boundaries` attribute which can
+   * popper boundaries. It will set a `data-popper-out-of-boundaries` attribute which can
    * be used to hide with a CSS selector the popper when its reference is
    * out of boundaries.
    *
