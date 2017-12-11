@@ -14,7 +14,7 @@ import isFixed from './isFixed';
  * @param {HTMLElement} reference
  * @param {number} padding
  * @param {HTMLElement} boundariesElement - Element used to define the boundaries
- * @param {HTMLElement} fixedParent - Force this element as the parent
+ * @param {HTMLElement} fixedParentRef - Force this element as the parent
  * @returns {Object} Coordinates of the boundaries
  */
 export default function getBoundaries(
@@ -22,16 +22,23 @@ export default function getBoundaries(
   reference,
   padding,
   boundariesElement,
-  fixedParent = null
+  fixedParent = false
 ) {
   // NOTE: 1 DOM access here
+
   let boundaries = { top: 0, left: 0 };
-  const offsetParent = fixedParent || findCommonOffsetParent(popper, reference);
+  const offsetParent = fixedParent ? popper.ownerDocument.documentElement : findCommonOffsetParent(popper, reference);
 
   // Handle viewport case
-  if (boundariesElement === 'viewport') {
+  if (boundariesElement === 'viewport' ) {
     boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
-  } else {
+  }
+  //Handle absolute viewport, i.e complete edges ignoring scrolls and padding s
+  else if (boundariesElement === 'absoluteViewport') {
+    const winSize = getViewportOffsetRectRelativeToArtbitraryNode(popper.ownerDocument.documentElement);
+    boundaries = { ...boundaries, bottom: winSize.height, right: winSize.width };
+  }
+  else {
     // Handle other cases based on DOM element used as boundaries
     let boundariesNode;
     if (boundariesElement === 'scrollParent') {
@@ -47,7 +54,8 @@ export default function getBoundaries(
 
     const offsets = getOffsetRectRelativeToArbitraryNode(
       boundariesNode,
-      offsetParent
+      offsetParent,
+      fixedParent
     );
 
     // In case of HTML, we need a different computation

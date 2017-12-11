@@ -9,9 +9,8 @@ import getBoundaries from '../utils/getBoundaries';
  * @returns {Object} The data object, properly modified
  */
 export default function preventOverflow(data, options) {
-  const fixedParent = data.positionFixed ? window.document.documentElement : undefined;
   let boundariesElement =
-    options.boundariesElement || fixedParent || getOffsetParent(data.instance.popper);
+    options.boundariesElement || getOffsetParent(data.instance.popper);
 
   // If offsetParent is the reference element, we really want to
   // go one step up and use the next offsetParent as reference to
@@ -25,7 +24,7 @@ export default function preventOverflow(data, options) {
     data.instance.reference,
     options.padding,
     boundariesElement,
-    fixedParent
+    data.positionFixed
   );
   options.boundaries = boundaries;
 
