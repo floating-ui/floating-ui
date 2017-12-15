@@ -99,9 +99,10 @@ No idea what am I talking about? You are looking for UMD probably.
 
 - UMD - Universal Module Definition: AMD, RequireJS and globals;
 - ESM - ES Modules: For webpack/Rollup or browser supporting the spec;
-- ESNext: Available in `dist/`, can be used with webpack and `babel-preset-env`;
+- ESNext: Available in `/dist`, can be used with webpack and `babel-preset-env`;
 
-Make sure to use the right one for your needs. If you want to import it with a `<script>` tag, use UMD.
+Make sure to use the right one for your needs. If you want to import it with a `<script>` tag, use UMD.  
+If you can't find the `/dist` folder in the Git repository, this is because the distribution files are shipped only to Bower, npm or our CDNs. You can still find them visiting `https://unpkg.com/popper.js/dist/` (or `https://unpkg.com/tooltip.js/dist/`)
 
 ## Usage
 
