@@ -24,7 +24,7 @@
 ## Wut? Poppers?
 
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
-Common examples of poppers are tooltips, popovers and drop-downs.
+Common examples of poppers are tooltips, popovers, and drop-downs.
 
 
 ## So, yet another tooltip library?
@@ -38,7 +38,7 @@ The engine is completely modular and most of its features are implemented as **m
 The whole code base is written in ES2015 and its features are automatically tested on real browsers thanks to [SauceLabs](https://saucelabs.com/) and [TravisCI](https://travis-ci.org/).
 
 Popper.js has zero dependencies. No jQuery, no LoDash, nothing.  
-It's used by big companies like [Twitter in Bootstrap v4](https://getbootstrap.com/), [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper) and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
+It's used by big companies like [Twitter in Bootstrap v4](https://getbootstrap.com/), [Microsoft in WebClipper](https://github.com/OneNoteDev/WebClipper), and [Atlassian in AtlasKit](https://aui-cdn.atlassian.com/atlaskit/registry/).
 
 ### Popper.js
 
@@ -94,10 +94,10 @@ For more info, [read the related issue](https://github.com/FezVrasta/popper.js/i
 
 ### Dist targets
 
-Popper.js is currently shipped with 3 targets in mind: UMD, ESM and ESNext.  
+Popper.js is currently shipped with 3 targets in mind: UMD, ESM, and ESNext.  
 No idea what am I talking about? You are looking for UMD probably.
 
-- UMD - Universal Module Definition: AMD, RequireJS and globals;
+- UMD - Universal Module Definition: AMD, RequireJS, and globals;
 - ESM - ES Modules: For webpack/Rollup or browser supporting the spec;
 - ESNext: Available in `/dist`, can be used with webpack and `babel-preset-env`;
 
