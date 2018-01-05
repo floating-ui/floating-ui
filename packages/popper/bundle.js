@@ -37,3 +37,11 @@ bundle({
   banner,
   miniBanner,
 });
+
+bundle({
+  name: 'PopperLite',
+  input: 'src/popper-lite.js',
+  file: 'popper-lite.js',
+  banner,
+  miniBanner,
+});
