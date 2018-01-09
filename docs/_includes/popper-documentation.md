@@ -935,7 +935,7 @@ to change in future major versions of the library.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| x | <code>string</code> | <code>&quot;&#x27;bottom&#x27;&quot;</code> | Where to anchor the X axis (`bottom` or `top`). AKA X offset origin. Change this if your popper should grow in a direction different from `bottom` |
+| x | <code>string</code> | <code>&quot;&#x27;right&#x27;&quot;</code> | Where to anchor the X axis (`left` or `right`). AKA X offset origin. Change this if your popper should grow in a direction different from `right` |
 
 <a name="modifiers..computeStyle.y"></a>
 
@@ -945,7 +945,7 @@ to change in future major versions of the library.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| x | <code>string</code> | <code>&quot;&#x27;left&#x27;&quot;</code> | Where to anchor the Y axis (`left` or `right`). AKA Y offset origin. Change this if your popper should grow in a direction different from `right` |
+| y | <code>string</code> | <code>&quot;&#x27;bottom&#x27;&quot;</code> | Where to anchor the Y axis (`bottom` or `top`). AKA Y offset origin. Change this if your popper should grow in a direction different from `bottom` |
 
 <a name="modifiers..applyStyle"></a>
 
