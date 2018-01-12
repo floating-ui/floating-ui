@@ -27,7 +27,7 @@ export default function isModifierRequired(
       );
     });
 
-  if (!isRequired) {
+  if (isRequired) {
     const requesting = `\`${requestingName}\``;
     const requested = `\`${requestedName}\``;
     console.warn(
