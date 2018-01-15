@@ -20,8 +20,8 @@ export default class Popper {
    * @return {Object} instance - The generated Popper.js instance
    */
   constructor(reference, popper, options = {}) {
-    // make update() debounced, so that it only runs at most once-per-tick
-    this.update = debounce(this.update.bind(this));
+    // don't use this, it's used only by Popper#scheduleUpdate internally
+    this.debouncedUpdate = debounce(this.update.bind(this));
 
     // with {} we create a new object with the options inside it
     this.options = { ...Popper.Defaults, ...options };
@@ -77,7 +77,7 @@ export default class Popper {
     });
 
     // fire the first update to position the popper in the right place
-    this.update();
+    this.debouncedUpdate();
 
     const eventsEnabled = this.options.eventsEnabled;
     if (eventsEnabled) {
@@ -90,8 +90,8 @@ export default class Popper {
 
   // We can't use class properties because they don't get listed in the
   // class prototype and break stuff like Sinon stubs
-  update() {
-    return update.call(this);
+  update(done) {
+    return update.call(this, done);
   }
   destroy() {
     return destroy.call(this);
@@ -105,10 +105,16 @@ export default class Popper {
 
   /**
    * Schedule an update, it will run on the next UI update available
+   * It returns a promise so that you can use it with `async/await`
    * @method scheduleUpdate
+   * @returns Promise
    * @memberof Popper
    */
-  scheduleUpdate = () => requestAnimationFrame(this.update);
+  scheduleUpdate = () => {
+    return new Promise(done =>
+      requestAnimationFrame(() => this.debouncedUpdate(done))
+    );
+  };
 
   /**
    * Collection of utilities useful when writing custom modifiers.

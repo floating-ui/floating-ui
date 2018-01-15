@@ -7,12 +7,14 @@ import runModifiers from '../utils/runModifiers';
  * Updates the position of the popper, computing the new offsets and applying
  * the new style.<br />
  * Prefer `scheduleUpdate` over `update` because of performance reasons.
+ * @arguments {Function} done - called once the update ends
  * @method
  * @memberof Popper
  */
-export default function update() {
+export default function update(done) {
   // if popper is destroyed, don't perform any further update
   if (this.state.isDestroyed) {
+    done && done(undefined);
     return;
   }
 
@@ -69,4 +71,6 @@ export default function update() {
   } else {
     this.options.onUpdate(data);
   }
+
+  done && done(data);
 }

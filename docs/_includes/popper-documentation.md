@@ -689,7 +689,7 @@ It has no effect if no `arrowElement` is provided.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[x-arrow]&#x27;</code> | Selector or node used as arrow |
+| element | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;[data-popper-arrow]&#x27;</code> | Selector or node used as arrow |
 
 <a name="modifiers..flip"></a>
 
@@ -820,7 +820,7 @@ the reference element.
 
 ### modifiers~hide
 Modifier used to hide the popper when its reference element is outside of the
-popper boundaries. It will set a `x-out-of-boundaries` attribute which can
+popper boundaries. It will set a `data-popper-out-of-boundaries` attribute which can
 be used to hide with a CSS selector the popper when its reference is
 out of boundaries.
 

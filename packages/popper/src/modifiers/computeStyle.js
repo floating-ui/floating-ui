@@ -89,7 +89,7 @@ export default function computeStyle(data, options) {
 
   // Attributes
   const attributes = {
-    'x-placement': data.placement,
+    'data-popper-placement': data.placement,
   };
 
   // Update `data` attributes, styles and arrowStyles

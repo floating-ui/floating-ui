@@ -36,7 +36,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
           margin: 20px;
           box-shadow: 0 0 0 20px rgba(0, 128, 0, .2);
         }
-        [x-arrow] {
+        [data-popper-arrow] {
           position: absolute;
           border-bottom: 8px solid green;
           border-left: 8px solid transparent;
@@ -48,7 +48,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
         ref
       </div>
       <div id="popper">
-        <div x-arrow id="arrow"></div>
+        <div data-popper-arrow id="arrow"></div>
         pop
       </div>
     `;
@@ -86,7 +86,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
           margin: 20px;
           box-shadow: 0 0 0 20px rgba(0, 128, 0, .2);
         }
-        [x-arrow] {
+        [data-popper-arrow] {
           position: absolute;
           border-bottom: 8px solid green;
           border-left: 8px solid transparent;
@@ -98,7 +98,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
         ref
       </div>
       <div id="popper">
-        <div x-arrow id="arrow"></div>
+        <div data-popper-arrow id="arrow"></div>
         pop
       </div>
     `;
@@ -138,7 +138,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
           border-bottom:20px solid black;
         }
 
-        [x-arrow] {
+        [data-popper-arrow] {
           position:absolute;
           width:10px;
           height:10px;
@@ -149,7 +149,7 @@ describe('[arrow core]' + (positionFixed ? ' Fixed' : ''), () => {
       </style>
       <div id="reference" aria-describedby="pop">ref</div>
       <div id="popper" role="tooltip" class="">
-        <div x-arrow id="arrow"></div>pop
+        <div data-popper-arrow id="arrow"></div>pop
       </div>
     `;
 

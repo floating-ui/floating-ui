@@ -37,11 +37,3 @@ bundle({
   banner,
   miniBanner,
 });
-
-bundle({
-  name: 'PopperUtils',
-  input: 'src/utils/index.js',
-  file: 'popper-utils.js',
-  banner,
-  miniBanner,
-});

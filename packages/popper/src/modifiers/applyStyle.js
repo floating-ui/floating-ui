@@ -32,7 +32,7 @@ export default function applyStyle(data) {
 }
 
 /**
- * Set the x-placement attribute before everything else because it could be used
+ * Set the data-popper-placement attribute before everything else because it could be used
  * to add margins to the popper margins needs to be calculated to get the
  * correct popper offsets.
  * @method
@@ -63,7 +63,7 @@ export function applyStyleOnLoad(
     options.modifiers.flip.padding
   );
 
-  popper.setAttribute('x-placement', placement);
+  popper.setAttribute('data-popper-placement', placement);
 
   // Apply `position` to popper before anything else because
   // without the position applied we can't guarantee correct computations

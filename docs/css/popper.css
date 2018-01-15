@@ -78,12 +78,12 @@ p.bold {
 .style5 .tooltip .tooltip-arrow {
     border-color: #1E252B;
 }
-.popper[x-placement^="top"],
-.tooltip[x-placement^="top"] {
+.popper[data-popper-placement^="top"],
+.tooltip[data-popper-placement^="top"] {
     margin-bottom: 5px;
 }
-.popper[x-placement^="top"] .popper__arrow,
-.tooltip[x-placement^="top"] .tooltip-arrow {
+.popper[data-popper-placement^="top"] .popper__arrow,
+.tooltip[data-popper-placement^="top"] .tooltip-arrow {
     border-width: 5px 5px 0 5px;
     border-left-color: transparent;
     border-right-color: transparent;
@@ -93,12 +93,12 @@ p.bold {
     margin-top: 0;
     margin-bottom: 0;
 }
-.popper[x-placement^="bottom"],
-.tooltip[x-placement^="bottom"] {
+.popper[data-popper-placement^="bottom"],
+.tooltip[data-popper-placement^="bottom"] {
     margin-top: 5px;
 }
-.tooltip[x-placement^="bottom"] .tooltip-arrow,
-.popper[x-placement^="bottom"] .popper__arrow {
+.tooltip[data-popper-placement^="bottom"] .tooltip-arrow,
+.popper[data-popper-placement^="bottom"] .popper__arrow {
     border-width: 0 5px 5px 5px;
     border-left-color: transparent;
     border-right-color: transparent;
@@ -108,12 +108,12 @@ p.bold {
     margin-top: 0;
     margin-bottom: 0;
 }
-.tooltip[x-placement^="right"],
-.popper[x-placement^="right"] {
+.tooltip[data-popper-placement^="right"],
+.popper[data-popper-placement^="right"] {
     margin-left: 5px;
 }
-.popper[x-placement^="right"] .popper__arrow,
-.tooltip[x-placement^="right"] .tooltip-arrow {
+.popper[data-popper-placement^="right"] .popper__arrow,
+.tooltip[data-popper-placement^="right"] .tooltip-arrow {
     border-width: 5px 5px 5px 0;
     border-left-color: transparent;
     border-top-color: transparent;
@@ -123,12 +123,12 @@ p.bold {
     margin-left: 0;
     margin-right: 0;
 }
-.popper[x-placement^="left"],
-.tooltip[x-placement^="left"] {
+.popper[data-popper-placement^="left"],
+.tooltip[data-popper-placement^="left"] {
     margin-right: 5px;
 }
-.popper[x-placement^="left"] .popper__arrow,
-.tooltip[x-placement^="left"] .tooltip-arrow {
+.popper[data-popper-placement^="left"] .popper__arrow,
+.tooltip[data-popper-placement^="left"] .tooltip-arrow {
     border-width: 5px 0 5px 5px;
     border-top-color: transparent;
     border-right-color: transparent;

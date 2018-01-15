@@ -5,11 +5,9 @@ import makeConnectedScrollElement from '@popperjs/test-utils/utils/makeConnected
 import makeElement from '@popperjs/test-utils/utils/makeElement';
 import '@popperjs/test-utils/setup';
 
-[true, false].forEach((positionFixed) => {
-
+[true, false].forEach(positionFixed => {
   describe('[lifecycle]' + (positionFixed ? ' Fixed' : ''), () => {
-
-    beforeEach(function(){
+    beforeEach(function() {
       Popper.Defaults.positionFixed = positionFixed;
     });
 
@@ -34,11 +32,13 @@ import '@popperjs/test-utils/setup';
       it('adds a scroll event listener to window when boundariesElement is viewport', () => {
         spyOn(window, 'addEventListener');
 
-        const {
-          state,
-        } = makePopper(makeConnectedElement(), makeConnectedElement(), {
-          boundariesElement: 'viewport',
-        });
+        const { state } = makePopper(
+          makeConnectedElement(),
+          makeConnectedElement(),
+          {
+            boundariesElement: 'viewport',
+          }
+        );
 
         expect(window.addEventListener.calls.argsFor(1)).toEqual([
           'scroll',
@@ -70,11 +70,13 @@ import '@popperjs/test-utils/setup';
       });
 
       it('should not add resize/scroll event if eventsEnabled option is set to false', () => {
-        const {
-          state,
-        } = makePopper(makeConnectedElement(), makeConnectedElement(), {
-          eventsEnabled: false,
-        });
+        const { state } = makePopper(
+          makeConnectedElement(),
+          makeConnectedElement(),
+          {
+            eventsEnabled: false,
+          }
+        );
 
         expect(state.eventsEnabled).toBe(false);
         expect(state.updateBound).toBeUndefined();
@@ -189,9 +191,9 @@ import '@popperjs/test-utils/setup';
           const { updateBound } = instance.state;
           instance.destroy();
 
-          expect(boundariesElement.removeEventListener.calls.allArgs()).toEqual([
-            ['scroll', updateBound],
-          ]);
+          expect(
+            boundariesElement.removeEventListener.calls.allArgs()
+          ).toEqual([['scroll', updateBound]]);
         });
 
         describe('when the reference is disconnected from the DOM', () => {
@@ -262,6 +264,29 @@ import '@popperjs/test-utils/setup';
         expect(instance.state.eventsEnabled).toBe(false);
         expect(instance.state.updateBound).toBe(null);
         expect(instance.state.scrollElement).toBe(null);
+      });
+    });
+
+    describe('scheduleUpdate', () => {
+      it('returns a promise', () => {
+        const instance = makePopper(
+          makeConnectedElement(),
+          makeConnectedElement()
+        );
+        instance.scheduleUpdate().then(data => {
+          expect(data).toBeDefined();
+        });
+      });
+
+      it('returns a promise with undefined as result if destroyed', () => {
+        const instance = makePopper(
+          makeConnectedElement(),
+          makeConnectedElement()
+        );
+        instance.destroy();
+        instance.scheduleUpdate().then(data => {
+          expect(data).toBeUndefined();
+        });
       });
     });
   });
