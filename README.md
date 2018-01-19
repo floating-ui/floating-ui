@@ -72,24 +72,24 @@ Find [the documentation here](docs/_includes/tooltip-documentation.md).
 ## Installation
 Popper.js is available on the following package managers and CDNs:
 
-| Source           |                                                                                  |
-|:-----------------|:---------------------------------------------------------------------------------|
-| npm              | `npm install popper.js --save`                                                   |
-| yarn             | `yarn add popper.js`                                                             |
-| NuGet            | `PM> Install-Package popper.js`                                                  |
-| Bower            | `bower install popper.js --save`                                                 |
-| unpkg            | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                     |
-| unpkg, minified  | [`https://unpkg.com/popper.min.js`](https://unpkg.com/popper.min.js)             |
+| Source           |                                                                                                                |
+|:-----------------|:---------------------------------------------------------------------------------------------------------------|
+| npm              | `npm install popper.js --save`                                                                                 |
+| yarn             | `yarn add popper.js`                                                                                           |
+| NuGet            | `PM> Install-Package popper.js`                                                                                |
+| Bower            | `bower install popper.js --save`                                                                               |
+| unpkg            | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                                   |
+| unpkg, minified  | [`https://unpkg.com/popper.js/dist/umd/popper.min.js`](https://unpkg.com/popper.js/dist/umd/popper.min.js)     |
 
 Tooltip.js as well:
 
-| Source           |                                                                                  |
-|:-----------------|:---------------------------------------------------------------------------------|
-| npm              | `npm install tooltip.js --save`                                                  |
-| yarn             | `yarn add tooltip.js`                                                            |
-| Bower*           | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                   |
-| unpkg            | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                   |
-| unpkg, minified  | [`https://unpkg.com/tooltip.min.js`](https://unpkg.com/tooltip.min.js)           |
+| Source           |                                                                                                                |
+|:-----------------|:---------------------------------------------------------------------------------------------------------------|
+| npm              | `npm install tooltip.js --save`                                                                                |
+| yarn             | `yarn add tooltip.js`                                                                                          |
+| Bower*           | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                                                 |
+| unpkg            | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                                                 |
+| unpkg, minified  | [`https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js`](https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js) |
 
 \*: Bower isn't officially supported, it can be used to install Tooltip.js only trough the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggests to use npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
