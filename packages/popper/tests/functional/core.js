@@ -9,6 +9,7 @@ import appendNewRef from '@popperjs/test-utils/utils/appendNewRef';
 import simulateScroll from '@popperjs/test-utils/utils/simulateScroll';
 import prepend from '@popperjs/test-utils/utils/prepend';
 import isMSBrowser from '@popperjs/test-utils/utils/isMSBrowser';
+import getScrollParent from '../../src/utils/getScrollParent';
 import getRect from '../utils/getRect';
 
 const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
@@ -818,6 +819,88 @@ const arrowSize = 5;
       });
     });
 
+    it('getScrollParent does not hold element as a scroll parent if it does not contain a scrollbar', () => {
+      const root = document.createElement('div');
+      root.style.overflow = 'auto';
+      root.style.width = '200px';
+      root.style.height = '100px';
+      jasmineWrapper.appendChild(root);
+
+      const child = document.createElement('div');
+      child.style.width = '200px';
+      child.style.height = '100px';
+      root.appendChild(child);
+
+      expect(getScrollParent(child)).toBe(document.body);
+    });
+
+    it('getScrollParent holds element as a scroll parent if it contains a horizontal scrollbar', () => {
+      const root = document.createElement('div');
+      root.style.overflow = 'auto';
+      root.style.width = '200px';
+      root.style.height = '100px';
+      jasmineWrapper.appendChild(root);
+
+      const child = document.createElement('div');
+      child.style.width = '210px';
+      child.style.height = '100px';
+      root.appendChild(child);
+
+      expect(getScrollParent(child)).toBe(root);
+    });
+
+    it('getScrollParent holds element as a scroll parent if it contains a vertical scrollbar', () => {
+      const root = document.createElement('div');
+      root.style.overflow = 'auto';
+      root.style.width = '200px';
+      root.style.height = '100px';
+      jasmineWrapper.appendChild(root);
+
+      const child = document.createElement('div');
+      child.style.width = '200px';
+      child.style.height = '110px';
+      root.appendChild(child);
+
+      expect(getScrollParent(child)).toBe(root);
+    });
+
+    it('inits a popper and its reference element where parent has overflow auto but no scrollbar', done => {
+      const outerWrapper = document.createElement('div');
+      outerWrapper.style.position = 'relative';
+      outerWrapper.style.marginLeft = '10px';
+      outerWrapper.style.overflow = 'auto';
+      jasmineWrapper.appendChild(outerWrapper);
+
+      const child = document.createElement('div');
+      child.style.marginLeft = '20px';
+      child.style.marginTop = '40px';
+      outerWrapper.appendChild(child);
+
+      const ref = appendNewRef(1, 'ref', child);
+      ref.style.width = '100px';
+      ref.style.height = '100px';
+      child.appendChild(ref);
+
+      const popper = document.createElement('div');
+      popper.style.width = '100px';
+      popper.style.height = '100px';
+      outerWrapper.appendChild(popper);
+
+      new Popper(ref, popper, {
+        modifiers: {
+          preventOverflow: {
+            boundariesElement: 'viewport',
+          },
+        },
+        onCreate: data => {
+          const refRect = getRect(ref);
+          expect(getRect(popper).top).toBeApprox(refRect.top + refRect.height);
+
+          data.instance.destroy();
+          done();
+        },
+      });
+    });
 
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
       if (isIPHONE) {
