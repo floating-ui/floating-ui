@@ -637,7 +637,6 @@ const arrowSize = 5;
 
       new Popper(ref, popper, {
         onCreate: data => {
-          debugger;
           expect(getRect(popper).top - arrowSize).toBeApprox(getRect(ref).bottom);
           expect(getRect(popper).left).toBeApprox(5);
           data.instance.destroy();
