@@ -371,7 +371,7 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
 
     it('init popper on transformed parent flips to top', done => {
       jasmineWrapper.innerHTML = `        
-              <div id="container" style="height: 100vh; transform: translateZ(0)">                    
+              <div id="container" style="margin-left: 100px; margin-top:100px; height: 100vh; transform: translateZ(0)">                    
                 <div style="height:100%"></div> 
                 <div id="reference" style="background: pink">reference</div>
                 <div id="popper" style="background: purple;">popper</div>
@@ -384,10 +384,10 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
       new Popper(reference, popper, {
         placement: 'bottom-start',
         onCreate() {
-          expect(popper.getBoundingClientRect().bottom).toBe(
+          expect(popper.getBoundingClientRect().bottom).toBeApprox(
             reference.getBoundingClientRect().top
           );
-          expect(popper.getBoundingClientRect().left).toBe(
+          expect(popper.getBoundingClientRect().left).toBeApprox(
             reference.getBoundingClientRect().left
           );
           done();

@@ -1489,7 +1489,7 @@ const arrowSize = 5;
       const ref = document.createElement('div');
       ref.style.width = '100px';
       ref.style.height = '100px';
-      ref.style.background = 'greens';
+      ref.style.background = 'green';
       ref.innerHTML = 'ref';
 
       container.appendChild(popper);
@@ -1505,6 +1505,8 @@ const arrowSize = 5;
           expect(getRect(popper).top).toBe(
             ref.getBoundingClientRect().top
           );
+
+          debugger;
           data.instance.destroy();
           done();
         },
