@@ -1476,9 +1476,10 @@ const arrowSize = 5;
       container.style.width = '800px';
       container.style.height = '600px';
       container.style.marginLeft = '200px';
-      container.style.marginRight = '200px';
+      container.style.marginTop = '200px';
       container.style.background = 'grey';
-      container.style.transform = 'translateZ(0)';
+      container.style.position = 'relative';
+      container.style.transform = 'translateX(0)';
 
       const popper = document.createElement('div');
       popper.style.width = '100px';
@@ -1499,14 +1500,13 @@ const arrowSize = 5;
       new Popper(ref, popper, {
         placement: 'right',
         onCreate: data => {
-          expect(getRect(popper).left).toBe(
-            ref.getBoundingClientRect().right
+          expect(getRect(popper).left).toBeApprox(
+            getRect(ref).right
           );
-          expect(getRect(popper).top).toBe(
-            ref.getBoundingClientRect().top
+          expect(getRect(popper).top).toBeApprox(
+            getRect(ref).top
           );
 
-          debugger;
           data.instance.destroy();
           done();
         },
