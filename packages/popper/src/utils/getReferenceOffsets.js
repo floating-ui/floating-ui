@@ -1,5 +1,6 @@
 import findCommonOffsetParent from './findCommonOffsetParent';
 import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
+import getTransformedParent from './getTransformedParent';
 
 /**
  * Get offsets to the reference element
@@ -8,11 +9,10 @@ import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbit
  * @param {Object} state
  * @param {Element} popper - the popper element
  * @param {Element} reference - the reference element (the popper will be relative to this)
- * @param {Element} fixedParent - force to calc by a specific parent, used by positionFixed mostly
- * @param {Element} ignoreParentScroll - force ignore on parents scroll, used by positionFixed mostly
+ * @param {Element} fixedPosition - is in fixed position mode
  * @returns {Object} An object containing the offsets which will be applied to the popper
  */
-export default function getReferenceOffsets(state, popper, reference, fixedParent = null) {
-  const commonOffsetParent = fixedParent ? window.document.documentElement : findCommonOffsetParent(popper, reference);
-  return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent, fixedParent);
+export default function getReferenceOffsets(state, popper, reference, fixedPosition = null) {
+  const commonOffsetParent = fixedPosition ? getTransformedParent(popper) : findCommonOffsetParent(popper, reference);
+  return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent, fixedPosition);
 }
