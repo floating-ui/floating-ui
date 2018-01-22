@@ -1471,6 +1471,46 @@ const arrowSize = 5;
       });
     });
 
+    it('init a popper with position fixed with a transformd parent', done => {
+      const container = document.createElement('div');
+      container.style.width = '800px';
+      container.style.height = '600px';
+      container.style.marginLeft = '200px';
+      container.style.marginRight = '200px';
+      container.style.background = 'grey';
+      container.style.transform = 'translateZ(0)';
+
+      const popper = document.createElement('div');
+      popper.style.width = '100px';
+      popper.style.height = '100px';
+      popper.style.background = 'yellow';
+      popper.innerHTML = 'popper';
+
+      const ref = document.createElement('div');
+      ref.style.width = '100px';
+      ref.style.height = '100px';
+      ref.style.background = 'greens';
+      ref.innerHTML = 'ref';
+
+      container.appendChild(popper);
+      container.appendChild(ref);
+      jasmineWrapper.appendChild(container);
+
+      new Popper(ref, popper, {
+        placement: 'right',
+        onCreate: data => {
+          expect(getRect(popper).left).toBe(
+            ref.getBoundingClientRect().right
+          );
+          expect(getRect(popper).top).toBe(
+            ref.getBoundingClientRect().top
+          );
+          data.instance.destroy();
+          done();
+        },
+      });
+    });
+
     // test for #224
     it('checks that only the needed parents scroll offsets are included', done => {
       jasmineWrapper.innerHTML = `
