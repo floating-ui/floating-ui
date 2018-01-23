@@ -1,4 +1,4 @@
-import isIE10 from './isIE10';
+import isIE from './isIE';
 
 function getSize(axis, body, html, computedStyle) {
   return Math.max(
@@ -7,7 +7,7 @@ function getSize(axis, body, html, computedStyle) {
     html[`client${axis}`],
     html[`offset${axis}`],
     html[`scroll${axis}`],
-    isIE10()
+    isIE(10)
       ? html[`offset${axis}`] +
         computedStyle[`margin${axis === 'Height' ? 'Top' : 'Left'}`] +
         computedStyle[`margin${axis === 'Height' ? 'Bottom' : 'Right'}`]
@@ -18,7 +18,7 @@ function getSize(axis, body, html, computedStyle) {
 export default function getWindowSizes() {
   const body = document.body;
   const html = document.documentElement;
-  const computedStyle = isIE10() && getComputedStyle(html);
+  const computedStyle = isIE(10) && getComputedStyle(html);
 
   return {
     height: getSize('Height', body, html, computedStyle),

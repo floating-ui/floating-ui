@@ -8,9 +8,9 @@ import isIE from './isIE';
  * @returns {Element} first transformed parent or documentElement
  */
 
-export default function getTransformedParent(element) {
+export default function getFixedPositionOffsetParent(element) {
   // This check is needed to avoid errors in case one of the elements isn't defined for any reason
-  if (!element || !element.parentElement || isIE()) {
+   if (!element || !element.parentElement || isIE()) {
     return document.documentElement;
   }
   let el = element.parentElement;
