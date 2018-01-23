@@ -184,6 +184,40 @@ const arrowSize = 5;
       });
     });
 
+    it('inits a center popper', done => {
+      const reference = appendNewRef(1);
+      const popper = appendNewPopper(2);
+
+      // try to position so the popper doesn't get shifted at the screen edges
+      reference.style.position = 'absolute';
+      reference.style.left = '50%';
+      reference.style.top = '50%';
+
+      // who would use an arrow on placement:center?
+      // (also makes diff less clean)
+      popper.removeChild(popper.querySelector('.popper__arrow'));
+
+      const pop = new Popper(reference, popper, {
+        placement: 'center',
+        onCreate(){
+          const popRect = getRect(popper);
+          const refRect = getRect(reference);
+          const diff = (a, b, field) => Math.abs(a[field] - b[field]);
+          const topDiff = diff(refRect, popRect, 'top');
+          const bottomDiff = diff(refRect, popRect, 'bottom');
+          const leftDiff = diff(refRect, popRect, 'left');
+          const rightDiff = diff(refRect, popRect, 'right');
+
+          expect(topDiff - bottomDiff, 'top v. bottom').toBeApprox(0);
+          expect(leftDiff - rightDiff, 'left v. right').toBeApprox(0);
+
+          pop.destroy();
+
+          done();
+        },
+      });
+    });
+
     describe(['inner modifier'], () => {
       it('inits a bottom inner popper', done => {
         const reference = appendNewRef(1);
@@ -1409,11 +1443,11 @@ const arrowSize = 5;
 
     it('checks cases where the reference element is fixed in scrolling parent', done => {
       jasmineWrapper.innerHTML = `
-            <div id="scroll" style="height: 100vh; overflow: scroll">                
+            <div id="scroll" style="height: 100vh; overflow: scroll">
                 <div id="reference" style="position: fixed; top: 100px; left: 100px; background: pink">reference</div>
                 <div id="popper" style="background: purple">popper</div>
                 <div style="height: 200vh"></div>
-            </div>                
+            </div>
             `;
 
       const reference = document.getElementById('reference');
@@ -1731,36 +1765,36 @@ const arrowSize = 5;
           body {
             padding: 100px;
           }
-  
+
           .scrollParent {
             height: 300px;
             width: 300px;
             overflow: auto;
             position: relative;
           }
-  
+
           .scrollContent {
             background: gray;
             padding: 1000px;
           }
-  
+
           #reference {
             background: lightgrey;
             height: 25px;
             width: 100px;
           }
-  
+
           #popper {
             background: cyan;
             height: 150px;
             width: 150px;
           }
-  
+
           [x-out-of-boundaries] {
             visibility: hidden;
           }
         </style>
-  
+
         <div class="scrollParent">
           <div class="scrollContent">
             <div id="reference">ref</div>

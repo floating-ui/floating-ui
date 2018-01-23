@@ -6,6 +6,7 @@
  * - `right`
  * - `bottom`
  * - `left`
+ * - `center`
  *
  * Each placement can have a variation from this list:
  * - `-start`
@@ -45,4 +46,7 @@ export default [
   'left-end',
   'left',
   'left-start',
+  'center-end',
+  'center',
+  'center-start',
 ];
