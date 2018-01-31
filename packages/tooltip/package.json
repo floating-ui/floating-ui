@@ -4,6 +4,7 @@
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "./dist/umd/tooltip.js",
   "module": "./dist/esm/tooltip.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "node bundle.js",
     "prepublish": "yarn build",

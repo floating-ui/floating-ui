@@ -19,7 +19,7 @@ export default class Tooltip {
    * @class Tooltip
    * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
    * @param {Object} options
-   * @param {String} options.placement=bottom
+   * @param {String|PlacementFunction} options.placement=top
    *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
    *      left(-start, -end)`
    * @param {HTMLElement|String|false} options.container=false - Append the tooltip to a specific element.
@@ -38,7 +38,7 @@ export default class Tooltip {
    * @param {String} [options.trigger='hover focus']
    *      How tooltip is triggered - click, hover, focus, manual.
    *      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
-   * @param {HTMLElement} options.boundariesElement
+   * @param {String|HTMLElement} options.boundariesElement
    *      The element used as boundaries for the tooltip. For more information refer to Popper.js'
    *      [boundariesElement docs](https://popper.js.org/popper-documentation.html)
    * @param {Number|String} options.offset=0 - Offset of the tooltip relative to its reference. For more information refer to Popper.js'
@@ -134,7 +134,7 @@ export default class Tooltip {
    * @param {String} template
    * @param {String|HTMLElement|TitleFunction} title
    * @param {Boolean} allowHtml
-   * @return {HTMLelement} tooltipNode
+   * @return {HTMLElement} tooltipNode
    */
   _create(reference, template, title, allowHtml) {
     // create tooltip element
@@ -294,7 +294,7 @@ export default class Tooltip {
    * Append tooltip to container
    * @memberof Tooltip
    * @private
-   * @param {HTMLElement} tooltip
+   * @param {HTMLElement} tooltipNode
    * @param {HTMLElement|String|false} container
    */
   _append(tooltipNode, container) {
