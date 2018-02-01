@@ -369,6 +369,32 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
       });
     });
 
+    it('init popper on transformed parent flips to top', done => {
+      jasmineWrapper.innerHTML = `        
+              <div id="container" style="position: relative; margin-left: 100px; margin-top:100px; height: 100vh; transform: translateZ(0)">                    
+                <div style="height:100%"></div> 
+                <div id="reference" style="background: pink">reference</div>
+                <div id="popper" style="background: purple;">popper</div>
+                <div style="height:200%"></div> 
+                </div>
+            `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+      new Popper(reference, popper, {
+        placement: 'bottom-start',
+        onCreate() {
+          expect(popper.getBoundingClientRect().bottom).toBeApprox(
+            reference.getBoundingClientRect().top
+          );
+          expect(popper.getBoundingClientRect().left).toBeApprox(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
     // This one will fail on IE10 - See #211
     xit('properly positions a bottom popper inside very high body', done => {
       jasmineWrapper.innerHTML = `

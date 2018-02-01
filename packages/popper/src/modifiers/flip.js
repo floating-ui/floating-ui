@@ -34,7 +34,7 @@ export default function flip(data, options) {
     data.instance.popper,
     data.instance.reference,
     options.padding,
-    data.positionFixed && options.boundariesElement === 'viewport' ? 'absoluteViewport' : options.boundariesElement,
+    options.boundariesElement,
     data.positionFixed
   );
 

@@ -5,6 +5,7 @@ import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbit
 import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
+import getFixedPositionOffsetParent from './getFixedPositionOffsetParent';
 
 /**
  * Computed the boundaries limits and return them
@@ -14,7 +15,7 @@ import isFixed from './isFixed';
  * @param {HTMLElement} reference
  * @param {number} padding
  * @param {HTMLElement} boundariesElement - Element used to define the boundaries
- * @param {HTMLElement} fixedParentRef - Force this element as the parent
+ * @param {Boolean} fixedPosition - Is in fixed position mode
  * @returns {Object} Coordinates of the boundaries
  */
 export default function getBoundaries(
@@ -22,22 +23,18 @@ export default function getBoundaries(
   reference,
   padding,
   boundariesElement,
-  fixedParent = false
+  fixedPosition = false
 ) {
   // NOTE: 1 DOM access here
 
   let boundaries = { top: 0, left: 0 };
-  const offsetParent = fixedParent ? popper.ownerDocument.documentElement : findCommonOffsetParent(popper, reference);
+  const offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
 
   // Handle viewport case
   if (boundariesElement === 'viewport' ) {
-    boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent);
+    boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent, fixedPosition);
   }
-  //Handle absolute viewport, i.e complete edges ignoring scrolls and padding s
-  else if (boundariesElement === 'absoluteViewport') {
-    const winSize = getViewportOffsetRectRelativeToArtbitraryNode(popper.ownerDocument.documentElement);
-    boundaries = { ...boundaries, bottom: winSize.height, right: winSize.width };
-  }
+
   else {
     // Handle other cases based on DOM element used as boundaries
     let boundariesNode;
@@ -55,7 +52,7 @@ export default function getBoundaries(
     const offsets = getOffsetRectRelativeToArbitraryNode(
       boundariesNode,
       offsetParent,
-      fixedParent
+      fixedPosition
     );
 
     // In case of HTML, we need a different computation

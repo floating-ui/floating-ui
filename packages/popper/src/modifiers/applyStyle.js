@@ -49,7 +49,7 @@ export function applyStyleOnLoad(
   state
 ) {
   // compute reference element offsets
-  const referenceOffsets = getReferenceOffsets(state, popper, reference, options.positionFixed ? window.document.documentElement : undefined);
+  const referenceOffsets = getReferenceOffsets(state, popper, reference, options.positionFixed);
 
   // compute auto placement, store placement inside the data object,
   // modifiers will be able to edit `placement` if needed

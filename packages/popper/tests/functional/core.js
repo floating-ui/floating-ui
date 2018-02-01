@@ -576,6 +576,10 @@ const arrowSize = 5;
     });
 
     it('inits a popper near a reference element, both inside a fixed element, inside a scrolled body', done => {
+      //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
+      if(isIE10 && positionFixed){
+        pending();
+      }
       const fixed = document.createElement('div');
       fixed.style.position = 'fixed';
       fixed.style.margin = '20px';
@@ -605,6 +609,10 @@ const arrowSize = 5;
     });
 
     it('inits a popper near a reference element, both inside a fixed element with CSS transforms, inside a scrolled body', done => {
+      //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
+      if(isIE10 && positionFixed){
+        pending();
+      }
       const relative = document.createElement('div');
       relative.style.position = 'relative';
       relative.style.margin = '20px';
@@ -820,7 +828,8 @@ const arrowSize = 5;
 
 
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
-      if (isIPHONE) {
+      //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
+      if (isIPHONE || (isIE10 && positionFixed)) {
         pending();
       }
 
@@ -1457,6 +1466,48 @@ const arrowSize = 5;
           expect(getRect(popper).left).toBeApprox(
             reference.getBoundingClientRect().left
           );
+          done();
+        },
+      });
+    });
+
+    it('init a popper with position fixed with a transformd parent', done => {
+      const container = document.createElement('div');
+      container.style.width = '800px';
+      container.style.height = '600px';
+      container.style.marginLeft = '200px';
+      container.style.marginTop = '200px';
+      container.style.background = 'grey';
+      container.style.position = 'relative';
+      container.style.transform = 'translateX(0)';
+
+      const popper = document.createElement('div');
+      popper.style.width = '100px';
+      popper.style.height = '100px';
+      popper.style.background = 'yellow';
+      popper.innerHTML = 'popper';
+
+      const ref = document.createElement('div');
+      ref.style.width = '100px';
+      ref.style.height = '100px';
+      ref.style.background = 'green';
+      ref.innerHTML = 'ref';
+
+      container.appendChild(popper);
+      container.appendChild(ref);
+      jasmineWrapper.appendChild(container);
+
+      new Popper(ref, popper, {
+        placement: 'right',
+        onCreate: data => {
+          expect(getRect(popper).left).toBeApprox(
+            getRect(ref).right
+          );
+          expect(getRect(popper).top).toBeApprox(
+            getRect(ref).top
+          );
+
+          data.instance.destroy();
           done();
         },
       });
