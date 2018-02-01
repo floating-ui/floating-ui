@@ -22,7 +22,10 @@ declare namespace Popper {
     | 'bottom-start'
     | 'left-end'
     | 'left'
-    | 'left-start';
+    | 'left-start'
+    | 'center-end'
+    | 'center'
+    | 'center-start';
 
   export type Boundary = 'scrollParent' | 'viewport' | 'window';
 
