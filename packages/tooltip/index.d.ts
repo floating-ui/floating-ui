@@ -27,6 +27,8 @@ export interface Options {
 declare class Tooltip {
   constructor(reference: HTMLElement, options: Options);
 
+  _isOpen: boolean;
+
   show(): void;
 
   hide(): void;

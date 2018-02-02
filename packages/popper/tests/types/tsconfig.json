@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "lib": [
+      "dom",
+      "es2017"
+    ],
+    "allowJs": false,
+    "noEmit": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "popper.js": [
+        "../../"
+      ]
+    }
+  },
+  "files": [
+    "type-tests.ts"
+  ]
+}
