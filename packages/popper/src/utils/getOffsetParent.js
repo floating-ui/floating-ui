@@ -8,7 +8,10 @@ import getStyleComputedProperty from './getStyleComputedProperty';
  */
 export default function getOffsetParent(element) {
   // NOTE: 1 DOM access here
-  const offsetParent = element && element.offsetParent;
+  let offsetParent = element && element.offsetParent;
+  while (offsetParent === null && element.nextElementSibling) {
+    offsetParent = (element = element.nextElementSibling).offsetParent;
+  }
   const nodeName = offsetParent && offsetParent.nodeName;
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
