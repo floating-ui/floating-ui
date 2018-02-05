@@ -9,6 +9,7 @@ import getStyleComputedProperty from './getStyleComputedProperty';
 export default function getOffsetParent(element) {
   // NOTE: 1 DOM access here
   let offsetParent = element && element.offsetParent;
+  // Skip hidden elements which don't have an offsetParent
   while (offsetParent === null && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
   }
