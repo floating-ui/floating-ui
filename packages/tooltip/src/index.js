@@ -260,7 +260,7 @@ export default class Tooltip {
   _dispose() {
     // remove event listeners first to prevent any unexpected behaviour
     this._events.forEach(({ func, event }) => {
-      this.reference.removeEventListener(event, func);
+      this.reference.removeEventListener(event, func); 
     });
     this._events = [];
 
