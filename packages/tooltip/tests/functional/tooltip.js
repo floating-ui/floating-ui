@@ -44,7 +44,14 @@ describe('[tooltip.js]', () => {
       then(() => instance.hide());
 
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('none');
+        expect(document.querySelector('.tooltip').style.width).toBe('1px');
+        expect(document.querySelector('.tooltip').style.height).toBe('1px');
+        expect(document.querySelector('.tooltip').style.margin).toBe('-1px');
+        expect(document.querySelector('.tooltip').style.padding).toBe('0px');
+        expect(document.querySelector('.tooltip').style.border).toBe('0px');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('hidden');
+        expect(document.querySelector('.tooltip').style.clip).toBe('rect(1px, 1px, 1px, 1px)');
+
         done();
       });
     });
@@ -71,7 +78,14 @@ describe('[tooltip.js]', () => {
       then(() => instance.toggle());
 
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('none');
+        expect(document.querySelector('.tooltip').style.width).toBe('1px');
+        expect(document.querySelector('.tooltip').style.height).toBe('1px');
+        expect(document.querySelector('.tooltip').style.margin).toBe('-1px');
+        expect(document.querySelector('.tooltip').style.padding).toBe('0px');
+        expect(document.querySelector('.tooltip').style.border).toBe('0px');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('hidden');
+        expect(document.querySelector('.tooltip').style.clip).toBe('rect(1px, 1px, 1px, 1px)');
+
         done();
       });
     });
@@ -322,8 +336,14 @@ describe('[tooltip.js]', () => {
       reference.dispatchEvent(new CustomEvent('mouseenter'));
       then(() => reference.dispatchEvent(new CustomEvent('mouseleave')), 200);
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('none');
-        done();
+        expect(document.querySelector('.tooltip').style.width).toBe('1px');
+        expect(document.querySelector('.tooltip').style.height).toBe('1px');
+        expect(document.querySelector('.tooltip').style.margin).toBe('-1px');
+        expect(document.querySelector('.tooltip').style.padding).toBe('0px');
+        expect(document.querySelector('.tooltip').style.border).toBe('0px');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('hidden');
+        expect(document.querySelector('.tooltip').style.clip).toBe('rect(1px, 1px, 1px, 1px)');
+done();
       }, 200);
     });
 
@@ -348,7 +368,13 @@ describe('[tooltip.js]', () => {
           .dispatchEvent(new CustomEvent('mouseleave'))
       );
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('none');
+                expect(document.querySelector('.tooltip').style.width).toBe('1px');
+        expect(document.querySelector('.tooltip').style.height).toBe('1px');
+        expect(document.querySelector('.tooltip').style.margin).toBe('-1px');
+        expect(document.querySelector('.tooltip').style.padding).toBe('0px');
+        expect(document.querySelector('.tooltip').style.border).toBe('0px');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('hidden');
+        expect(document.querySelector('.tooltip').style.clip).toBe('rect(1px, 1px, 1px, 1px)');
         done();
       }, 200);
     });
@@ -375,8 +401,14 @@ describe('[tooltip.js]', () => {
       );
       then(() => reference.dispatchEvent(new CustomEvent('mouseenter')));
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('');
-        done();
+        expect(document.querySelector('.tooltip').style.width).toBe('');
+        expect(document.querySelector('.tooltip').style.height).toBe('');
+        expect(document.querySelector('.tooltip').style.margin).toBe('');
+        expect(document.querySelector('.tooltip').style.padding).toBe('');
+        expect(document.querySelector('.tooltip').style.border).toBe('');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('');
+        expect(document.querySelector('.tooltip').style.clip).toBe('');
+      done();
       }, 200);
     });
 
@@ -425,7 +457,13 @@ describe('[tooltip.js]', () => {
       reference.dispatchEvent(new CustomEvent('click'));
       then(() => reference.dispatchEvent(new CustomEvent('click')));
       then(() => {
-        expect(document.querySelector('.tooltip').style.display).toBe('none');
+                expect(document.querySelector('.tooltip').style.width).toBe('1px');
+        expect(document.querySelector('.tooltip').style.height).toBe('1px');
+        expect(document.querySelector('.tooltip').style.margin).toBe('-1px');
+        expect(document.querySelector('.tooltip').style.padding).toBe('0px');
+        expect(document.querySelector('.tooltip').style.border).toBe('0px');
+        expect(document.querySelector('.tooltip').style.overflow).toBe('hidden');
+        expect(document.querySelector('.tooltip').style.clip).toBe('rect(1px, 1px, 1px, 1px)');
         done();
       });
     });

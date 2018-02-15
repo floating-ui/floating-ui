@@ -180,7 +180,13 @@ export default class Tooltip {
 
     // if the tooltipNode already exists, just show it
     if (this._tooltipNode) {
-      this._tooltipNode.style.display = '';
+      this._tooltipNode.style.width = '';
+      this._tooltipNode.style.height = '';
+      this._tooltipNode.style.margin = '';
+      this._tooltipNode.style.padding = '';
+      this._tooltipNode.style.border = '';
+      this._tooltipNode.style.overflow = '';
+      this._tooltipNode.style.clip = '';
       this._tooltipNode.setAttribute('aria-hidden', 'false');
       this.popperInstance.update();
       return this;
@@ -251,7 +257,13 @@ export default class Tooltip {
     this._isOpen = false;
 
     // hide tooltipNode
-    this._tooltipNode.style.display = 'none';
+    this._tooltipNode.style.width = '1px';
+    this._tooltipNode.style.height = '1px';
+    this._tooltipNode.style.margin = '-1px';
+    this._tooltipNode.style.padding = '0';
+    this._tooltipNode.style.border = '0';
+    this._tooltipNode.style.overflow = 'hidden';
+    this._tooltipNode.style.clip = 'rect(1px, 1px, 1px, 1px)';
     this._tooltipNode.setAttribute('aria-hidden', 'true');
 
     return this;
