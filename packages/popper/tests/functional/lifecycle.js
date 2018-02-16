@@ -104,6 +104,17 @@ import '@popperjs/test-utils/setup';
     });
 
     describe('on destroy', () => {
+
+      const mockStyles = {
+        top: '100px',
+        left: '100px',
+        right: '100px',
+        bottom: '100px',
+        position: 'absolute',
+        transform: 'translate3d(100px, 100px, 0)',
+        willChange: 'transform',
+      }
+
       it('removes the resize event listener from window', () => {
         spyOn(window, 'removeEventListener');
 
@@ -138,26 +149,46 @@ import '@popperjs/test-utils/setup';
 
       it('should clean up the popper element\'s styles if modifiers.applyStyle is enabled', () => {
         const popperElement = makeConnectedElement();
-        popperElement.style.top = '100px';
+
+        for (const key in mockStyles) {
+          if (mockStyles.hasOwnProperty(key)) {
+            popperElement.style[key] = mockStyles[key];
+          }
+        }
 
         const instance = new Popper(makeConnectedElement(), popperElement, {
           modifiers: { applyStyle: { enabled: true } },
         });
 
         instance.destroy();
-        expect(popperElement.style.top).toBe('');
+
+        for (const key in mockStyles) {
+          if (mockStyles.hasOwnProperty(key)) {
+            expect(popperElement.style[key]).toBe('');
+          }
+        }
       });
 
       it('should not modify the popper element\'s styles if modifiers.applyStyle is disabled', () => {
         const popperElement = makeConnectedElement();
-        popperElement.style.top = '100px';
+
+        for (const key in mockStyles) {
+          if (mockStyles.hasOwnProperty(key)) {
+            popperElement.style[key] = mockStyles[key];
+          }
+        }
 
         const instance = new Popper(makeConnectedElement(), popperElement, {
           modifiers: { applyStyle: { enabled: false } },
         });
 
         instance.destroy();
-        expect(popperElement.style.top).toBe('100px');
+
+        for (const key in mockStyles) {
+          if (mockStyles.hasOwnProperty(key)) {
+            expect(popperElement.style[key]).not.toBe('');
+          }
+        }
       });
 
       it('should not call update after destroy', () => {
