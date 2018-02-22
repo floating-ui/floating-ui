@@ -437,6 +437,7 @@ export default class Tooltip {
     this._clearTitleContent(titleNode, this.options.html, this.reference.getAttribute('title') || this.options.title)
     this._addTitleContent(this.reference, title, this.options.html, titleNode);
     this.options.title = title;
+    this.popperInstance.update();
   }
 
   _clearTitleContent(titleNode, allowHtml, lastTitle) {
