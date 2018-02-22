@@ -322,6 +322,26 @@ describe('[tooltip.js]', () => {
         done();
       })
     });
+
+    it('should update the tooltip position when changing the title', done => {
+      const updatedContent = 'Updated string with a different length';
+      instance = new Tooltip(reference, {
+        title: 'Constructor message',
+      });
+
+      instance.show();
+
+      const oldPosition = document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+
+      instance.updateTitleContent(updatedContent);
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+        ).not.toBe(oldPosition);
+        done();
+      })
+    });
   });
 
   describe('events', () => {
