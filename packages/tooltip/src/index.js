@@ -283,7 +283,7 @@ export default class Tooltip {
       this.popperInstance.destroy();
 
       // destroy tooltipNode if removeOnDestroy is not set, as popperInstance.destroy() already removes the element
-      if (!this.popperInstance.options.removeOnDestroy) {
+      if (!this.popperInstance.options.removeOnDestroy && this._tooltipNode.parentNode) {
         this._tooltipNode.parentNode.removeChild(this._tooltipNode);
         this._tooltipNode = null;
       }
