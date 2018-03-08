@@ -4,11 +4,13 @@
   "description": "A kickass library to create tooltips, based on Popper.js",
   "main": "./dist/umd/tooltip.js",
   "module": "./dist/esm/tooltip.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "node bundle.js",
     "prepublish": "yarn build",
     "pretest": "yarn lint",
     "test": "popper-karma",
+    "posttest": "tsc --project tests/types/tsconfig.json",
     "test:dev": "BROWSERS=Chrome NODE_ENV=development yarn test",
     "lint": "eslint .",
     "coverage": "COVERAGE=true yarn test"
@@ -26,6 +28,7 @@
     "@popperjs/test": "^1.0.0",
     "@popperjs/test-utils": "^1.0.0",
     "eslint": "^4.1.1",
-    "eslint-plugin-jasmine": "^2.6.2"
+    "eslint-plugin-jasmine": "^2.6.2",
+    "typescript": "^2.7.1"
   }
 }

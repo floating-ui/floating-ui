@@ -9,7 +9,7 @@ export default function getSupportedPropertyName(property) {
   const prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
   const upperProp = property.charAt(0).toUpperCase() + property.slice(1);
 
-  for (let i = 0; i < prefixes.length - 1; i++) {
+  for (let i = 0; i < prefixes.length; i++) {
     const prefix = prefixes[i];
     const toCheck = prefix ? `${prefix}${upperProp}` : property;
     if (typeof document.body.style[toCheck] !== 'undefined') {

@@ -12,7 +12,7 @@ function createReference() {
   reference.style.width = '100px';
   reference.style.height = '100px';
   reference.style.margin = '100px';
-  reference.innerText = 'reference';
+  reference.textContent = 'reference';
   jasmineWrapper.appendChild(reference);
 }
 
@@ -212,7 +212,7 @@ describe('[tooltip.js]', () => {
 
     it('should use a DOM node as tooltip content', done => {
       const content = document.createElement('div');
-      content.innerText = 'foobar';
+      content.textContent = 'foobar';
       instance = new Tooltip(reference, {
         title: content,
         html: true,
@@ -231,7 +231,7 @@ describe('[tooltip.js]', () => {
     it('should use a document fragment as tooltip content', done => {
       const content = document.createDocumentFragment();
       const inner = document.createElement('div');
-      inner.innerText = 'test';
+      inner.textContent = 'test';
       content.appendChild(inner);
       instance = new Tooltip(reference, {
         title: content,
@@ -282,6 +282,65 @@ describe('[tooltip.js]', () => {
         );
         done();
       });
+    });
+
+    it('should update title content with String', done => {
+      const updatedContent = 'Updated string';
+      instance = new Tooltip(reference, {
+        title: 'Constructor message',
+      });
+
+      instance.show();
+
+      instance.updateTitleContent(updatedContent);
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').textContent
+        ).toBe(updatedContent);
+        done();
+      })
+    });
+
+    it('should update title content with HTMLElement', done => {
+      const updatedContent = 'Updated with div element';
+      const el = document.createElement('div');
+      el.textContent = updatedContent;
+      instance = new Tooltip(reference, {
+        title: 'Constructor message',
+        html: true, 
+      });
+
+      instance.show();
+
+      instance.updateTitleContent(el);
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip-inner').innerHTML
+        ).toBe(el.outerHTML);
+        done();
+      })
+    });
+
+    it('should update the tooltip position when changing the title', done => {
+      const updatedContent = 'Updated string with a different length';
+      instance = new Tooltip(reference, {
+        title: 'Constructor message',
+      });
+
+      instance.show();
+
+      const oldPosition = document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+
+      instance.updateTitleContent(updatedContent);
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+        ).not.toBe(oldPosition);
+        done();
+      })
     });
   });
 

@@ -24,4 +24,23 @@ describe('utils/getOffsetParent', () => {
     node.appendChild(innerNode);
     expect(getOffsetParent(innerNode)).to.equal(node);
   });
+
+  it('first child element is hidden', () => {
+    const innerNode = document.createElement('div');
+    innerNode.style.display = 'none';
+    const nextSibling = document.createElement('div');
+    node.style.position = 'absolute';
+    node.appendChild(innerNode);
+    node.appendChild(nextSibling);
+
+    expect(getOffsetParent(innerNode)).to.equal(node);
+  });
+
+  it('all child elements are hidden', () => {
+    const innerNode = document.createElement('div');
+    innerNode.style.display = 'none';
+    node.style.position = 'absolute';
+
+    expect(getOffsetParent(innerNode)).to.equal(document.querySelector('html'));
+  });
 });
