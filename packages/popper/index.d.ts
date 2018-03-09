@@ -96,7 +96,7 @@ export interface Data {
 
 export interface PopperOptions {
   placement?: Placement;
-  positionFixed: boolean;
+  positionFixed?: boolean;
   eventsEnabled?: boolean;
   modifiers?: Modifiers;
   removeOnDestroy?: boolean;
