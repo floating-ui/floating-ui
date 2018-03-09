@@ -25,6 +25,8 @@ export type Placement = 'auto-start'
 
 export type Boundary = 'scrollParent' | 'viewport' | 'window';
 
+export type Behavior = 'flip' | 'clockwise' | 'counterclockwise';
+
 export type ModifierFn = (data: Data, options: Object) => Data;
 
 export interface BaseModifier {
@@ -49,7 +51,7 @@ export interface Modifiers {
     element?: string | Element,
   };
   flip?: BaseModifier & {
-    behavior?: 'flip' | 'clockwise' | 'counterclockwise' | Position[],
+    behavior?: Behavior | Position[],
     padding?: number,
     boundariesElement?: Boundary | Element,
   };
