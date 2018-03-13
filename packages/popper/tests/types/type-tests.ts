@@ -39,7 +39,8 @@ const modifiers: Modifiers = {
     allowsAnyKey: null
   }
 };
-const options: PopperOptions = {
+// Ensure backwards compatibility with < v1.14 typings, where all the types were part of the Popper namespace
+const options: Popper.PopperOptions = {
   positionFixed: true,
   placement: 'auto-start',
   eventsEnabled: false,
@@ -68,5 +69,3 @@ popper.update();
 popper.scheduleUpdate();
 popper.enableEventListeners();
 popper.disableEventListeners();
-
-
