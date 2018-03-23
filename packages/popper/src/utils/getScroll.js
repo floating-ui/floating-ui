@@ -11,7 +11,7 @@ export default function getScroll(element, side = 'top') {
   const nodeName = element.nodeName;
 
   if (nodeName === 'BODY' || nodeName === 'HTML') {
-    const html = element.ownerDocument.documentElement;
+    const html = element.ownerDocument.body;
     const scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
   }
