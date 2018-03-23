@@ -10,7 +10,7 @@
         * [.hide()](#Tooltip+hide)
         * [.dispose()](#Tooltip+dispose)
         * [.toggle()](#Tooltip+toggle)
-        * [.updateTitleContent()](#Tooltip+updateTitleContent)
+        * [.updateTitleContent(title)](#Tooltip+updateTitleContent)
     * _static_
         * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
         * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
@@ -26,7 +26,7 @@ Create a new Tooltip.js instance
 | --- | --- | --- | --- |
 | reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
 | options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> | <code>bottom</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
+| options.placement | <code>String</code> \| <code>PlacementFunction</code> | <code>top</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
 | options.container | <code>HTMLElement</code> \| <code>String</code> \| <code>false</code> | <code>false</code> | Append the tooltip to a specific element. |
 | options.delay | <code>Number</code> \| <code>Object</code> | <code>0</code> | Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.      If a number is supplied, delay is applied to both hide/show.      Object structure is: `{ show: 500, hide: 100 }` |
 | options.html | <code>Boolean</code> | <code>false</code> | Insert HTML into the tooltip. If false, the content will inserted with `textContent`. |
@@ -34,7 +34,7 @@ Create a new Tooltip.js instance
 | [options.template] | <code>String</code> | <code>&#x27;&lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot;&gt;&lt;div class=&quot;tooltip-arrow&quot;&gt;&lt;/div&gt;&lt;div class=&quot;tooltip-inner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;</code> | Base HTML to used when creating the tooltip.      The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.      `.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.      The outermost wrapper element should have the `.tooltip` class. |
 | options.title | <code>String</code> \| <code>HTMLElement</code> \| <code>TitleFunction</code> | <code>&#x27;&#x27;</code> | Default title value if `title` attribute isn't present. |
 | [options.trigger] | <code>String</code> | <code>&#x27;hover focus&#x27;</code> | How tooltip is triggered - click, hover, focus, manual.      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger. |
-| options.boundariesElement | <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
+| options.boundariesElement | <code>String</code> \| <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
 | options.offset | <code>Number</code> \| <code>String</code> | <code>0</code> | Offset of the tooltip relative to its reference. For more information refer to Popper.js'      [offset docs](https://popper.js.org/popper-documentation.html) |
 | options.popperOptions | <code>Object</code> | <code>{}</code> | Popper options, will be passed directly to popper instance. For more information refer to Popper.js'      [options docs](https://popper.js.org/popper-documentation.html) |
 
@@ -70,9 +70,9 @@ Updates the tooltip's title content
 
 **Kind**: instance method of [<code>Tooltip</code>](#Tooltip)  
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| title | <code>HTMLElement</code> \| <code>String</code> |  | The new content to use for the tooltip. This replaces the previous content using either textContent (for String) or innerHTML for HTMLElement. If ```title``` is of type HTMLElement it will only be visible if ```options.html``` is true.
+| Param | Type | Description |
+| --- | --- | --- |
+| title | <code>String</code> \| <code>HTMLElement</code> | The new content to use for the title |
 
 <a name="Tooltip.PlacementFunction"></a>
 

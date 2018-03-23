@@ -37,6 +37,9 @@ All the other properties are configurations that could be tweaked.</p>
 ## Functions
 
 <dl>
+<dt><a href="#getWindow">getWindow(element)</a> ⇒ <code>Window</code></dt>
+<dd><p>Get the window associated with the element</p>
+</dd>
 <dt><a href="#ModifierFn">ModifierFn(data, options)</a> ⇒ <code><a href="#dataObject">dataObject</a></code></dt>
 <dd><p>Modifier function, each modifier can have a function of this type assigned
 to its <code>fn</code> property.<br />
@@ -63,6 +66,7 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
     * [new Popper(reference, popper, options)](#new_Popper_new)
     * [.Defaults](#Popper.Defaults) : <code>Object</code>
         * [.placement](#Popper.Defaults.placement)
+        * [.positionFixed](#Popper.Defaults.positionFixed)
         * [.eventsEnabled](#Popper.Defaults.eventsEnabled)
         * [.removeOnDestroy](#Popper.Defaults.removeOnDestroy)
         * [.modifiers](#Popper.Defaults.modifiers)
@@ -107,6 +111,7 @@ new Popper(ref, pop, {
 
 * [.Defaults](#Popper.Defaults) : <code>Object</code>
     * [.placement](#Popper.Defaults.placement)
+    * [.positionFixed](#Popper.Defaults.positionFixed)
     * [.eventsEnabled](#Popper.Defaults.eventsEnabled)
     * [.removeOnDestroy](#Popper.Defaults.removeOnDestroy)
     * [.modifiers](#Popper.Defaults.modifiers)
@@ -124,6 +129,18 @@ Popper's placement
 | Name | Type | Default |
 | --- | --- | --- |
 | placement | [<code>placements</code>](#Popper.placements) | <code>&#x27;bottom&#x27;</code> | 
+
+<a name="Popper.Defaults.positionFixed"></a>
+
+#### Defaults.positionFixed
+Set this to true if you want popper to position it self in 'fixed' mode
+
+**Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
+**Properties**
+
+| Name | Type | Default |
+| --- | --- | --- |
+| positionFixed | <code>Boolean</code> | <code>false</code> | 
 
 <a name="Popper.Defaults.eventsEnabled"></a>
 
@@ -1021,6 +1038,17 @@ Just disable this modifier and define you own to achieve the desired effect.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+
+<a name="getWindow"></a>
+
+## getWindow(element) ⇒ <code>Window</code>
+Get the window associated with the element
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| element | <code>Element</code> | 
 
 <a name="ModifierFn"></a>
 
