@@ -10,16 +10,13 @@ export default (() => {
   const isIE11 = /Trident/.test(ua);
   const isIE10 = /MSIE 10/.test(ua);
 
-  return (version = 'all') => {
-    if (version === 'all') {
-      return isIE11 || isIE10;
-    }
+  return version => {
     if (version === 11) {
       return isIE11;
     }
     if (version === 10) {
       return isIE10;
     }
-    return false;
+    return isIE11 || isIE10;
   };
 })();
