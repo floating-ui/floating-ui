@@ -12,7 +12,7 @@ export default (() => {
 
   return (version = 'all') => {
     if (version === 'all') {
-      return isIE11 || isIE10
+      return isIE11 || isIE10;
     }
     if (version === 11) {
       return isIE11;
