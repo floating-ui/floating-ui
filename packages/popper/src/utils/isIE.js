@@ -8,7 +8,7 @@
 export default (() => {
   const ua = navigator.userAgent;
   const isIE11 = /Trident/.test(ua);
-  const isIE10 = /MISE 10/.test(ua);
+  const isIE10 = /MSIE 10/.test(ua);
 
   return (version = 'all') => {
     if (version === 'all') {
