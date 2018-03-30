@@ -38,11 +38,13 @@ export default function computeStyle(data, options) {
   };
 
   // floor sides to avoid blurry text
+  // no need to floor if not using gpuAcceleration
+  const floor = gpuAcceleration ? Math.floor : v => v;
   const offsets = {
-    left: Math.floor(popper.left),
-    top: Math.floor(popper.top),
-    bottom: Math.floor(popper.bottom),
-    right: Math.floor(popper.right),
+    left: floor(popper.left),
+    top: floor(popper.top),
+    bottom: floor(popper.bottom),
+    right: floor(popper.right),
   };
 
   const sideA = x === 'bottom' ? 'top' : 'bottom';
