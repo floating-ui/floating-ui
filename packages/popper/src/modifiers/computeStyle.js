@@ -37,7 +37,9 @@ export default function computeStyle(data, options) {
     position: popper.position,
   };
 
-  // round sides to avoid blurry text
+  // Avoid blurry text by using full pixel integers.
+  // For pixel-perfect positioning, top/bottom prefers rounded
+  // values, while left/right prefers floored values.
   const offsets = {
     left: Math.floor(popper.left),
     top: Math.round(popper.top),
