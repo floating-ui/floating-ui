@@ -1,4 +1,4 @@
-import isBrowser from './isBrowser'
+import isBrowser from './isBrowser';
 
 const ua = isBrowser && navigator.userAgent;
 const isIE11 = /Trident/.test(ua);
