@@ -33,12 +33,6 @@ An easy to use and flexible React wrapper based on React 16 (for [Portals](https
 
 Angular wrapper for Popper.js
 
-## AngularJS
-
-### [angular-popper](https://www.npmjs.com/package/angular-popper)
-
-This component is in alpha base, you can contribute to it!
-
 ## Vue.js
 
 The Vue.js situation is particular, there are several UI frameworks that use
