@@ -29,11 +29,10 @@ export default function update() {
   // NOTE: DOM access here
   // resets the popper's position so that the document size can be calculated excluding
   // the size of the popper element itself
-  Object.assign(this.popper.style, {
-    top: '',
-    left: '',
-    [getSupportedPropertyName('transform')]: '',
-  });
+  const popperStyles = this.popper.style;
+  popperStyles.top = '';
+  popperStyles.left = '';
+  popperStyles[getSupportedPropertyName('transform')] = '';
 
   // compute reference element offsets
   data.offsets.reference = getReferenceOffsets(
