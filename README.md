@@ -260,4 +260,4 @@ I want to thank some friends and projects for the work they did:
 - **you** for the star you'll give to this project and for being so awesome to give this project a try 🙂
 
 ### Copyright and license
-Code and documentation copyright 2016 **Federico Zivolo**. Code released under the [MIT license](LICENSE.md). Docs released under Creative Commons.
+Code and documentation copyright 2016 **Federico Zivolo**. Code released under the [MIT license](https://github.com/FezVrasta/popper.js/blob/master/LICENSE.md). Docs released under Creative Commons.
