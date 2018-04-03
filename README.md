@@ -184,6 +184,47 @@ new Popper(reference, popper, {
 
 ```
 
+### How to use Popper.js in Jest
+
+It is recommended that users mock Popper.js for use in Jest tests due to some limitations of JSDOM.
+
+
+The simplest way to mock Popper.js is to place the following code in `__mocks__/popper.js.js` adjacent to your `node_modules` directory.  Jest will pick it up automatically.
+
+```js
+import PopperJs from 'popper.js';
+
+export default class Popper {
+  static placements = PopperJs.placements;
+
+  constructor() {
+    return {
+      destroy: () => {},
+      scheduleUpdate: () => {}
+    };
+  }
+}
+```
+
+Alternatively, you can manually mock Popper.js for a particular test.
+
+```js
+jest.mock('popper.js', () => {
+  const PopperJS = jest.requireActual('popper.js');
+
+  return class Popper {
+    static placements = PopperJS.placements;
+
+    constructor() {
+      return {
+        destroy: () => {},
+        scheduleUpdate: () => {}
+      };
+    }
+  };
+});
+```
+
 ### Migration from Popper.js v0
 
 Since the API changed, we prepared some migration instructions to make it easy to upgrade to
