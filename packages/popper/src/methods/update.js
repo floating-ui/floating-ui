@@ -2,7 +2,6 @@ import computeAutoPlacement from '../utils/computeAutoPlacement';
 import getReferenceOffsets from '../utils/getReferenceOffsets';
 import getPopperOffsets from '../utils/getPopperOffsets';
 import runModifiers from '../utils/runModifiers';
-import getSupportedPropertyName from '../utils/getSupportedPropertyName';
 
 /**
  * Updates the position of the popper, computing the new offsets and applying
@@ -25,16 +24,6 @@ export default function update() {
     flipped: false,
     offsets: {},
   };
-
-  // NOTE: DOM access here
-  // resets the popper's position so that the document size can be calculated excluding
-  // the size of the popper element itself
-  const transformProp = getSupportedPropertyName('transform');
-  const popperStyles = this.popper.style; // assignment to help minification
-  const { top, left, [transformProp]: transform } = popperStyles;
-  popperStyles.top = '';
-  popperStyles.left = '';
-  popperStyles[transformProp] = '';
 
   // compute reference element offsets
   data.offsets.reference = getReferenceOffsets(
@@ -67,12 +56,6 @@ export default function update() {
     data.offsets.reference,
     data.placement
   );
-
-  // NOTE: DOM access here
-  // restores the original style properties after the offsets have been computed
-  popperStyles.top = top;
-  popperStyles.left = left;
-  popperStyles[transformProp] = transform;
 
   data.offsets.popper.position = this.options.positionFixed
     ? 'fixed'
