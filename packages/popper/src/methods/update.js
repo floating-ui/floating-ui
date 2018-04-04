@@ -26,14 +26,6 @@ export default function update() {
     offsets: {},
   };
 
-  // NOTE: DOM access here
-  // resets the popper's position so that the document size can be calculated excluding
-  // the size of the popper element itself
-  const popperStyles = this.popper.style;
-  popperStyles.top = '';
-  popperStyles.left = '';
-  popperStyles[getSupportedPropertyName('transform')] = '';
-
   // compute reference element offsets
   data.offsets.reference = getReferenceOffsets(
     this.state,
@@ -59,12 +51,31 @@ export default function update() {
 
   data.positionFixed = this.options.positionFixed;
 
+
+  // NOTE: DOM access here
+  // resets the popper's position so that the document size can be calculated excluding
+  // the size of the popper element itself
+  const transformProp = getSupportedPropertyName('transform');
+  const popperStyles = this.popper.style; // assignment to help minification
+  const { top, left, [transformProp]: transform } = popperStyles;
+  popperStyles.top = '';
+  popperStyles.left = '';
+  popperStyles[transformProp] = '';
+
+
   // compute the popper offsets
   data.offsets.popper = getPopperOffsets(
     this.popper,
     data.offsets.reference,
     data.placement
   );
+
+  // NOTE: DOM access here
+  // restores the original style properties after the offsets have been computed
+  popperStyles.top = top;
+  popperStyles.left = left;
+  popperStyles[transformProp] = transform;
+
   data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
 
   // run the modifiers
