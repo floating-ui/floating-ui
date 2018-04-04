@@ -32,7 +32,7 @@
     "postpublish": "nuget-publish && ./bower-publish.sh",
     "prebuild": "yarn lint",
     "pretest": "yarn lint",
-    "build": "node bundle.js",
+    "build": "node bundle.js && cp index.flow.js dist/esm/poppper.js.flow",
     "lint": "eslint .",
     "test": "popper-karma",
     "posttest": "tsc --project tests/types/tsconfig.json",
