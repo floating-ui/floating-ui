@@ -308,7 +308,7 @@ describe('[tooltip.js]', () => {
       el.textContent = updatedContent;
       instance = new Tooltip(reference, {
         title: 'Constructor message',
-        html: true, 
+        html: true,
       });
 
       instance.show();
@@ -340,7 +340,7 @@ describe('[tooltip.js]', () => {
           document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
         ).not.toBe(oldPosition);
         done();
-      })
+      }, 500)
     });
   });
 
