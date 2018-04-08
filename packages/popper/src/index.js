@@ -12,10 +12,10 @@ import placements from './methods/placements';
 
 export default class Popper {
   /**
-   * Create a new Popper.js instance
+   * Creates a new Popper.js instance.
    * @class Popper
    * @param {HTMLElement|referenceObject} reference - The reference element used to position the popper
-   * @param {HTMLElement} popper - The HTML element used as popper.
+   * @param {HTMLElement} popper - The HTML element used as the popper
    * @param {Object} options - Your custom options to override the ones defined in [Defaults](#defaults)
    * @return {Object} instance - The generated Popper.js instance
    */
@@ -104,7 +104,7 @@ export default class Popper {
   }
 
   /**
-   * Schedule an update, it will run on the next UI update available
+   * Schedules an update. It will run on the next UI update available.
    * @method scheduleUpdate
    * @memberof Popper
    */
@@ -143,7 +143,7 @@ export default class Popper {
  * new Popper(referenceObject, popperNode);
  * ```
  *
- * NB: This feature isn't supported in Internet Explorer 10
+ * NB: This feature isn't supported in Internet Explorer 10.
  * @name referenceObject
  * @property {Function} data.getBoundingClientRect
  * A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method.

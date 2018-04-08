@@ -2,7 +2,7 @@ import isModifierEnabled from '../utils/isModifierEnabled';
 import getSupportedPropertyName from '../utils/getSupportedPropertyName';
 
 /**
- * Destroy the popper
+ * Destroys the popper.
  * @method
  * @memberof Popper
  */
