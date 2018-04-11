@@ -4,6 +4,7 @@ import then from '@popperjs/test-utils/utils/then.js';
 import '@popperjs/test-utils/utils/customEventPolyfill.js';
 
 const jasmineWrapper = document.getElementById('jasmineWrapper');
+const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
 
 let reference;
 let instance;
@@ -299,7 +300,7 @@ describe('[tooltip.js]', () => {
           document.querySelector('.tooltip .tooltip-inner').textContent
         ).toBe(updatedContent);
         done();
-      })
+      });
     });
 
     it('should update title content with HTMLElement', done => {
@@ -316,14 +317,18 @@ describe('[tooltip.js]', () => {
       instance.updateTitleContent(el);
 
       then(() => {
-        expect(
-          document.querySelector('.tooltip-inner').innerHTML
-        ).toBe(el.outerHTML);
+        expect(document.querySelector('.tooltip-inner').innerHTML).toBe(
+          el.outerHTML
+        );
         done();
-      })
+      });
     });
 
     it('should update the tooltip position when changing the title', done => {
+      // Unreliable on IE...
+      if (isIE10) {
+        pending();
+      }
       const updatedContent = 'Updated string with a different length';
       instance = new Tooltip(reference, {
         title: 'Constructor message',
@@ -331,16 +336,20 @@ describe('[tooltip.js]', () => {
 
       instance.show();
 
-      const oldPosition = document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+      const oldPosition = document
+        .querySelector('.tooltip .tooltip-inner')
+        .getBoundingClientRect().left;
 
       instance.updateTitleContent(updatedContent);
 
       then(() => {
         expect(
-          document.querySelector('.tooltip .tooltip-inner').getBoundingClientRect().left
+          document
+            .querySelector('.tooltip .tooltip-inner')
+            .getBoundingClientRect().left
         ).not.toBe(oldPosition);
         done();
-      }, 500)
+      }, 500);
     });
   });
 
