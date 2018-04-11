@@ -15,7 +15,7 @@ function getSize(axis, body, html, computedStyle) {
   );
 }
 
-export default function getWindowSizes() {
+export default function getWindowSizes(document) {
   const body = document.body;
   const html = document.documentElement;
   const computedStyle = isIE(10) && getComputedStyle(html);
