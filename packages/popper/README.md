@@ -122,7 +122,7 @@ var anotherPopper = new Popper(
 ### Callbacks
 
 Popper.js supports two kinds of callbacks, the `onCreate` callback is called after
-the popper has been initalized. The `onUpdate` one is called on any subsequent update.
+the popper has been initialized. The `onUpdate` one is called on any subsequent update.
 
 ```js
 const reference = document.querySelector('.my-button');

@@ -96,7 +96,7 @@ Create a new Popper.js instance
 
 ### Popper.Defaults : <code>Object</code>
 Default options provided to Popper.js constructor.<br />
-These can be overriden using the `options` argument of Popper.js.<br />
+These can be overridden using the `options` argument of Popper.js.<br />
 To override an option, simply pass as 3rd argument an object with the same
 structure of this object, example:
 ```
@@ -607,8 +607,8 @@ the boundaries in order to remain attached to the edge of the reference.
 <a name="modifiers..keepTogether"></a>
 
 ### modifiers~keepTogether
-Modifier used to make sure the reference and its popper stay near eachothers
-without leaving any gap between the two. Expecially useful when the arrow is
+Modifier used to make sure the reference and its popper stay near each others
+without leaving any gap between the two. Especially useful when the arrow is
 enabled and you want to assure it to point to its reference element.
 It cares only about the first axis, you can still have poppers with margin
 between the popper and its reference element.
@@ -656,7 +656,7 @@ between the popper and its reference element.
 This modifier is used to move the `arrowElement` of the popper to make
 sure it is positioned between the reference element and its popper element.
 It will read the outer size of the `arrowElement` node to detect how many
-pixels of conjuction are needed.
+pixels of conjunction are needed.
 
 It has no effect if no `arrowElement` is provided.
 
