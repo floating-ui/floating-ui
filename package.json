@@ -7,6 +7,12 @@
   "scripts": {
     "precommit": "pretty-quick --staged"
   },
+  "prettier": {
+    "parser": "flow",
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true
+  },
   "devDependencies": {
     "flow-bin": "^0.70.0",
     "husky": "^0.14.3",
