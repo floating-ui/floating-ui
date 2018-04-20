@@ -30,8 +30,8 @@ export type Placement =
   | 'left-end';
 
 export type State = {
-  reference?: ?Element,
-  popper?: ?Element,
+  reference?: Element,
+  popper?: Element,
   options: Options,
   orderedModifiers: Array<Modifier>,
   measures: {

@@ -11,6 +11,17 @@ import orderModifiers from './utils/orderModifiers';
 import expandEventListeners from './utils/expandEventListeners';
 import getElementClientRect from './dom-utils/getElementClientRect';
 import computeOffsets from './utils/computeOffsets';
+import format from './utils/format';
+
+const INVALID_ELEMENT_ERROR =
+  'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
+
+const isValidElement = (element: mixed, name: string): boolean %checks =>
+  element instanceof Element
+    ? true
+    : Boolean(
+        console.error(format(INVALID_ELEMENT_ERROR, name, String(element)))
+      );
 
 const defaultOptions = {
   placement: 'bottom',
@@ -39,23 +50,12 @@ export default class Popper {
     // Store options into state
     this.state.options = { ...defaultOptions, ...options };
 
-    // Validate `reference` and `popper` elements
-    // this will get stripped in production to reduce the final bundle size
-    if (process.env.NODE_ENV !== 'production') {
-      if (!this.state.reference instanceof Element) {
-        throw new Error(
-          `Invalid \`reference\` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided \`${String(
-            this.state.reference
-          )}\``
-        );
-      }
-      if (!this.state.popper instanceof Element) {
-        throw new Error(
-          `Invalid \`popper\` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided \`${String(
-            this.state.popper
-          )}\``
-        );
-      }
+    // Don't proceed if `reference` or `popper` are invalid elements
+    if (
+      !isValidElement(this.state.reference, 'reference') ||
+      !isValidElement(this.state.popper, 'popper')
+    ) {
+      return;
     }
 
     // Order `options.modifiers` so that the dependencies are fulfilled
@@ -82,12 +82,21 @@ export default class Popper {
   // it will not be executed if not necessary
   update() {
     return new Promise((success, reject) => {
+      // Don't proceed if `reference` or `popper` are not valid elements anymore
+      if (
+        !isValidElement(this.state.reference, 'reference') ||
+        !isValidElement(this.state.popper, 'popper')
+      ) {
+        return;
+      }
+
       // Get initial measurements
-      // these are going to be used to compute the initial
-      // popper offsets and as cache for any modifier that
-      // needs them
+      // these are going to be used to compute the initial popper offsets
+      // and as cache for any modifier that needs them later
       this.state.measures = {
+        // $FlowFixMe the above isValidElement checks don't seem to have effect?
         reference: getElementClientRect(this.state.reference),
+        // $FlowFixMe the above isValidElement checks don't seem to have effect?
         popper: getElementClientRect(this.state.popper),
       };
 
