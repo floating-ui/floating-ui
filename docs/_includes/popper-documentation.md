@@ -234,7 +234,7 @@ Some valid examples are:
 - `top-end` (on top of reference, right aligned)
 - `right-start` (on right of reference, top aligned)
 - `bottom` (on bottom, centered)
-- `auto-right` (on the side with more space available, alignment depends by placement)
+- `auto-end` (on the side with more space available, alignment depends by placement)
 
 **Kind**: static enum of [<code>Popper</code>](#Popper)  
 **Read only**: true  
