@@ -69,10 +69,12 @@ export default function getBoundaries(
   }
 
   // Add paddings
-  boundaries.left += padding;
-  boundaries.top += padding;
-  boundaries.right -= padding;
-  boundaries.bottom -= padding;
+  padding = padding || 0;
+  const isPaddingNumber = typeof padding === 'number';
+  boundaries.left += isPaddingNumber ? padding : padding.left || 0; 
+  boundaries.top += isPaddingNumber ? padding : padding.top || 0; 
+  boundaries.right -= isPaddingNumber ? padding : padding.right || 0; 
+  boundaries.bottom -= isPaddingNumber ? padding : padding.bottom || 0; 
 
   return boundaries;
 }
