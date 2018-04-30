@@ -9,12 +9,12 @@
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "jest --coverage",
-    "build": "yarn clean && yarn build:es && yarn build:umd",
-    "build:es": "cross-env NODE_ENV=production babel src -d lib --ignore '*.test.js,__mocks__'",
-    "build:umd": "cross-env NODE_ENV=production rollup -c rollup.config.js",
-    "dev": "concurrently 'yarn dev:serve' 'yarn dev:umd --watch'",
+    "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve -s tests/visual",
-    "dev:umd": "rollup -c rollup.config.js",
+    "dev:bundles": "cross-env NODE_ENV=test rollup -c rollup.config.js",
+    "build": "yarn clean && yarn build:es && yarn build:bundles",
+    "build:es": "babel src -d lib --ignore '*.test.js,__mocks__'",
+    "build:bundles": "rollup -c rollup.config.js",
     "precommit": "pretty-quick --staged"
   },
   "prettier": {
@@ -51,6 +51,7 @@
     "pretty-quick": "^1.4.1",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-replace": "^2.0.0",
     "serve": "^6.5.6"
   }
 }

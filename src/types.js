@@ -37,6 +37,7 @@ export type Modifier = {
   requires?: Array<string>,
   fn: State => State,
   onLoad: State => void,
+  options: Object,
 };
 
 export type EventListeners = { scroll: boolean, resize: boolean };

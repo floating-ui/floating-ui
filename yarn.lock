@@ -1413,6 +1413,10 @@ estree-walker@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.2.1.tgz#bdafe8095383d8414d5dc2ecf4c9173b6db9412e"
 
+estree-walker@^0.3.0:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/estree-walker/-/estree-walker-0.3.1.tgz#e6b1a51cf7292524e7237c312e5fe6660c1ce1aa"
+
 esutils@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.2.tgz#0abf4f1caa5bcb1f7a9d8acc6dea4faaa04bac9b"
@@ -2668,6 +2672,12 @@ lru-cache@^4.0.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
+magic-string@^0.22.4:
+  version "0.22.5"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.22.5.tgz#8e9cf5afddf44385c1da5bc2a6a0dbd10b03657e"
+  dependencies:
+    vlq "^0.2.2"
+
 makeerror@1.0.x:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/makeerror/-/makeerror-1.0.11.tgz#e01a5c9109f2af79660e4e8b9587790184f5a96c"
@@ -3485,12 +3495,27 @@ rollup-plugin-babel@^3.0.4:
   dependencies:
     rollup-pluginutils "^1.5.0"
 
+rollup-plugin-replace@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-replace/-/rollup-plugin-replace-2.0.0.tgz#19074089c8ed57184b8cc64e967a03d095119277"
+  dependencies:
+    magic-string "^0.22.4"
+    minimatch "^3.0.2"
+    rollup-pluginutils "^2.0.1"
+
 rollup-pluginutils@^1.5.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-1.5.2.tgz#1e156e778f94b7255bfa1b3d0178be8f5c552408"
   dependencies:
     estree-walker "^0.2.1"
     minimatch "^3.0.2"
+
+rollup-pluginutils@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/rollup-pluginutils/-/rollup-pluginutils-2.0.1.tgz#7ec95b3573f6543a46a6461bd9a7c544525d0fc0"
+  dependencies:
+    estree-walker "^0.3.0"
+    micromatch "^2.3.11"
 
 rollup@^0.58.2:
   version "0.58.2"
@@ -4082,6 +4107,10 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vlq@^0.2.2:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/vlq/-/vlq-0.2.3.tgz#8f3e4328cf63b1540c0d67e1b2778386f8975b26"
 
 w3c-hr-time@^1.0.1:
   version "1.0.1"

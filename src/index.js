@@ -13,6 +13,7 @@ import getElementClientRect from './dom-utils/getElementClientRect';
 import computeOffsets from './utils/computeOffsets';
 import format from './utils/format';
 import debounce from './utils/debounce';
+import validateModifiers from './utils/validateModifiers';
 
 const INVALID_ELEMENT_ERROR =
   'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
@@ -65,6 +66,12 @@ export default class Popper {
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
     this.state.orderedModifiers = orderModifiers(this.state.options.modifiers);
+
+    // Validate the provided modifiers so that the consumer will get warned
+    // of one of the custom modifiers is invalid for any reason
+    if (process.env.NODE_ENV !== 'production') {
+      validateModifiers(this.state.options.modifiers);
+    }
 
     // Modifiers have the opportunity to execute some arbitrary code before
     // the first update cycle is ran, the order of execution will be the same
