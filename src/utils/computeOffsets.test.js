@@ -8,8 +8,8 @@ import getAltAxis from './getAltAxis';
 import getOppositePlacement from './getOppositePlacement';
 
 const reference = createRectMock({
-  width: 100,
-  height: 100,
+  width: 200,
+  height: 200,
   x: 100,
   y: 100,
 });
