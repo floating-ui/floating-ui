@@ -5,6 +5,9 @@
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
   "scripts": {
+    "clean": "rimraf lib",
+    "test": "jest --coverage",
+    "build": "yarn clean && cross-env NODE_ENV=production babel -q src -d lib",
     "precommit": "pretty-quick --staged"
   },
   "prettier": {
@@ -13,9 +16,30 @@
     "trailingComma": "es5",
     "singleQuote": true
   },
+  "babel": {
+    "plugins": [
+      "transform-flow-strip-types",
+      "transform-class-properties",
+      "transform-object-rest-spread"
+    ],
+    "env": {
+      "test": {
+        "presets": [
+          "env"
+        ]
+      }
+    }
+  },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "cross-env": "^5.1.4",
     "flow-bin": "^0.70.0",
     "husky": "^0.14.3",
+    "jest": "^22.4.3",
     "prettier": "^1.12.1",
     "pretty-quick": "^1.4.1"
   }

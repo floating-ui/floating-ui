@@ -9,3 +9,5 @@ dist
 .vscode/
 package-lock.json
 coverage.info
+lib
+coverage

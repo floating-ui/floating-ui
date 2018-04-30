@@ -1,4 +1,5 @@
 // @flow
+import type { Placement } from './enums';
 export type JQueryWrapper = Element[] & { jquery: string };
 
 export type Rect = {
@@ -14,20 +15,6 @@ export type Offsets = {
 };
 
 export type PositioningStrategy = 'absolute' | 'fixed';
-
-export type Placement =
-  | 'top'
-  | 'top-start'
-  | 'top-end'
-  | 'bottom'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'right'
-  | 'right-start'
-  | 'right-end'
-  | 'left'
-  | 'left-start'
-  | 'left-end';
 
 export type State = {
   reference?: Element,
