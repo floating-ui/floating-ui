@@ -6,10 +6,16 @@ import type {
   UpdateCallback,
   EventListeners,
 } from './types';
+
+// DOM Utils
+import getElementClientRect from './dom-utils/getElementClientRect';
+import getScrollParent from './dom-utils/getScrollParent';
+import getWindow from './dom-utils/getWindow';
+
+// Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import expandEventListeners from './utils/expandEventListeners';
-import getElementClientRect from './dom-utils/getElementClientRect';
 import computeOffsets from './utils/computeOffsets';
 import format from './utils/format';
 import debounce from './utils/debounce';
@@ -83,9 +89,7 @@ export default class Popper {
 
     this.update().then(() => {
       // After the first update completed, enable the event listeners
-      if (options.eventListeners) {
-        this.enableEventListeners(options.eventListeners);
-      }
+      this.enableEventListeners(this.state.options.eventListeners);
     });
   }
 
@@ -131,7 +135,7 @@ export default class Popper {
     };
 
     this.state.orderedModifiers.forEach(
-      ({ fn, enabled }) => enabled && fn && fn(this.state)
+      ({ fn, enabled }) => enabled && fn && (this.state = fn(this.state))
     );
   }
 
@@ -139,5 +143,24 @@ export default class Popper {
     eventListeners: boolean | { scroll?: boolean, resize?: boolean }
   ) {
     const { scroll, resize } = expandEventListeners(eventListeners);
+
+    if (this.state.popper) {
+      if (scroll) {
+        const scrollParent = getScrollParent(this.state.popper);
+        scrollParent &&
+          // TODO: add support for multiple scroll parents
+          scrollParent.addEventListener('scroll', this.update, {
+            passive: true,
+          });
+      }
+
+      if (resize) {
+        const win = getWindow(this.state.popper);
+        win &&
+          win.addEventListener('resize', this.update, {
+            passive: true,
+          });
+      }
+    }
   }
 }

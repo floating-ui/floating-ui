@@ -1,7 +1,7 @@
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 
-const dir = process.env.NODE_ENV === 'test' ? 'tests/visual/dist' : 'dist';
+const dir = process.env.NODE_ENV === 'dev' ? 'tests/visual/dist' : 'dist';
 
 export default [
   {
