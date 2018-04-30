@@ -9,8 +9,8 @@ import type { EventListeners } from '../types';
 // true, false => true, false
 // false, false => false, false
 export default (
-  eventListeners: boolean | EventListeners
-): { scroll: boolean, resize: boolean } => {
+  eventListeners: boolean | { scroll?: boolean, resize?: boolean }
+): EventListeners => {
   const fallbackValue =
     typeof eventListeners === 'boolean' ? eventListeners : false;
 

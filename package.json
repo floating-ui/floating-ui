@@ -1,14 +1,16 @@
 {
   "name": "popper2",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/cjs/popper.js",
+  "browser": "dist/umd/popper.js",
+  "module": "lib/index.js",
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "jest --coverage",
     "build": "yarn clean && yarn build:es && yarn build:umd",
-    "build:es": "cross-env NODE_ENV=production babel src -d lib",
+    "build:es": "cross-env NODE_ENV=production babel src -d lib --ignore '*.test.js,__mocks__'",
     "build:umd": "cross-env NODE_ENV=production rollup -c rollup.config.js",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:umd --watch'",
     "dev:serve": "serve -s tests/visual",

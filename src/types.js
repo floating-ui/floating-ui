@@ -44,7 +44,7 @@ export type EventListeners = { scroll: boolean, resize: boolean };
 export type Options = {
   placement: Placement,
   modifiers: Array<Modifier>,
-  eventListeners: boolean | EventListeners,
+  eventListeners: boolean | { scroll?: boolean, resize?: boolean },
 };
 
 export type UpdateCallback = State => void;

@@ -3,14 +3,19 @@ export const top: 'top' = 'top';
 export const bottom: 'bottom' = 'bottom';
 export const right: 'right' = 'right';
 export const left: 'left' = 'left';
+export const auto: 'auto' = 'auto';
 export type BasePlacement =
   | typeof top
   | typeof bottom
   | typeof right
-  | typeof left;
+  | typeof left
+  | typeof auto;
 export const basePlacements: Array<BasePlacement> = [top, bottom, right, left];
 
 export type Placement =
+  | 'auto'
+  | 'auto-start'
+  | 'auto-end'
   | 'top'
   | 'top-start'
   | 'top-end'

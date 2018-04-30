@@ -128,7 +128,9 @@ export default class Popper {
     );
   }
 
-  enableEventListeners(eventListeners: boolean | EventListeners) {
+  enableEventListeners(
+    eventListeners: boolean | { scroll?: boolean, resize?: boolean }
+  ) {
     const { scroll, resize } = expandEventListeners(eventListeners);
   }
 }

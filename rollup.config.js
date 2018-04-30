@@ -1,9 +1,7 @@
 import babel from 'rollup-plugin-babel';
 
-const file =
-  process.env.NODE_ENV !== 'production'
-    ? 'tests/visual/dist/popper.js'
-    : 'dist/popper.js';
+const dir =
+  process.env.NODE_ENV !== 'production' ? 'tests/visual/dist' : 'dist';
 
 export default [
   {
@@ -11,8 +9,19 @@ export default [
     plugins: [babel()],
     output: {
       name: 'Popper',
-      file,
+      file: 'popper.js',
+      file: `${dir}/umd/popper.js`,
       format: 'es',
+      sourcemap: true,
+    },
+  },
+  {
+    input: 'src/index.js',
+    plugins: [babel()],
+    output: {
+      name: 'Popper',
+      file: `${dir}/cjs/popper.js`,
+      format: 'cjs',
       sourcemap: true,
     },
   },

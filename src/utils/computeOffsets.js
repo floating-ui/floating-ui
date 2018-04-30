@@ -1,6 +1,5 @@
 // @flow
 import getBasePlacement from './getBasePlacement';
-import getMainAxisFromPlacement from './getMainAxisFromPlacement';
 import getAltAxis from './getAltAxis';
 import getAltLen from './getAltLen';
 import type { Rect, PositioningStrategy, Offsets } from '../types';
