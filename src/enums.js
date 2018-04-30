@@ -33,3 +33,12 @@ export const placements: Array<Placement> = basePlacements.reduce(
     ]),
   []
 );
+
+// modifiers that need to read the DOM
+export const read: 'read' = 'read';
+// pure-logic modifiers
+export const main: 'main' = 'main';
+// modifier with the purpose to write to the DOM (or write into a framework state)
+export const write: 'write' = 'write';
+
+export type ModifierPhases = typeof read | typeof main | typeof write;

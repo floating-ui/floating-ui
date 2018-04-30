@@ -22,23 +22,23 @@ export default ({
   switch (basePlacement) {
     case top:
       return {
-        x: reference.x + reference.width / 2,
-        y: reference.y - reference.height,
+        x: reference.x + reference.width / 2 - popper.width / 2,
+        y: reference.y - popper.height,
       };
     case bottom:
       return {
-        x: reference.x + popper.width / 2,
+        x: reference.x + reference.width / 2 - popper.width / 2,
         y: reference.y + reference.height,
       };
     case right:
       return {
         x: reference.x + reference.width,
-        y: reference.y + popper.height / 2,
+        y: reference.y + reference.height / 2 - popper.height / 2,
       };
     case left:
       return {
-        x: reference.x - reference.width,
-        y: reference.y + popper.height / 2,
+        x: reference.x - popper.width,
+        y: reference.y + reference.height / 2 - popper.height / 2,
       };
     default:
       // $FlowFixMe: This will actually never match github.com/facebook/flow/issues/2395

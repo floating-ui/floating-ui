@@ -30,11 +30,6 @@ export type State = {
   },
 };
 
-export type ModifierPhases =
-  | 'read' // modifiers that need to read the DOM
-  | 'main' // pure-logic modifiers
-  | 'write'; // modifier with the purpose to write to the DOM (or write into a framework state)
-
 export type Modifier = {
   name: string,
   enabled: boolean,

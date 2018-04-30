@@ -12,6 +12,7 @@ import expandEventListeners from './utils/expandEventListeners';
 import getElementClientRect from './dom-utils/getElementClientRect';
 import computeOffsets from './utils/computeOffsets';
 import format from './utils/format';
+import debounce from './utils/debounce';
 
 const INVALID_ELEMENT_ERROR =
   'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
@@ -42,6 +43,9 @@ export default class Popper {
     popper: Element | JQueryWrapper,
     options: Options = defaultOptions
   ) {
+    // make update() debounced, so that it only runs at most once-per-tick
+    (this: any).update = debounce(this.update.bind(this));
+
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
     this.state.reference = unwrapJqueryElement(reference);
@@ -60,7 +64,7 @@ export default class Popper {
 
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
-    this.state.orderedModifiers = orderModifiers(options.modifiers);
+    this.state.orderedModifiers = orderModifiers(this.state.options.modifiers);
 
     // Modifiers have the opportunity to execute some arbitrary code before
     // the first update cycle is ran, the order of execution will be the same
@@ -80,35 +84,10 @@ export default class Popper {
 
   // Async and optimistically optimized update
   // it will not be executed if not necessary
+  // check Popper#constructor to see how it gets debounced
   update() {
     return new Promise((success, reject) => {
-      // Don't proceed if `reference` or `popper` are not valid elements anymore
-      if (
-        !isValidElement(this.state.reference, 'reference') ||
-        !isValidElement(this.state.popper, 'popper')
-      ) {
-        return;
-      }
-
-      // Get initial measurements
-      // these are going to be used to compute the initial popper offsets
-      // and as cache for any modifier that needs them later
-      this.state.measures = {
-        // $FlowFixMe the above isValidElement checks don't seem to have effect?
-        reference: getElementClientRect(this.state.reference),
-        // $FlowFixMe the above isValidElement checks don't seem to have effect?
-        popper: getElementClientRect(this.state.popper),
-      };
-
-      this.state.offsets = {
-        popper: computeOffsets({
-          reference: this.state.measures.reference,
-          popper: this.state.measures.popper,
-          strategy: 'absolute',
-          placement: this.state.options.placement,
-        }),
-      };
-
+      this.forceUpdate();
       success(this.state);
     });
   }
@@ -116,7 +95,38 @@ export default class Popper {
   // Syncronous and forcefully executed update
   // it will always be executed even if not necessary, usually NOT needed
   // use Popper#update instead
-  forceUpdate() {}
+  forceUpdate() {
+    // Don't proceed if `reference` or `popper` are not valid elements anymore
+    if (
+      !isValidElement(this.state.reference, 'reference') ||
+      !isValidElement(this.state.popper, 'popper')
+    ) {
+      return;
+    }
+
+    // Get initial measurements
+    // these are going to be used to compute the initial popper offsets
+    // and as cache for any modifier that needs them later
+    this.state.measures = {
+      // $FlowFixMe the above isValidElement checks don't seem to have effect?
+      reference: getElementClientRect(this.state.reference),
+      // $FlowFixMe the above isValidElement checks don't seem to have effect?
+      popper: getElementClientRect(this.state.popper),
+    };
+
+    this.state.offsets = {
+      popper: computeOffsets({
+        reference: this.state.measures.reference,
+        popper: this.state.measures.popper,
+        strategy: 'absolute',
+        placement: this.state.options.placement,
+      }),
+    };
+
+    this.state.orderedModifiers.forEach(
+      ({ fn, enabled }) => enabled && fn && fn(this.state)
+    );
+  }
 
   enableEventListeners(eventListeners: boolean | EventListeners) {
     const { scroll, resize } = expandEventListeners(eventListeners);

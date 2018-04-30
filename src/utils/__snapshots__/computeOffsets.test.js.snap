@@ -2,14 +2,14 @@
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 1`] = `
 Object {
-  "x": 150,
+  "x": 100,
   "y": 0,
 }
 `;
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 2`] = `
 Object {
-  "x": 150,
+  "x": 100,
   "y": 200,
 }
 `;
@@ -17,13 +17,13 @@ Object {
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 3`] = `
 Object {
   "x": 200,
-  "y": 150,
+  "y": 100,
 }
 `;
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 4`] = `
 Object {
   "x": 0,
-  "y": 150,
+  "y": 100,
 }
 `;

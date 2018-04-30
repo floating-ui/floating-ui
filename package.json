@@ -5,13 +5,17 @@
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf lib",
+    "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "jest --coverage",
-    "build": "yarn clean && cross-env NODE_ENV=production babel -q src -d lib",
+    "build": "yarn clean && yarn build:es && yarn build:umd",
+    "build:es": "cross-env NODE_ENV=production babel src -d lib",
+    "build:umd": "cross-env NODE_ENV=production rollup -c rollup.config.js",
+    "dev": "concurrently 'yarn dev:serve' 'yarn dev:umd --watch'",
+    "dev:serve": "serve -s tests/visual",
+    "dev:umd": "rollup -c rollup.config.js",
     "precommit": "pretty-quick --staged"
   },
   "prettier": {
-    "parser": "flow",
     "semi": true,
     "trailingComma": "es5",
     "singleQuote": true
@@ -36,11 +40,15 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
     "cross-env": "^5.1.4",
     "flow-bin": "^0.70.0",
     "husky": "^0.14.3",
     "jest": "^22.4.3",
     "prettier": "^1.12.1",
-    "pretty-quick": "^1.4.1"
+    "pretty-quick": "^1.4.1",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^3.0.4",
+    "serve": "^6.5.6"
   }
 }
