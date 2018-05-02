@@ -24,12 +24,8 @@ import validateModifiers from './utils/validateModifiers';
 const INVALID_ELEMENT_ERROR =
   'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
 
-const isValidElement = (element: mixed, name: string): boolean %checks =>
-  element instanceof Element
-    ? true
-    : Boolean(
-        console.error(format(INVALID_ELEMENT_ERROR, name, String(element)))
-      );
+const areValidElements = (a: mixed, b: mixed): boolean %checks =>
+  a instanceof Element && b instanceof Element;
 
 const defaultOptions = {
   placement: 'bottom',
@@ -39,9 +35,12 @@ const defaultOptions = {
 
 export default class Popper {
   state: State = {
+    reference: undefined,
+    popper: undefined,
     orderedModifiers: [],
     measures: {},
     offsets: {},
+    scrollParents: {},
     options: defaultOptions,
   };
 
@@ -57,17 +56,20 @@ export default class Popper {
     // wrapped by jQuery, otherwise consume them as is
     this.state.reference = unwrapJqueryElement(reference);
     this.state.popper = unwrapJqueryElement(popper);
+    const { reference: referenceElement, popper: popperElement } = this.state;
 
     // Store options into state
     this.state.options = { ...defaultOptions, ...options };
 
     // Don't proceed if `reference` or `popper` are invalid elements
-    if (
-      !isValidElement(this.state.reference, 'reference') ||
-      !isValidElement(this.state.popper, 'popper')
-    ) {
+    if (!areValidElements(referenceElement, popperElement)) {
       return;
     }
+
+    this.state.scrollParents = {
+      reference: listScrollParents(referenceElement),
+      popper: listScrollParents(popperElement),
+    };
 
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
@@ -107,11 +109,9 @@ export default class Popper {
   // it will always be executed even if not necessary, usually NOT needed
   // use Popper#update instead
   forceUpdate() {
+    const { reference: referenceElement, popper: popperElement } = this.state;
     // Don't proceed if `reference` or `popper` are not valid elements anymore
-    if (
-      !isValidElement(this.state.reference, 'reference') ||
-      !isValidElement(this.state.popper, 'popper')
-    ) {
+    if (!areValidElements(referenceElement, popperElement)) {
       return;
     }
 
@@ -119,10 +119,8 @@ export default class Popper {
     // these are going to be used to compute the initial popper offsets
     // and as cache for any modifier that needs them later
     this.state.measures = {
-      // $FlowFixMe the above isValidElement checks don't seem to have effect?
-      reference: getElementClientRect(this.state.reference),
-      // $FlowFixMe the above isValidElement checks don't seem to have effect?
-      popper: getElementClientRect(this.state.popper),
+      reference: getElementClientRect(referenceElement),
+      popper: getElementClientRect(popperElement),
     };
 
     this.state.offsets = {
@@ -142,26 +140,33 @@ export default class Popper {
   enableEventListeners(
     eventListeners: boolean | { scroll?: boolean, resize?: boolean }
   ) {
+    const { reference: referenceElement, popper: popperElement } = this.state;
     const { scroll, resize } = expandEventListeners(eventListeners);
 
-    if (this.state.popper && this.state.reference) {
-      if (scroll) {
-        const scrollParents = listScrollParents(this.state.reference);
-        scrollParents.length > 0 &&
-          scrollParents.forEach(scrollParent =>
-            scrollParent.addEventListener('scroll', this.update, {
-              passive: true,
-            })
-          );
-      }
+    // Don't proceed if `reference` or `popper` are not valid elements anymore
+    if (!areValidElements(referenceElement, popperElement)) {
+      return;
+    }
 
-      if (resize) {
-        const win = getWindow(this.state.popper);
-        win &&
-          win.addEventListener('resize', this.update, {
+    if (scroll) {
+      const scrollParents = [
+        ...listScrollParents(referenceElement),
+        ...listScrollParents(popperElement),
+      ];
+      scrollParents.length > 0 &&
+        scrollParents.forEach(scrollParent =>
+          scrollParent.addEventListener('scroll', this.update, {
             passive: true,
-          });
-      }
+          })
+        );
+    }
+
+    if (resize && this.state.popper) {
+      const win = getWindow(this.state.popper);
+      win &&
+        win.addEventListener('resize', this.update, {
+          passive: true,
+        });
     }
   }
 }

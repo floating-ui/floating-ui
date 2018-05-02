@@ -40,7 +40,7 @@ export default ({
         y: reference.y + reference.height / 2 - popper.height / 2,
       };
     default:
-      // $FlowFixMe: This will actually never match github.com/facebook/flow/issues/2395
+      // $FlowFixMe: This will actually never match; github.com/facebook/flow/issues/2395
       return undefined;
   }
 };

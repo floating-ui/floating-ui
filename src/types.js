@@ -17,8 +17,8 @@ export type Offsets = {
 export type PositioningStrategy = 'absolute' | 'fixed';
 
 export type State = {
-  reference?: Element,
-  popper?: Element,
+  reference: ?Element,
+  popper: ?Element,
   options: Options,
   orderedModifiers: Array<Modifier>,
   measures: {
@@ -27,6 +27,10 @@ export type State = {
   },
   offsets: {
     popper?: Offsets,
+  },
+  scrollParents: {
+    reference?: Array<Node>,
+    popper?: Array<Node>,
   },
 };
 
