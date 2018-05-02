@@ -1,7 +1,7 @@
 // @flow
 import getParentNode from './getParentNode';
 
-export default function getScrollParent(node: Node) {
+export default function getScrollParent(node: Node): Node {
   if (!node) {
     return document.body;
   }

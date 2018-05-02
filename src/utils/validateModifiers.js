@@ -15,7 +15,6 @@ const VALID_PROPERTIES = [
 ];
 
 export default (modifiers: Array<any>): void => {
-  console.log(modifiers);
   modifiers.forEach(modifier => {
     Object.keys(modifier).forEach(key => {
       switch (key) {

@@ -9,7 +9,7 @@ import type {
 
 // DOM Utils
 import getElementClientRect from './dom-utils/getElementClientRect';
-import getScrollParent from './dom-utils/getScrollParent';
+import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
 
 // Pure Utils
@@ -144,14 +144,15 @@ export default class Popper {
   ) {
     const { scroll, resize } = expandEventListeners(eventListeners);
 
-    if (this.state.popper) {
+    if (this.state.popper && this.state.reference) {
       if (scroll) {
-        const scrollParent = getScrollParent(this.state.popper);
-        scrollParent &&
-          // TODO: add support for multiple scroll parents
-          scrollParent.addEventListener('scroll', this.update, {
-            passive: true,
-          });
+        const scrollParents = listScrollParents(this.state.reference);
+        scrollParents.length > 0 &&
+          scrollParents.forEach(scrollParent =>
+            scrollParent.addEventListener('scroll', this.update, {
+              passive: true,
+            })
+          );
       }
 
       if (resize) {
