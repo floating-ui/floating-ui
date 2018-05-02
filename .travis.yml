@@ -1,0 +1,11 @@
+language: node_js
+node_js: 9.11.1
+script:
+  - yarn test:ci
+cache:
+  yarn: true
+  directories:
+    - node_modules
+branches:
+  only:
+    - next
