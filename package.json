@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
-    "test": "jest --coverage",
+    "test": "jest --coverage --watch",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve -s tests/visual",
     "dev:bundles": "cross-env NODE_ENV=dev rollup -c rollup.config.js",
@@ -36,6 +36,9 @@
       }
     }
   },
+  "jest": {
+    "setupFiles": ["raf/polyfill"]
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -49,6 +52,7 @@
     "jest": "^22.4.3",
     "prettier": "^1.12.1",
     "pretty-quick": "^1.4.1",
+    "raf": "^3.4.0",
     "rollup": "^0.58.2",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-replace": "^2.0.0",
