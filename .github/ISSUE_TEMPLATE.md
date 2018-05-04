@@ -1,9 +1,10 @@
 <!--
 Thanks for your interest in contributing to Popper.js!  
+If your issue is not a bug report, please use our community at https://spectrum.chat/popper-js
+
 Please, make sure to fill all the sections of the template before submitting any issue. 
 
-Issues without the required informations will be closed.
-Do not delete this template or it will be closed!
+Issues without the required informations WILL BE CLOSED.
 
 Want your issue to be fixed earlier? Create a PR that introduces a CI test that fails
 because of the bug you found!
