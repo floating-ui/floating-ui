@@ -91,6 +91,7 @@ declare namespace Popper {
     hide: boolean;
     arrowElement: Element;
     styles: CSSStyleDeclaration;
+    arrowStyles: CSSStyleDeclaration;
     boundaries: Object;
     offsets: {
       popper: Offset,
