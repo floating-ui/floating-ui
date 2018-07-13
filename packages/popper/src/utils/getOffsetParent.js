@@ -27,10 +27,10 @@ export default function getOffsetParent(element) {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
-  // .offsetParent will return the closest TD or TABLE in case
+  // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
   if (
-    ['TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 &&
+    ['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 &&
     getStyleComputedProperty(offsetParent, 'position') === 'static'
   ) {
     return getOffsetParent(offsetParent);

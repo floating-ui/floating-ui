@@ -1720,7 +1720,7 @@ const arrowSize = 5;
     );
 
     // test for #276
-    it('works inside tables', done => {
+    it('works inside table td elements', done => {
       jasmineWrapper.innerHTML = `
         <style>
           table {
@@ -1748,6 +1748,54 @@ const arrowSize = 5;
                   pop
                 </div>
               </td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'bottom',
+        onCreate(data) {
+          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+          expect(getRect(reference).left).toBeApprox(getRect(popper).left);
+          data.instance.destroy();
+          done();
+        },
+      });
+    });
+
+     // test for #276
+     it('works inside table th elements', done => {
+      jasmineWrapper.innerHTML = `
+        <style>
+          table {
+            margin-top: 50px;
+          }
+          #reference {
+            background: orange;
+            width: 50px;
+            height: 50px;
+          }
+          #popper {
+            background: green;
+            width: 50px;
+            height: 50px;
+          }
+        </style>
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                <div id="reference">
+                  ref
+                </div>
+                <div id="popper">
+                  pop
+                </div>
+              </th>
             </tr>
           </tbody>
         </table>
