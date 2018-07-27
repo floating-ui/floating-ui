@@ -35,6 +35,11 @@ declare namespace Popper {
 
   export type ModifierFn = (data: Data, options: Object) => Data;
 
+  export interface Attributes {
+    'x-out-of-boundaries': '' | false;
+    'x-placement': Placement;
+  }
+
   export interface BaseModifier {
     order?: number;
     enabled?: boolean;
@@ -91,6 +96,8 @@ declare namespace Popper {
     hide: boolean;
     arrowElement: Element;
     styles: CSSStyleDeclaration;
+    arrowStyles: CSSStyleDeclaration;
+    attributes: Attributes;
     boundaries: Object;
     offsets: {
       popper: Offset,
