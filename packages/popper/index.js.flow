@@ -126,6 +126,8 @@ declare module 'popper.js' {
     destroy: () => void,
     scheduleUpdate: () => void,
     update: () => void,
+    enableEventListeners: () => void,
+    disableEventListeners: () => void,
   };
 
   declare class Popper {
