@@ -5,3 +5,4 @@
 # Except the dist files
 #======================
 !dist/**/*
+!index.d.ts

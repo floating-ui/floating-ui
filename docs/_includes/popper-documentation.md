@@ -9,8 +9,8 @@
 
 <dl>
 <dt><a href="#dataObject">dataObject</a></dt>
-<dd><p>The <code>dataObject</code> is an object containing all the informations used by Popper.js
-this object get passed to modifiers and to the <code>onCreate</code> and <code>onUpdate</code> callbacks.</p>
+<dd><p>The <code>dataObject</code> is an object containing all the information used by Popper.js.
+This object is passed to modifiers and to the <code>onCreate</code> and <code>onUpdate</code> callbacks.</p>
 </dd>
 <dt><a href="#referenceObject">referenceObject</a></dt>
 <dd><p>The <code>referenceObject</code> is an object that provides an interface compatible with Popper.js
@@ -18,7 +18,7 @@ and lets you use it as replacement of a real DOM node.<br />
 You can use this method to position a popper relatively to a set of coordinates
 in case you don&#39;t have a DOM node to use as reference.</p>
 <pre><code>new Popper(referenceObject, popperNode);
-</code></pre><p>NB: This feature isn&#39;t supported in Internet Explorer 10</p>
+</code></pre><p>NB: This feature isn&#39;t supported in Internet Explorer 10.</p>
 </dd>
 </dl>
 
@@ -82,14 +82,14 @@ make sure they are performant enough to avoid performance bottlenecks.</p>
 <a name="new_Popper_new"></a>
 
 ### new Popper(reference, popper, options)
-Create a new Popper.js instance
+Creates a new Popper.js instance.
 
 **Returns**: <code>Object</code> - instance - The generated Popper.js instance  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | reference | <code>HTMLElement</code> \| [<code>referenceObject</code>](#referenceObject) | The reference element used to position the popper |
-| popper | <code>HTMLElement</code> | The HTML element used as popper. |
+| popper | <code>HTMLElement</code> | The HTML element used as the popper |
 | options | <code>Object</code> | Your custom options to override the ones defined in [Defaults](#defaults) |
 
 <a name="Popper.Defaults"></a>
@@ -97,8 +97,8 @@ Create a new Popper.js instance
 ### Popper.Defaults : <code>Object</code>
 Default options provided to Popper.js constructor.<br />
 These can be overridden using the `options` argument of Popper.js.<br />
-To override an option, simply pass as 3rd argument an object with the same
-structure of this object, example:
+To override an option, simply pass an object with the same
+structure of the `options` object, as the 3rd argument. For example:
 ```
 new Popper(ref, pop, {
   modifiers: {
@@ -121,7 +121,7 @@ new Popper(ref, pop, {
 <a name="Popper.Defaults.placement"></a>
 
 #### Defaults.placement
-Popper's placement
+Popper's placement.
 
 **Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
@@ -145,7 +145,7 @@ Set this to true if you want popper to position it self in 'fixed' mode
 <a name="Popper.Defaults.eventsEnabled"></a>
 
 #### Defaults.eventsEnabled
-Whether events (resize, scroll) are initially enabled
+Whether events (resize, scroll) are initially enabled.
 
 **Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
@@ -171,7 +171,7 @@ you call the `destroy` method.
 
 #### Defaults.modifiers
 List of modifiers used to modify the offsets before they are applied to the popper.
-They provide most of the functionalities of Popper.js
+They provide most of the functionalities of Popper.js.
 
 **Kind**: static property of [<code>Defaults</code>](#Popper.Defaults)  
 **Properties**
@@ -184,7 +184,7 @@ They provide most of the functionalities of Popper.js
 
 #### Defaults.onCreate()
 Callback called when the popper is created.<br />
-By default, is set to no-op.<br />
+By default, it is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
 **Kind**: static method of [<code>Defaults</code>](#Popper.Defaults)  
@@ -197,10 +197,10 @@ Access Popper.js instance with `data.instance`.
 <a name="Popper.Defaults.onUpdate"></a>
 
 #### Defaults.onUpdate()
-Callback called when the popper is updated, this callback is not called
+Callback called when the popper is updated. This callback is not called
 on the initialization/creation of the popper, but only on subsequent
 updates.<br />
-By default, is set to no-op.<br />
+By default, it is set to no-op.<br />
 Access Popper.js instance with `data.instance`.
 
 **Kind**: static method of [<code>Defaults</code>](#Popper.Defaults)  
@@ -234,7 +234,7 @@ Some valid examples are:
 - `top-end` (on top of reference, right aligned)
 - `right-start` (on right of reference, top aligned)
 - `bottom` (on bottom, centered)
-- `auto-right` (on the side with more space available, alignment depends by placement)
+- `auto-end` (on the side with more space available, alignment depends by placement)
 
 **Kind**: static enum of [<code>Popper</code>](#Popper)  
 **Read only**: true  
@@ -249,7 +249,7 @@ Prefer `scheduleUpdate` over `update` because of performance reasons.
 <a name="Popper.destroy"></a>
 
 ### Popper.destroy()
-Destroy the popper
+Destroys the popper.
 
 **Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.enableEventListeners"></a>
@@ -263,21 +263,21 @@ position of the popper element when they are triggered.
 
 ### Popper.disableEventListeners()
 It will remove resize/scroll events and won't recalculate popper position
-when they are triggered. It also won't trigger onUpdate callback anymore,
+when they are triggered. It also won't trigger `onUpdate` callback anymore,
 unless you call `update` method manually.
 
 **Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="Popper.scheduleUpdate"></a>
 
 ### Popper.scheduleUpdate()
-Schedule an update, it will run on the next UI update available
+Schedules an update. It will run on the next UI update available.
 
 **Kind**: static method of [<code>Popper</code>](#Popper)  
 <a name="dataObject"></a>
 
 ## dataObject
-The `dataObject` is an object containing all the informations used by Popper.js
-this object get passed to modifiers and to the `onCreate` and `onUpdate` callbacks.
+The `dataObject` is an object containing all the information used by Popper.js.
+This object is passed to modifiers and to the `onCreate` and `onUpdate` callbacks.
 
 **Kind**: global variable  
 **Properties**
@@ -288,12 +288,12 @@ this object get passed to modifiers and to the `onCreate` and `onUpdate` callbac
 | data.placement | <code>String</code> | Placement applied to popper |
 | data.originalPlacement | <code>String</code> | Placement originally defined on init |
 | data.flipped | <code>Boolean</code> | True if popper has been flipped by flip modifier |
-| data.hide | <code>Boolean</code> | True if the reference element is out of boundaries, useful to know when to hide the popper. |
+| data.hide | <code>Boolean</code> | True if the reference element is out of boundaries, useful to know when to hide the popper |
 | data.arrowElement | <code>HTMLElement</code> | Node used as arrow by arrow modifier |
-| data.styles | <code>Object</code> | Any CSS property defined here will be applied to the popper, it expects the JavaScript nomenclature (eg. `marginBottom`) |
-| data.arrowStyles | <code>Object</code> | Any CSS property defined here will be applied to the popper arrow, it expects the JavaScript nomenclature (eg. `marginBottom`) |
+| data.styles | <code>Object</code> | Any CSS property defined here will be applied to the popper. It expects the JavaScript nomenclature (eg. `marginBottom`) |
+| data.arrowStyles | <code>Object</code> | Any CSS property defined here will be applied to the popper arrow. It expects the JavaScript nomenclature (eg. `marginBottom`) |
 | data.boundaries | <code>Object</code> | Offsets of the popper boundaries |
-| data.offsets | <code>Object</code> | The measurements of popper, reference and arrow elements. |
+| data.offsets | <code>Object</code> | The measurements of popper, reference and arrow elements |
 | data.offsets.popper | <code>Object</code> | `top`, `left`, `width`, `height` values |
 | data.offsets.reference | <code>Object</code> | `top`, `left`, `width`, `height` values |
 | data.offsets.arrow | <code>Object</code> | `top` and `left` offsets, only one of them will be different from 0 |
@@ -310,7 +310,7 @@ in case you don't have a DOM node to use as reference.
 new Popper(referenceObject, popperNode);
 ```
 
-NB: This feature isn't supported in Internet Explorer 10
+NB: This feature isn't supported in Internet Explorer 10.
 
 **Kind**: global variable  
 **Properties**
@@ -439,7 +439,7 @@ It can be one either `-end` or `-start`.
 The `offset` modifier can shift your popper on both its axis.
 
 It accepts the following units:
-- `px` or unitless, interpreted as pixels
+- `px` or unit-less, interpreted as pixels
 - `%` or `%r`, percentage relative to the length of the reference element
 - `%p`, percentage relative to the length of the popper element
 - `vw`, CSS viewport width unit
@@ -447,7 +447,7 @@ It accepts the following units:
 
 For length is intended the main axis relative to the placement of the popper.<br />
 This means that if the placement is `top` or `bottom`, the length will be the
-`width`. In case of `left` or `right`, it will be the height.
+`width`. In case of `left` or `right`, it will be the `height`.
 
 You can provide a single value (as `Number` or `String`), or a pair of values
 as `String` divided by a comma or one (or more) white spaces.<br />
@@ -468,7 +468,7 @@ Valid examples are:
 ```
 > **NB**: If you desire to apply offsets to your poppers in a way that may make them overlap
 > with their reference element, unfortunately, you will have to disable the `flip` modifier.
-> More on this [reading this issue](https://github.com/FezVrasta/popper.js/issues/373)
+> You can read more on this at this [issue](https://github.com/FezVrasta/popper.js/issues/373).
 
 **Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
@@ -523,7 +523,7 @@ Valid examples are:
 ### modifiers~preventOverflow
 Modifier used to prevent the popper from being positioned outside the boundary.
 
-An scenario exists where the reference itself is not within the boundaries.<br />
+A scenario exists where the reference itself is not within the boundaries.<br />
 We can say it has "escaped the boundaries" — or just "escaped".<br />
 In this case we need to decide whether the popper should either:
 
@@ -592,7 +592,7 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| padding | <code>number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper this makes sure the popper has always a little padding between the edges of its container |
+| padding | <code>number</code> | <code>5</code> | Amount of pixel used to define a minimum distance between the boundaries and the popper. This makes sure the popper always has a little padding between the edges of its container |
 
 <a name="modifiers..preventOverflow.boundariesElement"></a>
 
@@ -602,15 +602,15 @@ the boundaries in order to remain attached to the edge of the reference.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier, can be `scrollParent`, `window`, `viewport` or any DOM element. |
+| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;scrollParent&#x27;</code> | Boundaries used by the modifier. Can be `scrollParent`, `window`, `viewport` or any DOM element. |
 
 <a name="modifiers..keepTogether"></a>
 
 ### modifiers~keepTogether
-Modifier used to make sure the reference and its popper stay near each others
+Modifier used to make sure the reference and its popper stay near each other
 without leaving any gap between the two. Especially useful when the arrow is
-enabled and you want to assure it to point to its reference element.
-It cares only about the first axis, you can still have poppers with margin
+enabled and you want to ensure that it points to its reference element.
+It cares only about the first axis. You can still have poppers with margin
 between the popper and its reference element.
 
 **Kind**: inner property of [<code>modifiers</code>](#modifiers)  
@@ -767,7 +767,7 @@ restart it if it detects the need to flip the placement.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used to change the popper's placement. It can be one of `flip`, `clockwise`, `counterclockwise` or an array with a list of valid placements (with optional variations). |
+| behavior | <code>String</code> \| <code>Array</code> | <code>&#x27;flip&#x27;</code> | The behavior used to change the popper's placement. It can be one of `flip`, `clockwise`, `counterclockwise` or an array with a list of valid placements (with optional variations) |
 
 <a name="modifiers..flip.padding"></a>
 
@@ -787,7 +787,7 @@ restart it if it detects the need to flip the placement.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position, the popper will never be placed outside of the defined boundaries (except if keepTogether is enabled) |
+| boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position. The popper will never be placed outside of the defined boundaries (except if `keepTogether` is enabled) |
 
 <a name="modifiers..inner"></a>
 
@@ -942,7 +942,7 @@ to change in future major versions of the library.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3D transformation to position the popper. Otherwise, it will use the `top` and `left` properties |
 
 <a name="modifiers..computeStyle.x"></a>
 
@@ -976,7 +976,7 @@ want to delegate all the DOM manipulations to it.
 Note that if you disable this modifier, you must make sure the popper element
 has its position set to `absolute` before Popper.js can do its work!
 
-Just disable this modifier and define you own to achieve the desired effect.
+Just disable this modifier and define your own to achieve the desired effect.
 
 **Kind**: inner property of [<code>modifiers</code>](#modifiers)  
 
@@ -1037,7 +1037,7 @@ Just disable this modifier and define you own to achieve the desired effect.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3d transformation to position the popper. Otherwise, it will use the `top` and `left` properties. |
+| gpuAcceleration | <code>Boolean</code> | <code>true</code> | If true, it uses the CSS 3D transformation to position the popper. Otherwise, it will use the `top` and `left` properties |
 
 <a name="getWindow"></a>
 
