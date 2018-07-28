@@ -1,10 +1,4 @@
-import Tooltip, { PlacementFunction, TitleFunction , Options as TooltipOptions, Delay} from 'tooltip.js';
-
-const placementfn: PlacementFunction = (tooltip, reference) => {
-  tooltip.focus();
-  const x = reference.offsetWidth + 5;
-  return 'asdf';
-};
+import Tooltip, { TitleFunction , Options as TooltipOptions, Delay} from 'tooltip.js';
 
 const titlefn: TitleFunction = () => 'asdf';
 
@@ -17,7 +11,7 @@ const options: TooltipOptions = {
   container: 'container',
   delay,
   html: true,
-  placement: placementfn,
+  placement: 'top',
   template: 'I am the template',
   title: titlefn(),
   trigger: 'any string is valid here',

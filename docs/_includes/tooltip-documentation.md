@@ -12,7 +12,6 @@
         * [.toggle()](#Tooltip+toggle)
         * [.updateTitleContent(title)](#Tooltip+updateTitleContent)
     * _static_
-        * [.PlacementFunction](#Tooltip.PlacementFunction) ⇒ <code>String</code>
         * [.TitleFunction](#Tooltip.TitleFunction) ⇒ <code>String</code>
 
 <a name="new_Tooltip_new"></a>
@@ -26,15 +25,13 @@ Create a new Tooltip.js instance
 | --- | --- | --- | --- |
 | reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
 | options | <code>Object</code> |  |  |
-| options.placement | <code>String</code> \| <code>PlacementFunction</code> | <code>top</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
+| options.placement | <code>String</code> | <code>&#x27;top&#x27;</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
+| options.arrowSelector | <code>String</code> | <code>&#x27;.tooltip-arrow,</code> | .tooltip__arrow' - className used to locate the DOM arrow element in the tooltip. |
+| options.innerSelector | <code>String</code> | <code>&#x27;.tooltip-inner,</code> | .tooltip__inner' - className used to locate the DOM inner element in the tooltip. |
 | options.container | <code>HTMLElement</code> \| <code>String</code> \| <code>false</code> | <code>false</code> | Append the tooltip to a specific element. |
 | options.delay | <code>Number</code> \| <code>Object</code> | <code>0</code> | Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.      If a number is supplied, delay is applied to both hide/show.      Object structure is: `{ show: 500, hide: 100 }` |
 | options.html | <code>Boolean</code> | <code>false</code> | Insert HTML into the tooltip. If false, the content will inserted with `textContent`. |
-| options.placement | <code>String</code> \| <code>PlacementFunction</code> | <code>&#x27;top&#x27;</code> | One of the allowed placements, or a function returning one of them. |
 | [options.template] | <code>String</code> | <code>&#x27;&lt;div class=&quot;tooltip&quot; role=&quot;tooltip&quot;&gt;&lt;div class=&quot;tooltip-arrow&quot;&gt;&lt;/div&gt;&lt;div class=&quot;tooltip-inner&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#x27;</code> | Base HTML to used when creating the tooltip.      The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.      `.tooltip-arrow` or `.tooltip__arrow` will become the tooltip's arrow.      The outermost wrapper element should have the `.tooltip` class. |
-| options.arrowSelector | <code>String</code>  | <code>'.tooltip-arrow, .tooltip__arrow'</code> | selector used to locate the DOM inner element in the tooltip (useful if you pass a custom <code>options.template</code>) |
-| options.innerSelector | <code>String</code>  | <code>'.tooltip-inner, .tooltip__inner'</code> | selector used to locate the DOM arrow element in the tooltip (useful if you pass a custom <code>options.template</code>) |
-
 | options.title | <code>String</code> \| <code>HTMLElement</code> \| <code>TitleFunction</code> | <code>&#x27;&#x27;</code> | Default title value if `title` attribute isn't present. |
 | [options.trigger] | <code>String</code> | <code>&#x27;hover focus&#x27;</code> | How tooltip is triggered - click, hover, focus, manual.      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger. |
 | options.boundariesElement | <code>String</code> \| <code>HTMLElement</code> |  | The element used as boundaries for the tooltip. For more information refer to Popper.js'      [boundariesElement docs](https://popper.js.org/popper-documentation.html) |
@@ -76,19 +73,6 @@ Updates the tooltip's title content
 | Param | Type | Description |
 | --- | --- | --- |
 | title | <code>String</code> \| <code>HTMLElement</code> | The new content to use for the title |
-
-<a name="Tooltip.PlacementFunction"></a>
-
-### Tooltip.PlacementFunction ⇒ <code>String</code>
-Placement function, its context is the Tooltip instance.
-
-**Kind**: static typedef of [<code>Tooltip</code>](#Tooltip)  
-**Returns**: <code>String</code> - placement - One of the allowed placement options.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tooltip | <code>HTMLElement</code> | tooltip DOM node. |
-| reference | <code>HTMLElement</code> | reference DOM node. |
 
 <a name="Tooltip.TitleFunction"></a>
 

@@ -1,7 +1,5 @@
 import { Boundary, Placement, PopperOptions } from 'popper.js';
 
-export type PlacementFunction = (tooltip: HTMLElement, reference: HTMLElement) => string;
-
 export type TitleFunction = () => string;
 
 export type Delay = Record<'show' | 'hide', number>;
@@ -10,7 +8,7 @@ export interface Options {
   container?: HTMLElement | string;
   delay?: number | Delay;
   html?: boolean;
-  placement?: Placement | PlacementFunction;
+  placement?: Placement;
   template?: string;
   title?: string | HTMLElement | TitleFunction;
   /**
