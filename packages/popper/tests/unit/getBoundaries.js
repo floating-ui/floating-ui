@@ -1,5 +1,4 @@
 import getBoundaries from '../../src/utils/getBoundaries';
-import isIE from '../../src/utils/isIE';
 
 describe('utils/getBoundaries', () => {
   let node;
@@ -30,7 +29,7 @@ describe('utils/getBoundaries', () => {
     popper = document.createElement('div');
     scrollingPopper = document.createElement('div');
 
-    scrolling = document.createElement('div'); 
+    scrolling = document.createElement('div');
     setCss(scrolling, {
       top: '150px',
       left: '160px',

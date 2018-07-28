@@ -17,7 +17,7 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   const borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
 
   // In cases where the parent is fixed, we must ignore negative scroll in offset calc
-  if(fixedPosition && parent.nodeName === 'HTML') {
+  if(fixedPosition && isHTML) {
     parentRect.top = Math.max(parentRect.top, 0);
     parentRect.left = Math.max(parentRect.left, 0);
   }
