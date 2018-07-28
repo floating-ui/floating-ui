@@ -21,7 +21,7 @@ export default class Tooltip {
    * @class Tooltip
    * @param {HTMLElement} reference - The DOM node used as reference of the tooltip (it can be a jQuery element).
    * @param {Object} options
-   * @param {String|PlacementFunction} options.placement=top
+   * @param {String} options.placement='top'
    *      Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),
    *      left(-start, -end)`
    * @param {String} options.arrowSelector='.tooltip-arrow, .tooltip__arrow' - className used to locate the DOM arrow element in the tooltip.
@@ -32,7 +32,6 @@ export default class Tooltip {
    *      If a number is supplied, delay is applied to both hide/show.
    *      Object structure is: `{ show: 500, hide: 100 }`
    * @param {Boolean} options.html=false - Insert HTML into the tooltip. If false, the content will inserted with `textContent`.
-   * @param {String|PlacementFunction} options.placement='top' - One of the allowed placements, or a function returning one of them.
    * @param {String} [options.template='<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>']
    *      Base HTML to used when creating the tooltip.
    *      The tooltip's `title` will be injected into the `.tooltip-inner` or `.tooltip__inner`.
@@ -447,15 +446,6 @@ export default class Tooltip {
   }
 
 }
-
-/**
- * Placement function, its context is the Tooltip instance.
- * @memberof Tooltip
- * @callback PlacementFunction
- * @param {HTMLElement} tooltip - tooltip DOM node.
- * @param {HTMLElement} reference - reference DOM node.
- * @return {String} placement - One of the allowed placement options.
- */
 
 /**
  * Title function, its context is the Tooltip instance.
