@@ -41,6 +41,7 @@ export default class Tooltip {
    * @param {String} [options.trigger='hover focus']
    *      How tooltip is triggered - click, hover, focus, manual.
    *      You may pass multiple triggers; separate them with a space. `manual` cannot be combined with any other trigger.
+   * @param {Boolean} options.closeOnClickOutside=false - Close a popper on click outside of the popper and reference element. This has effect only when options.trigger is 'click'.
    * @param {String|HTMLElement} options.boundariesElement
    *      The element used as boundaries for the tooltip. For more information refer to Popper.js'
    *      [boundariesElement docs](https://popper.js.org/popper-documentation.html)
@@ -354,6 +355,19 @@ export default class Tooltip {
       };
       this._events.push({ event, func });
       reference.addEventListener(event, func);
+      if (event === 'click' && options.closeOnClickOutside) {
+        document.addEventListener('mousedown', e => {
+          if (!this._isOpening) {
+            return;
+          }
+          const popper = this.popperInstance.popper;
+          if (reference.contains(e.target) ||
+              popper.contains(e.target)) {
+            return;
+          }
+          func(e);
+        }, true);
+      }
     });
   }
 

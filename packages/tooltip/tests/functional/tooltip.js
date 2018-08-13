@@ -512,5 +512,18 @@ describe('[tooltip.js]', () => {
       expect(instance._popperOptions.modifiers.offset.offset).toBe(10);
       done();
     });
+
+    it('should hide on click outside with `options.closeOnClickOutside`', done => {
+      instance = new Tooltip(reference, {
+        title: 'foobar',
+        trigger: 'click',
+        closeOnClickOutside: true,
+      });
+      reference.dispatchEvent(new CustomEvent('click'));
+      then(() => expect(document.querySelector('.tooltip')).not.toBeNull());
+      then(() => document.body.dispatchEvent(new CustomEvent('mousedown')));
+      then(() => expect(document.querySelector('.tooltip').style.visibility).toBe('hidden'));
+      then(done);
+    });
   });
 });
