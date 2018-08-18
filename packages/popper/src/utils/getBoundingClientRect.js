@@ -42,7 +42,7 @@ export default function getBoundingClientRect(element) {
   };
 
   // subtract scrollbar size from sizes
-  const sizes = element.nodeName.toLowerCase() === 'html' ? getWindowSizes(element.ownerDocument) : {};
+  const sizes = element.nodeName.toUpperCase() === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
   const width =
     sizes.width || element.clientWidth || result.right - result.left;
   const height =

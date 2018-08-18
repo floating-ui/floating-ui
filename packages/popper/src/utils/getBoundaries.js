@@ -40,7 +40,7 @@ export default function getBoundaries(
     let boundariesNode;
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(reference));
-      if (boundariesNode.nodeName.toLowerCase() === 'body') {
+      if (boundariesNode.nodeName.toUpperCase() === 'BODY') {
         boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
@@ -56,7 +56,7 @@ export default function getBoundaries(
     );
 
     // In case of HTML, we need a different computation
-    if (boundariesNode.nodeName.toLowerCase() === 'html' && !isFixed(offsetParent)) {
+    if (boundariesNode.nodeName.toUpperCase() === 'HTML' && !isFixed(offsetParent)) {
       const { height, width } = getWindowSizes(popper.ownerDocument);
       boundaries.top += offsets.top - offsets.marginTop;
       boundaries.bottom = height + offsets.top;

@@ -21,16 +21,16 @@ export default function getOffsetParent(element) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
   }
 
-  const nodeName = offsetParent && offsetParent.nodeName.toLowerCase();
+  const nodeName = offsetParent && offsetParent.nodeName.toUpperCase();
 
-  if (!nodeName || nodeName === 'body' || nodeName === 'html') {
+  if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
   // .offsetParent will return the closest TD or TABLE in case
   // no offsetParent is present, I hate this job...
   if (
-    ['td', 'table'].indexOf(offsetParent.nodeName.toLowerCase()) !== -1 &&
+    ['TD', 'TABLE'].indexOf(offsetParent.nodeName.toUpperCase()) !== -1 &&
     getStyleComputedProperty(offsetParent, 'position') === 'static'
   ) {
     return getOffsetParent(offsetParent);

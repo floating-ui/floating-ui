@@ -8,9 +8,9 @@
  */
 export default function getScroll(element, side = 'top') {
   const upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
-  const nodeName = element.nodeName.toLowerCase();
+  const nodeName = element.nodeName.toUpperCase();
 
-  if (nodeName === 'body' || nodeName === 'html') {
+  if (nodeName === 'BODY' || nodeName === 'HTML') {
     const html = element.ownerDocument.documentElement;
     const scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];

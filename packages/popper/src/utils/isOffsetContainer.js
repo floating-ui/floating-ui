@@ -2,10 +2,10 @@ import getOffsetParent from './getOffsetParent';
 
 export default function isOffsetContainer(element) {
   const { nodeName } = element;
-  if (nodeName.toLowerCase() === 'body') {
+  if (nodeName.toUpperCase() === 'BODY') {
     return false;
   }
   return (
-    nodeName.toLowerCase() === 'html' || getOffsetParent(element.firstElementChild) === element
+    nodeName.toUpperCase() === 'HTML' || getOffsetParent(element.firstElementChild) === element
   );
 }

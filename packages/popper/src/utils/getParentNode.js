@@ -6,7 +6,7 @@
  * @returns {Element} parent
  */
 export default function getParentNode(element) {
-  if (element.nodeName.toLowerCase() === 'html') {
+  if (element.nodeName.toUpperCase() === 'HTML') {
     return element;
   }
   return element.parentNode || element.host;
