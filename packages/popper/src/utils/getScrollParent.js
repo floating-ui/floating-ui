@@ -14,12 +14,12 @@ export default function getScrollParent(element) {
     return document.body
   }
 
-  switch (element.nodeName.toLowerCase()) {
-    case 'html':
-    case 'body':
+  if (element.nodeType === Node.DOCUMENT_NODE) {
+    return element.body
+  } else switch (element.nodeName.toUpperCase()) {
+    case 'HTML':
+    case 'BODY':
       return element.ownerDocument.body
-    case '#document':
-      return element.body
   }
 
   // Firefox want us to check `-x` and `-y` variations as well
