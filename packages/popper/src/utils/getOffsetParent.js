@@ -15,7 +15,7 @@ export default function getOffsetParent(element) {
   const noOffsetParent = isIE(10) ? document.body : null;
 
   // NOTE: 1 DOM access here
-  let offsetParent = element.offsetParent;
+  let offsetParent = element.offsetParent || null;
   // Skip hidden elements which don't have an offsetParent
   while (offsetParent === noOffsetParent && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
