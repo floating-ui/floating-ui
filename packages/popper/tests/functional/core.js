@@ -1319,6 +1319,42 @@ const arrowSize = 5;
       });
     });
 
+    it('inits a popper near the reference element when it is a child of ref and the ref is relatively positioned and the ref contains svg as a first child', done => {
+      if (isIE10 && !positionFixed) {
+        pending();
+      }
+      const ref = appendNewRef(1);
+      ref.style.position = 'absolute';
+      ref.style.margin = '0';
+      ref.style.padding = '0';
+      ref.style.top = '50px';
+      ref.style.left = '50px';
+      ref.style.height = '100px';
+      ref.style.width = '100px';
+      ref.style.background = 'green';
+
+      ref.innerHTML = `<svg fill="currentColor" preserveAspectRatio="xMidYMid meet" height="1.5em" width="1.5em" viewBox="0 0 40 40" style="vertical-align: middle;">
+        <g>
+          <path d="m20 0c-11 0-20 9-20 20 0 8.8 5.7 16.3 13.7 19 1 0.2 1.3-0.5 1.3-1 0-0.5 0-2 0-3.7-5.5 1.2-6.7-2.4-6.7-2.4-0.9-2.3-2.2-2.9-2.2-2.9-1.9-1.2 0.1-1.2 0.1-1.2 2 0.1 3.1 2.1 3.1 2.1 1.7 3 4.6 2.1 5.8 1.6 0.2-1.3 0.7-2.2 1.3-2.7-4.5-0.5-9.2-2.2-9.2-9.8 0-2.2 0.8-4 2.1-5.4-0.2-0.5-0.9-2.6 0.2-5.3 0 0 1.7-0.5 5.5 2 1.6-0.4 3.3-0.6 5-0.6 1.7 0 3.4 0.2 5 0.7 3.8-2.6 5.5-2.1 5.5-2.1 1.1 2.8 0.4 4.8 0.2 5.3 1.3 1.4 2.1 3.2 2.1 5.4 0 7.6-4.7 9.3-9.2 9.8 0.7 0.6 1.4 1.9 1.4 3.7 0 2.7 0 4.9 0 5.5 0 0.6 0.3 1.2 1.3 1 8-2.7 13.7-10.2 13.7-19 0-11-9-20-20-20z"></path>
+        </g>
+      </svg>`;
+      ref.appendChild(document.createTextNode('ref'));
+
+      const popper = appendNewPopper(2, 'popper', ref);
+      popper.style.margin = '0';
+      popper.style.padding = '0';
+
+      new Popper(ref, popper, {
+        placement: 'bottom-start',
+        onCreate: data => {
+          expect(getRect(popper).left).toBeApprox(getRect(ref).left);
+          expect(getRect(popper).top).toBeApprox(getRect(ref).bottom);
+          data.instance.destroy();
+          done();
+        },
+      });
+    });
+
     it('checks that all the scrollable parents have an event listener attached', done => {
       jasmineWrapper.innerHTML = `
               <div id="s1" style="overflow: scroll; height: 300px; background: red;">
@@ -1720,7 +1756,7 @@ const arrowSize = 5;
     );
 
     // test for #276
-    it('works inside tables', done => {
+    it('works inside table td elements', done => {
       jasmineWrapper.innerHTML = `
         <style>
           table {
@@ -1748,6 +1784,54 @@ const arrowSize = 5;
                   pop
                 </div>
               </td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+
+      const reference = document.getElementById('reference');
+      const popper = document.getElementById('popper');
+
+      new Popper(reference, popper, {
+        placement: 'bottom',
+        onCreate(data) {
+          expect(getRect(reference).bottom).toBeApprox(getRect(popper).top);
+          expect(getRect(reference).left).toBeApprox(getRect(popper).left);
+          data.instance.destroy();
+          done();
+        },
+      });
+    });
+
+     // test for #276
+     it('works inside table th elements', done => {
+      jasmineWrapper.innerHTML = `
+        <style>
+          table {
+            margin-top: 50px;
+          }
+          #reference {
+            background: orange;
+            width: 50px;
+            height: 50px;
+          }
+          #popper {
+            background: green;
+            width: 50px;
+            height: 50px;
+          }
+        </style>
+        <table>
+          <tbody>
+            <tr>
+              <th>
+                <div id="reference">
+                  ref
+                </div>
+                <div id="popper">
+                  pop
+                </div>
+              </th>
             </tr>
           </tbody>
         </table>

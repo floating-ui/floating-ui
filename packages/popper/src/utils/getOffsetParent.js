@@ -15,7 +15,7 @@ export default function getOffsetParent(element) {
   const noOffsetParent = isIE(10) ? document.body : null;
 
   // NOTE: 1 DOM access here
-  let offsetParent = element.offsetParent;
+  let offsetParent = element.offsetParent || null;
   // Skip hidden elements which don't have an offsetParent
   while (offsetParent === noOffsetParent && element.nextElementSibling) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
@@ -27,10 +27,10 @@ export default function getOffsetParent(element) {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
-  // .offsetParent will return the closest TD or TABLE in case
+  // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
   if (
-    ['TD', 'TABLE'].indexOf(offsetParent.nodeName.toUpperCase()) !== -1 &&
+    ['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName.toUpperCase()) !== -1 &&
     getStyleComputedProperty(offsetParent, 'position') === 'static'
   ) {
     return getOffsetParent(offsetParent);

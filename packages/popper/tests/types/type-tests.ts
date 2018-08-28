@@ -50,6 +50,8 @@ const options: Popper.PopperOptions = {
     console.log(data);
   },
   onUpdate(data) {
+    console.log('x-out-of-boundaries', data.attributes);
+    console.log('x-placement', data.attributes['x-placement']);
     data.styles.alignContent = 'flex-start';
   }
 };
