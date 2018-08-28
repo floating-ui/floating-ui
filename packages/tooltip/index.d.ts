@@ -5,10 +5,12 @@ export type TitleFunction = () => string;
 export type Delay = Record<'show' | 'hide', number>;
 
 export interface Options {
+  placement?: Placement;
+  arrowSelector?: string;
+  innerSelector?: string;
   container?: HTMLElement | string;
   delay?: number | Delay;
   html?: boolean;
-  placement?: Placement;
   template?: string;
   title?: string | HTMLElement | TitleFunction;
   /**
@@ -17,6 +19,7 @@ export interface Options {
    * e.g. 'hover focus'
    */
   trigger?: string;
+  closeOnClickOutside?: boolean;
   boundariesElement?: Boundary | HTMLElement;
   offset?: number | string;
   popperOptions?: PopperOptions;
@@ -34,6 +37,8 @@ declare class Tooltip {
   dispose(): void;
 
   toggle(): void;
+
+  updateTitleContent(title: string | HTMLElement): void;
 }
 
 export default Tooltip;
