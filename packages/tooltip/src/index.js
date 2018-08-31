@@ -444,7 +444,7 @@ export default class Tooltip {
       }
       return;
     }
-    const titleNode = this._tooltipNode.parentNode.querySelector(this.options.innerSelector);
+    const titleNode = this._tooltipNode.querySelector(this.options.innerSelector);
     this._clearTitleContent(titleNode, this.options.html, this.reference.getAttribute('title') || this.options.title)
     this._addTitleContent(this.reference, title, this.options.html, titleNode);
     this.options.title = title;
