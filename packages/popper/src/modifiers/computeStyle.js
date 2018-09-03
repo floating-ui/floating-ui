@@ -86,10 +86,9 @@ export default function computeStyle(data, options) {
     left = offsets.left;
   }
   if (gpuAcceleration && prefixedProperty) {
-    styles[prefixedProperty] = `translate3d(${left}px, ${top}px, 0)`;
+    styles[prefixedProperty] = `translate(${left}px, ${top}px)`;
     styles[sideA] = 0;
     styles[sideB] = 0;
-    styles.willChange = 'transform';
   } else {
     // othwerise, we use the standard `top`, `left`, `bottom` and `right` properties
     const invertTop = sideA === 'bottom' ? -1 : 1;
