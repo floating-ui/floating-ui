@@ -6,7 +6,8 @@
  * @returns {Object} object containing width and height properties
  */
 export default function getOuterSizes(element) {
-  const styles = getComputedStyle(element);
+  const window = element.ownerDocument.defaultView;
+  const styles = window.getComputedStyle(element);
   const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   const y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);
   const result = {
