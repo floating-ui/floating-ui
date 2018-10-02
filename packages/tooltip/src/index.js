@@ -375,18 +375,26 @@ export default class Tooltip {
     this._isOpening = true;
     // defaults to 0
     const computedDelay = (delay && delay.show) || delay || 0;
-    this._showTimeout = window.setTimeout(
-      () => this._show(reference, options),
-      computedDelay
-    );
+    const func = () => this._show(reference, options);
+
+    if (computedDelay === 0) {
+      this._showTimeout = null;
+      func();
+    }
+    else {
+      this._showTimeout = window.setTimeout(func, computedDelay);
+    }
   }
 
   _scheduleHide(reference, delay, options, evt) {
     this._isOpening = false;
     // defaults to 0
     const computedDelay = (delay && delay.hide) || delay || 0;
-    window.setTimeout(() => {
-      window.clearTimeout(this._showTimeout);
+    const func = () => {
+      if (this._showTimeout !== null) {
+        window.clearTimeout(this._showTimeout);
+      }
+
       if (this._isOpen === false) {
         return;
       }
@@ -407,7 +415,14 @@ export default class Tooltip {
       }
 
       this._hide(reference, options);
-    }, computedDelay);
+    };
+
+    if (computedDelay === 0) {
+      func();
+    }
+    else {
+      window.setTimeout(func, computedDelay);
+    }
   }
 
   _setTooltipNodeEvent = (evt, reference, delay, options) => {
