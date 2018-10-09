@@ -1,3 +1,6 @@
+// Utils
+import getWindow from './utils/getWindow';
+
 /**
  * Get the outer sizes of the given element (offset size + margins)
  * @method
@@ -6,7 +9,7 @@
  * @returns {Object} object containing width and height properties
  */
 export default function getOuterSizes(element) {
-  const window = element.ownerDocument.defaultView;
+  const window = getWindow(element);
   const styles = window.getComputedStyle(element);
   const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom);
   const y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight);

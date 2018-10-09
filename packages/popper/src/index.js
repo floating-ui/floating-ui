@@ -1,6 +1,7 @@
 // Utils
 import debounce from './utils/debounce';
 import isFunction from './utils/isFunction';
+import getWindow from './utils/getWindow';
 
 // Methods
 import update from './methods/update';
@@ -108,7 +109,7 @@ export default class Popper {
    * @method scheduleUpdate
    * @memberof Popper
    */
-  scheduleUpdate = () => requestAnimationFrame(this.update);
+  scheduleUpdate = () => getWindow(this.popper).requestAnimationFrame(this.update);
 
   /**
    * Collection of utilities useful when writing custom modifiers.
