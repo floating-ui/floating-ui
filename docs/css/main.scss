@@ -1277,6 +1277,10 @@ button,
 	&.style2 {
         color: _palette(accent1, fg-light);
 		background-color: _palette(bg);
+    
+    option {
+        color: #0097a7;
+    }
 	}
 
 	&.style3 {
