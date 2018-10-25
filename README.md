@@ -28,7 +28,7 @@ Common examples of poppers are tooltips, popovers, and drop-downs.
 
 ## So, yet another tooltip library?
 
-Well,**no**.  
+Well, basically, **no**.  
 Popper.js is a **positioning engine**; its purpose is to calculate the position of an element
 to make it possible to position it near a given reference element.
 
@@ -89,7 +89,7 @@ Tooltip.js as well:
 | unpkg           | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                                                 |
 | unpkg, minified | [`https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js`](https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js) |
 
-\*: Bower isn't officially supported, it can be used to install Tooltip.js only through the npkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggest using npm or Yarn for your projects.  
+\*: Bower isn't officially supported, it can be used to install Tooltip.js only through the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggest using npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
 
 ### Dist targets
@@ -136,9 +136,9 @@ new Popper(reference, popper, {
 });
 ```
 
-### Writing your modifiers
+### Writing modifiers on your own
 
-Popper.js is based on a "plugin-like" architecture, most of its features are fully encapsulated "modifiers."  
+Popper.js is based on a "plugin-like" architecture, most of its features are fully encapsulated "modifiers".  
 A modifier is a function that is called each time Popper.js needs to compute the position of the popper. For this reason, modifiers should be very performant to avoid bottlenecks.
 
 To learn how to create a modifier, [read the modifiers documentation](docs/_includes/popper-documentation.md#modifiers--object)
@@ -244,7 +244,7 @@ Visit the [MENTIONS](MENTIONS.md) page for an updated list of projects.
 I want to thank some friends and projects for the work they did:
 
 - [@AndreaScn](https://github.com/AndreaScn) for his work on the GitHub Page and the manual testing he did during the development;
-- [@vampolo](https://github.com/vampolo) for the original idea and the name of the library;
+- [@vampolo](https://github.com/vampolo) for the original idea and for the name of the library;
 - [Sysdig](https://github.com/Draios) for all the awesome things I learned during these years that made it possible for me to write this library;
 - [Tether.js](http://github.hubspot.com/tether/) for having inspired me in writing a positioning library ready for the real world;
 - [The Contributors](https://github.com/FezVrasta/popper.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
