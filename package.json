@@ -1,8 +1,8 @@
 {
   "name": "popper.js",
   "version": "2.0.0-alpha.1",
-  "main": "dist/cjs/popper.js",
-  "main:umd": "dist/umd/popper.js",
+  "main": "dist/cjs/index.js",
+  "main:umd": "dist/umd/index.js",
   "module": "lib/index.js",
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
@@ -13,11 +13,16 @@
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve tests/visual",
     "dev:bundles": "cross-env NODE_ENV=dev rollup -c rollup.config.js",
-    "build": "yarn clean && concurrently 'yarn build:es' 'yarn build:bundles'",
+    "build": "yarn clean && yarn build:es && yarn build:bundles && yarn build:flow",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
+    "build:flow": "flow-copy-source src dist/cjs --ignore '{__mocks__/*,*.test}.js'",
     "precommit": "pretty-quick --staged"
   },
+  "files": [
+    "/dist",
+    "/lib"
+  ],
   "prettier": {
     "semi": true,
     "trailingComma": "es5",
@@ -54,6 +59,7 @@
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
     "flow-bin": "^0.86.0",
+    "flow-copy-source": "^2.0.2",
     "husky": "^1.1.3",
     "jest": "^23.6.0",
     "prettier": "^1.15.1",

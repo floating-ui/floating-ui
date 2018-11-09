@@ -16,8 +16,7 @@ export default [
     ],
     output: {
       name: 'Popper',
-      file: 'popper.js',
-      file: `${dir}/umd/popper.js`,
+      file: `${dir}/umd/index.js`,
       format: 'es',
       sourcemap: true,
     },
@@ -33,7 +32,7 @@ export default [
       }),
     ],
     output: {
-      file: `${dir}/cjs/popper.js`,
+      file: `${dir}/cjs/index.js`,
       format: 'cjs',
       sourcemap: true,
     },
@@ -49,7 +48,7 @@ export default [
       }),
     ],
     output: {
-      file: `${dir}/es/popper.js`,
+      file: `${dir}/es/index.js`,
       format: 'es',
       sourcemap: true,
     },

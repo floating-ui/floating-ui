@@ -1243,7 +1243,7 @@ chalk@^1.1.3:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chokidar@^2.0.3:
+chokidar@^2.0.0, chokidar@^2.0.3:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.4.tgz#356ff4e2b0e8e43e322d18a372460bbcf3accd26"
   integrity sha512-z9n7yt9rOvIJrMhvDtDictKrkFHeihkNl6uWMmZlmL6tJtX9Cs+87oK+teBx+JIgzvbX3yZHT3eF8vpbDxHJXQ==
@@ -1922,6 +1922,17 @@ flow-bin@^0.86.0:
   resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.86.0.tgz#153a28722b4dc13b7200c74b644dd4d9f4969a11"
   integrity sha512-ulRvFH3ewGIYwg+qPk/OJXoe3Nhqi0RyR0wqgK0b1NzUDEC6O99zU39MBTickXvlrr6iwRO6Wm4lVGeDmnzbew==
 
+flow-copy-source@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/flow-copy-source/-/flow-copy-source-2.0.2.tgz#096e579a9bb63a38afc5d4dd68ac847a5be27594"
+  integrity sha512-IHKgy45Q+Xs7UanUZyFFJae/ubMKtzj0dU4vs1YoqlfKl2wzLTaqehyTpjqO4vLAnL48yGvLfnttncX5Utn/4g==
+  dependencies:
+    chokidar "^2.0.0"
+    fs-extra "^7.0.0"
+    glob "^7.0.0"
+    kefir "^3.7.3"
+    yargs "^12.0.1"
+
 for-in@^1.0.1, for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -1954,6 +1965,15 @@ fragment-cache@^0.2.1:
   integrity sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   dependencies:
     map-cache "^0.2.2"
+
+fs-extra@^7.0.0:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
+  integrity sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
 
 fs-minipass@^1.2.5:
   version "1.2.5"
@@ -2076,7 +2096,7 @@ globals@^9.18.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
   integrity sha512-S0nG3CLEQiY/ILxqtztTWH/3iRRdyBLw6KMDxnKMchrtbj2OFmehVh0WUCfW3DUrIgx/qFrJPICrq4Z4sTR9UQ==
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2:
+graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.15"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.15.tgz#ffb703e1066e8a0eeaa4c8b80ba9253eeefbfb00"
   integrity sha512-6uHUhOPEBgQ24HM+r6b/QwWfZq+yiFcipKFrOFiBEnWdy5sdzYoi+pJeQaPI5qOLRFqWmAXUPQNsielzdLoecA==
@@ -3060,6 +3080,13 @@ json5@^0.5.0, json5@^0.5.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-0.5.1.tgz#1eade7acc012034ad84e2396767ead9fa5495821"
   integrity sha1-Hq3nrMASA0rYTiOWdn6tn6VJWCE=
 
+jsonfile@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
+  integrity sha1-h3Gq4HmbZAdrdmQPygWPnBDjPss=
+  optionalDependencies:
+    graceful-fs "^4.1.6"
+
 jsprim@^1.2.2:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/jsprim/-/jsprim-1.4.1.tgz#313e66bc1e5cc06e438bc1b7499c2e5c56acb6a2"
@@ -3069,6 +3096,13 @@ jsprim@^1.2.2:
     extsprintf "1.3.0"
     json-schema "0.2.3"
     verror "1.10.0"
+
+kefir@^3.7.3:
+  version "3.8.5"
+  resolved "https://registry.yarnpkg.com/kefir/-/kefir-3.8.5.tgz#ce8d952707ea833d9d995a96b92daa744dea83ba"
+  integrity sha512-u4UxHyIvdOOM62Y/yAtYPeYEg/yUfwl5/QF3ksrTRxEdhpa7LAFChntZxVqbcf0gCGblZzL/JnV/gZYWOps3Qw==
+  dependencies:
+    symbol-observable "1.0.4"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -4646,6 +4680,11 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
+symbol-observable@1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
+  integrity sha1-Kb9hXUqnEhvdiYsi1LP5vE4qoD0=
+
 symbol-tree@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.2.tgz#ae27db38f660a7ae2e1c3b7d1bc290819b8519e6"
@@ -4816,6 +4855,11 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^0.4.3"
+
+universalify@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
+  integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
 
 unset-value@^1.0.0:
   version "1.0.0"
