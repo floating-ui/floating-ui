@@ -14,7 +14,7 @@
     "dev:serve": "serve tests/visual",
     "dev:bundles": "cross-env NODE_ENV=dev rollup -c rollup.config.js",
     "build": "yarn clean && concurrently 'yarn build:es' 'yarn build:bundles'",
-    "build:es": "babel src -d lib --ignore '*.test.js,__mocks__'",
+    "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "precommit": "pretty-quick --staged"
   },
@@ -25,14 +25,14 @@
   },
   "babel": {
     "plugins": [
-      "@babel/transform-flow-strip-types",
-      "@babel/proposal-class-properties",
-      "@babel/proposal-object-rest-spread"
+      "@babel/plugin-transform-flow-strip-types",
+      "@babel/plugin-proposal-class-properties",
+      "@babel/plugin-proposal-object-rest-spread"
     ],
     "env": {
       "test": {
         "presets": [
-          "env"
+          "@babel/env"
         ]
       }
     }
@@ -49,6 +49,8 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
     "flow-bin": "^0.86.0",
