@@ -1,6 +1,6 @@
 {
-  "name": "popper2",
-  "version": "1.0.0",
+  "name": "popper.js",
+  "version": "2.0.0-alpha.1",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
   "module": "lib/index.js",
@@ -11,9 +11,9 @@
     "test": "jest --coverage --watch",
     "test:ci": "jest --coverage",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
-    "dev:serve": "serve -s tests/visual",
+    "dev:serve": "serve tests/visual",
     "dev:bundles": "cross-env NODE_ENV=dev rollup -c rollup.config.js",
-    "build": "yarn clean && yarn build:es && yarn build:bundles",
+    "build": "yarn clean && concurrently 'yarn build:es' 'yarn build:bundles'",
     "build:es": "babel src -d lib --ignore '*.test.js,__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "precommit": "pretty-quick --staged"
@@ -25,9 +25,9 @@
   },
   "babel": {
     "plugins": [
-      "transform-flow-strip-types",
-      "transform-class-properties",
-      "transform-object-rest-spread"
+      "@babel/transform-flow-strip-types",
+      "@babel/proposal-class-properties",
+      "@babel/proposal-object-rest-spread"
     ],
     "env": {
       "test": {
@@ -38,25 +38,28 @@
     }
   },
   "jest": {
-    "setupFiles": ["raf/polyfill"]
+    "setupFiles": [
+      "raf/polyfill"
+    ]
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "concurrently": "^3.5.1",
-    "cross-env": "^5.1.4",
-    "flow-bin": "^0.70.0",
-    "husky": "^0.14.3",
-    "jest": "^22.4.3",
-    "prettier": "^1.12.1",
-    "pretty-quick": "^1.4.1",
-    "raf": "^3.4.0",
-    "rollup": "^0.58.2",
-    "rollup-plugin-babel": "^3.0.4",
-    "rollup-plugin-replace": "^2.0.0",
-    "serve": "^6.5.6"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.0.0",
+    "@babel/preset-env": "^7.1.5",
+    "concurrently": "^4.0.1",
+    "cross-env": "^5.2.0",
+    "flow-bin": "^0.86.0",
+    "husky": "^1.1.3",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.1",
+    "pretty-quick": "^1.8.0",
+    "raf": "^3.4.1",
+    "rollup": "^0.67.0",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-replace": "^2.1.0",
+    "serve": "^10.0.2"
   }
 }
