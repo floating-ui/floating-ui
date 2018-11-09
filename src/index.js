@@ -11,6 +11,7 @@ import type {
 import getElementClientRect from './dom-utils/getElementClientRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
+import getWindowScroll from './dom-utils/getWindowScroll';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
@@ -115,6 +116,11 @@ export default class Popper {
       return;
     }
 
+    // Get scrollTop and scrollLeft of the active window
+    // this will be used in the `computeOffsets` function to properly
+    // position the popper taking in account the scroll position
+    const windowScroll = getWindowScroll(popperElement);
+
     // Get initial measurements
     // these are going to be used to compute the initial popper offsets
     // and as cache for any modifier that needs them later
@@ -129,6 +135,7 @@ export default class Popper {
         popper: this.state.measures.popper,
         strategy: 'absolute',
         placement: this.state.options.placement,
+        windowScroll,
       }),
     };
 

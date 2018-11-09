@@ -14,6 +14,7 @@ const reference = createRectMock({
   y: 100,
 });
 const popper = createRectMock({ width: 100, height: 100, x: 0, y: 0 });
+const windowScroll = { scrollTop: 10, scrollLeft: 20 };
 
 describe('[strategy: absolute]', () =>
   basePlacements.forEach((placement: Placement) =>
@@ -25,6 +26,7 @@ describe('[strategy: absolute]', () =>
             popper,
             strategy: 'absolute',
             placement,
+            windowScroll,
           })
         ).toMatchSnapshot('x and y');
 
@@ -34,6 +36,7 @@ describe('[strategy: absolute]', () =>
             popper,
             strategy: 'absolute',
             placement,
+            windowScroll,
           })[getMainAxisFromPlacement(placement)]
         ).toEqual(
           computeOffsets({
@@ -41,6 +44,7 @@ describe('[strategy: absolute]', () =>
             popper,
             strategy: 'absolute',
             placement: getOppositePlacement(placement),
+            windowScroll,
           })[getMainAxisFromPlacement(placement)]
         );
       });

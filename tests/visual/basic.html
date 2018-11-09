@@ -1,5 +1,4 @@
-<!doctype html>
-<title>Basic Visual Test</title>
+<!DOCTYPE html> <title>Basic Visual Test</title>
 
 <style>
   #reference {
@@ -25,28 +24,24 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import Popper from '../dist/es/popper.js';
+  import Popper from './dist/es/index.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 
-  window.instance = new Popper(
-    reference,
-    popper,
-    {
-      placement: 'right',
-      modifiers: [
-        {
-          name: 'applyStyle',
-          phase: 'write',
-          enabled: true,
-          fn(state) {
-            console.log(state);
-            popper.style.top = `${state.offsets.popper.y}px`;
-            popper.style.left = `${state.offsets.popper.x}px`;
-            return state;
-          }
-        }
-      ]
-    }
-  );
+  window.instance = new Popper(reference, popper, {
+    placement: 'right',
+    modifiers: [
+      {
+        name: 'applyStyle',
+        phase: 'write',
+        enabled: true,
+        fn(state) {
+          console.log(state);
+          popper.style.top = `${state.offsets.popper.y}px`;
+          popper.style.left = `${state.offsets.popper.x}px`;
+          return state;
+        },
+      },
+    ],
+  });
 </script>
