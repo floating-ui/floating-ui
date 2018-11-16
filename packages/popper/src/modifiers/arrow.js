@@ -36,7 +36,7 @@ export default function arrow(data, options) {
       return data;
     }
   }
-  
+
   const placement = data.placement.split('-')[0];
   const { popper, reference } = data.offsets;
   const isVertical = ['left', 'right'].indexOf(placement) !== -1;
