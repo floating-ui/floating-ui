@@ -38,13 +38,20 @@ export default function computeStyle(data, options) {
   };
 
   // Avoid blurry text by using full pixel integers.
-  // For pixel-perfect positioning, top/bottom prefers rounded
-  // values, while left/right prefers floored values.
+  // For pixel-perfect positioning in horizontal placements, top/bottom prefers
+  // rounded values, while left/right prefers floored values.
+  // Always use `round` for variations (-start and -end).
+  const placement = data.placement.split('-')[0];
+  const toInteger =
+    ['left', 'right'].indexOf(placement) !== -1 ||
+    data.placement.indexOf('-') > -1
+      ? Math.round
+      : Math.floor;
   const offsets = {
-    left: Math.floor(popper.left),
+    left: toInteger(popper.left),
     top: Math.round(popper.top),
     bottom: Math.round(popper.bottom),
-    right: Math.floor(popper.right),
+    right: toInteger(popper.right),
   };
 
   const sideA = x === 'bottom' ? 'top' : 'bottom';
