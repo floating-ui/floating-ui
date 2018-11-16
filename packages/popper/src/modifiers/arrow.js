@@ -37,6 +37,8 @@ export default function arrow(data, options) {
     }
   }
 
+  const arrowElementParent = arrowElement.parentNode;
+  
   const placement = data.placement.split('-')[0];
   const { popper, reference } = data.offsets;
   const isVertical = ['left', 'right'].indexOf(placement) !== -1;
@@ -70,7 +72,7 @@ export default function arrow(data, options) {
 
   // Compute the sideValue using the updated popper offsets
   // take popper margin in account because we don't have this info available
-  const css = getStyleComputedProperty(data.instance.popper);
+  const css = getStyleComputedProperty(arrowElementParent);
   const popperMarginSide = parseFloat(css[`margin${sideCapitalized}`], 10);
   const popperBorderSide = parseFloat(css[`border${sideCapitalized}Width`], 10);
   let sideValue =
