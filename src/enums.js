@@ -12,6 +12,10 @@ export type BasePlacement =
   | typeof auto;
 export const basePlacements: Array<BasePlacement> = [top, bottom, right, left];
 
+export const start: 'start' = 'start';
+export const end: 'end' = 'end';
+export type VariationPlacement = typeof start | typeof end;
+
 export type Placement =
   | 'auto'
   | 'auto-start'
@@ -33,8 +37,8 @@ export const placements: Array<Placement> = basePlacements.reduce(
   (acc: Array<Placement>, placement: BasePlacement): Array<Placement> =>
     acc.concat([
       placement,
-      (`${placement}-start`: any),
-      (`${placement}-end`: any),
+      (`${placement}-${start}`: any),
+      (`${placement}-${end}`: any),
     ]),
   []
 );

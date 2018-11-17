@@ -67,7 +67,9 @@
     "raf": "^3.4.1",
     "rollup": "^0.67.0",
     "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-bundle-size": "^1.0.2",
     "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-terser": "^3.0.0",
     "serve": "^10.0.2"
   }
 }

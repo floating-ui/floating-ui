@@ -5,6 +5,8 @@ import type {
   Options,
   UpdateCallback,
   EventListeners,
+  Rect,
+  Modifier,
 } from './types';
 
 // DOM Utils
@@ -22,6 +24,11 @@ import format from './utils/format';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 
+// Default modifiers
+import * as modifiers from './modifiers/index';
+
+const defaultModifiers: Array<Modifier> = (Object.values(modifiers): any);
+
 const INVALID_ELEMENT_ERROR =
   'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
 
@@ -32,16 +39,13 @@ const defaultOptions = {
   placement: 'bottom',
   eventListeners: { scroll: true, resize: true },
   modifiers: [],
+  strategy: 'absolute',
 };
 
 export default class Popper {
-  state: State = {
-    reference: undefined,
-    popper: undefined,
+  state: $Shape<State> = {
+    placement: 'bottom',
     orderedModifiers: [],
-    measures: {},
-    offsets: {},
-    scrollParents: {},
     options: defaultOptions,
   };
 
@@ -55,12 +59,21 @@ export default class Popper {
 
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
-    this.state.reference = unwrapJqueryElement(reference);
-    this.state.popper = unwrapJqueryElement(popper);
-    const { reference: referenceElement, popper: popperElement } = this.state;
+    this.state.elements = {
+      reference: unwrapJqueryElement(reference),
+      popper: unwrapJqueryElement(popper),
+    };
+    const {
+      reference: referenceElement,
+      popper: popperElement,
+    } = this.state.elements;
 
     // Store options into state
     this.state.options = { ...defaultOptions, ...options };
+
+    // Cache the placement in cache to make it available to the modifiers
+    // modifiers will modify this one (rather than the one in options)
+    this.state.placement = options.placement;
 
     // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
@@ -74,7 +87,11 @@ export default class Popper {
 
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
-    this.state.orderedModifiers = orderModifiers(this.state.options.modifiers);
+    this.state.orderedModifiers = orderModifiers([
+      ...defaultModifiers,
+      ...this.state.options.modifiers,
+    ]);
+    console.log(this.state.orderedModifiers);
 
     // Validate the provided modifiers so that the consumer will get warned
     // of one of the custom modifiers is invalid for any reason
@@ -100,7 +117,7 @@ export default class Popper {
   // it will not be executed if not necessary
   // check Popper#constructor to see how it gets debounced
   update() {
-    return new Promise((success, reject) => {
+    return new Promise<State>((success, reject) => {
       this.forceUpdate();
       success(this.state);
     });
@@ -110,7 +127,10 @@ export default class Popper {
   // it will always be executed even if not necessary, usually NOT needed
   // use Popper#update instead
   forceUpdate() {
-    const { reference: referenceElement, popper: popperElement } = this.state;
+    const {
+      reference: referenceElement,
+      popper: popperElement,
+    } = this.state.elements;
     // Don't proceed if `reference` or `popper` are not valid elements anymore
     if (!areValidElements(referenceElement, popperElement)) {
       return;
@@ -129,6 +149,10 @@ export default class Popper {
       popper: getElementClientRect(popperElement),
     };
 
+    // Offsets are the actual position the popper needs to have to be
+    // properly positioned near its reference element
+    // This is the most basic placement, and will be adjusted by
+    // the modifiers in the next step
     this.state.offsets = {
       popper: computeOffsets({
         reference: this.state.measures.reference,
@@ -139,15 +163,26 @@ export default class Popper {
       }),
     };
 
-    this.state.orderedModifiers.forEach(
-      ({ fn, enabled }) => enabled && fn && (this.state = fn(this.state))
+    // Modifiers have the ability to read the current Popper.js state, included
+    // the popper offsets, and modify it to address specifc cases
+    this.state = this.state.orderedModifiers.reduce(
+      (acc, { fn, enabled, options }) => {
+        if (enabled && typeof fn === 'function') {
+          acc = fn((this.state: State), options);
+        }
+        return acc;
+      },
+      {}
     );
   }
 
   enableEventListeners(
     eventListeners: boolean | { scroll?: boolean, resize?: boolean }
   ) {
-    const { reference: referenceElement, popper: popperElement } = this.state;
+    const {
+      reference: referenceElement,
+      popper: popperElement,
+    } = this.state.elements;
     const { scroll, resize } = expandEventListeners(eventListeners);
 
     // Don't proceed if `reference` or `popper` are not valid elements anymore
@@ -168,8 +203,8 @@ export default class Popper {
         );
     }
 
-    if (resize && this.state.popper) {
-      const win = getWindow(this.state.popper);
+    if (resize && this.state.elements.popper) {
+      const win = getWindow(this.state.elements.popper);
       win &&
         win.addEventListener('resize', this.update, {
           passive: true,

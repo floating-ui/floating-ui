@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`computes the arrow styles 1`] = `
+Object {
+  "left": "10px",
+  "position": "absolute",
+  "top": "5px",
+}
+`;
+
+exports[`computes the popper styles 1`] = `
+Object {
+  "position": "absolute",
+  "transform": "translate3d(10px, 5px, 0)",
+}
+`;
+
+exports[`computes the popper styles 2`] = `
+Object {
+  "left": "10px",
+  "position": "absolute",
+  "top": "5px",
+}
+`;

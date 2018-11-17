@@ -2,7 +2,7 @@
 export default function microtaskDebounce(fn: Function) {
   let called = false;
   return () =>
-    new Promise(resolve => {
+    new Promise<void>(resolve => {
       if (called) {
         return resolve();
       }
