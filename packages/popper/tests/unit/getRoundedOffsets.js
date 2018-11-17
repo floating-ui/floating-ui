@@ -1,5 +1,3 @@
-import chai from 'chai';
-const { expect } = chai;
 import getRoundedOffsets from '../../src/utils/getRoundedOffsets';
 import placements from '../../src/methods/placements';
 
@@ -58,7 +56,7 @@ describe('utils/getRoundedOffsets', () => {
     })
   });
 
-  it('Math.floor()s and subtracts 1 from left offset if both are odd in width', () => {
+  it('Math.rounds()s and subtracts 1 from left offset if both are odd in width', () => {
     const offsets = getRoundedOffsets({
       placement: 'bottom',
       offsets: {
@@ -66,8 +64,8 @@ describe('utils/getRoundedOffsets', () => {
         reference: ODD_SIZE,
       },
     }, true);
-    expect(offsets.left).toBe(ROUNDED_DOWN.left - 1);
-    expect(offsets.right).toBe(ROUNDED_DOWN.right);
+    expect(offsets.left).toBe(ROUNDED_UP.left - 1);
+    expect(offsets.right).toBe(ROUNDED_UP.right);
     expect(offsets.top).toBe(TOP);
     expect(offsets.bottom).toBe(BOTTOM);
   });
