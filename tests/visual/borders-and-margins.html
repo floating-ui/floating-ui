@@ -1,0 +1,36 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  #reference {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+  }
+
+  #popper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    border: 20px solid purple;
+    margin: 20px;
+  }
+</style>
+
+<div id="reference">Reference Box</div>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import Popper from './dist/es/index.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = new Popper(reference, popper, {
+    placement: 'right',
+  });
+</script>
