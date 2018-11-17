@@ -2,6 +2,10 @@ import getSupportedPropertyName from '../utils/getSupportedPropertyName';
 import find from '../utils/find';
 import getOffsetParent from '../utils/getOffsetParent';
 import getBoundingClientRect from '../utils/getBoundingClientRect';
+import getRoundedOffsets from '../utils/getRoundedOffsets';
+import isBrowser from '../utils/isBrowser';
+
+const isFirefox = isBrowser && /Firefox/i.test(navigator.userAgent);
 
 /**
  * @function
@@ -37,22 +41,10 @@ export default function computeStyle(data, options) {
     position: popper.position,
   };
 
-  // Avoid blurry text by using full pixel integers.
-  // For pixel-perfect positioning in horizontal placements, top/bottom prefers
-  // rounded values, while left/right prefers floored values.
-  // Always use `round` for variations (-start and -end).
-  const placement = data.placement.split('-')[0];
-  const toInteger =
-    ['left', 'right'].indexOf(placement) !== -1 ||
-    data.placement.indexOf('-') > -1
-      ? Math.round
-      : Math.floor;
-  const offsets = {
-    left: toInteger(popper.left),
-    top: Math.round(popper.top),
-    bottom: Math.round(popper.bottom),
-    right: toInteger(popper.right),
-  };
+  const offsets = getRoundedOffsets(
+    data,
+    window.devicePixelRatio < 2 || !isFirefox
+  );
 
   const sideA = x === 'bottom' ? 'top' : 'bottom';
   const sideB = y === 'right' ? 'left' : 'right';
