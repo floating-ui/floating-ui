@@ -15,7 +15,7 @@ const ALL_SIZE_COMBINATIONS = [
   [ODD_SIZE, ODD_SIZE],
 ];
 const variationPlacements = placements.filter(
-  placement => placement.includes('-')
+  placement => placement.indexOf('-') !== -1
 );
 
 describe('utils/getRoundedOffsets', () => {
