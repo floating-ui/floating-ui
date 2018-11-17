@@ -33,7 +33,7 @@ describe('utils/getRoundedOffsets', () => {
     expect(offsets.left).toBe(ROUNDED_UP.left);
     expect(offsets.right).toBe(ROUNDED_UP.right);
     expect(offsets.top).toBe(TOP);
-    expect(offset.bottom).toBe(BOTTOM);
+    expect(offsets.bottom).toBe(BOTTOM);
   });
 
   it('Math.floor()s when popper and reference have a difference in width oddness', () => {
@@ -55,7 +55,7 @@ describe('utils/getRoundedOffsets', () => {
       expect(offsets.left).toBe(ROUNDED_DOWN.left);
       expect(offsets.right).toBe(ROUNDED_DOWN.right);
       expect(offsets.top).toBe(TOP);
-      expect(offset.bottom).toBe(BOTTOM);
+      expect(offsets.bottom).toBe(BOTTOM);
     })
   });
 
@@ -70,7 +70,7 @@ describe('utils/getRoundedOffsets', () => {
     expect(offsets.left).toBe(ROUNDED_DOWN.left - 1);
     expect(offsets.right).toBe(ROUNDED_DOWN.right);
     expect(offsets.top).toBe(TOP);
-    expect(offset.bottom).toBe(BOTTOM);
+    expect(offsets.bottom).toBe(BOTTOM);
   });
 
   it('always Math.round()s variation placements', () => {
@@ -86,7 +86,7 @@ describe('utils/getRoundedOffsets', () => {
         expect(offsets.left).toBe(ROUNDED_UP.left);
         expect(offsets.right).toBe(ROUNDED_UP.right);
         expect(offsets.top).toBe(TOP);
-        expect(offset.bottom).toBe(BOTTOM);
+        expect(offsets.bottom).toBe(BOTTOM);
       });
     });
   });
@@ -94,28 +94,30 @@ describe('utils/getRoundedOffsets', () => {
   it('always Math.round()s vertical offsets', () => {
     ALL_SIZE_COMBINATIONS.forEach(([popperSize, referenceSize]) => {
       const offsets = getRoundedOffsets({
-        placement,
+        placement: 'bottom',
         offsets: {
           popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6, },
           reference: referenceSize,
         },
       }, true);
       expect(offsets.top).toBe(219);
-      expect(offset.bottom).toBe(319);
+      expect(offsets.bottom).toBe(319);
     });
   });
 
   it('does not integerize the offsets if second argument is `false`', () => {
-    const offsets = getRoundedOffsets({
-      placement: 'bottom',
-      offsets: {
-        popper: { ...EVEN_SIZE, ...ROUNDS_UP, },
-        reference: EVEN_SIZE,
-      },
-    }, false);
-    expect(offsets.left).toBe(ROUNDS_UP.left);
-    expect(offsets.right).toBe(ROUNDS_UP.right);
-    expect(offsets.top).toBe(TOP);
-    expect(offset.bottom).toBe(BOTTOM);
+    ALL_SIZE_COMBINATIONS.forEach(([popperSize, referenceSize]) => {
+      const offsets = getRoundedOffsets({
+        placement: 'bottom',
+        offsets: {
+          popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6, },
+          reference: referenceSize,
+        },
+      }, false);
+      expect(offsets.left).toBe(ROUNDS_UP.left);
+      expect(offsets.right).toBe(ROUNDS_UP.right);
+      expect(offsets.top).toBe(218.6);
+      expect(offsets.bottom).toBe(318.6);
+    });
   });
 });
