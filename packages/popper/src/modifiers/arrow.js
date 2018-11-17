@@ -74,8 +74,8 @@ export default function arrow(data, options) {
   // take popper margin in account because we don't have this info available
   const popperCss = getStyleComputedProperty(data.instance.popper);
   const parentCss = getStyleComputedProperty(arrowElementParent);
-  const marginProperty = 'margin' + sideCapitalized;
-  const borderProperty = 'border' + sideCapitalized + 'Width';
+  const marginProperty = `margin${sideCapitalized}`;
+  const borderProperty = `border${sideCapitalized}Width`;
   const popperMarginSide = parseFloat(popperCss[marginProperty], 10);
   const popperBorderSide = parseFloat(popperCss[borderProperty], 10);
   const parentMarginSide = parseFloat(parentCss[marginProperty], 10);
