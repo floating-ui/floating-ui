@@ -1,6 +1,6 @@
 {
   "name": "popper.js",
-  "version": "2.0.0-next.2",
+  "version": "2.0.0-next.3",
   "main": "dist/cjs/index.js",
   "main:umd": "dist/umd/index.js",
   "module": "lib/index.js",
