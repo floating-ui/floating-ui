@@ -3,7 +3,8 @@ import replace from 'rollup-plugin-replace';
 import bundleSize from 'rollup-plugin-bundle-size';
 import { terser } from 'rollup-plugin-terser';
 
-const dir = process.env.NODE_ENV === 'dev' ? 'tests/visual/dist' : 'dist';
+const IS_DEV = process.env.NODE_ENV === 'development';
+const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
 const umdBundle = minify => ({
   input: 'src/index.js',
@@ -64,11 +65,15 @@ const cjsBundle = minify => ({
   },
 });
 
-export default [
-  umdBundle(),
-  umdBundle(true),
-  esBundle(),
-  esBundle(true),
-  cjsBundle(),
-  cjsBundle(true),
-];
+const builds = IS_DEV
+  ? [esBundle()]
+  : [
+      umdBundle(),
+      umdBundle(true),
+      esBundle(),
+      esBundle(true),
+      cjsBundle(),
+      cjsBundle(true),
+    ];
+
+export default builds;

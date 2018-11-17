@@ -12,7 +12,7 @@
     "test:ci": "jest --coverage",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve tests/visual",
-    "dev:bundles": "cross-env NODE_ENV=dev rollup -c rollup.config.js",
+    "dev:bundles": "cross-env NODE_ENV=development rollup -c rollup.config.js",
     "build": "yarn clean && yarn build:es && yarn build:bundles && yarn build:flow",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",

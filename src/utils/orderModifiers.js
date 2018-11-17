@@ -1,26 +1,26 @@
 // @flow
 import type { Modifier } from '../types';
 
+// source: https://stackoverflow.com/questions/49875255
 const order = modifiers => {
-  let sortedModifiers = [...modifiers];
-  let i = 0,
-    j,
-    temp;
+  // indexed by name
+  const mapped = modifiers.reduce((mem, i) => {
+    mem[i.name] = i;
+    return mem;
+  }, {});
 
-  while (i < sortedModifiers.length) {
-    temp = sortedModifiers.slice(0, i);
-    for (j = i; j < sortedModifiers.length; j++) {
-      if (
-        (sortedModifiers[j].requires || []).every(n =>
-          temp.some(({ name }) => n === name)
-        )
-      ) {
-        sortedModifiers.splice(i++, 0, sortedModifiers.splice(j, 1)[0]);
-        break;
-      }
-    }
-  }
-  return sortedModifiers;
+  // inherit all dependencies for a given name
+  const inherited = i => {
+    return mapped[i].requires.reduce((mem, i) => {
+      return [...mem, i, ...inherited(i)];
+    }, []);
+  };
+
+  // order ...
+  const ordered = modifiers.sort((a, b) => {
+    return !!~inherited(b.name).indexOf(a.name) ? -1 : 1;
+  });
+  return ordered;
 };
 
 export default (modifiers: Array<Modifier>): Array<Modifier> => [

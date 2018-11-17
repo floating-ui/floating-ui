@@ -91,7 +91,6 @@ export default class Popper {
       ...defaultModifiers,
       ...this.state.options.modifiers,
     ]);
-    console.log(this.state.orderedModifiers);
 
     // Validate the provided modifiers so that the consumer will get warned
     // of one of the custom modifiers is invalid for any reason

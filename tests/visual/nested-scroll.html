@@ -56,18 +56,5 @@
 
   window.instance = new Popper(reference, popper, {
     placement: 'right',
-    modifiers: [
-      {
-        name: 'applyStyle',
-        phase: 'write',
-        enabled: true,
-        fn(state) {
-          console.log(state);
-          popper.style.top = `${state.offsets.popper.y}px`;
-          popper.style.left = `${state.offsets.popper.x}px`;
-          return state;
-        },
-      },
-    ],
   });
 </script>
