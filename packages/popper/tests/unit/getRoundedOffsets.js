@@ -5,12 +5,11 @@ import placements from '../../src/methods/placements';
 
 const TOP = 200;
 const BOTTOM = 300;
-const EVEN_SIZE = { width: 20, height: 20, top: TOP, bottom: BOTTOM, };
-const ODD_SIZE = { width: 21, height: 21, top: TOP, bottom: BOTTOM, };
-const ROUNDS_UP = { left: 18.57127, right: 38.57127, };
-const ROUNDS_DOWN = { left: 18.47127, right: 38.47127, };
-const ROUNDED_UP = { left: 19, right: 39, };
-const ROUNDED_DOWN = { left: 18, right: 38, };
+const EVEN_SIZE = { width: 20, height: 20, top: TOP, bottom: BOTTOM };
+const ODD_SIZE = { width: 21, height: 21, top: TOP, bottom: BOTTOM };
+const ROUNDS_UP = { left: 18.57127, right: 38.57127 };
+const ROUNDED_UP = { left: 19, right: 39 };
+const ROUNDED_DOWN = { left: 18, right: 38 };
 const ALL_SIZE_COMBINATIONS = [
   [EVEN_SIZE, EVEN_SIZE],
   [EVEN_SIZE, ODD_SIZE],
@@ -26,7 +25,7 @@ describe('utils/getRoundedOffsets', () => {
     const offsets = getRoundedOffsets({
       placement: 'bottom',
       offsets: {
-        popper: { ...EVEN_SIZE, ...ROUNDS_UP, },
+        popper: { ...EVEN_SIZE, ...ROUNDS_UP },
         reference: EVEN_SIZE,
       },
     }, true);
@@ -40,14 +39,14 @@ describe('utils/getRoundedOffsets', () => {
     const offsets1 = getRoundedOffsets({
       placement: 'bottom',
       offsets: {
-        popper: { ...EVEN_SIZE, ...ROUNDS_UP, },
+        popper: { ...EVEN_SIZE, ...ROUNDS_UP },
         reference: ODD_SIZE,
       },
     }, true);
     const offsets2 = getRoundedOffsets({
       placement: 'bottom',
       offsets: {
-        popper: { ...ODD_SIZE, ...ROUNDS_UP, },
+        popper: { ...ODD_SIZE, ...ROUNDS_UP },
         reference: EVEN_SIZE,
       },
     }, true);
@@ -63,7 +62,7 @@ describe('utils/getRoundedOffsets', () => {
     const offsets = getRoundedOffsets({
       placement: 'bottom',
       offsets: {
-        popper: { ...ODD_SIZE, ...ROUNDS_UP, },
+        popper: { ...ODD_SIZE, ...ROUNDS_UP },
         reference: ODD_SIZE,
       },
     }, true);
@@ -79,7 +78,7 @@ describe('utils/getRoundedOffsets', () => {
         const offsets = getRoundedOffsets({
           placement,
           offsets: {
-            popper: { ...popperSize, ...ROUNDS_UP, },
+            popper: { ...popperSize, ...ROUNDS_UP },
             reference: referenceSize,
           },
         }, true);
@@ -96,7 +95,7 @@ describe('utils/getRoundedOffsets', () => {
       const offsets = getRoundedOffsets({
         placement: 'bottom',
         offsets: {
-          popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6, },
+          popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6 },
           reference: referenceSize,
         },
       }, true);
@@ -110,7 +109,7 @@ describe('utils/getRoundedOffsets', () => {
       const offsets = getRoundedOffsets({
         placement: 'bottom',
         offsets: {
-          popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6, },
+          popper: { ...popperSize, ...ROUNDS_UP, top: 218.6, bottom: 318.6 },
           reference: referenceSize,
         },
       }, false);
