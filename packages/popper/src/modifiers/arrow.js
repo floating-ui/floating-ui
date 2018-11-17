@@ -36,7 +36,7 @@ export default function arrow(data, options) {
       return data;
     }
   }
-  
+
   const arrowElementParent = arrowElement.parentNode;
 
   const placement = data.placement.split('-')[0];
@@ -74,16 +74,22 @@ export default function arrow(data, options) {
   // take popper margin in account because we don't have this info available
   const popperCss = getStyleComputedProperty(data.instance.popper);
   const parentCss = getStyleComputedProperty(arrowElementParent);
-  const popperMarginSide = parseFloat(popperCss['margin' + sideCapitalized], 10);
-  const popperBorderSide = parseFloat(popperCss['border' + sideCapitalized + 'Width'], 10);
-  const parentMarginSide = parseFloat(parentCss['margin' + sideCapitalized], 10);
-  const parentBorderSide = parseFloat(parentCss['border' + sideCapitalized + 'Width'], 10);
+  const marginProperty = 'margin' + sideCapitalized;
+  const borderProperty = 'border' + sideCapitalized + 'Width';
+  const popperMarginSide = parseFloat(popperCss[marginProperty], 10);
+  const popperBorderSide = parseFloat(popperCss[borderProperty], 10);
+  const parentMarginSide = parseFloat(parentCss[marginProperty], 10);
+  const parentBorderSide = parseFloat(parentCss[borderProperty], 10);
   const parentOffset =
     arrowElementParent !== data.instance.popper
       ? parentMarginSide - parentBorderSide
       : 0;
   let sideValue =
-    center - data.offsets.popper[side] - popperMarginSide - popperBorderSide - parentOffset;
+    center -
+    data.offsets.popper[side] -
+    popperMarginSide -
+    popperBorderSide +
+    parentOffset;
 
   // prevent arrowElement from being placed not contiguously to its popper
   sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
