@@ -5,7 +5,9 @@ type Options = {
   bounaryElement: HTMLElement,
 };
 
-export function preventOverflow(state: State, options: ?Options) {}
+export function preventOverflow(state: State, options: ?Options) {
+  return state;
+}
 
 export default {
   name: 'preventOverflow',
