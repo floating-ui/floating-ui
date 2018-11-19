@@ -13,7 +13,7 @@ const reference = createRectMock({
   x: 100,
   y: 100,
 });
-const popper = createRectMock({ width: 100, height: 100, x: 0, y: 0 });
+const element = createRectMock({ width: 100, height: 100, x: 0, y: 0 });
 const scroll = { scrollTop: 10, scrollLeft: 20 };
 
 describe('[strategy: absolute]', () =>
@@ -23,7 +23,7 @@ describe('[strategy: absolute]', () =>
         expect(
           computeOffsets({
             reference,
-            popper,
+            element,
             strategy: 'absolute',
             placement,
             scroll,
@@ -33,7 +33,7 @@ describe('[strategy: absolute]', () =>
         expect(
           computeOffsets({
             reference,
-            popper,
+            element,
             strategy: 'absolute',
             placement,
             scroll,
@@ -41,7 +41,7 @@ describe('[strategy: absolute]', () =>
         ).toEqual(
           computeOffsets({
             reference,
-            popper,
+            element,
             strategy: 'absolute',
             placement: getOppositePlacement(placement),
             scroll,

@@ -28,5 +28,6 @@ const order = modifiers => {
 export default (modifiers: Array<Modifier>): Array<Modifier> => [
   ...order(modifiers.filter(({ phase }) => phase === 'read')),
   ...order(modifiers.filter(({ phase }) => phase === 'main')),
+  ...order(modifiers.filter(({ phase }) => phase === 'afterMain')),
   ...order(modifiers.filter(({ phase }) => phase === 'write')),
 ];

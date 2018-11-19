@@ -16,7 +16,8 @@ const sumScroll = scrollParents =>
 export default function getCommonTotalScroll(
   reference: HTMLElement,
   referenceScrollParents: Array<Node>,
-  popperScrollParents: Array<Node>
+  popperScrollParents: Array<Node>,
+  limiter?: Node
 ) {
   // if the scrollParent is shared between the two elements, we don't pick
   // it because it wouldn't add anything to the equation (they nulllify themselves)
@@ -28,7 +29,9 @@ export default function getCommonTotalScroll(
   // not sure why but that's how I got it working 😅
   // TODO: improve this comment with proper explanation
   const offsetParent = getOffsetParent(reference);
-  const index = referenceScrollParents.findIndex(node => node === offsetParent);
+  const index = referenceScrollParents.findIndex(
+    node => node === (limiter || offsetParent)
+  );
 
   const scrollParents = referenceScrollParents.slice(
     0,

@@ -1,5 +1,5 @@
 // @flow
-import type { State, PositioningStrategy, Offsets } from '../types';
+import type { State, PositioningStrategy, Offsets, Modifier } from '../types';
 
 // This modifier takes the Popper.js state and prepares some StyleSheet properties
 // that can be applied to the popper element to make it render in the expected position.
@@ -89,9 +89,9 @@ export function computeStyles(state: State, options: ?Options) {
   return state;
 }
 
-export default {
+export default ({
   name: 'computeStyles',
   enabled: true,
-  phase: 'main',
+  phase: 'afterMain',
   fn: computeStyles,
-};
+}: Modifier);

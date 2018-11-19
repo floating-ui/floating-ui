@@ -159,7 +159,7 @@ export default class Popper {
     this.state.offsets = {
       popper: computeOffsets({
         reference: this.state.measures.reference,
-        popper: this.state.measures.popper,
+        element: this.state.measures.popper,
         strategy: 'absolute',
         placement: this.state.options.placement,
         scroll: getCommonTotalScroll(
@@ -206,11 +206,10 @@ export default class Popper {
     }
 
     if (resize) {
-      const win = getWindow(this.state.elements.popper);
-      win &&
-        win.addEventListener('resize', this.update, {
-          passive: true,
-        });
+      const window = getWindow(this.state.elements.popper);
+      window.addEventListener('resize', this.update, {
+        passive: true,
+      });
     }
   }
 }

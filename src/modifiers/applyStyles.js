@@ -1,5 +1,5 @@
 // @flow
-import type { State, PositioningStrategy } from '../types';
+import type { Modifier, State, PositioningStrategy } from '../types';
 
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
@@ -17,10 +17,10 @@ export function applyStyles(state: State) {
   return state;
 }
 
-export default {
+export default ({
   name: 'applyStyles',
   enabled: true,
   phase: 'write',
   fn: applyStyles,
   requires: ['computeStyles'],
-};
+}: Modifier);
