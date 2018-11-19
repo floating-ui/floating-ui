@@ -1,13 +1,16 @@
 // @flow
+import getComputedStyle from './getComputedStyle';
 
 // Returns the width, height and offsets of the provided element
-export default (element: Element) => {
+export default (element: HTMLElement) => {
   // get the basic client rect, it doesn't include margins
-  const { width, height, top, left } = element.getBoundingClientRect();
+  const width = element.offsetWidth;
+  const height = element.offsetHeight;
+  const top = element.offsetTop;
+  const left = element.offsetLeft;
 
   // get the element margins, we need them to properly align the popper
-  const window = element.ownerDocument.defaultView;
-  const styles = window.getComputedStyle(element);
+  const styles = getComputedStyle(element);
 
   const marginTop = parseFloat(styles.marginTop) || 0;
   const marginRight = parseFloat(styles.marginRight) || 0;

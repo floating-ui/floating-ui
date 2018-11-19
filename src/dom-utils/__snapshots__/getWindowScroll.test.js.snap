@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`returns the scrollTop and scrollLeft of the window 1`] = `
+Object {
+  "scrollLeft": 100,
+  "scrollTop": 200,
+}
+`;

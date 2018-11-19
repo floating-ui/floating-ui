@@ -10,41 +10,39 @@ export default ({
   popper,
   strategy,
   placement,
-  windowScroll,
+  scroll,
 }: {
   reference: Rect,
   popper: Rect,
   strategy: PositioningStrategy,
   placement: Placement,
-  windowScroll: { scrollTop: number, scrollLeft: number },
+  scroll: { scrollTop: number, scrollLeft: number },
 }): Offsets => {
   const basePlacement = getBasePlacement(placement);
 
-  const { scrollTop, scrollLeft } = windowScroll;
+  const { scrollTop, scrollLeft } = scroll;
 
   switch (basePlacement) {
     case top:
       return {
-        x: scrollLeft + reference.x + reference.width / 2 - popper.width / 2,
-        y: scrollTop + reference.y - popper.height,
+        x: reference.x + reference.width / 2 - popper.width / 2 - scrollLeft,
+        y: reference.y - popper.height - scrollTop,
       };
     case bottom:
       return {
-        x: scrollLeft + reference.x + reference.width / 2 - popper.width / 2,
-        y: scrollTop + reference.y + reference.height,
+        x: reference.x + reference.width / 2 - popper.width / 2 - scrollLeft,
+        y: reference.y + reference.height - scrollTop,
       };
     case right:
       return {
-        x: scrollLeft + reference.x + reference.width,
-        y: scrollTop + reference.y + reference.height / 2 - popper.height / 2,
+        x: reference.x + reference.width - scrollLeft,
+        y: reference.y + reference.height / 2 - popper.height / 2 - scrollTop,
       };
     case left:
-      return {
-        x: scrollLeft + reference.x - popper.width,
-        y: scrollTop + reference.y + reference.height / 2 - popper.height / 2,
-      };
     default:
-      // $FlowFixMe: This will actually never match; github.com/facebook/flow/issues/2395
-      return undefined;
+      return {
+        x: reference.x - popper.width - scrollLeft,
+        y: reference.y + reference.height / 2 - popper.height / 2 - scrollTop,
+      };
   }
 };

@@ -2,28 +2,28 @@
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 1`] = `
 Object {
-  "x": 170,
-  "y": 10,
+  "x": 130,
+  "y": -10,
 }
 `;
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 2`] = `
 Object {
-  "x": 170,
-  "y": 310,
+  "x": 130,
+  "y": 290,
 }
 `;
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 3`] = `
 Object {
-  "x": 320,
-  "y": 160,
+  "x": 280,
+  "y": 140,
 }
 `;
 
 exports[`[strategy: absolute] [placement: \${placement}] computes offsets: x and y 4`] = `
 Object {
-  "x": 20,
-  "y": 160,
+  "x": -20,
+  "y": 140,
 }
 `;

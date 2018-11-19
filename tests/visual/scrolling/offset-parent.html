@@ -12,6 +12,13 @@
     width: 600px;
     height: 600px;
     background-color: darkgrey;
+    position: relative;
+  }
+
+  .scroll3 {
+    width: 400px;
+    height: 400px;
+    background-color: lightgray;
   }
 
   .scroll::before {
@@ -45,12 +52,14 @@
 </style>
 
 <div class="scroll scroll2">
-  <div class="scroll"><div id="reference">Reference Box</div></div>
+  <div class="scroll scroll3">
+    <div class="scroll"><div id="reference">Reference Box</div></div>
+    <div id="popper">Popper Box</div>
+  </div>
 </div>
-<div id="popper">Popper Box</div>
 
 <script type="module">
-  import Popper from './dist/es/index.js';
+  import Popper from '../dist/es/index.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 

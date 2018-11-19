@@ -1,21 +1,27 @@
 <!DOCTYPE html> <title>Basic Visual Test</title>
 
 <style>
-  #scroll {
+  .scroll {
     overflow: scroll;
     width: 300px;
     height: 300px;
     background-color: grey;
   }
 
-  #scroll::before {
+  .scroll2 {
+    width: 600px;
+    height: 600px;
+    background-color: darkgrey;
+  }
+
+  .scroll::before {
     content: 'before';
     display: block;
     height: 300px;
     width: 1px;
   }
 
-  #scroll::after {
+  .scroll::after {
     content: 'after';
     display: block;
     height: 300px;
@@ -38,13 +44,13 @@
   }
 </style>
 
-<div id="scroll">
-  <div id="reference">Reference Box</div>
-  <div id="popper">Popper Box</div>
+<div class="scroll scroll2">
+  <div class="scroll"><div id="reference">Reference Box</div></div>
 </div>
+<div id="popper">Popper Box</div>
 
 <script type="module">
-  import Popper from './dist/es/index.js';
+  import Popper from '../dist/es/index.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 

@@ -13,7 +13,9 @@ import type {
 import getElementClientRect from './dom-utils/getElementClientRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
-import getWindowScroll from './dom-utils/getWindowScroll';
+import getNodeScroll from './dom-utils/getNodeScroll';
+import getOffsetParent from './dom-utils/getOffsetParent';
+import getCommonTotalScroll from './dom-utils/getCommonTotalScroll';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
@@ -135,11 +137,6 @@ export default class Popper {
       return;
     }
 
-    // Get scrollTop and scrollLeft of the active window
-    // this will be used in the `computeOffsets` function to properly
-    // position the popper taking in account the scroll position
-    const windowScroll = getWindowScroll(popperElement);
-
     // Get initial measurements
     // these are going to be used to compute the initial popper offsets
     // and as cache for any modifier that needs them later
@@ -147,6 +144,13 @@ export default class Popper {
       reference: getElementClientRect(referenceElement),
       popper: getElementClientRect(popperElement),
     };
+
+    // Get scrollTop and scrollLeft of the offsetParent
+    // this will be used in the `computeOffsets` function to properly
+    // position the popper taking in account the scroll position
+    // FIXME: right now we only look for a single offsetParent (the popper one)
+    //        but we really want to take in account the reference offsetParent as well
+    const offsetParentScroll = getNodeScroll(getOffsetParent(popperElement));
 
     // Offsets are the actual position the popper needs to have to be
     // properly positioned near its reference element
@@ -158,20 +162,24 @@ export default class Popper {
         popper: this.state.measures.popper,
         strategy: 'absolute',
         placement: this.state.options.placement,
-        windowScroll,
+        scroll: getCommonTotalScroll(
+          referenceElement,
+          this.state.scrollParents.reference,
+          this.state.scrollParents.popper
+        ),
       }),
     };
 
     // Modifiers have the ability to read the current Popper.js state, included
     // the popper offsets, and modify it to address specifc cases
     this.state = this.state.orderedModifiers.reduce(
-      (acc, { fn, enabled, options }) => {
+      (state, { fn, enabled, options }) => {
         if (enabled && typeof fn === 'function') {
-          acc = fn((this.state: State), options);
+          state = fn((this.state: State), options);
         }
-        return acc;
+        return state;
       },
-      {}
+      this.state
     );
   }
 
@@ -184,25 +192,20 @@ export default class Popper {
     } = this.state.elements;
     const { scroll, resize } = expandEventListeners(eventListeners);
 
-    // Don't proceed if `reference` or `popper` are not valid elements anymore
-    if (!areValidElements(referenceElement, popperElement)) {
-      return;
-    }
-
     if (scroll) {
       const scrollParents = [
-        ...listScrollParents(referenceElement),
-        ...listScrollParents(popperElement),
+        ...this.state.scrollParents.reference,
+        ...this.state.scrollParents.popper,
       ];
-      scrollParents.length > 0 &&
-        scrollParents.forEach(scrollParent =>
-          scrollParent.addEventListener('scroll', this.update, {
-            passive: true,
-          })
-        );
+
+      scrollParents.forEach(scrollParent =>
+        scrollParent.addEventListener('scroll', this.update, {
+          passive: true,
+        })
+      );
     }
 
-    if (resize && this.state.elements.popper) {
+    if (resize) {
       const win = getWindow(this.state.elements.popper);
       win &&
         win.addEventListener('resize', this.update, {
