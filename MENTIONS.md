@@ -33,8 +33,6 @@ An easy to use and flexible React wrapper based on React 16 (for [Portals](https
 
 Angular wrapper for Popper.js
 
-## AngularJS
-
 ### [angular-popper](https://www.npmjs.com/package/angular-popper)
 
 This component is in alpha base, you can contribute to it!
@@ -65,6 +63,10 @@ Vue.js 2.x directive
 ### [ember-popper](https://github.com/kybishop/ember-popper)
 
 An Ember-centric wrapper around Popper.js.
+
+### [ember-tooltips](https://github.com/sir-dunxalot/ember-tooltips)
+
+An Ember library for creating tooltips and popovers, built on Popper.js.
 
 ## Preact and Inferno
 
