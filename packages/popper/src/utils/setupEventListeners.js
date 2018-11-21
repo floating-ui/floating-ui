@@ -1,6 +1,14 @@
 import getScrollParent from './getScrollParent';
 import getWindow from './getWindow';
 
+/**
+ * @method
+ * @argument {Element} scrollParent
+ * @argument {String} event
+ * @argument {EventListenerOrEventListenerObject} callback
+ * @argument {Element[]} scrollParents
+ * @private
+ */
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
   const isBody = scrollParent.nodeName.toUpperCase() === 'BODY';
   const target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
@@ -21,6 +29,11 @@ function attachToScrollParents(scrollParent, event, callback, scrollParents) {
  * Setup needed event listeners used to update the popper position
  * @method
  * @memberof Popper.Utils
+ * @argument {Element} reference
+ * @argument {Object} options
+ * @argument {ListenersStateObject} state
+ * @argument {EventListenerOrEventListenerObject} updateBound
+ * @returns {ListenersStateObject}
  * @private
  */
 export default function setupEventListeners(
@@ -46,3 +59,12 @@ export default function setupEventListeners(
 
   return state;
 }
+
+/**
+ * @typedef {Object} ListenersStateObject
+ *
+ * @property {EventListenerOrEventListenerObject} updateBound
+ * @property {Element[]} scrollParents
+ * @property {Element} scrollElement
+ * @property {Boolean} eventsEnabled
+ */

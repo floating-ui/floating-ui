@@ -2,8 +2,9 @@
  * Get CSS computed property of the given element
  * @method
  * @memberof Popper.Utils
- * @argument {Eement} element
+ * @argument {Element} element
  * @argument {String} property
+ * @returns {String}
  */
 export default function getStyleComputedProperty(element, property) {
   if (element.nodeType !== 1) {

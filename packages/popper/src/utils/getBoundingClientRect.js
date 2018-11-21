@@ -10,7 +10,7 @@ import isIE from './isIE';
  * @method
  * @memberof Popper.Utils
  * @param {HTMLElement} element
- * @return {Object} client rect
+ * @return {ClientRect} client rect
  */
 export default function getBoundingClientRect(element) {
   let rect = {};

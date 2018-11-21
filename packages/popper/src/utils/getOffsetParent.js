@@ -21,7 +21,7 @@ export default function getOffsetParent(element) {
     offsetParent = (element = element.nextElementSibling).offsetParent;
   }
 
-  const nodeName = offsetParent && offsetParent.nodeName.toUpperCase();
+  const nodeName = offsetParent && offsetParent.nodeName && offsetParent.nodeName.toUpperCase();
 
   if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
     return element ? element.ownerDocument.documentElement : document.documentElement;
@@ -30,7 +30,7 @@ export default function getOffsetParent(element) {
   // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
   if (
-    ['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName.toUpperCase()) !== -1 &&
+    ['TH', 'TD', 'TABLE'].indexOf(nodeName) !== -1 &&
     getStyleComputedProperty(offsetParent, 'position') === 'static'
   ) {
     return getOffsetParent(offsetParent);

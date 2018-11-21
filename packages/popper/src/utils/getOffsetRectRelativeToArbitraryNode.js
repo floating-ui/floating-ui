@@ -5,6 +5,13 @@ import getBoundingClientRect from './getBoundingClientRect';
 import runIsIE from './isIE';
 import getClientRect from './getClientRect';
 
+/**
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} children
+ * @argument {Element} parent
+ * @argument {Boolean} fixedPosition
+ */
 export default function getOffsetRectRelativeToArbitraryNode(children, parent, fixedPosition = false) {
   const isIE10 = runIsIE(10);
   const isHTML = parent.nodeName.toUpperCase() === 'HTML';
@@ -51,7 +58,7 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   if (
     isIE10 && !fixedPosition
       ? parent.contains(scrollParent)
-      : parent === scrollParent && scrollParent.nodeName.toUpperCase() !== 'BODY'
+      : parent === scrollParent && scrollParent.nodeName && scrollParent.nodeName.toUpperCase() !== 'BODY'
   ) {
     offsets = includeScroll(offsets, parent);
   }

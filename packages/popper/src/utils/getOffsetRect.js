@@ -6,7 +6,7 @@ import getClientRect from './getClientRect';
  * @method
  * @memberof Popper.Utils
  * @param {Element} element
- * @return {Object} position - Coordinates of the element and its `scrollTop`
+ * @return {ClientRect} position - Coordinates of the element and its `scrollTop`
  */
 export default function getOffsetRect(element) {
   let elementRect;

@@ -2,8 +2,8 @@
  * Given element offsets, generate an output similar to getBoundingClientRect
  * @method
  * @memberof Popper.Utils
- * @argument {Object} offsets
- * @returns {Object} ClientRect like output
+ * @argument {{top:Number,left:Number,width:Number,height:Number}} offsets
+ * @returns {ClientRect} ClientRect like output
  */
 export default function getClientRect(offsets) {
   return {

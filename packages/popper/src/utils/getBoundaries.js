@@ -40,7 +40,7 @@ export default function getBoundaries(
     let boundariesNode;
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(reference));
-      if (boundariesNode.nodeName.toUpperCase() === 'BODY') {
+      if (boundariesNode.nodeName && boundariesNode.nodeName.toUpperCase() === 'BODY') {
         boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {
