@@ -19,19 +19,23 @@
  */
 export default function getRoundedOffsets(data, shouldRound) {
   const { popper, reference } = data.offsets;
-
+  const { round, floor } = Math;
+  const noRound = v => v;
+  
+  const referenceWidth = round(reference.width);
+  const popperWidth = round(popper.width);
+  
   const isVertical = ['left', 'right'].indexOf(data.placement) !== -1;
   const isVariation = data.placement.indexOf('-') !== -1;
-  const sameWidthOddness = reference.width % 2 === popper.width % 2;
-  const bothOddWidth = reference.width % 2 === 1 && popper.width % 2 === 1;
-  const noRound = v => v;
+  const sameWidthParity = referenceWidth % 2 === popperWidth % 2;
+  const bothOddWidth = referenceWidth % 2 === 1 && popperWidth % 2 === 1;
 
   const horizontalToInteger = !shouldRound
     ? noRound
-    : isVertical || isVariation || sameWidthOddness
-    ? Math.round
-    : Math.floor;
-  const verticalToInteger = !shouldRound ? noRound : Math.round;
+    : isVertical || isVariation || sameWidthParity
+    ? round
+    : floor;
+  const verticalToInteger = !shouldRound ? noRound : round;
 
   return {
     left: horizontalToInteger(
