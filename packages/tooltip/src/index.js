@@ -169,11 +169,9 @@ export default class Tooltip {
       // if title is a element node or document fragment, append it only if allowHtml is true
       allowHtml && titleNode.appendChild(title);
     } else if (isFunction(title)) {
-      // if title is a function, call it and set textContent or innerHtml depending by `allowHtml` value
-      const titleText = title.call(reference);
-      allowHtml
-        ? (titleNode.innerHTML = titleText)
-        : (titleNode.textContent = titleText);
+      // Recursively call ourself so that the return value of the function gets handled appropriately - either
+      // as a dom node, a string, or even as another function.
+      this._addTitleContent(reference, title.call(reference), allowHtml, titleNode);
     } else {
       // if it's just a simple text, set textContent or innerHtml depending by `allowHtml` value
       allowHtml ? (titleNode.innerHTML = title) : (titleNode.textContent = title);

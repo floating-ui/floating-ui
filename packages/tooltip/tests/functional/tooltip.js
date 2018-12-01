@@ -249,7 +249,7 @@ describe('[tooltip.js]', () => {
       });
     });
 
-    it('should use a function result as tooltip content', done => {
+    it('should use a string returned by a function as tooltip content', done => {
       instance = new Tooltip(reference, {
         title: () => 'foobar',
       });
@@ -260,6 +260,62 @@ describe('[tooltip.js]', () => {
         expect(
           document.querySelector('.tooltip .tooltip-inner').textContent
         ).toBe('foobar');
+        done();
+      });
+    });
+
+    it('should use a DOM node returned by a function as tooltip content', done => {
+      const content = document.createElement('div');
+      content.textContent = 'foobar';
+      instance = new Tooltip(reference, {
+        title: () => content,
+        html: true,
+      });
+
+      instance.show();
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').innerHTML
+        ).toBe('<div>foobar</div>');
+        done();
+      });
+    });
+
+    it('should use a document fragment returned by a function as tooltip content', done => {
+      const content = document.createDocumentFragment();
+      const inner = document.createElement('div');
+      inner.textContent = 'test';
+      content.appendChild(inner);
+      instance = new Tooltip(reference, {
+        title: () => content,
+        html: true,
+      });
+
+      instance.show();
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').innerHTML
+        ).toBe('<div>test</div>');
+        done();
+      });
+    });
+
+    it('should not use dom node returned by function as tooltip content if html option disabled', done => {
+      const content = document.createElement('div');
+      content.textContent = 'test';
+      instance = new Tooltip(reference, {
+        title: () => content,
+        html: false,
+      });
+
+      instance.show();
+
+      then(() => {
+        expect(
+          document.querySelector('.tooltip .tooltip-inner').innerHTML
+        ).toBe('');
         done();
       });
     });
