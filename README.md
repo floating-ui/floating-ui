@@ -11,10 +11,11 @@
   <img src="http://badge-size.now.sh/https://unpkg.com/popper.js/dist/popper.min.js?compression=gzip" alt="Stable Release Size"/>
     <a href="https://codeclimate.com/github/FezVrasta/popper.js/coverage"><img src="https://codeclimate.com/github/FezVrasta/popper.js/badges/coverage.svg" alt="Istanbul Code Coverage"/></a>
     <a href="https://www.npmjs.com/browse/depended/popper.js"><img src="https://badgen.net/npm/dependents/popper.js" alt="Dependents packages" /></a>
-    <a href="https://spectrum.chat/popper-js" target="_blank"><img src="https://img.shields.io/badge/chat-on_spectrum-6833F9.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTAgOCI%2BPGRlZnM%2BPHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fTwvc3R5bGU%2BPC9kZWZzPjx0aXRsZT5zcGVjdHJ1bTwvdGl0bGU%2BPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNSwwQy40MiwwLDAsLjYzLDAsMy4zNGMwLDEuODQuMTksMi43MiwxLjc0LDMuMWgwVjcuNThhLjQ0LjQ0LDAsMCwwLC42OC4zNUw0LjM1LDYuNjlINWM0LjU4LDAsNS0uNjMsNS0zLjM1UzkuNTgsMCw1LDBaTTIuODMsNC4xOGEuNjMuNjMsMCwxLDEsLjY1LS42M0EuNjQuNjQsMCwwLDEsMi44Myw0LjE4Wk01LDQuMThhLjYzLjYzLDAsMSwxLC42NS0uNjNBLjY0LjY0LDAsMCwxLDUsNC4xOFptMi4xNywwYS42My42MywwLDEsMSwuNjUtLjYzQS42NC42NCwwLDAsMSw3LjE3LDQuMThaIi8%2BPC9zdmc%2B" alt="Get support or discuss"/></a>
+    <a href="https://spectrum.chat/popper-js" target="_blank"> <img src="https://img.shields.io/badge/chat-on_spectrum-6833F9.svg?logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyBpZD0iTGl2ZWxsb18xIiBkYXRhLW5hbWU9IkxpdmVsbG8gMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTAgOCI%2BPGRlZnM%2BPHN0eWxlPi5jbHMtMXtmaWxsOiNmZmY7fTwvc3R5bGU%2BPC9kZWZzPjx0aXRsZT5zcGVjdHJ1bTwvdGl0bGU%2BPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNSwwQy40MiwwLDAsLjYzLDAsMy4zNGMwLDEuODQuMTksMi43MiwxLjc0LDMuMWgwVjcuNThhLjQ0LjQ0LDAsMCwwLC42OC4zNUw0LjM1LDYuNjlINWM0LjU4LDAsNS0uNjMsNS0zLjM1UzkuNTgsMCw1LDBaTTIuODMsNC4xOGEuNjMuNjMsMCwxLDEsLjY1LS42M0EuNjQuNjQsMCwwLDEsMi44Myw0LjE4Wk01LDQuMThhLjYzLjYzLDAsMSwxLC42NS0uNjNBLjY0LjY0LDAsMCwxLDUsNC4xOFptMi4xNywwYS42My42MywwLDEsMSwuNjUtLjYzQS42NC42NCwwLDAsMSw3LjE3LDQuMThaIi8%2BPC9zdmc%2B" alt="Get support or discuss"/></a>
     <br />
     <a href="https://travis-ci.org/FezVrasta/popper.js/branches" target="_blank"><img src="https://travis-ci.org/FezVrasta/popper.js.svg?branch=master" alt="Build Status"/></a>
     <a href="https://saucelabs.com/u/popperjs" target="_blank"><img src="https://badges.herokuapp.com/browsers?labels=none&googlechrome=latest&firefox=latest&microsoftedge=latest&iexplore=11,10&safari=latest" alt="SauceLabs Reports"/></a>
+    <a href="#backers" alt="sponsors on Open Collective"><img src="https://opencollective.com/popperjs/backers/badge.svg" /></a> <a href="#sponsors" alt="Sponsors on Open Collective"><img src="https://opencollective.com/popperjs/sponsors/badge.svg" /></a>
 </p>
 
 <img src="https://raw.githubusercontent.com/FezVrasta/popper.js/master/popperjs.png" align="right" width=250 />
@@ -249,6 +250,36 @@ I want to thank some friends and projects for the work they did:
 - [Tether.js](http://github.hubspot.com/tether/) for having inspired me in writing a positioning library ready for the real world;
 - [The Contributors](https://github.com/FezVrasta/popper.js/graphs/contributors) for their much appreciated Pull Requests and bug reports;
 - **you** for the star you'll give to this project and for being so awesome to give this project a try 🙂
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/FezVrasta/popper.js/graphs/contributors"><img src="https://opencollective.com/popperjs/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/popperjs#backer)]
+
+<a href="https://opencollective.com/popperjs#backers" target="_blank"><img src="https://opencollective.com/popperjs/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/popperjs#sponsor)]
+
+<a href="https://opencollective.com/popperjs/sponsor/0/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/1/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/2/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/3/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/4/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/5/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/6/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/7/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/8/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/popperjs/sponsor/9/website" target="_blank"><img src="https://opencollective.com/popperjs/sponsor/9/avatar.svg"></a>
+
+
 
 ### Copyright and license
 
