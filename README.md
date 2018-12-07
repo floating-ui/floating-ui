@@ -108,10 +108,15 @@ If you can't find the `/dist` folder in the Git repository, this is because the 
 
 Given an existing popper DOM node, ask Popper.js to position it near its button.
 
+```html
+<div class="my-button">reference</div>
+<div class="my-popper">popper</div>
+```
+
 ```js
 var reference = document.querySelector('.my-button');
 var popper = document.querySelector('.my-popper');
-var anotherPopper = new Popper(reference, popper, {
+var popperInstance = new Popper(reference, popper, {
   // popper options here
 });
 ```
