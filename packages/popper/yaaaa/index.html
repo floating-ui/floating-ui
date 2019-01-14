@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <style>
+      #ref {
+        position: relative;
+        top: 400px;
+        left: 200px;
+        height: 9px;
+        width: 9px;
+        border: 1px solid red;
+        border-radius: 50%;
+        z-index: 5;
+      }
+
+      #popper {
+        background: blue;
+        width: 150px;
+        height: 150px;
+      }
+
+      #content {
+        height: 600px;
+        background: lightblue;
+      }
+
+      #wrapper {
+        height: 400px;
+        overflow: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="content">
+        <div id="ref"></div>
+        <div id="popper"></div>
+      </div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
