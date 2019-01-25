@@ -259,6 +259,7 @@ export default class Tooltip {
     }
 
     this._isOpen = false;
+    this._isOpening = false;
 
     // hide tooltipNode
     this._tooltipNode.style.visibility = 'hidden';
