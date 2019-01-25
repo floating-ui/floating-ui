@@ -270,8 +270,8 @@ export default class Tooltip {
 
   _dispose() {
     // remove event listeners first to prevent any unexpected behaviour
-    this._events.forEach(({ func, event }) => {
-      this.reference.removeEventListener(event, func);
+    this._events.forEach(({ target, func, event, useCapture }) => {
+      target.removeEventListener(event, func, useCapture);
     });
     this._events = [];
 
@@ -342,7 +342,7 @@ export default class Tooltip {
         evt.usedByTooltip = true;
         this._scheduleShow(reference, options.delay, options, evt);
       };
-      this._events.push({ event, func });
+      this._events.push({ target: reference, event, func });
       reference.addEventListener(event, func);
     });
 
@@ -354,10 +354,10 @@ export default class Tooltip {
         }
         this._scheduleHide(reference, options.delay, options, evt);
       };
-      this._events.push({ event, func });
+      this._events.push({ target: reference, event, func });
       reference.addEventListener(event, func);
       if (event === 'click' && options.closeOnClickOutside) {
-        document.addEventListener('mousedown', e => {
+        const documentFunc = e => {
           if (!this._isOpening) {
             return;
           }
@@ -367,7 +367,9 @@ export default class Tooltip {
             return;
           }
           func(e);
-        }, true);
+        };
+        document.addEventListener('mousedown', documentFunc, true);
+        this._events.push({ target: document, event: 'mousedown', func: documentFunc, useCapture: true });
       }
     });
   }
