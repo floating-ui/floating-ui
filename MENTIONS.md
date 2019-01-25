@@ -64,6 +64,10 @@ Vue.js 2.x directive
 
 An Ember-centric wrapper around Popper.js.
 
+### [ember-tooltips](https://github.com/sir-dunxalot/ember-tooltips)
+
+An Ember library for creating tooltips and popovers, built on Popper.js.
+
 ## Preact and Inferno
 
 ### [react-popper](https://github.com/souporserious/react-popper)

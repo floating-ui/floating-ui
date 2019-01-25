@@ -42,4 +42,9 @@ describe('utils/isFixed', () => {
       expect(isFixed(node)).to.be.false;
     });
   });
+
+  it('element is detached from the DOM', () => {
+    const node = document.createElement('div');
+    expect(isFixed(node)).to.be.false;
+  });
 });
