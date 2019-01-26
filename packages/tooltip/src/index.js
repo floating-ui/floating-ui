@@ -228,9 +228,11 @@ export default class Tooltip {
     this._popperOptions.modifiers = {
       ...this._popperOptions.modifiers,
       arrow: {
-        element: this.options.arrowSelector,
+        ...(this._popperOptions.modifiers && this._popperOptions.modifiers.arrow),
+        element: options.arrowSelector,
       },
       offset: {
+        ...(this._popperOptions.modifiers && this._popperOptions.modifiers.offset),
         offset: options.offset,
       },
     };
