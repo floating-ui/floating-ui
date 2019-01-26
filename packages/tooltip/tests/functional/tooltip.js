@@ -525,5 +525,35 @@ describe('[tooltip.js]', () => {
       then(() => expect(document.querySelector('.tooltip').style.visibility).toBe('hidden'));
       then(done);
     });
+
+    it('should proxy the arrow modifier to the Popper.js instance', done => {
+      instance = new Tooltip(reference, {
+        title: 'test',
+        popperOptions: {
+          modifiers: {
+            arrow: {
+              enabled: false,
+            },
+          },
+        },
+      }).show();
+      expect(instance._popperOptions.modifiers.arrow.enabled).toBe(false);
+      done();
+    });
+
+    it('should proxy the offset modifier to the Popper.js instance', done => {
+      instance = new Tooltip(reference, {
+        title: 'test',
+        popperOptions: {
+          modifiers: {
+            offset: {
+              enabled: false,
+            },
+          },
+        },
+      }).show();
+      expect(instance._popperOptions.modifiers.offset.enabled).toBe(false);
+      done();
+    });
   });
 });
