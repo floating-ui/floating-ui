@@ -41,10 +41,10 @@ declare namespace Popper {
   }
 
   export interface Padding {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number,
+    top?: number,
+    bottom?: number,
+    left?: number,
+    right?: number,
   }
 
   export interface BaseModifier {
