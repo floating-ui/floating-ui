@@ -51,6 +51,13 @@ declare module 'popper.js' {
 
   declare type ModifierFn = (data: Data, options: Object) => Data;
 
+  declare type Padding = {
+    top?: number,
+    bottom?: number,
+    left?: number,
+    right?: number,
+  }
+
   declare type BaseModifier = {
     order?: number,
     enabled?: boolean,
@@ -64,7 +71,7 @@ declare module 'popper.js' {
     },
     preventOverflow?: BaseModifier & {
       priority?: Position[],
-      padding?: number,
+      padding?: number | Padding,
       boundariesElement?: Boundary | Element,
       escapeWithReference?: boolean,
     },
@@ -74,7 +81,7 @@ declare module 'popper.js' {
     },
     flip?: BaseModifier & {
       behavior?: Behavior | Position[],
-      padding?: number,
+      padding?: number | Padding,
       boundariesElement?: Boundary | Element,
     },
     inner?: BaseModifier,
