@@ -40,6 +40,13 @@ declare namespace Popper {
     'x-placement': Placement;
   }
 
+  export interface Padding {
+    top?: number,
+    bottom?: number,
+    left?: number,
+    right?: number,
+  }
+
   export interface BaseModifier {
     order?: number;
     enabled?: boolean;
@@ -53,7 +60,7 @@ declare namespace Popper {
     };
     preventOverflow?: BaseModifier & {
       priority?: Position[],
-      padding?: number,
+      padding?: number | Padding,
       boundariesElement?: Boundary | Element,
       escapeWithReference?: boolean
     };
@@ -63,7 +70,7 @@ declare namespace Popper {
     };
     flip?: BaseModifier & {
       behavior?: Behavior | Position[],
-      padding?: number,
+      padding?: number | Padding,
       boundariesElement?: Boundary | Element,
     };
     inner?: BaseModifier;
