@@ -59,11 +59,10 @@ export default function flip(data, options) {
   }
 
   flipOrder.forEach((step, index) => {
-    if (placement !== step || flipOrder.length === index + 1) {
+    if (data.placement !== step || flipOrder.length === index + 1) {
       return data;
     }
 
-    placement = data.placement.split('-')[0];
     placementOpposite = getOppositePlacement(placement);
 
     const popperOffsets = data.offsets.popper;
@@ -114,7 +113,12 @@ export default function flip(data, options) {
         variation = getOppositeVariation(variation);
       }
 
-      data.placement = placement + (variation ? '-' + variation : '');
+      // if behavior is specified as an array we should not apply the variations 
+      if (typeof options.behavior !== 'string'){
+        data.placement = placement;
+      } else {
+        data.placement = placement + (variation ? '-' + variation : '');
+      }
 
       // this object contains `position`, we want to preserve it along with
       // any additional property we may add in the future
