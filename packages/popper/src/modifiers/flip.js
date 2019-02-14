@@ -95,12 +95,24 @@ export default function flip(data, options) {
 
     // flip the variation if required
     const isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
-    const flippedVariation =
+
+    // flips variation if reference element overflows boundaries
+    const flippedVariationByRef =
       !!options.flipVariations &&
       ((isVertical && variation === 'start' && overflowsLeft) ||
         (isVertical && variation === 'end' && overflowsRight) ||
         (!isVertical && variation === 'start' && overflowsTop) ||
         (!isVertical && variation === 'end' && overflowsBottom));
+
+    // flips variation if popper content overflows boundaries
+    const flippedVariationByContent =
+      !!options.flipVariationsByContent &&
+      ((isVertical && variation === 'start' && overflowsRight) ||
+        (isVertical && variation === 'end' && overflowsLeft) ||
+        (!isVertical && variation === 'start' && overflowsBottom) ||
+        (!isVertical && variation === 'end' && overflowsTop));
+
+    const flippedVariation = flippedVariationByRef || flippedVariationByContent;
 
     if (overlapsRef || overflowsBoundaries || flippedVariation) {
       // this boolean to detect any flip loop
