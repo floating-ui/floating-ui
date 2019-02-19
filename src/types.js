@@ -51,9 +51,9 @@ export type Modifier = {
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
-  fn: (State, options: ?Object) => State,
+  fn: (State, options: any) => State,
   onLoad?: State => void,
-  options?: Object,
+  options?: any,
 };
 
 export type EventListeners = { scroll: boolean, resize: boolean };

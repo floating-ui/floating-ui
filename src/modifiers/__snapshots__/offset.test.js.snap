@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bottom 1`] = `
+Array [
+  -10,
+  10,
+]
+`;
+
+exports[`left 1`] = `
+Array [
+  -10,
+  -10,
+]
+`;
+
+exports[`right 1`] = `
+Array [
+  10,
+  10,
+]
+`;
+
+exports[`top 1`] = `
+Array [
+  10,
+  -10,
+]
+`;
