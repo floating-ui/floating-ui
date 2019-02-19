@@ -89,7 +89,14 @@ export default class Popper {
     this.state.orderedModifiers = orderModifiers([
       ...defaultModifiers,
       ...this.state.options.modifiers,
-    ]);
+    ])
+      // Apply user defined preferences to modifiers
+      .map(modifier => ({
+        ...modifier,
+        ...this.state.options.modifiers.find(
+          ({ name }) => name === modifier.name
+        ),
+      }));
 
     // Validate the provided modifiers so that the consumer will get warned
     // of one of the custom modifiers is invalid for any reason
