@@ -7,13 +7,8 @@ export default function getScrollParent(node: Node): Node {
     return document.body;
   }
 
-  switch (node.nodeName.toUpperCase()) {
-    case 'HTML':
-    case 'BODY':
-      return node.ownerDocument.body;
-    case '#document':
-      // Flow doesn't understand nodeName type refinement unfortunately
-      return ((node: any): Document).body;
+  if (['HTML', 'BODY', '#document'].includes(node.nodeName.toUpperCase())) {
+    return node.ownerDocument.body;
   }
 
   if (node instanceof HTMLElement) {
