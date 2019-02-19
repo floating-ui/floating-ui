@@ -1,5 +1,5 @@
 // @flow
-import createRectMock from 'createRectMock';
+import createRectMock from '../test-utils/createRectMock';
 import computeOffsets from './computeOffsets';
 import { basePlacements, placements } from '../enums';
 import type { Placement } from '../enums';
