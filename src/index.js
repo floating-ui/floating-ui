@@ -56,9 +56,6 @@ export default class Popper {
     popper: Element | JQueryWrapper,
     options: Options = defaultOptions
   ) {
-    // make update() debounced, so that it only runs at most once-per-tick
-    (this: any).update = debounce(this.update.bind(this));
-
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
     this.state.elements = {
@@ -116,13 +113,14 @@ export default class Popper {
 
   // Async and optimistically optimized update
   // it will not be executed if not necessary
-  // check Popper#constructor to see how it gets debounced
-  update() {
-    return new Promise<State>((success, reject) => {
-      this.forceUpdate();
-      success(this.state);
-    });
-  }
+  // debounced, so that it only runs at most once-per-tick
+  update = debounce(
+    () =>
+      new Promise<State>((success, reject) => {
+        this.forceUpdate();
+        success(this.state);
+      })
+  );
 
   // Syncronous and forcefully executed update
   // it will always be executed even if not necessary, usually NOT needed
