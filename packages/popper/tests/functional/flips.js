@@ -117,14 +117,19 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
         });
       });
     });
-    function getSecondaryMargin(val) {
+
+    function getSecondaryMarginByReference(val) {
       return (val === 'start' ? '-' : '') + '100px';
     }
 
+    function getSecondaryMarginByContent(val) {
+      return val === 'start' ? '200px' : '50px';
+    }
+
     Object.keys(flippingVariations).forEach(val => {
-      it(`(variations) should flip from ${val} to ${flippingVariations[
+      it(`(variations)(by reference) should flip from ${val} to ${flippingVariations[
         val
-      ]} if boundariesElement is set`, done => {
+        ]} if boundariesElement is set`, done => {
         const relative = document.createElement('div');
         relative.style.margin = '100px 300px';
         relative.style.height = '300px';
@@ -144,18 +149,18 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
         switch (valElems[0]) {
           case 'top':
             ref.style.top = '100px';
-            ref.style.left = getSecondaryMargin(valElems[1]);
+            ref.style.left = getSecondaryMarginByReference(valElems[1]);
             break;
           case 'bottom':
             ref.style.bottom = '100px';
-            ref.style.left = getSecondaryMargin(valElems[1]);
+            ref.style.left = getSecondaryMarginByReference(valElems[1]);
             break;
           case 'left':
-            ref.style.top = getSecondaryMargin(valElems[1]);
+            ref.style.top = getSecondaryMarginByReference(valElems[1]);
             ref.style.left = '200px';
             break;
           case 'right':
-            ref.style.top = getSecondaryMargin(valElems[1]);
+            ref.style.top = getSecondaryMarginByReference(valElems[1]);
             ref.style.right = '200px';
             break;
         }
@@ -171,6 +176,76 @@ const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
             },
             flip: {
               flipVariations: true,
+              boundariesElement: relative,
+            },
+          },
+          onCreate: data => {
+            expect(data.flipped).toBe(true);
+            expect(data.placement).toBe(flippingVariations[val]);
+            expect(data.originalPlacement).toBe(val);
+            data.instance.destroy();
+            done();
+          },
+        });
+      });
+    });
+
+    Object.keys(flippingVariations).forEach(val => {
+      it(`(variations)(by content) should flip from ${val} to ${flippingVariations[
+        val
+        ]} if boundariesElement is set`, done => {
+        const relative = document.createElement('div');
+        relative.style.margin = '100px 300px';
+        relative.style.height = '300px';
+        relative.style.width = '300px';
+        relative.style.background = '#ffff00';
+        relative.style.position = 'relative';
+        jasmineWrapper.appendChild(relative);
+
+        const ref = appendNewRef(1, 'ref', relative);
+        ref.style.width = '50px';
+        ref.style.height = '50px';
+        ref.style.background = 'green';
+        ref.style.position = 'absolute';
+        ref.style.zIndex = '10';
+        const valElems = val.split('-');
+
+        switch (valElems[0]) {
+          case 'top':
+            ref.style.bottom = '20px';
+            ref.style.left = getSecondaryMarginByContent(valElems[1]);
+            break;
+          case 'bottom':
+            ref.style.top = '20px';
+            ref.style.left = getSecondaryMarginByContent(valElems[1]);
+            break;
+          case 'left':
+            ref.style.top = getSecondaryMarginByContent(valElems[1]);
+            ref.style.left = '200px';
+            break;
+          case 'right':
+            ref.style.top = getSecondaryMarginByContent(valElems[1]);
+            ref.style.right = '200px';
+            break;
+        }
+
+        const large = document.createElement('div');
+        large.style.width = '150px';
+        large.style.height = '150px';
+        large.style.backgroundColor = 'blue';
+
+        const popper = appendNewPopper(2, 'popper');
+        popper.appendChild(large);
+
+        new Popper(ref, popper, {
+          placement: val,
+          modifiers: {
+            preventOverflow: {
+              enabled: true,
+              escapeWithReference: true,
+            },
+            flip: {
+              flipVariationsByContent: true,
               boundariesElement: relative,
             },
           },

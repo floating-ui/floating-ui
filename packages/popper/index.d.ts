@@ -72,6 +72,8 @@ declare namespace Popper {
       behavior?: Behavior | Position[],
       padding?: number | Padding,
       boundariesElement?: Boundary | Element,
+      flipVariations?: boolean,
+      flipVariationsByContent?: boolean,
     };
     inner?: BaseModifier;
     hide?: BaseModifier;
