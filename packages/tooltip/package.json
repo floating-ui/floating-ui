@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "./dist/umd/tooltip.js",
   "module": "./dist/esm/tooltip.js",
+  "unpkg": "./dist/umd/tooltip.min.js",
   "types": "index.d.ts",
   "scripts": {
     "build": "node bundle.js",
