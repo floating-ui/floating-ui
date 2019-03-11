@@ -26,6 +26,7 @@
   ],
   "main": "dist/umd/popper.js",
   "module": "dist/esm/popper.js",
+  "unpkg": "dist/umd/popper.min.js",
   "types": "index.d.ts",
   "scripts": {
     "prepare": "yarn build",
