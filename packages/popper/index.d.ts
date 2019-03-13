@@ -158,6 +158,8 @@ declare class Popper {
   static Defaults: PopperOptions;
 
   options: PopperOptions;
+  popper: Element;
+  reference: Element | ReferenceObject;
 
   constructor(reference: Element | ReferenceObject, popper: Element, options?: PopperOptions);
 
