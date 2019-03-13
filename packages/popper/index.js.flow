@@ -142,6 +142,9 @@ declare module 'popper.js' {
   declare class Popper {
     static placements: Placement;
 
+    popper: Element;
+    reference: Element | ReferenceObject;
+
     constructor(
       reference: Element | ReferenceObject,
       popper: Element,
