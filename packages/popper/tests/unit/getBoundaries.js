@@ -49,7 +49,7 @@ describe('utils/getBoundaries', () => {
       height: '350px',
       width: '625px',
       position: 'absolute',
-      transform: 'translate3d(100px, 100px, 0)',
+      transform: 'translate(100px, 100px)',
       willChange: 'transform',
     });
 

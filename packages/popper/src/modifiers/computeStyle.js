@@ -50,7 +50,7 @@ export default function computeStyle(data, options) {
   const sideB = y === 'right' ? 'left' : 'right';
 
   // if gpuAcceleration is set to `true` and transform is supported,
-  //  we use `translate3d` to apply the position to the popper we
+  //  we use `translate` to apply the position to the popper we
   // automatically use the supported prefixed version if needed
   const prefixedProperty = getSupportedPropertyName('transform');
 
@@ -85,7 +85,7 @@ export default function computeStyle(data, options) {
     left = offsets.left;
   }
   if (gpuAcceleration && prefixedProperty) {
-    styles[prefixedProperty] = `translate3d(${left}px, ${top}px, 0)`;
+    styles[prefixedProperty] = `translate(${left}px, ${top}px)`;
     styles[sideA] = 0;
     styles[sideB] = 0;
     styles.willChange = 'transform';

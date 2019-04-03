@@ -111,7 +111,7 @@ import '@popperjs/test-utils/setup';
         right: '100px',
         bottom: '100px',
         position: 'absolute',
-        transform: 'translate3d(100px, 100px, 0)',
+        transform: 'translate(100px, 100px)',
         willChange: 'transform',
       }
 
