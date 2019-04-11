@@ -482,6 +482,29 @@ describe('[tooltip.js]', () => {
       });
     });
 
+    it('should not flash the tooltip if mouse leaves reference before tooltip is shown', done => {
+      const delay = 500;
+      const hoverTime = 200;
+
+      instance = new Tooltip(reference, {
+        title: 'foobar',
+        trigger: 'hover',
+        delay,
+      });
+
+      spyOn(instance, '_show');
+      
+      expect(document.querySelector('.tooltip')).toBeNull();
+
+      then(() => reference.dispatchEvent(new CustomEvent('mouseenter')), hoverTime);
+      then(() => reference.dispatchEvent(new CustomEvent('mouseleave')), delay * 2);
+      
+      then(() => {
+        expect(instance._show).not.toHaveBeenCalled();
+        done()
+      });
+    });
+
     it('should hide a tooltip on click while open', done => {
       instance = new Tooltip(reference, {
         title: 'foobar',
