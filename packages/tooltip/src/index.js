@@ -387,8 +387,8 @@ export default class Tooltip {
     this._isOpening = false;
     // defaults to 0
     const computedDelay = (delay && delay.hide) || delay || 0;
+    window.clearTimeout(this._showTimeout);
     window.setTimeout(() => {
-      window.clearTimeout(this._showTimeout);
       if (this._isOpen === false) {
         return;
       }
