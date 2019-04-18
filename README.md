@@ -95,7 +95,7 @@ For more info, [read the related issue](https://github.com/FezVrasta/popper.js/i
 ### Dist targets
 
 Popper.js is currently shipped with 3 targets in mind: UMD, ESM, and ESNext.  
-No have idea what am I talking about? You are looking for UMD probably.
+Have no idea what am I talking about? You are looking for UMD probably.
 
 - UMD - Universal Module Definition: AMD, RequireJS, and globals;
 - ESM - ES Modules: For webpack/Rollup or browser supporting the spec;
