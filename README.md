@@ -76,8 +76,7 @@ Popper.js is available on the following package managers and CDNs:
 | yarn            | `yarn add popper.js`                                                                                       |
 | NuGet           | `PM> Install-Package popper.js`                                                                            |
 | Bower           | `bower install popper.js --save`                                                                           |
-| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                               |
-| unpkg, minified | [`https://unpkg.com/popper.js/dist/umd/popper.min.js`](https://unpkg.com/popper.js/dist/umd/popper.min.js) |
+| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                               
 
 Tooltip.js as well:
 
