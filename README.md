@@ -86,7 +86,6 @@ Tooltip.js as well:
 | yarn            | `yarn add tooltip.js`                                                                                          |
 | Bower\*         | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                                                 |
 | unpkg           | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                                                 |
-| unpkg, minified | [`https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js`](https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js) |
 
 \*: Bower isn't officially supported, it can be used to install Tooltip.js only through the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggest using npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
