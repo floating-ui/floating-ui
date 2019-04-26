@@ -97,6 +97,13 @@ declare namespace Popper {
     height: number;
   }
 
+  type CSSStyleProperties = Pick<CSSStyleDeclaration, Exclude<keyof CSSStyleDeclaration,
+    | "top"
+    | "left"
+    | "width"
+    | "height"
+  >> & Offset;
+
   export interface Data {
     instance: Popper;
     placement: Placement;
@@ -104,8 +111,8 @@ declare namespace Popper {
     flipped: boolean;
     hide: boolean;
     arrowElement: Element;
-    styles: CSSStyleDeclaration;
-    arrowStyles: CSSStyleDeclaration;
+    styles: CSSStyleProperties;
+    arrowStyles: CSSStyleProperties;
     attributes: Attributes;
     boundaries: Object;
     offsets: {

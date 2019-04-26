@@ -37,7 +37,13 @@ const modifiers: Modifiers = {
   },
   otherModifier: {
     allowsAnyKey: null
-  }
+  },
+  testStyleModifier: {
+    fn: (data) => {
+      data.styles.width = 100;
+      return data;
+    }
+  },
 };
 // Ensure backwards compatibility with < v1.14 typings, where all the types were part of the Popper namespace
 const options: Popper.PopperOptions = {
