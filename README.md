@@ -119,6 +119,9 @@ var popperInstance = new Popper(reference, popper, {
 });
 ```
 
+Take a look at this [CodePen example](https://codepen.io/FezVrasta/pen/yWGrOZ) to see a full fledged
+usage example, consisting of all the HTML, JavaScript, and CSS needed to style a popper.
+
 ### Callbacks
 
 Popper.js supports two kinds of callbacks; the `onCreate` callback is called after
