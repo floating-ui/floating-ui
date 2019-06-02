@@ -26,8 +26,8 @@ Create a new Tooltip.js instance
 | reference | <code>HTMLElement</code> |  | The DOM node used as reference of the tooltip (it can be a jQuery element). |
 | options | <code>Object</code> |  |  |
 | options.placement | <code>String</code> | <code>&#x27;top&#x27;</code> | Placement of the popper accepted values: `top(-start, -end), right(-start, -end), bottom(-start, -end),      left(-start, -end)` |
-| options.arrowSelector | <code>String</code> | <code>&#x27;.tooltip-arrow,</code> | .tooltip__arrow' - className used to locate the DOM arrow element in the tooltip. |
-| options.innerSelector | <code>String</code> | <code>&#x27;.tooltip-inner,</code> | .tooltip__inner' - className used to locate the DOM inner element in the tooltip. |
+| [options.arrowSelector] | <code>String</code> | <code>&#x27;.tooltip-arrow, .tooltip__arrow&#x27;</code> | className used to locate the DOM arrow element in the tooltip. |
+| [options.innerSelector] | <code>String</code> | <code>&#x27;.tooltip-inner, .tooltip__inner&#x27;</code> | className used to locate the DOM inner element in the tooltip. |
 | options.container | <code>HTMLElement</code> \| <code>String</code> \| <code>false</code> | <code>false</code> | Append the tooltip to a specific element. |
 | options.delay | <code>Number</code> \| <code>Object</code> | <code>0</code> | Delay showing and hiding the tooltip (ms) - does not apply to manual trigger type.      If a number is supplied, delay is applied to both hide/show.      Object structure is: `{ show: 500, hide: 100 }` |
 | options.html | <code>Boolean</code> | <code>false</code> | Insert HTML into the tooltip. If false, the content will inserted with `textContent`. |
