@@ -3,7 +3,7 @@
 ## Report bugs
 
 If you find a bug, please, try to isolate the specific case and provide a fiddle on CodePen or JSFiddle to make it easy to reproduce the problem and help others finding a solution.
-You can use [this CodePen](http://codepen.io/FezVrasta/pen/wGqJEz) which already includes Popper.js.
+You can use [this CodePen](https://codepen.io/FezVrasta/pen/wGqJEz) which already includes Popper.js.
 
 If your issue is not about a bug, please make sure to consider posting on StackOverflow instead.
 
