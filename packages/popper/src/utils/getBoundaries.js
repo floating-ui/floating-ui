@@ -1,5 +1,6 @@
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
+import getReferenceNode from './getReferenceNode';
 import findCommonOffsetParent from './findCommonOffsetParent';
 import getOffsetRectRelativeToArbitraryNode from './getOffsetRectRelativeToArbitraryNode';
 import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRectRelativeToArtbitraryNode';
@@ -28,7 +29,7 @@ export default function getBoundaries(
   // NOTE: 1 DOM access here
 
   let boundaries = { top: 0, left: 0 };
-  const offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, reference);
+  const offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
 
   // Handle viewport case
   if (boundariesElement === 'viewport' ) {

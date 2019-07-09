@@ -118,6 +118,7 @@ declare module 'popper.js' {
   declare type ReferenceObject = {
     +clientHeight: number,
     +clientWidth: number,
+    +referenceNode?: Node,
 
     getBoundingClientRect():
       | ClientRect
