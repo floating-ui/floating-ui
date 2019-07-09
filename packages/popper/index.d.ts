@@ -133,6 +133,7 @@ declare namespace Popper {
   export interface ReferenceObject {
     clientHeight: number;
     clientWidth: number;
+    referenceNode?: Node;
 
     getBoundingClientRect(): ClientRect;
   }

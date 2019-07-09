@@ -1428,6 +1428,50 @@ const arrowSize = 5;
       });
     });
 
+    it('uses a reference object with a referenceNode to position its popper', done => {
+      // As above
+      if (isIE10) {
+        pending();
+      }
+
+      jasmineWrapper.innerHTML = `
+        <div id="reference" style="position: absolute; left: 10px; top: 10px; right: 10px; bottom: 10px;">
+          <div id="popper" style="background: purple;">popper</div>
+        </div>
+      `;
+
+      const popper = document.getElementById('popper');
+
+      const reference = {
+        getBoundingClientRect() {
+          return {
+            top: 10,
+            left: 100,
+            right: 150,
+            bottom: 90,
+            width: 50,
+            height: 80,
+          };
+        },
+        clientWidth: 50,
+        clientHeight: 80,
+        referenceNode: document.getElementById('reference'),
+      };
+
+      new Popper(reference, popper, {
+        placement: 'bottom-start',
+        onCreate() {
+          expect(getRect(popper).top).toBe(
+            reference.getBoundingClientRect().bottom
+          );
+          expect(getRect(popper).left).toBe(
+            reference.getBoundingClientRect().left
+          );
+          done();
+        },
+      });
+    });
+
     it('checks cases where the reference element is fixed', done => {
       jasmineWrapper.innerHTML = `
             <div id="reference" style="position: fixed; top: 100px; left: 100px; background: pink">reference</div>
