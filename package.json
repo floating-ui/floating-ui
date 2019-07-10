@@ -7,7 +7,7 @@
     "bundlesize": "^0.15.3",
     "jsdoc-to-markdown": "^3.0.0",
     "lcov-result-merger": "^1.2.0",
-    "lerna": "^2.2.0",
+    "lerna": "^3.15.0",
     "lint-staged": "^4.0.1",
     "pre-commit": "^1.2.2",
     "prettier-eslint-cli": "^4.1.1",
