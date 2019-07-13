@@ -76,7 +76,8 @@ Popper.js is available on the following package managers and CDNs:
 | yarn            | `yarn add popper.js`                                                                                       |
 | NuGet           | `PM> Install-Package popper.js`                                                                            |
 | Bower           | `bower install popper.js --save`                                                                           |
-| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                               
+| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js) ~ `7KB`                                         |
+| PageCDN         | [`https://pagecdn.com/lib/popper.js`](https://pagecdn.com/lib/popper.js) ~ `6KB`                             |
 
 Tooltip.js as well:
 
@@ -86,6 +87,8 @@ Tooltip.js as well:
 | yarn            | `yarn add tooltip.js`                                                                                          |
 | Bower\*         | `bower install tooltip.js=https://unpkg.com/tooltip.js --save`                                                 |
 | unpkg           | [`https://unpkg.com/tooltip.js`](https://unpkg.com/tooltip.js)                                                 |
+| PageCDN         | [`https://pagecdn.com/lib/tooltip.js`](https://pagecdn.com/lib/tooltip.js)                                                 |
+
 
 \*: Bower isn't officially supported, it can be used to install Tooltip.js only through the unpkg.com CDN. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggest using npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
