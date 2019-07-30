@@ -2098,3 +2098,35 @@ iframe.twitter-tweet {
     text-transform: none;
   }
 }
+
+
+//Template sections & new page style4
+
+.row{
+	display: flex;
+  flex-wrap: wrap;
+  margin-right: -.75rem;
+  margin-left: -.75rem;
+}
+
+@media (min-width: 992px){
+	.col-lg-4 {
+	    flex: 0 0 33.3333333333%;
+	    max-width: 33.3333333333%;
+	}
+}
+
+.images{
+	a{
+		border: none;
+		img{
+			width: 100%;
+			border-radius: 5px;
+			box-shadow: 0 2rem 1.5rem -1.5rem rgba(33,37,41,.15), 0 0 1.5rem 0.5rem rgba(33,37,41,.05);
+		}
+	}
+
+	.button{
+		margin-top:25px;
+	}
+}
