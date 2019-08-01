@@ -2100,7 +2100,7 @@ iframe.twitter-tweet {
 }
 
 
-//Template sections & new page style4
+//Template sections & new page style
 
 .row{
 	display: flex;
@@ -2191,10 +2191,6 @@ iframe.twitter-tweet {
     pointer-events: none;
 }
 
-#menu{
-	left: 70%;
-}
-
 .product-card{
 	text-align: left;
 	margin-top: 50px;
@@ -2212,7 +2208,38 @@ iframe.twitter-tweet {
 	}
 }
 
+@media(min-width:1281px){
+	#menu{
+		left: 70%;
+	}
+}
 
+@media(max-width:1280px){
+	#menu{
+		ul{
+			li{
+				border-top: none;
+			}
+		}
+	}
+	.dropdown-menu{
+		background: transparent;
+		color: #fff;
+		border: none;
+		position: relative;
+		display: block;
+		margin-bottom: 20px;
+		float: none;
+		.dropdown-item{
+			color: #fff;
+			padding-left: 0;
+			&:hover{
+				background: transparent;
+				text-decoration: underline;
+			}
+		}
+	}
+}
 @media (min-width: 768px){
 	.col-md-4 {
 	    flex: 0 0 33.3333333333%;
