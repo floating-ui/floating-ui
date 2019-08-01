@@ -2119,22 +2119,24 @@ iframe.twitter-tweet {
 }
 
 .images{
-	a{
-		border: none;
-		img{
-			width: 100%;
-			border-radius: 5px;
-			box-shadow: 0 2rem 1.5rem -1.5rem rgba(33,37,41,.15), 0 0 1.5rem 0.5rem rgba(33,37,41,.05);
-			transition: .1s ease;
-			&:hover{
-				transform: translateY(-0.25rem);
-				box-shadow: 0 2.25rem 1.5rem -1.5rem rgba(33,37,41,.3),0 0 1.5rem .5rem rgba(33,37,41,.05)!important;
+	.product-card{
+		margin-bottom: 20px;
+		a{
+			border: none;
+			img{
+				width: 100%;
+				border-radius: 5px;
+				box-shadow: 0 2rem 1.5rem -1.5rem rgba(33,37,41,.15), 0 0 1.5rem 0.5rem rgba(33,37,41,.05);
+				transition: .1s ease;
+				&:hover{
+					transform: translateY(-0.25rem);
+					box-shadow: 0 2.25rem 1.5rem -1.5rem rgba(33,37,41,.3),0 0 1.5rem .5rem rgba(33,37,41,.05)!important;
+				}
 			}
 		}
 	}
-
 	.button{
-		margin-top:25px;
+		margin-top:15px;
 	}
 }
 
@@ -2191,9 +2193,14 @@ iframe.twitter-tweet {
     pointer-events: none;
 }
 
+.section-example-wrapper{
+	.product-card{
+		margin-top: 50px;
+	}
+}
+
 .product-card{
 	text-align: left;
-	margin-top: 50px;
 	.item-title{
 	  color: #2E3842;
 		font-size: 0.8em;
@@ -2205,6 +2212,40 @@ iframe.twitter-tweet {
 	}
 	.item-description{
 		font-size: 12px;
+	}
+}
+
+.is-mobile.landing{
+	#banner.section-example-themes{
+		background: #1f242a;
+	}
+}
+#banner.section-example-themes{
+	background: #1f242a;
+	height: 40vh;
+	min-height: 30em;
+	p{
+		margin-bottom: 0;
+	}
+}
+
+header.major{
+	margin-bottom: 0px;
+}
+
+.section-example-wrapper{
+	padding-top: 4em;
+	.major{
+		margin-bottom: 0;
+		text-align: left;
+		padding-left: 1em;
+		img{
+			width: 15%;
+			margin-bottom: 15px;
+		}
+		p{
+			margin-bottom: 0;
+		}
 	}
 }
 
