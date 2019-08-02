@@ -549,12 +549,12 @@ describe('[tooltip.js]', () => {
       });
 
       spyOn(instance, '_show');
-      
+
       expect(document.querySelector('.tooltip')).toBeNull();
 
       then(() => reference.dispatchEvent(new CustomEvent('mouseenter')), hoverTime);
       then(() => reference.dispatchEvent(new CustomEvent('mouseleave')), delay * 2);
-      
+
       then(() => {
         expect(instance._show).not.toHaveBeenCalled();
         done()
@@ -587,6 +587,17 @@ describe('[tooltip.js]', () => {
       instance = new Tooltip(reference, {
         title: 'test',
         offset: 10,
+      }).show();
+      expect(instance._popperOptions.modifiers.offset.offset).toBe(10);
+      done();
+    });
+
+    it('should proxy a `offset` modifier to the Popper.js instance', done => {
+      instance = new Tooltip(reference, {
+        title: 'test',
+        popperOptions: {
+          modifiers: { offset: { offset: 10 } },
+        },
       }).show();
       expect(instance._popperOptions.modifiers.offset.offset).toBe(10);
       done();
