@@ -9,12 +9,48 @@
         <a href="#menu" class="menuToggle"><span>Menu</span></a>
         <div id="menu">
           <ul>
-            <li><a href="index.html">Home</a></li>
+          <li><a href="index.html">Home</a></li>
+            <!--
             {% for my_page in site.pages %}
             {% if my_page.title %}
             <li><a href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a></li>
             {% endif %}
-            {% endfor %}
+            {% endfor %} -->
+
+            <li class="nav-item dropdown">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="popperJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Popper.js
+                </button>
+                <div class="dropdown-menu" aria-labelledby="popperJs">
+                  <a class="dropdown-item" href="/index.html#example10">Examples</a>
+                  <a class="dropdown-item" href="/popper-documentation.html">Docs</a>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="tooltipJs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Tooltip.js
+                </button>
+                <div class="dropdown-menu" aria-labelledby="tooltipJs">
+                  <a class="dropdown-item" href="/tooltip-examples.html">Examples</a>
+                  <a class="dropdown-item" href="/tooltip-documentation.html">Docs</a>
+                </div>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="usedBy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Used in
+                </button>
+                <div class="dropdown-menu" aria-labelledby="usedBy">
+                  <a class="dropdown-item" href="/themes.html">UI Kits & Tools</a>
+                  <a class="dropdown-item" href="/themes.html#design-systems">Design Systems</a>
+                  <a class="dropdown-item" href="/themes.html#free-dashboards">Free Admin & Dashboards</a>
+                </div>
+              </div>
+            </li>
             <li><a href="{{ site.github }}" class="icon fa-github"> GitHub</a></li>
           </ul>
         </div>
