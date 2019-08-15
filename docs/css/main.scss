@@ -2222,10 +2222,14 @@ iframe.twitter-tweet {
 }
 #banner.section-example-themes{
 	background: #1f242a;
-	height: 40vh;
-	min-height: 30em;
+	height: 55vh;
+  min-height: 400px;
 	p{
 		margin-bottom: 0;
+		letter-spacing: 0.15em;
+	}
+	h2{
+		margin-top: 40px;
 	}
 }
 
@@ -2246,6 +2250,9 @@ header.major{
 		p{
 			margin-bottom: 0;
 		}
+	}
+	a.logo-ct{
+		border-bottom: none;
 	}
 }
 
