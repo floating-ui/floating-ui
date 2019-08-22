@@ -231,7 +231,9 @@ export default class Tooltip {
       },
       offset: {
         ...(this._popperOptions.modifiers && this._popperOptions.modifiers.offset),
-        offset: options.offset,
+        offset: options.offset ||
+          this._popperOptions.modifiers && this._popperOptions.modifiers.offset && this._popperOptions.modifiers.offset.offset ||
+          options.offset,
       },
     };
 
