@@ -28,6 +28,7 @@
   "module": "dist/esm/popper.js",
   "unpkg": "dist/umd/popper.min.js",
   "types": "index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "prepare": "yarn build",
     "postpublish": "nuget-publish && ./bower-publish.sh",

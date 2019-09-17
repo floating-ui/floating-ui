@@ -1,13 +1,14 @@
 import isBrowser from './isBrowser';
 
-const longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
-let timeoutDuration = 0;
-for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
-  if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
-    timeoutDuration = 1;
-    break;
+const timeoutDuration = (function(){
+  const longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
+  for (let i = 0; i < longerTimeoutBrowsers.length; i += 1) {
+    if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
+      return 1;
+    }
   }
-}
+  return 0;
+}());
 
 export function microtaskDebounce(fn) {
   let called = false
