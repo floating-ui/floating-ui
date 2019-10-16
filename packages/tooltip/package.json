@@ -1,6 +1,6 @@
 {
   "name": "tooltip.js",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "A kickass library to create tooltips, based on Popper.js",
   "license": "MIT",
   "main": "./dist/umd/tooltip.js",
