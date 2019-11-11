@@ -88,8 +88,8 @@ Creates a new Popper.js instance.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| reference | <code>HTMLElement</code> \| [<code>referenceObject</code>](#referenceObject) | The reference element used to position the popper |
-| popper | <code>HTMLElement</code> | The HTML element used as the popper |
+| reference | <code>Element</code> \| [<code>referenceObject</code>](#referenceObject) | The reference element used to position the popper |
+| popper | <code>Element</code> | The HTML / XML element used as the popper |
 | options | <code>Object</code> | Your custom options to override the ones defined in [Defaults](#defaults) |
 
 <a name="Popper.Defaults"></a>
@@ -366,6 +366,8 @@ All the other properties are configurations that could be tweaked.
         * [.behavior](#modifiers..flip.behavior)
         * [.padding](#modifiers..flip.padding)
         * [.boundariesElement](#modifiers..flip.boundariesElement)
+        * [.flipVariations](#modifiers..flip.flipVariations)
+        * [.flipVariationsByContent](#modifiers..flip.flipVariationsByContent)
     * [~inner](#modifiers..inner)
         * [.order](#modifiers..inner.order)
         * [.enabled](#modifiers..inner.enabled)
@@ -728,6 +730,8 @@ restart it if it detects the need to flip the placement.
     * [.behavior](#modifiers..flip.behavior)
     * [.padding](#modifiers..flip.padding)
     * [.boundariesElement](#modifiers..flip.boundariesElement)
+    * [.flipVariations](#modifiers..flip.flipVariations)
+    * [.flipVariationsByContent](#modifiers..flip.flipVariationsByContent)
 
 <a name="modifiers..flip.order"></a>
 
@@ -788,6 +792,26 @@ restart it if it detects the need to flip the placement.
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | boundariesElement | <code>String</code> \| <code>HTMLElement</code> | <code>&#x27;viewport&#x27;</code> | The element which will define the boundaries of the popper position. The popper will never be placed outside of the defined boundaries (except if `keepTogether` is enabled) |
+
+<a name="modifiers..flip.flipVariations"></a>
+
+#### flip.flipVariations
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| flipVariations | <code>Boolean</code> | <code>false</code> | The popper will switch placement variation between `-start` and `-end` when the reference element overlaps its boundaries. The original placement should have a set variation. |
+
+<a name="modifiers..flip.flipVariationsByContent"></a>
+
+#### flip.flipVariationsByContent
+**Kind**: static property of [<code>flip</code>](#modifiers..flip)  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| flipVariationsByContent | <code>Boolean</code> | <code>false</code> | The popper will switch placement variation between `-start` and `-end` when the popper element overlaps its reference boundaries. The original placement should have a set variation. |
 
 <a name="modifiers..inner"></a>
 
