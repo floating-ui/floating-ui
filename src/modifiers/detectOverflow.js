@@ -1,6 +1,8 @@
 // @flow
 import type { State, Modifier } from '../types';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
+import getElementClientRect from '../dom-utils/getElementClientRect';
+import getElementMargins from '../dom-utils/getElementMargins';
 import computeOffsets from '../utils/computeOffsets';
 
 type Options = {
@@ -17,7 +19,7 @@ type ModifierData = {
 export function detectOverflow(
   state: State,
   options: Options = {
-    boundaryElement: state.elements.popper.ownerDocument.documentElement,
+    boundaryElement: state.elements.popper.ownerDocument.body,
   }
 ) {
   const popperElement = state.elements.popper;
@@ -33,6 +35,14 @@ export function detectOverflow(
 
   const boundaryClientRect = getBoundingClientRect(options.boundaryElement);
   const referenceClientRect = getBoundingClientRect(referenceElement);
+  const boundaryMargins = getElementMargins(options.boundaryElement);
+  const boundaryRect = {
+    left: boundaryClientRect.left - boundaryMargins.left,
+    right: boundaryClientRect.right - boundaryMargins.right,
+    top: boundaryClientRect.top - boundaryMargins.top,
+    bottom:
+      boundaryClientRect.bottom - boundaryMargins.top - boundaryMargins.bottom,
+  };
 
   const popperOffsets = computeOffsets({
     reference: referenceClientRect,
@@ -45,7 +55,7 @@ export function detectOverflow(
     },
   });
 
-  console.log(popperOffsets, state.offsets.popper);
+  console.log(boundaryMargins);
 
   const popperClientRect = Object.assign({}, popperOffsets, {
     top: popperOffsets.y,
@@ -55,13 +65,13 @@ export function detectOverflow(
   });
 
   state.modifiersData.detectOverflow = {
-    top: boundaryClientRect.top > popperClientRect.top,
-    bottom: boundaryClientRect.bottom < popperClientRect.bottom,
-    left: boundaryClientRect.left > popperClientRect.left,
-    right: boundaryClientRect.right > popperClientRect.right,
+    top: boundaryRect.top > popperClientRect.top,
+    bottom: boundaryRect.bottom < popperClientRect.bottom,
+    left: boundaryRect.left > popperClientRect.left,
+    right: boundaryRect.right < popperClientRect.right,
   };
 
-  console.log(boundaryClientRect, popperClientRect);
+  console.log(boundaryRect, popperClientRect);
   console.log(state.modifiersData.detectOverflow);
 
   return state;
