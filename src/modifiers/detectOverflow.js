@@ -1,7 +1,9 @@
 // @flow
 import type { State, Modifier } from '../types';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
+import getDocumentRect from '../dom-utils/getDocumentRect';
 import computeOffsets from '../utils/computeOffsets';
+import rectToClientRect from '../utils/rectToClientRect';
 
 type Options = {
   boundaryElement: HTMLElement,
@@ -17,12 +19,13 @@ type ModifierData = {
 export function detectOverflow(
   state: State,
   options: Options = {
-    boundaryElement: state.elements.popper.ownerDocument.body,
+    boundaryElement: state.elements.popper.ownerDocument.documentElement,
   }
 ) {
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
+  const documentElement = options.boundaryElement.ownerDocument.documentElement;
 
   if (!options.boundaryElement.contains(popperElement)) {
     console.error(
@@ -31,7 +34,11 @@ export function detectOverflow(
     return state;
   }
 
-  const boundaryClientRect = getBoundingClientRect(options.boundaryElement);
+  const boundaryClientRect =
+    documentElement === options.boundaryElement
+      ? rectToClientRect(getDocumentRect(documentElement))
+      : getBoundingClientRect(options.boundaryElement);
+
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
   const popperOffsets = computeOffsets({
