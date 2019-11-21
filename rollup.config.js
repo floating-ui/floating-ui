@@ -18,7 +18,7 @@ const createUmdBundle = ({ minify } = {}) => ({
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/umd/index${minify ? '.min' : ''}.js`,
+    file: `${dir}/umd/popper${minify ? '.min' : ''}.js`,
     format: 'umd',
     sourcemap: true,
   },
@@ -35,7 +35,7 @@ const esmBundle = {
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/esm/index.js`,
+    file: `${dir}/esm/popper.js`,
     format: 'esm',
     sourcemap: true,
   },
@@ -51,7 +51,7 @@ const cjsBundle = {
     bundleSize(),
   ].filter(Boolean),
   output: {
-    file: `${dir}/cjs/index.js`,
+    file: `${dir}/cjs/popper.js`,
     format: 'cjs',
     sourcemap: true,
   },
@@ -67,7 +67,7 @@ const devBundle = {
   ],
   output: {
     name: 'Popper',
-    file: `${dir}/esm/index.js`,
+    file: `${dir}/esm/popper.js`,
     format: 'esm',
     sourcemap: true,
   },
