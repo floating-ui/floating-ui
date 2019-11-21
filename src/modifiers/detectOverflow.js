@@ -52,11 +52,9 @@ export function detectOverflow(
     },
   });
 
-  const popperClientRect = Object.assign({}, popperOffsets, {
-    top: popperOffsets.y,
-    bottom: popperOffsets.y + popperRect.height,
-    left: popperOffsets.x,
-    right: popperOffsets.x + popperRect.width,
+  const popperClientRect = rectToClientRect({
+    ...popperRect,
+    ...popperOffsets,
   });
 
   state.modifiersData.detectOverflow = {
