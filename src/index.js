@@ -49,6 +49,7 @@ export default class Popper {
     placement: 'bottom',
     orderedModifiers: [],
     options: defaultOptions,
+    modifiersData: {},
   };
 
   constructor(

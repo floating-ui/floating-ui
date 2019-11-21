@@ -1,5 +1,5 @@
 // @flow
-import getComputedStyle from './getComputedStyle';
+import getElementMargins from './getElementMargins';
 
 // Returns the width, height and offsets of the provided element
 export default (element: HTMLElement) => {
@@ -9,18 +9,12 @@ export default (element: HTMLElement) => {
   const top = element.offsetTop;
   const left = element.offsetLeft;
 
-  // get the element margins, we need them to properly align the popper
-  const styles = getComputedStyle(element);
-
-  const marginTop = parseFloat(styles.marginTop) || 0;
-  const marginRight = parseFloat(styles.marginRight) || 0;
-  const marginBottom = parseFloat(styles.marginBottom) || 0;
-  const marginLeft = parseFloat(styles.marginLeft) || 0;
+  const margins = getElementMargins(element);
 
   return {
-    width: width + marginLeft + marginRight,
-    height: height + marginTop + marginBottom,
-    y: top - marginTop,
-    x: left - marginLeft,
+    width: width + margins.left + margins.right,
+    height: height + margins.top + margins.bottom,
+    y: top - margins.top,
+    x: left - margins.left,
   };
 };

@@ -44,6 +44,7 @@ export type State = {
   styles: {
     [string]: $Shape<CSSStyleDeclaration>,
   },
+  modifiersData: Object,
 };
 
 export type Modifier = {
@@ -66,3 +67,14 @@ export type Options = {
 };
 
 export type UpdateCallback = State => void;
+
+export type ClientRectObject = {
+  x: number,
+  y: number,
+  top: number,
+  left: number,
+  right: number,
+  bottom: number,
+  width: number,
+  height: number,
+};

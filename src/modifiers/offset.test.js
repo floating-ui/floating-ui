@@ -1,5 +1,5 @@
 // @flow
-import createRectMock from '../test-utils/createRectMock';
+import createRectMock from '../../tests/utils/createRectMock';
 import { distanceAndSkiddingToXY } from './offset';
 
 const reference = createRectMock({
