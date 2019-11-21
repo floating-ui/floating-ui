@@ -31,9 +31,15 @@ export function detectOverflow(
   const documentElement = options.boundaryElement.ownerDocument.documentElement;
 
   if (!options.boundaryElement.contains(popperElement)) {
-    console.error(
-      'PopperJS: "detectOverflow" can accept as `boundaryElement` only a parent node of the provided popper.'
-    );
+    if (__DEV__) {
+      console.error(
+        [
+          'PopperJS: The "detectOverflow" modifier\'s `boundaryElement` must',
+          'be a parent of the popper element',
+        ].join(' ')
+      );
+    }
+
     return state;
   }
 
