@@ -6,12 +6,12 @@ import { terser } from 'rollup-plugin-terser';
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
-const umdBundle = minify => ({
+const createUmdBundle = ({ minify } = {}) => ({
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
-      __DEV__: "process.env.NODE_ENV !== 'production'",
+      __DEV__: minify ? 'false' : 'true',
     }),
     minify && terser(),
     bundleSize(),
@@ -24,42 +24,40 @@ const umdBundle = minify => ({
   },
 });
 
-const esBundle = minify => ({
+const esBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
       __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
-    minify && terser(),
     bundleSize(),
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/es/index${minify ? '.min' : ''}.js`,
+    file: `${dir}/es/index.js`,
     format: 'es',
     sourcemap: true,
   },
-});
+};
 
-const cjsBundle = minify => ({
+const cjsBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
       __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
-    minify && terser(),
     bundleSize(),
   ].filter(Boolean),
   output: {
-    file: `${dir}/cjs/index${minify ? '.min' : ''}.js`,
+    file: `${dir}/cjs/index.js`,
     format: 'cjs',
     sourcemap: true,
   },
-});
+};
 
-const devBundle = () => ({
+const devBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
@@ -73,17 +71,10 @@ const devBundle = () => ({
     format: 'es',
     sourcemap: true,
   },
-});
+};
 
 const builds = IS_DEV
-  ? [devBundle()]
-  : [
-      umdBundle(),
-      umdBundle(true),
-      esBundle(),
-      esBundle(true),
-      cjsBundle(),
-      cjsBundle(true),
-    ];
+  ? [devBundle]
+  : [createUmdBundle(), createUmdBundle({ minify: true }), esBundle, cjsBundle];
 
 export default builds;
