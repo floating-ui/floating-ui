@@ -45,13 +45,12 @@ export function detectOverflow(
     },
   });
 
-  const popperClientRect = {
-    ...popperOffsets,
+  const popperClientRect = Object.assign({}, popperOffsets, {
     top: popperOffsets.y,
     bottom: popperOffsets.y + popperRect.height,
     left: popperOffsets.x,
     right: popperOffsets.x + popperRect.width,
-  };
+  });
 
   state.modifiersData.detectOverflow = {
     top: boundaryClientRect.top > popperClientRect.top,
