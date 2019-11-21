@@ -24,7 +24,7 @@ const createUmdBundle = ({ minify } = {}) => ({
   },
 });
 
-const esBundle = {
+const esmBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
@@ -35,8 +35,8 @@ const esBundle = {
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/es/index.js`,
-    format: 'es',
+    file: `${dir}/esm/index.js`,
+    format: 'esm',
     sourcemap: true,
   },
 };
@@ -67,14 +67,19 @@ const devBundle = {
   ],
   output: {
     name: 'Popper',
-    file: `${dir}/es/index.js`,
-    format: 'es',
+    file: `${dir}/esm/index.js`,
+    format: 'esm',
     sourcemap: true,
   },
 };
 
 const builds = IS_DEV
   ? [devBundle]
-  : [createUmdBundle(), createUmdBundle({ minify: true }), esBundle, cjsBundle];
+  : [
+      createUmdBundle(),
+      createUmdBundle({ minify: true }),
+      esmBundle,
+      cjsBundle,
+    ];
 
 export default builds;
