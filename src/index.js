@@ -101,7 +101,7 @@ export default class Popper {
 
     // Validate the provided modifiers so that the consumer will get warned
     // of one of the custom modifiers is invalid for any reason
-    if (process.env.NODE_ENV !== 'production') {
+    if (__DEV__) {
       validateModifiers(this.state.options.modifiers);
     }
 

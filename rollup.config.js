@@ -6,74 +6,80 @@ import { terser } from 'rollup-plugin-terser';
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
-const umdBundle = minify => ({
+const createUmdBundle = ({ minify } = {}) => ({
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: minify ? 'false' : 'true',
     }),
     minify && terser(),
     bundleSize(),
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/umd/index${minify ? '.min' : ''}.js`,
+    file: `${dir}/umd/popper${minify ? '.min' : ''}.js`,
     format: 'umd',
     sourcemap: true,
   },
 });
 
-const esBundle = minify => ({
+const esmBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
-    minify && terser(),
     bundleSize(),
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/es/index${minify ? '.min' : ''}.js`,
-    format: 'es',
+    file: `${dir}/esm/popper.js`,
+    format: 'esm',
     sourcemap: true,
   },
-});
+};
 
-const cjsBundle = minify => ({
+const cjsBundle = {
   input: 'src/index.js',
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
-    minify && terser(),
     bundleSize(),
   ].filter(Boolean),
   output: {
-    file: `${dir}/cjs/index${minify ? '.min' : ''}.js`,
+    file: `${dir}/cjs/popper.js`,
     format: 'cjs',
     sourcemap: true,
   },
-});
+};
+
+const devBundle = {
+  input: 'src/index.js',
+  plugins: [
+    babel(),
+    replace({
+      __DEV__: 'true',
+    }),
+  ],
+  output: {
+    name: 'Popper',
+    file: `${dir}/esm/popper.js`,
+    format: 'esm',
+    sourcemap: true,
+  },
+};
 
 const builds = IS_DEV
-  ? [esBundle()]
+  ? [devBundle]
   : [
-      umdBundle(),
-      umdBundle(true),
-      esBundle(),
-      esBundle(true),
-      cjsBundle(),
-      cjsBundle(true),
+      createUmdBundle(),
+      createUmdBundle({ minify: true }),
+      esmBundle,
+      cjsBundle,
     ];
 
 export default builds;
