@@ -2,7 +2,7 @@
 import getParentNode from './getParentNode';
 import getComputedStyle from './getComputedStyle';
 
-export default function getScrollParent(node: Node): Node {
+export default function getScrollParent(node: Node): HTMLElement {
   if (!node) {
     return document.body;
   }
