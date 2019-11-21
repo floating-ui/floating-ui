@@ -34,13 +34,6 @@ export function detectOverflow(
   const boundaryClientRect = getBoundingClientRect(options.boundaryElement);
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
-  const boundaryRect = {
-    left: boundaryClientRect.left,
-    right: boundaryClientRect.right,
-    top: boundaryClientRect.top,
-    bottom: boundaryClientRect.bottom,
-  };
-
   const popperOffsets = computeOffsets({
     reference: referenceClientRect,
     element: popperRect,
@@ -61,13 +54,13 @@ export function detectOverflow(
   };
 
   state.modifiersData.detectOverflow = {
-    top: boundaryRect.top > popperClientRect.top,
-    bottom: boundaryRect.bottom < popperClientRect.bottom,
-    left: boundaryRect.left > popperClientRect.left,
-    right: boundaryRect.right < popperClientRect.right,
+    top: boundaryClientRect.top > popperClientRect.top,
+    bottom: boundaryClientRect.bottom < popperClientRect.bottom,
+    left: boundaryClientRect.left > popperClientRect.left,
+    right: boundaryClientRect.right < popperClientRect.right,
   };
 
-  console.log(boundaryRect, popperClientRect);
+  console.log(boundaryClientRect, popperClientRect);
   console.log(state.modifiersData.detectOverflow);
 
   return state;
