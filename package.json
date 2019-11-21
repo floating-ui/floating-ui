@@ -1,8 +1,8 @@
 {
   "name": "popper.js",
   "version": "2.0.0-next.4",
-  "main": "dist/cjs/index.js",
-  "main:umd": "dist/umd/index.js",
+  "main": "dist/cjs/popper.js",
+  "main:umd": "dist/umd/popper.js",
   "module": "lib/index.js",
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
