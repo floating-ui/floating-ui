@@ -10,11 +10,13 @@ type Options = {
   boundaryElement: HTMLElement,
 };
 
+// if the number is positive, the popper is overflowing by that number of pixels
+// when 0, or negative, the popper is within its boundaries
 type ModifierData = {
-  top: boolean,
-  bottom: boolean,
-  right: boolean,
-  left: boolean,
+  top: number,
+  bottom: number,
+  right: number,
+  left: number,
 };
 
 export function detectOverflow(
@@ -59,10 +61,10 @@ export function detectOverflow(
   });
 
   state.modifiersData.detectOverflow = {
-    top: boundaryClientRect.top > popperClientRect.top,
-    bottom: boundaryClientRect.bottom < popperClientRect.bottom,
-    left: boundaryClientRect.left > popperClientRect.left,
-    right: boundaryClientRect.right < popperClientRect.right,
+    top: boundaryClientRect.top - popperClientRect.top,
+    bottom: popperClientRect.bottom - boundaryClientRect.bottom,
+    left: boundaryClientRect.left - popperClientRect.left,
+    right: popperClientRect.right - boundaryClientRect.right,
   };
 
   console.log(boundaryClientRect, popperClientRect);
