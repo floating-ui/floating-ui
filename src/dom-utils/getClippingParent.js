@@ -11,7 +11,9 @@ export default function getClippingParent(element: HTMLElement): HTMLElement {
   const offsetParent = getOffsetParent(element);
   const win = getWindow(element);
 
-  return offsetParent === win || scrollParent.contains(offsetParent)
+  return offsetParent === win
+    ? element.ownerDocument.documentElement
+    : scrollParent.contains(offsetParent)
     ? scrollParent
     : getClippingParent(getScrollParent(getParentNode(scrollParent)));
 }
