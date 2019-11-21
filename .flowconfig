@@ -1,5 +1,6 @@
-[ignore]
-lib
+[declarations]
+<PROJECT_ROOT>/lib
+<PROJECT_ROOT>/dist
 
 [options]
 suppress_comment= \\(.\\|\n\\)*\\$FlowExpectError

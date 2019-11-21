@@ -2,52 +2,52 @@
 import type { Placement, ModifierPhases } from './enums';
 export type JQueryWrapper = Element[] & { jquery: string };
 
-export type Rect = {
+export type Rect = {|
   width: number,
   height: number,
   x: number,
   y: number,
-};
+|};
 
-export type Offsets = {
+export type Offsets = {|
   y: number,
   x: number,
-};
+|};
 
 export type PositioningStrategy = 'absolute' | 'fixed';
 
-export type StateMeasures = {
+export type StateMeasures = {|
   reference: Rect,
   popper: Rect,
-};
+|};
 
-export type StateOffsets = {
+export type StateOffsets = {|
   popper: Offsets,
   arrow?: Offsets,
-};
+|};
 
-export type State = {
-  elements: {
+export type State = {|
+  elements: {|
     reference: HTMLElement,
     popper: HTMLElement,
-  },
+  |},
   options: Options,
   placement: Placement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier>,
   measures: StateMeasures,
   offsets: StateOffsets,
-  scrollParents: {
+  scrollParents: {|
     reference: Array<Node>,
     popper: Array<Node>,
-  },
-  styles: {
+  |},
+  styles: {|
     [string]: $Shape<CSSStyleDeclaration>,
-  },
+  |},
   modifiersData: Object,
-};
+|};
 
-export type Modifier = {
+export type Modifier = {|
   name: string,
   enabled: boolean,
   phase: ModifierPhases,
@@ -55,20 +55,21 @@ export type Modifier = {
   fn: (State, options: any) => State,
   onLoad?: State => void,
   options?: any,
-};
+  data?: {},
+|};
 
-export type EventListeners = { scroll: boolean, resize: boolean };
+export type EventListeners = {| scroll: boolean, resize: boolean |};
 
-export type Options = {
+export type Options = {|
   placement: Placement,
   modifiers: Array<Modifier>,
   strategy: PositioningStrategy,
   eventListeners: boolean | { scroll?: boolean, resize?: boolean },
-};
+|};
 
 export type UpdateCallback = State => void;
 
-export type ClientRectObject = {
+export type ClientRectObject = {|
   x: number,
   y: number,
   top: number,
@@ -77,4 +78,4 @@ export type ClientRectObject = {
   bottom: number,
   width: number,
   height: number,
-};
+|};

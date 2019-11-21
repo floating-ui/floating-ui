@@ -67,9 +67,6 @@ export function detectOverflow(
     right: popperClientRect.right - boundaryClientRect.right,
   };
 
-  console.log(boundaryClientRect, popperClientRect);
-  console.log(state.modifiersData.detectOverflow);
-
   return state;
 }
 

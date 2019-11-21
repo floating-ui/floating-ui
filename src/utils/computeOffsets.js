@@ -2,7 +2,12 @@
 import getBasePlacement from './getBasePlacement';
 import getAltAxis from './getAltAxis';
 import getAltLen from './getAltLen';
-import type { Rect, PositioningStrategy, Offsets } from '../types';
+import type {
+  Rect,
+  PositioningStrategy,
+  Offsets,
+  ClientRectObject,
+} from '../types';
 import { top, right, bottom, left, type Placement } from '../enums';
 
 export default ({
@@ -12,8 +17,8 @@ export default ({
   placement,
   scroll,
 }: {
-  reference: Rect,
-  element: Rect,
+  reference: Rect | ClientRectObject,
+  element: Rect | ClientRectObject,
   strategy: PositioningStrategy,
   placement?: Placement,
   scroll: { scrollTop: number, scrollLeft: number },
