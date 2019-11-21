@@ -167,7 +167,7 @@ export default class Popper {
         reference: this.state.measures.reference,
         element: this.state.measures.popper,
         strategy: 'absolute',
-        placement: this.state.options.placement,
+        placement: this.state.placement,
         scroll: getCommonTotalScroll(
           referenceElement,
           this.state.scrollParents.reference,
@@ -178,15 +178,20 @@ export default class Popper {
 
     // Modifiers have the ability to read the current Popper.js state, included
     // the popper offsets, and modify it to address specifc cases
-    this.state = this.state.orderedModifiers.reduce(
-      (state, { fn, enabled, options }) => {
-        if (enabled && typeof fn === 'function') {
-          state = fn((this.state: State), options);
-        }
-        return state;
-      },
-      this.state
-    );
+    this.state.reset = false;
+
+    for (let index = 0; index < this.state.orderedModifiers.length; index++) {
+      const { fn, enabled, options } = this.state.orderedModifiers[index];
+      if (this.state.reset === true) {
+        this.state.reset = false;
+        index = 0;
+        continue;
+      }
+
+      if (enabled && typeof fn === 'function') {
+        this.state = fn((this.state: State), options);
+      }
+    }
   }
 
   enableEventListeners(

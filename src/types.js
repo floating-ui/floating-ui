@@ -45,6 +45,7 @@ export type State = {|
     [string]: $Shape<CSSStyleDeclaration>,
   |},
   modifiersData: Object,
+  reset: boolean,
 |};
 
 export type Modifier = {|
