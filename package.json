@@ -23,6 +23,7 @@
     "/dist",
     "/lib"
   ],
+  "sideEffects": false,
   "prettier": {
     "semi": true,
     "trailingComma": "es5",

@@ -11,9 +11,7 @@ const umdBundle = minify => ({
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
     minify && terser(),
     bundleSize(),
@@ -31,9 +29,7 @@ const esBundle = minify => ({
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
     minify && terser(),
     bundleSize(),
@@ -51,9 +47,7 @@ const cjsBundle = minify => ({
   plugins: [
     babel(),
     replace({
-      'process.env.NODE_ENV': JSON.stringify(
-        process.env.NODE_ENV || 'development'
-      ),
+      __DEV__: "process.env.NODE_ENV !== 'production'",
     }),
     minify && terser(),
     bundleSize(),
@@ -65,8 +59,24 @@ const cjsBundle = minify => ({
   },
 });
 
+const devBundle = () => ({
+  input: 'src/index.js',
+  plugins: [
+    babel(),
+    replace({
+      __DEV__: 'true',
+    }),
+  ],
+  output: {
+    name: 'Popper',
+    file: `${dir}/es/index.js`,
+    format: 'es',
+    sourcemap: true,
+  },
+});
+
 const builds = IS_DEV
-  ? [esBundle()]
+  ? [devBundle()]
   : [
       umdBundle(),
       umdBundle(true),
