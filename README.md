@@ -15,11 +15,11 @@ But wait, it's not 1993 anymore, nowadays we write UIs using powerful abstractio
 ## Installation:
 
 ```bash
-yarn add popper.js@next
+yarn add @popper/core@next
 
 # or
 
-npm install popper.js@next
+npm install @popper/core@next
 ```
 
 ## Usage
