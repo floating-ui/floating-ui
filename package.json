@@ -1,11 +1,13 @@
 {
   "name": "@popperjs/core",
   "version": "2.0.0-next.5",
+  "description": "A kickass library used to manage poppers in web applications",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
   "module": "lib/index.js",
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
+  "repository": "github:popperjs/popper.js",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "jest --coverage --watch",
