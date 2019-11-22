@@ -9,6 +9,7 @@
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
   "repository": "github:popperjs/popper.js",
+  "types": "ts-types/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "yarn test:unit && yarn test:functional",
@@ -20,6 +21,7 @@
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
+    "build:ts": "flow-to-ts \"src/**/*.js\" --write; tsc -d \"src/index.ts\" --outFile \"ts-types/\"; rimraf \"src/**/*.ts\"; rimraf \"types/**/*.js\"",
     "prepublishOnly": "yarn build",
     "postinstall": "patch-package",
     "flow": "flow",
@@ -124,6 +126,7 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.1.5",
     "@babel/runtime": "^7.7.4",
+    "@khanacademy/flow-to-ts": "^0.1.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -155,9 +158,10 @@
     "rollup-plugin-flow-entry": "^0.3.3",
     "rollup-plugin-license": "^0.13.0",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-visualizer": "^3.3.0",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "typescript": "^3.7.2"
   },
   "husky": {
     "hooks": {
