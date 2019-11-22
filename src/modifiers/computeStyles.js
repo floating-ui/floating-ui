@@ -38,6 +38,8 @@ export const computePopperStyles = ({
     };
   } else {
     return {
+      top: '0px',
+      left: '0px',
       transform: `translate3d(${offsets.x}px, ${offsets.y}px, 0)`,
       position: mapStrategyToPosition(strategy),
     };
