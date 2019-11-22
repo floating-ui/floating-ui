@@ -34,8 +34,8 @@ export function detectOverflow(
     if (__DEV__) {
       console.error(
         [
-          'PopperJS: The "detectOverflow" modifier\'s `boundaryElement` must',
-          'be a parent of the popper element',
+          'Popper: The "detectOverflow" modifier\'s `boundaryElement` must be',
+          'a parent of the popper element.',
         ].join(' ')
       );
     }
