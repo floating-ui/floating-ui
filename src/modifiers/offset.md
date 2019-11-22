@@ -9,9 +9,14 @@ To use the modifier you can run:
 
 ```js
 new Popper(reference, popper, {
-  modifiers: [{ name: 'offset', options: {
-    offset: () => [10, 20] }]
-  },
+  modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: () => [10, 20],
+      },
+    },
+  ],
 });
 ```
 
