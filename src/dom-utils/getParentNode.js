@@ -1,6 +1,8 @@
 // @flow
+import getNodeName from './getNodeName';
+
 export default (element: Node | ShadowRoot): Node => {
-  if (element.nodeName === 'HTML') {
+  if (getNodeName(element) === 'HTML') {
     // DocumentElement detectedF
     return element;
   }
