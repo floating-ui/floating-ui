@@ -73,7 +73,7 @@ export default class Popper {
 
     // Cache the placement in cache to make it available to the modifiers
     // modifiers will modify this one (rather than the one in options)
-    this.state.placement = options.placement;
+    this.state.placement = this.state.options.placement;
 
     // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
