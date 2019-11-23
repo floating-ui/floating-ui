@@ -18,8 +18,7 @@
     "build": "yarn clean && yarn build:es && yarn build:bundles && yarn build:flow",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
-    "build:flow": "flow-copy-source src dist/cjs --ignore '{__mocks__/*,*.test}.js'",
-    "precommit": "pretty-quick --staged"
+    "build:flow": "flow-copy-source src dist/cjs --ignore '{__mocks__/*,*.test}.js'"
   },
   "files": [
     "/dist",
@@ -83,5 +82,10 @@
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-terser": "^3.0.0",
     "serve": "^10.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   }
 }
