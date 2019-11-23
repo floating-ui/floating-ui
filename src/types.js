@@ -55,6 +55,7 @@ export type Modifier = {|
   requires?: Array<string>,
   fn: (State, options: any) => State,
   onLoad?: State => void,
+  onDestroy?: State => void,
   options?: any,
   data?: {},
 |};

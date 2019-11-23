@@ -223,4 +223,25 @@ export default class Popper {
       });
     }
   }
+
+  destroy() {
+    // Remove scroll event listeners
+    const scrollParents = [
+      ...this.state.scrollParents.reference,
+      ...this.state.scrollParents.popper,
+    ];
+
+    scrollParents.forEach(scrollParent =>
+      scrollParent.removeEventListener('scroll', this.update)
+    );
+
+    // Remove resize event listeners
+    const window = getWindow(this.state.elements.popper);
+    window.removeEventListener('resize', this.update);
+
+    // Run `onDestroy` modifier methods
+    this.state.orderedModifiers.forEach(
+      ({ onDestroy, enabled }) => enabled && onDestroy && onDestroy(this.state)
+    );
+  }
 }
