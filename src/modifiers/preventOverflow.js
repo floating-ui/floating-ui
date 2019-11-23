@@ -47,7 +47,7 @@ export function preventOverflow(
 }
 
 export default ({
-  name: 'flip',
+  name: 'preventOverflow',
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
