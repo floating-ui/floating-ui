@@ -50,7 +50,7 @@ const devBundle = {
   plugins: [
     babel(),
     replace({
-      __DEV__: 'true',
+      'process.env.NODE_ENV': JSON.stringify('development'),
     }),
   ],
   output: {
