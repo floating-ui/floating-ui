@@ -9,10 +9,10 @@ const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 const createUmdBundle = ({ minify } = {}) => ({
   input: 'src/index.js',
   plugins: [
-    babel(),
     replace({
       __DEV__: minify ? 'false' : 'true',
     }),
+    babel(),
     minify && terser(),
     bundleSize(),
   ].filter(Boolean),
@@ -26,13 +26,7 @@ const createUmdBundle = ({ minify } = {}) => ({
 
 const esmBundle = {
   input: 'src/index.js',
-  plugins: [
-    babel(),
-    replace({
-      __DEV__: "process.env.NODE_ENV !== 'production'",
-    }),
-    bundleSize(),
-  ].filter(Boolean),
+  plugins: [babel(), bundleSize()],
   output: {
     name: 'Popper',
     file: `${dir}/esm/popper.js`,
@@ -43,13 +37,7 @@ const esmBundle = {
 
 const cjsBundle = {
   input: 'src/index.js',
-  plugins: [
-    babel(),
-    replace({
-      __DEV__: "process.env.NODE_ENV !== 'production'",
-    }),
-    bundleSize(),
-  ].filter(Boolean),
+  plugins: [babel(), bundleSize()],
   output: {
     file: `${dir}/cjs/popper.js`,
     format: 'cjs',

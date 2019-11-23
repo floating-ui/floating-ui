@@ -32,10 +32,19 @@
     "singleQuote": true
   },
   "babel": {
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "loose": true,
+          "modules": false
+        }
+      ]
+    ],
     "plugins": [
       "@babel/plugin-transform-flow-strip-types",
       "@babel/plugin-proposal-class-properties",
-      "@babel/plugin-proposal-object-rest-spread"
+      "dev-expression"
     ],
     "env": {
       "test": {
@@ -53,12 +62,12 @@
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.5",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
+    "babel-plugin-dev-expression": "^0.2.2",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
     "flow-bin": "0.112.0",
