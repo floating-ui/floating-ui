@@ -84,9 +84,9 @@ export type ClientRectObject = {|
 
 export type PaddingObject = {|
   top?: number,
-  left?: number,
   right?: number,
   bottom?: number,
+  left?: number,
 |};
 
 export type Padding = number | PaddingObject;
