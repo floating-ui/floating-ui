@@ -21,12 +21,11 @@ export function preventOverflow(
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
   const popperOffsets = state.offsets.popper;
-  const paddingObject =
+  const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
-      ? mergePaddingObject(padding)
-      : expandToHashMap(padding, [top, right, bottom, left]);
-
-  console.log(paddingObject);
+      ? padding
+      : expandToHashMap(padding, [top, right, bottom, left])
+  );
 
   if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;

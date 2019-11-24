@@ -21,10 +21,11 @@ export function flip(
 
   const flippedPlacement = behavior.find(newPlacement => {
     const basePlacement = getBasePlacement(newPlacement);
-    const paddingValue =
+    const paddingValue = mergePaddingObject(
       typeof padding !== 'number'
-        ? mergePaddingObject(padding)
-        : expandToHashMap(padding, [top, right, bottom, left]);
+        ? padding
+        : expandToHashMap(padding, [top, right, bottom, left])
+    )[basePlacement];
     return overflow[basePlacement] + paddingValue <= 0;
   });
 
