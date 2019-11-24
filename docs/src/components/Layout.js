@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 
-import Header from './header';
+import Header from './Header';
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
 
