@@ -4,6 +4,7 @@ import type { State, Modifier, Rect, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
+import mergePaddingObject from '../utils/mergePaddingObject';
 
 export function preventOverflow(
   state: State,
@@ -12,7 +13,7 @@ export function preventOverflow(
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    padding = { left: 50, top: 50, right: 0, bottom: 0 },
+    padding = { left: 50, top: 20, right: 0, bottom: 0 },
   } = options;
   const overflow = state.modifiersData.detectOverflow;
   const basePlacement = getBasePlacement(state.placement);
@@ -20,12 +21,13 @@ export function preventOverflow(
   const altAxis = getAltAxis(mainAxis);
   const popperOffsets = state.offsets.popper;
   const isNumberPadding = typeof padding === 'number';
+  const mergedPadding = isNumberPadding ? {} : mergePaddingObject(padding);
 
   if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
-    const mainPadding = isNumberPadding ? padding : padding[mainSide];
-    const altPadding = isNumberPadding ? padding : padding[altSide];
+    const mainPadding = isNumberPadding ? padding : mergedPadding[mainSide];
+    const altPadding = isNumberPadding ? padding : mergedPadding[altSide];
 
     state.offsets.popper[mainAxis] = Math.max(
       Math.min(
@@ -38,8 +40,8 @@ export function preventOverflow(
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
-    const mainPadding = isNumberPadding ? padding : padding[mainSide];
-    const altPadding = isNumberPadding ? padding : padding[altSide];
+    const mainPadding = isNumberPadding ? padding : mergedPadding[mainSide];
+    const altPadding = isNumberPadding ? padding : mergedPadding[altSide];
 
     console.log(altAxis, mainSide, overflow[altSide]);
 

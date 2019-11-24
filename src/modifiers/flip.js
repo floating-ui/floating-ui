@@ -3,6 +3,7 @@ import type { Placement } from '../enums';
 import type { State, Modifier, Rect, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
+import mergePaddingObject from '../utils/mergePaddingObject';
 
 export function flip(
   state: State,
@@ -19,7 +20,9 @@ export function flip(
 
   const flippedPlacement = behavior.find(newPlacement => {
     const basePlacement = getBasePlacement(newPlacement);
-    const paddingValue = isNumberPadding ? padding : padding[basePlacement];
+    const paddingValue = isNumberPadding
+      ? padding
+      : mergePaddingObject(padding)[basePlacement];
     return overflow[basePlacement] + paddingValue <= 0;
   });
 
