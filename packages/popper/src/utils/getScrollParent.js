@@ -16,7 +16,9 @@ export default function getScrollParent(element) {
 
   switch (element.nodeName) {
     case 'HTML':
+    case 'html':
     case 'BODY':
+    case 'body':
       return element.ownerDocument.body
     case '#document':
       return element.body

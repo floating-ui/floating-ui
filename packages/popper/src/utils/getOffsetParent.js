@@ -23,14 +23,14 @@ export default function getOffsetParent(element) {
 
   const nodeName = offsetParent && offsetParent.nodeName;
 
-  if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+  if (!nodeName || nodeName === 'BODY' || nodeName === 'body' || nodeName === 'HTML' || nodeName === 'html') {
     return element ? element.ownerDocument.documentElement : document.documentElement;
   }
 
   // .offsetParent will return the closest TH, TD or TABLE in case
   // no offsetParent is present, I hate this job...
   if (
-    ['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 &&
+    ['TH', 'th', 'TD', 'td', 'TABLE', 'table'].indexOf(offsetParent.nodeName) !== -1 &&
     getStyleComputedProperty(offsetParent, 'position') === 'static'
   ) {
     return getOffsetParent(offsetParent);

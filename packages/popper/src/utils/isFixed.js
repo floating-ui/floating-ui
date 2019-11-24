@@ -11,7 +11,7 @@ import getParentNode from './getParentNode';
  */
 export default function isFixed(element) {
   const nodeName = element.nodeName;
-  if (nodeName === 'BODY' || nodeName === 'HTML') {
+  if (nodeName === 'BODY' || nodeName === 'body' || nodeName === 'HTML' || nodeName === 'html') {
     return false;
   }
   if (getStyleComputedProperty(element, 'position') === 'fixed') {
