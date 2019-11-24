@@ -1,3 +1,4 @@
+// @flow
 import type { PaddingObject } from '../types';
 
 export default (paddingObject: PaddingObject): PaddingObject => ({
