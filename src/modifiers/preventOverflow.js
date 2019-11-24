@@ -5,6 +5,7 @@ import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
 import mergePaddingObject from '../utils/mergePaddingObject';
+import expandToHashMap from '../utils/expandToHashMap';
 
 export function preventOverflow(
   state: State,
@@ -20,37 +21,37 @@ export function preventOverflow(
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
   const popperOffsets = state.offsets.popper;
-  const isNumberPadding = typeof padding === 'number';
-  const mergedPadding = isNumberPadding ? {} : mergePaddingObject(padding);
+  const paddingObject =
+    typeof padding !== 'number'
+      ? mergePaddingObject(padding)
+      : expandToHashMap(padding, [top, right, bottom, left]);
+
+  console.log(paddingObject);
 
   if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
-    const mainPadding = isNumberPadding ? padding : mergedPadding[mainSide];
-    const altPadding = isNumberPadding ? padding : mergedPadding[altSide];
 
     state.offsets.popper[mainAxis] = Math.max(
       Math.min(
         popperOffsets[mainAxis],
-        popperOffsets[mainAxis] - overflow[altSide] - altPadding
+        popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide]
       ),
-      popperOffsets[mainAxis] + overflow[mainSide] + mainPadding
+      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide]
     );
   }
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
-    const mainPadding = isNumberPadding ? padding : mergedPadding[mainSide];
-    const altPadding = isNumberPadding ? padding : mergedPadding[altSide];
 
     console.log(altAxis, mainSide, overflow[altSide]);
 
     state.offsets.popper[altAxis] = Math.max(
       Math.min(
         popperOffsets[altAxis],
-        popperOffsets[altAxis] - overflow[altSide] - altPadding
+        popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]
       ),
-      popperOffsets[altAxis] + overflow[mainSide] + mainPadding
+      popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide]
     );
   }
 
