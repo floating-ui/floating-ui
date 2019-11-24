@@ -12,6 +12,7 @@ import { MDXProvider } from '@mdx-js/react';
 
 import Header from './header';
 import './layout.css';
+import './prism-base2tone-pool-dark.css';
 
 const components = {
   a: ({ href, ...props }) => <Link to={href} {...props} />,
