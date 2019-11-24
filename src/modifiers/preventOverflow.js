@@ -43,8 +43,6 @@ export function preventOverflow(
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
 
-    console.log(altAxis, mainSide, overflow[altSide]);
-
     state.offsets.popper[altAxis] = Math.max(
       Math.min(
         popperOffsets[altAxis],
