@@ -8,8 +8,7 @@ export type BasePlacement =
   | typeof top
   | typeof bottom
   | typeof right
-  | typeof left
-  | typeof auto;
+  | typeof left;
 export const basePlacements: Array<BasePlacement> = [top, bottom, right, left];
 
 export const start: 'start' = 'start';

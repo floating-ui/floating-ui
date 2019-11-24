@@ -81,3 +81,12 @@ export type ClientRectObject = {|
   width: number,
   height: number,
 |};
+
+export type PaddingObject = {|
+  top: number,
+  left: number,
+  right: number,
+  bottom: number,
+|};
+
+export type Padding = number | $Shape<PaddingObject>;
