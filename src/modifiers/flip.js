@@ -10,11 +10,11 @@ export function flip(
   options: { behavior: Array<Placement>, padding: Padding } = {}
 ) {
   const placement = state.placement;
-  const behavior = options.behavior || [
+  const defaultBehavior = [
     state.options.placement,
     getOppositePlacement(placement),
   ];
-  const { padding = 5 } = options;
+  const { behavior = defaultBehavior, padding = 5 } = options;
   const isNumberPadding = typeof padding === 'number';
   const overflow = state.modifiersData.detectOverflow;
 
