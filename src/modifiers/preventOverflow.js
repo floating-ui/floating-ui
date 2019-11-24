@@ -51,4 +51,5 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
+  requires: ['detectOverflow'],
 }: Modifier);

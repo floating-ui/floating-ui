@@ -31,4 +31,5 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: flip,
+  requires: ['detectOverflow'],
 }: Modifier);
