@@ -4,7 +4,7 @@ import type { State, Modifier, Rect } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 
-export function flip(state: State, options: ?{ behavior: Array<Placement> }) {
+export function flip(state: State, options?: { behavior: Array<Placement> }) {
   const placement = state.placement;
   const behavior =
     options && options.behavior

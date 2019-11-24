@@ -7,7 +7,7 @@ import getAltAxis from '../utils/getAltAxis';
 
 export function preventOverflow(
   state: State,
-  options: { mainAxis: boolean, altAxis: boolean } = {}
+  options?: { mainAxis: boolean, altAxis: boolean } = {}
 ) {
   const {
     mainAxis: checkMainAxis = true,

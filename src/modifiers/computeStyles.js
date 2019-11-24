@@ -67,9 +67,8 @@ export const computeArrowStyles = ({
   }
 };
 
-export function computeStyles(state: State, options: ?Options) {
-  const gpuAcceleration =
-    options && options.gpuAcceleration != null ? options.gpuAcceleration : true;
+export function computeStyles(state: State, options?: Options = {}) {
+  const { gpuAcceleration = true } = options;
 
   state.styles = {};
 
