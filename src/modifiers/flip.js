@@ -5,7 +5,7 @@ import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
-import { right, bottom, left } from '../enums';
+import { top, right, bottom, left } from '../enums';
 
 export function flip(
   state: State,
