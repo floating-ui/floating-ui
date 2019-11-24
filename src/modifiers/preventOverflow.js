@@ -14,7 +14,7 @@ export function preventOverflow(
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    padding = { left: 50, top: 20, right: 0, bottom: 0 },
+    padding = 0,
   } = options;
   const overflow = state.modifiersData.detectOverflow;
   const basePlacement = getBasePlacement(state.placement);
