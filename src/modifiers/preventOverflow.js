@@ -9,7 +9,7 @@ import expandToHashMap from '../utils/expandToHashMap';
 
 export function preventOverflow(
   state: State,
-  options: { mainAxis: boolean, altAxis: boolean, padding: Padding } = {}
+  options?: { mainAxis: boolean, altAxis: boolean, padding: Padding } = {}
 ) {
   const {
     mainAxis: checkMainAxis = true,
@@ -62,4 +62,5 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
+  requires: ['detectOverflow'],
 }: Modifier);

@@ -21,7 +21,7 @@ type ModifierData = {
 
 export function detectOverflow(
   state: State,
-  options: Options = {
+  options?: Options = {
     boundaryElement: getClippingParent(state.elements.popper),
   }
 ) {

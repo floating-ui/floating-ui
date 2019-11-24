@@ -9,7 +9,7 @@ import { top, right, bottom, left } from '../enums';
 
 export function flip(
   state: State,
-  options: { behavior: Array<Placement>, padding: Padding } = {}
+  options?: { behavior: Array<Placement>, padding: Padding } = {}
 ) {
   const placement = state.placement;
   const defaultBehavior = [
@@ -44,4 +44,5 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: flip,
+  requires: ['detectOverflow'],
 }: Modifier);
