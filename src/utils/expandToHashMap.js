@@ -1,3 +1,4 @@
+// @flow
 export default function expandToHashMap<T: number | string>(
   value: T,
   keys: Array<string>
