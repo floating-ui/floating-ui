@@ -6,6 +6,7 @@ import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
+import within from '../utils/within';
 
 export function preventOverflow(
   state: State,
@@ -31,24 +32,20 @@ export function preventOverflow(
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
 
-    state.offsets.popper[mainAxis] = Math.max(
-      Math.min(
-        popperOffsets[mainAxis],
-        popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide]
-      ),
-      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide]
+    state.offsets.popper[mainAxis] = within(
+      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide],
+      popperOffsets[mainAxis],
+      popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide]
     );
   }
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
 
-    state.offsets.popper[altAxis] = Math.max(
-      Math.min(
-        popperOffsets[altAxis],
-        popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]
-      ),
-      popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide]
+    state.offsets.popper[altAxis] = within(
+      popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide],
+      popperOffsets[altAxis],
+      popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]
     );
   }
 
