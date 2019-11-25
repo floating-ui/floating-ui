@@ -30,7 +30,7 @@ export function preventOverflow(state: State, options?: Options = {}) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    tether = false,
+    tether = true,
     padding = 0,
   } = options;
   const overflow = state.modifiersData.detectOverflow;
