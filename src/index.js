@@ -32,7 +32,9 @@ import * as modifiers from './modifiers/index';
 const defaultModifiers: Array<Modifier> = (Object.values(modifiers): any);
 
 const INVALID_ELEMENT_ERROR =
-  'Invalid `%s` argument provided to Popper, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
+  'Popper: Invalid `%s` argument provided to Popper, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
+const INFINITE_LOOP_ERROR =
+  'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
 const areValidElements = (a: mixed, b: mixed): boolean %checks =>
   a instanceof Element && b instanceof Element;
@@ -70,10 +72,6 @@ export default class Popper {
 
     // Store options into state
     this.state.options = { ...defaultOptions, ...options };
-
-    // Cache the placement in cache to make it available to the modifiers
-    // modifiers will modify this one (rather than the one in options)
-    this.state.placement = this.state.options.placement;
 
     // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
@@ -158,35 +156,57 @@ export default class Popper {
     //        but we really want to take in account the reference offsetParent as well
     const offsetParentScroll = getNodeScroll(getOffsetParent(popperElement));
 
-    // Offsets are the actual position the popper needs to have to be
-    // properly positioned near its reference element
-    // This is the most basic placement, and will be adjusted by
-    // the modifiers in the next step
-    this.state.offsets = {
-      popper: computeOffsets({
-        reference: this.state.measures.reference,
-        element: this.state.measures.popper,
-        strategy: 'absolute',
-        placement: this.state.placement,
-        scroll: getCommonTotalScroll(
-          referenceElement,
-          this.state.scrollParents.reference,
-          this.state.scrollParents.popper
-        ),
-      }),
-    };
-
     // Modifiers have the ability to read the current Popper state, included
     // the popper offsets, and modify it to address specifc cases
     this.state.reset = false;
 
+    // Cache the placement in cache to make it available to the modifiers
+    // modifiers will modify this one (rather than the one in options)
+    this.state.placement = this.state.options.placement;
+
+    this.state.orderedModifiers.forEach(
+      modifier =>
+        (this.state.modifiersData[modifier.name] = {
+          ...modifier.data,
+        })
+    );
+
+    let __debug_loops__ = 0;
     for (let index = 0; index < this.state.orderedModifiers.length; index++) {
-      const { fn, enabled, options } = this.state.orderedModifiers[index];
+      if (__DEV__) {
+        __debug_loops__ += 1;
+        if (__debug_loops__ > 100) {
+          console.error(INFINITE_LOOP_ERROR);
+          break;
+        }
+      }
+      if (index === 0) {
+        // Offsets are the actual position the popper needs to have to be
+        // properly positioned near its reference element
+        // This is the most basic placement, and will be adjusted by
+        // the modifiers in the next step
+        this.state.offsets = {
+          popper: computeOffsets({
+            reference: this.state.measures.reference,
+            element: this.state.measures.popper,
+            strategy: 'absolute',
+            placement: this.state.placement,
+            scroll: getCommonTotalScroll(
+              referenceElement,
+              this.state.scrollParents.reference,
+              this.state.scrollParents.popper
+            ),
+          }),
+        };
+      }
+
       if (this.state.reset === true) {
         this.state.reset = false;
-        index = 0;
+        index = -1;
         continue;
       }
+
+      const { fn, enabled, options } = this.state.orderedModifiers[index];
 
       if (enabled && typeof fn === 'function') {
         this.state = fn((this.state: State), options);

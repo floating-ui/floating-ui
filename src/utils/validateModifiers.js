@@ -3,7 +3,7 @@ import format from './format';
 import { read, main, write } from '../enums';
 
 const ERROR_MESSAGE =
-  'PopperJS: modifier "%s" provided an invalid %s property, expected %s but got %s';
+  'Popper: modifier "%s" provided an invalid %s property, expected %s but got %s';
 const VALID_PROPERTIES = [
   'name',
   'enabled',

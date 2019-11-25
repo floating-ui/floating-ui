@@ -32,7 +32,7 @@ export function detectOverflow(
 
   if (!options.boundaryElement.contains(popperElement)) {
     console.error(
-      'PopperJS: "detectOverflow" can accept as `boundaryElement` only a parent node of the provided popper.'
+      'Popper: "detectOverflow" can accept as `boundaryElement` only a parent node of the provided popper.'
     );
     return state;
   }
@@ -48,7 +48,7 @@ export function detectOverflow(
     reference: referenceClientRect,
     element: popperRect,
     strategy: 'absolute',
-    placement: state.options.placement,
+    placement: state.placement,
     scroll: {
       scrollTop: 0,
       scrollLeft: 0,

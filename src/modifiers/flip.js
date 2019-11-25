@@ -18,6 +18,7 @@ export function flip(
   ];
   const { behavior = defaultBehavior, padding = 0 } = options;
   const overflow = state.modifiersData.detectOverflow;
+  const flipIndex = state.modifiersData.flip.index;
 
   const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
@@ -25,18 +26,31 @@ export function flip(
       : expandToHashMap(padding, basePlacements)
   );
 
-  const flippedPlacement = behavior.find(newPlacement => {
-    const basePlacement = getBasePlacement(newPlacement);
-    return overflow[basePlacement] + paddingObject[basePlacement] <= 0;
-  });
+  const flippedPlacement = behavior[flipIndex];
 
-  if (flippedPlacement && flippedPlacement !== placement) {
-    state = {
-      ...state,
-      placement: flippedPlacement,
-      reset: true,
-    };
+  if (!flippedPlacement && placement !== state.options.placement) {
+    state.placement = state.options.placement;
+    state.reset = true;
+    return state;
   }
+
+  if (!flippedPlacement && placement === state.options.placement) {
+    return state;
+  }
+
+  const basePlacement = getBasePlacement(flippedPlacement);
+  const fits = overflow[basePlacement] + paddingObject[basePlacement] <= 0;
+
+  if (!fits) {
+    state.modifiersData.flip.index += 1;
+    state.reset = true;
+    return state;
+  } else if (fits && state.placement !== flippedPlacement) {
+    state.placement = flippedPlacement;
+    state.reset = true;
+    return state;
+  }
+
   return state;
 }
 
@@ -46,4 +60,5 @@ export default ({
   phase: 'main',
   fn: flip,
   requires: ['detectOverflow'],
+  data: { index: 0 },
 }: Modifier);
