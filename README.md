@@ -14,13 +14,27 @@ But wait, it's not 1993 anymore, nowadays we write UIs using powerful abstractio
 
 ## Installation:
 
+### 1. Package Manager
+
 ```bash
-# With Yarn package mnager
-yarn add @popper/core@next
+# With Yarn
+yarn add @popperjs/core@next
 
 # With npm
-npm install @popper/core@next
+npm install --save @popperjs/core@next
 ```
+
+### 2. CDN
+
+```html
+<script src="https://unpkg.com/@popperjs/core"></script>
+```
+
+### 3. Direct Download
+
+Manually downloading the library is not recommended because you lose versioning management that the unpkg CDN or npm/Yarn provide.
+
+You don't receive fix/feat updates easily and will lag behind the website documentation, among other issues, and this quickly becomes an unmaintainable way to manage dependencies.
 
 ## Usage
 
@@ -35,21 +49,13 @@ new Popper(element, popper, { placement: 'right' });
 
 ## Distribution targets
 
-Popper is distributed in 3 different versions, each of them bundled as CommonJS, ES Module, and UMD.
+Popper is distributed in 3 different versions:
 
-The 3 versions are: `popper`,
+The 3 versions are:
 
 - `popper` (3.61 kB): includes all the modifiers (features);
 - `popper-lite` (2.48 kB): includes only the minimum amount of modifiers to provide the basic functionality;
 - `popper-minimal` (2.09 kB): doesn't include any modifier, you must import them seprately;
-
-Confused? Don't worry! If you'd like to begin with Popper in your HTML document, use the following:
-
-```html
-<script src="./@popperjs/core/dist/umd/popper.js"></script>
-```
-
-The script above will import the Popper build with the development warnings to help you begin.
 
 ## Hacking the library
 
