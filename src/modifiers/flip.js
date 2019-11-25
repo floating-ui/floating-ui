@@ -14,7 +14,7 @@ export function flip(
   const placement = state.placement;
   const defaultBehavior = [
     state.options.placement,
-    getOppositePlacement(placement),
+    getOppositePlacement(state.options.placement),
   ];
   const { behavior = defaultBehavior, padding = 0 } = options;
   const overflow = state.modifiersData.detectOverflow;
