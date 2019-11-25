@@ -2,15 +2,15 @@
   <img src="./docs/src/images/popper-logo.png" alt="Popper" height="300px"/>
 </p>
 
-Positioning tooltips (_but also dropdowns, popovers, and more_) has always been particularly painful. **Popper** is here to help.
+Positioning tooltips (_but also dropdowns, popovers, and more_) is difficult. **Popper** is here to help!
 
-Give it a reference element (such as a button) and a popper element (your tooltip) and it will automatically put your tooltip in the right place.
+Given a reference element (such as a button) and a tooltip element, Popper will automatically put your tooltip in the right place next to the button. This means it won't overflow the window boundary and get cut off, will flip to be placed inside the viewport, and stay with the button while scrolling a container.
 
-Popper is a ~3 kB library that aims to provide a reliable and extensible positioning engine you can use to build your awesome UI. Why waste your time writing your own logic every time you are programming a tooltip?
+Popper is a ~3 kB library that aims to provide a reliable and extensible positioning engine you can use to ensure all your popper elements are positioned in the right place. Why waste your time writing your own logic every time you are programming a tooltip? There are many edge cases that are easy to forget to consider, which is why we've done the hard work for you.
 
-This library can position any pair of elements in your document without needing to alter the DOM in any way. It doesn't care if your elements are not close to each other or are in two different scrolling containers, they will always end up in the right position.
+This library can position any pair of elements in your document without needing to alter the DOM in any way. It doesn't matter if your elements are not close to each other or are in two different scrolling containers, they will always end up in the right position.
 
-But wait, it's not 1993 anymore, nowadays we write UIs using powerful abstraction libraries such as React or Angular. You'll be glad to know Popper can fully integrate with them and be a good citizen together with your other components. Check out [`react-popper`](https://github.com/FezVrasta/react-popper) for the official Popper wrapper for React.
+Since we write UIs using powerful abstraction libraries such as React or Angular nowadays, you'll also be glad to know Popper can fully integrate with them and be a good citizen together with your other components. Check out [`react-popper`](https://github.com/FezVrasta/react-popper) for the official Popper wrapper for React.
 
 ## Installation:
 
