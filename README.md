@@ -53,9 +53,16 @@ Popper is distributed in 3 different versions:
 
 The 3 versions are:
 
-- `popper` (3.61 kB): includes all the modifiers (features);
-- `popper-lite` (2.48 kB): includes only the minimum amount of modifiers to provide the basic functionality;
-- `popper-minimal` (2.09 kB): doesn't include any modifier, you must import them seprately;
+- `popper`: includes all the modifiers (features);
+- `popper-lite`: includes only the minimum amount of modifiers to provide the basic functionality;
+- `popper-minimal`: doesn't include any modifier, you must import them seprately;
+
+Below you can find the size of each version, minified and compressed with
+the [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
+
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper.min.js?compression=brotli&label=popper)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
 
 ## Hacking the library
 
