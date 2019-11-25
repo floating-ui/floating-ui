@@ -3,6 +3,7 @@ import getScrollParent from './getScrollParent';
 import getOffsetParent from './getOffsetParent';
 import getParentNode from './getParentNode';
 import getWindow from './getWindow';
+import getDocumentElement from './getDocumentElement';
 
 // A "clipping parent" is a scrolling container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from `initial`
@@ -15,7 +16,7 @@ export default function getClippingParent(
   const win = getWindow(element);
 
   return offsetParent === win
-    ? element.ownerDocument.documentElement
+    ? getDocumentElement(element)
     : scrollParent.contains(offsetParent)
     ? scrollParent
     : getClippingParent(

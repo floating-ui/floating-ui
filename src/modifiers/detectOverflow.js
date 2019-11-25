@@ -3,6 +3,7 @@ import type { State, Modifier } from '../types';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingParent from '../dom-utils/getClippingParent';
 import getDocumentRect from '../dom-utils/getDocumentRect';
+import getDocumentElement from '../dom-utils/getDocumentElement';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
 
@@ -28,7 +29,7 @@ export function detectOverflow(
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const documentElement = options.boundaryElement.ownerDocument.documentElement;
+  const documentElement = getDocumentElement(options.boundaryElement);
 
   if (!options.boundaryElement.contains(popperElement)) {
     if (__DEV__) {

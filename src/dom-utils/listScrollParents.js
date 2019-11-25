@@ -2,6 +2,7 @@
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
 import getNodeName from './getNodeName';
+import getWindow from './getWindow';
 
 export default function listScrollParents(
   element: Node,
@@ -9,7 +10,7 @@ export default function listScrollParents(
 ): Array<Node> {
   const scrollParent = getScrollParent(element);
   const isBody = getNodeName(scrollParent) === 'BODY';
-  const target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
+  const target = isBody ? getWindow(scrollParent) : scrollParent;
   const updatedList = list.concat(target);
   return isBody
     ? updatedList
