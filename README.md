@@ -60,9 +60,9 @@ The 3 versions are:
 Below you can find the size of each version, minified and compressed with
 the [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
 
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper.min.js?compression=brotli&label=popper)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper.min.js?compression=brotli&label=popper)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
 
 ## Hacking the library
 
