@@ -50,26 +50,25 @@ export function preventOverflow(state: State, options?: Options = {}) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
     const len = mainAxis === 'y' ? 'height' : 'width';
+    const offset = popperOffsets[mainAxis];
+    const min =
+      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide];
+    const max =
+      popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
+    const tetherMin =
+      state.offsets.popper[mainAxis] -
+      referenceRect[len] / 2 +
+      popperRect[len] / 2;
+    const tetherMax =
+      state.offsets.popper[mainAxis] +
+      referenceRect[len] / 2 -
+      popperRect[len] / 2;
 
-    let offset = within(
-      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide],
-      popperOffsets[mainAxis],
-      popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide]
+    state.offsets.popper[mainAxis] = within(
+      tether ? Math.min(tetherMin, min) : min,
+      offset,
+      tether ? Math.max(tetherMax, max) : max
     );
-
-    if (tether) {
-      offset = within(
-        state.offsets.popper[mainAxis] -
-          referenceRect[len] / 2 +
-          popperRect[len] / 2,
-        offset,
-        state.offsets.popper[mainAxis] +
-          referenceRect[len] / 2 -
-          popperRect[len] / 2
-      );
-    }
-
-    state.offsets.popper[mainAxis] = offset;
   }
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
