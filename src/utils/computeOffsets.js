@@ -2,8 +2,6 @@
 import getBasePlacement from './getBasePlacement';
 import getVariationPlacement from './getVariationPlacement';
 import getMainAxisFromPlacement from './getMainAxisFromPlacement';
-import getAltAxis from './getAltAxis';
-import getAltLen from './getAltLen';
 import type {
   Rect,
   PositioningStrategy,
@@ -68,8 +66,7 @@ export default ({
   const mainAxis = basePlacement
     ? getMainAxisFromPlacement(basePlacement)
     : null;
-  const altAxis = mainAxis ? getAltAxis(mainAxis) : null;
-  const len = altAxis === 'x' ? 'height' : 'width';
+  const len = mainAxis === 'y' ? 'height' : 'width';
 
   if (mainAxis != null) {
     switch (variationPlacement) {
