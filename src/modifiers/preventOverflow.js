@@ -1,5 +1,12 @@
 // @flow
-import { top, left, right, bottom, type Placement } from '../enums';
+import {
+  basePlacements,
+  top,
+  left,
+  right,
+  bottom,
+  type Placement,
+} from '../enums';
 import type { State, Modifier, Rect, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
@@ -25,7 +32,7 @@ export function preventOverflow(
   const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
       ? padding
-      : expandToHashMap(padding, [top, right, bottom, left])
+      : expandToHashMap(padding, basePlacements)
   );
 
   if (checkMainAxis) {

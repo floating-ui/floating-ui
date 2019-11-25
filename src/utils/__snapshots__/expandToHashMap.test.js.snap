@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expands all the possible cases: false 1`] = `
+Object {
+  "resize": false,
+  "scroll": false,
+}
+`;
+
+exports[`expands all the possible cases: true 1`] = `
+Object {
+  "resize": true,
+  "scroll": true,
+}
+`;

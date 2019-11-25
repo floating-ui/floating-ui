@@ -66,7 +66,7 @@ export type Options = {|
   placement: Placement,
   modifiers: Array<Modifier>,
   strategy: PositioningStrategy,
-  eventListeners: boolean | { scroll?: boolean, resize?: boolean },
+  eventListeners: boolean | {| scroll?: boolean, resize?: boolean |},
 |};
 
 export type UpdateCallback = State => void;

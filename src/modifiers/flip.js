@@ -5,7 +5,7 @@ import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
-import { top, right, bottom, left } from '../enums';
+import { basePlacements } from '../enums';
 
 export function flip(
   state: State,
@@ -19,14 +19,15 @@ export function flip(
   const { behavior = defaultBehavior, padding = 0 } = options;
   const overflow = state.modifiersData.detectOverflow;
 
+  const paddingObject = mergePaddingObject(
+    typeof padding !== 'number'
+      ? padding
+      : expandToHashMap(padding, basePlacements)
+  );
+
   const flippedPlacement = behavior.find(newPlacement => {
     const basePlacement = getBasePlacement(newPlacement);
-    const paddingValue = mergePaddingObject(
-      typeof padding !== 'number'
-        ? padding
-        : expandToHashMap(padding, [top, right, bottom, left])
-    )[basePlacement];
-    return overflow[basePlacement] + paddingValue <= 0;
+    return overflow[basePlacement] + paddingObject[basePlacement] <= 0;
   });
 
   if (flippedPlacement && flippedPlacement !== placement) {

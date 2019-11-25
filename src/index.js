@@ -20,7 +20,7 @@ import getCommonTotalScroll from './dom-utils/getCommonTotalScroll';
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
-import expandEventListeners from './utils/expandEventListeners';
+import expandToHashMap from './utils/expandToHashMap';
 import computeOffsets from './utils/computeOffsets';
 import format from './utils/format';
 import debounce from './utils/debounce';
@@ -32,7 +32,7 @@ import * as modifiers from './modifiers/index';
 const defaultModifiers: Array<Modifier> = (Object.values(modifiers): any);
 
 const INVALID_ELEMENT_ERROR =
-  'Invalid `%s` argument provided to Popper.js, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
+  'Invalid `%s` argument provided to Popper, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
 
 const areValidElements = (a: mixed, b: mixed): boolean %checks =>
   a instanceof Element && b instanceof Element;
@@ -176,7 +176,7 @@ export default class Popper {
       }),
     };
 
-    // Modifiers have the ability to read the current Popper.js state, included
+    // Modifiers have the ability to read the current Popper state, included
     // the popper offsets, and modify it to address specifc cases
     this.state.reset = false;
 
@@ -195,13 +195,16 @@ export default class Popper {
   }
 
   enableEventListeners(
-    eventListeners: boolean | { scroll?: boolean, resize?: boolean }
+    eventListeners: boolean | {| scroll?: boolean, resize?: boolean |}
   ) {
     const {
       reference: referenceElement,
       popper: popperElement,
     } = this.state.elements;
-    const { scroll, resize } = expandEventListeners(eventListeners);
+    const { scroll, resize } =
+      typeof eventListeners === 'boolean'
+        ? expandToHashMap(eventListeners, ['scroll', 'resize'])
+        : eventListeners;
 
     if (scroll) {
       const scrollParents = [

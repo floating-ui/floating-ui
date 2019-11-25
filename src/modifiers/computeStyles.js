@@ -1,7 +1,7 @@
 // @flow
 import type { State, PositioningStrategy, Offsets, Modifier } from '../types';
 
-// This modifier takes the Popper.js state and prepares some StyleSheet properties
+// This modifier takes the Popper state and prepares some StyleSheet properties
 // that can be applied to the popper element to make it render in the expected position.
 
 type Options = {
