@@ -66,17 +66,9 @@ export function preventOverflow(state: State, options?: Options = {}) {
     const isReferenceLarger = referenceRect[len] > popperRect[len];
 
     state.offsets.popper[mainAxis] = within(
-      tether
-        ? isReferenceLarger
-          ? Math.min(min, tetherMax)
-          : Math.min(min, tetherMin)
-        : min,
+      tether ? Math.min(min, isReferenceLarger ? tetherMax : tetherMin) : min,
       offset,
-      tether
-        ? isReferenceLarger
-          ? Math.max(max, tetherMin)
-          : Math.max(max, tetherMax)
-        : max
+      tether ? Math.max(max, isReferenceLarger ? tetherMin : tetherMax) : max
     );
   }
   if (checkAltAxis) {
