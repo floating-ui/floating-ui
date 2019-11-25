@@ -65,18 +65,19 @@ export default ({
       };
   }
 
-  const mainAxis = placement ? getMainAxisFromPlacement(placement) : null;
+  const mainAxis = basePlacement
+    ? getMainAxisFromPlacement(basePlacement)
+    : null;
   const altAxis = mainAxis ? getAltAxis(mainAxis) : null;
-  const len = altAxis === 'x' ? 'width' : 'height';
-  const axis = [right, left].includes(basePlacement) ? mainAxis : altAxis;
+  const len = altAxis === 'x' ? 'height' : 'width';
 
-  if (axis != null) {
+  if (mainAxis != null) {
     switch (variationPlacement) {
       case start:
-        offsets[axis] -= element[len] / 2;
+        offsets[mainAxis] -= reference[len] / 2 - element[len] / 2;
         break;
       case end:
-        offsets[axis] += element[len] / 2;
+        offsets[mainAxis] += reference[len] / 2 - element[len] / 2;
         break;
       default:
     }
