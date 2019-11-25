@@ -32,7 +32,7 @@ import * as modifiers from './modifiers/index';
 const defaultModifiers: Array<Modifier> = (Object.values(modifiers): any);
 
 const INVALID_ELEMENT_ERROR =
-  'Popper: Invalid `%s` argument provided to Popper, it must be either a valid DOM element or a jQuery-wrapped DOM element, you provided `%s`';
+  'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element or a jQuery-wrapped DOM element.';
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
@@ -75,6 +75,9 @@ export default class Popper {
 
     // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
+      if (__DEV__) {
+        console.error(INVALID_ELEMENT_ERROR);
+      }
       return;
     }
 
@@ -138,6 +141,9 @@ export default class Popper {
     } = this.state.elements;
     // Don't proceed if `reference` or `popper` are not valid elements anymore
     if (!areValidElements(referenceElement, popperElement)) {
+      if (__DEV__) {
+        console.error(INVALID_ELEMENT_ERROR);
+      }
       return;
     }
 

@@ -42,7 +42,8 @@
     ],
     "plugins": [
       "@babel/plugin-transform-flow-strip-types",
-      "@babel/plugin-proposal-class-properties",
+      ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }],
+      ["@babel/plugin-proposal-class-properties", { "loose": true }],
       "dev-expression"
     ],
     "env": {
@@ -76,11 +77,11 @@
     "prettier": "^1.15.1",
     "pretty-quick": "^1.8.0",
     "raf": "^3.4.1",
-    "rollup": "^0.67.0",
-    "rollup-plugin-babel": "^4.0.3",
+    "rollup": "^1.27.0",
+    "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-bundle-size": "^1.0.2",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-terser": "^5.1.2",
     "serve": "^10.0.2"
   },
   "husky": {
