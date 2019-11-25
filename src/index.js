@@ -26,11 +26,6 @@ import format from './utils/format';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 
-// Default modifiers
-import * as modifiers from './modifiers/index';
-
-const defaultModifiers: Array<Modifier> = (Object.values(modifiers): any);
-
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element or a jQuery-wrapped DOM element.';
 const INFINITE_LOOP_ERROR =
@@ -47,6 +42,7 @@ const defaultOptions = {
 };
 
 export default class Popper {
+  static defaultModifiers: Array<Modifier>;
   state: $Shape<State> = {
     placement: 'bottom',
     orderedModifiers: [],
@@ -89,7 +85,7 @@ export default class Popper {
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
     this.state.orderedModifiers = orderModifiers([
-      ...defaultModifiers,
+      ...this.constructor.defaultModifiers,
       ...this.state.options.modifiers,
     ])
       // Apply user defined preferences to modifiers
@@ -274,3 +270,5 @@ export default class Popper {
     );
   }
 }
+
+Popper.defaultModifiers = [];

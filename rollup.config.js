@@ -6,8 +6,12 @@ import { terser } from 'rollup-plugin-terser';
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
-const createUmdBundle = ({ minify } = {}) => ({
-  input: 'src/index.js',
+const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-minimal.js'];
+
+const getFileName = input => input.split('/')[1].split('.')[0];
+
+const createUmdBundle = ({ input, minify } = {}) => ({
+  input,
   plugins: [
     replace({
       __DEV__: minify ? 'false' : 'true',
@@ -18,35 +22,35 @@ const createUmdBundle = ({ minify } = {}) => ({
   ].filter(Boolean),
   output: {
     name: 'Popper',
-    file: `${dir}/umd/popper${minify ? '.min' : ''}.js`,
+    file: `${dir}/umd/${getFileName(input)}${minify ? '.min' : ''}.js`,
     format: 'umd',
     sourcemap: true,
   },
 });
 
-const esmBundle = {
+const createEsmBundle = ({ input }) => ({
   input: 'src/index.js',
   plugins: [babel(), bundleSize()],
   output: {
     name: 'Popper',
-    file: `${dir}/esm/popper.js`,
+    file: `${dir}/esm/${getFileName(input)}.js`,
     format: 'esm',
     sourcemap: true,
   },
-};
+});
 
-const cjsBundle = {
-  input: 'src/index.js',
+const createCjsBundle = ({ input }) => ({
+  input,
   plugins: [babel(), bundleSize()],
   output: {
-    file: `${dir}/cjs/popper.js`,
+    file: `${dir}/cjs/${getFileName(input)}.js`,
     format: 'cjs',
     sourcemap: true,
   },
-};
+});
 
-const devBundle = {
-  input: 'src/index.js',
+const createDevBundle = ({ input }) => ({
+  input,
   plugins: [
     babel(),
     replace({
@@ -55,19 +59,21 @@ const devBundle = {
   ],
   output: {
     name: 'Popper',
-    file: `${dir}/esm/popper.js`,
+    file: `${dir}/esm/${getFileName(input)}.js`,
     format: 'esm',
     sourcemap: true,
   },
-};
+});
 
 const builds = IS_DEV
-  ? [devBundle]
-  : [
-      createUmdBundle(),
-      createUmdBundle({ minify: true }),
-      esmBundle,
-      cjsBundle,
-    ];
+  ? [createDevBundle({ input: 'src/popper.js' })]
+  : inputs
+      .map(input => [
+        createUmdBundle({ input }),
+        createUmdBundle({ input, minify: true }),
+        createEsmBundle({ input }),
+        createCjsBundle({ input }),
+      ])
+      .flat();
 
 export default builds;

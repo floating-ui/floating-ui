@@ -33,6 +33,24 @@ const popper = document.querySelector('#tooltip');
 new Popper(element, popper, { placement: 'right' });
 ```
 
+## Distribution targets
+
+Popper is distributed in 3 different versions, each of them bundled as CommonJS, ES Module, and UMD.
+
+The 3 versions are: `popper`,
+
+- `popper` (3.61 kB): includes all the modifiers (features);
+- `popper-lite` (2.48 kB): includes only the minimum amount of modifiers to provide the basic functionality;
+- `popper-minimal` (2.09 kB): doesn't include any modifier, you must import them seprately;
+
+Confused? Don't worry! If you'd like to begin with Popper in your HTML document, use the following:
+
+```html
+<script src="./@popperjs/core/dist/umd/popper.js"></script>
+```
+
+The script above will import the Popper build with the development warnings to help you begin.
+
 ## Hacking the library
 
 If you want to play with the library, implement new features, fix a bug you found, or simply experiment with it, this section is for you!

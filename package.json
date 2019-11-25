@@ -42,8 +42,19 @@
     ],
     "plugins": [
       "@babel/plugin-transform-flow-strip-types",
-      ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }],
-      ["@babel/plugin-proposal-class-properties", { "loose": true }],
+      [
+        "@babel/plugin-proposal-object-rest-spread",
+        {
+          "loose": true,
+          "useBuiltIns": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
       "dev-expression"
     ],
     "env": {
