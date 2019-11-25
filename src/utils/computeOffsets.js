@@ -66,9 +66,10 @@ export default ({
   const mainAxis = basePlacement
     ? getMainAxisFromPlacement(basePlacement)
     : null;
-  const len = mainAxis === 'y' ? 'height' : 'width';
 
   if (mainAxis != null) {
+    const len = mainAxis === 'y' ? 'height' : 'width';
+
     switch (variationPlacement) {
       case start:
         offsets[mainAxis] -= reference[len] / 2 - element[len] / 2;
