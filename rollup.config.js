@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
-const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-minimal.js'];
+const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
 
 const getFileName = input => input.split('/')[1].split('.')[0];
 
