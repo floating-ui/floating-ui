@@ -8,11 +8,11 @@ Given a reference element (such as a button) and a tooltip element, Popper will 
 
 ### Why Popper?
 
-A naive implementation of a popper element generally doesn't consider the following:
+Naive tooltip implementations generally don't consider the following:
 
-- Preventing overflow when the popper is near a boundary (e.g. `window`), it will get cut off
-- Flipping to keep the popper visible in the viewport for the user
-- Keeping the popper with the reference element when inside a scrolling container
+- Preventing overflow when the tooltip is near a boundary (e.g. `window`), it will get cut off;
+- Flipping to keep the tooltip visible in the viewport for the user;
+- Keeping the tooltip with the reference element when inside a scrolling container;
 
 Popper solves all of these key problems in an elegant, performant manner. It is a ~3 kB library that aims to provide a reliable and extensible positioning engine you can use to ensure all your popper elements are positioned in the right place. Why waste your time writing your own logic every time you are programming a tooltip? There are many edge cases that are easy to forget to consider, which is why we've done the hard work for you.
 
@@ -86,12 +86,9 @@ Popper.defaultModifiers = [
   computeStyles,
   applyStyles,
 ];
-
-// Now you can use the `Popper` class with _only_ the features you want. For
-// instance, we aren't using the `arrow`, `flip`, or `offset` modifiers, because
-// the current component, route, or our entire app does not need them. This lets
-// us save on bundle size bytes for our users!
 ```
+
+Now you can use the `Popper` class with _only_ the features you want. For instance, we aren't using the `arrow`, `flip`, or `offset` modifiers, because the current component, route, or our entire app does not need them. This lets us save on bundle size bytes for our users!
 
 If you don't want to bother with tree-shaking and don't need bundle size cost advantages, you can import the fully featured `esm` file:
 
@@ -119,15 +116,15 @@ Popper is distributed in 3 different versions, in 3 different file formats.
 
 The 3 file formats are:
 
+- `esm` (works with `import` syntax — **recommended**)
 - `umd` (works with `<script>` tags or RequireJS)
 - `cjs` (works with `require()` syntax)
-- `esm` (works with `import` syntax - **recommended**)
 
 The 3 versions are:
 
-- `popper`: includes all the modifiers (features) in one file (**default for `umd`**)
-- `popper-lite`: includes only the minimum amount of modifiers to provide the basic functionality
-- `popper-base`: doesn't include any modifier, you must import them separately (**default for `esm` and `cjs`**)
+- `popper`: includes all the modifiers (features) in one file (**default for `umd`**);
+- `popper-lite`: includes only the minimum amount of modifiers to provide the basic functionality;
+- `popper-base`: doesn't include any modifier, you must import them separately (**default for `esm` and `cjs`**);
 
 Below you can find the size of each version, minified and compressed with
 the [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
