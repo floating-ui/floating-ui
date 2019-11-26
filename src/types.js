@@ -42,9 +42,12 @@ export type State = {|
     popper: Array<Node>,
   |},
   styles: {|
-    [string]: $Shape<CSSStyleDeclaration>,
+    [key: string]: $Shape<CSSStyleDeclaration>,
   |},
-  modifiersData: Object,
+  attributes: {|
+    [key: string]: {| [key: string]: string |},
+  |},
+  modifiersData: { [key: string]: any },
   reset: boolean,
 |};
 

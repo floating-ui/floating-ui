@@ -70,22 +70,27 @@ export const computeArrowStyles = ({
 export function computeStyles(state: State, options?: Options = {}) {
   const { gpuAcceleration = true } = options;
 
-  state.styles = {};
-
-  // popper offsets are always available
-  state.styles.popper = computePopperStyles({
-    offsets: state.offsets.popper,
-    strategy: state.options.strategy,
-    gpuAcceleration,
-  });
-
-  // arrow offsets may not be available
-  if (state.offsets.arrow != null) {
-    state.styles.arrow = computeArrowStyles({
-      offsets: state.offsets.arrow,
-      gpuAcceleration,
-    });
-  }
+  state.modifiersData.computeStyles = {
+    styles: {
+      // popper offsets are always available
+      popper: computePopperStyles({
+        offsets: state.offsets.popper,
+        strategy: state.options.strategy,
+        gpuAcceleration,
+      }),
+      // arrow offsets may not be available
+      arrow:
+        state.offsets.arrow != null
+          ? computeArrowStyles({
+              offsets: state.offsets.arrow,
+              gpuAcceleration,
+            })
+          : undefined,
+    },
+    attributes: {
+      popper: { 'data-popper-placement': state.placement },
+    },
+  };
 
   return state;
 }
@@ -95,4 +100,5 @@ export default ({
   enabled: true,
   phase: 'afterMain',
   fn: computeStyles,
+  data: {},
 }: Modifier);
