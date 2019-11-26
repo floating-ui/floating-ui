@@ -4,15 +4,23 @@
 
 Positioning tooltips (_but also dropdowns, popovers, and more_) is difficult. **Popper** is here to help!
 
-Given a reference element (such as a button) and a tooltip element, Popper will automatically put your tooltip in the right place next to the button. This means it won't overflow the window boundary and get cut off, will flip to be placed inside the viewport, and stay with the button while scrolling a container.
+Given a reference element (such as a button) and a tooltip element, Popper will automatically put your tooltip in the right place next to the button.
 
-Popper is a ~3 kB library that aims to provide a reliable and extensible positioning engine you can use to ensure all your popper elements are positioned in the right place. Why waste your time writing your own logic every time you are programming a tooltip? There are many edge cases that are easy to forget to consider, which is why we've done the hard work for you.
+### Why Popper?
+
+A naive implementation of a popper element generally doesn't consider the following:
+
+- Preventing overflow when the popper is near a boundary (e.g. `window`), it will get cut off
+- Flipping to keep the popper visible in the viewport for the user
+- Keeping the popper with the reference element when inside a scrolling container
+
+Popper solves all of these key problems in an elegant, performant manner. It is a ~3 kB library that aims to provide a reliable and extensible positioning engine you can use to ensure all your popper elements are positioned in the right place. Why waste your time writing your own logic every time you are programming a tooltip? There are many edge cases that are easy to forget to consider, which is why we've done the hard work for you.
 
 This library can position any pair of elements in your document without needing to alter the DOM in any way. It doesn't matter if your elements are not close to each other or are in two different scrolling containers, they will always end up in the right position.
 
 Since we write UIs using powerful abstraction libraries such as React or Angular nowadays, you'll also be glad to know Popper can fully integrate with them and be a good citizen together with your other components. Check out [`react-popper`](https://github.com/FezVrasta/react-popper) for the official Popper wrapper for React.
 
-## Installation:
+## Installation
 
 ### 1. Package Manager
 
@@ -21,13 +29,13 @@ Since we write UIs using powerful abstraction libraries such as React or Angular
 yarn add @popperjs/core@next
 
 # With npm
-npm install --save @popperjs/core@next
+npm i @popperjs/core@next
 ```
 
 ### 2. CDN
 
 ```html
-<script src="https://unpkg.com/@popperjs/core"></script>
+<script src="https://unpkg.com/@popperjs/core@next"></script>
 ```
 
 ### 3. Direct Download
@@ -37,6 +45,64 @@ Manually downloading the library is not recommended because you lose versioning 
 You don't receive fix/feat updates easily and will lag behind the website documentation, among other issues, and this quickly becomes an unmaintainable way to manage dependencies.
 
 ## Usage
+
+Popper has the ability to work as a plug n' play library with all features included, as well as a tree-shakable library that minimizes bundle size if you import only what you need.
+
+### CDN
+
+Generally, for CDN users, you'll be using the fully-featured `umd` file:
+
+```html
+<script src="https://unpkg.com/@popperjs/core@next"></script>
+<script>
+  // Now the script is loaded, you can use the `Popper` class!
+</script>
+```
+
+Importing features you need comes at the cost of extra HTTP requests which is usually not worth it.
+
+### Module Bundlers
+
+For users of module bundlers like webpack or Rollup, you're going to want to take advantage of tree-shaking in your bundler. This comes at the cost of extra setup, but is worth it.
+
+In your app, you can do the following:
+
+```js
+// Import the core class
+import Popper from '@popperjs/core';
+
+// Import the features you need
+import {
+  computeStyles,
+  applyStyles,
+  detectOverflow,
+  preventOverflow,
+} from '@popperjs/core/lib/modifiers';
+
+// Setup Popper's default modifiers for each new instance
+Popper.defaultModifiers = [
+  detectOverflow,
+  preventOverflow,
+  computeStyles,
+  applyStyles,
+];
+
+// Now you can use the `Popper` class with _only_ the features you want. For
+// instance, we aren't using the `arrow`, `flip`, or `offset` modifiers, because
+// the current component, route, or our entire app does not need them. This lets
+// us save on bundle size bytes for our users!
+```
+
+If you don't want to bother with tree-shaking and don't need bundle size cost advantages, you can import the fully featured `esm` file:
+
+```js
+// All features included!
+import Popper from '@popperjs/core/lib/popper';
+```
+
+### Instantiation
+
+Creating a popper instance is done by passing the reference element (such as a button), the popper element (such as a tooltip), and some options to the `Popper` constructor:
 
 ```js
 // Get your elements
@@ -49,13 +115,19 @@ new Popper(element, popper, { placement: 'right' });
 
 ## Distribution targets
 
-Popper is distributed in 3 different versions:
+Popper is distributed in 3 different versions, in 3 different file formats.
+
+The 3 file formats are:
+
+- `umd` (works with `<script>` tags or RequireJS)
+- `cjs` (works with `require()` syntax)
+- `esm` (works with `import` syntax - **recommended**)
 
 The 3 versions are:
 
-- `popper`: includes all the modifiers (features);
-- `popper-lite`: includes only the minimum amount of modifiers to provide the basic functionality;
-- `popper-minimal`: doesn't include any modifier, you must import them seprately;
+- `popper`: includes all the modifiers (features) in one file (**default for `umd`**)
+- `popper-lite`: includes only the minimum amount of modifiers to provide the basic functionality
+- `popper-base`: doesn't include any modifier, you must import them separately (**default for `esm` and `cjs`**)
 
 Below you can find the size of each version, minified and compressed with
 the [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
