@@ -55,14 +55,12 @@ export default class Popper {
   ) {
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
+    const referenceElement = unwrapJqueryElement(reference);
+    const popperElement = unwrapJqueryElement(reference);
     this.state.elements = {
-      reference: unwrapJqueryElement(reference),
-      popper: unwrapJqueryElement(popper),
-    };
-    const {
       reference: referenceElement,
       popper: popperElement,
-    } = this.state.elements;
+    };
 
     // Store options into state
     this.state.options = { ...defaultOptions, ...options };
@@ -80,6 +78,12 @@ export default class Popper {
       popper: listScrollParents(popperElement),
     };
 
+    // Validate the provided modifiers so that the consumer will get warned
+    // of one of the custom modifiers is invalid for any reason
+    if (__DEV__) {
+      validateModifiers(this.state.options.modifiers);
+    }
+
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
     this.state.orderedModifiers = orderModifiers([
@@ -93,12 +97,6 @@ export default class Popper {
           ({ name }) => name === modifier.name
         ),
       }));
-
-    // Validate the provided modifiers so that the consumer will get warned
-    // of one of the custom modifiers is invalid for any reason
-    if (__DEV__) {
-      validateModifiers(this.state.options.modifiers);
-    }
 
     // Modifiers have the opportunity to execute some arbitrary code before
     // the first update cycle is ran, the order of execution will be the same
@@ -198,10 +196,6 @@ export default class Popper {
   enableEventListeners(
     eventListeners: boolean | {| scroll?: boolean, resize?: boolean |}
   ) {
-    const {
-      reference: referenceElement,
-      popper: popperElement,
-    } = this.state.elements;
     const { scroll, resize } =
       typeof eventListeners === 'boolean'
         ? expandToHashMap(eventListeners, ['scroll', 'resize'])
