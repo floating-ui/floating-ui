@@ -1,16 +1,15 @@
 # Modifiers
 
-Popper is built on top of an extensible core, which provides the fundation
-used to provide all the functionalities offered by the library.
+Popper is built on top of an extensible core, which provides the fundation used
+to provide all the functionalities offered by the library.
 
-All Popper does by default, is to compute the popper element position,
-in relation to the provided reference element.
-This includes all the logic needed to address scrolling parents, the four
-placements (top, right, bottom, left), the "auto" placement, and a few other
-low level operations.
+All Popper does by default, is to compute the popper element position, in
+relation to the provided reference element. This includes all the logic needed
+to address scrolling parents, the four placements (top, right, bottom, left),
+the "auto" placement, and a few other low level operations.
 
-All the additional functionalities provided by the library are implemented
-as Popper modifiers. They are plugins, or middlewares, that can hook into the
+All the additional functionalities provided by the library are implemented as
+Popper modifiers. They are plugins, or middlewares, that can hook into the
 lifecycle of Popper, and add additional logic to the positioning operations
 provided by default by Popper.
 
@@ -20,8 +19,8 @@ modifier documentation in the side menu.
 
 ## Custom Modifiers
 
-Is it possible to add custom modifiers, written by you, by defining them in
-the `options.modifiers` array during a Popper instantation.
+Is it possible to add custom modifiers, written by you, by defining them in the
+`options.modifiers` array during a Popper instantation.
 
 ```js
 new Popper(reference, popper, {
@@ -47,11 +46,11 @@ A modifier is composed of an object with the following properties:
 
 ### `name`
 
-The name is used as an identifier to make it possible to refer to
-the modifier from other parts of the library.
-For example, you can add an object to the `options.modifier` array
-with the `name` property, and the `options` property populated with
-some custom options, to override the options of a built-in modifier.
+The name is used as an identifier to make it possible to refer to the modifier
+from other parts of the library. For example, you can add an object to the
+`options.modifier` array with the `name` property, and the `options` property
+populated with some custom options, to override the options of a built-in
+modifier.
 
 ```js
 new Popper(reference, popper, {
@@ -76,8 +75,8 @@ Popper's modifiers lifecycle is divided in 3 phases: read, main, and write.
 This is done to optimize the library so that its access to the DOM is grouped
 together rather than scattered around the whole lifecycle. The modifiers that
 need to read from the DOM should run in the `read` phase, the ones that only
-perform logic with algorithms should live in `main`, and the ones that write
-to the DOM should be under `write`.
+perform logic with algorithms should live in `main`, and the ones that write to
+the DOM should be under `write`.
 
 Note that Popper provides a cache of DOM measurements in its state, so that
 modifiers can read them rather than querying the DOM, optimizing the overall
@@ -89,27 +88,28 @@ Each modifier can specify a list of modifiers it depends upon, so that Popper
 will execute them in the right order to allow the dependant modifier to access
 the data provided by the dependee modifier.
 
-For example, the `preventOverflow` modifier relies on the `detectOverflow`-provided
-data, which is accessed from `state.modifiersData.detectOverflow`.
+For example, the `preventOverflow` modifier relies on the
+`detectOverflow`-provided data, which is accessed from
+`state.modifiersData.detectOverflow`.
 
 ### `fn`
 
 This is the main function, used to provide the logic to the modifier.
 
-The signature is straightforward, it provides the Popper state, and the
-modifier options, and must return the (optionally altered) `state`.
+The signature is straightforward, it provides the Popper state, and the modifier
+options, and must return the (optionally altered) `state`.
 
-There are cases when you may want to control the Popper lifecycle
-through a modifier, for example, the `flip` modifier can alter the
-`placement` option, and if that happens, Popper is instructed to run all the modifiers
-again, so that they can react to the updated placement value.
+There are cases when you may want to control the Popper lifecycle through a
+modifier, for example, the `flip` modifier can alter the `placement` option, and
+if that happens, Popper is instructed to run all the modifiers again, so that
+they can react to the updated placement value.
 
 A modifier can reset the lifecycle by setting `state.reset` to `true`.
 
 ### `onLoad`
 
-This function is executed when the Popper instance is created, it can be useful if you
-need to execute one-time operations on Popper instantation.
+This function is executed when the Popper instance is created, it can be useful
+if you need to execute one-time operations on Popper instantation.
 
 ### `onDestroy`
 
@@ -117,10 +117,11 @@ Just like `onLoad`, but runs when the Popper instance is destroyed.
 
 ### `options`
 
-This is usually an object with all the properties used to configure the modifier.
+This is usually an object with all the properties used to configure the
+modifier.
 
 ### `data`
 
-If you desire to share data generated by your modifier with other modifiers,
-you can populate this object with some defaults, and update it inside your
-modifier by altering `state.modifiersData.<MODIFIER_NAME>`.
+If you desire to share data generated by your modifier with other modifiers, you
+can populate this object with some defaults, and update it inside your modifier
+by altering `state.modifiersData.<MODIFIER_NAME>`.
