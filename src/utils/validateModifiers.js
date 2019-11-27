@@ -109,6 +109,7 @@ export default (modifiers: Array<any>): void => {
           }
           break;
         case 'options':
+        case 'data':
           break;
         default:
           console.error(
