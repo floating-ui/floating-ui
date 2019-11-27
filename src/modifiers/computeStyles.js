@@ -74,15 +74,15 @@ export function computeStyles(state: State, options?: Options = {}) {
     styles: {
       // popper offsets are always available
       popper: computePopperStyles({
-        offsets: state.offsets.popper,
+        offsets: state.modifiersData.popperOffsets,
         strategy: state.options.strategy,
         gpuAcceleration,
       }),
       // arrow offsets may not be available
       arrow:
-        state.offsets.arrow != null
+        state.modifiersData.arrowOffsets != null
           ? computeArrowStyles({
-              offsets: state.offsets.arrow,
+              offsets: state.modifiersData.arrowOffsets,
               gpuAcceleration,
             })
           : undefined,

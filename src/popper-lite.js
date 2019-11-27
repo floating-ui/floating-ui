@@ -1,6 +1,6 @@
 // @flow
 import Popper from './index';
-import { computeStyles, applyStyles } from './modifiers/index';
+import { popperOffsets, computeStyles, applyStyles } from './modifiers/index';
 
-Popper.defaultModifiers = [computeStyles, applyStyles];
+Popper.defaultModifiers = [popperOffsets, computeStyles, applyStyles];
 export default Popper;

@@ -36,7 +36,6 @@ export type State = {|
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier>,
   measures: StateMeasures,
-  offsets: StateOffsets,
   scrollParents: {|
     reference: Array<Node>,
     popper: Array<Node>,

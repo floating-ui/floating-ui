@@ -37,7 +37,7 @@ export function preventOverflow(state: State, options?: Options = {}) {
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
-  const popperOffsets = state.offsets.popper;
+  const popperOffsets = state.modifiersData.popperOffsets;
   const referenceRect = state.measures.reference;
   const popperRect = state.measures.popper;
   const paddingObject = mergePaddingObject(
@@ -56,16 +56,16 @@ export function preventOverflow(state: State, options?: Options = {}) {
     const max =
       popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
     const tetherMin =
-      state.offsets.popper[mainAxis] -
+      state.modifiersData.popperOffsets[mainAxis] -
       referenceRect[len] / 2 +
       popperRect[len] / 2;
     const tetherMax =
-      state.offsets.popper[mainAxis] +
+      state.modifiersData.popperOffsets[mainAxis] +
       referenceRect[len] / 2 -
       popperRect[len] / 2;
     const isReferenceLarger = referenceRect[len] > popperRect[len];
 
-    state.offsets.popper[mainAxis] = within(
+    state.modifiersData.popperOffsets[mainAxis] = within(
       tether ? Math.min(min, isReferenceLarger ? tetherMax : tetherMin) : min,
       offset,
       tether ? Math.max(max, isReferenceLarger ? tetherMin : tetherMax) : max
@@ -75,7 +75,7 @@ export function preventOverflow(state: State, options?: Options = {}) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
 
-    state.offsets.popper[altAxis] = within(
+    state.modifiersData.popperOffsets[altAxis] = within(
       popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide],
       popperOffsets[altAxis],
       popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]

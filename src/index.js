@@ -15,13 +15,11 @@ import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
 import getNodeScroll from './dom-utils/getNodeScroll';
 import getOffsetParent from './dom-utils/getOffsetParent';
-import getCommonTotalScroll from './dom-utils/getCommonTotalScroll';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import expandToHashMap from './utils/expandToHashMap';
-import computeOffsets from './utils/computeOffsets';
 import format from './utils/format';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
@@ -181,25 +179,6 @@ export default class Popper {
           console.error(INFINITE_LOOP_ERROR);
           break;
         }
-      }
-      if (index === 0) {
-        // Offsets are the actual position the popper needs to have to be
-        // properly positioned near its reference element
-        // This is the most basic placement, and will be adjusted by
-        // the modifiers in the next step
-        this.state.offsets = {
-          popper: computeOffsets({
-            reference: this.state.measures.reference,
-            element: this.state.measures.popper,
-            strategy: 'absolute',
-            placement: this.state.placement,
-            scroll: getCommonTotalScroll(
-              referenceElement,
-              this.state.scrollParents.reference,
-              this.state.scrollParents.popper
-            ),
-          }),
-        };
       }
 
       if (this.state.reset === true) {

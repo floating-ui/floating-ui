@@ -40,8 +40,8 @@ export function offset(state: State, options?: { offset: ?OffsetsFunction }) {
       options.offset
     );
 
-    state.offsets.popper.x += x;
-    state.offsets.popper.y += y;
+    state.modifiersData.popperOffsets.x += x;
+    state.modifiersData.popperOffsets.y += y;
   }
 
   return state;
