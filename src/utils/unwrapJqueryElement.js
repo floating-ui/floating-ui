@@ -1,3 +1,6 @@
 // @flow
-export default (element: any): HTMLElement =>
-  element && element.jquery ? element[0] : element;
+import type { JQueryWrapper } from '../types';
+
+export default (element: HTMLElement | JQueryWrapper): HTMLElement =>
+  // $FlowFixMe: need to get type refinement work
+  element.hasOwnProperty('jquery') ? element[0] : element;

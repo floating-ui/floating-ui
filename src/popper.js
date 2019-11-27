@@ -2,5 +2,12 @@
 import Popper from './index';
 import * as modifiers from './modifiers/index';
 
-Popper.defaultModifiers = (Object.values(modifiers): any);
+type Modifiers$Values = $Values<typeof modifiers>;
+
+const defaultModifiers: Array<Modifiers$Values> = (Object.values(
+  modifiers
+): any);
+
+Popper.defaultModifiers = defaultModifiers;
+
 export default Popper;

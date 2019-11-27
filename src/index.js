@@ -49,8 +49,8 @@ export default class Popper {
   };
 
   constructor(
-    reference: Element | JQueryWrapper,
-    popper: Element | JQueryWrapper,
+    reference: HTMLElement | JQueryWrapper,
+    popper: HTMLElement | JQueryWrapper,
     options: $Shape<Options> = defaultOptions
   ) {
     // Unwrap `reference` and `popper` elements in case they are

@@ -1,6 +1,6 @@
 // @flow
 import type { Placement, ModifierPhases } from './enums';
-export type JQueryWrapper = Element[] & { jquery: string };
+export type JQueryWrapper = { @@iterator: HTMLElement[], jquery: string };
 
 export type Rect = {|
   width: number,
