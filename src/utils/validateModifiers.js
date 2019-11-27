@@ -82,6 +82,19 @@ export default (modifiers: Array<any>): void => {
             );
           }
           break;
+        case 'onDestroy':
+          if (typeof modifier.onLoad !== 'function') {
+            console.error(
+              format(
+                ERROR_MESSAGE,
+                modifier.name,
+                '"onDestroy"',
+                '"function"',
+                `"${String(modifier.fn)}"`
+              )
+            );
+          }
+          break;
         case 'requires':
           if (!Array.isArray(modifier.requires)) {
             console.error(
