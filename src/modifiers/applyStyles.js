@@ -61,4 +61,4 @@ export default ({
   fn: applyStyles,
   onDestroy,
   requires: ['computeStyles'],
-}: Modifier);
+}: Modifier<void>);

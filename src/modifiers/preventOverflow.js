@@ -91,4 +91,4 @@ export default ({
   phase: 'main',
   fn: preventOverflow,
   requires: ['detectOverflow'],
-}: Modifier);
+}: Modifier<Options>);

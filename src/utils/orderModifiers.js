@@ -25,7 +25,7 @@ const order = modifiers => {
   return ordered;
 };
 
-export default (modifiers: Array<Modifier>): Array<Modifier> => [
+export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> => [
   ...order(modifiers.filter(({ phase }) => phase === 'read')),
   ...order(modifiers.filter(({ phase }) => phase === 'main')),
   ...order(modifiers.filter(({ phase }) => phase === 'afterMain')),

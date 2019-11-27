@@ -101,4 +101,4 @@ export default ({
   phase: 'afterMain',
   fn: computeStyles,
   data: {},
-}: Modifier);
+}: Modifier<Options>);

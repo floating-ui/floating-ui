@@ -7,10 +7,9 @@ import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { basePlacements } from '../enums';
 
-export function flip(
-  state: State,
-  options?: { behavior: Array<Placement>, padding: Padding } = {}
-) {
+type Options = { behavior: Array<Placement>, padding: Padding };
+
+export function flip(state: State, options?: Options = {}) {
   const placement = state.placement;
   const defaultBehavior = [
     state.options.placement,
@@ -61,4 +60,4 @@ export default ({
   fn: flip,
   requires: ['detectOverflow'],
   data: { index: 0 },
-}: Modifier);
+}: Modifier<Options>);

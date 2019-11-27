@@ -29,4 +29,4 @@ export default ({
   phase: 'read',
   fn: popperOffsets,
   data: {},
-}: Modifier);
+}: Modifier<void>);

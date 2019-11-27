@@ -34,7 +34,7 @@ export type State = {|
   options: Options,
   placement: Placement,
   strategy: PositioningStrategy,
-  orderedModifiers: Array<Modifier>,
+  orderedModifiers: Array<Modifier<any>>,
   measures: StateMeasures,
   scrollParents: {|
     reference: Array<Node>,
@@ -50,12 +50,12 @@ export type State = {|
   reset: boolean,
 |};
 
-export type Modifier = {|
+export type Modifier<Options> = {|
   name: string,
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
-  fn: (State, options: any) => State,
+  fn: (State, Options) => State,
   onLoad?: State => void,
   onDestroy?: State => void,
   options?: any,
@@ -66,7 +66,7 @@ export type EventListeners = {| scroll: boolean, resize: boolean |};
 
 export type Options = {|
   placement: Placement,
-  modifiers: Array<Modifier>,
+  modifiers: Array<Modifier<any>>,
   strategy: PositioningStrategy,
   eventListeners: boolean | {| scroll?: boolean, resize?: boolean |},
 |};

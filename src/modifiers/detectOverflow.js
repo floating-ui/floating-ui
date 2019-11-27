@@ -80,4 +80,4 @@ export default ({
   fn: detectOverflow,
   requires: ['popperOffsets'],
   data: {},
-}: Modifier);
+}: Modifier<Options>);

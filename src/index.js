@@ -40,7 +40,7 @@ const defaultOptions = {
 };
 
 export default class Popper {
-  static defaultModifiers: Array<Modifier>;
+  static defaultModifiers: Array<Modifier<any>>;
   state: $Shape<State> = {
     placement: 'bottom',
     orderedModifiers: [],
