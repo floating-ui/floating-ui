@@ -30,7 +30,7 @@ const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
 const areValidElements = (...args: Array<mixed>): boolean =>
-  args.some(element => !(element instanceof Element));
+  !args.some(element => !(element instanceof Element));
 
 const defaultOptions = {
   placement: 'bottom',
@@ -56,7 +56,7 @@ export default class Popper {
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
     const referenceElement = unwrapJqueryElement(reference);
-    const popperElement = unwrapJqueryElement(reference);
+    const popperElement = unwrapJqueryElement(popper);
     this.state.elements = {
       reference: referenceElement,
       popper: popperElement,
