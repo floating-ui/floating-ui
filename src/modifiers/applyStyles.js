@@ -13,12 +13,11 @@ export function applyStyles(state: State) {
     const attributes = data.attributes[name] || {};
     const element = state.elements[name];
 
-    // Flow doesn't support to extend this property, but it's the most
-    // effective way to apply styles to an HTMLElement
-    // $FlowIgnore
     Object.assign(element.style, style);
 
-    Object.entries(attributes).forEach(args => element.setAttribute(...args));
+    Object.entries(attributes).forEach((args: [string, any]) =>
+      element.setAttribute(...args)
+    );
   });
 
   return state;

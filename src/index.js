@@ -29,8 +29,8 @@ const INVALID_ELEMENT_ERROR =
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
-const areValidElements = (a: mixed, b: mixed): boolean %checks =>
-  a instanceof Element && b instanceof Element;
+const areValidElements = (...args: Array<mixed>): boolean =>
+  args.some(element => !(element instanceof Element));
 
 const defaultOptions = {
   placement: 'bottom',

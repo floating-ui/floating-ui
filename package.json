@@ -28,6 +28,7 @@
   ],
   "sideEffects": false,
   "prettier": {
+    "parser": "babel-flow",
     "semi": true,
     "trailingComma": "es5",
     "singleQuote": true
