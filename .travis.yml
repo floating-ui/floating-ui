@@ -1,5 +1,5 @@
 language: node_js
-node_js: 9.11.1
+node_js: 12
 script:
   - yarn test:ci
 cache:
