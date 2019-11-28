@@ -220,7 +220,10 @@ used to ensure the utility functions behave as expected in isolation.
 ### Functional Tests
 
 The functional tests run with Puppeteer, to take advantage of a complete browser
-environment.
+environment. They are currently running on Chromium, and Firefox.
+
+You can run them with `jest tests/functional`, at the moment `--watch` mode is
+not supported due to a bug with `jest-puppeteer`.
 
 The assertions are written in form of image snapshots, so that it's easy to
 assert for the correct Popper behavior without having to write a lot of offsets
@@ -230,7 +233,24 @@ You can mark a `*.test.js` file to run in the Puppeteer environment by
 prepending a `@jest-environment jest-environment-puppeteer` JSDoc comment to the
 interested file.
 
+Here's an example of a basic functional test:
+
+```js
+/**
+ * @jest-environment jest-environment-puppeteer
+ * @flow
+ */
+import screenshot from '../utils/cleanScreenshot.js';
+
+it('should position the popper on the right', async () => {
+  const page = await browser.newPage();
+  await page.goto('http://localhost:5000/basic.html');
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+```
+
 You can find the complete
 [`jest-puppeteer` documentation here](https://github.com/smooth-code/jest-puppeteer#api),
 and the
-[`jest-image-snapshot` documentation here](https://github.com/americanexpress/jest-image-snapshot#%EF%B8%8F-api)
+[`jest-image-snapshot` documentation here](https://github.com/americanexpress/jest-image-snapshot#%EF%B8%8F-api).
