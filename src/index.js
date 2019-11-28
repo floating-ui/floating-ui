@@ -15,6 +15,7 @@ import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
 import getNodeScroll from './dom-utils/getNodeScroll';
 import getOffsetParent from './dom-utils/getOffsetParent';
+import addClientRectMargins from './dom-utils/addClientRectMargins';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
@@ -144,7 +145,13 @@ export default class Popper {
     // and as cache for any modifier that needs them later
     this.state.measures = {
       reference: getElementClientRect(referenceElement),
-      popper: getElementClientRect(popperElement),
+      // CSS marginsc an be applied to popper elements to quickly
+      // apply offsets dynamically based on some CSS selectors.
+      // For this reason we include margins in this calculation.
+      popper: addClientRectMargins(
+        getElementClientRect(popperElement),
+        popperElement
+      ),
     };
 
     // Get scrollTop and scrollLeft of the offsetParent

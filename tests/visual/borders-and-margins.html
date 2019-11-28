@@ -9,6 +9,7 @@
     height: 200px;
     background-color: red;
     box-shadow: inset 0 0 0 1px black;
+    margin: 40px;
   }
 
   #popper {
@@ -33,6 +34,6 @@
   const popper = document.querySelector('#popper');
 
   window.instance = new Popper(reference, popper, {
-    placement: 'right',
+    placement: 'right-start',
   });
 </script>

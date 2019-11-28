@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works with margins 1`] = `
+Object {
+  "height": 20,
+  "width": 20,
+  "x": -10,
+  "y": -10,
+}
+`;
