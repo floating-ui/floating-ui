@@ -2,6 +2,7 @@
  * @jest-environment jest-environment-puppeteer
  * @flow
  */
+import screenshot from '../utils/cleanScreenshot.js';
 
 it('should update the position when window is resized', async () => {
   const page = await browser.newPage();
@@ -9,5 +10,5 @@ it('should update the position when window is resized', async () => {
 
   await page.$eval('#scroll', evt => (evt.scrollTop += 300));
 
-  expect(await page.screenshot()).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot();
 });
