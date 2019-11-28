@@ -3,7 +3,8 @@ import replace from 'rollup-plugin-replace';
 import bundleSize from 'rollup-plugin-bundle-size';
 import { terser } from 'rollup-plugin-terser';
 
-const IS_DEV = process.env.NODE_ENV === 'development';
+const IS_DEV =
+  process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
