@@ -28,10 +28,10 @@
   ],
   "sideEffects": false,
   "prettier": {
-    "parser": "babel-flow",
     "semi": true,
     "trailingComma": "es5",
-    "singleQuote": true
+    "singleQuote": true,
+    "proseWrap": "always"
   },
   "babel": {
     "presets": [
@@ -64,21 +64,32 @@
       "test": {
         "presets": [
           "@babel/env"
+        ],
+        "plugins": [
+          "@babel/plugin-transform-runtime"
         ]
       }
     }
   },
   "jest": {
-    "setupFiles": [
-      "raf/polyfill"
-    ]
+    "preset": "jest-puppeteer",
+    "testMatch": [
+      "<rootDir>/src/**/*.test.js",
+      "<rootDir>/tests/**/*.test.js"
+    ],
+    "globalSetup": "jest-environment-puppeteer/setup",
+    "globalTeardown": "jest-environment-puppeteer/teardown",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setupTests.js"]
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.1.5",
+    "@babel/runtime": "^7.7.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-plugin-dev-expression": "^0.2.2",
@@ -87,10 +98,13 @@
     "flow-bin": "0.112.0",
     "flow-copy-source": "^2.0.2",
     "husky": "^1.1.3",
-    "jest": "^23.6.0",
+    "jest": "^24.9.0",
+    "jest-environment-puppeteer": "^4.3.0",
+    "jest-image-snapshot": "^2.11.1",
+    "jest-puppeteer": "^4.3.0",
     "prettier": "^1.15.1",
     "pretty-quick": "^1.8.0",
-    "raf": "^3.4.1",
+    "puppeteer": "^2.0.0",
     "rollup": "^1.27.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-bundle-size": "^1.0.2",

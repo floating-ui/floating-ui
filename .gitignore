@@ -11,3 +11,4 @@ package-lock.json
 coverage.info
 lib
 coverage
+__diff_output__
