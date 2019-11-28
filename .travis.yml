@@ -1,7 +1,7 @@
 language: node_js
 node_js: 12
 script:
-  - NODE_ENV=test yarn build:bundles
+  - NODE_ENV=development yarn build:bundles
   - yarn test:ci
 cache:
   yarn: true
