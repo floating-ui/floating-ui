@@ -80,7 +80,13 @@
     "globalSetup": "jest-environment-puppeteer/setup",
     "globalTeardown": "jest-environment-puppeteer/teardown",
     "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": ["<rootDir>/tests/setupTests.js"]
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setupTests.js"
+    ],
+    "reporters": [
+      "default",
+      "<rootDir>/tests/image-reporter.js"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -93,6 +99,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-plugin-dev-expression": "^0.2.2",
+    "chalk": "^3.0.0",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
     "flow-bin": "0.112.0",
@@ -102,6 +109,7 @@
     "jest-environment-puppeteer": "^4.3.0",
     "jest-image-snapshot": "^2.11.1",
     "jest-puppeteer": "^4.3.0",
+    "poster": "^0.0.9",
     "prettier": "^1.15.1",
     "pretty-quick": "^1.8.0",
     "puppeteer": "^2.0.0",
