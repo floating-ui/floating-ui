@@ -2,7 +2,8 @@ language: node_js
 node_js: 12
 script:
   - NODE_ENV=development yarn build:bundles
-  - yarn test:ci
+  - BROWSER=chromium yarn test:ci
+  - BROWSER=firefox yarn test:ci tests/functional
 cache:
   yarn: true
   directories:
