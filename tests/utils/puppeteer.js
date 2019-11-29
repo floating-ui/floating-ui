@@ -3,6 +3,7 @@ export const screenshot = async page => {
   return page.screenshot();
 };
 
+/* istanbul ignore next */
 export const scroll = async (page, selector, amount) => {
   const scroll = await page.$eval(
     selector,
