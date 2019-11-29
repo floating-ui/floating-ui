@@ -2,7 +2,7 @@
  * @jest-environment jest-environment-puppeteer
  * @flow
  */
-import screenshot from '../utils/cleanScreenshot.js';
+import { screenshot } from '../utils/puppeteer.js';
 
 it('should update the position when window is resized', async () => {
   const page = await browser.newPage();
