@@ -1,27 +1,16 @@
 // @flow
-import type {
-  JQueryWrapper,
-  State,
-  Options,
-  UpdateCallback,
-  EventListeners,
-  Rect,
-  Modifier,
-} from './types';
+import type { JQueryWrapper, State, Options, Modifier } from './types';
 
 // DOM Utils
 import getElementClientRect from './dom-utils/getElementClientRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
-import getNodeScroll from './dom-utils/getNodeScroll';
-import getOffsetParent from './dom-utils/getOffsetParent';
 import addClientRectMargins from './dom-utils/addClientRectMargins';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import expandToHashMap from './utils/expandToHashMap';
-import format from './utils/format';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 
@@ -118,7 +107,7 @@ export default class Popper {
   // debounced, so that it only runs at most once-per-tick
   update = debounce(
     () =>
-      new Promise<State>((success, reject) => {
+      new Promise<State>(success => {
         this.forceUpdate();
         success(this.state);
       })
@@ -153,13 +142,6 @@ export default class Popper {
         popperElement
       ),
     };
-
-    // Get scrollTop and scrollLeft of the offsetParent
-    // this will be used in the `computeOffsets` function to properly
-    // position the popper taking in account the scroll position
-    // FIXME: right now we only look for a single offsetParent (the popper one)
-    //        but we really want to take in account the reference offsetParent as well
-    const offsetParentScroll = getNodeScroll(getOffsetParent(popperElement));
 
     // Modifiers have the ability to read the current Popper state, included
     // the popper offsets, and modify it to address specifc cases

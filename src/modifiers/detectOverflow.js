@@ -63,12 +63,12 @@ export function detectOverflow(
     ...popperOffsets,
   });
 
-  state.modifiersData.detectOverflow = {
+  state.modifiersData.detectOverflow = ({
     top: boundaryClientRect.top - popperClientRect.top,
     bottom: popperClientRect.bottom - boundaryClientRect.bottom,
     left: boundaryClientRect.left - popperClientRect.left,
     right: popperClientRect.right - boundaryClientRect.right,
-  };
+  }: ModifierData);
 
   return state;
 }

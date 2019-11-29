@@ -1,10 +1,9 @@
 // @flow
 import createRectMock from '../../tests/utils/createRectMock';
 import computeOffsets from './computeOffsets';
-import { basePlacements, placements } from '../enums';
+import { basePlacements } from '../enums';
 import type { Placement } from '../enums';
 import getMainAxisFromPlacement from './getMainAxisFromPlacement';
-import getAltAxis from './getAltAxis';
 import getOppositePlacement from './getOppositePlacement';
 
 const reference = createRectMock({

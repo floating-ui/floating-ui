@@ -19,15 +19,6 @@ export default function getCommonTotalScroll(
   popperScrollParents: Array<Node>,
   limiter?: Node
 ) {
-  // if the scrollParent is shared between the two elements, we don't pick
-  // it because it wouldn't add anything to the equation (they nulllify themselves)
-  const nonCommonReference = referenceScrollParents.filter(
-    node => !popperScrollParents.includes(node)
-  );
-
-  // we then want to pick any scroll offset except for the one of the offsetParent
-  // not sure why but that's how I got it working 😅
-  // TODO: improve this comment with proper explanation
   const offsetParent = getOffsetParent(reference);
   const index = referenceScrollParents.findIndex(
     node => node === (limiter || offsetParent)

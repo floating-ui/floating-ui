@@ -13,7 +13,6 @@ import { top, right, bottom, left, start, end, type Placement } from '../enums';
 export default ({
   reference,
   element,
-  strategy,
   placement,
   scroll,
 }: {

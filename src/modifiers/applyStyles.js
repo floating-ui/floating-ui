@@ -1,5 +1,5 @@
 // @flow
-import type { Modifier, State, PositioningStrategy } from '../types';
+import type { Modifier, State } from '../types';
 
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow

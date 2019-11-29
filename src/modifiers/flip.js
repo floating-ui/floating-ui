@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { State, Modifier, Rect, Padding } from '../types';
+import type { State, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';

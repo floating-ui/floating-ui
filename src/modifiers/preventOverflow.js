@@ -1,13 +1,6 @@
 // @flow
-import {
-  basePlacements,
-  top,
-  left,
-  right,
-  bottom,
-  type Placement,
-} from '../enums';
-import type { State, Modifier, Rect, Padding } from '../types';
+import { basePlacements, top, left, right, bottom } from '../enums';
+import type { State, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
