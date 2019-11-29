@@ -59,15 +59,13 @@ Find [the documentation here](docs/_includes/popper-documentation.md).
 
 Popper.js is available on the following package managers and CDNs:
 
-| Source          |                                                                                                            |
-| :-------------- | :--------------------------------------------------------------------------------------------------------- |
-| npm             | `npm install popper.js --save`                                                                             |
-| yarn            | `yarn add popper.js`                                                                                       |
-| NuGet           | `PM> Install-Package popper.js`                                                                            |
-| Bower           | `bower install popper.js --save`                                                                           |
-| unpkg           | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js)                                               
-
-
+| Source |                                                              |
+| :----- | :----------------------------------------------------------- |
+| npm    | `npm install popper.js --save`                               |
+| yarn   | `yarn add popper.js`                                         |
+| NuGet  | `PM> Install-Package popper.js`                              |
+| Bower  | `bower install popper.js --save`                             |
+| unpkg  | [`https://unpkg.com/popper.js`](https://unpkg.com/popper.js) |
 
 \*: Bower isn't officially supported. This method has the limitation of not being able to define a specific version of the library. Bower and Popper.js suggest using npm or Yarn for your projects.  
 For more info, [read the related issue](https://github.com/FezVrasta/popper.js/issues/390).
@@ -94,8 +92,8 @@ Given an existing popper DOM node, ask Popper.js to position it near its button.
 ```
 
 ```js
-var reference = document.querySelector('.my-button');
-var popper = document.querySelector('.my-popper');
+var reference = document.querySelector(".my-button");
+var popper = document.querySelector(".my-popper");
 var popperInstance = new Popper(reference, popper, {
   // popper options here
 });
@@ -110,8 +108,8 @@ Popper.js supports two kinds of callbacks; the `onCreate` callback is called aft
 the popper has been initialized. The `onUpdate` one is called on any subsequent update.
 
 ```js
-const reference = document.querySelector('.my-button');
-const popper = document.querySelector('.my-popper');
+const reference = document.querySelector(".my-button");
+const popper = document.querySelector(".my-popper");
 new Popper(reference, popper, {
   onCreate: data => {
     // data is an object containing all the informations computed
@@ -120,7 +118,7 @@ new Popper(reference, popper, {
   },
   onUpdate: data => {
     // same as `onCreate` but called on subsequent updates
-  },
+  }
 });
 ```
 
@@ -150,17 +148,17 @@ function applyReactStyle(data) {
   // export data in your framework and use its content to apply the style to your popper
 }
 
-const reference = document.querySelector('.my-button');
-const popper = document.querySelector('.my-popper');
+const reference = document.querySelector(".my-button");
+const popper = document.querySelector(".my-popper");
 new Popper(reference, popper, {
   modifiers: {
     applyStyle: { enabled: false },
     applyReactStyle: {
       enabled: true,
       fn: applyReactStyle,
-      order: 900,
-    },
-  },
+      order: 900
+    }
+  }
 });
 ```
 
@@ -171,7 +169,7 @@ It is recommended that users mock Popper.js for use in Jest tests due to some li
 The simplest way to mock Popper.js is to place the following code in `__mocks__/popper.js.js` adjacent to your `node_modules` directory. Jest will pick it up automatically.
 
 ```js
-import PopperJs from 'popper.js';
+import PopperJs from "popper.js";
 
 export default class Popper {
   static placements = PopperJs.placements;
@@ -179,7 +177,7 @@ export default class Popper {
   constructor() {
     return {
       destroy: () => {},
-      scheduleUpdate: () => {},
+      scheduleUpdate: () => {}
     };
   }
 }
@@ -188,8 +186,8 @@ export default class Popper {
 Alternatively, you can manually mock Popper.js for a particular test.
 
 ```js
-jest.mock('popper.js', () => {
-  const PopperJS = jest.requireActual('popper.js');
+jest.mock("popper.js", () => {
+  const PopperJS = jest.requireActual("popper.js");
 
   return class Popper {
     static placements = PopperJS.placements;
@@ -197,7 +195,7 @@ jest.mock('popper.js', () => {
     constructor() {
       return {
         destroy: () => {},
-        scheduleUpdate: () => {},
+        scheduleUpdate: () => {}
       };
     }
   };
@@ -226,6 +224,19 @@ The aim of Popper.js is to provide a stable and powerful positioning engine read
 be used in 3rd party libraries.
 
 Visit the [MENTIONS](MENTIONS.md) page for an updated list of projects.
+
+### Where's Tooltip.js?
+
+Tooltip.js used to be the reference implementation used by Popper.js to instruct 3rd party
+contributors how to integrate Popper.js in their own libraries.
+
+The library has been discontinued, so that we can focus solely on Popper.js, which is the
+at the core of our mission.
+
+If you were a Tooltip.js user, consider switching to [Tippy.js](https://atomiks.github.io/tippyjs/),
+it's a more mature, and complete, Popper.js-based tooltip library.
+
+If you need to read the docs of the now deprecated Tooltip.js, you can [find them here](docs/tooltip-documentation.md).
 
 ### Credits
 
