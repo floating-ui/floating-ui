@@ -16,9 +16,6 @@ export default (element: Element): Rect => {
     ? getBoundingClientRect(directOffsetParent)
     : { left: 0, top: 0 };
 
-  const scrollLeft = scrollParentsScroll.scrollLeft;
-  const scrollTop = scrollParentsScroll.scrollTop;
-
   const ancestorOffsetParents = [];
   let currentOffsetParent = directOffsetParent;
 
@@ -33,14 +30,14 @@ export default (element: Element): Rect => {
   const height = rect.height;
   const x =
     rect.left +
-    scrollLeft -
-    directOffsetParentRect.left -
-    ancestorOffsetParentScrollSum.scrollLeft;
+    scrollParentsScroll.scrollLeft -
+    ancestorOffsetParentScrollSum.scrollLeft -
+    directOffsetParentRect.left;
   const y =
     rect.top +
-    scrollTop -
-    directOffsetParentRect.top -
-    ancestorOffsetParentScrollSum.scrollTop;
+    scrollParentsScroll.scrollTop -
+    ancestorOffsetParentScrollSum.scrollTop -
+    directOffsetParentRect.top;
 
   return { width, height, x, y };
 };
