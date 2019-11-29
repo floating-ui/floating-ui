@@ -9,12 +9,12 @@ import getOffsetParent from './getOffsetParent';
 // offsetParent
 export default (element: Element): Rect => {
   const rect = getBoundingClientRect(element);
-  const scrollParentsScroll = getScrollSum(listScrollParents(element));
+  const scrollParentsScrollSum = getScrollSum(listScrollParents(element));
   const directOffsetParent = getOffsetParent(element);
-  const isOffsetParentElement = directOffsetParent instanceof Element;
-  const directOffsetParentRect = isOffsetParentElement
-    ? getBoundingClientRect(directOffsetParent)
-    : { left: 0, top: 0 };
+  const directOffsetParentRect =
+    directOffsetParent instanceof Element
+      ? getBoundingClientRect(directOffsetParent)
+      : { left: 0, top: 0 };
 
   const ancestorOffsetParents = [];
   let currentOffsetParent = directOffsetParent;
@@ -30,12 +30,12 @@ export default (element: Element): Rect => {
   const height = rect.height;
   const x =
     rect.left +
-    scrollParentsScroll.scrollLeft -
+    scrollParentsScrollSum.scrollLeft -
     ancestorOffsetParentScrollSum.scrollLeft -
     directOffsetParentRect.left;
   const y =
     rect.top +
-    scrollParentsScroll.scrollTop -
+    scrollParentsScrollSum.scrollTop -
     ancestorOffsetParentScrollSum.scrollTop -
     directOffsetParentRect.top;
 
