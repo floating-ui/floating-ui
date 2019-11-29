@@ -1,17 +1,7 @@
 // @flow
 import getNodeScroll from './getNodeScroll';
 import getOffsetParent from './getOffsetParent';
-
-const sumScroll = scrollParents =>
-  scrollParents.reduce(
-    (scroll, scrollParent) => {
-      const nodeScroll = getNodeScroll(scrollParent);
-      scroll.scrollTop += nodeScroll.scrollTop;
-      scroll.scrollLeft += nodeScroll.scrollLeft;
-      return scroll;
-    },
-    { scrollTop: 0, scrollLeft: 0 }
-  );
+import getScrollSum from './getScrollSum';
 
 export default function getCommonTotalScroll(
   reference: HTMLElement,
@@ -29,5 +19,5 @@ export default function getCommonTotalScroll(
     index === -1 ? undefined : index
   );
 
-  return sumScroll(scrollParents);
+  return getScrollSum(scrollParents);
 }
