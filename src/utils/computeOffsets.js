@@ -71,10 +71,14 @@ export default ({
 
     switch (variationPlacement) {
       case start:
-        offsets[mainAxis] -= reference[len] / 2 - element[len] / 2;
+        offsets[mainAxis] =
+          Math.floor(offsets[mainAxis]) -
+          Math.floor(reference[len] / 2 - element[len] / 2);
         break;
       case end:
-        offsets[mainAxis] += reference[len] / 2 - element[len] / 2;
+        offsets[mainAxis] =
+          Math.floor(offsets[mainAxis]) +
+          Math.ceil(reference[len] / 2 - element[len] / 2);
         break;
       default:
     }
