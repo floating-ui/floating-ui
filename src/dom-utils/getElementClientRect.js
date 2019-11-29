@@ -8,7 +8,7 @@ import getWindowScroll from './getWindowScroll';
 
 // Returns the width, height and offsets of the provided element relative to the
 // offsetParent
-export default (element: HTMLElement): Rect => {
+export default (element: Element): Rect => {
   const rect = getBoundingClientRect(element);
   const offsetParent = getOffsetParent(element);
   const scrollParentsScroll = getScrollSum(listScrollParents(element));
