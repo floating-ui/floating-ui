@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const fs = require('fs');
 const poster = require('poster');
 
+const browser = process.env.BROWSER || 'chromium';
+
 // https://api.anonymousfiles.io/
 
 class ImageReporter {
@@ -32,7 +34,9 @@ class ImageReporter {
           (err, data) => {
             console.log(
               chalk.red.bold(
-                `Uploaded image diff file to ${JSON.parse(data).url}`
+                `[${browser}] Uploaded image diff file to ${
+                  JSON.parse(data).url
+                }`
               )
             );
           }
