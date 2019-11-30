@@ -5,15 +5,21 @@ export const screenshot = async page => {
 
 /* istanbul ignore next */
 export const scroll = async (page, selector, amount) => {
-  const scroll = await page.$eval(
+  const scrollTop = await page.$eval(selector, element => element.scrollTop);
+
+  await page.$eval(
     selector,
-    (evt, amount) => (evt.scrollTop += amount),
-    amount
+    (element, amount, scrollTop) => (element.scrollTop = scrollTop + amount),
+    amount,
+    scrollTop
   );
+
   await page.waitForFunction(
-    (selector, scroll) => document.querySelector(selector).scrollTop === scroll,
+    (selector, scrollTop, amount) =>
+      document.querySelector(selector).scrollTop === scrollTop + amount,
     {},
     selector,
-    scroll
+    scrollTop,
+    amount
   );
 };
