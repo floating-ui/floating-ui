@@ -29,8 +29,10 @@ export const computePopperStyles = ({
   strategy: PositioningStrategy,
   gpuAcceleration: boolean,
 }) => {
+  // @1x displays in Chrome can be blurry due to non-rounded offsets, but this
+  // introduces slight positioning errors. TODO: somehow solve this better
   // by default it is active, disable it only if explicitly set to false
-  if (gpuAcceleration === false) {
+  if (gpuAcceleration === false || window.devicePixelRatio < 2) {
     return {
       top: `${offsets.y}px`,
       left: `${offsets.x}px`,
