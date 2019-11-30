@@ -13,6 +13,11 @@ export function applyStyles(state: State) {
     const attributes = data.attributes[name] || {};
     const element = state.elements[name];
 
+    // arrow is optional
+    if (!element) {
+      return;
+    }
+
     Object.assign(element.style, style);
 
     Object.entries(attributes).forEach((args: [string, any]) =>
@@ -41,6 +46,11 @@ export function onDestroy(state: State) {
       }),
       {}
     );
+
+    // arrow is optional
+    if (!element) {
+      return;
+    }
 
     // Flow doesn't support to extend this property, but it's the most
     // effective way to apply styles to an HTMLElement
