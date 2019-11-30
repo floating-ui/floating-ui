@@ -24,7 +24,7 @@ export function arrow(state: State, options?: Options = {}) {
   if (!state.elements.popper.contains(arrowElement)) {
     if (__DEV__) {
       console.error(
-        'Popper: "arrow" modifier\'s `element` must be child of the popper element.'
+        'Popper: "arrow" modifier\'s `element` must be a child of the popper element.'
       );
     }
 
@@ -35,8 +35,8 @@ export function arrow(state: State, options?: Options = {}) {
 
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);
-  const isVertical = ['left', 'right'].includes(basePlacement);
   const axis = getMainAxisFromPlacement(basePlacement);
+  const isVertical = ['left', 'right'].includes(basePlacement);
   const len = isVertical ? 'height' : 'width';
 
   const arrowElementRect = addClientRectMargins(
@@ -44,7 +44,7 @@ export function arrow(state: State, options?: Options = {}) {
     arrowElement
   );
 
-  const scrollParentsScrollSum = getCommonTotalScroll(
+  const commonTotalScroll = getCommonTotalScroll(
     state.elements.reference,
     state.scrollParents.reference,
     state.scrollParents.popper
@@ -63,7 +63,7 @@ export function arrow(state: State, options?: Options = {}) {
     arrowElementRect[len] / 2 +
     endDiff / 2 -
     startDiff / 2 -
-    scrollParentsScrollSum[axis === 'y' ? 'scrollTop' : 'scrollLeft'];
+    commonTotalScroll[axis === 'y' ? 'scrollTop' : 'scrollLeft'];
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
