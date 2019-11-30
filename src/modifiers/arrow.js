@@ -37,7 +37,6 @@ export function arrow(state: State, options?: Options = {}) {
   const isVertical = ['left', 'right'].includes(basePlacement);
   const axis = getMainAxisFromPlacement(basePlacement);
   const len = isVertical ? 'height' : 'width';
-  const side = isVertical ? 'top' : 'left';
 
   const arrowElementRect = addClientRectMargins(
     getElementClientRect(arrowElement),
