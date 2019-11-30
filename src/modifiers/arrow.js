@@ -1,17 +1,16 @@
 // @flow
-import type { Placement } from '../enums';
-import type { State, Modifier, Padding } from '../types';
+import type { State, Modifier } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getElementClientRect from '../dom-utils/getElementClientRect';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 
-type Options = { element: HTMLElement };
+type Options = { element: HTMLElement | string };
 
 export function arrow(state: State, options?: Options = {}) {
   let { element: arrowElement = '[data-popper-arrow]' } = options;
 
-  // CSS Selector
+  // CSS selector
   if (typeof arrowElement === 'string') {
     arrowElement = state.elements.popper.querySelector(arrowElement);
 
@@ -71,5 +70,4 @@ export default ({
   phase: 'main',
   fn: arrow,
   requires: ['popperOffsets'],
-  data: { index: 0 },
 }: Modifier<Options>);
