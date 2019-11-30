@@ -222,8 +222,8 @@ used to ensure the utility functions behave as expected in isolation.
 The functional tests run with Puppeteer, to take advantage of a complete browser
 environment. They are currently running on Chromium, and Firefox.
 
-You can run them with `BROWSER=chromium $(yarn bin)/jest tests/functional`, at
-the moment `--watch` mode is not supported due to a bug with `jest-puppeteer`.
+You can run them with `yarn test:functional`, at the moment `--watch` mode is
+not supported due to a bug with `jest-puppeteer`.
 
 The assertions are written in form of image snapshots, so that it's easy to
 assert for the correct Popper behavior without having to write a lot of offsets

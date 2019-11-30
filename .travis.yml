@@ -9,9 +9,6 @@ branches:
   only:
     - next
 
-env:
-  - BROWSER=chromium
-
 before_script:
   - NODE_ENV=development yarn build:bundles
 
@@ -24,8 +21,8 @@ jobs:
 
     - name: '[Chrome] Functional Tests'
       script:
-        - BROWSER=chromium yarn jest tests/functional
+        - PUPPETEER_BROWSER=chromium yarn jest tests/functional
 
     - name: '[Firefox] Functional Tests'
       script:
-        - BROWSER=firefox travis_retry yarn jest tests/functional
+        - PUPPETEER_BROWSER=firefox travis_retry yarn jest tests/functional

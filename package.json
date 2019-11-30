@@ -11,7 +11,8 @@
   "repository": "github:popperjs/popper.js",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
-    "test": "jest --coverage --watch",
+    "test:unit": "jest --coverage --watch src",
+    "test:functional": "jest tests/functional",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve tests/visual",
     "dev:bundles": "cross-env NODE_ENV=development rollup -c rollup.config.js",
@@ -85,13 +86,20 @@
     "reporters": [
       "default",
       "<rootDir>/tests/image-reporter.js"
-    ]
+    ],
+    "setupFiles": ["dotenv/config"]
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "plugins": ["flowtype", "unused-imports"],
+    "plugins": [
+      "flowtype",
+      "unused-imports"
+    ],
     "rules": {
-      "flowtype/require-valid-file-annotation": ["error", "always"],
+      "flowtype/require-valid-file-annotation": [
+        "error",
+        "always"
+      ],
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": "error"
     }
@@ -111,6 +119,7 @@
     "chalk": "^3.0.0",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",
+    "dotenv": "^8.2.0",
     "eslint-plugin-flowtype": "^4.5.2",
     "eslint-plugin-unused-imports": "^0.1.1",
     "flow-bin": "0.112.0",

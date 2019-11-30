@@ -11,6 +11,7 @@ it('returns the expected position value', () => {
 });
 
 it('computes the popper styles', () => {
+  window.devicePixelRatio = 2;
   expect(
     computePopperStyles({
       offsets: { x: 10, y: 5 },
@@ -26,6 +27,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
     })
   ).toMatchSnapshot();
+  window.devicePixelRatio = 1;
 });
 
 it('computes the arrow styles', () => {
