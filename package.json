@@ -12,7 +12,6 @@
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "jest --coverage --watch",
-    "test:ci": "jest --coverage",
     "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
     "dev:serve": "serve tests/visual",
     "dev:bundles": "cross-env NODE_ENV=development rollup -c rollup.config.js",

@@ -1,13 +1,31 @@
 language: node_js
 node_js: 12
-script:
-  - NODE_ENV=development yarn build:bundles
-  - BROWSER=chromium yarn test:ci
-  - BROWSER=firefox yarn test:ci tests/functional
 cache:
   yarn: true
   directories:
     - node_modules
+
 branches:
   only:
     - next
+
+env:
+  - BROWSER=chromium
+
+before_script:
+  - NODE_ENV=development yarn build:bundles
+
+jobs:
+  include:
+    - stage: tests
+      name: Unit Tests
+      script:
+        - yarn jest src
+
+    - name: '[Chrome] Functional Tests'
+      script:
+        - BROWSER=chromium yarn jest tests/functional
+
+    - name: '[Firefox] Functional Tests'
+      script:
+        - BROWSER=firefox travis_retry yarn jest tests/functional
