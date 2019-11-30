@@ -20,7 +20,9 @@
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "build:flow": "flow-copy-source src dist/cjs --ignore '{__mocks__/*,*.test}.js'",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "flow": "flow",
+    "eslint": "eslint ."
   },
   "files": [
     "/dist",

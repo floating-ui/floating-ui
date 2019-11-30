@@ -5,3 +5,4 @@ lib
 flow-typed
 dist
 /*.js
+coverage
