@@ -3,6 +3,7 @@ import type { State, Modifier } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getElementClientRect from '../dom-utils/getElementClientRect';
+import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
 
@@ -43,6 +44,12 @@ export function arrow(state: State, options?: Options = {}) {
     arrowElement
   );
 
+  const scrollParentsScrollSum = getCommonTotalScroll(
+    state.elements.reference,
+    state.scrollParents.reference,
+    state.scrollParents.popper
+  );
+
   const endDiff =
     state.measures.reference[len] +
     state.measures.reference[axis] -
@@ -55,7 +62,8 @@ export function arrow(state: State, options?: Options = {}) {
     state.measures.popper[len] / 2 -
     arrowElementRect[len] / 2 +
     endDiff / 2 -
-    startDiff / 2;
+    startDiff / 2 -
+    scrollParentsScrollSum[axis === 'y' ? 'scrollTop' : 'scrollLeft'];
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
