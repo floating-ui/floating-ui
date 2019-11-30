@@ -20,7 +20,7 @@ jobs:
     - stage: tests
       name: Unit Tests
       script:
-        - yarn jest src
+        - yarn jest --coverage src
 
     - name: '[Chrome] Functional Tests'
       script:
