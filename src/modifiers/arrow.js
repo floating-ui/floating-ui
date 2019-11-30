@@ -46,10 +46,10 @@ export function arrow(state: State, options?: Options = {}) {
   const endDiff =
     state.measures.reference[len] +
     state.measures.reference[axis] -
-    (state.modifiersData.popperOffsets[axis] + state.measures.popper[len]);
+    popperOffsets[axis] -
+    state.measures.popper[len];
 
-  const startDiff =
-    state.modifiersData.popperOffsets[axis] - state.measures.reference[axis];
+  const startDiff = popperOffsets[axis] - state.measures.reference[axis];
 
   let center =
     state.measures.popper[len] / 2 -
