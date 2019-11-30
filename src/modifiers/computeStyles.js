@@ -82,9 +82,9 @@ export function computeStyles(state: State, options?: Options = {}) {
       }),
       // arrow offsets may not be available
       arrow:
-        state.modifiersData.arrowOffsets != null
+        state.modifiersData.arrow != null
           ? computeArrowStyles({
-              offsets: state.modifiersData.arrowOffsets,
+              offsets: state.modifiersData.arrow,
               gpuAcceleration,
             })
           : undefined,

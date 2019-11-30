@@ -30,6 +30,7 @@ export type State = {|
   elements: {|
     reference: HTMLElement,
     popper: HTMLElement,
+    arrow?: HTMLElement,
   |},
   options: Options,
   placement: Placement,
