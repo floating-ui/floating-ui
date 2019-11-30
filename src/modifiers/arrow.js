@@ -73,9 +73,9 @@ export function arrow(state: State, options?: Options = {}) {
     state.measures.popper[len] - arrowElementRect[len]
   );
 
-  // Flow: How to use computed property like {[axis]: center}?
-  state.modifiersData.arrow = {};
-  state.modifiersData.arrow[axis] = center;
+  // Prevents breaking syntax highlighting...
+  const axisProp: string = axis;
+  state.modifiersData.arrow = { [axisProp]: center };
 
   return state;
 }
