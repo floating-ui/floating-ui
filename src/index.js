@@ -50,6 +50,8 @@ export default class Popper {
     this.state.elements = {
       reference: referenceElement,
       popper: popperElement,
+      // TODO: `arrow` needs to go here for types, but the `arrow` modifier
+      // is what computes it?
     };
 
     // Store options into state
