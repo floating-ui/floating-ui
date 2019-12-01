@@ -1,5 +1,4 @@
 // @flow
-import getNodeScroll from './getNodeScroll';
 import getOffsetParent from './getOffsetParent';
 import getScrollSum from './getScrollSum';
 
