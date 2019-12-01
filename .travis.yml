@@ -26,7 +26,7 @@ jobs:
       script: yarn jest --coverage src
 
     - name: '[Chrome] Functional Tests'
-      script: PUPPETEER_BROWSER=chromium yarn jest tests/functional
+      script: PUPPETEER_BROWSER=chromium travis_retry yarn jest tests/functional
 
     - name: '[Firefox] Functional Tests'
       script: PUPPETEER_BROWSER=firefox travis_retry yarn jest tests/functional

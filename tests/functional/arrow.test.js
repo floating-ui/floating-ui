@@ -1,5 +1,5 @@
 /**
- * @jest-environment jest-environment-puppeteer
+ * @jest-environment puppeteer
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';

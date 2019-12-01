@@ -222,22 +222,21 @@ used to ensure the utility functions behave as expected in isolation.
 The functional tests run with Puppeteer, to take advantage of a complete browser
 environment. They are currently running on Chromium, and Firefox.
 
-You can run them with `yarn test:functional`, at the moment `--watch` mode is
-not supported due to a bug with `jest-puppeteer`.
+You can run them with `yarn test:functional`. Set the `PUPPETEER_BROWSER`
+environment variable to `firefox` to run them on the Mozilla browser.
 
 The assertions are written in form of image snapshots, so that it's easy to
 assert for the correct Popper behavior without having to write a lot of offsets
 comparisons manually.
 
 You can mark a `*.test.js` file to run in the Puppeteer environment by
-prepending a `@jest-environment jest-environment-puppeteer` JSDoc comment to the
-interested file.
+prepending a `@jest-environment puppeteer` JSDoc comment to the interested file.
 
 Here's an example of a basic functional test:
 
 ```js
 /**
- * @jest-environment jest-environment-puppeteer
+ * @jest-environment puppeteer
  * @flow
  */
 import { screenshot } from '../utils/puppeteer.js';
