@@ -11,5 +11,6 @@ it('should position the popper on the right', async () => {
   // $FlowFixMe
   expect(await screenshot(page)).toMatchImageSnapshot({
     failureThreshold: 0.01,
+    failureThresholdType: 'percent',
   });
 });
