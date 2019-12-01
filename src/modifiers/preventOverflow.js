@@ -23,11 +23,13 @@ type Options = {
   mainAxis: boolean,
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
-  /* Allows the popper to overflow from its boundaries to keep it near its reference element */
-  /* false = popper can never overflow, will detach from reference to stay visible */
-  /* "center" = popper can overflow once the center of the popper is at the edge of the reference */
-  /* "edges" = popper can overflow once the opposite edges are level */
-  /* "surfaces" = popper can overflow once the surfaces are level */
+  /**
+   * Allows the popper to overflow from its boundaries to keep it near its reference element:
+   * - false: popper can never overflow, will detach from reference to stay visible;
+   * - "center": popper can overflow once the center of the popper is at the edge of the reference;
+   * - "edges": popper can overflow once the opposite edges are level;
+   * - "surfaces":  popper can overflow once the surfaces are level;
+   */
   tether: Tether,
   /* Sets a padding to the provided boundary */
   padding: Padding,
