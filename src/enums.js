@@ -15,6 +15,11 @@ export const start: 'start' = 'start';
 export const end: 'end' = 'end';
 export type VariationPlacement = typeof start | typeof end;
 
+export const center: 'center' = 'center';
+export const edges: 'edges' = 'edges';
+export const surfaces: 'surfaces' = 'surfaces';
+export type Tether = false | typeof center | typeof edges | typeof surfaces;
+
 export type Placement =
   | 'auto'
   | 'auto-start'

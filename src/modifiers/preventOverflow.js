@@ -1,5 +1,15 @@
 // @flow
-import { basePlacements, top, left, right, bottom } from '../enums';
+import {
+  basePlacements,
+  top,
+  left,
+  right,
+  bottom,
+  surfaces,
+  edges,
+  center,
+} from '../enums';
+import type { Tether } from '../enums';
 import type { State, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
@@ -14,11 +24,11 @@ type Options = {
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
   /* Allows the popper to overflow from its boundaries to keep it near its reference element */
-  /* true = popper can overflow once the center of the popper is at the edge of the reference */
   /* false = popper can never overflow, will detach from reference to stay visible */
+  /* "center" = popper can overflow once the center of the popper is at the edge of the reference */
   /* "edges" = popper can overflow once the opposite edges are level */
   /* "surfaces" = popper can overflow once the surfaces are level */
-  tether: boolean | 'edges' | 'surfaces',
+  tether: Tether,
   /* Sets a padding to the provided boundary */
   padding: Padding,
 };
@@ -27,7 +37,7 @@ export function preventOverflow(state: State, options?: Options = {}) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    tether = true,
+    tether = center,
     padding = 0,
   } = options;
   const overflow = state.modifiersData.detectOverflow;
@@ -55,9 +65,9 @@ export function preventOverflow(state: State, options?: Options = {}) {
       popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
 
     const additive =
-      tether === 'surfaces'
+      tether === surfaces
         ? popperRect[len] / 2
-        : tether === 'edges'
+        : tether === edges
         ? -popperRect[len] / 2
         : 0;
 
@@ -71,7 +81,7 @@ export function preventOverflow(state: State, options?: Options = {}) {
       additive;
 
     const lenCondition =
-      referenceRect[len] > popperRect[len] || tether !== 'surfaces';
+      referenceRect[len] > popperRect[len] || tether !== surfaces;
 
     state.modifiersData.popperOffsets[mainAxis] = within(
       tether ? Math.min(min, lenCondition ? tetherMax : tetherMin) : min,
