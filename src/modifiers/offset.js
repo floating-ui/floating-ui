@@ -34,8 +34,8 @@ type OffsetsFunction = ({
 
 type Options = { offset: ?OffsetsFunction };
 
-export function offset(state: State, options?: Options) {
-  if (options && typeof options.offset === 'function') {
+export function offset(state: State, options?: Options = {}) {
+  if (typeof options.offset === 'function') {
     const [x, y] = distanceAndSkiddingToXY(
       state.placement,
       state.measures,

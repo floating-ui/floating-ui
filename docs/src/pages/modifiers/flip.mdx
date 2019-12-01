@@ -4,6 +4,17 @@ The flip modifier can change the `placement` of a popper when the
 `detectOverflow` modifier reported it's overflowing on the direction of the
 currently given placement.
 
+## Options
+
+```js
+type Options = {
+  behavior: Array<Placement>, // [placement, oppositePlacement]
+  padding: Padding, // 0
+};
+```
+
+### Options#behavior
+
 If the popper has placement set to `bottom`, but there isn't space to position
 the popper in that direction, by default, it will change the popper placement to
 `top`. As soon enough space is detected, the placement will be reverted to the
@@ -31,3 +42,23 @@ In the above example, the popper will be placed on left if there's enough space,
 if not, it will try the top placement, and if even on the top placement there's
 not enough space, it will try to use the right placement. Note that if none of
 the placements is suitable, the original left placement will be used.
+
+### Options#padding
+
+You can apply some additional padding to the boundaries defined by the
+`detectOverflow` modifier by setting this option to a number, to apply the
+padding evenly to all the four sides, or to an object containing the `top`,
+`left`, `bottom`, `right` properties, with a padding number for each side.
+
+```js
+new Popper(reference, popper, {
+  modifiers: [
+    {
+      name: 'flip',
+      options: {
+        padding: { top: 20, right: 10 },
+      },
+    },
+  ],
+});
+```

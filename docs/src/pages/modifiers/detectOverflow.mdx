@@ -3,6 +3,16 @@
 The detectOverflow modifier can signal other modifiers when a popper element is
 scheduled to be positioned outside a given boundary, or container element.
 
+## Options
+
+```js
+type Options = {
+  boundaryElement: HTMLElement, // popper's clipping parent
+};
+```
+
+### Options#boundaryElement
+
 By default, the boundary element is set to the closest scrolling clipping
 container, which, in other words, is a container with scrollbars, that can
 potentially hide the popper if the latter is positioned outside of the visible

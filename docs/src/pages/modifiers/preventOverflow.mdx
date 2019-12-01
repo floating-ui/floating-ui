@@ -3,6 +3,19 @@
 The preventOverflow modifier can move the popper when the `detectOverflow`
 modifier reported it's overflowing in any direction.
 
+## Options
+
+```js
+type Options = {
+  mainAxis: boolean, // = true
+  altAxis: boolean, // = false
+  tether: Tether, // = 'center'
+  padding: Padding, // = 0
+};
+```
+
+### Options#mainAxis
+
 By default, only the main axis is checked, that means if a popper with `bottom`
 placement is overflowing on the right of its boundary element, it will be moved
 on the left so that it stays within its boundaries. This behavior can be
@@ -21,6 +34,8 @@ new Popper(reference, popper, {
 });
 ```
 
+### Options#altAxis
+
 Optionally, the alternative axis check can be enabled, by setting
 `options.altAxis` to `true`. This will make the modifier check also the other
 axis, but keep in mind that this may lead the popper to overlap its reference
@@ -33,6 +48,60 @@ new Popper(reference, popper, {
       name: 'preventOverflow',
       options: {
         altAxis: true, // false by default
+      },
+    },
+  ],
+});
+```
+
+### Options#tether
+
+While trying to keep the popper element within its boundaries is usually a
+welcome behavior, we don't usually want to reach the point where the reference
+and popper elements are not touching eachother at all, since that would make it
+difficult for the user to understand where a popper originated from.
+
+The default behavior to avoid this situation, is to stop to try to keep the
+popper within its defined boundaries once the center of the popper reaches the
+edge of its reference element. This tether behavior is called `center`.
+
+Alternatively, this option can accept `edges`, which will work similarly to
+`center`, but will kick in only when the popper edge reaches the reference edge.
+
+```js
+new Popper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        tether: 'edges',
+      },
+    },
+  ],
+});
+```
+
+The `surfaces` behavior, instead, will kick in once the opposite edges are
+level.
+
+To conclude, the tether option can be disabled all together by setting it to
+`false`, so that the popper will detach from its reference element if required
+to keep it within its defined boundaries.
+
+### Options#padding
+
+You can apply some additional padding to the boundaries defined by the
+`detectOverflow` modifier by setting this option to a number, to apply the
+padding evenly to all the four sides, or to an object containing the `top`,
+`left`, `bottom`, `right` properties, with a padding number for each side.
+
+```js
+new Popper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        padding: { top: 20, right: 10 },
       },
     },
   ],
