@@ -1,0 +1,64 @@
+<!DOCTYPE html> <title>Prevent Overflow Visual Test</title>
+
+<style>
+  #scroll {
+    overflow: scroll;
+    width: 300px;
+    height: 750px;
+    background-color: grey;
+  }
+
+  #scroll::before {
+    content: 'before';
+    display: block;
+    height: 1000px;
+    width: 1px;
+  }
+
+  #scroll::after {
+    content: 'after';
+    display: block;
+    height: 1000px;
+    width: 1px;
+  }
+
+  #reference {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 300px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<div id="scroll">
+  <div id="reference">Reference Box</div>
+  <div id="popper">Popper Box</div>
+</div>
+
+<script type="module">
+  import Popper from '../dist/esm/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = new Popper(reference, popper, {
+    placement: 'right',
+    modifiers: [
+      {
+        name: 'preventOverflow',
+        options: {
+          tether: 'edges',
+        },
+      },
+    ],
+  });
+</script>
