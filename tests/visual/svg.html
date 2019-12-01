@@ -1,0 +1,38 @@
+<!DOCTYPE html> <title>SVG Visual Test</title>
+
+<style>
+  #reference {
+    width: 200px;
+    height: 200px;
+  }
+
+  #popper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<svg
+  id="reference"
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="red"
+>
+  <circle cx="50" cy="50" r="50" />
+</svg>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import Popper from './dist/esm/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = new Popper(reference, popper, {
+    placement: 'right',
+  });
+</script>
