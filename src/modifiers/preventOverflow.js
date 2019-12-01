@@ -14,7 +14,11 @@ type Options = {
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
   /* Allows the popper to overflow from its boundaries to keep it near its reference element */
-  tether: boolean,
+  /* true = popper can overflow once the center of the popper is at the edge of the reference */
+  /* false = popper can never overflow, will detach from reference to stay visible */
+  /* "edges" = popper can overflow once the opposite edges are level */
+  /* "surfaces" = popper can overflow once the surfaces are level */
+  tether: boolean | 'edges' | 'surfaces',
   /* Sets a padding to the provided boundary */
   padding: Padding,
 };
@@ -44,26 +48,38 @@ export function preventOverflow(state: State, options?: Options = {}) {
     const altSide = mainAxis === 'y' ? bottom : right;
     const len = mainAxis === 'y' ? 'height' : 'width';
     const offset = popperOffsets[mainAxis];
+
     const min =
       popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide];
     const max =
       popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
+
+    const additive =
+      tether === 'surfaces'
+        ? popperRect[len] / 2
+        : tether === 'edges'
+        ? -popperRect[len] / 2
+        : 0;
+
     const tetherMin =
       state.modifiersData.popperOffsets[mainAxis] -
       referenceRect[len] / 2 +
-      popperRect[len] / 2;
+      additive;
     const tetherMax =
       state.modifiersData.popperOffsets[mainAxis] +
       referenceRect[len] / 2 -
-      popperRect[len] / 2;
-    const isReferenceLarger = referenceRect[len] > popperRect[len];
+      additive;
+
+    const lenCondition =
+      referenceRect[len] > popperRect[len] || tether !== 'surfaces';
 
     state.modifiersData.popperOffsets[mainAxis] = within(
-      tether ? Math.min(min, isReferenceLarger ? tetherMax : tetherMin) : min,
+      tether ? Math.min(min, lenCondition ? tetherMax : tetherMin) : min,
       offset,
-      tether ? Math.max(max, isReferenceLarger ? tetherMin : tetherMax) : max
+      tether ? Math.max(max, lenCondition ? tetherMin : tetherMax) : max
     );
   }
+
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
