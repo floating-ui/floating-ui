@@ -7,15 +7,20 @@ import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { basePlacements } from '../enums';
 
-type Options = { behavior: Array<Placement>, padding: Padding };
+type Options = {
+  fallbackPlacements: Array<Placement>,
+  padding: Padding,
+};
 
 export function flip(state: State, options?: Options = {}) {
   const placement = state.placement;
-  const defaultBehavior = [
-    state.options.placement,
+  const defaultFallbackPlacements = [
     getOppositePlacement(state.options.placement),
   ];
-  const { behavior = defaultBehavior, padding = 0 } = options;
+  const {
+    fallbackPlacements = defaultFallbackPlacements,
+    padding = 0,
+  } = options;
   const overflow = state.modifiersData.detectOverflow;
   const flipIndex = state.modifiersData.flip.index;
 
@@ -25,7 +30,9 @@ export function flip(state: State, options?: Options = {}) {
       : expandToHashMap(padding, basePlacements)
   );
 
-  const flippedPlacement = behavior[flipIndex];
+  const placementOrder = [state.options.placement, ...fallbackPlacements];
+
+  const flippedPlacement = placementOrder[flipIndex];
 
   if (!flippedPlacement && placement !== state.options.placement) {
     state.placement = state.options.placement;
