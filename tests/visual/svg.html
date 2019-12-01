@@ -1,12 +1,13 @@
 <!DOCTYPE html> <title>SVG Visual Test</title>
 
 <style>
-  #reference {
+  svg {
     width: 200px;
     height: 200px;
+    padding: 20px;
   }
 
-  #popper {
+  .popper {
     position: absolute;
     top: 0;
     left: 0;
@@ -18,21 +19,37 @@
 </style>
 
 <svg
-  id="reference"
-  viewBox="0 0 100 100"
+  id="reference-1"
+  class="reference"
+  viewBox="0 0 200 200"
   xmlns="http://www.w3.org/2000/svg"
   fill="red"
 >
   <rect width="200" height="200" />
 </svg>
-<div id="popper">Popper Box</div>
+
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect
+    id="reference-2"
+    class="reference"
+    width="200"
+    height="200"
+    fill="tomato"
+  />
+</svg>
+<div class="popper" id="popper-1">Popper Box</div>
+<div class="popper" id="popper-2">Popper Box</div>
 
 <script type="module">
   import Popper from './dist/esm/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
 
-  window.instance = new Popper(reference, popper, {
-    placement: 'right',
-  });
+  const n = document.querySelectorAll('.popper').length;
+
+  for (let i = 1; i < n + 1; i++) {
+    const reference = document.querySelector(`#reference-${i}`);
+    const popper = document.querySelector(`#popper-${i}`);
+    new Popper(reference, popper, {
+      placement: 'right',
+    });
+  }
 </script>
