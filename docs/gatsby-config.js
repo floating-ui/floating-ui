@@ -45,9 +45,11 @@ module.exports = {
         plugins: [`gatsby-remark-images`],
       },
     },
+    `gatsby-dynamical-navigation`,
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-plugin-emotion`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
