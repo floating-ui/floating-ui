@@ -6,6 +6,7 @@ import getElementClientRect from '../dom-utils/getElementClientRect';
 import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
+import unwrapVirtualElement from '../utils/unwrapVirtualElement';
 
 type Options = { element: HTMLElement | string };
 
@@ -45,7 +46,7 @@ export function arrow(state: State, options?: Options = {}) {
   );
 
   const commonTotalScroll = getCommonTotalScroll(
-    state.elements.reference,
+    unwrapVirtualElement(state.elements.reference),
     state.scrollParents.reference,
     state.scrollParents.popper
   );

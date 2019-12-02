@@ -15,12 +15,14 @@ import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 
 const INVALID_ELEMENT_ERROR =
-  'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element or a jQuery-wrapped DOM element.';
+  'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
-const areValidElements = (...args: Array<mixed>): boolean =>
-  !args.some(element => !(element instanceof Element));
+const areValidElements = (...args: Array<any>): boolean =>
+  !args.some(
+    element => !(element && typeof element.getBoundingClientRect === 'function')
+  );
 
 const defaultOptions = {
   placement: 'bottom',

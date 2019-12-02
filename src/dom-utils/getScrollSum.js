@@ -1,7 +1,7 @@
 // @flow
 import getNodeScroll from './getNodeScroll';
 
-export default (scrollParents: Array<Node>) =>
+export default (scrollParents: Array<Element>) =>
   scrollParents.reduce(
     (scroll, scrollParent) => {
       const nodeScroll = getNodeScroll(scrollParent);

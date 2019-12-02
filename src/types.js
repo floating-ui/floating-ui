@@ -28,7 +28,7 @@ export type StateOffsets = {|
 
 export type State = {|
   elements: {|
-    reference: HTMLElement,
+    reference: Element | VirtualElement,
     popper: HTMLElement,
     arrow?: HTMLElement,
   |},
@@ -38,8 +38,8 @@ export type State = {|
   orderedModifiers: Array<Modifier<any>>,
   measures: StateMeasures,
   scrollParents: {|
-    reference: Array<Node>,
-    popper: Array<Node>,
+    reference: Array<Element>,
+    popper: Array<Element>,
   |},
   styles: {|
     [key: string]: $Shape<CSSStyleDeclaration>,
@@ -93,3 +93,8 @@ export type PaddingObject = {|
 |};
 
 export type Padding = number | $Shape<PaddingObject>;
+
+export type VirtualElement = {|
+  contextElement: HTMLElement,
+  getBoundingClientRect: () => ClientRect | DOMRect,
+|};

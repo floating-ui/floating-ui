@@ -1,16 +1,20 @@
 // @flow
-import type { Rect } from '../types';
+import type { Rect, VirtualElement } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
 import listScrollParents from './listScrollParents';
 import getScrollSum from './getScrollSum';
 import getOffsetParent from './getOffsetParent';
+import unwrapVirtualElement from '../utils/unwrapVirtualElement';
 
 // Returns the width, height and offsets of the provided element relative to the
 // offsetParent
-export default (element: Element): Rect => {
+export default (element: Element | VirtualElement): Rect => {
+  const unwrappedElement = unwrapVirtualElement(element);
   const rect = getBoundingClientRect(element);
-  const scrollParentsScrollSum = getScrollSum(listScrollParents(element));
-  const directOffsetParent = getOffsetParent(element);
+  const scrollParentsScrollSum = getScrollSum(
+    listScrollParents(unwrappedElement)
+  );
+  const directOffsetParent = getOffsetParent(unwrappedElement);
   const directOffsetParentRect =
     directOffsetParent instanceof Element
       ? getBoundingClientRect(directOffsetParent)

@@ -1,0 +1,56 @@
+<!DOCTYPE html> <title>Virtual Element Visual Test</title>
+
+<style>
+  #reference {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #offset {
+    position: relative;
+    top: 100px;
+    left: 100px;
+  }
+</style>
+
+<div id="offset">
+  <div id="reference">Reference Box</div>
+</div>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import Popper from './dist/esm/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  const ref = {
+    contextElement: reference,
+    getBoundingClientRect: () => ({
+      width: 200,
+      height: 150,
+      top: 100,
+      right: 300,
+      bottom: 250,
+      left: 100,
+    }),
+  };
+
+  window.instance = new Popper(ref, popper, {
+    placement: 'right',
+  });
+</script>

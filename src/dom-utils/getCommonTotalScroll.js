@@ -3,12 +3,12 @@ import getOffsetParent from './getOffsetParent';
 import getScrollSum from './getScrollSum';
 
 export default function getCommonTotalScroll(
-  reference: HTMLElement,
-  referenceScrollParents: Array<Node>,
-  popperScrollParents: Array<Node>,
+  referenceElement: Element,
+  referenceScrollParents: Array<Element>,
+  popperScrollParents: Array<Element>,
   limiter?: Node
 ) {
-  const offsetParent = getOffsetParent(reference);
+  const offsetParent = getOffsetParent(referenceElement);
   const index = referenceScrollParents.findIndex(
     node => node === (limiter || offsetParent)
   );

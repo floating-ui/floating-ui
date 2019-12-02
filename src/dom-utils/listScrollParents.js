@@ -6,8 +6,8 @@ import getWindow from './getWindow';
 
 export default function listScrollParents(
   element: Node,
-  list: Array<Node> = []
-): Array<Node> {
+  list: Array<Element> = []
+): Array<Element> {
   const scrollParent = getScrollParent(element);
   const isBody = getNodeName(scrollParent) === 'BODY';
   const target = isBody ? getWindow(scrollParent) : scrollParent;

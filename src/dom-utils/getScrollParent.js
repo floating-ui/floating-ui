@@ -1,13 +1,14 @@
 // @flow
 import getParentNode from './getParentNode';
 import getComputedStyle from './getComputedStyle';
+import getNodeName from './getNodeName';
 
 export default function getScrollParent(node: Node): HTMLElement {
   if (!node) {
     return document.body;
   }
 
-  if (['HTML', 'BODY', '#document'].includes(node.nodeName.toUpperCase())) {
+  if (['HTML', 'BODY', '#document'].includes(getNodeName(node))) {
     return node.ownerDocument.body;
   }
 
