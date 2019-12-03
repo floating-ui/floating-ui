@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { State, Modifier, Rect } from '../types';
+import type { ModifierArguments, Modifier, Rect } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 
 export function distanceAndSkiddingToXY(
@@ -34,7 +34,7 @@ type OffsetsFunction = ({
 
 type Options = { offset: ?OffsetsFunction };
 
-export function offset(state: State, options?: Options = {}) {
+export function offset({ state, options = {} }: ModifierArguments<Options>) {
   if (typeof options.offset === 'function') {
     const [x, y] = distanceAndSkiddingToXY(
       state.placement,

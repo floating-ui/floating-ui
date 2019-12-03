@@ -10,7 +10,7 @@ import {
   center,
 } from '../enums';
 import type { Tether } from '../enums';
-import type { State, Modifier, Padding } from '../types';
+import type { ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
@@ -35,7 +35,10 @@ type Options = {
   padding: Padding,
 };
 
-export function preventOverflow(state: State, options?: Options = {}) {
+export function preventOverflow({
+  state,
+  options = {},
+}: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,

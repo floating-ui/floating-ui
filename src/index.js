@@ -122,7 +122,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         const { fn, enabled, options } = state.orderedModifiers[index];
 
         if (enabled && typeof fn === 'function') {
-          state = fn((state: State), options);
+          state = fn({ state, options });
         }
       }
     };
@@ -186,7 +186,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // defined by the modifier dependencies directive.
     // The `onLoad` function may add or alter the options of themselves
     state.orderedModifiers.forEach(
-      ({ onLoad, enabled }) => enabled && onLoad && onLoad(state)
+      ({ onLoad, enabled }) =>
+        enabled &&
+        onLoad &&
+        onLoad({
+          state,
+        })
     );
 
     instance.enableEventListeners = (
@@ -235,7 +240,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       // Run `onDestroy` modifier methods
       state.orderedModifiers.forEach(
-        ({ onDestroy, enabled }) => enabled && onDestroy && onDestroy(state)
+        ({ onDestroy, enabled }) => enabled && onDestroy && onDestroy({ state })
       );
     };
 

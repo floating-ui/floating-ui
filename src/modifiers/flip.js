@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { State, Modifier, Padding } from '../types';
+import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
@@ -12,7 +12,7 @@ type Options = {
   padding: Padding,
 };
 
-export function flip(state: State, options?: Options = {}) {
+export function flip({ state, options = {} }: ModifierArguments<Options>) {
   const placement = state.placement;
   const defaultFallbackPlacements = [
     getOppositePlacement(state.options.placement),
