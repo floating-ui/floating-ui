@@ -2,4 +2,6 @@
 import { popperGenerator } from './index';
 import { popperOffsets, computeStyles, applyStyles } from './modifiers/index';
 
-export default popperGenerator([popperOffsets, computeStyles, applyStyles]);
+export default popperGenerator({
+  defaultModifiers: [popperOffsets, computeStyles, applyStyles],
+});

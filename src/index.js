@@ -24,14 +24,24 @@ const areValidElements = (...args: Array<any>): boolean =>
     element => !(element && typeof element.getBoundingClientRect === 'function')
   );
 
-const defaultOptions = {
+const defaultOptionsValue = {
   placement: 'bottom',
   eventListeners: { scroll: true, resize: true },
   modifiers: [],
   strategy: 'absolute',
 };
 
-export function popperGenerator(defaultModifiers: Array<Modifier<any>> = []) {
+type PopperGeneratorArgs = {
+  defaultModifiers?: Array<Modifier<any>>,
+  defaultOptions?: $Shape<Options>,
+};
+
+export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
+  const {
+    defaultModifiers = [],
+    defaultOptions = defaultOptionsValue,
+  } = generatorOptions;
+
   return function createPopper(
     reference: HTMLElement | JQueryWrapper,
     popper: HTMLElement | JQueryWrapper,

@@ -8,4 +8,4 @@ const defaultModifiers: Array<Modifiers$Values> = (Object.values(
   modifiers
 ): any);
 
-export default popperGenerator(defaultModifiers);
+export default popperGenerator({ defaultModifiers });
