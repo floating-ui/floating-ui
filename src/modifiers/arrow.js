@@ -4,9 +4,9 @@ import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getElementClientRect from '../dom-utils/getElementClientRect';
 import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
+import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
-import unwrapVirtualElement from '../utils/unwrapVirtualElement';
 
 type Options = { element: HTMLElement | string };
 
