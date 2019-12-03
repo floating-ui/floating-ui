@@ -1,6 +1,7 @@
 // @flow
 import type { Modifier, State } from '../types';
 import getNodeName from '../dom-utils/getNodeName';
+import getWindow from '../dom-utils/getWindow';
 
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
@@ -15,7 +16,10 @@ export function applyStyles(state: State) {
     const element = state.elements[name];
 
     // arrow is optional + virtual elements
-    if (!(element instanceof HTMLElement) || !getNodeName(element)) {
+    if (
+      !(element instanceof getWindow(element).HTMLElement) ||
+      !getNodeName(element)
+    ) {
       return;
     }
 
@@ -49,7 +53,10 @@ export function onDestroy(state: State) {
     );
 
     // arrow is optional + virtual elements
-    if (!(element instanceof HTMLElement) || !getNodeName(element)) {
+    if (
+      !(element instanceof getWindow(element).HTMLElement) ||
+      !getNodeName(element)
+    ) {
       return;
     }
 

@@ -1,5 +1,11 @@
 // @flow
-export default function getWindow(node: Node) {
-  const ownerDocument = node.ownerDocument;
-  return ownerDocument ? ownerDocument.defaultView : window;
+export default function getWindow(node: mixed) {
+  const ownerDocument: ?Document =
+    node != null &&
+    typeof node === 'object' &&
+    node.hasOwnProperty('ownerDocument')
+      ? // $FlowFixMe: assume ownerDocument to be the one we are looking for
+        node.ownerDocument
+      : null;
+  return ownerDocument != null ? ownerDocument.defaultView : window;
 }

@@ -2,7 +2,7 @@
 import type { State, Modifier } from '../types';
 import computeOffsets from '../utils/computeOffsets';
 import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
-import unwrapVirtualElement from '../utils/unwrapVirtualElement';
+import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 export function popperOffsets(state: State) {
   // Offsets are the actual position the popper needs to have to be

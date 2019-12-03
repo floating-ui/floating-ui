@@ -4,7 +4,8 @@ import getBoundingClientRect from './getBoundingClientRect';
 import listScrollParents from './listScrollParents';
 import getScrollSum from './getScrollSum';
 import getOffsetParent from './getOffsetParent';
-import unwrapVirtualElement from '../utils/unwrapVirtualElement';
+import unwrapVirtualElement from './unwrapVirtualElement';
+import getWindow from './getWindow';
 
 // Returns the width, height and offsets of the provided element relative to the
 // offsetParent
@@ -16,14 +17,16 @@ export default (element: Element | VirtualElement): Rect => {
   );
   const directOffsetParent = getOffsetParent(unwrappedElement);
   const directOffsetParentRect =
-    directOffsetParent instanceof Element
+    directOffsetParent instanceof getWindow(directOffsetParent).Element
       ? getBoundingClientRect(directOffsetParent)
       : { left: 0, top: 0 };
 
   const ancestorOffsetParents = [];
   let currentOffsetParent = directOffsetParent;
 
-  while (currentOffsetParent instanceof Element) {
+  while (
+    currentOffsetParent instanceof getWindow(currentOffsetParent).Element
+  ) {
     currentOffsetParent = getOffsetParent(currentOffsetParent);
     ancestorOffsetParents.push(currentOffsetParent);
   }

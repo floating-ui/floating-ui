@@ -4,7 +4,9 @@ import getNodeName from './getNodeName';
 
 export default function getOffsetParent(element: Element) {
   const offsetParent =
-    element instanceof HTMLElement ? element.offsetParent : null;
+    element instanceof getWindow(element).HTMLElement
+      ? element.offsetParent
+      : null;
   const window = getWindow(element);
 
   if (getNodeName(offsetParent) === 'BODY') {
