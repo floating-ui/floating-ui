@@ -25,7 +25,7 @@ type Options = {
 To use the modifier you can run:
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'offset',
@@ -56,7 +56,7 @@ The function can also provide some arguments, specifically you will have access
 to the popper "placement", the reference and popper "measurements".
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'offset',

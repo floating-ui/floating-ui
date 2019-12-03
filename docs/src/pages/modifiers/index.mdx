@@ -29,7 +29,7 @@ Is it possible to add custom modifiers, written by you, by defining them in the
 `options.modifiers` array during a Popper instantation.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [myCustomModifier],
 });
 ```
@@ -59,7 +59,7 @@ populated with some custom options, to override the options of a built-in
 modifier.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'flip',

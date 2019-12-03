@@ -41,14 +41,14 @@
 <div class="popper" id="popper-2">Popper Box</div>
 
 <script type="module">
-  import Popper from './dist/esm/popper.js';
+  import { createPopper } from './dist/esm/popper.js';
 
   const n = document.querySelectorAll('.popper').length;
 
   for (let i = 1; i < n + 1; i++) {
     const reference = document.querySelector(`#reference-${i}`);
     const popper = document.querySelector(`#popper-${i}`);
-    new Popper(reference, popper, {
+    createPopper(reference, popper, {
       placement: 'right',
     });
   }

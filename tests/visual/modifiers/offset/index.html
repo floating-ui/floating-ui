@@ -28,24 +28,23 @@
 <div class="popper" id="popper4">Popper Box</div>
 
 <script type="module">
-  import Popper from '../../dist/esm/popper.js';
+  import { createPopper } from '../../dist/esm/popper.js';
   const reference = document.querySelector('#reference');
 
-  ['top', 'right', 'bottom', 'left'].forEach(
-    (placement, n) =>
-      new Popper(reference, document.querySelector(`#popper${n + 1}`), {
-        placement: placement,
-        modifiers: [
-          {
-            name: 'offset',
-            options: {
-              offset: ({ popper, reference, placement }) => [
-                popper.width / 2,
-                reference.height / 2,
-              ],
-            },
+  ['top', 'right', 'bottom', 'left'].forEach((placement, n) =>
+    createPopper(reference, document.querySelector(`#popper${n + 1}`), {
+      placement: placement,
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: ({ popper, reference, placement }) => [
+              popper.width / 2,
+              reference.height / 2,
+            ],
           },
-        ],
-      })
+        },
+      ],
+    })
   );
 </script>

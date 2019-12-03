@@ -56,12 +56,6 @@
           "useBuiltIns": true
         }
       ],
-      [
-        "@babel/plugin-proposal-class-properties",
-        {
-          "loose": true
-        }
-      ],
       "dev-expression"
     ],
     "env": {
@@ -113,7 +107,6 @@
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.5",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/plugin-transform-flow-strip-types": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.1.5",

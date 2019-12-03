@@ -24,7 +24,7 @@
 <div id="horizontal"></div>
 
 <script type="module">
-  import Popper from './dist/esm/popper.js';
+  import { createPopper } from './dist/esm/popper.js';
 
   const vertical = document.querySelector('#vertical');
   const horizontal = document.querySelector('#horizontal');
@@ -63,7 +63,7 @@
       popper.style.height = `${elementSizes.popper[1]}px`;
       container.append(popper);
 
-      new Popper(reference, popper, { placement });
+      createPopper(reference, popper, { placement });
     });
   });
 </script>

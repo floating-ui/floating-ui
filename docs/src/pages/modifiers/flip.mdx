@@ -32,7 +32,7 @@ placement, the modifier will test the ones provided in the list, and use the
 first useful one.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   placement: 'left',
   modifiers: [
     {
@@ -58,7 +58,7 @@ padding evenly to all the four sides, or to an object containing the `top`,
 `left`, `bottom`, `right` properties, with a padding number for each side.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'flip',

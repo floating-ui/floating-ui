@@ -28,7 +28,7 @@ on the left so that it stays within its boundaries. This behavior can be
 disabled by setting `options.mainAxis` to `false`.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'preventOverflow',
@@ -48,7 +48,7 @@ axis, but keep in mind that this may lead the popper to overlap its reference
 element.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'preventOverflow',
@@ -75,7 +75,7 @@ Alternatively, this option can accept `edges`, which will work similarly to
 `center`, but will kick in only when the popper edge reaches the reference edge.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'preventOverflow',
@@ -102,7 +102,7 @@ padding evenly to all the four sides, or to an object containing the `top`,
 `left`, `bottom`, `right` properties, with a padding number for each side.
 
 ```js
-new Popper(reference, popper, {
+createPopper(reference, popper, {
   modifiers: [
     {
       name: 'preventOverflow',

@@ -1,5 +1,5 @@
 // @flow
-import Popper from './index';
+import { popperGenerator } from './index';
 import * as modifiers from './modifiers/index';
 
 type Modifiers$Values = $Values<typeof modifiers>;
@@ -7,7 +7,6 @@ type Modifiers$Values = $Values<typeof modifiers>;
 const defaultModifiers: Array<Modifiers$Values> = (Object.values(
   modifiers
 ): any);
+const createPopper = popperGenerator({ defaultModifiers });
 
-Popper.defaultModifiers = defaultModifiers;
-
-export default Popper;
+export { createPopper, popperGenerator };

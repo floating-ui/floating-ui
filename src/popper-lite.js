@@ -1,6 +1,9 @@
 // @flow
-import Popper from './index';
+import { popperGenerator } from './index';
 import { popperOffsets, computeStyles, applyStyles } from './modifiers/index';
 
-Popper.defaultModifiers = [popperOffsets, computeStyles, applyStyles];
-export default Popper;
+const createPopper = popperGenerator({
+  defaultModifiers: [popperOffsets, computeStyles, applyStyles],
+});
+
+export { createPopper, popperGenerator };
