@@ -47,6 +47,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     popper: HTMLElement | JQueryWrapper,
     options: $Shape<Options> = defaultOptions
   ) {
+    const instance = {};
+
     let state: $Shape<State> = {
       placement: 'bottom',
       orderedModifiers: [],
@@ -57,7 +59,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // Syncronous and forcefully executed update
     // it will always be executed even if not necessary, usually NOT needed
     // use Popper#update instead
-    const forceUpdate = () => {
+    instance.forceUpdate = () => {
       const {
         reference: referenceElement,
         popper: popperElement,
@@ -126,10 +128,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // Async and optimistically optimized update
     // it will not be executed if not necessary
     // debounced, so that it only runs at most once-per-tick
-    const update = debounce(
+    instance.update = debounce(
       () =>
         new Promise<State>(success => {
-          forceUpdate();
+          instance.forceUpdate();
           success(state);
         })
     );
@@ -185,7 +187,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       ({ onLoad, enabled }) => enabled && onLoad && onLoad(state)
     );
 
-    const enableEventListeners = (
+    instance.enableEventListeners = (
       eventListeners: boolean | {| scroll?: boolean, resize?: boolean |}
     ) => {
       const { scroll, resize } =
@@ -200,7 +202,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         ];
 
         scrollParents.forEach(scrollParent =>
-          scrollParent.addEventListener('scroll', update, {
+          scrollParent.addEventListener('scroll', instance.update, {
             passive: true,
           })
         );
@@ -208,13 +210,13 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       if (resize) {
         const window = getWindow(state.elements.popper);
-        window.addEventListener('resize', update, {
+        window.addEventListener('resize', instance.update, {
           passive: true,
         });
       }
     };
 
-    const destroy = () => {
+    instance.destroy = () => {
       // Remove scroll event listeners
       const scrollParents = [
         ...state.scrollParents.reference,
@@ -222,12 +224,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       ];
 
       scrollParents.forEach(scrollParent =>
-        scrollParent.removeEventListener('scroll', update)
+        scrollParent.removeEventListener('scroll', instance.update)
       );
 
       // Remove resize event listeners
       const window = getWindow(state.elements.popper);
-      window.removeEventListener('resize', update);
+      window.removeEventListener('resize', instance.update);
 
       // Run `onDestroy` modifier methods
       state.orderedModifiers.forEach(
@@ -235,16 +237,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       );
     };
 
-    update().then(() => {
+    instance.update().then(() => {
       // After the first update completed, enable the event listeners
-      enableEventListeners(state.options.eventListeners);
+      instance.enableEventListeners(state.options.eventListeners);
     });
 
-    return {
-      forceUpdate,
-      update,
-      destroy,
-    };
+    return instance;
   };
 }
 
