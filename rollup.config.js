@@ -21,6 +21,7 @@ const createUmdBundle = ({ input, minify } = {}) => ({
     minify && terser(),
     bundleSize(),
     visualizer({
+      sourcemap: true,
       filename: `stats/${getFileName(input)}${minify ? '-min' : ''}.html`,
     }),
   ].filter(Boolean),
