@@ -8,25 +8,13 @@ type Options = {
   gpuAcceleration?: boolean,
 };
 
-export const mapStrategyToPosition = (
-  strategy: PositioningStrategy
-): string => {
-  switch (strategy) {
-    case 'fixed':
-      return 'fixed';
-    case 'absolute':
-    default:
-      return 'absolute';
-  }
-};
-
-export const computePopperStyles = ({
+export const mapToStyles = ({
   offsets,
-  strategy,
+  position,
   gpuAcceleration,
 }: {
   offsets: Offsets,
-  strategy: PositioningStrategy,
+  position: PositioningStrategy,
   gpuAcceleration: boolean,
 }) => {
   // @1x displays in Chrome can be blurry due to non-rounded offsets, but this
@@ -36,35 +24,14 @@ export const computePopperStyles = ({
     return {
       top: `${offsets.y}px`,
       left: `${offsets.x}px`,
-      position: mapStrategyToPosition(strategy),
+      position,
     };
   } else {
     return {
       top: '0px',
       left: '0px',
       transform: `translate3d(${offsets.x}px, ${offsets.y}px, 0)`,
-      position: mapStrategyToPosition(strategy),
-    };
-  }
-};
-
-export const computeArrowStyles = ({
-  offsets,
-  gpuAcceleration,
-}: {
-  offsets: Offsets,
-  gpuAcceleration: boolean,
-}) => {
-  if (gpuAcceleration) {
-    return {
-      top: `${offsets.y}px`,
-      left: `${offsets.x}px`,
-      position: 'absolute',
-    };
-  } else {
-    return {
-      transform: `translate3d(${offsets.x}px, ${offsets.y}px, 0)`,
-      position: 'absolute',
+      position,
     };
   }
 };
@@ -75,16 +42,17 @@ export function computeStyles(state: State, options?: Options = {}) {
   state.modifiersData.computeStyles = {
     styles: {
       // popper offsets are always available
-      popper: computePopperStyles({
+      popper: mapToStyles({
         offsets: state.modifiersData.popperOffsets,
-        strategy: state.options.strategy,
+        position: state.options.strategy,
         gpuAcceleration,
       }),
       // arrow offsets may not be available
       arrow:
         state.modifiersData.arrow != null
-          ? computeArrowStyles({
+          ? mapToStyles({
               offsets: state.modifiersData.arrow,
+              position: 'absolute',
               gpuAcceleration,
             })
           : undefined,

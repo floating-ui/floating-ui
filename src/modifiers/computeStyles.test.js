@@ -1,29 +1,20 @@
 // @flow
-import {
-  mapStrategyToPosition,
-  computePopperStyles,
-  computeArrowStyles,
-} from './computeStyles';
-
-it('returns the expected position value', () => {
-  expect(mapStrategyToPosition('fixed')).toBe('fixed');
-  expect(mapStrategyToPosition('absolute')).toBe('absolute');
-});
+import { mapToStyles } from './computeStyles';
 
 it('computes the popper styles', () => {
   window.devicePixelRatio = 2;
   expect(
-    computePopperStyles({
+    mapToStyles({
       offsets: { x: 10, y: 5 },
-      strategy: 'absolute',
+      position: 'absolute',
       gpuAcceleration: true,
     })
   ).toMatchSnapshot();
 
   expect(
-    computePopperStyles({
+    mapToStyles({
       offsets: { x: 10, y: 5 },
-      strategy: 'absolute',
+      position: 'absolute',
       gpuAcceleration: false,
     })
   ).toMatchSnapshot();
@@ -32,8 +23,9 @@ it('computes the popper styles', () => {
 
 it('computes the arrow styles', () => {
   expect(
-    computeArrowStyles({
+    mapToStyles({
       offsets: { x: 10, y: 5 },
+      position: 'absolute',
       gpuAcceleration: true,
     })
   ).toMatchSnapshot();
