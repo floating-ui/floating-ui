@@ -3,6 +3,7 @@ import type { JQueryWrapper, State, Options, Modifier } from './types';
 
 // DOM Utils
 import getElementClientRect from './dom-utils/getElementClientRect';
+import getBoundingClientRect from './dom-utils/getBoundingClientRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
 import addClientRectMargins from './dom-utils/addClientRectMargins';
@@ -134,15 +135,17 @@ export default class Popper {
     // Get initial measurements
     // these are going to be used to compute the initial popper offsets
     // and as cache for any modifier that needs them later
+    const getClientRect =
+      this.state.options.strategy === 'fixed'
+        ? getBoundingClientRect
+        : getElementClientRect;
+
     this.state.measures = {
-      reference: getElementClientRect(referenceElement),
-      // CSS marginsc an be applied to popper elements to quickly
+      reference: getClientRect(referenceElement),
+      // CSS margins can be applied to popper elements to quickly
       // apply offsets dynamically based on some CSS selectors.
       // For this reason we include margins in this calculation.
-      popper: addClientRectMargins(
-        getElementClientRect(popperElement),
-        popperElement
-      ),
+      popper: addClientRectMargins(getClientRect(popperElement), popperElement),
     };
 
     // Modifiers have the ability to read the current Popper state, included

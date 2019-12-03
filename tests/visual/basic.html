@@ -1,9 +1,9 @@
 <!DOCTYPE html> <title>Basic Visual Test</title>
 
 <style>
-  #reference {
+  .reference {
     position: absolute;
-    top: 150px;
+
     left: 150px;
     width: 200px;
     height: 200px;
@@ -11,7 +11,15 @@
     box-shadow: inset 0 0 0 1px black;
   }
 
-  #popper {
+  #reference {
+    top: 150px;
+  }
+
+  #fixed-reference {
+    top: 950px;
+  }
+
+  .popper {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,8 +30,11 @@
   }
 </style>
 
-<div id="reference">Reference Box</div>
-<div id="popper">Popper Box</div>
+<div id="reference" class="reference">Reference Box</div>
+<div id="popper" class="popper">Popper Box</div>
+
+<div id="fixed-reference" class="reference">Fixed Reference Box</div>
+<div id="fixed-popper"  class="popper">Fixed Popper Box</div>
 
 <script type="module">
   import Popper from './dist/esm/popper.js';
@@ -32,5 +43,13 @@
 
   window.instance = new Popper(reference, popper, {
     placement: 'right',
+  });
+
+  const fixedReference = document.querySelector('#fixed-reference');
+  const fixedPopper = document.querySelector('#fixed-popper');
+
+  window.fixedInstance = new Popper(fixedReference, fixedPopper, {
+    placement: 'left',
+    strategy: 'fixed',
   });
 </script>
