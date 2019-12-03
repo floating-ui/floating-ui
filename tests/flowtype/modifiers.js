@@ -1,5 +1,5 @@
 // @flow
-import createPopper from '../../src/';
+import { createPopper } from '../../src/';
 
 // $FlowExpectError: valid elements must be provided
 createPopper(null, null);

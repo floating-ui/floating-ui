@@ -7,5 +7,6 @@ type Modifiers$Values = $Values<typeof modifiers>;
 const defaultModifiers: Array<Modifiers$Values> = (Object.values(
   modifiers
 ): any);
+const createPopper = popperGenerator({ defaultModifiers });
 
-export default popperGenerator({ defaultModifiers });
+export { createPopper, popperGenerator };

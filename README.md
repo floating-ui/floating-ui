@@ -124,7 +124,7 @@ advantages, you can import the fully featured `esm` file:
 
 ```js
 // All features included!
-import createPopper from '@popperjs/core/lib/popper';
+import { createPopper } from '@popperjs/core/lib/popper';
 ```
 
 ### Instantiation

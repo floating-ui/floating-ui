@@ -246,4 +246,4 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
   };
 }
 
-export default popperGenerator();
+export const createPopper = popperGenerator();
