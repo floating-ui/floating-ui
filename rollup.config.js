@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import bundleSize from 'rollup-plugin-bundle-size';
 import { terser } from 'rollup-plugin-terser';
+import visualizer from 'rollup-plugin-visualizer';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
@@ -19,6 +20,9 @@ const createUmdBundle = ({ input, minify } = {}) => ({
     babel(),
     minify && terser(),
     bundleSize(),
+    visualizer({
+      filename: `stats/${getFileName(input)}${minify ? '-min' : ''}.html`,
+    }),
   ].filter(Boolean),
   output: {
     name: 'Popper',
