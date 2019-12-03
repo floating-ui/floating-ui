@@ -76,7 +76,7 @@ Generally, for CDN users, you'll be using the fully-featured `umd` file:
 ```html
 <script src="https://unpkg.com/@popperjs/core@next"></script>
 <script>
-  // Now the script is loaded, you can use the `Popper` class!
+  // Now the script is loaded, you can use the `createPopper` function!
 </script>
 ```
 
@@ -92,7 +92,7 @@ setup, but is worth it.
 In your app, you can do the following:
 
 ```js
-// Import the core class
+// Import the generator function
 import { popperGenerator } from '@popperjs/core';
 
 // Import the features you need
@@ -114,10 +114,10 @@ const createPopper = popperGenerator({
 });
 ```
 
-Now you can use the `Popper` class with _only_ the features you want. For
-instance, we aren't using the `arrow`, `flip`, or `offset` modifiers, because
-the current component, route, or our entire app does not need them. This lets us
-save on bundle size bytes for our users!
+Now you can use the `createPopper` function to instantiate poppers with _only_
+the features you want. For instance, we aren't using the `arrow`, `flip`, or
+`offset` modifiers, because the current component, route, or our entire app does
+not need them. This lets us save on bundle size bytes for our users!
 
 If you don't want to bother with tree-shaking and don't need bundle size cost
 advantages, you can import the fully featured `esm` file:
