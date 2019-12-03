@@ -93,7 +93,7 @@ In your app, you can do the following:
 
 ```js
 // Import the core class
-import Popper from '@popperjs/core';
+import { popperGenerator } from '@popperjs/core';
 
 // Import the features you need
 import {
@@ -104,12 +104,14 @@ import {
 } from '@popperjs/core/lib/modifiers';
 
 // Setup Popper's default modifiers for each new instance
-Popper.defaultModifiers = [
-  detectOverflow,
-  preventOverflow,
-  computeStyles,
-  applyStyles,
-];
+const createPopper = popperGenerator({
+  defaultModifiers: [
+    detectOverflow,
+    preventOverflow,
+    computeStyles,
+    applyStyles,
+  ],
+});
 ```
 
 Now you can use the `Popper` class with _only_ the features you want. For
@@ -122,7 +124,7 @@ advantages, you can import the fully featured `esm` file:
 
 ```js
 // All features included!
-import Popper from '@popperjs/core/lib/popper';
+import createPopper from '@popperjs/core/lib/popper';
 ```
 
 ### Instantiation
