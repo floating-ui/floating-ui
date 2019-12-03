@@ -137,7 +137,7 @@ const element = document.querySelector('#button');
 const popper = document.querySelector('#tooltip');
 
 // Let Popper do the magic!
-new Popper(element, popper, { placement: 'right' });
+createPopper(element, popper, { placement: 'right' });
 ```
 
 ## Distribution targets

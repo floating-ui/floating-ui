@@ -27,11 +27,11 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import Popper from './dist/esm/popper.js';
+  import createPopper from './dist/esm/popper.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 
-  window.instance = new Popper(reference, popper, {
+  window.instance = createPopper(reference, popper, {
     placement: 'right',
   });
 </script>

@@ -1,3 +1,3 @@
 // @flow
-import Popper from './index';
-export default Popper;
+import createPopper from './index';
+export default createPopper;
