@@ -53,7 +53,7 @@ export function computeStyles(state: State, options?: Options = {}) {
           ? mapToStyles({
               offsets: state.modifiersData.arrow,
               position: 'absolute',
-              gpuAcceleration,
+              gpuAcceleration: false,
             })
           : undefined,
     },
