@@ -1,15 +1,14 @@
 // @flow
-import type { Modifier, State } from '../types';
+import type { Modifier, ModifierArguments } from '../types';
 import getNodeName from '../dom-utils/getNodeName';
 import getWindow from '../dom-utils/getWindow';
 
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
 
-export function applyStyles(state: State) {
-  const data = state.modifiersData.computeStyles;
-
+export function applyStyles({ state }: ModifierArguments<void>) {
   Object.keys(state.elements).forEach(name => {
+    const data = state.modifiersData.computeStyles;
     const style = data.styles[name] || {};
 
     const attributes = data.attributes[name] || {};
@@ -33,7 +32,7 @@ export function applyStyles(state: State) {
   return state;
 }
 
-export function onDestroy(state: State) {
+export function onDestroy({ state }: ModifierArguments<void>) {
   const data = state.modifiersData.computeStyles;
 
   Object.keys(state.elements).forEach(name => {

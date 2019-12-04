@@ -1,5 +1,10 @@
 // @flow
-import type { State, PositioningStrategy, Offsets, Modifier } from '../types';
+import type {
+  PositioningStrategy,
+  Offsets,
+  Modifier,
+  ModifierArguments,
+} from '../types';
 
 // This modifier takes the Popper state and prepares some StyleSheet properties
 // that can be applied to the popper element to make it render in the expected position.
@@ -36,7 +41,10 @@ export const mapToStyles = ({
   }
 };
 
-export function computeStyles(state: State, options?: Options = {}) {
+export function computeStyles({
+  state,
+  options = {},
+}: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
 
   state.modifiersData.computeStyles = {

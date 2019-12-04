@@ -1,5 +1,5 @@
 // @flow
-import type { State, Modifier } from '../types';
+import type { Modifier, ModifierArguments } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getRectRelativeToOffsetParent from '../dom-utils/getRectRelativeToOffsetParent';
@@ -10,7 +10,7 @@ import within from '../utils/within';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow(state: State, options?: Options = {}) {
+export function arrow({ state, options = {} }: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]' } = options;
 
   // CSS selector
