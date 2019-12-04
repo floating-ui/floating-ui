@@ -2,7 +2,7 @@
 import type { JQueryWrapper, State, Options, Modifier } from './types';
 
 // DOM Utils
-import getElementClientRect from './dom-utils/getElementClientRect';
+import getElementClientRect from './dom-utils/getRectRelativeToOffsetParent';
 import listScrollParents from './dom-utils/listScrollParents';
 import getWindow from './dom-utils/getWindow';
 import addClientRectMargins from './dom-utils/addClientRectMargins';
@@ -72,16 +72,18 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         return;
       }
 
+      const isFixed = state.options.strategy === 'fixed';
+
       // Get initial measurements
       // these are going to be used to compute the initial popper offsets
       // and as cache for any modifier that needs them later
       state.measures = {
-        reference: getElementClientRect(referenceElement),
+        reference: getElementClientRect(referenceElement, isFixed),
         // CSS marginsc an be applied to popper elements to quickly
         // apply offsets dynamically based on some CSS selectors.
         // For this reason we include margins in this calculation.
         popper: addClientRectMargins(
-          getElementClientRect(popperElement),
+          getElementClientRect(popperElement, isFixed),
           popperElement
         ),
       };

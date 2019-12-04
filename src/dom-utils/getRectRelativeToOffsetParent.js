@@ -9,24 +9,26 @@ import getWindow from './getWindow';
 
 // Returns the width, height and offsets of the provided element relative to the
 // offsetParent
-export default (element: Element | VirtualElement): Rect => {
+export default (
+  element: Element | VirtualElement,
+  isFixed: boolean = false
+): Rect => {
   const unwrappedElement = unwrapVirtualElement(element);
+  const win = getWindow(unwrappedElement);
   const rect = getBoundingClientRect(element);
   const scrollParentsScrollSum = getScrollSum(
     listScrollParents(unwrappedElement)
   );
   const directOffsetParent = getOffsetParent(unwrappedElement);
   const directOffsetParentRect =
-    directOffsetParent instanceof getWindow(directOffsetParent).Element
+    directOffsetParent instanceof win.Element && !isFixed
       ? getBoundingClientRect(directOffsetParent)
       : { left: 0, top: 0 };
 
-  const ancestorOffsetParents = [];
+  const ancestorOffsetParents = isFixed ? [directOffsetParent] : [];
   let currentOffsetParent = directOffsetParent;
 
-  while (
-    currentOffsetParent instanceof getWindow(currentOffsetParent).Element
-  ) {
+  while (currentOffsetParent instanceof win.Element) {
     currentOffsetParent = getOffsetParent(currentOffsetParent);
     ancestorOffsetParents.push(currentOffsetParent);
   }

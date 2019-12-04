@@ -2,7 +2,7 @@
 import type { State, Modifier } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
-import getElementClientRect from '../dom-utils/getElementClientRect';
+import getRectRelativeToOffsetParent from '../dom-utils/getRectRelativeToOffsetParent';
 import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
 import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
@@ -41,7 +41,7 @@ export function arrow(state: State, options?: Options = {}) {
   const len = isVertical ? 'height' : 'width';
 
   const arrowElementRect = addClientRectMargins(
-    getElementClientRect(arrowElement),
+    getRectRelativeToOffsetParent(arrowElement),
     arrowElement
   );
 
