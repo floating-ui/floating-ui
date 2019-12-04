@@ -3,6 +3,8 @@ import replace from 'rollup-plugin-replace';
 import bundleSize from 'rollup-plugin-bundle-size';
 import { terser } from 'rollup-plugin-terser';
 import visualizer from 'rollup-plugin-visualizer';
+import license from 'rollup-plugin-license';
+import pkg from './package.json';
 
 const IS_DEV = process.env.NODE_ENV === 'development';
 const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
@@ -10,6 +12,8 @@ const dir = IS_DEV ? 'tests/visual/dist' : 'dist';
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
 
 const getFileName = input => input.split('/')[1].split('.')[0];
+
+const banner = license({ banner: `@popperjs/core v${pkg.version}` });
 
 const createUmdBundle = ({ input, minify } = {}) => ({
   input,
@@ -19,6 +23,7 @@ const createUmdBundle = ({ input, minify } = {}) => ({
     }),
     babel(),
     minify && terser(),
+    banner,
     bundleSize(),
     visualizer({
       sourcemap: true,
@@ -35,7 +40,7 @@ const createUmdBundle = ({ input, minify } = {}) => ({
 
 const createEsmBundle = ({ input }) => ({
   input: 'src/index.js',
-  plugins: [babel(), bundleSize()],
+  plugins: [babel(), banner, bundleSize()],
   output: {
     name: 'Popper',
     file: `${dir}/esm/${getFileName(input)}.js`,
@@ -46,7 +51,7 @@ const createEsmBundle = ({ input }) => ({
 
 const createCjsBundle = ({ input }) => ({
   input,
-  plugins: [babel(), bundleSize()],
+  plugins: [babel(), banner, bundleSize()],
   output: {
     file: `${dir}/cjs/${getFileName(input)}.js`,
     format: 'cjs',
@@ -58,6 +63,7 @@ const createDevBundle = ({ input }) => ({
   input,
   plugins: [
     babel(),
+    banner,
     replace({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
