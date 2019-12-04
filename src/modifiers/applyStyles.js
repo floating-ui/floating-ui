@@ -6,9 +6,9 @@ import getWindow from '../dom-utils/getWindow';
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
 
-export function applyStyles({ state }: ModifierArguments<void>) {
+export function applyStyles({ state, namespace }: ModifierArguments<void>) {
   Object.keys(state.elements).forEach(name => {
-    const data = state.modifiersData.computeStyles;
+    const data = state.modifiersData.computeStyles[namespace];
     const style = data.styles[name] || {};
 
     const attributes = data.attributes[name] || {};
@@ -32,8 +32,8 @@ export function applyStyles({ state }: ModifierArguments<void>) {
   return state;
 }
 
-export function onDestroy({ state }: ModifierArguments<void>) {
-  const data = state.modifiersData.computeStyles;
+export function onDestroy({ state, namespace }: ModifierArguments<void>) {
+  const data = state.modifiersData.computeStyles[namespace];
 
   Object.keys(state.elements).forEach(name => {
     const element = state.elements[name];

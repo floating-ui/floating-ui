@@ -10,7 +10,11 @@ import within from '../utils/within';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow({ state, options = {} }: ModifierArguments<Options>) {
+export function arrow({
+  state,
+  options = {},
+  namespace,
+}: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]' } = options;
 
   // CSS selector
@@ -34,7 +38,7 @@ export function arrow({ state, options = {} }: ModifierArguments<Options>) {
 
   state.elements.arrow = arrowElement;
 
-  const popperOffsets = state.modifiersData.popperOffsets;
+  const popperOffsets = state.modifiersData.popperOffsets.default;
   const basePlacement = getBasePlacement(state.placement);
   const axis = getMainAxisFromPlacement(basePlacement);
   const isVertical = ['left', 'right'].includes(basePlacement);
@@ -83,7 +87,7 @@ export function arrow({ state, options = {} }: ModifierArguments<Options>) {
 
   // Prevents breaking syntax highlighting...
   const axisProp: string = axis;
-  state.modifiersData.arrow = { [axisProp]: center };
+  state.modifiersData.arrow[namespace] = { [axisProp]: center };
 
   return state;
 }

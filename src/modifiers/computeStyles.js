@@ -44,14 +44,15 @@ export const mapToStyles = ({
 export function computeStyles({
   state,
   options = {},
+  namespace,
 }: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
 
-  state.modifiersData.computeStyles = {
+  state.modifiersData.computeStyles[namespace] = {
     styles: {
       // popper offsets are always available
       popper: mapToStyles({
-        offsets: state.modifiersData.popperOffsets,
+        offsets: state.modifiersData.popperOffsets.default,
         position: state.options.strategy,
         gpuAcceleration,
       }),
@@ -59,7 +60,7 @@ export function computeStyles({
       arrow:
         state.modifiersData.arrow != null
           ? mapToStyles({
-              offsets: state.modifiersData.arrow,
+              offsets: state.modifiersData.arrow.default,
               position: 'absolute',
               gpuAcceleration: false,
             })

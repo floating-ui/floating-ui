@@ -54,9 +54,11 @@ export type State = {|
 export type ModifierArguments<Options> = {
   state: State,
   options?: Options,
+  namespace: string,
 };
 export type Modifier<Options> = {|
   name: string,
+  namespace?: string,
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,

@@ -25,6 +25,7 @@ export function detectOverflow({
   options = {
     boundaryElement: getClippingParent(state.elements.popper),
   },
+  namespace,
 }: ModifierArguments<Options>) {
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
@@ -63,7 +64,7 @@ export function detectOverflow({
     ...popperOffsets,
   });
 
-  state.modifiersData.detectOverflow = ({
+  state.modifiersData.detectOverflow[namespace] = ({
     top: boundaryClientRect.top - popperClientRect.top,
     bottom: popperClientRect.bottom - boundaryClientRect.bottom,
     left: boundaryClientRect.left - popperClientRect.left,
@@ -73,8 +74,19 @@ export function detectOverflow({
   return state;
 }
 
-export default ({
+export const preventOverflowNamespace = ({
   name: 'detectOverflow',
+  namespace: 'preventOverflow',
+  enabled: true,
+  phase: 'read',
+  fn: detectOverflow,
+  requires: ['popperOffsets'],
+  data: {},
+}: Modifier<Options>);
+
+export const flipNamespace = ({
+  name: 'detectOverflow',
+  namespace: 'flip',
   enabled: true,
   phase: 'read',
   fn: detectOverflow,

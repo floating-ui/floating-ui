@@ -45,11 +45,11 @@ export function preventOverflow({
     tether = center,
     padding = 0,
   } = options;
-  const overflow = state.modifiersData.detectOverflow;
+  const overflow = state.modifiersData.detectOverflow.preventOverflow;
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
-  const popperOffsets = state.modifiersData.popperOffsets;
+  const popperOffsets = state.modifiersData.popperOffsets.default;
   const referenceRect = state.measures.reference;
   const popperRect = state.measures.popper;
   const paddingObject = mergePaddingObject(
@@ -77,18 +77,18 @@ export function preventOverflow({
         : 0;
 
     const tetherMin =
-      state.modifiersData.popperOffsets[mainAxis] -
+      state.modifiersData.popperOffsets.default[mainAxis] -
       referenceRect[len] / 2 +
       additive;
     const tetherMax =
-      state.modifiersData.popperOffsets[mainAxis] +
+      state.modifiersData.popperOffsets.default[mainAxis] +
       referenceRect[len] / 2 -
       additive;
 
     const lenCondition =
       referenceRect[len] > popperRect[len] || tether !== surfaces;
 
-    state.modifiersData.popperOffsets[mainAxis] = within(
+    state.modifiersData.popperOffsets.default[mainAxis] = within(
       tether ? Math.min(min, lenCondition ? tetherMax : tetherMin) : min,
       offset,
       tether ? Math.max(max, lenCondition ? tetherMin : tetherMax) : max
@@ -99,7 +99,7 @@ export function preventOverflow({
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
 
-    state.modifiersData.popperOffsets[altAxis] = within(
+    state.modifiersData.popperOffsets.default[altAxis] = within(
       popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide],
       popperOffsets[altAxis],
       popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]

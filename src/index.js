@@ -9,7 +9,7 @@ import addClientRectMargins from './dom-utils/addClientRectMargins';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
-import orderModifiers from './utils/orderModifiers';
+import processModifiers from './utils/processModifiers';
 import expandToHashMap from './utils/expandToHashMap';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
@@ -96,12 +96,14 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // modifiers will modify this one (rather than the one in options)
       state.placement = state.options.placement;
 
-      state.orderedModifiers.forEach(
-        modifier =>
-          (state.modifiersData[modifier.name] = {
-            ...modifier.data,
-          })
-      );
+      state.orderedModifiers.forEach(modifier => {
+        if (state.modifiersData[modifier.name] == null) {
+          state.modifiersData[modifier.name] = {};
+        }
+        state.modifiersData[modifier.name][modifier.namespace] = {
+          ...modifier.data,
+        };
+      });
 
       let __debug_loops__ = 0;
       for (let index = 0; index < state.orderedModifiers.length; index++) {
@@ -119,10 +121,15 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           continue;
         }
 
-        const { fn, enabled, options } = state.orderedModifiers[index];
+        const {
+          fn,
+          enabled,
+          options,
+          namespace = 'default',
+        } = state.orderedModifiers[index];
 
         if (enabled && typeof fn === 'function') {
-          state = fn({ state, options });
+          state = fn({ state, options, namespace });
         }
       }
     };
@@ -171,7 +178,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     // Order `options.modifiers` so that the dependencies are fulfilled
     // once the modifiers are executed
-    state.orderedModifiers = orderModifiers([
+    state.orderedModifiers = processModifiers([
       ...defaultModifiers,
       ...state.options.modifiers,
     ])
@@ -186,11 +193,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // defined by the modifier dependencies directive.
     // The `onLoad` function may add or alter the options of themselves
     state.orderedModifiers.forEach(
-      ({ onLoad, enabled }) =>
+      ({ onLoad, enabled, namespace = 'default' }) =>
         enabled &&
         onLoad &&
         onLoad({
           state,
+          namespace,
         })
     );
 
@@ -240,7 +248,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       // Run `onDestroy` modifier methods
       state.orderedModifiers.forEach(
-        ({ onDestroy, enabled }) => enabled && onDestroy && onDestroy({ state })
+        ({ onDestroy, enabled, namespace = 'default' }) =>
+          enabled && onDestroy && onDestroy({ state, namespace })
       );
     };
 
