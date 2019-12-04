@@ -119,10 +119,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           continue;
         }
 
-        const { fn, enabled, options } = state.orderedModifiers[index];
+        const { fn, enabled, options, name } = state.orderedModifiers[index];
 
         if (enabled && typeof fn === 'function') {
-          state = fn({ state, options });
+          state = fn({ state, options, name });
         }
       }
     };
@@ -186,11 +186,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // defined by the modifier dependencies directive.
     // The `onLoad` function may add or alter the options of themselves
     state.orderedModifiers.forEach(
-      ({ onLoad, enabled }) =>
+      ({ onLoad, enabled, name }) =>
         enabled &&
         onLoad &&
         onLoad({
           state,
+          name,
         })
     );
 
@@ -240,7 +241,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       // Run `onDestroy` modifier methods
       state.orderedModifiers.forEach(
-        ({ onDestroy, enabled }) => enabled && onDestroy && onDestroy({ state })
+        ({ onDestroy, enabled, name }) =>
+          enabled && onDestroy && onDestroy({ state, name })
       );
     };
 
