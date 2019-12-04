@@ -132,9 +132,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // debounced, so that it only runs at most once-per-tick
     instance.update = debounce(
       () =>
-        new Promise<State>(success => {
+        new Promise<State>(resolve => {
           instance.forceUpdate();
-          success(state);
+          resolve(state);
         })
     );
 
