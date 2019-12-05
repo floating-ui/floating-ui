@@ -1,0 +1,32 @@
+{
+  "dist/umd/popper.js": {
+    "bundled": 40914,
+    "minified": 14703,
+    "gzipped": 5032
+  },
+  "dist/umd/popper.min.js": {
+    "bundled": 36733,
+    "minified": 12545,
+    "gzipped": 4301
+  },
+  "dist/umd/popper-lite.js": {
+    "bundled": 28618,
+    "minified": 10005,
+    "gzipped": 3516
+  },
+  "dist/umd/popper-lite.min.js": {
+    "bundled": 24698,
+    "minified": 8078,
+    "gzipped": 2867
+  },
+  "dist/umd/popper-base.js": {
+    "bundled": 18905,
+    "minified": 6548,
+    "gzipped": 2555
+  },
+  "dist/umd/popper-base.min.js": {
+    "bundled": 14985,
+    "minified": 4621,
+    "gzipped": 1897
+  }
+}
