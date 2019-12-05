@@ -1,5 +1,11 @@
 // @flow
-import type { JQueryWrapper, State, Options, Modifier } from './types';
+import type {
+  JQueryWrapper,
+  State,
+  Options,
+  Modifier,
+  Instance,
+} from './types';
 
 // DOM Utils
 import getElementClientRect from './dom-utils/getRectRelativeToOffsetParent';
@@ -44,9 +50,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     reference: HTMLElement | JQueryWrapper,
     popper: HTMLElement | JQueryWrapper,
     options: $Shape<Options> = defaultOptions
-  ) {
-    const instance = {};
-
+  ): Instance {
     let state: $Shape<State> = {
       placement: 'bottom',
       orderedModifiers: [],
@@ -54,87 +58,98 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       modifiersData: {},
     };
 
-    // Syncronous and forcefully executed update
-    // it will always be executed even if not necessary, usually NOT needed
-    // use Popper#update instead
-    instance.forceUpdate = () => {
-      const {
-        reference: referenceElement,
-        popper: popperElement,
-      } = state.elements;
-      // Don't proceed if `reference` or `popper` are not valid elements anymore
-      if (!areValidElements(referenceElement, popperElement)) {
-        if (__DEV__) {
-          console.error(INVALID_ELEMENT_ERROR);
+    const instance: Instance = {
+      // Syncronous and forcefully executed update
+      // it will always be executed even if not necessary, usually NOT needed
+      // use Popper#update instead
+      forceUpdate() {
+        const {
+          reference: referenceElement,
+          popper: popperElement,
+        } = state.elements;
+        // Don't proceed if `reference` or `popper` are not valid elements anymore
+        if (!areValidElements(referenceElement, popperElement)) {
+          if (__DEV__) {
+            console.error(INVALID_ELEMENT_ERROR);
+          }
+          return;
         }
-        return;
-      }
 
-      const isFixed = state.options.strategy === 'fixed';
+        const isFixed = state.options.strategy === 'fixed';
 
-      // Get initial measurements
-      // these are going to be used to compute the initial popper offsets
-      // and as cache for any modifier that needs them later
-      state.measures = {
-        reference: getElementClientRect(referenceElement, isFixed),
-        // CSS marginsc an be applied to popper elements to quickly
-        // apply offsets dynamically based on some CSS selectors.
-        // For this reason we include margins in this calculation.
-        popper: addClientRectMargins(
-          getElementClientRect(popperElement, isFixed),
-          popperElement
-        ),
-      };
+        // Get initial measurements
+        // these are going to be used to compute the initial popper offsets
+        // and as cache for any modifier that needs them later
+        state.measures = {
+          reference: getElementClientRect(referenceElement, isFixed),
+          // CSS marginsc an be applied to popper elements to quickly
+          // apply offsets dynamically based on some CSS selectors.
+          // For this reason we include margins in this calculation.
+          popper: addClientRectMargins(
+            getElementClientRect(popperElement, isFixed),
+            popperElement
+          ),
+        };
 
-      // Modifiers have the ability to read the current Popper state, included
-      // the popper offsets, and modify it to address specifc cases
-      state.reset = false;
+        // Modifiers have the ability to read the current Popper state, included
+        // the popper offsets, and modify it to address specifc cases
+        state.reset = false;
 
-      // Cache the placement in cache to make it available to the modifiers
-      // modifiers will modify this one (rather than the one in options)
-      state.placement = state.options.placement;
+        // Cache the placement in cache to make it available to the modifiers
+        // modifiers will modify this one (rather than the one in options)
+        state.placement = state.options.placement;
 
-      state.orderedModifiers.forEach(
-        modifier =>
-          (state.modifiersData[modifier.name] = {
-            ...modifier.data,
-          })
-      );
+        state.orderedModifiers.forEach(
+          modifier =>
+            (state.modifiersData[modifier.name] = {
+              ...modifier.data,
+            })
+        );
 
-      let __debug_loops__ = 0;
-      for (let index = 0; index < state.orderedModifiers.length; index++) {
-        if (__DEV__) {
-          __debug_loops__ += 1;
-          if (__debug_loops__ > 100) {
-            console.error(INFINITE_LOOP_ERROR);
-            break;
+        let __debug_loops__ = 0;
+        for (let index = 0; index < state.orderedModifiers.length; index++) {
+          if (__DEV__) {
+            __debug_loops__ += 1;
+            if (__debug_loops__ > 100) {
+              console.error(INFINITE_LOOP_ERROR);
+              break;
+            }
+          }
+
+          if (state.reset === true) {
+            state.reset = false;
+            index = -1;
+            continue;
+          }
+
+          const { fn, enabled, options, name } = state.orderedModifiers[index];
+
+          if (enabled && typeof fn === 'function') {
+            state = fn({ state, options, name, instance });
           }
         }
+      },
 
-        if (state.reset === true) {
-          state.reset = false;
-          index = -1;
-          continue;
-        }
-
-        const { fn, enabled, options, name } = state.orderedModifiers[index];
-
-        if (enabled && typeof fn === 'function') {
-          state = fn({ state, options, name, instance });
-        }
-      }
-    };
-
-    // Async and optimistically optimized update
-    // it will not be executed if not necessary
-    // debounced, so that it only runs at most once-per-tick
-    instance.update = debounce(
-      () =>
-        new Promise<State>(resolve => {
+      // Async and optimistically optimized update
+      // it will not be executed if not necessary
+      // debounced, so that it only runs at most once-per-tick
+      update: debounce(
+        () =>
+          // prettier-ignore
+          new Promise<State>(resolve => {
           instance.forceUpdate();
           resolve(state);
         })
-    );
+      ),
+
+      destroy() {
+        // Run `onDestroy` modifier methods
+        state.orderedModifiers.forEach(
+          ({ onDestroy, enabled, name }) =>
+            enabled && onDestroy && onDestroy({ state, name, instance })
+        );
+      },
+    };
 
     // Unwrap `reference` and `popper` elements in case they are
     // wrapped by jQuery, otherwise consume them as is
@@ -153,7 +168,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       if (__DEV__) {
         console.error(INVALID_ELEMENT_ERROR);
       }
-      return;
+      return instance;
     }
 
     state.scrollParents = {
@@ -193,14 +208,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           instance,
         })
     );
-
-    instance.destroy = () => {
-      // Run `onDestroy` modifier methods
-      state.orderedModifiers.forEach(
-        ({ onDestroy, enabled, name }) =>
-          enabled && onDestroy && onDestroy({ state, name, instance })
-      );
-    };
 
     instance.update();
 
