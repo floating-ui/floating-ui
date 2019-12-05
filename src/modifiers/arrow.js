@@ -61,42 +61,12 @@ export function arrow({ state, options = {} }: ModifierArguments<Options>) {
     state.measures.popper[len];
   const startDiff = popperOffsets[axis] - state.measures.reference[axis];
 
-  // Only center to reference if the popper is longer than reference along the
-  // axis
-  const popperReferenceSizeDiff =
-    state.measures.popper[len] - state.measures.reference[len];
-
-  const centerToReference =
-    popperReferenceSizeDiff > 0
-      ? endDiff / 2 - startDiff / 2 - totalScrollValue
-      : 0;
-
-  // Check where the arrow is in relation to the reference edges so it doesn't
-  // go outside of the reference bounds
-  const arrowOffset = popperOffsets[axis] + totalScrollValue;
-
-  const startReferenceOffset =
-    arrowOffset +
-    arrowElementRect[len] / 2 -
-    (state.measures.reference[axis] +
-      state.measures.reference[len] -
-      state.measures.popper[len] / 2) -
-    (popperReferenceSizeDiff > 0 ? popperReferenceSizeDiff : 0);
-  const endReferenceOffset =
-    arrowOffset -
-    arrowElementRect[len] / 2 -
-    (state.measures.reference[axis] - state.measures.popper[len] / 2) +
-    (popperReferenceSizeDiff > 0 ? popperReferenceSizeDiff : 0);
-
-  const startArrowOffset = startReferenceOffset > 0 ? startReferenceOffset : 0;
-  const endArrowOffset = endReferenceOffset < 0 ? endReferenceOffset : 0;
+  const centerToReference = endDiff / 2 - startDiff / 2 - totalScrollValue;
 
   let center =
     state.measures.popper[len] / 2 -
     arrowElementRect[len] / 2 +
-    centerToReference -
-    endArrowOffset -
-    startArrowOffset;
+    centerToReference;
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
