@@ -32,8 +32,6 @@ const getOverflowOffsets = (
   right: popperClientRect.right - boundaryClientRect.right,
 });
 
-const isViewport = value => value === 'viewport';
-
 export function detectOverflow({
   state,
   options = {},
