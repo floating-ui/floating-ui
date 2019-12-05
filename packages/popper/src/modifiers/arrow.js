@@ -71,8 +71,8 @@ export default function arrow(data, options) {
   // Compute the sideValue using the updated popper offsets
   // take popper margin in account because we don't have this info available
   const css = getStyleComputedProperty(data.instance.popper);
-  const popperMarginSide = parseFloat(css[`margin${sideCapitalized}`], 10);
-  const popperBorderSide = parseFloat(css[`border${sideCapitalized}Width`], 10);
+  const popperMarginSide = parseFloat(css[`margin${sideCapitalized}`]);
+  const popperBorderSide = parseFloat(css[`border${sideCapitalized}Width`]);
   let sideValue =
     center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
 
