@@ -17,6 +17,8 @@ import getAltAxis from '../utils/getAltAxis';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import within from '../utils/within';
+import addClientRectMargins from '../dom-utils/addClientRectMargins';
+import getRectRelativeToOffsetParent from '../dom-utils/getRectRelativeToOffsetParent';
 
 type Options = {
   /* Prevents boundaries overflow on the main axis */
@@ -76,14 +78,27 @@ export function preventOverflow({
         ? -popperRect[len] / 2
         : 0;
 
+    // For the "edges" value, we need to include the arrow in the calculation
+    // so the arrow doesn't go outside the reference bounds
+    const arrowElement = state.elements.arrow;
+    const arrowElementRect =
+      arrowElement && tether === edges
+        ? addClientRectMargins(
+            getRectRelativeToOffsetParent(arrowElement),
+            arrowElement
+          )
+        : { width: 0, height: 0 };
+
     const tetherMin =
       state.modifiersData.popperOffsets[mainAxis] -
       referenceRect[len] / 2 +
-      additive;
+      additive +
+      arrowElementRect[len];
     const tetherMax =
       state.modifiersData.popperOffsets[mainAxis] +
       referenceRect[len] / 2 -
-      additive;
+      additive -
+      arrowElementRect[len];
 
     const lenCondition =
       referenceRect[len] > popperRect[len] || tether !== surfaces;
