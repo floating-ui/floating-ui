@@ -62,6 +62,7 @@ export type ModifierArguments<Options> = {
   state: State,
   instance: Instance,
   options?: Options,
+  name: string,
 };
 export type Modifier<Options> = {|
   name: string,
@@ -69,7 +70,7 @@ export type Modifier<Options> = {|
   phase: ModifierPhases,
   requires?: Array<string>,
   fn: (ModifierArguments<Options>) => State,
-  onLoad?: (ModifierArguments<Options>) => void,
+  onLoad?: (ModifierArguments<Options>) => ?State,
   onDestroy?: (ModifierArguments<Options>) => void,
   options?: any,
   data?: {},

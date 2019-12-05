@@ -3,65 +3,78 @@ import type { ModifierArguments, Modifier } from '../types';
 import getWindow from '../dom-utils/getWindow';
 type Options = { scroll: boolean, resize: boolean };
 
-export function onLoad({
-  state,
-  options = {},
-  instance,
-}: ModifierArguments<Options>) {
-  const { scroll = true, resize = true } = options;
+const passive = { passive: true };
 
-  if (scroll) {
+function toggleEventListeners({ state, instance, scroll, resize }) {
+  if (scroll != null) {
     const scrollParents = [
       ...state.scrollParents.reference,
       ...state.scrollParents.popper,
     ];
 
     scrollParents.forEach(scrollParent =>
-      scrollParent.addEventListener('scroll', instance.update, {
-        passive: true,
-      })
+      scroll
+        ? scrollParent.addEventListener('scroll', instance.update, passive)
+        : scrollParent.removeEventListener('scroll', instance.update)
     );
   }
 
-  if (resize) {
+  if (resize != null) {
     const window = getWindow(state.elements.popper);
-    window.addEventListener('resize', instance.update, {
-      passive: true,
-    });
+    resize
+      ? window.addEventListener('resize', instance.update, passive)
+      : window.removeEventListener('resize', instance.update);
   }
 }
 
-export function onDestroy({
+function onLoad({
   state,
-  options = {},
   instance,
+  name,
+  options = {},
 }: ModifierArguments<Options>) {
   const { scroll = true, resize = true } = options;
 
-  if (scroll) {
-    // Remove scroll event listeners
-    const scrollParents = [
-      ...state.scrollParents.reference,
-      ...state.scrollParents.popper,
-    ];
+  // cache initial options so we can compare them later
+  state.modifiersData[`${name}#persistent`] = { scroll, resize };
 
-    scrollParents.forEach(scrollParent =>
-      scrollParent.removeEventListener('scroll', instance.update)
-    );
+  toggleEventListeners({ state, instance, scroll, resize });
+
+  return state;
+}
+
+function onDestroy({ state, instance }: ModifierArguments<Options>) {
+  toggleEventListeners({ state, instance, scroll: false, resize: false });
+}
+
+function update({
+  state,
+  options = {},
+  instance,
+  name,
+}: ModifierArguments<Options>) {
+  const data = state.modifiersData[`${name}#persistent`];
+  let { scroll = true, resize = true } = options;
+
+  // set options to `null` if they didn't change, so we know not to run any logic
+  if (data.scroll === scroll) {
+    scroll = null;
+  }
+  if (data.resize === resize) {
+    resize = null;
   }
 
-  if (resize) {
-    // Remove resize event listeners
-    const window = getWindow(state.elements.popper);
-    window.removeEventListener('resize', instance.update);
-  }
+  toggleEventListeners({ state, instance, scroll, resize });
+
+  return state;
 }
 
 export default ({
-  name: 'offset',
+  name: 'eventListeners',
   enabled: true,
   phase: 'write',
-  fn: ({ state }) => state,
+  fn: update,
   onLoad,
   onDestroy,
+  data: {},
 }: Modifier<Options>);
