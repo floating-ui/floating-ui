@@ -80,12 +80,12 @@ export function preventOverflow({
 
     // For the "edges" value, we need to include the arrow in the calculation
     // so the arrow doesn't go outside the reference bounds
+    const arrowElement = state.elements.arrow;
     const arrowElementRect =
-      state.elements.arrow && tether === edges
+      arrowElement && tether === edges
         ? addClientRectMargins(
-            getRectRelativeToOffsetParent(state.elements.arrow),
-            // $FlowFixMe
-            state.elements.arrow
+            getRectRelativeToOffsetParent(arrowElement),
+            arrowElement
           )
         : { width: 0, height: 0 };
 
