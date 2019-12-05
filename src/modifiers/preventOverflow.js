@@ -33,6 +33,8 @@ type Options = {
   tether: Tether,
   /* Sets a padding to the provided boundary */
   padding: Padding,
+  /* Determines which detectOverflow offsets to use */
+  detectOverflowArea: 'clippingArea' | 'visibleArea',
 };
 
 export function preventOverflow({
@@ -44,8 +46,9 @@ export function preventOverflow({
     altAxis: checkAltAxis = false,
     tether = center,
     padding = 0,
+    detectOverflowArea = 'clippingArea',
   } = options;
-  const overflow = state.modifiersData.detectOverflow.clippingArea;
+  const overflow = state.modifiersData.detectOverflow[detectOverflowArea];
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
