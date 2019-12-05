@@ -32,6 +32,8 @@ const getOverflowOffsets = (
   right: popperClientRect.right - boundaryClientRect.right,
 });
 
+const isViewport = value => value === 'viewport';
+
 export function detectOverflow({
   state,
   options = {},
@@ -44,10 +46,10 @@ export function detectOverflow({
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const documentElement = getDocumentElement(clippingArea);
+  const documentElement = getDocumentElement(state.elements.popper);
 
   if (
-    typeof clippingArea !== 'stirng' &&
+    typeof clippingArea !== 'string' &&
     !clippingArea.contains(popperElement)
   ) {
     if (__DEV__) {
@@ -58,17 +60,16 @@ export function detectOverflow({
     return state;
   }
 
-  const boundaryClientRect =
+  const clippingClientRect =
     documentElement === clippingArea
       ? rectToClientRect(getDocumentRect(documentElement))
       : clippingArea === 'viewport'
       ? rectToClientRect(getViewportRect(state.elements.popper))
       : getBoundingClientRect(clippingArea);
-  const viewportClientRect = rectToClientRect(
+  const visibleClientRect =
     visibleArea === 'viewport'
       ? rectToClientRect(getViewportRect(state.elements.popper))
-      : getBoundingClientRect(visibleArea)
-  );
+      : getBoundingClientRect(visibleArea);
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
@@ -89,8 +90,8 @@ export function detectOverflow({
   });
 
   state.modifiersData.detectOverflow = {
-    clippingArea: getOverflowOffsets(popperClientRect, boundaryClientRect),
-    visibleArea: getOverflowOffsets(popperClientRect, viewportClientRect),
+    clippingArea: getOverflowOffsets(popperClientRect, clippingClientRect),
+    visibleArea: getOverflowOffsets(popperClientRect, visibleClientRect),
   };
 
   return state;
