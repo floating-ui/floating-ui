@@ -9,7 +9,7 @@ export default function listScrollParents(
   list: Array<Element> = []
 ): Array<Element> {
   const scrollParent = getScrollParent(element);
-  const isBody = getNodeName(scrollParent) === 'BODY';
+  const isBody = getNodeName(scrollParent) === 'body';
   const target = isBody ? getWindow(scrollParent) : scrollParent;
   const updatedList = list.concat(target);
   return isBody

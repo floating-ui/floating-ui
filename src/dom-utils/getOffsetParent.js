@@ -7,7 +7,7 @@ export default function getOffsetParent(element: Element) {
   const offsetParent = isHTMLElement(element) ? element.offsetParent : null;
   const window = getWindow(element);
 
-  if (getNodeName(offsetParent) === 'BODY') {
+  if (getNodeName(offsetParent) === 'body') {
     return window;
   }
 

@@ -2,7 +2,7 @@
 import getNodeName from './getNodeName';
 
 export default (element: Node | ShadowRoot): Node => {
-  if (getNodeName(element) === 'HTML') {
+  if (getNodeName(element) === 'html') {
     // DocumentElement detectedF
     return element;
   }

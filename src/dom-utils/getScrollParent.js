@@ -5,7 +5,7 @@ import getNodeName from './getNodeName';
 import { isHTMLElement } from './instanceOf';
 
 export default function getScrollParent(node: Node): HTMLElement {
-  if (['HTML', 'BODY', '#DOCUMENT'].includes(getNodeName(node))) {
+  if (['html', 'body', '#document'].includes(getNodeName(node))) {
     return node.ownerDocument.body;
   }
 
