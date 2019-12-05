@@ -75,5 +75,6 @@
 
   window.instance = createPopper(reference, popper, {
     placement: 'right',
+    modifiers: [{ name: 'preventOverflow', options: { tether: 'edges' } }],
   });
 </script>
