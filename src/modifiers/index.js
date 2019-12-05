@@ -1,4 +1,5 @@
 // @flow
+export { default as eventListeners } from './eventListeners';
 export { default as popperOffsets } from './popperOffsets';
 export { default as detectOverflow } from './detectOverflow';
 export { default as computeStyles } from './computeStyles';
