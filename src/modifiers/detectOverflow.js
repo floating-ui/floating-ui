@@ -62,8 +62,8 @@ export function detectOverflow({
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
 
-  const clippingClientRect = getClientRect(state.elements.popper, clippingArea);
-  const visibleClientRect = getClientRect(state.elements.popper, visibleArea);
+  const clippingClientRect = getOverflowRect(popperElement, clippingArea);
+  const visibleClientRect = getOverflowRect(popperElement, visibleArea);
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
