@@ -10,7 +10,6 @@ import { basePlacements } from '../enums';
 type Options = {
   fallbackPlacements: Array<Placement>,
   padding: Padding,
-  detectOverflowArea: 'clippingArea' | 'visibleArea',
 };
 
 export function flip({ state, options = {} }: ModifierArguments<Options>) {
@@ -21,9 +20,8 @@ export function flip({ state, options = {} }: ModifierArguments<Options>) {
   const {
     fallbackPlacements = defaultFallbackPlacements,
     padding = 0,
-    detectOverflowArea = 'visibleArea',
   } = options;
-  const overflow = state.modifiersData.detectOverflow[detectOverflowArea];
+  const overflow = state.modifiersData.detectOverflow.visibleArea;
   const flipIndex = state.modifiersData.flip.index;
 
   const paddingObject = mergePaddingObject(

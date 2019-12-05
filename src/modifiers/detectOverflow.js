@@ -1,5 +1,6 @@
 // @flow
-import type { ModifierArguments, Modifier } from '../types';
+import type { ModifierArguments, Modifier, ClientRectObject } from '../types';
+import type { OverflowArea } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingParent from '../dom-utils/getClippingParent';
 import getDocumentRect from '../dom-utils/getDocumentRect';
@@ -7,10 +8,11 @@ import getDocumentElement from '../dom-utils/getDocumentElement';
 import getViewportRect from '../dom-utils/getViewportRect';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
+import { clippingParent, viewport } from '../enums';
 
 type Options = {
-  clippingArea: HTMLElement | 'viewport',
-  visibleArea: HTMLElement | 'viewport',
+  clippingArea: OverflowArea,
+  visibleArea: OverflowArea,
 };
 
 // if the number is positive, the popper is overflowing by that number of pixels
@@ -32,42 +34,36 @@ const getOverflowOffsets = (
   right: popperClientRect.right - boundaryClientRect.right,
 });
 
+const getOverflowRect = (
+  popper: HTMLElement,
+  area: OverflowArea
+): ClientRectObject => {
+  switch (area) {
+    case 'clippingParent':
+      const documentElement = getDocumentElement(popper);
+      const clippingParent = getClippingParent(popper);
+      return clippingParent === documentElement
+        ? rectToClientRect(getDocumentRect(documentElement))
+        : getBoundingClientRect(clippingParent);
+    case 'viewport':
+      return rectToClientRect(getViewportRect(popper));
+    default:
+      return getBoundingClientRect(area);
+  }
+};
+
 export function detectOverflow({
   state,
   options = {},
 }: ModifierArguments<Options>) {
-  const {
-    clippingArea = getClippingParent(state.elements.popper),
-    visibleArea = 'viewport',
-  } = options;
+  const { clippingArea = clippingParent, visibleArea = viewport } = options;
 
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const documentElement = getDocumentElement(state.elements.popper);
 
-  if (
-    typeof clippingArea !== 'string' &&
-    !clippingArea.contains(popperElement)
-  ) {
-    if (__DEV__) {
-      console.error(
-        'Popper: "detectOverflow" can accept as `boundaryElement` only a parent node of the provided popper.'
-      );
-    }
-    return state;
-  }
-
-  const clippingClientRect =
-    documentElement === clippingArea
-      ? rectToClientRect(getDocumentRect(documentElement))
-      : clippingArea === 'viewport'
-      ? rectToClientRect(getViewportRect(state.elements.popper))
-      : getBoundingClientRect(clippingArea);
-  const visibleClientRect =
-    visibleArea === 'viewport'
-      ? rectToClientRect(getViewportRect(state.elements.popper))
-      : getBoundingClientRect(visibleArea);
+  const clippingClientRect = getClientRect(state.elements.popper, clippingArea);
+  const visibleClientRect = getClientRect(state.elements.popper, visibleArea);
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
