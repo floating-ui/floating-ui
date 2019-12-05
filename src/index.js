@@ -4,13 +4,11 @@ import type { JQueryWrapper, State, Options, Modifier } from './types';
 // DOM Utils
 import getElementClientRect from './dom-utils/getRectRelativeToOffsetParent';
 import listScrollParents from './dom-utils/listScrollParents';
-import getWindow from './dom-utils/getWindow';
 import addClientRectMargins from './dom-utils/addClientRectMargins';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
-import expandToHashMap from './utils/expandToHashMap';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 
@@ -122,7 +120,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         const { fn, enabled, options, name } = state.orderedModifiers[index];
 
         if (enabled && typeof fn === 'function') {
-          state = fn({ state, options, name });
+          state = fn({ state, options, name, instance });
         }
       }
     };
@@ -192,64 +190,19 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         onLoad({
           state,
           name,
+          instance,
         })
     );
 
-    instance.enableEventListeners = (
-      eventListeners: boolean | {| scroll?: boolean, resize?: boolean |}
-    ) => {
-      const { scroll, resize } =
-        typeof eventListeners === 'boolean'
-          ? expandToHashMap(eventListeners, ['scroll', 'resize'])
-          : eventListeners;
-
-      if (scroll) {
-        const scrollParents = [
-          ...state.scrollParents.reference,
-          ...state.scrollParents.popper,
-        ];
-
-        scrollParents.forEach(scrollParent =>
-          scrollParent.addEventListener('scroll', instance.update, {
-            passive: true,
-          })
-        );
-      }
-
-      if (resize) {
-        const window = getWindow(state.elements.popper);
-        window.addEventListener('resize', instance.update, {
-          passive: true,
-        });
-      }
-    };
-
     instance.destroy = () => {
-      // Remove scroll event listeners
-      const scrollParents = [
-        ...state.scrollParents.reference,
-        ...state.scrollParents.popper,
-      ];
-
-      scrollParents.forEach(scrollParent =>
-        scrollParent.removeEventListener('scroll', instance.update)
-      );
-
-      // Remove resize event listeners
-      const window = getWindow(state.elements.popper);
-      window.removeEventListener('resize', instance.update);
-
       // Run `onDestroy` modifier methods
       state.orderedModifiers.forEach(
         ({ onDestroy, enabled, name }) =>
-          enabled && onDestroy && onDestroy({ state, name })
+          enabled && onDestroy && onDestroy({ state, name, instance })
       );
     };
 
-    instance.update().then(() => {
-      // After the first update completed, enable the event listeners
-      instance.enableEventListeners(state.options.eventListeners);
-    });
+    instance.update();
 
     return instance;
   };

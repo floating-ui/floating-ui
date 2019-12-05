@@ -51,8 +51,15 @@ export type State = {|
   reset: boolean,
 |};
 
+export type Instance = {|
+  destroy: () => void,
+  forceUpdate: () => void,
+  update: () => Promise<void>,
+|};
+
 export type ModifierArguments<Options> = {
   state: State,
+  instance: Instance,
   options?: Options,
 };
 export type Modifier<Options> = {|
