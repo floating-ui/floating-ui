@@ -33,8 +33,6 @@ type Options = {
   tether: Tether,
   /* Sets a padding to the provided boundary */
   padding: Padding,
-  /* Determines which detectOverflow offsets to use */
-  detectOverflowArea: 'clippingArea' | 'visibleArea',
 };
 
 export function preventOverflow({
