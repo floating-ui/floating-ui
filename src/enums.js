@@ -20,6 +20,13 @@ export const edges: 'edges' = 'edges';
 export const surfaces: 'surfaces' = 'surfaces';
 export type Tether = false | typeof center | typeof edges | typeof surfaces;
 
+export const clippingParent: 'clippingParent' = 'clippingParent';
+export const viewport: 'viewport' = 'viewport';
+export type OverflowArea =
+  | HTMLElement
+  | typeof clippingParent
+  | typeof viewport;
+
 export type Placement =
   | 'auto'
   | 'auto-start'
