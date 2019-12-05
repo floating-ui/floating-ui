@@ -9,7 +9,8 @@ import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
 
 type Options = {
-  boundaryElement: HTMLElement,
+  clippingArea: HTMLElement | 'viewport',
+  visibleArea: HTMLElement | 'viewport',
 };
 
 // if the number is positive, the popper is overflowing by that number of pixels
@@ -33,16 +34,22 @@ const getOverflowOffsets = (
 
 export function detectOverflow({
   state,
-  options = {
-    boundaryElement: getClippingParent(state.elements.popper),
-  },
+  options = {},
 }: ModifierArguments<Options>) {
+  const {
+    clippingArea = getClippingParent(state.elements.popper),
+    visibleArea = 'viewport',
+  } = options;
+
   const popperElement = state.elements.popper;
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const documentElement = getDocumentElement(options.boundaryElement);
+  const documentElement = getDocumentElement(clippingArea);
 
-  if (!options.boundaryElement.contains(popperElement)) {
+  if (
+    typeof clippingArea !== 'stirng' &&
+    !clippingArea.contains(popperElement)
+  ) {
     if (__DEV__) {
       console.error(
         'Popper: "detectOverflow" can accept as `boundaryElement` only a parent node of the provided popper.'
@@ -52,11 +59,15 @@ export function detectOverflow({
   }
 
   const boundaryClientRect =
-    documentElement === options.boundaryElement
+    documentElement === clippingArea
       ? rectToClientRect(getDocumentRect(documentElement))
-      : getBoundingClientRect(options.boundaryElement);
+      : clippingArea === 'viewport'
+      ? rectToClientRect(getViewportRect(state.elements.popper))
+      : getBoundingClientRect(clippingArea);
   const viewportClientRect = rectToClientRect(
-    getViewportRect(options.boundaryElement)
+    visibleArea === 'viewport'
+      ? rectToClientRect(getViewportRect(state.elements.popper))
+      : getBoundingClientRect(visibleArea)
   );
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
@@ -78,8 +89,8 @@ export function detectOverflow({
   });
 
   state.modifiersData.detectOverflow = {
-    viewport: getOverflowOffsets(popperClientRect, viewportClientRect),
-    boundary: getOverflowOffsets(popperClientRect, boundaryClientRect),
+    clippingArea: getOverflowOffsets(popperClientRect, boundaryClientRect),
+    visibleArea: getOverflowOffsets(popperClientRect, viewportClientRect),
   };
 
   return state;

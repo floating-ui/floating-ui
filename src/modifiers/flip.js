@@ -21,7 +21,7 @@ export function flip({ state, options = {} }: ModifierArguments<Options>) {
     fallbackPlacements = defaultFallbackPlacements,
     padding = 0,
   } = options;
-  const overflow = state.modifiersData.detectOverflow.viewport;
+  const overflow = state.modifiersData.detectOverflow.visibleArea;
   const flipIndex = state.modifiersData.flip.index;
 
   const paddingObject = mergePaddingObject(
