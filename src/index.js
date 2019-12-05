@@ -68,7 +68,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     };
 
     const instance = {
-      updateOptions(options) {
+      setOptions(options) {
         // Store options into state
         state.options = {
           ...defaultOptions,
@@ -200,7 +200,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    instance.updateOptions(options);
+    instance.setOptions(options);
 
     // Modifiers have the opportunity to execute some arbitrary code before
     // the first update cycle is ran, the order of execution will be the same
