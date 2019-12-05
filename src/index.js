@@ -51,14 +51,55 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     popper: HTMLElement | JQueryWrapper,
     options: $Shape<Options> = defaultOptions
   ): Instance {
+    // Unwrap `reference` and `popper` elements in case they are
+    // wrapped by jQuery, otherwise consume them as is
+    const referenceElement = unwrapJqueryElement(reference);
+    const popperElement = unwrapJqueryElement(popper);
+
     let state: $Shape<State> = {
       placement: 'bottom',
       orderedModifiers: [],
       options: defaultOptions,
       modifiersData: {},
+      elements: {
+        reference: referenceElement,
+        popper: popperElement,
+      },
     };
 
-    const instance: Instance = {
+    const instance = {
+      updateOptions(options) {
+        // Store options into state
+        state.options = {
+          ...defaultOptions,
+          ...options,
+        };
+
+        state.scrollParents = {
+          reference: listScrollParents(referenceElement),
+          popper: listScrollParents(popperElement),
+        };
+
+        // Validate the provided modifiers so that the consumer will get warned
+        // of one of the custom modifiers is invalid for any reason
+        if (__DEV__) {
+          validateModifiers(state.options.modifiers);
+        }
+
+        // Order `options.modifiers` so that the dependencies are fulfilled
+        // once the modifiers are executed
+        state.orderedModifiers = orderModifiers([
+          ...defaultModifiers,
+          ...state.options.modifiers,
+        ])
+          // Apply user defined preferences to modifiers
+          .map(modifier => ({
+            ...modifier,
+            ...state.options.modifiers.find(
+              ({ name }) => name === modifier.name
+            ),
+          }));
+      },
       // Syncronous and forcefully executed update
       // it will always be executed even if not necessary, usually NOT needed
       // use Popper#update instead
@@ -151,18 +192,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       },
     };
 
-    // Unwrap `reference` and `popper` elements in case they are
-    // wrapped by jQuery, otherwise consume them as is
-    const referenceElement = unwrapJqueryElement(reference);
-    const popperElement = unwrapJqueryElement(popper);
-    state.elements = {
-      reference: referenceElement,
-      popper: popperElement,
-    };
-
-    // Store options into state
-    state.options = { ...defaultOptions, ...options };
-
     // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
       if (__DEV__) {
@@ -171,28 +200,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    state.scrollParents = {
-      reference: listScrollParents(referenceElement),
-      popper: listScrollParents(popperElement),
-    };
-
-    // Validate the provided modifiers so that the consumer will get warned
-    // of one of the custom modifiers is invalid for any reason
-    if (__DEV__) {
-      validateModifiers(state.options.modifiers);
-    }
-
-    // Order `options.modifiers` so that the dependencies are fulfilled
-    // once the modifiers are executed
-    state.orderedModifiers = orderModifiers([
-      ...defaultModifiers,
-      ...state.options.modifiers,
-    ])
-      // Apply user defined preferences to modifiers
-      .map(modifier => ({
-        ...modifier,
-        ...state.options.modifiers.find(({ name }) => name === modifier.name),
-      }));
+    instance.updateOptions(options);
 
     // Modifiers have the opportunity to execute some arbitrary code before
     // the first update cycle is ran, the order of execution will be the same
