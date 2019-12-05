@@ -13,8 +13,8 @@ export default (element: HTMLElement) => {
 
   documentRect.height = Math.max(documentRect.height, win.innerHeight);
   documentRect.width = Math.max(documentRect.width, win.innerWidth);
-  document.x = -winScroll.scrollLeft;
-  document.y = -winScroll.scrollTop;
+  documentRect.x = -winScroll.scrollLeft;
+  documentRect.y = -winScroll.scrollTop;
 
   return documentRect;
 };
