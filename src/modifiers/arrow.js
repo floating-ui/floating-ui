@@ -78,14 +78,14 @@ export function arrow({ state, options = {} }: ModifierArguments<Options>) {
   const startReferenceOffset =
     arrowOffset +
     arrowElementRect[len] / 2 -
-    (state.measures.reference.y +
+    (state.measures.reference[axis] +
       state.measures.reference[len] -
       state.measures.popper[len] / 2) -
     (popperReferenceSizeDiff > 0 ? popperReferenceSizeDiff : 0);
   const endReferenceOffset =
     arrowOffset -
     arrowElementRect[len] / 2 -
-    (state.measures.reference.y - state.measures.popper[len] / 2) +
+    (state.measures.reference[axis] - state.measures.popper[len] / 2) +
     (popperReferenceSizeDiff > 0 ? popperReferenceSizeDiff : 0);
 
   const startArrowOffset = startReferenceOffset > 0 ? startReferenceOffset : 0;
