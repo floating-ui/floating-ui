@@ -2,7 +2,7 @@
 import getParentNode from './getParentNode';
 import getComputedStyle from './getComputedStyle';
 import getNodeName from './getNodeName';
-import getWindow from './getWindow';
+import { isHTMLElement } from './instanceOf';
 
 export default function getScrollParent(node: Node): HTMLElement {
   if (!node) {
@@ -13,7 +13,7 @@ export default function getScrollParent(node: Node): HTMLElement {
     return node.ownerDocument.body;
   }
 
-  if (node instanceof getWindow(node).HTMLElement) {
+  if (isHTMLElement(node)) {
     // Firefox want us to check `-x` and `-y` variations as well
     const { overflow, overflowX, overflowY } = getComputedStyle(node);
     if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {

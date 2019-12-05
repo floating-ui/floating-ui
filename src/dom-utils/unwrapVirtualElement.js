@@ -1,10 +1,7 @@
 // @flow
 import type { VirtualElement } from '../types';
-import getWindow from './getWindow';
+import { isElement } from './instanceOf';
 
 export default (element: Element | VirtualElement): Element => {
-  return element instanceof getWindow(element).Element
-    ? element
-    : // $FlowFixMe: type refinement not working
-      element.contextElement;
+  return isElement(element) ? element : element.contextElement;
 };

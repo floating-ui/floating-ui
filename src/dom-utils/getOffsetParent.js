@@ -1,12 +1,10 @@
 // @flow
 import getWindow from './getWindow';
 import getNodeName from './getNodeName';
+import { isHTMLElement } from './instanceOf';
 
 export default function getOffsetParent(element: Element) {
-  const offsetParent =
-    element instanceof getWindow(element).HTMLElement
-      ? element.offsetParent
-      : null;
+  const offsetParent = isHTMLElement(element) ? element.offsetParent : null;
   const window = getWindow(element);
 
   if (getNodeName(offsetParent) === 'BODY') {
