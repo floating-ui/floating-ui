@@ -4,6 +4,7 @@ import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingParent from '../dom-utils/getClippingParent';
 import getDocumentRect from '../dom-utils/getDocumentRect';
 import getDocumentElement from '../dom-utils/getDocumentElement';
+import getViewportRect from '../dom-utils/getViewportRect';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
 
@@ -19,6 +20,16 @@ type ModifierData = {
   right: number,
   left: number,
 };
+
+const getOverflowOffsets = (
+  popperClientRect,
+  boundaryClientRect
+): ModifierData => ({
+  top: boundaryClientRect.top - popperClientRect.top,
+  bottom: popperClientRect.bottom - boundaryClientRect.bottom,
+  left: boundaryClientRect.left - popperClientRect.left,
+  right: popperClientRect.right - boundaryClientRect.right,
+});
 
 export function detectOverflow({
   state,
@@ -44,6 +55,9 @@ export function detectOverflow({
     documentElement === options.boundaryElement
       ? rectToClientRect(getDocumentRect(documentElement))
       : getBoundingClientRect(options.boundaryElement);
+  const viewportClientRect = rectToClientRect(
+    getViewportRect(options.boundaryElement)
+  );
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
@@ -63,12 +77,10 @@ export function detectOverflow({
     ...popperOffsets,
   });
 
-  state.modifiersData.detectOverflow = ({
-    top: boundaryClientRect.top - popperClientRect.top,
-    bottom: popperClientRect.bottom - boundaryClientRect.bottom,
-    left: boundaryClientRect.left - popperClientRect.left,
-    right: popperClientRect.right - boundaryClientRect.right,
-  }: ModifierData);
+  state.modifiersData.detectOverflow = {
+    viewport: getOverflowOffsets(popperClientRect, viewportClientRect),
+    boundary: getOverflowOffsets(popperClientRect, boundaryClientRect),
+  };
 
   return state;
 }

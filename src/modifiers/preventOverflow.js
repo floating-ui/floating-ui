@@ -45,7 +45,7 @@ export function preventOverflow({
     tether = center,
     padding = 0,
   } = options;
-  const overflow = state.modifiersData.detectOverflow;
+  const overflow = state.modifiersData.detectOverflow.boundary;
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
