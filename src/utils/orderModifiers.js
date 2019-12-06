@@ -1,5 +1,6 @@
 // @flow
 import type { Modifier } from '../types';
+import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
 const order = modifiers => {
@@ -26,7 +27,7 @@ const order = modifiers => {
 };
 
 export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> =>
-  ['read', 'main', 'afterMain', 'write'].reduce(
+  modifierPhases.reduce(
     (acc, currentPhase) =>
       acc.concat(
         order(modifiers.filter(modifier => modifier.phase === currentPhase))

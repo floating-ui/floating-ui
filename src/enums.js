@@ -55,16 +55,36 @@ export const placements: Array<Placement> = basePlacements.reduce(
 );
 
 // modifiers that need to read the DOM
+export const beforeRead: 'beforeRead' = 'beforeRead';
 export const read: 'read' = 'read';
+export const afterRead: 'afterRead' = 'afterRead';
 // pure-logic modifiers
+export const beforeMain: 'beforeMain' = 'beforeMain';
 export const main: 'main' = 'main';
-// pure-logic modifiers that run after the main phase (such as computeStyles)
 export const afterMain: 'afterMain' = 'afterMain';
 // modifier with the purpose to write to the DOM (or write into a framework state)
+export const beforeWrite: 'beforeWrite' = 'beforeWrite';
 export const write: 'write' = 'write';
+export const afterWrite: 'afterWrite' = 'afterWrite';
+export const modifierPhases: Array<ModifierPhases> = [
+  beforeRead,
+  read,
+  afterRead,
+  beforeMain,
+  main,
+  afterMain,
+  beforeWrite,
+  write,
+  afterWrite,
+];
 
 export type ModifierPhases =
+  | typeof beforeRead
   | typeof read
+  | typeof afterRead
+  | typeof beforeMain
   | typeof main
   | typeof afterMain
-  | typeof write;
+  | typeof beforeWrite
+  | typeof write
+  | typeof afterWrite;
