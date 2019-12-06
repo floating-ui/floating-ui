@@ -63,6 +63,7 @@ export function offset({ state, options = {} }: ModifierArguments<Options>) {
 export default ({
   name: 'offset',
   enabled: true,
-  phase: 'beforeMain',
+  phase: 'main',
+  requires: ['detectOverflow'],
   fn: offset,
 }: Modifier<Options>);
