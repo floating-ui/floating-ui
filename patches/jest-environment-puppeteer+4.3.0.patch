@@ -1,29 +1,25 @@
 diff --git a/node_modules/jest-environment-puppeteer/lib/global.js b/node_modules/jest-environment-puppeteer/lib/global.js
-index 81ba353..a1f029a 100644
+index 81ba353..f47b9ca 100644
 --- a/node_modules/jest-environment-puppeteer/lib/global.js
 +++ b/node_modules/jest-environment-puppeteer/lib/global.js
-@@ -26,7 +26,7 @@ async function setup(jestConfig = {}) {
+@@ -14,6 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
+ 
+ /* eslint-disable no-console */
+ let browser;
++let didAlreadyRunInWatchMode = false;
+ 
+ async function setup(jestConfig = {}) {
+   const config = await (0, _readConfig.readConfig)();
+@@ -26,7 +27,11 @@ async function setup(jestConfig = {}) {
    }
  
    process.env.PUPPETEER_WS_ENDPOINT = browser.wsEndpoint();
 -  if (jestConfig.watch || jestConfig.watchAll) return;
-+  //if (jestConfig.watch || jestConfig.watchAll) return;
++  // If we are in watch mode, - only setupServer() once.
++  if (jestConfig.watch || jestConfig.watchAll) {
++    if (didAlreadyRunInWatchMode) return;
++    didAlreadyRunInWatchMode = true;
++  }
  
    if (config.server) {
      try {
-@@ -52,7 +52,7 @@ async function setup(jestConfig = {}) {
- }
- 
- async function teardown(jestConfig = {}) {
--  if (!jestConfig.watch && !jestConfig.watchAll) {
-+  //if (!jestConfig.watch && !jestConfig.watchAll) {
-     await (0, _jestDevServer.teardown)();
-     const config = await (0, _readConfig.readConfig)();
- 
-@@ -61,5 +61,5 @@ async function teardown(jestConfig = {}) {
-     } else {
-       await browser.close();
-     }
--  }
-+  //}
- }

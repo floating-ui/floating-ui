@@ -6,7 +6,7 @@ import { screenshot } from '../utils/puppeteer.js';
 
 it('should update the position when window is resized', async () => {
   const page = await browser.newPage();
-  await page.goto('http://localhost:5000/resize.html');
+  await page.goto(`${TEST_URL}/resize.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 
