@@ -12,8 +12,12 @@ const order = modifiers => {
 
   // inherit all dependencies for a given name
   const inherited = i => {
-    return mapped[i] && mapped[i].requires
-      ? mapped[i].requires.reduce((mem, i) => {
+    const current = mapped[i];
+    return current
+      ? [
+          ...(current.requires || []),
+          ...(current.optionalRequires || []),
+        ].reduce((mem, i) => {
           return [...mem, i, ...inherited(i)];
         }, [])
       : [];

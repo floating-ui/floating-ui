@@ -1,9 +1,11 @@
 // @flow
 import format from './format';
-import { read, main, write } from '../enums';
+import { modifierPhases } from '../enums';
 
-const ERROR_MESSAGE =
+const INVALID_MODIFIER_ERROR =
   'Popper: modifier "%s" provided an invalid %s property, expected %s but got %s';
+const MISSING_DEPENDENCY_ERROR =
+  'Popper: modifier "%s" requires "%s", but "%s" modifier is not available';
 const VALID_PROPERTIES = [
   'name',
   'enabled',
@@ -22,7 +24,7 @@ export default (modifiers: Array<any>): void => {
           if (typeof modifier.name !== 'string') {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 String(modifier.name),
                 '"name"',
                 '"string"',
@@ -35,7 +37,7 @@ export default (modifiers: Array<any>): void => {
           if (typeof modifier.enabled !== 'boolean') {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"enabled"',
                 '"boolean"',
@@ -44,13 +46,13 @@ export default (modifiers: Array<any>): void => {
             );
           }
         case 'phase':
-          if (![read, main, write].includes(modifier.phase)) {
+          if (!modifierPhases.includes(modifier.phase)) {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"phase"',
-                'either "read", "main" or "write"',
+                `either ${modifierPhases.join(', ')}`,
                 `"${String(modifier.phase)}"`
               )
             );
@@ -60,7 +62,7 @@ export default (modifiers: Array<any>): void => {
           if (typeof modifier.fn !== 'function') {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"fn"',
                 '"function"',
@@ -73,7 +75,7 @@ export default (modifiers: Array<any>): void => {
           if (typeof modifier.onLoad !== 'function') {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"onLoad"',
                 '"function"',
@@ -83,10 +85,10 @@ export default (modifiers: Array<any>): void => {
           }
           break;
         case 'onDestroy':
-          if (typeof modifier.onLoad !== 'function') {
+          if (typeof modifier.onDestroy !== 'function') {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"onDestroy"',
                 '"function"',
@@ -99,7 +101,7 @@ export default (modifiers: Array<any>): void => {
           if (!Array.isArray(modifier.requires)) {
             console.error(
               format(
-                ERROR_MESSAGE,
+                INVALID_MODIFIER_ERROR,
                 modifier.name,
                 '"requires"',
                 '"array"',
@@ -120,6 +122,20 @@ export default (modifiers: Array<any>): void => {
             ).join(', ')}; but "${key}" was provided.`
           );
       }
+
+      modifier.requires &&
+        modifier.requires.forEach(requirement => {
+          if (modifiers.find(mod => mod.name === requirement) == null) {
+            console.error(
+              format(
+                MISSING_DEPENDENCY_ERROR,
+                String(modifier.name),
+                requirement,
+                requirement
+              )
+            );
+          }
+        });
     });
   });
 };
