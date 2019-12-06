@@ -130,4 +130,5 @@ export default ({
   phase: 'main',
   fn: preventOverflow,
   requires: ['detectOverflow'],
+  optionallyRequires: ['offset'],
 }: Modifier<Options>);

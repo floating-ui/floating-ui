@@ -66,5 +66,6 @@ export default ({
   phase: 'main',
   fn: flip,
   requires: ['detectOverflow'],
+  optionallyRequires: ['offset'],
   data: { index: 0 },
 }: Modifier<Options>);
