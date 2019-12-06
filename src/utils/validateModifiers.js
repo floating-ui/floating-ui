@@ -110,6 +110,19 @@ export default (modifiers: Array<any>): void => {
             );
           }
           break;
+        case 'optionallyRequires':
+          if (!Array.isArray(modifier.requires)) {
+            console.error(
+              format(
+                INVALID_MODIFIER_ERROR,
+                modifier.name,
+                '"requires"',
+                '"array"',
+                `"${String(modifier.requires)}"`
+              )
+            );
+          }
+          break;
         case 'options':
         case 'data':
           break;
