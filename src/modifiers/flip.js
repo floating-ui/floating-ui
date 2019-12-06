@@ -44,7 +44,6 @@ export function flip({ state, options = {} }: ModifierArguments<Options>) {
     return state;
   }
 
-  const basePlacement = getBasePlacement(placement);
   const flippedBasePlacement = getBasePlacement(flippedPlacement);
 
   // Check the difference in size between the two so the flip modifier knows
