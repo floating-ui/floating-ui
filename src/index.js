@@ -80,12 +80,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           popper: listScrollParents(popperElement),
         };
 
-        // Validate the provided modifiers so that the consumer will get warned
-        // of one of the custom modifiers is invalid for any reason
-        if (__DEV__) {
-          validateModifiers(state.options.modifiers);
-        }
-
         // Order `options.modifiers` so that the dependencies are fulfilled
         // once the modifiers are executed
         state.orderedModifiers = orderModifiers([
@@ -99,6 +93,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
               ({ name }) => name === modifier.name
             ),
           }));
+
+        // Validate the provided modifiers so that the consumer will get warned
+        // if one of the custom modifiers is invalid for any reason
+        if (__DEV__) {
+          validateModifiers(state.orderedModifiers);
+        }
       },
       // Syncronous and forcefully executed update
       // it will always be executed even if not necessary, usually NOT needed
