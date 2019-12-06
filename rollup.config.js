@@ -4,7 +4,6 @@ import bundleSize from 'rollup-plugin-bundle-size';
 import { terser } from 'rollup-plugin-terser';
 import visualizer from 'rollup-plugin-visualizer';
 import license from 'rollup-plugin-license';
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
 import flowEntry from 'rollup-plugin-flow-entry';
 import pkg from './package.json';
 
@@ -25,7 +24,6 @@ const configs = bundles
           __DEV__: minify ? 'false' : 'true',
         }),
         babel(),
-        sizeSnapshot({ printInfo: false }),
         minify && terser(),
         license({ banner: `@popperjs/core v${pkg.version}` }),
         flow && flowEntry(),
