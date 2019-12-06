@@ -5,9 +5,9 @@
     "gzipped": 5302
   },
   "dist/umd/popper.min.js": {
-    "bundled": 39720,
-    "minified": 13274,
-    "gzipped": 4672
+    "bundled": 40087,
+    "minified": 13410,
+    "gzipped": 4707
   },
   "dist/umd/popper-lite.js": {
     "bundled": 29451,
@@ -30,9 +30,9 @@
     "gzipped": 1937
   },
   "dist/cjs/popper.js": {
-    "bundled": 41572,
-    "minified": 19231,
-    "gzipped": 5923
+    "bundled": 41925,
+    "minified": 19406,
+    "gzipped": 5962
   },
   "dist/cjs/popper-lite.js": {
     "bundled": 28490,

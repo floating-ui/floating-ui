@@ -65,6 +65,6 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: flip,
-  requires: ['detectOverflow'],
+  requires: ['detectOverflow', 'offset'],
   data: { index: 0 },
 }: Modifier<Options>);
