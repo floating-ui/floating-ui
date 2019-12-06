@@ -63,6 +63,6 @@ export function offset({ state, options = {} }: ModifierArguments<Options>) {
 export default ({
   name: 'offset',
   enabled: true,
-  phase: 'main',
+  phase: 'beforeMain',
   fn: offset,
 }: Modifier<Options>);
