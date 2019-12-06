@@ -69,7 +69,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     const instance = {
       setOptions(options) {
-        console.log(options);
         // Store options into state
         state.options = {
           ...defaultOptions,
@@ -165,7 +164,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           }
 
           const { fn, enabled, options, name } = state.orderedModifiers[index];
-          console.log(options);
 
           if (enabled && typeof fn === 'function') {
             state = fn({ state, options, name, instance });
