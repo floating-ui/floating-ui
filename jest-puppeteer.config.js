@@ -7,7 +7,7 @@ module.exports = {
     headless: process.env.HEADLESS !== 'false',
   },
   server: {
-    command: 'yarn dev:serve',
+    command: 'yarn dev',
     port: 5000,
   },
 };
