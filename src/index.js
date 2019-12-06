@@ -17,6 +17,11 @@ import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
+import { basePlacements } from './enums';
+
+import { computeStyles } from './modifiers/computeStyles';
+import { applyStyles } from './modifiers/applyStyles';
+import getBoundingClientRect from './dom-utils/getBoundingClientRect';
 
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
@@ -69,12 +74,15 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     const instance = {
       setOptions(options) {
-        console.log(options);
         // Store options into state
         state.options = {
           ...defaultOptions,
           ...options,
         };
+
+        // Cache the placement in cache to make it available to the modifiers
+        // modifiers will modify this one (rather than the one in options)
+        state.placement = state.options.placement;
 
         state.scrollParents = {
           reference: listScrollParents(referenceElement),
@@ -117,6 +125,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           return;
         }
 
+        const prevPlacement = state.placement;
         const isFixed = state.options.strategy === 'fixed';
 
         // Get initial measurements
@@ -133,13 +142,25 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           ),
         };
 
+        // Test the size of the popper for each different basePlacement
+        state.modifiersData.popperOffsets = { x: 0, y: 0 };
+        state.placementMeasures = basePlacements.reduce((acc, placement) => {
+          const testState = computeStyles({
+            state: { ...state, placement },
+            instance,
+            name: 'computeStyles',
+          });
+
+          applyStyles({ state: testState, instance, name: 'applyStyles' });
+
+          acc[placement] = getBoundingClientRect(state.elements.popper);
+
+          return acc;
+        }, {});
+
         // Modifiers have the ability to read the current Popper state, included
         // the popper offsets, and modify it to address specifc cases
         state.reset = false;
-
-        // Cache the placement in cache to make it available to the modifiers
-        // modifiers will modify this one (rather than the one in options)
-        state.placement = state.options.placement;
 
         state.orderedModifiers.forEach(
           modifier =>
@@ -165,11 +186,16 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           }
 
           const { fn, enabled, options, name } = state.orderedModifiers[index];
-          console.log(options);
 
           if (enabled && typeof fn === 'function') {
             state = fn({ state, options, name, instance });
           }
+        }
+
+        // Prevent the jitter when the popper changes placements if the
+        // placement causes its size to change
+        if (state.placement !== prevPlacement) {
+          instance.forceUpdate();
         }
       },
 

@@ -17,8 +17,4 @@ it('gets the variation placement, given a shifted placement', () => {
   expect(getVariationPlacement('left-start')).toBe('start');
   expect(getVariationPlacement('left')).toBe(undefined);
   expect(getVariationPlacement('left-end')).toBe('end');
-
-  expect(getVariationPlacement('auto-start')).toBe('start');
-  expect(getVariationPlacement('auto')).toBe(undefined);
-  expect(getVariationPlacement('auto-end')).toBe('end');
 });

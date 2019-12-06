@@ -28,9 +28,6 @@ export type OverflowArea =
   | typeof viewport;
 
 export type Placement =
-  | 'auto'
-  | 'auto-start'
-  | 'auto-end'
   | 'top'
   | 'top-start'
   | 'top-end'

@@ -44,8 +44,26 @@ export function flip({ state, options = {} }: ModifierArguments<Options>) {
     return state;
   }
 
-  const basePlacement = getBasePlacement(flippedPlacement);
-  const fits = overflow[basePlacement] + paddingObject[basePlacement] <= 0;
+  const basePlacement = getBasePlacement(placement);
+  const flippedBasePlacement = getBasePlacement(flippedPlacement);
+
+  // Check the difference in size between the two so the flip modifier knows
+  // it truly won't fit due to margins/padding difference based on the placement
+  // This fixes the "flip flicker" loop issue
+  let placementSizeDiff = 0;
+  if (state.domPlacement) {
+    const baseDomPlacement = getBasePlacement(state.domPlacement);
+    const oppositeDomPlacement = getOppositePlacement(baseDomPlacement);
+    placementSizeDiff =
+      state.placementMeasures[baseDomPlacement][oppositeDomPlacement] -
+      state.placementMeasures[flippedBasePlacement][oppositeDomPlacement];
+  }
+
+  const fits =
+    overflow[flippedBasePlacement] +
+      paddingObject[flippedBasePlacement] +
+      placementSizeDiff <=
+    0;
 
   if (!fits) {
     state.modifiersData.flip.index += 1;

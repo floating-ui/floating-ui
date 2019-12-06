@@ -17,8 +17,4 @@ it('gets the base placement, given a shifted placement', () => {
   expect(getBasePlacement('left-start')).toBe('left');
   expect(getBasePlacement('left')).toBe('left');
   expect(getBasePlacement('left-end')).toBe('left');
-
-  expect(getBasePlacement('auto-start')).toBe('auto');
-  expect(getBasePlacement('auto')).toBe('auto');
-  expect(getBasePlacement('auto-end')).toBe('auto');
 });
