@@ -19,7 +19,7 @@ export function distanceAndSkiddingToXY(
   });
 
   distance = (distance || 0) * invertDistance;
-  skidding = (distance || 0) * invertSkidding;
+  skidding = (skidding || 0) * invertSkidding;
 
   return ['left', 'right'].includes(basePlacement)
     ? [distance, skidding]

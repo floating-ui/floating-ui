@@ -32,7 +32,7 @@
   "dist/cjs/popper.js": {
     "bundled": 40805,
     "minified": 18651,
-    "gzipped": 5769
+    "gzipped": 5768
   },
   "dist/cjs/popper-lite.js": {
     "bundled": 27723,
