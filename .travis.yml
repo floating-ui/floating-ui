@@ -24,9 +24,9 @@ jobs:
 
     - stage: tests
       name: Unit Tests
-      script: yarn jest --coverage src
+      script: yarn test:unit
 
     - name: '[Chrome] Functional Tests'
-      script: PUPPETEER_BROWSER=chromium travis_retry yarn jest tests/functional
+      script: PUPPETEER_BROWSER=chromium travis_retry yarn test:functional
     #- name: '[Firefox] Functional Tests'
     #  script: PUPPETEER_BROWSER=firefox travis_retry yarn jest tests/functional
