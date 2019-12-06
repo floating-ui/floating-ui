@@ -18,9 +18,6 @@ import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 import { basePlacements } from './enums';
-
-import { computeStyles } from './modifiers/computeStyles';
-import { applyStyles } from './modifiers/applyStyles';
 import getBoundingClientRect from './dom-utils/getBoundingClientRect';
 
 const INVALID_ELEMENT_ERROR =
@@ -142,22 +139,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           ),
         };
 
-        // Test the size of the popper for each different basePlacement
-        state.modifiersData.popperOffsets = { x: 0, y: 0 };
-        state.placementMeasures = basePlacements.reduce((acc, placement) => {
-          const testState = computeStyles({
-            state: { ...state, placement },
-            instance,
-            name: 'computeStyles',
-          });
-
-          applyStyles({ state: testState, instance, name: 'applyStyles' });
-
-          acc[placement] = getBoundingClientRect(state.elements.popper);
-
-          return acc;
-        }, {});
-
         // Modifiers have the ability to read the current Popper state, included
         // the popper offsets, and modify it to address specifc cases
         state.reset = false;
@@ -168,6 +149,52 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
               ...modifier.data,
             })
         );
+
+        const computeStylesModifier = state.orderedModifiers.find(
+          modifier => modifier.name === 'computeStyles'
+        );
+        const applyStylesModifier = state.orderedModifiers.find(
+          modifier => modifier.name === 'applyStyles'
+        );
+
+        if (!computeStylesModifier) {
+          if (__DEV__) {
+            console.error(
+              'Popper: Required `computeStyles` modifier is missing'
+            );
+          }
+          return;
+        }
+
+        if (!applyStylesModifier) {
+          if (__DEV__) {
+            console.error('Popper: Required `applyStyles` modifier is missing');
+          }
+          return;
+        }
+
+        const computeStyles = computeStylesModifier.fn;
+        const applyStyles = applyStylesModifier.fn;
+
+        // Test the size of the popper for each different basePlacement
+        state.modifiersData.popperOffsets = { x: 0, y: 0 };
+        state.placementMeasures = basePlacements.reduce((acc, placement) => {
+          const testState = computeStyles({
+            state: { ...state, placement },
+            instance,
+            name: computeStylesModifier.name,
+          });
+
+          applyStyles({
+            state: testState,
+            instance,
+            name: applyStylesModifier.name,
+          });
+
+          acc[placement] = getBoundingClientRect(state.elements.popper);
+
+          return acc;
+        }, {});
 
         let __debug_loops__ = 0;
         for (let index = 0; index < state.orderedModifiers.length; index++) {
