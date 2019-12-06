@@ -234,7 +234,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       computeStylesModifier,
       applyStylesModifier,
     ] = state.orderedModifiers.filter(
-      modifier => modifier === 'computeStyles' || modifier === 'applyStyles'
+      ({ name }) => name === 'computeStyles' || name === 'applyStyles'
     );
 
     if (!applyStylesModifier || !computeStylesModifier) {
