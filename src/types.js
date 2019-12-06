@@ -32,7 +32,7 @@ export type State = {|
     popper: HTMLElement,
     arrow?: HTMLElement,
   |},
-  placementMeasures: {|
+  placementClientRects: {|
     top: ClientRectObject,
     right: ClientRectObject,
     bottom: ClientRectObject,
@@ -40,7 +40,7 @@ export type State = {|
   |},
   options: Options,
   placement: Placement,
-  domPlacement: Placement,
+  domPlacement: Placement | null,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any>>,
   measures: StateMeasures,

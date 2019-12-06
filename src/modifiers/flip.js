@@ -50,12 +50,12 @@ export function flip({ state, options = {} }: ModifierArguments<Options>) {
   // it truly won't fit due to margins/padding difference based on the placement
   // This fixes the "flip flicker" loop issue
   let placementSizeDiff = 0;
-  if (state.domPlacement && state.placementMeasures) {
+  if (state.domPlacement) {
     const baseDomPlacement = getBasePlacement(state.domPlacement);
     const oppositeDomPlacement = getOppositePlacement(baseDomPlacement);
     placementSizeDiff =
-      state.placementMeasures[baseDomPlacement][oppositeDomPlacement] -
-      state.placementMeasures[flippedBasePlacement][oppositeDomPlacement];
+      state.placementClientRects[baseDomPlacement][oppositeDomPlacement] -
+      state.placementClientRects[flippedBasePlacement][oppositeDomPlacement];
   }
 
   const fits =

@@ -24,6 +24,8 @@ const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
+const MISSING_MODIFIERS_ERROR =
+  'Popper: `computeStyles` and `applyStyles` modifiers are required, but not both were passed.';
 
 const areValidElements = (...args: Array<any>): boolean =>
   !args.some(
@@ -60,6 +62,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     let state: $Shape<State> = {
       placement: 'bottom',
+      domPlacement: null,
       orderedModifiers: [],
       options: defaultOptions,
       modifiersData: {},
@@ -227,49 +230,47 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           }) || state)
     );
 
-    const computeStylesModifier = state.orderedModifiers.find(
-      modifier => modifier.name === 'computeStyles'
-    );
-    const applyStylesModifier = state.orderedModifiers.find(
-      modifier => modifier.name === 'applyStyles'
+    const [
+      computeStylesModifier,
+      applyStylesModifier,
+    ] = state.orderedModifiers.filter(
+      modifier => modifier === 'computeStyles' || modifier === 'applyStyles'
     );
 
-    if (__DEV__) {
-      if (!applyStylesModifier) {
-        console.error('Popper: Required `applyStyles` modifier is missing');
+    if (!applyStylesModifier || !computeStylesModifier) {
+      if (__DEV__) {
+        console.error(MISSING_MODIFIERS_ERROR);
       }
-      if (!computeStylesModifier) {
-        console.error('Popper: Required `computeStyles` modifier is missing');
-      }
+      return instance;
     }
 
-    if (computeStylesModifier && applyStylesModifier) {
-      // Test the size of the popper for each different basePlacement
-      state.placementMeasures = basePlacements.reduce((acc, placement) => {
-        let testState = {
-          ...state,
-          modifiersData: {
-            popperOffsets: { x: 0, y: 0 },
-          },
-        };
+    // Test the size of the popper for each different basePlacement
+    state.placementClientRects = basePlacements.reduce((acc, placement) => {
+      let testState = {
+        ...state,
+        modifiersData: {
+          popperOffsets: { x: 0, y: 0 },
+        },
+      };
 
-        testState = computeStylesModifier.fn({
-          state: { ...testState, placement },
-          instance,
-          name: computeStylesModifier.name,
-        });
+      testState = computeStylesModifier.fn({
+        state: { ...testState, placement },
+        instance,
+        options: computeStylesModifier.options,
+        name: computeStylesModifier.name,
+      });
 
-        applyStylesModifier.fn({
-          state: testState,
-          instance,
-          name: applyStylesModifier.name,
-        });
+      applyStylesModifier.fn({
+        state: testState,
+        instance,
+        options: applyStylesModifier.options,
+        name: applyStylesModifier.name,
+      });
 
-        acc[placement] = getBoundingClientRect(state.elements.popper);
+      acc[placement] = getBoundingClientRect(state.elements.popper);
 
-        return acc;
-      }, {});
-    }
+      return acc;
+    }, {});
 
     instance.update();
 
