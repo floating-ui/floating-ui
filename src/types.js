@@ -69,7 +69,7 @@ export type Modifier<Options> = {|
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
-  optionalRequires?: Array<string>,
+  optionallyRequires?: Array<string>,
   fn: (ModifierArguments<Options>) => State,
   onLoad?: (ModifierArguments<Options>) => ?State,
   onDestroy?: (ModifierArguments<Options>) => void,

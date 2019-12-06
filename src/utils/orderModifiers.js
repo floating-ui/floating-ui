@@ -16,7 +16,7 @@ const order = modifiers => {
     return current
       ? [
           ...(current.requires || []),
-          ...(current.optionalRequires || []),
+          ...(current.optionallyRequires || []),
         ].reduce((mem, i) => {
           return [...mem, i, ...inherited(i)];
         }, [])
