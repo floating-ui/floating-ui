@@ -14,7 +14,6 @@ const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'cjs', dir: 'dist' },
-  { inputs, format: 'esm', dir: 'dist' },
 ];
 
 const configs = bundles

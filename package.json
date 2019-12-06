@@ -159,7 +159,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "pretty-quick --staged && yarn build:bundles && git add .size-snapshot.json"
     }
   }
 }
