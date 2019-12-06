@@ -14,9 +14,7 @@
     "test": "yarn test:unit && yarn test:functional",
     "test:unit": "jest --coverage --watch src",
     "test:functional": "jest --watch tests/functional",
-    "dev": "concurrently 'yarn dev:serve' 'yarn dev:bundles --watch'",
-    "dev:serve": "serve tests/visual",
-    "dev:bundles": "cross-env NODE_ENV=development rollup -c rollup.config.js",
+    "dev": "concurrently 'serve -l 5000 tests/visual' 'babel src -d tests/visual/dist --watch'",
     "build": "yarn clean && yarn build:es && yarn build:bundles",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
@@ -49,6 +47,7 @@
     ],
     "plugins": [
       "@babel/plugin-transform-flow-strip-types",
+      "babel-plugin-add-import-extension",
       [
         "@babel/plugin-proposal-object-rest-spread",
         {
@@ -65,6 +64,18 @@
         ],
         "plugins": [
           "@babel/plugin-transform-runtime"
+        ]
+      },
+      "development": {
+        "plugins": [
+          [
+            "transform-inline-environment-variables",
+            {
+              "include": [
+                "NODE_ENV"
+              ]
+            }
+          ]
         ]
       }
     }
@@ -107,14 +118,16 @@
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.5",
-    "@babel/plugin-transform-flow-strip-types": "^7.0.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.7.4",
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.1.5",
     "@babel/runtime": "^7.7.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
+    "babel-plugin-add-import-extension": "^1.1.0",
     "babel-plugin-dev-expression": "^0.2.2",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "chalk": "^3.0.0",
     "concurrently": "^5.0.0",
     "cross-env": "^6.0.3",

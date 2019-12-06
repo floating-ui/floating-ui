@@ -5,9 +5,9 @@
     "gzipped": 5302
   },
   "dist/umd/popper.min.js": {
-    "bundled": 38825,
-    "minified": 13144,
-    "gzipped": 4620
+    "bundled": 39253,
+    "minified": 13204,
+    "gzipped": 4650
   },
   "dist/umd/popper-lite.js": {
     "bundled": 29451,
@@ -15,8 +15,8 @@
     "gzipped": 3680
   },
   "dist/umd/popper-lite.min.js": {
-    "bundled": 25531,
-    "minified": 8395,
+    "bundled": 25648,
+    "minified": 8448,
     "gzipped": 3036
   },
   "dist/umd/popper-base.js": {
@@ -28,5 +28,62 @@
     "bundled": 15053,
     "minified": 4652,
     "gzipped": 1908
+  },
+  "dist/cjs/popper.js": {
+    "bundled": 40861,
+    "minified": 18681,
+    "gzipped": 5780
+  },
+  "dist/cjs/popper-lite.js": {
+    "bundled": 27779,
+    "minified": 12486,
+    "gzipped": 4056
+  },
+  "dist/cjs/popper-base.js": {
+    "bundled": 17772,
+    "minified": 7943,
+    "gzipped": 2776
+  },
+  "dist/esm/popper.js": {
+    "bundled": 40760,
+    "minified": 18592,
+    "gzipped": 5742,
+    "treeshaked": {
+      "rollup": {
+        "code": 14952,
+        "import_statements": 0
+      },
+      "webpack": {
+        "code": 15911
+      }
+    }
+  },
+  "dist/esm/popper-lite.js": {
+    "bundled": 27678,
+    "minified": 12397,
+    "gzipped": 4018,
+    "treeshaked": {
+      "rollup": {
+        "code": 10084,
+        "import_statements": 0
+      },
+      "webpack": {
+        "code": 11035
+      }
+    }
+  },
+  "dist/esm/popper-base.js": {
+    "bundled": 17655,
+    "minified": 7838,
+    "gzipped": 2734,
+    "treeshaked": {
+      "rollup": {
+        "code": 4670,
+        "import_statements": 0
+      },
+      "webpack": {
+        "code": 5621
+      }
+    }
   }
 }

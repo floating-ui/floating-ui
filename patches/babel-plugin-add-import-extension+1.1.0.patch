@@ -1,0 +1,44 @@
+diff --git a/node_modules/babel-plugin-add-import-extension/src/plugin.js b/node_modules/babel-plugin-add-import-extension/src/plugin.js
+index b7d0137..b521aa4 100644
+--- a/node_modules/babel-plugin-add-import-extension/src/plugin.js
++++ b/node_modules/babel-plugin-add-import-extension/src/plugin.js
+@@ -2,6 +2,7 @@ const { declare } = require('@babel/helper-plugin-utils')
+ const { types: { importDeclaration, stringLiteral }} = require('@babel/core')
+ const { lstatSync } = require('fs')
+ const { resolve, extname, dirname } = require('path')
++const template = require('@babel/template').default
+ 
+ const isNodeModule = module => {
+   try {
+@@ -51,6 +52,31 @@ module.exports = declare((api, options) => {
+           }
+         }
+       },
++      ExportNamedDeclaration(path, state) {
++        if (!path.node.source) {
++          return
++        }
++
++        const module = path.node.source.value
++
++        if (skipModule(module)) {
++          return
++        }
++
++        const { filename, cwd } = state.file.opts
++        const dir = dirname(filename)
++
++        const exports = path.node.specifiers.map(spec => `${spec.local.name} as ${spec.exported.name}`).join(',')
++        const exportDeclaration = template(`export { ${exports} } from '${module}.${extension}';`)();
++
++        if (module[0] === '.') {
++          if (isDirectory(resolve(dir, module))) {
++            path.replaceWith(importDeclaration(path.node.specifiers, stringLiteral(`${module}/index.${extension}`)))
++          } else {
++            path.replaceWith(exportDeclaration)
++          }
++        }
++      }
+     },
+   }
+ })
