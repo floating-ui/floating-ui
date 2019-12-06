@@ -14,6 +14,10 @@ class ImageReporter {
   }
 
   onTestResult(test, testResult, aggregateResults) {
+    if (process.env.CI !== 'true') {
+      return;
+    }
+
     if (
       testResult.numFailingTests &&
       testResult.failureMessage.match(/different from snapshot/)
