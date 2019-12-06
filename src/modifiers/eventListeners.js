@@ -64,6 +64,9 @@ function update({
     resize = null;
   }
 
+  // Update cache
+  state.modifiersData[`${name}#persistent`] = { scroll, resize };
+
   toggleEventListeners({ state, instance, scroll, resize });
 
   return state;
