@@ -89,4 +89,5 @@ export default ({
   phase: 'main',
   fn: arrow,
   requires: ['popperOffsets'],
+  optionallyRequires: ['preventOverflow'],
 }: Modifier<Options>);
