@@ -13,6 +13,15 @@ type Options = {
   gpuAcceleration?: boolean,
 };
 
+// Round the offsets to the nearest suitable subpixel based on the DPR
+const roundOffsets = ({ x, y }) => {
+  const dpr = window.devicePixelRatio;
+  return {
+    x: Math.round(x * dpr) / dpr,
+    y: Math.round(y * dpr) / dpr,
+  };
+};
+
 export const mapToStyles = ({
   offsets,
   position,
@@ -22,20 +31,24 @@ export const mapToStyles = ({
   position: PositioningStrategy,
   gpuAcceleration: boolean,
 }) => {
-  // @1x displays in Chrome can be blurry due to non-rounded offsets, but this
-  // introduces slight positioning errors. TODO: somehow solve this better
-  // by default it is active, disable it only if explicitly set to false
+  const { x, y } = roundOffsets(offsets);
+
+  // Layer acceleration can disable subpixel rendering which causes slightly
+  // blurry text on low PPI displays.
+  // Zooming can change the DPR, but it seems to report a value that will
+  // cleanly divide the values into the appropriate subpixels.
   if (gpuAcceleration === false || window.devicePixelRatio < 2) {
     return {
-      top: `${offsets.y}px`,
-      left: `${offsets.x}px`,
+      top: `${y}px`,
+      left: `${x}px`,
+      transform: '',
       position,
     };
   } else {
     return {
       top: '0px',
       left: '0px',
-      transform: `translate3d(${offsets.x}px, ${offsets.y}px, 0)`,
+      transform: `translate3d(${x}px, ${y}px, 0)`,
       position,
     };
   }
