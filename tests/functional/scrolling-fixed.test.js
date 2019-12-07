@@ -53,3 +53,14 @@ it('should handle case where root scrolling parent is also offset parent', async
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should handle multiple nested offsetParents', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/scrolling-fixed/offset-parent-multiple.html`);
+
+  await scroll(page, '.scroll3', 200);
+  await scroll(page, '.scroll2', 200);
+  await scroll(page, '.scroll1', 200);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
