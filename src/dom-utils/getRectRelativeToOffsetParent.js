@@ -36,9 +36,7 @@ export default (
   }
 
   const scrollSum = getScrollSum(relevantScrollParents);
-  const offsetParentScrollSum = isFixed
-    ? getScrollSum([offsetParent])
-    : { scrollLeft: 0, scrollTop: 0 };
+  const offsetParentScrollSum = getScrollSum(isFixed ? [offsetParent] : []);
 
   const width = rect.width;
   const height = rect.height;
