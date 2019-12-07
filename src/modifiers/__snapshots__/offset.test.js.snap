@@ -2,7 +2,7 @@
 
 exports[`bottom 1`] = `
 Array [
-  -20,
+  20,
   10,
 ]
 `;
@@ -23,7 +23,7 @@ Array [
 
 exports[`top 1`] = `
 Array [
-  -20,
+  20,
   -10,
 ]
 `;
