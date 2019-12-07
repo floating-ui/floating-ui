@@ -28,9 +28,8 @@ const areValidElements = (...args: Array<any>): boolean =>
     element => !(element && typeof element.getBoundingClientRect === 'function')
   );
 
-const defaultOptionsValue = {
+const defaultOptionsValue: Options = {
   placement: 'bottom',
-  eventListeners: { scroll: true, resize: true },
   modifiers: [],
   strategy: 'absolute',
 };
@@ -59,7 +58,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     let state: $Shape<State> = {
       placement: 'bottom',
       orderedModifiers: [],
-      options: defaultOptions,
+      options: { ...defaultOptionsValue, ...defaultOptions },
       modifiersData: {},
       elements: {
         reference: referenceElement,
@@ -177,7 +176,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       update: debounce(
         () =>
           // prettier-ignore
-          new Promise<State>(resolve => {
+          new Promise<$Shape<State>>(resolve => {
           instance.forceUpdate();
           resolve(state);
         })

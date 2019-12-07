@@ -1,5 +1,5 @@
 // @flow
-import { type VariationPlacement, type Placement, typeof auto } from '../enums';
+import { type VariationPlacement, type Placement, auto } from '../enums';
 
-export default (placement: Placement | auto): ?VariationPlacement =>
+export default (placement: Placement | typeof auto): ?VariationPlacement =>
   (placement.split('-')[1]: any);

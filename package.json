@@ -9,7 +9,6 @@
   "author": "Federico Zivolo <fzivolo@quid.com>",
   "license": "MIT",
   "repository": "github:popperjs/popper.js",
-  "types": "ts-types/index.d.ts",
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "yarn test:unit && yarn test:functional",
@@ -21,7 +20,7 @@
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
-    "build:ts": "flow-to-ts \"src/**/*.js\" --write; tsc -d \"src/index.ts\" --outFile \"ts-types/\"; rimraf \"src/**/*.ts\"; rimraf \"types/**/*.js\"",
+    "build:ts": "flow-to-ts \"src/**/*.js\" --write; tsc --outFile \"dist/typescript/\"; rimraf \"src/**/*.ts\"; rimraf \"types/**/*.js\"",
     "prepublishOnly": "yarn build",
     "postinstall": "patch-package",
     "flow": "flow",
@@ -161,7 +160,9 @@
     "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-visualizer": "^3.3.0",
     "serve": "^11.2.0",
-    "typescript": "^3.7.2"
+    "trim-right": "^1.0.1",
+    "typescript": "^3.7.2",
+    "utility-types": "^3.10.0"
   },
   "husky": {
     "hooks": {
