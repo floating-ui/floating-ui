@@ -22,18 +22,12 @@ export default (
       ? getBoundingClientRect(offsetParent)
       : { left: 0, top: 0 };
 
-  const relevantScrollParents = [];
-
   // We want all the scrolling containers only up to and including the
   // offsetParent
-  for (let i = 0; i < scrollParents.length; i++) {
-    const scrollParent = scrollParents[i];
-    relevantScrollParents.push(scrollParent);
-
-    if (scrollParent === offsetParent) {
-      break;
-    }
-  }
+  const relevantScrollParents = scrollParents.slice(
+    0,
+    scrollParents.indexOf(offsetParent) + 1
+  );
 
   const scrollSum = getScrollSum(relevantScrollParents);
   const offsetParentScrollSum = getScrollSum(isFixed ? [offsetParent] : []);
