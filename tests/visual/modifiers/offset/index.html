@@ -1,13 +1,23 @@
 <!DOCTYPE html> <title>Basic Visual Test</title>
 
 <style>
-  #reference {
+  .reference {
     position: absolute;
+    background-color: red;
+  }
+
+  #reference1 {
     top: 150px;
     left: 150px;
     width: 200px;
     height: 200px;
-    background-color: red;
+  }
+
+  #reference2 {
+    top: 150px;
+    left: 500px;
+    width: 200px;
+    height: 200px;
   }
 
   .popper {
@@ -21,30 +31,46 @@
   }
 </style>
 
-<div id="reference">Reference Box</div>
-<div class="popper" id="popper1">Popper Box</div>
-<div class="popper" id="popper2">Popper Box</div>
-<div class="popper" id="popper3">Popper Box</div>
-<div class="popper" id="popper4">Popper Box</div>
+<div class="reference" id="reference1">Reference Box</div>
+<div class="popper" id="popper1-1">Popper Box</div>
+<div class="popper" id="popper1-2">Popper Box</div>
+<div class="popper" id="popper1-3">Popper Box</div>
+<div class="popper" id="popper1-4">Popper Box</div>
+
+<div class="reference" id="reference2">Reference Box</div>
+<div class="popper" id="popper2-1">Popper Box</div>
+<div class="popper" id="popper2-2">Popper Box</div>
+<div class="popper" id="popper2-3">Popper Box</div>
+<div class="popper" id="popper2-4">Popper Box</div>
 
 <script type="module">
   import { createPopper } from '../../dist/popper.js';
-  const reference = document.querySelector('#reference');
+  const reference1 = document.querySelector('#reference1');
+  const reference2 = document.querySelector('#reference2');
 
-  ['top', 'right', 'bottom', 'left'].forEach((placement, n) =>
-    createPopper(reference, document.querySelector(`#popper${n + 1}`), {
+  ['top', 'right', 'bottom', 'left'].forEach((placement, n) => {
+    createPopper(reference1, document.querySelector(`#popper1-${n + 1}`), {
       placement: placement,
       modifiers: [
         {
           name: 'offset',
           options: {
-            offset: ({ popper, reference, placement }) => [
-              popper.width / 2,
-              reference.height / 2,
-            ],
+            offset: ({ popper, reference, placement }) => [50, 50],
           },
         },
       ],
-    })
-  );
+    });
+
+    createPopper(reference2, document.querySelector(`#popper2-${n + 1}`), {
+      placement: placement,
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: ({ popper, reference, placement }) => [-50, -50],
+          },
+        },
+      ],
+    });
+  });
 </script>
