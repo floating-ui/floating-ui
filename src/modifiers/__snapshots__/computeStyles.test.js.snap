@@ -5,6 +5,7 @@ Object {
   "left": "10px",
   "position": "absolute",
   "top": "5px",
+  "transform": "",
 }
 `;
 
@@ -22,5 +23,6 @@ Object {
   "left": "10px",
   "position": "absolute",
   "top": "5px",
+  "transform": "",
 }
 `;
