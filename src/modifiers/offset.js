@@ -10,9 +10,7 @@ export function distanceAndSkiddingToXY(
   getOffsets: OffsetsFunction
 ): [number, number] {
   const basePlacement = getBasePlacement(placement);
-
   const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
-  const invertSkidding = [top, bottom].includes(basePlacement) ? -1 : 1;
 
   let [distance, skidding] = getOffsets({
     ...measures,
@@ -20,7 +18,7 @@ export function distanceAndSkiddingToXY(
   });
 
   distance = (distance || 0) * invertDistance;
-  skidding = (skidding || 0) * invertSkidding;
+  skidding = skidding || 0;
 
   return [left, right].includes(basePlacement)
     ? [distance, skidding]
@@ -64,6 +62,6 @@ export default ({
   name: 'offset',
   enabled: true,
   phase: 'main',
-  requires: ['detectOverflow'],
+  requires: ['popperOffsets', 'detectOverflow'],
   fn: offset,
 }: Modifier<Options>);
