@@ -1,0 +1,11 @@
+{
+  "include": ["../src/**/*"],
+  "exclude": ["../**/*.test.ts"],
+  "compilerOptions": {
+    "target": "es2015",
+    "lib": ["dom", "es2017"],
+    "moduleResolution": "node",
+    "module": "es2015",
+    "removeComments": false
+  }
+}

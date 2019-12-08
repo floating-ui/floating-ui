@@ -31,9 +31,9 @@ type OffsetsFunction = ({
   placement: Placement,
 }) => [?number, ?number];
 
-type Options = { offset: ?OffsetsFunction };
+type Options = { offset?: OffsetsFunction };
 
-export function offset({ state, options = {} }: ModifierArguments<Options>) {
+export function offset({ state, options }: ModifierArguments<Options>) {
   if (typeof options.offset === 'function') {
     const [x, y] = distanceAndSkiddingToXY(
       state.placement,

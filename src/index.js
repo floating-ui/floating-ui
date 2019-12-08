@@ -7,6 +7,9 @@ import type {
   Instance,
 } from './types';
 
+export * from './types';
+export * from './enums';
+
 // DOM Utils
 import getElementClientRect from './dom-utils/getRectRelativeToOffsetParent';
 import listScrollParents from './dom-utils/listScrollParents';
@@ -28,9 +31,8 @@ const areValidElements = (...args: Array<any>): boolean =>
     element => !(element && typeof element.getBoundingClientRect === 'function')
   );
 
-const defaultOptionsValue = {
+const defaultOptionsValue: Options = {
   placement: 'bottom',
-  eventListeners: { scroll: true, resize: true },
   modifiers: [],
   strategy: 'absolute',
 };
@@ -59,7 +61,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     let state: $Shape<State> = {
       placement: 'bottom',
       orderedModifiers: [],
-      options: defaultOptions,
+      options: { ...defaultOptionsValue, ...defaultOptions },
       modifiersData: {},
       elements: {
         reference: referenceElement,
@@ -164,7 +166,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             continue;
           }
 
-          const { fn, enabled, options, name } = state.orderedModifiers[index];
+          const { fn, enabled, options = {}, name } = state.orderedModifiers[
+            index
+          ];
 
           if (enabled && typeof fn === 'function') {
             state = fn({ state, options, name, instance });
@@ -178,7 +182,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       update: debounce(
         () =>
           // prettier-ignore
-          new Promise<State>(resolve => {
+          new Promise<$Shape<State>>(resolve => {
           instance.forceUpdate();
           resolve(state);
         })
@@ -187,8 +191,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       destroy() {
         // Run `onDestroy` modifier methods
         state.orderedModifiers.forEach(
-          ({ onDestroy, enabled, name }) =>
-            enabled && onDestroy && onDestroy({ state, name, instance })
+          ({ onDestroy, enabled, name, options = {} }) =>
+            enabled &&
+            onDestroy &&
+            onDestroy({ state, name, instance, options })
         );
       },
     };
@@ -208,7 +214,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // defined by the modifier dependencies directive.
     // The `onLoad` function may add or alter the options of themselves
     state.orderedModifiers.forEach(
-      ({ onLoad, enabled, name }) =>
+      ({ onLoad, enabled, name, options = {} }) =>
         enabled &&
         onLoad &&
         (state =
@@ -216,6 +222,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             state,
             name,
             instance,
+            options,
           }) || state)
     );
 

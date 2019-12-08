@@ -17,10 +17,15 @@ jobs:
   include:
     - stage: Code Check
       name: Flow Type
-      script: yarn flow
+      script: yarn test:flow
 
     - name: ESLint
-      script: yarn eslint
+      script: yarn test:eslint
+
+    - name: TypeScript
+      script:
+        - yarn build:typescript
+        - yarn test:typescript
 
     - stage: tests
       name: Unit Tests

@@ -14,17 +14,20 @@
     "test": "yarn test:unit && yarn test:functional",
     "test:unit": "jest --coverage src",
     "test:functional": "DEV_PORT=`get-port` jest tests/functional",
+    "test:flow": "flow",
+    "test:typescript": "tsc --project tests/typescript/tsconfig.json",
+    "test:eslint": "eslint .",
     "dev": "NODE_ENV=development concurrently 'yarn serve' 'yarn build:dev --watch'",
     "serve": "serve -l ${DEV_PORT:-5000} tests/visual",
     "build": "yarn clean && yarn build:es && yarn build:bundles",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
+    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write; node typescript/ts.js; tsc --p typescript/tsconfig.json --declaration --outDir \"dist/typescript\"; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build",
-    "postinstall": "patch-package",
-    "flow": "flow",
-    "eslint": "eslint ."
+    "postinstall": "patch-package"
   },
+  "types": "dist/typescript",
   "files": [
     "/src",
     "/dist",
@@ -127,6 +130,7 @@
     "@babel/plugin-transform-runtime": "^7.7.4",
     "@babel/preset-env": "^7.1.5",
     "@babel/runtime": "^7.7.4",
+    "@khanacademy/flow-to-ts": "^0.1.4",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
@@ -141,6 +145,7 @@
     "eslint-plugin-unused-imports": "^0.1.1",
     "flow-bin": "0.112.0",
     "get-port-cli": "^2.0.0",
+    "glob": "^7.1.6",
     "husky": "^3.1.0",
     "jest": "^24.9.0",
     "jest-environment-puppeteer": "^4.3.0",
@@ -158,9 +163,12 @@
     "rollup-plugin-flow-entry": "^0.3.3",
     "rollup-plugin-license": "^0.13.0",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-visualizer": "^3.3.0",
-    "serve": "^11.2.0"
+    "serve": "^11.2.0",
+    "trim-right": "^1.0.1",
+    "typescript": "^3.7.2",
+    "utility-types": "^3.10.0"
   },
   "husky": {
     "hooks": {

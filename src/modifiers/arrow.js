@@ -11,7 +11,7 @@ import { left, right } from '../enums';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow({ state, options = {} }: ModifierArguments<Options>) {
+export function arrow({ state, options }: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]' } = options;
 
   // CSS selector

@@ -1,6 +1,6 @@
 // @flow
 import type { Placement, ModifierPhases } from './enums';
-export type JQueryWrapper = { @@iterator: HTMLElement[], jquery: string };
+export type JQueryWrapper = Array<HTMLElement> & { jquery: string };
 
 export type Rect = {|
   width: number,
@@ -58,10 +58,10 @@ export type Instance = {|
   setOptions: (options: $Shape<Options>) => void,
 |};
 
-export type ModifierArguments<Options> = {
-  state: State,
+export type ModifierArguments<Options: {}> = {
+  state: $Shape<State>,
   instance: Instance,
-  options?: Options,
+  options: $Shape<Options>,
   name: string,
 };
 export type Modifier<Options> = {|
@@ -81,9 +81,8 @@ export type EventListeners = {| scroll: boolean, resize: boolean |};
 
 export type Options = {|
   placement: Placement,
-  modifiers: Array<Modifier<any>>,
+  modifiers: Array<$Shape<Modifier<any>>>,
   strategy: PositioningStrategy,
-  eventListeners: boolean | {| scroll?: boolean, resize?: boolean |},
 |};
 
 export type UpdateCallback = State => void;
@@ -112,3 +111,5 @@ export type VirtualElement = {|
   contextElement: HTMLElement,
   getBoundingClientRect: () => ClientRect | DOMRect,
 |};
+
+export default null;
