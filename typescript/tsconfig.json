@@ -1,6 +1,6 @@
 {
-  "include": ["src/**/*"],
-  "exclude": ["**/*.test.ts"],
+  "include": ["../src/**/*"],
+  "exclude": ["../**/*.test.ts"],
   "compilerOptions": {
     "moduleResolution": "node",
     "module": "amd"
