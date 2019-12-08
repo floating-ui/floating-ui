@@ -4,37 +4,49 @@ import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
 const order = modifiers => {
-  // indexed by name
-  const mapped = modifiers.reduce((mem, i) => {
-    mem[i.name] = i;
-    return mem;
+  const map = modifiers.reduce((acc, modifier) => {
+    acc[modifier.name] = modifier;
+    return acc;
   }, {});
+  const visited = {};
+  const result = [];
 
-  // inherit all dependencies for a given name
-  const inherited = i => {
-    const current = mapped[i];
-    return current
-      ? [
-          ...(current.requires || []),
-          ...(current.optionallyRequires || []),
-        ].reduce((mem, i) => {
-          return [...mem, i, ...inherited(i)];
-        }, [])
-      : [];
-  };
+  // On visiting object, check for its dependencies and visit them recursively
+  function sort(modifier) {
+    visited[modifier.name] = true;
 
-  // order ...
-  const ordered = modifiers.sort((a, b) => {
-    return !!~inherited(b.name).indexOf(a.name) ? -1 : 1;
+    const requires = [
+      ...(modifier.requires || []),
+      ...(modifier.optionallyRequires || []),
+    ];
+
+    requires.forEach(dep => {
+      if (!visited[dep]) {
+        sort(map[dep]);
+      }
+    });
+
+    result.push(modifier);
+  }
+
+  modifiers.forEach(modifier => {
+    if (!visited[modifier.name]) {
+      // check for visited object
+      sort(modifier);
+    }
   });
-  return ordered;
+
+  return result;
 };
 
-export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> =>
-  modifierPhases.reduce(
-    (acc, currentPhase) =>
-      acc.concat(
-        order(modifiers.filter(modifier => modifier.phase === currentPhase))
-      ),
-    []
-  );
+export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> => {
+  // order based on dependencies
+  const orderedModifiers = order(modifiers);
+
+  // order based on phase
+  return modifierPhases.reduce((acc, phase) => {
+    return acc.concat(
+      orderedModifiers.filter(modifier => modifier.phase === phase)
+    );
+  }, []);
+};
