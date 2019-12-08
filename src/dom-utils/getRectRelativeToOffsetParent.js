@@ -15,37 +15,35 @@ export default (
 ): Rect => {
   const unwrappedElement = unwrapVirtualElement(element);
   const rect = getBoundingClientRect(element);
-  const scrollParentsScrollSum = getScrollSum(
-    listScrollParents(unwrappedElement)
-  );
-  const directOffsetParent = getOffsetParent(unwrappedElement);
-  const directOffsetParentRect =
-    isElement(directOffsetParent) && !isFixed
-      ? getBoundingClientRect(directOffsetParent)
+  const scrollParents = listScrollParents(unwrappedElement);
+  const offsetParent = getOffsetParent(unwrappedElement);
+  const offsetParentRect =
+    isElement(offsetParent) && !isFixed
+      ? getBoundingClientRect(offsetParent)
       : { left: 0, top: 0 };
 
-  const ancestorOffsetParents = isFixed ? [directOffsetParent] : [];
-  let currentOffsetParent = directOffsetParent;
+  // We want all the scrolling containers only up to and including the
+  // offsetParent
+  const relevantScrollParents = scrollParents.slice(
+    0,
+    scrollParents.indexOf(offsetParent) + 1
+  );
 
-  while (isElement(currentOffsetParent)) {
-    currentOffsetParent = getOffsetParent(currentOffsetParent);
-    ancestorOffsetParents.push(currentOffsetParent);
-  }
-
-  const ancestorOffsetParentScrollSum = getScrollSum(ancestorOffsetParents);
+  const scrollSum = getScrollSum(relevantScrollParents);
+  const offsetParentScrollSum = getScrollSum(isFixed ? [offsetParent] : []);
 
   const width = rect.width;
   const height = rect.height;
   const x =
     rect.left +
-    scrollParentsScrollSum.scrollLeft -
-    ancestorOffsetParentScrollSum.scrollLeft -
-    directOffsetParentRect.left;
+    scrollSum.scrollLeft -
+    offsetParentScrollSum.scrollLeft -
+    offsetParentRect.left;
   const y =
     rect.top +
-    scrollParentsScrollSum.scrollTop -
-    ancestorOffsetParentScrollSum.scrollTop -
-    directOffsetParentRect.top;
+    scrollSum.scrollTop -
+    offsetParentScrollSum.scrollTop -
+    offsetParentRect.top;
 
   return { width, height, x, y };
 };
