@@ -13,8 +13,8 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   const scrollParent = getScrollParent(children);
 
   const styles = getStyleComputedProperty(parent);
-  const borderTopWidth = parseFloat(styles.borderTopWidth, 10);
-  const borderLeftWidth = parseFloat(styles.borderLeftWidth, 10);
+  const borderTopWidth = parseFloat(styles.borderTopWidth);
+  const borderLeftWidth = parseFloat(styles.borderLeftWidth);
 
   // In cases where the parent is fixed, we must ignore negative scroll in offset calc
   if(fixedPosition && isHTML) {
@@ -35,8 +35,8 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   // differently when margins are applied to it. The margins are included in
   // the box of the documentElement, in the other cases not.
   if (!isIE10 && isHTML) {
-    const marginTop = parseFloat(styles.marginTop, 10);
-    const marginLeft = parseFloat(styles.marginLeft, 10);
+    const marginTop = parseFloat(styles.marginTop);
+    const marginLeft = parseFloat(styles.marginLeft);
 
     offsets.top -= borderTopWidth - marginTop;
     offsets.bottom -= borderTopWidth - marginTop;
