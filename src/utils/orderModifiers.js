@@ -4,16 +4,17 @@ import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
 const order = modifiers => {
-  const map = modifiers.reduce((acc, modifier) => {
-    acc[modifier.name] = modifier;
-    return acc;
-  }, {});
-  const visited = {};
+  const map = new Map();
+  const visited = new Set();
   const result = [];
 
+  modifiers.forEach(modifier => {
+    map.set(modifier.name, modifier);
+  });
+
   // On visiting object, check for its dependencies and visit them recursively
-  function sort(modifier) {
-    visited[modifier.name] = true;
+  function sort(modifier: Modifier<any>) {
+    visited.add(modifier.name);
 
     const requires = [
       ...(modifier.requires || []),
@@ -21,8 +22,23 @@ const order = modifiers => {
     ];
 
     requires.forEach(dep => {
-      if (!visited[dep]) {
-        sort(map[dep]);
+      if (!visited.has(dep)) {
+        const depModifier = map.get(dep);
+
+        if (__DEV__) {
+          if ((modifier.requires || []).includes(dep) && !depModifier) {
+            console.error(
+              [
+                `Popper: "${dep}" modifier is required by "${modifier.name}"`,
+                `modifier, but has not been passed as a modifier.`,
+              ].join(' ')
+            );
+          }
+        }
+
+        if (depModifier) {
+          sort(depModifier);
+        }
       }
     });
 
@@ -30,7 +46,7 @@ const order = modifiers => {
   }
 
   modifiers.forEach(modifier => {
-    if (!visited[modifier.name]) {
+    if (!visited.has(modifier.name)) {
       // check for visited object
       sort(modifier);
     }
