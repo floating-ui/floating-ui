@@ -41,10 +41,7 @@ export const mapToStyles = ({
   }
 };
 
-export function computeStyles({
-  state,
-  options = {},
-}: ModifierArguments<Options>) {
+export function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
 
   state.modifiersData.computeStyles = {

@@ -31,7 +31,7 @@ function onLoad({
   state,
   instance,
   name,
-  options = {},
+  options,
 }: ModifierArguments<Options>) {
   const { scroll = true, resize = true } = options;
 
@@ -49,7 +49,7 @@ function onDestroy({ state, instance }: ModifierArguments<Options>) {
 
 function update({
   state,
-  options = {},
+  options,
   instance,
   name,
 }: ModifierArguments<Options>) {

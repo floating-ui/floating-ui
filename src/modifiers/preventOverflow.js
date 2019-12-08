@@ -39,7 +39,7 @@ type Options = {
 
 export function preventOverflow({
   state,
-  options = {},
+  options,
 }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,

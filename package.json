@@ -23,7 +23,7 @@
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
-    "build:ts": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write; node typescript/ts.js; tsc --p typescript/tsconfig.json --declaration --outDir \"dist/typescript\"; rimraf \"src/**/*.ts\"",
+    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write; node typescript/ts.js; tsc --p typescript/tsconfig.json --declaration --outDir \"dist/typescript\"; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build",
     "postinstall": "patch-package"
   },

@@ -24,7 +24,7 @@ jobs:
 
     - name: TypeScript
       script:
-        - yarn build:ts
+        - yarn build:typescript
         - yarn test:typescript
 
     - stage: tests

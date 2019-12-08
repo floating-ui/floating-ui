@@ -4,7 +4,7 @@ import computeOffsets from '../utils/computeOffsets';
 import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
 import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
-export function popperOffsets({ state }: ModifierArguments<void>) {
+export function popperOffsets({ state }: ModifierArguments<{||}>) {
   // Offsets are the actual position the popper needs to have to be
   // properly positioned near its reference element
   // This is the most basic placement, and will be adjusted by
@@ -30,4 +30,4 @@ export default ({
   phase: 'read',
   fn: popperOffsets,
   data: {},
-}: Modifier<void>);
+}: Modifier<{||}>);

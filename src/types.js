@@ -61,7 +61,7 @@ export type Instance = {|
 export type ModifierArguments<Options: {}> = {
   state: $Shape<State>,
   instance: Instance,
-  options?: $Shape<Options>,
+  options: $Shape<Options>,
   name: string,
 };
 export type Modifier<Options> = {|
