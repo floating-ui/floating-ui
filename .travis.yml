@@ -10,9 +10,6 @@ branches:
   only:
     - next
 
-before_script:
-  - NODE_ENV=development yarn build:bundles
-
 jobs:
   include:
     - stage: Code Check
@@ -23,12 +20,12 @@ jobs:
       script: yarn test:eslint
 
     - name: TypeScript
-      script:
-        - yarn build:typescript
-        - yarn test:typescript
+      before_script: yarn build:typescript
+      script: yarn test:typescript
 
     - stage: tests
       name: Unit Tests
+      before_script: NODE_ENV=development yarn build:bundles
       script: yarn test:unit
 
     - name: '[Chrome] Functional Tests'

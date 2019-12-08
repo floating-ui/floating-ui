@@ -10,7 +10,6 @@ dist
 package-lock.json
 coverage.info
 lib
-ts-types
 coverage
 __diff_output__
 stats
