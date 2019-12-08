@@ -23,7 +23,9 @@ jobs:
       script: yarn test:eslint
 
     - name: TypeScript
-      script: yarn test:typescript
+      script:
+        - yarn build:ts
+        - yarn test:typescript
 
     - stage: tests
       name: Unit Tests
