@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should order modifiers based on \`phase\` and \`requires\` 1`] = `
+Array [
+  Object {
+    "name": "popperOffsets",
+    "phase": "read",
+  },
+  Object {
+    "name": "detectOverflow",
+    "phase": "read",
+    "requires": Array [
+      "popperOffsets",
+    ],
+  },
+  Object {
+    "name": "offset",
+    "phase": "main",
+    "requires": Array [
+      "popperOffsets",
+      "detectOverflow",
+    ],
+  },
+  Object {
+    "name": "preventOverflow",
+    "optionallyRequires": Array [
+      "offset",
+    ],
+    "phase": "main",
+    "requires": Array [
+      "detectOverflow",
+    ],
+  },
+  Object {
+    "name": "arrow",
+    "optionallyRequires": Array [
+      "preventOverflow",
+    ],
+    "phase": "main",
+  },
+  Object {
+    "name": "flip",
+    "optionallyRequires": Array [
+      "offset",
+    ],
+    "phase": "main",
+    "requires": Array [
+      "detectOverflow",
+    ],
+  },
+  Object {
+    "name": "hide",
+    "phase": "main",
+    "requires": Array [
+      "detectOverflow",
+    ],
+  },
+  Object {
+    "name": "computeStyles",
+    "phase": "afterMain",
+  },
+  Object {
+    "name": "applyStyles",
+    "phase": "write",
+  },
+  Object {
+    "name": "eventListeners",
+    "phase": "write",
+  },
+]
+`;

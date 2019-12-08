@@ -83,16 +83,17 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Order `options.modifiers` so that the dependencies are fulfilled
         // once the modifiers are executed
         state.orderedModifiers = orderModifiers([
-          ...defaultModifiers,
-          ...state.options.modifiers,
-        ])
-          // Apply user defined preferences to modifiers
-          .map(modifier => ({
-            ...modifier,
+          ...state.options.modifiers.filter(
+            modifier =>
+              !defaultModifiers.find(({ name }) => name === modifier.name)
+          ),
+          ...defaultModifiers.map(defaultModifier => ({
+            ...defaultModifier,
             ...state.options.modifiers.find(
-              ({ name }) => name === modifier.name
+              ({ name }) => name === defaultModifier.name
             ),
-          }));
+          })),
+        ]);
 
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the custom modifiers is invalid for any reason

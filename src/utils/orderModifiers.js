@@ -4,37 +4,65 @@ import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
 const order = modifiers => {
-  // indexed by name
-  const mapped = modifiers.reduce((mem, i) => {
-    mem[i.name] = i;
-    return mem;
-  }, {});
+  const map = new Map();
+  const visited = new Set();
+  const result = [];
 
-  // inherit all dependencies for a given name
-  const inherited = i => {
-    const current = mapped[i];
-    return current
-      ? [
-          ...(current.requires || []),
-          ...(current.optionallyRequires || []),
-        ].reduce((mem, i) => {
-          return [...mem, i, ...inherited(i)];
-        }, [])
-      : [];
-  };
-
-  // order ...
-  const ordered = modifiers.sort((a, b) => {
-    return !!~inherited(b.name).indexOf(a.name) ? -1 : 1;
+  modifiers.forEach(modifier => {
+    map.set(modifier.name, modifier);
   });
-  return ordered;
+
+  // On visiting object, check for its dependencies and visit them recursively
+  function sort(modifier: Modifier<any>) {
+    visited.add(modifier.name);
+
+    const requires = [
+      ...(modifier.requires || []),
+      ...(modifier.optionallyRequires || []),
+    ];
+
+    requires.forEach(dep => {
+      if (!visited.has(dep)) {
+        const depModifier = map.get(dep);
+
+        if (__DEV__) {
+          if ((modifier.requires || []).includes(dep) && !depModifier) {
+            console.error(
+              [
+                `Popper: "${dep}" modifier is required by "${modifier.name}"`,
+                `modifier, but has not been passed as a modifier.`,
+              ].join(' ')
+            );
+          }
+        }
+
+        if (depModifier) {
+          sort(depModifier);
+        }
+      }
+    });
+
+    result.push(modifier);
+  }
+
+  modifiers.forEach(modifier => {
+    if (!visited.has(modifier.name)) {
+      // check for visited object
+      sort(modifier);
+    }
+  });
+
+  return result;
 };
 
-export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> =>
-  modifierPhases.reduce(
-    (acc, currentPhase) =>
-      acc.concat(
-        order(modifiers.filter(modifier => modifier.phase === currentPhase))
-      ),
-    []
-  );
+export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> => {
+  // order based on dependencies
+  const orderedModifiers = order(modifiers);
+
+  // order based on phase
+  return modifierPhases.reduce((acc, phase) => {
+    return acc.concat(
+      orderedModifiers.filter(modifier => modifier.phase === phase)
+    );
+  }, []);
+};
