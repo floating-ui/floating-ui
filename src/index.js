@@ -7,6 +7,9 @@ import type {
   Instance,
 } from './types';
 
+export * from './types';
+export * from './enums';
+
 // DOM Utils
 import getElementClientRect from './dom-utils/getRectRelativeToOffsetParent';
 import listScrollParents from './dom-utils/listScrollParents';

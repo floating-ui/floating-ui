@@ -58,7 +58,7 @@ export type Instance = {|
   setOptions: (options: $Shape<Options>) => void,
 |};
 
-export type ModifierArguments<Options> = {
+export type ModifierArguments<Options: {}> = {
   state: $Shape<State>,
   instance: Instance,
   options?: $Shape<Options>,
@@ -81,7 +81,7 @@ export type EventListeners = {| scroll: boolean, resize: boolean |};
 
 export type Options = {|
   placement: Placement,
-  modifiers: Array<Modifier<any>>,
+  modifiers: Array<$Shape<Modifier<any>>>,
   strategy: PositioningStrategy,
 |};
 
