@@ -41,87 +41,13 @@
     "proseWrap": "always"
   },
   "babel": {
-    "presets": [
-      [
-        "@babel/env",
-        {
-          "loose": true,
-          "modules": false
-        }
-      ]
-    ],
-    "plugins": [
-      "@babel/plugin-transform-flow-strip-types",
-      "babel-plugin-add-import-extension",
-      [
-        "@babel/plugin-proposal-object-rest-spread",
-        {
-          "loose": true,
-          "useBuiltIns": true
-        }
-      ],
-      "dev-expression"
-    ],
-    "env": {
-      "test": {
-        "presets": [
-          "@babel/env"
-        ],
-        "plugins": [
-          "@babel/plugin-transform-runtime"
-        ]
-      },
-      "development": {
-        "plugins": [
-          [
-            "transform-inline-environment-variables",
-            {
-              "include": [
-                "NODE_ENV"
-              ]
-            }
-          ]
-        ]
-      }
-    }
+    "extends": "./.config/babel.config"
   },
   "jest": {
-    "preset": "jest-puppeteer",
-    "testMatch": [
-      "<rootDir>/src/**/*.test.js",
-      "<rootDir>/tests/**/*.test.js"
-    ],
-    "globals": {
-      "__DEV__": true
-    },
-    "globalSetup": "jest-environment-puppeteer/setup",
-    "globalTeardown": "jest-environment-puppeteer/teardown",
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setupTests.js"
-    ],
-    "reporters": [
-      "default",
-      "<rootDir>/tests/image-reporter.js"
-    ],
-    "setupFiles": [
-      "dotenv/config"
-    ]
+    "preset": "./.config/jest.config"
   },
   "eslintConfig": {
-    "parser": "babel-eslint",
-    "plugins": [
-      "flowtype",
-      "unused-imports"
-    ],
-    "rules": {
-      "flowtype/require-valid-file-annotation": [
-        "error",
-        "always"
-      ],
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": "error"
-    }
+    "extends": "./.config/eslint.config"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.13.0",

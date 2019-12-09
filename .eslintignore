@@ -1,8 +1,0 @@
-docs
-node_modules
-tests
-lib
-flow-typed
-dist
-/*.js
-coverage
