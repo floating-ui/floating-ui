@@ -57,27 +57,31 @@ export const mapToStyles = ({
 export function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
 
-  state.modifiersData.computeStyles = {
-    styles: {
-      // popper offsets are always available
-      popper: mapToStyles({
-        offsets: state.modifiersData.popperOffsets,
-        position: state.options.strategy,
-        gpuAcceleration,
+  // popper offsets are always available
+  state.styles.popper = {
+    ...state.styles.popper,
+    ...mapToStyles({
+      offsets: state.modifiersData.popperOffsets,
+      position: state.options.strategy,
+      gpuAcceleration,
+    }),
+  };
+
+  // arrow offsets may not be available
+  if (state.modifiersData.arrow != null) {
+    state.styles.arrow = {
+      ...state.styles.arrow,
+      ...mapToStyles({
+        offsets: state.modifiersData.arrow,
+        position: 'absolute',
+        gpuAcceleration: false,
       }),
-      // arrow offsets may not be available
-      arrow:
-        state.modifiersData.arrow != null
-          ? mapToStyles({
-              offsets: state.modifiersData.arrow,
-              position: 'absolute',
-              gpuAcceleration: false,
-            })
-          : undefined,
-    },
-    attributes: {
-      popper: { 'data-popper-placement': state.placement },
-    },
+    };
+  }
+
+  state.attributes.popper = {
+    ...state.attributes.popper,
+    'data-popper-placement': state.placement,
   };
 
   return state;

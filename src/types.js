@@ -45,7 +45,7 @@ export type State = {|
     [key: string]: $Shape<CSSStyleDeclaration>,
   |},
   attributes: {|
-    [key: string]: {| [key: string]: string |},
+    [key: string]: { [key: string]: string },
   |},
   modifiersData: { [key: string]: any },
   reset: boolean,

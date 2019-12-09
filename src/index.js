@@ -67,6 +67,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         reference: referenceElement,
         popper: popperElement,
       },
+      attributes: {},
+      styles: {},
     };
 
     const instance = {

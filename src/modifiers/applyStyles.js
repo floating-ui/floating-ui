@@ -8,10 +8,9 @@ import { isHTMLElement } from '../dom-utils/instanceOf';
 
 export function applyStyles({ state }: ModifierArguments<{||}>) {
   Object.keys(state.elements).forEach(name => {
-    const data = state.modifiersData.computeStyles;
-    const style = data.styles[name] || {};
+    const style = state.styles[name] || {};
 
-    const attributes = data.attributes[name] || {};
+    const attributes = state.attributes[name] || {};
     const element = state.elements[name];
 
     // arrow is optional + virtual elements
@@ -19,6 +18,9 @@ export function applyStyles({ state }: ModifierArguments<{||}>) {
       return;
     }
 
+    // Flow doesn't support to extend this property, but it's the most
+    // effective way to apply styles to an HTMLElement
+    // $FlowFixMe
     Object.assign(element.style, style);
 
     Object.entries(attributes).forEach((args: [string, any]) =>
@@ -30,14 +32,12 @@ export function applyStyles({ state }: ModifierArguments<{||}>) {
 }
 
 export function onDestroy({ state }: ModifierArguments<{||}>) {
-  const data = state.modifiersData.computeStyles;
-
   Object.keys(state.elements).forEach(name => {
     const element = state.elements[name];
     const styleProperties = Object.keys(
-      data.styles.hasOwnProperty(name) ? { ...data.styles[name] } : {}
+      state.styles.hasOwnProperty(name) ? { ...state.styles[name] } : {}
     );
-    const attributes = data.attributes[name] || {};
+    const attributes = state.attributes[name] || {};
 
     // Set all values to an empty string to unset them
     const style = styleProperties.reduce(
@@ -55,7 +55,7 @@ export function onDestroy({ state }: ModifierArguments<{||}>) {
 
     // Flow doesn't support to extend this property, but it's the most
     // effective way to apply styles to an HTMLElement
-    // $FlowIgnore
+    // $FlowFixMe
     Object.assign(element.style, style);
 
     Object.keys(attributes).forEach(attribute =>
