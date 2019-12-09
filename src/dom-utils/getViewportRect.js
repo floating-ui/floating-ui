@@ -1,7 +1,7 @@
 // @flow
 import getWindow from './getWindow';
 
-export default (element: HTMLElement) => {
+export default (element: Element) => {
   const win = getWindow(element);
   return {
     width: win.innerWidth,

@@ -59,7 +59,7 @@ export function onDestroy({ state }: ModifierArguments<{||}>) {
 
     // Flow doesn't support to extend this property, but it's the most
     // effective way to apply styles to an HTMLElement
-    // $FlowFixMe
+    // $FlowFixIgnore
     Object.assign(element.style, style);
 
     Object.keys(attributes).forEach(attribute =>
