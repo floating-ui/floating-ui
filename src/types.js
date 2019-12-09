@@ -111,5 +111,3 @@ export type VirtualElement = {|
   contextElement: HTMLElement,
   getBoundingClientRect: () => ClientRect | DOMRect,
 |};
-
-export default null;
