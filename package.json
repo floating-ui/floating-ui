@@ -124,6 +124,7 @@
     }
   },
   "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.13.0",
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
     "@babel/plugin-transform-flow-strip-types": "^7.7.4",
