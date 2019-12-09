@@ -52,7 +52,11 @@ const getOverflowRect = (
   }
 };
 
-export function detectOverflow({ state, options }: ModifierArguments<Options>) {
+export function detectOverflow({
+  state,
+  options,
+  name,
+}: ModifierArguments<Options>) {
   const { clippingArea = clippingParent, visibleArea = viewport } = options;
 
   const popperElement = state.elements.popper;
@@ -80,7 +84,7 @@ export function detectOverflow({ state, options }: ModifierArguments<Options>) {
     ...popperOffsets,
   });
 
-  state.modifiersData.detectOverflow = {
+  state.modifiersData[name] = {
     clippingArea: getOverflowOffsets(popperClientRect, clippingClientRect),
     visibleArea: getOverflowOffsets(popperClientRect, visibleClientRect),
   };
