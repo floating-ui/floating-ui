@@ -23,9 +23,13 @@ export function applyStyles({ state }: ModifierArguments<{||}>) {
     // $FlowFixMe
     Object.assign(element.style, style);
 
-    Object.entries(attributes).forEach((args: [string, any]) =>
-      element.setAttribute(...args)
-    );
+    Object.entries(attributes).forEach(([name, value]: [string, any]) => {
+      if (value === false) {
+        element.removeAttribute(name);
+      } else {
+        element.setAttribute(name, value === true ? '' : value);
+      }
+    });
   });
 
   return state;
