@@ -2,6 +2,8 @@
 import type { Placement, ModifierPhases } from './enums';
 export type JQueryWrapper = Array<HTMLElement> & { jquery: string };
 
+export type Obj = { [key: string]: any };
+
 export type Rect = {|
   width: number,
   height: number,
@@ -58,7 +60,7 @@ export type Instance = {|
   setOptions: (options: $Shape<Options>) => void,
 |};
 
-export type ModifierArguments<Options: {}> = {
+export type ModifierArguments<Options: Obj> = {
   state: $Shape<State>,
   instance: Instance,
   options: $Shape<Options>,
@@ -73,8 +75,8 @@ export type Modifier<Options> = {|
   fn: (ModifierArguments<Options>) => State,
   onLoad?: (ModifierArguments<Options>) => ?State,
   onDestroy?: (ModifierArguments<Options>) => void,
-  options?: any,
-  data?: {},
+  options?: Obj,
+  data?: Obj,
 |};
 
 export type EventListeners = {| scroll: boolean, resize: boolean |};
