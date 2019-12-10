@@ -1,0 +1,35 @@
+---
+title: Typings
+path: /typings
+order: 0
+---
+
+# Typings
+
+Popper comes with type definitions for both Flow and TypeScript.
+
+The project is type checked by Flow, and type definitions for TypeScript are
+automatically generated from its source code.
+
+## Flow
+
+Rather than exporting limited type definitions, we link to the Flow-typed source
+files from the `dist/umd` folder.
+
+Flow will automatically read the exposed types, so you don't need to change any
+configuration in your project to take benefit from Popper typings.
+
+## TypeScript
+
+Generating TypeScript type definitions from Flow makes it possible to type check
+the project with stricter rules, providing at the same time type definitions for
+users of other type system.
+
+Type definition interfaces for the two type systems are inherently identical,
+but we can't guarantee the same level of type coverage for TypeScript
+definitions, due to the intrinsic differences between Flow and TypeScript.
+
+TypeScript `.d.ts` files are located in the `dist/typescript` folder, an
+`index.d.ts` file located on the root of the repository allows the TypeScript
+compiler to locate them, no additional configuration is needed to consume the
+typings.
