@@ -19,23 +19,18 @@ function getClippingParents(elementOrVirtualElement: Element | VirtualElement) {
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );
-  const clippingParents = [];
 
-  scrollParents.forEach(scrollParent => {
+  return scrollParents.filter(scrollParent => {
     const clipperElement =
       canEscapeClipping && isHTMLElement(element)
         ? getOffsetParent(element)
         : element;
-    if (
+    return (
       isElement(scrollParent) &&
       isElement(clipperElement) &&
       scrollParent.contains(clipperElement)
-    ) {
-      clippingParents.push(scrollParent);
-    }
+    );
   });
-
-  return clippingParents;
 }
 
 // Gets the maximum area that the element is visible in due to any number of
