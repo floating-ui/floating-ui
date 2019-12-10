@@ -1,5 +1,5 @@
 // @flow
-import type { ModifierArguments, Modifier, Options } from '../types';
+import type { ModifierArguments, Modifier } from '../types';
 import { top, bottom, left, right } from '../enums';
 
 type ModifierData = {
@@ -9,12 +9,18 @@ type ModifierData = {
   left: number,
 };
 
+type Options = {
+  detectOverflowName: string,
+};
+
 const isAnySideFullyClipped = (overflow: ModifierData): boolean =>
   [top, right, bottom, left].some(side => overflow[side] >= 0);
 
-export function hide({ state, name }: ModifierArguments<Options>) {
+export function hide({ state, name, options }: ModifierArguments<Options>) {
+  const { detectOverflowName = 'detectOverflow#hide' } = options;
+
   const reference = state.measures.reference;
-  const overflow = state.modifiersData.detectOverflowHide.clippingArea;
+  const overflow = state.modifiersData[detectOverflowName].clippingArea;
 
   const referenceClippingOffsets = {
     top: overflow.top - reference.height,
@@ -42,6 +48,5 @@ export default ({
   name: 'hide',
   enabled: true,
   phase: 'main',
-  requires: ['detectOverflowHide'],
   fn: hide,
 }: Modifier<Options>);
