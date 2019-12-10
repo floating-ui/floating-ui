@@ -7,15 +7,18 @@ import { basePlacements, top, bottom, left, right } from '../enums';
 export function distanceAndSkiddingToXY(
   placement: Placement,
   measures: { popper: Rect, reference: Rect },
-  getOffsets: OffsetsFunction
+  offsetValue: OffsetsFunction | [number, number]
 ): [number, number] {
   const basePlacement = getBasePlacement(placement);
   const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
 
-  let [distance, skidding] = getOffsets({
-    ...measures,
-    placement,
-  });
+  let [distance, skidding] =
+    typeof offsetValue === 'function'
+      ? offsetValue({
+          ...measures,
+          placement,
+        })
+      : offsetValue;
 
   distance = (distance || 0) * invertDistance;
   skidding = skidding || 0;
@@ -31,29 +34,31 @@ type OffsetsFunction = ({
   placement: Placement,
 }) => [?number, ?number];
 
-type Options = { offset?: OffsetsFunction };
+type Options = {
+  offset: OffsetsFunction | [number, number],
+};
 
 export function offset({ state, options }: ModifierArguments<Options>) {
-  if (typeof options.offset === 'function') {
-    const [x, y] = distanceAndSkiddingToXY(
-      state.placement,
-      state.measures,
-      options.offset
-    );
+  const { offset = [0, 0] } = options;
 
-    // Add the offset to `detectOverflow`
-    basePlacements.forEach(placement => {
-      const isVertical = [top, bottom].includes(placement);
-      const value = isVertical ? y : x;
+  const [x, y] = distanceAndSkiddingToXY(
+    state.placement,
+    state.measures,
+    offset
+  );
 
-      ['clippingArea', 'visibleArea'].forEach(property => {
-        state.modifiersData.detectOverflow[property][placement] += value;
-      });
+  // Add the offset to `detectOverflow`
+  basePlacements.forEach(placement => {
+    const isVertical = [top, bottom].includes(placement);
+    const value = isVertical ? y : x;
+
+    ['clippingArea', 'visibleArea'].forEach(property => {
+      state.modifiersData.detectOverflow[property][placement] += value;
     });
+  });
 
-    state.modifiersData.popperOffsets.x += x;
-    state.modifiersData.popperOffsets.y += y;
-  }
+  state.modifiersData.popperOffsets.x += x;
+  state.modifiersData.popperOffsets.y += y;
 
   return state;
 }
