@@ -44,16 +44,12 @@ export type State = {|
     popper: Array<Element>,
   |},
   styles: {|
-    [string]: $Shape<CSSStyleDeclaration>,
+    [key: string]: $Shape<CSSStyleDeclaration>,
   |},
   attributes: {|
-<<<<<<< HEAD
-    [key: string]: { [key: string]: string },
-=======
-    [string]: { [string]: string },
->>>>>>> feat: store styles and attributes in root state props
+    [key: string]: { [key: string]: string | boolean },
   |},
-  modifiersData: { [string]: any },
+  modifiersData: { [key: string]: any },
   reset: boolean,
 |};
 
