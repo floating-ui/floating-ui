@@ -25,17 +25,6 @@ const order = modifiers => {
       if (!visited.has(dep)) {
         const depModifier = map.get(dep);
 
-        if (__DEV__) {
-          if ((modifier.requires || []).includes(dep) && !depModifier) {
-            console.error(
-              [
-                `Popper: "${dep}" modifier is required by "${modifier.name}"`,
-                `modifier, but has not been passed as a modifier.`,
-              ].join(' ')
-            );
-          }
-        }
-
         if (depModifier) {
           sort(depModifier);
         }
