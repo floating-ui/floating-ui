@@ -13,3 +13,4 @@ lib
 coverage
 __diff_output__
 stats
+src/**/*.ts
