@@ -55,19 +55,3 @@ const modifiers: any = [a, b, c, d, e, f, g, h, i, j];
 it('should order modifiers based on `phase` and `requires`', () => {
   expect(orderModifiers(modifiers)).toMatchSnapshot();
 });
-
-it('should error if a required modifier has not been passed', () => {
-  const spy = jest.spyOn(console, 'error');
-  const modifiers: any = [{ name: 'x', phase: 'read', requires: ['y'] }];
-
-  orderModifiers(modifiers);
-
-  expect(spy).toHaveBeenCalledWith(
-    [
-      `Popper: "y" modifier is required by "x"`,
-      `modifier, but has not been passed as a modifier.`,
-    ].join(' ')
-  );
-
-  spy.mockRestore();
-});
