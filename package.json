@@ -21,7 +21,7 @@
     "serve": "serve -l ${DEV_PORT:-5000} tests/visual",
     "build": "yarn clean && yarn build:es && yarn build:bundles && yarn build:typescript",
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
-    "build:bundles": "rollup -c rollup.config.js",
+    "build:bundles": "rollup -c .config/rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js; tsc --p typescript/tsconfig.json --declaration --outDir \"dist/typescript\"; rimraf \"src/**/*.ts\"; rimraf \"dist/typescript/**/*.js\"",
     "prepublishOnly": "yarn build",
