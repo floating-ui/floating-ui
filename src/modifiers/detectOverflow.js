@@ -11,7 +11,7 @@ import getClippingRect from '../dom-utils/getClippingRect';
 import getViewportRect from '../dom-utils/getViewportRect';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
-import { clippingParent, viewport } from '../enums';
+import { clippingParents, viewport } from '../enums';
 import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 type Options = {
@@ -46,7 +46,7 @@ const getOverflowRect = (
   const element = unwrapVirtualElement(elementOrVirtualElement);
 
   switch (area) {
-    case 'clippingParent':
+    case 'clippingParents':
       return getClippingRect(element);
     case 'viewport':
       return rectToClientRect(getViewportRect(element));
@@ -61,7 +61,7 @@ export function detectOverflow({
   name,
 }: ModifierArguments<Options>) {
   const {
-    clippingArea = clippingParent,
+    clippingArea = clippingParents,
     visibleArea = viewport,
     context = 'popper',
   } = options;
