@@ -27,7 +27,12 @@ export function hide({ state, name }: ModifierArguments<Options>) {
 
   state.modifiersData[name] = {
     referenceClippingOffsets,
-    isReferenceHidden: isAnySideFullyClipped(referenceClippingOffsets),
+    isReferenceHidden,
+  };
+
+  state.attributes.popper = {
+    ...state.attributes.popper,
+    'data-popper-reference-hidden': isReferenceHidden,
   };
 
   return state;

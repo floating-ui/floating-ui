@@ -52,6 +52,11 @@
     box-shadow: inset 0 0 0 1px black;
   }
 
+  #popper[data-popper-reference-hidden] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
   #arrow {
     width: 20px;
     height: 20px;
@@ -84,24 +89,6 @@
         name: 'detectOverflowHide',
         options: {
           context: 'reference',
-        },
-      },
-      {
-        name: 'applyHideStyles',
-        enabled: true,
-        phase: 'write',
-        fn({ state }) {
-          const popper = state.elements.popper;
-
-          if (state.modifiersData.hide.isReferenceHidden) {
-            popper.style.visibility = 'hidden';
-            popper.style.opacity = '0';
-          } else {
-            popper.style.visibility = '';
-            popper.style.opacity = '';
-          }
-
-          return state;
         },
       },
     ],
