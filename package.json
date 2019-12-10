@@ -6,7 +6,7 @@
   "main:umd": "dist/umd/popper.js",
   "module": "lib/index.js",
   "unpkg": "dist/umd/popper.min.js",
-  "author": "Federico Zivolo <fzivolo@quid.com>",
+  "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
   "repository": "github:popperjs/popper.js",
   "scripts": {
