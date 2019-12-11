@@ -52,9 +52,13 @@
     box-shadow: inset 0 0 0 1px black;
   }
 
+  #popper[data-popper-escaped] {
+    background-color: white;
+  }
+
   #popper[data-popper-reference-hidden] {
-    opacity: 0;
-    visibility: hidden;
+    opacity: 0.4;
+    background-color: yellow;
   }
 
   #arrow {
@@ -85,10 +89,29 @@
     modifiers: [
       hide,
       {
+        name: 'preventOverflow',
+        options: {
+          altAxis: true,
+        },
+      },
+      {
+        name: 'offset',
+        options: {
+          offset: [20, 20],
+        },
+      },
+      {
         ...detectOverflow,
-        name: 'detectOverflow#hide',
+        name: 'detectOverflowReference',
         options: {
           context: 'reference',
+        },
+      },
+      {
+        ...detectOverflow,
+        name: 'detectOverflowAlt',
+        options: {
+          alt: true,
         },
       },
     ],

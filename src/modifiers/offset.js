@@ -2,7 +2,7 @@
 import type { Placement } from '../enums';
 import type { ModifierArguments, Modifier, Rect } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
-import { basePlacements, top, bottom, left, right } from '../enums';
+import { top, left, right } from '../enums';
 
 export function distanceAndSkiddingToXY(
   placement: Placement,
@@ -38,7 +38,7 @@ type Options = {
   offset: OffsetsFunction | [number, number],
 };
 
-export function offset({ state, options }: ModifierArguments<Options>) {
+export function offset({ state, options, name }: ModifierArguments<Options>) {
   const { offset = [0, 0] } = options;
 
   const [x, y] = distanceAndSkiddingToXY(
@@ -47,18 +47,10 @@ export function offset({ state, options }: ModifierArguments<Options>) {
     offset
   );
 
-  // Add the offset to `detectOverflow`
-  basePlacements.forEach(placement => {
-    const isVertical = [top, bottom].includes(placement);
-    const value = isVertical ? y : x;
-
-    ['clippingArea', 'visibleArea'].forEach(property => {
-      state.modifiersData.detectOverflow[property][placement] += value;
-    });
-  });
-
   state.modifiersData.popperOffsets.x += x;
   state.modifiersData.popperOffsets.y += y;
+
+  state.modifiersData[name] = { x, y };
 
   return state;
 }
@@ -66,7 +58,7 @@ export function offset({ state, options }: ModifierArguments<Options>) {
 export default ({
   name: 'offset',
   enabled: true,
-  phase: 'main',
-  requires: ['popperOffsets', 'detectOverflow'],
+  phase: 'afterRead',
+  requires: ['popperOffsets'],
   fn: offset,
 }: Modifier<Options>);
