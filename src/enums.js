@@ -27,6 +27,10 @@ export type OverflowArea =
   | typeof clippingParents
   | typeof viewport;
 
+export const popper: 'popper' = 'popper';
+export const reference: 'reference' = 'reference';
+export type Context = typeof popper | typeof reference;
+
 export type Placement =
   | 'auto'
   | 'auto-start'
