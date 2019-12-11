@@ -12,7 +12,7 @@ type Options = {
   padding: Padding,
 };
 
-export function flip({ state, options }: ModifierArguments<Options>) {
+export function flip({ state, options, name }: ModifierArguments<Options>) {
   const placement = state.placement;
   const defaultFallbackPlacements = [
     getOppositePlacement(state.options.placement),
@@ -22,7 +22,7 @@ export function flip({ state, options }: ModifierArguments<Options>) {
     padding = 0,
   } = options;
   const overflow = state.modifiersData.detectOverflow.visibleArea;
-  const flipIndex = state.modifiersData.flip.index;
+  const flipIndex = state.modifiersData[name].index;
 
   const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
@@ -48,7 +48,7 @@ export function flip({ state, options }: ModifierArguments<Options>) {
   const fits = overflow[basePlacement] + paddingObject[basePlacement] <= 0;
 
   if (!fits) {
-    state.modifiersData.flip.index += 1;
+    state.modifiersData[name].index += 1;
     state.reset = true;
     return state;
   } else if (fits && state.placement !== flippedPlacement) {
