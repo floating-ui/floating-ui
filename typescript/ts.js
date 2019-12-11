@@ -9,12 +9,34 @@
 const ts = require('typescript');
 const glob = require('glob');
 const fs = require('fs');
+const path = require('path');
+const arg = require('arg');
+
+const convertToMultiplePatternMatching = array =>
+  array.length > 1 ? `{${array.join(',')}}` : array[0];
 
 const tsignore = '\n// @ts-ignore';
 
-function compile(fileNames, options) {
+const args = arg({
+  '--project': String,
+  '--outDir': String,
+});
+
+const tsconfig = require(path.join(process.cwd(), args['--project']));
+const tsconfigPath = path.dirname(path.join(process.cwd(), args['--project']));
+
+function compile(fileNames, options, write) {
+  let host;
+  if (write) {
+    host = ts.createCompilerHost(options);
+    host.writeFile = (fileName, contents) =>
+      fs.writeFileSync(fileName, contents, {
+        encoding: 'utf8',
+      });
+  }
+
   // Prepare and emit the d.ts files
-  const program = ts.createProgram(fileNames, options);
+  const program = ts.createProgram(fileNames, options, host);
   const emitResult = program.emit();
 
   let allDiagnostics = ts
@@ -38,15 +60,50 @@ function compile(fileNames, options) {
 
     alteredFiles.push(fileName);
   });
+
+  if (alteredFiles.length) {
+    console.info(`Ignored ${alteredFiles.length} type errors.`);
+  }
+
+  return alteredFiles.length === 0;
 }
 
 // Run the compiler
-glob('src/**/*.ts', { ignore: '**/*.test.ts' }, (err, files) => {
-  Array.from({ length: 2 }).forEach(() =>
-    compile(files, {
-      declaration: true,
-      emitDeclarationOnly: true,
-      project: require.resolve('../.config/tsconfig.json'),
-    })
-  );
-});
+glob(
+  convertToMultiplePatternMatching(
+    tsconfig.include.map(p =>
+      path.relative(process.cwd(), path.join(tsconfigPath, p))
+    )
+  ),
+  {
+    ignore: convertToMultiplePatternMatching(
+      tsconfig.exclude.map(p =>
+        path.relative(process.cwd(), path.join(tsconfigPath, p))
+      )
+    ),
+  },
+  (err, files) => {
+    let canWrite = false;
+    let written = false;
+    let loops = 0;
+    while (written === false && loops < 10) {
+      if (canWrite) {
+        written = true;
+      }
+      loops += 1;
+      canWrite = compile(
+        files,
+        {
+          declaration: true,
+          emitDeclarationOnly: true,
+          project: path.resolve(args['--project']),
+          outDir: path.resolve(args['--outDir']),
+        },
+        canWrite
+      );
+    }
+    if (written) {
+      console.info('Definitions files have been saved in destination folder');
+    }
+  }
+);

@@ -23,7 +23,7 @@
     "build:es": "babel src -d lib --ignore '**/*.test.js','**/__mocks__'",
     "build:bundles": "rollup -c .config/rollup.config.js",
     "build:dev": "NODE_ENV=development babel src -d tests/visual/dist",
-    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js; tsc --p .config/tsconfig.json --declaration --outDir \"dist/typescript\"; rimraf \"src/**/*.ts\"; rimraf \"dist/typescript/**/*.js\"",
+    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js --project .config/tsconfig.json --outDir dist/typescript; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build",
     "postinstall": "patch-package"
   },
@@ -58,6 +58,7 @@
     "@babel/preset-env": "^7.7.6",
     "@babel/runtime": "^7.7.6",
     "@khanacademy/flow-to-ts": "^0.1.4",
+    "arg": "^4.1.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
