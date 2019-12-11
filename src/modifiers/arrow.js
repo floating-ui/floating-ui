@@ -11,7 +11,7 @@ import { left, right } from '../enums';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow({ state, options }: ModifierArguments<Options>) {
+export function arrow({ state, options, name }: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]' } = options;
 
   // CSS selector
@@ -78,7 +78,7 @@ export function arrow({ state, options }: ModifierArguments<Options>) {
 
   // Prevents breaking syntax highlighting...
   const axisProp: string = axis;
-  state.modifiersData.arrow = { [axisProp]: center };
+  state.modifiersData[name] = { [axisProp]: center };
 
   return state;
 }
