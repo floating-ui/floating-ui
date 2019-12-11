@@ -5,19 +5,28 @@ import type {
   ClientRectObject,
   VirtualElement,
 } from '../types';
-import type { OverflowArea } from '../enums';
+import type { OverflowArea, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
 import getViewportRect from '../dom-utils/getViewportRect';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
-import { clippingParents, viewport } from '../enums';
+import {
+  clippingParents,
+  viewport,
+  reference,
+  popper,
+  bottom,
+  top,
+  right,
+} from '../enums';
 import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 type Options = {
   clippingArea: OverflowArea,
   visibleArea: OverflowArea,
-  context: 'popper' | 'reference',
+  context: Context,
+  alt: boolean,
 };
 
 // if the number is positive, the popper is overflowing by that number of pixels
@@ -63,13 +72,15 @@ export function detectOverflow({
   const {
     clippingArea = clippingParents,
     visibleArea = viewport,
-    context = 'popper',
+    context = popper,
+    alt = false,
   } = options;
 
-  const popperElement = state.elements.popper;
+  const altContext = context === popper ? reference : popper;
+
   const referenceElement = state.elements.reference;
-  const element = state.elements[context];
   const popperRect = state.measures.popper;
+  const element = state.elements[alt ? altContext : context];
 
   const clippingClientRect = getOverflowRect(element, clippingArea);
   const visibleClientRect = getOverflowRect(element, visibleArea);
@@ -93,11 +104,32 @@ export function detectOverflow({
   });
 
   const elementClientRect =
-    element === popperElement ? popperClientRect : referenceClientRect;
+    context === popper ? popperClientRect : referenceClientRect;
+
+  const clippingAreaOffsets = getOverflowOffsets(
+    elementClientRect,
+    clippingClientRect
+  );
+  const visibleAreaOffsets = getOverflowOffsets(
+    elementClientRect,
+    visibleClientRect
+  );
+
+  // Add `offset`
+  if (context === popper) {
+    const offset = state.modifiersData.offset;
+    [clippingAreaOffsets, visibleAreaOffsets].forEach(offsets => {
+      Object.keys(offsets).forEach(key => {
+        const multiply = [right, bottom].includes(key) ? 1 : -1;
+        const axis = [top, bottom].includes(key) ? 'y' : 'x';
+        offsets[key] += offset[axis] * multiply;
+      });
+    });
+  }
 
   state.modifiersData[name] = {
-    clippingArea: getOverflowOffsets(elementClientRect, clippingClientRect),
-    visibleArea: getOverflowOffsets(elementClientRect, visibleClientRect),
+    clippingArea: clippingAreaOffsets,
+    visibleArea: visibleAreaOffsets,
   };
 
   return state;
@@ -106,8 +138,9 @@ export function detectOverflow({
 export default ({
   name: 'detectOverflow',
   enabled: true,
-  phase: 'read',
+  phase: 'afterRead',
   fn: detectOverflow,
   requires: ['popperOffsets'],
+  optionallyRequires: ['offset'],
   data: {},
 }: Modifier<Options>);

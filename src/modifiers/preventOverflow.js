@@ -40,6 +40,7 @@ type Options = {
 export function preventOverflow({
   state,
   options,
+  name,
 }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
@@ -59,6 +60,8 @@ export function preventOverflow({
       ? padding
       : expandToHashMap(padding, basePlacements)
   );
+
+  const data = { x: 0, y: 0 };
 
   if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
@@ -100,23 +103,32 @@ export function preventOverflow({
     const lenCondition =
       referenceRect[len] > popperRect[len] || tether !== surfaces;
 
-    state.modifiersData.popperOffsets[mainAxis] = within(
+    const preventedOffset = within(
       tether ? Math.min(min, lenCondition ? tetherMax : tetherMin) : min,
       offset,
       tether ? Math.max(max, lenCondition ? tetherMin : tetherMax) : max
     );
+
+    state.modifiersData.popperOffsets[mainAxis] = preventedOffset;
+    data[mainAxis] = preventedOffset - offset;
   }
 
   if (checkAltAxis) {
     const mainSide = mainAxis === 'x' ? top : left;
     const altSide = mainAxis === 'x' ? bottom : right;
+    const offset = popperOffsets[altAxis];
 
-    state.modifiersData.popperOffsets[altAxis] = within(
-      popperOffsets[altAxis] + overflow[mainSide] + paddingObject[mainSide],
-      popperOffsets[altAxis],
-      popperOffsets[altAxis] - overflow[altSide] - paddingObject[altSide]
+    const preventedOffset = within(
+      offset + overflow[mainSide] + paddingObject[mainSide],
+      offset,
+      offset - overflow[altSide] - paddingObject[altSide]
     );
+
+    state.modifiersData.popperOffsets[altAxis] = preventedOffset;
+    data[altAxis] = preventedOffset - offset;
   }
+
+  state.modifiersData[name] = data;
 
   return state;
 }
