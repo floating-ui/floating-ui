@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/src/images/popper-logo.png" alt="Popper" height="300px"/>
+  <img src="./docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
 </p>
 
 Positioning tooltips (_but also dropdowns, popovers, and more_) is difficult.
