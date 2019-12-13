@@ -138,7 +138,7 @@ export function detectOverflow({
 export default ({
   name: 'detectOverflow',
   enabled: true,
-  phase: 'afterRead',
+  phase: 'read',
   fn: detectOverflow,
   requires: ['popperOffsets'],
   optionallyRequires: ['offset'],
