@@ -25,8 +25,8 @@ import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 type Options = {
   clippingArea: OverflowArea,
   visibleArea: OverflowArea,
-  context: Context,
-  alt: boolean,
+  elementContext: Context,
+  altArea: boolean,
 };
 
 // if the number is positive, the popper is overflowing by that number of pixels
@@ -72,15 +72,15 @@ export function detectOverflow({
   const {
     clippingArea = clippingParents,
     visibleArea = viewport,
-    context = popper,
-    alt = false,
+    elementContext = popper,
+    altArea = false,
   } = options;
 
-  const altContext = context === popper ? reference : popper;
+  const altContext = elementContext === popper ? reference : popper;
 
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const element = state.elements[alt ? altContext : context];
+  const element = state.elements[altArea ? altContext : elementContext];
 
   const clippingClientRect = getOverflowRect(element, clippingArea);
   const visibleClientRect = getOverflowRect(element, visibleArea);
@@ -104,7 +104,7 @@ export function detectOverflow({
   });
 
   const elementClientRect =
-    context === popper ? popperClientRect : referenceClientRect;
+    elementContext === popper ? popperClientRect : referenceClientRect;
 
   const clippingAreaOffsets = getOverflowOffsets(
     elementClientRect,
@@ -116,7 +116,7 @@ export function detectOverflow({
   );
 
   // Add `offset`
-  if (context === popper) {
+  if (elementContext === popper) {
     const offset = state.modifiersData.offset;
     [clippingAreaOffsets, visibleAreaOffsets].forEach(offsets => {
       Object.keys(offsets).forEach(key => {
