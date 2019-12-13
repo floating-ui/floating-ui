@@ -79,15 +79,14 @@
 
 <script type="module">
   import { createPopper } from '../../dist/popper.js';
-  import { detectOverflow } from '../../dist/modifiers/index.js';
-  import hide from '../../dist/modifiers/hide.js';
+  import { preconfiguredHide } from '../../dist/modifiers/hide.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 
   window.instance = createPopper(reference, popper, {
     placement: 'right',
     modifiers: [
-      hide,
+      ...preconfiguredHide,
       {
         name: 'preventOverflow',
         options: {
@@ -98,20 +97,6 @@
         name: 'offset',
         options: {
           offset: [20, 20],
-        },
-      },
-      {
-        ...detectOverflow,
-        name: 'detectOverflowReference',
-        options: {
-          elementContext: 'reference',
-        },
-      },
-      {
-        ...detectOverflow,
-        name: 'detectOverflowAlt',
-        options: {
-          altArea: true,
         },
       },
     ],
