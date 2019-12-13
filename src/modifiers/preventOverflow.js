@@ -48,7 +48,8 @@ export function preventOverflow({
     tether = center,
     padding = 0,
   } = options;
-  const overflow = state.modifiersData.detectOverflow.clippingArea;
+  const overflow =
+    state.modifiersData['detectOverflow:preventOverflow'].overflowOffsets;
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
@@ -138,6 +139,6 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
-  requires: ['detectOverflow'],
+  requires: ['detectOverflow:preventOverflow'],
   optionallyRequires: ['offset'],
 }: Modifier<Options>);
