@@ -19,17 +19,17 @@ function getClippingParents(elementOrVirtualElement: Element | VirtualElement) {
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );
+  const clipperElement =
+    canEscapeClipping && isHTMLElement(element)
+      ? getOffsetParent(element)
+      : element;
+
+  if (!isElement(clipperElement)) {
+    return [];
+  }
 
   return scrollParents.filter(scrollParent => {
-    const clipperElement =
-      canEscapeClipping && isHTMLElement(element)
-        ? getOffsetParent(element)
-        : element;
-    return (
-      isElement(scrollParent) &&
-      isElement(clipperElement) &&
-      scrollParent.contains(clipperElement)
-    );
+    return isElement(scrollParent) && scrollParent.contains(clipperElement);
   });
 }
 
