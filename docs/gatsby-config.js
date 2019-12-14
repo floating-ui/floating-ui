@@ -20,10 +20,17 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-remark-use-frontmatter-path',
+      options: {
+        plugins: ['gatsby-remark-use-frontmatter-path'],
+      },
+    },
+    {
       resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
-          default: require.resolve('./src/components/layout.js'),
+          default: require.resolve('./src/components/Layout.js'),
+          landing: require.resolve('./src/components/Landing.js'),
         },
         gatsbyRemarkPlugins: [
           {
@@ -41,8 +48,14 @@ module.exports = {
               aliases: {},
             },
           },
+          {
+            resolve: 'gatsby-remark-use-frontmatter-path',
+            options: {
+              plugins: ['gatsby-remark-use-frontmatter-path'],
+            },
+          },
         ],
-        plugins: [`gatsby-remark-images`],
+        plugins: [`gatsby-remark-images`, `gatsby-remark-prismjs`],
       },
     },
     `gatsby-dynamical-navigation`,

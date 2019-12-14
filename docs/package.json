@@ -21,6 +21,7 @@
     "gatsby-plugin-sharp": "^2.2.37",
     "gatsby-remark-images": "^3.1.33",
     "gatsby-remark-prismjs": "^3.3.24",
+    "gatsby-remark-use-frontmatter-path": "^1.0.0",
     "gatsby-source-filesystem": "^2.1.36",
     "gatsby-transformer-sharp": "^2.3.3",
     "modern-normalize": "^0.5.0",

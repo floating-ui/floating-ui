@@ -5958,6 +5958,15 @@ gatsby-remark-prismjs@^3.3.24:
     parse-numeric-range "^0.0.2"
     unist-util-visit "^1.4.1"
 
+gatsby-remark-use-frontmatter-path@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/gatsby-remark-use-frontmatter-path/-/gatsby-remark-use-frontmatter-path-1.0.0.tgz#7efb0680b1e62268de958ab4cf74d48d400bff81"
+  integrity sha512-K56dYfSY99tfFZ0Jdq2k8NWyVqNOkb8iO8BIUNfHdu+9bvamGAQawsFm4aYuwczRaOnAoX0tBJvVOOkP/FMiZQ==
+  dependencies:
+    gray-matter "4.0.2"
+    is-relative-url "3.0.0"
+    unist-util-visit "1.4.1"
+
 gatsby-source-filesystem@^2.1.36:
   version "2.1.36"
   resolved "https://registry.yarnpkg.com/gatsby-source-filesystem/-/gatsby-source-filesystem-2.1.36.tgz#3e2fda1d7e7a31cfc0e67814ef7f4fb94d6e4e8c"
@@ -6506,7 +6515,7 @@ graphql@^14.5.8:
   dependencies:
     iterall "^1.2.2"
 
-gray-matter@^4.0.2:
+gray-matter@4.0.2, gray-matter@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/gray-matter/-/gray-matter-4.0.2.tgz#9aa379e3acaf421193fce7d2a28cebd4518ac454"
   integrity sha512-7hB/+LxrOjq/dd8APlK0r24uL/67w7SkYnfwhNFwg/VDIGWGmduTDYf3WNstLW2fbbmRwrDGCVSJ2isuf2+4Hw==
@@ -7620,7 +7629,7 @@ is-regexp@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-regexp/-/is-regexp-1.0.0.tgz#fd2d883545c46bac5a633e7b9a09e87fa2cb5069"
   integrity sha1-/S2INUXEa6xaYz57mgnof6LLUGk=
 
-is-relative-url@^3.0.0:
+is-relative-url@3.0.0, is-relative-url@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-relative-url/-/is-relative-url-3.0.0.tgz#f623c8e26baa5bd3742b3b7ec074f50f3b45b3f3"
   integrity sha512-U1iSYRlY2GIMGuZx7gezlB5dp1Kheaym7zKzO1PV06mOihiWTXejLwm4poEJysPyXF+HtK/BEd0DVlcCh30pEA==
@@ -13081,6 +13090,13 @@ unist-util-visit-parents@^3.0.0:
     "@types/unist" "^2.0.0"
     unist-util-is "^4.0.0"
 
+unist-util-visit@1.4.1, unist-util-visit@^1.0.0, unist-util-visit@^1.1.0, unist-util-visit@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-1.4.1.tgz#4724aaa8486e6ee6e26d7ff3c8685960d560b1e3"
+  integrity sha512-AvGNk7Bb//EmJZyhtRUnNMEpId/AZ5Ph/KUpTI09WHQuDZHKovQ1oEv3mfmKpWKtoMzyMC4GLBm1Zy5k12fjIw==
+  dependencies:
+    unist-util-visit-parents "^2.0.0"
+
 unist-util-visit@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-2.0.0.tgz#1fdae5ea88251651bfe49b7e84390d664fc227c5"
@@ -13089,13 +13105,6 @@ unist-util-visit@2.0.0:
     "@types/unist" "^2.0.0"
     unist-util-is "^4.0.0"
     unist-util-visit-parents "^3.0.0"
-
-unist-util-visit@^1.0.0, unist-util-visit@^1.1.0, unist-util-visit@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/unist-util-visit/-/unist-util-visit-1.4.1.tgz#4724aaa8486e6ee6e26d7ff3c8685960d560b1e3"
-  integrity sha512-AvGNk7Bb//EmJZyhtRUnNMEpId/AZ5Ph/KUpTI09WHQuDZHKovQ1oEv3mfmKpWKtoMzyMC4GLBm1Zy5k12fjIw==
-  dependencies:
-    unist-util-visit-parents "^2.0.0"
 
 universalify@^0.1.0:
   version "0.1.2"
