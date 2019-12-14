@@ -17,8 +17,8 @@ type Options = {
 const roundOffsets = ({ x, y }) => {
   const dpr = window.devicePixelRatio;
   return {
-    x: Math.round(x * dpr) / dpr,
-    y: Math.round(y * dpr) / dpr,
+    x: Math.round(x * dpr) / dpr || 0,
+    y: Math.round(y * dpr) / dpr || 0,
   };
 };
 
@@ -32,6 +32,8 @@ export const mapToStyles = ({
   gpuAcceleration: boolean,
 }) => {
   const { x, y } = roundOffsets(offsets);
+  const hasX = offsets.hasOwnProperty('x');
+  const hasY = offsets.hasOwnProperty('y');
 
   // Layer acceleration can disable subpixel rendering which causes slightly
   // blurry text on low PPI displays.
@@ -39,15 +41,15 @@ export const mapToStyles = ({
   // cleanly divide the values into the appropriate subpixels.
   if (gpuAcceleration === false || window.devicePixelRatio < 2) {
     return {
-      top: `${y}px`,
-      left: `${x}px`,
+      top: hasY ? `${y}px` : '',
+      left: hasX ? `${x}px` : '',
       transform: '',
       position,
     };
   } else {
     return {
-      top: '0px',
-      left: '0px',
+      top: hasY ? '0' : '',
+      left: hasX ? '0' : '',
       transform: `translate3d(${x}px, ${y}px, 0)`,
       position,
     };
@@ -74,7 +76,7 @@ export function computeStyles({ state, options }: ModifierArguments<Options>) {
       ...mapToStyles({
         offsets: state.modifiersData.arrow,
         position: 'absolute',
-        gpuAcceleration: false,
+        gpuAcceleration,
       }),
     };
   }

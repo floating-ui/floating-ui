@@ -11,9 +11,9 @@ Object {
 
 exports[`computes the popper styles 1`] = `
 Object {
-  "left": "0px",
+  "left": "0",
   "position": "absolute",
-  "top": "0px",
+  "top": "0",
   "transform": "translate3d(10px, 5px, 0)",
 }
 `;
