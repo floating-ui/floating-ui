@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import styled from 'styled-components';
+import Highlight from './Highlight';
 
 import Header from './Header';
 import InstallBar from './InstallBar';
@@ -26,14 +27,11 @@ const Heading = styled.h3`
   font-family: 'Luckiest Guy', sans-serif;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  font-size: 40px;
+  font-size: 30px;
   -webkit-font-smoothing: antialasing;
   text-align: center;
   margin-bottom: 15px;
-`;
-
-const ExampleText = styled.p`
-  text-align: center;
+  margin-top: 40px;
 `;
 
 const PopcornBox = styled.img`
@@ -106,21 +104,30 @@ const Dot = styled.div`
   border: none;
 `;
 
-const DotContainer = styled.div`
+const ExampleArea = styled.div`
   position: relative;
-  width: 275px;
-  height: 250px;
-  text-align: center;
-  margin: 0 auto;
-`;
-
-const ScrollContainer = styled.div`
-  position: relative;
-  overflow-y: scroll;
   width: 350px;
   height: 350px;
-  background: rgba(0, 0, 0, 0.2);
-  margin: 0 auto;
+  background: #271d2f;
+  border-radius: 20px;
+
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255, 230, 157, 1);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+`;
+
+const DotContainer = styled(ExampleArea)`
+  text-align: center;
+`;
+
+const ScrollContainer = styled(ExampleArea)`
+  overflow-y: scroll;
 
   &::after {
     content: '';
@@ -128,6 +135,19 @@ const ScrollContainer = styled.div`
     width: 1px;
     height: 800px;
   }
+`;
+
+const ExampleBox = styled.article`
+  background-color: #18111c;
+  border-radius: 20px;
+  display: grid;
+  grid-template-columns: 350px auto;
+  margin-bottom: 60px;
+`;
+const ExampleText = styled.div`
+  padding: 20px;
+  display: grid;
+  align-items: center;
 `;
 
 const components = {
@@ -212,6 +232,29 @@ const ScrollExample = () => {
   );
 };
 
+const placementExampleCode = `
+import { createPopper } from '@popperjs/core';
+
+createPopper(
+  document.querySelector('#popcornbox'),
+  document.querySelector('#tooltip'),
+  {
+    // top, right, bottom, left
+    placement: clickedPlacement,
+  }
+)
+`.trim();
+
+const scrollContainerExampleCode = `
+import { createPopper } from '@popperjs/core';
+
+createPopper(
+  document.querySelector('#popcornbox'),
+  document.querySelector('#tooltip'),
+  { placement: 'right', }
+)
+`.trim();
+
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
@@ -229,14 +272,27 @@ const Layout = ({ children }) => {
       <InstallBar />
       <Container>
         <Heading>Placement</Heading>
-        <ExampleText>Click on the dots to place the tooltip</ExampleText>
-        <Example />
+
+        <ExampleBox>
+          <Example />
+          <ExampleText>
+            <p>Click on the dots to place the tooltip.</p>
+            <Highlight code={placementExampleCode} />
+          </ExampleText>
+        </ExampleBox>
 
         <Heading>Overflow prevention</Heading>
-        <ExampleText>
-          Scroll the container to watch the tooltip stay within the boundary
-        </ExampleText>
-        <ScrollExample />
+        <ExampleBox>
+          <ScrollExample />
+
+          <ExampleText>
+            <p>
+              Scroll the container to watch the tooltip stay within the
+              boundary.
+            </p>
+            <Highlight code={scrollContainerExampleCode} />
+          </ExampleText>
+        </ExampleBox>
       </Container>
     </MDXProvider>
   );

@@ -29,7 +29,7 @@ pre[class*='language-'] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  background: #2a2433;
+  background: #18111c;
   color: #b886fd;
 }
 
@@ -52,8 +52,10 @@ code[class*='language-'] ::selection {
 /* Code blocks */
 pre[class*='language-'] {
   padding: 1em;
-  margin: 0.5em 0;
+  margin: 1em 0;
   overflow: auto;
+  border: 1px solid #ffffff0d;
+  border-radius: 10px;
 }
 
 /* Inline code */
