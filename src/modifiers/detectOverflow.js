@@ -131,5 +131,6 @@ export default ({
   phase: 'read',
   fn: detectOverflow,
   requires: ['popperOffsets'],
+  optionallyRequires: ['offset'],
   data: {},
 }: Modifier<Options>);
