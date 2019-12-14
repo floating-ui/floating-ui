@@ -127,7 +127,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // these are going to be used to compute the initial popper offsets
         // and as cache for any modifier that needs them later
         state.measures = {
-          reference: getElementClientRect(referenceElement, isFixed),
+          reference: getElementClientRect(referenceElement, isFixed, false),
           // CSS marginsc an be applied to popper elements to quickly
           // apply offsets dynamically based on some CSS selectors.
           // For this reason we include margins in this calculation.

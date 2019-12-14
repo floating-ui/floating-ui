@@ -5,14 +5,27 @@ import listScrollParents from './listScrollParents';
 import getScrollSum from './getScrollSum';
 import getOffsetParent from './getOffsetParent';
 import unwrapVirtualElement from './unwrapVirtualElement';
-import { isElement } from './instanceOf';
+import { isElement, isHTMLElement } from './instanceOf';
 
 // Returns the width, height and offsets of the provided element relative to the
 // offsetParent
 export default (
   element: Element | VirtualElement,
-  isFixed: boolean = false
+  isFixed: boolean = false,
+  // For the popper and arrow, we need to use their layout measurements before
+  // any transforms. For the reference, we need to use composite measurements
+  // after any transforms
+  isLayout: boolean = true
 ): Rect => {
+  if (isLayout && isHTMLElement(element)) {
+    return {
+      x: element.offsetLeft,
+      y: element.offsetTop,
+      width: element.offsetWidth,
+      height: element.offsetHeight,
+    };
+  }
+
   const unwrappedElement = unwrapVirtualElement(element);
   const rect = getBoundingClientRect(element);
   const scrollParents = listScrollParents(unwrappedElement);
@@ -24,7 +37,6 @@ export default (
 
   // We want all the scrolling containers only up to and including the
   // offsetParent
-  const offsetScrollParentIndex = scrollParents.indexOf(offsetParent);
   const relevantScrollParents = scrollParents.slice(
     0,
     Math.max(0, scrollParents.indexOf(offsetParent)) + 1
