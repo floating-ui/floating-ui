@@ -24,9 +24,10 @@ export default (
 
   // We want all the scrolling containers only up to and including the
   // offsetParent
+  const offsetScrollParentIndex = scrollParents.indexOf(offsetParent);
   const relevantScrollParents = scrollParents.slice(
     0,
-    scrollParents.indexOf(offsetParent) + 1
+    Math.max(0, scrollParents.indexOf(offsetParent)) + 1
   );
 
   const scrollSum = getScrollSum(relevantScrollParents);

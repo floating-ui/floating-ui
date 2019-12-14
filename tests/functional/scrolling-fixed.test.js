@@ -43,6 +43,15 @@ it('should handle case where popper is one level deeper than reference', async (
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
+it('should handle basic offset parent', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/scrolling-fixed/offset-basic.html`);
+
+  await scroll(page, 'html', 200);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
 it('should handle case where root scrolling parent is also offset parent', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-fixed/offset-parent.html`);
