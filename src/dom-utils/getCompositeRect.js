@@ -7,8 +7,8 @@ import getOffsetParent from './getOffsetParent';
 import unwrapVirtualElement from './unwrapVirtualElement';
 import { isElement } from './instanceOf';
 
-// Returns the width, height and offsets of the provided element relative to the
-// offsetParent
+// Returns the composite rect of an element relative to its offsetParent.
+// Composite means it takes into account transforms as well as layout.
 export default (
   element: Element | VirtualElement,
   isFixed: boolean = false
@@ -26,7 +26,7 @@ export default (
   // offsetParent
   const relevantScrollParents = scrollParents.slice(
     0,
-    scrollParents.indexOf(offsetParent) + 1
+    Math.max(0, scrollParents.indexOf(offsetParent)) + 1
   );
 
   const scrollSum = getScrollSum(relevantScrollParents);
