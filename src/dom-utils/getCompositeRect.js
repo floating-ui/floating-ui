@@ -5,27 +5,14 @@ import listScrollParents from './listScrollParents';
 import getScrollSum from './getScrollSum';
 import getOffsetParent from './getOffsetParent';
 import unwrapVirtualElement from './unwrapVirtualElement';
-import { isElement, isHTMLElement } from './instanceOf';
+import { isElement } from './instanceOf';
 
-// Returns the width, height and offsets of the provided element relative to the
-// offsetParent
+// Returns the composite rect of an element relative to its offsetParent.
+// Composite means it takes into account transforms as well as layout.
 export default (
   element: Element | VirtualElement,
-  isFixed: boolean = false,
-  // For the popper and arrow, we need to use their layout measurements before
-  // any transforms. For the reference, we need to use composite measurements
-  // after any transforms
-  isLayout: boolean = true
+  isFixed: boolean = false
 ): Rect => {
-  if (isLayout && isHTMLElement(element)) {
-    return {
-      x: element.offsetLeft,
-      y: element.offsetTop,
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-    };
-  }
-
   const unwrappedElement = unwrapVirtualElement(element);
   const rect = getBoundingClientRect(element);
   const scrollParents = listScrollParents(unwrappedElement);

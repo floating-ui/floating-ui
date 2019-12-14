@@ -18,7 +18,7 @@ import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import within from '../utils/within';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
-import getRectRelativeToOffsetParent from '../dom-utils/getRectRelativeToOffsetParent';
+import getLayoutRect from '../dom-utils/getLayoutRect';
 
 type Options = {
   /* Prevents boundaries overflow on the main axis */
@@ -83,10 +83,7 @@ export function preventOverflow({
     const arrowElement = state.elements.arrow;
     const arrowElementRect =
       arrowElement && tether === edges
-        ? addClientRectMargins(
-            getRectRelativeToOffsetParent(arrowElement),
-            arrowElement
-          )
+        ? addClientRectMargins(getLayoutRect(arrowElement), arrowElement)
         : { width: 0, height: 0 };
 
     const tetherMin =
