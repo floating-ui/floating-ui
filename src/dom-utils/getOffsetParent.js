@@ -3,6 +3,7 @@ import getWindow from './getWindow';
 import getNodeName from './getNodeName';
 import isTableElement from './isTableElement';
 import getTrueOffsetParent from './getTrueOffsetParent';
+import getComputedStyle from './getComputedStyle';
 
 export default function getOffsetParent(element: Element) {
   const window = getWindow(element);
@@ -13,7 +14,11 @@ export default function getOffsetParent(element: Element) {
     offsetParent = getTrueOffsetParent(offsetParent);
   }
 
-  if (getNodeName(offsetParent) === 'body') {
+  if (
+    offsetParent &&
+    getNodeName(offsetParent) === 'body' &&
+    getComputedStyle(offsetParent).position === 'static'
+  ) {
     return window;
   }
 
