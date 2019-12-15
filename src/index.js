@@ -144,6 +144,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         // Cache the placement in cache to make it available to the modifiers
         // modifiers will modify this one (rather than the one in options)
+        const prevPlacement = state.placement;
         state.placement = state.options.placement;
 
         state.orderedModifiers.forEach(
@@ -176,6 +177,15 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           if (enabled && typeof fn === 'function') {
             state = fn({ state, options, name, instance });
           }
+        }
+
+        // Prevents a jitter if elements' size changes based on placement.
+        // This is separate from and does not solve the "flip flicker" issue.
+        // We can't know ahead of time (before the placement gets written to the
+        // DOM) what size the element will be due to conditionally applied/
+        // computed CSS based on placement (e.g. margins on arrow)
+        if (prevPlacement !== state.placement) {
+          instance.forceUpdate();
         }
       },
 
