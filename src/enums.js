@@ -26,6 +26,7 @@ export type OverflowArea =
   | HTMLElement
   | typeof clippingParents
   | typeof viewport;
+export type RootOverflowArea = typeof viewport | 'document';
 
 export const popper: 'popper' = 'popper';
 export const reference: 'reference' = 'reference';
