@@ -1,6 +1,6 @@
 // @flow
 import { popperGenerator } from './index';
-import { clippingParents, viewport } from './enums';
+import { viewport } from './enums';
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
 import detectOverflow from './modifiers/detectOverflow';
@@ -17,12 +17,11 @@ const defaultModifiers = [
   {
     ...detectOverflow,
     name: 'detectOverflow:preventOverflow',
-    options: { area: clippingParents },
   },
   {
     ...detectOverflow,
     name: 'detectOverflow:flip',
-    options: { area: viewport },
+    options: { rootArea: viewport },
   },
   computeStyles,
   applyStyles,

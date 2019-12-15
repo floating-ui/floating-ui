@@ -1,5 +1,8 @@
 // @flow
 import type { VirtualElement, ClientRectObject } from '../types';
+import type { RootOverflowArea } from '../enums';
+import { viewport } from '../enums';
+import getViewportRect from './getViewportRect';
 import getDocumentRect from './getDocumentRect';
 import listScrollParents from './listScrollParents';
 import getOffsetParent from './getOffsetParent';
@@ -36,7 +39,8 @@ function getClippingParents(elementOrVirtualElement: Element | VirtualElement) {
 // Gets the maximum area that the element is visible in due to any number of
 // clipping parents
 export default function getClippingRect(
-  elementOrVirtualElement: Element | VirtualElement
+  elementOrVirtualElement: Element | VirtualElement,
+  rootArea: RootOverflowArea
 ): ClientRectObject {
   const element = unwrapVirtualElement(elementOrVirtualElement);
   const documentElement = getDocumentElement(element);
@@ -44,8 +48,17 @@ export default function getClippingRect(
     element
   );
 
-  if (firstClippingParent === documentElement || !firstClippingParent) {
+  // Fallback to document
+  if (
+    rootArea === 'document' &&
+    (firstClippingParent === documentElement || !firstClippingParent)
+  ) {
     return rectToClientRect(getDocumentRect(documentElement));
+  }
+
+  // Fallback to viewport
+  if (rootArea === viewport && !firstClippingParent) {
+    return rectToClientRect(getViewportRect(element));
   }
 
   const clippingRect = restClippingParents.reduce((accRect, clippingParent) => {
