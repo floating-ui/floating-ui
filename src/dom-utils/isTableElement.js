@@ -1,5 +1,5 @@
 // @flow
-import getComputedStyle from './getComputedStyle';
+import getNodeName from './getNodeName';
 
 export default (element: Element): boolean =>
-  getComputedStyle(element).display.startsWith('table');
+  ['table', 'td', 'th'].includes(getNodeName(element));
