@@ -1,0 +1,76 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  tr {
+    overflow: auto;
+  }
+
+  .reference {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  .popper {
+    background-color: rebeccapurple;
+    width: 50px;
+    height: 50px;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<table>
+  <tr>
+    <th>CELL</th>
+    <th>CELL</th>
+    <th>
+      <div class="reference" id="reference-1">Reference Box</div>
+    </th>
+  </tr>
+</table>
+
+<div class="popper" id="popper-1">
+  Popper Box
+</div>
+
+<table>
+  <tr>
+    <th>CELL</th>
+    <th>CELL</th>
+    <th>
+      <div class="reference" id="reference-2">Reference Box</div>
+      <div class="popper" id="popper-2">
+        Popper Box
+      </div>
+    </th>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <th>CELL</th>
+    <th>CELL</th>
+    <th>
+      <div class="popper" id="popper-3">
+        Popper Box
+      </div>
+    </th>
+  </tr>
+</table>
+
+<div class="reference" id="reference-3">Reference Box</div>
+
+<script type="module">
+  import { createPopper } from '../dist/popper.js';
+
+  const n = document.querySelectorAll('.popper').length;
+
+  for (let i = 1; i < n + 1; i++) {
+    const reference = document.querySelector(`#reference-${i}`);
+    const popper = document.querySelector(`#popper-${i}`);
+    createPopper(reference, popper, {
+      placement: 'right',
+    });
+  }
+</script>
