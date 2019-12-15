@@ -2,6 +2,10 @@
 <PROJECT_ROOT>/lib
 <PROJECT_ROOT>/dist
 
+[ignore]
+<PROJECT_ROOT>/docs/public
+<PROJECT_ROOT>/docs/.cache
+
 [options]
 suppress_comment= \\(.\\|\n\\)*\\$FlowExpectError
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
