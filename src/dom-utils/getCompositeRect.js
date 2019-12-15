@@ -5,6 +5,8 @@ import listScrollParents from './listScrollParents';
 import getScrollSum from './getScrollSum';
 import getOffsetParent from './getOffsetParent';
 import unwrapVirtualElement from './unwrapVirtualElement';
+import isTableElement from './isTableElement';
+import getTrueOffsetParent from './getTrueOffsetParent';
 import { isElement } from './instanceOf';
 
 // Returns the composite rect of an element relative to its offsetParent.
@@ -21,13 +23,17 @@ export default (
     isElement(offsetParent) && !isFixed
       ? getBoundingClientRect(offsetParent)
       : { left: 0, top: 0 };
+  const trueOffsetParent = getTrueOffsetParent(unwrappedElement);
 
   // We want all the scrolling containers only up to and including the
   // offsetParent
-  const relevantScrollParents = scrollParents.slice(
-    0,
-    Math.max(0, scrollParents.indexOf(offsetParent)) + 1
-  );
+  const relevantScrollParents =
+    trueOffsetParent && isTableElement(trueOffsetParent)
+      ? scrollParents
+      : scrollParents.slice(
+          0,
+          Math.max(0, scrollParents.indexOf(offsetParent)) + 1
+        );
 
   const scrollSum = getScrollSum(relevantScrollParents);
   const offsetParentScrollSum = getScrollSum(isFixed ? [offsetParent] : []);
