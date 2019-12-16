@@ -5,8 +5,22 @@ import getComputedStyle from './getComputedStyle';
 import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
 
-const getTrueOffsetParent = (element: Element): ?Element =>
-  isHTMLElement(element) ? element.offsetParent : null;
+// https://stackoverflow.com/a/9851769/2059996
+const isFirefox = typeof window.InstallTrigger !== 'undefined';
+
+const getTrueOffsetParent = (element: Element): ?Element => {
+  let offsetParent;
+  if (
+    !isHTMLElement(element) ||
+    !(offsetParent = element.offsetParent) ||
+    // https://github.com/popperjs/popper.js/issues/837
+    (isFirefox && getComputedStyle(offsetParent).position === 'fixed')
+  ) {
+    return null;
+  }
+
+  return offsetParent;
+};
 
 export default function getOffsetParent(element: Element) {
   const window = getWindow(element);
