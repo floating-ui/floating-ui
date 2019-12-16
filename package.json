@@ -4,7 +4,7 @@
   "description": "A kickass library used to manage poppers in web applications",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
-  "module": "lib/index.js",
+  "module": "lib/popper-lite.js",
   "unpkg": "dist/umd/popper.min.js",
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
