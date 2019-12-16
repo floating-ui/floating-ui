@@ -6,7 +6,7 @@ import { isHTMLElement } from '../dom-utils/instanceOf';
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
 
-export function applyStyles({ state }: ModifierArguments<{||}>) {
+function applyStyles({ state }: ModifierArguments<{||}>) {
   Object.keys(state.elements).forEach(name => {
     const style = state.styles[name] || {};
 
@@ -35,7 +35,7 @@ export function applyStyles({ state }: ModifierArguments<{||}>) {
   return state;
 }
 
-export function onDestroy({ state }: ModifierArguments<{||}>) {
+function onDestroy({ state }: ModifierArguments<{||}>) {
   Object.keys(state.elements).forEach(name => {
     const element = state.elements[name];
     const styleProperties = Object.keys(

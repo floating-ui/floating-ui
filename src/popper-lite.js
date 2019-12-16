@@ -9,4 +9,5 @@ const createPopper = popperGenerator({
   defaultModifiers: [eventListeners, popperOffsets, computeStyles, applyStyles],
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export { createPopper, popperGenerator };

@@ -2,7 +2,7 @@
 import type { ModifierArguments, Modifier } from '../types';
 import computeOffsets from '../utils/computeOffsets';
 
-export function popperOffsets({ state, name }: ModifierArguments<{||}>) {
+function popperOffsets({ state, name }: ModifierArguments<{||}>) {
   // Offsets are the actual position the popper needs to have to be
   // properly positioned near its reference element
   // This is the most basic placement, and will be adjusted by

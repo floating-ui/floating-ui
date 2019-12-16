@@ -56,7 +56,7 @@ export const mapToStyles = ({
   }
 };
 
-export function computeStyles({ state, options }: ModifierArguments<Options>) {
+function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
 
   // popper offsets are always available

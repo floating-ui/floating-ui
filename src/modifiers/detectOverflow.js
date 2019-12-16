@@ -64,11 +64,7 @@ const getOverflowRect = (
   }
 };
 
-export function detectOverflow({
-  state,
-  options,
-  name,
-}: ModifierArguments<Options>) {
+function detectOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     area = clippingParents,
     rootArea = 'document',

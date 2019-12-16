@@ -12,7 +12,7 @@ type Options = {
   padding: Padding,
 };
 
-export function flip({ state, options, name }: ModifierArguments<Options>) {
+function flip({ state, options, name }: ModifierArguments<Options>) {
   const placement = state.placement;
   const defaultFallbackPlacements = [
     getOppositePlacement(state.options.placement),

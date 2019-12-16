@@ -9,7 +9,7 @@ import { left, right } from '../enums';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow({ state, name }: ModifierArguments<Options>) {
+function arrow({ state, name }: ModifierArguments<Options>) {
   const arrowElement = state.elements.arrow;
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);

@@ -32,7 +32,7 @@ const isAnySideFullyClipped = (overflow: ModifierData): boolean =>
 const defaultDetectOverflowReference = 'detectOverflow:hide:reference';
 const defaultDetectOverflowAltArea = 'detectOverflow:hide:altArea';
 
-export function hide({ state, name, options }: ModifierArguments<Options>) {
+function hide({ state, name, options }: ModifierArguments<Options>) {
   const {
     detectOverflowReference = defaultDetectOverflowReference,
     detectOverflowAltArea = defaultDetectOverflowAltArea,
@@ -79,8 +79,10 @@ const hideModifier = ({
   fn: hide,
 }: Modifier<Options>);
 
+// eslint-disable-next-line import/no-unused-modules
 export default hideModifier;
 
+// eslint-disable-next-line import/no-unused-modules
 export const preconfiguredHide = [
   {
     ...detectOverflow,

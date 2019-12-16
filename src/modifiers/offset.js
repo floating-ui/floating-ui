@@ -38,7 +38,7 @@ type Options = {
   offset: OffsetsFunction | [number, number],
 };
 
-export function offset({ state, options, name }: ModifierArguments<Options>) {
+function offset({ state, options, name }: ModifierArguments<Options>) {
   const { offset = [0, 0] } = options;
 
   const [x, y] = distanceAndSkiddingToXY(

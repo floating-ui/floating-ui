@@ -37,11 +37,7 @@ type Options = {
   padding: Padding,
 };
 
-export function preventOverflow({
-  state,
-  options,
-  name,
-}: ModifierArguments<Options>) {
+function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
