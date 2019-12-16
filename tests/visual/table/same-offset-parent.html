@@ -1,28 +1,15 @@
 <!DOCTYPE html> <title>Basic Visual Test</title>
 
 <style>
-  #scroll {
-    overflow: scroll;
-    width: 300px;
-    height: 300px;
-    background-color: grey;
-  }
-
-  #scroll::before {
-    content: 'before';
-    display: block;
-    height: 300px;
-    width: 1px;
-  }
-
-  #scroll::after {
-    content: 'after';
-    display: block;
-    height: 300px;
-    width: 1px;
+  html,
+  body {
+    height: 1500px;
   }
 
   #reference {
+    position: relative;
+    top: 150px;
+    left: 150px;
     width: 200px;
     height: 200px;
     background-color: red;
@@ -40,10 +27,24 @@
   }
 </style>
 
-<div id="scroll">
-  <div id="reference">Reference Box</div>
+<div style="position: relative;">
+  <table>
+    <tr>
+      <td>
+        cell
+      </td>
+      <td>
+        cell
+      </td>
+      <td>
+        <div style="position: relative">
+          <div id="reference">Reference Box</div>
+          <div id="popper">Popper Box</div>
+        </div>
+      </td>
+    </tr>
+  </table>
 </div>
-<div id="popper">Popper Box</div>
 
 <script type="module">
   import { createPopper } from '../dist/popper.js';

@@ -2,6 +2,7 @@
 
 <style>
   #scroll {
+    position: relative;
     overflow: scroll;
     width: 300px;
     height: 300px;
@@ -42,8 +43,8 @@
 
 <div id="scroll">
   <div id="reference">Reference Box</div>
+  <div id="popper">Popper Box</div>
 </div>
-<div id="popper">Popper Box</div>
 
 <script type="module">
   import { createPopper } from '../dist/popper.js';
@@ -52,5 +53,6 @@
 
   window.instance = createPopper(reference, popper, {
     placement: 'right',
+    strategy: 'fixed',
   });
 </script>

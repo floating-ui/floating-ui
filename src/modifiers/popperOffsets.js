@@ -1,8 +1,6 @@
 // @flow
 import type { ModifierArguments, Modifier } from '../types';
 import computeOffsets from '../utils/computeOffsets';
-import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
-import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 export function popperOffsets({ state, name }: ModifierArguments<{||}>) {
   // Offsets are the actual position the popper needs to have to be
@@ -14,11 +12,6 @@ export function popperOffsets({ state, name }: ModifierArguments<{||}>) {
     element: state.measures.popper,
     strategy: 'absolute',
     placement: state.placement,
-    scroll: getCommonTotalScroll(
-      unwrapVirtualElement(state.elements.reference),
-      state.scrollParents.reference,
-      state.scrollParents.popper
-    ),
   });
 
   return state;
