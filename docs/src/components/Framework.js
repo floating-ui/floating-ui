@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'emotion';
 
 export const media = {
   xs: '@media (min-width: 360px)',

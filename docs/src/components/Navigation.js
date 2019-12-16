@@ -1,6 +1,7 @@
 import React from 'react';
-import { useStaticQuery, graphql, Link } from 'gatsby';
-import styled from 'styled-components';
+import { Link } from 'gatsby';
+import styled from 'emotion';
+import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 
 const BLACKLIST = /^\/$/;
 
@@ -25,43 +26,19 @@ const Item = styled(Link)`
 `;
 
 export default function Navigation({ description, lang, meta, title }) {
-  const { allSiteNavigation } = useStaticQuery(graphql`
-    query allSiteNavigation {
-      allSiteNavigation(filter: { fields: { isRoot: { eq: true } } }) {
-        edges {
-          node {
-            title
-            path
-            childrenSiteNavigation {
-              title
-              path
-              order
-              fields {
-                isRoot
-              }
-            }
-          }
-        }
-      }
-    }
-  `);
-
   return (
     <Container>
-      {allSiteNavigation.edges.map(edge => (
-        <li>
-          <Item to={edge.node.path}>{edge.node.title}</Item>
-          {!edge.node.path.match(BLACKLIST) && (
-            <ul style={{ listStyle: 'none' }}>
-              {edge.node.childrenSiteNavigation.map(node => (
-                <li>
-                  <Item to={node.path}>{node.title}</Item>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ))}
+      <MdxRoutes>
+        {routes => (
+          <ul>
+            {routes.map((route, index) => (
+              <li key={index}>
+                <Item to={route}>{route}</Item>
+              </li>
+            ))}
+          </ul>
+        )}
+      </MdxRoutes>
     </Container>
   );
 }

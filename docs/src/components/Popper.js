@@ -1,6 +1,6 @@
 import { createPopper } from '../../../lib/popper.js';
 import { useRef, useLayoutEffect } from 'react';
-import styled from 'styled-components';
+import styled from 'emotion';
 
 export const usePopper = (options = {}) => {
   const referenceRef = useRef();

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'emotion';
 import popperLogo from '../images/popper-logo.svg';
 import stripes from '../images/stripes.svg';
 
