@@ -9,35 +9,17 @@ import { left, right } from '../enums';
 
 type Options = { element: HTMLElement | string };
 
-export function arrow({ state, options, name }: ModifierArguments<Options>) {
-  let { element: arrowElement = '[data-popper-arrow]' } = options;
-
-  // CSS selector
-  if (typeof arrowElement === 'string') {
-    arrowElement = state.elements.popper.querySelector(arrowElement);
-
-    if (!arrowElement) {
-      return state;
-    }
-  }
-
-  if (!state.elements.popper.contains(arrowElement)) {
-    if (__DEV__) {
-      console.error(
-        'Popper: "arrow" modifier\'s `element` must be a child of the popper element.'
-      );
-    }
-
-    return state;
-  }
-
-  state.elements.arrow = arrowElement;
-
+export function arrow({ state, name }: ModifierArguments<Options>) {
+  const arrowElement = state.elements.arrow;
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);
   const axis = getMainAxisFromPlacement(basePlacement);
   const isVertical = [left, right].includes(basePlacement);
   const len = isVertical ? 'height' : 'width';
+
+  if (!arrowElement) {
+    return state;
+  }
 
   const arrowElementRect = addClientRectMargins(
     getLayoutRect(arrowElement),
@@ -73,11 +55,42 @@ export function arrow({ state, options, name }: ModifierArguments<Options>) {
   return state;
 }
 
+function onLoad({ state, options }: ModifierArguments<Options>) {
+  let { element: arrowElement = '[data-popper-arrow]' } = options;
+
+  // CSS selector
+  if (typeof arrowElement === 'string') {
+    arrowElement = state.elements.popper.querySelector(arrowElement);
+
+    if (!arrowElement) {
+      return state;
+    }
+  }
+
+  if (!state.elements.popper.contains(arrowElement)) {
+    if (__DEV__) {
+      console.error(
+        [
+          'Popper: "arrow" modifier\'s `element` must be a child of the popper',
+          'element.',
+        ].join(' ')
+      );
+    }
+
+    return state;
+  }
+
+  state.elements.arrow = arrowElement;
+
+  return state;
+}
+
 export default ({
   name: 'arrow',
   enabled: true,
   phase: 'main',
   fn: arrow,
+  onLoad,
   requires: ['popperOffsets'],
   optionallyRequires: ['preventOverflow'],
 }: Modifier<Options>);
