@@ -42,16 +42,16 @@ Popper wrapper for React.
 
 ```bash
 # With Yarn
-yarn add @popperjs/core@next
+yarn add @popperjs/core@alpha
 
 # With npm
-npm i @popperjs/core@next
+npm i @popperjs/core@alpha
 ```
 
 ### 2. CDN
 
 ```html
-<script src="https://unpkg.com/@popperjs/core@next"></script>
+<script src="https://unpkg.com/@popperjs/core@alpha"></script>
 ```
 
 ### 3. Direct Download
@@ -74,7 +74,7 @@ import only what you need.
 Generally, for CDN users, you'll be using the fully-featured `umd` file:
 
 ```html
-<script src="https://unpkg.com/@popperjs/core@next"></script>
+<script src="https://unpkg.com/@popperjs/core@alpha"></script>
 <script>
   // Now the script is loaded, you can use the `createPopper` function!
 </script>
@@ -164,9 +164,9 @@ The 3 versions are:
 Below you can find the size of each version, minified and compressed with the
 [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
 
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper.min.js?compression=brotli&label=popper)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@next/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper.min.js?compression=brotli&label=popper)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
 
 ## Hacking the library
 
