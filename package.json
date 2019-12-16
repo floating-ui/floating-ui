@@ -1,6 +1,6 @@
 {
   "name": "@popperjs/core",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-next.17",
   "description": "A kickass library used to manage poppers in web applications",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
