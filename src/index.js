@@ -15,6 +15,8 @@ import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import addClientRectMargins from './dom-utils/addClientRectMargins';
+import getCommonOffsetParent from './dom-utils/getCommonOffsetParent';
+import unwrapVirtualElement from './dom-utils/unwrapVirtualElement';
 
 // Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
@@ -128,7 +130,14 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // these are going to be used to compute the initial popper offsets
         // and as cache for any modifier that needs them later
         state.measures = {
-          reference: getCompositeRect(referenceElement, isFixed),
+          reference: getCompositeRect(
+            referenceElement,
+            getCommonOffsetParent(
+              unwrapVirtualElement(referenceElement),
+              popperElement
+            ),
+            isFixed
+          ),
           // CSS marginsc an be applied to popper elements to quickly
           // apply offsets dynamically based on some CSS selectors.
           // For this reason we include margins in this calculation.

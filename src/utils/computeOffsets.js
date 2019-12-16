@@ -14,51 +14,47 @@ export default ({
   reference,
   element,
   placement,
-  scroll,
 }: {
   reference: Rect | ClientRectObject,
   element: Rect | ClientRectObject,
   strategy: PositioningStrategy,
   placement?: Placement,
-  scroll: { scrollTop: number, scrollLeft: number },
 }): Offsets => {
   const basePlacement = placement ? getBasePlacement(placement) : null;
   const variationPlacement = placement
     ? getVariationPlacement(placement)
     : null;
 
-  const { scrollTop, scrollLeft } = scroll;
-
   let offsets;
   switch (basePlacement) {
     case top:
       offsets = {
-        x: reference.x + reference.width / 2 - element.width / 2 - scrollLeft,
-        y: reference.y - element.height - scrollTop,
+        x: reference.x + reference.width / 2 - element.width / 2,
+        y: reference.y - element.height,
       };
       break;
     case bottom:
       offsets = {
-        x: reference.x + reference.width / 2 - element.width / 2 - scrollLeft,
-        y: reference.y + reference.height - scrollTop,
+        x: reference.x + reference.width / 2 - element.width / 2,
+        y: reference.y + reference.height,
       };
       break;
     case right:
       offsets = {
-        x: reference.x + reference.width - scrollLeft,
-        y: reference.y + reference.height / 2 - element.height / 2 - scrollTop,
+        x: reference.x + reference.width,
+        y: reference.y + reference.height / 2 - element.height / 2,
       };
       break;
     case left:
       offsets = {
-        x: reference.x - element.width - scrollLeft,
-        y: reference.y + reference.height / 2 - element.height / 2 - scrollTop,
+        x: reference.x - element.width,
+        y: reference.y + reference.height / 2 - element.height / 2,
       };
       break;
     default:
       offsets = {
-        x: reference.x - scrollLeft,
-        y: reference.y - scrollTop,
+        x: reference.x,
+        y: reference.y,
       };
   }
 

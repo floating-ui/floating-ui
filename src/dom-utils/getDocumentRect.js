@@ -7,7 +7,7 @@ import getWindowScroll from './getWindowScroll';
 export default (element: HTMLElement) => {
   const win = getWindow(element);
   const winScroll = getWindowScroll(element);
-  const documentRect = getCompositeRect(getDocumentElement(element));
+  const documentRect = getCompositeRect(getDocumentElement(element), win);
 
   documentRect.height = Math.max(documentRect.height, win.innerHeight);
   documentRect.width = Math.max(documentRect.width, win.innerWidth);

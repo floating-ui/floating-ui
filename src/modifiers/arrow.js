@@ -3,8 +3,6 @@ import type { Modifier, ModifierArguments } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
-import getCommonTotalScroll from '../dom-utils/getCommonTotalScroll';
-import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
 import { left, right } from '../enums';
@@ -46,14 +44,6 @@ export function arrow({ state, options, name }: ModifierArguments<Options>) {
     arrowElement
   );
 
-  const commonTotalScroll = getCommonTotalScroll(
-    unwrapVirtualElement(state.elements.reference),
-    state.scrollParents.reference,
-    state.scrollParents.popper
-  );
-  const totalScrollValue =
-    commonTotalScroll[axis === 'y' ? 'scrollTop' : 'scrollLeft'];
-
   const endDiff =
     state.measures.reference[len] +
     state.measures.reference[axis] -
@@ -61,7 +51,7 @@ export function arrow({ state, options, name }: ModifierArguments<Options>) {
     state.measures.popper[len];
   const startDiff = popperOffsets[axis] - state.measures.reference[axis];
 
-  const centerToReference = endDiff / 2 - startDiff / 2 - totalScrollValue;
+  const centerToReference = endDiff / 2 - startDiff / 2;
 
   let center =
     state.measures.popper[len] / 2 -

@@ -6,6 +6,6 @@ it('works with margins', () => {
   const element = document.createElement('div');
   Object.assign(element.style, { margin: '10px' });
   expect(
-    addClientRectMargins(getCompositeRect(element), element)
+    addClientRectMargins(getCompositeRect(element, document.body), element)
   ).toMatchSnapshot();
 });
