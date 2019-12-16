@@ -71,3 +71,25 @@ it('should handle multiple nested offsetParents', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should handle same offset parent', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/scrolling-absolute/scroll-same-offset-parent.html`
+  );
+
+  await scroll(page, '#scroll', 200);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
+it('should handle alt offset parent', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/scrolling-absolute/scroll-alt-offset-parent.html`
+  );
+
+  await scroll(page, '#scroll', 200);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
