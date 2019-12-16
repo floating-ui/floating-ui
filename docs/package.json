@@ -9,6 +9,7 @@
     "@emotion/styled": "^10.0.23",
     "@mdx-js/mdx": "^1.5.1",
     "@mdx-js/react": "^1.5.1",
+    "@pauliescanlon/gatsby-mdx-routes": "^0.0.1",
     "gatsby": "^2.17.11",
     "gatsby-dynamical-navigation": "^0.4.1",
     "gatsby-image": "^2.2.31",
@@ -21,7 +22,6 @@
     "gatsby-plugin-sharp": "^2.2.37",
     "gatsby-remark-images": "^3.1.33",
     "gatsby-remark-prismjs": "^3.3.24",
-    "gatsby-remark-use-frontmatter-path": "^1.0.0",
     "gatsby-source-filesystem": "^2.1.36",
     "gatsby-transformer-sharp": "^2.3.3",
     "modern-normalize": "^0.5.0",
@@ -31,7 +31,7 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-helmet": "^5.2.1",
-    "styled-components": "^4.4.1"
+    "emotion": "^4.4.1"
   },
   "devDependencies": {
     "prettier": "^1.19.1"

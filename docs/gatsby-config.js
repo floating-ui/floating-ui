@@ -20,12 +20,6 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-remark-use-frontmatter-path',
-      options: {
-        plugins: ['gatsby-remark-use-frontmatter-path'],
-      },
-    },
-    {
       resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
@@ -48,17 +42,14 @@ module.exports = {
               aliases: {},
             },
           },
-          {
-            resolve: 'gatsby-remark-use-frontmatter-path',
-            options: {
-              plugins: ['gatsby-remark-use-frontmatter-path'],
-            },
-          },
         ],
-        plugins: [`gatsby-remark-images`, `gatsby-remark-prismjs`],
+        plugins: [
+          `gatsby-remark-images`,
+          `gatsby-remark-prismjs`,
+          `@pauliescanlon/gatsby-mdx-routes`,
+        ],
       },
     },
-    `gatsby-dynamical-navigation`,
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
