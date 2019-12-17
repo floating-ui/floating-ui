@@ -1,16 +1,7 @@
 // @flow
-import {
-  basePlacements,
-  top,
-  left,
-  right,
-  bottom,
-  surfaces,
-  edges,
-  center,
-} from '../enums';
-import type { Tether } from '../enums';
-import type { ModifierArguments, Modifier, Padding } from '../types';
+import { basePlacements, top, left, right, bottom } from '../enums';
+import type { Placement } from '../enums';
+import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
@@ -20,30 +11,37 @@ import within from '../utils/within';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 
+type TetherOffset = ({
+  popper: Rect,
+  reference: Rect,
+  placement: Placement,
+}) => number | number;
+
 type Options = {
   /* Prevents boundaries overflow on the main axis */
   mainAxis: boolean,
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
-  /**
-   * Allows the popper to overflow from its boundaries to keep it near its reference element:
-   * - false: popper can never overflow, will detach from reference to stay visible;
-   * - "center": popper can overflow once the center of the popper is at the edge of the reference;
-   * - "edges": popper can overflow once the opposite edges are level;
-   * - "surfaces":  popper can overflow once the surfaces are level;
-   */
-  tether: Tether,
   /* Sets a padding to the provided boundary */
   padding: Padding,
+  /**
+   * Allows the popper to overflow from its boundaries to keep it near its
+   * reference element
+   */
+  tether: boolean,
+  /* Offsets when the `tether` option should activate */
+  tetherOffset: TetherOffset,
 };
 
 function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    tether = center,
+    tether = true,
+    tetherOffset = 0,
     padding = 0,
   } = options;
+
   const overflow =
     state.modifiersData['detectOverflow:preventOverflow'].overflowOffsets;
   const basePlacement = getBasePlacement(state.placement);
@@ -57,6 +55,13 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
       ? padding
       : expandToHashMap(padding, basePlacements)
   );
+  const tetherOffsetValue =
+    typeof tetherOffset === 'function'
+      ? tetherOffset({
+          ...state.measures,
+          placement: state.placement,
+        })
+      : tetherOffset;
 
   const data = { x: 0, y: 0 };
 
@@ -71,39 +76,33 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const max =
       popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
 
-    const additive =
-      tether === surfaces
-        ? popperRect[len] / 2
-        : tether === edges
-        ? -popperRect[len] / 2
-        : 0;
+    const additive = tether ? -popperRect[len] / 2 : 0;
 
     // For the "edges" value, we need to include the arrow in the calculation
     // so the arrow doesn't go outside the reference bounds
     const arrowElement = state.elements.arrow;
     const arrowElementRect =
-      arrowElement && tether === edges
+      arrowElement && tether
         ? addClientRectMargins(getLayoutRect(arrowElement), arrowElement)
         : { width: 0, height: 0 };
 
     const tetherMin =
-      state.modifiersData.popperOffsets[mainAxis] -
-      referenceRect[len] / 2 +
-      additive +
-      arrowElementRect[len];
-    const tetherMax =
       state.modifiersData.popperOffsets[mainAxis] +
       referenceRect[len] / 2 -
       additive -
-      arrowElementRect[len];
-
-    const lenCondition =
-      referenceRect[len] > popperRect[len] || tether !== surfaces;
+      arrowElementRect[len] -
+      tetherOffsetValue;
+    const tetherMax =
+      state.modifiersData.popperOffsets[mainAxis] -
+      referenceRect[len] / 2 +
+      additive +
+      arrowElementRect[len] +
+      tetherOffsetValue;
 
     const preventedOffset = within(
-      tether ? Math.min(min, lenCondition ? tetherMax : tetherMin) : min,
+      tether ? Math.min(min, tetherMin) : min,
       offset,
-      tether ? Math.max(max, lenCondition ? tetherMin : tetherMax) : max
+      tether ? Math.max(max, tetherMax) : max
     );
 
     state.modifiersData.popperOffsets[mainAxis] = preventedOffset;
