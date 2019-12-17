@@ -40,7 +40,7 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
 
   const placementOrder = [state.options.placement, ...fallbackPlacements];
 
-  let flippedPlacement = placementOrder[flipIndex];
+  let flippedPlacement: Placement = placementOrder[flipIndex];
 
   if (!flippedPlacement) {
     return state;
@@ -76,7 +76,7 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
     const fitsB = overflow[sideB] + paddingObject[sideB] <= 0;
 
     const oppositeVariation = variation === start ? end : start;
-    // const oppositePlacement = getOppositeVariationPlacement(flippedPlacement);
+    const oppositePlacement = getOppositeVariationPlacement(flippedPlacement);
     const storedVariation = state.modifiersData[`${name}#persistent`];
 
     const condition =
@@ -86,10 +86,10 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
 
     if (condition) {
       state.modifiersData[`${name}#persistent`] = oppositeVariation;
-      flippedPlacement = `${basePlacement}-${oppositeVariation}`;
+      flippedPlacement = oppositePlacement;
     } else if (storedVariation) {
       state.modifiersData[`${name}#persistent`] = variation;
-      flippedPlacement = `${basePlacement}-${storedVariation}`;
+      flippedPlacement = (`${basePlacement}-${storedVariation}`: any);
     }
   }
 
