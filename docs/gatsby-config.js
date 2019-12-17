@@ -23,7 +23,8 @@ module.exports = {
       resolve: `gatsby-plugin-mdx`,
       options: {
         defaultLayouts: {
-          default: require.resolve('./src/components/layout.js'),
+          default: require.resolve('./src/components/Layout.js'),
+          landing: require.resolve('./src/components/Landing.js'),
         },
         gatsbyRemarkPlugins: [
           {
@@ -42,14 +43,24 @@ module.exports = {
             },
           },
         ],
-        plugins: [`gatsby-remark-images`],
+        plugins: [
+          `gatsby-remark-images`,
+          `gatsby-remark-prismjs`,
+          `@pauliescanlon/gatsby-mdx-routes`,
+        ],
       },
     },
-    `gatsby-dynamical-navigation`,
     `gatsby-plugin-react-helmet`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     `gatsby-plugin-emotion`,
+    {
+      resolve: `gatsby-plugin-google-fonts`,
+      options: {
+        fonts: [`Luckiest+Guy`],
+        display: 'swap',
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
