@@ -22,7 +22,7 @@ function isHTMLElement(node) {
 
 function isShadowRoot(node) {
   const OwnElement = getWindow(node).ShadowRoot;
-  return node instanceof OwnElement;
+  return OwnElement ? node instanceof OwnElement : false;
 }
 
 export { isElement, isHTMLElement, isShadowRoot };
