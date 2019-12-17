@@ -2,12 +2,12 @@
 import type { Placement } from '../enums';
 import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
-import getVariationPlacement from '../utils/getVariationPlacement';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
+import getVariationPlacement from '../utils/getVariationPlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
-import { basePlacements, right, bottom, left, top, start } from '../enums';
+import { basePlacements, right, bottom, left, top, start, end } from '../enums';
 
 type Options = {
   fallbackPlacements: Array<Placement>,
@@ -16,15 +16,19 @@ type Options = {
 };
 
 export function flip({ state, options, name }: ModifierArguments<Options>) {
-  const placement = state.placement;
-  const defaultFallbackPlacements = [
-    getOppositePlacement(state.options.placement),
-  ];
   const {
-    fallbackPlacements = defaultFallbackPlacements,
+    fallbackPlacements: preFallbackPlacements = [
+      getOppositePlacement(state.options.placement),
+    ],
     padding = 0,
     checkVariation = true,
   } = options;
+
+  // If all placements don't fit, we want to use the originally specified one
+  // in options as the last
+  const fallbackPlacements = preFallbackPlacements.concat(
+    state.options.placement
+  );
 
   const overflow = state.modifiersData['detectOverflow:flip'].overflowOffsets;
   const flipIndex = state.modifiersData[name].index;
@@ -38,13 +42,7 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
 
   let flippedPlacement = placementOrder[flipIndex];
 
-  if (!flippedPlacement && placement !== state.options.placement) {
-    state.placement = state.options.placement;
-    state.reset = true;
-    return state;
-  }
-
-  if (!flippedPlacement && placement === state.options.placement) {
+  if (!flippedPlacement) {
     return state;
   }
 
@@ -77,8 +75,9 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
     const fitsA = overflow[sideA] + paddingObject[sideA] <= 0;
     const fitsB = overflow[sideB] + paddingObject[sideB] <= 0;
 
-    const oppositeVariation = getOppositeVariationPlacement(flippedPlacement);
-    const storedPlacement = state.modifiersData[`${name}#persistent`];
+    const oppositeVariation = variation === start ? end : start;
+    // const oppositePlacement = getOppositeVariationPlacement(flippedPlacement);
+    const storedVariation = state.modifiersData[`${name}#persistent`];
 
     const condition =
       state.measures.popper[len] < state.measures.reference[len]
@@ -87,10 +86,10 @@ export function flip({ state, options, name }: ModifierArguments<Options>) {
 
     if (condition) {
       state.modifiersData[`${name}#persistent`] = oppositeVariation;
-      flippedPlacement = oppositeVariation;
-    } else if (storedPlacement) {
-      state.modifiersData[`${name}#persistent`] = flippedPlacement;
-      flippedPlacement = storedPlacement;
+      flippedPlacement = `${basePlacement}-${oppositeVariation}`;
+    } else if (storedVariation) {
+      state.modifiersData[`${name}#persistent`] = variation;
+      flippedPlacement = `${basePlacement}-${storedVariation}`;
     }
   }
 
