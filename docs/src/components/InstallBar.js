@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'emotion';
+import styled from '@emotion/styled';
 
 import { media, Container } from './Framework';
 

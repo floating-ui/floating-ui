@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
-import styled from 'emotion';
+import styled from '@emotion/styled';
 import Highlight from './Highlight';
 
 import Header from './Header';
