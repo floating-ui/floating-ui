@@ -21,6 +21,8 @@
 
 <!-- 🚨 HEY! HERE BEGINS THE INTERESTING STUFF 🚨 -->
 
+> Popper 2 is coming! Check out its [README here](/tree/next), the issue tracker is now tracking the work needed to release this new version.
+
 ## Wut? Poppers?
 
 A popper is an element on the screen which "pops out" from the natural flow of your application.  
