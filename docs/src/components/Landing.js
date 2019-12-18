@@ -110,6 +110,7 @@ const ExampleArea = styled.div`
   height: 350px;
   background: #271d2f;
   border-radius: 20px;
+  scrollbar-color: rgba(255, 230, 157, 1) transparent;
 
   ::-webkit-scrollbar {
     -webkit-appearance: none;
