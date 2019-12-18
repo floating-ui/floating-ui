@@ -5,8 +5,12 @@ title: Flip
 # Flip
 
 The flip modifier can change the `placement` of a popper when the
-`detectOverflow` modifier reported it's overflowing on the direction of the
+`detectOverflow` modifier reported is overflowing on the direction of the
 currently given placement.
+
+> **Note**: to customize the behavior of the `flip`'s `detectOverflow` modifier,
+> you will need to specify as modifier name `detectOverflow:flip`. This is a
+> modifier instance dedicated to the `flip` modifier.
 
 ## Options
 
@@ -15,6 +19,18 @@ type Options = {
   fallbackPlacements: Array<Placement>, // [oppositePlacement]
   padding: Padding, // 0
 };
+
+/**
+ * Below are described the relative types
+ */
+type Padding =
+  | {|
+      top?: number,
+      left?: number,
+      right?: number,
+      bottom?: number,
+    |}
+  | number;
 ```
 
 ### Options#fallbackPlacements
@@ -62,6 +78,24 @@ createPopper(reference, popper, {
       name: 'flip',
       options: {
         padding: { top: 20, right: 10 },
+      },
+    },
+  ],
+});
+```
+
+## Customize `detectOverflow:flip`
+
+If you'd like to change the boundary area of the `flip` modifier, you can
+customize the `detectOverflow:flip` modifier:
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'detectOverflow:flip',
+      options: {
+        rootArea: 'document', // `viewport` by default
       },
     },
   ],

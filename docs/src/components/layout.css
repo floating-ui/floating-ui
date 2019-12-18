@@ -4,3 +4,10 @@ body {
   background: #34283f;
   color: white;
 }
+
+blockquote {
+  margin: 0;
+  padding: 1em 40px;
+  border-radius: 2px 20px 20px 2px;
+  background-color: #f3f3f3;
+}

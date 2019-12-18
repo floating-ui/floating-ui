@@ -9,6 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
+import { Global, css } from '@emotion/core';
 
 import Navigation from './Navigation';
 import './layout.css';
@@ -21,19 +22,24 @@ const components = {
 const Layout = ({ children }) => {
   return (
     <MDXProvider components={components}>
+      <Global
+        styles={{
+          body: {
+            backgroundColor: '#ffffff',
+          },
+        }}
+      />
       <div css={{ display: 'flex' }}>
         <Navigation root="/" target="location" />
 
         <div
           css={{
-            margin: `20px auto 20px 280px`,
             maxWidth: 960,
+            margin: '0 auto',
             padding: `0px 1.0875rem 1.45rem`,
             paddingTop: 0,
             flex: 1,
-            backgroundColor: '#ffffff',
             color: '#222222',
-            borderRadius: 20,
           }}
         >
           <main>{children}</main>

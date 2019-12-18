@@ -11,19 +11,24 @@ scheduled to be positioned outside a given boundary, or container element.
 
 ```flow
 type Options = {
-  boundaryElement: HTMLElement, // popper's clipping parent
+  area: OverflowArea,
+  rootArea: RootOverflowArea,
+  elementContext: Context,
+  altArea: boolean,
 };
 ```
 
-### Options#boundaryElement
+### Options#area
 
-By default, the boundary element is set to the closest scrolling clipping
-container, which, in other words, is a container with scrollbars, that can
-potentially hide the popper if the latter is positioned outside of the visible
-container area.
+By default, the boundary is set to a virtual area to make so the popper element
+will never get clipped by a scrolling parent with clipping capabilities.
 
-If none of these containers is found, it will fallback to the page viewport,
-which is the visible document area.
+This is what you need most of the times, and it's called `clippingParents`, but
+if you'd like to customize it further, this option can be set to `viewport`, or
+to an arbitrary parent element.
+
+If the provided area is not found for whatever reason, the modifier will
+fallback to the `rootArea` option, which can be either `viewport` or `document`.
 
 We can define an arbitrary boundary element, we just need to make sure the
 custom element is a parent of the popper element.
@@ -34,7 +39,7 @@ createPopper(reference, popper, {
     {
       name: 'detectOverflow',
       options: {
-        boundaryElement: document.querySelector('#custom'),
+        area: document.querySelector('#custom'),
       },
     },
   ],

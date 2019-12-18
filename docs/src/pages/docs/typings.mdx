@@ -17,6 +17,16 @@ files from the `dist/umd` folder.
 Flow will automatically read the exposed types, so you don't need to change any
 configuration in your project to take benefit from Popper typings.
 
+It's although reccomended to add the following lines to your `.flowconfig` file
+in order to instruct Flow not to report type errors originating from your
+`node_modules` folder. Type definitions exposed by the modules will still be
+used, but their errors, if any, will be ignored.
+
+```ini
+[declarations]
+<PROJECT_ROOT>/node_modules
+```
+
 ## TypeScript
 
 Generating TypeScript type definitions from Flow makes it possible to type check

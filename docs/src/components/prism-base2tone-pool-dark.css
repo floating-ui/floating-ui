@@ -13,7 +13,6 @@ pre[class*='language-'] {
     'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono',
     'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L',
     'Courier New', Courier, monospace;
-  font-size: 14px;
   line-height: 1.375;
   direction: ltr;
   text-align: left;
@@ -57,6 +56,7 @@ pre[class*='language-'] {
   background: #18111c;
   color: #b886fd;
   border-radius: 10px;
+  font-size: 14px;
 }
 
 /* Inline code */

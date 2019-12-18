@@ -11,11 +11,37 @@ modifier reported it's overflowing in any direction.
 
 ```flow
 type Options = {
-  mainAxis: boolean, // = true
-  altAxis: boolean, // = false
-  tether: boolean, // = true
-  padding: Padding, // = 0
+  /* Prevents boundaries overflow on the main axis */
+  mainAxis: boolean,
+  /* Prevents boundaries overflow on the alternate axis */
+  altAxis: boolean,
+  /* Sets a padding to the provided boundary */
+  padding: Padding,
+  /* Allows the popper to overflow from its boundaries to keep it near its reference element */
+  tether: boolean,
+  /* Offsets when the `tether` option should activate */
+  tetherOffset: TetherOffset,
 };
+
+/**
+ * Below are described the relative types
+ */
+type Padding =
+  | {|
+      top?: number,
+      left?: number,
+      right?: number,
+      bottom?: number,
+    |}
+  | number;
+
+type TetherOffset =
+  | (({
+      popper: Rect,
+      reference: Rect,
+      placement: Placement,
+    }) => number)
+  | number;
 ```
 
 ### Options#mainAxis
@@ -62,15 +88,14 @@ createPopper(reference, popper, {
 
 While trying to keep the popper element within its boundaries is usually a
 welcome behavior, we don't usually want to reach the point where the reference
-and popper elements are not touching eachother at all, since that would make it
+and popper elements are not touching each other at all, since that would make it
 difficult for the user to understand where a popper originated from.
 
 The default behavior to avoid this situation, is to stop to try to keep the
 popper within its defined boundaries once the center of the popper reaches the
-edge of its reference element. This tether behavior is called `center`.
+edge of its reference element.
 
-Alternatively, this option can accept `edges`, which will work similarly to
-`center`, but will kick in only when the popper edge reaches the reference edge.
+This behavior can be disabled by setting the `tether` option to `false`:
 
 ```js
 createPopper(reference, popper, {
@@ -78,7 +103,7 @@ createPopper(reference, popper, {
     {
       name: 'preventOverflow',
       options: {
-        tether: 'edges',
+        tether: false, // true by default
       },
     },
   ],
@@ -91,6 +116,30 @@ level.
 To conclude, the tether option can be disabled all together by setting it to
 `false`, so that the popper will detach from its reference element if required
 to keep it within its defined boundaries.
+
+### Options#tetherOffset
+
+When `tether` is enabled, you can customize its behavior by providing an offset
+to be used during the `tether` calculations. Setting the offset to a positive
+number will make the tether behavior kick in earlier, while setting it negative
+will do the opposite.
+
+The `tetherOffset` option can also take a function, this will enable you to read
+some useful data, such as the popper and reference measures, or the current
+popper placement:
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        tetherOffset: ({ popper, reference, placement }) => popper.width / 2,
+      },
+    },
+  ],
+});
+```
 
 ### Options#padding
 

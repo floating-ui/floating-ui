@@ -9,8 +9,12 @@ const BLACKLIST = ['/404'];
 const Container = styled.div`
   background: #c83b50;
   padding: 20px 10px;
-  margin: 0;
   position: fixed;
+  height: 100vh;
+  width: 250px;
+`;
+
+const SpaceHolder = styled.div`
   height: 100vh;
   width: 250px;
 `;
@@ -61,21 +65,23 @@ export default function Navigation({ description, lang, meta, title }) {
   return (
     <MdxRoutes>
       {routes => (
-        <Container>
-          {createTree(
-            routes
-              .map(route => ({
-                ...route,
-                slug: route.slug.replace(/\/$/, ''),
-              }))
-              .filter(route => !BLACKLIST.includes(route.slug))
-              .sort(
-                (a, b) => a.slug.split('/').length - b.slug.split('/').length
-              )
-          ).map((route, index) => (
-            <Block route={route} key={index} />
-          ))}
-        </Container>
+        <SpaceHolder>
+          <Container>
+            {createTree(
+              routes
+                .map(route => ({
+                  ...route,
+                  slug: route.slug.replace(/\/$/, ''),
+                }))
+                .filter(route => !BLACKLIST.includes(route.slug))
+                .sort(
+                  (a, b) => a.slug.split('/').length - b.slug.split('/').length
+                )
+            ).map((route, index) => (
+              <Block route={route} key={index} />
+            ))}
+          </Container>
+        </SpaceHolder>
       )}
     </MdxRoutes>
   );

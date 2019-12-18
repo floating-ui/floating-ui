@@ -12,10 +12,16 @@ to fine tune the position according to some custom logic.
 
 ## Options
 
-```js
+```flow
 type Options = {
-  offset: ?OffsetsFunction, // = undefined
+  offset: OffsetsFunction | [number, number], // = [0, 0]
 };
+
+type OffsetsFunction = ({
+  popper: Rect,
+  reference: Rect,
+  placement: Placement,
+}) => [?number, ?number];
 ```
 
 ### Options#offset

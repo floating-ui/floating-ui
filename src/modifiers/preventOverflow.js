@@ -11,11 +11,13 @@ import within from '../utils/within';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 
-type TetherOffset = ({
-  popper: Rect,
-  reference: Rect,
-  placement: Placement,
-}) => number | number;
+type TetherOffset =
+  | (({
+      popper: Rect,
+      reference: Rect,
+      placement: Placement,
+    }) => number)
+  | number;
 
 type Options = {
   /* Prevents boundaries overflow on the main axis */
