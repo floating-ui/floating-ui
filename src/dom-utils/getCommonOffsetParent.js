@@ -2,9 +2,10 @@
 import getOffsetParent from './getOffsetParent';
 import { isElement, isShadowRoot } from './instanceOf';
 import getWindow from './getWindow';
+import getFirstVisibleElementChild from './getFirstVisibleElementChild';
 
 function isOffsetContainer(element: Element): boolean {
-  const firstElementChild = element.firstElementChild;
+  const firstElementChild = getFirstVisibleElementChild(element);
   return !firstElementChild || getOffsetParent(firstElementChild) === element;
 }
 
