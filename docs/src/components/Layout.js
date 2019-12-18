@@ -23,11 +23,26 @@ const Layout = ({ children }) => {
   return (
     <MDXProvider components={components}>
       <Global
-        styles={{
-          body: {
-            backgroundColor: '#ffffff',
-          },
-        }}
+        styles={css`
+          body {
+            background-color: #ffffff;
+          }
+
+          h2::before {
+            content: ' ';
+            display: block;
+            border-bottom: 1px solid #ececec;
+            padding-top: 44px;
+            margin-bottom: 40px;
+          }
+
+          blockquote {
+            margin: 0;
+            padding: 1em 40px;
+            border-radius: 2px 20px 20px 2px;
+            background-color: #f3f3f3;
+          }
+        `}
       />
       <div css={{ display: 'flex' }}>
         <Navigation root="/" target="location" />
