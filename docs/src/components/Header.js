@@ -25,6 +25,7 @@ const Slogan = styled.h2`
   margin: 0 auto;
   max-width: 100%;
   font-family: 'Luckiest Guy', sans-serif;
+  -webkit-font-smoothing: antialiased;
   color: #c83b50;
   text-transform: uppercase;
   letter-spacing: 1.5px;

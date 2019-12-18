@@ -28,7 +28,7 @@ const Heading = styled.h3`
   letter-spacing: 1.5px;
   text-transform: uppercase;
   font-size: 30px;
-  -webkit-font-smoothing: antialasing;
+  -webkit-font-smoothing: antialiased;
   text-align: center;
   margin-bottom: 15px;
   margin-top: 40px;

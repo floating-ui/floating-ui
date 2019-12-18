@@ -33,6 +33,7 @@ const Item = styled(Link)`
   text-transform: uppercase;
   font-size: 20px;
   font-family: 'Luckiest Guy', sans-serif;
+  -webkit-font-smoothing: antialiased;
 `;
 
 const Block = ({ route }) => (
