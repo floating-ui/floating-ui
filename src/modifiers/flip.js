@@ -52,7 +52,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
 
   // Check alt axis to see if we can switch variation placements
   const variation = getVariationPlacement(flippedPlacement);
-  if (variation && checkVariation && fitsOnMainAxis) {
+  if (variation && checkVariation) {
     const isVertical = [top, bottom].includes(basePlacement);
     const isStartVariation = variation === start;
     const len = isVertical ? 'width' : 'height';
