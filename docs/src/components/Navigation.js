@@ -12,6 +12,7 @@ const Container = styled.div`
   position: fixed;
   height: 100vh;
   width: 250px;
+  overflow: auto;
 `;
 
 const SpaceHolder = styled.div`
