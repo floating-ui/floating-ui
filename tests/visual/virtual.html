@@ -51,6 +51,18 @@
   };
 
   window.instance = createPopper(ref, popper, {
-    placement: 'right',
+    placement: 'bottom',
+  });
+
+  document.addEventListener('mousemove', ({ clientX, clientY }) => {
+    ref.getBoundingClientRect = () => ({
+      top: clientY,
+      right: clientX,
+      bottom: clientY,
+      left: clientX,
+      width: 0,
+      height: 0,
+    });
+    instance.update();
   });
 </script>
