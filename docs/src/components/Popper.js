@@ -1,5 +1,5 @@
 import { createPopper } from '../../../lib/popper.js';
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 export const usePopper = (options = {}) => {
@@ -20,7 +20,12 @@ export const usePopper = (options = {}) => {
     return () => {
       popperInstance.destroy();
     };
-  });
+  }, []);
+
+  useEffect(() => {
+    popperInstanceRef.current.setOptions(options);
+    popperInstanceRef.current.update();
+  }, [options]);
 
   return {
     reference: referenceRef,
