@@ -72,10 +72,19 @@ export const Tooltip = styled.div`
 `;
 
 export const Arrow = styled.div`
-  transform: rotate(45deg);
-  width: 10px;
-  height: 10px;
-  background: white;
-  position: absolute;
-  z-index: -1;
+  &,
+  &::before {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    z-index: -1;
+  }
+
+  &::before {
+    content: '';
+    transform: rotate(45deg);
+    background: white;
+    top: 0;
+    left: 0;
+  }
 `;
