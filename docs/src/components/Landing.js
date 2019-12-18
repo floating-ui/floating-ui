@@ -160,6 +160,7 @@ const Example = () => {
   const { reference, popper } = usePopper({
     placement,
     modifiers: [
+      { name: 'flip', enabled: false },
       {
         name: 'offset',
         options: {
