@@ -78,25 +78,35 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
     const additive = tether ? -popperRect[len] / 2 : 0;
 
-    // For the "edges" value, we need to include the arrow in the calculation
-    // so the arrow doesn't go outside the reference bounds
+    // We need to include the arrow in the calculation so the arrow doesn't go
+    // outside the reference bounds
     const arrowElement = state.elements.arrow;
-    const arrowElementRect =
+    const arrowRect =
       arrowElement && tether
         ? addClientRectMargins(getLayoutRect(arrowElement), arrowElement)
         : { width: 0, height: 0 };
+    // If the reference length is smaller than the arrow length, we don't want
+    // to include its full size in the calculation. If the reference is small
+    // and near the edge of a boundary, the popper can overflow even if the
+    // reference is not overflowing as well (e.g. virtual elements with no
+    // width or height)
+    const arrowLen = within(
+      0,
+      Math.abs(referenceRect[len] - arrowRect[len]),
+      arrowRect[len]
+    );
 
     const tetherMin =
       state.modifiersData.popperOffsets[mainAxis] +
       referenceRect[len] / 2 -
       additive -
-      arrowElementRect[len] -
+      arrowLen -
       tetherOffsetValue;
     const tetherMax =
       state.modifiersData.popperOffsets[mainAxis] -
       referenceRect[len] / 2 +
       additive +
-      arrowElementRect[len] +
+      arrowLen +
       tetherOffsetValue;
 
     const preventedOffset = within(
