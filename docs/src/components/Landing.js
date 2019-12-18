@@ -11,6 +11,7 @@ import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
 import Highlight from './Highlight';
+import CarbonAds from './CarbonAds';
 
 import Header from './Header';
 import InstallBar from './InstallBar';
@@ -272,6 +273,8 @@ const Layout = ({ children }) => {
     <MDXProvider components={components}>
       <Header siteTitle={data.site.siteMetadata.title} />
       <InstallBar />
+      <CarbonAds />
+
       <Container>
         <Heading>Placement</Heading>
 

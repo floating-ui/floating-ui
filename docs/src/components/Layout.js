@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import { Global, css } from '@emotion/core';
+import CarbonAds from './CarbonAds';
 
 import Navigation from './Navigation';
 import './layout.css';
@@ -57,6 +58,7 @@ const Layout = ({ children }) => {
             color: '#222222',
           }}
         >
+          <CarbonAds data-light style={{ float: 'right', marginLeft: 20 }} />
           <main>{children}</main>
           <footer>
             © {new Date().getFullYear()}, Built with

@@ -1,0 +1,38 @@
+#carbonads {
+  background-color: #281d2f;
+  color: #fff;
+  margin: 30px auto;
+  width: 360px;
+  height: 155px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.carbon-wrap {
+  display: flex;
+}
+
+.carbon-img {
+  padding-right: 10px;
+}
+
+.carbon-poweredby {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+}
+
+.carbon-text {
+  font-size: 14px;
+}
+
+.carbon-text,
+.carbon-poweredby {
+  text-decoration: none;
+  color: inherit;
+}
+
+[data-light] #carbonads {
+  background-color: #f3f3f3;
+  color: #222;
+}
