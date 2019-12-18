@@ -21,7 +21,7 @@
 
 <!-- 🚨 HEY! HERE BEGINS THE INTERESTING STUFF 🚨 -->
 
-> Popper 2 is coming! Check out its [README here](/tree/next), the issue tracker is now tracking the work needed to release this new version.
+> Popper 2 is coming! Check out its [README here](https://github.com/popperjs/popper.js/tree/next), the issue tracker is now tracking the work needed to release this new version.
 
 ## Wut? Poppers?
 
