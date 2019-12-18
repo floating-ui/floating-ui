@@ -2,7 +2,6 @@
 import type { Rect, VirtualElement } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
 import getScrollSum from './getScrollSum';
-import unwrapVirtualElement from './unwrapVirtualElement';
 import { isElement } from './instanceOf';
 
 // Returns the composite rect of an element relative to its offsetParent.
@@ -12,8 +11,7 @@ export default (
   commonOffsetParent: Element,
   isFixed: boolean = false
 ): Rect => {
-  const element = unwrapVirtualElement(elementOrVirtualElement);
-  const rect = getBoundingClientRect(element);
+  const rect = getBoundingClientRect(elementOrVirtualElement);
   const offsetParentRect =
     isElement(commonOffsetParent) && !isFixed
       ? getBoundingClientRect(commonOffsetParent)
