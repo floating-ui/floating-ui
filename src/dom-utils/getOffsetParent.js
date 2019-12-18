@@ -5,10 +5,9 @@ import getComputedStyle from './getComputedStyle';
 import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
 
-// https://stackoverflow.com/a/9851769/2059996
-const isFirefox = typeof window.InstallTrigger !== 'undefined';
-
 const getTrueOffsetParent = (element: Element): ?Element => {
+  // https://stackoverflow.com/a/9851769/2059996
+  const isFirefox = typeof window.InstallTrigger !== 'undefined';
   let offsetParent;
   if (
     !isHTMLElement(element) ||
