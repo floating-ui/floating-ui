@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import { Link } from 'gatsby';
 import popperLogo from '../images/popper-logo.svg';
 import stripes from '../images/stripes.svg';
 
@@ -43,8 +44,30 @@ const SubSlogan = styled.p`
   margin-bottom: 0;
 `;
 
+const Button = styled(Link)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #c73a50;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: white;
+  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+
+  &:hover,
+  &:focus {
+    border: 1px solid #c73a50;
+  }
+`;
+
 const Header = () => (
   <HeaderStyled>
+    <Button to="/docs">Documentation</Button>
     <Logo src={popperLogo} alt="Popper logo" draggable="false" />
     <Slogan>Tooltip Positioning Engine</Slogan>
     <SubSlogan>Includes popovers, drop-downs, and more</SubSlogan>
