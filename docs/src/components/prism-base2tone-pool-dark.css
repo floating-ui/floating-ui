@@ -28,7 +28,6 @@ pre[class*='language-'] {
   -moz-hyphens: none;
   -ms-hyphens: none;
   hyphens: none;
-  color: #c83b50;
 }
 
 pre[class*='language-']::-moz-selection,
@@ -54,7 +53,7 @@ pre[class*='language-'] {
   overflow: auto;
   border: 1px solid #ffffff0d;
   background: #18111c;
-  color: #b886fd;
+  color: #ffe69d;
   border-radius: 10px;
   font-size: 14px;
 }
@@ -63,6 +62,7 @@ pre[class*='language-'] {
 :not(pre) > code[class*='language-'] {
   padding: 0.1em;
   border-radius: 0.3em;
+  color: #c83b50;
 }
 
 .token.comment,

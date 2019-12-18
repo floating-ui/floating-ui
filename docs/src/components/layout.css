@@ -3,6 +3,15 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background: #34283f;
   color: white;
+  line-height: 1.6;
+}
+
+h2::before {
+  content: ' ';
+  display: block;
+  border-bottom: 1px solid #ececec;
+  padding-top: 44px;
+  margin-bottom: 40px;
 }
 
 blockquote {
