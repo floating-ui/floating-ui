@@ -1,11 +1,11 @@
 // @flow
+import type { State, ClientRectObject, VirtualElement } from '../types';
 import type {
-  ModifierArguments,
-  Modifier,
-  ClientRectObject,
-  VirtualElement,
-} from '../types';
-import type { RootOverflowArea, OverflowArea, Context } from '../enums';
+  Placement,
+  RootOverflowArea,
+  OverflowArea,
+  Context,
+} from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
 import getViewportRect from '../dom-utils/getViewportRect';
@@ -22,6 +22,7 @@ import {
 import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 type Options = {
+  placement: Placement,
   area: OverflowArea,
   rootArea: RootOverflowArea,
   elementContext: Context,
@@ -64,8 +65,12 @@ const getOverflowRect = (
   }
 };
 
-function detectOverflow({ state, options, name }: ModifierArguments<Options>) {
+export default function detectOverflow(
+  state: State,
+  options: $Shape<Options> = {}
+): OverflowOffsets {
   const {
+    placement = state.placement,
     area = clippingParents,
     rootArea = 'document',
     elementContext = popper,
@@ -79,18 +84,13 @@ function detectOverflow({ state, options, name }: ModifierArguments<Options>) {
   const element = state.elements[altArea ? altContext : elementContext];
 
   const clippingClientRect = getOverflowRect(element, area, rootArea);
-
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
   const popperOffsets = computeOffsets({
     reference: referenceClientRect,
     element: popperRect,
     strategy: 'absolute',
-    placement: state.placement,
-    scroll: {
-      scrollTop: 0,
-      scrollLeft: 0,
-    },
+    placement,
   });
 
   const popperClientRect = rectToClientRect({
@@ -117,19 +117,5 @@ function detectOverflow({ state, options, name }: ModifierArguments<Options>) {
     });
   }
 
-  state.modifiersData[name] = {
-    overflowOffsets: overflowOffsets,
-  };
-
-  return state;
+  return overflowOffsets;
 }
-
-export default ({
-  name: 'detectOverflow',
-  enabled: true,
-  phase: 'read',
-  fn: detectOverflow,
-  requires: ['popperOffsets'],
-  optionallyRequires: ['offset'],
-  data: {},
-}: Modifier<Options>);

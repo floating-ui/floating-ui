@@ -60,7 +60,7 @@ it('shorter: should be flipped to original -end variation when it fits', async (
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation-shorter.html`);
 
-  await scroll(page, 'html', 200);
+  await scroll(page, 'html', 600);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });

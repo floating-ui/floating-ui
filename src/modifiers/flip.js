@@ -1,36 +1,61 @@
 // @flow
-import type { Placement } from '../enums';
+import type { Placement, OverflowArea, RootOverflowArea } from '../enums';
 import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
-import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
-import getVariationPlacement from '../utils/getVariationPlacement';
 import getBasePlacement from '../utils/getBasePlacement';
+import getVariationPlacement from '../utils/getVariationPlacement';
+import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
-import { basePlacements, right, bottom, left, top, start, end } from '../enums';
+import {
+  basePlacements,
+  start,
+  top,
+  bottom,
+  right,
+  left,
+  viewport,
+  clippingParents,
+} from '../enums';
+import detectOverflow from '../utils/detectOverflow';
 
 type Options = {
   fallbackPlacements: Array<Placement>,
   padding: Padding,
-  checkVariation: boolean,
+  area: OverflowArea,
+  rootArea: RootOverflowArea,
+  flipVariations: boolean,
+};
+
+const getExpandedFallbackPlacements = (
+  placement: Placement
+): Array<Placement> => {
+  const oppositePlacement = getOppositePlacement(placement);
+  return [
+    getOppositeVariationPlacement(placement),
+    oppositePlacement,
+    getOppositeVariationPlacement(oppositePlacement),
+  ];
 };
 
 function flip({ state, options, name }: ModifierArguments<Options>) {
   const {
-    fallbackPlacements: preFallbackPlacements = [
-      getOppositePlacement(state.options.placement),
-    ],
+    fallbackPlacements: specifiedFallbackPlacements,
     padding = 0,
-    checkVariation = true,
+    area = clippingParents,
+    rootArea = viewport,
+    flipVariations = true,
   } = options;
 
-  // If all placements don't fit, we want to use the originally specified one
-  // in options as the last
-  const fallbackPlacements = preFallbackPlacements.concat(
-    state.options.placement
-  );
+  const preferredPlacement = state.options.placement;
+  const isBasePlacement =
+    getBasePlacement(preferredPlacement) === preferredPlacement;
+  const fallbackPlacements =
+    specifiedFallbackPlacements ||
+    (isBasePlacement
+      ? [getOppositePlacement(preferredPlacement)]
+      : getExpandedFallbackPlacements(preferredPlacement));
 
-  const overflow = state.modifiersData['detectOverflow:flip'].overflowOffsets;
   const flipIndex = state.modifiersData[name].index;
   const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
@@ -38,66 +63,69 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       : expandToHashMap(padding, basePlacements)
   );
 
-  const placementOrder = [state.options.placement, ...fallbackPlacements];
+  const placementOrder = [preferredPlacement, ...fallbackPlacements];
+  const flippedPlacement: Placement = placementOrder[flipIndex];
 
-  let flippedPlacement: Placement = placementOrder[flipIndex];
+  const referenceRect = state.measures.reference;
+  const popperRect = state.measures.popper;
+
+  const overflow = detectOverflow(state, {
+    placement: flippedPlacement,
+    area,
+    rootArea,
+  });
 
   if (!flippedPlacement) {
+    // If none of the placements fit, we still want to use the better-fitting
+    // flipped variation if possible
+    const fallbackVariation = state.modifiersData[name].fallbackVariation;
+    if (fallbackVariation && state.placement !== fallbackVariation) {
+      state.placement = fallbackVariation;
+      state.reset = true;
+    }
+
     return state;
   }
 
   const basePlacement = getBasePlacement(flippedPlacement);
-  const fitsOnMainAxis =
-    overflow[basePlacement] + paddingObject[basePlacement] <= 0;
+  const variationPlacement = getVariationPlacement(flippedPlacement);
+  const isVertical = [top, bottom].includes(basePlacement);
+  const isStartVariation = variationPlacement === start;
+  const len = isVertical ? 'width' : 'height';
 
-  // Check alt axis to see if we can switch variation placements
-  const variation = getVariationPlacement(flippedPlacement);
-  if (variation && checkVariation) {
-    const isVertical = [top, bottom].includes(basePlacement);
-    const isStartVariation = variation === start;
-    const len = isVertical ? 'width' : 'height';
-
-    const sideA = isStartVariation
+  const edge =
+    referenceRect[len] < popperRect[len]
       ? isVertical
-        ? right
-        : bottom
-      : isVertical
-      ? left
-      : top;
-    const sideB = isStartVariation
-      ? isVertical
-        ? left
+        ? isStartVariation
+          ? right
+          : left
+        : isStartVariation
+        ? bottom
         : top
       : isVertical
-      ? right
+      ? isStartVariation
+        ? left
+        : right
+      : isStartVariation
+      ? top
       : bottom;
 
-    const fitsA = overflow[sideA] + paddingObject[sideA] <= 0;
-    const fitsB = overflow[sideB] + paddingObject[sideB] <= 0;
+  let fits = overflow[basePlacement] + paddingObject[basePlacement] <= 0;
 
-    const oppositeVariation = variation === start ? end : start;
-    const oppositePlacement = getOppositeVariationPlacement(flippedPlacement);
-    const storedVariation = state.modifiersData[`${name}#persistent`];
+  if (flipVariations && !isBasePlacement) {
+    const fitsEdge = overflow[edge] + paddingObject[edge] <= 0;
+    fits = fits && fitsEdge;
 
-    const condition =
-      state.measures.popper[len] < state.measures.reference[len]
-        ? fitsA && !fitsB
-        : !fitsA && fitsB;
-
-    if (condition) {
-      state.modifiersData[`${name}#persistent`] = oppositeVariation;
-      flippedPlacement = oppositePlacement;
-    } else if (storedVariation) {
-      state.modifiersData[`${name}#persistent`] = variation;
-      flippedPlacement = (`${basePlacement}-${storedVariation}`: any);
+    if (fitsEdge && !state.modifiersData[name].fallbackVariation) {
+      state.modifiersData[name].fallbackVariation = flippedPlacement;
     }
   }
 
-  if (!fitsOnMainAxis) {
+  if (!fits) {
     state.modifiersData[name].index += 1;
     state.reset = true;
     return state;
-  } else if (fitsOnMainAxis && state.placement !== flippedPlacement) {
+  } else if (fits && state.placement !== flippedPlacement) {
     state.placement = flippedPlacement;
     state.reset = true;
     return state;
@@ -111,7 +139,7 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: flip,
-  requires: ['detectOverflow:flip'],
+  requires: [],
   optionallyRequires: ['offset'],
   data: { index: 0 },
 }: Modifier<Options>);

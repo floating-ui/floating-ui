@@ -79,20 +79,14 @@
 
 <script type="module">
   import { createPopper } from '../../dist/popper.js';
-  import { preconfiguredHide } from '../../dist/modifiers/hide.js';
+  import hide from '../../dist/modifiers/hide.js';
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 
   window.instance = createPopper(reference, popper, {
     placement: 'right',
     modifiers: [
-      ...preconfiguredHide,
-      {
-        name: 'preventOverflow',
-        options: {
-          altAxis: true,
-        },
-      },
+      hide,
       {
         name: 'offset',
         options: {
