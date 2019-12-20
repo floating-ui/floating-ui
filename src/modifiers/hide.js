@@ -1,12 +1,7 @@
 // @flow
-import type { ModifierArguments, Modifier, Rect } from '../types';
-import { top, bottom, left, right, clippingParents, reference } from '../enums';
-import detectOverflow from './detectOverflow';
-
-type Options = {
-  detectOverflowReference: string,
-  detectOverflowAltArea: string,
-};
+import type { ModifierArguments, Modifier, Rect, Options } from '../types';
+import { top, bottom, left, right } from '../enums';
+import detectOverflow from '../utils/detectOverflow';
 
 type ModifierData = {
   top: number,
@@ -29,25 +24,21 @@ const getOffsets = (
 const isAnySideFullyClipped = (overflow: ModifierData): boolean =>
   [top, right, bottom, left].some(side => overflow[side] >= 0);
 
-const defaultDetectOverflowReference = 'detectOverflow:hide:reference';
-const defaultDetectOverflowAltArea = 'detectOverflow:hide:altArea';
-
-function hide({ state, name, options }: ModifierArguments<Options>) {
-  const {
-    detectOverflowReference = defaultDetectOverflowReference,
-    detectOverflowAltArea = defaultDetectOverflowAltArea,
-  } = options;
-
+function hide({ state, name }: ModifierArguments<Options>) {
   const referenceRect = state.measures.reference;
   const popperRect = state.measures.popper;
-  const overflow = state.modifiersData[detectOverflowReference].overflowOffsets;
-  const altOverflow =
-    state.modifiersData[detectOverflowAltArea].overflowOffsets;
   const preventedOffsets = state.modifiersData.preventOverflow;
 
-  const referenceClippingOffsets = getOffsets(overflow, referenceRect);
+  const referenceOverflow = detectOverflow(state, {
+    elementContext: 'reference',
+  });
+  const popperAltOverflow = detectOverflow(state, {
+    altArea: true,
+  });
+
+  const referenceClippingOffsets = getOffsets(referenceOverflow, referenceRect);
   const popperEscapeOffsets = getOffsets(
-    altOverflow,
+    popperAltOverflow,
     popperRect,
     preventedOffsets
   );
@@ -75,33 +66,10 @@ const hideModifier = ({
   name: 'hide',
   enabled: true,
   phase: 'main',
+  requires: [],
   optionallyRequires: ['preventOverflow'],
   fn: hide,
 }: Modifier<Options>);
 
 // eslint-disable-next-line import/no-unused-modules
 export default hideModifier;
-
-// eslint-disable-next-line import/no-unused-modules
-export const preconfiguredHide = [
-  {
-    ...detectOverflow,
-    name: defaultDetectOverflowReference,
-    options: {
-      area: clippingParents,
-      elementContext: reference,
-    },
-  },
-  {
-    ...detectOverflow,
-    name: defaultDetectOverflowAltArea,
-    options: {
-      area: clippingParents,
-      altArea: true,
-    },
-  },
-  {
-    ...hideModifier,
-    requires: [defaultDetectOverflowReference, defaultDetectOverflowAltArea],
-  },
-];

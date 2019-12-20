@@ -1,9 +1,7 @@
 // @flow
 import { popperGenerator } from './index';
-import { viewport } from './enums';
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
-import detectOverflow from './modifiers/detectOverflow';
 import computeStyles from './modifiers/computeStyles';
 import applyStyles from './modifiers/applyStyles';
 import offset from './modifiers/offset';
@@ -14,15 +12,6 @@ import arrow from './modifiers/arrow';
 const defaultModifiers = [
   eventListeners,
   popperOffsets,
-  {
-    ...detectOverflow,
-    name: 'detectOverflow:preventOverflow',
-  },
-  {
-    ...detectOverflow,
-    name: 'detectOverflow:flip',
-    options: { rootArea: viewport },
-  },
   computeStyles,
   applyStyles,
   offset,

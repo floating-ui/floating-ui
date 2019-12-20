@@ -1,6 +1,13 @@
 // @flow
-import { basePlacements, top, left, right, bottom } from '../enums';
-import type { Placement } from '../enums';
+import {
+  basePlacements,
+  top,
+  left,
+  right,
+  bottom,
+  clippingParents,
+} from '../enums';
+import type { Placement, OverflowArea, RootOverflowArea } from '../enums';
 import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
@@ -10,6 +17,7 @@ import expandToHashMap from '../utils/expandToHashMap';
 import within from '../utils/within';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
+import detectOverflow from '../utils/detectOverflow';
 
 type TetherOffset =
   | (({
@@ -24,8 +32,10 @@ type Options = {
   mainAxis: boolean,
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
-  /* Sets a padding to the provided boundary */
-  padding: Padding,
+  /* The area to check the popper is overflowing in */
+  area: OverflowArea,
+  /* If the popper is not overflowing the main area, fallback to this one */
+  rootArea: RootOverflowArea,
   /**
    * Allows the popper to overflow from its boundaries to keep it near its
    * reference element
@@ -33,19 +43,22 @@ type Options = {
   tether: boolean,
   /* Offsets when the `tether` option should activate */
   tetherOffset: TetherOffset,
+  /* Sets a padding to the provided boundary */
+  padding: Padding,
 };
 
 function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
+    area = clippingParents,
+    rootArea = 'document',
     tether = true,
     tetherOffset = 0,
     padding = 0,
   } = options;
 
-  const overflow =
-    state.modifiersData['detectOverflow:preventOverflow'].overflowOffsets;
+  const overflow = detectOverflow(state, { area, rootArea });
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
@@ -146,6 +159,6 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
-  requires: ['detectOverflow:preventOverflow'],
+  requires: [],
   optionallyRequires: ['offset'],
 }: Modifier<Options>);

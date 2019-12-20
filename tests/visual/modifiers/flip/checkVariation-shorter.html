@@ -36,12 +36,12 @@
   const popper = document.querySelector('#popper');
 
   window.instance = createPopper(reference, popper, {
-    placement: 'right-end',
+    placement: 'right-start',
     modifiers: [
       {
         name: 'flip',
         options: {
-          checkVariation: true,
+          flipVariations: true,
         },
       },
     ],
