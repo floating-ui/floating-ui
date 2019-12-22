@@ -1,28 +1,40 @@
 ---
 title: Flip
+index: 4
 ---
+
+import { FlipDemo } from '../../../components/Demos';
 
 # Flip
 
-The flip modifier can change the `placement` of a popper when the
-`detectOverflow` modifier reported is overflowing on the direction of the
-currently given placement.
+The `flip` modifier can change the `placement` of a popper when it's scheduled
+to overflow a given boundary.
 
-> **Note**: to customize the behavior of the `flip`'s `detectOverflow` modifier,
-> you will need to specify as modifier name `detectOverflow:flip`. This is a
-> modifier instance dedicated to the `flip` modifier.
+## Demo
+
+The placement is set to `bottom`, but if that placement does not fit, the
+opposite `top` placement will be used.
+
+<FlipDemo />
+
+## Phase
+
+`main`
 
 ## Options
 
 ```flow
 type Options = {
   fallbackPlacements: Array<Placement>, // [oppositePlacement]
-  padding: Padding, // 0
+  padding: Padding, // 0,
+  boundary: Boundary, // "clippingParents"
+  rootBoundary: RootBoundary, // "viewport"
+  flipVariations: boolean, // true
 };
 
-/**
- * Below are described the relative types
- */
+// Below are the described relative types
+type Boundary = 'clippingParents' | HTMLElement;
+type RootBoundary = 'document' | 'viewport';
 type Padding =
   | {|
       top?: number,
@@ -33,17 +45,16 @@ type Padding =
   | number;
 ```
 
-### Options#fallbackPlacements
+### `fallbackPlacements`
 
-If the popper has placement set to `bottom`, but there isn't space to position
-the popper in that direction, by default, it will change the popper placement to
-`top`. As soon enough space is detected, the placement will be reverted to the
-originally defined one.
+If the popper has placement set to `bottom`, but there isn't enough space to
+position the popper in that direction, by default, it will change the popper
+placement to `top`. As soon as enough space is detected, the placement will be
+reverted to the originally defined (or preferred) one.
 
-You can also define custom "flip" fallback placements, by providing a list of
-placements to try. Doing so, when no space is available on the defined
-placement, the modifier will test the ones provided in the list, and use the
-first useful one.
+You can also define fallback placements by providing a list of placements to
+try. When no space is available on the preferred placement, the modifier will
+test the ones provided in the list, and use the first useful one.
 
 ```js
 createPopper(reference, popper, {
@@ -60,16 +71,18 @@ createPopper(reference, popper, {
 ```
 
 In the above example, the popper will be placed on left if there's enough space,
-if not, it will try the top placement, and if even on the top placement there's
-not enough space, it will try to use the right placement. Note that if none of
-the placements is suitable, the original left placement will be used.
+if not, it will try the top placement, and if the top placement doesn't fit
+either, it will try to use the right placement. If even the right placement
+doesn't fit, it reverts back to the original placement.
 
-### Options#padding
+### `padding`
 
-You can apply some additional padding to the boundaries defined by the
-`detectOverflow` modifier by setting this option to a number, to apply the
-padding evenly to all the four sides, or to an object containing the `top`,
-`left`, `bottom`, `right` properties, with a padding number for each side.
+If you don't want the popper to reach the _very_ edge of the boundary area, you
+can apply some padding. This will make the popper flip earlier (in pixels) than
+the true edge.
+
+You can pass a `number`, which will be equal padding on all four sides, or an
+`object` containing side properties each with their own padding value.
 
 ```js
 createPopper(reference, popper, {
@@ -77,27 +90,87 @@ createPopper(reference, popper, {
     {
       name: 'flip',
       options: {
-        padding: { top: 20, right: 10 },
+        // Equal padding on all four sides
+        padding: 8,
+        // Different padding on certain sides. Unspecified sides are 0.
+        padding: { top: 58, bottom: 8, right: 15 },
       },
     },
   ],
 });
 ```
 
-## Customize `detectOverflow:flip`
+### `boundary`
 
-If you'd like to change the boundary area of the `flip` modifier, you can
-customize the `detectOverflow:flip` modifier:
+This describes the area that the popper will be constrained within (not allowed
+to overflow). Once the popper reaches the edge of this area, it will attempt to
+flip to another side.
+
+By default, it is `"clippingParents"`, which are the scrolling containers that
+may cause the popper to be partially or fully cut off.
+
+```js
+const element = document.querySelector('#parentElement');
+
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'flip',
+      options: {
+        area: element,
+      },
+    },
+  ],
+});
+```
+
+### `rootBoundary`
+
+This describes the root boundary that will be checked for overflow. There are
+only two "roots" – the viewport and the document. `"viewport"` is default, which
+is the area of the document the user can actually see on the screen.
+`"document"` is the entire page which can be potentially scrolled.
 
 ```js
 createPopper(reference, popper, {
   modifiers: [
     {
-      name: 'detectOverflow:flip',
+      name: 'preventOverflow',
       options: {
-        rootArea: 'document', // `viewport` by default
+        rootBoundary: 'document', // 'viewport' by default
       },
     },
   ],
 });
+```
+
+### `flipVariations`
+
+When using variation placements (e.g. `top-start`), the popper will attempt to
+flip the opposite variation if the preferred variation does not fit. This allows
+the popper to stay aligned to the edge of the reference element before
+`preventOverflow` has a chance to misalign it.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'flip',
+      options: {
+        flipVariations: false, // true by default
+      },
+    },
+  ],
+});
+```
+
+## Data
+
+```flow
+type Data = {
+  // The current index in the placement order it's trying.
+  index: number,
+  // The preferred fallback variation placement to use if no placements fit.
+  fallbackVariation: Placement,
+};
 ```

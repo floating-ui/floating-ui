@@ -2,50 +2,51 @@
   <img src="./docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
 </p>
 
-Positioning tooltips (_but also dropdowns, popovers, and more_) is difficult.
-**Popper** is here to help!
+**Positioning tooltips is difficult. Popper is here to help!**
 
-Given a reference element (such as a button) and a tooltip element, Popper will
-automatically put your tooltip in the right place next to the button.
+Given an element, such as a button, and a tooltip element describing it, Popper
+will automatically put the tooltip in the right place near the button.
 
-### Why Popper?
+But Popper is not just about tooltips. It will position _any_ UI element that
+"pops out" from the flow of your document. The most common example is a tooltip,
+but it also includes popovers, drop-downs, and more. All of these can be
+generically described as a "popper element".
+
+## Why Popper?
 
 Naive tooltip implementations generally don't consider the following:
 
-- Preventing overflow when the tooltip is near a boundary (e.g. `window`), it
-  will get cut off;
+- Preventing overflow when the tooltip is near a boundary (e.g. window), it will
+  get cut off;
 - Flipping to keep the tooltip visible in the viewport for the user;
-- Keeping the tooltip with the reference element when inside a scrolling
-  container;
+- Keeping the tooltip with the reference element when inside any number of
+  scrolling containers;
+- Keeping the tooltip in its original DOM context
 
 Popper solves all of these key problems in an elegant, performant manner. It is
 a ~3 kB library that aims to provide a reliable and extensible positioning
 engine you can use to ensure all your popper elements are positioned in the
-right place. Why waste your time writing your own logic every time you are
-programming a tooltip? There are many edge cases that are easy to forget to
-consider, which is why we've done the hard work for you.
+right place.
 
-This library can position any pair of elements in your document without needing
-to alter the DOM in any way. It doesn't matter if your elements are not close to
-each other or are in two different scrolling containers, they will always end up
-in the right position.
+Why waste your time writing your own logic every time you are programming a
+tooltip? There are many edge cases that are easy to forget to consider, which is
+why we've done the hard work for you.
 
 Since we write UIs using powerful abstraction libraries such as React or Angular
 nowadays, you'll also be glad to know Popper can fully integrate with them and
-be a good citizen together with your other components. Check out
-[`react-popper`](https://github.com/FezVrasta/react-popper) for the official
-Popper wrapper for React.
+be a good citizen together with your other components. Check out `react-popper`
+for the official Popper wrapper for React.
 
 ## Installation
 
 ### 1. Package Manager
 
 ```bash
-# With Yarn
-yarn add @popperjs/core@alpha
-
 # With npm
 npm i @popperjs/core@alpha
+
+# With Yarn
+yarn add @popperjs/core@alpha
 ```
 
 ### 2. CDN
@@ -54,93 +55,106 @@ npm i @popperjs/core@alpha
 <script src="https://unpkg.com/@popperjs/core@alpha"></script>
 ```
 
-### 3. Direct Download
+### 3. Direct Download?
 
-Manually downloading the library is not recommended because you lose versioning
-management that the unpkg CDN or npm/Yarn provide.
-
-You don't receive fix/feat updates easily and will lag behind the website
-documentation, among other issues, and this quickly becomes an unmaintainable
-way to manage dependencies.
+Managing dependencies by "directly downloading" them and placing them into your
+source code is not recommended for a variety of reasons, including missing out
+on feat/fix updates easily. Please, use a versioning management system like a
+CDN or npm/Yarn.
 
 ## Usage
 
-Popper has the ability to work as a plug n' play library with all features
-included, as well as a tree-shakable library that minimizes bundle size if you
-import only what you need.
+The most straightforward way to get started is to import Popper from the `unpkg`
+CDN, which includes all of its features. You can call the `Popper.createPopper`
+constructor to create new popper instances.
 
-### CDN
-
-Generally, for CDN users, you'll be using the fully-featured `umd` file:
+Here is a complete example:
 
 ```html
+<!DOCTYPE html>
+<title>Popper example</title>
+
+<style>
+  #tooltip {
+    background-color: rebeccapurple;
+    padding: 20px;
+    width: 200px;
+  }
+</style>
+
+<button type="button" id="button">I'm a button</button>
+<div id="tooltip">I'm a tooltip</div>
+
 <script src="https://unpkg.com/@popperjs/core@alpha"></script>
 <script>
-  // Now the script is loaded, you can use the `createPopper` function!
+  const button = document.querySelector('#button');
+  const tooltip = document.querySelector('#tooltip');
+
+  // Pass the button, the tooltip, and some options, and Popper will do the
+  // magic positioning for you:
+  Popper.createPopper(button, tooltip, {
+    placement: 'right',
+  });
 </script>
 ```
 
-Importing features you need comes at the cost of extra HTTP requests which is
-usually not worth it.
+### Module bundlers
 
-### Module Bundlers
-
-For users of module bundlers like webpack or Rollup, you're going to want to
-take advantage of tree-shaking in your bundler. This comes at the cost of extra
-setup, but is worth it.
-
-In your app, you can do the following:
+You can import the `createPopper` constructor from the fully-featured file:
 
 ```js
-// Import the generator function
-import { popperGenerator } from '@popperjs/core';
+import { createPopper } from '@popperjs/core';
 
-// Import the features you need
-import {
-  computeStyles,
-  applyStyles,
-  detectOverflow,
-  preventOverflow,
-} from '@popperjs/core/lib/modifiers';
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
 
-// Setup Popper's default modifiers for each new instance
-const createPopper = popperGenerator({
-  defaultModifiers: [
-    detectOverflow,
-    preventOverflow,
-    computeStyles,
-    applyStyles,
-  ],
+// Pass the button, the tooltip, and some options, and Popper will do the
+// magic positioning for you:
+createPopper(button, tooltip, {
+  placement: 'right',
 });
 ```
 
-Now you can use the `createPopper` function to instantiate poppers with _only_
-the features you want. For instance, we aren't using the `arrow`, `flip`, or
-`offset` modifiers, because the current component, route, or our entire app does
-not need them. This lets us save on bundle size bytes for our users!
+All the modifiers listed in the docs menu will be enabled and "just work", so
+you don't need to think about setting Popper up. The size of Popper including
+all of its features is about 5 kB minzipped, but it may grow a bit in the
+future.
 
-If you don't want to bother with tree-shaking and don't need bundle size cost
-advantages, you can import the fully featured `esm` file:
+#### Popper Lite (tree-shaking)
 
-```js
-// All features included!
-import { createPopper } from '@popperjs/core/lib/popper';
-```
-
-### Instantiation
-
-Creating a popper instance is done by passing the reference element (such as a
-button), the popper element (such as a tooltip), and some options to the
-`Popper` constructor:
+If bundle size is important, you'll want to take advantage of tree-shaking. The
+library is built in a modular way to allow to import only the parts you really
+need.
 
 ```js
-// Get your elements
-const element = document.querySelector('#button');
-const popper = document.querySelector('#tooltip');
-
-// Let Popper do the magic!
-createPopper(element, popper, { placement: 'right' });
+import { createPopper } from '@popperjs/core/lib/popper-lite.js';
 ```
+
+The Lite version includes the most necessary modifiers that will compute the
+offsets of the popper, compute and add the positioning styles, and add event
+listeners. This is close in bundle size to pure CSS tooltip libraries, and
+behaves somewhat similarly.
+
+However, this does not include the features that makes Popper truly useful.
+
+The two most useful modifiers not included in Lite are `preventOverflow` and
+`flip`:
+
+```js
+import { createPopper } from '@popperjs/core/lib/popper-lite.js';
+import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow.js';
+import flip from '@popperjs/core/lib/modifiers/flip.js';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
+
+createPopper(button, tooltip, {
+  modifiers: [preventOverflow, flip],
+});
+```
+
+As you make more poppers, you may be finding yourself needing other modifiers
+provided by the library.
 
 ## Distribution targets
 
@@ -154,19 +168,19 @@ The 3 file formats are:
 
 The 3 versions are:
 
-- `popper`: includes all the modifiers (features) in one file (**default for
-  `umd`**);
+- `popper`: includes all the modifiers (features) in one file (**default**);
 - `popper-lite`: includes only the minimum amount of modifiers to provide the
   basic functionality;
-- `popper-base`: doesn't include any modifier, you must import them separately
-  (**default for `esm` and `cjs`**);
+- `popper-base`: doesn't include any modifier, you must import them separately;
 
 Below you can find the size of each version, minified and compressed with the
 [Brotli compression algorithm](https://medium.com/groww-engineering/enable-brotli-compression-in-webpack-with-fallback-to-gzip-397a57cf9fc6):
 
+<!-- Don't change the labels to use hyphens, it breaks, even when encoded -->
+
 ![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper.min.js?compression=brotli&label=popper)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-lite.min.js?compression=brotli&label=popper-lite)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-minimal.min.js?compression=brotli&label=popper-minimal)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-lite.min.js?compression=brotli&label=popper%20lite)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-base.min.js?compression=brotli&label=popper%20base)
 
 ## Hacking the library
 
@@ -178,19 +192,19 @@ First of all, make sure to have
 
 Install the development dependencies:
 
-```
+```bash
 yarn install
 ```
 
 And run the development environment:
 
-```
+```bash
 yarn dev
 ```
 
 Then, simply open one the development server web page:
 
-```
+```bash
 # macOS and Linux
 open localhost:5000
 

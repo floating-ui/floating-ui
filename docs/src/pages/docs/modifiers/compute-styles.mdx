@@ -1,5 +1,47 @@
 ---
 title: Compute Styles
+index: 6
 ---
 
 # Compute Styles
+
+The `computeStyles` modifier prepares the styles that will get written to the
+DOM in the next phase, `write`. This includes rounding the offsets and deciding
+what properties to use (e.g. `gpuAcceleration`).
+
+## Phase
+
+`beforeWrite`
+
+## Options
+
+```flow
+type Options = {
+  gpuAcceleration: boolean,
+};
+```
+
+### `gpuAcceleration`
+
+This determines whether GPU-accelerated styles are used to position the popper.
+
+- `true`: Popper will use the 3D transforms on high PPI displays and 2D
+  transforms on low PPI displays.
+- `false`: Popper will use `top/left` properties.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'computeStyles',
+      options: {
+        gpuAcceleration: false, // true by default
+      },
+    },
+  ],
+});
+```
+
+## Data
+
+This modifier currently has no data.

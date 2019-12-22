@@ -12,4 +12,8 @@ export const Container = styled.div`
   padding: 0 15px;
   max-width: 940px;
   margin: 0 auto;
+
+  ${media.md} {
+    padding: 0 40px;
+  }
 `;
