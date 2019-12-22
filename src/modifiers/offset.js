@@ -58,7 +58,7 @@ function offset({ state, options, name }: ModifierArguments<Options>) {
 export default ({
   name: 'offset',
   enabled: true,
-  phase: 'read',
+  phase: 'main',
   requires: ['popperOffsets'],
   fn: offset,
 }: Modifier<Options>);

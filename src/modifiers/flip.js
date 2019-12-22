@@ -1,5 +1,5 @@
 // @flow
-import type { Placement, OverflowArea, RootOverflowArea } from '../enums';
+import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
@@ -22,8 +22,8 @@ import detectOverflow from '../utils/detectOverflow';
 type Options = {
   fallbackPlacements: Array<Placement>,
   padding: Padding,
-  area: OverflowArea,
-  rootArea: RootOverflowArea,
+  boundary: Boundary,
+  rootBoundary: RootBoundary,
   flipVariations: boolean,
 };
 
@@ -42,8 +42,8 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   const {
     fallbackPlacements: specifiedFallbackPlacements,
     padding = 0,
-    area = clippingParents,
-    rootArea = viewport,
+    boundary = clippingParents,
+    rootBoundary = viewport,
     flipVariations = true,
   } = options;
 
@@ -71,8 +71,8 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
 
   const overflow = detectOverflow(state, {
     placement: flippedPlacement,
-    area,
-    rootArea,
+    boundary,
+    rootBoundary,
   });
 
   if (!flippedPlacement) {

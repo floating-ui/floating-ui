@@ -7,13 +7,16 @@ import type {
 } from '../types';
 
 // This modifier takes the Popper state and prepares some StyleSheet properties
-// that can be applied to the popper element to make it render in the expected position.
+// that can be applied to the popper element to make it render in the expected
+// position.
 
 type Options = {
-  gpuAcceleration?: boolean,
+  gpuAcceleration: boolean,
 };
 
-// Round the offsets to the nearest suitable subpixel based on the DPR
+// Round the offsets to the nearest suitable subpixel based on the DPR.
+// Zooming can change the DPR, but it seems to report a value that will
+// cleanly divide the values into the appropriate subpixels.
 const roundOffsets = ({ x, y }) => {
   const dpr = window.devicePixelRatio;
   return {
@@ -35,25 +38,27 @@ export const mapToStyles = ({
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
 
-  // Layer acceleration can disable subpixel rendering which causes slightly
-  // blurry text on low PPI displays.
-  // Zooming can change the DPR, but it seems to report a value that will
-  // cleanly divide the values into the appropriate subpixels.
-  if (gpuAcceleration === false || window.devicePixelRatio < 2) {
-    return {
-      top: hasY ? `${y}px` : '',
-      left: hasX ? `${x}px` : '',
-      transform: '',
-      position,
-    };
-  } else {
+  if (gpuAcceleration) {
     return {
       top: hasY ? '0' : '',
       left: hasX ? '0' : '',
-      transform: `translate3d(${x}px, ${y}px, 0)`,
+      // Layer acceleration can disable subpixel rendering which causes slightly
+      // blurry text on low PPI displays, so we want to use 2D transforms
+      // instead
+      transform:
+        window.devicePixelRatio < 2
+          ? `translate(${x}px, ${y}px)`
+          : `translate3d(${x}px, ${y}px, 0)`,
       position,
     };
   }
+
+  return {
+    top: hasY ? `${y}px` : '',
+    left: hasX ? `${x}px` : '',
+    transform: '',
+    position,
+  };
 };
 
 function computeStyles({ state, options }: ModifierArguments<Options>) {
@@ -92,7 +97,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
 export default ({
   name: 'computeStyles',
   enabled: true,
-  phase: 'afterMain',
+  phase: 'beforeWrite',
   fn: computeStyles,
   data: {},
 }: Modifier<Options>);

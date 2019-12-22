@@ -2,10 +2,10 @@
 
 exports[`computes the arrow styles 1`] = `
 Object {
-  "left": "10px",
+  "left": "0",
   "position": "absolute",
-  "top": "5px",
-  "transform": "",
+  "top": "0",
+  "transform": "translate(10px, 5px)",
 }
 `;
 

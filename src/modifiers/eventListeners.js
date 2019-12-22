@@ -1,7 +1,11 @@
 // @flow
 import type { ModifierArguments, Modifier } from '../types';
 import getWindow from '../dom-utils/getWindow';
-type Options = { scroll: boolean, resize: boolean };
+
+type Options = {
+  scroll: boolean,
+  resize: boolean,
+};
 
 const passive = { passive: true };
 

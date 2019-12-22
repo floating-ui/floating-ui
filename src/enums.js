@@ -17,11 +17,8 @@ export type VariationPlacement = typeof start | typeof end;
 
 export const clippingParents: 'clippingParents' = 'clippingParents';
 export const viewport: 'viewport' = 'viewport';
-export type OverflowArea =
-  | HTMLElement
-  | typeof clippingParents
-  | typeof viewport;
-export type RootOverflowArea = typeof viewport | 'document';
+export type Boundary = HTMLElement | typeof clippingParents;
+export type RootBoundary = typeof viewport | 'document';
 
 export const popper: 'popper' = 'popper';
 export const reference: 'reference' = 'reference';
