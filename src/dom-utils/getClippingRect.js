@@ -1,6 +1,6 @@
 // @flow
 import type { VirtualElement, ClientRectObject } from '../types';
-import type { RootOverflowArea } from '../enums';
+import type { RootBoundary } from '../enums';
 import { viewport } from '../enums';
 import getViewportRect from './getViewportRect';
 import getDocumentRect from './getDocumentRect';
@@ -40,7 +40,7 @@ function getClippingParents(elementOrVirtualElement: Element | VirtualElement) {
 // clipping parents
 export default function getClippingRect(
   elementOrVirtualElement: Element | VirtualElement,
-  rootArea: RootOverflowArea
+  rootBoundary: RootBoundary
 ): ClientRectObject {
   const element = unwrapVirtualElement(elementOrVirtualElement);
   const documentElement = getDocumentElement(element);
@@ -50,14 +50,14 @@ export default function getClippingRect(
 
   // Fallback to document
   if (
-    rootArea === 'document' &&
+    rootBoundary === 'document' &&
     (firstClippingParent === documentElement || !firstClippingParent)
   ) {
     return rectToClientRect(getDocumentRect(documentElement));
   }
 
   // Fallback to viewport
-  if (rootArea === viewport && !firstClippingParent) {
+  if (rootBoundary === viewport && !firstClippingParent) {
     return rectToClientRect(getViewportRect(element));
   }
 
