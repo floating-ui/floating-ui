@@ -1,14 +1,8 @@
 // @flow
 import type { State, ClientRectObject, VirtualElement } from '../types';
-import type {
-  Placement,
-  RootOverflowArea,
-  OverflowArea,
-  Context,
-} from '../enums';
+import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
-import getViewportRect from '../dom-utils/getViewportRect';
 import computeOffsets from '../utils/computeOffsets';
 import rectToClientRect from '../utils/rectToClientRect';
 import {
@@ -23,10 +17,10 @@ import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
 
 type Options = {
   placement: Placement,
-  area: OverflowArea,
-  rootArea: RootOverflowArea,
+  boundary: Boundary,
+  rootBoundary: RootBoundary,
   elementContext: Context,
-  altArea: boolean,
+  altBoundary: boolean,
 };
 
 // if the number is positive, the popper is overflowing by that number of pixels
@@ -50,19 +44,16 @@ const getOverflowOffsets = (
 
 const getOverflowRect = (
   elementOrVirtualElement: Element | VirtualElement,
-  area: OverflowArea,
-  rootArea: RootOverflowArea
+  boundary: Boundary,
+  rootBoundary: RootBoundary
 ): ClientRectObject => {
   const element = unwrapVirtualElement(elementOrVirtualElement);
 
-  switch (area) {
-    case 'clippingParents':
-      return getClippingRect(element, rootArea);
-    case 'viewport':
-      return rectToClientRect(getViewportRect(element));
-    default:
-      return getBoundingClientRect(area);
+  if (boundary === 'clippingParents') {
+    return getClippingRect(element, rootBoundary);
   }
+
+  return getBoundingClientRect(boundary);
 };
 
 export default function detectOverflow(
@@ -71,19 +62,19 @@ export default function detectOverflow(
 ): OverflowOffsets {
   const {
     placement = state.placement,
-    area = clippingParents,
-    rootArea = 'document',
+    boundary = clippingParents,
+    rootBoundary = 'document',
     elementContext = popper,
-    altArea = false,
+    altBoundary = false,
   } = options;
 
   const altContext = elementContext === popper ? reference : popper;
 
   const referenceElement = state.elements.reference;
   const popperRect = state.measures.popper;
-  const element = state.elements[altArea ? altContext : elementContext];
+  const element = state.elements[altBoundary ? altContext : elementContext];
 
-  const clippingClientRect = getOverflowRect(element, area, rootArea);
+  const clippingClientRect = getOverflowRect(element, boundary, rootBoundary);
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
   const popperOffsets = computeOffsets({

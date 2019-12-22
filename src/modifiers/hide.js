@@ -33,7 +33,7 @@ function hide({ state, name }: ModifierArguments<Options>) {
     elementContext: 'reference',
   });
   const popperAltOverflow = detectOverflow(state, {
-    altArea: true,
+    altBoundary: true,
   });
 
   const referenceClippingOffsets = getOffsets(referenceOverflow, referenceRect);

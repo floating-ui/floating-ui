@@ -7,7 +7,7 @@ import {
   bottom,
   clippingParents,
 } from '../enums';
-import type { Placement, OverflowArea, RootOverflowArea } from '../enums';
+import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
@@ -33,9 +33,9 @@ type Options = {
   /* Prevents boundaries overflow on the alternate axis */
   altAxis: boolean,
   /* The area to check the popper is overflowing in */
-  area: OverflowArea,
+  boundary: Boundary,
   /* If the popper is not overflowing the main area, fallback to this one */
-  rootArea: RootOverflowArea,
+  rootBoundary: RootBoundary,
   /**
    * Allows the popper to overflow from its boundaries to keep it near its
    * reference element
@@ -51,14 +51,14 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    area = clippingParents,
-    rootArea = 'document',
+    boundary = clippingParents,
+    rootBoundary = 'document',
     tether = true,
     tetherOffset = 0,
     padding = 0,
   } = options;
 
-  const overflow = detectOverflow(state, { area, rootArea });
+  const overflow = detectOverflow(state, { boundary, rootBoundary });
   const basePlacement = getBasePlacement(state.placement);
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);

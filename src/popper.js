@@ -8,6 +8,7 @@ import offset from './modifiers/offset';
 import flip from './modifiers/flip';
 import preventOverflow from './modifiers/preventOverflow';
 import arrow from './modifiers/arrow';
+import hide from './modifiers/hide';
 
 const defaultModifiers = [
   eventListeners,
@@ -18,6 +19,7 @@ const defaultModifiers = [
   flip,
   preventOverflow,
   arrow,
+  hide,
 ];
 
 const createPopper = popperGenerator({ defaultModifiers });
