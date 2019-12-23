@@ -6,6 +6,7 @@ import {
   right,
   bottom,
   clippingParents,
+  start,
 } from '../enums';
 import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
@@ -18,6 +19,7 @@ import within from '../utils/within';
 import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import detectOverflow from '../utils/detectOverflow';
+import getVariation from '../utils/getVariation';
 
 type TetherOffset =
   | (({
@@ -60,6 +62,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
   const overflow = detectOverflow(state, { boundary, rootBoundary });
   const basePlacement = getBasePlacement(state.placement);
+  const variation = getVariation(state.placement);
+  const isBasePlacement = !variation;
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
   const popperOffsets = state.modifiersData.popperOffsets;
@@ -93,6 +97,9 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
     const additive = tether ? -popperRect[len] / 2 : 0;
 
+    const minLen = variation === start ? referenceRect[len] : popperRect[len];
+    const maxLen = variation === start ? -popperRect[len] : -referenceRect[len];
+
     // We need to include the arrow in the calculation so the arrow doesn't go
     // outside the reference bounds
     const arrowElement = state.elements.arrow;
@@ -111,18 +118,15 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
       arrowRect[len]
     );
 
-    const tetherMin =
-      state.modifiersData.popperOffsets[mainAxis] +
-      referenceRect[len] / 2 -
-      additive -
-      arrowLen -
-      tetherOffsetValue;
-    const tetherMax =
-      state.modifiersData.popperOffsets[mainAxis] -
-      referenceRect[len] / 2 +
-      additive +
-      arrowLen +
-      tetherOffsetValue;
+    const minOffset = isBasePlacement
+      ? referenceRect[len] / 2 - additive - arrowLen - tetherOffsetValue
+      : minLen - arrowLen;
+    const maxOffset = isBasePlacement
+      ? -referenceRect[len] / 2 + additive + arrowLen + tetherOffsetValue
+      : maxLen + arrowLen;
+
+    const tetherMin = state.modifiersData.popperOffsets[mainAxis] + minOffset;
+    const tetherMax = state.modifiersData.popperOffsets[mainAxis] + maxOffset;
 
     const preventedOffset = within(
       tether ? Math.min(min, tetherMin) : min,
