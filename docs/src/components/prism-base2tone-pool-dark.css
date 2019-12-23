@@ -13,7 +13,7 @@ pre[class*='language-'] {
     'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono',
     'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L',
     'Courier New', Courier, monospace;
-  line-height: 1.375;
+  line-height: 1.8;
   direction: ltr;
   text-align: left;
   white-space: pre;
@@ -48,32 +48,50 @@ code[class*='language-'] ::selection {
 
 /* Code blocks */
 pre[class*='language-'] {
-  padding: 1em;
+  padding: 1em 1.5em;
   margin: 1em 0;
   overflow: auto;
   border: 1px solid #ffffff0d;
-  background: #18111c;
+  background: #281e36;
   color: #ffe69d;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /* Inline code */
 :not(pre) > code[class*='language-'] {
-  padding: 0.1em;
+  padding: 0.2em 0.4em;
+  font-size: 0.9em;
   border-radius: 0.3em;
+  background-color: #ffe9ec;
   color: #c83b50;
+  font-weight: bold;
+}
+
+h3 > code[class*='language-'] {
+  padding: 0;
+  font-size: 1.2em;
+  color: #333;
+  background-color: white;
+}
+
+:not(pre) > code[class*='language-']::selection,
+:not(pre) > code[class*='language-'] ::selection {
+  text-shadow: none;
+  background: #8f51e6;
+  color: white;
 }
 
 .token.comment,
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #635775;
+  color: #657fc8;
 }
 
-.token.punctuation {
-  color: #635775;
+.token.punctuation,
+.token.keyword {
+  color: #4edee5;
 }
 
 .token.namespace {
@@ -112,7 +130,6 @@ code.language-scss,
 .language-scss .token.string,
 .style .token.string,
 .token.attr-value,
-.token.keyword,
 .token.control,
 .token.directive,
 .token.unit,

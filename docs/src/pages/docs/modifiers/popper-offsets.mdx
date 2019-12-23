@@ -1,10 +1,11 @@
 ---
 title: Popper Offsets
+index: 0
 ---
 
 # Popper Offsets
 
-The popperOffsets modifier is at the core of Popper, it computes the offsets
+The `popperOffsets` modifier is at the core of Popper, it computes the offsets
 needed to position the popper element near the reference element.
 
 In other words, without this modifier you would have no reason to use Popper at
@@ -17,3 +18,20 @@ lifecycle.
 
 Additionally, you may want to replace this modifier with your own one, to
 address very specific cases not covered by the default one.
+
+## Phase
+
+`read`
+
+## Options
+
+This modifier currently has no options.
+
+## Data
+
+```flow
+type Data = {
+  x: number,
+  y: number,
+};
+```

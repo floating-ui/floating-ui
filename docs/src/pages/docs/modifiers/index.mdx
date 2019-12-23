@@ -4,22 +4,14 @@ title: Modifiers
 
 # Modifiers
 
-Popper is built on top of an extensible core, which provides the fundation used
-to deliver all the functionalities offered by the library.
+Popper is built using an extensible core, which provides the foundation used to
+deliver all the functionalities offered by the library.
 
-All Popper does by default, is to compute the popper element position, in
-relation to the provided reference element. This includes all the logic needed
-to address scrolling parents, the four placements (top, right, bottom, left),
-the "auto" placement, and a few other low level operations.
-
-All the additional functionalities provided by the library are implemented as
-Popper modifiers. They are plugins, or middlewares, that can hook into the
-lifecycle of Popper, and add additional logic to the positioning operations
-provided by default by Popper.
-
-Out of the box, some essential modifiers are included in the library:
-`detectOverflow`, `flip`, `offset`, and `preventOverflow`, you can find each
-modifier documentation in the side menu.
+All the useful functionalities provided by the library are implemented as Popper
+modifiers. They are plugins, or middlewares, that can hook into the lifecycle of
+Popper, and add additional logic to the positioning operations provided by
+default by Popper. They effectively "modify" the popper state in some fashion,
+adding functionality, hence the term "modifiers".
 
 ## Custom Modifiers
 
@@ -40,12 +32,19 @@ A modifier is composed of an object with the following properties:
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
-  fn: (State, options: any) => State,
+  fn: ({ state, options, name, instance }: ModifierArguments<Options>) => State,
   onLoad?: State => void,
   onDestroy?: State => void,
   options?: any,
   data?: {},
 |};
+
+type ModifierArguments<Options: Obj> = {
+  state: $Shape<State>,
+  instance: Instance,
+  options: $Shape<Options>,
+  name: string,
+};
 ```
 
 ### `name`
@@ -74,27 +73,50 @@ otherwise, it will be ignored.
 
 ### `phase`
 
-Popper's modifiers lifecycle is divided in 3 phases: read, main, and write.
+Popper's modifiers lifecycle is divided into 3 core phases: `read`, `main`, and
+`write`. This is done to optimize the library so that its access to the DOM is
+grouped together rather than scattered around the whole lifecycle.
 
-This is done to optimize the library so that its access to the DOM is grouped
-together rather than scattered around the whole lifecycle. The modifiers that
-need to read from the DOM should run in the `read` phase, the ones that only
-perform logic with algorithms should live in `main`, and the ones that write to
-the DOM should be under `write`.
+The modifiers that need to read from the DOM should run in the `read` phase, the
+ones that only perform logic with algorithms should live in `main`, and the ones
+that write to the DOM should be under `write`.
 
 Note that Popper provides a cache of DOM measurements in its state, so that
 modifiers can read them rather than querying the DOM, optimizing the overall
-execution time. This means you should never need to hook into the `read` phase.
+execution time. This means you should rarely need to hook into the `read` phase.
+
+For further granularity if needed, there are 2 other sub-phases: `before` and
+`after`. Here is the full list:
+
+- `beforeRead`
+- `read`
+- `afterRead`
+- `beforeMain`
+- `main`
+- `afterMain`
+- `beforeWrite`
+- `write`
+- `afterWrite`
 
 ### `requires`
 
 Each modifier can specify a list of modifiers it depends upon, so that Popper
-will execute them in the right order to allow the dependant modifier to access
+will execute them in the right order to allow the dependent modifier to access
 the data provided by the dependee modifier.
 
-For example, the `preventOverflow` modifier relies on the
-`detectOverflow`-provided data, which is accessed from
-`state.modifiersData.detectOverflow`.
+An error is thrown if the modifier is not passed, so this data will be
+guaranteed to be available via `state.modifiersData.<MODIFIER_NAME>`.
+
+### `optionallyRequires`
+
+Each modifier can specify a list of modifiers it **optionally** depends upon.
+That is, it only depends upon it if the modifier is actually present and running
+modifications to the state. If it doesn't exist in `modifiers`, it will get
+ignored.
+
+For example, the `preventOverflow` modifier optionally relies on
+`offset`-provided data, which is accessed from `state.modifiersData.offset`. If
+`offset` doesn't exist, `preventOverflow` will still work as normal.
 
 ### `fn`
 

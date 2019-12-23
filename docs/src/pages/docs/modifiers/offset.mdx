@@ -1,20 +1,41 @@
 ---
 title: Offset
+index: 1
 ---
+
+import { OffsetDemo } from '../../../components/Demos';
 
 # Offset
 
-The offset modifier lets you displace a popper element from its reference
+The `offset` modifier lets you displace a popper element from its reference
 element.
 
 This can be useful if you need to apply some margin between them or if you need
 to fine tune the position according to some custom logic.
 
+## Demo
+
+### Distance
+
+`[10, 0]`: The popper is offset 10px away from the reference.
+
+<OffsetDemo offset={[10, 0]} />
+
+### Skidding
+
+`[0, 10]`: The popper is offset 10px along the reference.
+
+<OffsetDemo offset={[0, 10]} />
+
+## Phase
+
+`main`
+
 ## Options
 
 ```flow
 type Options = {
-  offset: OffsetsFunction | [number, number], // = [0, 0]
+  offset: OffsetsFunction | [number, number], // [0, 0]
 };
 
 type OffsetsFunction = ({
@@ -24,9 +45,10 @@ type OffsetsFunction = ({
 }) => [?number, ?number];
 ```
 
-### Options#offset
+### `offset`
 
-To use the modifier you can run:
+The basic `offset` accepts an array with two numbers in the form
+`[distance, skidding]`.
 
 ```js
 createPopper(reference, popper, {
@@ -34,30 +56,35 @@ createPopper(reference, popper, {
     {
       name: 'offset',
       options: {
-        offset: () => [10, 20],
+        offset: [10, 20],
       },
     },
   ],
 });
 ```
 
-Let's take a look at the `options` object, it accepts an optional `offset`
-property which maps to a function used to return the two offset values we want
-to apply.
-
-The first value is the "distance" between the reference and the popper, while
-the second value is the "skidding" or "deviation" between them.
+The first number, `distance`, displaces the popper away from, or toward, the
+reference element in the direction of its placement. A positive number displaces
+it further away, while a negative number lets it overlap the reference.
 
 ```
-    A               A
-    |
-    | <- distance
-    |               |-------| <- skidding
-    B                       B
+POP
+ |
+ | <- [10, 0]
+ |
+REF
 ```
 
-The function can also provide some arguments, specifically you will have access
-to the popper "placement", the reference and popper "measurements".
+The second number, `skidding`, displaces the popper along the reference element.
+
+```
+           POP
+ |----------| <- [0, 10]
+REF
+```
+
+The option can also take a function provided with some arguments, giving you
+access to the popper "placement", the reference and popper measurements.
 
 ```js
 createPopper(reference, popper, {

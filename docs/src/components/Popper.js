@@ -1,6 +1,7 @@
 import { createPopper } from '../../../lib/popper.js';
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, cloneElement } from 'react';
 import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 
 export const usePopper = (options = {}) => {
   const referenceRef = useRef();
@@ -37,15 +38,26 @@ export const Tooltip = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  background: white;
-  color: #333;
+  background: ${props => (props.dark ? '#333' : '#fff')};
+  color: ${props => (props.dark ? '#fff' : '#642f45')};
   padding: 5px 10px;
   border-radius: 4px;
   font-weight: bold;
   font-size: 14px;
   text-align: left;
   pointer-events: none;
-  color: #642f45;
+
+  ${props =>
+    props.hide &&
+    css`
+      &[data-popper-escaped] {
+        opacity: 0.5;
+      }
+
+      &[data-popper-reference-hidden] {
+        opacity: 0;
+      }
+    `}
 
   &[data-popper-placement^='top'] {
     > [data-popper-arrow] {
@@ -88,7 +100,7 @@ export const Arrow = styled.div`
   &::before {
     content: '';
     transform: rotate(45deg);
-    background: white;
+    background: ${props => (props.dark ? '#333' : '#fff')};
     top: 0;
     left: 0;
   }

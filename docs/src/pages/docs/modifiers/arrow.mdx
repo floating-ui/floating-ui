@@ -1,5 +1,70 @@
 ---
 title: Arrow
+index: 2
 ---
 
+import { ArrowDemo } from '../../../components/Demos';
+
 # Arrow
+
+The `arrow` modifier positions an inner element of the popper so it appears
+centered relative to the reference element, usually the triangle or caret that
+points toward the reference element.
+
+## Demo
+
+<ArrowDemo />
+
+## Phase
+
+`main`
+
+## Options
+
+```flow
+type Options = {
+  element: HTMLElement | string, // "[data-popper-arrow]"
+};
+```
+
+### `element`
+
+Specifies the element to position as the arrow. This element must be a child of
+the popper element.
+
+A string represents a `CSS` selector queried within the context of the popper
+element.
+
+Popper will automatically pick up the following element (using the
+`data-popper-arrow` attribute) and position it:
+
+```html
+<div id="popper">
+  <div data-popper-arrow></div>
+</div>
+```
+
+Or you can pass an element without an attribute:
+
+```js
+const arrow = document.querySelector('#arrow');
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'arrow',
+      options: {
+        element: arrow,
+      },
+    },
+  ],
+});
+```
+
+## Data
+
+```flow
+type Data = {
+  x?: number,
+  y?: number,
+};
+```

@@ -1,31 +1,42 @@
 ---
 title: Prevent Overflow
+index: 3
 ---
+
+import { PreventOverflowDemo } from '../../../components/Demos';
 
 # Prevent Overflow
 
-The preventOverflow modifier can move the popper when the `detectOverflow`
-modifier reported it's overflowing in any direction.
+The `preventOverflow` modifier prevents the popper from being cut off by moving
+it so that it stays visible within its boundary area.
+
+## Demo
+
+The tooltip is prevented from overflowing its clipping container, even though
+that won't center it anymore.
+
+<PreventOverflowDemo />
+
+## Phase
+
+`main`
 
 ## Options
 
 ```flow
 type Options = {
-  /* Prevents boundaries overflow on the main axis */
-  mainAxis: boolean,
-  /* Prevents boundaries overflow on the alternate axis */
-  altAxis: boolean,
-  /* Sets a padding to the provided boundary */
-  padding: Padding,
-  /* Allows the popper to overflow from its boundaries to keep it near its reference element */
-  tether: boolean,
-  /* Offsets when the `tether` option should activate */
-  tetherOffset: TetherOffset,
+  mainAxis: boolean, // true
+  altAxis: boolean, // false
+  padding: Padding, // 0
+  boundary: Boundary, // "clippingParents"
+  rootBoundary: RootBoundary, // "document"
+  tether: boolean, // true
+  tetherOffset: TetherOffset, // 0
 };
 
-/**
- * Below are described the relative types
- */
+// Below are the described relative types
+type Boundary = 'clippingParents' | HTMLElement;
+type RootBoundary = 'document' | 'viewport';
 type Padding =
   | {|
       top?: number,
@@ -34,7 +45,6 @@ type Padding =
       bottom?: number,
     |}
   | number;
-
 type TetherOffset =
   | (({
       popper: Rect,
@@ -44,12 +54,16 @@ type TetherOffset =
   | number;
 ```
 
-### Options#mainAxis
+### `mainAxis`
 
-By default, only the main axis is checked, that means if a popper with `bottom`
-placement is overflowing on the right of its boundary element, it will be moved
-on the left so that it stays within its boundaries. This behavior can be
-disabled by setting `options.mainAxis` to `false`.
+For top and bottom placements, this is the `x`-axis. For left and right
+placements, it is the `y`-axis.
+
+By default, only this axis checked, which means if a popper with `bottom`
+placement is overflowing on the right of its boundary area, it will be moved to
+the left so that it doesn't get cut off.
+
+This behavior can be disabled by setting it to `false`.
 
 ```js
 createPopper(reference, popper, {
@@ -64,12 +78,11 @@ createPopper(reference, popper, {
 });
 ```
 
-### Options#altAxis
+### `altAxis`
 
-Optionally, the alternative axis check can be enabled, by setting
-`options.altAxis` to `true`. This will make the modifier check also the other
-axis, but keep in mind that this may lead the popper to overlap its reference
-element.
+Optionally, the alternative axis check can be enabled. Keep in mind that this
+may cause the popper to overlap its reference element. Generally, the `flip`
+modifier is used to prevent this from happening.
 
 ```js
 createPopper(reference, popper, {
@@ -84,18 +97,88 @@ createPopper(reference, popper, {
 });
 ```
 
-### Options#tether
+### `padding`
 
-While trying to keep the popper element within its boundaries is usually a
-welcome behavior, we don't usually want to reach the point where the reference
-and popper elements are not touching each other at all, since that would make it
-difficult for the user to understand where a popper originated from.
+If you don't want the popper to reach the _very_ edge of the boundary area, you
+can apply some padding. This will make the popper move earlier (in pixels) than
+the true edge.
 
-The default behavior to avoid this situation, is to stop to try to keep the
-popper within its defined boundaries once the center of the popper reaches the
-edge of its reference element.
+You can pass a `number`, which will be equal padding on all four sides, or an
+`object` containing side properties each with their own padding value.
 
-This behavior can be disabled by setting the `tether` option to `false`:
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        // Equal padding on all four sides
+        padding: 8,
+        // Different padding on certain sides. Unspecified sides are 0.
+        padding: { top: 58, bottom: 8, right: 15 },
+      },
+    },
+  ],
+});
+```
+
+### `boundary`
+
+This describes the area that the popper will be constrained within (not allowed
+to overflow). Once the popper reaches the edge of this area, it will be moved to
+prevent itself from overflowing, even if that means it will no longer be
+centered relative to the reference element.
+
+By default it is `"clippingParents"`, which is a virtual area describing
+scrolling parents that can clip the popper, causing it to be cut off.
+
+```js
+const boundaryElement = document.querySelector('#boundary');
+
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        boundary: boundaryElement, // 'clippingParents' by default
+      },
+    },
+  ],
+});
+```
+
+### `rootBoundary`
+
+This describes the root boundary that will be checked for overflow. There are
+only two "roots" – the viewport and the document. `"document"` is default, which
+is the entire page which can potentially be scrolled. `"viewport"` is the area
+of the document the user can actually see on the screen.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        rootBoundary: 'viewport', // 'document' by default
+      },
+    },
+  ],
+});
+```
+
+### `tether`
+
+While trying to keep the popper element within its overflow area is usually
+desired, we likely don't want to reach the point where the reference and popper
+elements are not touching (or "tethered") to each other at all, since that would
+make it difficult for the user to understand where the popper originated from.
+
+The default behavior is to avoid this situation by allowing the popper to
+overflow once the opposite edges of the reference element and popper element are
+aligned (i.e. right before they would appear to be detached).
+
+This behavior can be disabled by setting it to `false`:
 
 ```js
 createPopper(reference, popper, {
@@ -110,18 +193,11 @@ createPopper(reference, popper, {
 });
 ```
 
-The `surfaces` behavior, instead, will kick in once the opposite edges are
-level.
-
-To conclude, the tether option can be disabled all together by setting it to
-`false`, so that the popper will detach from its reference element if required
-to keep it within its defined boundaries.
-
-### Options#tetherOffset
+### `tetherOffset`
 
 When `tether` is enabled, you can customize its behavior by providing an offset
 to be used during the `tether` calculations. Setting the offset to a positive
-number will make the tether behavior kick in earlier, while setting it negative
+number will make the tether behavior activate earlier, while setting it negative
 will do the opposite.
 
 The `tetherOffset` option can also take a function, this will enable you to read
@@ -141,22 +217,13 @@ createPopper(reference, popper, {
 });
 ```
 
-### Options#padding
+## Data
 
-You can apply some additional padding to the boundaries defined by the
-`detectOverflow` modifier by setting this option to a number, to apply the
-padding evenly to all the four sides, or to an object containing the `top`,
-`left`, `bottom`, `right` properties, with a padding number for each side.
-
-```js
-createPopper(reference, popper, {
-  modifiers: [
-    {
-      name: 'preventOverflow',
-      options: {
-        padding: { top: 20, right: 10 },
-      },
-    },
-  ],
-});
+```flow
+// Describes how much the Popper has been moved from its desired position so
+// that it doesn't overflow
+type Data = {
+  x: number,
+  y: number,
+};
 ```
