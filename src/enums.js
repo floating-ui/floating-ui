@@ -13,7 +13,7 @@ export const basePlacements: Array<BasePlacement> = [top, bottom, right, left];
 
 export const start: 'start' = 'start';
 export const end: 'end' = 'end';
-export type VariationPlacement = typeof start | typeof end;
+export type Variation = typeof start | typeof end;
 
 export const clippingParents: 'clippingParents' = 'clippingParents';
 export const viewport: 'viewport' = 'viewport';

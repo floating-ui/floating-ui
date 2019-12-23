@@ -3,7 +3,7 @@ import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
-import getVariationPlacement from '../utils/getVariationPlacement';
+import getVariation from '../utils/getVariation';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
@@ -88,9 +88,9 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   }
 
   const basePlacement = getBasePlacement(flippedPlacement);
-  const variationPlacement = getVariationPlacement(flippedPlacement);
+  const variation = getVariation(flippedPlacement);
   const isVertical = [top, bottom].includes(basePlacement);
-  const isStartVariation = variationPlacement === start;
+  const isStartVariation = variation === start;
   const len = isVertical ? 'width' : 'height';
 
   const edge =

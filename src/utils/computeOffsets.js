@@ -1,6 +1,6 @@
 // @flow
 import getBasePlacement from './getBasePlacement';
-import getVariationPlacement from './getVariationPlacement';
+import getVariation from './getVariation';
 import getMainAxisFromPlacement from './getMainAxisFromPlacement';
 import type {
   Rect,
@@ -21,9 +21,7 @@ export default ({
   placement?: Placement,
 }): Offsets => {
   const basePlacement = placement ? getBasePlacement(placement) : null;
-  const variationPlacement = placement
-    ? getVariationPlacement(placement)
-    : null;
+  const variation = placement ? getVariation(placement) : null;
 
   let offsets;
   switch (basePlacement) {
@@ -65,7 +63,7 @@ export default ({
   if (mainAxis != null) {
     const len = mainAxis === 'y' ? 'height' : 'width';
 
-    switch (variationPlacement) {
+    switch (variation) {
       case start:
         offsets[mainAxis] =
           Math.floor(offsets[mainAxis]) -
