@@ -12,6 +12,7 @@ import unwrapVirtualElement from './unwrapVirtualElement';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
 import rectToClientRect from '../utils/rectToClientRect';
+import getBorders from './getBorders';
 
 // A "clipping parent" is a scrolling container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
@@ -44,9 +45,8 @@ export default function getClippingRect(
 ): ClientRectObject {
   const element = unwrapVirtualElement(elementOrVirtualElement);
   const documentElement = getDocumentElement(element);
-  const [firstClippingParent, ...restClippingParents] = getClippingParents(
-    element
-  );
+  const clippingParents = getClippingParents(element);
+  const firstClippingParent = clippingParents[0];
 
   // Fallback to document
   if (
@@ -61,12 +61,15 @@ export default function getClippingRect(
     return rectToClientRect(getViewportRect(element));
   }
 
-  const clippingRect = restClippingParents.reduce((accRect, clippingParent) => {
+  const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getBoundingClientRect(clippingParent);
-    accRect.top = Math.max(rect.top, accRect.top);
-    accRect.right = Math.min(rect.right, accRect.right);
-    accRect.bottom = Math.min(rect.bottom, accRect.bottom);
-    accRect.left = Math.max(rect.left, accRect.left);
+    const borders = getBorders(clippingParent);
+
+    accRect.top = Math.max(rect.top + borders.top, accRect.top);
+    accRect.right = Math.min(rect.right - borders.right, accRect.right);
+    accRect.bottom = Math.min(rect.bottom - borders.bottom, accRect.bottom);
+    accRect.left = Math.max(rect.left + borders.left, accRect.left);
+
     return accRect;
   }, getBoundingClientRect(firstClippingParent));
 
