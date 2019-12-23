@@ -14,8 +14,9 @@ import { Global, css } from '@emotion/core';
 import CarbonAds from './CarbonAds';
 import { Container, media } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
+import Navigation, { NAVIGATION_WIDTH } from './Navigation';
+import processRoutes from '../utils/processRoutes';
 
-import Navigation, { NAVIGATION_WIDTH, BLACKLIST } from './Navigation';
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
 
@@ -119,20 +120,12 @@ const components = {
 
 const Layout = ({ children, path }) => {
   function getPrevNextRoutes(routes) {
-    const validRoutes = routes
-      .filter(
-        route => !BLACKLIST.includes(route) && route.slug.includes('modifiers')
-      )
-      .map(route => ({
-        ...route,
-        slug: route.slug.replace(/\/$/, ''),
-      }));
-
+    const validRoutes = processRoutes(routes);
     const slashlessPath = path.replace(/\/$/, '');
 
-    const currentPathIndex = validRoutes
-      .sort((a, b) => a.index - b.index)
-      .findIndex(route => route.slug === slashlessPath);
+    const currentPathIndex = validRoutes.findIndex(
+      route => route.slug === slashlessPath
+    );
 
     return {
       prev: validRoutes[currentPathIndex - 1],

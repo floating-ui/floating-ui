@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import { createTree } from '../utils/createTree';
+import processRoutes from '../utils/processRoutes';
 import { media } from './Framework';
 
 import popperText from '../images/popper-text.svg';
 
-export const BLACKLIST = ['/404'];
 export const NAVIGATION_WIDTH = 250;
 
 const Container = styled.div`
@@ -155,11 +155,9 @@ const Block = ({ route }) => (
         </Item>
       </li>
       <Ul root={route.slug.split('/').length === 1}>
-        {route.children
-          .sort((a, b) => a.children.length - b.children.length)
-          .map((route, index) => (
-            <Block key={index} route={route} />
-          ))}
+        {route.children.map((route, index) => (
+          <Block key={index} route={route} />
+        ))}
       </Ul>
     </Ul>
   </>
@@ -194,19 +192,7 @@ export default function Navigation({ description, lang, meta, title }) {
             <PopperTextLogo />
             <CloseMenuButton onClick={closeMenu}>Close Menu</CloseMenuButton>
             <MenuContents>
-              {createTree(
-                routes
-                  .map(route => ({
-                    ...route,
-                    slug: route.slug.replace(/\/$/, ''),
-                  }))
-                  .filter(route => !BLACKLIST.includes(route.slug))
-                  .sort(
-                    (a, b) =>
-                      a.slug.split('/').length - b.slug.split('/').length
-                  )
-                  .sort((a, b) => a.index - b.index)
-              ).map((route, index) => (
+              {createTree(processRoutes(routes)).map((route, index) => (
                 <Block route={route} key={index} />
               ))}
             </MenuContents>
