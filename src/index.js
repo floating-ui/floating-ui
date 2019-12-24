@@ -14,7 +14,6 @@ export * from './enums';
 import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
-import addClientRectMargins from './dom-utils/addClientRectMargins';
 import getOffsetParent from './dom-utils/getOffsetParent';
 
 // Pure Utils
@@ -134,13 +133,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             getOffsetParent(popperElement),
             isFixed
           ),
-          // CSS marginsc an be applied to popper elements to quickly
-          // apply offsets dynamically based on some CSS selectors.
-          // For this reason we include margins in this calculation.
-          popper: addClientRectMargins(
-            getLayoutRect(popperElement),
-            popperElement
-          ),
+          popper: getLayoutRect(popperElement),
         };
 
         // Modifiers have the ability to read the current Popper state, included
@@ -149,7 +142,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         // Cache the placement in cache to make it available to the modifiers
         // modifiers will modify this one (rather than the one in options)
-        const prevPlacement = state.placement;
         state.placement = state.options.placement;
 
         state.orderedModifiers.forEach(
@@ -182,15 +174,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           if (enabled && typeof fn === 'function') {
             state = fn({ state, options, name, instance });
           }
-        }
-
-        // Prevents a jitter if elements' size changes based on placement.
-        // This is separate from and does not solve the "flip flicker" issue.
-        // We can't know ahead of time (before the placement gets written to the
-        // DOM) what size the element will be due to conditionally applied/
-        // computed CSS based on placement (e.g. margins on arrow)
-        if (prevPlacement !== state.placement) {
-          instance.forceUpdate();
         }
       },
 

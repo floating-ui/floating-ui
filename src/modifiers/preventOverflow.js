@@ -16,10 +16,10 @@ import getAltAxis from '../utils/getAltAxis';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import within from '../utils/within';
-import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import detectOverflow from '../utils/detectOverflow';
 import getVariation from '../utils/getVariation';
+import getFreshSideObject from '../utils/getFreshSideObject';
 
 type TetherOffset =
   | (({
@@ -104,9 +104,19 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     // outside the reference bounds
     const arrowElement = state.elements.arrow;
     const arrowRect =
-      arrowElement && tether
-        ? addClientRectMargins(getLayoutRect(arrowElement), arrowElement)
+      tether && arrowElement
+        ? getLayoutRect(arrowElement)
         : { width: 0, height: 0 };
+    const arrowPaddingObject = state.modifiersData['arrow#persistent']
+      ? state.modifiersData['arrow#persistent'].padding
+      : getFreshSideObject();
+    const arrowPaddingMin = arrowPaddingObject
+      ? arrowPaddingObject[mainSide]
+      : 0;
+    const arrowPaddingMax = arrowPaddingObject
+      ? arrowPaddingObject[altSide]
+      : 0;
+
     // If the reference length is smaller than the arrow length, we don't want
     // to include its full size in the calculation. If the reference is small
     // and near the edge of a boundary, the popper can overflow even if the
@@ -119,11 +129,19 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     );
 
     const minOffset = isBasePlacement
-      ? referenceRect[len] / 2 - additive - arrowLen - tetherOffsetValue
-      : minLen - arrowLen - tetherOffsetValue;
+      ? referenceRect[len] / 2 -
+        additive -
+        arrowLen -
+        arrowPaddingMin -
+        tetherOffsetValue
+      : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
     const maxOffset = isBasePlacement
-      ? -referenceRect[len] / 2 + additive + arrowLen + tetherOffsetValue
-      : maxLen + arrowLen + tetherOffsetValue;
+      ? -referenceRect[len] / 2 +
+        additive +
+        arrowLen +
+        arrowPaddingMax +
+        tetherOffsetValue
+      : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
 
     const tetherMin = state.modifiersData.popperOffsets[mainAxis] + minOffset;
     const tetherMax = state.modifiersData.popperOffsets[mainAxis] + maxOffset;

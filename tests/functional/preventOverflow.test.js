@@ -13,11 +13,20 @@ it('should not overflow when small reference is at edge of boundary', async () =
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
-it('should overflow with the arrow length taken into account', async () => {
+it('should take into account the arrow padding (mainSide)', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/arrow.html`);
 
-  await scroll(page, '#scroll', 330);
+  await scroll(page, '#scroll', 760);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
+it('should take into account the arrow padding (altSide)', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/preventOverflow/arrow.html`);
+
+  await scroll(page, '#scroll', 20);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });

@@ -60,6 +60,12 @@ export const ArrowDemo = () => {
           offset: [10, 0],
         },
       },
+      {
+        name: 'arrow',
+        options: {
+          padding: 0,
+        },
+      },
     ],
   });
 

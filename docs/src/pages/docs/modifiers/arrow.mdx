@@ -26,6 +26,7 @@ points toward the reference element.
 ```flow
 type Options = {
   element: HTMLElement | string, // "[data-popper-arrow]"
+  padding: Padding, // 0
 };
 ```
 
@@ -56,6 +57,28 @@ createPopper(reference, popper, {
       name: 'arrow',
       options: {
         element: arrow,
+      },
+    },
+  ],
+});
+```
+
+### `padding`
+
+If you don't want the arrow to reach the _very_ edge of the popper (this is
+common if your popper has rounded corners using `border-radius`), you can apply
+some padding to it.
+
+You can pass a `number`, which will be equal padding on all four sides, or an
+`object` containing side properties each with their own padding value.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'arrow',
+      options: {
+        padding: 5, // 5px from the edges of the popper
       },
     },
   ],
