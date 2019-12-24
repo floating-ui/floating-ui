@@ -1,18 +1,18 @@
 // @flow
 import type { Rect, VirtualElement } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
-import getComputedStyle from './getComputedStyle';
 import getScrollSum from './getScrollSum';
+import getBorders from './getBorders';
 import { isHTMLElement } from './instanceOf';
 
 // offsets without `border`
-const getInnerOffsets = (element: HTMLElement): { x: number, y: number } => {
-  const { borderLeft, borderTop } = getComputedStyle(element);
-  const rect = getBoundingClientRect(element);
+const getInnerOffsets = (offsetParent: Element): { x: number, y: number } => {
+  const rect = getBoundingClientRect(offsetParent);
+  const borders = getBorders(offsetParent);
 
   return {
-    x: rect.x + (parseFloat(borderLeft) || 0),
-    y: rect.y + (parseFloat(borderTop) || 0),
+    x: rect.x + borders.left,
+    y: rect.y + borders.top,
   };
 };
 
@@ -20,22 +20,20 @@ const getInnerOffsets = (element: HTMLElement): { x: number, y: number } => {
 // Composite means it takes into account transforms as well as layout.
 export default (
   elementOrVirtualElement: Element | VirtualElement,
-  commonOffsetParent: Element,
+  offsetParent: Element,
   isFixed: boolean = false
 ): Rect => {
   const rect = getBoundingClientRect(elementOrVirtualElement);
-  const offsetParentRect =
-    isHTMLElement(commonOffsetParent) && !isFixed
-      ? getInnerOffsets(commonOffsetParent)
+  const scrollSum = getScrollSum(isFixed ? [] : [offsetParent]);
+  const offsets =
+    isHTMLElement(offsetParent) && !isFixed
+      ? getInnerOffsets(offsetParent)
       : { x: 0, y: 0 };
-  const offsetParentScrollSum = getScrollSum(
-    isFixed ? [] : [commonOffsetParent]
-  );
 
   const width = rect.width;
   const height = rect.height;
-  const x = rect.left + offsetParentScrollSum.scrollLeft - offsetParentRect.x;
-  const y = rect.top + offsetParentScrollSum.scrollTop - offsetParentRect.y;
+  const x = rect.left + scrollSum.scrollLeft - offsets.x;
+  const y = rect.top + scrollSum.scrollTop - offsets.y;
 
   return { width, height, x, y };
 };

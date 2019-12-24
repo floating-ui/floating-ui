@@ -93,3 +93,14 @@ it('(max) (end-variation) should be allowed to overflow once the opposite edges 
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should not overflow offset parent borders', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/modifiers/preventOverflow/offset-parent-border.html`
+  );
+
+  await scroll(page, '#scroll', 600);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
