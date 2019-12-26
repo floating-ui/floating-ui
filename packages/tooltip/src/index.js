@@ -362,9 +362,9 @@ export default class Tooltip {
           if (!this._isOpening) {
             return;
           }
-          const popper = this.popperInstance.popper;
           if (reference.contains(e.target) ||
-              popper.contains(e.target)) {
+              this.popperInstance &&
+              this.popperInstance.popper.contains(e.target)) {
             return;
           }
           func(e);
