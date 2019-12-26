@@ -12,31 +12,29 @@ import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/core';
 import CarbonAds from './CarbonAds';
-import { Container, media } from './Framework';
+import { Container, media, Footer } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 
 import Navigation, { NAVIGATION_WIDTH, BLACKLIST } from './Navigation';
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
+import { ChevronRight, ChevronLeft } from 'react-feather';
 
 const Main = styled.main`
   margin-left: 0;
-  color: #333;
   padding-top: 45px;
 
-  ${media.md} {
+  ${media.lg} {
     padding-top: 0;
     margin-left: ${NAVIGATION_WIDTH}px;
   }
 `;
 
-const Footer = styled.footer`
-  border-top: 1px solid #eee;
-  padding: 25px 0;
-  color: #aaa;
-  text-align: center;
+const FooterStyled = styled(Footer)`
+  background: none;
+  border-top: 1px solid #44395d;
 
-  ${media.md} {
+  ${media.lg} {
     margin-left: ${NAVIGATION_WIDTH}px;
   }
 `;
@@ -44,72 +42,80 @@ const Footer = styled.footer`
 const NavButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #44395d;
   margin-top: 50px;
 `;
 
 const NavButtonContainer = styled(Container)`
   display: flex;
-  flex-direction: column;
   width: 100%;
+  padding: 0;
 
   ${media.md} {
-    flex-direction: row;
+    padding: 0 40px;
   }
 `;
 
 const PlaceholderNavButton = styled.a`
   padding: 50px 25px;
-  width: 100%;
   border: none;
+  min-width: 50%;
   pointer-events: none;
-  display: none;
+`;
 
-  ${media.md} {
-    display: block;
-  }
+const NavDivider = styled.div`
+  min-width: 1px;
+  background: #44395d;
+  height: 100%;
 `;
 
 const NavButton = styled(Link)`
-  font-size: 25px;
-  padding: 50px 25px;
-  width: 100%;
-  color: #c83b50;
-  border-bottom: 0;
+  position: relative;
+  font-size: 22px;
+  padding: 50px 40px;
+  color: #4edee5;
+  border-bottom: 2px solid transparent;
+  transition: none;
+  border-bottom: 2px solid transparent;
+  flex-grow: 1;
 
   ${media.md} {
-    max-width: 50%;
+    width: 100%;
+  }
+
+  ${media.lg} {
+    font-size: 24px;
   }
 
   &:last-of-type {
+    border-bottom-color: transparent;
     text-align: right;
-    border-bottom: 1px solid #eee;
-    order: -1;
-
-    ${media.md} {
-      border-bottom: none;
-      border-left: 1px solid #eee;
-      order: initial;
-    }
   }
 
   &:hover {
-    background-color: #ffe9ec;
+    background-color: #281e36;
+    border-bottom-color: #4edee5;
+  }
+
+  &:active {
+    border-bottom-style: dashed;
   }
 `;
 
 const NavButtonDirection = styled.span`
-  position: relative;
-  top: -1px;
-  opacity: 0.7;
-  font-size: 0.8em;
+  position: absolute;
+  top: 54px;
+
+  ${media.lg} {
+    top: 56px;
+  }
 
   &[data-prev] {
-    margin-right: 20px;
+    left: 10px;
   }
 
   &[data-next] {
-    margin-left: 20px;
+    right: 10px;
   }
 `;
 
@@ -144,14 +150,20 @@ const Layout = ({ children, path }) => {
     <MDXProvider components={components}>
       <Global
         styles={css`
-          body {
-            background-color: #ffffff;
+          h1,
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            color: #f4e0f1;
           }
 
           h1 {
             font-size: 40px;
             margin-top: 0;
             padding-top: 20px;
+            line-height: 1.1;
           }
 
           h2 {
@@ -176,7 +188,7 @@ const Layout = ({ children, path }) => {
           h2::before {
             content: ' ';
             display: block;
-            border-bottom: 1px solid #ececec;
+            border-bottom: 1px solid #44395d;
             padding-top: 20px;
             margin-bottom: 40px;
           }
@@ -185,9 +197,13 @@ const Layout = ({ children, path }) => {
             margin: 0;
             padding: 0.5em 30px;
             border-radius: 0px 10px 10px 0px;
-            background-color: #fff8d4;
-            color: #c83b50;
-            border-left: 3px dashed #c83b50;
+            background-color: rgba(135, 82, 27, 0.25);
+            color: #ddc5a1;
+            border-left: 2px dashed #ddc5a1;
+          }
+
+          h3 > code[class*='language-'] {
+            color: #ffe69d;
           }
 
           ul {
@@ -196,28 +212,35 @@ const Layout = ({ children, path }) => {
           }
 
           a {
+            color: #ffe69d;
             text-decoration: none;
-            color: #00a3ac;
-            border-bottom: 2px solid #b7e7e5;
             padding-bottom: 1px;
-            font-weight: bold;
+            border-bottom: 2px solid rgba(255, 228, 148, 0.25);
+            transition: border-bottom-color 0.15s ease-in-out;
 
             &:hover {
-              background-color: #d9f6f4;
-              border-bottom-color: #00a3ac;
+              border-bottom: 2px solid rgba(255, 228, 148, 1);
             }
 
             &:active {
               border-bottom-style: dashed;
             }
           }
+
+          ${media.md} {
+            pre[class*='language-'] {
+              padding: 15px 20px;
+            }
+          }
         `}
       />
       <div>
         <Navigation root="/" target="location" />
-        <CarbonAds data-light style={{ float: 'right', marginLeft: 20 }} />
         <Main>
-          <Container>{children}</Container>
+          <Container>
+            {children}
+            <CarbonAds />
+          </Container>
           <MdxRoutes>
             {routes => {
               const { prev, next } = getPrevNextRoutes(routes);
@@ -226,16 +249,21 @@ const Layout = ({ children, path }) => {
                   <NavButtonContainer>
                     {prev ? (
                       <NavButton to={prev.slug}>
-                        <NavButtonDirection data-prev>Prev</NavButtonDirection>
+                        <NavButtonDirection data-prev>
+                          <ChevronLeft size={28} />
+                        </NavButtonDirection>
                         {prev.title}
                       </NavButton>
                     ) : (
                       <PlaceholderNavButton />
                     )}
+                    <NavDivider />
                     {next ? (
                       <NavButton to={next.slug}>
                         {next.title}
-                        <NavButtonDirection data-next>Next</NavButtonDirection>
+                        <NavButtonDirection data-next>
+                          <ChevronRight size={28} />
+                        </NavButtonDirection>
                       </NavButton>
                     ) : (
                       <PlaceholderNavButton />
@@ -246,7 +274,7 @@ const Layout = ({ children, path }) => {
             }}
           </MdxRoutes>
         </Main>
-        <Footer>© {new Date().getFullYear()} MIT License</Footer>
+        <FooterStyled>© {new Date().getFullYear()} MIT License</FooterStyled>
       </div>
     </MDXProvider>
   );

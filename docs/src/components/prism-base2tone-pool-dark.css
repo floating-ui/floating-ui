@@ -13,7 +13,7 @@ pre[class*='language-'] {
     'Lucida Console', 'Lucida Sans Typewriter', 'DejaVu Sans Mono',
     'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L',
     'Courier New', Courier, monospace;
-  line-height: 1.8;
+  line-height: 1.5;
   direction: ltr;
   text-align: left;
   white-space: pre;
@@ -48,7 +48,7 @@ code[class*='language-'] ::selection {
 
 /* Code blocks */
 pre[class*='language-'] {
-  padding: 1em 1.5em;
+  padding: 10px 15px;
   margin: 1em 0;
   overflow: auto;
   border: 1px solid #ffffff0d;
@@ -60,19 +60,9 @@ pre[class*='language-'] {
 
 /* Inline code */
 :not(pre) > code[class*='language-'] {
-  padding: 0.2em 0.4em;
-  font-size: 0.9em;
-  border-radius: 0.3em;
-  background-color: #ffe9ec;
-  color: #c83b50;
+  color: #ff6b81;
   font-weight: bold;
-}
-
-h3 > code[class*='language-'] {
-  padding: 0;
-  font-size: 1.2em;
-  color: #333;
-  background-color: white;
+  white-space: pre-wrap;
 }
 
 :not(pre) > code[class*='language-']::selection,

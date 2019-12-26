@@ -7,6 +7,7 @@ import { createTree } from '../utils/createTree';
 import { media } from './Framework';
 
 import popperText from '../images/popper-text.svg';
+import { Menu } from 'react-feather';
 
 export const BLACKLIST = ['/404'];
 export const NAVIGATION_WIDTH = 250;
@@ -31,7 +32,7 @@ const Container = styled.div`
       transform: translateX(0);
     `}
 
-  ${media.md} {
+  ${media.lg} {
     display: block;
     transform: translateX(0);
     box-shadow: none;
@@ -61,6 +62,7 @@ const Item = styled(Link)`
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    border: none;
   }
 
   &:active {
@@ -78,7 +80,7 @@ const MobileHeader = styled.header`
   width: 100%;
   z-index: 1;
 
-  ${media.md} {
+  ${media.lg} {
     display: none;
   }
 `;
@@ -99,7 +101,7 @@ const PopperTextLogo = ({ mobile }) => (
       display: ${mobile ? 'block' : 'none'};
       user-select: none;
 
-      ${media.md} {
+      ${media.lg} {
         display: ${mobile ? 'none' : 'block'};
         margin-top: 8px;
       }
@@ -113,8 +115,7 @@ const MenuButton = styled.button`
   color: white;
   font-weight: bold;
   top: 0;
-  margin-left: 15px;
-  padding: 8px 16px;
+  padding: 8px 15px;
   height: 45px;
   background-color: #c83b50;
   border-radius: 0 0 4px 4px;
@@ -128,13 +129,13 @@ const CloseMenuButton = styled.button`
   padding: 8px 16px;
   border-radius: 4px;
 
-  ${media.md} {
+  ${media.lg} {
     display: none;
   }
 `;
 
 const MenuContents = styled.div`
-  ${media.md} {
+  ${media.lg} {
     margin-top: 50px;
   }
 `;
@@ -186,7 +187,7 @@ export default function Navigation({ description, lang, meta, title }) {
               aria-expanded={menuOpen ? 'true' : 'false'}
               aria-label="Click to open navigation menu"
             >
-              Menu
+              <Menu size={30} />
             </MenuButton>
             <PopperTextLogo mobile />
           </MobileHeader>
