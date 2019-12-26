@@ -5,17 +5,18 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect, useRef, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
+import { Crop, Layers, Heart, Check, ChevronRight } from 'react-feather';
 import Highlight from './Highlight';
 import CarbonAds from './CarbonAds';
 
 import Header from './Header';
 import InstallBar from './InstallBar';
-import { Container } from './Framework';
+import { Container, media, Footer, sizes } from './Framework';
 import { usePopper, Tooltip, Arrow } from './Popper';
 
 import './layout.css';
@@ -23,6 +24,7 @@ import './prism-base2tone-pool-dark.css';
 import 'modern-normalize';
 
 import popcornBox from '../images/popcorn-box.svg';
+import { css } from '@emotion/core';
 
 const Heading = styled.h3`
   font-family: 'Luckiest Guy', sans-serif;
@@ -30,20 +32,31 @@ const Heading = styled.h3`
   text-transform: uppercase;
   font-size: 30px;
   -webkit-font-smoothing: antialiased;
-  text-align: center;
+  margin-top: 15px;
   margin-bottom: 15px;
-  margin-top: 40px;
+  line-height: 1.1;
+  color: #f4e0f1;
 `;
 
-const PopcornBox = styled.img`
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  top: 50%;
-  left: 50%;
-  margin-left: -60px;
-  margin-top: -60px;
-`;
+const PopcornBox = forwardRef((props, ref) => (
+  <img
+    ref={ref}
+    alt="Popcorn box"
+    {...props}
+    css={css`
+      position: relative;
+      left: 50%;
+      width: 134px;
+      height: 120px;
+      margin-left: -67px;
+      transform: scale(0.8);
+
+      ${media.sm} {
+        transform: scale(1);
+      }
+    `}
+  />
+));
 
 const TooltipName = styled.div`
   font-weight: 900;
@@ -59,58 +72,97 @@ const DotHitArea = styled.button`
   justify-content: center;
   align-items: center;
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   padding: 0;
   border: none;
-  display: ${props => (props.hidden ? 'none' : '')};
   background: none;
   transition: transform 0.4s cubic-bezier(0.54, 1.5, 0.38, 1.2);
   cursor: pointer;
+  outline: 0;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus > div {
+    box-shadow: 0 0 0 6px rgba(255, 100, 150, 0.4);
+  }
 
   &:hover {
-    transform: scale(1.25);
+    transform: scale(1.5);
   }
 
   &[data-placement^='top'] {
     top: 0;
     left: 50%;
-    margin-left: -30px;
-  }
-
-  &[data-placement^='right'] {
-    right: 0;
-    top: 50%;
-    margin-top: -30px;
+    margin-left: -25px;
   }
 
   &[data-placement^='bottom'] {
     bottom: 0;
     left: 50%;
-    margin-left: -30px;
+    margin-left: -25px;
+  }
+
+  &[data-placement='top-start'],
+  &[data-placement='bottom-start'] {
+    left: calc(50% - 50px);
+  }
+
+  &[data-placement='top-end'],
+  &[data-placement='bottom-end'] {
+    left: calc(50% + 50px);
+  }
+
+  &[data-placement^='right'] {
+    right: 0;
+    top: 50%;
+    margin-top: -25px;
   }
 
   &[data-placement^='left'] {
     left: 0;
     top: 50%;
-    margin-top: -30px;
+    margin-top: -25px;
+  }
+
+  &[data-placement='left-start'],
+  &[data-placement='right-start'] {
+    top: calc(50% - 50px);
+  }
+
+  &[data-placement='left-end'],
+  &[data-placement='right-end'] {
+    top: calc(50% + 50px);
   }
 `;
 
 const Dot = styled.div`
-  width: 20px;
-  height: 20px;
-  background: #ffe69d;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ff6b81;
+  background: ${props => (props.selected ? '#ff6b81' : 'transparent')};
   border-radius: 50%;
-  border: none;
 `;
 
-const ExampleArea = styled.div`
+const Section = styled.section`
+  background-color: #281e36;
+  padding: 40px 0;
+  font-size: 16px;
+  text-align: center;
+
+  ${media.lg} {
+    font-size: 18px;
+    padding: 50px 0;
+  }
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #362c4f;
+  }
+`;
+
+export const ExampleArea = styled.div`
   position: relative;
-  width: 350px;
-  max-height: 400px;
-  background: #271d2f;
-  border-radius: 20px;
+  width: 100%;
   scrollbar-color: rgba(255, 230, 157, 1) transparent;
 
   ::-webkit-scrollbar {
@@ -125,43 +177,135 @@ const ExampleArea = styled.div`
 `;
 
 const DotContainer = styled(ExampleArea)`
+  height: 350px;
   text-align: center;
+  margin: 0 auto;
+
+  ${media.lg} {
+    height: 450px;
+  }
 `;
 
-const ScrollContainer = styled(ExampleArea)`
+export const ScrollContainer = styled(ExampleArea)`
   overflow-y: scroll;
+  height: 350px;
+  margin: 0 auto;
+  border: 2px dashed #ff6b81;
+  background-color: #281e36;
+
+  ${media.lg} {
+    height: 450px;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 600px;
+  }
 
   &::after {
     content: '';
     display: block;
     width: 1px;
-    height: 800px;
+    height: 600px;
   }
 `;
 
 const ExampleBox = styled.article`
-  background-color: #18111c;
-  border-radius: 20px;
-  display: grid;
-  grid-template-columns: 350px auto;
-  margin-bottom: 60px;
+  padding: 40px 0;
+  overflow-x: hidden;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #44395d;
+  }
+
+  ${media.lg} {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    align-items: start;
+    font-size: 17px;
+    padding: 50px 0;
+  }
+
+  strong {
+    color: #ff6b81;
+  }
+
+  p {
+    margin-top: 0;
+  }
+
+  .prism-code {
+    margin: 0;
+  }
 `;
+
 const ExampleText = styled.div`
-  padding: 20px;
+  padding: 20px 0 0;
   display: grid;
   align-items: center;
+
+  ${media.lg} {
+    padding: 0 40px;
+  }
+`;
+
+const LinkStyled = styled(Link)`
+  color: #ffe69d;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 2px solid rgba(255, 228, 148, 0.25);
+  transition: border-bottom-color 0.15s ease-in-out;
+
+  &:hover {
+    border-bottom: 2px solid rgba(255, 228, 148, 1);
+  }
+`;
+
+const Ul = styled.ul`
+  padding-left: 20px;
+  list-style: none;
+  margin-top: 0;
+  text-align: left;
+`;
+
+const Li = styled.li`
+  &::before {
+    content: '✓';
+    display: inline-block;
+    top: 4px;
+    margin-right: 4px;
+    position: relative;
+    color: #ff6b81;
+    font-size: 30px;
+    height: 20px;
+    margin-left: -30px;
+  }
+
+  strong {
+    color: #ff6b81;
+  }
 `;
 
 const components = {
   a: ({ href, ...props }) => <Link to={href} {...props} />,
 };
 
-const Example = () => {
-  const [placement, setPlacement] = useState('right');
+const PlacementExample = () => {
+  const [placement, setPlacement] = useState('top');
   const { reference, popper } = usePopper({
     placement,
     modifiers: [
-      { name: 'flip', enabled: false },
+      {
+        name: 'flip',
+        enabled: false,
+      },
+      // left/right placements on mobile
+      {
+        name: 'preventOverflow',
+        options: { altAxis: true },
+      },
       {
         name: 'offset',
         options: {
@@ -171,92 +315,205 @@ const Example = () => {
     ],
   });
 
+  const code = `
+import { createPopper } from '@popperjs/core';
+ 
+const popcorn = document.querySelector('#popcorn');
+const tooltip = document.querySelector('#tooltip');
+ 
+createPopper(popcorn, tooltip, {
+  placement: '${placement}',
+});`;
+
   return (
-    <DotContainer>
-      {['top', 'right', 'bottom', 'left'].map(p => (
-        <DotHitArea
-          key={p}
-          onClick={() => setPlacement(p)}
-          onMouseDown={() => setPlacement(p)}
-          data-placement={p}
-          hidden={placement === p}
-        >
-          <Dot />
-        </DotHitArea>
-      ))}
-      <PopcornBox ref={reference} src={popcornBox} />
-      <Tooltip ref={popper}>
-        <TooltipName>Popcorn</TooltipName>
-        <TooltipPrice>New item</TooltipPrice>
-        <Arrow data-popper-arrow />
-      </Tooltip>
-    </DotContainer>
+    <ExampleBox>
+      <DotContainer>
+        {['top', 'right', 'bottom', 'left']
+          .reduce(
+            (placements, basePlacement) => [
+              ...placements,
+              // clockwise tabbing order
+              ...(['bottom', 'left'].includes(basePlacement)
+                ? [
+                    `${basePlacement}-end`,
+                    basePlacement,
+                    `${basePlacement}-start`,
+                  ]
+                : [
+                    `${basePlacement}-start`,
+                    basePlacement,
+                    `${basePlacement}-end`,
+                  ]),
+            ],
+            []
+          )
+          .map(p => (
+            <DotHitArea
+              key={p}
+              onClick={() => setPlacement(p)}
+              onMouseDown={() => setPlacement(p)}
+              data-placement={p}
+              selected={placement === p}
+            >
+              <Dot selected={placement === p} />
+            </DotHitArea>
+          ))}
+        <PopcornBox
+          ref={reference}
+          src={popcornBox}
+          style={{ position: 'absolute', top: '50%', marginTop: -60 }}
+        />
+        <Tooltip ref={popper}>
+          <TooltipName>Popcorn</TooltipName>
+          {/*<Arrow data-popper-arrow />*/}
+        </Tooltip>
+      </DotContainer>
+      <ExampleText>
+        <Heading>Placement</Heading>
+        <p>
+          <strong>Click on the dots</strong> to place the tooltip. There are 12
+          different placements to choose from.
+        </p>
+        <Highlight code={code} />
+      </ExampleText>
+    </ExampleBox>
   );
 };
 
-const ScrollExample = () => {
+const PreventOverflowExample = () => {
   const { reference, popper } = usePopper({
     placement: 'right',
     modifiers: [
       {
+        name: 'flip',
+        enabled: false,
+      },
+      // left/right placements on mobile
+      {
+        name: 'preventOverflow',
+        options: { altAxis: true },
+      },
+      {
         name: 'offset',
         options: {
           offset: [10, 0],
         },
       },
+    ],
+  });
+  const scrollContainerRef = useRef();
+
+  useLayoutEffect(() => {
+    scrollContainerRef.current.scrollTop =
+      window.innerWidth <= sizes.lg ? 490 : 450;
+  }, []);
+
+  const code = `
+import { createPopper } from '@popperjs/core';
+ 
+const popcorn = document.querySelector('#popcorn');
+const tooltip = document.querySelector('#tooltip');
+ 
+createPopper(popcorn, tooltip, {
+  placement: 'right',
+});
+`;
+
+  return (
+    <ExampleBox>
+      <ScrollContainer ref={scrollContainerRef}>
+        <PopcornBox
+          ref={reference}
+          src={popcornBox}
+          style={{
+            position: 'absolute',
+            left: 100,
+          }}
+        />
+        <Tooltip ref={popper}>
+          <TooltipName>Popcorn</TooltipName>
+          <TooltipName>sizes</TooltipName>
+          <TooltipName>&amp; Price</TooltipName>
+
+          <TooltipPrice>XXS: $1.99</TooltipPrice>
+          <TooltipPrice>XS: $2.99</TooltipPrice>
+          <TooltipPrice>S: $3.99</TooltipPrice>
+          <TooltipPrice>M: $4.99</TooltipPrice>
+          <TooltipPrice>L: $5.99</TooltipPrice>
+          <TooltipPrice>XL: $6.99</TooltipPrice>
+          <TooltipPrice>XXL: $7.99</TooltipPrice>
+
+          {/*<Arrow data-popper-arrow />*/}
+        </Tooltip>
+      </ScrollContainer>
+      <ExampleText>
+        <Heading>Overflow prevention</Heading>
+        <p>
+          <strong>Scroll the container</strong> to see the tooltip stay within
+          the boundary. Once the opposite edges of the popcorn and tooltip are
+          aligned, the tooltip is allowed to overflow to prevent detachment.
+        </p>
+        <Highlight code={code} />
+      </ExampleText>
+    </ExampleBox>
+  );
+};
+
+const FlipExample = () => {
+  const { reference, popper } = usePopper({
+    placement: 'bottom',
+    modifiers: [
       {
-        name: 'preventOverflow',
+        name: 'offset',
         options: {
-          tether: 'edges',
+          offset: [10, 0],
         },
       },
     ],
   });
+  const scrollContainerRef = useRef();
+
+  useLayoutEffect(() => {
+    scrollContainerRef.current.scrollTop =
+      window.innerWidth <= sizes.lg ? 490 : 450;
+  }, []);
+
+  const code = `
+import { createPopper } from '@popperjs/core';
+ 
+const popcorn = document.querySelector('#popcorn');
+const tooltip = document.querySelector('#tooltip');
+ 
+createPopper(popcorn, tooltip);
+`;
 
   return (
-    <ScrollContainer>
-      <PopcornBox ref={reference} src={popcornBox} />
-      <Tooltip ref={popper}>
-        <TooltipName>Popcorn</TooltipName>
-        <TooltipName>Sizes</TooltipName>
-        <TooltipName>Price</TooltipName>
+    <ExampleBox>
+      <ScrollContainer ref={scrollContainerRef}>
+        <PopcornBox ref={reference} src={popcornBox} />
+        <Tooltip ref={popper}>
+          <TooltipName>Popcorn</TooltipName>
+          <TooltipPrice>New Item</TooltipPrice>
 
-        <TooltipPrice>XXS: $1.99</TooltipPrice>
-        <TooltipPrice>XS: $2.99</TooltipPrice>
-        <TooltipPrice>S: $3.99</TooltipPrice>
-        <TooltipPrice>M: $4.99</TooltipPrice>
-        <TooltipPrice>L: $5.99</TooltipPrice>
-        <TooltipPrice>XL: $6.99</TooltipPrice>
-        <TooltipPrice>XXL: $7.99</TooltipPrice>
-
-        <Arrow data-popper-arrow />
-      </Tooltip>
-    </ScrollContainer>
+          {/*<Arrow data-popper-arrow />*/}
+        </Tooltip>
+      </ScrollContainer>
+      <ExampleText>
+        <Heading>Flipping</Heading>
+        <p>
+          <strong>Scroll the container</strong> to see the tooltip flip to the
+          opposite side once it's about to overflow the clipping container. Once
+          enough space is detected on its preferred side, it will flip back.
+        </p>
+        <p>
+          You can also scroll the entire page to see the tooltip flip once it's
+          about to overflow the viewport, rather than its clipping container.
+        </p>
+        <Highlight code={code} />
+      </ExampleText>
+    </ExampleBox>
   );
 };
-
-const placementExampleCode = `
-import { createPopper } from '@popperjs/core';
-
-createPopper(
-  document.querySelector('#popcornbox'),
-  document.querySelector('#tooltip'),
-  {
-    // top, right, bottom, left
-    placement: clickedPlacement,
-  }
-)
-`.trim();
-
-const scrollContainerExampleCode = `
-import { createPopper } from '@popperjs/core';
-
-createPopper(
-  document.querySelector('#popcornbox'),
-  document.querySelector('#tooltip'),
-  { placement: 'right', }
-)
-`.trim();
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -275,30 +532,114 @@ const Layout = ({ children }) => {
       <InstallBar />
       <CarbonAds />
 
-      <Container>
-        <Heading>Placement</Heading>
-
-        <ExampleBox>
-          <Example />
-          <ExampleText>
-            <p>Click on the dots to place the tooltip.</p>
-            <Highlight code={placementExampleCode} />
-          </ExampleText>
-        </ExampleBox>
-
-        <Heading>Overflow prevention</Heading>
-        <ExampleBox>
-          <ScrollExample />
-
-          <ExampleText>
-            <p>
-              Scroll the container to watch the tooltip stay within the
-              boundary.
-            </p>
-            <Highlight code={scrollContainerExampleCode} />
-          </ExampleText>
-        </ExampleBox>
+      <Container maxWidth={1400}>
+        <PlacementExample />
+        <PreventOverflowExample />
+        <FlipExample />
       </Container>
+
+      <Section>
+        <Container>
+          <Crop size={50} stroke="#ffe69d" />
+          <Heading>In a nutshell, Popper:</Heading>
+          <Ul>
+            <Li>
+              <strong>Places your tooltip relative to the reference</strong>{' '}
+              taking into account their sizes, and positions its arrow centered
+              to the reference.
+            </Li>
+            <Li>
+              <strong>
+                Takes into account the many different contexts it can live in
+              </strong>{' '}
+              relative to the reference (different offsetParents, different or
+              nested scrolling containers).
+            </Li>
+            <Li>
+              <strong>Keeps your tooltip in view as best as possible</strong>.{' '}
+              It prevents the tooltip from being clipped or cut off (overflow
+              prevention) and changes the tooltip placement if the original does
+              not fit (flipping).
+            </Li>
+          </Ul>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Layers size={50} stroke="#ffe69d" />
+          <Heading>Granular configuration with sensible defaults</Heading>
+          <p>
+            Popper aims to "just work" without you needing to configure much. Of
+            course, there are cases where you need to configure Popper beyond
+            its defaults – in these cases, Popper shines by offering high
+            granularity of configuration to fine-tune the position or behavior
+            of your tooltip.
+          </p>
+          <p>
+            You can extend Popper with your own modifiers (or plugins) to make
+            your tooltip work for you, no matter how advanced the scenario.
+          </p>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Check size={50} stroke="#ffe69d" />
+          <Heading>No compromises</Heading>
+          <Ul>
+            <Li>
+              <strong>No detachment</strong>. Position updates take less than a
+              millisecond on average devices. Popper doesn't debounce the
+              positioning updates of the tooltip to the point where it will{' '}
+              <em>ever</em> detach from its reference, but this doesn't come at
+              the cost of poor performance.
+            </Li>
+            <Li>
+              <strong>
+                You don't have to change the DOM context of your tooltip
+              </strong>
+              ; it will work no matter where your tooltip and reference elements
+              live, even in the most complex scenarios like nested scrolling
+              containers or alternative offsetParent contexts.
+            </Li>
+            <Li>
+              <strong>Still lightweight</strong>. Handling all of this
+              complexity is still done in an efficient manner. The base Popper
+              is only 2 kB minzipped.
+            </Li>
+          </Ul>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Heart size={50} stroke="#ffe69d" />
+          <Heading>Free open-source, used by millions</Heading>
+          <p>
+            Popper has billions of hits across the web, is trusted by millions
+            of developers in production, and used in popular libraries like
+            Bootstrap and Material UI.
+          </p>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <ChevronRight size={50} stroke="#ffe69d" />
+          <Heading>Ready to start?</Heading>
+          <p>
+            Start reading{' '}
+            <LinkStyled to="/docs">Popper's documentation</LinkStyled>!
+          </p>
+        </Container>
+      </Section>
+
+      <Footer>
+        <Container>
+          <p>© {new Date().getFullYear()} MIT License</p>
+        </Container>
+      </Footer>
     </MDXProvider>
   );
 };

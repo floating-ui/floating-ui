@@ -1,11 +1,15 @@
 #carbonads {
   background-color: #281d2f;
   color: #fff;
-  margin: 30px auto;
-  width: 360px;
-  height: 155px;
   padding: 15px;
   border-radius: 10px;
+  width: 310px;
+  height: 155px;
+  margin: 20px auto 0;
+}
+
+#carbonads a {
+  border: none;
 }
 
 .carbon-wrap {
@@ -30,9 +34,4 @@
 .carbon-poweredby {
   text-decoration: none;
   color: inherit;
-}
-
-[data-light] #carbonads {
-  background-color: #f3f3f3;
-  color: #222;
 }

@@ -30,6 +30,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-feather": "^2.0.3",
     "react-helmet": "^5.2.1"
   },
   "devDependencies": {

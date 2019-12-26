@@ -2,42 +2,41 @@ import React, { useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { usePopper, Tooltip, Arrow } from './Popper';
+import { ExampleArea } from './Landing';
 
-const ClippingParentStyled = styled.div`
-  position: relative;
-  width: 300px;
-  height: 300px;
-  background-color: whitesmoke;
+const ClippingParentStyled = styled(ExampleArea)`
   overflow-y: scroll;
+  height: 350px;
+  margin: 0 auto;
+  border: 2px dashed #ff6b81;
+  background-color: #281e36;
 
   ${props =>
-    props.scrollable
-      ? css`
-          &::before {
-            content: '';
-            display: block;
-            height: 400px;
-          }
+    props.scrollable &&
+    css`
+      &::before {
+        content: '';
+        display: block;
+        height: 400px;
+      }
 
-          &::after {
-            content: '';
-            display: block;
-            height: 500px;
-          }
-        `
-      : css`
-          border: 3px solid #c83b50;
-        `}
+      &::after {
+        content: '';
+        display: block;
+        height: 500px;
+      }
+    `}
 `;
 
 const Reference = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
-  border: 2px dashed #c83b50;
-  color: #c83b50;
+  width: 150px;
+  height: 150px;
+  background: #b886fd;
+  border: 2px solid #b886fd;
+  color: black;
   font-weight: bold;
 `;
 
@@ -70,7 +69,7 @@ export const ArrowDemo = () => {
         <Reference ref={reference} style={{ position: 'absolute', left: 15 }}>
           Reference
         </Reference>
-        <Tooltip ref={popper} dark>
+        <Tooltip ref={popper}>
           Tooltip
           <br />
           that
@@ -84,7 +83,7 @@ export const ArrowDemo = () => {
           its
           <br />
           reference
-          <Arrow data-popper-arrow dark />
+          <Arrow data-popper-arrow />
         </Tooltip>
       </ClippingParent>
     </>
@@ -102,13 +101,13 @@ export const HideDemo = () => {
           style={{
             position: 'absolute',
             left: '50%',
-            marginLeft: -50,
+            marginLeft: -75,
           }}
         >
           Reference
         </Reference>
       </ClippingParent>
-      <Tooltip ref={popper} dark hide>
+      <Tooltip ref={popper} hide>
         Tooltip
       </Tooltip>
     </>
@@ -131,9 +130,7 @@ export const OffsetDemo = ({ offset }) => {
   return (
     <>
       <Reference ref={reference}>Reference</Reference>
-      <Tooltip ref={popper} dark>
-        Tooltip
-      </Tooltip>
+      <Tooltip ref={popper}>Tooltip</Tooltip>
     </>
   );
 };
@@ -154,9 +151,7 @@ export const PreventOverflowDemo = () => {
         >
           Reference
         </Reference>
-        <Tooltip ref={popper} dark>
-          Tooltip wider than its reference
-        </Tooltip>
+        <Tooltip ref={popper}>Tooltip wider than its reference</Tooltip>
       </ClippingParent>
     </>
   );
@@ -173,14 +168,12 @@ export const FlipDemo = () => {
           style={{
             position: 'absolute',
             left: '50%',
-            marginLeft: -50,
+            marginLeft: -75,
           }}
         >
           Reference
         </Reference>
-        <Tooltip ref={popper} dark>
-          Tooltip
-        </Tooltip>
+        <Tooltip ref={popper}>Tooltip</Tooltip>
       </ClippingParent>
     </>
   );

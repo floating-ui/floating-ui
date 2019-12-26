@@ -40,6 +40,7 @@ export const Tooltip = styled.div`
   left: 0;
   background: ${props => (props.dark ? '#333' : '#fff')};
   color: ${props => (props.dark ? '#fff' : '#642f45')};
+  backdrop-filter: blur(20px) saturate(180%);
   padding: 5px 10px;
   border-radius: 4px;
   font-weight: bold;

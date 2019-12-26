@@ -16,6 +16,9 @@ const InstallBarContainer = styled(Container)`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  padding: 0 15px;
+  max-width: 1000px;
+  color: white;
 
   ${media.lg} {
     flex-direction: row;
@@ -31,7 +34,13 @@ const Bar = styled.div`
   font-size: 14px;
   overflow: hidden;
   font-weight: normal;
-  margin-top: 15px;
+  margin-top: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+
+  ${media.sm} {
+    max-width: none;
+  }
 
   ${media.lg} {
     margin-top: 0;
