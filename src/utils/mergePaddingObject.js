@@ -1,10 +1,8 @@
 // @flow
-import type { PaddingObject } from '../types';
+import type { SideObject } from '../types';
+import getFreshSideObject from './getFreshSideObject';
 
-export default (paddingObject: $Shape<PaddingObject>): PaddingObject => ({
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0,
+export default (paddingObject: $Shape<SideObject>): SideObject => ({
+  ...getFreshSideObject(),
   ...paddingObject,
 });

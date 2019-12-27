@@ -100,14 +100,14 @@ export type ClientRectObject = {|
   height: number,
 |};
 
-export type PaddingObject = {|
+export type SideObject = {|
   top: number,
   left: number,
   right: number,
   bottom: number,
 |};
 
-export type Padding = number | $Shape<PaddingObject>;
+export type Padding = number | $Shape<SideObject>;
 
 export type VirtualElement = {|
   contextElement: HTMLElement,

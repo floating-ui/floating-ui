@@ -1,29 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`bottom 1`] = `
-Array [
-  20,
-  10,
-]
+Object {
+  "x": 20,
+  "y": 10,
+}
 `;
 
 exports[`left 1`] = `
-Array [
-  -10,
-  20,
-]
+Object {
+  "x": -10,
+  "y": 20,
+}
 `;
 
 exports[`right 1`] = `
-Array [
-  10,
-  20,
-]
+Object {
+  "x": 10,
+  "y": 20,
+}
 `;
 
 exports[`top 1`] = `
-Array [
-  20,
-  -10,
-]
+Object {
+  "x": 20,
+  "y": -10,
+}
 `;

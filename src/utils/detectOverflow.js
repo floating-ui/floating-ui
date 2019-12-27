@@ -1,5 +1,5 @@
 // @flow
-import type { State, ClientRectObject, VirtualElement } from '../types';
+import type { State, SideObject } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
@@ -23,43 +23,10 @@ type Options = {
   altBoundary: boolean,
 };
 
-// if the number is positive, the popper is overflowing by that number of pixels
-// when 0, or negative, the popper is within its boundaries
-type OverflowOffsets = {
-  top: number,
-  bottom: number,
-  right: number,
-  left: number,
-};
-
-const getOverflowOffsets = (
-  popperClientRect,
-  boundaryClientRect
-): OverflowOffsets => ({
-  top: boundaryClientRect.top - popperClientRect.top,
-  bottom: popperClientRect.bottom - boundaryClientRect.bottom,
-  left: boundaryClientRect.left - popperClientRect.left,
-  right: popperClientRect.right - boundaryClientRect.right,
-});
-
-const getOverflowRect = (
-  elementOrVirtualElement: Element | VirtualElement,
-  boundary: Boundary,
-  rootBoundary: RootBoundary
-): ClientRectObject => {
-  const element = unwrapVirtualElement(elementOrVirtualElement);
-
-  if (boundary === 'clippingParents') {
-    return getClippingRect(element, rootBoundary);
-  }
-
-  return getBoundingClientRect(boundary);
-};
-
 export default function detectOverflow(
   state: State,
   options: $Shape<Options> = {}
-): OverflowOffsets {
+): SideObject {
   const {
     placement = state.placement,
     boundary = clippingParents,
@@ -74,7 +41,11 @@ export default function detectOverflow(
   const popperRect = state.measures.popper;
   const element = state.elements[altBoundary ? altContext : elementContext];
 
-  const clippingClientRect = getOverflowRect(element, boundary, rootBoundary);
+  const clippingClientRect = getClippingRect(
+    unwrapVirtualElement(element),
+    boundary,
+    rootBoundary
+  );
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
   const popperOffsets = computeOffsets({
@@ -92,14 +63,20 @@ export default function detectOverflow(
   const elementClientRect =
     elementContext === popper ? popperClientRect : referenceClientRect;
 
-  const overflowOffsets = getOverflowOffsets(
-    elementClientRect,
-    clippingClientRect
-  );
+  // positive = overflowing the clipping rect
+  // 0 or negative = within the clipping rect
+  const overflowOffsets = {
+    top: clippingClientRect.top - elementClientRect.top,
+    bottom: elementClientRect.bottom - clippingClientRect.bottom,
+    left: clippingClientRect.left - elementClientRect.left,
+    right: elementClientRect.right - clippingClientRect.right,
+  };
+
+  const offsetData = state.modifiersData.offset;
 
   // Offsets can be applied only to the popper element
-  if (elementContext === popper) {
-    const offset = state.modifiersData.offset;
+  if (elementContext === popper && offsetData) {
+    const offset = offsetData[placement];
 
     Object.keys(overflowOffsets).forEach(key => {
       const multiply = [right, bottom].includes(key) ? 1 : -1;

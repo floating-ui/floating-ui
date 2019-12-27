@@ -1,27 +1,26 @@
 // @flow
-import type { ModifierArguments, Modifier, Rect, Options } from '../types';
+import type {
+  ModifierArguments,
+  Modifier,
+  Rect,
+  Options,
+  SideObject,
+} from '../types';
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
 
-type ModifierData = {
-  top: number,
-  bottom: number,
-  right: number,
-  left: number,
-};
-
 const getOffsets = (
-  overflow: ModifierData,
+  overflow: SideObject,
   rect: Rect,
   preventedOffsets: { x: number, y: number } = { x: 0, y: 0 }
-): ModifierData => ({
+): SideObject => ({
   top: overflow.top - rect.height - preventedOffsets.y,
   right: overflow.right - rect.width + preventedOffsets.x,
   bottom: overflow.bottom - rect.height + preventedOffsets.y,
   left: overflow.left - rect.width - preventedOffsets.x,
 });
 
-const isAnySideFullyClipped = (overflow: ModifierData): boolean =>
+const isAnySideFullyClipped = (overflow: SideObject): boolean =>
   [top, right, bottom, left].some(side => overflow[side] >= 0);
 
 function hide({ state, name }: ModifierArguments<Options>) {
@@ -62,7 +61,7 @@ function hide({ state, name }: ModifierArguments<Options>) {
   return state;
 }
 
-const hideModifier = ({
+export default ({
   name: 'hide',
   enabled: true,
   phase: 'main',
@@ -70,6 +69,3 @@ const hideModifier = ({
   optionallyRequires: ['preventOverflow'],
   fn: hide,
 }: Modifier<Options>);
-
-// eslint-disable-next-line import/no-unused-modules
-export default hideModifier;
