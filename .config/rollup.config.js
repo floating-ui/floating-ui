@@ -22,9 +22,10 @@ const configs = bundles
     inputs.map(input => ({
       input,
       plugins: [
-        replace({
-          __DEV__: minify ? 'false' : 'true',
-        }),
+        format === 'umd' &&
+          replace({
+            __DEV__: minify ? 'false' : 'true',
+          }),
         babel(),
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
         minify && compiler(),

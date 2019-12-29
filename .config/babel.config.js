@@ -25,7 +25,7 @@ module.exports = {
       presets: ['@babel/env'],
       plugins: ['@babel/plugin-transform-runtime'],
     },
-    development: {
+    dev: {
       plugins: [
         [
           'transform-inline-environment-variables',
