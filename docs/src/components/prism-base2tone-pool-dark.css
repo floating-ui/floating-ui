@@ -72,6 +72,10 @@ pre[class*='language-'] {
   color: white;
 }
 
+.token-line {
+  min-height: 1em;
+}
+
 .token.comment,
 .token.prolog,
 .token.doctype,
