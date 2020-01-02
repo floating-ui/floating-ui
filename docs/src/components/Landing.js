@@ -13,6 +13,7 @@ import styled from '@emotion/styled';
 import { Crop, Layers, Heart, Check, ChevronRight } from 'react-feather';
 import Highlight from './Highlight';
 import CarbonAds from './CarbonAds';
+import SEO from './Seo';
 
 import Header from './Header';
 import InstallBar from './InstallBar';
@@ -549,6 +550,7 @@ const Layout = ({ children }) => {
 
   return (
     <MDXProvider components={components}>
+      <SEO title="Home" />
       <Header siteTitle={data.site.siteMetadata.title} />
       <InstallBar />
       <CarbonAds />

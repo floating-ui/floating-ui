@@ -1,4 +1,5 @@
-#carbonads {
+#carbonads,
+.carbonplaceholder {
   background-color: #281d2f;
   color: #fff;
   padding: 15px;
@@ -6,6 +7,24 @@
   width: 310px;
   height: 155px;
   margin: 20px auto 0;
+}
+
+.carbonplaceholder * {
+  opacity: 0;
+  animation: fade-in 0.2s forwards 0.5s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#carbonads + .carbonplaceholder {
+  display: none;
 }
 
 #carbonads a {

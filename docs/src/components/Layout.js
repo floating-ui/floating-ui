@@ -15,6 +15,7 @@ import CarbonAds from './CarbonAds';
 import { Container, media, Footer } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import Navigation, { NAVIGATION_WIDTH } from './Navigation';
+import SEO from './Seo';
 import processRoutes from '../utils/processRoutes';
 
 import './layout.css';
@@ -125,7 +126,7 @@ const components = {
   'x-ad': CarbonAds,
 };
 
-const Layout = ({ children, path }) => {
+const Layout = ({ children, path, pageResources }) => {
   function getPrevNextRoutes(routes) {
     const validRoutes = processRoutes(routes);
     const slashlessPath = path.replace(/\/$/, '');
@@ -229,6 +230,7 @@ const Layout = ({ children, path }) => {
         `}
       />
       <div>
+        <SEO title={pageResources.json.pageContext.frontmatter.title} />
         <Navigation root="/" target="location" />
         <Main>
           <Container>{children}</Container>
