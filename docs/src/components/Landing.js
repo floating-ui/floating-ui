@@ -688,7 +688,11 @@ const Layout = ({ children }) => {
             of developers in production, and used in popular libraries like
             Bootstrap and Material UI.
           </p>
-          <Button href="https://opencollective.com/popperjs" target="_blank">
+          <Button
+            href="https://opencollective.com/popperjs"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Support us
           </Button>
         </Container>
