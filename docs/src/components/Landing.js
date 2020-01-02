@@ -10,7 +10,14 @@ import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
-import { Crop, Layers, Heart, Check, ChevronRight } from 'react-feather';
+import {
+  Crop,
+  Layers,
+  Heart,
+  Check,
+  ChevronRight,
+  CloudLightning,
+} from 'react-feather';
 import Highlight from './Highlight';
 import CarbonAds from './CarbonAds';
 import SEO from './Seo';
@@ -19,6 +26,7 @@ import Header from './Header';
 import InstallBar from './InstallBar';
 import { Container, media, Footer, sizes } from './Framework';
 import { usePopper, Tooltip } from './Popper';
+import { ProductCard, Grid } from './ProductCard';
 
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
@@ -186,6 +194,7 @@ export const ExampleArea = styled.div`
   position: relative;
   width: 100%;
   scrollbar-color: rgba(255, 230, 157, 1) transparent;
+  border-radius: 10px;
 
   ::-webkit-scrollbar {
     -webkit-appearance: none;
@@ -632,6 +641,41 @@ const Layout = ({ children }) => {
               is only 2 kB minzipped.
             </Li>
           </Ul>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <CloudLightning size={50} stroke="#ffe69d" />
+          <Heading>UI Tools Using Popper</Heading>
+          <p>
+            Looking for some real life examples of UI Kits, Dashboards and
+            Design Systems that are implementing Popper? Try these hand picked
+            Free & Premium products!
+          </p>
+
+          <Grid>
+            <ProductCard
+              title="Argon Dashboard PRO"
+              description="Premium Bootstrap 4 Admin - $79"
+              image="https://raw.githack.com/creativetimofficial/public-assets/master/argon-dashboard-pro/argon-dashboard-pro.jpg"
+              url="https://www.creative-tim.com/product/argon-dashboard-pro?ref=popper.js.org"
+            />
+
+            <ProductCard
+              title="Material Dashboard PRO"
+              description="Premium Bootstrap 4 Material Admin - $49"
+              image="https://raw.githack.com/creativetimofficial/public-assets/master/material-dashboard-pro-html/opt_mdp_thumbnail.jpg"
+              url="https://www.creative-tim.com/product/material-dashboard-pro?ref=popper.js.org"
+            />
+
+            <ProductCard
+              title="Now UI Dashboard PRO"
+              description="Premium Bootstrap 4 Admin - $49"
+              image="https://raw.githack.com/creativetimofficial/public-assets/master/now-ui-dashboard-pro/now-ui-dashboard-pro.jpg"
+              url="https://www.creative-tim.com/product/now-ui-dashboard-pro?ref=popper.js.org"
+            />
+          </Grid>
         </Container>
       </Section>
 
