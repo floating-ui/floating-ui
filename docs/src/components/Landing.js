@@ -25,7 +25,7 @@ import SEO from './Seo';
 import Header from './Header';
 import InstallBar from './InstallBar';
 import { Container, media, Footer, sizes } from './Framework';
-import { usePopper, Tooltip } from './Popper';
+import { usePopper, Tooltip, Arrow } from './Popper';
 import { ProductCard, Grid } from './ProductCard';
 
 import './layout.css';
@@ -396,7 +396,7 @@ createPopper(popcorn, tooltip, {
         />
         <Tooltip ref={popper}>
           <TooltipName>Popcorn</TooltipName>
-          {/*<Arrow data-popper-arrow />*/}
+          <Arrow data-popper-arrow />
         </Tooltip>
       </DotContainer>
       <ExampleText>
@@ -474,7 +474,7 @@ createPopper(popcorn, tooltip, {
           <TooltipPrice>XL: $6.99</TooltipPrice>
           <TooltipPrice>XXL: $7.99</TooltipPrice>
 
-          {/*<Arrow data-popper-arrow />*/}
+          <Arrow data-popper-arrow />
         </Tooltip>
       </ScrollContainer>
       <ExampleText>
@@ -526,7 +526,7 @@ createPopper(popcorn, tooltip);
           <TooltipName>Popcorn</TooltipName>
           <TooltipPrice>New Item</TooltipPrice>
 
-          {/*<Arrow data-popper-arrow />*/}
+          <Arrow data-popper-arrow />
         </Tooltip>
       </ScrollContainer>
       <ExampleText>
