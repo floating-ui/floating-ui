@@ -1,13 +1,17 @@
 // @flow
-import type { Modifier, ModifierArguments } from '../types';
+import type { Modifier, ModifierArguments, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
-import addClientRectMargins from '../dom-utils/addClientRectMargins';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
-import { left, right } from '../enums';
+import mergePaddingObject from '../utils/mergePaddingObject';
+import expandToHashMap from '../utils/expandToHashMap';
+import { left, right, basePlacements, top, bottom } from '../enums';
 
-type Options = { element: HTMLElement | string };
+type Options = {
+  element: HTMLElement | string,
+  padding: Padding,
+};
 
 function arrow({ state, name }: ModifierArguments<Options>) {
   const arrowElement = state.elements.arrow;
@@ -21,10 +25,8 @@ function arrow({ state, name }: ModifierArguments<Options>) {
     return state;
   }
 
-  const arrowElementRect = addClientRectMargins(
-    getLayoutRect(arrowElement),
-    arrowElement
-  );
+  const paddingObject = state.modifiersData[`${name}#persistent`].padding;
+  const arrowRect = getLayoutRect(arrowElement);
 
   const endDiff =
     state.measures.reference[len] +
@@ -36,16 +38,17 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   const centerToReference = endDiff / 2 - startDiff / 2;
 
   let center =
-    state.measures.popper[len] / 2 -
-    arrowElementRect[len] / 2 +
-    centerToReference;
+    state.measures.popper[len] / 2 - arrowRect[len] / 2 + centerToReference;
+
+  const minProp = axis === 'y' ? top : left;
+  const maxProp = axis === 'y' ? bottom : right;
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
   center = within(
-    0,
+    paddingObject[minProp],
     center,
-    state.measures.popper[len] - arrowElementRect[len]
+    state.measures.popper[len] - arrowRect[len] - paddingObject[maxProp]
   );
 
   // Prevents breaking syntax highlighting...
@@ -55,8 +58,8 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   return state;
 }
 
-function onLoad({ state, options }: ModifierArguments<Options>) {
-  let { element: arrowElement = '[data-popper-arrow]' } = options;
+function onLoad({ state, options, name }: ModifierArguments<Options>) {
+  let { element: arrowElement = '[data-popper-arrow]', padding = 0 } = options;
 
   // CSS selector
   if (typeof arrowElement === 'string') {
@@ -81,6 +84,13 @@ function onLoad({ state, options }: ModifierArguments<Options>) {
   }
 
   state.elements.arrow = arrowElement;
+  state.modifiersData[`${name}#persistent`] = {
+    padding: mergePaddingObject(
+      typeof padding !== 'number'
+        ? padding
+        : expandToHashMap(padding, basePlacements)
+    ),
+  };
 
   return state;
 }

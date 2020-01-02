@@ -1,19 +1,34 @@
 import { createPopper } from '../../../lib/popper.js';
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, cloneElement, useMemo } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
 export const usePopper = (options = {}) => {
   const referenceRef = useRef();
   const popperRef = useRef();
-
   const popperInstanceRef = useRef();
+
+  const mergedOptions = useMemo(
+    () => ({
+      ...options,
+      modifiers: [
+        {
+          name: 'arrow',
+          options: {
+            padding: 5,
+          },
+        },
+        ...options.modifiers,
+      ],
+    }),
+    [options]
+  );
 
   useLayoutEffect(() => {
     const popperInstance = createPopper(
       referenceRef.current,
       popperRef.current,
-      options
+      mergedOptions
     );
 
     popperInstanceRef.current = popperInstance;
@@ -25,9 +40,9 @@ export const usePopper = (options = {}) => {
   }, []);
 
   useLayoutEffect(() => {
-    popperInstanceRef.current.setOptions(options);
+    popperInstanceRef.current.setOptions(mergedOptions);
     popperInstanceRef.current.update();
-  }, [options]);
+  }, [mergedOptions]);
 
   return {
     reference: referenceRef,
@@ -61,32 +76,20 @@ export const Tooltip = styled.div`
       }
     `}
 
-  &[data-popper-placement^='top'] {
-    > [data-popper-arrow] {
-      bottom: -5px;
-      margin: 0 6px;
-    }
+  &[data-popper-placement^='top'] > [data-popper-arrow] {
+    bottom: -5px;
   }
 
-  &[data-popper-placement^='right'] {
-    > [data-popper-arrow] {
-      left: -5px;
-      margin: 6px 0;
-    }
+  &[data-popper-placement^='right'] > [data-popper-arrow] {
+    left: -5px;
   }
 
-  &[data-popper-placement^='bottom'] {
-    > [data-popper-arrow] {
-      top: -5px;
-      margin: 0 6px;
-    }
+  &[data-popper-placement^='bottom'] > [data-popper-arrow] {
+    top: -5px;
   }
 
-  &[data-popper-placement^='left'] {
-    > [data-popper-arrow] {
-      right: -5px;
-      margin: 6px 0;
-    }
+  &[data-popper-placement^='left'] > [data-popper-arrow] {
+    right: -5px;
   }
 `;
 
