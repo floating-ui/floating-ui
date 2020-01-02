@@ -18,7 +18,7 @@ export const usePopper = (options = {}) => {
             padding: 5,
           },
         },
-        ...options.modifiers,
+        ...(options.modifiers || []),
       ],
     }),
     [options]
