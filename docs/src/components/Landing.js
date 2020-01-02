@@ -26,6 +26,27 @@ import 'modern-normalize';
 import popcornBox from '../images/popcorn-box.svg';
 import { css } from '@emotion/core';
 
+const Button = styled.a`
+  display: inline-block;
+  background: white;
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 10px;
+  color: #c83b50;
+  box-shadow: 0 8px 16px -4px rgb(255, 230, 157, 0.5);
+  transition: all 0.2s ease-in-out;
+  text-transform: uppercase;
+
+  &:hover {
+    background: #c73a50;
+    color: white;
+    border-color: #c73a50;
+  }
+`;
+
 const Heading = styled.h3`
   font-family: 'Luckiest Guy', sans-serif;
   letter-spacing: 1.5px;
@@ -621,6 +642,9 @@ const Layout = ({ children }) => {
             of developers in production, and used in popular libraries like
             Bootstrap and Material UI.
           </p>
+          <Button href="https://opencollective.com/popperjs" target="_blank">
+            Support us
+          </Button>
         </Container>
       </Section>
 
