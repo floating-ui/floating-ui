@@ -122,6 +122,7 @@ const NavButtonDirection = styled.span`
 
 const components = {
   a: ({ href, ...props }) => <Link to={href} {...props} />,
+  'x-ad': CarbonAds,
 };
 
 const Layout = ({ children, path }) => {
@@ -230,10 +231,7 @@ const Layout = ({ children, path }) => {
       <div>
         <Navigation root="/" target="location" />
         <Main>
-          <Container>
-            {children}
-            <CarbonAds />
-          </Container>
+          <Container>{children}</Container>
           <MdxRoutes>
             {routes => {
               const { prev, next } = getPrevNextRoutes(routes);

@@ -7,16 +7,17 @@ const CarbonAds = ({
 }) => {
   const ref = useRef(null);
   useEffect(() => {
-    if (ref.current) {
+    const node = ref.current;
+    if (node) {
       const script = document.createElement('script');
       script.src = url;
       script.async = true;
       script.id = '_carbonads_js';
-      ref.current.appendChild(script);
+      node.appendChild(script);
     }
 
-    return () => (ref.current.innerHTML = '');
-  }, [ref]);
+    return () => (node.innerHTML = '');
+  }, [ref, url]);
 
   return <div {...props} ref={ref} />;
 };

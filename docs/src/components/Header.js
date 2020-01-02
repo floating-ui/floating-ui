@@ -4,7 +4,7 @@ import { Link } from 'gatsby';
 import popperLogo from '../images/popper-logo.svg';
 import stripes from '../images/stripes.svg';
 
-import { media, Button } from './Framework';
+import { media } from './Framework';
 import { GitHub } from 'react-feather';
 import { css } from '@emotion/core';
 

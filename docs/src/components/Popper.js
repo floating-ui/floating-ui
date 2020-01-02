@@ -1,5 +1,5 @@
 import { createPopper } from '../../../lib/popper.js';
-import { useRef, useLayoutEffect, cloneElement } from 'react';
+import { useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
@@ -21,6 +21,7 @@ export const usePopper = (options = {}) => {
     return () => {
       popperInstance.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {

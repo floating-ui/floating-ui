@@ -17,7 +17,7 @@ import CarbonAds from './CarbonAds';
 import Header from './Header';
 import InstallBar from './InstallBar';
 import { Container, media, Footer, sizes } from './Framework';
-import { usePopper, Tooltip, Arrow } from './Popper';
+import { usePopper, Tooltip } from './Popper';
 
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
@@ -317,10 +317,10 @@ const PlacementExample = () => {
 
   const code = `
 import { createPopper } from '@popperjs/core';
- 
+
 const popcorn = document.querySelector('#popcorn');
 const tooltip = document.querySelector('#tooltip');
- 
+
 createPopper(popcorn, tooltip, {
   placement: '${placement}',
 });`;
@@ -410,10 +410,10 @@ const PreventOverflowExample = () => {
 
   const code = `
 import { createPopper } from '@popperjs/core';
- 
+
 const popcorn = document.querySelector('#popcorn');
 const tooltip = document.querySelector('#tooltip');
- 
+
 createPopper(popcorn, tooltip, {
   placement: 'right',
 });
@@ -480,10 +480,10 @@ const FlipExample = () => {
 
   const code = `
 import { createPopper } from '@popperjs/core';
- 
+
 const popcorn = document.querySelector('#popcorn');
 const tooltip = document.querySelector('#tooltip');
- 
+
 createPopper(popcorn, tooltip);
 `;
 

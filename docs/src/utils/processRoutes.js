@@ -1,5 +1,5 @@
 const BLACKLIST = new Set(['/404/']);
-const DIR_ORDER = ['modifiers', 'utils', 'typings'];
+const DIR_ORDER = ['modifiers', 'utils', 'typings', 'browser-support'];
 const MODIFIER_ORDER = [
   'Popper Offsets',
   'Offset',
