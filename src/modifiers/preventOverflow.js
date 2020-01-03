@@ -171,8 +171,6 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   }
 
   state.modifiersData[name] = data;
-
-  return state;
 }
 
 export default ({

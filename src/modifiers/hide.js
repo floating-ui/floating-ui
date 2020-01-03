@@ -57,8 +57,6 @@ function hide({ state, name }: ModifierArguments<Options>) {
     'data-popper-reference-hidden': isReferenceHidden,
     'data-popper-escaped': hasPopperEscaped,
   };
-
-  return state;
 }
 
 export default ({

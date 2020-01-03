@@ -84,7 +84,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       state.reset = true;
     }
 
-    return state;
+    return;
   }
 
   const basePlacement = getBasePlacement(flippedPlacement);
@@ -124,14 +124,10 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   if (!fits) {
     state.modifiersData[name].index += 1;
     state.reset = true;
-    return state;
   } else if (fits && state.placement !== flippedPlacement) {
     state.placement = flippedPlacement;
     state.reset = true;
-    return state;
   }
-
-  return state;
 }
 
 export default ({

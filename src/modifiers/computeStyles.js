@@ -90,8 +90,6 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     ...state.attributes.popper,
     'data-popper-placement': state.placement,
   };
-
-  return state;
 }
 
 export default ({

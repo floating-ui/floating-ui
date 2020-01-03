@@ -43,8 +43,6 @@ function onLoad({
   state.modifiersData[`${name}#persistent`] = { scroll, resize };
 
   toggleEventListeners({ state, instance, scroll, resize });
-
-  return state;
 }
 
 function onDestroy({ state, instance }: ModifierArguments<Options>) {
@@ -72,8 +70,6 @@ function update({
   state.modifiersData[`${name}#persistent`] = { scroll, resize };
 
   toggleEventListeners({ state, instance, scroll, resize });
-
-  return state;
 }
 
 export default ({

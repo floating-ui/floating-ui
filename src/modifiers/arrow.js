@@ -22,7 +22,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   const len = isVertical ? 'height' : 'width';
 
   if (!arrowElement) {
-    return state;
+    return;
   }
 
   const paddingObject = state.modifiersData[`${name}#persistent`].padding;
@@ -54,8 +54,6 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   // Prevents breaking syntax highlighting...
   const axisProp: string = axis;
   state.modifiersData[name] = { [axisProp]: center };
-
-  return state;
 }
 
 function onLoad({ state, options, name }: ModifierArguments<Options>) {
@@ -66,7 +64,7 @@ function onLoad({ state, options, name }: ModifierArguments<Options>) {
     arrowElement = state.elements.popper.querySelector(arrowElement);
 
     if (!arrowElement) {
-      return state;
+      return;
     }
   }
 
@@ -79,8 +77,6 @@ function onLoad({ state, options, name }: ModifierArguments<Options>) {
         ].join(' ')
       );
     }
-
-    return state;
   }
 
   state.elements.arrow = arrowElement;
@@ -91,8 +87,6 @@ function onLoad({ state, options, name }: ModifierArguments<Options>) {
         : expandToHashMap(padding, basePlacements)
     ),
   };
-
-  return state;
 }
 
 export default ({

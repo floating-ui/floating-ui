@@ -31,8 +31,6 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
       }
     });
   });
-
-  return state;
 }
 
 function onDestroy({ state }: ModifierArguments<{||}>) {
