@@ -191,7 +191,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           ];
 
           if (enabled && typeof fn === 'function') {
-            fn({ state, options, name, instance });
+            state = fn({ state, options, name, instance }) || state;
           }
         }
       },
@@ -232,7 +232,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           const callbackFn = rest[callback];
 
           if (enabled && typeof callbackFn === 'function') {
-            callbackFn({ state, name, instance, options });
+            state = callbackFn({ state, name, instance, options }) || state;
           }
         }
       );

@@ -74,9 +74,9 @@ export type Modifier<Options> = {|
   phase: ModifierPhases,
   requires?: Array<string>,
   optionallyRequires?: Array<string>,
-  fn: (ModifierArguments<Options>) => void,
-  onLoad?: (ModifierArguments<Options>) => void,
-  onDestroy?: (ModifierArguments<Options>) => void,
+  fn: (ModifierArguments<Options>) => ?State,
+  onLoad?: (ModifierArguments<Options>) => ?State,
+  onDestroy?: (ModifierArguments<Options>) => ?State,
   options?: Obj,
   data?: Obj,
 |};
