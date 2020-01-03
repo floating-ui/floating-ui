@@ -29,6 +29,7 @@ export type StateOffsets = {|
 |};
 
 export type State = {|
+  isCreated: boolean,
   elements: {|
     reference: Element | VirtualElement,
     popper: HTMLElement,
@@ -54,6 +55,7 @@ export type State = {|
 |};
 
 export type Instance = {|
+  state: State,
   destroy: () => void,
   forceUpdate: () => void,
   update: () => Promise<void>,
@@ -72,9 +74,9 @@ export type Modifier<Options> = {|
   phase: ModifierPhases,
   requires?: Array<string>,
   optionallyRequires?: Array<string>,
-  fn: (ModifierArguments<Options>) => State,
+  fn: (ModifierArguments<Options>) => ?State,
   onLoad?: (ModifierArguments<Options>) => ?State,
-  onDestroy?: (ModifierArguments<Options>) => void,
+  onDestroy?: (ModifierArguments<Options>) => ?State,
   options?: Obj,
   data?: Obj,
 |};

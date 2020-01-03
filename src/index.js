@@ -21,6 +21,7 @@ import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
+import uniqueBy from './utils/uniqueBy';
 
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
@@ -60,6 +61,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     const popperElement = unwrapJqueryElement(popper);
 
     let state: $Shape<State> = {
+      isCreated: false,
       placement: 'bottom',
       orderedModifiers: [],
       options: { ...defaultOptionsValue, ...defaultOptions },
@@ -73,6 +75,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     };
 
     const instance = {
+      state,
       setOptions(options) {
         // Store options into state
         state.options = {
@@ -103,8 +106,21 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the custom modifiers is invalid for any reason
         if (__DEV__) {
-          validateModifiers(state.orderedModifiers);
+          const modifiers = [
+            ...state.orderedModifiers,
+            ...state.options.modifiers,
+          ];
+
+          validateModifiers(uniqueBy(modifiers, ({ name }) => name));
         }
+
+        if (state.isCreated) {
+          runModifiersCallback('onDestroy');
+        }
+
+        runModifiersCallback('onLoad');
+
+        state.isCreated = true;
       },
       // Syncronous and forcefully executed update
       // it will always be executed even if not necessary, usually NOT needed
@@ -172,7 +188,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           ];
 
           if (enabled && typeof fn === 'function') {
-            state = fn({ state, options, name, instance });
+            state = fn({ state, options, name, instance }) || state;
           }
         }
       },
@@ -182,21 +198,14 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // debounced, so that it only runs at most once-per-tick
       update: debounce(
         () =>
-          // prettier-ignore
           new Promise<$Shape<State>>(resolve => {
-          instance.forceUpdate();
-          resolve(state);
-        })
+            instance.forceUpdate();
+            resolve(state);
+          })
       ),
 
       destroy() {
-        // Run `onDestroy` modifier methods
-        state.orderedModifiers.forEach(
-          ({ onDestroy, enabled, name, options = {} }) =>
-            enabled &&
-            onDestroy &&
-            onDestroy({ state, name, instance, options })
-        );
+        runModifiersCallback('onDestroy');
       },
     };
 
@@ -214,18 +223,17 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // the first update cycle is ran, the order of execution will be the same
     // defined by the modifier dependencies directive.
     // The `onLoad` function may add or alter the options of themselves
-    state.orderedModifiers.forEach(
-      ({ onLoad, enabled, name, options = {} }) =>
-        enabled &&
-        onLoad &&
-        (state =
-          onLoad({
-            state,
-            name,
-            instance,
-            options,
-          }) || state)
-    );
+    function runModifiersCallback(callback: 'onLoad' | 'onDestroy') {
+      state.orderedModifiers.forEach(
+        ({ enabled, name, options = {}, ...rest }) => {
+          const callbackFn = rest[callback];
+
+          if (enabled && typeof callbackFn === 'function') {
+            state = callbackFn({ state, name, instance, options }) || state;
+          }
+        }
+      );
+    }
 
     instance.update();
 

@@ -13,8 +13,6 @@ function popperOffsets({ state, name }: ModifierArguments<{||}>) {
     strategy: 'absolute',
     placement: state.placement,
   });
-
-  return state;
 }
 
 export default ({
