@@ -21,6 +21,7 @@ import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
+import uniqueBy from './utils/uniqueBy';
 
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
@@ -106,15 +107,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // if one of the custom modifiers is invalid for any reason
         if (__DEV__) {
           const modifiers = [
-            ...state.options.modifiers,
             ...state.orderedModifiers,
+            ...state.options.modifiers,
           ];
 
-          validateModifiers(
-            modifiers.filter(
-              (modifier, index) => modifiers.indexOf(modifier) === index
-            )
-          );
+          validateModifiers(uniqueBy(modifiers, ({ name }) => name));
         }
 
         if (state.isCreated) {
