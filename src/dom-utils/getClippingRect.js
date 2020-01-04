@@ -10,7 +10,7 @@ import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
-import getBorders from './getBorders';
+import getDecorations from './getDecorations';
 import rectToClientRect from '../utils/rectToClientRect';
 import getFreshSideObject from '../utils/getFreshSideObject';
 
@@ -63,14 +63,14 @@ export default function getClippingRect(
 
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getClientRectFromMixedType(element, clippingParent);
-    const borders = isHTMLElement(clippingParent)
-      ? getBorders(clippingParent)
+    const decorations = isHTMLElement(clippingParent)
+      ? getDecorations(clippingParent)
       : getFreshSideObject();
 
-    accRect.top = Math.max(rect.top + borders.top, accRect.top);
-    accRect.right = Math.min(rect.right - borders.right, accRect.right);
-    accRect.bottom = Math.min(rect.bottom - borders.bottom, accRect.bottom);
-    accRect.left = Math.max(rect.left + borders.left, accRect.left);
+    accRect.top = Math.max(rect.top + decorations.top, accRect.top);
+    accRect.right = Math.min(rect.right - decorations.right, accRect.right);
+    accRect.bottom = Math.min(rect.bottom - decorations.bottom, accRect.bottom);
+    accRect.left = Math.max(rect.left + decorations.left, accRect.left);
 
     return accRect;
   }, getClientRectFromMixedType(element, firstClippingParent));
