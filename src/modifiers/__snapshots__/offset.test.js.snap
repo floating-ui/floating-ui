@@ -2,28 +2,28 @@
 
 exports[`bottom 1`] = `
 Object {
-  "x": 20,
-  "y": 10,
-}
-`;
-
-exports[`left 1`] = `
-Object {
-  "x": -10,
-  "y": 20,
-}
-`;
-
-exports[`right 1`] = `
-Object {
   "x": 10,
   "y": 20,
 }
 `;
 
-exports[`top 1`] = `
+exports[`left 1`] = `
+Object {
+  "x": -20,
+  "y": 10,
+}
+`;
+
+exports[`right 1`] = `
 Object {
   "x": 20,
-  "y": -10,
+  "y": 10,
+}
+`;
+
+exports[`top 1`] = `
+Object {
+  "x": 10,
+  "y": -20,
 }
 `;

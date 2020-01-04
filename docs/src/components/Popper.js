@@ -1,5 +1,5 @@
 import { createPopper } from '../../../lib/popper.js';
-import { useRef, useLayoutEffect, cloneElement, useMemo } from 'react';
+import { useRef, useLayoutEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 
@@ -12,13 +12,19 @@ export const usePopper = (options = {}) => {
     () => ({
       ...options,
       modifiers: [
+        ...(options.modifiers || []),
         {
           name: 'arrow',
           options: {
             padding: 5,
           },
         },
-        ...(options.modifiers || []),
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 10],
+          },
+        },
       ],
     }),
     [options]

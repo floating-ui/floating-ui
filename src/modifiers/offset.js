@@ -1,32 +1,8 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments, Modifier, Rect } from '../types';
+import type { ModifierArguments, Modifier, Rect, Offsets } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import { top, left, right, placements } from '../enums';
-
-export function distanceAndSkiddingToXY(
-  placement: Placement,
-  measures: { popper: Rect, reference: Rect },
-  offsetValue: OffsetsFunction | [number, number]
-): { x: number, y: number } {
-  const basePlacement = getBasePlacement(placement);
-  const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
-
-  let [distance, skidding] =
-    typeof offsetValue === 'function'
-      ? offsetValue({
-          ...measures,
-          placement,
-        })
-      : offsetValue;
-
-  distance = (distance || 0) * invertDistance;
-  skidding = skidding || 0;
-
-  return [left, right].includes(basePlacement)
-    ? { x: distance, y: skidding }
-    : { x: skidding, y: distance };
-}
 
 type OffsetsFunction = ({
   popper: Rect,
@@ -34,15 +10,41 @@ type OffsetsFunction = ({
   placement: Placement,
 }) => [?number, ?number];
 
+type Offset = OffsetsFunction | [?number, ?number];
+
 type Options = {
-  offset: OffsetsFunction | [number, number],
+  offset: Offset,
 };
+
+export function distanceAndSkiddingToXY(
+  placement: Placement,
+  rects: { popper: Rect, reference: Rect },
+  offset: Offset
+): Offsets {
+  const basePlacement = getBasePlacement(placement);
+  const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
+
+  let [skidding, distance] =
+    typeof offset === 'function'
+      ? offset({
+          ...rects,
+          placement,
+        })
+      : offset;
+
+  skidding = skidding || 0;
+  distance = (distance || 0) * invertDistance;
+
+  return [left, right].includes(basePlacement)
+    ? { x: distance, y: skidding }
+    : { x: skidding, y: distance };
+}
 
 function offset({ state, options, name }: ModifierArguments<Options>) {
   const { offset = [0, 0] } = options;
 
   const data = placements.reduce((acc, placement) => {
-    acc[placement] = distanceAndSkiddingToXY(placement, state.measures, offset);
+    acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
     return acc;
   }, {});
 

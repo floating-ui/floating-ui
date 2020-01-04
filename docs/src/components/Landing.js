@@ -337,12 +337,6 @@ const PlacementExample = () => {
         name: 'preventOverflow',
         options: { altAxis: true },
       },
-      {
-        name: 'offset',
-        options: {
-          offset: [10, 0],
-        },
-      },
     ],
   });
 
@@ -424,12 +418,6 @@ const PreventOverflowExample = () => {
         name: 'preventOverflow',
         options: { altAxis: true },
       },
-      {
-        name: 'offset',
-        options: {
-          offset: [10, 0],
-        },
-      },
     ],
   });
   const scrollContainerRef = useRef();
@@ -491,17 +479,7 @@ createPopper(popcorn, tooltip, {
 };
 
 const FlipExample = () => {
-  const { reference, popper } = usePopper({
-    placement: 'bottom',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [10, 0],
-        },
-      },
-    ],
-  });
+  const { reference, popper } = usePopper({ placement: 'bottom' });
   const scrollContainerRef = useRef();
 
   useLayoutEffect(() => {

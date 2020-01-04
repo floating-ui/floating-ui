@@ -8,7 +8,7 @@ const a = {
 const b = {
   name: 'arrow',
   phase: 'main',
-  optionallyRequires: ['preventOverflow'],
+  requiresIfExists: ['preventOverflow'],
 };
 const c = {
   name: 'computeStyles',
@@ -27,7 +27,7 @@ const f = {
   name: 'flip',
   phase: 'main',
   requires: ['detectOverflow'],
-  optionallyRequires: ['offset'],
+  requiresIfExists: ['offset'],
 };
 const g = {
   name: 'hide',
@@ -47,7 +47,7 @@ const j = {
   name: 'preventOverflow',
   phase: 'main',
   requires: ['detectOverflow'],
-  optionallyRequires: ['offset'],
+  requiresIfExists: ['offset'],
 };
 
 const modifiers: any = [a, b, c, d, e, f, g, h, i, j];

@@ -23,7 +23,7 @@ const ClippingParentStyled = styled(ExampleArea)`
       &::after {
         content: '';
         display: block;
-        height: 500px;
+        height: 550px;
       }
     `}
 `;
@@ -44,30 +44,14 @@ const ClippingParent = props => {
   const scrollRef = useRef();
 
   useLayoutEffect(() => {
-    scrollRef.current.scrollTop = 315;
+    scrollRef.current.scrollTop = 300;
   }, []);
 
   return <ClippingParentStyled ref={scrollRef} {...props} />;
 };
 
 export const ArrowDemo = () => {
-  const { reference, popper } = usePopper({
-    placement: 'right',
-    modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [10, 0],
-        },
-      },
-      {
-        name: 'arrow',
-        options: {
-          padding: 0,
-        },
-      },
-    ],
-  });
+  const { reference, popper } = usePopper({ placement: 'right' });
 
   return (
     <>
@@ -76,19 +60,15 @@ export const ArrowDemo = () => {
           Reference
         </Reference>
         <Tooltip ref={popper}>
-          Tooltip
-          <br />
-          that
-          <br />
-          is
-          <br />
-          taller
-          <br />
-          than
-          <br />
-          its
-          <br />
-          reference
+          <div
+            css={css`
+              display: grid;
+              place-items: center;
+              height: 200px;
+            `}
+          >
+            Tooltip taller than its reference
+          </div>
           <Arrow data-popper-arrow />
         </Tooltip>
       </ClippingParent>

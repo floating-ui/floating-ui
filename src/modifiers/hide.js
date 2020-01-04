@@ -5,27 +5,31 @@ import type {
   Rect,
   Options,
   SideObject,
+  Offsets,
 } from '../types';
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
 
-const getOffsets = (
+function getSideOffsets(
   overflow: SideObject,
   rect: Rect,
-  preventedOffsets: { x: number, y: number } = { x: 0, y: 0 }
-): SideObject => ({
-  top: overflow.top - rect.height - preventedOffsets.y,
-  right: overflow.right - rect.width + preventedOffsets.x,
-  bottom: overflow.bottom - rect.height + preventedOffsets.y,
-  left: overflow.left - rect.width - preventedOffsets.x,
-});
+  preventedOffsets: Offsets = { x: 0, y: 0 }
+): SideObject {
+  return {
+    top: overflow.top - rect.height - preventedOffsets.y,
+    right: overflow.right - rect.width + preventedOffsets.x,
+    bottom: overflow.bottom - rect.height + preventedOffsets.y,
+    left: overflow.left - rect.width - preventedOffsets.x,
+  };
+}
 
-const isAnySideFullyClipped = (overflow: SideObject): boolean =>
-  [top, right, bottom, left].some(side => overflow[side] >= 0);
+function isAnySideFullyClipped(overflow: SideObject): boolean {
+  return [top, right, bottom, left].some(side => overflow[side] >= 0);
+}
 
 function hide({ state, name }: ModifierArguments<Options>) {
-  const referenceRect = state.measures.reference;
-  const popperRect = state.measures.popper;
+  const referenceRect = state.rects.reference;
+  const popperRect = state.rects.popper;
   const preventedOffsets = state.modifiersData.preventOverflow;
 
   const referenceOverflow = detectOverflow(state, {
@@ -35,8 +39,11 @@ function hide({ state, name }: ModifierArguments<Options>) {
     altBoundary: true,
   });
 
-  const referenceClippingOffsets = getOffsets(referenceOverflow, referenceRect);
-  const popperEscapeOffsets = getOffsets(
+  const referenceClippingOffsets = getSideOffsets(
+    referenceOverflow,
+    referenceRect
+  );
+  const popperEscapeOffsets = getSideOffsets(
     popperAltOverflow,
     popperRect,
     preventedOffsets
@@ -64,6 +71,6 @@ export default ({
   enabled: true,
   phase: 'main',
   requires: [],
-  optionallyRequires: ['preventOverflow'],
+  requiresIfExists: ['preventOverflow'],
   fn: hide,
 }: Modifier<Options>);

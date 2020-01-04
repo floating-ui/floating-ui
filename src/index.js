@@ -6,34 +6,25 @@ import type {
   Modifier,
   Instance,
 } from './types';
-
-export * from './types';
-export * from './enums';
-
-// DOM Utils
 import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getOffsetParent from './dom-utils/getOffsetParent';
-
-// Pure Utils
 import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 import uniqueBy from './utils/uniqueBy';
 
+export * from './types';
+export * from './enums';
+
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
-const areValidElements = (...args: Array<any>): boolean =>
-  !args.some(
-    element => !(element && typeof element.getBoundingClientRect === 'function')
-  );
-
-const defaultOptionsValue: Options = {
+const DEFAULT_OPTIONS: Options = {
   placement: 'bottom',
   modifiers: [],
   strategy: 'absolute',
@@ -44,10 +35,16 @@ type PopperGeneratorArgs = {
   defaultOptions?: $Shape<Options>,
 };
 
+function areValidElements(...args: Array<any>): boolean {
+  return !args.some(
+    element => !(element && typeof element.getBoundingClientRect === 'function')
+  );
+}
+
 export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
   const {
     defaultModifiers = [],
-    defaultOptions = defaultOptionsValue,
+    defaultOptions = DEFAULT_OPTIONS,
   } = generatorOptions;
 
   return function createPopper(
@@ -55,8 +52,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     popper: HTMLElement | JQueryWrapper,
     options: $Shape<Options> = defaultOptions
   ): Instance {
-    // Unwrap `reference` and `popper` elements in case they are
-    // wrapped by jQuery, otherwise consume them as is
+    // Consumers may pass a jQuery element where the real DOM element is wrapped
+    // inside an object at the `0` property
     const referenceElement = unwrapJqueryElement(reference);
     const popperElement = unwrapJqueryElement(popper);
 
@@ -64,7 +61,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       isCreated: false,
       placement: 'bottom',
       orderedModifiers: [],
-      options: { ...defaultOptionsValue, ...defaultOptions },
+      options: { ...DEFAULT_OPTIONS, ...defaultOptions },
       modifiersData: {},
       elements: {
         reference: referenceElement,
@@ -77,7 +74,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     const instance = {
       state,
       setOptions(options) {
-        // Store options into state
         state.options = {
           ...defaultOptions,
           ...options,
@@ -88,8 +84,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           popper: listScrollParents(popperElement),
         };
 
-        // Order `options.modifiers` so that the dependencies are fulfilled
-        // once the modifiers are executed
+        // Orders the modifiers based on their dependencies and `phase`
+        // properties
         state.orderedModifiers = orderModifiers([
           ...state.options.modifiers.filter(
             modifier =>
@@ -104,7 +100,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         ]);
 
         // Validate the provided modifiers so that the consumer will get warned
-        // if one of the custom modifiers is invalid for any reason
+        // if one of the modifiers is invalid for any reason
         if (__DEV__) {
           const modifiers = [
             ...state.orderedModifiers,
@@ -122,15 +118,20 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         state.isCreated = true;
       },
-      // Syncronous and forcefully executed update
-      // it will always be executed even if not necessary, usually NOT needed
-      // use Popper#update instead
+
+      // Sync update – it will always be executed, even if not necessary. This
+      // is useful for low frequency updates where sync behavior simplifies the
+      // logic.
+      // For high frequency updates (e.g. `resize` and `scroll` events), always
+      // prefer the async Popper#update method
       forceUpdate() {
         const {
           reference: referenceElement,
           popper: popperElement,
         } = state.elements;
-        // Don't proceed if `reference` or `popper` are not valid elements anymore
+
+        // Don't proceed if `reference` or `popper` are not valid elements
+        // anymore
         if (!areValidElements(referenceElement, popperElement)) {
           if (__DEV__) {
             console.error(INVALID_ELEMENT_ERROR);
@@ -138,28 +139,29 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           return;
         }
 
-        const isFixed = state.options.strategy === 'fixed';
-
-        // Get initial measurements
-        // these are going to be used to compute the initial popper offsets
-        // and as cache for any modifier that needs them later
-        state.measures = {
+        // Store the reference and popper rects to be read by modifiers
+        state.rects = {
           reference: getCompositeRect(
             referenceElement,
             getOffsetParent(popperElement),
-            isFixed
+            state.options.strategy === 'fixed'
           ),
           popper: getLayoutRect(popperElement),
         };
 
-        // Modifiers have the ability to read the current Popper state, included
-        // the popper offsets, and modify it to address specifc cases
+        // Modifiers have the ability to reset the current update cycle. The
+        // most common use case for this is the `flip` modifier changing the
+        // placement, which then needs to re-run all the modifiers, because the
+        // logic was previously ran for the previous placement and is therefore
+        // stale/incorrect
         state.reset = false;
 
-        // Cache the placement in cache to make it available to the modifiers
-        // modifiers will modify this one (rather than the one in options)
         state.placement = state.options.placement;
 
+        // On each update cycle, the `modifiersData` property for each modifier
+        // is filled with the initial data specified by the modifier. This means
+        // it doesn't persist and is fresh on each update.
+        // To ensure persistent data, use `${name}#persistent`
         state.orderedModifiers.forEach(
           modifier =>
             (state.modifiersData[modifier.name] = {
@@ -193,9 +195,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         }
       },
 
-      // Async and optimistically optimized update
-      // it will not be executed if not necessary
-      // debounced, so that it only runs at most once-per-tick
+      // Async and optimistically optimized update – it will not be executed if
+      // not necessary (debounced to run at most once-per-tick)
       update: debounce(
         () =>
           new Promise<$Shape<State>>(resolve => {
@@ -209,7 +210,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       },
     };
 
-    // Don't proceed if `reference` or `popper` are invalid elements
     if (!areValidElements(referenceElement, popperElement)) {
       if (__DEV__) {
         console.error(INVALID_ELEMENT_ERROR);
@@ -219,10 +219,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     instance.setOptions(options);
 
-    // Modifiers have the opportunity to execute some arbitrary code before
-    // the first update cycle is ran, the order of execution will be the same
-    // defined by the modifier dependencies directive.
-    // The `onLoad` function may add or alter the options of themselves
+    // Modifiers have the ability to execute arbitrary code before the first
+    // update cycle runs. They will be executed in the same order as the update
+    // cycle. This is useful when a modifier adds some persistent data that
+    // other modifiers need to use, but the modifier is run after the dependent
+    // one.
     function runModifiersCallback(callback: 'onLoad' | 'onDestroy') {
       state.orderedModifiers.forEach(
         ({ enabled, name, options = {}, ...rest }) => {

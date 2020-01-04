@@ -18,7 +18,7 @@ export type Offsets = {|
 
 export type PositioningStrategy = 'absolute' | 'fixed';
 
-export type StateMeasures = {|
+export type StateRects = {|
   reference: Rect,
   popper: Rect,
 |};
@@ -39,7 +39,7 @@ export type State = {|
   placement: Placement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any>>,
-  measures: StateMeasures,
+  rects: StateRects,
   scrollParents: {|
     reference: Array<Element>,
     popper: Array<Element>,
@@ -73,7 +73,7 @@ export type Modifier<Options> = {|
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
-  optionallyRequires?: Array<string>,
+  requiresIfExists?: Array<string>,
   fn: (ModifierArguments<Options>) => ?State,
   onLoad?: (ModifierArguments<Options>) => ?State,
   onDestroy?: (ModifierArguments<Options>) => ?State,

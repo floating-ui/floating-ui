@@ -1,5 +1,6 @@
 // @flow
 import getNodeName from './getNodeName';
 
-export default (element: Element): boolean =>
-  ['table', 'td', 'th'].includes(getNodeName(element));
+export default function isTableElement(element: Element): boolean {
+  return ['table', 'td', 'th'].includes(getNodeName(element));
+}

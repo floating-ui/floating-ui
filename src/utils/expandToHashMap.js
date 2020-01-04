@@ -1,4 +1,5 @@
 // @flow
+
 export default function expandToHashMap<
   T: number | string | boolean,
   K: string

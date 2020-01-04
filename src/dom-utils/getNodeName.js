@@ -1,4 +1,5 @@
 // @flow
 
-export default (element: ?Node): ?string =>
-  element ? (element.nodeName || '').toLowerCase() : null;
+export default function getNodeName(element: ?Node): ?string {
+  return element ? (element.nodeName || '').toLowerCase() : null;
+}
