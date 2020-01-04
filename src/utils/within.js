@@ -1,4 +1,9 @@
 // @flow
 
-export default (min: number, value: number, max: number): number =>
-  Math.max(min, Math.min(value, max));
+export default function within(
+  min: number,
+  value: number,
+  max: number
+): number {
+  return Math.max(min, Math.min(value, max));
+}

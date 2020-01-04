@@ -1,10 +1,11 @@
 // @flow
+import type { Rect } from '../types';
 import getCompositeRect from './getCompositeRect';
 import getWindow from './getWindow';
 import getDocumentElement from './getDocumentElement';
 import getWindowScroll from './getWindowScroll';
 
-export default (element: HTMLElement) => {
+export default function getDocumentRect(element: HTMLElement): Rect {
   const win = getWindow(element);
   const winScroll = getWindowScroll(element);
   const documentRect = getCompositeRect(getDocumentElement(element), win);
@@ -15,4 +16,4 @@ export default (element: HTMLElement) => {
   documentRect.y = -winScroll.scrollTop;
 
   return documentRect;
-};
+}

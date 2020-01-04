@@ -8,8 +8,9 @@ import isTableElement from './isTableElement';
 // https://stackoverflow.com/a/9851769/2059996
 const isFirefox = () => typeof window.InstallTrigger !== 'undefined';
 
-const getTrueOffsetParent = (element: Element): ?Element => {
+function getTrueOffsetParent(element: Element): ?Element {
   let offsetParent;
+
   if (
     !isHTMLElement(element) ||
     !(offsetParent = element.offsetParent) ||
@@ -20,7 +21,7 @@ const getTrueOffsetParent = (element: Element): ?Element => {
   }
 
   return offsetParent;
-};
+}
 
 export default function getOffsetParent(element: Element) {
   const window = getWindow(element);

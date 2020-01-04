@@ -10,7 +10,7 @@ export default function getScrollParent(node: Node): HTMLElement {
   }
 
   if (isHTMLElement(node)) {
-    // Firefox want us to check `-x` and `-y` variations as well
+    // Firefox wants us to check `-x` and `-y` variations as well
     const { overflow, overflowX, overflowY } = getComputedStyle(node);
     if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
       return node;

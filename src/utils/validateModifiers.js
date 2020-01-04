@@ -16,7 +16,7 @@ const VALID_PROPERTIES = [
   'options',
 ];
 
-export default (modifiers: Array<any>): void => {
+export default function validateModifiers(modifiers: Array<any>): void {
   modifiers.forEach(modifier => {
     Object.keys(modifier).forEach(key => {
       switch (key) {
@@ -110,7 +110,7 @@ export default (modifiers: Array<any>): void => {
             );
           }
           break;
-        case 'optionallyRequires':
+        case 'requiresIfExists':
           if (!Array.isArray(modifier.requires)) {
             console.error(
               format(
@@ -151,4 +151,4 @@ export default (modifiers: Array<any>): void => {
         });
     });
   });
-};
+}

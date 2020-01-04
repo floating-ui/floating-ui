@@ -22,31 +22,33 @@ export default ({
 }): Offsets => {
   const basePlacement = placement ? getBasePlacement(placement) : null;
   const variation = placement ? getVariation(placement) : null;
+  const commonX = reference.x + reference.width / 2 - element.width / 2;
+  const commonY = reference.y + reference.height / 2 - element.height / 2;
 
   let offsets;
   switch (basePlacement) {
     case top:
       offsets = {
-        x: reference.x + reference.width / 2 - element.width / 2,
+        x: commonX,
         y: reference.y - element.height,
       };
       break;
     case bottom:
       offsets = {
-        x: reference.x + reference.width / 2 - element.width / 2,
+        x: commonX,
         y: reference.y + reference.height,
       };
       break;
     case right:
       offsets = {
         x: reference.x + reference.width,
-        y: reference.y + reference.height / 2 - element.height / 2,
+        y: commonY,
       };
       break;
     case left:
       offsets = {
         x: reference.x - element.width,
-        y: reference.y + reference.height / 2 - element.height / 2,
+        y: commonY,
       };
       break;
     default:

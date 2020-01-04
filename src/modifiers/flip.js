@@ -7,6 +7,7 @@ import getVariation from '../utils/getVariation';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
+import detectOverflow from '../utils/detectOverflow';
 import {
   basePlacements,
   start,
@@ -17,7 +18,6 @@ import {
   viewport,
   clippingParents,
 } from '../enums';
-import detectOverflow from '../utils/detectOverflow';
 
 type Options = {
   fallbackPlacements: Array<Placement>,
@@ -27,16 +27,15 @@ type Options = {
   flipVariations: boolean,
 };
 
-const getExpandedFallbackPlacements = (
-  placement: Placement
-): Array<Placement> => {
+function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
   const oppositePlacement = getOppositePlacement(placement);
+
   return [
     getOppositeVariationPlacement(placement),
     oppositePlacement,
     getOppositeVariationPlacement(oppositePlacement),
   ];
-};
+}
 
 function flip({ state, options, name }: ModifierArguments<Options>) {
   const {
@@ -48,26 +47,21 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   } = options;
 
   const preferredPlacement = state.options.placement;
-  const isBasePlacement =
-    getBasePlacement(preferredPlacement) === preferredPlacement;
+  const basePlacement = getBasePlacement(preferredPlacement);
+  const isBasePlacement = basePlacement === preferredPlacement;
+
   const fallbackPlacements =
     specifiedFallbackPlacements ||
     (isBasePlacement
       ? [getOppositePlacement(preferredPlacement)]
       : getExpandedFallbackPlacements(preferredPlacement));
 
-  const flipIndex = state.modifiersData[name].index;
-  const paddingObject = mergePaddingObject(
-    typeof padding !== 'number'
-      ? padding
-      : expandToHashMap(padding, basePlacements)
-  );
-
   const placementOrder = [preferredPlacement, ...fallbackPlacements];
+  const flipIndex = state.modifiersData[name].index;
   const flippedPlacement: Placement = placementOrder[flipIndex];
 
-  const referenceRect = state.measures.reference;
-  const popperRect = state.measures.popper;
+  const referenceRect = state.rects.reference;
+  const popperRect = state.rects.popper;
 
   const overflow = detectOverflow(state, {
     placement: flippedPlacement,
@@ -87,11 +81,16 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
     return;
   }
 
-  const basePlacement = getBasePlacement(flippedPlacement);
+  const baseFlippedPlacement = getBasePlacement(flippedPlacement);
   const variation = getVariation(flippedPlacement);
-  const isVertical = [top, bottom].includes(basePlacement);
+  const isVertical = [top, bottom].includes(baseFlippedPlacement);
   const isStartVariation = variation === start;
   const len = isVertical ? 'width' : 'height';
+  const paddingObject = mergePaddingObject(
+    typeof padding !== 'number'
+      ? padding
+      : expandToHashMap(padding, basePlacements)
+  );
 
   const edge =
     referenceRect[len] < popperRect[len]
@@ -110,7 +109,8 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       ? top
       : bottom;
 
-  let fits = overflow[basePlacement] + paddingObject[basePlacement] <= 0;
+  let fits =
+    overflow[baseFlippedPlacement] + paddingObject[baseFlippedPlacement] <= 0;
 
   if (flipVariations && !isBasePlacement) {
     const fitsEdge = overflow[edge] + paddingObject[edge] <= 0;
@@ -136,6 +136,6 @@ export default ({
   phase: 'main',
   fn: flip,
   requires: [],
-  optionallyRequires: ['offset'],
+  requiresIfExists: ['offset'],
   data: { index: 0 },
 }: Modifier<Options>);

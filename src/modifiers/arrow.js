@@ -27,28 +27,24 @@ function arrow({ state, name }: ModifierArguments<Options>) {
 
   const paddingObject = state.modifiersData[`${name}#persistent`].padding;
   const arrowRect = getLayoutRect(arrowElement);
-
-  const endDiff =
-    state.measures.reference[len] +
-    state.measures.reference[axis] -
-    popperOffsets[axis] -
-    state.measures.popper[len];
-  const startDiff = popperOffsets[axis] - state.measures.reference[axis];
-
-  const centerToReference = endDiff / 2 - startDiff / 2;
-
-  let center =
-    state.measures.popper[len] / 2 - arrowRect[len] / 2 + centerToReference;
-
   const minProp = axis === 'y' ? top : left;
   const maxProp = axis === 'y' ? bottom : right;
 
+  const endDiff =
+    state.rects.reference[len] +
+    state.rects.reference[axis] -
+    popperOffsets[axis] -
+    state.rects.popper[len];
+  const startDiff = popperOffsets[axis] - state.rects.reference[axis];
+
+  const centerToReference = endDiff / 2 - startDiff / 2;
+
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
-  center = within(
+  const center = within(
     paddingObject[minProp],
-    center,
-    state.measures.popper[len] - arrowRect[len] - paddingObject[maxProp]
+    state.rects.popper[len] / 2 - arrowRect[len] / 2 + centerToReference,
+    state.rects.popper[len] - arrowRect[len] - paddingObject[maxProp]
   );
 
   // Prevents breaking syntax highlighting...
@@ -96,5 +92,5 @@ export default ({
   fn: arrow,
   onLoad,
   requires: ['popperOffsets'],
-  optionallyRequires: ['preventOverflow'],
+  requiresIfExists: ['preventOverflow'],
 }: Modifier<Options>);

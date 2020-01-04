@@ -1,5 +1,8 @@
 // @flow
 import { type BasePlacement, type Placement, auto } from '../enums';
 
-export default (placement: Placement | typeof auto): BasePlacement =>
-  (placement.split('-')[0]: any);
+export default function getBasePlacement(
+  placement: Placement | typeof auto
+): BasePlacement {
+  return (placement.split('-')[0]: any);
+}

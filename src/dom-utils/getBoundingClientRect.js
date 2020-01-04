@@ -1,8 +1,11 @@
 // @flow
 import type { ClientRectObject, VirtualElement } from '../types';
 
-export default (element: Element | VirtualElement): ClientRectObject => {
+export default function getBoundingClientRect(
+  element: Element | VirtualElement
+): ClientRectObject {
   const rect = element.getBoundingClientRect();
+
   return {
     width: rect.width,
     height: rect.height,
@@ -13,4 +16,4 @@ export default (element: Element | VirtualElement): ClientRectObject => {
     x: rect.left,
     y: rect.top,
   };
-};
+}

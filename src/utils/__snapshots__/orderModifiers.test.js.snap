@@ -23,29 +23,29 @@ Array [
   },
   Object {
     "name": "preventOverflow",
-    "optionallyRequires": Array [
-      "offset",
-    ],
     "phase": "main",
     "requires": Array [
       "detectOverflow",
+    ],
+    "requiresIfExists": Array [
+      "offset",
     ],
   },
   Object {
     "name": "arrow",
-    "optionallyRequires": Array [
+    "phase": "main",
+    "requiresIfExists": Array [
       "preventOverflow",
     ],
-    "phase": "main",
   },
   Object {
     "name": "flip",
-    "optionallyRequires": Array [
-      "offset",
-    ],
     "phase": "main",
     "requires": Array [
       "detectOverflow",
+    ],
+    "requiresIfExists": Array [
+      "offset",
     ],
   },
   Object {

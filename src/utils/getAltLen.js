@@ -1,4 +1,5 @@
 // @flow
 
-export default (len: 'width' | 'height'): 'width' | 'height' =>
-  len === 'width' ? 'height' : 'width';
+export default function getAltLen(len: 'width' | 'height'): 'width' | 'height' {
+  return len === 'width' ? 'height' : 'width';
+}

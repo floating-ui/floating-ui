@@ -1,22 +1,19 @@
 // @flow
+import type { SideObject } from '../types';
 import getComputedStyle from './getComputedStyle';
 import { isHTMLElement } from './instanceOf';
 
-type Borders = {
-  top: number,
-  right: number,
-  bottom: number,
-  left: number,
-};
+function toNumber(cssValue: string): number {
+  return parseFloat(cssValue) || 0;
+}
 
-const toNumber = (cssValue: string): number => parseFloat(cssValue) || 0;
-
-export default (element: Element): Borders => {
+export default function getBorders(element: Element): SideObject {
   const computedStyle = isHTMLElement(element) ? getComputedStyle(element) : {};
+
   return {
     top: toNumber(computedStyle.borderTop),
     right: toNumber(computedStyle.borderRight),
     bottom: toNumber(computedStyle.borderBottom),
     left: toNumber(computedStyle.borderLeft),
   };
-};
+}

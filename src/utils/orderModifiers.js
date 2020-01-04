@@ -3,7 +3,7 @@ import type { Modifier } from '../types';
 import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
-const order = modifiers => {
+function order(modifiers) {
   const map = new Map();
   const visited = new Set();
   const result = [];
@@ -18,7 +18,7 @@ const order = modifiers => {
 
     const requires = [
       ...(modifier.requires || []),
-      ...(modifier.optionallyRequires || []),
+      ...(modifier.requiresIfExists || []),
     ];
 
     requires.forEach(dep => {
@@ -42,9 +42,11 @@ const order = modifiers => {
   });
 
   return result;
-};
+}
 
-export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> => {
+export default function orderModifiers(
+  modifiers: Array<Modifier<any>>
+): Array<Modifier<any>> {
   // order based on dependencies
   const orderedModifiers = order(modifiers);
 
@@ -54,4 +56,4 @@ export default (modifiers: Array<Modifier<any>>): Array<Modifier<any>> => {
       orderedModifiers.filter(modifier => modifier.phase === phase)
     );
   }, []);
-};
+}

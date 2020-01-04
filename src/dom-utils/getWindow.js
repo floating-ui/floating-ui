@@ -7,5 +7,6 @@ export default function getWindow(node: mixed) {
       ? // $FlowFixMe: assume ownerDocument to be the one we are looking for
         node.ownerDocument
       : null;
+
   return ownerDocument != null ? ownerDocument.defaultView : window;
 }

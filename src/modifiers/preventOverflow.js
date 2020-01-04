@@ -67,8 +67,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const mainAxis = getMainAxisFromPlacement(basePlacement);
   const altAxis = getAltAxis(mainAxis);
   const popperOffsets = state.modifiersData.popperOffsets;
-  const referenceRect = state.measures.reference;
-  const popperRect = state.measures.popper;
+  const referenceRect = state.rects.reference;
+  const popperRect = state.rects.popper;
   const paddingObject = mergePaddingObject(
     typeof padding !== 'number'
       ? padding
@@ -77,7 +77,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const tetherOffsetValue =
     typeof tetherOffset === 'function'
       ? tetherOffset({
-          ...state.measures,
+          ...state.rects,
           placement: state.placement,
         })
       : tetherOffset;
@@ -110,12 +110,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const arrowPaddingObject = state.modifiersData['arrow#persistent']
       ? state.modifiersData['arrow#persistent'].padding
       : getFreshSideObject();
-    const arrowPaddingMin = arrowPaddingObject
-      ? arrowPaddingObject[mainSide]
-      : 0;
-    const arrowPaddingMax = arrowPaddingObject
-      ? arrowPaddingObject[altSide]
-      : 0;
+    const arrowPaddingMin = arrowPaddingObject[mainSide];
+    const arrowPaddingMax = arrowPaddingObject[altSide];
 
     // If the reference length is smaller than the arrow length, we don't want
     // to include its full size in the calculation. If the reference is small
@@ -179,5 +175,5 @@ export default ({
   phase: 'main',
   fn: preventOverflow,
   requires: [],
-  optionallyRequires: ['offset'],
+  requiresIfExists: ['offset'],
 }: Modifier<Options>);

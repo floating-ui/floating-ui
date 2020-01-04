@@ -1,5 +1,6 @@
 // @flow
-export default function microtaskDebounce(fn: Function) {
+
+export default function debounce(fn: Function) {
   let pending;
   return () => {
     if (!pending) {

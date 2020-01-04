@@ -16,18 +16,23 @@ function toggleEventListeners({ state, instance, scroll, resize }) {
       ...state.scrollParents.popper,
     ];
 
-    scrollParents.forEach(scrollParent =>
-      scroll
-        ? scrollParent.addEventListener('scroll', instance.update, passive)
-        : scrollParent.removeEventListener('scroll', instance.update)
-    );
+    scrollParents.forEach(scrollParent => {
+      if (scroll) {
+        scrollParent.addEventListener('scroll', instance.update, passive);
+      } else {
+        scrollParent.removeEventListener('scroll', instance.update, passive);
+      }
+    });
   }
 
   if (resize != null) {
     const window = getWindow(state.elements.popper);
-    resize
-      ? window.addEventListener('resize', instance.update, passive)
-      : window.removeEventListener('resize', instance.update);
+
+    if (resize) {
+      window.addEventListener('resize', instance.update, passive);
+    } else {
+      window.removeEventListener('resize', instance.update, passive);
+    }
   }
 }
 
@@ -58,7 +63,8 @@ function update({
   const data = state.modifiersData[`${name}#persistent`];
   let { scroll = true, resize = true } = options;
 
-  // set options to `null` if they didn't change, so we know not to run any logic
+  // Set options to `null` if they didn't change, so we know not to run any
+  // logic
   if (data.scroll === scroll) {
     scroll = null;
   }

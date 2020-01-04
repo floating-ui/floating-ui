@@ -6,10 +6,6 @@ import type {
   ModifierArguments,
 } from '../types';
 
-// This modifier takes the Popper state and prepares some StyleSheet properties
-// that can be applied to the popper element to make it render in the expected
-// position.
-
 type Options = {
   gpuAcceleration: boolean,
 };
@@ -17,15 +13,16 @@ type Options = {
 // Round the offsets to the nearest suitable subpixel based on the DPR.
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
-const roundOffsets = ({ x, y }) => {
+function roundOffsets({ x, y }): Offsets {
   const dpr = window.devicePixelRatio;
+
   return {
     x: Math.round(x * dpr) / dpr || 0,
     y: Math.round(y * dpr) / dpr || 0,
   };
-};
+}
 
-export const mapToStyles = ({
+export function mapToStyles({
   offsets,
   position,
   gpuAcceleration,
@@ -33,7 +30,7 @@ export const mapToStyles = ({
   offsets: Offsets,
   position: PositioningStrategy,
   gpuAcceleration: boolean,
-}) => {
+}) {
   const { x, y } = roundOffsets(offsets);
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
@@ -59,7 +56,7 @@ export const mapToStyles = ({
     transform: '',
     position,
   };
-};
+}
 
 function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true } = options;
