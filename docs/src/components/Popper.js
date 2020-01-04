@@ -6,7 +6,7 @@ import { css } from '@emotion/core';
 export const usePopper = (options = {}) => {
   const referenceRef = useRef();
   const popperRef = useRef();
-  const popperInstanceRef = useRef();
+  const instanceRef = useRef();
 
   const mergedOptions = useMemo(
     () => ({
@@ -31,28 +31,29 @@ export const usePopper = (options = {}) => {
   );
 
   useLayoutEffect(() => {
-    const popperInstance = createPopper(
+    const instance = createPopper(
       referenceRef.current,
       popperRef.current,
       mergedOptions
     );
 
-    popperInstanceRef.current = popperInstance;
+    instanceRef.current = instance;
 
     return () => {
-      popperInstance.destroy();
+      instance.destroy();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {
-    popperInstanceRef.current.setOptions(mergedOptions);
-    popperInstanceRef.current.update();
+    instanceRef.current.setOptions(mergedOptions);
+    instanceRef.current.update();
   }, [mergedOptions]);
 
   return {
     reference: referenceRef,
     popper: popperRef,
+    instance: instanceRef,
   };
 };
 

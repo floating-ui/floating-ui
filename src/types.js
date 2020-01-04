@@ -112,6 +112,5 @@ export type SideObject = {|
 export type Padding = number | $Shape<SideObject>;
 
 export type VirtualElement = {|
-  contextElement: HTMLElement,
   getBoundingClientRect: () => ClientRect | DOMRect,
 |};

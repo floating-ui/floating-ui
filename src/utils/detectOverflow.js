@@ -3,9 +3,9 @@ import type { State, SideObject } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
-import unwrapVirtualElement from '../dom-utils/unwrapVirtualElement';
-import computeOffsets from '../utils/computeOffsets';
-import rectToClientRect from '../utils/rectToClientRect';
+import getDocumentElement from '../dom-utils/getDocumentElement';
+import computeOffsets from './computeOffsets';
+import rectToClientRect from './rectToClientRect';
 import {
   clippingParents,
   reference,
@@ -14,6 +14,7 @@ import {
   top,
   right,
 } from '../enums';
+import { isElement } from '../dom-utils/instanceOf';
 
 type Options = {
   placement: Placement,
@@ -42,7 +43,7 @@ export default function detectOverflow(
   const element = state.elements[altBoundary ? altContext : elementContext];
 
   const clippingClientRect = getClippingRect(
-    unwrapVirtualElement(element),
+    isElement(element) ? element : getDocumentElement(state.elements.popper),
     boundary,
     rootBoundary
   );

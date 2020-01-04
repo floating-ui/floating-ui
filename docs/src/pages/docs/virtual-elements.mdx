@@ -1,0 +1,55 @@
+---
+title: Virtual Elements
+---
+
+import { VirtualElementDemo } from '../../components/Demos';
+
+# Virtual Elements
+
+You can use a virtual element instead of a real DOM element as the reference.
+This allows you to position the popper relative to a virtual area defined by any
+coordinates you desire.
+
+A common use case for this is making the popper follow the mouse cursor, where
+the cursor acts as a point reference.
+
+A virtual element is a plain object with only one property – a custom
+`getBoundingClientRect` function that returns a custom `ClientRect` object:
+
+```flow
+type VirtualElement = {|
+  getBoundingClientRect: () => ClientRect | DOMRect,
+|};
+```
+
+## Demo
+
+<VirtualElementDemo />
+
+## Usage
+
+This will make the popper follow the mouse cursor as seen in the demo above:
+
+```js
+function generateGetBoundingClientRect(x = 0, y = 0) {
+  return () => ({
+    width: 0,
+    height: 0,
+    top: y,
+    right: x,
+    bottom: y,
+    left: x,
+  });
+}
+
+const virtualElement = {
+  getBoundingClientRect: generateGetBoundingClientRect(),
+};
+
+const instance = createPopper(virtualElement, popper);
+
+document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+  virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
+  instance.update();
+});
+```
