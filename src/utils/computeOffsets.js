@@ -10,7 +10,7 @@ import type {
 } from '../types';
 import { top, right, bottom, left, start, end, type Placement } from '../enums';
 
-export default ({
+export default function computeOffsets({
   reference,
   element,
   placement,
@@ -19,7 +19,7 @@ export default ({
   element: Rect | ClientRectObject,
   strategy: PositioningStrategy,
   placement?: Placement,
-}): Offsets => {
+}): Offsets {
   const basePlacement = placement ? getBasePlacement(placement) : null;
   const variation = placement ? getVariation(placement) : null;
   const commonX = reference.x + reference.width / 2 - element.width / 2;
@@ -81,4 +81,4 @@ export default ({
   }
 
   return offsets;
-};
+}
