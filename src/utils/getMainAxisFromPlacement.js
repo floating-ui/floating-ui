@@ -1,4 +1,8 @@
 // @flow
 import type { Placement } from '../enums';
-export default (placement: Placement): 'x' | 'y' =>
-  ['top', 'bottom'].includes(placement) ? 'x' : 'y';
+
+export default function getMainAxisFromPlacement(
+  placement: Placement
+): 'x' | 'y' {
+  return ['top', 'bottom'].includes(placement) ? 'x' : 'y';
+}
