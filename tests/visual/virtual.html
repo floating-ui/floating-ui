@@ -38,31 +38,25 @@
   const reference = document.querySelector('#reference');
   const popper = document.querySelector('#popper');
 
-  const ref = {
-    contextElement: reference,
-    getBoundingClientRect: () => ({
-      width: 200,
-      height: 150,
-      top: 100,
-      right: 300,
-      bottom: 250,
-      left: 100,
-    }),
-  };
-
-  window.instance = createPopper(ref, popper, {
-    placement: 'bottom',
-  });
-
-  document.addEventListener('mousemove', ({ clientX, clientY }) => {
-    ref.getBoundingClientRect = () => ({
-      top: clientY,
-      right: clientX,
-      bottom: clientY,
-      left: clientX,
+  function generateGetBoundingClientRect(x = 0, y = 0) {
+    return () => ({
       width: 0,
       height: 0,
+      top: y,
+      right: x,
+      bottom: y,
+      left: x,
     });
+  }
+
+  const virtualElement = {
+    getBoundingClientRect: generateGetBoundingClientRect(),
+  };
+
+  const instance = createPopper(virtualElement, popper);
+
+  document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+    virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
     instance.update();
   });
 </script>
