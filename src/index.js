@@ -53,7 +53,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     options: $Shape<Options> = defaultOptions
   ): Instance {
     let state: $Shape<State> = {
-      isCreated: false,
       placement: 'bottom',
       orderedModifiers: [],
       options: { ...DEFAULT_OPTIONS, ...defaultOptions },
@@ -66,9 +65,13 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       styles: {},
     };
 
+    let effectCleanupFns: Array<() => void> = [];
+
     const instance = {
       state,
       setOptions(options) {
+        cleanupModifierEffects();
+
         state.options = {
           ...defaultOptions,
           ...options,
@@ -105,13 +108,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           validateModifiers(uniqueBy(modifiers, ({ name }) => name));
         }
 
-        if (state.isCreated) {
-          runModifiersCallback('onDestroy');
-        }
-
-        runModifiersCallback('onLoad');
-
-        state.isCreated = true;
+        runModifierEffects();
       },
 
       // Sync update – it will always be executed, even if not necessary. This
@@ -198,7 +195,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       ),
 
       destroy() {
-        runModifiersCallback('onDestroy');
+        cleanupModifierEffects();
       },
     };
 
@@ -216,16 +213,21 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // cycle. This is useful when a modifier adds some persistent data that
     // other modifiers need to use, but the modifier is run after the dependent
     // one.
-    function runModifiersCallback(callback: 'onLoad' | 'onDestroy') {
+    function runModifierEffects() {
       state.orderedModifiers.forEach(
-        ({ enabled, name, options = {}, ...rest }) => {
-          const callbackFn = rest[callback];
-
-          if (enabled && typeof callbackFn === 'function') {
-            state = callbackFn({ state, name, instance, options }) || state;
+        ({ enabled, name, options = {}, effect }) => {
+          if (enabled && typeof effect === 'function') {
+            const cleanupFn = effect({ state, name, instance, options });
+            const noopFn = () => {};
+            effectCleanupFns.push(cleanupFn || noopFn);
           }
         }
       );
+    }
+
+    function cleanupModifierEffects() {
+      effectCleanupFns.forEach(fn => fn());
+      effectCleanupFns = [];
     }
 
     instance.update();

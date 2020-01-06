@@ -74,8 +74,7 @@ export type Modifier<Options> = {|
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
   fn: (ModifierArguments<Options>) => ?State,
-  onLoad?: (ModifierArguments<Options>) => ?State,
-  onDestroy?: (ModifierArguments<Options>) => ?State,
+  effect?: (ModifierArguments<Options>) => ?() => void,
   options?: Obj,
   data?: Obj,
 |};

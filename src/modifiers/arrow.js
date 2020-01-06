@@ -52,7 +52,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   state.modifiersData[name] = { [axisProp]: center };
 }
 
-function onLoad({ state, options, name }: ModifierArguments<Options>) {
+function effect({ state, options, name }: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]', padding = 0 } = options;
 
   // CSS selector
@@ -73,6 +73,8 @@ function onLoad({ state, options, name }: ModifierArguments<Options>) {
         ].join(' ')
       );
     }
+
+    return;
   }
 
   state.elements.arrow = arrowElement;
@@ -90,7 +92,7 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: arrow,
-  onLoad,
+  effect,
   requires: ['popperOffsets'],
   requiresIfExists: ['preventOverflow'],
 }: Modifier<Options>);

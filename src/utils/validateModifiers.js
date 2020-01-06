@@ -11,7 +11,7 @@ const VALID_PROPERTIES = [
   'enabled',
   'phase',
   'fn',
-  'onLoad',
+  'effect',
   'requires',
   'options',
 ];
@@ -71,26 +71,13 @@ export default function validateModifiers(modifiers: Array<any>): void {
             );
           }
           break;
-        case 'onLoad':
-          if (typeof modifier.onLoad !== 'function') {
+        case 'effect':
+          if (typeof modifier.effect !== 'function') {
             console.error(
               format(
                 INVALID_MODIFIER_ERROR,
                 modifier.name,
-                '"onLoad"',
-                '"function"',
-                `"${String(modifier.fn)}"`
-              )
-            );
-          }
-          break;
-        case 'onDestroy':
-          if (typeof modifier.onDestroy !== 'function') {
-            console.error(
-              format(
-                INVALID_MODIFIER_ERROR,
-                modifier.name,
-                '"onDestroy"',
+                '"effect"',
                 '"function"',
                 `"${String(modifier.fn)}"`
               )
