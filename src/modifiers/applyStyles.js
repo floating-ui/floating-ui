@@ -33,37 +33,39 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
   });
 }
 
-function onDestroy({ state }: ModifierArguments<{||}>) {
-  Object.keys(state.elements).forEach(name => {
-    const element = state.elements[name];
-    const styleProperties = Object.keys(
-      state.styles.hasOwnProperty(name) ? { ...state.styles[name] } : {}
-    );
-    const attributes = state.attributes[name] || {};
+function effect({ state }: ModifierArguments<{||}>) {
+  return () => {
+    Object.keys(state.elements).forEach(name => {
+      const element = state.elements[name];
+      const styleProperties = Object.keys(
+        state.styles.hasOwnProperty(name) ? { ...state.styles[name] } : {}
+      );
+      const attributes = state.attributes[name] || {};
 
-    // Set all values to an empty string to unset them
-    const style = styleProperties.reduce(
-      (style, property) => ({
-        ...style,
-        [String(property)]: '',
-      }),
-      {}
-    );
+      // Set all values to an empty string to unset them
+      const style = styleProperties.reduce(
+        (style, property) => ({
+          ...style,
+          [String(property)]: '',
+        }),
+        {}
+      );
 
-    // arrow is optional + virtual elements
-    if (!isHTMLElement(element) || !getNodeName(element)) {
-      return;
-    }
+      // arrow is optional + virtual elements
+      if (!isHTMLElement(element) || !getNodeName(element)) {
+        return;
+      }
 
-    // Flow doesn't support to extend this property, but it's the most
-    // effective way to apply styles to an HTMLElement
-    // $FlowFixMe
-    Object.assign(element.style, style);
+      // Flow doesn't support to extend this property, but it's the most
+      // effective way to apply styles to an HTMLElement
+      // $FlowFixMe
+      Object.assign(element.style, style);
 
-    Object.keys(attributes).forEach(attribute =>
-      element.removeAttribute(attribute)
-    );
-  });
+      Object.keys(attributes).forEach(attribute =>
+        element.removeAttribute(attribute)
+      );
+    });
+  };
 }
 
 export default ({
@@ -71,6 +73,6 @@ export default ({
   enabled: true,
   phase: 'write',
   fn: applyStyles,
-  onDestroy,
+  effect,
   requires: ['computeStyles'],
 }: Modifier<{||}>);

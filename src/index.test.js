@@ -14,14 +14,14 @@ it('returns expected instance object', () => {
   expect(createPopper(reference, getPopper())).toMatchSnapshot();
 });
 
-it('runs `onLoad` modifiers callback on create', () => {
+it('runs modifier effects on create', () => {
   const spy = jest.fn();
 
   createPopper(reference, getPopper(), {
     modifiers: [
       {
         ...testModifier,
-        onLoad: spy,
+        effect: spy,
       },
     ],
   });
@@ -29,14 +29,14 @@ it('runs `onLoad` modifiers callback on create', () => {
   expect(spy).toHaveBeenCalledTimes(1);
 });
 
-it('does not run `onDestroy` modifiers callback on create', () => {
+it('does not run modifier effect cleanup functions on create', () => {
   const spy = jest.fn();
 
   createPopper(reference, getPopper(), {
     modifiers: [
       {
         ...testModifier,
-        onDestroy: spy,
+        effect: () => spy,
       },
     ],
   });
@@ -66,7 +66,7 @@ describe('.setOptions() method', () => {
 });
 
 describe('.destroy() method', () => {
-  it('runs `onDestroy` modifiers callback', () => {
+  it('runs effect cleanup functions', () => {
     const spy = jest.fn();
 
     createPopper(reference, getPopper(), {
@@ -74,7 +74,7 @@ describe('.destroy() method', () => {
       modifiers: [
         {
           ...testModifier,
-          onDestroy: spy,
+          effect: () => spy,
         },
       ],
     }).destroy();

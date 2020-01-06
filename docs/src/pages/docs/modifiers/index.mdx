@@ -39,8 +39,7 @@ type Modifier = {|
   // Optional properties
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
-  onLoad?: (ModifierArguments<Options>) => ?State,
-  onDestroy?: (ModifierArguments<Options>) => ?State,
+  effect?: (ModifierArguments<Options>) => ?() => void,
   options?: any,
   data?: {},
 |};
@@ -138,16 +137,31 @@ exists, because `offset` mutates the `popperOffsets` data, which
 In short, the modifier depends upon this list of modifiers' **behavior** (or
 mutations to dependent data from other modifiers) to work.
 
-### `onLoad`
+### `effect`
 
-This function is executed when the Popper instance is created or when its
-options are updated. It can be useful if you want to store some persistent data,
-which the `arrow` and `eventListeners` modifiers use.
+This function allows you to execute arbitrary code (effects) before the first
+update cycle is ran. Perform effects in the function and return a cleanup
+function if necessary:
 
-### `onDestroy`
+```js
+function effect() {
+  // perform side effects
+  return () => {
+    // cleanup side effects
+  };
+}
+```
 
-Just like `onLoad`, but runs when the Popper instance is destroyed or when its
-options are updated. Use this to clean up the code run in `onLoad`.
+Examples where this is useful involve code that is not necessary to be run on
+every update, rather only when the instance lifecycle changes (created, updated,
+or destroyed):
+
+- The `eventListeners` modifier uses this to add and remove `window`/`document`
+  event listeners which is not part of the main modifier update cycle.
+- The `arrow` modifier uses this to add the element to `state.elements`. The
+  `arrow` modifier is dependent on `preventOverflow` (run after), but
+  `preventOverflow` depends on `state.elements.arrow`. Since effects are run
+  before the first update cycle, the problem is resolved.
 
 ### `options`
 
