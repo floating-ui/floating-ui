@@ -1,20 +1,20 @@
 // @flow
 import type {
-  JQueryWrapper,
   State,
   Options,
   Modifier,
   Instance,
+  VirtualElement,
 } from './types';
 import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getOffsetParent from './dom-utils/getOffsetParent';
-import unwrapJqueryElement from './utils/unwrapJqueryElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 import uniqueBy from './utils/uniqueBy';
+import { isElement } from './dom-utils/instanceOf';
 
 export * from './types';
 export * from './enums';
@@ -48,15 +48,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
   } = generatorOptions;
 
   return function createPopper(
-    reference: HTMLElement | JQueryWrapper,
-    popper: HTMLElement | JQueryWrapper,
+    reference: Element | VirtualElement,
+    popper: HTMLElement,
     options: $Shape<Options> = defaultOptions
   ): Instance {
-    // Consumers may pass a jQuery element where the real DOM element is wrapped
-    // inside an object at the `0` property
-    const referenceElement = unwrapJqueryElement(reference);
-    const popperElement = unwrapJqueryElement(popper);
-
     let state: $Shape<State> = {
       isCreated: false,
       placement: 'bottom',
@@ -64,8 +59,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       options: { ...DEFAULT_OPTIONS, ...defaultOptions },
       modifiersData: {},
       elements: {
-        reference: referenceElement,
-        popper: popperElement,
+        reference,
+        popper,
       },
       attributes: {},
       styles: {},
@@ -80,8 +75,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         };
 
         state.scrollParents = {
-          reference: listScrollParents(referenceElement),
-          popper: listScrollParents(popperElement),
+          reference: isElement(reference) ? listScrollParents(reference) : [],
+          popper: listScrollParents(popper),
         };
 
         // Orders the modifiers based on their dependencies and `phase`
@@ -125,14 +120,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // For high frequency updates (e.g. `resize` and `scroll` events), always
       // prefer the async Popper#update method
       forceUpdate() {
-        const {
-          reference: referenceElement,
-          popper: popperElement,
-        } = state.elements;
+        const { reference, popper } = state.elements;
 
         // Don't proceed if `reference` or `popper` are not valid elements
         // anymore
-        if (!areValidElements(referenceElement, popperElement)) {
+        if (!areValidElements(reference, popper)) {
           if (__DEV__) {
             console.error(INVALID_ELEMENT_ERROR);
           }
@@ -142,11 +134,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Store the reference and popper rects to be read by modifiers
         state.rects = {
           reference: getCompositeRect(
-            referenceElement,
-            getOffsetParent(popperElement),
+            reference,
+            getOffsetParent(popper),
             state.options.strategy === 'fixed'
           ),
-          popper: getLayoutRect(popperElement),
+          popper: getLayoutRect(popper),
         };
 
         // Modifiers have the ability to reset the current update cycle. The
@@ -210,7 +202,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       },
     };
 
-    if (!areValidElements(referenceElement, popperElement)) {
+    if (!areValidElements(reference, popper)) {
       if (__DEV__) {
         console.error(INVALID_ELEMENT_ERROR);
       }

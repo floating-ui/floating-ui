@@ -1,6 +1,5 @@
 // @flow
 import type { Placement, ModifierPhases } from './enums';
-export type JQueryWrapper = Array<HTMLElement> & { jquery: string };
 
 export type Obj = { [key: string]: any };
 
