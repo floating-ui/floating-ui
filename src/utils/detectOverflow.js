@@ -1,5 +1,5 @@
 // @flow
-import type { State, SideObject } from '../types';
+import type { State, SideObject, Padding } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
@@ -13,8 +13,12 @@ import {
   bottom,
   top,
   right,
+  basePlacements,
+  viewport,
 } from '../enums';
 import { isElement } from '../dom-utils/instanceOf';
+import mergePaddingObject from './mergePaddingObject';
+import expandToHashMap from './expandToHashMap';
 
 type Options = {
   placement: Placement,
@@ -22,6 +26,7 @@ type Options = {
   rootBoundary: RootBoundary,
   elementContext: Context,
   altBoundary: boolean,
+  padding: Padding,
 };
 
 export default function detectOverflow(
@@ -31,10 +36,17 @@ export default function detectOverflow(
   const {
     placement = state.placement,
     boundary = clippingParents,
-    rootBoundary = 'document',
+    rootBoundary = viewport,
     elementContext = popper,
     altBoundary = false,
+    padding = 0,
   } = options;
+
+  const paddingObject = mergePaddingObject(
+    typeof padding !== 'number'
+      ? padding
+      : expandToHashMap(padding, basePlacements)
+  );
 
   const altContext = elementContext === popper ? reference : popper;
 
@@ -67,10 +79,14 @@ export default function detectOverflow(
   // positive = overflowing the clipping rect
   // 0 or negative = within the clipping rect
   const overflowOffsets = {
-    top: clippingClientRect.top - elementClientRect.top,
-    bottom: elementClientRect.bottom - clippingClientRect.bottom,
-    left: clippingClientRect.left - elementClientRect.left,
-    right: elementClientRect.right - clippingClientRect.right,
+    top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
+    bottom:
+      elementClientRect.bottom -
+      clippingClientRect.bottom +
+      paddingObject.bottom,
+    left: clippingClientRect.left - elementClientRect.left + paddingObject.left,
+    right:
+      elementClientRect.right - clippingClientRect.right + paddingObject.right,
   };
 
   const offsetData = state.modifiersData.offset;

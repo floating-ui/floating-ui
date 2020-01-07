@@ -1,21 +1,10 @@
 // @flow
-import {
-  basePlacements,
-  top,
-  left,
-  right,
-  bottom,
-  clippingParents,
-  start,
-  viewport,
-} from '../enums';
+import { top, left, right, bottom, start } from '../enums';
 import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
-import mergePaddingObject from '../utils/mergePaddingObject';
-import expandToHashMap from '../utils/expandToHashMap';
 import within from '../utils/within';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import detectOverflow from '../utils/detectOverflow';
@@ -54,14 +43,14 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
-    boundary = clippingParents,
-    rootBoundary = viewport,
+    boundary,
+    rootBoundary,
+    padding,
     tether = true,
     tetherOffset = 0,
-    padding = 0,
   } = options;
 
-  const overflow = detectOverflow(state, { boundary, rootBoundary });
+  const overflow = detectOverflow(state, { boundary, rootBoundary, padding });
   const basePlacement = getBasePlacement(state.placement);
   const variation = getVariation(state.placement);
   const isBasePlacement = !variation;
@@ -70,11 +59,6 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   const popperOffsets = state.modifiersData.popperOffsets;
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
-  const paddingObject = mergePaddingObject(
-    typeof padding !== 'number'
-      ? padding
-      : expandToHashMap(padding, basePlacements)
-  );
   const tetherOffsetValue =
     typeof tetherOffset === 'function'
       ? tetherOffset({
@@ -91,10 +75,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const len = mainAxis === 'y' ? 'height' : 'width';
     const offset = popperOffsets[mainAxis];
 
-    const min =
-      popperOffsets[mainAxis] + overflow[mainSide] + paddingObject[mainSide];
-    const max =
-      popperOffsets[mainAxis] - overflow[altSide] - paddingObject[altSide];
+    const min = popperOffsets[mainAxis] + overflow[mainSide];
+    const max = popperOffsets[mainAxis] - overflow[altSide];
 
     const additive = tether ? -popperRect[len] / 2 : 0;
 
@@ -158,8 +140,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const altSide = mainAxis === 'x' ? bottom : right;
     const offset = popperOffsets[altAxis];
 
-    const min = offset + overflow[mainSide] + paddingObject[mainSide];
-    const max = offset - overflow[altSide] - paddingObject[altSide];
+    const min = offset + overflow[mainSide];
+    const max = offset - overflow[altSide];
 
     const preventedOffset = within(min, offset, max);
 

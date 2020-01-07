@@ -33,18 +33,6 @@ type Options = {
   rootBoundary: RootBoundary, // "viewport"
   flipVariations: boolean, // true
 };
-
-// Below are the described relative types
-type Boundary = 'clippingParents' | HTMLElement | Array<HTMLElement>;
-type RootBoundary = 'document' | 'viewport';
-type Padding =
-  | {|
-      top?: number,
-      left?: number,
-      right?: number,
-      bottom?: number,
-    |}
-  | number;
 ```
 
 ### `fallbackPlacements`
@@ -79,12 +67,7 @@ doesn't fit, it reverts back to the original placement.
 
 ### `padding`
 
-If you don't want the popper to reach the _very_ edge of the boundary area, you
-can apply some padding. This will make the popper flip earlier (in pixels) than
-the true edge.
-
-You can pass a `number`, which will be equal padding on all four sides, or an
-`object` containing side properties each with their own padding value.
+See `padding` in [Detect Overflow](/docs/utils/detect-overflow) for details.
 
 ```js
 createPopper(reference, popper, {
@@ -92,10 +75,7 @@ createPopper(reference, popper, {
     {
       name: 'flip',
       options: {
-        // Equal padding on all four sides
         padding: 8,
-        // Different padding on certain sides. Unspecified sides are 0.
-        padding: { top: 58, bottom: 8, right: 15 },
       },
     },
   ],
@@ -104,12 +84,7 @@ createPopper(reference, popper, {
 
 ### `boundary`
 
-This describes the area that the popper will be constrained within (not allowed
-to overflow). Once the popper reaches the edge of this area, it will attempt to
-flip to another side.
-
-By default, it is `"clippingParents"`, which are the scrolling containers that
-may cause the popper to be partially or fully cut off.
+See `boundary` in [Detect Overflow](/docs/utils/detect-overflow) for details.
 
 ```js
 const element = document.querySelector('#parentElement');
@@ -128,18 +103,16 @@ createPopper(reference, popper, {
 
 ### `rootBoundary`
 
-This describes the root boundary that will be checked for overflow. There are
-only two "roots" – the viewport and the document. `"viewport"` is default, which
-is the area of the document the user can actually see on the screen.
-`"document"` is the entire page which can be potentially scrolled.
+See `rootBoundary` in [Detect Overflow](/docs/utils/detect-overflow) for
+details.
 
 ```js
 createPopper(reference, popper, {
   modifiers: [
     {
-      name: 'preventOverflow',
+      name: 'flip',
       options: {
-        rootBoundary: 'document', // 'viewport' by default
+        rootBoundary: 'document',
       },
     },
   ],
@@ -168,11 +141,4 @@ createPopper(reference, popper, {
 
 ## Data
 
-```flow
-type Data = {
-  // The current index in the placement order it's trying.
-  index: number,
-  // The preferred fallback variation placement to use if no placements fit.
-  fallbackVariation: Placement,
-};
-```
+This modifier has no data.

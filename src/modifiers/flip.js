@@ -3,21 +3,11 @@ import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { ModifierArguments, Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
-import getVariation from '../utils/getVariation';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
-import mergePaddingObject from '../utils/mergePaddingObject';
-import expandToHashMap from '../utils/expandToHashMap';
 import detectOverflow from '../utils/detectOverflow';
-import {
-  basePlacements,
-  start,
-  top,
-  bottom,
-  right,
-  left,
-  viewport,
-  clippingParents,
-} from '../enums';
+import computeAutoPlacement from '../utils/computeAutoPlacement';
+import uniqueBy from '../utils/uniqueBy';
+import { bottom, top, start, right, left } from '../enums';
 
 type Options = {
   fallbackPlacements: Array<Placement>,
@@ -28,6 +18,10 @@ type Options = {
 };
 
 function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
+  if (placement.includes('auto')) {
+    return [];
+  }
+
   const oppositePlacement = getOppositePlacement(placement);
 
   return [
@@ -37,12 +31,12 @@ function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
   ];
 }
 
-function flip({ state, options, name }: ModifierArguments<Options>) {
+function flip({ state, options }: ModifierArguments<Options>) {
   const {
     fallbackPlacements: specifiedFallbackPlacements,
-    padding = 0,
-    boundary = clippingParents,
-    rootBoundary = viewport,
+    padding,
+    boundary,
+    rootBoundary,
     flipVariations = true,
   } = options;
 
@@ -56,76 +50,82 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       ? [getOppositePlacement(preferredPlacement)]
       : getExpandedFallbackPlacements(preferredPlacement));
 
-  const placementOrder = [preferredPlacement, ...fallbackPlacements];
-  const flipIndex = state.modifiersData[name].index;
-  const flippedPlacement: Placement = placementOrder[flipIndex];
+  const placements = uniqueBy(
+    [preferredPlacement, ...fallbackPlacements].reduce((acc, placement) => {
+      return placement.includes('auto')
+        ? acc.concat(
+            computeAutoPlacement(state, {
+              placement,
+              boundary,
+              rootBoundary,
+              padding,
+              flipVariations,
+            })
+          )
+        : acc.concat(placement);
+    }, []),
+    placement => placement
+  );
 
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
 
-  const overflow = detectOverflow(state, {
-    placement: flippedPlacement,
-    boundary,
-    rootBoundary,
-  });
+  const placementOverflowData = placements.reduce((acc, placement) => {
+    const basePlacement = getBasePlacement(placement);
+    const isStartVariation = placement.includes(start);
+    const isVertical = [top, bottom].includes(basePlacement);
+    const len = isVertical ? 'width' : 'height';
 
-  if (!flippedPlacement) {
-    // If none of the placements fit, we still want to use the better-fitting
-    // flipped variation if possible
-    const fallbackVariation = state.modifiersData[name].fallbackVariation;
-    if (fallbackVariation && state.placement !== fallbackVariation) {
-      state.placement = fallbackVariation;
-      state.reset = true;
-    }
+    const overflow = detectOverflow(state, {
+      placement,
+      boundary,
+      rootBoundary,
+      padding,
+    });
 
-    return;
-  }
-
-  const baseFlippedPlacement = getBasePlacement(flippedPlacement);
-  const variation = getVariation(flippedPlacement);
-  const isVertical = [top, bottom].includes(baseFlippedPlacement);
-  const isStartVariation = variation === start;
-  const len = isVertical ? 'width' : 'height';
-  const paddingObject = mergePaddingObject(
-    typeof padding !== 'number'
-      ? padding
-      : expandToHashMap(padding, basePlacements)
-  );
-
-  const edge =
-    referenceRect[len] < popperRect[len]
-      ? isVertical
-        ? isStartVariation
-          ? right
-          : left
-        : isStartVariation
-        ? bottom
-        : top
-      : isVertical
+    let mainVariationSide: any = isVertical
       ? isStartVariation
-        ? left
-        : right
+        ? right
+        : left
       : isStartVariation
-      ? top
-      : bottom;
+      ? bottom
+      : top;
 
-  let fits =
-    overflow[baseFlippedPlacement] + paddingObject[baseFlippedPlacement] <= 0;
+    if (referenceRect[len] > popperRect[len]) {
+      mainVariationSide = getOppositePlacement(mainVariationSide);
+    }
 
-  if (flipVariations && !isBasePlacement) {
-    const fitsEdge = overflow[edge] + paddingObject[edge] <= 0;
-    fits = fits && fitsEdge;
+    const altVariationSide: any = getOppositePlacement(mainVariationSide);
 
-    if (fitsEdge && !state.modifiersData[name].fallbackVariation) {
-      state.modifiersData[name].fallbackVariation = flippedPlacement;
+    acc[placement] = [
+      // checks
+      overflow[basePlacement] <= 0,
+      overflow[mainVariationSide] <= 0,
+      overflow[altVariationSide] <= 0,
+    ];
+
+    return acc;
+  }, {});
+
+  // `2` may be desired in some cases – research later
+  let checks = flipVariations ? 3 : 1;
+  let firstFittingPlacement = placements[0];
+
+  for (let i = checks; i >= 0; checks--) {
+    const tryPlacement = placements.find(placement => {
+      return placementOverflowData[placement]
+        .slice(0, checks)
+        .every(check => check);
+    });
+
+    if (tryPlacement) {
+      firstFittingPlacement = tryPlacement;
+      break;
     }
   }
 
-  if (!fits) {
-    state.modifiersData[name].index += 1;
-    state.reset = true;
-  } else if (fits && state.placement !== flippedPlacement) {
-    state.placement = flippedPlacement;
+  if (state.placement !== firstFittingPlacement) {
+    state.placement = firstFittingPlacement;
     state.reset = true;
   }
 }
@@ -136,5 +136,4 @@ export default ({
   phase: 'main',
   fn: flip,
   requiresIfExists: ['offset'],
-  data: { index: 0 },
 }: Modifier<Options>);
