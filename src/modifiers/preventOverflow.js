@@ -7,6 +7,7 @@ import {
   bottom,
   clippingParents,
   start,
+  viewport,
 } from '../enums';
 import type { Placement, Boundary, RootBoundary } from '../enums';
 import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
@@ -54,7 +55,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
     boundary = clippingParents,
-    rootBoundary = 'document',
+    rootBoundary = viewport,
     tether = true,
     tetherOffset = 0,
     padding = 0,
