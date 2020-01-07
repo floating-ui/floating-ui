@@ -70,7 +70,6 @@ export default ({
   name: 'hide',
   enabled: true,
   phase: 'main',
-  requires: [],
   requiresIfExists: ['preventOverflow'],
   fn: hide,
 }: Modifier<Options>);

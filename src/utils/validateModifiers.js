@@ -98,14 +98,14 @@ export default function validateModifiers(modifiers: Array<any>): void {
           }
           break;
         case 'requiresIfExists':
-          if (!Array.isArray(modifier.requires)) {
+          if (!Array.isArray(modifier.requiresIfExists)) {
             console.error(
               format(
                 INVALID_MODIFIER_ERROR,
                 modifier.name,
-                '"requires"',
+                '"requiresIfExists"',
                 '"array"',
-                `"${String(modifier.requires)}"`
+                `"${String(modifier.requiresIfExists)}"`
               )
             );
           }

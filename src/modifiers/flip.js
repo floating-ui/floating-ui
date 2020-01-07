@@ -135,7 +135,6 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: flip,
-  requires: [],
   requiresIfExists: ['offset'],
   data: { index: 0 },
 }: Modifier<Options>);

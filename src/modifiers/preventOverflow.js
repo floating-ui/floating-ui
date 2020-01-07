@@ -175,6 +175,5 @@ export default ({
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
-  requires: [],
   requiresIfExists: ['offset'],
 }: Modifier<Options>);
