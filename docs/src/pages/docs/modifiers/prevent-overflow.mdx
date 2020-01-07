@@ -31,7 +31,7 @@ type Options = {
   altAxis: boolean, // false
   padding: Padding, // 0
   boundary: Boundary, // "clippingParents"
-  rootBoundary: RootBoundary, // "document"
+  rootBoundary: RootBoundary, // "viewport"
   tether: boolean, // true
   tetherOffset: TetherOffset, // 0
 };
@@ -152,9 +152,9 @@ createPopper(reference, popper, {
 ### `rootBoundary`
 
 This describes the root boundary that will be checked for overflow. There are
-only two "roots" – the viewport and the document. `"document"` is default, which
-is the entire page which can potentially be scrolled. `"viewport"` is the area
-of the document the user can actually see on the screen.
+only two "roots" – the viewport and the document. `"viewport"` is default, which
+is the area of the document the user can actually see on the screen.
+`"document"` is the entire page which can be potentially scrolled.
 
 ```js
 createPopper(reference, popper, {
