@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`auto produces correct array of computed placements 1`] = `
+Array [
+  "right",
+  "bottom",
+  "top",
+  "left",
+]
+`;
+
+exports[`auto-end produces correct array of computed placements 1`] = `
+Array [
+  "right-start",
+  "right-end",
+  "bottom-start",
+  "bottom-end",
+  "top-start",
+  "top-end",
+  "left-start",
+  "left-end",
+]
+`;
+
+exports[`auto-end produces correct array of computed placements when flipVariations: false 1`] = `
+Array [
+  "right-end",
+  "bottom-end",
+  "top-end",
+  "left-end",
+]
+`;
+
+exports[`auto-start produces correct array of computed placements 1`] = `
+Array [
+  "right-start",
+  "right-end",
+  "bottom-start",
+  "bottom-end",
+  "top-start",
+  "top-end",
+  "left-start",
+  "left-end",
+]
+`;
+
+exports[`auto-start produces correct array of computed placements when flipVariations: false 1`] = `
+Array [
+  "right-start",
+  "bottom-start",
+  "top-start",
+  "left-start",
+]
+`;

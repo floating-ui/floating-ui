@@ -44,6 +44,27 @@ it('does not run modifier effect cleanup functions on create', () => {
   expect(spy).not.toHaveBeenCalled();
 });
 
+it('errors if placement: "auto" and "flip" modifier is not present/enabled', () => {
+  const spy = jest.spyOn(console, 'error');
+
+  createPopper(reference, getPopper(), {
+    placement: 'auto',
+    modifiers: [
+      {
+        name: 'flip',
+        enabled: false,
+      },
+    ],
+  });
+
+  expect(spy).toHaveBeenCalledWith(
+    [
+      'Popper: "auto" placements require the "flip" modifier be',
+      'present and enabled to work.',
+    ].join(' ')
+  );
+});
+
 describe('.setOptions() method', () => {
   it('correctly updates `placement`', () => {
     const popper = createPopper(reference, getPopper(), {

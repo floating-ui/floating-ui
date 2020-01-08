@@ -100,12 +100,27 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the modifiers is invalid for any reason
         if (__DEV__) {
-          const modifiers = [
-            ...state.orderedModifiers,
-            ...state.options.modifiers,
-          ];
+          const modifiers = uniqueBy(
+            [...state.orderedModifiers, ...state.options.modifiers],
+            ({ name }) => name
+          );
 
-          validateModifiers(uniqueBy(modifiers, ({ name }) => name));
+          validateModifiers(modifiers);
+
+          if (state.options.placement.includes('auto')) {
+            const flipModifier = state.orderedModifiers.find(
+              ({ name }) => name === 'flip'
+            );
+
+            if (!flipModifier || !flipModifier.enabled) {
+              console.error(
+                [
+                  'Popper: "auto" placements require the "flip" modifier be',
+                  'present and enabled to work.',
+                ].join(' ')
+              );
+            }
+          }
         }
 
         runModifierEffects();

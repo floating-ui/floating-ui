@@ -4,7 +4,7 @@ import type { Boundary, RootBoundary } from '../enums';
 import { viewport } from '../enums';
 import getViewportRect from './getViewportRect';
 import getDocumentRect from './getDocumentRect';
-import listScrollParents from './listScrollParents';
+import listClippingParents from './listClippingParents';
 import getOffsetParent from './getOffsetParent';
 import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
@@ -25,11 +25,11 @@ function getClientRectFromMixedType(
     : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }
 
-// A "clipping parent" is a scrolling container with the characteristic of
+// A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingParents(element: Element) {
-  const scrollParents = listScrollParents(element);
+  const clippingParents = listClippingParents(element);
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );
@@ -42,8 +42,8 @@ function getClippingParents(element: Element) {
     return [];
   }
 
-  return scrollParents.filter(scrollParent => {
-    return isElement(scrollParent) && scrollParent.contains(clipperElement);
+  return clippingParents.filter(clippingParent => {
+    return isElement(clippingParent) && clippingParent.contains(clipperElement);
   });
 }
 
