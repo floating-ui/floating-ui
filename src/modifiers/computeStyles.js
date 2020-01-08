@@ -37,6 +37,7 @@ export function mapToStyles({
 
   if (gpuAcceleration) {
     return {
+      position,
       top: hasY ? '0' : '',
       left: hasX ? '0' : '',
       // Layer acceleration can disable subpixel rendering which causes slightly
@@ -46,15 +47,14 @@ export function mapToStyles({
         window.devicePixelRatio < 2
           ? `translate(${x}px, ${y}px)`
           : `translate3d(${x}px, ${y}px, 0)`,
-      position,
     };
   }
 
   return {
+    position,
     top: hasY ? `${y}px` : '',
     left: hasX ? `${x}px` : '',
     transform: '',
-    position,
   };
 }
 

@@ -34,6 +34,12 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
 }
 
 function effect({ state }: ModifierArguments<{||}>) {
+  Object.assign(state.elements.popper.style, {
+    position: 'absolute',
+    left: '0',
+    top: '0',
+  });
+
   return () => {
     Object.keys(state.elements).forEach(name => {
       const element = state.elements[name];
