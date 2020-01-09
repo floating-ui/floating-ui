@@ -1,7 +1,8 @@
 // @flow
 import type { Rect, VirtualElement, Offsets } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
-import getScrollSum from './getScrollSum';
+import getNodeScroll from './getNodeScroll';
+import getNodeName from './getNodeName';
 import getBorders from './getBorders';
 import { isHTMLElement } from './instanceOf';
 
@@ -24,15 +25,23 @@ export default function getCompositeRect(
   isFixed: boolean = false
 ): Rect {
   const rect = getBoundingClientRect(elementOrVirtualElement);
-  const scrollSum = getScrollSum(isFixed ? [] : [offsetParent]);
-  const offsets =
-    isHTMLElement(offsetParent) && !isFixed
-      ? getInnerOffsets(offsetParent)
-      : { x: 0, y: 0 };
+
+  let scroll = { scrollLeft: 0, scrollTop: 0 };
+  let offsets = { x: 0, y: 0 };
+
+  if (!isFixed) {
+    if (getNodeName(offsetParent) !== 'body') {
+      scroll = getNodeScroll(offsetParent);
+    }
+
+    if (isHTMLElement(offsetParent)) {
+      offsets = getInnerOffsets(offsetParent);
+    }
+  }
 
   return {
-    x: rect.left + scrollSum.scrollLeft - offsets.x,
-    y: rect.top + scrollSum.scrollTop - offsets.y,
+    x: rect.left + scroll.scrollLeft - offsets.x,
+    y: rect.top + scroll.scrollTop - offsets.y,
     width: rect.width,
     height: rect.height,
   };
