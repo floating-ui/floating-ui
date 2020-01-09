@@ -11,9 +11,9 @@ export default function getBorders(element: Element): SideObject {
   const computedStyle = isHTMLElement(element) ? getComputedStyle(element) : {};
 
   return {
-    top: toNumber(computedStyle.borderTop),
-    right: toNumber(computedStyle.borderRight),
-    bottom: toNumber(computedStyle.borderBottom),
-    left: toNumber(computedStyle.borderLeft),
+    top: toNumber(computedStyle.borderTopWidth),
+    right: toNumber(computedStyle.borderRightWidth),
+    bottom: toNumber(computedStyle.borderBottomWidth),
+    left: toNumber(computedStyle.borderLeftWidth),
   };
 }
