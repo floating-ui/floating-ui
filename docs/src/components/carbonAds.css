@@ -1,12 +1,19 @@
 #carbonads,
 .carbonplaceholder {
-  background-color: #281d2f;
+  background-color: #281e36;
   color: #fff;
   padding: 15px;
   border-radius: 10px;
-  width: 310px;
+  width: 290px;
   height: 155px;
-  margin: 20px auto 0;
+  margin: 0 auto;
+}
+
+@media (min-width: 360px) {
+  #carbonads,
+  .carbonplaceholder {
+    width: 320px;
+  }
 }
 
 .carbonplaceholder * {

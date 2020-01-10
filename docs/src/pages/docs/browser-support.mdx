@@ -4,22 +4,35 @@ title: Browser Support
 
 # Browser Support
 
-Popper (v2) supports Chrome, Firefox, and Safari, additionally, any
-Chromium-based browser, such as Microsoft Edge (2020), Opera, etc should be
-supported.
+Popper supports modern versions of Chrome, Firefox, Safari, Edge, and IE11 with
+polyfills. Additionally, any Chromium-based browser, such as Edge (2020), Opera,
+etc should be supported.
 
 <x-ad />
 
-Microsoft Edge (2019 and earlier) is supported as well, but you may need to
-provide some polyfills to make sure Popper has access to all the browser APIs it
-requires. The same is valid for Internet Explorer 11.
+## IE11
 
-We reccomend to use the following snippet to automatically include the required
-polyfills in your web page:
+IE11 (and older browsers in general) require polyfills to work. The simplest way
+to make Popper work is to use the following polyfill service:
 
 ```html
 <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.find,Array.prototype.includes,Array.from,Object.entries,Promise,Object.assign"></script>
 ```
 
-Right now, Internet Explorer 10 and older versions aren't tested but may work,
-please report back if you successfully run Popper in those browsers.
+Browsers that don't need the polyfills won't be burdened with the JS bundle
+size.
+
+### Support note
+
+If you need to support old browsers, ensure you **lock** Popper's version to a
+specific number when using the CDN. On new releases, we may add more modern
+functions that require new polyfills, or positioning behavior may break in IE11
+since it is completely untested. We don't plan to officially support IE11, but
+welcome PRs to fix issues. For the most part, IE11 seems to work without much
+trouble, but there may be edge cases in some scenarios.
+
+## IE10 and older
+
+Browsers older than 2013 (including Android 4.4) will never be supported since
+they are becoming increasingly obsolete and add a lot of complexity (runtime and
+bundle) costs to the library.

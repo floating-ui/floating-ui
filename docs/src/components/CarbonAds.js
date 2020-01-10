@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import { LinkStyled } from './Framework';
+
 import './carbonAds.css';
 
 const CarbonAds = ({
@@ -21,15 +23,18 @@ const CarbonAds = ({
 
   return (
     <div {...props} ref={ref}>
-      <div class="carbonplaceholder">
-        <span class="carbon-text">
+      <div className="carbonplaceholder">
+        <span className="carbon-text">
           Don't mind tech-related ads? Consider disabling your ad-blocker to
           help us!
           <br />
           They are small and unobtrusive.
           <br />
           Alternatively, consider to support us on{' '}
-          <a href="https://opencollective.com/popperjs">Open Collective</a>!
+          <LinkStyled href="https://opencollective.com/popperjs">
+            Open Collective
+          </LinkStyled>
+          !
         </span>
       </div>
     </div>
