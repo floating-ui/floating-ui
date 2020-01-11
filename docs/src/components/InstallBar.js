@@ -78,7 +78,7 @@ const InstallBar = () => (
       </Bar>
       <Bar>
         <LogoWrapper>CDN</LogoWrapper>
-        <TextWrapper>https://unpkg.com/@popperjs/core@^2</TextWrapper>
+        <TextWrapper>https://unpkg.com/@popperjs/core@2.0.0-rc.1</TextWrapper>
       </Bar>
     </InstallBarContainer>
   </InstallBarStyled>

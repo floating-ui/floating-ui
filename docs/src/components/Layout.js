@@ -151,7 +151,6 @@ const NavButtonDirection = styled.span`
 `;
 
 const components = {
-  a: ({ href, ...props }) => <Link to={href} {...props} />,
   'x-ad': CarbonAds,
 };
 

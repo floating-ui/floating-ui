@@ -43,16 +43,16 @@ for the official Popper wrapper for React.
 
 ```bash
 # With npm
-npm i @popperjs/core@alpha
+npm i @popperjs/core
 
 # With Yarn
-yarn add @popperjs/core@alpha
+yarn add @popperjs/core
 ```
 
 ### 2. CDN
 
 ```html
-<script src="https://unpkg.com/@popperjs/core@alpha"></script>
+<script src="https://unpkg.com/@popperjs/core"></script>
 ```
 
 ### 3. Direct Download?
@@ -85,7 +85,7 @@ Here is a complete example:
 <button type="button" id="button">I'm a button</button>
 <div id="tooltip">I'm a tooltip</div>
 
-<script src="https://unpkg.com/@popperjs/core@alpha"></script>
+<script src="https://unpkg.com/@popperjs/core"></script>
 <script>
   const button = document.querySelector('#button');
   const tooltip = document.querySelector('#tooltip');
@@ -178,9 +178,9 @@ Below you can find the size of each version, minified and compressed with the
 
 <!-- Don't change the labels to use hyphens, it breaks, even when encoded -->
 
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper.min.js?compression=brotli&label=popper)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-lite.min.js?compression=brotli&label=popper%20lite)
-![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core@alpha/dist/umd/popper-base.min.js?compression=brotli&label=popper%20base)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper.min.js?compression=brotli&label=popper)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-lite.min.js?compression=brotli&label=popper%20lite)
+![](https://badge-size.now.sh/https://unpkg.com/@popperjs/core/dist/umd/popper-base.min.js?compression=brotli&label=popper%20base)
 
 ## Hacking the library
 
