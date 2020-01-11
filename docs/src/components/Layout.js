@@ -258,7 +258,9 @@ const Layout = ({ children, path, pageResources }) => {
         `}
       />
       <div>
-        <SEO title={pageResources.json.pageContext.frontmatter.title} />
+        {pageResources && (
+          <SEO title={pageResources.json.pageContext.frontmatter.title} />
+        )}
         <Navigation root="/" target="location" />
         <Main>
           <Container>{children}</Container>
