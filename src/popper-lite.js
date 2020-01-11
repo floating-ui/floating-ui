@@ -5,9 +5,14 @@ import popperOffsets from './modifiers/popperOffsets';
 import computeStyles from './modifiers/computeStyles';
 import applyStyles from './modifiers/applyStyles';
 
-const createPopper = popperGenerator({
-  defaultModifiers: [eventListeners, popperOffsets, computeStyles, applyStyles],
-});
+const defaultModifiers = [
+  eventListeners,
+  popperOffsets,
+  computeStyles,
+  applyStyles,
+];
+
+const createPopper = popperGenerator({ defaultModifiers });
 
 // eslint-disable-next-line import/no-unused-modules
-export { createPopper, popperGenerator };
+export { createPopper, popperGenerator, defaultModifiers };
