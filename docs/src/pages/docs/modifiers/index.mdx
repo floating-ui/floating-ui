@@ -20,9 +20,25 @@ adding functionality, hence the term "modifiers".
 Is it possible to add custom modifiers, written by you, by defining them in the
 `options.modifiers` array during a Popper instantation.
 
+### Example modifier
+
+A modifier that logs to the console when it's on the top (not very useful, but
+demonstrates each property):
+
 ```js
+const topLogger = {
+  name: 'topLogger',
+  enabled: true,
+  phase: 'main',
+  fn({ state }) {
+    if (state.placement === 'top') {
+      console.log('Popper is on the top');
+    }
+  },
+};
+
 createPopper(reference, popper, {
-  modifiers: [myCustomModifier],
+  modifiers: [topLogger],
 });
 ```
 

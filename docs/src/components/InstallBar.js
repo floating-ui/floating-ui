@@ -9,6 +9,7 @@ const InstallBarStyled = styled.div`
   background: #c83b50;
   padding: 15px 0;
   font-weight: bold;
+  margin-bottom: 25px;
 `;
 
 const InstallBarContainer = styled(Container)`

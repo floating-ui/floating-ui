@@ -66,22 +66,29 @@ const PlaceholderNavButton = styled.a`
 `;
 
 const NavDivider = styled.div`
+  display: none;
   min-width: 1px;
   background: #44395d;
   height: 100%;
+
+  ${media.md} {
+    display: block;
+  }
 `;
 
 const NavButton = styled(Link)`
   position: relative;
-  font-size: 22px;
+  font-size: 18px;
   padding: 50px 40px;
   color: #4edee5;
   border-bottom: 2px solid transparent;
   transition: none;
   border-bottom: 2px solid transparent;
   flex-grow: 1;
+  word-break: break-word;
 
   ${media.md} {
+    font-size: 22px;
     width: 100%;
   }
 
@@ -89,9 +96,19 @@ const NavButton = styled(Link)`
     font-size: 24px;
   }
 
+  &:first-of-type {
+    &:not(:last-of-type) {
+      padding-right: 15px;
+    }
+  }
+
   &:last-of-type {
     border-bottom-color: transparent;
     text-align: right;
+
+    &:not(:first-of-type) {
+      padding-left: 15px;
+    }
   }
 
   &:hover {
@@ -104,9 +121,21 @@ const NavButton = styled(Link)`
   }
 `;
 
+const arrowCss = css`
+  vertical-align: 3px;
+
+  ${media.md} {
+    vertical-align: 0;
+  }
+`;
+
 const NavButtonDirection = styled.span`
   position: absolute;
-  top: 54px;
+  top: 50px;
+
+  ${media.md} {
+    top: 54px;
+  }
 
   ${media.lg} {
     top: 56px;
@@ -203,7 +232,6 @@ const Layout = ({ children, path, pageResources }) => {
 
           ul {
             padding-left: 20px;
-            line-height: 2;
           }
 
           a {
@@ -243,7 +271,7 @@ const Layout = ({ children, path, pageResources }) => {
                     {prev ? (
                       <NavButton to={prev.slug}>
                         <NavButtonDirection data-prev>
-                          <ChevronLeft size={28} />
+                          <ChevronLeft size={28} css={arrowCss} />
                         </NavButtonDirection>
                         {prev.title}
                       </NavButton>
@@ -255,7 +283,7 @@ const Layout = ({ children, path, pageResources }) => {
                       <NavButton to={next.slug}>
                         {next.title}
                         <NavButtonDirection data-next>
-                          <ChevronRight size={28} />
+                          <ChevronRight size={28} css={arrowCss} />
                         </NavButtonDirection>
                       </NavButton>
                     ) : (

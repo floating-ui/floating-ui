@@ -24,7 +24,7 @@ import SEO from './Seo';
 
 import Header from './Header';
 import InstallBar from './InstallBar';
-import { Container, media, Footer, sizes } from './Framework';
+import { Container, LinkStyled, media, Footer, sizes } from './Framework';
 import { usePopper, Tooltip, Arrow } from './Popper';
 import { ProductCard, Grid } from './ProductCard';
 
@@ -45,7 +45,6 @@ const Button = styled.a`
   font-weight: 700;
   margin-top: 10px;
   color: #c83b50;
-  box-shadow: 0 8px 16px -4px rgb(255, 230, 157, 0.5);
   transition: all 0.2s ease-in-out;
   text-transform: uppercase;
 
@@ -282,18 +281,6 @@ const ExampleText = styled.div`
   }
 `;
 
-const LinkStyled = styled(Link)`
-  color: #ffe69d;
-  text-decoration: none;
-  padding-bottom: 1px;
-  border-bottom: 2px solid rgba(255, 228, 148, 0.25);
-  transition: border-bottom-color 0.15s ease-in-out;
-
-  &:hover {
-    border-bottom: 2px solid rgba(255, 228, 148, 1);
-  }
-`;
-
 const Ul = styled.ul`
   padding-left: 20px;
   list-style: none;
@@ -335,7 +322,9 @@ const PlacementExample = () => {
       // left/right placements on mobile
       {
         name: 'preventOverflow',
-        options: { altAxis: true },
+        options: {
+          rootBoundary: 'document',
+        },
       },
     ],
   });
@@ -406,20 +395,7 @@ createPopper(popcorn, tooltip, {
 };
 
 const PreventOverflowExample = () => {
-  const { reference, popper } = usePopper({
-    placement: 'right',
-    modifiers: [
-      {
-        name: 'flip',
-        enabled: false,
-      },
-      // left/right placements on mobile
-      {
-        name: 'preventOverflow',
-        options: { altAxis: true },
-      },
-    ],
-  });
+  const { reference, popper } = usePopper({ placement: 'right' });
   const scrollContainerRef = useRef();
 
   useLayoutEffect(() => {
@@ -468,9 +444,10 @@ createPopper(popcorn, tooltip, {
       <ExampleText>
         <Heading>Overflow prevention</Heading>
         <p>
-          <strong>Scroll the container</strong> to see the tooltip stay within
-          the boundary. Once the opposite edges of the popcorn and tooltip are
-          aligned, the tooltip is allowed to overflow to prevent detachment.
+          <strong>Scroll the container</strong> (or the whole page) to see the
+          tooltip stay within the boundary. Once the opposite edges of the
+          popcorn and tooltip are aligned, the tooltip is allowed to overflow to
+          prevent detachment.
         </p>
         <Highlight code={code} />
       </ExampleText>
@@ -510,13 +487,10 @@ createPopper(popcorn, tooltip);
       <ExampleText>
         <Heading>Flipping</Heading>
         <p>
-          <strong>Scroll the container</strong> to see the tooltip flip to the
-          opposite side once it's about to overflow the clipping container. Once
-          enough space is detected on its preferred side, it will flip back.
-        </p>
-        <p>
-          You can also scroll the entire page to see the tooltip flip once it's
-          about to overflow the viewport, rather than its clipping container.
+          <strong>Scroll the container</strong> (or the whole page) to see the
+          tooltip flip to the opposite side once it's about to overflow the
+          visible area. Once enough space is detected on its preferred side, it
+          will flip back.
         </p>
         <Highlight code={code} />
       </ExampleText>

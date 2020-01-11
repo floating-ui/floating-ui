@@ -65,10 +65,9 @@ export const ArrowDemo = () => {
               display: grid;
               place-items: center;
               height: 200px;
+              width: 100px;
             `}
-          >
-            Tooltip taller than its reference
-          </div>
+          ></div>
           <Arrow data-popper-arrow />
         </Tooltip>
       </ClippingParent>

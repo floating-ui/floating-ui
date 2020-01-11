@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Link } from 'gatsby';
 
 export const sizes = {
   xs: 360,
@@ -32,4 +33,20 @@ export const Footer = styled.footer`
   background-color: #1c1428;
   padding: 25px 0;
   color: #8e72b4;
+`;
+
+export const LinkStyled = styled(Link)`
+  color: #ffe69d;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 2px solid rgba(255, 228, 148, 0.25);
+  transition: border-bottom-color 0.15s ease-in-out;
+
+  &:hover {
+    border-bottom: 2px solid rgba(255, 228, 148, 1);
+  }
+
+  &:active {
+    border-bottom-style: dashed;
+  }
 `;
