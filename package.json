@@ -1,7 +1,7 @@
 {
   "name": "@popperjs/core",
   "version": "2.0.0-rc.1",
-  "description": "A kickass library used to manage poppers in web applications",
+  "description": "Positioning tooltips is difficult. Popper is here to help!",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
   "module": "lib/popper.js",
