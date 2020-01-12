@@ -78,11 +78,10 @@ describe('.setOptions() method', () => {
 
   it('correctly updates `modifiers`', () => {
     const popper = createPopper(reference, getPopper(), { modifiers: [] });
-    const modifier = { name: 'test', phase: 'main' };
 
-    popper.setOptions({ modifiers: [modifier] });
+    popper.setOptions({ modifiers: [testModifier] });
 
-    expect(popper.state.orderedModifiers.includes(modifier)).toBe(true);
+    expect(popper.state.orderedModifiers.includes(testModifier)).toBe(true);
   });
 });
 
