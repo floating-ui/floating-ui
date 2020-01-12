@@ -50,10 +50,12 @@ export default function orderModifiers(
   // order based on dependencies
   const orderedModifiers = order(modifiers);
 
-  // order based on phase
-  return modifierPhases.reduce((acc, phase) => {
-    return acc.concat(
-      orderedModifiers.filter(modifier => modifier.phase === phase)
-    );
-  }, []);
+  // order based on phase and strip out disabled ones
+  return modifierPhases
+    .reduce((acc, phase) => {
+      return acc.concat(
+        orderedModifiers.filter(modifier => modifier.phase === phase)
+      );
+    }, [])
+    .filter(modifier => modifier.enabled);
 }

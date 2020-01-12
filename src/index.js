@@ -112,7 +112,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
               ({ name }) => name === 'flip'
             );
 
-            if (!flipModifier || !flipModifier.enabled) {
+            if (!flipModifier) {
               console.error(
                 [
                   'Popper: "auto" placements require the "flip" modifier be',
@@ -189,11 +189,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             continue;
           }
 
-          const { fn, enabled, options = {}, name } = state.orderedModifiers[
-            index
-          ];
+          const { fn, options = {}, name } = state.orderedModifiers[index];
 
-          if (enabled && typeof fn === 'function') {
+          if (typeof fn === 'function') {
             state = fn({ state, options, name, instance }) || state;
           }
         }
@@ -229,15 +227,13 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     // other modifiers need to use, but the modifier is run after the dependent
     // one.
     function runModifierEffects() {
-      state.orderedModifiers.forEach(
-        ({ enabled, name, options = {}, effect }) => {
-          if (enabled && typeof effect === 'function') {
-            const cleanupFn = effect({ state, name, instance, options });
-            const noopFn = () => {};
-            effectCleanupFns.push(cleanupFn || noopFn);
-          }
+      state.orderedModifiers.forEach(({ name, options = {}, effect }) => {
+        if (typeof effect === 'function') {
+          const cleanupFn = effect({ state, name, instance, options });
+          const noopFn = () => {};
+          effectCleanupFns.push(cleanupFn || noopFn);
         }
-      );
+      });
     }
 
     function cleanupModifierEffects() {
