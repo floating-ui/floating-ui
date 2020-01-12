@@ -47,15 +47,16 @@ function order(modifiers) {
 export default function orderModifiers(
   modifiers: Array<Modifier<any>>
 ): Array<Modifier<any>> {
-  // order based on dependencies
-  const orderedModifiers = order(modifiers);
+  // Strip out disabled modifiers
+  const enabledModifiers = modifiers.filter(modifier => modifier.enabled);
 
-  // order based on phase and strip out disabled ones
-  return modifierPhases
-    .reduce((acc, phase) => {
-      return acc.concat(
-        orderedModifiers.filter(modifier => modifier.phase === phase)
-      );
-    }, [])
-    .filter(modifier => modifier.enabled);
+  // order based on dependencies
+  const orderedModifiers = order(enabledModifiers);
+
+  // order based on phase
+  return modifierPhases.reduce((acc, phase) => {
+    return acc.concat(
+      orderedModifiers.filter(modifier => modifier.phase === phase)
+    );
+  }, []);
 }
