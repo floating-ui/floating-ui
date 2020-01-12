@@ -35,4 +35,5 @@ jobs:
       script:
         - yarn build
         - cd docs
+        - yarn install
         - yarn deploy
