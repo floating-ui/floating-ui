@@ -58,11 +58,15 @@ const NavButtonContainer = styled(Container)`
   }
 `;
 
-const PlaceholderNavButton = styled.a`
+const PlaceholderNavButton = styled.div`
   padding: 50px 25px;
   border: none;
-  min-width: 50%;
-  pointer-events: none;
+`;
+
+const NavButtonCell = styled.div`
+  flex: 1;
+  min-width: 0;
+  display: flex;
 `;
 
 const NavDivider = styled.div`
@@ -83,8 +87,6 @@ const NavButton = styled(Link)`
   color: #4edee5;
   border-bottom: 2px solid transparent;
   transition: none;
-  border-bottom: 2px solid transparent;
-  flex-grow: 1;
   word-break: break-word;
 
   ${media.md} {
@@ -96,21 +98,6 @@ const NavButton = styled(Link)`
     font-size: 24px;
   }
 
-  &:first-of-type {
-    &:not(:last-of-type) {
-      padding-right: 15px;
-    }
-  }
-
-  &:last-of-type {
-    border-bottom-color: transparent;
-    text-align: right;
-
-    &:not(:first-of-type) {
-      padding-left: 15px;
-    }
-  }
-
   &:hover {
     background-color: #281e36;
     border-bottom-color: #4edee5;
@@ -119,6 +106,8 @@ const NavButton = styled(Link)`
   &:active {
     border-bottom-style: dashed;
   }
+
+  text-align: ${props => (props.first ? 'left' : 'right')};
 `;
 
 const arrowCss = css`
@@ -319,27 +308,27 @@ const Layout = ({ children, path, pageResources }) => {
               return (
                 <NavButtonWrapper>
                   <NavButtonContainer>
-                    {prev ? (
-                      <NavButton to={prev.slug}>
-                        <NavButtonDirection data-prev>
-                          <ChevronLeft size={28} css={arrowCss} />
-                        </NavButtonDirection>
-                        {prev.title}
-                      </NavButton>
-                    ) : (
-                      <PlaceholderNavButton />
-                    )}
+                    <NavButtonCell>
+                      {prev && (
+                        <NavButton to={prev.slug} first>
+                          <NavButtonDirection data-prev>
+                            <ChevronLeft size={28} css={arrowCss} />
+                          </NavButtonDirection>
+                          {prev.title}
+                        </NavButton>
+                      )}
+                    </NavButtonCell>
                     <NavDivider />
-                    {next ? (
-                      <NavButton to={next.slug}>
-                        {next.title}
-                        <NavButtonDirection data-next>
-                          <ChevronRight size={28} css={arrowCss} />
-                        </NavButtonDirection>
-                      </NavButton>
-                    ) : (
-                      <PlaceholderNavButton />
-                    )}
+                    <NavButtonCell>
+                      {next && (
+                        <NavButton to={next.slug} last>
+                          {next.title}
+                          <NavButtonDirection data-next>
+                            <ChevronRight size={28} css={arrowCss} />
+                          </NavButtonDirection>
+                        </NavButton>
+                      )}
+                    </NavButtonCell>
                   </NavButtonContainer>
                 </NavButtonWrapper>
               );
