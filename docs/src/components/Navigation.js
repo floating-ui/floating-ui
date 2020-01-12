@@ -158,7 +158,7 @@ const CloseMenuButton = styled.button`
 `;
 
 const MenuContents = styled.div`
-  padding: 0 10px 20px;
+  padding: 0 10px 20px 0;
 
   ${media.lg} {
     margin-top: 15px;
