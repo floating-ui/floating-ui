@@ -52,7 +52,7 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "deploy": "gatsby build && cp CNAME public/ && gh-pages -d public"
+    "deploy": "gatsby build && cp CNAME public/ && gh-pages -d public --repo ${GITHUB_REPO}"
   },
   "repository": {
     "type": "git",
