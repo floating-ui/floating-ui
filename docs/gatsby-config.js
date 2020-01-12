@@ -1,11 +1,18 @@
 module.exports = {
   siteMetadata: {
     title: `Popper`,
-    description: `A kickass library used to manage poppers in web applications.`,
+    description: `Positioning tooltips is difficult. Popper is here to help!`,
     author: `@FezVrasta`,
   },
   plugins: [
     `gatsby-plugin-catch-links`,
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: 'UA-75790772-1',
+        respectDNT: true,
+      },
+    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
