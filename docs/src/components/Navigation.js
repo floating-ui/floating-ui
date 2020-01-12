@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Link } from 'gatsby';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
@@ -10,14 +10,13 @@ import { media } from './Framework';
 import popperText from '../images/popper-text.svg';
 import { Menu } from 'react-feather';
 
-export const NAVIGATION_WIDTH = 250;
+export const NAVIGATION_WIDTH = 260;
 
 const Container = styled.div`
   background: #c83b50;
-  padding: 10px 10px 20px;
   position: fixed;
   top: 0;
-  height: 100vh;
+  height: 100%;
   width: ${NAVIGATION_WIDTH}px;
   overflow: auto;
   transform: translateX(-${NAVIGATION_WIDTH}px);
@@ -42,8 +41,15 @@ const Container = styled.div`
 const Ul = styled.ul`
   list-style: none;
   padding: 0;
-  padding-left: ${props => (props.root ? 0 : 15)}px;
+  margin-left: ${props => (props.root ? 0 : 15)}px;
   line-height: 1.5;
+
+  ${props =>
+    !props.root &&
+    css`
+      margin-left: 15px;
+      border-left: 1px solid rgba(255, 200, 200, 0.5);
+    `}
 `;
 
 const Item = styled(Link)`
@@ -55,7 +61,7 @@ const Item = styled(Link)`
   font-size: 18px;
   font-family: 'Luckiest Guy', sans-serif;
   transition: background-color 0.1s;
-  border-radius: 20px;
+  border-radius: 0 20px 20px 0;
   border: none;
   -webkit-font-smoothing: antialiased;
   font-weight: normal;
@@ -85,6 +91,27 @@ const MobileHeader = styled.header`
   }
 `;
 
+const PopperTextLogoContainer = styled.div`
+  background: #c83b50;
+  margin-top: -8px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  padding: 8px 0;
+  transition: box-shadow 0.4s ease-out;
+  display: none;
+
+  ${media.md} {
+    display: block;
+  }
+
+  ${props =>
+    props.scrolled &&
+    css`
+      box-shadow: 0 10px 15px -4px rgba(100, 0, 0, 0.3);
+    `}
+`;
+
 const PopperTextLogo = ({ mobile }) => (
   <img
     src={popperText}
@@ -92,19 +119,11 @@ const PopperTextLogo = ({ mobile }) => (
     alt="Popper Logo"
     css={css`
       display: block;
-      position: absolute;
-      left: 50%;
-      top: 0;
-      margin-left: -50px;
+      margin: 0 auto -10px;
       width: 100px;
       height: 50px;
-      display: ${mobile ? 'block' : 'none'};
       user-select: none;
-
-      ${media.lg} {
-        display: ${mobile ? 'none' : 'block'};
-        margin-top: 8px;
-      }
+      margin-top: ${mobile ? '-12px' : '0'};
     `}
   />
 );
@@ -122,6 +141,10 @@ const MenuButton = styled.button`
 `;
 
 const CloseMenuButton = styled.button`
+  position: relative;
+  top: 10px;
+  left: 25px;
+  display: block;
   background-color: white;
   color: #c83b50;
   border: none;
@@ -135,8 +158,10 @@ const CloseMenuButton = styled.button`
 `;
 
 const MenuContents = styled.div`
+  padding: 0 10px 20px;
+
   ${media.lg} {
-    margin-top: 50px;
+    margin-top: 15px;
   }
 `;
 
@@ -149,7 +174,6 @@ const Block = ({ route }) => (
           activeStyle={{
             backgroundColor: '#FFF',
             color: '#C83B50',
-            borderRadius: 20,
           }}
         >
           {route.title}
@@ -164,8 +188,13 @@ const Block = ({ route }) => (
   </>
 );
 
+let scrollOffset = 0;
+
 export default function Navigation({ description, lang, meta, title }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const menuRef = useRef();
 
   function openMenu() {
     setMenuOpen(true);
@@ -174,6 +203,27 @@ export default function Navigation({ description, lang, meta, title }) {
   function closeMenu() {
     setMenuOpen(false);
   }
+
+  function handleScroll() {
+    const scrollTop = menuRef.current.scrollTop;
+    scrollOffset = scrollTop;
+    setScrolled(scrollTop > 10);
+  }
+
+  useLayoutEffect(() => {
+    const menu = menuRef.current;
+    menu.scrollTop = scrollOffset;
+
+    const currentItem = menu.querySelector('[aria-current="page"]');
+
+    if (currentItem) {
+      const rect = currentItem.getBoundingClientRect();
+
+      if (rect.bottom > window.innerHeight || rect.top < 0) {
+        currentItem.scrollIntoView();
+      }
+    }
+  }, []);
 
   return (
     <MdxRoutes>
@@ -189,8 +239,10 @@ export default function Navigation({ description, lang, meta, title }) {
             </MenuButton>
             <PopperTextLogo mobile />
           </MobileHeader>
-          <Container open={menuOpen}>
-            <PopperTextLogo />
+          <Container open={menuOpen} ref={menuRef} onScroll={handleScroll}>
+            <PopperTextLogoContainer scrolled={scrolled}>
+              <PopperTextLogo />
+            </PopperTextLogoContainer>
             <CloseMenuButton onClick={closeMenu}>Close Menu</CloseMenuButton>
             <MenuContents>
               {createTree(processRoutes(routes)).map((route, index) => (

@@ -31,7 +31,7 @@ const Bar = styled.div`
   background: #642f45;
   border-radius: 4px;
   color: #ffd3f8;
-  font-family: Menlo, Consalas, monospace;
+  font-family: Menlo, SFMono-Regular, Consolas, Liberation Mono, monospace;
   font-size: 14px;
   overflow: hidden;
   font-weight: normal;
@@ -64,6 +64,7 @@ const Logo = styled.img`
 
 const TextWrapper = styled.div`
   padding: 10px 15px;
+  white-space: nowrap;
 `;
 
 const InstallBar = () => (

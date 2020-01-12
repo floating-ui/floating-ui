@@ -94,6 +94,7 @@ pre[class*='language-'] {
 
 .token.tag,
 .token.operator,
+.token.boolean,
 .token.number {
   color: #ed655e;
 }
@@ -116,7 +117,6 @@ code.language-javascript,
 
 code.language-css,
 code.language-scss,
-.token.boolean,
 .token.string,
 .token.entity,
 .token.url,
