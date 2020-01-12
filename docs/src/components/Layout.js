@@ -58,11 +58,6 @@ const NavButtonContainer = styled(Container)`
   }
 `;
 
-const PlaceholderNavButton = styled.div`
-  padding: 50px 25px;
-  border: none;
-`;
-
 const NavButtonCell = styled.div`
   flex: 1;
   min-width: 0;

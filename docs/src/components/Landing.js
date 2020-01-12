@@ -28,12 +28,44 @@ import { Container, LinkStyled, media, Footer, sizes } from './Framework';
 import { usePopper, Tooltip, Arrow } from './Popper';
 import { ProductCard, Grid } from './ProductCard';
 
+import microsoftLogo from '../images/logos/microsoft.svg';
+import atlassianLogo from '../images/logos/atlassian.svg';
+import bootstrapLogo from '../images/logos/bootstrap.svg';
+import drupalLogo from '../images/logos/drupal.svg';
+import gitlabLogo from '../images/logos/gitlab.svg';
+
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
 import 'modern-normalize';
 
 import popcornBox from '../images/popcorn-box.svg';
 import { css } from '@emotion/core';
+
+const UsedByContainer = styled.div`
+  margin-top: 40px;
+`;
+
+const UsedByLogo = styled(props => (
+  <a
+    href={props.href}
+    target="_blank"
+    className={props.className}
+    title={props.alt}
+    rel="noopener noreferrer"
+  >
+    <img src={props.src} alt={props.alt} />
+  </a>
+))`
+  opacity: 0.2;
+  transition: opacity 0.2s ease-in-out;
+  &:hover {
+    opacity: 1;
+  }
+  img {
+    height: 40px;
+    margin: 10px;
+  }
+`;
 
 const Button = styled.a`
   display: inline-block;
@@ -658,6 +690,33 @@ const Layout = ({ children }) => {
           >
             Support us
           </Button>
+          <UsedByContainer>
+            <UsedByLogo
+              href="https://microsoft.com/"
+              src={microsoftLogo}
+              alt="Used by Microsoft"
+            />
+            <UsedByLogo
+              href="https://www.atlassian.com/"
+              src={atlassianLogo}
+              alt="Used by Atlassian"
+            />
+            <UsedByLogo
+              href="https://getbootstrap.com/"
+              src={bootstrapLogo}
+              alt="Used by Bootstrap"
+            />
+            <UsedByLogo
+              href="https://www.drupal.org/"
+              src={drupalLogo}
+              alt="Used by Drupal"
+            />
+            <UsedByLogo
+              href="https://www.gitlab.com/"
+              src={gitlabLogo}
+              alt="Used by GitLab"
+            />
+          </UsedByContainer>
         </Container>
       </Section>
 

@@ -101,7 +101,7 @@ const PopperTextLogoContainer = styled.div`
   transition: box-shadow 0.4s ease-out;
   display: none;
 
-  ${media.md} {
+  ${media.lg} {
     display: block;
   }
 
