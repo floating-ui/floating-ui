@@ -5,6 +5,7 @@ module.exports = {
     author: `@FezVrasta`,
   },
   plugins: [
+    `gatsby-plugin-catch-links`,
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -27,6 +28,12 @@ module.exports = {
           landing: require.resolve('./src/components/Landing.js'),
         },
         gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              className: `gatsby-link-icon`,
+            },
+          },
           {
             resolve: `gatsby-remark-images`,
             options: {

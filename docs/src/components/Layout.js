@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
@@ -169,6 +169,13 @@ const Layout = ({ children, path, pageResources }) => {
     };
   }
 
+  // HACK: remove this if the plugin can somehow work by default...
+  useLayoutEffect(() => {
+    try {
+      document.querySelector(window.location.hash).scrollIntoView();
+    } catch (e) {}
+  }, []);
+
   return (
     <MDXProvider components={components}>
       <Global
@@ -252,6 +259,49 @@ const Layout = ({ children, path, pageResources }) => {
           ${media.md} {
             pre[class*='language-'] {
               padding: 15px 20px;
+            }
+          }
+
+          h1 .gatsby-link-icon {
+            display: none;
+          }
+
+          h2,
+          h3,
+          h4,
+          h5,
+          h6 {
+            &:hover {
+              .gatsby-link-icon {
+                opacity: 1;
+              }
+            }
+          }
+
+          .gatsby-link-icon {
+            fill: #ffb6b3;
+            border: none;
+            margin-left: -30px;
+            padding-right: 10px;
+            opacity: 0;
+            transition: opacity 0.15s ease-in-out;
+            float: right;
+
+            ${media.md} {
+              float: left;
+            }
+
+            &:focus {
+              opacity: 1;
+            }
+
+            &:hover {
+              border: none;
+            }
+
+            svg {
+              width: 20px;
+              height: 20px;
             }
           }
         `}

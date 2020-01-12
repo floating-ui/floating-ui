@@ -27,13 +27,19 @@ function SEO({ description, lang, meta, title }) {
 
   const metaDescription = description || site.siteMetadata.description;
 
+  const isHome = title === 'Home';
+  const computedTitle = isHome
+    ? `${site.siteMetadata.title} - Tooltip Positioning Engine`
+    : title;
+  const computedTitleTemplate = isHome ? '' : `%s | ${site.siteMetadata.title}`;
+
   return (
     <Helmet
       htmlAttributes={{
         lang,
       }}
-      title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      title={computedTitle}
+      titleTemplate={computedTitleTemplate}
       meta={[
         {
           name: `description`,

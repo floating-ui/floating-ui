@@ -62,4 +62,22 @@ createPopper(reference, popper {
 })
 ```
 
-See the [`popperGenerator` constructor](/docs/constructors) as well.
+### Popper Generator
+
+To pass these extra modifiers as default, you can use the `popperGenerator`
+function:
+
+```js
+import {
+  popperGenerator,
+  defaultModifiers,
+} from '@popperjs/core/lib/popper-lite';
+import flip from '@popperjs/core/lib/modifiers/flip';
+import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
+
+const createPopper = popperGenerator({
+  defaultModifiers: [...defaultModifiers, flip, preventOverflow],
+});
+
+// Now you can use `createPopper`
+```

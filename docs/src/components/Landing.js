@@ -289,20 +289,23 @@ const Ul = styled.ul`
 `;
 
 const Li = styled.li`
-  &::before {
-    content: '✓';
+  svg {
     display: inline-block;
-    top: 4px;
-    margin-right: 4px;
+    top: 6px;
+    left: 2px;
+    margin-right: 6px;
     position: relative;
     color: #ff6b81;
-    font-size: 30px;
-    height: 20px;
+    height: 25px;
     margin-left: -30px;
   }
 
   strong {
     color: #ff6b81;
+  }
+
+  &:not(:last-of-type) {
+    margin-bottom: 10px;
   }
 `;
 
@@ -528,11 +531,15 @@ const Layout = ({ children }) => {
           <Heading>In a nutshell, Popper:</Heading>
           <Ul>
             <Li>
-              <strong>Places your tooltip relative to the reference</strong>{' '}
+              <Check />
+              <strong>
+                Places your tooltip relative to the reference
+              </strong>{' '}
               taking into account their sizes, and positions its arrow centered
               to the reference.
             </Li>
             <Li>
+              <Check />
               <strong>
                 Takes into account the many different contexts it can live in
               </strong>{' '}
@@ -540,7 +547,8 @@ const Layout = ({ children }) => {
               nested scrolling containers).
             </Li>
             <Li>
-              <strong>Keeps your tooltip in view as best as possible</strong>.{' '}
+              <Check />
+              <strong>Keeps your tooltip in view as best as possible</strong>.
               It prevents the tooltip from being clipped or cut off (overflow
               prevention) and changes the tooltip placement if the original does
               not fit (flipping).
@@ -573,6 +581,7 @@ const Layout = ({ children }) => {
           <Heading>No compromises</Heading>
           <Ul>
             <Li>
+              <Check />
               <strong>No detachment</strong>. Position updates take less than a
               millisecond on average devices. Popper doesn't debounce the
               positioning updates of the tooltip to the point where it will{' '}
@@ -580,6 +589,7 @@ const Layout = ({ children }) => {
               the cost of poor performance.
             </Li>
             <Li>
+              <Check />
               <strong>
                 You don't have to change the DOM context of your tooltip
               </strong>
@@ -588,6 +598,7 @@ const Layout = ({ children }) => {
               containers or alternative offsetParent contexts.
             </Li>
             <Li>
+              <Check />
               <strong>Still lightweight</strong>. Handling all of this
               complexity is still done in an efficient manner. The base Popper
               is only 2 kB minzipped.
