@@ -423,6 +423,7 @@ createPopper(popcorn, tooltip, {
           style={{ position: 'absolute', top: '50%', marginTop: -60 }}
         />
         <Tooltip ref={popper}>
+          <TooltipName data-small>Tip</TooltipName>
           <TooltipName>Popcorn</TooltipName>
           <Arrow data-popper-arrow />
         </Tooltip>

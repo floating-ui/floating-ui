@@ -48,14 +48,21 @@ code[class*='language-'] ::selection {
 
 /* Code blocks */
 pre[class*='language-'] {
-  padding: 10px 15px;
+  padding: 5px 7px;
   margin: 1em 0;
   overflow: auto;
   border: 1px solid #ffffff0d;
   background: #281e36;
   color: #ffe69d;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
+}
+
+@media (min-width: 992px) {
+  pre[class*='language-'] {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
 }
 
 /* Inline code */

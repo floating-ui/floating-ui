@@ -2,6 +2,7 @@ import { createPopper } from '../../../lib/popper.js';
 import { useRef, useLayoutEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import { media } from './Framework';
 
 export const usePopper = (options = {}) => {
   const referenceRef = useRef();
@@ -99,6 +100,23 @@ export const Tooltip = styled.div`
 
   &[data-popper-placement^='left'] > [data-popper-arrow] {
     right: -5px;
+  }
+
+  [data-small] {
+    display: block;
+  }
+  [data-small] ~ *:not([data-small]) {
+    display: none;
+  }
+
+  ${media.lg} {
+    [data-small] {
+      display: none;
+    }
+    [data-small] ~ *:not([data-small]),
+    :not([data-small]) {
+      display: block;
+    }
   }
 `;
 
