@@ -47,8 +47,11 @@ function order(modifiers) {
 export default function orderModifiers(
   modifiers: Array<Modifier<any>>
 ): Array<Modifier<any>> {
+  // Strip out disabled modifiers
+  const enabledModifiers = modifiers.filter(modifier => modifier.enabled);
+
   // order based on dependencies
-  const orderedModifiers = order(modifiers);
+  const orderedModifiers = order(enabledModifiers);
 
   // order based on phase
   return modifierPhases.reduce((acc, phase) => {

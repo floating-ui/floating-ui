@@ -3,10 +3,12 @@
 exports[`should order modifiers based on \`phase\` and \`requires\` 1`] = `
 Array [
   Object {
+    "enabled": true,
     "name": "popperOffsets",
     "phase": "read",
   },
   Object {
+    "enabled": true,
     "name": "detectOverflow",
     "phase": "read",
     "requires": Array [
@@ -14,6 +16,7 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "offset",
     "phase": "main",
     "requires": Array [
@@ -22,6 +25,7 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "preventOverflow",
     "phase": "main",
     "requires": Array [
@@ -32,6 +36,7 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "arrow",
     "phase": "main",
     "requiresIfExists": Array [
@@ -39,6 +44,7 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "flip",
     "phase": "main",
     "requires": Array [
@@ -49,6 +55,7 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "hide",
     "phase": "main",
     "requires": Array [
@@ -56,14 +63,17 @@ Array [
     ],
   },
   Object {
+    "enabled": true,
     "name": "computeStyles",
     "phase": "afterMain",
   },
   Object {
+    "enabled": true,
     "name": "applyStyles",
     "phase": "write",
   },
   Object {
+    "enabled": true,
     "name": "eventListeners",
     "phase": "write",
   },
