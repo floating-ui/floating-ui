@@ -83,6 +83,7 @@ const NavButton = styled(Link)`
   border-bottom: 2px solid transparent;
   transition: none;
   word-break: break-word;
+  width: 100%;
 
   ${media.md} {
     font-size: 22px;

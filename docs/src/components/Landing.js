@@ -283,6 +283,8 @@ export const ScrollContainer = styled(ExampleArea)`
 const ExampleBox = styled.article`
   padding: 40px 0;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column-reverse;
 
   &:not(:last-of-type) {
     border-bottom: 1px solid #44395d;
@@ -313,9 +315,11 @@ const ExampleText = styled.div`
   padding: 20px 0 0;
   display: grid;
   align-items: center;
+  margin-bottom: 20px;
 
   ${media.lg} {
     padding: 0 40px;
+    margin-bottom: 0;
   }
 `;
 
