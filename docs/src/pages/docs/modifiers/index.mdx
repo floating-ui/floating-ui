@@ -81,7 +81,9 @@ createPopper(reference, popper, {
   modifiers: [
     {
       name: 'flip',
-      fallbackPlacements: ['top', 'bottom'],
+      options: {
+        fallbackPlacements: ['top', 'bottom'],
+      },
     },
   ],
 });
