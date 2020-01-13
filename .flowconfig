@@ -1,4 +1,5 @@
 [declarations]
+<PROJECT_ROOT>/node_modules
 <PROJECT_ROOT>/lib
 <PROJECT_ROOT>/dist
 
