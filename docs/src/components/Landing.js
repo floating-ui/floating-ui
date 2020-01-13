@@ -5,7 +5,13 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useState, useLayoutEffect, useRef, forwardRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  forwardRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useStaticQuery, graphql, Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
@@ -430,8 +436,25 @@ createPopper(popcorn, tooltip, {
 };
 
 const PreventOverflowExample = () => {
-  const { reference, popper } = usePopper({ placement: 'right' });
   const scrollContainerRef = useRef();
+
+  const { reference, popper, instance } = usePopper({
+    placement: 'right',
+    strategy: 'fixed',
+  });
+
+  useEffect(() => {
+    instance.current.setOptions({
+      ...instance.current.state.options,
+      modifiers: [
+        ...instance.current.state.options.modifiers,
+        {
+          name: 'preventOverflow',
+          options: { boundary: scrollContainerRef.current },
+        },
+      ],
+    });
+  }, [instance]);
 
   useLayoutEffect(() => {
     scrollContainerRef.current.scrollTop =
