@@ -124,6 +124,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         }
 
         runModifierEffects();
+        instance.update();
       },
 
       // Sync update – it will always be executed, even if not necessary. This
@@ -244,8 +245,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       effectCleanupFns.forEach(fn => fn());
       effectCleanupFns = [];
     }
-
-    instance.update();
 
     return instance;
   };
