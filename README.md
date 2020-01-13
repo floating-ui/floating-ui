@@ -166,6 +166,13 @@ The 3 file formats are:
 - `umd` (works with `<script>` tags or RequireJS)
 - `cjs` (works with `require()` syntax)
 
+There are two different `esm` builds, one for bundler consumers (e.g. webpack,
+Rollup, etc..), which is located under `/lib`, and one for browsers with native
+support for ES Modules, under `/dist/esm`. The only differences within the two,
+is that the browser-compatible version doesn't make use of
+`process.env.NODE_ENV` to run development checks, and the extension is `.mjs`
+rather than `.js`.
+
 The 3 versions are:
 
 - `popper`: includes all the modifiers (features) in one file (**default**);
