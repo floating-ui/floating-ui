@@ -1,3 +1,5 @@
+const MJS = process.env.MJS === 'true';
+
 module.exports = {
   presets: [
     [
@@ -10,7 +12,12 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-transform-flow-strip-types',
-    'babel-plugin-add-import-extension',
+    [
+      'babel-plugin-add-import-extension',
+      {
+        extension: MJS ? 'mjs' : 'js',
+      },
+    ],
     [
       '@babel/plugin-proposal-object-rest-spread',
       {
@@ -18,7 +25,16 @@ module.exports = {
         useBuiltIns: true,
       },
     ],
-    'dev-expression',
+    ...(MJS
+      ? [
+          [
+            'inline-replace-variables',
+            {
+              __DEV__: false,
+            },
+          ],
+        ]
+      : ['dev-expression']),
   ],
   env: {
     test: {

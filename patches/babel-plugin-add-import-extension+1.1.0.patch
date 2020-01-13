@@ -1,19 +1,19 @@
 diff --git a/node_modules/babel-plugin-add-import-extension/src/plugin.js b/node_modules/babel-plugin-add-import-extension/src/plugin.js
-index b7d0137..192dcd1 100644
+index b7d0137..ef52b12 100644
 --- a/node_modules/babel-plugin-add-import-extension/src/plugin.js
 +++ b/node_modules/babel-plugin-add-import-extension/src/plugin.js
-@@ -2,6 +2,7 @@ const { declare } = require('@babel/helper-plugin-utils')
- const { types: { importDeclaration, stringLiteral }} = require('@babel/core')
+@@ -1,5 +1,5 @@
+ const { declare } = require('@babel/helper-plugin-utils')
+-const { types: { importDeclaration, stringLiteral }} = require('@babel/core')
++const { types: { importDeclaration, exportNamedDeclaration, exportAllDeclaration, stringLiteral }} = require('@babel/core')
  const { lstatSync } = require('fs')
  const { resolve, extname, dirname } = require('path')
-+const template = require('@babel/template').default
  
- const isNodeModule = module => {
-   try {
-@@ -51,6 +52,43 @@ module.exports = declare((api, options) => {
+@@ -51,6 +51,47 @@ module.exports = declare((api, options) => {
            }
          }
        },
+-    },
 +      ExportNamedDeclaration(path, state) {
 +        if (!path.node.source) {
 +          return
@@ -27,15 +27,11 @@ index b7d0137..192dcd1 100644
 +
 +        const { filename, cwd } = state.file.opts
 +        const dir = dirname(filename)
-+
-+        const exports = path.node.specifiers.map(spec => `${spec.local.name} as ${spec.exported.name}`).join(',')
-+        const exportDeclaration = template(`export { ${exports} } from '${module}.${extension}';`)();
-+
 +        if (module[0] === '.') {
 +          if (isDirectory(resolve(dir, module))) {
-+            path.replaceWith(importDeclaration(path.node.specifiers, stringLiteral(`${module}/index.${extension}`)))
++            path.replaceWith(exportNamedDeclaration(path.node.declaration, path.node.specifiers, stringLiteral(`${module}/index.${extension}`)))
 +          } else {
-+            path.replaceWith(exportDeclaration)
++            path.replaceWith(exportNamedDeclaration(path.node.declaration, path.node.specifiers, stringLiteral(`${module}.${extension}`)))
 +          }
 +        }
 +      },
@@ -49,8 +45,16 @@ index b7d0137..192dcd1 100644
 +          return
 +        }
 +
-+        path.replaceWith(template(`export * from '${module}.js';`)())
++        const { filename, cwd } = state.file.opts
++        const dir = dirname(filename)
++        if (module[0] === '.') {
++          if (isDirectory(resolve(dir, module))) {
++            path.replaceWith(exportAllDeclaration(stringLiteral(`${module}/index.${extension}`)))
++          } else {
++            path.replaceWith(exportAllDeclaration(stringLiteral(`${module}.${extension}`)))
++          }
++        }
 +      }
-     },
++    }
    }
  })
