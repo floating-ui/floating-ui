@@ -84,6 +84,16 @@ describe('.setOptions() method', () => {
 
     expect(popper.state.orderedModifiers.includes(modifier)).toBe(true);
   });
+
+  it('works with a partial', () => {
+    const popper = createPopper(reference, getPopper(), {
+      modifiers: [testModifier],
+    });
+
+    popper.setOptions({ placement: 'right' });
+
+    expect(popper.state.orderedModifiers).toEqual([testModifier]);
+  });
 });
 
 describe('.destroy() method', () => {
