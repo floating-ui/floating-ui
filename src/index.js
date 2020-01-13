@@ -74,6 +74,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         state.options = {
           ...defaultOptions,
+          ...state.options,
           ...options,
         };
 
