@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-
+import { UNPKG_CDN_URL } from '../../variables';
 import { media, Container } from './Framework';
 
 import npmLogo from '../images/npm-logo.svg';
@@ -79,7 +79,7 @@ const InstallBar = () => (
       </Bar>
       <Bar>
         <LogoWrapper>CDN</LogoWrapper>
-        <TextWrapper>https://unpkg.com/@popperjs/core@2.0.0-rc.1</TextWrapper>
+        <TextWrapper>{UNPKG_CDN_URL}</TextWrapper>
       </Bar>
     </InstallBarContainer>
   </InstallBarStyled>

@@ -1,3 +1,5 @@
+const { UNPKG_CDN_URL, VERSION_RANGE } = require('./variables');
+
 module.exports = {
   siteMetadata: {
     title: `Popper`,
@@ -35,6 +37,16 @@ module.exports = {
           landing: require.resolve('./src/components/Landing.js'),
         },
         gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-find-replace`,
+            options: {
+              replacements: {
+                __VERSION_RANGE__: VERSION_RANGE,
+                __UNPKG_CDN_URL__: UNPKG_CDN_URL,
+              },
+              prefix: false,
+            },
+          },
           {
             resolve: `gatsby-remark-autolink-headers`,
             options: {

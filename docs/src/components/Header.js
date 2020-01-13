@@ -79,7 +79,7 @@ const DocsLink = styled(Link)`
 
 const Header = () => (
   <HeaderStyled>
-    <DocsLink css={buttonCss} to="/docs">
+    <DocsLink css={buttonCss} to="/docs/">
       Documentation
     </DocsLink>
     <Logo src={popperLogo} alt="Popper logo" draggable="false" />

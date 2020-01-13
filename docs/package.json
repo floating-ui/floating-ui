@@ -23,6 +23,7 @@
     "gatsby-plugin-react-helmet": "^3.1.18",
     "gatsby-plugin-sharp": "^2.3.9",
     "gatsby-remark-autolink-headers": "^2.1.23",
+    "gatsby-remark-find-replace": "^0.3.0",
     "gatsby-remark-images": "^3.1.38",
     "gatsby-remark-prismjs": "^3.3.27",
     "gatsby-source-filesystem": "^2.1.42",
