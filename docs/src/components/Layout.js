@@ -305,7 +305,7 @@ const Layout = ({ children, path, pageResources }) => {
                   <NavButtonContainer>
                     <NavButtonCell>
                       {prev && (
-                        <NavButton to={prev.slug} first>
+                        <NavButton to={`${prev.slug}/`} first>
                           <NavButtonDirection data-prev>
                             <ChevronLeft size={28} css={arrowCss} />
                           </NavButtonDirection>
@@ -316,7 +316,7 @@ const Layout = ({ children, path, pageResources }) => {
                     <NavDivider />
                     <NavButtonCell>
                       {next && (
-                        <NavButton to={next.slug} last>
+                        <NavButton to={`${next.slug}/`} last>
                           {next.title}
                           <NavButtonDirection data-next>
                             <ChevronRight size={28} css={arrowCss} />

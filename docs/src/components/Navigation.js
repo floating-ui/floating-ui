@@ -170,7 +170,7 @@ const Block = ({ route }) => (
     <Ul root>
       <li>
         <Item
-          to={route.slug}
+          to={`${route.slug}/`}
           activeStyle={{
             backgroundColor: '#FFF',
             color: '#C83B50',
