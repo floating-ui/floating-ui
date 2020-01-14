@@ -30,7 +30,7 @@ const configs = bundles
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
         minify && compiler(),
         minify && terser(),
-        license({ banner: `@popperjs/core v${pkg.version}` }),
+        license({ banner: `@popperjs/core v${pkg.version} - MIT License` }),
         flow && flowEntry(),
         bundleSize(),
         visualizer({
