@@ -1,7 +1,8 @@
 // @flow
 
 export default function contains(parent: Element, child: Element): boolean {
-  return parent.shadowRoot
-    ? parent.shadowRoot.contains(child)
-    : parent.contains(child);
+  return (
+    parent.contains(child) ||
+    (parent.shadowRoot ? parent.shadowRoot.contains(child) : false)
+  );
 }
