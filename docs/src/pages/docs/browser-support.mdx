@@ -31,6 +31,36 @@ since it is completely untested. We don't plan to officially support IE11, but
 welcome PRs to fix issues. For the most part, IE11 seems to work without much
 trouble, but there may be edge cases in some scenarios.
 
+## Safari
+
+Safari has unfortunate quirks regarding updating the position of DOM elements.
+We have filed WebKit bugs for these, so hopefully they will be fixed in the
+future.
+
+### Lag
+
+On macOS and iOS, when the popper is prevented from overflowing the root
+viewport boundary, it can appear to lag behind while scrolling (not 1:1
+in-sync). For iOS this also happens in scrolling containers.
+
+We recommend one of these options for Safari only:
+
+- Setting `rootBoundary` to `"document"` for the `preventOverflow` modifier
+- Hiding the popper upon scrolling
+
+### Fixed strategy
+
+In the latest version of macOS Safari, when elastic overscroll (rubber-banding
+effect) is in progress, fixed elements will detach from the reference element
+because they no longer stick **including** the elastic overscroll – which Safari
+reports scroll to include. On iOS, this is not an issue.
+
+In addition, while scrolling the document, a slight lag as mentioned above also
+becomes present because the popper needs to be continuously updated while
+scrolling, which Safari is not good at. Ideally this strategy should only be
+used when the reference element is fixed, and not to "break" the popper out of a
+clipping container context.
+
 ## IE10 and older
 
 Browsers older than 2013 (including Android 4.4) will never be supported since
