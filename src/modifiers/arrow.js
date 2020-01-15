@@ -65,7 +65,7 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
     }
   }
 
-  if (contains(state.elements.popper, arrowElement)) {
+  if (!contains(state.elements.popper, arrowElement)) {
     if (__DEV__) {
       console.error(
         [
