@@ -1,5 +1,7 @@
+import React from 'react';
 import styled from '@emotion/styled';
 import { Link } from 'gatsby';
+import { css } from '@emotion/core';
 
 export const sizes = {
   xs: 360,
@@ -35,7 +37,7 @@ export const Footer = styled.footer`
   color: #8e72b4;
 `;
 
-export const LinkStyled = styled(Link)`
+const linkCss = css`
   color: #ffe69d;
   text-decoration: none;
   padding-bottom: 1px;
@@ -50,3 +52,17 @@ export const LinkStyled = styled(Link)`
     border-bottom-style: dashed;
   }
 `;
+
+export const LinkStyled = props => <Link {...props} css={linkCss} />;
+export const ExternalLinkStyled = ({ to, ...props }) => (
+  <a
+    {...props}
+    href={to}
+    css={linkCss}
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    {/* jsx-a11y/anchor-has-content doesn't infer `children` */}
+    {props.children}
+  </a>
+);

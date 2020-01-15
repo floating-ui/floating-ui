@@ -12,7 +12,7 @@ import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/core';
 import CarbonAds from './CarbonAds';
-import { Container, media, Footer } from './Framework';
+import { Container, media, Footer, sizes } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import Navigation, { NAVIGATION_WIDTH } from './Navigation';
 import SEO from './Seo';
@@ -43,13 +43,13 @@ const FooterStyled = styled(Footer)`
 
 const NavButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
   border-top: 1px solid #44395d;
   margin-top: 50px;
 `;
 
 const NavButtonContainer = styled(Container)`
   display: flex;
+  justify-content: space-between;
   width: 100%;
   padding: 0;
 
@@ -59,9 +59,9 @@ const NavButtonContainer = styled(Container)`
 `;
 
 const NavButtonCell = styled.div`
-  flex: 1;
-  min-width: 0;
   display: flex;
+  min-width: 0;
+  width: 100%;
 `;
 
 const NavDivider = styled.div`
@@ -85,9 +85,17 @@ const NavButton = styled(Link)`
   word-break: break-word;
   width: 100%;
 
+  &[data-first] {
+    padding-right: 10px;
+  }
+
+  &[data-last] {
+    padding-left: 10px;
+    text-align: right;
+  }
+
   ${media.md} {
     font-size: 22px;
-    width: 100%;
   }
 
   ${media.lg} {
@@ -102,8 +110,6 @@ const NavButton = styled(Link)`
   &:active {
     border-bottom-style: dashed;
   }
-
-  text-align: ${props => (props.first ? 'left' : 'right')};
 `;
 
 const arrowCss = css`
@@ -137,7 +143,35 @@ const NavButtonDirection = styled.span`
 
 const components = {
   'x-ad': CarbonAds,
+  a: props => (
+    // eslint-disable-next-line
+    <a {...props} onClick={anchorScroll}>
+      {props.children}
+    </a>
+  ),
 };
+
+function anchorScroll(event) {
+  if (event) {
+    event.preventDefault();
+    window.history.pushState({}, '', event.currentTarget.getAttribute('href'));
+  }
+
+  try {
+    const element = document.querySelector(window.location.hash);
+    element.scrollIntoView();
+
+    const isH2 = element.nodeName === 'H2';
+
+    if (window.innerWidth <= sizes.lg) {
+      if (!isH2) {
+        window.scrollBy(0, -60);
+      }
+    } else if (isH2) {
+      window.scrollBy(0, 50);
+    }
+  } catch (e) {}
+}
 
 const Layout = ({ children, path, pageResources }) => {
   function getPrevNextRoutes(routes) {
@@ -155,11 +189,8 @@ const Layout = ({ children, path, pageResources }) => {
   }
 
   // HACK: remove this if the plugin can somehow work by default...
-  useLayoutEffect(() => {
-    try {
-      document.querySelector(window.location.hash).scrollIntoView();
-    } catch (e) {}
-  }, []);
+  // Fixes the anchor not being scrolled to on page load
+  useLayoutEffect(anchorScroll, []);
 
   return (
     <MDXProvider components={components}>
@@ -306,7 +337,7 @@ const Layout = ({ children, path, pageResources }) => {
                   <NavButtonContainer>
                     <NavButtonCell>
                       {prev && (
-                        <NavButton to={`${prev.slug}/`} first>
+                        <NavButton to={`${prev.slug}/`} data-first>
                           <NavButtonDirection data-prev>
                             <ChevronLeft size={28} css={arrowCss} />
                           </NavButtonDirection>
@@ -317,7 +348,7 @@ const Layout = ({ children, path, pageResources }) => {
                     <NavDivider />
                     <NavButtonCell>
                       {next && (
-                        <NavButton to={`${next.slug}/`} last>
+                        <NavButton to={`${next.slug}/`} data-last>
                           {next.title}
                           <NavButtonDirection data-next>
                             <ChevronRight size={28} css={arrowCss} />

@@ -2,6 +2,8 @@ body {
   line-height: 1.6;
   background: #34283f;
   color: #e0d6f8;
+  font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', sans-serif;
 }
 
 ::selection {

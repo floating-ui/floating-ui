@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { LinkStyled } from './Framework';
+import { ExternalLinkStyled } from './Framework';
 
 import './carbonAds.css';
 
@@ -31,9 +31,9 @@ const CarbonAds = ({
           They are small and unobtrusive.
           <br />
           Alternatively, consider to support us on{' '}
-          <LinkStyled href="https://opencollective.com/popperjs">
+          <ExternalLinkStyled to="https://opencollective.com/popperjs">
             Open Collective
-          </LinkStyled>
+          </ExternalLinkStyled>
           !
         </span>
       </div>

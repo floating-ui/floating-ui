@@ -34,9 +34,9 @@ import bootstrapLogo from '../images/logos/bootstrap.svg';
 import drupalLogo from '../images/logos/drupal.svg';
 import gitlabLogo from '../images/logos/gitlab.svg';
 
+import 'modern-normalize';
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
-import 'modern-normalize';
 
 import popcornBox from '../images/popcorn-box.svg';
 import { css } from '@emotion/core';
@@ -276,7 +276,6 @@ export const ScrollContainer = styled(ExampleArea)`
 
 const ExampleBox = styled.article`
   padding: 40px 0;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column-reverse;
 
@@ -298,10 +297,6 @@ const ExampleBox = styled.article`
 
   p {
     margin-top: 0;
-  }
-
-  .prism-code {
-    margin: 0;
   }
 `;
 
@@ -734,7 +729,7 @@ const Layout = ({ children }) => {
           <Heading>Ready to start?</Heading>
           <p>
             Start reading{' '}
-            <LinkStyled to="/docs">Popper's documentation</LinkStyled>!
+            <LinkStyled to="/docs/">Popper's documentation</LinkStyled>!
           </p>
         </Container>
       </Section>
