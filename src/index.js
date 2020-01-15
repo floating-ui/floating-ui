@@ -14,7 +14,9 @@ import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 import uniqueBy from './utils/uniqueBy';
+import getBasePlacement from './utils/getBasePlacement';
 import { isElement } from './dom-utils/instanceOf';
+import { auto } from './enums';
 
 export * from './types';
 export * from './enums';
@@ -108,7 +110,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
           validateModifiers(modifiers);
 
-          if (state.options.placement.includes('auto')) {
+          if (getBasePlacement(state.options.placement) === auto) {
             const flipModifier = orderedModifiers.find(
               ({ name }) => name === 'flip'
             );

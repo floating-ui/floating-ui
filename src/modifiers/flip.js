@@ -7,7 +7,8 @@ import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacemen
 import detectOverflow from '../utils/detectOverflow';
 import computeAutoPlacement from '../utils/computeAutoPlacement';
 import uniqueBy from '../utils/uniqueBy';
-import { bottom, top, start, right, left } from '../enums';
+import { bottom, top, start, right, left, auto } from '../enums';
+import getVariation from '../utils/getVariation';
 
 type Options = {
   fallbackPlacements: Array<Placement>,
@@ -18,7 +19,7 @@ type Options = {
 };
 
 function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
-  if (placement.includes('auto')) {
+  if (getBasePlacement(placement) === auto) {
     return [];
   }
 
@@ -52,7 +53,7 @@ function flip({ state, options }: ModifierArguments<Options>) {
 
   const placements = uniqueBy(
     [preferredPlacement, ...fallbackPlacements].reduce((acc, placement) => {
-      return placement.includes('auto')
+      return getBasePlacement(placement) === auto
         ? acc.concat(
             computeAutoPlacement(state, {
               placement,
@@ -72,7 +73,7 @@ function flip({ state, options }: ModifierArguments<Options>) {
 
   const placementOverflowData = placements.reduce((acc, placement) => {
     const basePlacement = getBasePlacement(placement);
-    const isStartVariation = placement.includes(start);
+    const isStartVariation = getVariation(placement) === start;
     const isVertical = [top, bottom].includes(basePlacement);
     const len = isVertical ? 'width' : 'height';
 
