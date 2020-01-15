@@ -1,6 +1,7 @@
 const BLACKLIST = new Set(['/404/']);
 const DIR_ORDER = [
   'tippy',
+  'tutorial',
   'constructors',
   'modifiers',
   'utils',

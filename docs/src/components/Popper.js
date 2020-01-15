@@ -10,24 +10,27 @@ export const usePopper = (options = {}) => {
   const instanceRef = useRef();
 
   const mergedOptions = useMemo(
-    () => ({
-      ...options,
-      modifiers: [
-        ...(options.modifiers || []),
-        {
-          name: 'arrow',
-          options: {
-            padding: 5,
+    () =>
+      options === null
+        ? {}
+        : {
+            ...options,
+            modifiers: [
+              ...(options.modifiers || []),
+              {
+                name: 'arrow',
+                options: {
+                  padding: 5,
+                },
+              },
+              {
+                name: 'offset',
+                options: {
+                  offset: [0, 10],
+                },
+              },
+            ],
           },
-        },
-        {
-          name: 'offset',
-          options: {
-            offset: [0, 10],
-          },
-        },
-      ],
-    }),
     [options]
   );
 
