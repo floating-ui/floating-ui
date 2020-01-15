@@ -39,7 +39,7 @@ Type definition interfaces for the two type systems are inherently identical,
 but we can't guarantee the same level of type coverage for TypeScript
 definitions, due to the intrinsic differences between Flow and TypeScript.
 
-TypeScript `.d.ts` files are located in the `dist/typescript` folder, an
-`index.d.ts` file located on the root of the repository allows the TypeScript
-compiler to locate them, no additional configuration is needed to consume the
-typings.
+TypeScript `.d.ts` files are colocated in the `lib/` folder, together with the
+corresponding JavaScript modules, an `index.d.ts` file located on the root of
+the repository allows the TypeScript compiler to locate them, no additional
+configuration is needed to consume the typings.
