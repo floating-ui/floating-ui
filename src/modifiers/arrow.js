@@ -2,6 +2,7 @@
 import type { Modifier, ModifierArguments, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getLayoutRect from '../dom-utils/getLayoutRect';
+import contains from '../dom-utils/contains';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
@@ -64,10 +65,7 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
     }
   }
 
-  if (
-    !state.elements.popper.contains(arrowElement) &&
-    (!state.elements.popper.shadowRoot || !state.elements.popper.shadowRoot.contains(arrowElement))
-  ) {
+  if (contains(state.elements.popper, arrowElement)) {
     if (__DEV__) {
       console.error(
         [

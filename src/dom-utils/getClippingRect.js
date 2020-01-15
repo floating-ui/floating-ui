@@ -11,6 +11,7 @@ import getComputedStyle from './getComputedStyle';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
 import getDecorations from './getDecorations';
+import contains from './contains';
 import rectToClientRect from '../utils/rectToClientRect';
 import getFreshSideObject from '../utils/getFreshSideObject';
 
@@ -43,7 +44,9 @@ function getClippingParents(element: Element) {
   }
 
   return clippingParents.filter(clippingParent => {
-    return isElement(clippingParent) && clippingParent.contains(clipperElement);
+    return (
+      isElement(clippingParent) && contains(clippingParent, clipperElement)
+    );
   });
 }
 
