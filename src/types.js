@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
 
 export type Obj = { [key: string]: any };

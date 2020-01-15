@@ -19,6 +19,13 @@ files from the `dist/umd` folder.
 Flow will automatically read the exposed types, so you don't need to change any
 configuration in your project to take benefit from Popper typings.
 
+You may also decide to import a specific module from the library, by doing so,
+the module types will be automatically imported with it:
+
+```flow
+import hideModifier from '@popperjs/core/lib/modifiers/hide';
+```
+
 It's although reccomended to add the following lines to your `.flowconfig` file
 in order to instruct Flow not to report type errors originating from your
 `node_modules` folder. Type definitions exposed by the modules will still be
@@ -43,3 +50,10 @@ TypeScript `.d.ts` files are colocated in the `lib/` folder, together with the
 corresponding JavaScript modules, an `index.d.ts` file located on the root of
 the repository allows the TypeScript compiler to locate them, no additional
 configuration is needed to consume the typings.
+
+You may also decide to import a specific module from the library, by doing so,
+the module types will be automatically imported with it:
+
+```typescript
+import hideModifier from '@popperjs/core/lib/modifiers/hide';
+```

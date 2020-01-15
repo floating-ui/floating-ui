@@ -1,4 +1,4 @@
-const MJS = process.env.MJS === 'true';
+const BROWSER_COMPAT = process.env.BROWSER_COMPAT === 'true';
 
 module.exports = {
   presets: [
@@ -12,12 +12,7 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-transform-flow-strip-types',
-    [
-      'babel-plugin-add-import-extension',
-      {
-        extension: MJS ? 'mjs' : 'js',
-      },
-    ],
+    'babel-plugin-add-import-extension',
     [
       '@babel/plugin-proposal-object-rest-spread',
       {
@@ -25,7 +20,7 @@ module.exports = {
         useBuiltIns: true,
       },
     ],
-    ...(MJS
+    ...(BROWSER_COMPAT
       ? [
           [
             'inline-replace-variables',
