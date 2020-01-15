@@ -152,10 +152,10 @@ const components = {
 };
 
 function anchorScroll(event) {
-  if (event) {
-    event.preventDefault();
-    window.history.pushState({}, '', event.currentTarget.getAttribute('href'));
-  }
+  // if (event) {
+  //   event.preventDefault();
+  //   window.history.pushState({}, '', event.currentTarget.getAttribute('href'));
+  // }
 
   try {
     const element = document.querySelector(window.location.hash);
