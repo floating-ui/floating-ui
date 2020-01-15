@@ -1,1 +1,1 @@
-export * from './dist/typescript';
+export * from './lib';

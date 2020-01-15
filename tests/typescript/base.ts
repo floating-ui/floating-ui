@@ -1,4 +1,5 @@
 import { createPopper, Options } from '@popperjs/core';
+import { createPopper as createPopperLite } from '@popperjs/core/lib/popper-lite';
 
 const options: Options = {
   strategy: 'fixed',
@@ -14,4 +15,9 @@ const popperWithOptions = createPopper(
   document.createElement('div'),
   document.createElement('span'),
   options
+);
+
+const popper2 = createPopperLite(
+  document.createElement('div'),
+  document.createElement('span')
 );

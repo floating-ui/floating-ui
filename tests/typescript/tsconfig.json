@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@popperjs/core": ["../../"]
+      "@popperjs/core": ["../../"],
+      "@popperjs/core/*": ["../../*"]
     }
   },
   "files": ["./base.ts"]

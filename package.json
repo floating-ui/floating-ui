@@ -28,7 +28,7 @@
     "build:mjs": "MJS=true yarn build:es --out-file-extension=.mjs -d dist/esm",
     "build:bundles": "rollup -c .config/rollup.config.js",
     "build:dev": "NODE_ENV=dev babel src -d tests/visual/dist",
-    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js --project .config/tsconfig.json --outDir dist/typescript; rimraf \"src/**/*.ts\"",
+    "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js --project .config/tsconfig.json --outDir lib; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build"
   },
   "files": [
