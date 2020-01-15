@@ -143,7 +143,7 @@ const MenuButton = styled.button`
 const CloseMenuButton = styled.button`
   position: relative;
   top: 10px;
-  left: 25px;
+  left: 15px;
   display: block;
   background-color: white;
   color: #c83b50;
