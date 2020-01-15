@@ -65,6 +65,42 @@ it('errors if placement: "auto" and "flip" modifier is not present/enabled', () 
   );
 });
 
+it('does not error for missing phase for disabled modifiers', () => {
+  const spy = jest.spyOn(console, 'error');
+
+  createPopper(reference, getPopper(), {
+    modifiers: [
+      {
+        name: 'flip',
+        enabled: true,
+        phase: 'main',
+        fn: () => {},
+      },
+      {
+        name: 'flip',
+        enabled: false,
+      },
+    ],
+  });
+
+  expect(spy).not.toHaveBeenCalled();
+});
+
+it('errors for custom modifier missing phase property', () => {
+  const spy = jest.spyOn(console, 'error');
+
+  createPopper(reference, getPopper(), {
+    modifiers: [
+      {
+        name: 'custom',
+        enabled: false,
+      },
+    ],
+  });
+
+  expect(spy).toHaveBeenCalled();
+});
+
 describe('.setOptions() method', () => {
   it('correctly updates `placement`', () => {
     const popper = createPopper(reference, getPopper(), {

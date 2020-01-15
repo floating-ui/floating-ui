@@ -85,7 +85,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         // Orders the modifiers based on their dependencies and `phase`
         // properties
-        state.orderedModifiers = orderModifiers([
+        const orderedModifiers = orderModifiers([
           ...state.options.modifiers.filter(
             modifier =>
               !defaultModifiers.find(({ name }) => name === modifier.name)
@@ -102,14 +102,14 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // if one of the modifiers is invalid for any reason
         if (__DEV__) {
           const modifiers = uniqueBy(
-            [...state.orderedModifiers, ...state.options.modifiers],
+            [...orderedModifiers, ...state.options.modifiers],
             ({ name }) => name
           );
 
           validateModifiers(modifiers);
 
           if (state.options.placement.includes('auto')) {
-            const flipModifier = state.orderedModifiers.find(
+            const flipModifier = orderedModifiers.find(
               ({ name }) => name === 'flip'
             );
 
@@ -123,6 +123,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             }
           }
         }
+
+        // Strip out disabled modifiers
+        state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
 
         runModifierEffects();
         instance.update();
