@@ -48,6 +48,8 @@ We recommend one of these options for Safari only:
 - Setting `rootBoundary` to `"document"` for the `preventOverflow` modifier
 - Hiding the popper upon scrolling
 
+[WebKit bug report](https://bugs.webkit.org/show_bug.cgi?id=206228)
+
 ### Fixed strategy
 
 In the latest version of macOS Safari, when elastic overscroll (rubber-banding
@@ -60,6 +62,8 @@ becomes present because the popper needs to be continuously updated while
 scrolling, which Safari is not good at. Ideally this strategy should only be
 used when the reference element is fixed, and not to "break" the popper out of a
 clipping container context.
+
+[WebKit bug report](https://bugs.webkit.org/show_bug.cgi?id=206227)
 
 ## IE10 and older
 
