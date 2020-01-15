@@ -64,7 +64,10 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
     }
   }
 
-  if (!state.elements.popper.contains(arrowElement)) {
+  if (
+    !state.elements.popper.contains(arrowElement) &&
+    (!state.elements.popper.shadowRoot || !state.elements.popper.shadowRoot.contains(arrowElement))
+  ) {
     if (__DEV__) {
       console.error(
         [
