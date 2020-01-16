@@ -30,6 +30,7 @@ module.exports = {
           ],
         ]
       : ['dev-expression']),
+    'annotate-pure-calls',
   ],
   env: {
     test: {
