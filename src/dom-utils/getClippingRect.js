@@ -4,7 +4,7 @@ import type { Boundary, RootBoundary } from '../enums';
 import { viewport } from '../enums';
 import getViewportRect from './getViewportRect';
 import getDocumentRect from './getDocumentRect';
-import listClippingParents from './listClippingParents';
+import listScrollParents from './listScrollParents';
 import getOffsetParent from './getOffsetParent';
 import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
@@ -30,7 +30,7 @@ function getClientRectFromMixedType(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingParents(element: Element) {
-  const clippingParents = listClippingParents(element);
+  const clippingParents = listScrollParents(element);
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );
