@@ -2,6 +2,8 @@
 import type { State, Padding } from '../types';
 import type {
   Placement,
+  BasePlacement,
+  VariationPlacement,
   Boundary,
   RootBoundary,
   ComputedPlacement,
@@ -19,6 +21,10 @@ type Options = {
   flipVariations: boolean,
 };
 
+type OverflowsMap = {
+  [BasePlacement | VariationPlacement]: number,
+};
+
 export default function computeAutoPlacement(
   state: $Shape<State>,
   options: Options = {}
@@ -32,13 +38,15 @@ export default function computeAutoPlacement(
   } = options;
 
   const variation = getVariation(placement);
-  const placements: any = variation
+
+  const placements = variation
     ? flipVariations
       ? variationPlacements
       : variationPlacements.filter(placement => placement.includes(variation))
     : basePlacements;
 
-  const overflows = placements.reduce((acc, placement) => {
+  // $FlowFixMe: Flow seems to have problems with two array unions...
+  const overflows: OverflowsMap = placements.reduce((acc, placement) => {
     acc[placement] = detectOverflow(state, {
       placement,
       boundary,
@@ -49,6 +57,5 @@ export default function computeAutoPlacement(
     return acc;
   }, {});
 
-  // $FlowFixMe
   return Object.keys(overflows).sort((a, b) => overflows[a] - overflows[b]);
 }
