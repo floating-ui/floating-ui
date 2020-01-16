@@ -12,18 +12,22 @@ jobs:
       name: Flow Type
       script: yarn test:flow
 
-    - name: ESLint
+    - stage: Tests & Code Check
+      name: ESLint
       script: yarn test:eslint
 
-    - name: TypeScript
+    - stage: Tests & Code Check
+      name: TypeScript
       before_script: yarn build:typescript
       script: yarn test:typescript
 
-    - name: Unit Tests
+    - stage: Tests & Code Check
+      name: Unit Tests
       before_script: NODE_ENV=development yarn build:bundles
       script: yarn test:unit
 
-    - name: '[Chrome] Functional Tests'
+    - stage: Tests & Code Check
+      name: '[Chrome] Functional Tests'
       script: PUPPETEER_BROWSER=chromium travis_retry yarn test:functional
 
     #- name: '[Firefox] Functional Tests'
