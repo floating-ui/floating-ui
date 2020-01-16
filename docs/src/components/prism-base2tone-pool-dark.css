@@ -198,3 +198,13 @@ pre > code.highlight {
   background: #ed655e33;
   background: linear-gradient(to right, #ed655e33 70%, #ed655e00);
 }
+
+.gatsby-highlight-code-line {
+  background-color: #1c1425;
+  display: block;
+  margin-right: -1em;
+  margin-left: -1em;
+  padding-right: 1em;
+  padding-left: 0.75em;
+  border-left: 0.25em solid #ff6b81;
+}
