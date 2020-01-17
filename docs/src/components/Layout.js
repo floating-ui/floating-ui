@@ -326,7 +326,7 @@ const Layout = ({ children, path, pageResources }) => {
         {pageResources && (
           <SEO title={pageResources.json.pageContext.frontmatter.title} />
         )}
-        <Navigation root="/" target="location" />
+        <Navigation root="/" target="location" path={path} />
         <Main>
           <Container>{children}</Container>
           <MdxRoutes>

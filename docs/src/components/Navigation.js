@@ -190,10 +190,11 @@ const Block = ({ route }) => (
 
 let scrollOffset = 0;
 
-export default function Navigation({ description, lang, meta, title }) {
+export default function Navigation({ description, lang, meta, title, path }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  console.log(path);
   const menuRef = useRef();
 
   function openMenu() {
@@ -245,7 +246,16 @@ export default function Navigation({ description, lang, meta, title }) {
             </PopperTextLogoContainer>
             <CloseMenuButton onClick={closeMenu}>Close Menu</CloseMenuButton>
             <MenuContents>
-              {createTree(processRoutes(routes)).map((route, index) => (
+              {createTree(
+                processRoutes(
+                  routes.filter(
+                    route =>
+                      !route.slug.startsWith('/docs/') ||
+                      route.slug.startsWith(path) ||
+                      route.slug.split('/').length === path.split('/').length
+                  )
+                )
+              ).map((route, index) => (
                 <Block route={route} key={index} />
               ))}
             </MenuContents>
