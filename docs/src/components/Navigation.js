@@ -194,8 +194,10 @@ export default function Navigation({ description, lang, meta, title, path }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  console.log(path);
   const menuRef = useRef();
+
+  const versionMatch = path.match(/^\/docs\/(v[0-9]+)\//);
+  const docsVersion = versionMatch ? versionMatch[1] : null;
 
   function openMenu() {
     setMenuOpen(true);
@@ -251,8 +253,8 @@ export default function Navigation({ description, lang, meta, title, path }) {
                   routes.filter(
                     route =>
                       !route.slug.startsWith('/docs/') ||
-                      route.slug.startsWith(path) ||
-                      route.slug.split('/').length === path.split('/').length
+                      route.slug.startsWith(`/docs/${docsVersion}/`) ||
+                      route.slug.match(/^\/docs\/v[0-9]+\/$/)
                   )
                 )
               ).map((route, index) => (
