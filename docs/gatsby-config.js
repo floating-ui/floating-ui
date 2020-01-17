@@ -3,7 +3,7 @@ const { UNPKG_CDN_URL, VERSION_RANGE } = require('./variables');
 module.exports = {
   siteMetadata: {
     title: `Popper`,
-    description: `Positioning tooltips is difficult. Popper is here to help!`,
+    description: `Positioning tooltips is difficult. Popper is here to help! Popper is the de facto standard to position tooltips in modern web applications.`,
     author: `@FezVrasta`,
   },
   plugins: [
