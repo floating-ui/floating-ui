@@ -16,6 +16,7 @@ import { Container, media, Footer, sizes } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import Navigation, { NAVIGATION_WIDTH } from './Navigation';
 import SEO from './Seo';
+import { createTree } from '../utils/createTree';
 import processRoutes from '../utils/processRoutes';
 
 import './layout.css';
@@ -173,9 +174,15 @@ function anchorScroll(event) {
   } catch (e) {}
 }
 
+const flatten = routes =>
+  routes.reduce(
+    (acc, cur) => acc.concat(cur).concat(flatten(cur.children)),
+    []
+  );
+
 const Layout = ({ children, path, pageResources }) => {
   function getPrevNextRoutes(routes) {
-    const validRoutes = processRoutes(routes, path);
+    const validRoutes = flatten(createTree(processRoutes(routes, path)));
 
     const currentPathIndex = validRoutes.findIndex(
       route => route.slug === path
