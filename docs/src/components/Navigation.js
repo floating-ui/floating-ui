@@ -170,16 +170,16 @@ const Block = ({ route }) => (
     <Ul root>
       <li>
         <Item
-          to={`${route.slug}/`}
+          to={route.slug}
           activeStyle={{
             backgroundColor: '#FFF',
             color: '#C83B50',
           }}
         >
-          {route.title}
+          {route.navigationLabel}
         </Item>
       </li>
-      <Ul root={route.slug.split('/').length === 1}>
+      <Ul root={route.slug.split('/').length === 2}>
         {route.children.map((route, index) => (
           <Block key={index} route={route} />
         ))}
@@ -190,14 +190,11 @@ const Block = ({ route }) => (
 
 let scrollOffset = 0;
 
-export default function Navigation({ description, lang, meta, title, path }) {
+export default function Navigation({ description, lang, meta, path }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const menuRef = useRef();
-
-  const versionMatch = path.match(/^\/docs\/(v[0-9]+)\//);
-  const docsVersion = versionMatch ? versionMatch[1] : null;
 
   function openMenu() {
     setMenuOpen(true);
@@ -248,16 +245,7 @@ export default function Navigation({ description, lang, meta, title, path }) {
             </PopperTextLogoContainer>
             <CloseMenuButton onClick={closeMenu}>Close Menu</CloseMenuButton>
             <MenuContents>
-              {createTree(
-                processRoutes(
-                  routes.filter(
-                    route =>
-                      !route.slug.startsWith('/docs/') ||
-                      route.slug.startsWith(`/docs/${docsVersion}/`) ||
-                      route.slug.match(/^\/docs\/v[0-9]+\/$/)
-                  )
-                )
-              ).map((route, index) => (
+              {createTree(processRoutes(routes, path)).map((route, index) => (
                 <Block route={route} key={index} />
               ))}
             </MenuContents>

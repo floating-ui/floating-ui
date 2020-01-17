@@ -1,0 +1,20 @@
+diff --git a/node_modules/@pauliescanlon/gatsby-mdx-routes/src/components/MdxRoutes/MdxRoutes.js b/node_modules/@pauliescanlon/gatsby-mdx-routes/src/components/MdxRoutes/MdxRoutes.js
+index 9b3ca23..8c4fa68 100644
+--- a/node_modules/@pauliescanlon/gatsby-mdx-routes/src/components/MdxRoutes/MdxRoutes.js
++++ b/node_modules/@pauliescanlon/gatsby-mdx-routes/src/components/MdxRoutes/MdxRoutes.js
+@@ -15,6 +15,7 @@ export const MdxRoutes = ({ children }) => {
+                 }
+                 frontmatter {
+                   navigationLabel
++                  order
+                 }
+               }
+             }
+@@ -26,6 +27,7 @@ export const MdxRoutes = ({ children }) => {
+           return {
+             navigationLabel: data.node.frontmatter.navigationLabel,
+             slug: data.node.fields.slug,
++            order: data.node.frontmatter.order,
+           }
+         })
+         return children(mdxData)

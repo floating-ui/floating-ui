@@ -175,11 +175,10 @@ function anchorScroll(event) {
 
 const Layout = ({ children, path, pageResources }) => {
   function getPrevNextRoutes(routes) {
-    const validRoutes = processRoutes(routes);
-    const slashlessPath = path.replace(/\/$/, '');
+    const validRoutes = processRoutes(routes, path);
 
     const currentPathIndex = validRoutes.findIndex(
-      route => route.slug === slashlessPath
+      route => route.slug === path
     );
 
     return {
@@ -324,7 +323,9 @@ const Layout = ({ children, path, pageResources }) => {
       />
       <div>
         {pageResources && (
-          <SEO title={pageResources.json.pageContext.frontmatter.title} />
+          <SEO
+            title={pageResources.json.pageContext.frontmatter.navigationLabel}
+          />
         )}
         <Navigation root="/" target="location" path={path} />
         <Main>
@@ -341,7 +342,7 @@ const Layout = ({ children, path, pageResources }) => {
                           <NavButtonDirection data-prev>
                             <ChevronLeft size={28} css={arrowCss} />
                           </NavButtonDirection>
-                          {prev.title}
+                          {prev.navigationLabel}
                         </NavButton>
                       )}
                     </NavButtonCell>
@@ -349,7 +350,7 @@ const Layout = ({ children, path, pageResources }) => {
                     <NavButtonCell>
                       {next && (
                         <NavButton to={`${next.slug}/`} data-last>
-                          {next.title}
+                          {next.navigationLabel}
                           <NavButtonDirection data-next>
                             <ChevronRight size={28} css={arrowCss} />
                           </NavButtonDirection>
