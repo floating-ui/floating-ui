@@ -130,7 +130,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
 
         runModifierEffects();
-        instance.update();
+
+        return instance.update();
       },
 
       // Sync update – it will always be executed, even if not necessary. This
