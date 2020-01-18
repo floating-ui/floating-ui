@@ -59,7 +59,7 @@ export type Instance = {|
   destroy: () => void,
   forceUpdate: () => void,
   update: () => Promise<void>,
-  setOptions: (options: $Shape<Options>) => void,
+  setOptions: (options: $Shape<Options>) => Promise<void>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
