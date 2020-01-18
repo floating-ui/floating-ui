@@ -180,7 +180,28 @@ const flatten = routes =>
     []
   );
 
-const Layout = ({ children, path, pageResources }) => {
+const EditPage = ({ path }) => (
+  <MdxRoutes>
+    {routes => {
+      const route = routes.find(route => route.slug === path);
+
+      return (
+        <a
+          style={{ marginTop: 15, display: 'inline-block' }}
+          href={`https://github.com/popperjs/popper-core/edit/master/docs/src/${
+            route.fileAbsolutePath.split('/docs/src/')[1]
+          }`}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Edit this page
+        </a>
+      );
+    }}
+  </MdxRoutes>
+);
+
+const Layout = ({ children, path, pageResources, ...props }) => {
   function getPrevNextRoutes(routes) {
     const validRoutes = flatten(createTree(processRoutes(routes, path)));
 
@@ -336,7 +357,10 @@ const Layout = ({ children, path, pageResources }) => {
         )}
         <Navigation root="/" target="location" path={path} />
         <Main>
-          <Container>{children}</Container>
+          <Container>
+            {children}
+            <EditPage path={path} />
+          </Container>
           <MdxRoutes>
             {routes => {
               const { prev, next } = getPrevNextRoutes(routes);
