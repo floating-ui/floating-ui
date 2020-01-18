@@ -33,7 +33,7 @@ function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
 }
 
 function flip({ state, options, name }: ModifierArguments<Options>) {
-  if (state.modifiersData[name].skip) {
+  if (state.modifiersData[name]._skip) {
     return;
   }
 
@@ -142,7 +142,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   }
 
   if (state.placement !== firstFittingPlacement) {
-    state.modifiersData[name].skip = true;
+    state.modifiersData[name]._skip = true;
     state.placement = firstFittingPlacement;
     state.reset = true;
   }
@@ -154,5 +154,5 @@ export default ({
   phase: 'main',
   fn: flip,
   requiresIfExists: ['offset'],
-  data: { skip: false },
+  data: { _skip: false },
 }: Modifier<Options>);
