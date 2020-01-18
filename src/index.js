@@ -207,7 +207,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       // Async and optimistically optimized update – it will not be executed if
       // not necessary (debounced to run at most once-per-tick)
-      update: debounce(
+      update: debounce<$Shape<State>>(
         () =>
           new Promise<$Shape<State>>(resolve => {
             instance.forceUpdate();
@@ -227,7 +227,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    instance.setOptions(options);
+    instance
+      .setOptions(options)
+      .then(state => options.onFirstUpdate && options.onFirstUpdate(state));
 
     // Modifiers have the ability to execute arbitrary code before the first
     // update cycle runs. They will be executed in the same order as the update

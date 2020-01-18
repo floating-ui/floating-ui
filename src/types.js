@@ -58,8 +58,8 @@ export type Instance = {|
   state: State,
   destroy: () => void,
   forceUpdate: () => void,
-  update: () => Promise<State>,
-  setOptions: (options: $Shape<Options>) => Promise<State>,
+  update: () => Promise<$Shape<State>>,
+  setOptions: (options: $Shape<Options>) => Promise<$Shape<State>>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
@@ -86,6 +86,7 @@ export type Options = {|
   placement: Placement,
   modifiers: Array<$Shape<Modifier<any>>>,
   strategy: PositioningStrategy,
+  onFirstUpdate?: ($Shape<State>) => void,
 |};
 
 export type UpdateCallback = State => void;

@@ -1,6 +1,6 @@
 ---
 navigationLabel: Lifecycle
-order: 5
+order: 3
 ---
 
 # Popper's Lifecycle
@@ -49,9 +49,17 @@ are fired, to learn more visit the
 There are situations where you may need to hook into the Popper's lifecycle to
 perform some additional logic.
 
-The best way to do that is to
-[define your own custom modifier](../modifiers/#custom-modifiers) and take
-advantage of the [effect](../modifiers/#effect) property.
+If all you need is a callback ran after Popper positioned the element the first
+time, you can define the `onFirstUpdate` property in the Popper options:
+
+```js
+createPopper(referenceElement, popperElement, {
+  onFirstUpdate: state => console.log('Popper positioned on', state.placement),
+});
+```
+
+If, instead, you want to run some logic on each update cycle, the best way to do
+that is to [define your own custom modifier](../modifiers/#custom-modifiers).
 
 If you want to make sure to run your logic after all the other modifiers have
-ran, we suggest to assign the `afterWrite` `phase` to your custom modifier.
+ran, we suggest to set `afterWrite` as your custom modifier's `phase`.

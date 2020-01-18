@@ -44,7 +44,8 @@ createPopper(reference, popper, {
 type Options = {|
   placement: Placement, // "bottom"
   modifiers: Array<$Shape<Modifier<any>>>, // []
-  strategy: PositioningStrategy, // "absolute"
+  strategy: PositioningStrategy, // "absolute",
+  onFirstUpdate?: $Shape<State> => void, // undefined
 |};
 
 type Placement =
@@ -63,7 +64,7 @@ type Placement =
   | 'left'
   | 'left-start'
   | 'left-end';
-type Stategy = 'absolute' | 'fixed';
+type Strategy = 'absolute' | 'fixed';
 ```
 
 ### `placement`
@@ -159,14 +160,15 @@ type Options = {|
   placement: Placement,
   modifiers: Array<$Shape<Modifier<any>>>,
   strategy: PositioningStrategy,
+  onFirstUpdate?: $Shape<State> => void,
 |};
 
 type Instance = {|
   state: State,
   destroy: () => void,
   forceUpdate: () => void,
-  update: () => Promise<State>,
-  setOptions: (options: $Shape<Options>) => Promise<State>,
+  update: () => Promise<$Shape<State>>,
+  setOptions: (options: $Shape<Options>) => Promise<$Shape<State>>,
 |};
 ```
 
