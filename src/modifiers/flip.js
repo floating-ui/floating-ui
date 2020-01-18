@@ -32,7 +32,11 @@ function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
   ];
 }
 
-function flip({ state, options }: ModifierArguments<Options>) {
+function flip({ state, options, name }: ModifierArguments<Options>) {
+  if (state.modifiersData[name].skip) {
+    return;
+  }
+
   const {
     fallbackPlacements: specifiedFallbackPlacements,
     padding,
@@ -71,7 +75,12 @@ function flip({ state, options }: ModifierArguments<Options>) {
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
 
-  const placementOverflowData = placements.reduce((acc, placement) => {
+  const checksMap: Map<string, Array<boolean>> = new Map();
+  let makeFallbackChecks = true;
+  let firstFittingPlacement = placements[0];
+
+  for (let i = 0; i < placements.length; i++) {
+    const placement = placements[i];
     const basePlacement = getBasePlacement(placement);
     const isStartVariation = getVariation(placement) === start;
     const isVertical = [top, bottom].includes(basePlacement);
@@ -98,34 +107,42 @@ function flip({ state, options }: ModifierArguments<Options>) {
 
     const altVariationSide: any = getOppositePlacement(mainVariationSide);
 
-    acc[placement] = [
-      // checks
+    const checks = [
       overflow[basePlacement] <= 0,
       overflow[mainVariationSide] <= 0,
       overflow[altVariationSide] <= 0,
     ];
 
-    return acc;
-  }, {});
-
-  // `2` may be desired in some cases – research later
-  let checks = flipVariations ? 3 : 1;
-  let firstFittingPlacement = placements[0];
-
-  for (let i = checks; i >= 0; checks--) {
-    const tryPlacement = placements.find(placement => {
-      return placementOverflowData[placement]
-        .slice(0, checks)
-        .every(check => check);
-    });
-
-    if (tryPlacement) {
-      firstFittingPlacement = tryPlacement;
+    if (checks.every(check => check)) {
+      firstFittingPlacement = placement;
+      makeFallbackChecks = false;
       break;
+    }
+
+    checksMap.set(placement, checks);
+  }
+
+  if (makeFallbackChecks) {
+    // `2` may be desired in some cases – research later
+    const numberOfChecks = flipVariations ? 3 : 1;
+
+    for (let i = numberOfChecks; i > 0; i--) {
+      const fittingPlacement = placements.find(placement => {
+        const checks = checksMap.get(placement);
+        if (checks) {
+          return checks.slice(0, i).every(check => check);
+        }
+      });
+
+      if (fittingPlacement) {
+        firstFittingPlacement = fittingPlacement;
+        break;
+      }
     }
   }
 
   if (state.placement !== firstFittingPlacement) {
+    state.modifiersData[name].skip = true;
     state.placement = firstFittingPlacement;
     state.reset = true;
   }
@@ -137,4 +154,5 @@ export default ({
   phase: 'main',
   fn: flip,
   requiresIfExists: ['offset'],
+  data: { skip: false },
 }: Modifier<Options>);
