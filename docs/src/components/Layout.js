@@ -186,16 +186,18 @@ const EditPage = ({ path }) => (
       const route = routes.find(route => route.slug === path);
 
       return (
-        <a
-          style={{ marginTop: 15, display: 'inline-block' }}
-          href={`https://github.com/popperjs/popper-core/edit/master/docs/src/${
-            route.fileAbsolutePath.split('/docs/src/')[1]
-          }`}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          Edit this page
-        </a>
+        route && (
+          <a
+            style={{ marginTop: 15, display: 'inline-block' }}
+            href={`https://github.com/popperjs/popper-core/edit/master/docs/src/${
+              route.fileAbsolutePath.split('/docs/src/')[1]
+            }`}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Edit this page
+          </a>
+        )
       );
     }}
   </MdxRoutes>
