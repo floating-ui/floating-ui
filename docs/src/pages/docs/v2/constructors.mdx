@@ -165,8 +165,8 @@ type Instance = {|
   state: State,
   destroy: () => void,
   forceUpdate: () => void,
-  update: () => Promise<void>,
-  setOptions: (options: $Shape<Options>) => void,
+  update: () => Promise<State>,
+  setOptions: (options: $Shape<Options>) => Promise<State>,
 |};
 ```
 
