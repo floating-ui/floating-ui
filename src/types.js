@@ -58,7 +58,7 @@ export type Instance = {|
   state: State,
   destroy: () => void,
   forceUpdate: () => void,
-  update: () => Promise<void>,
+  update: () => Promise<State>,
   setOptions: (options: $Shape<Options>) => void,
 |};
 
