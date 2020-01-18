@@ -1,0 +1,57 @@
+---
+navigationLabel: Lifecycle
+order: 5
+---
+
+# Popper's Lifecycle
+
+Popper relies on a set of steps, executed in a precise order, in order to
+provide the functionalities you expect from it.
+
+Everything starts with the popper initialization, executed by calling
+`createPopper`.
+
+As first thing, all the [modifier's effects](../modifiers/#effect) are ran.
+After that, it's the turn of the [modifier's main logic](../modifiers/#fn).
+
+At this point, your popper has been properly positioned, and its position is
+ready to be updated in different ways.
+
+## Manual update
+
+You can ask Popper to recompute your tooltip's position by running
+`instance.update()`.
+
+This method will return a promise, that will be resolved with the updated
+`State`, from where you will optionally be able to read the updated positions.
+
+```js
+const state = await popperInstance.update();
+```
+
+## Set new options
+
+You can also trigger an update by setting new options to your Popper instance.
+This, internally, will call the `update()` method.
+
+```js
+const state = await popperInstance.setOptions({ placement: 'bottom' });
+```
+
+## Event Listeners
+
+You can also have Popper automatically update the position when certain events
+are fired, to learn more visit the
+[Event Listeners Modifier page](../modifiers/event-listeners/).
+
+## Hook into the lifecycle
+
+There are situations where you may need to hook into the Popper's lifecycle to
+perform some additional logic.
+
+The best way to do that is to
+[define your own custom modifier](../modifiers/#custom-modifiers) and take
+advantage of the [effect](../modifiers/#effect) property.
+
+If you want to make sure to run your logic after all the other modifiers have
+ran, we suggest to assign the `afterWrite` `phase` to your custom modifier.
