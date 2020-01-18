@@ -42,6 +42,7 @@ const Ul = styled.ul`
   list-style: none;
   padding: 0;
   margin-left: ${props => (props.root ? 0 : 15)}px;
+  margin-top: 0;
   line-height: 1.5;
 
   ${props =>
@@ -119,7 +120,7 @@ const PopperTextLogo = ({ mobile }) => (
     alt="Popper Logo"
     css={css`
       display: block;
-      margin: 0 auto -10px;
+      margin: 0 auto;
       width: 100px;
       height: 50px;
       user-select: none;
@@ -159,9 +160,10 @@ const CloseMenuButton = styled.button`
 
 const MenuContents = styled.div`
   padding: 0 10px 20px 0;
+  margin-top: 20px;
 
   ${media.lg} {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 `;
 
