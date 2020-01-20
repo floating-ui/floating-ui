@@ -14,6 +14,7 @@ import getBasePlacement from '../utils/getBasePlacement';
 
 type Options = {
   gpuAcceleration: boolean,
+  adaptive: boolean,
 };
 
 const unsetSides = {
@@ -103,7 +104,7 @@ export function mapToStyles({
 }
 
 function computeStyles({ state, options }: ModifierArguments<Options>) {
-  const { gpuAcceleration = true } = options;
+  const { gpuAcceleration = true, adaptive = true } = options;
 
   const commonStyles = {
     placement: getBasePlacement(state.placement),
@@ -119,7 +120,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
       ...commonStyles,
       offsets: state.modifiersData.popperOffsets,
       position: state.options.strategy,
-      dynamicSide: true,
+      dynamicSide: adaptive,
     }),
   };
 
