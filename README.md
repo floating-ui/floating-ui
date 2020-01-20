@@ -14,7 +14,6 @@
 </p>
 
 <br />
-<br />
 
 **Positioning tooltips and popovers is difficult. Popper is here to help!**
 
@@ -26,7 +25,7 @@ and floats near a target element. The most common example is a tooltip, but it
 also includes popovers, drop-downs, and more. All of these can be generically
 described as a "popper" element.
 
-[![Popper visualized](https://i.imgur.com/Ogd1eWZ.jpg)](https://popper.js.org)
+[![Popper visualized](https://i.imgur.com/F7qWsmV.jpg)](https://popper.js.org)
 
 ## Why not use pure CSS?
 
@@ -334,3 +333,7 @@ You can find the complete
 [`jest-puppeteer` documentation here](https://github.com/smooth-code/jest-puppeteer#api),
 and the
 [`jest-image-snapshot` documentation here](https://github.com/americanexpress/jest-image-snapshot#%EF%B8%8F-api).
+
+## License
+
+MIT
