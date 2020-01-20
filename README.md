@@ -1,8 +1,20 @@
 <p align="center">
-  <img src="./docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
+  <img src="https://github.com/popperjs/popper-core/blob/master/docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
 </p>
 
-# Popper – Tooltip & Popover Positioning Engine
+<h1 align="center">Tooltip & Popover Positioning Engine</h1>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@popperjs/core">
+    <img src="https://img.shields.io/npm/v/@popperjs/core?style=for-the-badge" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/@popperjs/core">
+    <img src="https://img.shields.io/npm/dm/popper.js?style=for-the-badge" alt="npm downloads per month" />
+  </a>
+</p>
+
+<br />
+<br />
 
 **Positioning tooltips and popovers is difficult. Popper is here to help!**
 
