@@ -17,10 +17,10 @@ type Options = {
 };
 
 const unsetSides = {
-  top: '',
-  right: '',
-  bottom: '',
-  left: '',
+  top: 'auto',
+  right: 'auto',
+  bottom: 'auto',
+  left: 'auto',
 };
 
 // Round the offsets to the nearest suitable subpixel based on the DPR.

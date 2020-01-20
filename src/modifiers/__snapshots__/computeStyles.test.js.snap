@@ -2,10 +2,10 @@
 
 exports[`computes the arrow styles 1`] = `
 Object {
-  "bottom": "",
+  "bottom": "auto",
   "left": "0",
   "position": "absolute",
-  "right": "",
+  "right": "auto",
   "top": "0",
   "transform": "translate(10px, 5px)",
 }
@@ -13,10 +13,10 @@ Object {
 
 exports[`computes the popper styles 1`] = `
 Object {
-  "bottom": "",
+  "bottom": "auto",
   "left": "0",
   "position": "absolute",
-  "right": "",
+  "right": "auto",
   "top": "0",
   "transform": "translate3d(10px, 5px, 0)",
 }
@@ -24,10 +24,10 @@ Object {
 
 exports[`computes the popper styles 2`] = `
 Object {
-  "bottom": "",
+  "bottom": "auto",
   "left": "10px",
   "position": "absolute",
-  "right": "",
+  "right": "auto",
   "top": "5px",
   "transform": "",
 }
@@ -38,16 +38,16 @@ Object {
   "bottom": "105px",
   "left": "10px",
   "position": "absolute",
-  "right": "",
-  "top": "",
+  "right": "auto",
+  "top": "auto",
   "transform": "",
 }
 `;
 
 exports[`computes the popper styles 4`] = `
 Object {
-  "bottom": "",
-  "left": "",
+  "bottom": "auto",
+  "left": "auto",
   "position": "absolute",
   "right": "110px",
   "top": "5px",
