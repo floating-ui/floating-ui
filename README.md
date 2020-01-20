@@ -31,22 +31,23 @@ described as a "popper" element.
 
 CSS tooltips have accessibility and usability problems:
 
-- **Clipping and overflow issues**: They will not be prevented from overflowing
-  clipping boundaries, such as the viewport. The tooltip gets partially cut off
-  or overflows if it's near the edge since there is no dynamic positioning
-  logic. When using Popper, your tooltip will always be positioned in the right
-  place.
-- **No flipping**: They will not flip to a different placement to fit better in
-  view if necessary. Popper automatically flips the tooltip to make it fit in
-  view as best as possible for the user.
+- **Clipping and overflow issues**: CSS tooltips will not be prevented from
+  overflowing clipping boundaries, such as the viewport. The tooltip gets
+  partially cut off or overflows if it's near the edge since there is no dynamic
+  positioning logic. When using Popper, your tooltip will always be positioned
+  in the right place.
+- **No flipping**: CSS tooltips will not flip to a different placement to fit
+  better in view if necessary. Popper automatically flips the tooltip to make it
+  fit in view as best as possible for the user.
 - **Using HTML**: Popovers containing interactive HTML are difficult or not
   possible to create without UX issues using pure CSS. Popper positions any HTML
   element – no pseudo-elements are used.
-- **No virtual positioning**: Cannot follow the mouse cursor or be used as a
-  context menu. Popper allows you to position your tooltip relative to any
-  coordinates you desire.
-- **Lack of extensibility**: Cannot be easily extended to fit any arbitrary use
-  case you may need to adjust for. Popper is built with this in mind.
+- **No virtual positioning**: CSS tooltips cannot follow the mouse cursor or be
+  used as a context menu. Popper allows you to position your tooltip relative to
+  any coordinates you desire.
+- **Lack of extensibility**: CSS tooltips cannot be easily extended to fit any
+  arbitrary use case you may need to adjust for. Popper is built with
+  extensibility in mind.
 
 ## Why Popper?
 
@@ -67,8 +68,8 @@ Naive JavaScript tooltip implementations usually have the following problems:
 - **Performance**: They often have runtime performance issues and update the
   tooltip position too slowly.
 
-Popper solves all of these key problems in an elegant, performant manner. It is
-a lightweight ~3 kB library that aims to provide a reliable and extensible
+**Popper solves all of these key problems in an elegant, performant manner.** It
+is a lightweight ~3 kB library that aims to provide a reliable and extensible
 positioning engine you can use to ensure all your popper elements are positioned
 in the right place.
 
