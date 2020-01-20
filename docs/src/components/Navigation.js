@@ -170,7 +170,7 @@ const MenuContents = styled.div`
 const Block = ({ route }) => (
   <>
     <Ul root>
-      <li>
+      <li style={{ marginBottom: 0 }}>
         <Item
           to={route.slug}
           activeStyle={{

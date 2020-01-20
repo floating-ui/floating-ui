@@ -83,8 +83,10 @@ const Header = () => (
       Documentation
     </DocsLink>
     <Logo src={popperLogo} alt="Popper logo" draggable="false" />
-    <Slogan>Tooltip Positioning Engine</Slogan>
-    <SubSlogan>Includes popovers, drop-downs, and more</SubSlogan>
+    <Slogan>Tooltip &amp; Popover Positioning Engine</Slogan>
+    <SubSlogan>
+      Weighs just <strong>3 kB!</strong>
+    </SubSlogan>
     <a
       css={buttonCss}
       href="https://github.com/popperjs/popper.js"

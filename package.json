@@ -1,7 +1,7 @@
 {
   "name": "@popperjs/core",
   "version": "2.0.0-rc.3",
-  "description": "Positioning tooltips is difficult. Popper is here to help!",
+  "description": "Tooltip and Popover Positioning Engine",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
   "module": "lib/popper.js",

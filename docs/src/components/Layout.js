@@ -243,6 +243,7 @@ const Layout = ({ children, path, pageResources, ...props }) => {
 
           h2 {
             font-size: 32px;
+            line-height: 1.3;
           }
 
           h3 {
@@ -283,6 +284,10 @@ const Layout = ({ children, path, pageResources, ...props }) => {
 
           ul {
             padding-left: 20px;
+          }
+
+          li {
+            margin-bottom: 5px;
           }
 
           a {
