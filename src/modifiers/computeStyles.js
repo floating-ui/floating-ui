@@ -28,7 +28,7 @@ const unsetSides = {
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
 function roundOffsets({ x, y }): Offsets {
-  const dpr = window.devicePixelRatio;
+  const dpr = window.devicePixelRatio || 1;
 
   return {
     x: Math.round(x * dpr) / dpr || 0,
@@ -88,7 +88,7 @@ export function mapToStyles({
       // blurry text on low PPI displays, so we want to use 2D transforms
       // instead
       transform:
-        window.devicePixelRatio < 2
+        (window.devicePixelRatio || 1) < 2
           ? `translate(${x}px, ${y}px)`
           : `translate3d(${x}px, ${y}px, 0)`,
     };
