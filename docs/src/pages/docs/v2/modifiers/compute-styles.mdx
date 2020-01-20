@@ -20,6 +20,7 @@ what properties to use (e.g. `gpuAcceleration`).
 ```flow
 type Options = {
   gpuAcceleration: boolean,
+  adaptive: boolean,
 };
 ```
 
@@ -38,6 +39,35 @@ createPopper(reference, popper, {
       name: 'computeStyles',
       options: {
         gpuAcceleration: false, // true by default
+      },
+    },
+  ],
+});
+```
+
+### `adaptive`
+
+This option, enabled by default, tells Popper to use the most suitable CSS
+properties to position the popper (either `top` and `left`, or `bottom` and
+`right`).
+
+This allows the popper content to change, and reduce the likelihood of needing
+to recompute the popper position.
+
+For example, if our popper is positioned on the left of its reference element,
+Popper will apply `right: 0px` and `translate3d(-200px, 0px, 0px)`. Doing so, if
+the content of the popper changes, making it wider or narrower, the popper will
+stay anchored to its reference element.
+
+This behavior can be disabled by setting the option to `false`:
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'computeStyles',
+      options: {
+        adaptive: false, // true by default
       },
     },
   ],
