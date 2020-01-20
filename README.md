@@ -1,36 +1,87 @@
 <p align="center">
-  <img src="./docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
+  <img src="https://github.com/popperjs/popper-core/blob/master/docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
 </p>
 
-**Positioning tooltips is difficult. Popper is here to help!**
+<h1 align="center">Tooltip & Popover Positioning Engine</h1>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/@popperjs/core">
+    <img src="https://img.shields.io/npm/v/@popperjs/core?style=for-the-badge" alt="npm version" />
+  </a>
+  <a href="https://www.npmjs.com/package/@popperjs/core">
+    <img src="https://img.shields.io/npm/dm/popper.js?style=for-the-badge" alt="npm downloads per month" />
+  </a>
+</p>
+
+<br />
+
+**Positioning tooltips and popovers is difficult. Popper is here to help!**
 
 Given an element, such as a button, and a tooltip element describing it, Popper
 will automatically put the tooltip in the right place near the button.
 
-But Popper is not just about tooltips. It will position _any_ UI element that
-"pops out" from the flow of your document. The most common example is a tooltip,
-but it also includes popovers, drop-downs, and more. All of these can be
-generically described as a "popper element".
+It will position _any_ UI element that "pops out" from the flow of your document
+and floats near a target element. The most common example is a tooltip, but it
+also includes popovers, drop-downs, and more. All of these can be generically
+described as a "popper" element.
+
+[![Popper visualized](https://i.imgur.com/F7qWsmV.jpg)](https://popper.js.org)
+
+## Why not use pure CSS?
+
+CSS tooltips have accessibility and usability problems:
+
+- **Clipping and overflow issues**: CSS tooltips will not be prevented from
+  overflowing clipping boundaries, such as the viewport. The tooltip gets
+  partially cut off or overflows if it's near the edge since there is no dynamic
+  positioning logic. When using Popper, your tooltip will always be positioned
+  in the right place.
+- **No flipping**: CSS tooltips will not flip to a different placement to fit
+  better in view if necessary. Popper automatically flips the tooltip to make it
+  fit in view as best as possible for the user.
+- **Using HTML**: Popovers containing interactive HTML are difficult or not
+  possible to create without UX issues using pure CSS. Popper positions any HTML
+  element – no pseudo-elements are used.
+- **No virtual positioning**: CSS tooltips cannot follow the mouse cursor or be
+  used as a context menu. Popper allows you to position your tooltip relative to
+  any coordinates you desire.
+- **Lack of extensibility**: CSS tooltips cannot be easily extended to fit any
+  arbitrary use case you may need to adjust for. Popper is built with
+  extensibility in mind.
 
 ## Why Popper?
 
-Naive tooltip implementations generally don't consider the following:
+With the CSS drawbacks out of the way, we now move on to Popper in the
+JavaScript space itself.
 
-- Preventing overflow when the tooltip is near a boundary (e.g. window), it will
-  get cut off;
-- Flipping to keep the tooltip visible in the viewport for the user;
-- Keeping the tooltip with the reference element when inside any number of
-  scrolling containers;
-- Keeping the tooltip in its original DOM context
+Naive JavaScript tooltip implementations usually have the following problems:
 
-Popper solves all of these key problems in an elegant, performant manner. It is
-a ~3 kB library that aims to provide a reliable and extensible positioning
-engine you can use to ensure all your popper elements are positioned in the
-right place.
+- **Scrolling containers**: They don't ensure the tooltip stays with the
+  reference element while scrolling when inside any number of scrolling
+  containers.
+- **DOM context**: They often require the tooltip move outside of its original
+  DOM context because they don't handle `offsetParent` contexts.
+- **Configurability**: They often lack advanced configurability to suit any
+  possible use case.
+- **Size**: They are usually relatively large in size, or require an ancient
+  jQuery dependency.
+- **Performance**: They often have runtime performance issues and update the
+  tooltip position too slowly.
 
-Why waste your time writing your own logic every time you are programming a
-tooltip? There are many edge cases that are easy to forget to consider, which is
-why we've done the hard work for you.
+**Popper solves all of these key problems in an elegant, performant manner.** It
+is a lightweight ~3 kB library that aims to provide a reliable and extensible
+positioning engine you can use to ensure all your popper elements are positioned
+in the right place.
+
+When you start writing your own popper implementation, you'll quickly run into
+all of the problems mentioned above. These widgets are incredibly common in our
+UIs; we've done the hard work figuring this out so you don't need to spend hours
+fixing and handling numerous edge cases that we already ran into while building
+the library!
+
+Popper is used in popular libraries like Bootstrap, Foundation, Material UI, and
+more. It's likely you've already used popper elements on the web positioned by
+Popper at some point in the past few years.
 
 Since we write UIs using powerful abstraction libraries such as React or Angular
 nowadays, you'll also be glad to know Popper can fully integrate with them and
@@ -59,8 +110,8 @@ yarn add @popperjs/core
 
 Managing dependencies by "directly downloading" them and placing them into your
 source code is not recommended for a variety of reasons, including missing out
-on feat/fix updates easily. Please, use a versioning management system like a
-CDN or npm/Yarn.
+on feat/fix updates easily. Please use a versioning management system like a CDN
+or npm/Yarn.
 
 ## Usage
 
@@ -76,14 +127,16 @@ Here is a complete example:
 
 <style>
   #tooltip {
-    background-color: rebeccapurple;
-    padding: 20px;
-    width: 200px;
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 13px;
   }
 </style>
 
-<button type="button" id="button">I'm a button</button>
-<div id="tooltip">I'm a tooltip</div>
+<button id="button" aria-describedby="tooltip">I'm a button</button>
+<div id="tooltip" role="tooltip">I'm a tooltip</div>
 
 <script src="https://unpkg.com/@popperjs/core@2.0.0-rc.3"></script>
 <script>
@@ -97,6 +150,9 @@ Here is a complete example:
   });
 </script>
 ```
+
+Visit the [tutorial](https://popper.js.org/docs/v2/tutorial/) for an example of
+how to build your own tooltip from scratch using Popper.
 
 ### Module bundlers
 
@@ -155,6 +211,9 @@ createPopper(button, tooltip, {
 
 As you make more poppers, you may be finding yourself needing other modifiers
 provided by the library.
+
+See [tree-shaking](https://popper.js.org/docs/v2/tree-shaking/) for more
+information.
 
 ## Distribution targets
 
@@ -275,3 +334,7 @@ You can find the complete
 [`jest-puppeteer` documentation here](https://github.com/smooth-code/jest-puppeteer#api),
 and the
 [`jest-image-snapshot` documentation here](https://github.com/americanexpress/jest-image-snapshot#%EF%B8%8F-api).
+
+## License
+
+MIT

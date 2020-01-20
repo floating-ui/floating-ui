@@ -568,7 +568,7 @@ const Layout = ({ children }) => {
             <Li>
               <Check />
               <strong>
-                Places your tooltip relative to the reference
+                Places your tooltip or popover relative to the reference
               </strong>{' '}
               taking into account their sizes, and positions its arrow centered
               to the reference.
@@ -583,10 +583,12 @@ const Layout = ({ children }) => {
             </Li>
             <Li>
               <Check />
-              <strong>Keeps your tooltip in view as best as possible</strong>.
-              It prevents the tooltip from being clipped or cut off (overflow
-              prevention) and changes the tooltip placement if the original does
-              not fit (flipping).
+              <strong>
+                Keeps your tooltip or popover in view as best as possible
+              </strong>
+              . It prevents it from being clipped or cut off (overflow
+              prevention) and changes the placement if the original does not fit
+              (flipping).
             </Li>
           </Ul>
         </Container>
@@ -601,11 +603,11 @@ const Layout = ({ children }) => {
             course, there are cases where you need to configure Popper beyond
             its defaults – in these cases, Popper shines by offering high
             granularity of configuration to fine-tune the position or behavior
-            of your tooltip.
+            of your popper.
           </p>
           <p>
             You can extend Popper with your own modifiers (or plugins) to make
-            your tooltip work for you, no matter how advanced the scenario.
+            your popper work for you, no matter how advanced the scenario.
           </p>
         </Container>
       </Section>
@@ -626,9 +628,10 @@ const Layout = ({ children }) => {
             <Li>
               <Check />
               <strong>
-                You don't have to change the DOM context of your tooltip
+                You don't have to change the DOM context of your tooltip or
+                popover element
               </strong>
-              ; it will work no matter where your tooltip and reference elements
+              ; it will work no matter where your popper and reference elements
               live, even in the most complex scenarios like nested scrolling
               containers or alternative offsetParent contexts.
             </Li>

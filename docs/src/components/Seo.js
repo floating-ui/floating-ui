@@ -29,7 +29,7 @@ function SEO({ description, lang, meta, title }) {
 
   const isHome = title === 'Home';
   const computedTitle = isHome
-    ? `${site.siteMetadata.title} - Tooltip Positioning Engine`
+    ? `${site.siteMetadata.title} - Tooltip & Popover Positioning Engine`
     : title;
   const computedTitleTemplate = isHome ? '' : `%s | ${site.siteMetadata.title}`;
 

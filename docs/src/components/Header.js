@@ -10,11 +10,16 @@ import { css } from '@emotion/core';
 
 const HeaderStyled = styled.header`
   background-image: url(${stripes}),
-    radial-gradient(400px, #fff, #fff1e1 20%, #ffa0b1);
+    radial-gradient(40vh, #fff, #fff1e1 20%, #ffa0b1);
   text-align: center;
   padding: 60px 25px 50px;
   background-size: cover;
   background-position: center 60%;
+
+  ${media.md} {
+    background-image: url(${stripes}),
+      radial-gradient(500px, #fff, #fff1e1 20%, #ffa0b1);
+  }
 `;
 
 const Logo = styled.img`
@@ -83,8 +88,10 @@ const Header = () => (
       Documentation
     </DocsLink>
     <Logo src={popperLogo} alt="Popper logo" draggable="false" />
-    <Slogan>Tooltip Positioning Engine</Slogan>
-    <SubSlogan>Includes popovers, drop-downs, and more</SubSlogan>
+    <Slogan>Tooltip &amp; Popover Positioning Engine</Slogan>
+    <SubSlogan>
+      Weighs just <strong>3 kB!</strong>
+    </SubSlogan>
     <a
       css={buttonCss}
       href="https://github.com/popperjs/popper.js"
