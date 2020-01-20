@@ -1,0 +1,62 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  .scroll {
+    overflow: scroll;
+    width: 600px;
+    height: 300px;
+    background-color: grey;
+    position: relative;
+  }
+
+  .scroll::before {
+    content: 'after';
+    display: block;
+    height: 200px;
+    width: 1px;
+  }
+
+  #reference {
+    width: 200px;
+    height: 200px;
+    margin-left: 400px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+  #popper[data-popper-placement='left'] {
+    height: 100px;
+  }
+  #popper[data-popper-placement='top'] {
+    width: 100px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+</style>
+
+<div class="scroll scroll1">
+  <div id="reference">Reference Box</div>
+  <div id="popper">Popper Box</div>
+</div>
+
+<script type="module">
+  import { createPopper } from '../../dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = createPopper(reference, popper, {
+    placement: 'left',
+    modifiers: [
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['top'],
+        },
+      },
+    ],
+  });
+</script>
