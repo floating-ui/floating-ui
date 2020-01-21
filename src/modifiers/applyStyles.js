@@ -34,17 +34,21 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
 }
 
 function effect({ state }: ModifierArguments<{||}>) {
-  Object.assign(state.elements.popper.style, {
+  const initialStyles = {
     position: 'absolute',
     left: '0',
     top: '0',
-  });
+  };
+
+  Object.assign(state.elements.popper.style, initialStyles);
 
   return () => {
     Object.keys(state.elements).forEach(name => {
       const element = state.elements[name];
       const styleProperties = Object.keys(
-        state.styles.hasOwnProperty(name) ? { ...state.styles[name] } : {}
+        state.styles.hasOwnProperty(name)
+          ? { ...state.styles[name] }
+          : initialStyles
       );
       const attributes = state.attributes[name] || {};
 
