@@ -68,6 +68,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     };
 
     let effectCleanupFns: Array<() => void> = [];
+    let isDestroyed = false;
 
     const instance = {
       state,
@@ -140,6 +141,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // For high frequency updates (e.g. `resize` and `scroll` events), always
       // prefer the async Popper#update method
       forceUpdate() {
+        if (isDestroyed) {
+          return;
+        }
+
         const { reference, popper } = state.elements;
 
         // Don't proceed if `reference` or `popper` are not valid elements
@@ -217,6 +222,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       destroy() {
         cleanupModifierEffects();
+        isDestroyed = true;
       },
     };
 
@@ -227,9 +233,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    instance
-      .setOptions(options)
-      .then(state => options.onFirstUpdate && options.onFirstUpdate(state));
+    instance.setOptions(options).then(state => {
+      if (!isDestroyed && options.onFirstUpdate) {
+        options.onFirstUpdate(state);
+      }
+    });
 
     // Modifiers have the ability to execute arbitrary code before the first
     // update cycle runs. They will be executed in the same order as the update
