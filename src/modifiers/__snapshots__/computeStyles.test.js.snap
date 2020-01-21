@@ -2,10 +2,8 @@
 
 exports[`computes the arrow styles 1`] = `
 Object {
-  "bottom": "auto",
   "left": "0",
   "position": "absolute",
-  "right": "auto",
   "top": "0",
   "transform": "translate(10px, 5px)",
 }
