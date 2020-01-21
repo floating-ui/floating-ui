@@ -57,7 +57,7 @@ pre[class*='language-'] {
   border-radius: 0;
 }
 
-@media (min-width: 992px) {
+@media (min-width: 600px) {
   pre[class*='language-'] {
     font-size: 16px;
     border: 1px solid #ffffff0d;
