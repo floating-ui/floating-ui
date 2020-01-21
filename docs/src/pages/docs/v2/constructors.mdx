@@ -45,7 +45,7 @@ type Options = {|
   placement: Placement, // "bottom"
   modifiers: Array<$Shape<Modifier<any>>>, // []
   strategy: PositioningStrategy, // "absolute",
-  onFirstUpdate?: $Shape<State> => void, // undefined
+  onFirstUpdate?: ($Shape<State>) => void, // undefined
 |};
 
 type Placement =
@@ -96,7 +96,7 @@ createPopper(reference, popper, {
 });
 ```
 
-See [Modifiers](/docs/modifiers) for more information.
+See [Modifiers](../modifiers/) for more information.
 
 ### `strategy`
 
@@ -160,7 +160,7 @@ type Options = {|
   placement: Placement,
   modifiers: Array<$Shape<Modifier<any>>>,
   strategy: PositioningStrategy,
-  onFirstUpdate?: $Shape<State> => void,
+  onFirstUpdate?: ($Shape<State>) => void,
 |};
 
 type Instance = {|

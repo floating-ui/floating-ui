@@ -91,19 +91,19 @@ export const Tooltip = styled.div`
     `}
 
   &[data-popper-placement^='top'] > [data-popper-arrow] {
-    bottom: -5px;
+    bottom: -4px;
   }
 
   &[data-popper-placement^='right'] > [data-popper-arrow] {
-    left: -5px;
+    left: -4px;
   }
 
   &[data-popper-placement^='bottom'] > [data-popper-arrow] {
-    top: -5px;
+    top: -4px;
   }
 
   &[data-popper-placement^='left'] > [data-popper-arrow] {
-    right: -5px;
+    right: -4px;
   }
 
   [data-small] {
