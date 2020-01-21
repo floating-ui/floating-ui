@@ -76,6 +76,7 @@ export const Tooltip = styled.div`
   text-align: left;
   pointer-events: none;
   visibility: hidden;
+  z-index: 1;
 
   ${props =>
     props.hide &&
@@ -112,7 +113,7 @@ export const Tooltip = styled.div`
     display: none;
   }
 
-  ${media.lg} {
+  ${media.sm} {
     [data-small] {
       display: none;
     }

@@ -57,15 +57,12 @@ const Item = styled(Link)`
   display: block;
   color: white;
   text-decoration: none;
-  padding: 10px 15px 5px;
-  text-transform: uppercase;
+  padding: 6px 15px;
   font-size: 18px;
-  font-family: 'Luckiest Guy', sans-serif;
   transition: background-color 0.1s;
   border-radius: 0 20px 20px 0;
   border: none;
-  -webkit-font-smoothing: antialiased;
-  font-weight: normal;
+  font-weight: 500;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
@@ -176,6 +173,7 @@ const Block = ({ route }) => (
           activeStyle={{
             backgroundColor: '#FFF',
             color: '#C83B50',
+            fontWeight: 'bold',
           }}
         >
           {route.navigationLabel}
