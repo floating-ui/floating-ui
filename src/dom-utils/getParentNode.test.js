@@ -28,10 +28,11 @@ it('fallbacks to documentElement if no parentNode can be extracted', () => {
 });
 
 // JSDOM doesn't support Shadow DOM unfortunately, polyfills didn't help
-xit('returns the shadow dom host', () => {
+it('returns the shadow dom host', () => {
   const element = document.createElement('div');
   const shadowRoot = element.attachShadow({ mode: 'open' });
   const child = document.createElement('div');
   shadowRoot.appendChild(child);
-  expect(getParentNode(child)).toBe(element);
+  expect(getParentNode(child)).toBe(shadowRoot);
+  expect(getParentNode(shadowRoot)).toBe(element);
 });
