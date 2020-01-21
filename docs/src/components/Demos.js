@@ -56,7 +56,13 @@ export const ArrowDemo = () => {
   return (
     <>
       <ClippingParent scrollable>
-        <Reference ref={reference} style={{ position: 'absolute', left: 15 }}>
+        <Reference
+          ref={reference}
+          css={css`
+            position: absolute;
+            left: 15px;
+          `}
+        >
           Reference
         </Reference>
         <Tooltip ref={popper}>
@@ -83,11 +89,11 @@ export const HideDemo = () => {
       <ClippingParent scrollable>
         <Reference
           ref={reference}
-          style={{
-            position: 'absolute',
-            left: '50%',
-            marginLeft: -75,
-          }}
+          css={css`
+            position: absolute;
+            left: 50%;
+            margin-left: -75px;
+          `}
         >
           Reference
         </Reference>
@@ -128,11 +134,11 @@ export const PreventOverflowDemo = () => {
       <ClippingParent>
         <Reference
           ref={reference}
-          style={{
-            position: 'absolute',
-            top: 50,
-            left: 15,
-          }}
+          css={css`
+            position: absolute;
+            top: 50%;
+            left: 15px;
+          `}
         >
           Reference
         </Reference>
@@ -150,11 +156,11 @@ export const FlipDemo = () => {
       <ClippingParent scrollable>
         <Reference
           ref={reference}
-          style={{
-            position: 'absolute',
-            left: '50%',
-            marginLeft: -75,
-          }}
+          css={css`
+            position: absolute;
+            left: 50%;
+            margin-left: -75px;
+          `}
         >
           Reference
         </Reference>

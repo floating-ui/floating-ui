@@ -409,7 +409,11 @@ createPopper(popcorn, tooltip, {
         <PopcornBox
           ref={reference}
           src={popcornBox}
-          style={{ position: 'absolute', top: '50%', marginTop: -60 }}
+          css={css`
+            position: absolute;
+            top: 50%;
+            margin-top: -60px;
+          `}
         />
         <Tooltip ref={popper}>
           <TooltipName data-small>Tip</TooltipName>
@@ -458,10 +462,10 @@ createPopper(popcorn, tooltip, {
         <PopcornBox
           ref={reference}
           src={popcornBox}
-          style={{
-            position: 'absolute',
-            left: 100,
-          }}
+          css={css`
+            position: absolute;
+            left: 100px;
+          `}
         />
         <Tooltip ref={popper}>
           <TooltipName>Popcorn</TooltipName>

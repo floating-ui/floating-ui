@@ -82,7 +82,7 @@ const MobileHeader = styled.header`
   padding: 15px 0;
   height: 45px;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
 
   ${media.lg} {
     display: none;

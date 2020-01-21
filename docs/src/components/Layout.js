@@ -188,7 +188,10 @@ const EditPage = ({ path }) => (
       return (
         route && (
           <a
-            style={{ marginTop: 15, display: 'inline-block' }}
+            css={css`
+              margin-top: 15px;
+              display: inline-block;
+            `}
             href={`https://github.com/popperjs/popper-core/edit/master/docs/src/${
               route.fileAbsolutePath.split('/docs/src/')[1]
             }`}
