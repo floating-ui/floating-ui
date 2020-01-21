@@ -21,7 +21,7 @@ const Container = styled.div`
   overflow: auto;
   transform: translateX(-${NAVIGATION_WIDTH}px);
   display: none;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 10px 0 20px -2px rgba(80, 0, 20, 0.2);
 
   ${props =>
