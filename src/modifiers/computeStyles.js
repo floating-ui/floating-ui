@@ -43,7 +43,7 @@ export function mapToStyles({
   offsets,
   position,
   gpuAcceleration,
-  dynamicSide,
+  adaptive,
 }: {
   popper: HTMLElement,
   popperRect: Rect,
@@ -51,7 +51,7 @@ export function mapToStyles({
   offsets: Offsets,
   position: PositioningStrategy,
   gpuAcceleration: boolean,
-  dynamicSide: boolean,
+  adaptive: boolean,
 }) {
   let { x, y } = roundOffsets(offsets);
 
@@ -61,7 +61,7 @@ export function mapToStyles({
   let sideX: string = left;
   let sideY: string = top;
 
-  if (dynamicSide) {
+  if (adaptive) {
     let offsetParent = getOffsetParent(popper);
     if (offsetParent === getWindow(popper)) {
       offsetParent = getDocumentElement(popper);
@@ -78,10 +78,14 @@ export function mapToStyles({
     }
   }
 
+  const commonStyles = {
+    position,
+    ...(adaptive && unsetSides),
+  };
+
   if (gpuAcceleration) {
     return {
-      position,
-      ...unsetSides,
+      ...commonStyles,
       [sideY]: hasY ? '0' : '',
       [sideX]: hasX ? '0' : '',
       // Layer acceleration can disable subpixel rendering which causes slightly
@@ -95,8 +99,7 @@ export function mapToStyles({
   }
 
   return {
-    position,
-    ...unsetSides,
+    ...commonStyles,
     [sideY]: hasY ? `${y}px` : '',
     [sideX]: hasX ? `${x}px` : '',
     transform: '',
@@ -120,7 +123,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
       ...commonStyles,
       offsets: state.modifiersData.popperOffsets,
       position: state.options.strategy,
-      dynamicSide: adaptive,
+      adaptive,
     }),
   };
 
@@ -132,7 +135,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
         ...commonStyles,
         offsets: state.modifiersData.arrow,
         position: 'absolute',
-        dynamicSide: false,
+        adaptive: false,
       }),
     };
   }

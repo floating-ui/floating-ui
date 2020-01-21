@@ -12,7 +12,7 @@ it('computes the popper styles', () => {
       offsets: { x: 10, y: 5 },
       position: 'absolute',
       gpuAcceleration: true,
-      dynamicSide: true,
+      adaptive: true,
     })
   ).toMatchSnapshot();
 
@@ -24,7 +24,7 @@ it('computes the popper styles', () => {
       offsets: { x: 10, y: 5 },
       position: 'absolute',
       gpuAcceleration: false,
-      dynamicSide: true,
+      adaptive: true,
     })
   ).toMatchSnapshot();
 
@@ -36,7 +36,7 @@ it('computes the popper styles', () => {
       offsets: { x: 10, y: 5 },
       position: 'absolute',
       gpuAcceleration: false,
-      dynamicSide: true,
+      adaptive: true,
     })
   ).toMatchSnapshot();
 
@@ -48,7 +48,7 @@ it('computes the popper styles', () => {
       offsets: { x: 10, y: 5 },
       position: 'absolute',
       gpuAcceleration: false,
-      dynamicSide: true,
+      adaptive: true,
     })
   ).toMatchSnapshot();
 
@@ -64,7 +64,7 @@ it('computes the arrow styles', () => {
       offsets: { x: 10, y: 5 },
       position: 'absolute',
       gpuAcceleration: true,
-      dynamicSide: false,
+      adaptive: false,
     })
   ).toMatchSnapshot();
 });
