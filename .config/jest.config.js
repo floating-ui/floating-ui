@@ -6,7 +6,7 @@ module.exports = {
   },
   globalSetup: 'jest-environment-puppeteer/setup',
   globalTeardown: 'jest-environment-puppeteer/teardown',
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jest-environment-jsdom-fourteen',
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
   reporters: ['default', require.resolve('../tests/image-reporter.js')],
   setupFiles: ['dotenv/config'],

@@ -87,6 +87,7 @@
     "glob": "^7.1.6",
     "husky": "^4.0.7",
     "jest": "^24.9.0",
+    "jest-environment-jsdom-fourteen": "^1.0.1",
     "jest-environment-puppeteer": "^4.4.0",
     "jest-image-snapshot": "^2.11.1",
     "jest-puppeteer": "^4.4.0",
