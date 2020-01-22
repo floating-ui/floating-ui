@@ -110,7 +110,7 @@ yarn add @popperjs/core
 ### 2. CDN
 
 ```html
-<script src="https://unpkg.com/@popperjs/core@2.0.0-rc.3"></script>
+<script src="https://unpkg.com/@popperjs/core@^2.0.0"></script>
 ```
 
 ### 3. Direct Download?
@@ -145,7 +145,7 @@ Here is a complete example:
 <button id="button" aria-describedby="tooltip">I'm a button</button>
 <div id="tooltip" role="tooltip">I'm a tooltip</div>
 
-<script src="https://unpkg.com/@popperjs/core@2.0.0-rc.3"></script>
+<script src="https://unpkg.com/@popperjs/core@^2.0.0"></script>
 <script>
   const button = document.querySelector('#button');
   const tooltip = document.querySelector('#tooltip');
