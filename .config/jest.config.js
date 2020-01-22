@@ -10,4 +10,5 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
   reporters: ['default', require.resolve('../tests/image-reporter.js')],
   setupFiles: ['dotenv/config'],
+  modulePathIgnorePatterns: ['tests/visual/dist'],
 };
