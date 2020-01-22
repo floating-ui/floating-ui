@@ -36,6 +36,7 @@ import atlassianLogo from '../images/logos/atlassian.svg';
 import bootstrapLogo from '../images/logos/bootstrap.svg';
 import drupalLogo from '../images/logos/drupal.svg';
 import gitlabLogo from '../images/logos/gitlab.svg';
+import mediumLogo from '../images/logos/medium.svg';
 
 import 'modern-normalize';
 import './layout.css';
@@ -735,6 +736,11 @@ const Layout = ({ children }) => {
               href="https://www.gitlab.com/"
               src={gitlabLogo}
               alt="Used by GitLab"
+            />
+            <UsedByLogo
+              href="https://www.medium.com/"
+              src={mediumLogo}
+              alt="Used by Medium"
             />
           </UsedByContainer>
         </Container>
