@@ -136,8 +136,8 @@ export const PreventOverflowDemo = () => {
           ref={reference}
           css={css`
             position: absolute;
-            top: 50%;
-            left: 15px;
+            top: 10px;
+            left: 10px;
           `}
         >
           Reference

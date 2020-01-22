@@ -235,6 +235,7 @@ const Layout = ({ children, path, pageResources, ...props }) => {
           h5,
           h6 {
             color: #f4e0f1;
+            font-weight: bold;
           }
 
           h1 {

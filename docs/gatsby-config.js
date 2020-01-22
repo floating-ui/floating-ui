@@ -84,7 +84,7 @@ module.exports = {
       resolve: `gatsby-plugin-google-fonts`,
       options: {
         fonts: [`Luckiest+Guy`],
-        display: 'swap',
+        display: 'block',
       },
     },
     {

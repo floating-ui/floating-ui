@@ -2,8 +2,10 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { UNPKG_CDN_URL } from '../../variables';
 import { media, Container } from './Framework';
+import { Gift } from 'react-feather';
 
 import npmLogo from '../images/npm-logo.svg';
+import { css } from '@emotion/core';
 
 const InstallBarStyled = styled.div`
   background: #c83b50;
@@ -70,7 +72,19 @@ const TextWrapper = styled.div`
 const InstallBar = () => (
   <InstallBarStyled>
     <InstallBarContainer>
-      Get Popper Now!
+      <div
+        css={css`
+          margin-bottom: 5px;
+        `}
+      >
+        <Gift
+          css={css`
+            vertical-align: -5px;
+            margin-right: 10px;
+          `}
+        />
+        Install Popper
+      </div>
       <Bar>
         <LogoWrapper>
           <Logo src={npmLogo} draggable="false" />

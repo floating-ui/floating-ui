@@ -11,7 +11,16 @@ function getId() {
 const Box = styled.div`
   background: white;
   border-radius: 8px;
-  padding: 25px 25px 50px;
+  padding: 50px 25px 75px;
+  text-align: center;
+`;
+
+const Button = styled.button`
+  background: white;
+  border: 1px solid #ccc;
+  color: #333;
+  font-size: 100%;
+  padding: 5px 10px;
 `;
 
 const Tooltip = forwardRef((props, ref) => (
@@ -26,6 +35,7 @@ const Tooltip = forwardRef((props, ref) => (
       padding: 4px 8px;
       font-size: 13px;
       border-radius: 4px;
+      text-align: left;
 
       &[data-popper-placement^='top'] > [data-popper-arrow] {
         bottom: -4px;
@@ -70,9 +80,9 @@ export const Result1 = () => {
 
   return (
     <Box>
-      <button ref={reference} aria-describedby={id}>
+      <Button ref={reference} aria-describedby={id}>
         My button
-      </button>
+      </Button>
       <Tooltip ref={popper} id={id}>
         My tooltip
       </Tooltip>
@@ -86,9 +96,9 @@ export const Result2 = () => {
 
   return (
     <Box>
-      <button ref={reference} aria-describedby={id}>
+      <Button ref={reference} aria-describedby={id}>
         My button
-      </button>
+      </Button>
       <Tooltip ref={popper} id={id}>
         My tooltip
         <Arrow data-popper-arrow />
@@ -111,9 +121,9 @@ export const Result3 = () => {
 
   return (
     <Box>
-      <button ref={reference} aria-describedby={id}>
+      <Button ref={reference} aria-describedby={id}>
         My button
-      </button>
+      </Button>
       <Tooltip ref={popper} id={id}>
         My tooltip
         <Arrow data-popper-arrow />
@@ -146,7 +156,7 @@ export const Result4 = () => {
 
   return (
     <Box>
-      <button
+      <Button
         ref={reference}
         onMouseEnter={show}
         onMouseLeave={hide}
@@ -155,7 +165,7 @@ export const Result4 = () => {
         aria-describedby={id}
       >
         My button
-      </button>
+      </Button>
       <Tooltip id={id} ref={popper} style={{ display }}>
         My tooltip
         <Arrow data-popper-arrow />
