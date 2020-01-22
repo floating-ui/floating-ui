@@ -147,6 +147,10 @@ code.language-scss,
   color: #ffb6b3;
 }
 
+.token.dom {
+  color: #a5c8ff;
+}
+
 .token.deleted {
   text-decoration: line-through;
 }

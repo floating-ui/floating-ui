@@ -117,19 +117,19 @@ Now we need to offset the arrow depending on the popper's current placement.
 Popper provides this information with the `data-popper-placement` attribute:
 
 ```css
-#tooltip[data-popper-placement^='top'] #arrow {
+#tooltip[data-popper-placement^='top'] > #arrow {
   bottom: -4px;
 }
 
-#tooltip[data-popper-placement^='bottom'] #arrow {
+#tooltip[data-popper-placement^='bottom'] > #arrow {
   top: -4px;
 }
 
-#tooltip[data-popper-placement^='left'] #arrow {
+#tooltip[data-popper-placement^='left'] > #arrow {
   right: -4px;
 }
 
-#tooltip[data-popper-placement^='right'] #arrow {
+#tooltip[data-popper-placement^='right'] > #arrow {
   left: -4px;
 }
 ```
@@ -279,19 +279,19 @@ function hide() {
         background: #333;
       }
 
-      #tooltip[data-popper-placement^='top'] #arrow {
+      #tooltip[data-popper-placement^='top'] > #arrow {
         bottom: -4px;
       }
 
-      #tooltip[data-popper-placement^='bottom'] #arrow {
+      #tooltip[data-popper-placement^='bottom'] > #arrow {
         top: -4px;
       }
 
-      #tooltip[data-popper-placement^='left'] #arrow {
+      #tooltip[data-popper-placement^='left'] > #arrow {
         right: -4px;
       }
 
-      #tooltip[data-popper-placement^='right'] #arrow {
+      #tooltip[data-popper-placement^='right'] > #arrow {
         left: -4px;
       }
     </style>

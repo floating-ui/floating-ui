@@ -25,7 +25,14 @@ and floats near a target element. The most common example is a tooltip, but it
 also includes popovers, drop-downs, and more. All of these can be generically
 described as a "popper" element.
 
+## Demo
+
 [![Popper visualized](https://i.imgur.com/F7qWsmV.jpg)](https://popper.js.org)
+
+## Docs
+
+- [v2.x (latest)](https://popper.js.org/docs/v2/)
+- [v1.x](https://popper.js.org/docs/v1/)
 
 ## Why not use pure CSS?
 

@@ -5,7 +5,7 @@ import popperLogo from '../images/popper-logo.svg';
 import stripes from '../images/stripes.svg';
 
 import { media } from './Framework';
-import { GitHub } from 'react-feather';
+import { GitHub, Terminal } from 'react-feather';
 import { css } from '@emotion/core';
 
 const HeaderStyled = styled.header`
@@ -35,7 +35,7 @@ const Slogan = styled.h2`
   -webkit-font-smoothing: antialiased;
   color: #c83b50;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.5px;
   font-size: 30px;
   line-height: 1.1;
   margin-bottom: -15px;
@@ -48,8 +48,8 @@ const Slogan = styled.h2`
 const SubSlogan = styled.p`
   color: #642f45;
   font-size: 22px;
-  font-weight: bold;
   font-style: italic;
+  font-weight: 500;
   margin-bottom: 20px;
   line-height: 1.2;
 `;
@@ -62,11 +62,11 @@ const buttonCss = css`
   text-decoration: none;
   font-size: 16px;
   font-weight: 700;
-  margin-top: 10px;
   color: #c83b50;
   box-shadow: 0 8px 16px -4px rgba(200, 59, 80, 0.5);
   transition: all 0.2s ease-in-out;
   text-transform: uppercase;
+  margin: 5px;
 
   &:hover {
     background: #c73a50;
@@ -75,18 +75,13 @@ const buttonCss = css`
   }
 `;
 
-const DocsLink = styled(Link)`
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0 15px;
+const iconCss = css`
+  vertical-align: -7px;
+  margin-right: 5px;
 `;
 
 const Header = () => (
   <HeaderStyled>
-    <DocsLink css={buttonCss} to="/docs/">
-      Documentation
-    </DocsLink>
     <Logo src={popperLogo} alt="Popper logo" draggable="false" />
     <Slogan>
       Tooltip &amp; Popover <br /> Positioning Engine
@@ -94,13 +89,23 @@ const Header = () => (
     <SubSlogan>
       Weighs just <strong>3 kB!</strong>
     </SubSlogan>
-    <a
-      css={buttonCss}
-      href="https://github.com/popperjs/popper.js"
-      rel="nofollow noreferrer"
+    <div
+      css={css`
+        margin-top: 30px;
+      `}
     >
-      <GitHub style={{ verticalAlign: -7, marginRight: 5 }} /> Star on GitHub
-    </a>
+      <a
+        css={buttonCss}
+        href="https://github.com/popperjs/popper.js"
+        rel="nofollow noreferrer"
+      >
+        <GitHub css={iconCss} /> Star on GitHub
+      </a>
+      <Link to="/docs/v2/" css={buttonCss}>
+        <Terminal css={iconCss} />
+        Documentation
+      </Link>
+    </div>
   </HeaderStyled>
 );
 

@@ -17,6 +17,9 @@ import {
   Check,
   ChevronRight,
   CloudLightning,
+  Move,
+  ArrowUp,
+  ArrowDown,
 } from 'react-feather';
 import Highlight from './Highlight';
 import CarbonAds from './CarbonAds';
@@ -89,7 +92,7 @@ const Button = styled.a`
 
 const Heading = styled.h3`
   font-family: 'Luckiest Guy', sans-serif;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   font-size: 30px;
   -webkit-font-smoothing: antialiased;
@@ -422,7 +425,9 @@ createPopper(popcorn, tooltip, {
         </Tooltip>
       </DotContainer>
       <ExampleText>
-        <Heading>Placement</Heading>
+        <Heading>
+          <Move /> Placement
+        </Heading>
         <p>
           <strong>Click on the dots</strong> to place the tooltip. There are 12
           different placements to choose from.
@@ -484,7 +489,9 @@ createPopper(popcorn, tooltip, {
         </Tooltip>
       </ScrollContainer>
       <ExampleText>
-        <Heading>Overflow prevention</Heading>
+        <Heading>
+          <Crop /> Overflow prevention
+        </Heading>
         <p>
           <strong>Scroll the container</strong> (or the whole page) to see the
           tooltip stay within the boundary. Once the opposite edges of the
@@ -527,7 +534,10 @@ createPopper(popcorn, tooltip);
         </Tooltip>
       </ScrollContainer>
       <ExampleText>
-        <Heading>Flipping</Heading>
+        <Heading>
+          <ArrowUp />
+          <ArrowDown /> Flipping
+        </Heading>
         <p>
           <strong>Scroll the container</strong> (or the whole page) to see the
           tooltip flip to the opposite side once it's about to overflow the

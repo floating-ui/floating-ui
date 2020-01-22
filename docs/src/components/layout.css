@@ -10,3 +10,9 @@ body {
   text-shadow: none;
   background: #8f51e6;
 }
+
+h1,
+h2,
+h3 {
+  font-weight: normal;
+}
