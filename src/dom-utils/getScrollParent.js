@@ -6,6 +6,7 @@ import { isHTMLElement } from './instanceOf';
 
 export default function getScrollParent(node: Node): HTMLElement {
   if (['html', 'body', '#document'].includes(getNodeName(node))) {
+    // $FlowFixMe: assume body is always available
     return node.ownerDocument.body;
   }
 
