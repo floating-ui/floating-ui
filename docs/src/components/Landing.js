@@ -254,6 +254,7 @@ const DotContainer = styled(ExampleArea)`
 
 export const ScrollContainer = styled(ExampleArea)`
   overflow-y: scroll;
+  overscroll-behavior: contain;
   height: 350px;
   margin: 0 auto;
   border: 2px dashed #ff6b81;
