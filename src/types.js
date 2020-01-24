@@ -29,7 +29,6 @@ export type StateOffsets = {|
 |};
 
 export type State = {|
-  isCreated: boolean,
   elements: {|
     reference: Element | VirtualElement,
     popper: HTMLElement,
@@ -63,7 +62,7 @@ export type Instance = {|
 |};
 
 export type ModifierArguments<Options: Obj> = {
-  state: $Shape<State>,
+  state: State,
   instance: Instance,
   options: $Shape<Options>,
   name: string,
@@ -74,8 +73,8 @@ export type Modifier<Options> = {|
   phase: ModifierPhases,
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
-  fn: (ModifierArguments<Options>) => ?State,
-  effect?: (ModifierArguments<Options>) => ?() => void,
+  fn: (ModifierArguments<Options>) => State | void,
+  effect?: (ModifierArguments<Options>) => (() => void) | void,
   options?: Obj,
   data?: Obj,
 |};
