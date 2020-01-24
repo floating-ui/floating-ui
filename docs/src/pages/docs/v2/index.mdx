@@ -7,19 +7,25 @@ redirect_from:
 
 # Documentation
 
-import Logo from '../../../images/popper-logo-outlined.svg';
+import { css } from 'emotion';
+import { media } from 'src/components/Framework';
+import Logo from 'src/images/popper-logo-outlined.svg';
 
 <img
   src={Logo}
   alt="Popper"
   height={190}
-  style={{
-    float: 'right',
-    position: 'relative',
-    top: -15,
-    marginLeft: 10,
-    filter: 'contrast(105%) brightness(95%)',
-  }}
+  className={css`
+    float: right;
+    position: relative;
+    top: -15px;
+    margin-left: 10px;
+    filter: contrast(105%) brightness(95%);
+    display: none;
+    ${media.lg} {
+      display: block;
+    }
+  `}
 />
 
 **Positioning tooltips and popovers is difficult. Popper is here to help!**

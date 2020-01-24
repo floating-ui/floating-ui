@@ -1,8 +1,11 @@
+<!-- <HEADER> // IGNORE IT -->
 <p align="center">
-  <img src="https://github.com/popperjs/popper-core/blob/master/docs/src/images/popper-logo.svg" alt="Popper" height="300px"/>
+  <img src="https://rawcdn.githack.com/popperjs/popper-core/8805a5d7599e14619c9e7ac19a3713285d8e5d7f/docs/src/images/popper-logo-outlined.svg" alt="Popper" height="300px"/>
 </p>
 
-<h1 align="center">Tooltip & Popover Positioning Engine</h1>
+<div align="center">
+  <h1>Tooltip & Popover Positioning Engine</h1>
+</div>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@popperjs/core">
@@ -14,6 +17,7 @@
 </p>
 
 <br />
+<!-- </HEADER> // NOW BEGINS THE README -->
 
 **Positioning tooltips and popovers is difficult. Popper is here to help!**
 

@@ -8,6 +8,7 @@ module.exports = {
     image: '/images/popper-og-image.jpg',
   },
   plugins: [
+    `gatsby-plugin-root-import`,
     `gatsby-plugin-catch-links`,
     {
       resolve: `gatsby-plugin-google-analytics`,
