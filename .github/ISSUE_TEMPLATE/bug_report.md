@@ -1,10 +1,9 @@
 ---
 name: 🐞 Bug report
-about: Create a report to help us improve
+about: Something is broken
 title: ''
 labels: "# BUG \U0001F41E, NEEDS: triage"
 assignees: ''
-
 ---
 
 <!--
