@@ -5,6 +5,7 @@ module.exports = {
     title: `Popper`,
     description: `Positioning tooltips and popovers is difficult. Popper is here to help! Popper is the de facto standard to position tooltips and popovers in modern web applications.`,
     author: `@FezVrasta`,
+    image: '/images/popper-og-image.jpg',
   },
   plugins: [
     `gatsby-plugin-catch-links`,
