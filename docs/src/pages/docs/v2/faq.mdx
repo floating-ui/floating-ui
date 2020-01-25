@@ -8,6 +8,14 @@ order: 8
 Note: this page is a work in progress right now. Popper 2 is newly released so
 we don't have many questions yet.
 
+## Why is my popper overflowing or slightly off center?
+
+Ensure you don't have CSS `margin` applied to the popper.
+
+To replicate margin, use the `offset` modifier to apply some distance between
+the popper and its reference element, as well as the `padding` option in
+`preventOverflow` or `flip` to apply some padding between the popper's boundary.
+
 ## Why is my popper jittering while scrolling?
 
 Try using the `"fixed"` strategy.
