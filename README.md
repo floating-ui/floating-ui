@@ -114,7 +114,11 @@ yarn add @popperjs/core
 ### 2. CDN
 
 ```html
-<script src="https://unpkg.com/@popperjs/core@^2.0.0"></script>
+<!-- Development version -->
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
+
+<!-- Production version -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
 ```
 
 ### 3. Direct Download?
