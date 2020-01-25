@@ -84,24 +84,6 @@ describe('margin warning', () => {
     );
   });
 
-  it('warns for single margin side', () => {
-    const spy = jest.spyOn(console, 'warn');
-    const popper = getPopper();
-    popper.style.marginBottom = '5px';
-
-    createPopper(reference, popper);
-
-    expect(spy).toHaveBeenCalledWith(
-      [
-        'Popper: CSS "margin" styles cannot be used to apply padding',
-        'between the popper and its reference element or boundary.',
-        'To replicate margin, use the `offset` modifier, as well as',
-        'the `padding` option in the `preventOverflow` and `flip`',
-        'modifiers.',
-      ].join(' ')
-    );
-  });
-
   it('does not warn with no margin', () => {
     const spy = jest.spyOn(console, 'warn');
     const popper = getPopper();

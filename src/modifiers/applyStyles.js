@@ -38,6 +38,7 @@ function effect({ state }: ModifierArguments<{||}>) {
     position: 'absolute',
     left: '0',
     top: '0',
+    margin: '0',
   };
 
   Object.assign(state.elements.popper.style, initialStyles);
