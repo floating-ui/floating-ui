@@ -127,9 +127,20 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             }
           }
 
+          const {
+            marginTop,
+            marginRight,
+            marginBottom,
+            marginLeft,
+          } = getComputedStyle(popper);
+
           // We no longer take into account `margins` on the popper, and it can
           // cause bugs with positioning, so we'll warn the consumer
-          if (parseFloat(getComputedStyle(popper).margin)) {
+          if (
+            [marginTop, marginRight, marginBottom, marginLeft].some(margin =>
+              parseFloat(margin)
+            )
+          ) {
             console.warn(
               [
                 'Popper: CSS "margin" styles cannot be used to apply padding',
