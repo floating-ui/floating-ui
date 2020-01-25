@@ -1,6 +1,6 @@
 // @flow
 import type { Placement, Boundary, RootBoundary } from '../enums';
-import type { ModifierArguments, Modifier, Padding } from '../types';
+import type { Modifier, Padding } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
@@ -19,6 +19,10 @@ export type Options = {
   flipVariations: boolean,
 };
 
+type Data = {|
+  _skip: boolean,
+|};
+
 function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
   if (getBasePlacement(placement) === auto) {
     return [];
@@ -33,7 +37,7 @@ function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
   ];
 }
 
-function flip({ state, options, name }: ModifierArguments<Options>) {
+function flip({ state, options, name }) {
   if (state.modifiersData[name]._skip) {
     return;
   }
@@ -156,4 +160,4 @@ export default ({
   fn: flip,
   requiresIfExists: ['offset'],
   data: { _skip: false },
-}: Modifier<Options>);
+}: Modifier<'flip', Options, {| data: Data |}>);

@@ -1,5 +1,4 @@
 // @flow
-import type { Modifier } from '../types';
 import { modifierPhases } from '../enums';
 
 // source: https://stackoverflow.com/questions/49875255
@@ -13,7 +12,7 @@ function order(modifiers) {
   });
 
   // On visiting object, check for its dependencies and visit them recursively
-  function sort(modifier: Modifier<any>) {
+  function sort(modifier) {
     visited.add(modifier.name);
 
     const requires = [
@@ -44,9 +43,9 @@ function order(modifiers) {
   return result;
 }
 
-export default function orderModifiers(
-  modifiers: Array<Modifier<any>>
-): Array<Modifier<any>> {
+export default function orderModifiers<M: any>(
+  modifiers: Array<M>
+): Array<M> {
   // order based on dependencies
   const orderedModifiers = order(modifiers);
 

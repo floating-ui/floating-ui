@@ -1,5 +1,5 @@
 // @flow
-import type { ModifierArguments, Modifier } from '../types';
+import type { Modifier } from '../types';
 import getWindow from '../dom-utils/getWindow';
 
 // eslint-disable-next-line import/no-unused-modules
@@ -10,7 +10,7 @@ export type Options = {
 
 const passive = { passive: true };
 
-function effect({ state, instance, options }: ModifierArguments<Options>) {
+function effect({ state, instance, options }) {
   const { scroll = true, resize = true } = options;
 
   const window = getWindow(state.elements.popper);
@@ -48,5 +48,4 @@ export default ({
   phase: 'write',
   fn: () => {},
   effect,
-  data: {},
-}: Modifier<Options>);
+}: Modifier<'eventListeners', Options>);

@@ -5,7 +5,7 @@ import type { Modifier } from './types';
 const reference = document.createElement('div');
 const getPopper = () => document.createElement('div');
 
-const testModifier: Modifier<{||}> = {
+const testModifier: Modifier<'test', {||}> = {
   name: 'test',
   phase: 'main',
   enabled: true,
@@ -17,7 +17,7 @@ it('returns expected instance object', () => {
 });
 
 it('runs modifier effects on create', () => {
-  const spy = jest.fn();
+  const spy: () => void = jest.fn();
 
   createPopper(reference, getPopper(), {
     modifiers: [
@@ -151,7 +151,7 @@ describe('.destroy() method', () => {
   });
 
   it('forceUpdate() is not ran when destroy is called sync', done => {
-    const spy = jest.fn();
+    const spy: () => void = jest.fn();
 
     createPopper(reference, getPopper(), {
       modifiers: [{ ...testModifier, fn: spy }],

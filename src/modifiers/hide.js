@@ -1,20 +1,15 @@
 // @flow
-import type {
-  ModifierArguments,
-  Modifier,
-  Rect,
-  Options,
-  SideObject,
-  Offsets,
-} from '../types';
+import type { Modifier, Rect, Options, SideObject, Offsets } from '../types';
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
 
 function getSideOffsets(
   overflow: SideObject,
   rect: Rect,
-  preventedOffsets: Offsets = { x: 0, y: 0 }
+  preventedOffsets: ?Offsets
 ): SideObject {
+  preventedOffsets = preventedOffsets || { x: 0, y: 0 };
+
   return {
     top: overflow.top - rect.height - preventedOffsets.y,
     right: overflow.right - rect.width + preventedOffsets.x,
@@ -27,7 +22,7 @@ function isAnySideFullyClipped(overflow: SideObject): boolean {
   return [top, right, bottom, left].some(side => overflow[side] >= 0);
 }
 
-function hide({ state, name }: ModifierArguments<Options>) {
+function hide({ state, name }) {
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
   const preventedOffsets = state.modifiersData.preventOverflow;
@@ -72,4 +67,4 @@ export default ({
   phase: 'main',
   requiresIfExists: ['preventOverflow'],
   fn: hide,
-}: Modifier<Options>);
+}: Modifier<'hide', Options>);

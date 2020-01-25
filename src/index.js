@@ -2,9 +2,9 @@
 import type {
   State,
   Options,
-  Modifier,
   Instance,
   VirtualElement,
+  Modifiers,
 } from './types';
 import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
@@ -33,7 +33,7 @@ const DEFAULT_OPTIONS: Options = {
 };
 
 type PopperGeneratorArgs = {
-  defaultModifiers?: Array<Modifier<any>>,
+  defaultModifiers?: Modifiers,
   defaultOptions?: $Shape<Options>,
 };
 
@@ -88,18 +88,20 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         // Orders the modifiers based on their dependencies and `phase`
         // properties
-        const orderedModifiers = orderModifiers([
-          ...state.options.modifiers.filter(
-            modifier =>
-              !defaultModifiers.find(({ name }) => name === modifier.name)
-          ),
-          ...defaultModifiers.map(defaultModifier => ({
-            ...defaultModifier,
-            ...state.options.modifiers.find(
-              ({ name }) => name === defaultModifier.name
+        const orderedModifiers = orderModifiers(
+          ([
+            ...state.options.modifiers.filter(
+              modifier =>
+                !defaultModifiers.find(({ name }) => name === modifier.name)
             ),
-          })),
-        ]);
+            ...defaultModifiers.map(defaultModifier => ({
+              ...defaultModifier,
+              ...state.options.modifiers.find(
+                ({ name }) => name === defaultModifier.name
+              ),
+            })),
+          ]: Modifiers)
+        );
 
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the modifiers is invalid for any reason

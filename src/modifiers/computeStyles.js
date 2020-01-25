@@ -1,11 +1,5 @@
 // @flow
-import type {
-  PositioningStrategy,
-  Offsets,
-  Modifier,
-  ModifierArguments,
-  Rect,
-} from '../types';
+import type { PositioningStrategy, Offsets, Modifier, Rect } from '../types';
 import { type BasePlacement, top, left, right, bottom } from '../enums';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import getWindow from '../dom-utils/getWindow';
@@ -107,7 +101,7 @@ export function mapToStyles({
   };
 }
 
-function computeStyles({ state, options }: ModifierArguments<Options>) {
+function computeStyles({ state, options }) {
   const { gpuAcceleration = true, adaptive = true } = options;
 
   const commonStyles = {
@@ -152,5 +146,4 @@ export default ({
   enabled: true,
   phase: 'beforeWrite',
   fn: computeStyles,
-  data: {},
-}: Modifier<Options>);
+}: Modifier<'computeStyles', Options>);

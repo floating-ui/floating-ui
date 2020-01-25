@@ -1,7 +1,7 @@
 // @flow
 import { top, left, right, bottom, start } from '../enums';
 import type { Placement, Boundary, RootBoundary } from '../enums';
-import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
+import type { Rect, Modifier, Padding, Offsets } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
@@ -40,7 +40,7 @@ export type Options = {
   padding: Padding,
 };
 
-function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
+function preventOverflow({ state, options, name }) {
   const {
     mainAxis: checkMainAxis = true,
     altAxis: checkAltAxis = false,
@@ -168,4 +168,5 @@ export default ({
   phase: 'main',
   fn: preventOverflow,
   requiresIfExists: ['offset'],
-}: Modifier<Options>);
+  data: null,
+}: Modifier<'preventOverflow', Options, {| data: ?Offsets |}>);

@@ -1,8 +1,8 @@
 // @flow
-import type { ModifierArguments, Modifier } from '../types';
+import type { Modifier, Offsets } from '../types';
 import computeOffsets from '../utils/computeOffsets';
 
-function popperOffsets({ state, name }: ModifierArguments<{||}>) {
+function popperOffsets({ state, name }) {
   // Offsets are the actual position the popper needs to have to be
   // properly positioned near its reference element
   // This is the most basic placement, and will be adjusted by
@@ -20,5 +20,5 @@ export default ({
   enabled: true,
   phase: 'read',
   fn: popperOffsets,
-  data: {},
-}: Modifier<{||}>);
+  data: { x: 0, y: 0 },
+}: Modifier<'popperOffsets', {||}, {| data: Offsets |}>);

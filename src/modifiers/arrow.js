@@ -1,5 +1,5 @@
 // @flow
-import type { Modifier, ModifierArguments, Padding } from '../types';
+import type { Modifier, Padding, Offsets } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import contains from '../dom-utils/contains';
@@ -15,11 +15,11 @@ export type Options = {
   padding: Padding,
 };
 
-function arrow({ state, name }: ModifierArguments<Options>) {
+function arrow({ state, name }) {
   const arrowElement = state.elements.arrow;
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);
-  const axis = getMainAxisFromPlacement(basePlacement);
+  const axis: 'x' | 'y' = getMainAxisFromPlacement(basePlacement);
   const isVertical = [left, right].includes(basePlacement);
   const len = isVertical ? 'height' : 'width';
 
@@ -54,7 +54,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   state.modifiersData[name] = { [axisProp]: center };
 }
 
-function effect({ state, options, name }: ModifierArguments<Options>) {
+function effect({ state, options, name }) {
   let { element: arrowElement = '[data-popper-arrow]', padding = 0 } = options;
 
   // CSS selector
@@ -97,4 +97,5 @@ export default ({
   effect,
   requires: ['popperOffsets'],
   requiresIfExists: ['preventOverflow'],
-}: Modifier<Options>);
+  data: null,
+}: Modifier<'arrow', Options, {| data: ?$Shape<Offsets> |}>);

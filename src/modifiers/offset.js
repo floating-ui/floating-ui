@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments, Modifier, Rect, Offsets } from '../types';
+import type { Modifier, Rect, Offsets } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import { top, left, right, placements } from '../enums';
 
@@ -41,7 +41,7 @@ export function distanceAndSkiddingToXY(
     : { x: skidding, y: distance };
 }
 
-function offset({ state, options, name }: ModifierArguments<Options>) {
+function offset({ state, options, name }) {
   const { offset = [0, 0] } = options;
 
   const data = placements.reduce((acc, placement) => {
@@ -63,4 +63,5 @@ export default ({
   phase: 'main',
   requires: ['popperOffsets'],
   fn: offset,
-}: Modifier<Options>);
+  data: null,
+}: Modifier<'offset', Options, {| data: ?{ [Placement]: Offsets } |}>);

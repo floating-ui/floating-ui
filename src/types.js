@@ -1,12 +1,16 @@
 // @flow
 /* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
-import type { Options as PreventOverflowOptions } from './modifiers/preventOverflow';
-import type { Options as ArrowOptions } from './modifiers/arrow';
-import type { Options as FlipOptions } from './modifiers/flip';
-import type { Options as OffsetOptions } from './modifiers/offset';
-import type { Options as ComputeStylesOptions } from './modifiers/computeStyles';
-import type { Options as EventListenersOptions } from './modifiers/eventListeners';
+
+import typeof ApplyStylesModifier from './modifiers/applyStyles';
+import typeof ArrowModifier from './modifiers/arrow';
+import typeof ComputeStylesModifier from './modifiers/computeStyles';
+import typeof EventListenersModifier from './modifiers/eventListeners';
+import typeof FlipModifier from './modifiers/flip';
+import typeof HideModifier from './modifiers/hide';
+import typeof OffsetModifier from './modifiers/offset';
+import typeof PopperOffsetsModifier from './modifiers/popperOffsets';
+import typeof PreventOverflowModifier from './modifiers/preventOverflow';
 
 export type Obj = { [key: string]: any };
 
@@ -43,7 +47,7 @@ export type State = {|
   options: Options,
   placement: Placement,
   strategy: PositioningStrategy,
-  orderedModifiers: Array<Modifier<any>>,
+  orderedModifiers: Array<Modifier<any, any, any>>,
   rects: StateRects,
   scrollParents: {|
     reference: Array<Element>,
@@ -55,7 +59,14 @@ export type State = {|
   attributes: {|
     [key: string]: { [key: string]: string | boolean },
   |},
-  modifiersData: { [key: string]: any },
+  modifiersData: $Shape<{
+    [key: string]: any,
+    arrow: $PropertyType<ArrowModifier, 'data'>,
+    flip: $PropertyType<FlipModifier, 'data'>,
+    popperOffsets: $PropertyType<PopperOffsetsModifier, 'data'>,
+    offset: $PropertyType<OffsetModifier, 'data'>,
+    preventOverflow: $PropertyType<PreventOverflowModifier, 'data'>,
+  }>,
   reset: boolean,
 |};
 
@@ -67,51 +78,41 @@ export type Instance = {|
   setOptions: (options: $Shape<Options>) => Promise<$Shape<State>>,
 |};
 
-export type ModifierArguments<Options: Obj> = {
+export type ModifierArguments<Options: Obj, Name> = {
   state: State,
   instance: Instance,
   options: $Shape<Options>,
-  name: string,
+  name: Name,
 };
-export type Modifier<Options> = {|
-  name: string,
+
+export type Modifier<Name, Options = {||}, DataObj = {||}> = {|
+  name: Name,
   enabled: boolean,
   phase: ModifierPhases,
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
-  fn: (ModifierArguments<Options>) => State | void,
-  effect?: (ModifierArguments<Options>) => (() => void) | void,
+  fn: (ModifierArguments<Options, Name>) => State | void,
+  effect?: (ModifierArguments<Options, Name>) => (() => void) | void,
   options?: $Shape<Options>,
-  data?: Obj,
+  ...DataObj,
 |};
 
-export type PreventOverflowModifier = Modifier<PreventOverflowOptions> & {|
-  name: 'preventOverflow',
-|};
-export type ArrowModifier = Modifier<ArrowOptions> & {|
-  name: 'arrow',
-|};
-export type EventListenersModifier = Modifier<EventListenersOptions> & {|
-  name: 'eventListeners',
-|};
-export type FlipModifier = Modifier<FlipOptions> & {|
-  name: 'flip',
-|};
-export type OffsetModifier = Modifier<OffsetOptions> & {|
-  name: 'offset',
-|};
-export type ComputeStylesModifier = Modifier<ComputeStylesOptions> & {|
-  name: 'computeStyles',
-|};
+export type OptionalModifier<M> = {
+  ...$Shape<M>,
+  name: $PropertyType<M, 'name'>,
+};
 
 export type Modifiers = Array<
-  | $Shape<PreventOverflowModifier>
-  | $Shape<ArrowModifier>
-  | $Shape<FlipModifier>
-  | $Shape<OffsetModifier>
-  | $Shape<ComputeStylesModifier>
-  | $Shape<EventListenersModifier>
-  | $Shape<Modifier<any>>
+  | OptionalModifier<ApplyStylesModifier>
+  | OptionalModifier<HideModifier>
+  | OptionalModifier<PopperOffsetsModifier>
+  | OptionalModifier<PreventOverflowModifier>
+  | OptionalModifier<ArrowModifier>
+  | OptionalModifier<FlipModifier>
+  | OptionalModifier<OffsetModifier>
+  | OptionalModifier<ComputeStylesModifier>
+  | OptionalModifier<EventListenersModifier>
+  | $Shape<Modifier<string, any, any>>
 >;
 
 export type Options = {|
