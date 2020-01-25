@@ -10,7 +10,8 @@ import uniqueBy from '../utils/uniqueBy';
 import { bottom, top, start, right, left, auto } from '../enums';
 import getVariation from '../utils/getVariation';
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   fallbackPlacements: Array<Placement>,
   padding: Padding,
   boundary: Boundary,

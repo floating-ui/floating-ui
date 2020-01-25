@@ -1,6 +1,12 @@
 // @flow
 /* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
+import type { Options as PreventOverflowOptions } from './modifiers/preventOverflow';
+import type { Options as ArrowOptions } from './modifiers/arrow';
+import type { Options as FlipOptions } from './modifiers/flip';
+import type { Options as OffsetOptions } from './modifiers/offset';
+import type { Options as ComputeStylesOptions } from './modifiers/computeStyles';
+import type { Options as EventListenersOptions } from './modifiers/eventListeners';
 
 export type Obj = { [key: string]: any };
 
@@ -75,15 +81,42 @@ export type Modifier<Options> = {|
   requiresIfExists?: Array<string>,
   fn: (ModifierArguments<Options>) => State | void,
   effect?: (ModifierArguments<Options>) => (() => void) | void,
-  options?: Obj,
+  options?: $Shape<Options>,
   data?: Obj,
 |};
 
-export type EventListeners = {| scroll: boolean, resize: boolean |};
+export type PreventOverflowModifier = Modifier<PreventOverflowOptions> & {|
+  name: 'preventOverflow',
+|};
+export type ArrowModifier = Modifier<ArrowOptions> & {|
+  name: 'arrow',
+|};
+export type EventListenersModifier = Modifier<EventListenersOptions> & {|
+  name: 'eventListeners',
+|};
+export type FlipModifier = Modifier<FlipOptions> & {|
+  name: 'flip',
+|};
+export type OffsetModifier = Modifier<OffsetOptions> & {|
+  name: 'offset',
+|};
+export type ComputeStylesModifier = Modifier<ComputeStylesOptions> & {|
+  name: 'computeStyles',
+|};
+
+export type Modifiers = Array<
+  | $Shape<PreventOverflowModifier>
+  | $Shape<ArrowModifier>
+  | $Shape<FlipModifier>
+  | $Shape<OffsetModifier>
+  | $Shape<ComputeStylesModifier>
+  | $Shape<EventListenersModifier>
+  | $Shape<Modifier<any>>
+>;
 
 export type Options = {|
   placement: Placement,
-  modifiers: Array<$Shape<Modifier<any>>>,
+  modifiers: Modifiers,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
 |};

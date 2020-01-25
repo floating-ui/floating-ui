@@ -1,13 +1,15 @@
 // @flow
 import { createPopper } from './';
+import type { Modifier } from './types';
 
 const reference = document.createElement('div');
 const getPopper = () => document.createElement('div');
 
-const testModifier = {
+const testModifier: Modifier<{||}> = {
   name: 'test',
   phase: 'main',
   enabled: true,
+  fn: () => {},
 };
 
 it('returns expected instance object', () => {
