@@ -13,7 +13,6 @@ import getBoundingClientRect from './getBoundingClientRect';
 import getDecorations from './getDecorations';
 import contains from './contains';
 import rectToClientRect from '../utils/rectToClientRect';
-import getFreshSideObject from '../utils/getFreshSideObject';
 
 function getClientRectFromMixedType(
   element: Element,
@@ -66,9 +65,11 @@ export default function getClippingRect(
 
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getClientRectFromMixedType(element, clippingParent);
-    const decorations = isHTMLElement(clippingParent)
-      ? getDecorations(clippingParent)
-      : getFreshSideObject();
+    const decorations = getDecorations(
+      isHTMLElement(clippingParent)
+        ? clippingParent
+        : getDocumentElement(element)
+    );
 
     accRect.top = Math.max(rect.top + decorations.top, accRect.top);
     accRect.right = Math.min(rect.right - decorations.right, accRect.right);

@@ -2,21 +2,21 @@
 
 exports[`auto produces correct array of computed placements 1`] = `
 Array [
-  "right",
-  "bottom",
   "top",
+  "bottom",
+  "right",
   "left",
 ]
 `;
 
 exports[`auto-end produces correct array of computed placements 1`] = `
 Array [
-  "right-start",
-  "right-end",
-  "bottom-start",
-  "bottom-end",
   "top-start",
   "top-end",
+  "bottom-start",
+  "bottom-end",
+  "right-start",
+  "right-end",
   "left-start",
   "left-end",
 ]
@@ -24,21 +24,21 @@ Array [
 
 exports[`auto-end produces correct array of computed placements when flipVariations: false 1`] = `
 Array [
-  "right-end",
-  "bottom-end",
   "top-end",
+  "bottom-end",
+  "right-end",
   "left-end",
 ]
 `;
 
 exports[`auto-start produces correct array of computed placements 1`] = `
 Array [
-  "right-start",
-  "right-end",
-  "bottom-start",
-  "bottom-end",
   "top-start",
   "top-end",
+  "bottom-start",
+  "bottom-end",
+  "right-start",
+  "right-end",
   "left-start",
   "left-end",
 ]
@@ -46,9 +46,9 @@ Array [
 
 exports[`auto-start produces correct array of computed placements when flipVariations: false 1`] = `
 Array [
-  "right-start",
-  "bottom-start",
   "top-start",
+  "bottom-start",
+  "right-start",
   "left-start",
 ]
 `;
