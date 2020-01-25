@@ -65,6 +65,54 @@ it('errors if placement: "auto" and "flip" modifier is not present/enabled', () 
   );
 });
 
+describe('margin warning', () => {
+  it('warns for margin: value', () => {
+    const spy = jest.spyOn(console, 'warn');
+    const popper = getPopper();
+    popper.style.margin = '5px';
+
+    createPopper(reference, popper);
+
+    expect(spy).toHaveBeenCalledWith(
+      [
+        'Popper: CSS "margin" styles cannot be used to apply padding',
+        'between the popper and its reference element or boundary.',
+        'To replicate margin, use the `offset` modifier, as well as',
+        'the `padding` option in the `preventOverflow` and `flip`',
+        'modifiers.',
+      ].join(' ')
+    );
+  });
+
+  it('warns for two sides', () => {
+    const spy = jest.spyOn(console, 'warn');
+    const popper = getPopper();
+    popper.style.margin = '0 0.5em';
+
+    createPopper(reference, popper);
+
+    expect(spy).toHaveBeenCalledWith(
+      [
+        'Popper: CSS "margin" styles cannot be used to apply padding',
+        'between the popper and its reference element or boundary.',
+        'To replicate margin, use the `offset` modifier, as well as',
+        'the `padding` option in the `preventOverflow` and `flip`',
+        'modifiers.',
+      ].join(' ')
+    );
+  });
+
+  it('does not warn with no margin', () => {
+    const spy = jest.spyOn(console, 'warn');
+    const popper = getPopper();
+    popper.style.margin = '0px';
+
+    createPopper(reference, popper);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+});
+
 it('does not error for missing phase for disabled modifiers', () => {
   const spy = jest.spyOn(console, 'error');
 
