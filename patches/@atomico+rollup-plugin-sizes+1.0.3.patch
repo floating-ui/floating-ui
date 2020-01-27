@@ -1,0 +1,15 @@
+diff --git a/node_modules/@atomico/rollup-plugin-sizes/index.js b/node_modules/@atomico/rollup-plugin-sizes/index.js
+index f503d0c..9191b6b 100644
+--- a/node_modules/@atomico/rollup-plugin-sizes/index.js
++++ b/node_modules/@atomico/rollup-plugin-sizes/index.js
+@@ -52,7 +52,9 @@ function sizes(limit) {
+ 				rows.push([key, toKB(gzip), toKB(brotli)]);
+ 			}
+ 
+-			rows.push(["", toKB(totalGzip), toKB(totalBroli)]);
++      if (bundles.length > 1) {
++			  rows.push(["", toKB(totalGzip), toKB(totalBroli)]);
++      }
+ 			sizes[index] = totalGzip;
+ 
+ 			console.log(

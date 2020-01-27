@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
-import bundleSize from 'rollup-plugin-bundle-size';
+import bundleSize from '@atomico/rollup-plugin-sizes';
 import { terser } from 'rollup-plugin-terser';
 import visualizer from 'rollup-plugin-visualizer';
 import license from 'rollup-plugin-license';
