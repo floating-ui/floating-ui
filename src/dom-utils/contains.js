@@ -11,7 +11,7 @@ export default function contains(parent: Element, child: Element) {
   else if (isShadow) {
     let next = child;
     do {
-      if (next && next.isSameNode(parent)) {
+      if (next && parent.isSameNode(next)) {
         return true;
       }
       // $FlowFixMe: need a better way to handle this...
