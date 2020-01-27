@@ -17,26 +17,3 @@ createPopper(reference, popper, {
   strategy: 'fixed',
 });
 ```
-
-## Are there any breaking changes between v1 and v2?
-
-Yes! We'll try to list them all below:
-
-1. `new Popper(...)` has been replaced by `createPopper(...)`;
-2. `options.modifiers` is now an array, containing modifiers identified by a
-   `name` property;
-3. Dedicated modifier's options are now grouped inside the `options` property;
-4. `innerModifier` is gone, you can use the `offset` modifier to replace it;
-5. `keepTogether` modifier is gone, take a look at the `preventOverflow`
-   modifier options instead;
-6. Using `margin` CSS properties to offset your poppers is not supported
-   anymore, use the `offset` modifier instead;
-7. `options.positionFixed` has been replaced by `options.strategy`, which can be
-   set to `'fixed'`;
-8. The `x-placement`, `x-arrow`, and all the other HTML attributes have been
-   replaced by `data-popper-*` prefixed attributes;
-9. `instance.scheduleUpdate()` is now `instance.update()`, and it now returns a
-   promise;
-10. `instance.update()` is now `instance.forceUpdate()`;
-11. If the `flip` modifier has not enough space to flip your popper, the
-    original placement will be used;

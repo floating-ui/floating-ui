@@ -1,0 +1,160 @@
+---
+navigationLabel: Migration Guide
+order: 11
+---
+
+# Migrating to Popper 2
+
+Popper 2 introduces a lot of changes for the better! Here's a guide to help you
+migrate to the new version.
+
+<x-ad />
+
+## 1. Install the new package
+
+Remove the `popper.js` package from your `package.json` or CDN script tag
+includes, and install `@popperjs/core`.
+
+Popper has changed its package name to live under the scoped `@popperjs`
+organization. This is where other packages like `react-popper` will now live
+too.
+
+## 2. Change the import
+
+### Modules
+
+In Popper 1, it was a class:
+
+```js
+import Popper from 'popper.js';
+
+new Popper(reference, popper, options);
+```
+
+In Popper 2, it's now a function:
+
+```js
+import { createPopper } from '@popperjs/core';
+
+createPopper(reference, popper, options);
+```
+
+### CDN / `umd` version
+
+This named import lives under the `Popper` namespace object:
+
+```js
+Popper.createPopper;
+```
+
+## 3. Change your CSS attribute selectors
+
+In v1, attributes were prefixed with `x-`, for example, `x-placement`. In v2,
+these are now prefixed with `data-popper-`, which matches the HTML5 spec, and
+has its own data namespace to prevent conflicts.
+
+Also, `x-out-of-boundaries` is now `data-popper-reference-hidden`.
+
+## 4. Remove all CSS margins
+
+In Popper 2 we no longer consider CSS `margin` because of inherent issues with
+it. Instead, to apply some padding between the popper and its reference element,
+use the `offset` modifier. You also need to remove `margin` from your arrows
+too; instead use the `padding` option in the `arrow` modifier.
+
+## 5. Ensure your popper and arrow box size is constant for all placements
+
+Your popper and arrow cannot be a different width or height for different
+placements; it must be constant in size. This is due to the way the Popper
+lifecycle works – which can't know ahead of time (before writing to the DOM)
+what the computed CSS will be, which can change the size of the elements. In
+Popper 1, this caused all sorts of flicker and jitter issues.
+
+We are looking into a way to allow this in the future, but it's currently a
+difficult problem to solve efficiently.
+
+## 6. Add back boundary paddings if necessary
+
+In Popper 2, all `padding` is now `0`. In v1, these were `5` for
+`preventOverflow` and `flip`. If necessary, you can add these back using the
+`padding` option, which works the same as v1.
+
+## 7. Change `positionFixed`
+
+In Popper 2, this is now the `strategy` option:
+
+```js
+createPopper(reference, popper, {
+  strategy: 'fixed',
+});
+```
+
+## 8. Update method names
+
+- `scheduleUpdate()` is now `update()` (and returns a promise)
+- `update()` is now `forceUpdate()` (and is sync)
+- `enableEventListeners` / `disableEventListeners` are gone; see the
+  `eventListeners` modifier. You can use the `setOptions` method to change the
+  `scroll` and `resize` options at will to replicate the original methods'
+  functionality.
+
+## 9. Update callbacks
+
+- `onCreate` is now `onFirstUpdate`
+- `onUpdate` is gone; use a custom modifier with an `afterWrite` phase
+
+## 10. Update modifiers
+
+In Popper 2 this is now an array of objects (modifiers), instead of an object
+where each property was the modifier name.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'flip',
+      enabled: false,
+    },
+  ],
+});
+```
+
+In addition, their options are grouped together in the `options` object:
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'flip',
+      options: {
+        padding: 5,
+      },
+    },
+  ],
+});
+```
+
+We cannot list all the changes to them here (there are a lot!); you'll need to
+visit each modifier in the menu to learn more about their new behavior.
+
+See [Modifiers](../modifiers/) for more information on writing custom modifiers.
+
+## 11. `inner`, `keepTogether`, `shift` modifiers are gone
+
+- `inner` can be replicated using the `offset` modifier with negative values
+- `keepTogether` functionality lives in `preventOverflow` in `tether` options
+
+## 12. Remove virtual element properties
+
+The only property your virtual elements (or Reference Objects in Popper 1) need
+is `getBoundingClientRect`. The other properties are unnecessary now.
+
+## 13. Transitions
+
+In Popper 2, the `computeStyles` modifier has a new option called `adaptive`
+enabled by default, which breaks CSS transitions. You should set this option to
+`false` if CSS transitions are enabled.
+
+Keep in mind, `adaptive` has the benefit of allowing you to change the height or
+width of the popper in most cases without needing to update its position, so
+you'll lose this benefit when disabling it.
