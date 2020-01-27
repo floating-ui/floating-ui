@@ -14,3 +14,6 @@ jobs:
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           pattern: 'dist/umd/*.js'
+          build-script: 'build:bundles'
+          compression: true
+          show-total: false
