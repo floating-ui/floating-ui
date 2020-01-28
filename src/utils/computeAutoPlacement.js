@@ -43,7 +43,7 @@ export default function computeAutoPlacement(
     ? flipVariations
       ? variationPlacements
       : variationPlacements.filter(
-          placement => placement.indexOf(variation) >= 0
+          placement => getVariation(placement) === variation
         )
     : basePlacements;
 
