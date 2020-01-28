@@ -1,0 +1,41 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  #reference {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<div id="reference">Reference Box</div>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import { createPopper } from '../../dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = createPopper(reference, popper, {
+    placement: 'top',
+    modifiers: [
+      {
+        name: 'computeStyles',
+        options: {
+          gpuAcceleration: false,
+        },
+      },
+    ],
+  });
+</script>

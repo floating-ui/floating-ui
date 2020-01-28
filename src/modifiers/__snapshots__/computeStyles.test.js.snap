@@ -33,7 +33,7 @@ Object {
 
 exports[`computes the popper styles 3`] = `
 Object {
-  "bottom": "105px",
+  "bottom": "-105px",
   "left": "10px",
   "position": "absolute",
   "right": "auto",
@@ -47,7 +47,7 @@ Object {
   "bottom": "auto",
   "left": "auto",
   "position": "absolute",
-  "right": "110px",
+  "right": "-110px",
   "top": "5px",
   "transform": "",
 }
