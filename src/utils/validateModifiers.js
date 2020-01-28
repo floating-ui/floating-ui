@@ -46,7 +46,7 @@ export default function validateModifiers(modifiers: Array<any>): void {
             );
           }
         case 'phase':
-          if (!modifierPhases.includes(modifier.phase)) {
+          if (modifierPhases.indexOf(modifier.phase) < 0) {
             console.error(
               format(
                 INVALID_MODIFIER_ERROR,

@@ -19,7 +19,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);
   const axis = getMainAxisFromPlacement(basePlacement);
-  const isVertical = [left, right].includes(basePlacement);
+  const isVertical = [left, right].indexOf(basePlacement) >= 0;
   const len = isVertical ? 'height' : 'width';
 
   if (!arrowElement) {

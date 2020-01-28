@@ -22,7 +22,7 @@ export function distanceAndSkiddingToXY(
   offset: Offset
 ): Offsets {
   const basePlacement = getBasePlacement(placement);
-  const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
+  const invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
 
   let [skidding, distance] =
     typeof offset === 'function'
@@ -35,7 +35,7 @@ export function distanceAndSkiddingToXY(
   skidding = skidding || 0;
   distance = (distance || 0) * invertDistance;
 
-  return [left, right].includes(basePlacement)
+  return [left, right].indexOf(basePlacement) >= 0
     ? { x: distance, y: skidding }
     : { x: skidding, y: distance };
 }

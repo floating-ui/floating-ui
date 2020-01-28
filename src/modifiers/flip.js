@@ -83,7 +83,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
     const placement = placements[i];
     const basePlacement = getBasePlacement(placement);
     const isStartVariation = getVariation(placement) === start;
-    const isVertical = [top, bottom].includes(basePlacement);
+    const isVertical = [top, bottom].indexOf(basePlacement) >= 0;
     const len = isVertical ? 'width' : 'height';
 
     const overflow = detectOverflow(state, {

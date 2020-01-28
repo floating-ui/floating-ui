@@ -49,7 +49,7 @@ function compile(fileNames, options, write) {
     const fileName = diagnostic.file.fileName;
     let start = diagnostic.start;
 
-    if (alteredFiles.includes(fileName)) {
+    if (alteredFiles.indexOf(fileName) >= 0) {
       start += tsignore.length;
     }
 

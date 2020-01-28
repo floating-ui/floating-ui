@@ -30,9 +30,8 @@ function getClientRectFromMixedType(
 // `initial`
 function getClippingParents(element: Element) {
   const clippingParents = listScrollParents(element);
-  const canEscapeClipping = ['absolute', 'fixed'].includes(
-    getComputedStyle(element).position
-  );
+  const canEscapeClipping =
+    ['absolute', 'fixed'].indexOf(getComputedStyle(element).position) >= 0;
   const clipperElement =
     canEscapeClipping && isHTMLElement(element)
       ? getOffsetParent(element)
