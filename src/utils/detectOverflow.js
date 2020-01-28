@@ -96,8 +96,8 @@ export default function detectOverflow(
     const offset = offsetData[placement];
 
     Object.keys(overflowOffsets).forEach(key => {
-      const multiply = [right, bottom].includes(key) ? 1 : -1;
-      const axis = [top, bottom].includes(key) ? 'y' : 'x';
+      const multiply = [right, bottom].indexOf(key) >= 0 ? 1 : -1;
+      const axis = [top, bottom].indexOf(key) >= 0 ? 'y' : 'x';
       overflowOffsets[key] += offset[axis] * multiply;
     });
   }

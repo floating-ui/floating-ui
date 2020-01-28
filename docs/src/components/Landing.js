@@ -386,7 +386,7 @@ createPopper(popcorn, tooltip, {
             (placements, basePlacement) => [
               ...placements,
               // clockwise tabbing order
-              ...(['bottom', 'left'].includes(basePlacement)
+              ...(['bottom', 'left'].indexOf(basePlacement) >= 0
                 ? [
                     `${basePlacement}-end`,
                     basePlacement,

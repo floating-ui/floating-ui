@@ -42,7 +42,9 @@ export default function computeAutoPlacement(
   const placements = variation
     ? flipVariations
       ? variationPlacements
-      : variationPlacements.filter(placement => placement.includes(variation))
+      : variationPlacements.filter(
+          placement => getVariation(placement) === variation
+        )
     : basePlacements;
 
   // $FlowFixMe: Flow seems to have problems with two array unions...
