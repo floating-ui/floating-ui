@@ -68,13 +68,15 @@ export function mapToStyles({
     }
 
     if (placement === top) {
-      y = y - offsetParent.clientHeight + popperRect.height;
       sideY = bottom;
+      y -= offsetParent.clientHeight - popperRect.height;
+      y *= gpuAcceleration ? 1 : -1;
     }
 
     if (placement === left) {
-      x = x - offsetParent.clientWidth + popperRect.width;
       sideX = right;
+      x -= offsetParent.clientWidth - popperRect.width;
+      x *= gpuAcceleration ? 1 : -1;
     }
   }
 
