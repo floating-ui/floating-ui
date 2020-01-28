@@ -23,7 +23,8 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
     // $FlowFixMe
     Object.assign(element.style, style);
 
-    Object.entries(attributes).forEach(([name, value]: [string, any]) => {
+    Object.keys(attributes).forEach(name => {
+      const value = attributes[name];
       if (value === false) {
         element.removeAttribute(name);
       } else {
