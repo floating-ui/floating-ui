@@ -6,21 +6,24 @@ import getWindow from './getWindow';
 
 // Borders + scrollbars
 export default function getDecorations(element: HTMLElement): SideObject {
-  const borders = getBorders(element);
   const win = getWindow(element);
+  const borders = getBorders(element);
+  const isHTML = getNodeName(element) === 'html';
 
-  let right = element.offsetWidth - element.clientWidth - borders.right;
-  let bottom = element.offsetHeight - element.clientHeight - borders.bottom;
-
-  if (getNodeName(element) === 'html') {
-    right = win.innerWidth - element.clientWidth;
-    bottom = win.innerHeight - element.clientHeight;
-  }
+  const x = element.clientWidth + borders.right;
+  const y = element.clientHeight + borders.bottom;
 
   return {
-    top: borders.top,
-    right,
-    bottom,
-    left: borders.left,
+    top: element.clientTop,
+    right:
+      // RTL scrollbar
+      element.clientLeft > borders.left
+        ? borders.right
+        : // LTR scrollbar
+        isHTML
+        ? win.innerWidth - x
+        : element.offsetWidth - x,
+    bottom: isHTML ? win.innerHeight - y : element.offsetHeight - y,
+    left: element.clientLeft,
   };
 }

@@ -1,21 +1,9 @@
 // @flow
-import type { Rect, VirtualElement, Offsets } from '../types';
+import type { Rect, VirtualElement } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
 import getNodeScroll from './getNodeScroll';
 import getNodeName from './getNodeName';
-import getBorders from './getBorders';
 import { isHTMLElement } from './instanceOf';
-
-// offsets without `border`
-function getInnerOffsets(offsetParent: Element): Offsets {
-  const rect = getBoundingClientRect(offsetParent);
-  const borders = getBorders(offsetParent);
-
-  return {
-    x: rect.x + borders.left,
-    y: rect.y + borders.top,
-  };
-}
 
 // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
@@ -35,7 +23,9 @@ export default function getCompositeRect(
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getInnerOffsets(offsetParent);
+      offsets = getBoundingClientRect(offsetParent);
+      offsets.x += offsetParent.clientLeft;
+      offsets.y += offsetParent.clientTop;
     }
   }
 
