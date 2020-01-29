@@ -100,7 +100,8 @@ const PopperTextLogoContainer = styled.div`
   display: none;
 
   ${media.lg} {
-    display: block;
+    display: flex;
+    justify-content: center;
   }
 
   ${props =>
@@ -111,19 +112,29 @@ const PopperTextLogoContainer = styled.div`
 `;
 
 const PopperTextLogo = ({ mobile }) => (
-  <img
-    src={popperText}
-    draggable="false"
-    alt="Popper Logo"
+  <Link
+    to="/"
     css={css`
       display: block;
       margin: 0 auto;
-      width: 100px;
-      height: 50px;
       user-select: none;
       margin-top: ${mobile ? '-12px' : '0'};
+      &,
+      &:hover {
+        border-width: 0;
+      }
     `}
-  />
+  >
+    <img
+      src={popperText}
+      draggable="false"
+      alt="Popper Logo"
+      css={css`
+        width: 100px;
+        height: 50px;
+      `}
+    />
+  </Link>
 );
 
 const MenuButton = styled.button`
