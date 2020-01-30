@@ -6,7 +6,7 @@ import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import { createTree } from '../utils/createTree';
 import processRoutes from '../utils/processRoutes';
 import { media } from './Framework';
-
+import Docsearch from './Docsearch';
 import popperText from '../images/popper-text.svg';
 import { Menu } from 'react-feather';
 
@@ -18,7 +18,6 @@ const Container = styled.div`
   top: 0;
   height: 100%;
   width: ${NAVIGATION_WIDTH}px;
-  overflow: auto;
   transform: translateX(-${NAVIGATION_WIDTH}px);
   display: none;
   z-index: 2;
@@ -27,12 +26,14 @@ const Container = styled.div`
   ${props =>
     props.open &&
     css`
-      display: block;
+      display: flex;
+      flex-direction: column;
       transform: translateX(0);
     `}
 
   ${media.lg} {
-    display: block;
+    display: flex;
+    flex-direction: column;
     transform: translateX(0);
     box-shadow: none;
   }
@@ -91,24 +92,16 @@ const MobileHeader = styled.header`
 
 const PopperTextLogoContainer = styled.div`
   background: #c83b50;
-  margin-top: -8px;
   width: 100%;
-  position: sticky;
-  top: 0;
   padding: 6px 0 0;
   transition: box-shadow 0.4s ease-out;
   display: none;
 
   ${media.lg} {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
-
-  ${props =>
-    props.scrolled &&
-    css`
-      box-shadow: 0 10px 15px -4px rgba(100, 0, 0, 0.3);
-    `}
 `;
 
 const PopperTextLogo = ({ mobile }) => (
@@ -150,9 +143,6 @@ const MenuButton = styled.button`
 `;
 
 const CloseMenuButton = styled.button`
-  position: relative;
-  top: 10px;
-  left: 15px;
   display: block;
   background-color: white;
   color: #c83b50;
@@ -160,6 +150,7 @@ const CloseMenuButton = styled.button`
   font-weight: bold;
   padding: 8px 16px;
   border-radius: 4px;
+  margin: 10px 10px 0 10px;
 
   ${media.lg} {
     display: none;
@@ -167,6 +158,9 @@ const CloseMenuButton = styled.button`
 `;
 
 const MenuContents = styled.div`
+  overflow: auto;
+  min-height: 0;
+  flex: 1;
   padding: 0 10px 20px 0;
   margin-top: 20px;
 
@@ -250,12 +244,15 @@ export default function Navigation({ description, lang, meta, path }) {
             </MenuButton>
             <PopperTextLogo mobile />
           </MobileHeader>
-          <Container open={menuOpen} ref={menuRef} onScroll={handleScroll}>
-            <PopperTextLogoContainer scrolled={scrolled}>
+          <Container open={menuOpen}>
+            <PopperTextLogoContainer>
               <PopperTextLogo />
             </PopperTextLogoContainer>
             <CloseMenuButton onClick={closeMenu}>Close Menu</CloseMenuButton>
-            <MenuContents>
+
+            <Docsearch scrolled={scrolled} name="docs" />
+
+            <MenuContents ref={menuRef} onScroll={handleScroll}>
               {createTree(processRoutes(routes, path)).map((route, index) => (
                 <Block route={route} key={index} />
               ))}

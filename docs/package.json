@@ -10,6 +10,7 @@
     "@mdx-js/mdx": "^1.5.2",
     "@mdx-js/react": "^1.5.2",
     "@pauliescanlon/gatsby-mdx-routes": "^0.0.4",
+    "docsearch.js": "^2.6.3",
     "emotion": "^10.0.27",
     "gatsby": "^2.18.13",
     "gatsby-dynamical-navigation": "^0.4.1",
