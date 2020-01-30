@@ -133,3 +133,24 @@ type OverflowOffsets = {
   left: number,
 };
 ```
+
+## Example
+
+For your custom modifiers, ensure you add `"offset"` to `requiresIfExists`, as
+the util needs to have access to this information if `offset` exists in the
+modifier lifecycle:
+
+```js
+import detectOverflow from '@popperjs/core/lib/utils/detectOverflow.js';
+
+const myModifier = {
+  name: 'myModifier',
+  enabled: true,
+  phase: 'main',
+  requiresIfExists: ['offset'],
+  fn({ state }) {
+    const overflow = detectOverflow(state);
+    // ...
+  },
+};
+```
