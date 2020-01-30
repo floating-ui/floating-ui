@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import docsearch from 'docsearch.js';
 import 'docsearch.js/dist/cdn/docsearch.css';
 import { media } from './Framework';
+
+const canUseDOM = !!(
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement
+);
 
 const DocsearchContainer = styled.div`
   padding-bottom: 10px;
@@ -36,12 +41,16 @@ const DocsearchContainer = styled.div`
 
 export default ({ name, className, scrolled }) => {
   useEffect(() => {
-    docsearch({
-      apiKey: 'd5fa05c4e33e776fbf2b8021cbc15b37',
-      indexName: 'popper',
-      inputSelector: `.docsearch-input-${name}`,
-      algoliaOptions: { facetFilters: ['tags:v2'] },
-    });
+    if (canUseDOM) {
+      import('docsearch.js').then(docsearch =>
+        docsearch.default({
+          apiKey: 'd5fa05c4e33e776fbf2b8021cbc15b37',
+          indexName: 'popper',
+          inputSelector: `.docsearch-input-${name}`,
+          algoliaOptions: { facetFilters: ['tags:v2'] },
+        })
+      );
+    }
   }, [name]);
 
   return (
