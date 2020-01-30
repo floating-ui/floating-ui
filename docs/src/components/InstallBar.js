@@ -37,7 +37,7 @@ const Bar = styled.div`
   font-size: 14px;
   overflow: hidden;
   font-weight: normal;
-  margin: 0 5px;
+  margin: 5px;
   max-width: 100%;
   overflow-x: auto;
 
@@ -47,6 +47,7 @@ const Bar = styled.div`
 
   ${media.lg} {
     margin-top: 0;
+    margin-bottom: 0;
   }
 `;
 
