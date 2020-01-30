@@ -17,7 +17,7 @@ const InstallBarStyled = styled.div`
 const InstallBarContainer = styled(Container)`
   flex-direction: column;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   padding: 0 15px;
   max-width: 1000px;
@@ -37,7 +37,7 @@ const Bar = styled.div`
   font-size: 14px;
   overflow: hidden;
   font-weight: normal;
-  margin-top: 8px;
+  margin: 0 5px;
   max-width: 100%;
   overflow-x: auto;
 
@@ -74,7 +74,7 @@ const InstallBar = () => (
     <InstallBarContainer>
       <div
         css={css`
-          margin-bottom: 5px;
+          margin-right: 15px;
         `}
       >
         <Gift
