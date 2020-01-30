@@ -10,6 +10,7 @@ import { type BasePlacement, top, left, right, bottom } from '../enums';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import getWindow from '../dom-utils/getWindow';
 import getDocumentElement from '../dom-utils/getDocumentElement';
+import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
 
 type Options = {
@@ -110,6 +111,20 @@ export function mapToStyles({
 
 function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true, adaptive = true } = options;
+
+  if (__DEV__) {
+    if (
+      adaptive &&
+      parseFloat(getComputedStyle(state.elements.popper).transitionDuration)
+    ) {
+      console.warn(
+        [
+          'Popper: The "computeStyles" modifier\'s `adaptive` option must be',
+          'disabled if CSS transitions are applied to the popper element.',
+        ].join(' ')
+      );
+    }
+  }
 
   const commonStyles = {
     placement: getBasePlacement(state.placement),
