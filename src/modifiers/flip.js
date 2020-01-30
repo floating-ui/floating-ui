@@ -51,7 +51,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
 
   const fallbackPlacements =
     specifiedFallbackPlacements ||
-    (isBasePlacement
+    (isBasePlacement || !flipVariations
       ? [getOppositePlacement(preferredPlacement)]
       : getExpandedFallbackPlacements(preferredPlacement));
 

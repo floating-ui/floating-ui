@@ -64,3 +64,10 @@ it('shorter: should be flipped to original -end variation when it fits', async (
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should not flip variations with `flipVariations: false`', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/flip/flipVariations-false.html`);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
