@@ -13,7 +13,7 @@ jobs:
       - uses: preactjs/compressed-size-action@v1
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
-          pattern: 'dist/umd/*.js'
+          pattern: 'dist/umd/*.min.js'
           build-script: 'build:bundles'
           show-total: false
           compression: brotli
