@@ -5,6 +5,7 @@ import type {
   Modifier,
   ModifierArguments,
   Rect,
+  Window,
 } from '../types';
 import { type BasePlacement, top, left, right, bottom } from '../enums';
 import getOffsetParent from '../dom-utils/getOffsetParent';
@@ -29,7 +30,7 @@ const unsetSides = {
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
 function roundOffsets({ x, y }): Offsets {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = (window: Window).devicePixelRatio || 1;
 
   return {
     x: Math.round(x * dpr) / dpr || 0,
@@ -68,6 +69,9 @@ export function mapToStyles({
       offsetParent = getDocumentElement(popper);
     }
 
+    // $FlowFixMe: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
+    /*:: offsetParent = (offsetParent: Element); */
+
     if (placement === top) {
       sideY = bottom;
       y -= offsetParent.clientHeight - popperRect.height;
@@ -95,7 +99,7 @@ export function mapToStyles({
       // blurry text on low PPI displays, so we want to use 2D transforms
       // instead
       transform:
-        (window.devicePixelRatio || 1) < 2
+        ((window: Window).devicePixelRatio || 1) < 2
           ? `translate(${x}px, ${y}px)`
           : `translate3d(${x}px, ${y}px, 0)`,
     };

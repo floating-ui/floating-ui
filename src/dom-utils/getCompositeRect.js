@@ -1,5 +1,5 @@
 // @flow
-import type { Rect, VirtualElement } from '../types';
+import type { Rect, VirtualElement, Window } from '../types';
 import getBoundingClientRect from './getBoundingClientRect';
 import getNodeScroll from './getNodeScroll';
 import getNodeName from './getNodeName';
@@ -9,7 +9,7 @@ import { isHTMLElement } from './instanceOf';
 // Composite means it takes into account transforms as well as layout.
 export default function getCompositeRect(
   elementOrVirtualElement: Element | VirtualElement,
-  offsetParent: Element,
+  offsetParent: Element | Window,
   isFixed: boolean = false
 ): Rect {
   const rect = getBoundingClientRect(elementOrVirtualElement);
