@@ -16,3 +16,4 @@ jobs:
           pattern: 'dist/umd/*.js'
           build-script: 'build:bundles'
           show-total: false
+          compression: brotli
