@@ -5,15 +5,16 @@ import getNodeScroll from './getNodeScroll';
 import getNodeName from './getNodeName';
 import { isHTMLElement } from './instanceOf';
 import getWindowScrollBarX from './getWindowScrollBarX';
+import getDocumentElement from './getDocumentElement';
 
 // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
 export default function getCompositeRect(
   elementOrVirtualElement: Element | VirtualElement,
-  offsetParent: Element,
-  documentElement?: HTMLElement,
+  offsetParent: Element | Window,
   isFixed: boolean = false
 ): Rect {
+  let documentElement;
   const rect = getBoundingClientRect(elementOrVirtualElement);
 
   let scroll = { scrollLeft: 0, scrollTop: 0 };
@@ -28,7 +29,7 @@ export default function getCompositeRect(
       offsets = getBoundingClientRect(offsetParent);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
-    } else if (documentElement) {
+    } else if ((documentElement = getDocumentElement(offsetParent))) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }

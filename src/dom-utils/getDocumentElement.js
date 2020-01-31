@@ -1,6 +1,10 @@
 // @flow
+import { isElement } from './instanceOf';
 
-export default function getDocumentElement(element: Element): HTMLElement {
+export default function getDocumentElement(
+  element: Element | Window
+): HTMLElement {
   // $FlowFixMe: assume body is always available
-  return element.ownerDocument.documentElement;
+  return (isElement(element) ? element.ownerDocument : element.document)
+    .documentElement;
 }

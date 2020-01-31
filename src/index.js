@@ -188,7 +188,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           reference: getCompositeRect(
             reference,
             getOffsetParent(popper),
-            getDocumentElement(popper),
             state.options.strategy === 'fixed'
           ),
           popper: getLayoutRect(popper),
