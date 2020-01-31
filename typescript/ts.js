@@ -46,14 +46,18 @@ function compile(fileNames, options, write) {
   const alteredFiles = [];
 
   allDiagnostics.forEach(diagnostic => {
-    const fileName = diagnostic.file.fileName;
+    console.log(diagnostic.messageText);
+    const fileName = diagnostic.file && diagnostic.file.fileName;
+    if (!fileName) return;
+
     let start = diagnostic.start;
 
     if (alteredFiles.indexOf(fileName) >= 0) {
       start += tsignore.length;
     }
 
-    const source = fs.readFileSync(fileName);
+    let source = fs.readFileSync(fileName, 'utf8');
+    source = source.replace(/\/\/ \$FlowFixMe/g, tsignore);
     const pos = source.slice(0, start).lastIndexOf('\n');
     const output = [source.slice(0, pos), tsignore, source.slice(pos)].join('');
     fs.writeFileSync(fileName, output, { encoding: 'utf8' });
