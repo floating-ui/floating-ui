@@ -13,25 +13,35 @@ const canUseDOM = !!(
 const DocsearchContainer = styled.div`
   padding-bottom: 10px;
   display: none;
-  ${media.lg} {
-    display: block;
-  }
+  transition: box-shadow 0.4s ease-out;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px;
 
   ${props =>
     props.scrolled &&
     css`
       box-shadow: 0 10px 15px -4px rgba(100, 0, 0, 0.3);
     `}
-  .algolia-autocomplete {
-    display: flex !important;
-    flex-direction: column;
-    align-items: stretch;
-    margin: 10px 10px 0 10px;
+
+  ${media.lg} {
+    display: flex;
   }
+
+  .algolia-autocomplete,
+  input {
+    width: 100%;
+  }
+
   input {
     border: 0;
     border-radius: 20px;
     padding: 10px 20px;
+    transition: box-shadow 0.2s ease-in-out;
+    &:focus {
+      outline: 0;
+      box-shadow: 0 0 0 5px #a93244;
+    }
   }
 
   .algolia-autocomplete .ds-dropdown-menu:before {
@@ -42,13 +52,15 @@ const DocsearchContainer = styled.div`
 export default ({ name, className, scrolled }) => {
   useEffect(() => {
     if (canUseDOM) {
-      import('docsearch.js').then(docsearch =>
-        docsearch.default({
-          apiKey: 'd5fa05c4e33e776fbf2b8021cbc15b37',
-          indexName: 'popper',
-          inputSelector: `.docsearch-input-${name}`,
-          algoliaOptions: { facetFilters: ['tags:v2'] },
-        })
+      import('docsearch.js').then(
+        docsearch =>
+          document.querySelector('.algolia-autocomplete') == null &&
+          docsearch.default({
+            apiKey: 'd5fa05c4e33e776fbf2b8021cbc15b37',
+            indexName: 'popper',
+            inputSelector: `.docsearch-input-${name}`,
+            algoliaOptions: { facetFilters: ['tags:v2'] },
+          })
       );
     }
   }, [name]);
