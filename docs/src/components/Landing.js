@@ -37,6 +37,7 @@ import bootstrapLogo from '../images/logos/bootstrap.svg';
 import drupalLogo from '../images/logos/drupal.svg';
 import gitlabLogo from '../images/logos/gitlab.svg';
 import mediumLogo from '../images/logos/medium.svg';
+import adobeLogo from '../images/logos/adobe.svg';
 
 import 'modern-normalize';
 import './layout.css';
@@ -716,17 +717,22 @@ const Layout = ({ children }) => {
             <UsedByLogo
               href="https://microsoft.com/"
               src={microsoftLogo}
-              alt="Used by Microsoft"
+              alt="Used by Microsoft - Fluent UI"
             />
             <UsedByLogo
               href="https://www.atlassian.com/"
               src={atlassianLogo}
-              alt="Used by Atlassian"
+              alt="Used by Atlassian - Atlaskit"
             />
             <UsedByLogo
               href="https://getbootstrap.com/"
               src={bootstrapLogo}
               alt="Used by Bootstrap"
+            />
+            <UsedByLogo
+              href="https://www.adobe.com/"
+              src={adobeLogo}
+              alt="Used by Adobe - @webspectrum components"
             />
             <UsedByLogo
               href="https://www.drupal.org/"
@@ -741,7 +747,7 @@ const Layout = ({ children }) => {
             <UsedByLogo
               href="https://www.medium.com/"
               src={mediumLogo}
-              alt="Used by Medium"
+              alt="Used by Medium - text selection tooltip"
             />
           </UsedByContainer>
         </Container>

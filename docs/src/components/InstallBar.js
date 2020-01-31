@@ -76,6 +76,12 @@ const InstallBar = () => (
       <div
         css={css`
           margin-right: 15px;
+          margin-bottom: 5px;
+          margin-top: 5px;
+          ${media.lg} {
+            margin-top: 0;
+            margin-bottom: 0;
+          }
         `}
       >
         <Gift
