@@ -11,7 +11,6 @@ import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getOffsetParent from './dom-utils/getOffsetParent';
 import getComputedStyle from './dom-utils/getComputedStyle';
-import getDocumentElement from './dom-utils/getDocumentElement';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
