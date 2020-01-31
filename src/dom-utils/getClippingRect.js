@@ -28,7 +28,7 @@ function getClientRectFromMixedType(
 // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
-function getClippingParents(element: Element) {
+function getClippingParents(element: Element): Array<Element> {
   const clippingParents = listScrollParents(element);
   const canEscapeClipping =
     ['absolute', 'fixed'].indexOf(getComputedStyle(element).position) >= 0;
@@ -41,11 +41,11 @@ function getClippingParents(element: Element) {
     return [];
   }
 
-  return clippingParents.filter(clippingParent => {
-    return (
+  // $FlowFixMe: https://github.com/facebook/flow/issues/1414
+  return clippingParents.filter(
+    clippingParent =>
       isElement(clippingParent) && contains(clippingParent, clipperElement)
-    );
-  });
+  );
 }
 
 // Gets the maximum area that the element is visible in due to any number of
