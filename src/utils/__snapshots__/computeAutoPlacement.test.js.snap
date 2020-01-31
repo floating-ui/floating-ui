@@ -2,8 +2,8 @@
 
 exports[`auto produces correct array of computed placements 1`] = `
 Array [
-  "top",
   "bottom",
+  "top",
   "right",
   "left",
 ]
@@ -11,10 +11,10 @@ Array [
 
 exports[`auto-end produces correct array of computed placements 1`] = `
 Array [
-  "top-start",
-  "top-end",
   "bottom-start",
   "bottom-end",
+  "top-start",
+  "top-end",
   "right-start",
   "right-end",
   "left-start",
@@ -24,8 +24,8 @@ Array [
 
 exports[`auto-end produces correct array of computed placements when flipVariations: false 1`] = `
 Array [
-  "top-end",
   "bottom-end",
+  "top-end",
   "right-end",
   "left-end",
 ]
@@ -33,10 +33,10 @@ Array [
 
 exports[`auto-start produces correct array of computed placements 1`] = `
 Array [
-  "top-start",
-  "top-end",
   "bottom-start",
   "bottom-end",
+  "top-start",
+  "top-end",
   "right-start",
   "right-end",
   "left-start",
@@ -46,8 +46,8 @@ Array [
 
 exports[`auto-start produces correct array of computed placements when flipVariations: false 1`] = `
 Array [
-  "top-start",
   "bottom-start",
+  "top-start",
   "right-start",
   "left-start",
 ]
