@@ -6,10 +6,12 @@ module.exports = {
     description: `Positioning tooltips and popovers is difficult. Popper is here to help! Popper is the de facto standard to position tooltips and popovers in modern web applications.`,
     author: `@FezVrasta`,
     image: '/images/popper-og-image.jpg',
+    siteUrl: 'https://popper.js.org',
   },
   plugins: [
     `gatsby-plugin-root-import`,
     `gatsby-plugin-catch-links`,
+    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

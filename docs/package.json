@@ -26,6 +26,7 @@
     "gatsby-plugin-react-helmet": "^3.1.18",
     "gatsby-plugin-root-import": "^2.0.5",
     "gatsby-plugin-sharp": "^2.3.9",
+    "gatsby-plugin-sitemap": "^2.2.26",
     "gatsby-redirect-from": "^0.2.1",
     "gatsby-remark-autolink-headers": "^2.1.23",
     "gatsby-remark-find-replace": "^0.3.0",
