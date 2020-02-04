@@ -1,11 +1,10 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('should not overflow when small reference is at edge of boundary', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/edge.html`);
 
   await scroll(page, '#scroll', 300);
@@ -14,7 +13,6 @@ it('should not overflow when small reference is at edge of boundary', async () =
 });
 
 it('should not be tethered earlier than expected with a point reference', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/point.html`);
 
   await scroll(page, '#scroll', 300);
@@ -23,7 +21,6 @@ it('should not be tethered earlier than expected with a point reference', async 
 });
 
 it('should take into account the arrow padding (mainSide)', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/arrow.html`);
 
   await scroll(page, '#scroll', 760);
@@ -32,7 +29,6 @@ it('should take into account the arrow padding (mainSide)', async () => {
 });
 
 it('should take into account the arrow padding (altSide)', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/arrow.html`);
 
   await scroll(page, '#scroll', 20);
@@ -41,7 +37,6 @@ it('should take into account the arrow padding (altSide)', async () => {
 });
 
 it('should not be tethered if `tether: false`', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/no-tether.html`);
 
   await scroll(page, '#scroll', 1500);
@@ -50,7 +45,6 @@ it('should not be tethered if `tether: false`', async () => {
 });
 
 it('should be prevented from overflowing', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/main.html`);
 
   await scroll(page, '#scroll', 670);
@@ -59,7 +53,6 @@ it('should be prevented from overflowing', async () => {
 });
 
 it('(min) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/main.html`);
 
   await scroll(page, '#scroll', 780);
@@ -68,7 +61,6 @@ it('(min) should be allowed to overflow once the opposite edges are level', asyn
 });
 
 it('(max) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/main.html`);
 
   await scroll(page, '#scroll', 4);
@@ -77,7 +69,6 @@ it('(max) should be allowed to overflow once the opposite edges are level', asyn
 });
 
 it('(min) (start-variation) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/start-variation.html`);
 
   await scroll(page, '#scroll', 780);
@@ -86,7 +77,6 @@ it('(min) (start-variation) should be allowed to overflow once the opposite edge
 });
 
 it('(max) (start-variation) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/start-variation.html`);
 
   await scroll(page, '#scroll', 4);
@@ -95,7 +85,6 @@ it('(max) (start-variation) should be allowed to overflow once the opposite edge
 });
 
 it('(min) (end-variation) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/end-variation.html`);
 
   await scroll(page, '#scroll', 780);
@@ -104,7 +93,6 @@ it('(min) (end-variation) should be allowed to overflow once the opposite edges 
 });
 
 it('(max) (end-variation) should be allowed to overflow once the opposite edges are level', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/end-variation.html`);
 
   await scroll(page, '#scroll', 4);
@@ -113,7 +101,6 @@ it('(max) (end-variation) should be allowed to overflow once the opposite edges 
 });
 
 it('should not overflow offset parent borders', async () => {
-  const page = await browser.newPage();
   await page.goto(
     `${TEST_URL}/modifiers/preventOverflow/offset-parent-border.html`
   );
@@ -124,7 +111,6 @@ it('should not overflow offset parent borders', async () => {
 });
 
 it('should be inside scroller container', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/body-render.html`);
 
   await scroll(page, '#scroll', 600);

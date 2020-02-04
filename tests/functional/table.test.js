@@ -1,5 +1,5 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { screenshot, scroll } from '../utils/puppeteer.js';
@@ -12,7 +12,6 @@ const hack = async page => {
 };
 
 it('should position popper on right when reference is in table', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/table/basic.html`);
   await hack(page);
 
@@ -22,7 +21,6 @@ it('should position popper on right when reference is in table', async () => {
 });
 
 it('should position popper on right when reference and popper are in table', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/table/same.html`);
   await hack(page);
 
@@ -32,7 +30,6 @@ it('should position popper on right when reference and popper are in table', asy
 });
 
 it('should position popper on right when reference is in table inside offsetParents', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/table/offset-parent.html`);
   await hack(page);
 
@@ -42,7 +39,6 @@ it('should position popper on right when reference is in table inside offsetPare
 });
 
 it('should position popper on right when reference and popper are in table inside offsetParents', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/table/same-offset-parent.html`);
   await hack(page);
 

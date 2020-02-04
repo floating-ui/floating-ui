@@ -1,11 +1,10 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('should update the position when window is resized', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/scroll.html`);
   await scroll(page, '#scroll', 300);
 
@@ -13,7 +12,6 @@ it('should update the position when window is resized', async () => {
 });
 
 it('should handle basic nested scrollable parents', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/nested.html`);
   await scroll(page, '.scroll2', 300);
   await scroll(page, '.scroll1', 300);
@@ -22,7 +20,6 @@ it('should handle basic nested scrollable parents', async () => {
 });
 
 it('should handle basic nested scrollable parents when pop/ref are on same div', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/nested-same.html`);
 
   await scroll(page, '.scroll2', 300);
@@ -32,7 +29,6 @@ it('should handle basic nested scrollable parents when pop/ref are on same div',
 });
 
 it('should handle case where popper is one level deeper than reference', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/nested-alt.html`);
 
   await scroll(page, '.scroll2', 300);
@@ -42,7 +38,6 @@ it('should handle case where popper is one level deeper than reference', async (
 });
 
 it('should handle basic offset parent', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/offset-basic.html`);
 
   await scroll(page, 'html', 200);
@@ -51,7 +46,6 @@ it('should handle basic offset parent', async () => {
 });
 
 it('should handle case where root scrolling parent is also offset parent', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/offset-parent.html`);
 
   await scroll(page, '.scroll3', 200);
@@ -62,7 +56,6 @@ it('should handle case where root scrolling parent is also offset parent', async
 });
 
 it('should handle multiple nested offsetParents', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/scrolling-absolute/offset-parent-multiple.html`);
 
   await scroll(page, '.scroll3', 200);
@@ -73,7 +66,6 @@ it('should handle multiple nested offsetParents', async () => {
 });
 
 it('should handle same offset parent', async () => {
-  const page = await browser.newPage();
   await page.goto(
     `${TEST_URL}/scrolling-absolute/scroll-same-offset-parent.html`
   );
@@ -84,7 +76,6 @@ it('should handle same offset parent', async () => {
 });
 
 it('should handle alt offset parent', async () => {
-  const page = await browser.newPage();
   await page.goto(
     `${TEST_URL}/scrolling-absolute/scroll-alt-offset-parent.html`
   );
@@ -95,7 +86,6 @@ it('should handle alt offset parent', async () => {
 });
 
 it('finds scrolling parent through assigned slots', async () => {
-  const page = await browser.newPage();
   await page.goto(
     `${TEST_URL}/scrolling-absolute/parent-through-assigned-slot.html`
   );

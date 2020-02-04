@@ -1,11 +1,10 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('should flip from right to bottom', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/main.html`);
 
   await scroll(page, '.scroll1', 400);
@@ -14,14 +13,12 @@ it('should flip from right to bottom', async () => {
 });
 
 it('should flip from -end to -start variation', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
 it('should flip from -end to -start variation while maintaining main axis flipping', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation.html`);
 
   await scroll(page, 'html', 200);
@@ -30,7 +27,6 @@ it('should flip from -end to -start variation while maintaining main axis flippi
 });
 
 it('larger: should be flipped to -end variation', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation-larger.html`);
 
   await scroll(page, 'html', 0);
@@ -39,7 +35,6 @@ it('larger: should be flipped to -end variation', async () => {
 });
 
 it('larger: should be flipped to -start variation when -end does not fit', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation-larger.html`);
 
   await scroll(page, 'html', 500);
@@ -48,7 +43,6 @@ it('larger: should be flipped to -start variation when -end does not fit', async
 });
 
 it('shorter: should be flipped to -start variation', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation-shorter.html`);
 
   await scroll(page, 'html', 0);
@@ -57,7 +51,6 @@ it('shorter: should be flipped to -start variation', async () => {
 });
 
 it('shorter: should be flipped to original -end variation when it fits', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/checkVariation-shorter.html`);
 
   await scroll(page, 'html', 600);
@@ -66,14 +59,12 @@ it('shorter: should be flipped to original -end variation when it fits', async (
 });
 
 it('should not flip variations with `flipVariations: false`', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/flipVariations-false.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
 it('should flip from right to bottom', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/flip/alt-boundary.html`);
 
   await scroll(page, '.scroll1', 400);

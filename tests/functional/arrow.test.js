@@ -1,11 +1,10 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('shuld center the arrow', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/main.html`);
 
   await scroll(page, '.scroll3', 300);
@@ -16,7 +15,6 @@ it('shuld center the arrow', async () => {
 });
 
 it('should keep arrow within popper edges', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/main.html`);
 
   await scroll(page, '.scroll2', 400);
@@ -27,7 +25,6 @@ it('should keep arrow within popper edges', async () => {
 });
 
 it('tether should activate at correct time', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/main.html`);
 
   await scroll(page, '.scroll2', 400);
@@ -38,7 +35,6 @@ it('tether should activate at correct time', async () => {
 });
 
 it('should hide arrow if it is at the edge (min)', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/hide.html`);
 
   await scroll(page, '.scroll', 390);
@@ -47,7 +43,6 @@ it('should hide arrow if it is at the edge (min)', async () => {
 });
 
 it('should hide arrow if it is at the edge (max)', async () => {
-  const page = await browser.newPage();
   await page.setViewport({ width: 800, height: 400 });
   await page.goto(`${TEST_URL}/modifiers/arrow/hide.html`);
 
