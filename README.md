@@ -319,30 +319,32 @@ used to ensure the utility functions behave as expected in isolation.
 
 ### Functional Tests
 
-The functional tests run with Puppeteer, to take advantage of a complete browser
-environment. They are currently running on Chromium, and Firefox.
+The functional tests run with Playwright, to take advantage of a complete
+browser environment. They are currently running on Chromium, Firefox, and
+WebKit.
 
-You can run them with `yarn test:functional`. Set the `PUPPETEER_BROWSER`
-environment variable to `firefox` to run them on the Mozilla browser.
+You can run them with `yarn test:functional`. Set the `JEST_BROWSER` environment
+variable to `firefox` to run them on the Mozilla browser, or `webkit` to run
+them on WebKit.
 
 The assertions are written in form of image snapshots, so that it's easy to
 assert for the correct Popper behavior without having to write a lot of offsets
 comparisons manually.
 
 You can mark a `*.test.js` file to run in the Puppeteer environment by
-prepending a `@jest-environment puppeteer` JSDoc comment to the interested file.
+prepending a `@jest-environment jest-playwright-preset` JSDoc comment to the
+interested file.
 
 Here's an example of a basic functional test:
 
 ```js
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { screenshot } from '../utils/puppeteer.js';
 
 it('should position the popper on the right', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/basic.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
@@ -350,7 +352,7 @@ it('should position the popper on the right', async () => {
 ```
 
 You can find the complete
-[`jest-puppeteer` documentation here](https://github.com/smooth-code/jest-puppeteer#api),
+[`jest-playwright-preset` documentation here](https://github.com/mmarkelov/jest-playwright),
 and the
 [`jest-image-snapshot` documentation here](https://github.com/americanexpress/jest-image-snapshot#%EF%B8%8F-api).
 

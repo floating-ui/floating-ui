@@ -1,11 +1,10 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('shuld center the arrow', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/index.html`);
 
   await scroll(page, '.scroll3', 300);
@@ -16,7 +15,6 @@ it('shuld center the arrow', async () => {
 });
 
 it('should keep arrow within popper edges', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/arrow/index.html`);
 
   await scroll(page, '.scroll2', 400);
