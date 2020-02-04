@@ -46,7 +46,6 @@ function compile(fileNames, options, write) {
   const alteredFiles = [];
 
   allDiagnostics.forEach(diagnostic => {
-    console.log(diagnostic.messageText);
     const fileName = diagnostic.file && diagnostic.file.fileName;
     if (!fileName) return;
 
