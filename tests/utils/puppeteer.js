@@ -1,5 +1,11 @@
+export const delay = time =>
+  new Promise(function(resolve) {
+    setTimeout(resolve, time);
+  });
+
 export const screenshot = async page => {
   await page.addStyleTag({ content: '* { color: transparent !important; }' });
+  await delay(1000);
   return page.screenshot();
 };
 
