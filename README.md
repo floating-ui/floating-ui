@@ -325,7 +325,7 @@ The functional tests run with Playwright, to take advantage of a complete
 browser environment. They are currently running on Chromium, Firefox, and
 WebKit.
 
-You can run them with `yarn test:functional`. Set the `JEST_BROWSER` environment
+You can run them with `yarn test:functional`. Set the `BROWSER` environment
 variable to `firefox` to run them on the Mozilla browser, or `webkit` to run
 them on WebKit.
 
