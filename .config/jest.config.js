@@ -4,13 +4,14 @@ process.env.JEST_PUPPETEER_CONFIG = require.resolve(
 );
 
 module.exports = {
+  preset: 'jest-playwright-preset',
   testMatch: ['<rootDir>/src/**/*.test.js', '<rootDir>/tests/**/*.test.js'],
   globals: {
     __DEV__: true,
   },
-  testEnvironment: 'jest-environment-jsdom-sixteen',
   globalSetup: 'jest-playwright-preset/setup',
   globalTeardown: 'jest-playwright-preset/teardown',
+  testEnvironment: 'jest-environment-jsdom-sixteen',
   setupFilesAfterEnv: ['<rootDir>/tests/setupTests.js'],
   reporters: ['default', require.resolve('../tests/imageReporter.js')],
   setupFiles: ['dotenv/config'],
