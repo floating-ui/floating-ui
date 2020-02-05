@@ -4245,12 +4245,17 @@ jest-message-util@^25.5.0:
     slash "^3.0.0"
     stack-utils "^1.0.1"
 
-jest-mock@^25.1.0, jest-mock@^25.5.0:
+jest-mock@^25.1.0, jest-mock@^25.3.0, jest-mock@^25.5.0:
   version "25.5.0"
   resolved "https://registry.yarnpkg.com/jest-mock/-/jest-mock-25.5.0.tgz#a91a54dabd14e37ecd61665d6b6e06360a55387a"
   integrity sha512-eXWuTV8mKzp/ovHc5+3USJMYsTBhyQ+5A1Mak35dey/RG8GlM4YWVylZuGgVXinaW6tpvk/RSecmF37FKUlpXA==
   dependencies:
     "@jest/types" "^25.5.0"
+
+jest-playwright-preset@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-0.0.5.tgz#85fe8c23e5c1628eef59b0990e11019493ebce54"
+  integrity sha512-5joIIlxnHrVa+TtwGqBNd/K4hRcd2vfZc762D73BM7kdbyKO4lXhg1cWoxxU/F9o150BZobvqFLAXrW78Gdsgg==
 
 jest-pnp-resolver@^1.2.1:
   version "1.2.1"
