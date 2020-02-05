@@ -33,13 +33,13 @@ jobs:
       name: '[Chromium] Functional Tests'
       script: JEST_BROWSER=chromium yarn test:functional
 
-    # - stage: Tests & Code Check
-    #   name: '[Firefox] Functional Tests'
-    #   script: JEST_BROWSER=firefox yarn test:functional
+    - stage: Tests & Code Check
+      name: '[Firefox] Functional Tests'
+      script: JEST_BROWSER=firefox yarn test:functional
 
-    # - stage: Tests & Code Check
-    #   name: '[WebKit] Functional Tests'
-    #   script: JEST_BROWSER=webkit yarn test:functional
+    - stage: Tests & Code Check
+      name: '[WebKit] Functional Tests'
+      script: JEST_BROWSER=webkit yarn test:functional
 
     - stage: Deploy
       name: Website / Documentation

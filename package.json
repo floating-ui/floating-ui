@@ -90,7 +90,7 @@
     "jest-environment-jsdom-fourteen": "^1.0.1",
     "jest-environment-node": "^25.1.0",
     "jest-image-snapshot": "^2.12.0",
-    "jest-playwright-preset": "^0.0.4",
+    "jest-playwright-preset": "^0.0.5",
     "playwright": "^0.10.0",
     "poster": "^0.0.9",
     "prettier": "^1.19.1",

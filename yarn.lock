@@ -3941,10 +3941,10 @@ jest-mock@^25.1.0:
   dependencies:
     "@jest/types" "^25.1.0"
 
-jest-playwright-preset@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-0.0.4.tgz#86b8d4ea7ca92f09560bda7ece63047578f0d806"
-  integrity sha512-66xi2dYF1Cd9krgwXMTZco+cy/SCkxfvgGGwP6yU6K3gBOV+F5n9LRPZN0P/XnTwM+A2oPQSzN5Y0bxiH5vrdQ==
+jest-playwright-preset@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-0.0.5.tgz#85fe8c23e5c1628eef59b0990e11019493ebce54"
+  integrity sha512-5joIIlxnHrVa+TtwGqBNd/K4hRcd2vfZc762D73BM7kdbyKO4lXhg1cWoxxU/F9o150BZobvqFLAXrW78Gdsgg==
 
 jest-pnp-resolver@^1.2.1:
   version "1.2.1"
