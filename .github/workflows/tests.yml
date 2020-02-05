@@ -2,14 +2,21 @@ name: Unit Tests
 
 on: [push, pull_request]
 
+<<<<<<< HEAD
 env:
   CI: true
 
+=======
+>>>>>>> chore: try github actions
 jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v2
+=======
+      - uses: actions/checkout@v2-beta
+>>>>>>> chore: try github actions
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
@@ -33,6 +40,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v2
       - uses: mujo-code/puppeteer-headful@master
         with:
@@ -45,3 +53,59 @@ jobs:
         uses: mujo-code/puppeteer-headful@master
         with:
           args: yarn test:unit
+=======
+      - uses: actions/checkout@v2-beta
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - name: TypeScript
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: build:bundles
+      - name: Run Jest Unit Tests
+        uses: CultureHQ/actions-yarn@master
+        with:
+          args: test:unit
+
+  # functional-chromium:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2-beta
+  #     - uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: install
+  #     - name: Run Jest Functional Tests
+  #       uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: test:functional
+  #       env:
+  #         BROWSER: chromium
+
+  # functional-firefox:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2-beta
+  #     - uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: install
+  #     - name: Run Jest Functional Tests
+  #       uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: test:functional
+  #       env:
+  #         BROWSER: firefox
+
+  # functional-webkit:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2-beta
+  #     - uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: install
+  #     - name: Run Jest Functional Tests
+  #       uses: CultureHQ/actions-yarn@master
+  #       with:
+  #         args: test:functional
+  #       env:
+  #         BROWSER: webkit
+>>>>>>> chore: try github actions

@@ -3,14 +3,12 @@ name: Compressed Size
 on: [pull_request]
 
 jobs:
-  build:
+  size:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-      - uses: preactjs/compressed-size-action@v1
+      - name: Report Compressed Size Differences
+        uses: preactjs/compressed-size-action@v1
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
           pattern: 'dist/umd/*.min.js'
