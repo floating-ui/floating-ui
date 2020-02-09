@@ -47,21 +47,21 @@ function effect({ state }: ModifierArguments<{||}>) {
   return () => {
     Object.keys(state.elements).forEach(name => {
       const element = state.elements[name];
-      const styleProperties = Object.keys(
-        state.styles.hasOwnProperty(name)
-          ? { ...state.styles[name] }
-          : initialStyles
-      );
       const attributes = state.attributes[name] || {};
 
-      // Set all values to an empty string to unset them
-      const style = styleProperties.reduce(
-        (style, property) => ({
-          ...style,
-          [String(property)]: '',
-        }),
-        {}
+      const styleProperties = Object.keys(
+        state.styles.hasOwnProperty(name)
+          ? state.styles[name]
+          : name === 'reference'
+          ? {}
+          : initialStyles
       );
+
+      // Set all values to an empty string to unset them
+      const style = styleProperties.reduce((style, property) => {
+        style[property] = '';
+        return style;
+      }, {});
 
       // arrow is optional + virtual elements
       if (!isHTMLElement(element) || !getNodeName(element)) {
@@ -73,9 +73,9 @@ function effect({ state }: ModifierArguments<{||}>) {
       // $FlowFixMe
       Object.assign(element.style, style);
 
-      Object.keys(attributes).forEach(attribute =>
-        element.removeAttribute(attribute)
-      );
+      Object.keys(attributes).forEach(attribute => {
+        element.removeAttribute(attribute);
+      });
     });
   };
 }
