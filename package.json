@@ -9,6 +9,14 @@
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
   "repository": "github:popperjs/popper.js",
+  "keywords": [
+    "tooltip",
+    "popover",
+    "dropdown",
+    "popup",
+    "popper",
+    "positioning engine"
+  ],
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/popperjs"
