@@ -96,7 +96,7 @@ const Header = () => (
     >
       <a
         css={buttonCss}
-        href="https://github.com/popperjs/popper.js"
+        href="https://github.com/popperjs/popper-core"
         rel="nofollow noreferrer"
       >
         <GitHub css={iconCss} /> Star on GitHub

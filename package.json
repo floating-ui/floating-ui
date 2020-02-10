@@ -8,7 +8,7 @@
   "unpkg": "dist/umd/popper.min.js",
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
-  "repository": "github:popperjs/popper.js",
+  "repository": "github:popperjs/popper-core",
   "keywords": [
     "tooltip",
     "popover",
