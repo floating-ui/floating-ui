@@ -23,7 +23,7 @@ export * from './types';
 export * from './enums';
 
 const INVALID_ELEMENT_ERROR =
-  'Popper: Invalid reference or popper argument provided to Popper, they must be either a valid DOM element, virtual element, or a jQuery-wrapped DOM element.';
+  'Popper: Invalid reference or popper argument provided. They must be either a DOM element or virtual element.';
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
@@ -102,6 +102,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           })),
         ]);
 
+        // Strip out disabled modifiers
+        state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
+
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the modifiers is invalid for any reason
         if (__DEV__) {
@@ -113,7 +116,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           validateModifiers(modifiers);
 
           if (getBasePlacement(state.options.placement) === auto) {
-            const flipModifier = orderedModifiers.find(
+            const flipModifier = state.orderedModifiers.find(
               ({ name }) => name === 'flip'
             );
 
@@ -152,9 +155,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             );
           }
         }
-
-        // Strip out disabled modifiers
-        state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
 
         runModifierEffects();
 
