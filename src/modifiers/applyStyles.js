@@ -36,13 +36,23 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
 
 function effect({ state }: ModifierArguments<{||}>) {
   const initialStyles = {
-    position: 'absolute',
-    left: '0',
-    top: '0',
-    margin: '0',
+    popper: {
+      position: 'absolute',
+      left: '0',
+      top: '0',
+      margin: '0',
+    },
+    arrow: {
+      position: 'absolute',
+    },
+    reference: {},
   };
 
-  Object.assign(state.elements.popper.style, initialStyles);
+  Object.assign(state.elements.popper.style, initialStyles.popper);
+
+  if (state.elements.arrow) {
+    Object.assign(state.elements.arrow.style, initialStyles.arrow);
+  }
 
   return () => {
     Object.keys(state.elements).forEach(name => {
@@ -52,9 +62,7 @@ function effect({ state }: ModifierArguments<{||}>) {
       const styleProperties = Object.keys(
         state.styles.hasOwnProperty(name)
           ? state.styles[name]
-          : name === 'reference'
-          ? {}
-          : initialStyles
+          : initialStyles[name]
       );
 
       // Set all values to an empty string to unset them
