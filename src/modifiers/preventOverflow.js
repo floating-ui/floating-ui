@@ -101,11 +101,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     // and near the edge of a boundary, the popper can overflow even if the
     // reference is not overflowing as well (e.g. virtual elements with no
     // width or height)
-    const arrowLen = within(
-      0,
-      Math.abs(referenceRect[len] - arrowRect[len]),
-      arrowRect[len]
-    );
+    const arrowLen = within(0, referenceRect[len], arrowRect[len]);
 
     const minOffset = isBasePlacement
       ? referenceRect[len] / 2 -

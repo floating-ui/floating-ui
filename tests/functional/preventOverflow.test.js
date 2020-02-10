@@ -13,6 +13,15 @@ it('should not overflow when small reference is at edge of boundary', async () =
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
+it('should not be tethered earlier than expected with a point reference', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/preventOverflow/point.html`);
+
+  await scroll(page, '#scroll', 300);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
 it('should take into account the arrow padding (mainSide)', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/arrow.html`);
