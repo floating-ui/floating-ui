@@ -6,7 +6,6 @@ import getBasePlacement from '../utils/getBasePlacement';
 import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacement';
 import detectOverflow from '../utils/detectOverflow';
 import computeAutoPlacement from '../utils/computeAutoPlacement';
-import uniqueBy from '../utils/uniqueBy';
 import { bottom, top, start, right, left, auto } from '../enums';
 import getVariation from '../utils/getVariation';
 
@@ -55,27 +54,27 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       ? [getOppositePlacement(preferredPlacement)]
       : getExpandedFallbackPlacements(preferredPlacement));
 
-  const placements = uniqueBy(
-    [preferredPlacement, ...fallbackPlacements].reduce((acc, placement) => {
-      return getBasePlacement(placement) === auto
-        ? acc.concat(
-            computeAutoPlacement(state, {
+  const placements = [preferredPlacement, ...fallbackPlacements].reduce(
+    (acc, placement) => {
+      return acc.concat(
+        getBasePlacement(placement) === auto
+          ? computeAutoPlacement(state, {
               placement,
               boundary,
               rootBoundary,
               padding,
               flipVariations,
             })
-          )
-        : acc.concat(placement);
-    }, []),
-    placement => placement
+          : placement
+      );
+    },
+    []
   );
 
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
 
-  const checksMap: Map<string, Array<boolean>> = new Map();
+  const checksMap = new Map();
   let makeFallbackChecks = true;
   let firstFittingPlacement = placements[0];
 
