@@ -30,7 +30,8 @@ const unsetSides = {
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
 function roundOffsets({ x, y }): Offsets {
-  const dpr = (window: Window).devicePixelRatio || 1;
+  const win: Window = window;
+  const dpr = win.devicePixelRatio || 1;
 
   return {
     x: Math.round(x * dpr) / dpr || 0,
@@ -62,6 +63,8 @@ export function mapToStyles({
 
   let sideX: string = left;
   let sideY: string = top;
+
+  const win: Window = window;
 
   if (adaptive) {
     let offsetParent = getOffsetParent(popper);
@@ -99,7 +102,7 @@ export function mapToStyles({
       // blurry text on low PPI displays, so we want to use 2D transforms
       // instead
       transform:
-        ((window: Window).devicePixelRatio || 1) < 2
+        (win.devicePixelRatio || 1) < 2
           ? `translate(${x}px, ${y}px)`
           : `translate3d(${x}px, ${y}px, 0)`,
     };
@@ -117,14 +120,26 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true, adaptive = true } = options;
 
   if (__DEV__) {
+    const { transitionProperty } = getComputedStyle(state.elements.popper);
+
     if (
       adaptive &&
-      parseFloat(getComputedStyle(state.elements.popper).transitionDuration)
+      ['transform', 'top', 'right', 'bottom', 'left'].some(
+        property => transitionProperty.indexOf(property) >= 0
+      )
     ) {
       console.warn(
         [
-          'Popper: The "computeStyles" modifier\'s `adaptive` option must be',
-          'disabled if CSS transitions are applied to the popper element.',
+          'Popper: Detected CSS transitions on at least one of the following',
+          'CSS properties: "transform", "top", "right", "bottom", "left".',
+          '\n\n',
+          'Disable the "computeStyles" modifier\'s `adaptive` option to allow',
+          'for smooth transitions, or remove these properties from the CSS',
+          'transition declaration on the popper element if only transitioning',
+          'opacity or background-color for example.',
+          '\n\n',
+          'We recommend using the popper element as a wrapper around an inner',
+          'element that can have any CSS property transitioned for animations.',
         ].join(' ')
       );
     }
