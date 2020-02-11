@@ -121,14 +121,8 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const offsetModifierValue = state.modifiersData.offset
       ? state.modifiersData.offset[state.placement][mainAxis]
       : 0;
-    const tetherMin =
-      state.modifiersData.popperOffsets[mainAxis] +
-      minOffset -
-      offsetModifierValue;
-    const tetherMax =
-      state.modifiersData.popperOffsets[mainAxis] +
-      maxOffset -
-      offsetModifierValue;
+    const tetherMin = popperOffsets[mainAxis] + minOffset - offsetModifierValue;
+    const tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
 
     const preventedOffset = within(
       tether ? Math.min(min, tetherMin) : min,
@@ -136,7 +130,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
       tether ? Math.max(max, tetherMax) : max
     );
 
-    state.modifiersData.popperOffsets[mainAxis] = preventedOffset;
+    popperOffsets[mainAxis] = preventedOffset;
     data[mainAxis] = preventedOffset - offset;
   }
 
