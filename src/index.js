@@ -16,6 +16,7 @@ import debounce from './utils/debounce';
 import validateModifiers from './utils/validateModifiers';
 import uniqueBy from './utils/uniqueBy';
 import getBasePlacement from './utils/getBasePlacement';
+import mergeByName from './utils/mergeByName';
 import { isElement } from './dom-utils/instanceOf';
 import { auto } from './enums';
 
@@ -89,18 +90,9 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         // Orders the modifiers based on their dependencies and `phase`
         // properties
-        const orderedModifiers = orderModifiers([
-          ...state.options.modifiers.filter(
-            modifier =>
-              !defaultModifiers.find(({ name }) => name === modifier.name)
-          ),
-          ...defaultModifiers.map(defaultModifier => ({
-            ...defaultModifier,
-            ...state.options.modifiers.find(
-              ({ name }) => name === defaultModifier.name
-            ),
-          })),
-        ]);
+        const orderedModifiers = orderModifiers(
+          mergeByName([...defaultModifiers, ...state.options.modifiers])
+        );
 
         // Strip out disabled modifiers
         state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
