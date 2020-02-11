@@ -4,32 +4,19 @@ import type { Modifier } from '../types';
 export default function mergeByName(
   modifiers: Array<$Shape<Modifier<any>>>
 ): Array<$Shape<Modifier<any>>> {
-  const modifiersMap = new Map();
+  const merged = modifiers.reduce((merged, current) => {
+    const existing = merged[current.name];
+    merged[current.name] = existing
+      ? {
+          ...existing,
+          ...current,
+          options: { ...existing.options, ...current.options },
+          data: { ...existing.data, ...current.data },
+        }
+      : current;
+    return merged;
+  }, {});
 
-  modifiers.forEach(modifier => {
-    const currentModifier = modifiersMap.get(modifier.name);
-
-    modifiersMap.set(
-      modifier.name,
-      currentModifier
-        ? {
-            ...currentModifier,
-            ...modifier,
-            // $FlowFixMe
-            options: { ...currentModifier.options, ...modifier.options },
-            // $FlowFixMe
-            data: { ...currentModifier.data, ...modifier.data },
-          }
-        : modifier
-    );
-  });
-
-  const result = [];
-
-  // IE11 doesn't support map.values() 😞
-  modifiersMap.forEach(modifier => {
-    result.push(modifier);
-  });
-
-  return result;
+  // IE11 does not support Object.values
+  return Object.keys(merged).map(key => merged[key]);
 }
