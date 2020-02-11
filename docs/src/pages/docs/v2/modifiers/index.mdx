@@ -57,7 +57,7 @@ type Modifier = {|
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
   effect?: (ModifierArguments<Options>) => ?() => void,
-  options?: any,
+  options?: {},
   data?: {},
 |};
 
@@ -184,8 +184,7 @@ or destroyed):
 
 ### `options`
 
-This is usually an object with all the properties used to configure the
-modifier.
+This is an object with all the properties used to configure the modifier.
 
 ### `data`
 
