@@ -9,13 +9,14 @@ import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import pkg from '../package.json';
 
 const getFileName = input => input.split('/')[1].split('.')[0];
-const getDir = (dir, format) => (format === 'esm' ? dir : `${dir}/${format}`);
+const getDir = (dir, format) => (dir === 'lib' ? dir : `${dir}/${format}`);
 
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'umd', dir: 'dist', flow: true },
   { inputs, format: 'cjs', dir: 'dist' },
+  { inputs, format: 'esm', dir: 'dist' },
   { inputs, format: 'esm', dir: 'lib' },
 ];
 
