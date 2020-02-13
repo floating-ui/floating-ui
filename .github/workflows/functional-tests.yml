@@ -8,28 +8,43 @@ jobs:
     name: Chromium Functional Tests
     runs-on: ubuntu-latest
     container:
-      image: arjun27/playwright-bionic:0.1.0
+      image: arjun27/playwright-bionic:0.1.1
     steps:
+      - run: npm i -g yarn
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npx yarn && BROWSER=chromium npx yarn test:functional
+      - uses: bahmutov/npm-install@v1
+      - run: node ./node_modules/playwright/install.js
+      - run: yarn test:functional
+        env:
+          BROWSER: chromium
+          CI: true
 
   functional-firefox:
     name: Firefox Functional Tests
     runs-on: ubuntu-latest
     container:
-      image: arjun27/playwright-bionic:0.1.0
+      image: arjun27/playwright-bionic:0.1.1
     steps:
+      - run: npm i -g yarn
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npx yarn && BROWSER=firefox npx yarn test:functional
+      - uses: bahmutov/npm-install@v1
+      - run: node ./node_modules/playwright/install.js
+      - run: yarn test:functional
+        env:
+          BROWSER: firefox
+          CI: true
 
   functional-webkit:
     name: WebKit Functional Tests
     runs-on: ubuntu-latest
     container:
-      image: arjun27/playwright-bionic:0.1.0
+      image: arjun27/playwright-bionic:0.1.1
     steps:
+      - run: npm i -g yarn
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npx yarn && BROWSER=webkit npx yarn test:functional
+      - uses: bahmutov/npm-install@v1
+      - run: node ./node_modules/playwright/install.js
+      - run: yarn test:functional
+        env:
+          BROWSER: webkit
+          CI: true
