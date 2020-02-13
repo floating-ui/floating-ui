@@ -1,6 +1,6 @@
 module.exports = {
   launchBrowserApp: {
     headless: process.env.HEADLESS !== 'false',
-    dumpio: true,
+    args: process.env.BROWSER === 'chromium' ? ['--no-sandbox', '--disable-setuid-sandbox'] : []
   },
 };
