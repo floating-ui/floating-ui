@@ -4252,10 +4252,15 @@ jest-mock@^25.1.0, jest-mock@^25.3.0, jest-mock@^25.5.0:
   dependencies:
     "@jest/types" "^25.5.0"
 
-jest-playwright-preset@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-0.0.5.tgz#85fe8c23e5c1628eef59b0990e11019493ebce54"
-  integrity sha512-5joIIlxnHrVa+TtwGqBNd/K4hRcd2vfZc762D73BM7kdbyKO4lXhg1cWoxxU/F9o150BZobvqFLAXrW78Gdsgg==
+jest-playwright-preset@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/jest-playwright-preset/-/jest-playwright-preset-0.0.8.tgz#b8e7b3d3dfa625d85c0ec84748c5e6cfcc8baf4d"
+  integrity sha512-cXqI2gBcjTXRSOvRk6wMukAwPhrxf7TCQ1w/Qb1mStvl/sR+Ykqn9KHXiTSWEneCyV8hYx4Dp3gNvUY7GlgHfQ==
+  optionalDependencies:
+    playwright "^0.10.0"
+    playwright-chromium "*"
+    playwright-firefox "*"
+    playwright-webkit "*"
 
 jest-pnp-resolver@^1.2.1:
   version "1.2.1"
@@ -5459,6 +5464,13 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
+playwright-chromium@*:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/playwright-chromium/-/playwright-chromium-0.10.0.tgz#1b0898ffaa31a65277a2deee0764465589dca953"
+  integrity sha512-C9539clSFz2moxQpCM7G1YaThyDhnrUSdZAvysuoTXXFzuHVguNNHt5BnP5IczA91zkb51V0ESQCAdiydUzBoA==
+  dependencies:
+    playwright-core "=0.10.0"
+
 playwright-core@=0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-0.10.0.tgz#86699c9cc3e613d733e6635a54aceea1993013d5"
@@ -5475,6 +5487,20 @@ playwright-core@=0.10.0:
     rimraf "^2.6.1"
     uuid "^3.4.0"
     ws "^6.1.0"
+
+playwright-firefox@*:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/playwright-firefox/-/playwright-firefox-0.10.0.tgz#af06ba81f85c05775e1b45d1b521bbdaa5e307f7"
+  integrity sha512-W62qDExGIvYkLIZ+xxRn7i2VJBPHrq9+qvMqWbAL2mg+LMADdlbAmC5M4kAyTiCw57Ou1BuGkHhdZaxX+Oe6xg==
+  dependencies:
+    playwright-core "=0.10.0"
+
+playwright-webkit@*:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/playwright-webkit/-/playwright-webkit-0.10.0.tgz#4a8ce4e01e6bf37f62aed3d5bc19ad29ea48c7f8"
+  integrity sha512-PLV5+97mh521x78HngNOUCrMr1FjCVPxO5wjYI0K943wSM7M+WBOxWLiyjOW0/yztFDRoU1odk3jcB1l5d5JOA==
+  dependencies:
+    playwright-core "=0.10.0"
 
 playwright@^0.10.0:
   version "0.10.0"

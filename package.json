@@ -96,9 +96,10 @@
     "husky": "^4.2.1",
     "jest": "^25.5.1",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-environment-node": "^25.1.0",
     "jest-environment-puppeteer": "^4.4.0",
     "jest-image-snapshot": "^3.1.0",
-    "jest-playwright-preset": "^0.0.5",
+    "jest-playwright-preset": "^0.0.8",
     "playwright": "^0.10.0",
     "poster": "^0.0.9",
     "prettier": "^2.0.5",
@@ -117,8 +118,5 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  },
-  "dependencies": {
-    "remove": "^0.1.5"
   }
 }
