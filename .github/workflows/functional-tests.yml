@@ -10,8 +10,9 @@ jobs:
     container:
       image: arjun27/playwright-bionic:0.1.1
     steps:
-      - run: npm i -g yarn
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: npm i -g yarn
       - uses: bahmutov/npm-install@v1
       - run: node ./node_modules/playwright/install.js
       - run: yarn test:functional
@@ -25,8 +26,9 @@ jobs:
     container:
       image: arjun27/playwright-bionic:0.1.1
     steps:
-      - run: npm i -g yarn
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: npm i -g yarn
       - uses: bahmutov/npm-install@v1
       - run: node ./node_modules/playwright/install.js
       - run: yarn test:functional
@@ -40,8 +42,9 @@ jobs:
     container:
       image: arjun27/playwright-bionic:0.1.1
     steps:
-      - run: npm i -g yarn
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: npm i -g yarn
       - uses: bahmutov/npm-install@v1
       - run: node ./node_modules/playwright/install.js
       - run: yarn test:functional
