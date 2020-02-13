@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: yarn && BROWSER=chromium yarn test:functional
+      - run: npx yarn && BROWSER=chromium npx yarn test:functional
 
   functional-firefox:
     name: Firefox Functional Tests
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: yarn && BROWSER=firefox yarn test:functional
+      - run: npx yarn && BROWSER=firefox npx yarn test:functional
 
   functional-webkit:
     name: WebKit Functional Tests
@@ -32,4 +32,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: yarn && BROWSER=webkit yarn test:functional
+      - run: npx yarn && BROWSER=webkit npx yarn test:functional
