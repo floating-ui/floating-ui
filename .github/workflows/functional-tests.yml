@@ -2,19 +2,34 @@ name: Functional Tests
 on: [push, pull_request]
 env:
   CI: true
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
 jobs:
   functional-chromium:
     name: Chromium Functional Tests
     runs-on: ubuntu-latest
+    container:
+      image: arjun27/playwright-bionic:0.1.0
     steps:
       - uses: actions/checkout@v2
-      - uses: CultureHQ/actions-yarn@master
-        with:
-          args: install
-      - uses: mujo-code/puppeteer-headful@master
-        with:
-          args: yarn test:functional
-        env:
-          PUPPETEER_BROWSER: chromium
+      - uses: actions/setup-node@v1
+      - run: yarn && BROWSER=chromium yarn test:functional
+
+  functional-firefox:
+    name: Firefox Functional Tests
+    runs-on: ubuntu-latest
+    container:
+      image: arjun27/playwright-bionic:0.1.0
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: yarn && BROWSER=firefox yarn test:functional
+
+  functional-webkit:
+    name: WebKit Functional Tests
+    runs-on: ubuntu-latest
+    container:
+      image: arjun27/playwright-bionic:0.1.0
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - run: yarn && BROWSER=webkit yarn test:functional
