@@ -16,7 +16,6 @@ export const usePopper = (options = {}) => {
         : {
             ...options,
             modifiers: [
-              ...(options.modifiers || []),
               {
                 name: 'arrow',
                 options: {
@@ -29,6 +28,7 @@ export const usePopper = (options = {}) => {
                   offset: [0, 10],
                 },
               },
+              ...(options.modifiers || []),
             ],
           },
     [options]
