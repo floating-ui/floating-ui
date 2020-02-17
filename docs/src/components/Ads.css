@@ -1,0 +1,58 @@
+.cf-wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: #281e36;
+  color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  width: 290px;
+  height: 155px;
+  margin: 15px auto;
+  font-size: 14px;
+}
+
+.cf-sponsored-by,
+.cf-powered-by,
+.cf-powered-by:hover,
+.cf-sponsored-by:hover {
+  text-decoration: none;
+  color: inherit;
+  border: 0;
+}
+
+.cf-sponsored-by {
+  display: flex;
+}
+
+.cf-powered-by {
+  text-align: right;
+  font-size: 12px;
+}
+
+.cf-img {
+  padding-right: 10px;
+}
+
+@media (min-width: 360px) {
+  .cf-wrapper {
+    width: 320px;
+  }
+}
+
+.cf-fallback * {
+  opacity: 0;
+  animation: fade-in 0.2s forwards 1s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#codefund:not(:empty) + .cf-fallback {
+  display: none;
+}

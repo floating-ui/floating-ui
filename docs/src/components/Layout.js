@@ -11,7 +11,7 @@ import { Link } from 'gatsby';
 import { MDXProvider } from '@mdx-js/react';
 import styled from '@emotion/styled';
 import { Global, css } from '@emotion/core';
-import CarbonAds from './CarbonAds';
+import Ads from './Ads';
 import { Container, media, Footer, sizes } from './Framework';
 import { MdxRoutes } from '@pauliescanlon/gatsby-mdx-routes';
 import Navigation, { NAVIGATION_WIDTH } from './Navigation';
@@ -143,7 +143,7 @@ const NavButtonDirection = styled.span`
 `;
 
 const components = {
-  'x-ad': CarbonAds,
+  'x-ad': Ads,
   a: props => (
     // eslint-disable-next-line
     <a {...props} onClick={anchorScroll}>

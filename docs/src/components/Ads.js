@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { ExternalLinkStyled } from './Framework';
 
-import './carbonAds.css';
+import './Ads.css';
 
-const CarbonAds = ({
-  url = 'https://cdn.carbonads.com/carbon.js?serve=CKYIE2QW&placement=fezvrastagithubiopopperjs',
+const Ads = ({
+  url = 'https://app.codefund.io/properties/720/funder.js',
   ...props
 }) => {
   const ref = useRef(null);
@@ -14,7 +14,6 @@ const CarbonAds = ({
       const script = document.createElement('script');
       script.src = url;
       script.async = true;
-      script.id = '_carbonads_js';
       node.prepend(script);
     }
 
@@ -23,8 +22,9 @@ const CarbonAds = ({
 
   return (
     <div {...props} ref={ref}>
-      <div className="carbonplaceholder">
-        <span className="carbon-text">
+      <div id="codefund" />
+      <div className="cf-wrapper cf-fallback">
+        <span className="cf-text">
           Don't mind tech-related ads? Consider disabling your ad-blocker to
           help us!
           <br />
@@ -41,4 +41,4 @@ const CarbonAds = ({
   );
 };
 
-export default CarbonAds;
+export default Ads;

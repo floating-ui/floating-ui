@@ -22,7 +22,7 @@ import {
   ArrowDown,
 } from 'react-feather';
 import Highlight from './Highlight';
-import CarbonAds from './CarbonAds';
+import Ads from './Ads';
 import SEO from './Seo';
 
 import Header from './Header';
@@ -569,7 +569,7 @@ const Layout = ({ children }) => {
       <SEO title="Home" />
       <Header siteTitle={data.site.siteMetadata.title} />
       <InstallBar />
-      <CarbonAds />
+      <Ads />
 
       <Container maxWidth={1400}>
         <PlacementExample />
