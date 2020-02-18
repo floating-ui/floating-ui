@@ -38,6 +38,7 @@ function effect({ state }: ModifierArguments<{||}>) {
   const initialStyles = {
     popper: {
       position: 'absolute',
+      visibility: 'hidden',
       left: '0',
       top: '0',
       margin: '0',

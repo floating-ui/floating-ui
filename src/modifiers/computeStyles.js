@@ -155,6 +155,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
   // popper offsets are always available
   state.styles.popper = {
     ...state.styles.popper,
+    visibility: 'visible',
     ...mapToStyles({
       ...commonStyles,
       offsets: state.modifiersData.popperOffsets,
