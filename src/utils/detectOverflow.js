@@ -59,8 +59,7 @@ export default function detectOverflow(
     boundary,
     rootBoundary
   );
-  console.log({ element });
-  console.log(clippingClientRect);
+
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
   const popperOffsets = computeOffsets({
