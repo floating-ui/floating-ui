@@ -31,6 +31,7 @@ type Options = {
   altAxis: boolean, // false
   padding: Padding, // 0
   boundary: Boundary, // "clippingParents"
+  altBoundary: boolean, // false
   rootBoundary: RootBoundary, // "viewport"
   tether: boolean, // true
   tetherOffset: TetherOffset, // 0
@@ -121,6 +122,24 @@ createPopper(reference, popper, {
       name: 'preventOverflow',
       options: {
         boundary: element,
+      },
+    },
+  ],
+});
+```
+
+### `altBoundary`
+
+See [`altBoundary` in Detect Overflow](../../utils/detect-overflow/#altboundary)
+for details.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        altBoundary: true,
       },
     },
   ],
