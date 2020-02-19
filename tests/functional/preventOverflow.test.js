@@ -122,3 +122,12 @@ it('should not overflow offset parent borders', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should be inside scroller container', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/preventOverflow/body-render.html`);
+
+  await scroll(page, '#scroll', 600);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
