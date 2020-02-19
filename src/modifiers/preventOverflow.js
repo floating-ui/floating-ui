@@ -28,6 +28,8 @@ type Options = {
   boundary: Boundary,
   /* If the popper is not overflowing the main area, fallback to this one */
   rootBoundary: RootBoundary,
+  /* If popper render outside overflow parent, example */
+  altBoundary: boolean,
   /**
    * Allows the popper to overflow from its boundaries to keep it near its
    * reference element
@@ -45,12 +47,18 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     altAxis: checkAltAxis = false,
     boundary,
     rootBoundary,
+    altBoundary = false,
     padding,
     tether = true,
     tetherOffset = 0,
   } = options;
 
-  const overflow = detectOverflow(state, { boundary, rootBoundary, padding });
+  const overflow = detectOverflow(state, {
+    boundary,
+    rootBoundary,
+    padding,
+    altBoundary,
+  });
   const basePlacement = getBasePlacement(state.placement);
   const variation = getVariation(state.placement);
   const isBasePlacement = !variation;
