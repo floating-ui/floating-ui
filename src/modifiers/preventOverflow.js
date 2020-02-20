@@ -28,7 +28,7 @@ type Options = {
   boundary: Boundary,
   /* If the popper is not overflowing the main area, fallback to this one */
   rootBoundary: RootBoundary,
-  /* If popper render outside overflow parent, example */
+  /* Use the reference's "clippingParents" boundary context */
   altBoundary: boolean,
   /**
    * Allows the popper to overflow from its boundaries to keep it near its
@@ -47,7 +47,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     altAxis: checkAltAxis = false,
     boundary,
     rootBoundary,
-    altBoundary = false,
+    altBoundary,
     padding,
     tether = true,
     tetherOffset = 0,
