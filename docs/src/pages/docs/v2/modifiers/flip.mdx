@@ -124,8 +124,13 @@ createPopper(reference, popper, {
 
 ### `altBoundary`
 
-See [`altBoundary` in Detect Overflow](../../utils/detect-overflow/#altboundary)
-for details.
+This will check the reference's boundary context
+([`clippingParents`](../../utils/detect-overflow/#boundary)) instead of the
+popper's, effectively replicating the
+[`scrollParent`](../../../v1/#preventoverflowboundarieselement) boundary from
+Popper v1. See
+[`altBoundary` in Detect Overflow](../../utils/detect-overflow/#altboundary) for
+details.
 
 ```js
 createPopper(reference, popper, {
@@ -133,7 +138,7 @@ createPopper(reference, popper, {
     {
       name: 'preventOverflow',
       options: {
-        altBoundary: true,
+        altBoundary: true, // false by default
       },
     },
   ],
