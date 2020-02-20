@@ -122,6 +122,24 @@ createPopper(reference, popper, {
 });
 ```
 
+### `altBoundary`
+
+See [`altBoundary` in Detect Overflow](../../utils/detect-overflow/#altboundary)
+for details.
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'preventOverflow',
+      options: {
+        altBoundary: true,
+      },
+    },
+  ],
+});
+```
+
 ### `flipVariations`
 
 When using variation placements (e.g. `top-start`), the popper will attempt to

@@ -71,3 +71,12 @@ it('should not flip variations with `flipVariations: false`', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should flip from right to bottom', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/flip/alt-boundary.html`);
+
+  await scroll(page, '.scroll1', 400);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
