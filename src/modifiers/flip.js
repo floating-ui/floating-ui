@@ -14,6 +14,7 @@ type Options = {
   padding: Padding,
   boundary: Boundary,
   rootBoundary: RootBoundary,
+  altBoundary: boolean,
   flipVariations: boolean,
 };
 
@@ -41,6 +42,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
     padding,
     boundary,
     rootBoundary,
+    altBoundary,
     flipVariations = true,
   } = options;
 
@@ -89,6 +91,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       placement,
       boundary,
       rootBoundary,
+      altBoundary,
       padding,
     });
 
