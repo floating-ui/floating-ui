@@ -6,7 +6,7 @@ import getWindow from './getWindow';
 
 function isElement(node) {
   const OwnElement = getWindow(node).Element;
-  return node instanceof OwnElement;
+  return node instanceof OwnElement || node instanceof Element;
 }
 
 /*:: declare function isHTMLElement(node: mixed): boolean %checks(node instanceof
@@ -14,7 +14,7 @@ function isElement(node) {
 
 function isHTMLElement(node) {
   const OwnElement = getWindow(node).HTMLElement;
-  return node instanceof OwnElement;
+  return node instanceof OwnElement || node instanceof HTMLElement;
 }
 
 export { isElement, isHTMLElement };
