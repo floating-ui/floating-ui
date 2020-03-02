@@ -9,9 +9,25 @@ Don't see your question here? Feel free to ask on
 [Spectrum](https://spectrum.chat/popper-js)! We'll try to answer you within a
 day or two.
 
+## Why is my popper in the wrong location (or not visible at all)?
+
+For the `left` and `top` placements, Popper relies on HTML Standards Mode for
+the `computeStyles` modifier's `adaptive` option. A problem will occur in Quirks
+Mode when the `<body>` is the popper element's offsetParent, and it's taller
+than the viewport.
+
+To fix it, use the Standards Mode doctype:
+
+```html
+<!DOCTYPE html>
+<html>
+  <!-- ... -->
+</html>
+```
+
 ## Why is my popper jittering while scrolling?
 
-If your reference element is `position: fixed`, use the `"fixed"` strategy.
+If your reference element is `position: fixed`, use the `"fixed"` strategy:
 
 ```js
 createPopper(reference, popper, {
@@ -42,8 +58,8 @@ styles applied. The `.box` element has all of the CSS styling and animations.
 ## How do I set modifier defaults and allow them to be overridden?
 
 Modifiers are merged by name, where later items in the array override earlier
-ones. This provides an easy way to configure some defaults for modifiers, but
-allow them to be overridden easily:
+ones. This provides a way to configure some defaults for modifiers, but allow
+them to be overridden easily:
 
 ```js
 // A user passes this object in:
@@ -77,12 +93,11 @@ createPopper(reference, popper, {
 
 ## How do I change `offset` based on the browser width (media queries)?
 
-Popper doesn't accept margins, but you can make offset dynamic based on media
-queries still.
+Popper doesn't accept margins, but you can still make offset dynamic based on
+media queries.
 
 `window.matchMedia()` is a useful API for this — since `offset` can take a
-function, it allows you to dyanmically change the offset based on any dynamic
-condition:
+function, it allows you to dynamically change the offset based on a condition:
 
 ```js
 const mediaQuery = window.matchMedia('(max-width: 500px)');
