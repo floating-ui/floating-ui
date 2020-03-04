@@ -126,10 +126,11 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
         tetherOffsetValue
       : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
 
-    const clientOffset =
-      mainAxis === 'y'
+    const clientOffset = arrowElement
+      ? mainAxis === 'y'
         ? state.elements.popper.clientTop
-        : state.elements.popper.clientLeft;
+        : state.elements.popper.clientLeft
+      : 0;
 
     const offsetModifierValue = state.modifiersData.offset
       ? state.modifiersData.offset[state.placement][mainAxis]
