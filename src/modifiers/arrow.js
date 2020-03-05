@@ -38,7 +38,12 @@ function arrow({ state, name }: ModifierArguments<Options>) {
     state.rects.popper[len];
   const startDiff = popperOffsets[axis] - state.rects.reference[axis];
 
-  const centerToReference = endDiff / 2 - startDiff / 2;
+  const clientOffset =
+    axis === 'y'
+      ? state.elements.popper.clientLeft
+      : state.elements.popper.clientTop;
+
+  const centerToReference = endDiff / 2 - startDiff / 2 - clientOffset;
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
