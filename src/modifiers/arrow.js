@@ -3,6 +3,7 @@ import type { Modifier, ModifierArguments, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import contains from '../dom-utils/contains';
+import getOffsetParent from '../dom-utils/getOffsetParent';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
@@ -38,10 +39,13 @@ function arrow({ state, name }: ModifierArguments<Options>) {
     state.rects.popper[len];
   const startDiff = popperOffsets[axis] - state.rects.reference[axis];
 
-  const clientOffset =
-    axis === 'y'
-      ? state.elements.popper.clientLeft
-      : state.elements.popper.clientTop;
+  const arrowOffsetParent =
+    state.elements.arrow && getOffsetParent(state.elements.arrow);
+  const clientOffset = arrowOffsetParent
+    ? axis === 'y'
+      ? arrowOffsetParent.clientLeft || 0
+      : arrowOffsetParent.clientTop || 0
+    : 0;
 
   const centerToReference = endDiff / 2 - startDiff / 2 - clientOffset;
 

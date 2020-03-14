@@ -7,6 +7,7 @@ import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
 import within from '../utils/within';
 import getLayoutRect from '../dom-utils/getLayoutRect';
+import getOffsetParent from '../dom-utils/getOffsetParent';
 import detectOverflow from '../utils/detectOverflow';
 import getVariation from '../utils/getVariation';
 import getFreshSideObject from '../utils/getFreshSideObject';
@@ -126,10 +127,12 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
         tetherOffsetValue
       : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
 
-    const clientOffset = arrowElement
+    const arrowOffsetParent =
+      state.elements.arrow && getOffsetParent(state.elements.arrow);
+    const clientOffset = arrowOffsetParent
       ? mainAxis === 'y'
-        ? state.elements.popper.clientTop
-        : state.elements.popper.clientLeft
+        ? arrowOffsetParent.clientTop || 0
+        : arrowOffsetParent.clientLeft || 0
       : 0;
 
     const offsetModifierValue = state.modifiersData.offset
