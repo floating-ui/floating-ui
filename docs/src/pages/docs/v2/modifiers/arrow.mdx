@@ -92,30 +92,32 @@ type Data = {
   // Describes the offset of the arrow
   x?: number,
   y?: number,
-  // Describes the offset of the arrow relative to its "true" center (occurs
+  // Describes the offset of the arrow (where it actually is) relative to
+  // where it should be if it were allowed to overflow its popper. Non-zero
   // once the arrow reaches the edge of its popper and cannot overflow it to be
-  // centered to the reference)
+  // centered to the reference.
   centerOffset: number,
 };
 ```
 
 If you would like to hide the arrow once it reaches the edge of its popper (i.e.
-once it no longer can point to the center of the reference element):
+once it can no longer point to the center of the reference element), you can
+create a custom modifier:
 
 ```js
-const arrowHideModifier = {
+const applyArrowHide = {
   name: 'applyArrowHide',
   enabled: true,
-  phase: 'main',
+  phase: 'write',
   fn({ state }) {
-    if (!state.elements.arrow) {
-      return;
-    }
+    const { arrow } = state.elements;
 
-    if (state.modifiersData.arrow.centerOffset !== 0) {
-      state.elements.arrow.removeAttribute('data-hide', '');
-    } else {
-      state.elements.arrow.removeAttribute('data-hide');
+    if (arrow) {
+      if (state.modifiersData.arrow.centerOffset !== 0) {
+        arrow.setAttribute('data-hide', '');
+      } else {
+        arrow.removeAttribute('data-hide');
+      }
     }
   },
 };
