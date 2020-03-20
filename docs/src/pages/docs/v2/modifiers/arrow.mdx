@@ -89,7 +89,40 @@ createPopper(reference, popper, {
 
 ```flow
 type Data = {
+  // Describes the offset of the arrow
   x?: number,
   y?: number,
+  // Describes the offset of the arrow relative to its "true" center (occurs
+  // once the arrow reaches the edge of its popper and cannot overflow it to be
+  // centered to the reference)
+  centerOffset: number,
 };
+```
+
+If you would like to hide the arrow once it reaches the edge of its popper (i.e.
+once it no longer can point to the center of the reference element):
+
+```js
+const arrowHideModifier = {
+  name: 'applyArrowHide',
+  enabled: true,
+  phase: 'main',
+  fn({ state }) {
+    if (!state.elements.arrow) {
+      return;
+    }
+
+    if (state.modifiersData.arrow.centerOffset !== 0) {
+      state.elements.arrow.removeAttribute('data-hide', '');
+    } else {
+      state.elements.arrow.removeAttribute('data-hide');
+    }
+  },
+};
+```
+
+```css
+.arrow[data-hide] {
+  visibility: hidden;
+}
 ```
