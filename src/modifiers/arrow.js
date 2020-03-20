@@ -41,25 +41,27 @@ function arrow({ state, name }: ModifierArguments<Options>) {
 
   const arrowOffsetParent =
     state.elements.arrow && getOffsetParent(state.elements.arrow);
-  const clientOffset = arrowOffsetParent
+  const clientSize = arrowOffsetParent
     ? axis === 'y'
-      ? arrowOffsetParent.clientLeft || 0
-      : arrowOffsetParent.clientTop || 0
+      ? arrowOffsetParent.clientHeight || 0
+      : arrowOffsetParent.clientWidth || 0
     : 0;
 
-  const centerToReference = endDiff / 2 - startDiff / 2 - clientOffset;
+  const centerToReference = endDiff / 2 - startDiff / 2;
 
   // Make sure the arrow doesn't overflow the popper if the center point is
   // outside of the popper bounds
-  const center = within(
-    paddingObject[minProp],
-    state.rects.popper[len] / 2 - arrowRect[len] / 2 + centerToReference,
-    state.rects.popper[len] - arrowRect[len] - paddingObject[maxProp]
-  );
+  const min = paddingObject[minProp];
+  const max = clientSize - arrowRect[len] - paddingObject[maxProp];
+  const center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
+  const offset = within(min, center, max);
 
   // Prevents breaking syntax highlighting...
   const axisProp: string = axis;
-  state.modifiersData[name] = { [axisProp]: center };
+  state.modifiersData[name] = {
+    [axisProp]: offset,
+    centerOffset: offset - center,
+  };
 }
 
 function effect({ state, options, name }: ModifierArguments<Options>) {
