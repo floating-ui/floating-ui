@@ -13,7 +13,7 @@ const getFileName = input => input.split('/')[1].split('.')[0];
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
-  { inputs, format: 'umd', dir: 'dist', flow: true },
+  { inputs, format: 'umd', dir: 'dist' },
   { inputs, format: 'cjs', dir: 'dist', flow: true },
 ];
 
