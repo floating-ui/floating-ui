@@ -10,6 +10,8 @@ import preventOverflow from './modifiers/preventOverflow';
 import arrow from './modifiers/arrow';
 import hide from './modifiers/hide';
 
+export * from './types';
+
 const defaultModifiers = [
   eventListeners,
   popperOffsets,
