@@ -15,7 +15,7 @@ function getTrueOffsetParent(element: Element): ?Element {
     !isHTMLElement(element) ||
     !(offsetParent = element.offsetParent) ||
     // https://github.com/popperjs/popper-core/issues/837
-    (isFirefox() && getComputedStyle(offsetParent).position === 'fixed')
+    (isFirefox() && getComputedStyle(element).position === 'fixed')
   ) {
     return null;
   }
