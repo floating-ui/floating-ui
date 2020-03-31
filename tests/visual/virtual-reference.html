@@ -49,7 +49,7 @@
 
   const virtualElement = {
     getBoundingClientRect: () => reference.getBoundingClientRect(),
-    contextNode: reference,
+    contextElement: reference,
   };
 
   const instance = createPopper(virtualElement, popper);
