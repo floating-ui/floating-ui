@@ -8,7 +8,7 @@ The `detectOverflow` utility returns an object of overflow offsets of the popper
 or reference element relative to a given boundary.
 
 ```js
-import detectOverflow from '@popperjs/core/lib/utils/detectOverflow.js';
+import { detectOverflow } from '@popperjs/core';
 
 const overflow = detectOverflow(state, options);
 ```
@@ -141,7 +141,7 @@ the util needs to have access to this information if `offset` exists in the
 modifier lifecycle:
 
 ```js
-import detectOverflow from '@popperjs/core/lib/utils/detectOverflow.js';
+import { detectOverflow } from '@popperjs/core';
 
 const myModifier = {
   name: 'myModifier',
@@ -154,3 +154,9 @@ const myModifier = {
   },
 };
 ```
+
+`detectOverflow` only considers the `offset` modifier by default and reports
+values as though no other modifier is currently affecting it. This means if
+`preventOverflow` is enabled, its values should be taken into account
+(`state.modifiersData.preventOverflow`), along with any other potential modifier
+that alters `popperOffsets`.

@@ -14,14 +14,19 @@ coordinates you desire.
 A common use case for this is making the popper follow the mouse cursor, where
 the cursor acts as a point reference.
 
-A virtual element is a plain object with only one property – a custom
-`getBoundingClientRect` function that returns a custom `ClientRect` object:
+A virtual element is a plain object:
 
 ```flow
 type VirtualElement = {|
   getBoundingClientRect: () => ClientRect | DOMRect,
+  contextElement?: Element,
 |};
 ```
+
+`contextElement` is an optional property that describes the DOM context of the
+virtual element. This is necessary if `getBoundingClientRect` is derived from a
+real DOM element, and that element is within a different scrolling container
+context to the popper element.
 
 ## Demo
 
