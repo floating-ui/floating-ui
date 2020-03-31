@@ -84,7 +84,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         };
 
         state.scrollParents = {
-          reference: isElement(reference) ? listScrollParents(reference) : [],
+          reference: isElement(reference)
+            ? listScrollParents(reference)
+            : reference.contextNode
+            ? listScrollParents(reference.contextNode)
+            : [],
           popper: listScrollParents(popper),
         };
 
