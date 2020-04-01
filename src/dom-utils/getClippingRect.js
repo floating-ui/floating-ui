@@ -15,7 +15,7 @@ import contains from './contains';
 import rectToClientRect from '../utils/rectToClientRect';
 
 function getClientRectFromMixedType(
-  element: Element | VirtualElement,
+  element: HTMLElement,
   clippingParent: Element | RootBoundary
 ): ClientRectObject {
   return clippingParent === viewport
@@ -52,25 +52,26 @@ function getClippingParents(element: Element): Array<Element> {
 // clipping parents
 export default function getClippingRect(
   element: Element | VirtualElement,
+  popper: HTMLElement,
   boundary: Boundary,
   rootBoundary: RootBoundary
 ): ClientRectObject {
+  const documentElement = getDocumentElement(popper);
   const mainClippingParents =
     boundary === 'clippingParents'
-      ? isElement(element)
-        ? getClippingParents(element)
-        // FIXME: this empty array should be replaced with a `getClippingParents(something)`
-        : []
+      ? getClippingParents(
+          isElement(element)
+            ? element
+            : element.contextElement || documentElement
+        )
       : [].concat(boundary);
   const clippingParents = [...mainClippingParents, rootBoundary];
   const firstClippingParent = clippingParents[0];
 
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
-    const rect = getClientRectFromMixedType(element, clippingParent);
+    const rect = getClientRectFromMixedType(popper, clippingParent);
     const decorations = getDecorations(
-      isHTMLElement(clippingParent)
-        ? clippingParent
-        : getDocumentElement(element)
+      isHTMLElement(clippingParent) ? clippingParent : documentElement
     );
 
     accRect.top = Math.max(rect.top + decorations.top, accRect.top);
@@ -79,7 +80,7 @@ export default function getClippingRect(
     accRect.left = Math.max(rect.left + decorations.left, accRect.left);
 
     return accRect;
-  }, getClientRectFromMixedType(element, firstClippingParent));
+  }, getClientRectFromMixedType(popper, firstClippingParent));
 
   clippingRect.width = clippingRect.right - clippingRect.left;
   clippingRect.height = clippingRect.bottom - clippingRect.top;

@@ -3,7 +3,6 @@ import type { State, SideObject, Padding } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
-import getDocumentElement from '../dom-utils/getDocumentElement';
 import computeOffsets from './computeOffsets';
 import rectToClientRect from './rectToClientRect';
 import {
@@ -16,7 +15,6 @@ import {
   basePlacements,
   viewport,
 } from '../enums';
-import { isElement } from '../dom-utils/instanceOf';
 import mergePaddingObject from './mergePaddingObject';
 import expandToHashMap from './expandToHashMap';
 
@@ -54,7 +52,12 @@ export default function detectOverflow(
   const popperRect = state.rects.popper;
   const element = state.elements[altBoundary ? altContext : elementContext];
 
-  const clippingClientRect = getClippingRect(element, boundary, rootBoundary);
+  const clippingClientRect = getClippingRect(
+    element,
+    state.elements.popper,
+    boundary,
+    rootBoundary
+  );
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 
