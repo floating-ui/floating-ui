@@ -1,5 +1,5 @@
 // @flow
-import type { ClientRectObject } from '../types';
+import type { ClientRectObject, VirtualElement } from '../types';
 import type { Boundary, RootBoundary } from '../enums';
 import { viewport } from '../enums';
 import getViewportRect from './getViewportRect';
@@ -15,7 +15,7 @@ import contains from './contains';
 import rectToClientRect from '../utils/rectToClientRect';
 
 function getClientRectFromMixedType(
-  element: Element,
+  element: Element | VirtualElement,
   clippingParent: Element | RootBoundary
 ): ClientRectObject {
   return clippingParent === viewport
@@ -51,13 +51,16 @@ function getClippingParents(element: Element): Array<Element> {
 // Gets the maximum area that the element is visible in due to any number of
 // clipping parents
 export default function getClippingRect(
-  element: Element,
+  element: Element | VirtualElement,
   boundary: Boundary,
   rootBoundary: RootBoundary
 ): ClientRectObject {
   const mainClippingParents =
     boundary === 'clippingParents'
-      ? getClippingParents(element)
+      ? isElement(element)
+        ? getClippingParents(element)
+        // FIXME: this empty array should be replaced with a `getClippingParents(something)`
+        : []
       : [].concat(boundary);
   const clippingParents = [...mainClippingParents, rootBoundary];
   const firstClippingParent = clippingParents[0];

@@ -54,13 +54,7 @@ export default function detectOverflow(
   const popperRect = state.rects.popper;
   const element = state.elements[altBoundary ? altContext : elementContext];
 
-  const clippingClientRect = getClippingRect(
-    isElement(element)
-      ? element
-      : element.contextElement || getDocumentElement(state.elements.popper),
-    boundary,
-    rootBoundary
-  );
+  const clippingClientRect = getClippingRect(element, boundary, rootBoundary);
 
   const referenceClientRect = getBoundingClientRect(referenceElement);
 

@@ -1,6 +1,6 @@
 // @flow
-/*:: import type { Window } from '../types'; */
-/*:: declare function getWindow(node: Node | Window): Window; */
+/*:: import type { Window, VirtualElement } from '../types'; */
+/*:: declare function getWindow(node: Node | VirtualElement | Window): Window; */
 
 export default function getWindow(node) {
   if (node.toString() !== '[object Window]') {
