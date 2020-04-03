@@ -1,6 +1,6 @@
 {
   "name": "@popperjs/core",
-  "version": "2.2.0",
+  "version": "2.2.0-bundlephobia.1",
   "description": "Tooltip and Popover Positioning Engine",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
@@ -109,7 +109,7 @@
     "rollup-plugin-license": "^0.13.0",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-terser": "^5.2.0",
-    "rollup-plugin-visualizer": "^3.3.1",
+    "rollup-plugin-visualizer": "^4.0.3",
     "serve": "^11.3.0",
     "typescript": "^3.7.5"
   },
