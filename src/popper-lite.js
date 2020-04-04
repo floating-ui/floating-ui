@@ -8,7 +8,7 @@ import applyStyles from './modifiers/applyStyles';
 
 import detectOverflow from './utils/detectOverflow';
 
-export * from './types';
+export type * from './types';
 
 const defaultModifiers = [
   eventListeners,

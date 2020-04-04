@@ -20,7 +20,7 @@ import mergeByName from './utils/mergeByName';
 import { isElement } from './dom-utils/instanceOf';
 import { auto } from './enums';
 
-export * from './types';
+export type * from './types';
 export * from './enums';
 
 const INVALID_ELEMENT_ERROR =

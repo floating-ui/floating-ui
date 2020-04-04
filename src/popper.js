@@ -13,7 +13,7 @@ import hide from './modifiers/hide';
 
 import detectOverflow from './utils/detectOverflow';
 
-export * from './types';
+export type * from './types';
 
 const defaultModifiers = [
   eventListeners,
