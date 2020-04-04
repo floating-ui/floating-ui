@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
 import { usePopper, Tooltip, Arrow } from './Popper';
@@ -51,7 +51,26 @@ const ClippingParent = props => {
 };
 
 export const ArrowDemo = () => {
-  const { reference, popper } = usePopper({ placement: 'right' });
+  const [hide, setHide] = useState(false);
+  const { reference, popper } = usePopper({
+    placement: 'right',
+    modifiers: [
+      {
+        name: 'applyArrowHide',
+        enabled: true,
+        phase: 'write',
+        fn({ state }) {
+          setHide(state.modifiersData.arrow.centerOffset !== 0);
+        },
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          tetherOffset: () => (hide ? -16 : 0),
+        },
+      },
+    ],
+  });
 
   return (
     <>
@@ -74,7 +93,17 @@ export const ArrowDemo = () => {
               width: 100px;
             `}
           ></div>
-          <Arrow data-popper-arrow />
+          <Arrow
+            data-popper-arrow
+            css={css`
+              &::before {
+                transition: transform 0.2s ease-out, visibility 0.2s ease-out;
+                visibility: ${hide ? 'hidden' : 'visible'};
+                transform: translateX(${hide ? 10 : 0}px) rotate(45deg);
+                transform-origin: center;
+              }
+            `}
+          />
         </Tooltip>
       </ClippingParent>
     </>
