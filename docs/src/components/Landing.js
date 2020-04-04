@@ -30,21 +30,55 @@ import InstallBar from './InstallBar';
 import { Container, LinkStyled, media, Footer, sizes } from './Framework';
 import { usePopper, Tooltip, Arrow } from './Popper';
 import { ProductCard, Grid } from './ProductCard';
-
-import microsoftLogo from '../images/logos/microsoft.svg';
-import atlassianLogo from '../images/logos/atlassian.svg';
-import bootstrapLogo from '../images/logos/bootstrap.svg';
-import drupalLogo from '../images/logos/drupal.svg';
-import gitlabLogo from '../images/logos/gitlab.svg';
-import mediumLogo from '../images/logos/medium.svg';
-import adobeLogo from '../images/logos/adobe.svg';
-
 import 'modern-normalize';
 import './layout.css';
 import './prism-base2tone-pool-dark.css';
 
 import popcornBox from '../images/popcorn-box.svg';
 import { css } from '@emotion/core';
+
+const USED_BY_LIST = [
+  {
+    logo: require('../images/logos/microsoft.svg'),
+    label: 'Used by Microsoft - Fluent UI',
+    url: 'https://microsoft.com/',
+  },
+  {
+    logo: require('../images/logos/atlassian.svg'),
+    label: 'Used by Atlassian - Atlaskit',
+    url: 'https://www.atlassian.com/',
+  },
+  {
+    logo: require('../images/logos/bootstrap.svg'),
+    label: 'Used by Bootstrap',
+    url: 'https://getbootstrap.com/',
+  },
+  {
+    logo: require('../images/logos/gitlab.svg'),
+    label: 'Used by GitLab',
+    url: 'https://www.gitlab.com/',
+  },
+  {
+    logo: require('../images/logos/medium.svg'),
+    label: 'Used by Medium - text selection tooltip',
+    url: 'https://www.medium.com/',
+  },
+  {
+    logo: require('../images/logos/adobe.svg'),
+    label: 'Used by Adobe - @webspectrum components',
+    url: 'https://www.adobe.com/',
+  },
+  {
+    logo: require('../images/logos/stackexchange.svg'),
+    label: 'Used by Stack Exchange',
+    url: 'https://www.stackexchange.com/',
+  },
+  {
+    logo: require('../images/logos/drupal.svg'),
+    label: 'Used by Drupal',
+    url: 'https://www.drupal.org/',
+  },
+];
 
 const UsedByContainer = styled.div`
   margin-top: 40px;
@@ -714,41 +748,9 @@ const Layout = ({ children }) => {
             Support us
           </Button>
           <UsedByContainer>
-            <UsedByLogo
-              href="https://microsoft.com/"
-              src={microsoftLogo}
-              alt="Used by Microsoft - Fluent UI"
-            />
-            <UsedByLogo
-              href="https://www.atlassian.com/"
-              src={atlassianLogo}
-              alt="Used by Atlassian - Atlaskit"
-            />
-            <UsedByLogo
-              href="https://getbootstrap.com/"
-              src={bootstrapLogo}
-              alt="Used by Bootstrap"
-            />
-            <UsedByLogo
-              href="https://www.adobe.com/"
-              src={adobeLogo}
-              alt="Used by Adobe - @webspectrum components"
-            />
-            <UsedByLogo
-              href="https://www.drupal.org/"
-              src={drupalLogo}
-              alt="Used by Drupal"
-            />
-            <UsedByLogo
-              href="https://www.gitlab.com/"
-              src={gitlabLogo}
-              alt="Used by GitLab"
-            />
-            <UsedByLogo
-              href="https://www.medium.com/"
-              src={mediumLogo}
-              alt="Used by Medium - text selection tooltip"
-            />
+            {USED_BY_LIST.map(({ logo, label, url }) => (
+              <UsedByLogo href={url} src={logo} alt={label} />
+            ))}
           </UsedByContainer>
         </Container>
       </Section>
