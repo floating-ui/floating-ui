@@ -120,7 +120,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
   const { gpuAcceleration = true, adaptive = true } = options;
 
   if (__DEV__) {
-    const { transitionProperty } = getComputedStyle(state.elements.popper);
+    const { transitionProperty = '' } = getComputedStyle(state.elements.popper);
 
     if (
       adaptive &&
