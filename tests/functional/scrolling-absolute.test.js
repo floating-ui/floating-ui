@@ -93,3 +93,14 @@ it('should handle alt offset parent', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('finds scrolling parent through assigned slots', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/scrolling-absolute/parent-through-assigned-slot.html`
+  );
+
+  await scroll(page, '#scroll', 200);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
