@@ -1,0 +1,24 @@
+---
+navigationLabel: 3rd Party
+order: 10
+---
+
+# 3rd Party
+
+Popper can't ship every possible modifier by default due to bundle size and
+complexity constraints, but its architecture is built with extensibility in mind
+to enable **custom modifiers** written by you or the community to suit any
+possible use case without Popper needing to support it by default.
+
+<x-ad />
+
+Here are some common examples:
+
+- [`maxSize` modifier](https://codesandbox.io/s/great-tesla-3roz7?file=/src/index.js):
+  changes the size of your popper to fit it within the available viewport space.
+  (published as an npm package)
+- [`sameWidth` modifier](https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js):
+  make your popper the same width as the reference.
+
+We encourage you to publish your own popper modifiers as npm packages to be
+downloaded by the community if you think they're useful or complex enough!
