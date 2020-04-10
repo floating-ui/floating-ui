@@ -333,7 +333,7 @@ The assertions are written in form of image snapshots, so that it's easy to
 assert for the correct Popper behavior without having to write a lot of offsets
 comparisons manually.
 
-You can mark a `*.test.js` file to run in the Puppeteer environment by
+You can mark a `*.test.js` file to run in the Playwright environment by
 prepending a `@jest-environment jest-playwright-preset` JSDoc comment to the
 interested file.
 
@@ -344,7 +344,7 @@ Here's an example of a basic functional test:
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { screenshot } from '../utils/puppeteer.js';
+import { screenshot } from '../utils/playwright.js';
 
 it('should position the popper on the right', async () => {
   await page.goto(`${TEST_URL}/basic.html`);

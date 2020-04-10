@@ -2,7 +2,7 @@
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { scroll, screenshot } from '../utils/puppeteer.js';
+import { scroll, screenshot } from '../utils/playwright.js';
 
 it('should update the position when window is resized', async () => {
   await page.goto(`${TEST_URL}/scrolling-absolute/scroll.html`);

@@ -2,7 +2,7 @@
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { screenshot, scroll } from '../utils/puppeteer.js';
+import { screenshot, scroll } from '../utils/playwright.js';
 
 const hack = async page => {
   // HACK: fixes issue with tables on GitHub Actions

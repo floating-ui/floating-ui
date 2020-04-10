@@ -2,7 +2,7 @@
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { scroll, screenshot } from '../utils/puppeteer.js';
+import { scroll, screenshot } from '../utils/playwright.js';
 
 it('shuld center the arrow', async () => {
   await page.goto(`${TEST_URL}/modifiers/arrow/main.html`);

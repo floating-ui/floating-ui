@@ -2,7 +2,7 @@
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { scroll, screenshot } from '../utils/puppeteer.js';
+import { scroll, screenshot } from '../utils/playwright.js';
 
 it('should not overflow when small reference is at edge of boundary', async () => {
   await page.goto(`${TEST_URL}/modifiers/preventOverflow/edge.html`);

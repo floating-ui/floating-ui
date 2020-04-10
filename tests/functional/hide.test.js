@@ -2,7 +2,7 @@
  * @jest-environment jest-playwright-preset
  * @flow
  */
-import { scroll, screenshot } from '../utils/puppeteer.js';
+import { scroll, screenshot } from '../utils/playwright.js';
 
 it('should be yellow color when the reference is hidden', async () => {
   await page.goto(`${TEST_URL}/modifiers/hide/index.html`);
