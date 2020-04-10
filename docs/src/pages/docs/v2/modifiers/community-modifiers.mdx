@@ -1,0 +1,34 @@
+---
+navigationLabel: Community Modifiers
+order: 10
+---
+
+# Community Modifiers
+
+Due to bundle size and complexity constraints, we can't include all the possible
+modifiers in the core library, but we do encourage everybody to publish their
+own **custom modifiers** in dedicated npm packages!
+
+When you do so, please make sure to add the `popperjs-modifier`
+[keyword][npm-keyword] to your `package.json`, so that other people can easily
+discover the community modifiers [on npm][npm-search-result].
+
+<x-ad />
+
+You can find all the information needed to learn how to create your very own
+custom modifiers by visiting [the dedicated docs](../#custom-modifiers).
+
+Below you can find a few common examples to help get you started:
+
+- [`maxSize` modifier][maxsize-sandbox]: changes the size of your popper to fit
+  it within the available viewport space. (published as an [npm
+  package][maxsize-npm])
+- [`sameWidth` modifier][samewidth-sandbox]: make your popper the same width as
+  the reference.
+
+[npm-keyword]: https://docs.npmjs.com/files/package.json#keywords
+[npm-search-result]: https://www.npmjs.com/search?q=keywords%3Apopperjs-modifier
+[maxsize-sandbox]: https://codesandbox.io/s/great-tesla-3roz7?file=/src/index.js
+[maxsize-npm]: https://www.npmjs.com/package/popper-max-size-modifier
+[samewidth-sandbox]:
+  https://codesandbox.io/s/bitter-sky-pe3z9?file=/src/index.js
