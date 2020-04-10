@@ -43,7 +43,7 @@ it('should hide arrow if it is at the edge (min)', async () => {
 });
 
 it('should hide arrow if it is at the edge (max)', async () => {
-  await page.setViewport({ width: 800, height: 400 });
+  await page.setViewportSize({ width: 800, height: 400 });
   await page.goto(`${TEST_URL}/modifiers/arrow/hide.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();

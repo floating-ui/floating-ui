@@ -9,7 +9,7 @@ it('should update the position when window is resized', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 
-  await page.setViewport({ width: 400, height: 400 });
+  await page.setViewportSize({ width: 400, height: 400 });
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });

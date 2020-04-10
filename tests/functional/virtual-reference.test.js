@@ -1,5 +1,5 @@
 /**
- * @jest-environment puppeteer
+ * @jest-environment jest-playwright-preset
  * @flow
  */
 import { scroll, screenshot } from '../utils/playwright.js';

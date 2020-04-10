@@ -15,17 +15,14 @@ export const scroll = async (page, selector, amount) => {
 
   await page.$eval(
     selector,
-    (element, amount, scrollTop) => (element.scrollTop = scrollTop + amount),
-    amount,
-    scrollTop
+    (element, { amount, scrollTop }) =>
+      (element.scrollTop = scrollTop + amount),
+    { amount, scrollTop }
   );
 
   await page.waitForFunction(
-    (selector, scrollTop, amount) =>
+    ({ selector, scrollTop, amount }) =>
       document.querySelector(selector).scrollTop === scrollTop + amount,
-    {},
-    selector,
-    scrollTop,
-    amount
+    { selector, scrollTop, amount }
   );
 };
