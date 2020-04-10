@@ -24,9 +24,8 @@
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "yarn test:unit && yarn test:functional",
-    "test:unit": "jest --coverage src",
-    "test:functional": "server-test 'yarn serve:dev' ${DEV_PORT:-5000} 'yarn jest tests/functional'",
-    "test:functional:watch": "server-test 'yarn serve:dev' ${DEV_PORT:-5000} 'yarn jest tests/functional --watch'",
+    "test:unit": "yarn jest --coverage src",
+    "test:functional": "yarn jest tests/functional",
     "test:flow": "flow",
     "test:typescript": "tsc --project tests/typescript/tsconfig.json",
     "test:eslint": "eslint .",
@@ -111,7 +110,6 @@
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-visualizer": "^4.0.3",
     "serve": "^11.3.0",
-    "start-server-and-test": "^1.10.8",
     "typescript": "^3.7.5"
   },
   "husky": {

@@ -12,4 +12,8 @@ module.exports = {
       height: 600,
     },
   },
+  server: {
+    command: 'yarn serve',
+    port: 5000,
+  },
 };

@@ -7,47 +7,32 @@ jobs:
   functional-chromium:
     name: Chromium Functional Tests
     runs-on: ubuntu-latest
-    container:
-      image: arjun27/playwright-bionic:0.1.1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: npm i -g yarn
-      - uses: bahmutov/npm-install@v1
-      - run: node ./node_modules/playwright/install.js
-      - run: yarn test:functional
+      - uses: microsoft/playwright-github-action@v1
+      - run: npm i && npm run test:functional
         env:
           BROWSER: chromium
-          CI: true
 
   functional-firefox:
     name: Firefox Functional Tests
     runs-on: ubuntu-latest
-    container:
-      image: arjun27/playwright-bionic:0.1.1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: npm i -g yarn
-      - uses: bahmutov/npm-install@v1
-      - run: node ./node_modules/playwright/install.js
-      - run: yarn test:functional
+      - uses: microsoft/playwright-github-action@v1
+      - run: npm i && npm run test:functional
         env:
           BROWSER: firefox
-          CI: true
 
   functional-webkit:
     name: WebKit Functional Tests
     runs-on: ubuntu-latest
-    container:
-      image: arjun27/playwright-bionic:0.1.1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
-      - run: npm i -g yarn
-      - uses: bahmutov/npm-install@v1
-      - run: node ./node_modules/playwright/install.js
-      - run: yarn test:functional
+      - uses: microsoft/playwright-github-action@v1
+      - run: npm i && npm run test:functional
         env:
           BROWSER: webkit
-          CI: true
