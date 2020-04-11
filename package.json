@@ -36,7 +36,7 @@
     "build:esbrowser": "BROWSER_COMPAT=true yarn build:es -d dist/esm",
     "build:bundles": "rollup -c .config/rollup.config.js",
     "build:dev": "NODE_ENV=dev babel src -d tests/visual/dist",
-    "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib",
+    "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib && replace-in-files --string=__DEV__ --replacement=false 'lib/**/*.flow'",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; node typescript/ts.js --project .config/tsconfig.json --outDir lib; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build"
   },
@@ -104,6 +104,7 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "puppeteer": "^2.1.0",
+    "replace-in-files-cli": "^0.3.1",
     "rollup": "^1.30.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-flow-entry": "^0.3.3",
