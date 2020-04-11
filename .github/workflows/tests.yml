@@ -34,14 +34,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ianwalter/puppeteer@v2.0.0
+      - uses: mujo-code/puppeteer-headful@master
         with:
           args: yarn
       - name: TypeScript
-        uses: ianwalter/puppeteer@v2.0.0
+        uses: mujo-code/puppeteer-headful@master
         with:
           args: yarn build:bundles
       - name: Run Jest Unit Tests
-        uses: ianwalter/puppeteer@v2.0.0
+        uses: mujo-code/puppeteer-headful@master
         with:
           args: yarn test:unit
