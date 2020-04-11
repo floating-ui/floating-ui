@@ -11,26 +11,8 @@ cache:
 
 jobs:
   include:
-    - stage: Tests & Code Check
-      name: Flow Type
-      script: yarn test:flow
-
-    - stage: Tests & Code Check
-      name: ESLint
-      script: yarn test:eslint
-
-    - stage: Tests & Code Check
-      name: TypeScript
-      before_script: yarn build:typescript
-      script: yarn test:typescript
-
-    - stage: Tests & Code Check
-      name: Unit Tests
-      before_script: NODE_ENV=development yarn build:bundles
-      script: yarn test:unit
-
-    - stage: Tests & Code Check
-      name: '[Chrome] Functional Tests'
+    - stage: Functional Tests
+      name: 'Chrome'
       script: PUPPETEER_BROWSER=chromium travis_retry yarn test:functional
 
     #- name: '[Firefox] Functional Tests'
