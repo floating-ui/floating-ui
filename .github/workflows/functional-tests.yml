@@ -15,6 +15,6 @@ jobs:
           args: install
       - uses: mujo-code/puppeteer-headful@master
         with:
-          args: yarn test:functional --runInBand
+          args: yarn test:functional
         env:
           PUPPETEER_BROWSER: chromium
