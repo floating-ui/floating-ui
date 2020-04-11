@@ -2,6 +2,9 @@ name: Unit Tests
 
 on: [push]
 
+env:
+  CI: true
+
 jobs:
   checks:
     runs-on: ubuntu-latest
@@ -26,8 +29,6 @@ jobs:
         uses: CultureHQ/actions-yarn@master
         with:
           args: test:typescript
-        env:
-          CI: true
 
   unit:
     runs-on: ubuntu-latest
