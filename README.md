@@ -42,6 +42,8 @@ We've created a
 [Migration Guide](https://popper.js.org/docs/v2/migration-guide/) to help you
 migrate from Popper 1 to Popper 2.
 
+To contribute to the Popper website and documentation, please visit the [dedicated repository](https://github.com/popperjs/website).
+
 ## Why not use pure CSS?
 
 CSS tooltips have accessibility and usability problems:
