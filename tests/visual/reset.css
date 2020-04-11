@@ -127,3 +127,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+body {
+  margin: 8px;
+}
