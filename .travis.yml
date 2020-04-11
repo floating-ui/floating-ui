@@ -35,12 +35,3 @@ jobs:
 
     #- name: '[Firefox] Functional Tests'
     #  script: PUPPETEER_BROWSER=firefox travis_retry yarn jest tests/functional
-
-    - stage: Deploy
-      name: Website / Documentation
-      if: '(NOT type IN (pull_request)) AND (branch = master)'
-      script:
-        - yarn build
-        - cd docs
-        - yarn install
-        - yarn deploy
