@@ -4,6 +4,13 @@ import type { Placement, ModifierPhases } from './enums';
 
 export type Obj = { [key: string]: any };
 
+export type VisualViewport = EventTarget & {
+  width: number,
+  height: number,
+  offsetLeft: number,
+  offsetTop: number,
+};
+
 // This is a limited subset of the Window object, Flow doesn't provide one
 // so we define our own, with just the properties we need
 export type Window = {|
@@ -25,12 +32,7 @@ export type Window = {|
   Node: Node,
   toString(): '[object Window]',
   devicePixelRatio: number,
-  visualViewport?: {
-    width: number,
-    height: number,
-    offsetLeft: number,
-    offsetTop: number,
-  },
+  visualViewport?: VisualViewport,
 |};
 
 export type Rect = {|
@@ -69,8 +71,8 @@ export type State = {|
   orderedModifiers: Array<Modifier<any>>,
   rects: StateRects,
   scrollParents: {|
-    reference: Array<Element | Window>,
-    popper: Array<Element | Window>,
+    reference: Array<Element | Window | VisualViewport>,
+    popper: Array<Element | Window | VisualViewport>,
   |},
   styles: {|
     [key: string]: $Shape<CSSStyleDeclaration>,
