@@ -1,5 +1,5 @@
 name: Functional Tests
-on: [push]
+on: [push, pull_request]
 env:
   CI: true
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
