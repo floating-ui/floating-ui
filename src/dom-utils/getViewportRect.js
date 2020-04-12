@@ -8,7 +8,7 @@ export default function getViewportRect(element: Element) {
   return {
     width: visualViewport.width || win.innerWidth,
     height: visualViewport.height || win.innerHeight,
-    x: 0,
-    y: 0,
+    x: visualViewport.offsetLeft || 0,
+    y: visualViewport.offsetTop || 0,
   };
 }
