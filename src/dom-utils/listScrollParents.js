@@ -12,8 +12,8 @@ export default function listScrollParents(
   const scrollParent = getScrollParent(element);
   const isBody = getNodeName(scrollParent) === 'body';
   const win = getWindow(scrollParent);
-  const target = isBody ? win : scrollParent;
-  const updatedList = list.concat(target, win.visualViewport || []);
+  const target = isBody ? [win].concat(win.visualViewport || []) : scrollParent;
+  const updatedList = list.concat(target);
 
   return isBody
     ? updatedList
