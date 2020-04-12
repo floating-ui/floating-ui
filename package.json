@@ -42,7 +42,6 @@
   },
   "files": [
     "index.d.ts",
-    "/src",
     "/dist",
     "/lib"
   ],
