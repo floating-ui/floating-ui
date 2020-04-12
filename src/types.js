@@ -28,6 +28,8 @@ export type Window = {|
   visualViewport?: {
     width: number,
     height: number,
+    offsetLeft: number,
+    offsetTop: number,
   },
 |};
 
