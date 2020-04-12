@@ -1166,7 +1166,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@khanacademy/flow-to-ts@^0.1.4":
+"@khanacademy/flow-to-ts@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@khanacademy/flow-to-ts/-/flow-to-ts-0.1.6.tgz#5951e25c09d49b6392d1e5c6e6687252e3b2a89c"
   integrity sha512-qpseRKs3Um89se5jnuVHgFUZATaBxd8YHb7WWyNrrMQARPFG72f48ykcojnP0t7O6iT7Qo9HSqp65MYwxvkkyg==

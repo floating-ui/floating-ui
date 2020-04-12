@@ -15,7 +15,7 @@ const arg = require('arg');
 const convertToMultiplePatternMatching = array =>
   array.length > 1 ? `{${array.join(',')}}` : array[0];
 
-const tsignore = '\n// @ts-ignore';
+const tsnocheck = '// @ts-nocheck\n';
 
 const args = arg({
   '--project': String,
@@ -49,16 +49,8 @@ function compile(fileNames, options, write) {
     const fileName = diagnostic.file && diagnostic.file.fileName;
     if (!fileName) return;
 
-    let start = diagnostic.start;
-
-    if (alteredFiles.indexOf(fileName) >= 0) {
-      start += tsignore.length;
-    }
-
     let source = fs.readFileSync(fileName, 'utf8');
-    source = source.replace(/\/\/ \$FlowFixMe/g, tsignore);
-    const pos = source.slice(0, start).lastIndexOf('\n');
-    const output = [source.slice(0, pos), tsignore, source.slice(pos)].join('');
+    const output = `${tsnocheck}${source}`;
     fs.writeFileSync(fileName, output, { encoding: 'utf8' });
 
     alteredFiles.push(fileName);
@@ -67,8 +59,6 @@ function compile(fileNames, options, write) {
   if (alteredFiles.length) {
     console.info(`Ignored ${alteredFiles.length} type errors.`);
   }
-
-  return alteredFiles.length === 0;
 }
 
 // Run the compiler
@@ -86,27 +76,17 @@ glob(
     ),
   },
   (err, files) => {
-    let canWrite = false;
-    let written = false;
-    let loops = 0;
-    while (written === false && loops < 10) {
-      if (canWrite) {
-        written = true;
-      }
-      loops += 1;
-      canWrite = compile(
-        files,
-        {
-          declaration: true,
-          emitDeclarationOnly: true,
-          project: path.resolve(args['--project']),
-          outDir: path.resolve(args['--outDir']),
-        },
-        canWrite
-      );
-    }
-    if (written) {
-      console.info('Definitions files have been saved in destination folder');
-    }
+    compile(
+      files,
+      {
+        declaration: true,
+        emitDeclarationOnly: true,
+        project: path.resolve(args['--project']),
+        outDir: path.resolve(args['--outDir']),
+      },
+      true
+    );
+
+    console.info('Definitions files have been saved in destination folder');
   }
 );

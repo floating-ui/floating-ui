@@ -2,11 +2,9 @@
 import type { State, Padding } from '../types';
 import type {
   Placement,
-  BasePlacement,
-  VariationPlacement,
+  ComputedPlacement,
   Boundary,
   RootBoundary,
-  ComputedPlacement,
 } from '../enums';
 import getVariation from './getVariation';
 import { variationPlacements, basePlacements } from '../enums';
@@ -21,9 +19,11 @@ type Options = {
   flipVariations: boolean,
 };
 
+/*::
 type OverflowsMap = {
-  [BasePlacement | VariationPlacement]: number,
+  [ComputedPlacement]: number,
 };
+*/
 
 export default function computeAutoPlacement(
   state: $Shape<State>,
