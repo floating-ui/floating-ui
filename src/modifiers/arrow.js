@@ -10,12 +10,6 @@ import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 
-// eslint-disable-next-line
-export type ArrowModifier = $Shape<Modifier<any>> & {
-  name: 'arrow',
-  options?: $Shape<Options>,
-};
-
 type Options = {
   element: HTMLElement | string,
   padding: Padding,
@@ -113,4 +107,4 @@ export default ({
   effect,
   requires: ['popperOffsets'],
   requiresIfExists: ['preventOverflow'],
-}: Modifier<Options>);
+}: Modifier<'arrow', Options>);

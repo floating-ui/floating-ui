@@ -16,12 +16,6 @@ type Options = {
   offset: Offset,
 };
 
-// eslint-disable-next-line
-export type OffsetModifier = $Shape<Modifier<any>> & {
-  name: 'offset',
-  options?: $Shape<Options>,
-};
-
 export function distanceAndSkiddingToXY(
   placement: Placement,
   rects: { popper: Rect, reference: Rect },
@@ -68,4 +62,4 @@ export default ({
   phase: 'main',
   requires: ['popperOffsets'],
   fn: offset,
-}: Modifier<Options>);
+}: Modifier<'offset', Options>);

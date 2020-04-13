@@ -2,12 +2,6 @@
 import type { ModifierArguments, Modifier } from '../types';
 import computeOffsets from '../utils/computeOffsets';
 
-// eslint-disable-next-line
-export type PopperOffsetsModifier = $Shape<Modifier<any>> & {
-  name: 'offset',
-  options?: $Shape<{||}>,
-};
-
 function popperOffsets({ state, name }: ModifierArguments<{||}>) {
   // Offsets are the actual position the popper needs to have to be
   // properly positioned near its reference element
@@ -27,4 +21,4 @@ export default ({
   phase: 'read',
   fn: popperOffsets,
   data: {},
-}: Modifier<{||}>);
+}: Modifier<'popperOffsets', {||}>);

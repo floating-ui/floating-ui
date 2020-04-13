@@ -2,8 +2,8 @@
 import type { Modifier } from '../types';
 
 export default function mergeByName(
-  modifiers: Array<$Shape<Modifier<any>>>
-): Array<$Shape<Modifier<any>>> {
+  modifiers: Array<$Shape<Modifier<any, any>>>
+): Array<$Shape<Modifier<any, any>>> {
   const merged = modifiers.reduce((merged, current) => {
     const existing = merged[current.name];
     merged[current.name] = existing

@@ -2,12 +2,6 @@
 import type { ModifierArguments, Modifier } from '../types';
 import getWindow from '../dom-utils/getWindow';
 
-// eslint-disable-next-line
-export type EventListenersModifier = $Shape<Modifier<any>> & {
-  name: 'eventListeners',
-  options?: $Shape<Options>,
-};
-
 type Options = {
   scroll: boolean,
   resize: boolean,
@@ -54,4 +48,4 @@ export default ({
   fn: () => {},
   effect,
   data: {},
-}: Modifier<Options>);
+}: Modifier<'eventListeners', Options>);

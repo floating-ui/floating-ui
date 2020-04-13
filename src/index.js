@@ -35,7 +35,7 @@ const DEFAULT_OPTIONS: OptionsGeneric<any> = {
 };
 
 type PopperGeneratorArgs = {
-  defaultModifiers?: Array<Modifier<any>>,
+  defaultModifiers?: Array<Modifier<any, any>>,
   defaultOptions?: $Shape<OptionsGeneric<any>>,
 };
 
@@ -51,7 +51,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     defaultOptions = DEFAULT_OPTIONS,
   } = generatorOptions;
 
-  return function createPopper<TModifier: $Shape<Modifier<any>>>(
+  return function createPopper<TModifier: $Shape<Modifier<any, any>>>(
     reference: Element | VirtualElement,
     popper: HTMLElement,
     options: $Shape<OptionsGeneric<TModifier>> = defaultOptions
