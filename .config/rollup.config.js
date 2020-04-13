@@ -31,7 +31,7 @@ const configs = bundles
         minify && compiler(),
         minify && terser(),
         license({ banner: `@popperjs/core v${pkg.version} - MIT License` }),
-        flow && flowEntry({ types: 'lib/index.js' }),
+        flow && flowEntry({ types: `lib/${getFileName(input)}.js` }),
         bundleSize(),
         visualizer({
           sourcemap: true,
