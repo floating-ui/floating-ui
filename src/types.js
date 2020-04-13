@@ -2,12 +2,15 @@
 /* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
 
-import type { Options as FlipOptions } from './modifiers/flip';
-import type { Options as OffsetOptions } from './modifiers/offset';
-import type { Options as EventListenersOptions } from './modifiers/eventListeners';
-import type { Options as ComputeStylesOptions } from './modifiers/computeStyles';
-import type { Options as ArrowOptions } from './modifiers/arrow';
-import type { Options as PreventOverflowOptions } from './modifiers/preventOverflow';
+import type { PopperOffsetsModifier } from './modifiers/popperOffsets';
+import type { FlipModifier } from './modifiers/flip';
+import type { HideModifier } from './modifiers/hide';
+import type { OffsetModifier } from './modifiers/offset';
+import type { EventListenersModifier } from './modifiers/eventListeners';
+import type { ComputeStylesModifier } from './modifiers/computeStyles';
+import type { ArrowModifier } from './modifiers/arrow';
+import type { PreventOverflowModifier } from './modifiers/preventOverflow';
+import type { ApplyStylesModifier } from './modifiers/applyStyles';
 
 export type Obj = { [key: string]: any };
 
@@ -117,48 +120,11 @@ export type Modifier<Options> = {|
   data?: Obj,
 |};
 
-export type OffsetModifier = $Shape<Modifier<any>> & {
-  name: 'offset',
-  options?: $Shape<OffsetOptions>,
-};
-
-export type ApplyStylesModifier = $Shape<Modifier<any>> & {
-  name: 'applyStyles',
-};
-
-export type ArrowModifier = $Shape<Modifier<any>> & {
-  name: 'arrow',
-  options?: $Shape<ArrowOptions>,
-};
-
-export type ComputeStylesModifier = $Shape<Modifier<any>> & {
-  name: 'computeStyles',
-  options?: $Shape<ComputeStylesOptions>,
-};
-
-export type EventListenersModifier = $Shape<Modifier<any>> & {
-  name: 'eventListeners',
-  options?: $Shape<EventListenersOptions>,
-};
-
-export type FlipModifier = $Shape<Modifier<any>> & {
-  name: 'flip',
-  options?: $Shape<FlipOptions>,
-};
-
-export type PreventOverflowModifier = $Shape<Modifier<any>> & {
-  name: 'preventOverflow',
-  options?: $Shape<PreventOverflowOptions>,
-};
-
-export type PopperOffsetsModifier = $Shape<Modifier<any>> & {
-  name: 'popperOffsets',
-};
-
 export type StrictModifiers =
   | OffsetModifier
   | ApplyStylesModifier
   | ArrowModifier
+  | HideModifier
   | ComputeStylesModifier
   | EventListenersModifier
   | FlipModifier

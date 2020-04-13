@@ -15,7 +15,12 @@ import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
 
 // eslint-disable-next-line
-export type Options = {
+export type ComputeStylesModifier = $Shape<Modifier<any>> & {
+  name: 'computeStyles',
+  options?: $Shape<Options>,
+};
+
+type Options = {
   gpuAcceleration: boolean,
   adaptive: boolean,
 };

@@ -11,7 +11,12 @@ import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 
 // eslint-disable-next-line
-export type Options = {
+export type ArrowModifier = $Shape<Modifier<any>> & {
+  name: 'arrow',
+  options?: $Shape<Options>,
+};
+
+type Options = {
   element: HTMLElement | string,
   padding: Padding,
 };

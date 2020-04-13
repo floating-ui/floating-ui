@@ -12,9 +12,14 @@ type OffsetsFunction = ({
 
 type Offset = OffsetsFunction | [?number, ?number];
 
-// eslint-disable-next-line
-export type Options = {
+type Options = {
   offset: Offset,
+};
+
+// eslint-disable-next-line
+export type OffsetModifier = $Shape<Modifier<any>> & {
+  name: 'offset',
+  options?: $Shape<Options>,
 };
 
 export function distanceAndSkiddingToXY(

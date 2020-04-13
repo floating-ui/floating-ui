@@ -9,6 +9,11 @@ import type {
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
 
+// eslint-disable-next-line
+export type HideModifier = $Shape<Modifier<any>> & {
+  name: 'hide',
+};
+
 function getSideOffsets(
   overflow: SideObject,
   rect: Rect,
