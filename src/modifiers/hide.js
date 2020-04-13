@@ -3,12 +3,16 @@ import type {
   ModifierArguments,
   Modifier,
   Rect,
-  Options,
   SideObject,
   Offsets,
 } from '../types';
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
+
+// eslint-disable-next-line
+export type HideModifier = $Shape<Modifier<any>> & {
+  name: 'hide',
+};
 
 function getSideOffsets(
   overflow: SideObject,
@@ -27,7 +31,7 @@ function isAnySideFullyClipped(overflow: SideObject): boolean {
   return [top, right, bottom, left].some(side => overflow[side] >= 0);
 }
 
-function hide({ state, name }: ModifierArguments<Options>) {
+function hide({ state, name }: ModifierArguments<{||}>) {
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
   const preventedOffsets = state.modifiersData.preventOverflow;
@@ -72,4 +76,4 @@ export default ({
   phase: 'main',
   requiresIfExists: ['preventOverflow'],
   fn: hide,
-}: Modifier<Options>);
+}: Modifier<{||}>);

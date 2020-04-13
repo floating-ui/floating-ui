@@ -3,6 +3,11 @@ import type { Modifier, ModifierArguments } from '../types';
 import getNodeName from '../dom-utils/getNodeName';
 import { isHTMLElement } from '../dom-utils/instanceOf';
 
+// eslint-disable-next-line
+export type ApplyStylesModifier = $Shape<Modifier<any>> & {
+  name: 'applyStyles',
+};
+
 // This modifier takes the styles prepared by the `computeStyles` modifier
 // and applies them to the HTMLElements such as popper and arrow
 

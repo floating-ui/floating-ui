@@ -9,6 +9,12 @@ import computeAutoPlacement from '../utils/computeAutoPlacement';
 import { bottom, top, start, right, left, auto } from '../enums';
 import getVariation from '../utils/getVariation';
 
+// eslint-disable-next-line
+export type FlipModifier = $Shape<Modifier<any>> & {
+  name: 'flip',
+  options?: $Shape<Options>,
+};
+
 type Options = {
   fallbackPlacements: Array<Placement>,
   padding: Padding,

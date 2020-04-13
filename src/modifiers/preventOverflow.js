@@ -20,6 +20,12 @@ type TetherOffset =
     }) => number)
   | number;
 
+// eslint-disable-next-line
+export type PreventOverflowModifier = $Shape<Modifier<any>> & {
+  name: 'preventOverflow',
+  options?: $Shape<Options>,
+};
+
 type Options = {
   /* Prevents boundaries overflow on the main axis */
   mainAxis: boolean,
