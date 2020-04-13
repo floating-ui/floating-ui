@@ -53,3 +53,16 @@ it('(variation) should be positioned at right-end', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should only position at right or bottom (not top)', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/auto/whitelist.html`);
+
+  await scroll(page, '.scroll1', 150);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+
+  await scroll(page, '.scroll1', 300);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});

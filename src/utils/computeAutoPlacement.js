@@ -7,7 +7,11 @@ import type {
   RootBoundary,
 } from '../enums';
 import getVariation from './getVariation';
-import { variationPlacements, basePlacements } from '../enums';
+import {
+  variationPlacements,
+  basePlacements,
+  placements as allPlacements,
+} from '../enums';
 import detectOverflow from './detectOverflow';
 import getBasePlacement from './getBasePlacement';
 
@@ -17,6 +21,7 @@ type Options = {
   boundary: Boundary,
   rootBoundary: RootBoundary,
   flipVariations: boolean,
+  allowedAutoPlacements?: Array<Placement>,
 };
 
 /*::
@@ -35,17 +40,19 @@ export default function computeAutoPlacement(
     rootBoundary,
     padding,
     flipVariations,
+    allowedAutoPlacements = allPlacements,
   } = options;
 
   const variation = getVariation(placement);
 
-  const placements = variation
+  const placements = (variation
     ? flipVariations
       ? variationPlacements
       : variationPlacements.filter(
           placement => getVariation(placement) === variation
         )
-    : basePlacements;
+    : basePlacements
+  ).filter(placement => allowedAutoPlacements.indexOf(placement) >= 0);
 
   // $FlowFixMe: Flow seems to have problems with two array unions...
   const overflows: OverflowsMap = placements.reduce((acc, placement) => {

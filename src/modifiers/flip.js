@@ -16,6 +16,7 @@ type Options = {
   rootBoundary: RootBoundary,
   altBoundary: boolean,
   flipVariations: boolean,
+  allowedAutoPlacements: Array<Placement>,
 };
 
 function getExpandedFallbackPlacements(placement: Placement): Array<Placement> {
@@ -44,6 +45,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
     rootBoundary,
     altBoundary,
     flipVariations = true,
+    allowedAutoPlacements,
   } = options;
 
   const preferredPlacement = state.options.placement;
@@ -66,6 +68,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
               rootBoundary,
               padding,
               flipVariations,
+              allowedAutoPlacements,
             })
           : placement
       );
