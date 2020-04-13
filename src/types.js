@@ -72,7 +72,7 @@ export type State = {|
     popper: HTMLElement,
     arrow?: HTMLElement,
   |},
-  options: Options<any>,
+  options: OptionsGeneric<any>,
   placement: Placement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any>>,
@@ -96,7 +96,7 @@ export type Instance = {|
   destroy: () => void,
   forceUpdate: () => void,
   update: () => Promise<$Shape<State>>,
-  setOptions: (options: $Shape<Options<any>>) => Promise<$Shape<State>>,
+  setOptions: (options: $Shape<OptionsGeneric<any>>) => Promise<$Shape<State>>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
@@ -167,9 +167,16 @@ export type StrictModifiers =
 
 export type EventListeners = {| scroll: boolean, resize: boolean |};
 
-export type Options<TModifier: $Shape<Modifier<any>>> = {|
+export type Options = {|
   placement: Placement,
-  modifiers: Array<TModifier>,
+  modifiers: Array<$Shape<Modifier<any>>>,
+  strategy: PositioningStrategy,
+  onFirstUpdate?: ($Shape<State>) => void,
+|};
+
+export type OptionsGeneric<TModifier> = {|
+  placement: Placement,
+  modifiers: Array<$Shape<TModifier>>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
 |};
