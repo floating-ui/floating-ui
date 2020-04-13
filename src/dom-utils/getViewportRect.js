@@ -3,12 +3,23 @@ import getWindow from './getWindow';
 
 export default function getViewportRect(element: Element) {
   const win = getWindow(element);
-  const visualViewport = win.visualViewport || {};
+  const visualViewport = win.visualViewport;
 
-  return {
-    width: visualViewport.width || win.innerWidth,
-    height: visualViewport.height || win.innerHeight,
-    x: visualViewport.offsetLeft || 0,
-    y: visualViewport.offsetTop || 0,
-  };
+  let width = win.innerWidth;
+  let height = win.innerHeight;
+  let x = 0;
+  let y = 0;
+
+  if (visualViewport) {
+    width = visualViewport.width;
+    height = visualViewport.height;
+
+    // iOS has a buggy implementation as expected
+    if (!/iPhone|iPod|iPad/.test(navigator.platform)) {
+      x = visualViewport.offsetLeft;
+      y = visualViewport.offsetTop;
+    }
+  }
+
+  return { width, height, x, y };
 }
