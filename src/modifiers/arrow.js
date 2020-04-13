@@ -23,7 +23,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
   const isVertical = [left, right].indexOf(basePlacement) >= 0;
   const len = isVertical ? 'height' : 'width';
 
-  if (!arrowElement) {
+  if (!arrowElement || !popperOffsets) {
     return;
   }
 

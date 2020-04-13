@@ -51,7 +51,7 @@ export function mapToStyles({
   popper: HTMLElement,
   popperRect: Rect,
   placement: BasePlacement,
-  offsets: Offsets,
+  offsets: $Shape<{ x: number, y: number, centerOffset: number }>,
   position: PositioningStrategy,
   gpuAcceleration: boolean,
   adaptive: boolean,
@@ -153,18 +153,18 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     gpuAcceleration,
   };
 
-  // popper offsets are always available
-  state.styles.popper = {
-    ...state.styles.popper,
-    ...mapToStyles({
-      ...commonStyles,
-      offsets: state.modifiersData.popperOffsets,
-      position: state.options.strategy,
-      adaptive,
-    }),
-  };
+  if (state.modifiersData.popperOffsets != null) {
+    state.styles.popper = {
+      ...state.styles.popper,
+      ...mapToStyles({
+        ...commonStyles,
+        offsets: state.modifiersData.popperOffsets,
+        position: state.options.strategy,
+        adaptive,
+      }),
+    };
+  }
 
-  // arrow offsets may not be available
   if (state.modifiersData.arrow != null) {
     state.styles.arrow = {
       ...state.styles.arrow,

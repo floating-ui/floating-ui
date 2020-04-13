@@ -80,7 +80,39 @@ export type State = {|
   attributes: {|
     [key: string]: { [key: string]: string | boolean },
   |},
-  modifiersData: { [key: string]: any },
+  modifiersData: {
+    arrow?: {
+      x?: number,
+      y?: number,
+      centerOffset: number,
+    },
+    hide?: {
+      isReferenceHidden: boolean,
+      hasPopperEscaped: boolean,
+      referenceClippingOffsets: SideObject,
+      popperEscapeOffsets: SideObject,
+    },
+    offset?: {
+      auto: Offsets,
+      'auto-start': Offsets,
+      'auto-end': Offsets,
+      top: Offsets,
+      'top-start': Offsets,
+      'top-end': Offsets,
+      right: Offsets,
+      'right-start': Offsets,
+      'right-end': Offsets,
+      bottom: Offsets,
+      'bottom-start': Offsets,
+      'bottom-end': Offsets,
+      left: Offsets,
+      'left-start': Offsets,
+      'left-end': Offsets,
+    },
+    preventOverflow?: Offsets,
+    popperOffsets?: Offsets,
+    [key: string]: any,
+  },
   reset: boolean,
 |};
 
