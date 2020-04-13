@@ -3,7 +3,6 @@ import type {
   ModifierArguments,
   Modifier,
   Rect,
-  Options,
   SideObject,
   Offsets,
 } from '../types';
@@ -27,7 +26,7 @@ function isAnySideFullyClipped(overflow: SideObject): boolean {
   return [top, right, bottom, left].some(side => overflow[side] >= 0);
 }
 
-function hide({ state, name }: ModifierArguments<Options>) {
+function hide({ state, name }: ModifierArguments<{||}>) {
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
   const preventedOffsets = state.modifiersData.preventOverflow;
@@ -72,4 +71,4 @@ export default ({
   phase: 'main',
   requiresIfExists: ['preventOverflow'],
   fn: hide,
-}: Modifier<Options>);
+}: Modifier<{||}>);

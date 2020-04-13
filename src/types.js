@@ -2,6 +2,13 @@
 /* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
 
+import type { Options as FlipOptions } from './modifiers/flip';
+import type { Options as OffsetOptions } from './modifiers/offset';
+import type { Options as EventListenersOptions } from './modifiers/eventListeners';
+import type { Options as ComputeStylesOptions } from './modifiers/computeStyles';
+import type { Options as ArrowOptions } from './modifiers/arrow';
+import type { Options as PreventOverflowOptions } from './modifiers/preventOverflow';
+
 export type Obj = { [key: string]: any };
 
 export type VisualViewport = EventTarget & {
@@ -65,7 +72,7 @@ export type State = {|
     popper: HTMLElement,
     arrow?: HTMLElement,
   |},
-  options: Options,
+  options: Options<any>,
   placement: Placement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any>>,
@@ -89,7 +96,7 @@ export type Instance = {|
   destroy: () => void,
   forceUpdate: () => void,
   update: () => Promise<$Shape<State>>,
-  setOptions: (options: $Shape<Options>) => Promise<$Shape<State>>,
+  setOptions: (options: $Shape<Options<any>>) => Promise<$Shape<State>>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
@@ -110,11 +117,59 @@ export type Modifier<Options> = {|
   data?: Obj,
 |};
 
+export type OffsetModifier = $Shape<Modifier<any>> & {
+  name: 'offset',
+  options?: $Shape<OffsetOptions>,
+};
+
+export type ApplyStylesModifier = $Shape<Modifier<any>> & {
+  name: 'applyStyles',
+};
+
+export type ArrowModifier = $Shape<Modifier<any>> & {
+  name: 'arrow',
+  options?: $Shape<ArrowOptions>,
+};
+
+export type ComputeStylesModifier = $Shape<Modifier<any>> & {
+  name: 'computeStyles',
+  options?: $Shape<ComputeStylesOptions>,
+};
+
+export type EventListenersModifier = $Shape<Modifier<any>> & {
+  name: 'eventListeners',
+  options?: $Shape<EventListenersOptions>,
+};
+
+export type FlipModifier = $Shape<Modifier<any>> & {
+  name: 'flip',
+  options?: $Shape<FlipOptions>,
+};
+
+export type PreventOverflowModifier = $Shape<Modifier<any>> & {
+  name: 'preventOverflow',
+  options?: $Shape<PreventOverflowOptions>,
+};
+
+export type PopperOffsetsModifier = $Shape<Modifier<any>> & {
+  name: 'popperOffsets',
+};
+
+export type StrictModifiers =
+  | OffsetModifier
+  | ApplyStylesModifier
+  | ArrowModifier
+  | ComputeStylesModifier
+  | EventListenersModifier
+  | FlipModifier
+  | PreventOverflowModifier
+  | PopperOffsetsModifier;
+
 export type EventListeners = {| scroll: boolean, resize: boolean |};
 
-export type Options = {|
+export type Options<TModifier: $Shape<Modifier<any>>> = {|
   placement: Placement,
-  modifiers: Array<$Shape<Modifier<any>>>,
+  modifiers: Array<TModifier>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
 |};
