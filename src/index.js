@@ -1,7 +1,6 @@
 // @flow
 import type {
   State,
-  Options,
   OptionsGeneric,
   Modifier,
   Instance,
@@ -29,7 +28,7 @@ const INVALID_ELEMENT_ERROR =
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: OptionsGeneric<any> = {
   placement: 'bottom',
   modifiers: [],
   strategy: 'absolute',
@@ -37,7 +36,7 @@ const DEFAULT_OPTIONS: Options = {
 
 type PopperGeneratorArgs = {
   defaultModifiers?: Array<Modifier<any>>,
-  defaultOptions?: $Shape<Options>,
+  defaultOptions?: $Shape<OptionsGeneric<any>>,
 };
 
 function areValidElements(...args: Array<any>): boolean {

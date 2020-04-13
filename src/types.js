@@ -176,7 +176,7 @@ export type Options = {|
 
 export type OptionsGeneric<TModifier> = {|
   placement: Placement,
-  modifiers: Array<$Shape<TModifier>>,
+  modifiers: Array<TModifier>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
 |};
