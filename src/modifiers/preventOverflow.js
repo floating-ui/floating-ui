@@ -78,6 +78,10 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
   const data = { x: 0, y: 0 };
 
+  if (!popperOffsets) {
+    return;
+  }
+
   if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
@@ -163,7 +167,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
     const preventedOffset = within(min, offset, max);
 
-    state.modifiersData.popperOffsets[altAxis] = preventedOffset;
+    popperOffsets[altAxis] = preventedOffset;
     data[altAxis] = preventedOffset - offset;
   }
 
