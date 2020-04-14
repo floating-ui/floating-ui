@@ -24,11 +24,8 @@ type Options = {
   allowedAutoPlacements?: Array<Placement>,
 };
 
-/*::
-type OverflowsMap = {
-  [ComputedPlacement]: number,
-};
-*/
+/*:: type OverflowsMap = { [ComputedPlacement]: number }; */
+/*;; type OverflowsMap = { [key in ComputedPlacement]: number }; */
 
 export default function computeAutoPlacement(
   state: $Shape<State>,

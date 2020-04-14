@@ -69,6 +69,9 @@ export type StateOffsets = {|
   arrow?: Offsets,
 |};
 
+/*:: type OffsetData = { [Placement]: Offsets }; */
+/*;; type OffsetData = { [key in Placement]?: Offsets } */
+
 export type State = {|
   elements: {|
     reference: Element | VirtualElement,
@@ -102,23 +105,7 @@ export type State = {|
       referenceClippingOffsets: SideObject,
       popperEscapeOffsets: SideObject,
     },
-    offset?: {
-      auto: Offsets,
-      'auto-start': Offsets,
-      'auto-end': Offsets,
-      top: Offsets,
-      'top-start': Offsets,
-      'top-end': Offsets,
-      right: Offsets,
-      'right-start': Offsets,
-      'right-end': Offsets,
-      bottom: Offsets,
-      'bottom-start': Offsets,
-      'bottom-end': Offsets,
-      left: Offsets,
-      'left-start': Offsets,
-      'left-end': Offsets,
-    },
+    offset?: OffsetData,
     preventOverflow?: Offsets,
     popperOffsets?: Offsets,
     [key: string]: any,

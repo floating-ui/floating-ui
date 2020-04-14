@@ -26,6 +26,17 @@ const args = arg({
 const tsconfig = require(path.join(process.cwd(), args['--project']));
 const tsconfigPath = path.dirname(path.join(process.cwd(), args['--project']));
 
+/**
+ * TypeScript-specific types can be defined inside /*;;  comment blocks
+ */
+const createSourceFile = ts.createSourceFile;
+ts.createSourceFile = (fileName, text, languageVersion, setParentNodes) => {
+  text = text.replace(/\/\*;;([\s\S]+?)\*\//gm, '$1');
+  text = text.replace(/\/\*;(.+?)\*\//gm, ':$1');
+
+  return createSourceFile(fileName, text, languageVersion, setParentNodes);
+};
+
 function compile(fileNames, options) {
   const host = ts.createCompilerHost(options);
   host.writeFile = (fileName, contents) =>
