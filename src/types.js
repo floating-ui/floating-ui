@@ -2,15 +2,15 @@
 /* eslint-disable import/no-unused-modules */
 import type { Placement, ModifierPhases } from './enums';
 
-import typeof PopperOffsetsModifier from './modifiers/popperOffsets';
-import typeof FlipModifier from './modifiers/flip';
-import typeof HideModifier from './modifiers/hide';
-import typeof OffsetModifier from './modifiers/offset';
-import typeof EventListenersModifier from './modifiers/eventListeners';
-import typeof ComputeStylesModifier from './modifiers/computeStyles';
-import typeof ArrowModifier from './modifiers/arrow';
-import typeof PreventOverflowModifier from './modifiers/preventOverflow';
-import typeof ApplyStylesModifier from './modifiers/applyStyles';
+import type { PopperOffsetsModifier } from './modifiers/popperOffsets';
+import type { FlipModifier } from './modifiers/flip';
+import type { HideModifier } from './modifiers/hide';
+import type { OffsetModifier } from './modifiers/offset';
+import type { EventListenersModifier } from './modifiers/eventListeners';
+import type { ComputeStylesModifier } from './modifiers/computeStyles';
+import type { ArrowModifier } from './modifiers/arrow';
+import type { PreventOverflowModifier } from './modifiers/preventOverflow';
+import type { ApplyStylesModifier } from './modifiers/applyStyles';
 
 export type Obj = { [key: string]: any };
 
@@ -135,7 +135,7 @@ export type EventListeners = {| scroll: boolean, resize: boolean |};
 
 export type Options = {|
   placement: Placement,
-  modifiers: Array<$Shape<Modifier<any>>>,
+  modifiers: Array<$Shape<Modifier<any, any>>>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
 |};

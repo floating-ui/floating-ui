@@ -56,10 +56,12 @@ function offset({ state, options, name }: ModifierArguments<Options>) {
   state.modifiersData[name] = data;
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type OffsetModifier = Modifier<'offset', Options>;
 export default ({
   name: 'offset',
   enabled: true,
   phase: 'main',
   requires: ['popperOffsets'],
   fn: offset,
-}: Modifier<'offset', Options>);
+}: OffsetModifier);

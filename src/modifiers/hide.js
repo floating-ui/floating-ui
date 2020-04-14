@@ -65,10 +65,12 @@ function hide({ state, name }: ModifierArguments<{||}>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type HideModifier = Modifier<'hide', {||}>;
 export default ({
   name: 'hide',
   enabled: true,
   phase: 'main',
   requiresIfExists: ['preventOverflow'],
   fn: hide,
-}: Modifier<'hide', {||}>);
+}: HideModifier);

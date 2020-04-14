@@ -183,10 +183,12 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type ComputeStylesModifier = Modifier<'computeStyles', Options>;
 export default ({
   name: 'computeStyles',
   enabled: true,
   phase: 'beforeWrite',
   fn: computeStyles,
   data: {},
-}: Modifier<'computeStyles', Options>);
+}: ComputeStylesModifier);
