@@ -69,6 +69,9 @@ export type StateOffsets = {|
   arrow?: Offsets,
 |};
 
+/*:: type OffsetData = { [Placement]: Offsets }; */
+/*;; type OffsetData = { [key in Placement]?: Offsets } */
+
 export type State = {|
   elements: {|
     reference: Element | VirtualElement,
@@ -90,7 +93,23 @@ export type State = {|
   attributes: {|
     [key: string]: { [key: string]: string | boolean },
   |},
-  modifiersData: { [key: string]: any },
+  modifiersData: {
+    arrow?: {
+      x?: number,
+      y?: number,
+      centerOffset: number,
+    },
+    hide?: {
+      isReferenceHidden: boolean,
+      hasPopperEscaped: boolean,
+      referenceClippingOffsets: SideObject,
+      popperEscapeOffsets: SideObject,
+    },
+    offset?: OffsetData,
+    preventOverflow?: Offsets,
+    popperOffsets?: Offsets,
+    [key: string]: any,
+  },
   reset: boolean,
 |};
 

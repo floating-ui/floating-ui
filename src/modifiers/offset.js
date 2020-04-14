@@ -50,8 +50,10 @@ function offset({ state, options, name }: ModifierArguments<Options>) {
 
   const { x, y } = data[state.placement];
 
-  state.modifiersData.popperOffsets.x += x;
-  state.modifiersData.popperOffsets.y += y;
+  if (state.modifiersData.popperOffsets != null) {
+    state.modifiersData.popperOffsets.x += x;
+    state.modifiersData.popperOffsets.y += y;
+  }
 
   state.modifiersData[name] = data;
 }
