@@ -88,6 +88,8 @@ function effect({ state }: ModifierArguments<{||}>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type ApplyStylesModifier = Modifier<'applyStyles', {||}>;
 export default ({
   name: 'applyStyles',
   enabled: true,
@@ -95,4 +97,4 @@ export default ({
   fn: applyStyles,
   effect,
   requires: ['computeStyles'],
-}: Modifier<{||}>);
+}: ApplyStylesModifier);

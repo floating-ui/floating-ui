@@ -13,7 +13,7 @@ function order(modifiers) {
   });
 
   // On visiting object, check for its dependencies and visit them recursively
-  function sort(modifier: Modifier<any>) {
+  function sort(modifier: Modifier<any, any>) {
     visited.add(modifier.name);
 
     const requires = [
@@ -45,8 +45,8 @@ function order(modifiers) {
 }
 
 export default function orderModifiers(
-  modifiers: Array<Modifier<any>>
-): Array<Modifier<any>> {
+  modifiers: Array<Modifier<any, any>>
+): Array<Modifier<any, any>> {
   // order based on dependencies
   const orderedModifiers = order(modifiers);
 

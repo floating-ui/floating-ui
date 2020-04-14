@@ -99,6 +99,8 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type ArrowModifier = Modifier<'arrow', Options>;
 export default ({
   name: 'arrow',
   enabled: true,
@@ -107,4 +109,4 @@ export default ({
   effect,
   requires: ['popperOffsets'],
   requiresIfExists: ['preventOverflow'],
-}: Modifier<Options>);
+}: ArrowModifier);

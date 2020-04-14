@@ -1,7 +1,7 @@
 // @flow
 import type {
   State,
-  Options,
+  OptionsGeneric,
   Modifier,
   Instance,
   VirtualElement,
@@ -28,15 +28,15 @@ const INVALID_ELEMENT_ERROR =
 const INFINITE_LOOP_ERROR =
   'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
-const DEFAULT_OPTIONS: Options = {
+const DEFAULT_OPTIONS: OptionsGeneric<any> = {
   placement: 'bottom',
   modifiers: [],
   strategy: 'absolute',
 };
 
 type PopperGeneratorArgs = {
-  defaultModifiers?: Array<Modifier<any>>,
-  defaultOptions?: $Shape<Options>,
+  defaultModifiers?: Array<Modifier<any, any>>,
+  defaultOptions?: $Shape<OptionsGeneric<any>>,
 };
 
 function areValidElements(...args: Array<any>): boolean {
@@ -51,10 +51,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     defaultOptions = DEFAULT_OPTIONS,
   } = generatorOptions;
 
-  return function createPopper(
+  return function createPopper<TModifier: $Shape<Modifier<any, any>>>(
     reference: Element | VirtualElement,
     popper: HTMLElement,
-    options: $Shape<Options> = defaultOptions
+    options: $Shape<OptionsGeneric<TModifier>> = defaultOptions
   ): Instance {
     let state: $Shape<State> = {
       placement: 'bottom',
@@ -78,6 +78,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         cleanupModifierEffects();
 
         state.options = {
+          // $FlowFixMe
           ...defaultOptions,
           ...state.options,
           ...options,

@@ -153,6 +153,8 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type FlipModifier = Modifier<'flip', Options>;
 export default ({
   name: 'flip',
   enabled: true,
@@ -160,4 +162,4 @@ export default ({
   fn: flip,
   requiresIfExists: ['offset'],
   data: { _skip: false },
-}: Modifier<Options>);
+}: FlipModifier);

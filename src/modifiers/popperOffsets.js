@@ -15,10 +15,12 @@ function popperOffsets({ state, name }: ModifierArguments<{||}>) {
   });
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type PopperOffsetsModifier = Modifier<'popperOffsets', {||}>;
 export default ({
   name: 'popperOffsets',
   enabled: true,
   phase: 'read',
   fn: popperOffsets,
   data: {},
-}: Modifier<{||}>);
+}: PopperOffsetsModifier);

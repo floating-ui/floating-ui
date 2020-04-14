@@ -20,20 +20,18 @@ const tsnocheck = '// @ts-nocheck\n';
 const args = arg({
   '--project': String,
   '--outDir': String,
+  '--verbose': Boolean,
 });
 
 const tsconfig = require(path.join(process.cwd(), args['--project']));
 const tsconfigPath = path.dirname(path.join(process.cwd(), args['--project']));
 
-function compile(fileNames, options, write) {
-  let host;
-  if (write) {
-    host = ts.createCompilerHost(options);
-    host.writeFile = (fileName, contents) =>
-      fs.writeFileSync(fileName, contents, {
-        encoding: 'utf8',
-      });
-  }
+function compile(fileNames, options) {
+  const host = ts.createCompilerHost(options);
+  host.writeFile = (fileName, contents) =>
+    fs.writeFileSync(fileName, contents, {
+      encoding: 'utf8',
+    });
 
   // Prepare and emit the d.ts files
   const program = ts.createProgram(fileNames, options, host);
@@ -47,7 +45,20 @@ function compile(fileNames, options, write) {
 
   allDiagnostics.forEach(diagnostic => {
     const fileName = diagnostic.file && diagnostic.file.fileName;
+    if (args['--verbose']) {
+      console.log(
+        fileName,
+        '\n',
+        typeof diagnostic.messageText !== 'string'
+          ? diagnostic.messageText.messageText
+          : diagnostic.messageText,
+        '\n\n'
+      );
+    }
     if (!fileName) return;
+    if (alteredFiles.includes(fileName)) {
+      return;
+    }
 
     let source = fs.readFileSync(fileName, 'utf8');
     const output = `${tsnocheck}${source}`;

@@ -170,10 +170,12 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
   state.modifiersData[name] = data;
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type PreventOverflowModifier = Modifier<'preventOverflow', Options>;
 export default ({
   name: 'preventOverflow',
   enabled: true,
   phase: 'main',
   fn: preventOverflow,
   requiresIfExists: ['offset'],
-}: Modifier<Options>);
+}: PreventOverflowModifier);

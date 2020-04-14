@@ -3,7 +3,6 @@ import type {
   ModifierArguments,
   Modifier,
   Rect,
-  Options,
   SideObject,
   Offsets,
 } from '../types';
@@ -27,7 +26,7 @@ function isAnySideFullyClipped(overflow: SideObject): boolean {
   return [top, right, bottom, left].some(side => overflow[side] >= 0);
 }
 
-function hide({ state, name }: ModifierArguments<Options>) {
+function hide({ state, name }: ModifierArguments<{||}>) {
   const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
   const preventedOffsets = state.modifiersData.preventOverflow;
@@ -66,10 +65,12 @@ function hide({ state, name }: ModifierArguments<Options>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type HideModifier = Modifier<'hide', {||}>;
 export default ({
   name: 'hide',
   enabled: true,
   phase: 'main',
   requiresIfExists: ['preventOverflow'],
   fn: hide,
-}: Modifier<Options>);
+}: HideModifier);

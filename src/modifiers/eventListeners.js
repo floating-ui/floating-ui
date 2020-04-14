@@ -41,6 +41,8 @@ function effect({ state, instance, options }: ModifierArguments<Options>) {
   };
 }
 
+// eslint-disable-next-line import/no-unused-modules
+export type EventListenersModifier = Modifier<'eventListeners', Options>;
 export default ({
   name: 'eventListeners',
   enabled: true,
@@ -48,4 +50,4 @@ export default ({
   fn: () => {},
   effect,
   data: {},
-}: Modifier<Options>);
+}: EventListenersModifier);
