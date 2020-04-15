@@ -11,7 +11,7 @@ import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 
 type Options = {
-  element: HTMLElement | string,
+  element: HTMLElement | string | null,
   padding: Padding,
 };
 
@@ -66,6 +66,10 @@ function arrow({ state, name }: ModifierArguments<Options>) {
 
 function effect({ state, options, name }: ModifierArguments<Options>) {
   let { element: arrowElement = '[data-popper-arrow]', padding = 0 } = options;
+
+  if (arrowElement == null) {
+    return;
+  }
 
   // CSS selector
   if (typeof arrowElement === 'string') {
