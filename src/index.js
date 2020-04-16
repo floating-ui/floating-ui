@@ -155,7 +155,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         runModifierEffects();
 
-        return instance.update();
+        instance.forceUpdate();
+        // @deprecated, the promise return type is for api compatibility and
+        // will be removed in the future
+        return Promise.resolve(state);
       },
 
       // Sync update – it will always be executed, even if not necessary. This
@@ -164,6 +167,8 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // For high frequency updates (e.g. `resize` and `scroll` events), always
       // prefer the async Popper#update method
       forceUpdate() {
+        instance.update.cancel();
+
         if (isDestroyed) {
           return;
         }
@@ -256,11 +261,10 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    instance.setOptions(options).then(state => {
-      if (!isDestroyed && options.onFirstUpdate) {
-        options.onFirstUpdate(state);
-      }
-    });
+    instance.setOptions(options);
+    if (options.onFirstUpdate) {
+      options.onFirstUpdate(state);
+    }
 
     // Modifiers have the ability to execute arbitrary code before the first
     // update cycle runs. They will be executed in the same order as the update

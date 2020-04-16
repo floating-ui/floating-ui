@@ -195,17 +195,4 @@ describe('.destroy() method', () => {
 
     expect(spy).toHaveBeenCalledTimes(1);
   });
-
-  it('forceUpdate() is not ran when destroy is called sync', done => {
-    const spy = jest.fn();
-
-    createPopper(reference, getPopper(), {
-      modifiers: [{ ...testModifier, fn: spy }],
-    }).destroy();
-
-    setTimeout(() => {
-      expect(spy).not.toHaveBeenCalled();
-      done();
-    });
-  });
 });

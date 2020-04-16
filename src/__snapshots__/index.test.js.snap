@@ -19,6 +19,21 @@ Object {
     },
     "orderedModifiers": Array [],
     "placement": "bottom",
+    "rects": Object {
+      "popper": Object {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0,
+      },
+      "reference": Object {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0,
+      },
+    },
+    "reset": false,
     "scrollParents": Object {
       "popper": Array [
         [Window],
