@@ -157,6 +157,7 @@ export type Options = {|
   modifiers: Array<$Shape<Modifier<any, any>>>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
+  suppressMarginWarning?: boolean,
 |};
 
 export type OptionsGeneric<TModifier> = {|
@@ -164,6 +165,7 @@ export type OptionsGeneric<TModifier> = {|
   modifiers: Array<TModifier>,
   strategy: PositioningStrategy,
   onFirstUpdate?: ($Shape<State>) => void,
+  suppressMarginWarning?: boolean,
 |};
 
 export type UpdateCallback = State => void;

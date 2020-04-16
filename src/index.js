@@ -127,29 +127,31 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             }
           }
 
-          const {
-            marginTop,
-            marginRight,
-            marginBottom,
-            marginLeft,
-          } = getComputedStyle(popper);
+          if (!state.options.suppressMarginWarning) {
+            const {
+              marginTop,
+              marginRight,
+              marginBottom,
+              marginLeft,
+            } = getComputedStyle(popper);
 
-          // We no longer take into account `margins` on the popper, and it can
-          // cause bugs with positioning, so we'll warn the consumer
-          if (
-            [marginTop, marginRight, marginBottom, marginLeft].some(margin =>
-              parseFloat(margin)
-            )
-          ) {
-            console.warn(
-              [
-                'Popper: CSS "margin" styles cannot be used to apply padding',
-                'between the popper and its reference element or boundary.',
-                'To replicate margin, use the `offset` modifier, as well as',
-                'the `padding` option in the `preventOverflow` and `flip`',
-                'modifiers.',
-              ].join(' ')
-            );
+            // We no longer take into account `margins` on the popper, and it can
+            // cause bugs with positioning, so we'll warn the consumer
+            if (
+              [marginTop, marginRight, marginBottom, marginLeft].some(margin =>
+                parseFloat(margin)
+              )
+            ) {
+              console.warn(
+                [
+                  'Popper: CSS "margin" styles cannot be used to apply padding',
+                  'between the popper and its reference element or boundary.',
+                  'To replicate margin, use the `offset` modifier, as well as',
+                  'the `padding` option in the `preventOverflow` and `flip`',
+                  'modifiers.',
+                ].join(' ')
+              );
+            }
           }
         }
 
