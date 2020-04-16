@@ -2,7 +2,8 @@
 import type { ModifierArguments, Modifier } from '../types';
 import getWindow from '../dom-utils/getWindow';
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   scroll: boolean,
   resize: boolean,
 };

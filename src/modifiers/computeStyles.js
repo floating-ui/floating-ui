@@ -14,7 +14,8 @@ import getDocumentElement from '../dom-utils/getDocumentElement';
 import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   gpuAcceleration: boolean,
   adaptive: boolean,
 };

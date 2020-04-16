@@ -12,7 +12,8 @@ type OffsetsFunction = ({
 
 type Offset = OffsetsFunction | [?number, ?number];
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   offset: Offset,
 };
 
