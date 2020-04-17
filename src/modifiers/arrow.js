@@ -10,7 +10,8 @@ import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   element: HTMLElement | string | null,
   padding: Padding,
 };

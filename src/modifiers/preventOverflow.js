@@ -20,7 +20,8 @@ type TetherOffset =
     }) => number)
   | number;
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   /* Prevents boundaries overflow on the main axis */
   mainAxis: boolean,
   /* Prevents boundaries overflow on the alternate axis */
