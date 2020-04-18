@@ -4,6 +4,7 @@ import getParentNode from './getParentNode';
 import getNodeName from './getNodeName';
 import getWindow from './getWindow';
 import type { Window, VisualViewport } from '../types';
+import isScrollParent from './isScrollParent';
 
 export default function listScrollParents(
   element: Node,
@@ -12,7 +13,12 @@ export default function listScrollParents(
   const scrollParent = getScrollParent(element);
   const isBody = getNodeName(scrollParent) === 'body';
   const win = getWindow(scrollParent);
-  const target = isBody ? [win].concat(win.visualViewport || []) : scrollParent;
+  const target = isBody
+    ? [win].concat(
+        win.visualViewport || [],
+        isScrollParent(scrollParent) ? scrollParent : []
+      )
+    : scrollParent;
   const updatedList = list.concat(target);
 
   return isBody

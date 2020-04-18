@@ -1,0 +1,99 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  @import '/reset.css';
+
+  #reference {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  html {
+    height: 100%;
+    overflow-y: hidden;
+    position: relative;
+  }
+
+  body {
+    height: inherit;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  p {
+    margin-bottom: 20px;
+  }
+</style>
+
+<p>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis a leo neque.
+  Fusce non massa nunc. Sed consequat, nunc porta vestibulum posuere, enim massa
+  imperdiet leo, vitae iaculis nibh sapien sit amet sem. Praesent semper
+  condimentum metus, ut faucibus est lobortis id. Cras sed malesuada diam.
+  Integer dictum lorem laoreet nibh viverra porta. Vivamus non suscipit erat,
+  vitae ultrices leo. Donec dignissim volutpat ligula, laoreet euismod dui
+  fermentum sit amet. Nam leo nisl, vehicula et orci at, maximus placerat eros.
+</p>
+
+<p>
+  Nullam libero purus, rutrum ac rhoncus a, facilisis vitae tortor. Curabitur eu
+  sodales elit, ut luctus sem. Nulla vel leo sed mauris egestas viverra eget
+  vitae augue. Phasellus porttitor justo sit amet arcu tempor, sed laoreet risus
+  efficitur. Aenean turpis dui, auctor tincidunt elit facilisis, tempor interdum
+  turpis. Aenean fringilla velit vulputate consectetur faucibus. Integer varius
+  vehicula mi, id eleifend lacus tristique ac. Praesent sit amet leo at metus
+  suscipit aliquet vel ut ligula. Vivamus semper interdum velit, non tincidunt
+  ligula facilisis sed. Aenean semper tincidunt lectus ut feugiat. Vivamus et
+  ligula id sem facilisis iaculis ut at sem. Nullam sed consectetur ligula.
+</p>
+
+<p>
+  Suspendisse orci erat, suscipit sagittis augue quis, rhoncus viverra nibh.
+  Praesent massa mauris, mattis molestie justo a, elementum varius lacus. Aenean
+  laoreet dolor nec nunc commodo maximus. Praesent eu luctus nibh. Vestibulum
+  dolor arcu, tincidunt vel viverra at, elementum ut elit. Vivamus maximus
+  efficitur urna nec pharetra. Morbi at dapibus metus. Aliquam viverra mi sed
+  metus volutpat imperdiet. Phasellus eu libero consequat nulla tristique
+  condimentum nec non arcu. Nulla ac commodo neque.
+</p>
+
+<div id="reference">Reference Box</div>
+<div id="popper">Popper Box</div>
+
+<p>
+  Duis dui metus, hendrerit in dolor et, pharetra ultrices ex. Aliquam
+  ullamcorper felis sem, sed tempus est placerat quis. Aliquam in ipsum dolor.
+  Etiam ut est quis sem tristique aliquet nec id velit. In accumsan tempor
+  tortor. In a porttitor purus. Quisque at sollicitudin diam. Nullam eget
+  rhoncus sapien, eu faucibus lectus. Sed efficitur diam sed ante aliquam
+  laoreet. Proin consequat dui sed sem porta semper. Duis laoreet, erat a
+  facilisis lobortis, arcu mauris condimentum dui, non interdum velit augue at
+  eros.
+</p>
+
+<p>
+  Curabitur euismod sodales nisl, id auctor enim bibendum eget. Phasellus
+  commodo viverra libero, non ornare odio consequat porta. Aliquam et sem
+  sapien. Integer sagittis nisi turpis, vel scelerisque leo laoreet nec. Duis ut
+  elit odio. Vivamus nec ipsum eu enim pellentesque vulputate. Vivamus vehicula
+  elit ut elit semper ornare.
+</p>
+
+<script type="module">
+  import { createPopper } from './dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = createPopper(reference, popper, {
+    placement: 'top',
+  });
+</script>

@@ -6,6 +6,7 @@ import getNodeName from './getNodeName';
 import { isHTMLElement } from './instanceOf';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import getDocumentElement from './getDocumentElement';
+import isScrollParent from './isScrollParent';
 
 // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
@@ -14,14 +15,18 @@ export default function getCompositeRect(
   offsetParent: Element | Window,
   isFixed: boolean = false
 ): Rect {
-  let documentElement;
+  const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(elementOrVirtualElement);
 
   let scroll = { scrollLeft: 0, scrollTop: 0 };
   let offsets = { x: 0, y: 0 };
 
   if (!isFixed) {
-    if (getNodeName(offsetParent) !== 'body') {
+    if (
+      getNodeName(offsetParent) !== 'body' ||
+      // https://github.com/popperjs/popper-core/issues/1078
+      isScrollParent(documentElement)
+    ) {
       scroll = getNodeScroll(offsetParent);
     }
 
@@ -29,7 +34,7 @@ export default function getCompositeRect(
       offsets = getBoundingClientRect(offsetParent);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
-    } else if ((documentElement = getDocumentElement(offsetParent))) {
+    } else if (documentElement) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
