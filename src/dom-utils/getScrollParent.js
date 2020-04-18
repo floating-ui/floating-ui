@@ -2,7 +2,7 @@
 import getParentNode from './getParentNode';
 import isScrollParent from './isScrollParent';
 import getNodeName from './getNodeName';
-import { isHTMLElement } from './instanceof';
+import { isHTMLElement } from './instanceOf';
 
 export default function getScrollParent(node: Node): HTMLElement {
   if (['html', 'body', '#document'].indexOf(getNodeName(node)) >= 0) {
