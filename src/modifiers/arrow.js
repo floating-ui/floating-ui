@@ -9,6 +9,7 @@ import within from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
+import { isHTMLElement } from '../dom-utils/instanceOf';
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
@@ -40,8 +41,7 @@ function arrow({ state, name }: ModifierArguments<Options>) {
     state.rects.popper[len];
   const startDiff = popperOffsets[axis] - state.rects.reference[axis];
 
-  const arrowOffsetParent =
-    state.elements.arrow && getOffsetParent(state.elements.arrow);
+  const arrowOffsetParent = getOffsetParent(arrowElement);
   const clientSize = arrowOffsetParent
     ? axis === 'y'
       ? arrowOffsetParent.clientHeight || 0
@@ -78,6 +78,18 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
 
     if (!arrowElement) {
       return;
+    }
+  }
+
+  if (__DEV__) {
+    if (!isHTMLElement(arrowElement)) {
+      console.error(
+        [
+          'Popper: "arrow" element must be an HTMLElement (not an SVGElement).',
+          'To use an SVG arrow, wrap it in a HTMLElement that will be used as',
+          'the arrow.',
+        ].join(' ')
+      );
     }
   }
 
