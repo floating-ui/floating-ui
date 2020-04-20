@@ -20,7 +20,8 @@ import { isElement } from '../dom-utils/instanceOf';
 import mergePaddingObject from './mergePaddingObject';
 import expandToHashMap from './expandToHashMap';
 
-type Options = {
+// eslint-disable-next-line import/no-unused-modules
+export type Options = {
   placement: Placement,
   boundary: Boundary,
   rootBoundary: RootBoundary,
