@@ -86,7 +86,7 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
       console.error(
         [
           'Popper: "arrow" element must be an HTMLElement (not an SVGElement).',
-          'To use an SVG arrow, wrap it in a HTMLElement that will be used as',
+          'To use an SVG arrow, wrap it in an HTMLElement that will be used as',
           'the arrow.',
         ].join(' ')
       );
