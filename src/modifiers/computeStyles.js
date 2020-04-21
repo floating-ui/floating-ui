@@ -91,7 +91,7 @@ export function mapToStyles({
 
   const commonStyles = {
     position,
-    ...(adaptive && unsetSides),
+    ...(adaptive ? unsetSides : undefined),
   };
 
   if (gpuAcceleration) {
