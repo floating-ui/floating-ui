@@ -10,6 +10,9 @@ assignees: ''
 Thanks for your interest in contributing to Popper!
 If your issue is not a bug report, please use our community at https://spectrum.chat/popper-js
 
+Is your issue related to Popper v1? Please consider to migrate to v2, we are not actively
+developing previous versions if not for security patches.
+
 Please, make sure to fill all the sections of the template before submitting any issue.
 
 Issues without the required informations WILL BE CLOSED.
@@ -18,7 +21,7 @@ Want your issue to be fixed earlier? Create a PR that introduces a CI test that 
 because of the bug you found!
 -->
 
-### CodePen demo
+### CodeSandbox demo
 
 <!--
 Edit this sandbox template to allow the contributors to easily reproduce your problem.
