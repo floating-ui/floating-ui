@@ -11,6 +11,8 @@ import getVariation from '../utils/getVariation';
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
+  mainAxis: boolean,
+  altAxis: boolean,
   fallbackPlacements: Array<Placement>,
   padding: Padding,
   boundary: Boundary,
@@ -40,6 +42,8 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
   }
 
   const {
+    mainAxis: checkMainAxis = true,
+    altAxis: checkAltAxis = true,
     fallbackPlacements: specifiedFallbackPlacements,
     padding,
     boundary,
@@ -113,11 +117,18 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
 
     const altVariationSide: any = getOppositePlacement(mainVariationSide);
 
-    const checks = [
-      overflow[basePlacement] <= 0,
-      overflow[mainVariationSide] <= 0,
-      overflow[altVariationSide] <= 0,
-    ];
+    const checks = [];
+
+    if (checkMainAxis) {
+      checks.push(overflow[basePlacement] <= 0);
+    }
+
+    if (checkAltAxis) {
+      checks.push(
+        overflow[mainVariationSide] <= 0,
+        overflow[altVariationSide] <= 0
+      );
+    }
 
     if (checks.every(check => check)) {
       firstFittingPlacement = placement;

@@ -80,3 +80,10 @@ it('should flip from right to bottom', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('should not flip to the top', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/flip/altAxis-false.html`);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
