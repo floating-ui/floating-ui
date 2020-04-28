@@ -1,6 +1,6 @@
 {
   "name": "@popperjs/core",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "description": "Tooltip and Popover Positioning Engine",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
