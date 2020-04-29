@@ -4351,10 +4351,10 @@ jest@^25.5.1:
     import-local "^3.0.2"
     jest-cli "^25.5.1"
 
-jpeg-js@^0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.3.6.tgz#c40382aac9506e7d1f2d856eb02f6c7b2a98b37c"
-  integrity sha512-MUj2XlMB8kpe+8DJUGH/3UJm4XpI8XEgZQ+CiHDeyrGoKPdW/8FJv6ku+3UiYm5Fz3CWaL+iXmD8Q4Ap6aC1Jw==
+jpeg-js@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/jpeg-js/-/jpeg-js-0.3.7.tgz#471a89d06011640592d314158608690172b1028d"
+  integrity sha512-9IXdWudL61npZjvLuVe/ktHiA41iE8qFyLB+4VDTblEsWBzeg8WQTlktdUK4CdncUqtUgUg0bbOmTE2bKBKaBQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -5328,28 +5328,28 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-playwright-core@=0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-0.13.0.tgz#50cff00d833e1418e70213d3bf971c6e971e547d"
-  integrity sha512-bH9cOQhmbdXJnHX22PRZ79IdXv5wmLc9tHob2PmkT5qFilopT3INAIJcKkaLN1E/GqIDp0xGdB88Vr5f86g8pQ==
+playwright-core@=0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-0.15.0.tgz#c605c98a13c81d5a2e2691f15d04758cf302c20a"
+  integrity sha512-uTm4PoF2U3iXkLMMG9vlTxlGfO8atQGAHDxqi8xV7hEjNSYeLTU7c6HN5zwadeHRVuBbNsZ4yqu9u4hoqC7uxQ==
   dependencies:
-    debug "^4.1.0"
+    debug "^4.1.1"
     extract-zip "^2.0.0"
     https-proxy-agent "^3.0.0"
-    jpeg-js "^0.3.6"
+    jpeg-js "^0.3.7"
     mime "^2.4.4"
-    pngjs "^3.4.0"
+    pngjs "^5.0.0"
     progress "^2.0.3"
     proxy-from-env "^1.1.0"
     rimraf "^3.0.2"
     ws "^6.1.0"
 
-playwright@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-0.13.0.tgz#6e739c8e097b9da4509a610e6273913ae669e0d5"
-  integrity sha512-jL/2vZ0YP2G+6y3O4lEkpoPqI8okKR2zVO9oSvkBF9rFXmB+1J2BbxhJr5P0szk+iY9PisTjh0d6d9l3q3W6Ew==
+playwright@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-0.15.0.tgz#bf5c3bb8404975aba78459310742388c08438431"
+  integrity sha512-UGHkQz8DT43uJ0KgMh2rmj8BI4FE5ReQJ9nm5mG68tt1Cj2sXPdM2b05qptfYYBPtQRetQqtJTauZ6rlCDemaQ==
   dependencies:
-    playwright-core "=0.13.0"
+    playwright-core "=0.15.0"
 
 please-upgrade-node@^3.2.0:
   version "3.2.0"
@@ -5372,6 +5372,11 @@ pngjs@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-4.0.1.tgz#f803869bb2fc1bfe1bf99aa4ec21c108117cfdbe"
   integrity sha512-rf5+2/ioHeQxR6IxuYNYGFytUyG3lma/WW1nsmjeHlWwtb2aByla6dkVc8pmJ9nplzkTA0q2xx7mMWrOTqT4Gg==
+
+pngjs@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-5.0.0.tgz#e79dd2b215767fd9c04561c01236df960bce7fbb"
+  integrity sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==
 
 posix-character-classes@^0.1.0:
   version "0.1.1"
