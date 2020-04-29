@@ -6,7 +6,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v2
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
@@ -30,7 +30,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2-beta
+      - uses: actions/checkout@v2
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install

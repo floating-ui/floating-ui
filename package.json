@@ -24,8 +24,8 @@
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "yarn test:unit && yarn test:functional",
-    "test:unit": "yarn jest --coverage src",
-    "test:functional": "yarn jest tests/functional",
+    "test:unit": "jest --coverage src",
+    "test:functional": "jest tests/functional",
     "test:flow": "flow",
     "test:typescript": "tsc --project tests/typescript/tsconfig.json",
     "test:eslint": "eslint .",
