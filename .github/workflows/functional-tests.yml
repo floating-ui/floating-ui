@@ -14,6 +14,7 @@ jobs:
       - run: yarn -s && yarn test:functional --runInBand
         env:
           BROWSER: chromium
+          DEBUG: pw:browser
 
   functional-firefox:
     name: Firefox Functional Tests
@@ -25,6 +26,7 @@ jobs:
       - run: yarn -s && yarn test:functional --runInBand
         env:
           BROWSER: firefox
+          DEBUG: pw:browser
 
   functional-webkit:
     name: WebKit Functional Tests
@@ -36,3 +38,4 @@ jobs:
       - run: yarn -s && yarn test:functional --runInBand
         env:
           BROWSER: webkit
+          DEBUG: pw:browser
