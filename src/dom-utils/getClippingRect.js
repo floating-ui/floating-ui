@@ -10,9 +10,23 @@ import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
-import getDecorations from './getDecorations';
 import contains from './contains';
 import rectToClientRect from '../utils/rectToClientRect';
+
+function getInnerBoundingClientRect(element: Element) {
+  const rect = getBoundingClientRect(element);
+
+  rect.top = rect.top + element.clientTop;
+  rect.left = rect.left + element.clientLeft;
+  rect.bottom = rect.top + element.clientHeight;
+  rect.right = rect.left + element.clientWidth;
+  rect.width = element.clientWidth;
+  rect.height = element.clientHeight;
+  rect.x = rect.left;
+  rect.y = rect.top;
+
+  return rect;
+}
 
 function getClientRectFromMixedType(
   element: Element,
@@ -21,7 +35,7 @@ function getClientRectFromMixedType(
   return clippingParent === viewport
     ? rectToClientRect(getViewportRect(element))
     : isHTMLElement(clippingParent)
-    ? getBoundingClientRect(clippingParent)
+    ? getInnerBoundingClientRect(clippingParent)
     : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }
 
@@ -64,16 +78,11 @@ export default function getClippingRect(
 
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getClientRectFromMixedType(element, clippingParent);
-    const decorations = getDecorations(
-      isHTMLElement(clippingParent)
-        ? clippingParent
-        : getDocumentElement(element)
-    );
 
-    accRect.top = Math.max(rect.top + decorations.top, accRect.top);
-    accRect.right = Math.min(rect.right - decorations.right, accRect.right);
-    accRect.bottom = Math.min(rect.bottom - decorations.bottom, accRect.bottom);
-    accRect.left = Math.max(rect.left + decorations.left, accRect.left);
+    accRect.top = Math.max(rect.top, accRect.top);
+    accRect.right = Math.min(rect.right, accRect.right);
+    accRect.bottom = Math.min(rect.bottom, accRect.bottom);
+    accRect.left = Math.max(rect.left, accRect.left);
 
     return accRect;
   }, getClientRectFromMixedType(element, firstClippingParent));
