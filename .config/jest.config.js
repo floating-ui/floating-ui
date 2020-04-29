@@ -1,5 +1,5 @@
 // https://github.com/smooth-code/jest-puppeteer/issues/160#issuecomment-491975158
-process.env.JEST_PUPPETEER_CONFIG = require.resolve(
+process.env.JEST_PLAYWRIGHT_CONFIG = require.resolve(
   './jest-playwright.config.js'
 );
 
