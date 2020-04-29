@@ -49,7 +49,6 @@ it('(variation) should be positioned at right-end', async () => {
 });
 
 it('should only position at right or bottom (not top)', async () => {
-  const page = await browser.newPage();
   await page.goto(`${TEST_URL}/auto/whitelist.html`);
 
   await scroll(page, '.scroll1', 150);
