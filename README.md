@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/npm/v/@popperjs/core?style=for-the-badge" alt="npm version" />
   </a>
   <a href="https://www.npmjs.com/package/@popperjs/core">
-    <img src="https://img.shields.io/endpoint?url=https://popper-combined-downloads-epvdua2xvdy4.runkit.sh&style=for-the-badge" alt="npm downloads per month (popper.js + @popperjs/core)" />
+    <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https://runkit.io/fezvrasta/combined-npm-downloads/1.0.0?packages=popper.js,@popperjs/core" alt="npm downloads per month (popper.js + @popperjs/core)" />
   </a>
 </p>
 
