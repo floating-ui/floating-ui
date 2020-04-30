@@ -1,19 +1,17 @@
 // @flow
 import type { Rect } from '../types';
-import getCompositeRect from './getCompositeRect';
-import getWindow from './getWindow';
 import getDocumentElement from './getDocumentElement';
 import getWindowScroll from './getWindowScroll';
 
 export default function getDocumentRect(element: HTMLElement): Rect {
-  const win = getWindow(element);
   const winScroll = getWindowScroll(element);
-  const documentRect = getCompositeRect(getDocumentElement(element), win);
+  const html = getDocumentElement(element);
+  const body = element.ownerDocument.body;
 
-  documentRect.height = Math.max(documentRect.height, win.innerHeight);
-  documentRect.width = Math.max(documentRect.width, win.innerWidth);
-  documentRect.x = -winScroll.scrollLeft;
-  documentRect.y = -winScroll.scrollTop;
+  const width = Math.max(html.clientWidth, body ? body.clientWidth : 0);
+  const height = Math.max(html.clientHeight, body ? body.clientHeight : 0);
+  const x = -winScroll.scrollLeft;
+  const y = -winScroll.scrollTop;
 
-  return documentRect;
+  return { width, height, x, y };
 }
