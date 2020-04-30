@@ -19,6 +19,7 @@ export type VisualViewport = EventTarget & {
   height: number,
   offsetLeft: number,
   offsetTop: number,
+  scale: number,
 };
 
 // This is a limited subset of the Window object, Flow doesn't provide one
