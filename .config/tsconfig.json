@@ -6,6 +6,9 @@
     "lib": ["dom", "es2017"],
     "moduleResolution": "node",
     "module": "es2015",
-    "removeComments": false
+    "removeComments": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib"
   }
 }

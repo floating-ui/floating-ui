@@ -24,6 +24,10 @@ jobs:
       - name: TypeScript
         uses: CultureHQ/actions-yarn@master
         with:
+          args: build:es
+      - name: TypeScript
+        uses: CultureHQ/actions-yarn@master
+        with:
           args: build:typescript
       - name: TypeScript
         uses: CultureHQ/actions-yarn@master
