@@ -21,6 +21,12 @@
     "type": "opencollective",
     "url": "https://opencollective.com/popperjs"
   },
+  "files": [
+    "index.d.ts",
+    "/dist",
+    "/lib"
+  ],
+  "sideEffects": false,
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
     "test": "yarn test:unit && yarn test:functional",
@@ -40,12 +46,6 @@
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; tsc-silent --project .config/tsconfig.json --createSourceFile .config/createSourceFile.js --suppress @; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build"
   },
-  "files": [
-    "index.d.ts",
-    "/dist",
-    "/lib"
-  ],
-  "sideEffects": false,
   "prettier": {
     "semi": true,
     "trailingComma": "es5",
@@ -61,6 +61,11 @@
   "eslintConfig": {
     "extends": "./.config/eslint.config"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.25.2",
     "@atomico/rollup-plugin-sizes": "^1.1.0",
@@ -73,8 +78,6 @@
     "@khanacademy/flow-to-ts": "^0.1.6",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-replace": "^2.3.2",
-    "@typescript-eslint/parser": "^2.30.0",
-    "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^25.5.1",
     "babel-plugin-add-import-extension": "^1.3.0",
@@ -109,10 +112,5 @@
     "rollup-plugin-visualizer": "^4.0.3",
     "serve": "^11.3.0",
     "typescript": "^3.7.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   }
 }
