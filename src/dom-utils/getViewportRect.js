@@ -13,6 +13,11 @@ export default function getViewportRect(element: Element) {
   let x = 0;
   let y = 0;
 
+  // NB: This isn't supported on iOS <= 12. If the keyboard is open, the popper
+  // can be obscured underneath it.
+  // Also, `html.clientHeight` adds the bottom bar height in Safari iOS, even
+  // if it isn't open, so if this isn't available, the popper will be detected
+  // to overflow the bottom of the screen too early.
   if (visualViewport) {
     width = visualViewport.width;
     height = visualViewport.height;
