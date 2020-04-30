@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.25.2",
-    "@atomico/rollup-plugin-sizes": "^1.1.0",
+    "@atomico/rollup-plugin-sizes": "^1.1.4",
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.7.5",
     "@babel/plugin-transform-flow-strip-types": "^7.7.4",
