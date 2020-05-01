@@ -10,7 +10,7 @@ global.console = {
 };
 
 beforeAll(() => {
-  page != null &&
+  typeof page !== 'undefined' &&
     page.on('console', (m) =>
       console.log('Console message: ' + m.text() + '; URL: ' + page.url())
     );
