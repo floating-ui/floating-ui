@@ -9,6 +9,12 @@ global.console = {
   log: console.log,
 };
 
+beforeAll(() => {
+  page.on('console', (m) =>
+    console.log('Console message: ' + m.text() + '; URL: ' + page.url())
+  );
+});
+
 beforeEach(() => {
   global.console.error = jest.fn();
   global.console.warn = jest.fn();
