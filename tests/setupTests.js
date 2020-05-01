@@ -10,9 +10,10 @@ global.console = {
 };
 
 beforeAll(() => {
-  page.on('console', (m) =>
-    console.log('Console message: ' + m.text() + '; URL: ' + page.url())
-  );
+  page != null &&
+    page.on('console', (m) =>
+      console.log('Console message: ' + m.text() + '; URL: ' + page.url())
+    );
 });
 
 beforeEach(() => {

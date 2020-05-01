@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: microsoft/playwright-github-action@v1
-      - run: yarn -s && yarn test:functional --runInBand
+      - run: yarn -s && yarn build:dev && yarn test:functional --runInBand
         env:
           BROWSER: chromium
           DEBUG: pw:browser
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: microsoft/playwright-github-action@v1
-      - run: yarn -s && yarn test:functional --runInBand
+      - run: yarn -s && yarn build:dev && yarn test:functional --runInBand
         env:
           BROWSER: firefox
           DEBUG: pw:browser
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
       - uses: microsoft/playwright-github-action@v1
-      - run: yarn -s && yarn test:functional --runInBand
+      - run: yarn -s && yarn build:dev && yarn test:functional --runInBand
         env:
           BROWSER: webkit
           DEBUG: pw:browser
