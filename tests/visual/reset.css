@@ -131,3 +131,9 @@ table {
 body {
   margin: 8px;
 }
+
+*::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 0;
+  height: 0;
+}
