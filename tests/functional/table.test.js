@@ -4,9 +4,9 @@
  */
 import { screenshot, scroll } from '../utils/playwright.js';
 
-const hack = async page => {
+const hack = async (page) => {
   // HACK: fixes issue with tables on GitHub Actions
-  if (Boolean(process.env.CI)) {
+  if (Boolean(process.env.CI) && process.env.BROWSER !== 'chromium') {
     await page.addStyleTag({ content: 'table { margin-left: 4px; }' });
   }
 };
