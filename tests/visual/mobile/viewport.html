@@ -1,0 +1,50 @@
+<!DOCTYPE html> <title>Mobile Viewport Visual Test</title>
+
+<style>
+  body {
+    display: flex;
+  }
+
+  .push {
+    width: 2000px;
+    height: 200px;
+    background: gray;
+    flex-shrink: 0;
+  }
+
+  #reference {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+    flex-shrink: 0;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<div class="push"></div>
+<div id="reference">Reference Box</div>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import { createPopper } from '../dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+  window.instance = createPopper(reference, popper, {
+    placement: 'top',
+    modifiers: [
+      {
+        name: 'preventOverflow',
+        options: {
+          tether: false,
+        },
+      },
+    ],
+  });
+</script>
