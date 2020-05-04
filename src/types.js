@@ -135,7 +135,7 @@ export type Modifier<Name, Options> = {|
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
   fn: (ModifierArguments<Options>) => State | void,
-  effect?: (ModifierArguments<Options>) => (() => void) | void,
+  effect?: (ModifierArguments<Options>) => ((() => void) | void),
   options?: $Shape<Options>,
   data?: Obj,
 |};
