@@ -7,7 +7,7 @@ import devices from 'puppeteer/DeviceDescriptors';
 
 const iPhonex = devices['iPhone X'];
 
-it('preventOverflow works on mobile devices with horizontal scrollbars', async () => {
+it.skip('preventOverflow works on mobile devices with horizontal scrollbars', async () => {
   const page = await browser.newPage();
   await page.emulate(iPhonex);
   await page.goto(`${TEST_URL}/mobile/viewport.html`);
