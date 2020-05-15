@@ -1,7 +1,7 @@
 # Contributing
 
 For a quick introduction to the repository technologies, please read
-[Hacking the library](https://popper.js.org/docs/v2/#hacking-the-library).
+[Hacking the library](https://github.com/popperjs/popper-core#hacking-the-library).
 
 Full documentation is available
 [on our official website](https://popper.js.org/docs/).
