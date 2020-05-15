@@ -18,3 +18,5 @@ major version.
 
 If you find a vulnerability, please contact **federico.zivolo [AT] gmail [DOT] com**,
 do not disclose the vulnerability on the public issue tracker.
+
+Alternatively, visit https://tidelift.com/security
