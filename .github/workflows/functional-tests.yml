@@ -3,6 +3,7 @@ on: [push, pull_request]
 env:
   CI: true
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+  PUPPETEER_EXEC_PATH: google-chrome-stable
 
 jobs:
   functional-chromium:
@@ -13,7 +14,7 @@ jobs:
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
-      - uses: mujo-code/puppeteer-headful@master
+      - uses: ianwalter/puppeteer@12728ddef82390d1ecd4732fb543f62177392fbb
         with:
           args: yarn test:functional
         env:

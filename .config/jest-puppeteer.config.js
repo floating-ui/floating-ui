@@ -6,6 +6,7 @@ module.exports = {
     dumpio: true,
     headless: process.env.HEADLESS !== 'false',
     executablePath: process.env.PUPPETEER_EXEC_PATH,
+    args: ['--no-sandbox'],
   },
   server: {
     command: `yarn build:dev && DEV_PORT=${process.env.DEV_PORT} yarn serve`,
