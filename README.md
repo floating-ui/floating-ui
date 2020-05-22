@@ -14,6 +14,9 @@
   <a href="https://www.npmjs.com/package/@popperjs/core">
     <img src="https://img.shields.io/endpoint?style=for-the-badge&url=https://runkit.io/fezvrasta/combined-npm-downloads/1.0.0?packages=popper.js,@popperjs/core" alt="npm downloads per month (popper.js + @popperjs/core)" />
   </a>
+  <a href="https://rollingversions.com/popperjs/popper-core">
+    <img src="https://img.shields.io/badge/Rolling%20Versions-Enabled-brightgreen?style=for-the-badge" alt="Rolling Versions" />
+  </a>
 </p>
 
 <br />
