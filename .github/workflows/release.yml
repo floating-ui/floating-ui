@@ -1,0 +1,22 @@
+name: Release
+
+on:
+  repository_dispatch:
+    types: [rollingversions_publish_approved]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - run:
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >
+          ~/.npmrc
+      - run:
+          npx rollingversions publish --github-token ${{ secrets.GITHUB_TOKEN }}
