@@ -9,13 +9,14 @@ jobs:
   functional-chromium:
     name: Chromium Functional Tests
     runs-on: ubuntu-latest
+    container:
+      image: ianwalter/puppeteer:3.0.0
+      options: --shm-size=1g
     steps:
       - uses: actions/checkout@v2
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
-      - uses: ianwalter/puppeteer@12728ddef82390d1ecd4732fb543f62177392fbb
-        with:
-          args: yarn test:functional
+      - run: yarn test:functional
         env:
           PUPPETEER_BROWSER: chromium
