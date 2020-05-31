@@ -17,6 +17,10 @@ function getTrueOffsetParent(element: Element): ?Element {
   return element.offsetParent;
 }
 
+/*
+get the closest ancestor positioned element. Handles some edge cases,
+such as table ancestors and cross browser bugs.
+*/
 export default function getOffsetParent(element: Element) {
   const window = getWindow(element);
 
