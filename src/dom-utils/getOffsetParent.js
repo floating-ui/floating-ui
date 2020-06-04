@@ -21,7 +21,7 @@ function getTrueOffsetParent(element: Element): ?Element {
 function findNearestTransformedParent(element) {
   const parent = element.parentElement;
   if (parent) {
-    let elementComputedStyles = getComputedStyle(parent);
+    const elementComputedStyles = getComputedStyle(parent);
     return elementComputedStyles.willChange !== 'auto' || elementComputedStyles.transform !== 'none' ? parent : findNearestTransformedParent(parent);
   }
   return null
