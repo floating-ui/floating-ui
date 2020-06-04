@@ -17,6 +17,16 @@ function getTrueOffsetParent(element: Element): ?Element {
   return element.offsetParent;
 }
 
+// https://github.com/popperjs/popper-core/issues/1035
+function findNearestTransformedParent(element) {
+  const parent = element.parentElement;
+  if (parent) {
+    let elementComputedStyles = getComputedStyle(parent);
+    return elementComputedStyles.willChange !== 'auto' || elementComputedStyles.transform !== 'none' ? parent : findNearestTransformedParent(parent);
+  }
+  return null
+}
+
 /*
 get the closest ancestor positioned element. Handles some edge cases,
 such as table ancestors and cross browser bugs.
@@ -39,5 +49,5 @@ export default function getOffsetParent(element: Element) {
     return window;
   }
 
-  return offsetParent || window;
+  return offsetParent || findNearestTransformedParent(element) || window;
 }

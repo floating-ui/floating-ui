@@ -29,14 +29,14 @@ export default function getCompositeRect(
     ) {
       scroll = getNodeScroll(offsetParent);
     }
+  }
 
-    if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent);
-      offsets.x += offsetParent.clientLeft;
-      offsets.y += offsetParent.clientTop;
-    } else if (documentElement) {
-      offsets.x = getWindowScrollBarX(documentElement);
-    }
+  if (isHTMLElement(offsetParent)) {
+    offsets = getBoundingClientRect(offsetParent);
+    offsets.x += offsetParent.clientLeft;
+    offsets.y += offsetParent.clientTop;
+  } else if (documentElement) {
+    offsets.x = getWindowScrollBarX(documentElement);
   }
 
   return {
