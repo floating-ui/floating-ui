@@ -26,8 +26,11 @@ export default function getOffsetParent(element: Element) {
 
   let offsetParent = getTrueOffsetParent(element);
 
-  // Find the nearest non-table offsetParent
-  while (offsetParent && isTableElement(offsetParent)) {
+  while (
+    offsetParent &&
+    isTableElement(offsetParent) &&
+    getComputedStyle(offsetParent).position === 'static'
+  ) {
     offsetParent = getTrueOffsetParent(offsetParent);
   }
 
