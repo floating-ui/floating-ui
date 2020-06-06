@@ -4,6 +4,7 @@ import getNodeName from './getNodeName';
 import getComputedStyle from './getComputedStyle';
 import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
+import getParentNode from './getParentNode';
 
 function getTrueOffsetParent(element: Element): ?Element {
   if (
@@ -17,10 +18,34 @@ function getTrueOffsetParent(element: Element): ?Element {
   return element.offsetParent;
 }
 
-/*
-get the closest ancestor positioned element. Handles some edge cases,
-such as table ancestors and cross browser bugs.
-*/
+// `.offsetParent` reports `null` for fixed elements, while absolute elements
+// return the containing block
+function getContainingBlock(element: Element) {
+  let currentNode = getParentNode(element);
+
+  while (getNodeName(currentNode) !== 'body') {
+    if (isHTMLElement(currentNode)) {
+      const css = getComputedStyle(currentNode);
+
+      // This is non-exhaustive but covers the most common CSS properties that
+      // create a containing block.
+      if (
+        css.transform !== 'none' ||
+        css.perspective !== 'none' ||
+        css.willChange !== 'auto'
+      ) {
+        return currentNode;
+      } else {
+        currentNode = currentNode.parentNode;
+      }
+    }
+  }
+
+  return null;
+}
+
+// Gets the closest ancestor positioned element. Handles some edge cases,
+// such as table ancestors and cross browser bugs.
 export default function getOffsetParent(element: Element) {
   const window = getWindow(element);
 
@@ -39,5 +64,5 @@ export default function getOffsetParent(element: Element) {
     return window;
   }
 
-  return offsetParent || window;
+  return offsetParent || getContainingBlock(element) || window;
 }

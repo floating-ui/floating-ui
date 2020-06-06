@@ -41,7 +41,8 @@ type PopperGeneratorArgs = {
 
 function areValidElements(...args: Array<any>): boolean {
   return !args.some(
-    element => !(element && typeof element.getBoundingClientRect === 'function')
+    (element) =>
+      !(element && typeof element.getBoundingClientRect === 'function')
   );
 }
 
@@ -100,7 +101,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         );
 
         // Strip out disabled modifiers
-        state.orderedModifiers = orderedModifiers.filter(m => m.enabled);
+        state.orderedModifiers = orderedModifiers.filter((m) => m.enabled);
 
         // Validate the provided modifiers so that the consumer will get warned
         // if one of the modifiers is invalid for any reason
@@ -137,7 +138,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
           // We no longer take into account `margins` on the popper, and it can
           // cause bugs with positioning, so we'll warn the consumer
           if (
-            [marginTop, marginRight, marginBottom, marginLeft].some(margin =>
+            [marginTop, marginRight, marginBottom, marginLeft].some((margin) =>
               parseFloat(margin)
             )
           ) {
@@ -203,7 +204,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // it doesn't persist and is fresh on each update.
         // To ensure persistent data, use `${name}#persistent`
         state.orderedModifiers.forEach(
-          modifier =>
+          (modifier) =>
             (state.modifiersData[modifier.name] = {
               ...modifier.data,
             })
@@ -237,7 +238,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       // not necessary (debounced to run at most once-per-tick)
       update: debounce<$Shape<State>>(
         () =>
-          new Promise<$Shape<State>>(resolve => {
+          new Promise<$Shape<State>>((resolve) => {
             instance.forceUpdate();
             resolve(state);
           })
@@ -256,7 +257,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
       return instance;
     }
 
-    instance.setOptions(options).then(state => {
+    instance.setOptions(options).then((state) => {
       if (!isDestroyed && options.onFirstUpdate) {
         options.onFirstUpdate(state);
       }
@@ -278,7 +279,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     }
 
     function cleanupModifierEffects() {
-      effectCleanupFns.forEach(fn => fn());
+      effectCleanupFns.forEach((fn) => fn());
       effectCleanupFns = [];
     }
 
