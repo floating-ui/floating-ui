@@ -23,7 +23,7 @@ function getTrueOffsetParent(element: Element): ?Element {
 function getContainingBlock(element: Element) {
   let currentNode = getParentNode(element);
 
-  while (getNodeName(currentNode) !== 'body') {
+  while (['html', 'body'].indexOf(getNodeName(currentNode)) < 0) {
     if (isHTMLElement(currentNode)) {
       const css = getComputedStyle(currentNode);
 
