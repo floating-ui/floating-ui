@@ -23,21 +23,22 @@ function getTrueOffsetParent(element: Element): ?Element {
 function getContainingBlock(element: Element) {
   let currentNode = getParentNode(element);
 
-  while (['html', 'body'].indexOf(getNodeName(currentNode)) < 0) {
-    if (isHTMLElement(currentNode)) {
-      const css = getComputedStyle(currentNode);
+  while (
+    isHTMLElement(currentNode) &&
+    ['html', 'body'].indexOf(getNodeName(currentNode)) < 0
+  ) {
+    const css = getComputedStyle(currentNode);
 
-      // This is non-exhaustive but covers the most common CSS properties that
-      // create a containing block.
-      if (
-        css.transform !== 'none' ||
-        css.perspective !== 'none' ||
-        css.willChange !== 'auto'
-      ) {
-        return currentNode;
-      } else {
-        currentNode = currentNode.parentNode;
-      }
+    // This is non-exhaustive but covers the most common CSS properties that
+    // create a containing block.
+    if (
+      css.transform !== 'none' ||
+      css.perspective !== 'none' ||
+      css.willChange !== 'auto'
+    ) {
+      return currentNode;
+    } else {
+      currentNode = currentNode.parentNode;
     }
   }
 
