@@ -1,0 +1,55 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  @import '/reset.css';
+  #reference {
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #containing-block {
+    background: gray;
+    width: 400px;
+    height: 400px;
+    overflow: auto;
+    will-change: transform;
+  }
+
+  #containing-block::before {
+    content: '';
+    display: block;
+    height: 200px;
+    width: 1px;
+  }
+
+  #containing-block::after {
+    content: '';
+    display: block;
+    height: 200px;
+    width: 1px;
+  }
+</style>
+
+<div id="containing-block">
+  <div id="reference">Reference Box</div>
+  <div id="popper">Popper Box</div>
+</div>
+
+<script type="module">
+  import { createPopper } from './dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = createPopper(reference, popper, {
+    strategy: 'fixed',
+  });
+</script>

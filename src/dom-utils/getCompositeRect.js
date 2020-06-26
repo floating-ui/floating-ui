@@ -17,11 +17,12 @@ export default function getCompositeRect(
 ): Rect {
   const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(elementOrVirtualElement);
+  const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
   let scroll = { scrollLeft: 0, scrollTop: 0 };
   let offsets = { x: 0, y: 0 };
 
-  if (!isFixed) {
+  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       // https://github.com/popperjs/popper-core/issues/1078
