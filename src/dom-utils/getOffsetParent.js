@@ -34,7 +34,7 @@ function getContainingBlock(element: Element) {
     if (
       css.transform !== 'none' ||
       css.perspective !== 'none' ||
-      css.willChange !== 'auto'
+      (css.willChange && css.willChange !== 'auto')
     ) {
       return currentNode;
     } else {
