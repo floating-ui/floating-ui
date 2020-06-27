@@ -130,7 +130,7 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
       );
     }
 
-    if (checks.every(check => check)) {
+    if (checks.every((check) => check)) {
       firstFittingPlacement = placement;
       makeFallbackChecks = false;
       break;
@@ -144,10 +144,10 @@ function flip({ state, options, name }: ModifierArguments<Options>) {
     const numberOfChecks = flipVariations ? 3 : 1;
 
     for (let i = numberOfChecks; i > 0; i--) {
-      const fittingPlacement = placements.find(placement => {
+      const fittingPlacement = placements.find((placement) => {
         const checks = checksMap.get(placement);
         if (checks) {
-          return checks.slice(0, i).every(check => check);
+          return checks.slice(0, i).every((check) => check);
         }
       });
 
