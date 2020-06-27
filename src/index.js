@@ -17,6 +17,7 @@ import validateModifiers from './utils/validateModifiers';
 import uniqueBy from './utils/uniqueBy';
 import getBasePlacement from './utils/getBasePlacement';
 import mergeByName from './utils/mergeByName';
+import detectOverflow from './utils/detectOverflow';
 import { isElement } from './dom-utils/instanceOf';
 import { auto } from './enums';
 
@@ -288,3 +289,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 }
 
 export const createPopper = popperGenerator();
+
+// eslint-disable-next-line import/no-unused-modules
+export { detectOverflow };
