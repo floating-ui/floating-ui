@@ -5,6 +5,7 @@ import getComputedStyle from './getComputedStyle';
 import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
 import getParentNode from './getParentNode';
+import getDocumentElement from './getDocumentElement';
 
 function getTrueOffsetParent(element: Element): ?Element {
   if (
@@ -15,7 +16,21 @@ function getTrueOffsetParent(element: Element): ?Element {
     return null;
   }
 
-  return element.offsetParent;
+  const offsetParent = element.offsetParent;
+
+  if (offsetParent) {
+    const html = getDocumentElement(offsetParent);
+
+    if (
+      getNodeName(offsetParent) === 'body' &&
+      getComputedStyle(offsetParent).position === 'static' &&
+      getComputedStyle(html).position !== 'static'
+    ) {
+      return html;
+    }
+  }
+
+  return offsetParent;
 }
 
 // `.offsetParent` reports `null` for fixed elements, while absolute elements
