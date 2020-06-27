@@ -42,17 +42,37 @@ export default function computeAutoPlacement(
 
   const variation = getVariation(placement);
 
-  const placements = (variation
+  const placements = variation
     ? flipVariations
       ? variationPlacements
       : variationPlacements.filter(
-          placement => getVariation(placement) === variation
+          (placement) => getVariation(placement) === variation
         )
-    : basePlacements
-  ).filter(placement => allowedAutoPlacements.indexOf(placement) >= 0);
+    : basePlacements;
+
+  // $FlowFixMe
+  let allowedPlacements = placements.filter(
+    (placement) => allowedAutoPlacements.indexOf(placement) >= 0
+  );
+
+  if (allowedPlacements.length === 0) {
+    allowedPlacements = placements;
+
+    if (__DEV__) {
+      console.error(
+        [
+          'Popper: The `allowedAutoPlacements` option did not allow any',
+          'placements. Ensure the `placement` option matches the variation',
+          'of the allowed placements.',
+          'For example, "auto" cannot be used to allow "bottom-start".',
+          'Use "auto-start" instead.',
+        ].join(' ')
+      );
+    }
+  }
 
   // $FlowFixMe: Flow seems to have problems with two array unions...
-  const overflows: OverflowsMap = placements.reduce((acc, placement) => {
+  const overflows: OverflowsMap = allowedPlacements.reduce((acc, placement) => {
     acc[placement] = detectOverflow(state, {
       placement,
       boundary,
