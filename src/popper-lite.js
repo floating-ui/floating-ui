@@ -1,12 +1,10 @@
 // @flow
-import { popperGenerator } from './index';
+import { popperGenerator, detectOverflow } from './';
 
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
 import computeStyles from './modifiers/computeStyles';
 import applyStyles from './modifiers/applyStyles';
-
-import detectOverflow from './utils/detectOverflow';
 
 export type * from './types';
 

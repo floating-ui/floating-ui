@@ -1,5 +1,5 @@
 // @flow
-import { popperGenerator } from './index';
+import { popperGenerator, detectOverflow } from './';
 
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
@@ -10,8 +10,6 @@ import flip from './modifiers/flip';
 import preventOverflow from './modifiers/preventOverflow';
 import arrow from './modifiers/arrow';
 import hide from './modifiers/hide';
-
-import detectOverflow from './utils/detectOverflow';
 
 export type * from './types';
 
