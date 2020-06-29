@@ -23,7 +23,7 @@ function getSideOffsets(
 }
 
 function isAnySideFullyClipped(overflow: SideObject): boolean {
-  return [top, right, bottom, left].some(side => overflow[side] >= 0);
+  return [top, right, bottom, left].some((side) => overflow[side] >= 0);
 }
 
 function hide({ state, name }: ModifierArguments<{||}>) {

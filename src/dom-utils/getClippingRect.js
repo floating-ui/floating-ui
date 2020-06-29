@@ -11,6 +11,7 @@ import getComputedStyle from './getComputedStyle';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
 import contains from './contains';
+import getNodeName from './getNodeName';
 import rectToClientRect from '../utils/rectToClientRect';
 
 function getInnerBoundingClientRect(element: Element) {
@@ -57,8 +58,10 @@ function getClippingParents(element: Element): Array<Element> {
 
   // $FlowFixMe: https://github.com/facebook/flow/issues/1414
   return clippingParents.filter(
-    clippingParent =>
-      isElement(clippingParent) && contains(clippingParent, clipperElement)
+    (clippingParent) =>
+      isElement(clippingParent) &&
+      contains(clippingParent, clipperElement) &&
+      getNodeName(clippingParent) !== 'body'
   );
 }
 

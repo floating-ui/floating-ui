@@ -99,7 +99,7 @@ export default function detectOverflow(
   if (elementContext === popper && offsetData) {
     const offset = offsetData[placement];
 
-    Object.keys(overflowOffsets).forEach(key => {
+    Object.keys(overflowOffsets).forEach((key) => {
       const multiply = [right, bottom].indexOf(key) >= 0 ? 1 : -1;
       const axis = [top, bottom].indexOf(key) >= 0 ? 'y' : 'x';
       overflowOffsets[key] += offset[axis] * multiply;
