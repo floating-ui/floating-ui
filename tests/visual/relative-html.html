@@ -4,7 +4,10 @@
   @import '/reset.css';
   html {
     position: relative;
-    margin: 30px;
+  }
+
+  body {
+    height: 2000px;
   }
 
   #reference {
@@ -34,6 +37,6 @@
   const popper = document.querySelector('#popper');
 
   window.instance = createPopper(reference, popper, {
-    placement: 'right',
+    placement: 'top',
   });
 </script>

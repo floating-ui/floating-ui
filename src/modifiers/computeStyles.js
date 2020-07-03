@@ -69,8 +69,16 @@ export function mapToStyles({
 
   if (adaptive) {
     let offsetParent = getOffsetParent(popper);
+    let heightProp = 'clientHeight';
+    let widthProp = 'clientWidth';
+
     if (offsetParent === getWindow(popper)) {
       offsetParent = getDocumentElement(popper);
+
+      if (getComputedStyle(offsetParent).position !== 'static') {
+        heightProp = 'scrollHeight';
+        widthProp = 'scrollWidth';
+      }
     }
 
     // $FlowFixMe: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
@@ -78,13 +86,15 @@ export function mapToStyles({
 
     if (placement === top) {
       sideY = bottom;
-      y -= offsetParent.clientHeight - popperRect.height;
+      // $FlowFixMe
+      y -= offsetParent[heightProp] - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
     if (placement === left) {
       sideX = right;
-      x -= offsetParent.clientWidth - popperRect.width;
+      // $FlowFixMe
+      x -= offsetParent[widthProp] - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
   }
@@ -127,7 +137,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     if (
       adaptive &&
       ['transform', 'top', 'right', 'bottom', 'left'].some(
-        property => transitionProperty.indexOf(property) >= 0
+        (property) => transitionProperty.indexOf(property) >= 0
       )
     ) {
       console.warn(
