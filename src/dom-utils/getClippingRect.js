@@ -10,6 +10,7 @@ import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
 import { isElement, isHTMLElement } from './instanceOf';
 import getBoundingClientRect from './getBoundingClientRect';
+import getParentNode from './getParentNode';
 import contains from './contains';
 import getNodeName from './getNodeName';
 import rectToClientRect from '../utils/rectToClientRect';
@@ -44,7 +45,7 @@ function getClientRectFromMixedType(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingParents(element: Element): Array<Element> {
-  const clippingParents = listScrollParents(element);
+  const clippingParents = listScrollParents(getParentNode(element));
   const canEscapeClipping =
     ['absolute', 'fixed'].indexOf(getComputedStyle(element).position) >= 0;
   const clipperElement =
