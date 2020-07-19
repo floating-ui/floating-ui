@@ -1,0 +1,20 @@
+diff --git a/node_modules/@khanacademy/flow-to-ts/src/transform.js b/node_modules/@khanacademy/flow-to-ts/src/transform.js
+index e7b2138..1240e5e 100644
+--- a/node_modules/@khanacademy/flow-to-ts/src/transform.js
++++ b/node_modules/@khanacademy/flow-to-ts/src/transform.js
+@@ -329,7 +329,14 @@ const transform = {
+       }
+       const typeAnnotation = t.tsTypeAnnotation(returnType);
+       path.replaceWith(
+-        t.tsFunctionType(typeParameters, parameters, typeAnnotation)
++        !path.parent ||
++          t.isUnionTypeAnnotation(path.parent) ||
++          t.isIntersectionTypeAnnotation(path.parent) ||
++          t.isArrayTypeAnnotation(path.parent)
++          ? t.tsParenthesizedType(
++              t.tsFunctionType(typeParameters, parameters, typeAnnotation)
++            )
++          : t.tsFunctionType(typeParameters, parameters, typeAnnotation)
+       );
+     }
+   },
