@@ -50,7 +50,7 @@ export default function detectOverflow(
 
   const altContext = elementContext === popper ? reference : popper;
 
-  const referenceElement = state.elements.reference;
+  const referenceRect = state.rects.reference;
   const popperRect = state.rects.popper;
   const element = state.elements[altBoundary ? altContext : elementContext];
 
@@ -62,7 +62,7 @@ export default function detectOverflow(
     rootBoundary
   );
 
-  const referenceClientRect = rectToClientRect(state.rects.element);
+  const referenceClientRect = rectToClientRect(referenceRect);
 
   const popperOffsets = computeOffsets({
     reference: referenceClientRect,
