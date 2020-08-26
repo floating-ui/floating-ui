@@ -1,5 +1,5 @@
 // @flow
-import { createPopper, popperGenerator, detectOverflow } from '.';
+import { createPopper, popperGenerator, detectOverflow } from './createPopper';
 
 export type * from './types';
 

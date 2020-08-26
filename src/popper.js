@@ -1,5 +1,5 @@
 // @flow
-import { popperGenerator, detectOverflow } from '.';
+import { popperGenerator, detectOverflow } from './createPopper';
 
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
