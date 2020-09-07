@@ -20,6 +20,7 @@ import mergeByName from './utils/mergeByName';
 import detectOverflow from './utils/detectOverflow';
 import { isElement } from './dom-utils/instanceOf';
 import { auto } from './enums';
+import isConnected from "./dom-utils/isConnedted";
 
 export type * from './types';
 export * from './enums';
@@ -88,11 +89,17 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         state.scrollParents = {
           reference: isElement(reference)
-            ? listScrollParents(reference)
+            ? isConnected(reference)
+              ? listScrollParents(reference)
+              : []
             : reference.contextElement
-            ? listScrollParents(reference.contextElement)
+              ? isConnected(reference.contextElement)
+                ? listScrollParents(reference.contextElement)
+                :[]
+              : [],
+          popper: isConnected(popper)
+            ? listScrollParents(popper)
             : [],
-          popper: listScrollParents(popper),
         };
 
         // Orders the modifiers based on their dependencies and `phase`
