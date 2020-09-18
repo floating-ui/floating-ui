@@ -1,3 +1,4 @@
+import getNodeName from './getNodeName';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getParentNode from './getParentNode';
 
@@ -10,7 +11,7 @@ import getParentNode from './getParentNode';
  * @returns {Boolean} answer to "isFixed?"
  */
 export default function isFixed(element) {
-  const nodeName = element.nodeName;
+  const nodeName = getNodeName(element);
   if (nodeName === 'BODY' || nodeName === 'HTML') {
     return false;
   }

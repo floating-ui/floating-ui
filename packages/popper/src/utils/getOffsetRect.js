@@ -1,3 +1,4 @@
+import getNodeName from './getNodeName';
 import getWindowSizes from './getWindowSizes';
 import getClientRect from './getClientRect';
 
@@ -10,7 +11,7 @@ import getClientRect from './getClientRect';
  */
 export default function getOffsetRect(element) {
   let elementRect;
-  if (element.nodeName === 'HTML') {
+  if (getNodeName(element) === 'HTML') {
     const { width, height } = getWindowSizes(element.ownerDocument);
     elementRect = {
       width,

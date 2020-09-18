@@ -1,3 +1,4 @@
+import getNodeName from './getNodeName';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import includeScroll from './includeScroll';
 import getScrollParent from './getScrollParent';
@@ -7,7 +8,7 @@ import getClientRect from './getClientRect';
 
 export default function getOffsetRectRelativeToArbitraryNode(children, parent, fixedPosition = false) {
   const isIE10 = runIsIE(10);
-  const isHTML = parent.nodeName === 'HTML';
+  const isHTML = getNodeName(parent) === 'HTML';
   const childrenRect = getBoundingClientRect(children);
   const parentRect = getBoundingClientRect(parent);
   const scrollParent = getScrollParent(children);
@@ -51,7 +52,7 @@ export default function getOffsetRectRelativeToArbitraryNode(children, parent, f
   if (
     isIE10 && !fixedPosition
       ? parent.contains(scrollParent)
-      : parent === scrollParent && scrollParent.nodeName !== 'BODY'
+      : parent === scrollParent && getNodeName(scrollParent) !== 'BODY'
   ) {
     offsets = includeScroll(offsets, parent);
   }

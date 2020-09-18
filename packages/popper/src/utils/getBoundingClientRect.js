@@ -1,3 +1,4 @@
+import getNodeName from './getNodeName';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getBordersSize from './getBordersSize';
 import getWindowSizes from './getWindowSizes';
@@ -42,7 +43,7 @@ export default function getBoundingClientRect(element) {
   };
 
   // subtract scrollbar size from sizes
-  const sizes = element.nodeName === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
+  const sizes = getNodeName(element) === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
   const width =
     sizes.width || element.clientWidth || result.width;
   const height =

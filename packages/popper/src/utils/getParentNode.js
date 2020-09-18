@@ -1,3 +1,5 @@
+import getNodeName from './getNodeName';
+
 /**
  * Returns the parentNode or the host of the element
  * @method
@@ -6,7 +8,7 @@
  * @returns {Element} parent
  */
 export default function getParentNode(element) {
-  if (element.nodeName === 'HTML') {
+  if (getNodeName(element) === 'HTML') {
     return element;
   }
   return element.parentNode || element.host;

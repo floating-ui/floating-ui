@@ -1,7 +1,8 @@
+import getNodeName from './getNodeName';
 import getOffsetParent from './getOffsetParent';
 
 export default function isOffsetContainer(element) {
-  const { nodeName } = element;
+  const nodeName = getNodeName(element);
   if (nodeName === 'BODY') {
     return false;
   }

@@ -1,3 +1,4 @@
+import getNodeName from './getNodeName';
 import getStyleComputedProperty from './getStyleComputedProperty';
 import getParentNode from './getParentNode';
 
@@ -14,11 +15,11 @@ export default function getScrollParent(element) {
     return document.body
   }
 
-  switch (element.nodeName) {
+  switch (getNodeName(element)) {
     case 'HTML':
     case 'BODY':
       return element.ownerDocument.body
-    case '#document':
+    case '#DOCUMENT':
       return element.body
   }
 
