@@ -1,5 +1,5 @@
 // @flow
-import { createPopper } from './';
+import { createPopper } from './createPopper';
 
 const reference = document.createElement('div');
 const getPopper = () => document.createElement('div');

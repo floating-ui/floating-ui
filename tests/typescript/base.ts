@@ -1,6 +1,4 @@
-import { createPopper, Options } from '@popperjs/core';
-import { createPopper as createPopperLite } from '@popperjs/core/lib/popper-lite';
-import hideModifier from '@popperjs/core/lib/modifiers/hide';
+import { createPopper, Options, createPopperLite, hide } from '@popperjs/core';
 
 const options: Options = {
   strategy: 'fixed',
@@ -21,5 +19,5 @@ const popperWithOptions = createPopper(
 const popper2 = createPopperLite(
   document.createElement('div'),
   document.createElement('span'),
-  { modifiers: [hideModifier] }
+  { modifiers: [hide] }
 );

@@ -1,5 +1,5 @@
 // @flow
-import { popperGenerator, detectOverflow } from '.';
+import { popperGenerator, detectOverflow } from './createPopper';
 
 import eventListeners from './modifiers/eventListeners';
 import popperOffsets from './modifiers/popperOffsets';
@@ -29,3 +29,7 @@ const createPopper = popperGenerator({ defaultModifiers });
 
 // eslint-disable-next-line import/no-unused-modules
 export { createPopper, popperGenerator, defaultModifiers, detectOverflow };
+// eslint-disable-next-line import/no-unused-modules
+export { createPopper as createPopperLite } from './popper-lite';
+// eslint-disable-next-line import/no-unused-modules
+export * from './modifiers';
