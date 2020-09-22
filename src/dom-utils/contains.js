@@ -1,8 +1,8 @@
 // @flow
 export default function contains(parent: Element, child: Element) {
   // $FlowFixMe: hasOwnProperty doesn't seem to work in tests
-  const rootNode = child.getRootNode && child.getRootNode();
-  isShadow = Boolean(rootNode && rootNode.host);
+  const rootNode = child.getRootNode && child.getRootNode(),
+    isShadow = Boolean(rootNode && rootNode.host);
 
   // First, attempt with faster native method
   if (parent.contains(child)) {
