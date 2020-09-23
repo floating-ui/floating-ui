@@ -44,7 +44,7 @@
     "build:dev": "NODE_ENV=dev babel src -d tests/visual/dist",
     "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib && replace-in-files --string=__DEV__ --replacement=false 'lib/**/*.flow'",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; tsc-silent --project .config/tsconfig.json --createSourceFile .config/createSourceFile.js --suppress @; rimraf \"src/**/*.ts\"",
-    "postinstall": "patch-package",
+    "prepare": "patch-package",
     "prepublishOnly": "yarn build"
   },
   "prettier": {
