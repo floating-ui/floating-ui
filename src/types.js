@@ -44,6 +44,7 @@ export type Window = {|
   toString(): '[object Window]',
   devicePixelRatio: number,
   visualViewport?: VisualViewport,
+  ShadowRoot: ShadowRoot,
 |};
 
 export type Rect = {|
@@ -135,7 +136,7 @@ export type Modifier<Name, Options> = {|
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
   fn: (ModifierArguments<Options>) => State | void,
-  effect?: (ModifierArguments<Options>) => ((() => void) | void),
+  effect?: (ModifierArguments<Options>) => (() => void) | void,
   options?: $Shape<Options>,
   data?: Obj,
 |};
@@ -167,7 +168,7 @@ export type OptionsGeneric<TModifier> = {|
   onFirstUpdate?: ($Shape<State>) => void,
 |};
 
-export type UpdateCallback = State => void;
+export type UpdateCallback = (State) => void;
 
 export type ClientRectObject = {|
   x: number,
