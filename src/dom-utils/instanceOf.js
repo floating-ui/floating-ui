@@ -17,4 +17,12 @@ function isHTMLElement(node) {
   return node instanceof OwnElement || node instanceof HTMLElement;
 }
 
-export { isElement, isHTMLElement };
+/*:: declare function isShadowRoot(node: mixed): boolean %checks(node instanceof
+  ShadowRoot); */
+
+function isShadowRoot(node) {
+  const OwnElement = getWindow(node).ShadowRoot;
+  return node instanceof OwnElement || node instanceof ShadowRoot;
+}
+
+export { isElement, isHTMLElement, isShadowRoot };
