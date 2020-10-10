@@ -44,7 +44,6 @@
     "build:dev": "NODE_ENV=dev babel src -d tests/visual/dist",
     "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib && replace-in-files --string=__DEV__ --replacement=false 'lib/**/*.flow'",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; tsc-silent --project .config/tsconfig.json --createSourceFile .config/createSourceFile.js --suppress @; rimraf \"src/**/*.ts\"",
-    "prepare": "patch-package",
     "prepublishOnly": "yarn build"
   },
   "prettier": {
@@ -76,7 +75,7 @@
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.7.6",
     "@fezvrasta/tsc-silent": "^1.3.0",
-    "@khanacademy/flow-to-ts": "^0.1.6",
+    "@khanacademy/flow-to-ts": "^0.1.7",
     "@rollup/plugin-babel": "^5.0.0",
     "@rollup/plugin-replace": "^2.3.2",
     "babel-eslint": "^10.0.3",
@@ -101,7 +100,6 @@
     "jest-environment-puppeteer": "^4.4.0",
     "jest-image-snapshot": "^3.1.0",
     "jest-puppeteer": "^4.4.0",
-    "patch-package": "^6.2.2",
     "poster": "^0.0.9",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
