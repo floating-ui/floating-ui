@@ -9,7 +9,7 @@ export default function contains(parent: Element, child: Element) {
     return true;
   }
   // then fallback to custom implementation with Shadow DOM support
-  else if (isShadowRoot(rootNode)) {
+  else if (rootNode && isShadowRoot(rootNode)) {
     let next = child;
     do {
       if (next && parent.isSameNode(next)) {
