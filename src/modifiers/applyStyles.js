@@ -40,7 +40,6 @@ function effect({ state }: ModifierArguments<{||}>) {
       position: state.options.strategy,
       left: '0',
       top: '0',
-      margin: '0',
     },
     arrow: {
       position: 'absolute',
