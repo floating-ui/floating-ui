@@ -108,7 +108,7 @@ export default class Popper {
    * @method scheduleUpdate
    * @memberof Popper
    */
-  scheduleUpdate = () => requestAnimationFrame(this.update);
+  scheduleUpdate = () => requestAnimationFrame(update.call(this));
 
   /**
    * Collection of utilities useful when writing custom modifiers.
