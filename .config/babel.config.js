@@ -29,7 +29,17 @@ module.exports = {
             },
           ],
         ]
-      : ['dev-expression']),
+      : [
+          [
+            'inline-replace-variables',
+            {
+              __DEV__: {
+                type: 'node',
+                replacement: `typeof process !== 'undefined' && process.env.NODE_ENV !== "production"`,
+              },
+            },
+          ],
+        ]),
     'annotate-pure-calls',
   ],
   env: {

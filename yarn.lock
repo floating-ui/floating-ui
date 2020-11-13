@@ -1661,11 +1661,6 @@ babel-plugin-annotate-pure-calls@^0.4.0:
   resolved "https://registry.yarnpkg.com/babel-plugin-annotate-pure-calls/-/babel-plugin-annotate-pure-calls-0.4.0.tgz#78aa00fd878c4fcde4d49f3da397fcf5defbcce8"
   integrity sha512-oi4M/PWUJOU9ZyRGoPTfPMqdyMp06jbJAomd3RcyYuzUtBOddv98BqLm96Lucpi2QFoQHkdGQt0ACvw7VzVEQA==
 
-babel-plugin-dev-expression@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/babel-plugin-dev-expression/-/babel-plugin-dev-expression-0.2.2.tgz#c18de18a06150f9480edd151acbb01d2e65e999b"
-  integrity sha512-y32lfBif+c2FIh5dwGfcc/IfX5aw/Bru7Du7W2n17sJE/GJGAsmIk5DPW/8JOoeKpXW5evJfJOvRq5xkiS6vng==
-
 babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.3.3.tgz#84fda19c976ec5c6defef57f9427b3def66e17a3"
