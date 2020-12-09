@@ -4,7 +4,5 @@
 <PROJECT_ROOT>/dist
 
 [options]
-suppress_comment= \\(.\\|\n\\)*\\$FlowExpectError
-suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
-suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
+types_first=false
 
