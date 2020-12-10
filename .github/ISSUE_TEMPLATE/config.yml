@@ -8,6 +8,6 @@ contact_links:
   - name: ❓ StackOverflow
     url: https://stackoverflow.com/questions/tagged/popper.js
     about: Having troubles with Popper? Ask to the awesome SO community!
-  - name: 💬 Spectrum
-    url: https://spectrum.chat/popper-js
-    about: Want to talk about Popper with other users? Join us on Spectrum!
+  - name: 💬 Discussions
+    url: https://github.com/popperjs/popper-core/discussions
+    about: Want to talk about Popper with other users? Join us on GitHub Discussions!
