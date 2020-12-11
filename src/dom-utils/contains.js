@@ -15,7 +15,7 @@ export default function contains(parent: Element, child: Element) {
       if (next && parent.isSameNode(next)) {
         return true;
       }
-      // $FlowFixMe: need a better way to handle this...
+      // $FlowFixMe[prop-missing]: need a better way to handle this...
       next = next.parentNode || next.host;
     } while (next);
   }

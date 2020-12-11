@@ -5,4 +5,5 @@
 
 [options]
 types_first=false
+include_warnings=true
 

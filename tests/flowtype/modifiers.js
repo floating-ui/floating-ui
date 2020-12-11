@@ -1,7 +1,7 @@
 // @flow
 import { createPopper, type Modifier, type StrictModifiers } from '../../src/';
 
-// $FlowExpectedError: valid elements must be provided
+// $FlowExpectedError[incompatible-call]: valid elements must be provided
 createPopper(null, null);
 
 const reference = document.createElement('button');
@@ -9,7 +9,7 @@ const popper = document.createElement('div');
 
 createPopper(reference, popper, {});
 
-// $FlowExpectedError: '' is not a number
+// $FlowExpectedError[incompatible-call]: '' is not a number
 createPopper<StrictModifiers>(reference, popper, {
   modifiers: [{ name: 'offset', options: { offset: [0, ''] } }],
 });

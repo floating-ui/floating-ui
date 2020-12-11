@@ -50,7 +50,6 @@ export default function computeAutoPlacement(
         )
     : basePlacements;
 
-  // $FlowFixMe
   let allowedPlacements = placements.filter(
     (placement) => allowedAutoPlacements.indexOf(placement) >= 0
   );
@@ -71,7 +70,7 @@ export default function computeAutoPlacement(
     }
   }
 
-  // $FlowFixMe: Flow seems to have problems with two array unions...
+  // $FlowFixMe[incompatible-type]: Flow seems to have problems with two array unions...
   const overflows: OverflowsMap = allowedPlacements.reduce((acc, placement) => {
     acc[placement] = detectOverflow(state, {
       placement,
