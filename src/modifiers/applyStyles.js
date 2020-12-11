@@ -7,7 +7,7 @@ import { isHTMLElement } from '../dom-utils/instanceOf';
 // and applies them to the HTMLElements such as popper and arrow
 
 function applyStyles({ state }: ModifierArguments<{||}>) {
-  Object.keys(state.elements).forEach(name => {
+  Object.keys(state.elements).forEach((name) => {
     const style = state.styles[name] || {};
 
     const attributes = state.attributes[name] || {};
@@ -20,10 +20,10 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
 
     // Flow doesn't support to extend this property, but it's the most
     // effective way to apply styles to an HTMLElement
-    // $FlowFixMe
+    // $FlowFixMe[cannot-write]
     Object.assign(element.style, style);
 
-    Object.keys(attributes).forEach(name => {
+    Object.keys(attributes).forEach((name) => {
       const value = attributes[name];
       if (value === false) {
         element.removeAttribute(name);
@@ -55,7 +55,7 @@ function effect({ state }: ModifierArguments<{||}>) {
   }
 
   return () => {
-    Object.keys(state.elements).forEach(name => {
+    Object.keys(state.elements).forEach((name) => {
       const element = state.elements[name];
       const attributes = state.attributes[name] || {};
 
@@ -76,12 +76,9 @@ function effect({ state }: ModifierArguments<{||}>) {
         return;
       }
 
-      // Flow doesn't support to extend this property, but it's the most
-      // effective way to apply styles to an HTMLElement
-      // $FlowFixMe
       Object.assign(element.style, style);
 
-      Object.keys(attributes).forEach(attribute => {
+      Object.keys(attributes).forEach((attribute) => {
         element.removeAttribute(attribute);
       });
     });

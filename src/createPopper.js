@@ -77,7 +77,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         cleanupModifierEffects();
 
         state.options = {
-          // $FlowFixMe
+          // $FlowFixMe[exponential-spread]
           ...defaultOptions,
           ...state.options,
           ...options,

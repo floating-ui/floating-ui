@@ -73,7 +73,7 @@ export function mapToStyles({
       offsetParent = getDocumentElement(popper);
     }
 
-    // $FlowFixMe: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
+    // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
     /*:: offsetParent = (offsetParent: Element); */
 
     if (placement === top) {
@@ -127,7 +127,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     if (
       adaptive &&
       ['transform', 'top', 'right', 'bottom', 'left'].some(
-        property => transitionProperty.indexOf(property) >= 0
+        (property) => transitionProperty.indexOf(property) >= 0
       )
     ) {
       console.warn(
