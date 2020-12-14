@@ -18,6 +18,7 @@ import getBasePlacement from '../utils/getBasePlacement';
 export type Options = {
   gpuAcceleration: boolean,
   adaptive: boolean,
+  roundOffsets: boolean,
 };
 
 const unsetSides = {
@@ -30,7 +31,7 @@ const unsetSides = {
 // Round the offsets to the nearest suitable subpixel based on the DPR.
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
-function roundOffsets({ x, y }): Offsets {
+function roundOffsetsByDPR({ x, y }): Offsets {
   const win: Window = window;
   const dpr = win.devicePixelRatio || 1;
 
@@ -48,6 +49,7 @@ export function mapToStyles({
   position,
   gpuAcceleration,
   adaptive,
+  roundOffsets,
 }: {
   popper: HTMLElement,
   popperRect: Rect,
@@ -56,8 +58,9 @@ export function mapToStyles({
   position: PositioningStrategy,
   gpuAcceleration: boolean,
   adaptive: boolean,
+  roundOffsets: boolean,
 }) {
-  let { x, y } = roundOffsets(offsets);
+  let { x = 0, y = 0 } = roundOffsets ? roundOffsetsByDPR(offsets) : offsets;
 
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
@@ -118,7 +121,11 @@ export function mapToStyles({
 }
 
 function computeStyles({ state, options }: ModifierArguments<Options>) {
-  const { gpuAcceleration = true, adaptive = true } = options;
+  const {
+    gpuAcceleration = true,
+    adaptive = true,
+    roundOffsets = true,
+  } = options;
 
   if (__DEV__) {
     const transitionProperty =
@@ -162,6 +169,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
         offsets: state.modifiersData.popperOffsets,
         position: state.options.strategy,
         adaptive,
+        roundOffsets,
       }),
     };
   }
@@ -174,6 +182,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
         offsets: state.modifiersData.arrow,
         position: 'absolute',
         adaptive: false,
+        roundOffsets,
       }),
     };
   }
