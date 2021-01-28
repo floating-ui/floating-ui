@@ -1,7 +1,6 @@
 // @flow
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
-import getNodeName from './getNodeName';
 import getWindow from './getWindow';
 import type { Window, VisualViewport } from '../types';
 import isScrollParent from './isScrollParent';
@@ -17,7 +16,7 @@ export default function listScrollParents(
   list: Array<Element | Window> = []
 ): Array<Element | Window | VisualViewport> {
   const scrollParent = getScrollParent(element);
-  const isBody = getNodeName(scrollParent) === 'body';
+  const isBody = scrollParent === element.ownerDocument.body;
   const win = getWindow(scrollParent);
   const target = isBody
     ? [win].concat(
