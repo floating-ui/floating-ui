@@ -1,7 +1,6 @@
 // @flow
 import getScrollParent from './getScrollParent';
 import getParentNode from './getParentNode';
-import getNodeName from './getNodeName';
 import getWindow from './getWindow';
 import type { Window, VisualViewport } from '../types';
 import isScrollParent from './isScrollParent';
