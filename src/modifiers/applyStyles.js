@@ -18,17 +18,21 @@ function applyStyles({ state }: ModifierArguments<{||}>) {
       return;
     }
 
-    // Flow doesn't support to extend this property, but it's the most
-    // effective way to apply styles to an HTMLElement
-    // $FlowFixMe[cannot-write]
-    Object.assign(element.style, style);
+    Object.entries(style).forEach(([property, value]) => {
+      if (element.style[property] !== value) {
+        element.style[property] = value;
+      }
+    });
 
     Object.keys(attributes).forEach((name) => {
       const value = attributes[name];
-      if (value === false) {
+      if (value === false && element.hasAttribute(name)) {
         element.removeAttribute(name);
-      } else {
-        element.setAttribute(name, value === true ? '' : value);
+      } else if (
+        element.hasAttribute(name) &&
+        (value === true ? `` : value) === element.getAttribute(name)
+      ) {
+        element.setAttribute(name, value === true ? `` : value);
       }
     });
   });
