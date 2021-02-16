@@ -207,7 +207,7 @@ library is built in a modular way to allow to import only the parts you really
 need.
 
 ```js
-import { createPopper } from '@popperjs/core/lib/popper-lite.js';
+import { createPopperLite as createPopper } from "@popperjs/core";
 ```
 
 The Lite version includes the most necessary modifiers that will compute the
@@ -221,9 +221,7 @@ The two most useful modifiers not included in Lite are `preventOverflow` and
 `flip`:
 
 ```js
-import { createPopper } from '@popperjs/core/lib/popper-lite.js';
-import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow.js';
-import flip from '@popperjs/core/lib/modifiers/flip.js';
+import { createPopperLite as createPopper, preventOverflow, flip } from "@popperjs/core";
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');

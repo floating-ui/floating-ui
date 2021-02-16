@@ -38,3 +38,18 @@ it('returns true that a node contains itself', () => {
   const element = document.createElement('div');
   expect(contains(element, element)).toBeTruthy();
 });
+
+it('returns correct results for detached DOM with anchor as root', () => {
+  const element = document.createElement('a');
+  element.href = '0.0.0.0';
+  const child = document.createElement('span');
+  const sibling = document.createElement('span');
+  const grandChild = document.createElement('span');
+  element.appendChild(child);
+  element.appendChild(sibling);
+  child.appendChild(grandChild);
+
+  expect(contains(element, child)).toBeTruthy();
+  expect(contains(element, grandChild)).toBeTruthy();
+  expect(contains(sibling, grandChild)).toBeFalsy();
+});

@@ -68,13 +68,11 @@ export default function computeOffsets({
     switch (variation) {
       case start:
         offsets[mainAxis] =
-          Math.floor(offsets[mainAxis]) -
-          Math.floor(reference[len] / 2 - element[len] / 2);
+          offsets[mainAxis] - (reference[len] / 2 - element[len] / 2);
         break;
       case end:
         offsets[mainAxis] =
-          Math.floor(offsets[mainAxis]) +
-          Math.ceil(reference[len] / 2 - element[len] / 2);
+          offsets[mainAxis] + (reference[len] / 2 - element[len] / 2);
         break;
       default:
     }
