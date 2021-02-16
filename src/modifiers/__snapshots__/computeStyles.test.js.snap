@@ -52,3 +52,25 @@ Object {
   "transform": "",
 }
 `;
+
+exports[`computes the popper styles 5`] = `
+Object {
+  "bottom": "auto",
+  "left": "auto",
+  "position": "absolute",
+  "right": "-112px",
+  "top": "8px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 6`] = `
+Object {
+  "bottom": "auto",
+  "left": "auto",
+  "position": "absolute",
+  "right": "-110.3px",
+  "top": "5.83px",
+  "transform": "",
+}
+`;

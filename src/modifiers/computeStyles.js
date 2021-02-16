@@ -15,11 +15,16 @@ import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
 
 // eslint-disable-next-line import/no-unused-modules
+export type RoundOffsets = (offsets: $Shape<{ x: number, y: number, centerOffset: number }>) => Offsets;
+
+// eslint-disable-next-line import/no-unused-modules
 export type Options = {
   gpuAcceleration: boolean,
   adaptive: boolean,
-  roundOffsets: boolean,
+  roundOffsets?: boolean | RoundOffsets,
 };
+
+const round = Math.round
 
 const unsetSides = {
   top: 'auto',
@@ -36,8 +41,8 @@ function roundOffsetsByDPR({ x, y }): Offsets {
   const dpr = win.devicePixelRatio || 1;
 
   return {
-    x: Math.round(x * dpr) / dpr || 0,
-    y: Math.round(y * dpr) / dpr || 0,
+    x: round(round(x * dpr) / dpr) || 0,
+    y: round(round(y * dpr) / dpr) || 0,
   };
 }
 
@@ -58,9 +63,13 @@ export function mapToStyles({
   position: PositioningStrategy,
   gpuAcceleration: boolean,
   adaptive: boolean,
-  roundOffsets: boolean,
+  roundOffsets: boolean | RoundOffsets,
 }) {
-  let { x = 0, y = 0 } = roundOffsets ? roundOffsetsByDPR(offsets) : offsets;
+  let { x = 0, y = 0 } = roundOffsets === true
+    ? roundOffsetsByDPR(offsets)
+    : typeof roundOffsets === 'function'
+      ? roundOffsets(offsets)
+      : offsets;
 
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
@@ -124,6 +133,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
   const {
     gpuAcceleration = true,
     adaptive = true,
+    // defaults to use builtin `roundOffsetsByDPR`
     roundOffsets = true,
   } = options;
 
