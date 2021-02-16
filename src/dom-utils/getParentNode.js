@@ -1,6 +1,7 @@
 // @flow
 import getNodeName from './getNodeName';
 import getDocumentElement from './getDocumentElement';
+import { isShadowRoot } from './instanceOf';
 
 export default function getParentNode(element: Node | ShadowRoot): Node {
   if (getNodeName(element) === 'html') {
@@ -13,8 +14,7 @@ export default function getParentNode(element: Node | ShadowRoot): Node {
     // $FlowFixMe[prop-missing]
     element.assignedSlot || // step into the shadow DOM of the parent of a slotted node
     element.parentNode || // DOM Element detected
-    // $FlowFixMe[incompatible-return]: need a better way to handle this...
-    element.host || // ShadowRoot detected
+    (isShadowRoot(element) ? element.host : null) || // ShadowRoot detected
     // $FlowFixMe[incompatible-call]: HTMLElement is a Node
     getDocumentElement(element) // fallback
   );
