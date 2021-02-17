@@ -81,8 +81,16 @@ export function mapToStyles({
 
   if (adaptive) {
     let offsetParent = getOffsetParent(popper);
+    let heightProp = 'clientHeight';
+    let widthProp = 'clientWidth';
+
     if (offsetParent === getWindow(popper)) {
       offsetParent = getDocumentElement(popper);
+
+      if (getComputedStyle(offsetParent).position !== 'static') {
+        heightProp = 'scrollHeight';
+        widthProp = 'scrollWidth';
+      }
     }
 
     // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
@@ -90,13 +98,15 @@ export function mapToStyles({
 
     if (placement === top) {
       sideY = bottom;
-      y -= offsetParent.clientHeight - popperRect.height;
+      // $FlowFixMe
+      y -= offsetParent[heightProp] - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
     if (placement === left) {
       sideX = right;
-      x -= offsetParent.clientWidth - popperRect.width;
+      // $FlowFixMe
+      x -= offsetParent[widthProp] - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
   }
