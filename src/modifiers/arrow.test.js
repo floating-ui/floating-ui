@@ -34,3 +34,29 @@ it('does not error if HTMLElement is used as arrow', () => {
 
   expect(console.error).not.toHaveBeenCalled();
 });
+
+it('allows to define a function as padding', () => {
+  const reference = document.createElement('div');
+  const popper = document.createElement('div');
+  const arrow = document.createElement('div');
+
+  popper.appendChild(arrow);
+
+  const instance = createPopper(reference, popper, {
+    modifiers: [
+      {
+        name: 'arrow',
+        options: { element: arrow, padding: () => 10 },
+      },
+    ],
+  });
+
+  expect(
+    instance.state.modifiersData['arrow#persistent'].padding
+  ).toMatchObject({
+    bottom: 10,
+    left: 10,
+    right: 10,
+    top: 10,
+  });
+});
