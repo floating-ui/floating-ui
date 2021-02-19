@@ -6,8 +6,6 @@ import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
 import getParentNode from './getParentNode';
 
-const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
-
 function getTrueOffsetParent(element: Element): ?Element {
   if (
     !isHTMLElement(element) ||
@@ -23,6 +21,7 @@ function getTrueOffsetParent(element: Element): ?Element {
 // `.offsetParent` reports `null` for fixed elements, while absolute elements
 // return the containing block
 function getContainingBlock(element: Element) {
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
   let currentNode = getParentNode(element);
 
   while (
