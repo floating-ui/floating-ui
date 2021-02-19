@@ -10,7 +10,7 @@ import getWindowScroll from './getWindowScroll';
 export default function getDocumentRect(element: HTMLElement): Rect {
   const html = getDocumentElement(element);
   const winScroll = getWindowScroll(element);
-  const body = element.ownerDocument.body;
+  const body = element.ownerDocument?.body;
 
   const width = Math.max(
     html.scrollWidth,

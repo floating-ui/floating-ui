@@ -16,7 +16,7 @@ export default function listScrollParents(
   list: Array<Element | Window> = []
 ): Array<Element | Window | VisualViewport> {
   const scrollParent = getScrollParent(element);
-  const isBody = scrollParent === element.ownerDocument.body;
+  const isBody = scrollParent === element.ownerDocument?.body;
   const win = getWindow(scrollParent);
   const target = isBody
     ? [win].concat(
