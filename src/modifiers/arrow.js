@@ -1,5 +1,11 @@
 // @flow
-import type { Modifier, ModifierArguments, Padding } from '../types';
+import type {
+  Modifier,
+  ModifierArguments,
+  Padding,
+  StateRects,
+} from '../types';
+import type { Placement } from '../enums';
 import getBasePlacement from '../utils/getBasePlacement';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import contains from '../dom-utils/contains';
@@ -14,7 +20,7 @@ import { isHTMLElement } from '../dom-utils/instanceOf';
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
   element: HTMLElement | string | null,
-  padding: Padding,
+  padding: Padding | ((StateRects, Placement) => Padding),
 };
 
 function arrow({ state, name }: ModifierArguments<Options>) {
@@ -105,6 +111,11 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
 
     return;
   }
+
+  padding =
+    typeof padding === 'function'
+      ? padding(state.rects, state.placement)
+      : padding;
 
   state.elements.arrow = arrowElement;
   state.modifiersData[`${name}#persistent`] = {
