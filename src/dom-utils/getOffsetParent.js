@@ -6,6 +6,8 @@ import { isHTMLElement } from './instanceOf';
 import isTableElement from './isTableElement';
 import getParentNode from './getParentNode';
 
+const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+
 function getTrueOffsetParent(element: Element): ?Element {
   if (
     !isHTMLElement(element) ||
@@ -31,10 +33,14 @@ function getContainingBlock(element: Element) {
 
     // This is non-exhaustive but covers the most common CSS properties that
     // create a containing block.
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
     if (
       css.transform !== 'none' ||
       css.perspective !== 'none' ||
-      (css.willChange && (css.willChange === 'transform' || css.willChange === 'perspective'))
+      css.contain === 'paint' ||
+      ['transform', 'perspective'].includes(css.willChange) ||
+      (isFirefox && css.willChange === 'filter') ||
+      (isFirefox && css.filter && css.filter !== 'none')
     ) {
       return currentNode;
     } else {
