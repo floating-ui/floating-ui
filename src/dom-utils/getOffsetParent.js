@@ -21,6 +21,7 @@ function getTrueOffsetParent(element: Element): ?Element {
 // `.offsetParent` reports `null` for fixed elements, while absolute elements
 // return the containing block
 function getContainingBlock(element: Element) {
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
   let currentNode = getParentNode(element);
 
   while (
@@ -31,10 +32,14 @@ function getContainingBlock(element: Element) {
 
     // This is non-exhaustive but covers the most common CSS properties that
     // create a containing block.
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
     if (
       css.transform !== 'none' ||
       css.perspective !== 'none' ||
-      (css.willChange && css.willChange !== 'auto')
+      css.contain === 'paint' ||
+      ['transform', 'perspective'].includes(css.willChange) ||
+      (isFirefox && css.willChange === 'filter') ||
+      (isFirefox && css.filter && css.filter !== 'none')
     ) {
       return currentNode;
     } else {
