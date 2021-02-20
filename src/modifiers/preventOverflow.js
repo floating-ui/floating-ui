@@ -11,6 +11,7 @@ import getOffsetParent from '../dom-utils/getOffsetParent';
 import detectOverflow from '../utils/detectOverflow';
 import getVariation from '../utils/getVariation';
 import getFreshSideObject from '../utils/getFreshSideObject';
+import { max as mathMax, min as mathMin } from '../utils/math';
 
 type TetherOffset =
   | (({
@@ -150,9 +151,9 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
 
     if (checkMainAxis) {
       const preventedOffset = within(
-        tether ? Math.min(min, tetherMin) : min,
+        tether ? mathMin(min, tetherMin) : min,
         offset,
-        tether ? Math.max(max, tetherMax) : max
+        tether ? mathMax(max, tetherMax) : max
       );
 
       popperOffsets[mainAxis] = preventedOffset;
@@ -168,9 +169,9 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
       const max = offset - overflow[altSide];
 
       const preventedOffset = within(
-        tether ? Math.min(min, tetherMin) : min,
+        tether ? mathMin(min, tetherMin) : min,
         offset,
-        tether ? Math.max(max, tetherMax) : max
+        tether ? mathMax(max, tetherMax) : max
       );
 
       popperOffsets[altAxis] = preventedOffset;

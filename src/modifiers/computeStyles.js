@@ -13,9 +13,12 @@ import getWindow from '../dom-utils/getWindow';
 import getDocumentElement from '../dom-utils/getDocumentElement';
 import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
+import { round } from '../utils/math';
 
 // eslint-disable-next-line import/no-unused-modules
-export type RoundOffsets = (offsets: $Shape<{ x: number, y: number, centerOffset: number }>) => Offsets;
+export type RoundOffsets = (
+  offsets: $Shape<{ x: number, y: number, centerOffset: number }>
+) => Offsets;
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
@@ -23,8 +26,6 @@ export type Options = {
   adaptive: boolean,
   roundOffsets?: boolean | RoundOffsets,
 };
-
-const round = Math.round
 
 const unsetSides = {
   top: 'auto',
@@ -65,9 +66,10 @@ export function mapToStyles({
   adaptive: boolean,
   roundOffsets: boolean | RoundOffsets,
 }) {
-  let { x = 0, y = 0 } = roundOffsets === true
-    ? roundOffsetsByDPR(offsets)
-    : typeof roundOffsets === 'function'
+  let { x = 0, y = 0 } =
+    roundOffsets === true
+      ? roundOffsetsByDPR(offsets)
+      : typeof roundOffsets === 'function'
       ? roundOffsets(offsets)
       : offsets;
 
