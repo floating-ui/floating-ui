@@ -44,8 +44,9 @@
     "build:dev": "NODE_ENV=dev babel src -d tests/visual/dist",
     "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib && replace-in-files --string=__DEV__ --replacement=false 'lib/**/*.flow'",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; tsc-silent --project .config/tsconfig.json --createSourceFile .config/createSourceFile.js --suppress @; rimraf \"src/**/*.ts\"",
-    "prepublishOnly": "yarn build",
-    "postinstall": "husky install .config/husky"
+    "prepublishOnly": "yarn build && pinst --disable",
+    "postinstall": "husky install .config/husky",
+    "postpublish": "pinst --enable"
   },
   "prettier": {
     "semi": true,
@@ -101,6 +102,7 @@
     "jest-environment-puppeteer": "^4.4.0",
     "jest-image-snapshot": "^4.3.0",
     "jest-puppeteer": "^4.4.0",
+    "pinst": "^2.1.4",
     "poster": "^0.0.9",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
