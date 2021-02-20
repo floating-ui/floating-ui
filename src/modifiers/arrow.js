@@ -1,10 +1,5 @@
 // @flow
-import type {
-  Modifier,
-  ModifierArguments,
-  Padding,
-  StateRects,
-} from '../types';
+import type { Modifier, ModifierArguments, Padding, Rect } from '../types';
 import type { Placement } from '../enums';
 import getBasePlacement from '../utils/getBasePlacement';
 import getLayoutRect from '../dom-utils/getLayoutRect';
@@ -20,7 +15,13 @@ import { isHTMLElement } from '../dom-utils/instanceOf';
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
   element: HTMLElement | string | null,
-  padding: Padding | ((StateRects, Placement) => Padding),
+  padding:
+    | Padding
+    | (({
+        popper: Rect,
+        reference: Rect,
+        placement: Placement,
+      }) => Padding),
 };
 
 function arrow({ state, name }: ModifierArguments<Options>) {
@@ -114,7 +115,7 @@ function effect({ state, options, name }: ModifierArguments<Options>) {
 
   padding =
     typeof padding === 'function'
-      ? padding(state.rects, state.placement)
+      ? padding({ ...state.rects, placement: state.placement })
       : padding;
 
   state.elements.arrow = arrowElement;
