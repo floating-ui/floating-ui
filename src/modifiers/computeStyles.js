@@ -100,14 +100,14 @@ export function mapToStyles({
 
     if (placement === top) {
       sideY = bottom;
-      // $FlowFixMe
+      // $FlowFixMe[prop-missing]
       y -= offsetParent[heightProp] - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
     if (placement === left) {
       sideX = right;
-      // $FlowFixMe
+      // $FlowFixMe[prop-missing]
       x -= offsetParent[widthProp] - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
