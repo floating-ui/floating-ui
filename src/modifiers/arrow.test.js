@@ -50,13 +50,10 @@ it('allows to define a function as padding', () => {
       },
     ],
   });
+  instance.forceUpdate();
 
-  expect(
-    instance.state.modifiersData['arrow#persistent'].padding
-  ).toMatchObject({
-    bottom: 10,
-    left: 10,
-    right: 10,
-    top: 10,
+  expect(instance.state.modifiersData['arrow']).toMatchObject({
+    centerOffset: 10,
+    x: 10,
   });
 });
