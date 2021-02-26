@@ -3,7 +3,7 @@
 /*:: declare function getWindow(node: Node | Window): Window; */
 
 export default function getWindow(node) {
-  if (node === null || node === undefined) {
+  if (node == null) {
       return window;
   }
       
