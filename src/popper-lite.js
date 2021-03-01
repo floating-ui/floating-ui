@@ -6,7 +6,8 @@ import popperOffsets from './modifiers/popperOffsets';
 import computeStyles from './modifiers/computeStyles';
 import applyStyles from './modifiers/applyStyles';
 
-export type * from './types';
+/*:: export type * from './types'; */
+/*;; export * from './types'; */
 
 const defaultModifiers = [
   eventListeners,

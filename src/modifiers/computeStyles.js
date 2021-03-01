@@ -96,7 +96,7 @@ export function mapToStyles({
     }
 
     // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
-    /*:: offsetParent = (offsetParent: Element); */
+    offsetParent = (offsetParent: Element);
 
     if (placement === top) {
       sideY = bottom;
