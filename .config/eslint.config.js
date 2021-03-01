@@ -6,6 +6,7 @@ module.exports = {
     'unused-imports/no-unused-imports': 'error',
     'unused-imports/no-unused-vars': 'error',
     'import/no-unused-modules': ['error', { unusedExports: true }],
+    'flowtype/use-flow-type': 1,
   },
   ignorePatterns: [
     'docs',
