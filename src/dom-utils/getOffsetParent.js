@@ -67,6 +67,11 @@ export default function getOffsetParent(element: Element) {
 
   let offsetParent = getTrueOffsetParent(element);
 
+  // fix issue https://github.com/popperjs/popper-core/issues/1279
+  if (offsetParent && offsetParent.tagName === 'ION-CONTENT') {
+    offsetParent = document.querySelector('ion-content').shadowRoot.querySelector('main')
+  }
+
   while (
     offsetParent &&
     isTableElement(offsetParent) &&
