@@ -45,6 +45,7 @@ export default function validateModifiers(modifiers: Array<any>): void {
               )
             );
           }
+          break;
         case 'phase':
           if (modifierPhases.indexOf(modifier.phase) < 0) {
             console.error(
