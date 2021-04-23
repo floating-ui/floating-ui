@@ -1,6 +1,6 @@
 {
-  "name": "@popperjs/core",
-  "version": "2.4.0",
+  "name": "popperjs-core-ionic-scroll-fix",
+  "version": "2.4.1",
   "description": "Tooltip and Popover Positioning Engine",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
@@ -8,7 +8,7 @@
   "unpkg": "dist/umd/popper.min.js",
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
-  "repository": "github:popperjs/popper-core",
+  "repository": "https://github.com/Sitronik/popper-core",
   "keywords": [
     "tooltip",
     "popover",

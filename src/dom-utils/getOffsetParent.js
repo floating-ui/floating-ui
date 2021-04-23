@@ -68,8 +68,21 @@ export default function getOffsetParent(element: Element) {
   let offsetParent = getTrueOffsetParent(element);
 
   // fix issue https://github.com/popperjs/popper-core/issues/1279
-  if (offsetParent && offsetParent.tagName === 'ION-CONTENT') {
-    offsetParent = document.querySelector('ion-content').shadowRoot.querySelector('main')
+  if (offsetParent && (offsetParent.tagName === 'ION-CONTENT' || offsetParent.tagName === 'MAIN')) {
+    const pages = document.getElementsByClassName('ion-page');
+    if (pages.length) {
+      const elByZIndexes = {};
+      for (const el of pages) {
+        const styles = window.getComputedStyle(el);
+        elByZIndexes[styles['z-index']] = el.querySelector('ion-content');
+      }
+
+      const maxZIndex = Math.max(...Object.keys(elByZIndexes));
+      const shadowRoot = elByZIndexes[maxZIndex].shadowRoot;
+      if (shadowRoot) {
+        offsetParent = shadowRoot.querySelector('main');
+      }
+    }
   }
 
   while (
