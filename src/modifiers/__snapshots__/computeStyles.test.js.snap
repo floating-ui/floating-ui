@@ -56,6 +56,50 @@ Object {
 exports[`computes the popper styles 5`] = `
 Object {
   "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 6`] = `
+Object {
+  "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 7`] = `
+Object {
+  "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 8`] = `
+Object {
+  "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 9`] = `
+Object {
+  "bottom": "auto",
   "left": "auto",
   "position": "absolute",
   "right": "-112px",
@@ -64,7 +108,7 @@ Object {
 }
 `;
 
-exports[`computes the popper styles 6`] = `
+exports[`computes the popper styles 10`] = `
 Object {
   "bottom": "auto",
   "left": "auto",
