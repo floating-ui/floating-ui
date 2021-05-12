@@ -127,7 +127,7 @@ export function mapToStyles({
       // blurry text on low PPI displays, so we want to use 2D transforms
       // instead
       transform:
-        (win.devicePixelRatio || 1) < 2
+        (win.devicePixelRatio || 1) > 1
           ? `translate(${x}px, ${y}px)`
           : `translate3d(${x}px, ${y}px, 0)`,
     };
