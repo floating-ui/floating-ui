@@ -5,13 +5,14 @@ import { isHTMLElement } from './instanceOf';
 const round = Math.round;
 
 export default function getBoundingClientRect(
-  element: Element | VirtualElement
+  element: Element | VirtualElement,
+  includeScale = false
 ): ClientRectObject {
   const rect = element.getBoundingClientRect();
   let scaleX = 1;
   let scaleY = 1;
 
-  if (isHTMLElement(element)) {
+  if (isHTMLElement(element) && includeScale) {
     // Fallback to 1 in case both values are `0`
     scaleX = rect.width / element.offsetWidth || 1;
     scaleY = rect.height / element.offsetHeight || 1;
