@@ -14,6 +14,7 @@ import getParentNode from './getParentNode';
 import contains from './contains';
 import getNodeName from './getNodeName';
 import rectToClientRect from '../utils/rectToClientRect';
+import { max, min } from '../utils/math';
 
 function getInnerBoundingClientRect(element: Element) {
   const rect = getBoundingClientRect(element);
@@ -83,10 +84,10 @@ export default function getClippingRect(
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getClientRectFromMixedType(element, clippingParent);
 
-    accRect.top = Math.max(rect.top, accRect.top);
-    accRect.right = Math.min(rect.right, accRect.right);
-    accRect.bottom = Math.min(rect.bottom, accRect.bottom);
-    accRect.left = Math.max(rect.left, accRect.left);
+    accRect.top = max(rect.top, accRect.top);
+    accRect.right = min(rect.right, accRect.right);
+    accRect.bottom = min(rect.bottom, accRect.bottom);
+    accRect.left = max(rect.left, accRect.left);
 
     return accRect;
   }, getClientRectFromMixedType(element, firstClippingParent));

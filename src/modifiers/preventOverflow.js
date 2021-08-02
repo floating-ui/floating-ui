@@ -11,6 +11,7 @@ import getOffsetParent from '../dom-utils/getOffsetParent';
 import detectOverflow from '../utils/detectOverflow';
 import getVariation from '../utils/getVariation';
 import getFreshSideObject from '../utils/getFreshSideObject';
+import { max as mathMax, min as mathMin } from '../utils/math';
 
 type TetherOffset =
   | (({
@@ -83,7 +84,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     return;
   }
 
-  if (checkMainAxis) {
+  if (checkMainAxis || checkAltAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
     const len = mainAxis === 'y' ? 'height' : 'width';
@@ -148,28 +149,34 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
       popperOffsets[mainAxis] + minOffset - offsetModifierValue - clientOffset;
     const tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
 
-    const preventedOffset = within(
-      tether ? Math.min(min, tetherMin) : min,
-      offset,
-      tether ? Math.max(max, tetherMax) : max
-    );
+    if (checkMainAxis) {
+      const preventedOffset = within(
+        tether ? mathMin(min, tetherMin) : min,
+        offset,
+        tether ? mathMax(max, tetherMax) : max
+      );
 
-    popperOffsets[mainAxis] = preventedOffset;
-    data[mainAxis] = preventedOffset - offset;
-  }
+      popperOffsets[mainAxis] = preventedOffset;
+      data[mainAxis] = preventedOffset - offset;
+    }
 
-  if (checkAltAxis) {
-    const mainSide = mainAxis === 'x' ? top : left;
-    const altSide = mainAxis === 'x' ? bottom : right;
-    const offset = popperOffsets[altAxis];
+    if (checkAltAxis) {
+      const mainSide = mainAxis === 'x' ? top : left;
+      const altSide = mainAxis === 'x' ? bottom : right;
+      const offset = popperOffsets[altAxis];
 
-    const min = offset + overflow[mainSide];
-    const max = offset - overflow[altSide];
+      const min = offset + overflow[mainSide];
+      const max = offset - overflow[altSide];
 
-    const preventedOffset = within(min, offset, max);
+      const preventedOffset = within(
+        tether ? mathMin(min, tetherMin) : min,
+        offset,
+        tether ? mathMax(max, tetherMax) : max
+      );
 
-    popperOffsets[altAxis] = preventedOffset;
-    data[altAxis] = preventedOffset - offset;
+      popperOffsets[altAxis] = preventedOffset;
+      data[altAxis] = preventedOffset - offset;
+    }
   }
 
   state.modifiersData[name] = data;

@@ -4,6 +4,7 @@ import getDocumentElement from './getDocumentElement';
 import getComputedStyle from './getComputedStyle';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import getWindowScroll from './getWindowScroll';
+import { max } from '../utils/math';
 
 // Gets the entire size of the scrollable document area, even extending outside
 // of the `<html>` and `<body>` rect bounds if horizontally scrollable
@@ -12,13 +13,13 @@ export default function getDocumentRect(element: HTMLElement): Rect {
   const winScroll = getWindowScroll(element);
   const body = element.ownerDocument?.body;
 
-  const width = Math.max(
+  const width = max(
     html.scrollWidth,
     html.clientWidth,
     body ? body.scrollWidth : 0,
     body ? body.clientWidth : 0
   );
-  const height = Math.max(
+  const height = max(
     html.scrollHeight,
     html.clientHeight,
     body ? body.scrollHeight : 0,
@@ -29,7 +30,7 @@ export default function getDocumentRect(element: HTMLElement): Rect {
   const y = -winScroll.scrollTop;
 
   if (getComputedStyle(body || html).direction === 'rtl') {
-    x += Math.max(html.clientWidth, body ? body.clientWidth : 0) - width;
+    x += max(html.clientWidth, body ? body.clientWidth : 0) - width;
   }
 
   return { width, height, x, y };

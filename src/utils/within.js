@@ -1,9 +1,10 @@
 // @flow
+import { max as mathMax, min as mathMin } from './math';
 
 export default function within(
   min: number,
   value: number,
   max: number
 ): number {
-  return Math.max(min, Math.min(value, max));
+  return mathMax(min, mathMin(value, max));
 }

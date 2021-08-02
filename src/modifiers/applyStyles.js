@@ -49,6 +49,7 @@ function effect({ state }: ModifierArguments<{||}>) {
   };
 
   Object.assign(state.elements.popper.style, initialStyles.popper);
+  state.styles = initialStyles;
 
   if (state.elements.arrow) {
     Object.assign(state.elements.arrow.style, initialStyles.arrow);
