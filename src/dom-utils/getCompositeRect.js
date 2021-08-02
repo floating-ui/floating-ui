@@ -8,15 +8,12 @@ import getWindowScrollBarX from './getWindowScrollBarX';
 import getDocumentElement from './getDocumentElement';
 import isScrollParent from './isScrollParent';
 
-function isElementScaled(element) {
-  if (isHTMLElement(element)) {
-    const rect = element.getBoundingClientRect();
-    const scaleX = rect.width / element.offsetWidth || 1;
-    const scaleY = rect.height / element.offsetHeight || 1;
+function isElementScaled(element: HTMLElement) {
+  const rect = element.getBoundingClientRect();
+  const scaleX = rect.width / element.offsetWidth || 1;
+  const scaleY = rect.height / element.offsetHeight || 1;
 
-    return scaleX !== 1 || scaleY !== 1;
-  }
-  return false;
+  return scaleX !== 1 || scaleY !== 1;
 }
 
 // Returns the composite rect of an element relative to its offsetParent.
@@ -28,7 +25,7 @@ export default function getCompositeRect(
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const offsetParentIsScaled =
-    isOffsetParentAnElement && isElementScaled(offsetParent);
+    isHTMLElement(offsetParent) && isElementScaled(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(
     elementOrVirtualElement,
