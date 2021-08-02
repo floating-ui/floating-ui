@@ -6,7 +6,7 @@ const round = Math.round;
 
 export default function getBoundingClientRect(
   element: Element | VirtualElement,
-  includeScale = false
+  includeScale: boolean = false
 ): ClientRectObject {
   const rect = element.getBoundingClientRect();
   let scaleX = 1;
