@@ -17,27 +17,14 @@ export type Options = {
   element: HTMLElement | string | null,
   padding:
     | Padding
-    | (({|
+    | (({
         popper: Rect,
         reference: Rect,
         placement: Placement,
-      |}) => Padding),
+      }) => Padding),
 };
 
-const toPaddingObject = (padding, state) => {
-  padding =
-    typeof padding === 'function'
-      ? padding({ ...state.rects, placement: state.placement })
-      : padding;
-
-  return mergePaddingObject(
-    typeof padding !== 'number'
-      ? padding
-      : expandToHashMap(padding, basePlacements)
-  );
-};
-
-function arrow({ state, name, options }: ModifierArguments<Options>) {
+function arrow({ state, name }: ModifierArguments<Options>) {
   const arrowElement = state.elements.arrow;
   const popperOffsets = state.modifiersData.popperOffsets;
   const basePlacement = getBasePlacement(state.placement);
@@ -49,7 +36,7 @@ function arrow({ state, name, options }: ModifierArguments<Options>) {
     return;
   }
 
-  const paddingObject = toPaddingObject(options.padding, state);
+  const paddingObject = state.modifiersData[`${name}#persistent`].padding;
   const arrowRect = getLayoutRect(arrowElement);
   const minProp = axis === 'y' ? top : left;
   const maxProp = axis === 'y' ? bottom : right;
@@ -85,8 +72,8 @@ function arrow({ state, name, options }: ModifierArguments<Options>) {
   };
 }
 
-function effect({ state, options }: ModifierArguments<Options>) {
-  let { element: arrowElement = '[data-popper-arrow]' } = options;
+function effect({ state, options, name }: ModifierArguments<Options>) {
+  let { element: arrowElement = '[data-popper-arrow]', padding = 0 } = options;
 
   if (arrowElement == null) {
     return;
@@ -126,7 +113,19 @@ function effect({ state, options }: ModifierArguments<Options>) {
     return;
   }
 
+  padding =
+    typeof padding === 'function'
+      ? padding({ ...state.rects, placement: state.placement })
+      : padding;
+
   state.elements.arrow = arrowElement;
+  state.modifiersData[`${name}#persistent`] = {
+    padding: mergePaddingObject(
+      typeof padding !== 'number'
+        ? padding
+        : expandToHashMap(padding, basePlacements)
+    ),
+  };
 }
 
 // eslint-disable-next-line import/no-unused-modules

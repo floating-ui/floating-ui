@@ -71,7 +71,8 @@ export type StateOffsets = {|
   arrow?: Offsets,
 |};
 
-type OffsetData = { [Placement]: Offsets };
+/*:: type OffsetData = { [Placement]: Offsets }; */
+/*;; type OffsetData = { [key in Placement]: Offsets } */
 
 export type State = {|
   elements: {|

@@ -11,6 +11,5 @@ module.exports = {
   server: {
     command: `yarn build:dev && DEV_PORT=${process.env.DEV_PORT} yarn serve`,
     port: process.env.DEV_PORT,
-    launchTimeout: 10 * 1000
   },
 };
