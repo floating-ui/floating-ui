@@ -8,6 +8,14 @@ import getWindowScrollBarX from './getWindowScrollBarX';
 import getDocumentElement from './getDocumentElement';
 import isScrollParent from './isScrollParent';
 
+function isElementScaled(element: HTMLElement) {
+  const rect = element.getBoundingClientRect();
+  const scaleX = rect.width / element.offsetWidth || 1;
+  const scaleY = rect.height / element.offsetHeight || 1;
+
+  return scaleX !== 1 || scaleY !== 1;
+}
+
 // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
 export default function getCompositeRect(
@@ -15,9 +23,14 @@ export default function getCompositeRect(
   offsetParent: Element | Window,
   isFixed: boolean = false
 ): Rect {
-  const documentElement = getDocumentElement(offsetParent);
-  const rect = getBoundingClientRect(elementOrVirtualElement);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
+  const offsetParentIsScaled =
+    isHTMLElement(offsetParent) && isElementScaled(offsetParent);
+  const documentElement = getDocumentElement(offsetParent);
+  const rect = getBoundingClientRect(
+    elementOrVirtualElement,
+    offsetParentIsScaled
+  );
 
   let scroll = { scrollLeft: 0, scrollTop: 0 };
   let offsets = { x: 0, y: 0 };
@@ -32,7 +45,7 @@ export default function getCompositeRect(
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent);
+      offsets = getBoundingClientRect(offsetParent, true);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
     } else if (documentElement) {
