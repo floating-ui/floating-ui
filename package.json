@@ -1,5 +1,5 @@
 {
-  "name": "popperjs-monorepo",
+  "name": "@techtouch-inc/popperjs-monorepo",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -42,5 +42,8 @@
   "dependencies": {},
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }

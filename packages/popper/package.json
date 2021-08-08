@@ -1,11 +1,11 @@
 {
-  "name": "popper.js",
-  "version": "1.16.1",
+  "name": "@techtouch-inc/popper.js",
+  "version": "1.16.0",
   "description": "A kickass library to manage your poppers",
   "homepage": "https://popper.js.org",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FezVrasta/popper.js.git"
+    "url": "git+https://github.com/techtouch-inc/popper.js.git"
   },
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "contributors": [
@@ -52,5 +52,8 @@
   },
   "resolutions": {
     "micromatch": "^3.0.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
