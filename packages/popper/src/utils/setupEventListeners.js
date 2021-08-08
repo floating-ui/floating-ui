@@ -1,8 +1,9 @@
 import getScrollParent from './getScrollParent';
 import getWindow from './getWindow';
+import getParentNodeAndParentNodeIs from './getParentNodeAndParentNodeIs';
 
 function attachToScrollParents(scrollParent, event, callback, scrollParents) {
-  const isBody = scrollParent.nodeName === 'BODY';
+  const isBody = scrollParent.nodeName === 'BODY' || getParentNodeAndParentNodeIs(scrollParent, parent => parent.nodeName === 'HTML');
   const target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
   target.addEventListener(event, callback, { passive: true });
 

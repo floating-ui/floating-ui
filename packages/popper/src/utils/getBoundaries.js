@@ -7,6 +7,7 @@ import getViewportOffsetRectRelativeToArtbitraryNode from './getViewportOffsetRe
 import getWindowSizes from './getWindowSizes';
 import isFixed from './isFixed';
 import getFixedPositionOffsetParent from './getFixedPositionOffsetParent';
+import getParentNodeAndParentNodeIs from './getParentNodeAndParentNodeIs';
 
 /**
  * Computed the boundaries limits and return them
@@ -41,7 +42,7 @@ export default function getBoundaries(
     let boundariesNode;
     if (boundariesElement === 'scrollParent') {
       boundariesNode = getScrollParent(getParentNode(reference));
-      if (boundariesNode.nodeName === 'BODY') {
+      if (boundariesNode.nodeName === 'BODY' || getParentNodeAndParentNodeIs(boundariesNode, parent => parent.nodeName === 'HTML')) {
         boundariesNode = popper.ownerDocument.documentElement;
       }
     } else if (boundariesElement === 'window') {

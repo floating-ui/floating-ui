@@ -1,3 +1,4 @@
+import getParentNodeAndParentNodeIs from './getParentNodeAndParentNodeIs';
 /**
  * Gets the scroll value of the given element in the given side (top and left)
  * @method
@@ -10,7 +11,7 @@ export default function getScroll(element, side = 'top') {
   const upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
   const nodeName = element.nodeName;
 
-  if (nodeName === 'BODY' || nodeName === 'HTML') {
+  if (nodeName === 'BODY' || nodeName === 'HTML' || getParentNodeAndParentNodeIs(element, parent => parent.nodeName === 'HTML')) {
     const html = element.ownerDocument.documentElement;
     const scrollingElement = element.ownerDocument.scrollingElement || html;
     return scrollingElement[upperSide];
