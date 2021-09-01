@@ -114,12 +114,16 @@ export type State = {|
   reset: boolean,
 |};
 
+type SetAction<S> = S | ((prev: S) => S);
+
 export type Instance = {|
   state: State,
   destroy: () => void,
   forceUpdate: () => void,
   update: () => Promise<$Shape<State>>,
-  setOptions: (options: $Shape<OptionsGeneric<any>>) => Promise<$Shape<State>>,
+  setOptions: (
+    setOptionsAction: SetAction<$Shape<OptionsGeneric<any>>>
+  ) => Promise<$Shape<State>>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
