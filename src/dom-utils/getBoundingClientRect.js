@@ -13,9 +13,17 @@ export default function getBoundingClientRect(
   let scaleY = 1;
 
   if (isHTMLElement(element) && includeScale) {
+    const offsetHeight = element.offsetHeight;
+    const offsetWidth = element.offsetWidth;
+
+    // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
     // Fallback to 1 in case both values are `0`
-    scaleX = rect.width / element.offsetWidth || 1;
-    scaleY = rect.height / element.offsetHeight || 1;
+    if (offsetWidth > 0) {
+      scaleX = rect.width / offsetWidth || 1;
+    }
+    if (offsetHeight > 0) {
+      scaleY = rect.height / offsetHeight || 1;
+    }
   }
 
   return {
