@@ -36,16 +36,22 @@ jobs:
 
   unit:
     runs-on: ubuntu-latest
+    container:
+      image: ianwalter/puppeteer:3.0.0
+      options: --shm-size=1g
     steps:
       - uses: actions/checkout@v2
-      - uses: mujo-code/puppeteer-headful@master
+      - uses: CultureHQ/actions-yarn@master
+        with:
+          args: install
+      - uses: ianwalter/puppeteer@3.0.0
         with:
           args: yarn
       - name: TypeScript
-        uses: mujo-code/puppeteer-headful@master
+        uses: ianwalter/puppeteer@3.0.0
         with:
           args: yarn build:bundles
       - name: Run Jest Unit Tests
-        uses: mujo-code/puppeteer-headful@master
+        uses: ianwalter/puppeteer@3.0.0
         with:
           args: yarn test:unit
