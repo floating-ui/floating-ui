@@ -7,21 +7,12 @@ import type {
   Rect,
   Window,
 } from '../types';
-import {
-  type BasePlacement,
-  type Variation,
-  top,
-  left,
-  right,
-  bottom,
-  end,
-} from '../enums';
+import { type BasePlacement, top, left, right, bottom } from '../enums';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import getWindow from '../dom-utils/getWindow';
 import getDocumentElement from '../dom-utils/getDocumentElement';
 import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
-import getVariation from '../utils/getVariation';
 import { round } from '../utils/math';
 
 // eslint-disable-next-line import/no-unused-modules
@@ -60,7 +51,6 @@ export function mapToStyles({
   popper,
   popperRect,
   placement,
-  variant,
   offsets,
   position,
   gpuAcceleration,
@@ -70,7 +60,6 @@ export function mapToStyles({
   popper: HTMLElement,
   popperRect: Rect,
   placement: BasePlacement,
-  variant: Variation,
   offsets: $Shape<{ x: number, y: number, centerOffset: number }>,
   position: PositioningStrategy,
   gpuAcceleration: boolean,
@@ -109,20 +98,14 @@ export function mapToStyles({
     // $FlowFixMe[incompatible-cast]: force type refinement, we compare offsetParent with window above, but Flow doesn't detect it
     offsetParent = (offsetParent: Element);
 
-    if (
-      placement === top ||
-      ((placement === left || placement === right) && variant === end)
-    ) {
+    if (placement === top) {
       sideY = bottom;
       // $FlowFixMe[prop-missing]
       y -= offsetParent[heightProp] - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
-    if (
-      placement === left ||
-      ((placement === top || placement === bottom) && variant === end)
-    ) {
+    if (placement === left) {
       sideX = right;
       // $FlowFixMe[prop-missing]
       x -= offsetParent[widthProp] - popperRect.width;
@@ -195,7 +178,6 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
 
   const commonStyles = {
     placement: getBasePlacement(state.placement),
-    variant: getVariation(state.placement),
     popper: state.elements.popper,
     popperRect: state.rects.popper,
     gpuAcceleration,
