@@ -73,7 +73,12 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
     const instance = {
       state,
-      setOptions(options) {
+      setOptions(setOptionsAction) {
+        const options =
+          typeof setOptionsAction === 'function'
+            ? setOptionsAction(state.options)
+            : setOptionsAction;
+
         cleanupModifierEffects();
 
         state.options = {
