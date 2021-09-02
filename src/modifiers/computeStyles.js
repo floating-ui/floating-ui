@@ -7,12 +7,20 @@ import type {
   Rect,
   Window,
 } from '../types';
-import { type BasePlacement, top, left, right, bottom } from '../enums';
+import {
+  type Variation,
+  type BasePlacement,
+  top,
+  left,
+  right,
+  bottom,
+} from '../enums';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import getWindow from '../dom-utils/getWindow';
 import getDocumentElement from '../dom-utils/getDocumentElement';
 import getComputedStyle from '../dom-utils/getComputedStyle';
 import getBasePlacement from '../utils/getBasePlacement';
+import getVariation from '../utils/getVariation';
 import { round } from '../utils/math';
 
 // eslint-disable-next-line import/no-unused-modules
@@ -60,6 +68,7 @@ export function mapToStyles({
   popper: HTMLElement,
   popperRect: Rect,
   placement: BasePlacement,
+  variation: ?Variation,
   offsets: $Shape<{ x: number, y: number, centerOffset: number }>,
   position: PositioningStrategy,
   gpuAcceleration: boolean,
@@ -178,6 +187,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
 
   const commonStyles = {
     placement: getBasePlacement(state.placement),
+    variation: getVariation(state.placement),
     popper: state.elements.popper,
     popperRect: state.rects.popper,
     gpuAcceleration,

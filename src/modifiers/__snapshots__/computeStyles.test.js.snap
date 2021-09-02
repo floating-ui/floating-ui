@@ -53,7 +53,7 @@ Object {
 }
 `;
 
-exports[`computes the popper styles 5`] = `
+exports[`customizes roundOffsets implementation 1`] = `
 Object {
   "bottom": "auto",
   "left": "auto",
@@ -64,13 +64,57 @@ Object {
 }
 `;
 
-exports[`computes the popper styles 6`] = `
+exports[`customizes roundOffsets implementation 2`] = `
 Object {
   "bottom": "auto",
   "left": "auto",
   "position": "absolute",
   "right": "-110.3px",
   "top": "5.83px",
+  "transform": "",
+}
+`;
+
+exports[`uses the other direction with the end variation 1`] = `
+Object {
+  "bottom": "auto",
+  "left": "auto",
+  "position": "absolute",
+  "right": "-110px",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`uses the other direction with the end variation 2`] = `
+Object {
+  "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`uses the other direction with the end variation 3`] = `
+Object {
+  "bottom": "-105px",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "auto",
+  "transform": "",
+}
+`;
+
+exports[`uses the other direction with the end variation 4`] = `
+Object {
+  "bottom": "auto",
+  "left": "10px",
+  "position": "absolute",
+  "right": "auto",
+  "top": "5px",
   "transform": "",
 }
 `;

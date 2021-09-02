@@ -14,6 +14,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: true,
       adaptive: true,
       roundOffsets: true,
+      variation: null,
     })
   ).toMatchSnapshot();
 
@@ -27,6 +28,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      variation: null,
     })
   ).toMatchSnapshot();
 
@@ -40,6 +42,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      variation: null,
     })
   ).toMatchSnapshot();
 
@@ -53,10 +56,70 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      variation: null,
+    })
+  ).toMatchSnapshot();
+});
+
+it('uses the other direction with the end variation', () => {
+  expect(
+    mapToStyles({
+      popper: document.createElement('div'),
+      placement: 'left',
+      variation: 'end',
+      popperRect: { x: 10, y: 10, width: 100, height: 100 },
+      offsets: { x: 10, y: 5 },
+      position: 'absolute',
+      gpuAcceleration: false,
+      adaptive: true,
+      roundOffsets: true,
     })
   ).toMatchSnapshot();
 
-  // customize roundOffsets impls
+  expect(
+    mapToStyles({
+      popper: document.createElement('div'),
+      placement: 'right',
+      variation: 'end',
+      popperRect: { x: 10, y: 10, width: 100, height: 100 },
+      offsets: { x: 10, y: 5 },
+      position: 'absolute',
+      gpuAcceleration: false,
+      adaptive: true,
+      roundOffsets: true,
+    })
+  ).toMatchSnapshot();
+
+  expect(
+    mapToStyles({
+      popper: document.createElement('div'),
+      placement: 'top',
+      variation: 'end',
+      popperRect: { x: 10, y: 10, width: 100, height: 100 },
+      offsets: { x: 10, y: 5 },
+      position: 'absolute',
+      gpuAcceleration: false,
+      adaptive: true,
+      roundOffsets: true,
+    })
+  ).toMatchSnapshot();
+
+  expect(
+    mapToStyles({
+      popper: document.createElement('div'),
+      placement: 'bottom',
+      variation: 'end',
+      popperRect: { x: 10, y: 10, width: 100, height: 100 },
+      offsets: { x: 10, y: 5 },
+      position: 'absolute',
+      gpuAcceleration: false,
+      adaptive: true,
+      roundOffsets: true,
+    })
+  ).toMatchSnapshot();
+});
+
+it('customizes roundOffsets implementation', () => {
   expect(
     mapToStyles({
       popper: document.createElement('div'),
@@ -68,8 +131,9 @@ it('computes the popper styles', () => {
       adaptive: true,
       roundOffsets: ({ x, y }) => ({
         x: Math.round(x + 2),
-        y: Math.round(y + 2)
-      })
+        y: Math.round(y + 2),
+      }),
+      variation: null,
     })
   ).toMatchSnapshot();
 
@@ -83,7 +147,8 @@ it('computes the popper styles', () => {
       position: 'absolute',
       gpuAcceleration: false,
       adaptive: true,
-      roundOffsets: false
+      roundOffsets: false,
+      variation: null,
     })
   ).toMatchSnapshot();
 
@@ -101,6 +166,7 @@ it('computes the arrow styles', () => {
       gpuAcceleration: true,
       adaptive: false,
       roundOffsets: true,
+      variation: null,
     })
   ).toMatchSnapshot();
 });
