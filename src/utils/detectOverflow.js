@@ -1,7 +1,6 @@
 // @flow
 import type { State, SideObject, Padding } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
-import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
 import getClippingRect from '../dom-utils/getClippingRect';
 import getDocumentElement from '../dom-utils/getDocumentElement';
 import computeOffsets from './computeOffsets';
@@ -51,7 +50,6 @@ export default function detectOverflow(
 
   const altContext = elementContext === popper ? reference : popper;
 
-  const referenceElement = state.elements.reference;
   const popperRect = state.rects.popper;
   const element = state.elements[altBoundary ? altContext : elementContext];
 
