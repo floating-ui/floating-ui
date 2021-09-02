@@ -10,7 +10,7 @@ import pkg from '../package.json';
 
 const getFileName = (input) => input.split('/')[1].split('.')[0];
 
-const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js'];
+const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js', 'src/enums.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'umd', dir: 'dist' },
