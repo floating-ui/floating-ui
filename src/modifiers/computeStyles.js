@@ -89,7 +89,10 @@ export function mapToStyles({
     if (offsetParent === getWindow(popper)) {
       offsetParent = getDocumentElement(popper);
 
-      if (getComputedStyle(offsetParent).position !== 'static') {
+      if (
+        getComputedStyle(offsetParent).position !== 'static' &&
+        position === 'absolute'
+      ) {
         heightProp = 'scrollHeight';
         widthProp = 'scrollWidth';
       }
