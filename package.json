@@ -26,19 +26,6 @@
     "/dist",
     "/lib"
   ],
-  "exports": {
-    ".": {
-      "node": {
-        "import": "./lib/index.js",
-        "default": "./dist/cjs/popper.js"
-      },
-      "browser": {
-        "import": "./dist/esm/popper.js",
-        "default": "./dist/umd/popper.js"
-      }
-    },
-    "./package.json": "./package.json"
-  },
   "sideEffects": false,
   "scripts": {
     "clean": "rimraf lib && rimraf dist && rimraf test/visual/dist",
