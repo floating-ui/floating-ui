@@ -18,7 +18,7 @@ it('should position the popper on the right when the popper element is scaled', 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
-it('should position the popper on the right when the parent element is scaled', async () => {
+it.skip('should position the popper on the right when the parent element is scaled', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/transform/parent-scaled.html`);
 
