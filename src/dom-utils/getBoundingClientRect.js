@@ -1,9 +1,10 @@
 // @flow
 import type { ClientRectObject, VirtualElement } from '../types';
-import { isHTMLElement } from './instanceOf';
+// import { isHTMLElement } from './instanceOf';
 
 export default function getBoundingClientRect(
   element: Element | VirtualElement,
+  // eslint-disable-next-line unused-imports/no-unused-vars
   includeScale: boolean = false
 ): ClientRectObject {
   const rect = element.getBoundingClientRect();
