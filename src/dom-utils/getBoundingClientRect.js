@@ -2,8 +2,6 @@
 import type { ClientRectObject, VirtualElement } from '../types';
 import { isHTMLElement } from './instanceOf';
 
-const round = Math.round;
-
 export default function getBoundingClientRect(
   element: Element | VirtualElement,
   includeScale: boolean = false
@@ -27,13 +25,13 @@ export default function getBoundingClientRect(
   }
 
   return {
-    width: round(rect.width / scaleX),
-    height: round(rect.height / scaleY),
-    top: round(rect.top / scaleY),
-    right: round(rect.right / scaleX),
-    bottom: round(rect.bottom / scaleY),
-    left: round(rect.left / scaleX),
-    x: round(rect.left / scaleX),
-    y: round(rect.top / scaleY),
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY,
   };
 }
