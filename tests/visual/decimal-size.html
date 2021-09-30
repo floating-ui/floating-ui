@@ -1,0 +1,42 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  @import '/reset.css';
+  #reference {
+    width: 25.5px;
+    height: 25.5px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #flex {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    top: 0;
+    left: 50px;
+    right: 120px;
+  }
+</style>
+
+<div id="flex">
+  <div id="reference">Reference Box</div>
+  <div id="popper">Popper Box</div>
+</div>
+
+<script type="module">
+  import { createPopper } from './dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+
+  window.instance = createPopper(reference, popper, {
+    placement: 'bottom',
+  });
+</script>
