@@ -35,16 +35,6 @@ class ImageReporter {
             fileId: 'file',
             fileContentType: 'image/png',
           },
-          (err, data) => {
-            console.log(
-              chalk.red.bold(
-                `[${browser}] ${value}\n${browser.replace(
-                  /./g,
-                  ' '
-                )}   Uploaded image diff file to ${JSON.parse(data).url}`
-              )
-            );
-          }
         );
       });
     }
