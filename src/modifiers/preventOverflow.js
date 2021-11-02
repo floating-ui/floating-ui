@@ -167,7 +167,7 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const min = offset + overflow[mainSide];
     const max = offset - overflow[altSide];
 
-    const isOriginSide = [top, left].indexOf(state.placement) !== -1;
+    const isOriginSide = [top, left].indexOf(basePlacement) !== -1;
 
     const offsetModifierValue = offsetModifierState?.[altAxis] ?? 0;
     const tetherMin = isOriginSide
