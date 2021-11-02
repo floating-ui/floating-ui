@@ -117,8 +117,10 @@ export function mapToStyles({
       ((placement === left || placement === right) && variation === end)
     ) {
       sideY = bottom;
-      // $FlowFixMe[prop-missing]
-      y -= offsetParent[heightProp] - popperRect.height;
+      y -=
+        (win.visualViewport?.height ??
+          // $FlowFixMe[prop-missing]
+          offsetParent[heightProp]) - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
@@ -128,7 +130,10 @@ export function mapToStyles({
     ) {
       sideX = right;
       // $FlowFixMe[prop-missing]
-      x -= offsetParent[widthProp] - popperRect.width;
+      x -=
+        (win.visualViewport?.width ??
+          // $FlowFixMe[prop-missing]
+          offsetParent[widthProp]) - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
   }
