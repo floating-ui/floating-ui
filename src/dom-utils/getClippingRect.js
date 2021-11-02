@@ -64,7 +64,9 @@ function getClippingParents(element: Element): Array<Element> {
       isElement(clippingParent) &&
       contains(clippingParent, clipperElement) &&
       getNodeName(clippingParent) !== 'body' &&
-      getComputedStyle(clippingParent).position !== 'static'
+      (canEscapeClipping
+        ? getComputedStyle(clippingParent).position !== 'static'
+        : true)
   );
 }
 
