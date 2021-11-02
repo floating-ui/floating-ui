@@ -1,0 +1,58 @@
+<!DOCTYPE html><meta name="viewport" content="width=device-width" />
+<title>Issue 1136</title>
+
+<style>
+  .fixed {
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #333;
+    color: #fff;
+  }
+
+  #popper {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #f00;
+    width: 200px;
+    height: 100px;
+  }
+
+  .content {
+    height: 5000px;
+  }
+</style>
+
+<div class="content">
+  <p id="log"></p>
+  <div id="reference" class="fixed">Reference</div>
+  <div id="popper">Popper</div>
+</div>
+
+<script type="module">
+  import { createPopper } from '../dist/popper.js';
+  const reference = document.querySelector('#reference');
+  const popper = document.querySelector('#popper');
+  window.instance = createPopper(reference, popper, {
+    placement: 'top',
+    strategy: 'fixed',
+    modifiers: [
+      {
+        name: 'preventOverflow',
+        enabled: false,
+      },
+      {
+        name: 'computeStyles',
+        options: {
+          adaptive: true,
+        },
+      },
+      {
+        name: 'flip',
+        enabled: false,
+      },
+    ],
+  });
+</script>
