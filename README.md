@@ -45,27 +45,33 @@ We've created a
 [Migration Guide](https://popper.js.org/docs/v2/migration-guide/) to help you
 migrate from Popper 1 to Popper 2.
 
-To contribute to the Popper website and documentation, please visit the [dedicated repository](https://github.com/popperjs/website).
+To contribute to the Popper website and documentation, please visit the
+[dedicated repository](https://github.com/popperjs/website).
 
 ## Why not use pure CSS?
 
-CSS tooltips have accessibility and usability problems:
-
-- **Clipping and overflow issues**: CSS tooltips will not be prevented from
-  overflowing clipping boundaries, such as the viewport. The tooltip gets
-  partially cut off or overflows if it's near the edge since there is no dynamic
-  positioning logic. When using Popper, your tooltip will always be positioned
-  in the right place.
-- **No flipping**: CSS tooltips will not flip to a different placement to fit
-  better in view if necessary. Popper automatically flips the tooltip to make it
-  fit in view as best as possible for the user.
-- **Using HTML**: Popovers containing interactive HTML are difficult or not
-  possible to create without UX issues using pure CSS. Popper positions any HTML
-  element – no pseudo-elements are used.
-- **No virtual positioning**: CSS tooltips cannot follow the mouse cursor or be
+- **Clipping and overflow issues**: Pure CSS poppers will not be prevented from
+  overflowing clipping boundaries, such as the viewport. It will get partially
+  cut off or overflows if it's near the edge since there is no dynamic
+  positioning logic. When using Popper, your popper will always be positioned in
+  the right place without needing manual adjustments.
+- **No flipping**: CSS poppers will not flip to a different placement to fit
+  better in view if necessary. While you can manually adjust for the main axis
+  overflow, this feature cannot be achieved via CSS alone. Popper automatically
+  flips the tooltip to make it fit in view as best as possible for the user.
+- **No virtual positioning**: CSS poppers cannot follow the mouse cursor or be
   used as a context menu. Popper allows you to position your tooltip relative to
   any coordinates you desire.
-- **Lack of extensibility**: CSS tooltips cannot be easily extended to fit any
+- **Slower development cycle**: When pure CSS is used to position popper
+  elements, the lack of dynamic positioning means they must be carefully placed
+  to consider overflow on all screen sizes. In reusable component libraries,
+  this means a developer can't just add the component anywhere on the page,
+  because these issues need to be considered and adjusted for every time. With
+  Popper, you can place your elements anywhere and they will be positioned
+  correctly, without needing to consider different screen sizes, layouts, etc.
+  This massively speeds up development time because this work is automatically
+  offloaded to Popper.
+- **Lack of extensibility**: CSS poppers cannot be easily extended to fit any
   arbitrary use case you may need to adjust for. Popper is built with
   extensibility in mind.
 
@@ -81,6 +87,10 @@ Naive JavaScript tooltip implementations usually have the following problems:
   containers.
 - **DOM context**: They often require the tooltip move outside of its original
   DOM context because they don't handle `offsetParent` contexts.
+- **Compatibility**: Popper handles an incredible number of edge cases regarding
+  different browsers and environments (mobile viewports, RTL, scrollbars enabled
+  or disabled, etc.). Popper is a popular and well-maintained library, so you
+  can be confident positioning will work for your users on any device.
 - **Configurability**: They often lack advanced configurability to suit any
   possible use case.
 - **Size**: They are usually relatively large in size, or require an ancient
@@ -207,7 +217,7 @@ library is built in a modular way to allow to import only the parts you really
 need.
 
 ```js
-import { createPopperLite as createPopper } from "@popperjs/core";
+import { createPopperLite as createPopper } from '@popperjs/core';
 ```
 
 The Lite version includes the most necessary modifiers that will compute the
@@ -221,7 +231,11 @@ The two most useful modifiers not included in Lite are `preventOverflow` and
 `flip`:
 
 ```js
-import { createPopperLite as createPopper, preventOverflow, flip } from "@popperjs/core";
+import {
+  createPopperLite as createPopper,
+  preventOverflow,
+  flip,
+} from '@popperjs/core';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
