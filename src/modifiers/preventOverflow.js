@@ -18,8 +18,9 @@ type TetherOffset =
       popper: Rect,
       reference: Rect,
       placement: Placement,
-    }) => number)
-  | number;
+    }) => number | { mainAxis: number, altAxis: number })
+  | number
+  | { mainAxis: number, altAxis: number };
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
@@ -77,6 +78,10 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
           placement: state.placement,
         })
       : tetherOffset;
+  const normalizedTetherOffsetValue =
+    typeof tetherOffsetValue === 'number'
+      ? { mainAxis: tetherOffsetValue, altAxis: tetherOffsetValue }
+      : { mainAxis: 0, altAxis: 0, ...tetherOffsetValue };
   const offsetModifierState = state.modifiersData.offset
     ? state.modifiersData.offset[state.placement]
     : null;
@@ -126,15 +131,21 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
         additive -
         arrowLen -
         arrowPaddingMin -
-        tetherOffsetValue
-      : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
+        normalizedTetherOffsetValue.mainAxis
+      : minLen -
+        arrowLen -
+        arrowPaddingMin -
+        normalizedTetherOffsetValue.mainAxis;
     const maxOffset = isBasePlacement
       ? -referenceRect[len] / 2 +
         additive +
         arrowLen +
         arrowPaddingMax +
-        tetherOffsetValue
-      : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
+        normalizedTetherOffsetValue.mainAxis
+      : maxLen +
+        arrowLen +
+        arrowPaddingMax +
+        normalizedTetherOffsetValue.mainAxis;
 
     const arrowOffsetParent =
       state.elements.arrow && getOffsetParent(state.elements.arrow);
@@ -173,9 +184,17 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     const offsetModifierValue = offsetModifierState?.[altAxis] ?? 0;
     const tetherMin = isOriginSide
       ? min
-      : offset - referenceRect[len] - popperRect[len] - offsetModifierValue;
+      : offset -
+        referenceRect[len] -
+        popperRect[len] -
+        offsetModifierValue +
+        normalizedTetherOffsetValue.altAxis;
     const tetherMax = isOriginSide
-      ? offset + referenceRect[len] + popperRect[len] - offsetModifierValue
+      ? offset +
+        referenceRect[len] +
+        popperRect[len] -
+        offsetModifierValue -
+        normalizedTetherOffsetValue.altAxis
       : max;
 
     const preventedOffset =
