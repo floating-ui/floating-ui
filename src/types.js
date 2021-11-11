@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable import/no-unused-modules */
-import type { Placement, ModifierPhases } from './enums';
+import type { ComputedPlacement, Placement, ModifierPhases } from './enums';
 
 import type { PopperOffsetsModifier } from './modifiers/popperOffsets';
 import type { FlipModifier } from './modifiers/flip';
@@ -80,7 +80,7 @@ export type State = {|
     arrow?: HTMLElement,
   |},
   options: OptionsGeneric<any>,
-  placement: Placement,
+  placement: ComputedPlacement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any, any>>,
   rects: StateRects,
