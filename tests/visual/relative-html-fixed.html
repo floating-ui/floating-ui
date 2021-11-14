@@ -32,12 +32,22 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { createPopper } from './dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from './dist/index.js';
+  import { platform } from './dist/dom.js';
 
-  window.instance = createPopper(reference, popper, {
-    placement: 'top',
-    strategy: 'fixed',
-  });
+  async function update() {
+    const { x, y } = await position(reference, popper, {
+      platform,
+      placement: 'top',
+      strategy: 'fixed',
+    });
+
+    Object.assign(popper.style, {
+      position: 'fixed',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
 </script>

@@ -1,7 +1,6 @@
 // @flow
 import getWindow from './getWindow';
 import getDocumentElement from './getDocumentElement';
-import getWindowScrollBarX from './getWindowScrollBarX';
 
 export default function getViewportRect(element: Element) {
   const win = getWindow(element);
@@ -37,10 +36,5 @@ export default function getViewportRect(element: Element) {
     }
   }
 
-  return {
-    width,
-    height,
-    x: x + getWindowScrollBarX(element),
-    y,
-  };
+  return { width, height, x, y };
 }

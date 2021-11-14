@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[placement: bottom] computes offsets 1`] = `
+Object {
+  "x": 150,
+  "y": 300,
+}
+`;
+
+exports[`[placement: bottom-end] computes offsets 1`] = `
+Object {
+  "x": 200,
+  "y": 300,
+}
+`;
+
+exports[`[placement: bottom-start] computes offsets 1`] = `
+Object {
+  "x": 100,
+  "y": 300,
+}
+`;
+
+exports[`[placement: left] computes offsets 1`] = `
+Object {
+  "x": 0,
+  "y": 150,
+}
+`;
+
+exports[`[placement: left-end] computes offsets 1`] = `
+Object {
+  "x": 0,
+  "y": 200,
+}
+`;
+
+exports[`[placement: left-start] computes offsets 1`] = `
+Object {
+  "x": 0,
+  "y": 100,
+}
+`;
+
+exports[`[placement: right] computes offsets 1`] = `
+Object {
+  "x": 300,
+  "y": 150,
+}
+`;
+
+exports[`[placement: right-end] computes offsets 1`] = `
+Object {
+  "x": 300,
+  "y": 200,
+}
+`;
+
+exports[`[placement: right-start] computes offsets 1`] = `
+Object {
+  "x": 300,
+  "y": 100,
+}
+`;
+
+exports[`[placement: top] computes offsets 1`] = `
+Object {
+  "x": 150,
+  "y": 0,
+}
+`;
+
+exports[`[placement: top-end] computes offsets 1`] = `
+Object {
+  "x": 200,
+  "y": 0,
+}
+`;
+
+exports[`[placement: top-start] computes offsets 1`] = `
+Object {
+  "x": 100,
+  "y": 0,
+}
+`;

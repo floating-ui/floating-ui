@@ -50,11 +50,7 @@
     border: 10px solid;
   }
 
-  #arrow::before {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 20px;
+  #popperArrow {
     width: 20px;
     height: 20px;
     background-color: yellow;
@@ -66,17 +62,42 @@
     <div class="scroll scroll1"><div id="reference">Reference Box</div></div>
     <div id="popper">
       Popper Box
-      <div id="arrow" data-popper-arrow></div>
+      <div id="popperArrow"></div>
     </div>
   </div>
 </div>
 
 <script type="module">
-  import { createPopper } from '../../dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position, shift, arrow } from '../../dist/index.js';
+  import { platform } from '../../dist/dom.js';
+  import listScrollParents from '../../dist/dom-utils/listScrollParents.js';
 
-  window.instance = createPopper(reference, popper, {
-    placement: 'right',
+  async function update() {
+    const { x, y, modifiersData } = await position(reference, popper, {
+      platform,
+      placement: 'right',
+      modifiers: [shift(), arrow({ element: popperArrow })],
+    });
+
+    Object.assign(popper.style, {
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+
+    Object.assign(popperArrow.style, {
+      position: 'absolute',
+      left: `${modifiersData.arrow.x}px`,
+      top: `${modifiersData.arrow.y}px`,
+    });
+  }
+
+  Object.assign(popper.style, {
+    position: 'absolute',
   });
+
+  update();
+  [
+    ...listScrollParents(reference),
+    ...listScrollParents(popper),
+  ].forEach((parent) => parent.addEventListener('scroll', update));
 </script>

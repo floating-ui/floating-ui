@@ -32,9 +32,8 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { createPopper } from './dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from './dist/index.js';
+  import { platform } from './dist/dom.js';
 
   function generateGetBoundingClientRect(x = 0, y = 0) {
     return () => ({
@@ -51,10 +50,23 @@
     getBoundingClientRect: generateGetBoundingClientRect(),
   };
 
-  const instance = createPopper(virtualElement, popper);
+  async function update() {
+    const { x, y } = await position(virtualElement, popper, {
+      platform,
+      placement: 'right',
+    });
+
+    Object.assign(popper.style, {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
 
   document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
     virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
-    instance.update();
+    update();
   });
 </script>

@@ -1,4 +1,7 @@
+/* eslint-disable import/no-unused-modules */
 // @flow
+import getBasePlacement from './utils/getBasePlacement';
+
 export const top: 'top' = 'top';
 export const bottom: 'bottom' = 'bottom';
 export const right: 'right' = 'right';
@@ -45,11 +48,8 @@ export const variationPlacements: Array<VariationPlacement> = basePlacements.red
     acc.concat([(`${placement}-${start}`: any), (`${placement}-${end}`: any)]),
   []
 );
-export const placements: Array<Placement> = [...basePlacements, auto].reduce(
-  (
-    acc: Array<Placement>,
-    placement: BasePlacement | typeof auto
-  ): Array<Placement> =>
+export const placements = basePlacements.reduce(
+  (acc: Array<Placement>, placement: BasePlacement): Array<Placement> =>
     acc.concat([
       placement,
       (`${placement}-${start}`: any),
@@ -57,38 +57,6 @@ export const placements: Array<Placement> = [...basePlacements, auto].reduce(
     ]),
   []
 );
-
-// modifiers that need to read the DOM
-export const beforeRead: 'beforeRead' = 'beforeRead';
-export const read: 'read' = 'read';
-export const afterRead: 'afterRead' = 'afterRead';
-// pure-logic modifiers
-export const beforeMain: 'beforeMain' = 'beforeMain';
-export const main: 'main' = 'main';
-export const afterMain: 'afterMain' = 'afterMain';
-// modifier with the purpose to write to the DOM (or write into a framework state)
-export const beforeWrite: 'beforeWrite' = 'beforeWrite';
-export const write: 'write' = 'write';
-export const afterWrite: 'afterWrite' = 'afterWrite';
-export const modifierPhases: Array<ModifierPhases> = [
-  beforeRead,
-  read,
-  afterRead,
-  beforeMain,
-  main,
-  afterMain,
-  beforeWrite,
-  write,
-  afterWrite,
-];
-
-export type ModifierPhases =
-  | typeof beforeRead
-  | typeof read
-  | typeof afterRead
-  | typeof beforeMain
-  | typeof main
-  | typeof afterMain
-  | typeof beforeWrite
-  | typeof write
-  | typeof afterWrite;
+export const computedPlacements: Array<ComputedPlacement> =
+  // $FlowIgnore[incompatible-type]
+  placements.filter((placement) => getBasePlacement(placement) !== auto);

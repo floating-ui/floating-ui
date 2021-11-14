@@ -18,7 +18,10 @@ it('should position popper on right when reference is in table', async () => {
 
   await scroll(page, 'html', 100);
 
-  expect(await screenshot(page)).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot({
+    failureThresholdType: 'percent',
+    failureThreshold: 0.005,
+  });
 });
 
 it('should position popper on right when reference and popper are in table', async () => {
@@ -28,7 +31,10 @@ it('should position popper on right when reference and popper are in table', asy
 
   await scroll(page, 'html', 100);
 
-  expect(await screenshot(page)).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot({
+    failureThresholdType: 'percent',
+    failureThreshold: 0.005,
+  });
 });
 
 it('should position popper on right when reference is in table inside offsetParents', async () => {
@@ -38,7 +44,10 @@ it('should position popper on right when reference is in table inside offsetPare
 
   await scroll(page, 'html', 100);
 
-  expect(await screenshot(page)).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot({
+    failureThresholdType: 'percent',
+    failureThreshold: 0.005,
+  });
 });
 
 it('should position popper on right when reference and popper are in table inside offsetParents', async () => {
@@ -48,12 +57,18 @@ it('should position popper on right when reference and popper are in table insid
 
   await scroll(page, 'html', 100);
 
-  expect(await screenshot(page)).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot({
+    failureThresholdType: 'percent',
+    failureThreshold: 0.005,
+  });
 });
 
 it('should position popper on right #1124', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/table/offset-parent-2.html`);
 
-  expect(await screenshot(page)).toMatchImageSnapshot();
+  expect(await screenshot(page)).toMatchImageSnapshot({
+    failureThresholdType: 'percent',
+    failureThreshold: 0.005,
+  });
 });

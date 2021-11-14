@@ -1,13 +1,13 @@
+/* eslint-disable import/no-unused-modules */
 // @flow
 export type * from './types';
-export * from './enums';
-export * from './modifiers';
 
-// eslint-disable-next-line import/no-unused-modules
-export { popperGenerator, detectOverflow, createPopper as createPopperBase } from './createPopper';
-
-// eslint-disable-next-line import/no-unused-modules
-export { createPopper } from './popper';
-
-// eslint-disable-next-line import/no-unused-modules
-export { createPopper as createPopperLite } from './popper-lite';
+export { position } from './position';
+export { platform } from './dom';
+export { auto } from './modifiers/auto';
+export { shift, limitShift } from './modifiers/shift';
+export { flip } from './modifiers/flip';
+export { arrow } from './modifiers/arrow';
+export { offset } from './modifiers/offset';
+export { hide } from './modifiers/hide';
+export { size } from './modifiers/size';

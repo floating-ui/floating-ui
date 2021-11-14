@@ -32,11 +32,24 @@
 </div>
 
 <script type="module">
-  import { createPopper } from './dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from './dist/index.js';
+  import { platform } from './dist/dom.js';
 
-  window.instance = createPopper(reference, popper, {
-    placement: 'bottom',
+  async function update() {
+    const { x, y } = await position(reference, popper, {
+      platform,
+      placement: 'bottom',
+    });
+
+    Object.assign(popper.style, {
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  Object.assign(popper.style, {
+    position: 'absolute',
   });
+
+  update();
 </script>

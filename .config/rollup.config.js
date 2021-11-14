@@ -10,11 +10,19 @@ import pkg from '../package.json';
 
 const getFileName = (input) => input.split('/')[1].split('.')[0];
 
-const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js', 'src/enums.js'];
+const inputs = [
+  // 'src/popper.js',
+  // 'src/popper-lite.js',
+  // 'src/popper-base.js',
+  // 'src/enums.js',
+  // 'src/position.js',
+  'src/index.js',
+];
 const bundles = [
-  { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
-  { inputs, format: 'umd', dir: 'dist' },
-  { inputs, format: 'cjs', dir: 'dist', flow: true },
+  { inputs, format: 'esm', dir: 'dist', minify: true, flow: true },
+  { inputs, format: 'esm', dir: 'dist', minify: false, flow: true },
+  // { inputs, format: 'umd', dir: 'dist' },
+  // { inputs, format: 'cjs', dir: 'dist', flow: true },
 ];
 
 const configs = bundles
@@ -22,15 +30,16 @@ const configs = bundles
     inputs.map((input) => ({
       input,
       plugins: [
-        format === 'umd' &&
-          replace({
-            __DEV__: minify ? 'false' : 'true',
-          }),
+        // format === 'umd' &&
+        replace({
+          __DEV__: minify ? 'false' : 'true',
+        }),
         babel({ babelHelpers: 'bundled' }),
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
-        minify && compiler(),
+        // minify && compiler(),
         minify && terser(),
-        license({ banner: `@popperjs/core v${pkg.version} - MIT License` }),
+        !minify &&
+          license({ banner: `@popperjs/core v${pkg.version} - MIT License` }),
         flow && flowEntry({ types: `lib/${getFileName(input)}.js` }),
         bundleSize(),
         visualizer({

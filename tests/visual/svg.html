@@ -39,15 +39,28 @@
 <div class="popper" id="popper-2">Popper Box</div>
 
 <script type="module">
-  import { createPopper } from './dist/popper.js';
+  import { position } from './dist/index.js';
+  import { platform } from './dist/dom.js';
 
   const n = document.querySelectorAll('.popper').length;
 
   for (let i = 1; i < n + 1; i++) {
     const reference = document.querySelector(`#reference-${i}`);
     const popper = document.querySelector(`#popper-${i}`);
-    createPopper(reference, popper, {
-      placement: 'right',
-    });
+
+    async function update() {
+      const { x, y } = await position(reference, popper, {
+        platform,
+        placement: 'right',
+      });
+
+      Object.assign(popper.style, {
+        position: 'absolute',
+        left: `${x}px`,
+        top: `${y}px`,
+      });
+    }
+
+    update();
   }
 </script>

@@ -44,14 +44,31 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { createPopper } from './dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from './dist/index.js';
+  import { platform } from './dist/dom.js';
+  import listScrollParents from './dist/dom-utils/listScrollParents.js';
 
   const virtualElement = {
     getBoundingClientRect: () => reference.getBoundingClientRect(),
     contextElement: reference,
   };
 
-  const instance = createPopper(virtualElement, popper);
+  async function update() {
+    const { x, y } = await position(virtualElement, popper, {
+      platform,
+      placement: 'right',
+    });
+
+    Object.assign(popper.style, {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
+  [
+    ...listScrollParents(reference),
+    ...listScrollParents(popper),
+  ].forEach((parent) => parent.addEventListener('scroll', update));
 </script>

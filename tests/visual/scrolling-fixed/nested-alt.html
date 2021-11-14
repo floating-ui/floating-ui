@@ -50,12 +50,30 @@
 </div>
 
 <script type="module">
-  import { createPopper } from '../dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from '../dist/index.js';
+  import { platform } from '../dist/dom.js';
+  import listScrollParents from '../dist/dom-utils/listScrollParents.js';
 
-  window.instance = createPopper(reference, popper, {
-    placement: 'right',
-    strategy: 'fixed',
+  async function update() {
+    const { x, y } = await position(reference, popper, {
+      platform,
+      placement: 'right',
+      strategy: 'fixed',
+    });
+
+    Object.assign(popper.style, {
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  Object.assign(popper.style, {
+    position: 'fixed',
   });
+
+  update();
+  [
+    ...listScrollParents(reference),
+    ...listScrollParents(popper),
+  ].forEach((parent) => parent.addEventListener('scroll', update));
 </script>

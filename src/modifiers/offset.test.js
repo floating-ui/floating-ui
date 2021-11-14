@@ -1,6 +1,6 @@
 // @flow
 import createRectMock from '../../tests/utils/createRectMock';
-import { distanceAndSkiddingToXY } from './offset';
+import { convertTupleToCoords } from './offset';
 
 const reference = createRectMock({
   width: 0,
@@ -16,10 +16,15 @@ const popper = createRectMock({
   y: 0,
 });
 
-['top', 'right', 'bottom', 'left'].forEach(placement => {
+['top', 'right', 'bottom', 'left'].forEach((placement) => {
   it(placement, () => {
     expect(
-      distanceAndSkiddingToXY(placement, { reference, popper }, () => [10, 20])
+      convertTupleToCoords({
+        placement,
+        rects: { reference, popper },
+        coords: { x: 0, y: 0 },
+        tuple: () => [10, 20],
+      })
     ).toMatchSnapshot();
   });
 });

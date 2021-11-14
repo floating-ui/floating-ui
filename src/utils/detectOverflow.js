@@ -1,41 +1,72 @@
 // @flow
-import type { State, SideObject, Padding } from '../types';
-import type { Placement, Boundary, RootBoundary, Context } from '../enums';
-import getClippingRect from '../dom-utils/getClippingRect';
-import getDocumentElement from '../dom-utils/getDocumentElement';
-import getBoundingClientRect from '../dom-utils/getBoundingClientRect';
-import computeOffsets from './computeOffsets';
+import type { SideObject, Padding, Window, ModifierArguments } from '../types';
+import type { Boundary, RootBoundary, Context } from '../enums';
 import rectToClientRect from './rectToClientRect';
 import {
   clippingParents,
   reference,
   popper,
-  bottom,
-  top,
-  right,
   basePlacements,
   viewport,
 } from '../enums';
-import { isElement } from '../dom-utils/instanceOf';
 import mergePaddingObject from './mergePaddingObject';
 import expandToHashMap from './expandToHashMap';
 
 // eslint-disable-next-line import/no-unused-modules
-export type Options = {
-  placement: Placement,
+export type Options = {|
   boundary: Boundary,
   rootBoundary: RootBoundary,
   elementContext: Context,
   altBoundary: boolean,
   padding: Padding,
-};
+|};
 
-export default function detectOverflow(
-  state: State,
+let element;
+let isAppended = false;
+
+// Draw the clipping rect on the screen for debugging purposes
+// eslint-disable-next-line unused-imports/no-unused-vars
+function draw(rect, parent: ?(Element | Window)) {
+  if (isAppended) {
+    Object.assign(element.style, {
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+      top: `${rect.y}px`,
+      left: `${rect.x}px`,
+    });
+
+    return;
+  }
+
+  element = document.createElement('div');
+  Object.assign(element.style, {
+    position: 'absolute',
+    backgroundColor: 'yellow',
+    opacity: '0.3',
+    pointerEvents: 'none',
+    width: `${rect.width}px`,
+    height: `${rect.height}px`,
+    top: `${rect.y}px`,
+    left: `${rect.x}px`,
+  });
+
+  if (parent?.toString() === '[object Window]') {
+    parent = document.body;
+  }
+
+  // $FlowIgnore[prop-missing] checked above
+  parent?.appendChild(element);
+
+  isAppended = true;
+}
+
+export default async function detectOverflow(
+  modifierArguments: ModifierArguments,
   options: $Shape<Options> = {}
-): SideObject {
+): Promise<SideObject> {
+  const { platform, rects, coords, elements, strategy } = modifierArguments;
+
   const {
-    placement = state.placement,
     boundary = clippingParents,
     rootBoundary = viewport,
     elementContext = popper,
@@ -50,38 +81,38 @@ export default function detectOverflow(
   );
 
   const altContext = elementContext === popper ? reference : popper;
+  const element = elements[altBoundary ? altContext : elementContext];
 
-  const popperRect = state.rects.popper;
-  const element = state.elements[altBoundary ? altContext : elementContext];
-
-  const clippingClientRect = getClippingRect(
-    isElement(element)
+  const clippingClientRect = await platform.getClippingClientRect({
+    element: (await platform.isElement(element))
       ? element
-      : element.contextElement || getDocumentElement(state.elements.popper),
+      : element.contextElement ||
+        (await platform.getDocumentElement({ element: elements.popper })),
     boundary,
-    rootBoundary
+    rootBoundary,
+  });
+
+  const elementClientRect = rectToClientRect(
+    await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+      rect:
+        elementContext === popper
+          ? { ...rects.popper, ...coords }
+          : rects.reference,
+      offsetParent: await platform.getOffsetParent({
+        element: elements.popper,
+      }),
+      strategy,
+    })
   );
 
-  const referenceClientRect = getBoundingClientRect(state.elements.reference);
-
-  const popperOffsets = computeOffsets({
-    reference: referenceClientRect,
-    element: popperRect,
-    strategy: 'absolute',
-    placement,
-  });
-
-  const popperClientRect = rectToClientRect({
-    ...popperRect,
-    ...popperOffsets,
-  });
-
-  const elementClientRect =
-    elementContext === popper ? popperClientRect : referenceClientRect;
+  if (__DEV__) {
+    // draw(elementClientRect, document.body);
+    // draw(clippingClientRect, document.body);
+  }
 
   // positive = overflowing the clipping rect
   // 0 or negative = within the clipping rect
-  const overflowOffsets = {
+  return {
     top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
     bottom:
       elementClientRect.bottom -
@@ -91,19 +122,4 @@ export default function detectOverflow(
     right:
       elementClientRect.right - clippingClientRect.right + paddingObject.right,
   };
-
-  const offsetData = state.modifiersData.offset;
-
-  // Offsets can be applied only to the popper element
-  if (elementContext === popper && offsetData) {
-    const offset = offsetData[placement];
-
-    Object.keys(overflowOffsets).forEach((key) => {
-      const multiply = [right, bottom].indexOf(key) >= 0 ? 1 : -1;
-      const axis = [top, bottom].indexOf(key) >= 0 ? 'y' : 'x';
-      overflowOffsets[key] += offset[axis] * multiply;
-    });
-  }
-
-  return overflowOffsets;
 }

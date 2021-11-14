@@ -19,6 +19,7 @@
     background-color: rebeccapurple;
     box-shadow: inset 0 0 0 1px black;
     transform: scale(1.5);
+    transform-origin: top left;
   }
 </style>
 
@@ -26,11 +27,21 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { createPopper } from '../dist/popper.js';
-  const reference = document.querySelector('#reference');
-  const popper = document.querySelector('#popper');
+  import { position } from '../dist/index.js';
+  import { platform } from '../dist/dom.js';
 
-  window.instance = createPopper(reference, popper, {
-    placement: 'right',
-  });
+  async function update() {
+    const { x, y } = await position(reference, popper, {
+      platform,
+      placement: 'right',
+    });
+
+    Object.assign(popper.style, {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
 </script>

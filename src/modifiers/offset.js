@@ -1,8 +1,8 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments, Modifier, Rect, Offsets } from '../types';
+import type { ModifierArguments, Rect, Coords } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
-import { top, left, right, placements } from '../enums';
+import { top, left, right } from '../enums';
 
 type OffsetsFunction = ({
   popper: Rect,
@@ -12,59 +12,35 @@ type OffsetsFunction = ({
 
 type Offset = OffsetsFunction | [?number, ?number];
 
-// eslint-disable-next-line import/no-unused-modules
-export type Options = {
-  offset: Offset,
-};
-
-export function distanceAndSkiddingToXY(
+export function convertTupleToCoords({
+  placement,
+  coords,
+  rects,
+  tuple,
+}: {
   placement: Placement,
+  coords: Coords,
   rects: { popper: Rect, reference: Rect },
-  offset: Offset
-): Offsets {
+  tuple: Offset,
+}) {
   const basePlacement = getBasePlacement(placement);
   const invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
 
   let [skidding, distance] =
-    typeof offset === 'function'
-      ? offset({
-          ...rects,
-          placement,
-        })
-      : offset;
+    typeof tuple === 'function' ? tuple({ ...rects, placement }) : tuple;
 
   skidding = skidding || 0;
   distance = (distance || 0) * invertDistance;
 
   return [left, right].indexOf(basePlacement) >= 0
-    ? { x: distance, y: skidding }
-    : { x: skidding, y: distance };
+    ? { x: coords.x + distance, y: coords.y + skidding }
+    : { x: coords.x + skidding, y: coords.y + distance };
 }
 
-function offset({ state, options, name }: ModifierArguments<Options>) {
-  const { offset = [0, 0] } = options;
-
-  const data = placements.reduce((acc, placement) => {
-    acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
-    return acc;
-  }, {});
-
-  const { x, y } = data[state.placement];
-
-  if (state.modifiersData.popperOffsets != null) {
-    state.modifiersData.popperOffsets.x += x;
-    state.modifiersData.popperOffsets.y += y;
-  }
-
-  state.modifiersData[name] = data;
-}
-
-// eslint-disable-next-line import/no-unused-modules
-export type OffsetModifier = Modifier<'offset', Options>;
-export default ({
+export const offset = (tuple: Offset) => ({
   name: 'offset',
-  enabled: true,
-  phase: 'main',
-  requires: ['popperOffsets'],
-  fn: offset,
-}: OffsetModifier);
+  fn(modifierArguments: ModifierArguments) {
+    const { placement, rects, coords } = modifierArguments;
+    return convertTupleToCoords({ placement, rects, coords, tuple });
+  },
+});

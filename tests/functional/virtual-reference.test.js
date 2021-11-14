@@ -4,7 +4,7 @@
  */
 import { scroll, screenshot } from '../utils/puppeteer.js';
 
-it('should follow the cursor', async () => {
+it('should follow scroll', async () => {
   const page = await browser.newPage();
   await page.goto(`${TEST_URL}/virtual-reference.html`);
 
