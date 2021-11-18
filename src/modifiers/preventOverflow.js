@@ -5,21 +5,22 @@ import type { Rect, ModifierArguments, Modifier, Padding } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
-import within from '../utils/within';
+import { within, withinMaxClamp } from '../utils/within';
 import getLayoutRect from '../dom-utils/getLayoutRect';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import detectOverflow from '../utils/detectOverflow';
 import getVariation from '../utils/getVariation';
 import getFreshSideObject from '../utils/getFreshSideObject';
-import { max as mathMax, min as mathMin } from '../utils/math';
+import { min as mathMin, max as mathMax } from '../utils/math';
 
 type TetherOffset =
   | (({
       popper: Rect,
       reference: Rect,
       placement: Placement,
-    }) => number)
-  | number;
+    }) => number | { mainAxis: number, altAxis: number })
+  | number
+  | { mainAxis: number, altAxis: number };
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
@@ -77,6 +78,13 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
           placement: state.placement,
         })
       : tetherOffset;
+  const normalizedTetherOffsetValue =
+    typeof tetherOffsetValue === 'number'
+      ? { mainAxis: tetherOffsetValue, altAxis: tetherOffsetValue }
+      : { mainAxis: 0, altAxis: 0, ...tetherOffsetValue };
+  const offsetModifierState = state.modifiersData.offset
+    ? state.modifiersData.offset[state.placement]
+    : null;
 
   const data = { x: 0, y: 0 };
 
@@ -84,14 +92,14 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
     return;
   }
 
-  if (checkMainAxis || checkAltAxis) {
+  if (checkMainAxis) {
     const mainSide = mainAxis === 'y' ? top : left;
     const altSide = mainAxis === 'y' ? bottom : right;
     const len = mainAxis === 'y' ? 'height' : 'width';
     const offset = popperOffsets[mainAxis];
 
-    const min = popperOffsets[mainAxis] + overflow[mainSide];
-    const max = popperOffsets[mainAxis] - overflow[altSide];
+    const min = offset + overflow[mainSide];
+    const max = offset - overflow[altSide];
 
     const additive = tether ? -popperRect[len] / 2 : 0;
 
@@ -123,15 +131,21 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
         additive -
         arrowLen -
         arrowPaddingMin -
-        tetherOffsetValue
-      : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
+        normalizedTetherOffsetValue.mainAxis
+      : minLen -
+        arrowLen -
+        arrowPaddingMin -
+        normalizedTetherOffsetValue.mainAxis;
     const maxOffset = isBasePlacement
       ? -referenceRect[len] / 2 +
         additive +
         arrowLen +
         arrowPaddingMax +
-        tetherOffsetValue
-      : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
+        normalizedTetherOffsetValue.mainAxis
+      : maxLen +
+        arrowLen +
+        arrowPaddingMax +
+        normalizedTetherOffsetValue.mainAxis;
 
     const arrowOffsetParent =
       state.elements.arrow && getOffsetParent(state.elements.arrow);
@@ -141,42 +155,55 @@ function preventOverflow({ state, options, name }: ModifierArguments<Options>) {
         : arrowOffsetParent.clientLeft || 0
       : 0;
 
-    const offsetModifierValue = state.modifiersData.offset
-      ? state.modifiersData.offset[state.placement][mainAxis]
-      : 0;
+    const offsetModifierValue = offsetModifierState?.[mainAxis] ?? 0;
+    const tetherMin = offset + minOffset - offsetModifierValue - clientOffset;
+    const tetherMax = offset + maxOffset - offsetModifierValue;
 
-    const tetherMin =
-      popperOffsets[mainAxis] + minOffset - offsetModifierValue - clientOffset;
-    const tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
+    const preventedOffset = within(
+      tether ? mathMin(min, tetherMin) : min,
+      offset,
+      tether ? mathMax(max, tetherMax) : max
+    );
 
-    if (checkMainAxis) {
-      const preventedOffset = within(
-        tether ? mathMin(min, tetherMin) : min,
-        offset,
-        tether ? mathMax(max, tetherMax) : max
-      );
+    popperOffsets[mainAxis] = preventedOffset;
+    data[mainAxis] = preventedOffset - offset;
+  }
 
-      popperOffsets[mainAxis] = preventedOffset;
-      data[mainAxis] = preventedOffset - offset;
-    }
+  if (checkAltAxis) {
+    const mainSide = mainAxis === 'x' ? top : left;
+    const altSide = mainAxis === 'x' ? bottom : right;
+    const offset = popperOffsets[altAxis];
 
-    if (checkAltAxis) {
-      const mainSide = mainAxis === 'x' ? top : left;
-      const altSide = mainAxis === 'x' ? bottom : right;
-      const offset = popperOffsets[altAxis];
+    const len = altAxis === 'y' ? 'height' : 'width';
 
-      const min = offset + overflow[mainSide];
-      const max = offset - overflow[altSide];
+    const min = offset + overflow[mainSide];
+    const max = offset - overflow[altSide];
 
-      const preventedOffset = within(
-        tether ? mathMin(min, tetherMin) : min,
-        offset,
-        tether ? mathMax(max, tetherMax) : max
-      );
+    const isOriginSide = [top, left].indexOf(basePlacement) !== -1;
 
-      popperOffsets[altAxis] = preventedOffset;
-      data[altAxis] = preventedOffset - offset;
-    }
+    const offsetModifierValue = offsetModifierState?.[altAxis] ?? 0;
+    const tetherMin = isOriginSide
+      ? min
+      : offset -
+        referenceRect[len] -
+        popperRect[len] -
+        offsetModifierValue +
+        normalizedTetherOffsetValue.altAxis;
+    const tetherMax = isOriginSide
+      ? offset +
+        referenceRect[len] +
+        popperRect[len] -
+        offsetModifierValue -
+        normalizedTetherOffsetValue.altAxis
+      : max;
+
+    const preventedOffset =
+      tether && isOriginSide
+        ? withinMaxClamp(tetherMin, offset, tetherMax)
+        : within(tether ? tetherMin : min, offset, tether ? tetherMax : max);
+
+    popperOffsets[altAxis] = preventedOffset;
+    data[altAxis] = preventedOffset - offset;
   }
 
   state.modifiersData[name] = data;
