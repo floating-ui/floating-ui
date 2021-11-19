@@ -1,62 +1,13 @@
 {
-  "private": true,
-  "name": "popperjs",
-  "description": "Tooltip and Popover Positioning Engine",
-  "author": "Federico Zivolo <federico.zivolo@gmail.com>",
-  "license": "MIT",
-  "repository": "github:popperjs/popper-core",
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  },
-  "keywords": [
-    "tooltip",
-    "popover",
-    "dropdown",
-    "popup",
-    "popper",
-    "positioning engine"
+  "name": "@popperjs/monorepo",
+  "packageManager": "yarn@3.1.0",
+  "workspaces": [
+    "packages/*"
   ],
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/popperjs"
-  },
-  "scripts": {
-    "test:flow": "flow",
-    "test:eslint": "eslint .",
-    "dev": "yarn dev:dom",
-    "dev:dom": "yarn workspace @popperjs/dom dev",
-    "test:dom:unit": "yarn workspace @popperjs/dom test:unit",
-    "test:dom:functional": "yarn workspace @popperjs/dom test:functional"
-  },
   "prettier": {
     "semi": true,
     "trailingComma": "es5",
     "singleQuote": true,
     "proseWrap": "always"
-  },
-  "eslintConfig": {
-    "extends": "./.config/eslint.config"
-  },
-  "babel": {
-    "extends": "./.config/babel.config"
-  },
-  "browserslist": "> 1%, not dead",
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.16.3",
-    "@babel/preset-react": "^7.16.0",
-    "babel-plugin-add-import-extension": "^1.6.0",
-    "babel-plugin-annotate-pure-calls": "^0.4.0",
-    "eslint": "^8.2.0",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "flow-bin": "^0.139.0"
   }
 }

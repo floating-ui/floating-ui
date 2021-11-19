@@ -9,7 +9,6 @@ dist
 .vscode/
 package-lock.json
 coverage.info
-lib
 coverage
 __diff_output__
 stats

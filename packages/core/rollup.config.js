@@ -1,3 +1,4 @@
+import path from 'path';
 import { babel } from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
@@ -7,14 +8,14 @@ const NAME = 'popper-core';
 export default [
   {
     output: {
-      file: `dist/${NAME}.esm.js`,
+      file: path.join(__dirname, `dist/${NAME}.esm.js`),
       format: 'esm',
     },
     minify: false,
   },
   {
     output: {
-      file: `dist/${NAME}.esm.min.js`,
+      file: path.join(__dirname, `dist/${NAME}.esm.min.js`),
       format: 'esm',
     },
     minify: true,
@@ -22,7 +23,7 @@ export default [
   {
     output: {
       name: 'Popper',
-      file: `dist/${NAME}.umd.js`,
+      file: path.join(__dirname, `dist/${NAME}.umd.js`),
       format: 'umd',
     },
     minify: false,
@@ -30,18 +31,18 @@ export default [
   {
     output: {
       name: 'Popper',
-      file: `dist/${NAME}.umd.min.js`,
+      file: path.join(__dirname, `dist/${NAME}.umd.min.js`),
       format: 'umd',
     },
     minify: true,
   },
 ].map(({ output, minify }) => ({
-  input: 'src/index.js',
+  input: path.join(__dirname, 'src/index.js'),
   output,
   plugins: [
     babel({
       babelHelpers: 'bundled',
-      configFile: path.join(process.cwd(), '../../.config/babel.config'),
+      configFile: require.resolve('../../.config/babel.config'),
     }),
     replace({
       __DEV__: 'process.env.NODE_ENV !== "production"',

@@ -6,6 +6,5 @@
 <PROJECT_ROOT>/dist
 
 [options]
-types_first=false
 include_warnings=true
 
