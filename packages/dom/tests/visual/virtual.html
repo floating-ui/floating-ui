@@ -1,0 +1,69 @@
+<!DOCTYPE html> <title>Virtual Element Visual Test</title>
+
+<style>
+  #reference {
+    position: absolute;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #offset {
+    position: relative;
+    top: 100px;
+    left: 100px;
+  }
+</style>
+
+<div id="offset">
+  <div id="reference">Reference Box</div>
+</div>
+<div id="popper">Popper Box</div>
+
+<script type="module">
+  import { position, listScrollParents } from './dist/index.js';
+
+  function generateGetBoundingClientRect(x = 0, y = 0) {
+    return () => ({
+      width: 0,
+      height: 0,
+      top: y,
+      right: x,
+      bottom: y,
+      left: x,
+    });
+  }
+
+  const virtualElement = {
+    getBoundingClientRect: generateGetBoundingClientRect(),
+  };
+
+  async function update() {
+    const { x, y } = await position(virtualElement, popper, {
+      placement: 'right',
+    });
+
+    Object.assign(popper.style, {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
+
+  document.addEventListener('mousemove', ({ clientX: x, clientY: y }) => {
+    virtualElement.getBoundingClientRect = generateGetBoundingClientRect(x, y);
+    update();
+  });
+</script>

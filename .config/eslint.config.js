@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   plugins: ['flowtype', 'unused-imports', 'import'],
   rules: {
     'flowtype/require-valid-file-annotation': ['error', 'always'],
@@ -17,5 +17,11 @@ module.exports = {
     'dist',
     '/*.js',
     'coverage',
+    '*/**/*.config.js',
   ],
+  parserOptions: {
+    babelOptions: {
+      configFile: './.config/babel.config.js',
+    },
+  },
 };

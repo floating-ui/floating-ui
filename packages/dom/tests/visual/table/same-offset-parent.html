@@ -1,0 +1,62 @@
+<!DOCTYPE html> <title>Basic Visual Test</title>
+
+<style>
+  html,
+  body {
+    height: 1500px;
+  }
+
+  #reference {
+    position: relative;
+    top: 150px;
+    left: 150px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  #popper {
+    width: 100px;
+    height: 100px;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+  }
+</style>
+
+<div style="position: relative">
+  <table>
+    <tr>
+      <td>cell</td>
+      <td>cell</td>
+      <td>
+        <div style="position: relative">
+          <div id="reference">Reference Box</div>
+          <div id="popper">Popper Box</div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<script type="module">
+  import { position, listScrollParents } from '../dist/index.js';
+
+  async function update() {
+    const { x, y } = await position(reference, popper, {
+      placement: 'right',
+    });
+
+    Object.assign(popper.style, {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  }
+
+  update();
+  [
+    ...listScrollParents(reference),
+    ...listScrollParents(popper),
+  ].forEach((parent) => parent.addEventListener('scroll', update));
+</script>

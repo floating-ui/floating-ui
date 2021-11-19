@@ -9,6 +9,7 @@ module.exports = {
         modules: false,
       },
     ],
+    '@babel/react',
   ],
   plugins: [
     '@babel/plugin-transform-flow-strip-types',
