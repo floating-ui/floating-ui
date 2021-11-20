@@ -291,12 +291,6 @@ found, or simply experiment with it, this section is for you!
 First of all, make sure to have
 [Yarn installed](https://yarnpkg.com/lang/en/docs/install).
 
-Install the development dependencies:
-
-```bash
-yarn install
-```
-
 And run the development environment:
 
 ```bash
