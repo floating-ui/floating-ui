@@ -9,9 +9,8 @@ import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 import isVerticalPlacement from '../utils/isVerticalPlacement';
 
-// eslint-disable-next-line import/no-unused-modules
 export type Options = {
-  element: HTMLElement | string | null,
+  element: Obj,
   padding:
     | Padding
     | (({|
@@ -32,13 +31,7 @@ const toPaddingObject = (padding, rects, placement) => {
   );
 };
 
-export const arrow = ({
-  element,
-  padding,
-}: {
-  padding: Padding,
-  element: Obj,
-}): Modifier => ({
+export const arrow = ({ element, padding }: Options): Modifier => ({
   name: 'arrow',
   async fn(modifierArguments: ModifierArguments) {
     const { placement, rects, coords, platform } = modifierArguments;
@@ -75,7 +68,6 @@ export const arrow = ({
     const center = clientSize / 2 - arrowRect[len] / 2 + centerToReference;
     const offset = within(min, center, max);
 
-    // Prevents breaking syntax highlighting...
     const axisProp: string = axis;
     return {
       ...coords,

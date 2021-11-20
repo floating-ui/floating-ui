@@ -9,7 +9,6 @@ import detectOverflow, {
 import getVariationSides from '../utils/getVariationSides';
 import getExpandedPlacements from '../utils/getExpandedPlacements';
 
-// eslint-disable-next-line import/no-unused-modules
 export type Options = {
   mainAxis: boolean,
   altAxis: boolean,

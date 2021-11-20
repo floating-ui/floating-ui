@@ -8,7 +8,7 @@ import getBasePlacement from '../utils/getBasePlacement';
 import getVariation from '../utils/getVariation';
 import isVerticalPlacement from '../utils/isVerticalPlacement';
 
-type Options = {
+export type Options = {
   ...DetectOverflowOptions,
 };
 

@@ -10,7 +10,7 @@ type OffsetsFunction = ({
   placement: Placement,
 }) => [?number, ?number];
 
-type Offset = OffsetsFunction | [?number, ?number];
+export type Offset = OffsetsFunction | [?number, ?number];
 
 export function convertTupleToCoords({
   placement,
@@ -24,7 +24,7 @@ export function convertTupleToCoords({
   tuple: Offset,
 }): Coords {
   const basePlacement = getBasePlacement(placement);
-  const invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
+  const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
 
   let [skidding, distance] =
     typeof tuple === 'function' ? tuple({ ...rects, placement }) : tuple;
@@ -32,7 +32,7 @@ export function convertTupleToCoords({
   skidding = skidding || 0;
   distance = (distance || 0) * invertDistance;
 
-  return [left, right].indexOf(basePlacement) >= 0
+  return [left, right].includes(basePlacement)
     ? { x: coords.x + distance, y: coords.y + skidding }
     : { x: coords.x + skidding, y: coords.y + distance };
 }

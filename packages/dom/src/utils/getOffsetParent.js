@@ -22,8 +22,8 @@ function getTrueOffsetParent(element: Element): ?Element {
 // `.offsetParent` reports `null` for fixed elements, while absolute elements
 // return the containing block
 function getContainingBlock(element: Element) {
-  const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
-  const isIE = navigator.userAgent.indexOf('Trident') !== -1;
+  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+  const isIE = navigator.userAgent.includes('Trident');
 
   if (isIE && isHTMLElement(element)) {
     // In IE 9, 10 and 11 fixed elements containing block is always established by the viewport
@@ -37,7 +37,7 @@ function getContainingBlock(element: Element) {
 
   while (
     isHTMLElement(currentNode) &&
-    ['html', 'body'].indexOf(getNodeName(currentNode)) < 0
+    !['html', 'body'].includes(getNodeName(currentNode))
   ) {
     const css = getComputedStyle(currentNode);
 
@@ -48,7 +48,7 @@ function getContainingBlock(element: Element) {
       css.transform !== 'none' ||
       css.perspective !== 'none' ||
       css.contain === 'paint' ||
-      ['transform', 'perspective'].indexOf(css.willChange) !== -1 ||
+      ['transform', 'perspective'].includes(css.willChange) ||
       (isFirefox && css.willChange === 'filter') ||
       (isFirefox && css.filter && css.filter !== 'none')
     ) {

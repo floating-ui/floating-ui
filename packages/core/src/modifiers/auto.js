@@ -17,8 +17,8 @@ function convertAutoPlacementToComputedPlacements(
   const variation = getVariation(placement);
 
   if (!variation) {
-    return basePlacements.filter(
-      (placement) => allowedPlacements.indexOf(placement) !== -1
+    return basePlacements.filter((placement) =>
+      allowedPlacements.includes(placement)
     );
   }
 
@@ -27,7 +27,7 @@ function convertAutoPlacementToComputedPlacements(
   );
 }
 
-type Options = {
+export type Options = {
   altAxis: boolean,
   allowedPlacements: Array<ComputedPlacement>,
   autoVariation: false,

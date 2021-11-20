@@ -63,15 +63,14 @@ export const shift = (options: Options = {}): Modifier => ({
 });
 
 type LimitShiftOffset =
-  | (({
+  | (({|
       placement: Placement,
       popper: Rect,
       reference: Rect,
-      arrow?: Rect,
-    }) => number)
+    |}) => number)
   | number;
 
-type LimitShiftOptions = {
+export type LimitShiftOptions = {
   offset: LimitShiftOffset,
   mainAxis: boolean,
   altAxis: boolean,

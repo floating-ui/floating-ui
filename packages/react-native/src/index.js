@@ -4,7 +4,12 @@ import { useMemo, useEffect, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
 import { position, rectToClientRect } from '@popperjs/core';
 import type { Placement } from '@popperjs/core/src/enums';
-import type { Modifier, Platform } from '@popperjs/core/src/types';
+import type {
+  Modifier,
+  Platform,
+  PositionReturn,
+} from '@popperjs/core/src/types';
+import type { Coords } from '../../core/src/types';
 
 const ORIGIN = { x: 0, y: 0 };
 
@@ -85,8 +90,7 @@ export const createPlatform = ({
 });
 
 type UsePopperReturn = {|
-  x: number,
-  y: number,
+  ...PositionReturn,
   placement: ?Placement,
   offsetParent: {| current: any |},
   popper: {| current: any |},
@@ -113,7 +117,12 @@ export const usePopper = ({
   const offsetParentRef = useRef<null>(null);
   const referenceRef = useRef<null>(null);
   const popperRef = useRef<null>(null);
-  const [data, setData] = useState({ ...ORIGIN, placement: null });
+  const [data, setData] = useState({
+    ...ORIGIN,
+    placement: null,
+    strategy: 'absolute',
+    modifiersData: {},
+  });
   const [scrollOffsets, setScrollOffsets] = useState(ORIGIN);
 
   const platform = useMemo(

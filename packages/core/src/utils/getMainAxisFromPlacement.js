@@ -1,8 +1,9 @@
 // @flow
 import type { Placement } from '../enums';
+import isVerticalPlacement from './isVerticalPlacement';
 
 export default function getMainAxisFromPlacement(
   placement: Placement
 ): 'x' | 'y' {
-  return ['top', 'bottom'].indexOf(placement) >= 0 ? 'x' : 'y';
+  return isVerticalPlacement(placement) ? 'x' : 'y';
 }

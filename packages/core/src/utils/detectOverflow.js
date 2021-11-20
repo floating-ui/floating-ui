@@ -12,7 +12,6 @@ import {
 import mergePaddingObject from './mergePaddingObject';
 import expandToHashMap from './expandToHashMap';
 
-// eslint-disable-next-line import/no-unused-modules
 export type Options = {|
   boundary: Boundary,
   rootBoundary: RootBoundary,
@@ -20,44 +19,6 @@ export type Options = {|
   altBoundary: boolean,
   padding: Padding,
 |};
-
-let element;
-let isAppended = false;
-
-// Draw the clipping rect on the screen for debugging purposes
-// eslint-disable-next-line unused-imports/no-unused-vars
-function draw(rect, parent: any) {
-  if (isAppended) {
-    Object.assign(element.style, {
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
-      top: `${rect.y}px`,
-      left: `${rect.x}px`,
-    });
-
-    return;
-  }
-
-  element = document.createElement('div');
-  Object.assign(element.style, {
-    position: 'absolute',
-    backgroundColor: 'yellow',
-    opacity: '0.3',
-    pointerEvents: 'none',
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    top: `${rect.y}px`,
-    left: `${rect.x}px`,
-  });
-
-  if (parent.toString() === '[object Window]') {
-    parent = document.body;
-  }
-
-  parent.appendChild(element);
-
-  isAppended = true;
-}
 
 export default async function detectOverflow(
   modifierArguments: ModifierArguments,
@@ -103,11 +64,6 @@ export default async function detectOverflow(
       strategy,
     })
   );
-
-  if (__DEV__) {
-    // draw(elementClientRect, document.body);
-    // draw(clippingClientRect, document.body);
-  }
 
   // positive = overflowing the clipping rect
   // 0 or negative = within the clipping rect
