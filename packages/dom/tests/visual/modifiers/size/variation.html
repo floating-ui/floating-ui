@@ -1,0 +1,98 @@
+<!DOCTYPE html> <title>Size Visual Test</title>
+
+<style>
+  .scroll {
+    position: relative;
+    overflow: scroll;
+    width: 300px;
+    height: 200px;
+    background-color: #ccc;
+  }
+
+  .scroll > div:nth-child(1) {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    box-shadow: inset 0 0 0 1px black;
+  }
+
+  .scroll > div:nth-child(2) {
+    position: absolute;
+    background-color: rebeccapurple;
+    box-shadow: inset 0 0 0 1px black;
+    width: 300px;
+    height: 300px;
+  }
+
+  #grid {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    max-width: 500px;
+  }
+
+  #grid > .scroll {
+    display: grid;
+    place-items: center;
+  }
+</style>
+
+<div id="grid">
+  <div class="scroll">
+    <div id="reference1">Reference Box</div>
+    <div id="popper1">Popper Box</div>
+  </div>
+  <div class="scroll">
+    <div id="reference2">Reference Box</div>
+    <div id="popper2">Popper Box</div>
+  </div>
+  <div class="scroll">
+    <div id="reference3">Reference Box</div>
+    <div id="popper3">Popper Box</div>
+  </div>
+  <div class="scroll">
+    <div id="reference4">Reference Box</div>
+    <div id="popper4">Popper Box</div>
+  </div>
+</div>
+
+<script type="module">
+  import { position, size } from '../../dist/index.js';
+
+  const placements = ['top-start', 'right-start', 'bottom-start', 'left-start'];
+
+  for (let i = 0; i < 4; i++) {
+    const reference = window[`reference${i + 1}`];
+    const popper = window[`popper${i + 1}`];
+    const placement = placements[i];
+
+    async function update() {
+      const {
+        x,
+        y,
+        modifiersData: {
+          size: { width, height },
+        },
+      } = await position(reference, popper, {
+        placement,
+        modifiers: [size({ padding: 10 })],
+      });
+
+      let scheduleUpdate =
+        `${width}px` !== popper.style.maxWidth ||
+        `${height}px` !== popper.style.maxHeight;
+
+      Object.assign(popper.style, {
+        left: `${x}px`,
+        top: `${y}px`,
+        maxWidth: `${width}px`,
+        maxHeight: `${height}px`,
+      });
+
+      scheduleUpdate && update();
+    }
+
+    update();
+  }
+</script>

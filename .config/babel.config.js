@@ -30,8 +30,7 @@ module.exports = {
   ],
   env: {
     test: {
-      presets: ['@babel/env'],
-      plugins: ['@babel/plugin-transform-runtime'],
+      presets: [['@babel/env', { targets: 'current node' }]],
     },
     dev: {
       plugins: [

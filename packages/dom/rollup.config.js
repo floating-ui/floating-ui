@@ -14,8 +14,7 @@ const devExport = {
   },
   plugins: [
     babel({
-      babelHelpers:
-        process.env.NODE_ENV === 'development' ? 'bundled' : 'runtime',
+      babelHelpers: process.env.NODE_ENV === 'test' ? 'inline' : 'bundled',
       configFile: path.join(process.cwd(), '../../.config/babel.config'),
     }),
     replace({
