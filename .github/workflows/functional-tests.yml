@@ -20,3 +20,8 @@ jobs:
       - run: yarn workspace @popperjs/dom test:functional
         env:
           PUPPETEER_BROWSER: chromium
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: visual-diff
+          path: packages/dom/tests/functional/__image_snapshots__/__diff_output__
