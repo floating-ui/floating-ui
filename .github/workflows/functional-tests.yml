@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
       - run: yarn install
+      - run: yarn workspace @popperjs/core build
       - run: yarn workspace @popperjs/dom test:functional
         env:
           PUPPETEER_BROWSER: chromium
