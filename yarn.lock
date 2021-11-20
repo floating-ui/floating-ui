@@ -2119,6 +2119,8 @@ __metadata:
 "@popperjs/monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "@popperjs/monorepo@workspace:."
+  dependencies:
+    flow-bin: ^0.165.0
   languageName: unknown
   linkType: soft
 
@@ -5092,6 +5094,15 @@ __metadata:
     locate-path: ^5.0.0
     path-exists: ^4.0.0
   checksum: 4c172680e8f8c1f78839486e14a43ef82e9decd0e74145f40707cc42e7420506d5ec92d9a11c22bd2c48fb0c384ea05dd30e10dd152fefeec6f2f75282a8b844
+  languageName: node
+  linkType: hard
+
+"flow-bin@npm:^0.165.0":
+  version: 0.165.1
+  resolution: "flow-bin@npm:0.165.1"
+  bin:
+    flow: cli.js
+  checksum: 75b45323349982ea1f3d0eeee51a4547208e40d1964e3b1d8417fd19932a10ac50c9f2bb55a26f45cddfd9ff6cf623af2b1c92dfd5901d0d279ced7bae0c0ff3
   languageName: node
   linkType: hard
 

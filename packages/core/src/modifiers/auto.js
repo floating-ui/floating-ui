@@ -1,6 +1,6 @@
 // @flow
 import type { ComputedPlacement, AutoPlacement } from '../enums';
-import type { ModifierArguments } from '../types';
+import type { Modifier, ModifierArguments } from '../types';
 import { auto as autoEnum, basePlacements, computedPlacements } from '../enums';
 import detectOverflow, {
   type Options as DetectOverflowOptions,
@@ -34,7 +34,7 @@ type Options = {
   ...DetectOverflowOptions,
 };
 
-export const auto = (options: Options = {}) => ({
+export const auto = (options: Options = {}): Modifier => ({
   name: 'auto',
   async fn(modifierArguments: ModifierArguments) {
     const {

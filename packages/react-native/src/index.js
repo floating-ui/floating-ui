@@ -84,6 +84,23 @@ export const createPlatform = ({
   isElement: () => Promise.resolve(true),
 });
 
+type UsePopperReturn = {
+  x: number,
+  y: number,
+  placement: ?Placement,
+  offsetParent: {| current: any |},
+  popper: {| current: any |},
+  reference: {| current: any |},
+  scrollProps: {|
+    onScroll: (event: {
+      nativeEvent: {
+        contentOffset: {| x: number, y: number |},
+      },
+    }) => void,
+    scrollEventThrottle: 16,
+  |},
+};
+
 export const usePopper = ({
   placement,
   modifiers,
@@ -92,11 +109,11 @@ export const usePopper = ({
   placement: Placement,
   modifiers: Array<Modifier>,
   sameScrollView: boolean,
-} = {}) => {
+} = {}): UsePopperReturn => {
   const offsetParentRef = useRef<null>(null);
   const referenceRef = useRef<null>(null);
   const popperRef = useRef<null>(null);
-  const [data, setData] = useState(ORIGIN);
+  const [data, setData] = useState({ ...ORIGIN, placement: null });
   const [scrollOffsets, setScrollOffsets] = useState(ORIGIN);
 
   const platform = useMemo(
@@ -105,7 +122,7 @@ export const usePopper = ({
   );
 
   useEffect(() => {
-    const wrap = data === ORIGIN ? requestAnimationFrame : (cb) => cb();
+    const wrap = !data.placement ? requestAnimationFrame : (cb) => cb();
 
     wrap(() => {
       if (!referenceRef.current || !popperRef.current) {
@@ -122,13 +139,14 @@ export const usePopper = ({
 
   return useMemo(
     () => ({
-      ...data,
+      x: data.x,
+      y: data.y,
+      placement: data.placement ?? null,
       offsetParent: offsetParentRef,
       reference: referenceRef,
       popper: popperRef,
       scrollProps: {
-        onScroll: (event: any) =>
-          setScrollOffsets(event.nativeEvent.contentOffset),
+        onScroll: (event) => setScrollOffsets(event.nativeEvent.contentOffset),
         scrollEventThrottle: 16,
       },
     }),

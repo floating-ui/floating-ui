@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments, Padding, Rect, Obj } from '../types';
+import type { Modifier, ModifierArguments, Padding, Rect, Obj } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import within from '../utils/within';
@@ -38,7 +38,7 @@ export const arrow = ({
 }: {
   padding: Padding,
   element: Obj,
-}) => ({
+}): Modifier => ({
   name: 'arrow',
   async fn(modifierArguments: ModifierArguments) {
     const { placement, rects, coords, platform } = modifierArguments;

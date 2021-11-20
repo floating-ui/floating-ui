@@ -8,3 +8,5 @@
 [options]
 include_warnings=true
 
+[version]
+^0.165.0

@@ -1,8 +1,8 @@
 // @flow
 import { isShadowRoot } from './instanceOf';
 
-export default function contains(parent: Element, child: Element) {
-  const rootNode = child.getRootNode && child.getRootNode();
+export default function contains(parent: Element, child: Element): boolean {
+  const rootNode = child.getRootNode?.();
 
   // First, attempt with faster native method
   if (parent.contains(child)) {

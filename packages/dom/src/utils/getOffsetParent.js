@@ -1,4 +1,5 @@
 // @flow
+import type { Window } from '../types';
 import getWindow from './getWindow';
 import getNodeName from './getNodeName';
 import getComputedStyle from './getComputedStyle';
@@ -62,7 +63,7 @@ function getContainingBlock(element: Element) {
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
 // such as table ancestors and cross browser bugs.
-export default function getOffsetParent(element: Element) {
+export default function getOffsetParent(element: Element): Element | Window {
   const window = getWindow(element);
 
   let offsetParent = getTrueOffsetParent(element);

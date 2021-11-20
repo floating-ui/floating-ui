@@ -1,8 +1,9 @@
 // @flow
+import type { Rect } from '@popperjs/core/src/types';
 import getWindow from './getWindow';
 import getDocumentElement from './getDocumentElement';
 
-export default function getViewportRect(element: Element) {
+export default function getViewportRect(element: Element): Rect {
   const win = getWindow(element);
   const html = getDocumentElement(element);
   const visualViewport = win.visualViewport;

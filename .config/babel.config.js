@@ -7,6 +7,9 @@ module.exports = {
       {
         loose: true,
         modules: false,
+        targets: {
+          esmodules: true,
+        },
       },
     ],
     '@babel/react',

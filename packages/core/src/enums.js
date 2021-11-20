@@ -41,12 +41,16 @@ export type AutoPlacement = 'auto' | 'auto-start' | 'auto-end';
 export type ComputedPlacement = VariationPlacement | BasePlacement;
 export type Placement = AutoPlacement | BasePlacement | VariationPlacement;
 
-export const variationPlacements: Array<VariationPlacement> = basePlacements.reduce(
-  (acc: Array<VariationPlacement>, placement: BasePlacement) =>
-    acc.concat([(`${placement}-${start}`: any), (`${placement}-${end}`: any)]),
-  []
-);
-export const placements = basePlacements.reduce(
+export const variationPlacements: Array<VariationPlacement> =
+  basePlacements.reduce(
+    (acc: Array<VariationPlacement>, placement: BasePlacement) =>
+      acc.concat([
+        (`${placement}-${start}`: any),
+        (`${placement}-${end}`: any),
+      ]),
+    []
+  );
+export const placements: Array<Placement> = basePlacements.reduce(
   (acc: Array<Placement>, placement: BasePlacement): Array<Placement> =>
     acc.concat([
       placement,

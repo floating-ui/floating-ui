@@ -1,6 +1,6 @@
 // @flow
 import { top, bottom, left, right, type Placement } from '../enums';
-import type { Rect, ModifierArguments } from '../types';
+import type { Modifier, Rect, ModifierArguments } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
 import getAltAxis from '../utils/getAltAxis';
@@ -15,7 +15,7 @@ type Options = {
   ...DetectOverflowOptions,
 };
 
-export const shift = (options: Options = {}) => ({
+export const shift = (options: Options = {}): Modifier => ({
   name: 'shift',
   async fn(modifierArguments: ModifierArguments) {
     const { placement, coords } = modifierArguments;
@@ -77,7 +77,7 @@ type LimitShiftOptions = {
   altAxis: boolean,
 };
 
-export const limitShift = (options: LimitShiftOptions = {}) => ({
+export const limitShift = (options: LimitShiftOptions = {}): Modifier => ({
   name: 'limitShift',
   async fn(modifierArguments: ModifierArguments) {
     const { placement, coords, rects, modifiersData } = modifierArguments;

@@ -1,5 +1,5 @@
 // @flow
-import type { ModifierArguments, Rect, SideObject } from '../types';
+import type { Modifier, ModifierArguments, Rect, SideObject } from '../types';
 import { top, bottom, left, right } from '../enums';
 import detectOverflow from '../utils/detectOverflow';
 
@@ -16,7 +16,7 @@ function isAnySideFullyClipped(overflow: SideObject) {
   return [top, right, bottom, left].some((side) => overflow[side] >= 0);
 }
 
-export const hide = () => ({
+export const hide = (): Modifier => ({
   name: 'hide',
   async fn(modifierArguments: ModifierArguments) {
     const { rects, coords } = modifierArguments;

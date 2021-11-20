@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments } from '../types';
+import type { Modifier, ModifierArguments } from '../types';
 import getOppositePlacement from '../utils/getOppositePlacement';
 import getBasePlacement from '../utils/getBasePlacement';
 import detectOverflow, {
@@ -18,7 +18,7 @@ export type Options = {
   ...DetectOverflowOptions,
 };
 
-export const flip = (options: Options = {}) => ({
+export const flip = (options: Options = {}): Modifier => ({
   name: 'flip',
   async fn(modifierArguments: ModifierArguments) {
     const {

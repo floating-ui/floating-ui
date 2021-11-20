@@ -1,6 +1,10 @@
 /* eslint-disable import/no-unused-modules */
 // @flow
-import type { VirtualElement, PositionConfig } from '@popperjs/core/src/types';
+import type {
+  VirtualElement,
+  PositionConfig,
+  PositionReturn,
+} from '@popperjs/core/src/types';
 import { position as positionCore } from '@popperjs/core';
 import { platform } from './platform';
 
@@ -8,7 +12,8 @@ export const position = (
   reference: Element | VirtualElement,
   popper: HTMLElement,
   options: $Shape<PositionConfig> = {}
-) => positionCore(reference, popper, { platform, ...options });
+): Promise<PositionReturn> =>
+  positionCore(reference, popper, { platform, ...options });
 
 export { default as listScrollParents } from './utils/listScrollParents';
 

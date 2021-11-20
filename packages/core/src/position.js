@@ -78,7 +78,11 @@ export const position: Position = async (reference, popper, config) => {
     }
 
     const { name, fn } = modifiers[i];
-    const { data: modifierData, ...nextCoords } = await fn({
+    const {
+      x,
+      y,
+      data: modifierData,
+    } = await fn({
       initialPlacement: placement,
       placement: statefulPlacement,
       coords: statefulCoords,
@@ -90,7 +94,7 @@ export const position: Position = async (reference, popper, config) => {
       elements: { reference, popper },
     });
 
-    statefulCoords = nextCoords;
+    statefulCoords = { x, y };
     modifiersData = { ...modifiersData, [name]: modifierData ?? {} };
 
     if (isReset) {

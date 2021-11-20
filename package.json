@@ -9,5 +9,8 @@
     "trailingComma": "es5",
     "singleQuote": true,
     "proseWrap": "always"
+  },
+  "dependencies": {
+    "flow-bin": "^0.165.0"
   }
 }

@@ -130,10 +130,9 @@ export type Modifier = {
   name: string,
   fn: (
     modifierArguments: ModifierArguments
-  ) => {|
-    ...Coords,
-    data: Obj,
-  |},
+  ) =>
+    | $Shape<{| ...Coords, data: Obj |}>
+    | Promise<$Shape<{ ...Coords, data: Obj }>>,
 };
 
 export type ClientRectObject = {|

@@ -5,7 +5,10 @@ import { isHTMLElement } from './instanceOf';
 import getHTMLElementScroll from './getHTMLElementScroll';
 import type { Window } from '../types';
 
-export default function getNodeScroll(node: Node | Window) {
+export default function getNodeScroll(node: Node | Window): {
+  scrollLeft: number,
+  scrollTop: number,
+} {
   if (node === getWindow(node) || !isHTMLElement(node)) {
     return getWindowScroll(node);
   } else {

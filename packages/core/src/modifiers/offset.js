@@ -1,6 +1,6 @@
 // @flow
 import type { Placement } from '../enums';
-import type { ModifierArguments, Rect, Coords } from '../types';
+import type { Modifier, ModifierArguments, Rect, Coords } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import { top, left, right } from '../enums';
 
@@ -22,7 +22,7 @@ export function convertTupleToCoords({
   coords: Coords,
   rects: { popper: Rect, reference: Rect },
   tuple: Offset,
-}) {
+}): Coords {
   const basePlacement = getBasePlacement(placement);
   const invertDistance = [left, top].indexOf(basePlacement) >= 0 ? -1 : 1;
 
@@ -37,7 +37,7 @@ export function convertTupleToCoords({
     : { x: coords.x + skidding, y: coords.y + distance };
 }
 
-export const offset = (tuple: Offset) => ({
+export const offset = (tuple: Offset): Modifier => ({
   name: 'offset',
   fn(modifierArguments: ModifierArguments) {
     const { placement, rects, coords } = modifierArguments;

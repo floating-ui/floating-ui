@@ -1,6 +1,14 @@
 // @flow
 import type { ElementRects } from '../types';
-import { top, bottom, left, right, start, type Placement } from '../enums';
+import {
+  top,
+  bottom,
+  left,
+  right,
+  start,
+  type Placement,
+  type BasePlacement,
+} from '../enums';
 import getOppositePlacement from './getOppositePlacement';
 import getVariation from './getVariation';
 import isVerticalPlacement from './isVerticalPlacement';
@@ -8,7 +16,10 @@ import isVerticalPlacement from './isVerticalPlacement';
 export default function getVariationSides(
   placement: Placement,
   rects: ElementRects
-) {
+): {
+  main: BasePlacement,
+  alt: BasePlacement,
+} {
   const isVertical = isVerticalPlacement(placement);
   const isStartVariation = getVariation(placement) === start;
   const len = isVertical ? 'width' : 'height';

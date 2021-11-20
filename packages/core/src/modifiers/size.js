@@ -1,5 +1,5 @@
 // @flow
-import type { ModifierArguments } from '../types';
+import type { Modifier, ModifierArguments } from '../types';
 import { bottom, top, left, right, end } from '../enums';
 import detectOverflow, {
   type Options as DetectOverflowOptions,
@@ -12,7 +12,7 @@ type Options = {
   ...DetectOverflowOptions,
 };
 
-export const size = (options: Options) => ({
+export const size = (options: Options): Modifier => ({
   name: 'size',
   async fn(modifierArguments: ModifierArguments) {
     const { placement, rects, coords } = modifierArguments;
