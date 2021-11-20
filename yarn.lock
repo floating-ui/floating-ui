@@ -2063,7 +2063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@workspace:packages/core":
+"@popperjs/core@workspace:^, @popperjs/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@popperjs/core@workspace:packages/core"
   dependencies:
@@ -2096,6 +2096,7 @@ __metadata:
     "@babel/core": ^7.12.17
     "@babel/plugin-transform-flow-strip-types": ^7.12.13
     "@babel/preset-env": ^7.12.17
+    "@popperjs/core": "workspace:^"
     "@rollup/plugin-babel": ^5.3.0
     "@rollup/plugin-node-resolve": ^13.0.6
     "@rollup/plugin-replace": ^3.0.0

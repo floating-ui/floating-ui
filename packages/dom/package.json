@@ -15,6 +15,9 @@
   },
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "@popperjs/core": "workspace:^"
+  },
   "devDependencies": {
     "@babel/cli": "^7.12.17",
     "@babel/core": "^7.12.17",
