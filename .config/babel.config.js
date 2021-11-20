@@ -7,9 +7,8 @@ module.exports = {
       {
         loose: true,
         modules: false,
-        targets: {
-          esmodules: true,
-        },
+        targets: '> 1%, not dead',
+        useBuiltIns: false,
       },
     ],
     '@babel/react',
@@ -17,13 +16,6 @@ module.exports = {
   plugins: [
     '@babel/plugin-transform-flow-strip-types',
     'babel-plugin-add-import-extension',
-    [
-      '@babel/plugin-proposal-object-rest-spread',
-      {
-        loose: true,
-        useBuiltIns: true,
-      },
-    ],
     ...(BROWSER_COMPAT
       ? [
           [

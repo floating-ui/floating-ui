@@ -9,28 +9,15 @@ const NAME = 'popper-react-native';
 export default [
   {
     output: {
-      file: `dist/${NAME}.esm.js`,
+      file: `dist/${NAME}.mjs`,
       format: 'esm',
     },
     minify: false,
   },
   {
     output: {
-      file: `dist/${NAME}.esm.min.js`,
-      format: 'esm',
-    },
-    minify: true,
-  },
-  {
-    output: {
-      name: 'PopperDOM',
-      file: `dist/${NAME}.umd.js`,
-      format: 'umd',
-      globals: {
-        '@popperjs/core': 'Popper',
-        react: 'React',
-        'react-native': 'ReactNative',
-      },
+      file: `dist/${NAME}.cjs`,
+      format: 'cjs',
     },
     minify: false,
   },

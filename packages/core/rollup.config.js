@@ -8,14 +8,14 @@ const NAME = 'popper-core';
 export default [
   {
     output: {
-      file: path.join(__dirname, `dist/${NAME}.esm.js`),
+      file: path.join(__dirname, `dist/${NAME}.mjs`),
       format: 'esm',
     },
     minify: false,
   },
   {
     output: {
-      file: path.join(__dirname, `dist/${NAME}.esm.min.js`),
+      file: path.join(__dirname, `dist/${NAME}.min.mjs`),
       format: 'esm',
     },
     minify: true,
@@ -23,7 +23,7 @@ export default [
   {
     output: {
       name: 'Popper',
-      file: path.join(__dirname, `dist/${NAME}.umd.js`),
+      file: path.join(__dirname, `dist/${NAME}.js`),
       format: 'umd',
     },
     minify: false,
@@ -31,7 +31,7 @@ export default [
   {
     output: {
       name: 'Popper',
-      file: path.join(__dirname, `dist/${NAME}.umd.min.js`),
+      file: path.join(__dirname, `dist/${NAME}.min.js`),
       format: 'umd',
     },
     minify: true,

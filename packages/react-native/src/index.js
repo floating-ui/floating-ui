@@ -84,7 +84,7 @@ export const createPlatform = ({
   isElement: () => Promise.resolve(true),
 });
 
-type UsePopperReturn = {
+type UsePopperReturn = {|
   x: number,
   y: number,
   placement: ?Placement,
@@ -99,7 +99,7 @@ type UsePopperReturn = {
     }) => void,
     scrollEventThrottle: 16,
   |},
-};
+|};
 
 export const usePopper = ({
   placement,
@@ -139,9 +139,7 @@ export const usePopper = ({
 
   return useMemo(
     () => ({
-      x: data.x,
-      y: data.y,
-      placement: data.placement ?? null,
+      ...data,
       offsetParent: offsetParentRef,
       reference: referenceRef,
       popper: popperRef,

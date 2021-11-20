@@ -29,14 +29,14 @@ const devExport = {
 const buildExport = [
   {
     output: {
-      file: `dist/${NAME}.esm.js`,
+      file: `dist/${NAME}.mjs`,
       format: 'esm',
     },
     minify: false,
   },
   {
     output: {
-      file: `dist/${NAME}.esm.min.js`,
+      file: `dist/${NAME}.min.mjs`,
       format: 'esm',
     },
     minify: true,
@@ -44,7 +44,7 @@ const buildExport = [
   {
     output: {
       name: 'PopperDOM',
-      file: `dist/${NAME}.umd.js`,
+      file: `dist/${NAME}.js`,
       format: 'umd',
       globals: {
         '@popperjs/core': 'Popper',
@@ -55,7 +55,7 @@ const buildExport = [
   {
     output: {
       name: 'PopperDOM',
-      file: `dist/${NAME}.umd.min.js`,
+      file: `dist/${NAME}.min.js`,
       format: 'umd',
       globals: {
         '@popperjs/core': 'Popper',

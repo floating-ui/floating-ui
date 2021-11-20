@@ -1,9 +1,9 @@
 {
   "name": "@popperjs/core",
   "version": "3.0.0-alpha.0",
-  "description": "",
-  "main": "dist/popper-core.umd.js",
-  "module": "dist/popper-core.esm.js",
+  "description": "Tooltip and popover positioning engine",
+  "main": "dist/popper-core.js",
+  "module": "dist/popper-core.mjs",
   "sideEffects": false,
   "scripts": {
     "build": "NODE_ENV=build rollup -c",

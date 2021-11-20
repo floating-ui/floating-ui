@@ -1,9 +1,10 @@
 {
   "name": "@popperjs/dom",
   "version": "3.0.0-alpha.0",
-  "description": "",
+  "description": "Popper for the web",
   "source": "index.js",
-  "main": "tests/visual/dist/index.js",
+  "main": "dist/popper-dom.js",
+  "module": "dist/popper-dom.mjs",
   "sideEffects": false,
   "scripts": {
     "dev": "concurrently 'NODE_ENV=development rollup -c -w' 'serve -l 1234 tests/visual'",
