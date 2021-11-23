@@ -122,6 +122,22 @@ it('computes the popper styles', () => {
     })
   ).toMatchSnapshot();
 
+
+  expect(
+    mapToStyles({
+      popper: document.createElement('div'),
+      variation: 'end',
+      placement: 'bottom',
+      popperRect: { x: 108.34375, y: 8, width: 140.296875, height: 38 },
+      offsets: { x: 10, y: 5 },
+      position: 'absolute',
+      gpuAcceleration: false,
+      adaptive: true,
+      roundOffsets: true,
+      isFixed: false,
+    })
+  ).toMatchSnapshot();
+
   // customize roundOffsets impls
   expect(
     mapToStyles({

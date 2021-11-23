@@ -79,12 +79,12 @@ export function mapToStyles({
   roundOffsets: boolean | RoundOffsets,
   isFixed: boolean,
 }) {
-  let { x = 0, y = 0 } =
-    roundOffsets === true
-      ? roundOffsetsByDPR(offsets)
-      : typeof roundOffsets === 'function'
-      ? roundOffsets(offsets)
-      : offsets;
+  let { x = 0, y = 0 } = offsets;
+
+  ({ x, y } =
+    typeof roundOffsets === 'function'
+      ? roundOffsets({ x, y })
+      : { x, y });
 
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
@@ -147,6 +147,11 @@ export function mapToStyles({
     position,
     ...(adaptive && unsetSides),
   };
+
+  ({ x, y } =
+    roundOffsets === true
+      ? roundOffsetsByDPR({ x, y })
+      : { x, y });
 
   if (gpuAcceleration) {
     return {

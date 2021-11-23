@@ -102,13 +102,24 @@ Object {
   "bottom": "auto",
   "left": "auto",
   "position": "absolute",
+  "right": "-150.5px",
+  "top": "5px",
+  "transform": "",
+}
+`;
+
+exports[`computes the popper styles 10`] = `
+Object {
+  "bottom": "auto",
+  "left": "auto",
+  "position": "absolute",
   "right": "-112px",
   "top": "8px",
   "transform": "",
 }
 `;
 
-exports[`computes the popper styles 10`] = `
+exports[`computes the popper styles 11`] = `
 Object {
   "bottom": "auto",
   "left": "auto",
