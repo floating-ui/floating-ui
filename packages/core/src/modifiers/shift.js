@@ -1,39 +1,42 @@
 // @flow
 import { top, bottom, left, right, type Placement } from '../enums';
-import type { Modifier, Rect, ModifierArguments } from '../types';
+import type { Modifier, Rect, ModifierArguments, Coords } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
-import getAltAxis from '../utils/getAltAxis';
+import getCrossAxis from '../utils/getCrossAxis';
 import within from '../utils/within';
 import detectOverflow, {
   type Options as DetectOverflowOptions,
 } from '../utils/detectOverflow';
 
-type Options = {
+type Options = {|
   mainAxis: boolean,
-  altAxis: boolean,
+  crossAxis: boolean,
+  limiter: (modifierArguments: ModifierArguments) => Coords,
   ...DetectOverflowOptions,
-};
+|};
 
-export const shift = (options: Options = {}): Modifier => ({
+export const shift = (options: $Shape<Options> = {}): Modifier => ({
   name: 'shift',
   async fn(modifierArguments: ModifierArguments) {
-    const { placement, coords } = modifierArguments;
+    const { x, y, placement } = modifierArguments;
     const {
       mainAxis: checkMainAxis = true,
-      altAxis: checkAltAxis = false,
+      crossAxis: checkCrossAxis = false,
+      limiter = ({ x, y }) => ({ x, y }),
       ...detectOverflowOptions
     } = options;
 
+    const coords = { x, y };
     const overflow = await detectOverflow(
       modifierArguments,
       detectOverflowOptions
     );
     const mainAxis = getMainAxisFromPlacement(getBasePlacement(placement));
-    const altAxis = getAltAxis(mainAxis);
+    const crossAxis = getCrossAxis(mainAxis);
 
     let mainAxisCoord = coords[mainAxis];
-    let altAxisCoord = coords[altAxis];
+    let crossAxisCoord = coords[crossAxis];
 
     if (checkMainAxis) {
       const minSide = mainAxis === 'y' ? top : left;
@@ -44,21 +47,23 @@ export const shift = (options: Options = {}): Modifier => ({
       mainAxisCoord = within(min, mainAxisCoord, max);
     }
 
-    if (checkAltAxis) {
-      const minSide = altAxis === 'y' ? top : left;
-      const maxSide = altAxis === 'y' ? bottom : right;
-      const min = altAxisCoord + overflow[minSide];
-      const max = altAxisCoord - overflow[maxSide];
+    if (checkCrossAxis) {
+      const minSide = crossAxis === 'y' ? top : left;
+      const maxSide = crossAxis === 'y' ? bottom : right;
+      const min = crossAxisCoord + overflow[minSide];
+      const max = crossAxisCoord - overflow[maxSide];
 
-      altAxisCoord = within(min, altAxisCoord, max);
+      crossAxisCoord = within(min, crossAxisCoord, max);
     }
 
     const mainAxisString: string = mainAxis;
-    const altAxisString: string = altAxis;
-    return {
+    const crossAxisString: string = crossAxis;
+
+    return limiter({
+      ...modifierArguments,
       [mainAxisString]: mainAxisCoord,
-      [altAxisString]: altAxisCoord,
-    };
+      [crossAxisString]: crossAxisCoord,
+    });
   },
 });
 
@@ -70,36 +75,39 @@ type LimitShiftOffset =
     |}) => number)
   | number;
 
-export type LimitShiftOptions = {
+export type LimitShiftOptions = {|
   offset: LimitShiftOffset,
   mainAxis: boolean,
-  altAxis: boolean,
-};
+  crossAxis: boolean,
+|};
 
-export const limitShift = (options: LimitShiftOptions = {}): Modifier => ({
-  name: 'limitShift',
-  async fn(modifierArguments: ModifierArguments) {
-    const { placement, coords, rects, modifiersData } = modifierArguments;
+export const limitShift =
+  (
+    options: $Shape<LimitShiftOptions> = {}
+  ): ((modifierArguments: ModifierArguments) => void) =>
+  async (modifierArguments: ModifierArguments) => {
+    const { x, y, placement, rects, modifiersData } = modifierArguments;
     const {
       offset = 0,
       mainAxis: checkMainAxis = true,
-      altAxis: checkAltAxis = true,
+      crossAxis: checkCrossAxis = true,
     } = options;
 
+    const coords = { x, y };
     const mainAxis = getMainAxisFromPlacement(getBasePlacement(placement));
-    const altAxis = getAltAxis(mainAxis);
+    const crossAxis = getCrossAxis(mainAxis);
 
     let mainAxisCoord = coords[mainAxis];
-    let altAxisCoord = coords[altAxis];
+    let crossAxisCoord = coords[crossAxis];
 
     const rawOffset =
       typeof offset === 'function'
         ? offset({ ...rects, placement })
-        : { mainAxis: offset, altAxis: 0 };
+        : { mainAxis: offset, crossAxis: 0 };
     const computedOffset =
       typeof rawOffset === 'number'
-        ? { mainAxis: rawOffset, altAxis: 0 }
-        : { mainAxis: 0, altAxis: 0, ...rawOffset };
+        ? { mainAxis: rawOffset, crossAxis: 0 }
+        : { mainAxis: 0, crossAxis: 0, ...rawOffset };
 
     if (checkMainAxis) {
       const len = mainAxis === 'y' ? 'height' : 'width';
@@ -117,33 +125,33 @@ export const limitShift = (options: LimitShiftOptions = {}): Modifier => ({
       }
     }
 
-    if (checkAltAxis) {
+    if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
       const refLen = rects.reference[len];
       const popLen = rects.popper[len];
       const limitMin =
-        rects.reference[altAxis] -
+        rects.reference[crossAxis] -
         popLen -
         (modifiersData.offset?.[mainAxis] ?? 0) +
-        computedOffset.altAxis;
+        computedOffset.crossAxis;
       const limitMax =
-        rects.reference[altAxis] +
+        rects.reference[crossAxis] +
         refLen +
         (modifiersData.offset?.[mainAxis] ?? 0) +
-        computedOffset.altAxis;
+        computedOffset.crossAxis;
 
-      if (altAxisCoord < limitMin) {
-        altAxisCoord = limitMin;
-      } else if (altAxisCoord > limitMax) {
-        altAxisCoord = limitMax;
+      if (crossAxisCoord < limitMin) {
+        crossAxisCoord = limitMin;
+      } else if (crossAxisCoord > limitMax) {
+        crossAxisCoord = limitMax;
       }
     }
 
     const mainAxisString: string = mainAxis;
-    const altAxisString: string = altAxis;
+    const crossAxisString: string = crossAxis;
+    // $FlowIgnore[incompatible-return] always returns 'x' and 'y'
     return {
       [mainAxisString]: mainAxisCoord,
-      [altAxisString]: altAxisCoord,
+      [crossAxisString]: crossAxisCoord,
     };
-  },
-});
+  };

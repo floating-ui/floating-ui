@@ -52,12 +52,15 @@
 </div>
 
 <script type="module">
-  import { position, auto, listScrollParents } from '../dist/index.js';
+  import {
+    computePosition,
+    autoPlacement,
+    listScrollParents,
+  } from '../../dist/index.js';
 
   async function update() {
-    const { x, y } = await position(reference, popper, {
-      placement: 'auto',
-      modifiers: [auto()],
+    const { x, y } = await computePosition(reference, popper, {
+      modifiers: [autoPlacement()],
     });
 
     Object.assign(popper.style, {
@@ -71,8 +74,7 @@
   });
 
   update();
-  [
-    ...listScrollParents(reference),
-    ...listScrollParents(popper),
-  ].forEach((parent) => parent.addEventListener('scroll', update));
+  [...listScrollParents(reference), ...listScrollParents(popper)].forEach(
+    (parent) => parent.addEventListener('scroll', update)
+  );
 </script>

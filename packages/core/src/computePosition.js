@@ -1,10 +1,14 @@
 // @flow
-import type { Position } from './types';
+import type { ComputePosition } from './types';
 import { auto } from './enums';
 import computeCoords from './utils/computeCoords';
 import getBasePlacement from './utils/getBasePlacement';
 
-export const position: Position = async (reference, popper, config) => {
+export const computePosition: ComputePosition = async (
+  reference,
+  popper,
+  config
+) => {
   const {
     placement = 'bottom',
     strategy = 'absolute',
@@ -16,20 +20,8 @@ export const position: Position = async (reference, popper, config) => {
     if (platform == null) {
       throw new Error(
         [
-          'Popper: `platform` property was not passed. If you are using Popper',
-          'on the web, import the `dom` platform.',
-        ].join(' ')
-      );
-    }
-
-    if (
-      getBasePlacement(placement) === auto &&
-      !modifiers.find(({ name }) => name === auto)
-    ) {
-      console.error(
-        [
-          'Popper: In order to use auto placements, the `auto` modifier must',
-          'be passed to the `modifiers` array.',
+          'Popper: `platform` property was not passed. Ensure you are using',
+          'the @popperjs/dom package to use Popper on the web.',
         ].join(' ')
       );
     }
@@ -83,9 +75,9 @@ export const position: Position = async (reference, popper, config) => {
       y,
       data: modifierData,
     } = await fn({
+      ...statefulCoords,
       initialPlacement: placement,
       placement: statefulPlacement,
-      coords: statefulCoords,
       strategy,
       modifiersData,
       scheduleReset,

@@ -49,10 +49,10 @@
 </div>
 
 <script type="module">
-  import { position, listScrollParents } from '../dist/index.js';
+  import { computePosition, listScrollParents } from '../dist/index.js';
 
   async function update() {
-    const { x, y } = await position(reference, popper, {
+    const { x, y } = await computePosition(reference, popper, {
       placement: 'right',
     });
 
@@ -64,8 +64,7 @@
   }
 
   update();
-  [
-    ...listScrollParents(reference),
-    ...listScrollParents(popper),
-  ].forEach((parent) => parent.addEventListener('scroll', update));
+  [...listScrollParents(reference), ...listScrollParents(popper)].forEach(
+    (parent) => parent.addEventListener('scroll', update)
+  );
 </script>

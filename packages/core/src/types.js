@@ -21,7 +21,7 @@ export type PositionConfig = {|
   modifiers: Array<Modifier>,
 |};
 
-export type PositionReturn = {|
+export type ComputePositionReturn = {|
   ...Coords,
   placement: Placement,
   strategy: PositioningStrategy,
@@ -60,11 +60,11 @@ export type PositionReturn = {|
   },
 |};
 
-export type Position = (
+export type ComputePosition = (
   reference: Reference,
   popper: Popper,
   config: $Shape<PositionConfig>
-) => Promise<PositionReturn>;
+) => Promise<ComputePositionReturn>;
 
 export type Platform = {|
   isElement: (value: any) => Promise<boolean>,
@@ -89,11 +89,11 @@ export type Platform = {|
 |};
 
 export type ModifierArguments = {|
+  ...Coords,
   placement: Placement,
   initialPlacement: Placement,
   rects: ElementRects,
   elements: Elements,
-  coords: Coords,
   modifiersData: Obj,
   platform: Platform,
   strategy: PositioningStrategy,

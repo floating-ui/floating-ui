@@ -43,7 +43,7 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { position, listScrollParents } from './dist/index.js';
+  import { computePosition, listScrollParents } from './dist/index.js';
 
   const virtualElement = {
     getBoundingClientRect: () => reference.getBoundingClientRect(),
@@ -51,7 +51,7 @@
   };
 
   async function update() {
-    const { x, y } = await position(virtualElement, popper, {
+    const { x, y } = await computePosition(virtualElement, popper, {
       placement: 'right',
     });
 
@@ -63,8 +63,7 @@
   }
 
   update();
-  [
-    ...listScrollParents(reference),
-    ...listScrollParents(popper),
-  ].forEach((parent) => parent.addEventListener('scroll', update));
+  [...listScrollParents(reference), ...listScrollParents(popper)].forEach(
+    (parent) => parent.addEventListener('scroll', update)
+  );
 </script>

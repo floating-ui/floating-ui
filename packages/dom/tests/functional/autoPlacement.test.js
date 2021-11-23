@@ -6,14 +6,14 @@ import { scroll, screenshot } from '../utils/puppeteer.js';
 
 it('should be positioned on top', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/main.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/main.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
 it('should be positioned on right', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/main.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/main.html`);
 
   await scroll(page, '.scroll1', 300);
 
@@ -22,7 +22,7 @@ it('should be positioned on right', async () => {
 
 it('should be positioned on bottom', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/main.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/main.html`);
 
   await scroll(page, '.scroll1', 400);
 
@@ -31,14 +31,14 @@ it('should be positioned on bottom', async () => {
 
 it('(variation) should be positioned at top-start', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/variation.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/variation.html`);
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
-it('(variation) should be positioned at right-start', async () => {
+it('(variation) should be positioned at right-end', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/variation.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/variation.html`);
 
   await scroll(page, 'html', 100);
 
@@ -47,7 +47,7 @@ it('(variation) should be positioned at right-start', async () => {
 
 it('(variation) should be positioned at right-end', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/variation.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/variation.html`);
 
   await scroll(page, 'html', 200);
 
@@ -56,7 +56,7 @@ it('(variation) should be positioned at right-end', async () => {
 
 it('should only position at right or bottom (not top)', async () => {
   const page = await browser.newPage();
-  await page.goto(`${TEST_URL}/auto/whitelist.html`);
+  await page.goto(`${TEST_URL}/modifiers/autoPlacement/whitelist.html`);
 
   await scroll(page, '.scroll1', 150);
 

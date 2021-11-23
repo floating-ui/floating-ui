@@ -183,7 +183,7 @@ Here is a complete example:
   }
 
   applyStyles(); // Initial styles to avoid inline/layout-related positioning.
-  PopperDOM.position(button, tooltip).then(applyStyles);
+  PopperDOM.computePosition(button, tooltip).then(applyStyles);
 </script>
 ```
 
@@ -201,7 +201,7 @@ build your own tooltip from scratch using Popper!
 Import `position` from `@popperjs/dom` to use it on the web:
 
 ```js
-import { position } from '@popperjs/dom';
+import { computePosition } from '@popperjs/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -215,7 +215,7 @@ function applyStyles({ x = 0, y = 0, strategy = 'absolute' }) {
 }
 
 applyStyles();
-position(button, tooltip).then(applyStyles);
+computePosition(button, tooltip).then(applyStyles);
 ```
 
 ### React Native
@@ -250,7 +250,7 @@ function App() {
 
 ```js
 type UsePopperReturn = {|
-  // @popperjs/core `position()` return type, includes x & y coords,
+  // @popperjs/core `computePosition()` return type, includes x & y coords,
   // `modifiersData`, and `strategy`.
   ...PositionReturn,
   placement: ?Placement,

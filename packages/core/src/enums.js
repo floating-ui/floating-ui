@@ -11,6 +11,7 @@ export type BasePlacement =
   | typeof right
   | typeof left;
 export const basePlacements: Array<BasePlacement> = [top, bottom, right, left];
+export type AutoPlacement = 'auto' | 'auto-start' | 'auto-end';
 
 export const start: 'start' = 'start';
 export const end: 'end' = 'end';
@@ -37,9 +38,7 @@ export type VariationPlacement =
   | 'right-end'
   | 'left-start'
   | 'left-end';
-export type AutoPlacement = 'auto' | 'auto-start' | 'auto-end';
-export type ComputedPlacement = VariationPlacement | BasePlacement;
-export type Placement = AutoPlacement | BasePlacement | VariationPlacement;
+export type Placement = BasePlacement | VariationPlacement;
 
 export const variationPlacements: Array<VariationPlacement> =
   basePlacements.reduce(
@@ -59,6 +58,3 @@ export const placements: Array<Placement> = basePlacements.reduce(
     ]),
   []
 );
-export const computedPlacements: Array<ComputedPlacement> =
-  // $FlowIgnore[incompatible-type]
-  placements.filter((placement) => placement.split('-')[0] !== auto);

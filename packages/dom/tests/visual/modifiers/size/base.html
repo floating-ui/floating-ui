@@ -58,7 +58,7 @@
 </div>
 
 <script type="module">
-  import { position, size } from '../../dist/index.js';
+  import { computePosition, size } from '../../dist/index.js';
 
   const placements = ['top', 'right', 'bottom', 'left'];
 
@@ -74,7 +74,7 @@
         modifiersData: {
           size: { width, height },
         },
-      } = await position(reference, popper, {
+      } = await computePosition(reference, popper, {
         placement,
         modifiers: [size({ padding: 10 })],
       });

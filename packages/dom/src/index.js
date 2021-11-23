@@ -3,23 +3,23 @@
 import type {
   VirtualElement,
   PositionConfig,
-  PositionReturn,
+  ComputePositionReturn,
 } from '@popperjs/core/src/types';
-import { position as positionCore } from '@popperjs/core';
+import { computePosition as computePositionCore } from '@popperjs/core';
 import { platform } from './platform';
 
-export const position = (
+export const computePosition = (
   reference: Element | VirtualElement,
   popper: HTMLElement,
   options: $Shape<PositionConfig> = {}
-): Promise<PositionReturn> =>
-  positionCore(reference, popper, { platform, ...options });
+): Promise<ComputePositionReturn> =>
+  computePositionCore(reference, popper, { platform, ...options });
 
 export { default as listScrollParents } from './utils/listScrollParents';
 
 export {
   arrow,
-  auto,
+  autoPlacement,
   flip,
   hide,
   limitShift,

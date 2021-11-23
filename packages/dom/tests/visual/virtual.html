@@ -31,7 +31,7 @@
 <div id="popper">Popper Box</div>
 
 <script type="module">
-  import { position, listScrollParents } from './dist/index.js';
+  import { computePosition, listScrollParents } from './dist/index.js';
 
   function generateGetBoundingClientRect(x = 0, y = 0) {
     return () => ({
@@ -49,7 +49,7 @@
   };
 
   async function update() {
-    const { x, y } = await position(virtualElement, popper, {
+    const { x, y } = await computePosition(virtualElement, popper, {
       placement: 'right',
     });
 

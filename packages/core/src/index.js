@@ -2,8 +2,8 @@
 // @flow
 export type * from './types';
 
-export { position } from './position';
-export { auto } from './modifiers/auto';
+export { computePosition } from './computePosition';
+export { autoPlacement } from './modifiers/autoPlacement';
 export { shift, limitShift } from './modifiers/shift';
 export { flip } from './modifiers/flip';
 export { arrow } from './modifiers/arrow';

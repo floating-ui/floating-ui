@@ -63,7 +63,7 @@
 </div>
 
 <script type="module">
-  import { position, shift, listScrollParents } from './dist/index.js';
+  import { computePosition, shift, listScrollParents } from './dist/index.js';
 
   const referenceElement = document.querySelector('#reference');
   const popperElement = document.querySelector('#popper');
@@ -74,7 +74,7 @@
       x,
       y,
       modifiersData: { size: sizeData, arrow: arrowData, hide: hideData },
-    } = await position(referenceElement, popperElement, {
+    } = await computePosition(referenceElement, popperElement, {
       placement: 'right-start',
       modifiers: [
         // offset([0, 10]),

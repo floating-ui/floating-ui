@@ -2,14 +2,14 @@
 // @flow
 import { useMemo, useEffect, useRef, useState } from 'react';
 import { Dimensions } from 'react-native';
-import { position, rectToClientRect } from '@popperjs/core';
+import { computePosition, rectToClientRect } from '@popperjs/core';
 import type { Placement } from '@popperjs/core/src/enums';
 import type {
   Modifier,
   Platform,
-  PositionReturn,
+  ComputePositionReturn,
+  Coords,
 } from '@popperjs/core/src/types';
-import type { Coords } from '../../core/src/types';
 
 const ORIGIN = { x: 0, y: 0 };
 
@@ -90,7 +90,7 @@ export const createPlatform = ({
 });
 
 type UsePopperReturn = {|
-  ...PositionReturn,
+  ...ComputePositionReturn,
   placement: ?Placement,
   offsetParent: {| current: any |},
   popper: {| current: any |},
@@ -138,7 +138,7 @@ export const usePopper = ({
         return;
       }
 
-      position(referenceRef.current, popperRef.current, {
+      computePosition(referenceRef.current, popperRef.current, {
         platform,
         placement,
         modifiers,

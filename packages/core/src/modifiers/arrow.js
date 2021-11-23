@@ -9,7 +9,7 @@ import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
 import isVerticalPlacement from '../utils/isVerticalPlacement';
 
-export type Options = {
+export type Options = {|
   element: Obj,
   padding:
     | Padding
@@ -18,7 +18,7 @@ export type Options = {
         reference: Rect,
         placement: Placement,
       |}) => Padding),
-};
+|};
 
 const toPaddingObject = (padding, rects, placement) => {
   padding =
@@ -31,11 +31,15 @@ const toPaddingObject = (padding, rects, placement) => {
   );
 };
 
-export const arrow = ({ element, padding }: Options): Modifier => ({
+export const arrow = ({
+  element,
+  padding,
+}: $Shape<Options> = {}): Modifier => ({
   name: 'arrow',
   async fn(modifierArguments: ModifierArguments) {
-    const { placement, rects, coords, platform } = modifierArguments;
+    const { x, y, placement, rects, platform } = modifierArguments;
 
+    const coords = { x, y };
     const basePlacement = getBasePlacement(placement);
     const axis = getMainAxisFromPlacement(basePlacement);
     const isVerticalOffset = !isVerticalPlacement(placement);
@@ -70,7 +74,8 @@ export const arrow = ({ element, padding }: Options): Modifier => ({
 
     const axisProp: string = axis;
     return {
-      ...coords,
+      x,
+      y,
       data: {
         [axisProp]: offset,
         centerOffset: center - offset,

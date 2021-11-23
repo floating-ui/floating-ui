@@ -8,14 +8,14 @@ import getBasePlacement from '../utils/getBasePlacement';
 import getVariation from '../utils/getVariation';
 import isVerticalPlacement from '../utils/isVerticalPlacement';
 
-export type Options = {
+export type Options = {|
   ...DetectOverflowOptions,
-};
+|};
 
-export const size = (options: Options): Modifier => ({
+export const size = (options: $Shape<Options> = {}): Modifier => ({
   name: 'size',
   async fn(modifierArguments: ModifierArguments) {
-    const { placement, rects, coords } = modifierArguments;
+    const { x, y, placement, rects } = modifierArguments;
 
     const overflow = await detectOverflow(modifierArguments, options);
     const basePlacement = getBasePlacement(placement);
@@ -33,7 +33,8 @@ export const size = (options: Options): Modifier => ({
     }
 
     return {
-      ...coords,
+      x,
+      y,
       data: {
         height: rects.popper.height - overflow[heightSide],
         width: rects.popper.width - overflow[widthSide],

@@ -67,16 +67,16 @@
 
 <script type="module">
   import {
-    position,
+    computePosition,
     hide,
     offset,
     listScrollParents,
   } from '../../dist/index.js';
 
   async function update() {
-    const { x, y, modifiersData } = await position(reference, popper, {
+    const { x, y, modifiersData } = await computePosition(reference, popper, {
       placement: 'right',
-      modifiers: [offset([20, 20]), hide()],
+      modifiers: [offset({ mainAxis: 20, crossAxis: 20 }), hide()],
     });
 
     Object.assign(popper.style, {
@@ -93,8 +93,7 @@
   }
 
   update();
-  [
-    ...listScrollParents(reference),
-    ...listScrollParents(popper),
-  ].forEach((parent) => parent.addEventListener('scroll', update));
+  [...listScrollParents(reference), ...listScrollParents(popper)].forEach(
+    (parent) => parent.addEventListener('scroll', update)
+  );
 </script>

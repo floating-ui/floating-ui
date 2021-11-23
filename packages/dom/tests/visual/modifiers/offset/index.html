@@ -41,14 +41,18 @@
 <div class="popper" id="popper2-4">Popper Box</div>
 
 <script type="module">
-  import { position, offset, listScrollParents } from '../../dist/index.js';
+  import {
+    computePosition,
+    offset,
+    listScrollParents,
+  } from '../../dist/index.js';
 
   ['top', 'right', 'bottom', 'left'].forEach((placement, n) => {
     async function update() {
       const popper1 = document.querySelector(`#popper1-${n + 1}`);
-      const { x: x1, y: y1 } = await position(reference1, popper1, {
+      const { x: x1, y: y1 } = await computePosition(reference1, popper1, {
         placement,
-        modifiers: [offset([50, 50])],
+        modifiers: [offset({ mainAxis: 50, crossAxis: 50 })],
       });
 
       Object.assign(popper1.style, {
@@ -58,9 +62,9 @@
       });
 
       const popper2 = document.querySelector(`#popper2-${n + 1}`);
-      const { x: x2, y: y2 } = await position(reference2, popper2, {
+      const { x: x2, y: y2 } = await computePosition(reference2, popper2, {
         placement,
-        modifiers: [offset([-50, -50])],
+        modifiers: [offset({ mainAxis: -50, crossAxis: -50 })],
       });
 
       Object.assign(popper2.style, {

@@ -9,20 +9,21 @@ import detectOverflow, {
 import getVariationSides from '../utils/getVariationSides';
 import getExpandedPlacements from '../utils/getExpandedPlacements';
 
-export type Options = {
+export type Options = {|
   mainAxis: boolean,
-  altAxis: boolean,
+  crossAxis: boolean,
   fallbackPlacements: Array<Placement>,
   flipVariations: boolean,
   ...DetectOverflowOptions,
-};
+|};
 
-export const flip = (options: Options = {}): Modifier => ({
+export const flip = (options: $Shape<Options> = {}): Modifier => ({
   name: 'flip',
   async fn(modifierArguments: ModifierArguments) {
     const {
       placement,
-      coords,
+      x,
+      y,
       modifiersData,
       rects,
       scheduleReset,
@@ -30,12 +31,12 @@ export const flip = (options: Options = {}): Modifier => ({
     } = modifierArguments;
 
     if (modifiersData.flip?.skip) {
-      return coords;
+      return { x, y };
     }
 
     const {
       mainAxis: checkMainAxis = true,
-      altAxis: checkAltAxis = true,
+      crossAxis: checkCrossAxis = true,
       fallbackPlacements: specifiedFallbackPlacements,
       flipVariations = true,
       ...detectOverflowOptions
@@ -64,7 +65,7 @@ export const flip = (options: Options = {}): Modifier => ({
       overflows.push(overflow[basePlacement]);
     }
 
-    if (checkAltAxis) {
+    if (checkCrossAxis) {
       const { main, alt } = getVariationSides(placement, rects);
       overflows.push(overflow[main], overflow[alt]);
     }
@@ -79,7 +80,8 @@ export const flip = (options: Options = {}): Modifier => ({
         scheduleReset({ placement: nextPlacement });
 
         return {
-          ...coords,
+          x,
+          y,
           data: {
             index: modifiersData.flip ? modifiersData.flip.index + 1 : 1,
             overflows: [...overflowsData, { placement, overflows }],
@@ -102,12 +104,9 @@ export const flip = (options: Options = {}): Modifier => ({
 
       scheduleReset({ placement: bestFittingPlacement });
 
-      return {
-        ...coords,
-        data: { skip: true },
-      };
+      return { x, y, data: { skip: true } };
     }
 
-    return coords;
+    return { x, y };
   },
 });

@@ -1,7 +1,15 @@
 // @flow
-import type { ComputedPlacement, AutoPlacement } from '../enums';
 import type { Modifier, ModifierArguments } from '../types';
-import { auto as autoEnum, basePlacements, computedPlacements } from '../enums';
+import {
+  auto,
+  basePlacements,
+  placements as allPlacements,
+  bottom,
+  top,
+  type Placement,
+  type AutoPlacement,
+  type Variation,
+} from '../enums';
 import detectOverflow, {
   type Options as DetectOverflowOptions,
 } from '../utils/detectOverflow';
@@ -12,7 +20,7 @@ import getOppositeVariationPlacement from '../utils/getOppositeVariationPlacemen
 
 function convertAutoPlacementToComputedPlacements(
   placement: AutoPlacement,
-  allowedPlacements: Array<ComputedPlacement>
+  allowedPlacements: Array<Placement>
 ) {
   const variation = getVariation(placement);
 
@@ -27,19 +35,21 @@ function convertAutoPlacementToComputedPlacements(
   );
 }
 
-export type Options = {
-  altAxis: boolean,
-  allowedPlacements: Array<ComputedPlacement>,
+export type Options = {|
+  variation: ?Variation,
+  crossAxis: boolean,
+  allowedPlacements: Array<Placement>,
   autoVariation: false,
   ...DetectOverflowOptions,
-};
+|};
 
-export const auto = (options: Options = {}): Modifier => ({
-  name: 'auto',
+export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
+  name: 'autoPlacement',
   async fn(modifierArguments: ModifierArguments) {
     const {
+      x,
+      y,
       initialPlacement,
-      coords,
       rects,
       scheduleReset,
       modifiersData,
@@ -47,26 +57,27 @@ export const auto = (options: Options = {}): Modifier => ({
     } = modifierArguments;
 
     const {
-      altAxis = true,
-      allowedPlacements = computedPlacements,
+      variation = null,
+      crossAxis = true,
+      allowedPlacements = allPlacements,
       autoVariation = true,
       ...detectOverflowOptions
     } = options;
 
-    if (
-      modifiersData.auto?.skip ||
-      getBasePlacement(initialPlacement) !== autoEnum
-    ) {
-      return coords;
+    if (modifiersData.autoPlacement?.skip) {
+      return { x, y };
     }
 
-    let placements: any = convertAutoPlacementToComputedPlacements(
-      // $FlowIgnore[incompatible-call] checked above
-      initialPlacement,
+    const autoPlacement: AutoPlacement = ('auto' +
+      (variation != null ? `-${variation}` : ''): any);
+
+    let placements = convertAutoPlacementToComputedPlacements(
+      autoPlacement,
       allowedPlacements
     );
 
     if (autoVariation) {
+      // $FlowFixMe[incompatible-type]
       placements = placements.reduce((acc, placement) => {
         return acc.concat(
           getVariation(placement)
@@ -76,20 +87,20 @@ export const auto = (options: Options = {}): Modifier => ({
       }, []);
     }
 
-    // Make `computeCoords` start from the right place
-    if (getBasePlacement(placement) === autoEnum) {
-      scheduleReset({ placement: placements[0] });
-      return coords;
-    }
-
     const overflow = await detectOverflow(
       modifierArguments,
       detectOverflowOptions
     );
 
-    const currentIndex = modifiersData.auto?.index ?? 0;
+    const currentIndex = modifiersData.autoPlacement?.index ?? 0;
     const currentPlacement = placements[currentIndex];
     const { main, alt } = getVariationSides(currentPlacement, rects);
+
+    // Make `computeCoords` start from the right place
+    if (placement !== currentPlacement) {
+      scheduleReset({ placement: placements[0] });
+      return { x, y };
+    }
 
     const currentOverflows = [
       overflow[getBasePlacement(currentPlacement)],
@@ -98,7 +109,7 @@ export const auto = (options: Options = {}): Modifier => ({
     ];
 
     const allOverflows = [
-      ...(modifiersData.auto?.overflows ?? []),
+      ...(modifiersData.autoPlacement?.overflows ?? []),
       { placement: currentPlacement, overflows: currentOverflows },
     ];
 
@@ -109,7 +120,8 @@ export const auto = (options: Options = {}): Modifier => ({
       scheduleReset({ placement: nextPlacement });
 
       return {
-        ...coords,
+        x,
+        y,
         data: {
           index: currentIndex + 1,
           overflows: allOverflows,
@@ -118,7 +130,7 @@ export const auto = (options: Options = {}): Modifier => ({
     }
 
     const sortFn =
-      altAxis || (autoVariation && getVariation(placement))
+      crossAxis || (autoVariation && getVariation(placement))
         ? (a, b) =>
             a.overflows
               .filter((overflow) => overflow > 0)
@@ -140,7 +152,8 @@ export const auto = (options: Options = {}): Modifier => ({
     });
 
     return {
-      ...coords,
+      x,
+      y,
       data: { skip: true },
     };
   },

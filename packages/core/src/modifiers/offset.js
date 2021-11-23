@@ -3,44 +3,61 @@ import type { Placement } from '../enums';
 import type { Modifier, ModifierArguments, Rect, Coords } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import { top, left, right } from '../enums';
+import isVerticalPlacement from '../utils/isVerticalPlacement';
 
-type OffsetsFunction = ({
+type OffsetValue =
+  | number
+  | {|
+      mainAxis?: number,
+      crossAxis?: number,
+    |};
+
+type OffsetFunction = ({
   popper: Rect,
   reference: Rect,
   placement: Placement,
-}) => [?number, ?number];
+}) =>
+  | number
+  | {|
+      mainAxis?: number,
+      crossAxis?: number,
+    |};
 
-export type Offset = OffsetsFunction | [?number, ?number];
+export type Offset = OffsetValue | OffsetFunction;
 
-export function convertTupleToCoords({
+export function convertValueToCoords({
   placement,
-  coords,
   rects,
-  tuple,
+  value,
+  ...coords
 }: {
   placement: Placement,
-  coords: Coords,
   rects: { popper: Rect, reference: Rect },
-  tuple: Offset,
+  value: Offset,
+  ...Coords,
 }): Coords {
   const basePlacement = getBasePlacement(placement);
-  const invertDistance = [left, top].includes(basePlacement) ? -1 : 1;
+  const multiplier = [left, top].includes(basePlacement) ? -1 : 1;
 
-  let [skidding, distance] =
-    typeof tuple === 'function' ? tuple({ ...rects, placement }) : tuple;
+  const rawValue =
+    typeof value === 'function' ? value({ ...rects, placement }) : value;
+  let { mainAxis, crossAxis } =
+    typeof rawValue === 'number'
+      ? { mainAxis: rawValue, crossAxis: rawValue }
+      : { mainAxis: 0, crossAxis: 0, ...rawValue };
 
-  skidding = skidding || 0;
-  distance = (distance || 0) * invertDistance;
+  mainAxis = mainAxis * multiplier;
+  crossAxis = crossAxis;
 
-  return [left, right].includes(basePlacement)
-    ? { x: coords.x + distance, y: coords.y + skidding }
-    : { x: coords.x + skidding, y: coords.y + distance };
+  return !isVerticalPlacement(basePlacement)
+    ? { x: coords.x + mainAxis, y: coords.y + crossAxis }
+    : { x: coords.x + crossAxis, y: coords.y + mainAxis };
 }
 
-export const offset = (tuple: Offset): Modifier => ({
+export const offset = (value: Offset): Modifier => ({
   name: 'offset',
   fn(modifierArguments: ModifierArguments) {
-    const { placement, rects, coords } = modifierArguments;
-    return convertTupleToCoords({ placement, rects, coords, tuple });
+    const { x, y, placement, rects } = modifierArguments;
+    return convertValueToCoords({ placement, rects, x, y, value });
   },
 });

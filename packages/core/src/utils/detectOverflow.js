@@ -24,7 +24,7 @@ export default async function detectOverflow(
   modifierArguments: ModifierArguments,
   options: $Shape<Options> = {}
 ): Promise<SideObject> {
-  const { platform, rects, coords, elements, strategy } = modifierArguments;
+  const { x, y, platform, rects, elements, strategy } = modifierArguments;
 
   const {
     boundary = clippingParents,
@@ -55,9 +55,7 @@ export default async function detectOverflow(
   const elementClientRect = rectToClientRect(
     await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
       rect:
-        elementContext === popper
-          ? { ...rects.popper, ...coords }
-          : rects.reference,
+        elementContext === popper ? { ...rects.popper, x, y } : rects.reference,
       offsetParent: await platform.getOffsetParent({
         element: elements.popper,
       }),

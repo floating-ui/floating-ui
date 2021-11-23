@@ -1,6 +1,8 @@
 // @flow
-import { type Variation, type Placement } from '../enums';
+import type { Variation, Placement, AutoPlacement } from '../enums';
 
-export default function getVariation(placement: Placement): ?Variation {
+export default function getVariation(
+  placement: Placement | AutoPlacement
+): ?Variation {
   return (placement.split('-')[1]: any);
 }
