@@ -74,8 +74,6 @@ export const arrow = ({
 
     const axisProp: string = axis;
     return {
-      x,
-      y,
       data: {
         [axisProp]: offset,
         centerOffset: center - offset,

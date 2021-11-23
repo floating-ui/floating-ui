@@ -31,7 +31,7 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
     } = modifierArguments;
 
     if (modifiersData.flip?.skip) {
-      return { x, y };
+      return {};
     }
 
     const {
@@ -80,8 +80,6 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
         scheduleReset({ placement: nextPlacement });
 
         return {
-          x,
-          y,
           data: {
             index: nextIndex,
             overflows: [...overflowsData, { placement, overflows }],
@@ -104,9 +102,11 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
 
       scheduleReset({ placement: bestFittingPlacement });
 
-      return { x, y, data: { skip: true } };
+      return {
+        data: { skip: true },
+      };
     }
 
-    return { x, y };
+    return {};
   },
 });

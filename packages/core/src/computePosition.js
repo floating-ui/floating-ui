@@ -34,10 +34,9 @@ export const computePosition: ComputePosition = async (
 
   // Places the popper using the 12 different placement types. The most
   // basic form of positioning.
-  const coords = computeCoords({ ...rects, placement });
+  let { x, y } = computeCoords({ ...rects, placement });
 
   let statefulPlacement = placement;
-  let statefulCoords = coords;
 
   // Modifiers have the ability to reset the modifier lifecycle and start
   // the process over again. Mainly used by the `flip` modifier which changes
@@ -63,19 +62,17 @@ export const computePosition: ComputePosition = async (
     }
 
     if (i === 0) {
-      statefulCoords = computeCoords({
-        ...rects,
-        placement: statefulPlacement,
-      });
+      ({ x, y } = computeCoords({ ...rects, placement: statefulPlacement }));
     }
 
     const { name, fn } = modifiers[i];
     const {
-      x,
-      y,
+      x: nextX,
+      y: nextY,
       data: modifierData,
     } = await fn({
-      ...statefulCoords,
+      x,
+      y,
       initialPlacement: placement,
       placement: statefulPlacement,
       strategy,
@@ -86,7 +83,9 @@ export const computePosition: ComputePosition = async (
       elements: { reference, popper },
     });
 
-    statefulCoords = { x, y };
+    x = nextX ?? x;
+    y = nextY ?? y;
+
     modifiersData = { ...modifiersData, [name]: modifierData ?? {} };
 
     if (isReset) {
@@ -97,7 +96,8 @@ export const computePosition: ComputePosition = async (
   }
 
   return {
-    ...statefulCoords,
+    x,
+    y,
     placement: statefulPlacement,
     strategy,
     modifiersData,

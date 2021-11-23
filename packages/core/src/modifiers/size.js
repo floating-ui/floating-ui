@@ -15,7 +15,7 @@ export type Options = {|
 export const size = (options: $Shape<Options> = {}): Modifier => ({
   name: 'size',
   async fn(modifierArguments: ModifierArguments) {
-    const { x, y, placement, rects } = modifierArguments;
+    const { placement, rects } = modifierArguments;
 
     const overflow = await detectOverflow(modifierArguments, options);
     const basePlacement = getBasePlacement(placement);
@@ -33,8 +33,6 @@ export const size = (options: $Shape<Options> = {}): Modifier => ({
     }
 
     return {
-      x,
-      y,
       data: {
         height: rects.popper.height - overflow[heightSide],
         width: rects.popper.width - overflow[widthSide],

@@ -19,7 +19,7 @@ function isAnySideFullyClipped(overflow: SideObject) {
 export const hide = (): Modifier => ({
   name: 'hide',
   async fn(modifierArguments: ModifierArguments) {
-    const { x, y, rects } = modifierArguments;
+    const { rects } = modifierArguments;
     const referenceRect = rects.reference;
     const popperRect = rects.popper;
 
@@ -39,8 +39,6 @@ export const hide = (): Modifier => ({
     const hasPopperEscaped = isAnySideFullyClipped(popperEscapeOffsets);
 
     return {
-      x,
-      y,
       data: {
         referenceClippingOffsets,
         popperEscapeOffsets,

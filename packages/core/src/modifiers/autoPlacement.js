@@ -65,7 +65,7 @@ export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
     } = options;
 
     if (modifiersData.autoPlacement?.skip) {
-      return { x, y };
+      return {};
     }
 
     const autoPlacement: AutoPlacement = ('auto' +
@@ -120,8 +120,6 @@ export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
       scheduleReset({ placement: nextPlacement });
 
       return {
-        x,
-        y,
         data: {
           index: currentIndex + 1,
           overflows: allOverflows,
@@ -152,8 +150,6 @@ export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
     });
 
     return {
-      x,
-      y,
       data: { skip: true },
     };
   },
