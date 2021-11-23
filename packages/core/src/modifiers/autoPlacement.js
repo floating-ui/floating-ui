@@ -39,7 +39,7 @@ export type Options = {|
   variation: ?Variation,
   crossAxis: boolean,
   allowedPlacements: Array<Placement>,
-  autoVariation: false,
+  autoVariation: boolean,
   ...DetectOverflowOptions,
 |};
 

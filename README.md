@@ -223,67 +223,7 @@ computePosition(button, tooltip).then(applyStyles);
 **Status: Experimental**
 
 Support for React Native is currently in early development.
-
-```js
-import { View, Text } from 'react-native';
-import { usePopper } from '@popperjs/react-native';
-
-function App() {
-  const { reference, popper } = usePopper();
-
-  return (
-    <View>
-      <View ref={reference}>
-        <Text>Reference</Text>
-      </View>
-      <View ref={popper}>
-        <Text>Popper</Text>
-      </View>
-    </View>
-  );
-}
-```
-
-#### Return
-
-`usePopper` returns the following object:
-
-```js
-type UsePopperReturn = {|
-  // @popperjs/core `computePosition()` return type, includes x & y coords,
-  // `modifiersData`, and `strategy`.
-  ...PositionReturn,
-  placement: ?Placement,
-  // The popper's `offsetParent` if not contained within the base App root.
-  offsetParent: {| current: any |},
-  popper: {| current: any |},
-  reference: {| current: any |},
-  // Apply to the <ScrollView /> in which the reference element is contained,
-  // if the popper is not also within it.
-  scrollProps: {|
-    onScroll: (event: {
-      nativeEvent: {
-        contentOffset: {| x: number, y: number |},
-      },
-    }) => void,
-    scrollEventThrottle: 16,
-  |},
-|};
-```
-
-#### Options
-
-These options can be passed to `usePopper`:
-
-```js
-type Options = {
-  placement: Placement, // default: "bottom"
-  modifiers: Array<Modifiers>, // default: []
-  // If the Popper is contained within the same <ScrollView /> as the
-  // reference element.
-  sameScrollView: boolean, // default: true
-};
-```
+[View the docs here](https://popper.js.org/docs/v3/react-native/).
 
 ## Hacking the library
 
