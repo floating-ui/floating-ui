@@ -50,14 +50,19 @@ export function convertValueToCoords({
   crossAxis = crossAxis;
 
   return !isVerticalPlacement(basePlacement)
-    ? { x: coords.x + mainAxis, y: coords.y + crossAxis }
-    : { x: coords.x + crossAxis, y: coords.y + mainAxis };
+    ? { x: mainAxis, y: crossAxis }
+    : { x: crossAxis, y: mainAxis };
 }
 
 export const offset = (value: Offset): Modifier => ({
   name: 'offset',
   fn(modifierArguments: ModifierArguments) {
     const { x, y, placement, rects } = modifierArguments;
-    return convertValueToCoords({ placement, rects, x, y, value });
+    const diffCoords = convertValueToCoords({ placement, rects, x, y, value });
+    return {
+      x: x + diffCoords.x,
+      y: y + diffCoords.y,
+      data: diffCoords,
+    };
   },
 });

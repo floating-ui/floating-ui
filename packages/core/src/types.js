@@ -21,43 +21,49 @@ export type PositionConfig = {|
   modifiers: Array<Modifier>,
 |};
 
+type ModifiersData = {
+  arrow?: {|
+    x?: number,
+    y?: number,
+    centerOffset: number,
+  |},
+  autoPlacement?: {|
+    skip?: boolean,
+    index?: number,
+    overflows?: Array<{
+      placement: Placement,
+      overflows: [number] | [number, number, number],
+    }>,
+  |},
+  flip?: {|
+    skip?: boolean,
+    index?: number,
+    overflows?: Array<{|
+      placement: Placement,
+      overflows: [number] | [number, number, number],
+    |}>,
+  |},
+  hide?: {|
+    isReferenceHidden: boolean,
+    hasPopperEscaped: boolean,
+    referenceClippingOffsets: SideObject,
+    popperEscapeOffsets: SideObject,
+  |},
+  offset?: {|
+    x: number,
+    y: number,
+  |},
+  size?: {|
+    width: number,
+    height: number,
+  |},
+};
+
 export type ComputePositionReturn = {|
   ...Coords,
   placement: Placement,
   strategy: PositioningStrategy,
-  modifiersData: {
-    arrow?: {|
-      x?: number,
-      y?: number,
-      centerOffset: number,
-    |},
-    flip?: {|
-      skip: boolean,
-      index: number,
-      overflows: Array<{|
-        placement: Placement,
-        overflows: [number] | [number, number, number],
-      |}>,
-    |},
-    auto?: {|
-      skip: boolean,
-      overflows: Array<{
-        placement: Placement,
-        overflows: [number] | [number, number, number],
-      }>,
-    |},
-    hide?: {|
-      isReferenceHidden: boolean,
-      hasPopperEscaped: boolean,
-      referenceClippingOffsets: SideObject,
-      popperEscapeOffsets: SideObject,
-    |},
-    size?: {|
-      width: number,
-      height: number,
-    |},
-    [key: string]: any,
-  },
+  modifiersData: ModifiersData,
 |};
 
 export type ComputePosition = (
@@ -94,7 +100,7 @@ export type ModifierArguments = {|
   initialPlacement: Placement,
   rects: ElementRects,
   elements: Elements,
-  modifiersData: Obj,
+  modifiersData: ModifiersData,
   platform: Platform,
   strategy: PositioningStrategy,
   scheduleReset: ({|

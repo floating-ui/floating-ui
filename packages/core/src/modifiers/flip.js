@@ -72,8 +72,8 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
 
     // One or more sides is overflowing
     if (!overflows.every((side) => side <= 0)) {
-      const nextPlacement =
-        placements[modifiersData.flip ? modifiersData.flip.index + 1 : 1];
+      const nextIndex = (modifiersData.flip?.index ?? 0) + 1;
+      const nextPlacement = placements[nextIndex];
 
       if (nextPlacement) {
         // Try next placement and re-run the lifecycle
@@ -83,7 +83,7 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
           x,
           y,
           data: {
-            index: modifiersData.flip ? modifiersData.flip.index + 1 : 1,
+            index: nextIndex,
             overflows: [...overflowsData, { placement, overflows }],
           },
         };
