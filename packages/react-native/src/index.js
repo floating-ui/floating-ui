@@ -8,7 +8,6 @@ import type {
   Modifier,
   Platform,
   ComputePositionReturn,
-  Coords,
 } from '@popperjs/core/src/types';
 
 const ORIGIN = { x: 0, y: 0 };

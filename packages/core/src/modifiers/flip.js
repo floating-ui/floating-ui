@@ -20,15 +20,8 @@ export type Options = {|
 export const flip = (options: $Shape<Options> = {}): Modifier => ({
   name: 'flip',
   async fn(modifierArguments: ModifierArguments) {
-    const {
-      placement,
-      x,
-      y,
-      modifiersData,
-      rects,
-      scheduleReset,
-      initialPlacement,
-    } = modifierArguments;
+    const { placement, modifiersData, rects, scheduleReset, initialPlacement } =
+      modifierArguments;
 
     if (modifiersData.flip?.skip) {
       return {};

@@ -1,8 +1,6 @@
 // @flow
 import type { ComputePosition } from './types';
-import { auto } from './enums';
 import computeCoords from './utils/computeCoords';
-import getBasePlacement from './utils/getBasePlacement';
 
 export const computePosition: ComputePosition = async (
   reference,

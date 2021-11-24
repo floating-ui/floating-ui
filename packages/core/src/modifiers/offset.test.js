@@ -10,8 +10,6 @@ const popper = { width: 0, height: 0, x: 0, y: 0 };
       convertValueToCoords({
         placement,
         rects: { reference, popper },
-        x: 0,
-        y: 0,
         value: () => ({ mainAxis: 20, crossAxis: 10 }),
       })
     ).toMatchSnapshot();

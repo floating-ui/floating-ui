@@ -17,10 +17,11 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 17
+      - run: yarn install
       - run: yarn workspace @popperjs/core build
       - run: yarn workspace @popperjs/dom test:functional
         env:
-          PUPPETEER_BROWSER: chromium
+          PUPPETEER_BROWSER: chrome
       - uses: actions/upload-artifact@v2
         if: always()
         with:

@@ -2,7 +2,7 @@
 import getBasePlacement from './getBasePlacement';
 import getVariation from './getVariation';
 import getMainAxisFromPlacement from './getMainAxisFromPlacement';
-import type { Rect, Coords, ClientRectObject } from '../types';
+import type { Rect, Coords } from '../types';
 import { top, right, bottom, left, start, end, type Placement } from '../enums';
 
 export default function computeCoords({

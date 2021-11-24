@@ -2,7 +2,7 @@
 import type { Placement } from '../enums';
 import type { Modifier, ModifierArguments, Rect, Coords } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
-import { top, left, right } from '../enums';
+import { top, left } from '../enums';
 import isVerticalPlacement from '../utils/isVerticalPlacement';
 
 type OffsetValue =
@@ -29,13 +29,11 @@ export function convertValueToCoords({
   placement,
   rects,
   value,
-  ...coords
-}: {
+}: {|
   placement: Placement,
   rects: { popper: Rect, reference: Rect },
   value: Offset,
-  ...Coords,
-}): Coords {
+|}): Coords {
   const basePlacement = getBasePlacement(placement);
   const multiplier = [left, top].includes(basePlacement) ? -1 : 1;
 
@@ -58,7 +56,7 @@ export const offset = (value: Offset): Modifier => ({
   name: 'offset',
   fn(modifierArguments: ModifierArguments) {
     const { x, y, placement, rects } = modifierArguments;
-    const diffCoords = convertValueToCoords({ placement, rects, x, y, value });
+    const diffCoords = convertValueToCoords({ placement, rects, value });
     return {
       x: x + diffCoords.x,
       y: y + diffCoords.y,

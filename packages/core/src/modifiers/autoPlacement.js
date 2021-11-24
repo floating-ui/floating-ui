@@ -1,11 +1,8 @@
 // @flow
 import type { Modifier, ModifierArguments } from '../types';
 import {
-  auto,
   basePlacements,
   placements as allPlacements,
-  bottom,
-  top,
   type Placement,
   type AutoPlacement,
   type Variation,
@@ -46,15 +43,8 @@ export type Options = {|
 export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
   name: 'autoPlacement',
   async fn(modifierArguments: ModifierArguments) {
-    const {
-      x,
-      y,
-      initialPlacement,
-      rects,
-      scheduleReset,
-      modifiersData,
-      placement,
-    } = modifierArguments;
+    const { x, y, rects, scheduleReset, modifiersData, placement } =
+      modifierArguments;
 
     const {
       variation = null,
