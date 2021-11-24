@@ -59,10 +59,11 @@ const getElementRectsPromise: GetElementRects = ({
 const getClippingClientRectPromise: GetClippingClientRect = (args) =>
   Promise.resolve(getClippingClientRect(args));
 
-const convertOffsetParentRelativeRectToViewportRelativeRectPromise: ConvertOffsetParentRelativeRectToViewportRelativeRect = (
-  args
-) =>
-  Promise.resolve(convertOffsetParentRelativeRectToViewportRelativeRect(args));
+const convertOffsetParentRelativeRectToViewportRelativeRectPromise: ConvertOffsetParentRelativeRectToViewportRelativeRect =
+  (args) =>
+    Promise.resolve(
+      convertOffsetParentRelativeRectToViewportRelativeRect(args)
+    );
 
 const getOffsetParentPromise: GetOffsetParent = ({ element }) =>
   Promise.resolve(getOffsetParent(element));
@@ -80,7 +81,8 @@ export const platform: Platform = {
   isElement: isElementPromise,
   getElementRects: getElementRectsPromise,
   getClippingClientRect: getClippingClientRectPromise,
-  convertOffsetParentRelativeRectToViewportRelativeRect: convertOffsetParentRelativeRectToViewportRelativeRectPromise,
+  convertOffsetParentRelativeRectToViewportRelativeRect:
+    convertOffsetParentRelativeRectToViewportRelativeRectPromise,
   getDocumentElement: getDocumentElementPromise,
   getOffsetParent: getOffsetParentPromise,
   getDimensions: getDimensionsPromise,

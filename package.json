@@ -15,11 +15,13 @@
     "extends": "./.config/eslint.config"
   },
   "scripts": {
-    "test:types": "yarn flow",
-    "test:lint": "yarn eslint ."
+    "test:types": "flow",
+    "test:lint": "eslint .",
+    "dev": "concurrently 'yarn workspace @popperjs/core dev' 'yarn workspace @popperjs/dom dev'"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "concurrently": "^6.4.0",
     "eslint": "^8.3.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.25.3",

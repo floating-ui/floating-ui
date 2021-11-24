@@ -21,7 +21,7 @@ export type PositionConfig = {|
   modifiers: Array<Modifier>,
 |};
 
-type ModifiersData = {
+export type ModifiersData = {
   arrow?: {|
     x?: number,
     y?: number,

@@ -1,6 +1,7 @@
 /* eslint-disable import/no-unused-modules */
 // @flow
 export type * from './types';
+export type * from './enums';
 
 export { computePosition } from './computePosition';
 export { autoPlacement } from './modifiers/autoPlacement';

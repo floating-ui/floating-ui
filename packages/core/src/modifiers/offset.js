@@ -41,15 +41,15 @@ export function convertValueToCoords({
     typeof value === 'function' ? value({ ...rects, placement }) : value;
   let { mainAxis, crossAxis } =
     typeof rawValue === 'number'
-      ? { mainAxis: rawValue, crossAxis: rawValue }
+      ? { mainAxis: rawValue, crossAxis: 0 }
       : { mainAxis: 0, crossAxis: 0, ...rawValue };
 
   mainAxis = mainAxis * multiplier;
   crossAxis = crossAxis;
 
-  return !isVerticalPlacement(basePlacement)
-    ? { x: mainAxis, y: crossAxis }
-    : { x: crossAxis, y: mainAxis };
+  return isVerticalPlacement(basePlacement)
+    ? { x: crossAxis, y: mainAxis }
+    : { x: mainAxis, y: crossAxis };
 }
 
 export const offset = (value: Offset): Modifier => ({

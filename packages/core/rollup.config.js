@@ -5,7 +5,7 @@ import { terser } from 'rollup-plugin-terser';
 
 const NAME = 'popper-core';
 
-export default [
+const buildExport = [
   {
     output: {
       file: path.join(__dirname, `dist/${NAME}.mjs`),
@@ -36,18 +36,32 @@ export default [
     },
     minify: true,
   },
-].map(({ output, minify }) => ({
-  input: path.join(__dirname, 'src/index.js'),
-  output,
-  plugins: [
-    babel({
-      babelHelpers: 'bundled',
-      configFile: require.resolve('../../.config/babel.config'),
-    }),
-    replace({
-      __DEV__: 'process.env.NODE_ENV !== "production"',
-      preventAssignment: true,
-    }),
-    minify && terser(),
-  ],
-}));
+];
+
+const devExport = [
+  {
+    output: {
+      file: path.join(__dirname, `dist/${NAME}.mjs`),
+      format: 'esm',
+    },
+    minify: false,
+  },
+];
+
+export default (process.env.NODE_ENV === 'build' ? buildExport : devExport).map(
+  ({ output, minify }) => ({
+    input: path.join(__dirname, 'src/index.js'),
+    output,
+    plugins: [
+      babel({
+        babelHelpers: 'bundled',
+        configFile: require.resolve('../../.config/babel.config'),
+      }),
+      replace({
+        __DEV__: 'process.env.NODE_ENV !== "production"',
+        preventAssignment: true,
+      }),
+      minify && terser(),
+    ],
+  })
+);

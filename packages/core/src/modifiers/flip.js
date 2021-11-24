@@ -13,6 +13,7 @@ export type Options = {|
   mainAxis: boolean,
   crossAxis: boolean,
   fallbackPlacements: Array<Placement>,
+  fallbackStrategy: 'bestFit' | 'preferredPlacement',
   flipVariations: boolean,
   ...DetectOverflowOptions,
 |};
@@ -31,6 +32,7 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
       mainAxis: checkMainAxis = true,
       crossAxis: checkCrossAxis = true,
       fallbackPlacements: specifiedFallbackPlacements,
+      fallbackStrategy = 'bestFit',
       flipVariations = true,
       ...detectOverflowOptions
     } = options;
@@ -80,20 +82,28 @@ export const flip = (options: $Shape<Options> = {}): Modifier => ({
         };
       }
 
-      // No placements fit, fallback to the one that fits best
-      const bestFittingPlacement = overflowsData
-        .slice()
-        .sort(
-          (a, b) =>
-            a.overflows
-              .filter((overflow) => overflow > 0)
-              .reduce((acc, overflow) => acc + overflow, 0) -
-            b.overflows
-              .filter((overflow) => overflow > 0)
-              .reduce((acc, overflow) => acc + overflow, 0)
-        )[0].placement;
-
-      scheduleReset({ placement: bestFittingPlacement });
+      switch (fallbackStrategy) {
+        case 'bestFit': {
+          scheduleReset({
+            placement: overflowsData
+              .slice()
+              .sort(
+                (a, b) =>
+                  a.overflows
+                    .filter((overflow) => overflow > 0)
+                    .reduce((acc, overflow) => acc + overflow, 0) -
+                  b.overflows
+                    .filter((overflow) => overflow > 0)
+                    .reduce((acc, overflow) => acc + overflow, 0)
+              )[0].placement,
+          });
+          break;
+        }
+        case 'preferredPlacement':
+          scheduleReset({ placement: initialPlacement });
+          break;
+        default:
+      }
 
       return {
         data: { skip: true },

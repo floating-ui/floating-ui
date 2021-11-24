@@ -21,7 +21,9 @@ const devExport = {
       'process.env.NODE_ENV': '"production"',
       preventAssignment: true,
     }),
-    nodeResolve(),
+    nodeResolve({
+      exportConditions: ['rollup'],
+    }),
   ],
 };
 

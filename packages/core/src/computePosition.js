@@ -23,6 +23,20 @@ export const computePosition: ComputePosition = async (
         ].join(' ')
       );
     }
+
+    if (
+      modifiers.filter(
+        ({ name }) => name === 'autoPlacement' || name === 'flip'
+      ).length > 1
+    ) {
+      throw new Error(
+        [
+          'Popper: duplicate `autoPlacement` and/or `flip` modifiers detected.',
+          'Ensure only one of either has been passed. Using both in',
+          'conjunction, or duplicates of either, will lead to infinite loops.',
+        ].join(' ')
+      );
+    }
   }
 
   // Although the DOM provides a synchronous way to get a rect, other

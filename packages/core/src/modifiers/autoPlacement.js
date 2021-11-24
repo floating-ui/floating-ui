@@ -48,7 +48,7 @@ export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
 
     const {
       variation = null,
-      crossAxis = true,
+      crossAxis = false,
       allowedPlacements = allPlacements,
       autoVariation = true,
       ...detectOverflowOptions
@@ -120,12 +120,8 @@ export const autoPlacement = (options: $Shape<Options> = {}): Modifier => ({
     const sortFn =
       crossAxis || (autoVariation && getVariation(placement))
         ? (a, b) =>
-            a.overflows
-              .filter((overflow) => overflow > 0)
-              .reduce((acc, overflow) => acc + overflow, 0) -
-            b.overflows
-              .filter((overflow) => overflow > 0)
-              .reduce((acc, overflow) => acc + overflow, 0)
+            a.overflows.reduce((acc, overflow) => acc + overflow, 0) -
+            b.overflows.reduce((acc, overflow) => acc + overflow, 0)
         : (a, b) => a.overflows[0] - b.overflows[0];
 
     const placementsSortedByLeastOverflow = allOverflows.slice().sort(sortFn);
