@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unused-modules */
 // @flow
-import { useMemo, useEffect, useRef, useState } from 'react';
+import { useMemo, useState, useLayoutEffect } from 'react';
 import { Dimensions } from 'react-native';
 import { computePosition, rectToClientRect } from '@popperjs/core';
 import type { Placement } from '@popperjs/core/src/enums';
@@ -10,16 +10,31 @@ import type {
   ComputePositionReturn,
 } from '@popperjs/core/src/types';
 
+export {
+  arrow,
+  autoPlacement,
+  flip,
+  hide,
+  limitShift,
+  offset,
+  shift,
+  size,
+} from '@popperjs/core';
+
 const ORIGIN = { x: 0, y: 0 };
+const INITIAL_DATA = {
+  ...ORIGIN,
+  placement: null,
+  strategy: 'absolute',
+  modifiersData: {},
+};
 
 export const createPlatform = ({
-  offsetParentRef,
+  offsetParent,
   sameScrollView = true,
   scrollOffsets = ORIGIN,
 }: {
-  offsetParentRef: {|
-    current: any,
-  |},
+  offsetParent: any,
   sameScrollView: boolean,
   scrollOffsets: {|
     x: number,
@@ -46,8 +61,8 @@ export const createPlatform = ({
         });
       };
 
-      if (offsetParentRef.current) {
-        offsetParentRef.current.measure(onMeasure);
+      if (offsetParent) {
+        offsetParent.measure(onMeasure);
       } else {
         onMeasure();
       }
@@ -56,7 +71,11 @@ export const createPlatform = ({
   getClippingClientRect() {
     const { width, height } = Dimensions.get('window');
     return Promise.resolve(
-      rectToClientRect({ width, height, ...scrollOffsets })
+      rectToClientRect({
+        width,
+        height,
+        ...(sameScrollView ? scrollOffsets : ORIGIN),
+      })
     );
   },
   convertOffsetParentRelativeRectToViewportRelativeRect({ rect }) {
@@ -65,8 +84,8 @@ export const createPlatform = ({
         resolve({ ...rect, x: rect.x + offsetX, y: rect.y + offsetY });
       };
 
-      if (offsetParentRef.current) {
-        offsetParentRef.current.measure(onMeasure);
+      if (offsetParent) {
+        offsetParent.measure(onMeasure);
       } else {
         onMeasure();
       }
@@ -91,9 +110,9 @@ export const createPlatform = ({
 type UsePopperReturn = {|
   ...ComputePositionReturn,
   placement: ?Placement,
-  offsetParent: {| current: any |},
-  popper: {| current: any |},
-  reference: {| current: any |},
+  offsetParent: <S>(((S) => S) | S) => void,
+  popper: <S>(((S) => S) | S) => void,
+  reference: <S>(((S) => S) | S) => void,
   scrollProps: {|
     onScroll: (event: {
       nativeEvent: {
@@ -113,44 +132,37 @@ export const usePopper = ({
   modifiers: Array<Modifier>,
   sameScrollView: boolean,
 } = {}): UsePopperReturn => {
-  const offsetParentRef = useRef<null>(null);
-  const referenceRef = useRef<null>(null);
-  const popperRef = useRef<null>(null);
-  const [data, setData] = useState({
-    ...ORIGIN,
-    placement: null,
-    strategy: 'absolute',
-    modifiersData: {},
-  });
+  const [offsetParent, setOffsetParent] = useState<any>(null);
+  const [reference, setReference] = useState<any>(null);
+  const [popper, setPopper] = useState<any>(null);
+  const [data, setData] = useState(INITIAL_DATA);
   const [scrollOffsets, setScrollOffsets] = useState(ORIGIN);
 
   const platform = useMemo(
-    () => createPlatform({ offsetParentRef, scrollOffsets, sameScrollView }),
-    [offsetParentRef, scrollOffsets, sameScrollView]
+    () => createPlatform({ offsetParent, scrollOffsets, sameScrollView }),
+    [offsetParent, scrollOffsets, sameScrollView]
   );
 
-  useEffect(() => {
-    const wrap = !data.placement ? requestAnimationFrame : (cb) => cb();
-
-    wrap(() => {
-      if (!referenceRef.current || !popperRef.current) {
+  useLayoutEffect(() => {
+    requestAnimationFrame(() => {
+      if (!reference || !popper) {
         return;
       }
 
-      computePosition(referenceRef.current, popperRef.current, {
+      computePosition(reference, popper, {
         platform,
         placement,
         modifiers,
       }).then(setData);
     });
-  }, [platform, scrollOffsets]);
+  }, [platform, reference, popper, modifiers, placement]);
 
   return useMemo(
     () => ({
       ...data,
-      offsetParent: offsetParentRef,
-      reference: referenceRef,
-      popper: popperRef,
+      offsetParent: setOffsetParent,
+      reference: setReference,
+      popper: setPopper,
       scrollProps: {
         onScroll: (event) => setScrollOffsets(event.nativeEvent.contentOffset),
         scrollEventThrottle: 16,
