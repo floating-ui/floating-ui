@@ -15,17 +15,23 @@
     "extends": "./.config/eslint.config"
   },
   "scripts": {
+    "dev": "concurrently 'yarn workspace @popperjs/core dev' 'yarn workspace @popperjs/dom dev'",
+    "clean": "node .config/clean-dev.mjs",
     "test:types": "flow",
     "test:lint": "eslint .",
-    "dev": "concurrently 'yarn workspace @popperjs/core dev' 'yarn workspace @popperjs/dom dev'"
+    "build:typescript": "flow-to-ts \"packages/**/src/**/*.js\" --write --inline-utility-types; tsc --project .config/tsconfig.json; node .config/clean-build.mjs"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "@khanacademy/flow-to-ts": "^0.5.2",
     "concurrently": "^6.4.0",
     "eslint": "^8.3.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "flow-bin": "^0.165.0"
+    "flow-bin": "^0.165.0",
+    "globby": "^12.0.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.5.2"
   }
 }

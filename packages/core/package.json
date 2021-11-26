@@ -10,6 +10,11 @@
     "dev": "rollup -c -w",
     "test": "jest"
   },
+  "files": [
+    "dist/",
+    "index.d.ts",
+    "src/**/*.d.ts"
+  ],
   "author": "",
   "license": "MIT",
   "babel": {

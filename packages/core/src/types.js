@@ -16,9 +16,9 @@ export type Coords = {|
 
 export type PositionConfig = {|
   platform: Platform,
-  placement: Placement,
-  strategy: PositioningStrategy,
-  modifiers: Array<Modifier>,
+  placement?: Placement,
+  strategy?: PositioningStrategy,
+  modifiers?: Array<Modifier>,
 |};
 
 export type ModifiersData = {
@@ -69,7 +69,7 @@ export type ComputePositionReturn = {|
 export type ComputePosition = (
   reference: Reference,
   popper: Popper,
-  config: $Shape<PositionConfig>
+  config: PositionConfig
 ) => Promise<ComputePositionReturn>;
 
 export type Platform = {|

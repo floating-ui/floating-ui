@@ -6,6 +6,11 @@
   "main": "dist/popper-dom.js",
   "module": "dist/popper-dom.mjs",
   "sideEffects": false,
+  "files": [
+    "dist/",
+    "index.d.ts",
+    "src/**/*.d.ts"
+  ],
   "scripts": {
     "dev": "concurrently 'NODE_ENV=development rollup -c -w' 'serve -l 1234 tests/visual'",
     "test:functional": "jest tests/functional",
