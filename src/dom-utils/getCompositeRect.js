@@ -7,11 +7,12 @@ import { isHTMLElement } from './instanceOf';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import getDocumentElement from './getDocumentElement';
 import isScrollParent from './isScrollParent';
+import { round } from '../utils/math';
 
 function isElementScaled(element: HTMLElement) {
   const rect = element.getBoundingClientRect();
-  const scaleX = rect.width / element.offsetWidth || 1;
-  const scaleY = rect.height / element.offsetHeight || 1;
+  const scaleX = round(rect.width) / element.offsetWidth || 1;
+  const scaleY = round(rect.height) / element.offsetHeight || 1;
 
   return scaleX !== 1 || scaleY !== 1;
 }

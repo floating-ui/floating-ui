@@ -51,8 +51,8 @@ function roundOffsetsByDPR({ x, y }): Offsets {
   const dpr = win.devicePixelRatio || 1;
 
   return {
-    x: round(round(x * dpr) / dpr) || 0,
-    y: round(round(y * dpr) / dpr) || 0,
+    x: round(x * dpr) / dpr || 0,
+    y: round(y * dpr) / dpr || 0,
   };
 }
 

@@ -138,3 +138,33 @@ it('should be able to use svg element as a boundary', async () => {
 
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
+
+it('(altAxis + tether + origin placement) should tether to reference element when overflowing', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/modifiers/preventOverflow/altAxis-tether-origin.html`
+  );
+
+  await scroll(page, '#scroll', 1250);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+
+  await scroll(page, '#scroll', 1000);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
+it('(altAxis + tether + non-origin placement) should tether to reference element when overflowing', async () => {
+  const page = await browser.newPage();
+  await page.goto(
+    `${TEST_URL}/modifiers/preventOverflow/altAxis-tether-non-origin.html`
+  );
+
+  await scroll(page, '#scroll', 1325);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+
+  await scroll(page, '#scroll', 1050);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});

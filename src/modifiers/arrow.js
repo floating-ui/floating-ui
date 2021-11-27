@@ -6,7 +6,7 @@ import getLayoutRect from '../dom-utils/getLayoutRect';
 import contains from '../dom-utils/contains';
 import getOffsetParent from '../dom-utils/getOffsetParent';
 import getMainAxisFromPlacement from '../utils/getMainAxisFromPlacement';
-import within from '../utils/within';
+import { within } from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
