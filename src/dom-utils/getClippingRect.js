@@ -37,7 +37,7 @@ function getClientRectFromMixedType(
 ): ClientRectObject {
   return clippingParent === viewport
     ? rectToClientRect(getViewportRect(element))
-    : isHTMLElement(clippingParent)
+    : isElement(clippingParent)
     ? getInnerBoundingClientRect(clippingParent)
     : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }

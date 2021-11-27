@@ -17,10 +17,7 @@ export type Variation = typeof start | typeof end;
 
 export const clippingParents: 'clippingParents' = 'clippingParents';
 export const viewport: 'viewport' = 'viewport';
-export type Boundary =
-  | HTMLElement
-  | Array<HTMLElement>
-  | typeof clippingParents;
+export type Boundary = Element | Array<Element> | typeof clippingParents;
 export type RootBoundary = typeof viewport | 'document';
 
 export const popper: 'popper' = 'popper';

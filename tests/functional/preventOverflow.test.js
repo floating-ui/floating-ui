@@ -132,6 +132,13 @@ it('should be inside scroller container', async () => {
   expect(await screenshot(page)).toMatchImageSnapshot();
 });
 
+it('should be able to use svg element as a boundary', async () => {
+  const page = await browser.newPage();
+  await page.goto(`${TEST_URL}/modifiers/preventOverflow/svg-boundary.html`);
+
+  expect(await screenshot(page)).toMatchImageSnapshot();
+});
+
 it('(altAxis + tether + origin placement) should tether to reference element when overflowing', async () => {
   const page = await browser.newPage();
   await page.goto(
