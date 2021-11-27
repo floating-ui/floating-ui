@@ -25,7 +25,7 @@ class ImageReporter {
       const files = fs.readdirSync(
         './tests/functional/__image_snapshots__/__diff_output__/'
       );
-      files.forEach(async value => {
+      files.forEach(async (value) => {
         const file = `./tests/functional/__image_snapshots__/__diff_output__/${value}`;
 
         poster.post(
