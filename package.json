@@ -106,7 +106,7 @@
     "poster": "^0.0.9",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
-    "puppeteer": "^7.1.0",
+    "puppeteer": "^10.4.0",
     "replace-in-files-cli": "^1.0.0",
     "rollup": "^2.39.0",
     "rollup-plugin-flow-entry": "^0.3.3",

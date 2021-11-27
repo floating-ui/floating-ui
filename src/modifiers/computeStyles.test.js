@@ -15,6 +15,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: true,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -29,6 +30,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -43,6 +45,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -57,6 +60,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -72,6 +76,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
   expect(
@@ -85,6 +90,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
   expect(
@@ -98,6 +104,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
   expect(
@@ -111,6 +118,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -129,6 +137,7 @@ it('computes the popper styles', () => {
         x: Math.round(x + 2),
         y: Math.round(y + 2),
       }),
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -144,6 +153,7 @@ it('computes the popper styles', () => {
       gpuAcceleration: false,
       adaptive: true,
       roundOffsets: false,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 
@@ -162,6 +172,7 @@ it('computes the arrow styles', () => {
       gpuAcceleration: true,
       adaptive: false,
       roundOffsets: true,
+      isFixed: false,
     })
   ).toMatchSnapshot();
 });

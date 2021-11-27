@@ -66,6 +66,7 @@ export function mapToStyles({
   gpuAcceleration,
   adaptive,
   roundOffsets,
+  isFixed,
 }: {
   popper: HTMLElement,
   popperRect: Rect,
@@ -76,6 +77,7 @@ export function mapToStyles({
   gpuAcceleration: boolean,
   adaptive: boolean,
   roundOffsets: boolean | RoundOffsets,
+  isFixed: boolean,
 }) {
   let { x = 0, y = 0 } =
     roundOffsets === true
@@ -117,8 +119,12 @@ export function mapToStyles({
       ((placement === left || placement === right) && variation === end)
     ) {
       sideY = bottom;
-      // $FlowFixMe[prop-missing]
-      y -= offsetParent[heightProp] - popperRect.height;
+      const offsetY =
+        isFixed && win.visualViewport
+          ? win.visualViewport.height
+          : // $FlowFixMe[prop-missing]
+            offsetParent[heightProp];
+      y -= offsetY - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
@@ -127,8 +133,12 @@ export function mapToStyles({
       ((placement === top || placement === bottom) && variation === end)
     ) {
       sideX = right;
-      // $FlowFixMe[prop-missing]
-      x -= offsetParent[widthProp] - popperRect.width;
+      const offsetX =
+        isFixed && win.visualViewport
+          ? win.visualViewport.width
+          : // $FlowFixMe[prop-missing]
+            offsetParent[widthProp];
+      x -= offsetX - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
   }
@@ -202,6 +212,7 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     popper: state.elements.popper,
     popperRect: state.rects.popper,
     gpuAcceleration,
+    isFixed: state.options.strategy === 'fixed',
   };
 
   if (state.modifiersData.popperOffsets != null) {
