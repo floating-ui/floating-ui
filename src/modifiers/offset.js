@@ -4,7 +4,8 @@ import type { ModifierArguments, Modifier, Rect, Offsets } from '../types';
 import getBasePlacement from '../utils/getBasePlacement';
 import { top, left, right, placements } from '../enums';
 
-type OffsetsFunction = ({
+// eslint-disable-next-line import/no-unused-modules
+export type OffsetsFunction = ({
   popper: Rect,
   reference: Rect,
   placement: Placement,
