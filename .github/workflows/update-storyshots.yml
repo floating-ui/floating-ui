@@ -1,5 +1,5 @@
-name: Update Storyshots
-on: [workflow_dispatch]
+name: Functional Tests
+on: [push, pull_request]
 env:
   CI: true
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
@@ -17,12 +17,11 @@ jobs:
       - uses: CultureHQ/actions-yarn@master
         with:
           args: install
-      - run: yarn test:functional -u
+      - run: yarn test:functional
         env:
           PUPPETEER_BROWSER: chromium
-      - uses: EndBug/add-and-commit@v7
+      - uses: actions/upload-artifact@v2
+        if: always()
         with:
-          add: 'tests/functional/__image_snapshots__/*'
-          author_name: 'GitHub Actions'
-          author_email: 'github-actions@github.com'
-          message: 'test: update snapshot tests'
+          name: storyshots-diff
+          path: tests/functional/__image_snapshots__/__diff_output__
