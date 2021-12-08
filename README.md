@@ -71,12 +71,6 @@ Right now, Floating UI focuses on positioning floating elements, but a package
 that exposes higher-level primitives for building these elements more easily is
 in development.
 
-## Inspiration
-
-Floating UI is an evolution of libraries in this space like Popper and Tether,
-developed by the co-author of the former and creator of Tippy.js. Much of the
-code is forked from Popper 2's codebase and adapted to the new API.
-
 ## Contributing
 
 This project is a monorepo written in TypeScript using npm workspaces. The website
