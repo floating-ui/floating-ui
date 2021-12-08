@@ -484,7 +484,7 @@ function HomePage() {
               </a>
             </Link>
             <a
-              href="https://github.com/atomiks/floating-ui"
+              href="https://github.com/floating-ui/floating-ui"
               className="flex transition hover:shadow-xl items-center gap-2 bg-gray-50 rounded text-gray-900 px-4 py-3 sm:text-xl shadow-lg font-bold"
               target="_blank"
               rel="noopener noreferrer"
