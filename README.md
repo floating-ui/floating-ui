@@ -1,8 +1,8 @@
 <p align="center">
   <img height="300" src="https://github.com/atomiks/floating-ui/blob/main/website/assets/logo.png" alt="Floating UI">
 <p>
-
-### Powerful positioning primitives
+  
+> **Popper is now Floating UI! For Popper v2, visit [its dedicated branch.](https://github.com/floating-ui/popper-core/tree/v2.x)**
 
 [Website](https://floating-ui.com)
 
