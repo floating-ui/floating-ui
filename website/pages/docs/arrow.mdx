@@ -1,0 +1,111 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# arrow
+
+The `arrow{:.function}` middleware provides data to position an
+inner element of the floating element, usually the triangle or
+caret which points toward the reference element, so that it is
+centered to it.
+
+If you're using an aligned placement, like `'top-start'{:js}` or
+`'right-end'{:js}`, you may not need to use this middleware if
+you want the arrow's position to remain "static".
+
+## Usage
+
+Add a new element **inside** your floating element:
+
+```html
+<div id="tooltip">
+  Tooltip text
+  <div id="arrow"></div>
+</div>
+```
+
+And ensure it has `position: absolute{:sass}` applied in its CSS.
+
+```js
+import {computePosition, arrow} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [arrow({element: arrowElement})],
+}).then(({middlewareData}) => {
+  const {x, y} = middlewareData.arrow;
+
+  Object.assign(arrowElement.style, {
+    left: x != null ? `${x}px` : '',
+    top: y != null ? `${y}px` : '',
+  });
+});
+```
+
+## Options
+
+```ts
+type Options = {
+  element: any; // `HTMLElement` for the DOM
+  padding: Padding;
+};
+```
+
+### element
+
+This is the arrow element to be positioned.
+
+```js
+arrow({
+  element: document.querySelector('#arrow'),
+});
+```
+
+### padding
+
+```ts
+type Padding = number | SideObject;
+```
+
+This describes the padding between the arrow and the edges of the
+floating element. If your floating element has
+`border-radius{:.function}`, this will prevent it from
+overflowing the corners.
+
+```js
+arrow({
+  element: document.querySelector('#arrow'),
+  padding: 5, // stop 5px from the edges of the floating element
+});
+```
+
+## Data
+
+The following data is available in `middlewareData.arrow{:js}`:
+
+```ts
+type Data = {
+  x?: number;
+  y?: number;
+  centerOffset: number;
+};
+```
+
+### x
+
+This property exists if the arrow should be offset on the x-axis.
+
+### y
+
+This property exists if the arrow should be offset on the y-axis.
+
+### centerOffset
+
+This property describes where the arrow actually is relative to
+where it could be if it were allowed to overflow the floating
+element in order to stay centered to the reference element.
+
+This enables two useful things:
+
+- You can hide the arrow if it can't stay centered to the
+  reference, i.e. `centerOffset !== 0{:js}`.
+- You can interpolate the shape of the arrow (e.g. skew it) so it
+  stays centered as best as possible.

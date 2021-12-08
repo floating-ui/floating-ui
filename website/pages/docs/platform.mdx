@@ -1,0 +1,166 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# Platform
+
+Floating UI works on any platform that can run JavaScript, as
+long as it has adequate measurement APIs for elements.
+
+Floating UI works largely with a `Rect{:.class}`, which is an
+object of numbers in the form `{width, height, x, y}`. This data
+can come from anywhere, and the library will perform the right
+computations. `x` and `y` represent the coordinates of the
+element relative to another one.
+
+```js
+import {computePosition} from '@floating-ui/core';
+
+computePosition(referenceElement, floatingElement, {
+  platform: {
+    // ...
+  },
+});
+```
+
+## Methods
+
+A `platform{:.objectKey}` is a plain object consisting of 7
+methods. These methods allow the platform to interface with
+Floating UI's logic.
+
+Each of these methods can be either async or sync. This enables
+support of platforms whose measurement APIs are async, like React
+Native.
+
+### getElementRects
+
+Takes in the elements and the positioning `strategy{:.objectKey}`
+and returns the element `Rect{:.class}` objects.
+
+```js
+function getElementRects({reference, floating, strategy}) {
+  return {
+    reference: {width: 0, height: 0, x: 0, y: 0},
+    floating: {width: 0, height: 0, x: 0, y: 0},
+  };
+}
+```
+
+#### reference
+
+The `x{:.objectKey}` and `y{:.objectKey}` values of a reference
+`Rect{:.class}` should be its coordinates relative to the
+floating element's `offsetParent` element, not the viewport.
+
+#### floating
+
+Both `x{:.objectKey}` and `y{:.objectKey}` are not relevant
+initially, so you can set these both of these to `0{:js}`.
+
+### convertOffsetParentRelativeRectToViewportRelativeRect
+
+This function will take a `Rect{:.class}` that is relative to a
+given `offsetParent{:.param}` element and convert its
+`x{:.objectKey}` and `y{:.objectKey}` values such that it is
+instead relative to the viewport.
+
+```js
+function convertOffsetParentRelativeRectToViewportRelativeRect({
+  rect,
+  offsetParent,
+  strategy,
+}) {
+  return rect;
+}
+```
+
+### getOffsetParent
+
+Returns the `offsetParent` of a given element. The following four
+properties are what is accessed on an `offsetParent`.
+
+```js
+function getOffsetParent({element}) {
+  return {
+    clientWidth: 0,
+    clientHeight: 0,
+    clientLeft: 0,
+    clientTop: 0,
+  };
+}
+```
+
+### isElement
+
+Determines if the current value is an element.
+
+```js
+function isElement(value) {
+  return true;
+}
+```
+
+### getDocumentElement
+
+Returns the document element.
+
+```js
+function getDocumentElement({element}) {
+  return {};
+}
+```
+
+### getDimensions
+
+Return the dimensions of an element.
+
+```js
+function getDimensions({element}) {
+  return {width: 0, height: 0};
+}
+```
+
+### getClippingClientRect
+
+Return the `clientRect` (**relative to the viewport**) whose
+outside bounds will clip the given element. For instance, the
+viewport.
+
+```js
+function getClippingClientRect({
+  element,
+  boundary,
+  rootBoundary,
+}) {
+  return {
+    width: 0,
+    height: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    x: 0,
+    y: 0,
+  };
+}
+```
+
+## Usage
+
+All these methods are passed to `platform{:.objectKey}`:
+
+```js
+import {computePosition} from '@floating-ui/core';
+
+computePosition(referenceEl, floatingEl, {
+  platform: {
+    getElementRects,
+    convertOffsetParentRelativeRectToViewportRelativeRect,
+    getOffsetParent,
+    isElement,
+    getDocumentElement,
+    getDimensions,
+    getClippingClientRect,
+  },
+});
+```

@@ -1,0 +1,219 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# computePosition
+
+The `computePosition(){:js}` function is at the heart of Floating
+UI. It's a pure function which computes the necessary coordinates
+to position the floating element next to a given reference
+element.
+
+## Arguments
+
+The function takes three arguments and returns a promise:
+
+```js
+computePosition(referenceElement, floatingElement, options);
+```
+
+## Usage
+
+With two elements on the document like so:
+
+```html
+<button id="button">My button</button>
+<div id="tooltip">My tooltip</div>
+```
+
+Call `computePosition(){:js}` with these elements as arguments:
+
+```js
+import {computePosition} from '@floating-ui/dom';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
+
+computePosition(button, tooltip).then(({x, y}) => {
+  // Do things with `x` and `y`
+});
+```
+
+Since a promise is returned, we can chain the `.then(){:js}`
+method which will resolve with the data necessary to position the
+tooltip next to the reference element.
+
+`x{:.param}` and `y{:.param}` represent the positioning
+coordinates of the floating element relative to its
+`offsetParent` such that it will be positioned on the
+`'bottom'{:js}` center (by default) of the reference element.
+
+The recommended way to position the tooltip is to use
+`Object.assign(){:js}` on the style object:
+
+```js {6-9,12-15}
+import {computePosition} from '@floating-ui/dom';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
+
+// Can be done in your CSS
+Object.assign(tooltip.style, {
+  position: 'absolute',
+});
+
+computePosition(button, tooltip).then(({x, y}) => {
+  Object.assign(tooltip.style, {
+    left: `${x}px`,
+    top: `${y}px`,
+  });
+});
+```
+
+Your floating element must have `position: absolute{:sass}`
+**already applied** before `computePosition(){:js}` is called, so
+that its dimensions are read correctly.
+
+## Options
+
+Passed as a third argument, this is the object to configure the
+behavior.
+
+```js
+computePosition(referenceEl, floatingEl, {
+  // options
+});
+```
+
+### placement
+
+This is the core positioning placement. 12 strings are available:
+
+```ts
+type Placement =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end';
+```
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'bottom-start', // 'bottom' by default
+});
+```
+
+### strategy
+
+This is the type of CSS position property to use. Two strings are
+available:
+
+```ts
+type Strategy = 'absolute' | 'fixed';
+```
+
+```js
+computePosition(referenceEl, floatingEl, {
+  strategy: 'fixed', // 'absolute' by default
+});
+```
+
+Instead of applying `position: absolute{:sass}` in your CSS
+before the `computePosition(){:js}` call, you'll now apply
+`position: fixed{:sass}`.
+
+You will want to use `'fixed'{:js}` if your reference element is
+inside a fixed container, but your floating element not.
+
+### middleware
+
+Middleware alter the base `placement{:.objectKey}` in some
+fashion, or provide useful data to the consumer. 7 core
+middleware are included in the package, which should cover almost
+all use cases:
+
+- `autoPlacement{:.function}`
+- `arrow{:.function}`
+- `flip{:.function}`
+- `hide{:.function}`
+- `offset{:.function}`
+- `shift{:.function}`
+- `size{:.function}`
+
+These are documented in the navigation bar on the left.
+Importantly, you can also craft your own custom middleware to
+extend the behavior of the library.
+
+## Return value
+
+```ts
+type ComputePositionReturn = {
+  x: number;
+  y: number;
+  // The stateful placement, which can be different
+  // from the initial `placement` passed as options
+  placement: Placement;
+  strategy: Strategy;
+  middlewareData: MiddlewareData;
+};
+```
+
+## Updating
+
+Since `computePosition{:.function}` is only a single function
+call, it only positions your element once. There are cases in
+which you'll want it to be continually updated:
+
+- The reference element is inside a scrolling container, but the
+  floating element is not.
+- The window is being resized.
+- The size of the reference element or floating element changes.
+- The location of the reference element changes (e.g. layout
+  change).
+
+```js
+async function update() {
+  const {x, y} = await computePosition(referenceEl, floatingEl);
+  Object.assign(floatingEl.style, {
+    left: `${x}px`,
+    top: `${y}px`,
+  });
+}
+
+// Initial call
+update();
+
+// Adds event listeners to `window`
+addEventListener('scroll', update);
+addEventListener('resize', update);
+```
+
+A `ResizeObserver{:.class}`, `requestAnimationFrame{:.function}`
+loop, etc. can handle additional cases.
+
+### scrollParents
+
+To update on all relevant nodes, the library exports this util:
+
+```js
+import {getScrollParents} from '@floating-ui/dom';
+
+async function update() {
+  // ...
+}
+
+[
+  ...getScrollParents(referenceEl),
+  ...getScrollParents(floatingEl),
+].forEach((el) => {
+  el.addEventListener('scroll', update);
+  el.addEventListener('resize', update);
+});
+```

@@ -1,0 +1,69 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# Motivation
+
+So, why a new positioning library? This page aims to explain why
+this library was created.
+
+## Comparison with Popper
+
+[Popper](https://popper.js.org) is currently the most popular
+open source solution to position floating elements, created
+in 2016. Prior to that it was [Tether](https://tether.io/).
+
+Floating UI was actually going to be Popper v3, however, the API
+change was too big, and so I opted to create a new package
+entirely. It also aims to be more ambitious by offering
+higher-level primitives, not just positioning logic, under the
+new package identity (in the future).
+
+Floating UI is a fork of Popper in this sense, because it
+leverages much of its cross-browser bugfix related code, which is
+important.
+
+Being one of the co-authors of Popper v2, I've learned a lot
+since then, and various problems popped up regarding its
+architecture that Floating UI aims to solve.
+
+The differences are summarized as follows:
+
+- **Cross-platform**: Floating UI is cross-platform, while Popper
+  not. This means it supports React Native and any other JS
+  environment, not just the web.
+- **Smaller size**: The code is smaller and more optimized, and
+  everything is modular by default, and thus tree-shakeable.
+  Popper is not tree-shakeable by default, and even when enabling
+  the tree-shaking format it's not as effective. With Floating
+  UI, you can even change the DOM platform to be smaller to save
+  even more size if you don't need all advanced checks.
+- **More intuitive API**: Popper's API is highly mutable, which
+  can be hard to debug. Floating UI is pure with more intuitive
+  naming of various APIs. Modifying options of middleware (or
+  modifiers in Popper) takes far fewer characters to write.
+- **Inversion of control**: There were many issues opened
+  surrounding the nature of `computeStyles` and `applyStyles` in
+  Popper. Leaving the application of styles up to you means you
+  don't get annoyed when the library is doing something with the
+  styles you don't want to happen. Use the computed data as you
+  please.
+- **Improved extensibility**: Modifiers in Popper are hard to
+  write. `requires`, `requiresIfExists`, `phase`, needing to
+  check for other modifiers' data to correctly position
+  something, etc. Floating UI removes all of it. It's all based
+  on the order of the array, and that's up to you.
+- **More features**: New features are easier to support thanks to
+  the new architecture, and Floating UI already offers more, like
+  the `size{:.function}` middleware. Importantly, new features
+  are tree-shaken away even if you don't use them, so there's no
+  size cost.
+- **More predictable**: Floating UI doesn't perform any "magic",
+  like adding event listeners to update the position, or
+  auto-ordering the modifiers array. This means you use Floating
+  UI starting at its most fundamental level, without any
+  middleware enabled already. You add features as you need them,
+  which makes the library more predictable.
+
+Floating UI aims to be an ideal solution for component libraries,
+like Bootstrap or Material UI, due to its low-level and
+unopinionated nature.

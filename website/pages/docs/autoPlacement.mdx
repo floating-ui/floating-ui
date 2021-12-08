@@ -1,0 +1,81 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# autoPlacement
+
+The `autoPlacement{:.function}` middleware chooses the
+`placement{:.objectKey}` automatically (the one with most space
+available on checked axes).
+
+## Usage
+
+```js
+import {computePosition, autoPlacement} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [autoPlacement()],
+});
+```
+
+## Options
+
+```ts
+type Options = DetectOverflowOptions & {
+  alignment: Alignment | null;
+  crossAxis: boolean;
+  allowedPlacements: Array<Placement>;
+  autoAlignment: boolean;
+};
+```
+
+### alignment
+
+Without options, `autoPlacement{:.function}` will choose any of
+the `BasePlacement{:.class}`s which fit best, i.e. `'top'{:js}`,
+`'right'{:js}`, `'bottom'{:js}`, or `'left'{:js}`.
+
+By specifying an alignment, it will choose those aligned
+placements.
+
+```js
+autoPlacement({
+  // top-start, right-start, bottom-start, left-start
+  alignment: 'start',
+});
+```
+
+### crossAxis
+
+Describes whether to check the `crossAxis{:.objectKey}` when
+choosing the ideal placement.
+
+```js
+autoPlacement({
+  crossAxis: true, // false by default
+});
+```
+
+### allowedPlacements
+
+Describes the placements which are allowed to be chosen.
+
+```js
+autoPlacement({
+  // 'right' and 'left' won't be chosen
+  allowedPlacements: ['top', 'bottom'],
+});
+```
+
+### autoAlignment
+
+When `alignment{:.objectKey}` is specified, this describes
+whether to automatically choose placements with the opposite
+alignment if they fit better.
+
+```js
+autoPlacement({
+  alignment: 'start',
+  // Won't also choose 'end' alignments if those fit better
+  autoAlignment: false, // true by default
+});
+```

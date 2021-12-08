@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../../styles.css" />
+
+<div id="scroll">
+  <div id="reference">Ref</div>
+  <div id="floating">Float</div>
+</div>
+
+<script type="module">
+  import {computePosition, hide} from '../../../dist/index.mjs';
+  import {position, addEventListeners} from '../../../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      placement: 'right',
+      middleware: [hide()],
+    }).then(position);
+  });
+</script>

@@ -1,0 +1,42 @@
+name: Tests
+on: [push, pull_request]
+
+jobs:
+  checks:
+    name: Linting and type checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - uses: bahmutov/npm-install@v1
+      - run: npm run lint
+      - run: npm run test:types
+
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - uses: bahmutov/npm-install@v1
+      - run: npm run build
+      - run: npm -w packages/core test
+      - run: npm -w packages/react-dom test
+
+  functional-tests:
+    name: Functional tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: npx playwright install-deps
+      - uses: bahmutov/npm-install@v1
+      - run: npx playwright install
+      - run: npm run build
+      - run: npm -w packages/dom run test:functional

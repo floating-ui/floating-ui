@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../../styles.css" />
+
+<style>
+  #floating {
+    height: 300px;
+  }
+</style>
+
+<div id="reference">Ref</div>
+<div id="floating">Float</div>
+
+<script type="module">
+  import {computePosition, autoPlacement} from '../../../dist/index.mjs';
+  import {position} from '../../../utils.mjs';
+
+  computePosition(reference, floating, {
+    middleware: [autoPlacement()],
+  }).then(position);
+</script>

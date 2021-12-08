@@ -1,0 +1,70 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# hide
+
+The `hide{:.function}` middleware provides data to hide the
+floating element in applicable situations, usually when it's not
+within the same clipping context as the reference element.
+
+<div className="flex flex-col gap-4">
+  <Chrome center scrollable className="h-96">
+    <Floating
+      portaled
+      middleware={[{name: 'offset', options: 5}, {name: 'hide'}]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+        Scroll up
+      </div>
+    </Floating>
+  </Chrome>
+</div>
+
+In the above example, the floating element turns red once it has
+`escaped{:.objectKey}` the reference element's clipping context.
+Once the reference element is hidden, it hides itself.
+
+## Usage
+
+```js
+import {computePosition, hide} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [hide()],
+}).then(({middlewareData}) => {
+  const {referenceHidden} = middlewareData.hide;
+
+  Object.assign(floatingEl.style, {
+    visibility: referenceHidden ? 'hidden' : 'visible',
+  });
+});
+```
+
+## Data
+
+```ts
+type Data = {
+  referenceHidden: boolean;
+  referenceHiddenOffsets: SideObject;
+  escaped: boolean;
+  escapedOffsets: SideObject;
+};
+```
+
+### referenceHidden
+
+Determines whether the reference element is currently not visible
+on screen for the user.
+
+### referenceHiddenOffsets
+
+A side object containing overflow offsets.
+
+### escaped
+
+Determines whether the floating element has "escaped" the
+reference's clipping context and appears fully detached from it.
+
+### escapedOffsets
+
+A side object containing overflow offsets.

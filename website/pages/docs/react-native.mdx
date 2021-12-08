@@ -1,0 +1,189 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# React Native
+
+**Status: Experimental**
+
+Support for React Native is new, and as such the API is not final
+and might not cover various use cases. It also might be buggy so
+consider this a very early alpha.
+
+Please visit the
+[GitHub](https://github.com/atomiks/floating-ui/) and contribute
+to the discussions!
+
+```shell
+npm install @floating-ui/react-native
+```
+
+```shell
+yarn add @floating-ui/react-native
+```
+
+## Usage
+
+The `useFloating(){:js}` hook accepts all of
+[computePosition's options](/docs/computePosition#options).
+
+```jsx
+import {View, Text} from 'react-native';
+import {useFloating, shift} from '@floating-ui/react-native';
+
+function App() {
+  const {x, y, reference, floating} = useFloating({
+    placement: 'right',
+    middleware: [shift()],
+  });
+
+  return (
+    <View>
+      <View ref={reference}>
+        <Text>Reference</Text>
+      </View>
+      <View
+        ref={floating}
+        style={{
+          position: 'absolute',
+          top: y ?? '',
+          left: x ?? '',
+        }}
+      >
+        <Text>Floating</Text>
+      </View>
+    </View>
+  );
+}
+```
+
+`x{:.const}` and `y{:.const}` will be `null` initially, before
+the layout effect has fired.
+
+## ScrollView
+
+When your floating element is portaled to the app root, while the
+reference element is inside a `<ScrollView />{:jsx}`, you pass
+the `sameScrollView{:.objectKey}` option, and spread
+`scrollProps{:.const}` to the component:
+
+```jsx /scrollProps/ {7}
+import {View, Text, ScrollView} from 'react-native';
+import {useFloating} from '@floating-ui/react-native';
+
+function App() {
+  const {x, y, reference, floating, scrollProps} = useFloating({
+    placement: 'right',
+    sameScrollView: false,
+  });
+
+  return (
+    <View>
+      <ScrollView {...scrollProps}>
+        <View ref={reference}>
+          <Text>Reference</Text>
+        </View>
+      </ScrollView>
+
+      <View
+        ref={floating}
+        style={{
+          position: 'absolute',
+          top: y ?? '',
+          left: x ?? '',
+        }}
+      >
+        <Text>Floating</Text>
+      </View>
+    </View>
+  );
+}
+```
+
+## offsetParent
+
+Pass this to the floating element's `offsetParent{:.const}`, if
+required:
+
+```jsx /offsetParent/
+import {View, Text, ScrollView} from 'react-native';
+import {useFloating} from '@floating-ui/react-native';
+
+function App() {
+  const {x, y, reference, floating, offsetParent} = useFloating({
+    placement: 'right',
+    sameScrollView: false,
+  });
+
+  return (
+    <View>
+      <ScrollView>
+        <View ref={reference}>
+          <Text>Reference</Text>
+        </View>
+      </ScrollView>
+
+      <View ref={offsetParent}>
+        <View
+          ref={floating}
+          style={{
+            position: 'absolute',
+            top: y ?? '',
+            left: x ?? '',
+          }}
+        >
+          <Text>Floating</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+```
+
+## Updating
+
+The hook returns an `update(){:js}` function to update the
+position:
+
+```js
+const {update} = useFloating();
+```
+
+In addition, the `refs{:.const}` containing the actual elements
+are passed back:
+
+```js
+const {refs} = useFloating();
+
+// .current will be filled with the element inside an effect
+// refs.reference.current
+// refs.floating.current
+// refs.offsetParent.current
+```
+
+## Arrow
+
+A `ref{:.const}` can be passed as the `element{:.objectKey}`:
+
+```jsx /arrowRef/ {11}
+import {useRef} from 'react';
+import {useFloating, arrow} from '@floating-ui/react-native';
+
+function App() {
+  const arrowRef = useRef();
+  const {
+    x,
+    y,
+    middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
+  } = useFloating({
+    middleware: [arrow({element: arrowRef})],
+  });
+
+  // Pass the `arrowRef` to the element
+}
+```
+
+## Updating middleware
+
+If you intend to make `middleware{:.objectKey}` dynamic, ensure
+you call `update(){:js}` whenever the state changes to compute
+the new position.

@@ -1,0 +1,157 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# shift
+
+The `shift{:.function}` middleware shifts the floating element in
+order to keep it in view (prevents overflow).
+
+<div className="flex flex-col gap-4">
+  <Chrome>
+    <Floating
+      content="Element wider than its reference"
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600 font-mono">[]</div>
+    </Floating>
+  </Chrome>
+
+  <Chrome>
+    <Floating
+      content="Element wider than its reference"
+      middleware={[{name: 'shift'}]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600 font-mono">[shift()]</div>
+    </Floating>
+  </Chrome>
+</div>
+
+## Usage
+
+```js
+import {computePosition, shift} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [shift()],
+});
+```
+
+## Options
+
+```ts
+type Options = DetectOverflowOptions & {
+  mainAxis: boolean;
+  crossAxis: boolean;
+  limiter: (middlewareArguments: MiddlewareArguments) => Coords;
+};
+```
+
+### mainAxis
+
+This is the main axis in which shifting is applied, either `x` or
+`y` depending on the placement.
+
+```js
+shift({mainAxis: false}); // true by default
+```
+
+### crossAxis
+
+This is the cross axis in which shifting is applied, the opposite
+axis of `mainAxis{:.objectKey}`. Enabling this can lead to the
+floating element **overlapping** the reference element, which is
+generally not desired and is replaced by the `flip{:.function}`
+middleware.
+
+```js
+shift({crossAxis: true}); // false by default
+```
+
+### limiter
+
+This accepts a function that **limits** the shifting done, in
+order to prevent detachment or "overly-eager" behavior. The
+behavior is to stop shifting once the opposite edges of the
+elements are aligned.
+
+```js
+import {shift, limitShift} from '@floating-ui/dom';
+
+shift({limiter: limitShift()});
+```
+
+This function itself takes options.
+
+#### limitShift.mainAxis
+
+Whether to apply limiting on the mainAxis.
+
+```js
+shift({
+  limiter: limitShift({mainAxis: false}), // true by default
+});
+```
+
+#### limitShift.crossAxis
+
+Whether to apply limiting to the crossAxis.
+
+```js
+shift({
+  limiter: limitShift({crossAxis: false}), // true by default
+});
+```
+
+#### limitShift.offset
+
+This will offset when the limiting starts. A positive number will
+start limiting earlier, while negative later.
+
+```js
+shift({
+  limiter: limitShift({
+    // Start limiting 5px earlier
+    offset: 5,
+  }),
+});
+```
+
+This can also take a function, which provides the
+`Rect{:.class}`s of each element to read their dimensions:
+
+```js
+shift({
+  limiter: limitShift({
+    // Start limiting by the reference's width earlier
+    offset: ({reference, floating, placement}) =>
+      reference.width,
+  }),
+});
+```
+
+You may also pass an object to configure both axes:
+
+```js
+shift({
+  limiter: limitShift({
+    // object
+    offset: {
+      mainAxis: 10,
+      crossAxis: 5,
+    },
+    // or a function which returns one
+    offset: ({reference, floating, placement}) => ({
+      mainAxis: reference.height,
+      crossAxis: floating.width,
+    }),
+  }),
+});
+```
+
+### ...detectOverflowOptions
+
+All of [detectOverflow](/docs/detectOverflow#options)'s options
+can be passed. For instance:
+
+```js
+shift({padding: 5}); // 0 by default
+```

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../styles.css" />
+
+<div id="scroll">
+  <div id="scroll" data-nested style="position: relative">
+    <div id="reference" style="position: absolute; top: 100px">Ref</div>
+  </div>
+  <div id="floating" data-fixed>Float</div>
+</div>
+
+<script type="module">
+  import {computePosition} from '../../dist/index.mjs';
+  import {position, addEventListeners} from '../../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      strategy: 'fixed',
+      placement: 'right',
+    }).then(position);
+  });
+</script>

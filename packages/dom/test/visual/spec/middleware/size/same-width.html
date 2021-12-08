@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../../styles.css" />
+
+<div id="reference">Ref</div>
+<div id="floating">Pop</div>
+
+<script type="module">
+  import {computePosition, size} from '../../../dist/index.mjs';
+  import {position, addEventListeners} from '../../../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      middleware: [
+        size({
+          apply({reference}) {
+            Object.assign(floating.style, {
+              boxSizing: 'border-box',
+              width: `${reference.width}px`,
+            });
+          },
+        }),
+      ],
+    }).then(position);
+  });
+</script>

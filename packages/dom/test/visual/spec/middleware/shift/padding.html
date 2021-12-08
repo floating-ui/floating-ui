@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../../styles.css" />
+
+<style>
+  #floating {
+    width: 300px;
+  }
+</style>
+
+<div id="reference">Ref</div>
+<div id="floating">Float</div>
+
+<script type="module">
+  import {computePosition, shift} from '../../../dist/index.mjs';
+  import {position, addEventListeners} from '../../../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      placement: 'bottom',
+      middleware: [shift({padding: 5})],
+    }).then(position);
+  });
+</script>

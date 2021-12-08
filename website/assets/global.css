@@ -1,0 +1,14 @@
+[data-reach-skip-nav-link] {
+  color: black;
+  margin-left: 18rem;
+}
+
+@media (max-width: 600px) {
+  [data-reach-skip-nav-link] {
+    margin-left: calc(25vw);
+  }
+}
+
+.shiki {
+  position: relative;
+}

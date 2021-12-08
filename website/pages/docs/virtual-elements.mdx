@@ -1,0 +1,78 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# Virtual Elements
+
+You can position a floating element relative to a virtual element
+instead of a real one. This enables things like positioning
+context menus or following the cursor.
+
+## Usage
+
+A virtual element is a plain object that has a
+`getBoundingClientRect{:.function}` property, which mimics a real
+element's one:
+
+```js
+// A virtual element which is 20 x 20 px, starting from (0, 0)
+const virtualEl = {
+  getBoundingClientRect() {
+    return {
+      top: 0,
+      bottom: 20,
+      left: 0,
+      right: 20,
+      width: 20,
+      height: 20,
+    };
+  },
+};
+
+computePosition(virtualEl, floatingEl);
+```
+
+A point reference, such as a mouse event, is one such use case:
+
+```js
+function onClick({clientX, clientY}) {
+  const virtualEl = {
+    getBoundingClientRect() {
+      return {
+        width: 0,
+        height: 0,
+        left: clientX,
+        top: clientY,
+        right: clientX,
+        bottom: clientY,
+      };
+    },
+  };
+
+  computePosition(virtualEl, floatingEl).then(({x, y}) => {
+    // Position the floating element relative to the click
+  });
+}
+
+document.addEventListener('click', onClick);
+```
+
+## contextElement
+
+An extra property can be specified on a virtual element:
+
+```js
+const virtualEl = {
+  getBoundingClientRect() {
+    return {
+      // ...
+    };
+  },
+  contextElement: document.querySelector('#context'),
+};
+```
+
+This may be required if your virtual element's
+`getBoundingClientRect{:.function}` data is **derived** from a
+real element's one. For instance, you're modifying a real
+reference element's `getBoundingClientRect{:.function}` in some
+way, and using a virtual element enables this.

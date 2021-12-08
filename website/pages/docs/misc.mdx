@@ -1,0 +1,64 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# Misc
+
+## Subpixel and accelerated positioning
+
+Instead of `top{:.objectKey}` and `left{:.objectKey}` as shown
+throughout the docs, you can use `transform: translate(){:sass}`
+instead to position the floating element for increased
+performance.
+
+```js
+Object.assign(floatingEl.style, {
+  top: '0',
+  left: '0',
+  transform: `translate(${Math.round(x)}px,${Math.round(y)}px)`,
+});
+```
+
+`x` and `y` can contain decimals, so unless the
+`transform{:.objectKey}` translation is placed evenly on the
+device's subpixel grid, then there will be blurring. You can
+check `window.devicePixelRatio{:js}` to round by DPR.
+
+### 3D transforms
+
+You can also promote the floating element to its own layer:
+
+<!-- prettier-ignore -->
+```js
+Object.assign(floatingEl.style, {
+  top: '0',
+  left: '0',
+  transform: `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`,
+});
+```
+
+If you're animating the location of the floating element, using
+`transform{:.function}` will offer smoother animations.
+
+## Transforms on elements
+
+A `transform{:.function}` on a reference element will not cause
+any positioning issues. You should be wary of these cases though:
+
+### floating
+
+If the floating element has a `scale` transform, ensure you
+specify a `transform-origin{:.function}` depending on its
+placement.
+
+### parent
+
+If a parent of the reference and floating element is scaled, the
+position will be **incorrect**. To solve this, place the floating
+element outside of the scaled parent context.
+
+### body
+
+If `<body>{:html}` is translated, the position will be offset by
+that amount. It's possible to create your own custom middleware
+to handle these types of cases if necessary, but for most users
+it is not relevant.

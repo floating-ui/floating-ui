@@ -1,0 +1,78 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# offset
+
+The `offset` middleware displaces the floating element from its
+reference element.
+
+<Chrome center className="pt-16 pb-24">
+  <div className="flex gap-4">
+    <Floating
+      portaled
+      middleware={[{name: 'offset', options: 0}]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 mx-auto bg-blue-600">
+        0px
+      </div>
+    </Floating>
+    <Floating
+      portaled
+      middleware={[{name: 'offset', options: 10}]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 mx-auto bg-blue-600">
+        10px
+      </div>
+    </Floating>
+  </div>
+</Chrome>
+
+## Usage
+
+```js
+import {computePosition, offset} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [offset(10)],
+});
+```
+
+This will offset the floating element 10px from its reference
+element.
+
+## Options
+
+```ts
+type Options =
+  | OffsetValue
+  | (({
+      reference: Rect,
+      floating: Rect,
+      placement: Placement,
+    }) => OffsetValue);
+
+// Below is the relative type
+type OffsetValue =
+  | number
+  | {mainAxis?: number; crossAxis?: number};
+```
+
+```js
+// number: distance offset (mainAxis shorthand)
+offset(10);
+
+// object: configure both axes
+offset({
+  mainAxis: 10, // distance
+  crossAxis: 10, // skidding
+});
+
+// function: takes Rects and placement and return a number
+offset(({reference}) => reference.height);
+
+// function: takes Rects and placement and return an object
+offset(({floating, placement}) => ({
+  crossAxis:
+    placement === 'top' ? floating.height : floating.width,
+}));
+```

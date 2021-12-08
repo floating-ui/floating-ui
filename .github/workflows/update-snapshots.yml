@@ -1,0 +1,26 @@
+name: Update Visual Snapshots
+on: [workflow_dispatch]
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip downloading during yarn install
+  PLAYWRIGHT_BROWSERS_PATH: 0 # Places binaries to node_modules/@playwright/test
+
+jobs:
+  functional-tests:
+    name: Functional
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      - run: npx playwright install-deps
+      - uses: bahmutov/npm-install@v1
+      - run: npx playwright install
+      - run: npm run build
+      - run: npm -w packages/dom run test:functional:update
+      - uses: EndBug/add-and-commit@v7
+        with:
+          add: '.'
+          author_name: 'GitHub Actions'
+          author_email: 'github-actions@github.com'
+          message: 'test: update visual snapshots'

@@ -1,0 +1,45 @@
+{
+  "name": "website",
+  "private": true,
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "author": "",
+  "license": "ISC",
+  "prettier": {
+    "printWidth": 65,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "proseWrap": "always"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.3.11",
+    "tailwindcss": "^2.2.19"
+  },
+  "dependencies": {
+    "@atomiks/mdx-pretty-code": "^0.0.2",
+    "@floating-ui/react-dom": "^0.3.2",
+    "@mdx-js/loader": "^1.6.22",
+    "@next/mdx": "^12.0.3",
+    "@reach/skip-nav": "^0.16.0",
+    "@tailwindcss/typography": "^0.4.1",
+    "@tippyjs/react": "^4.2.6",
+    "classnames": "^2.3.1",
+    "next": "^12.0.4",
+    "parse-numeric-range": "^1.3.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-feather": "^2.0.9",
+    "shiki": "^0.9.14",
+    "unist-util-visit": "^2.0.3",
+    "use-isomorphic-layout-effect": "^1.1.1"
+  }
+}

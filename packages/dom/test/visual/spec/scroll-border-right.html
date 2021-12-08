@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../styles.css" />
+
+<style>
+  #clip {
+    border-width: 10px;
+    overflow: scroll;
+  }
+
+  #reference {
+    position: relative;
+    top: 115px;
+  }
+
+  #floating {
+    width: 300px;
+  }
+</style>
+
+<div id="clip">
+  <div id="reference">Ref</div>
+  <div id="floating">Float</div>
+</div>
+
+<script src="https://unpkg.com/@popperjs/core"></script>
+<script type="module">
+  import {computePosition, shift} from '../dist/index.mjs';
+  import {position, addEventListeners} from '../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      placement: 'right',
+      middleware: [shift({crossAxis: true})],
+    }).then(position);
+  });
+
+  // Popper.createPopper(reference, floating, {
+  //   placement: 'right',
+  //   modifiers: [
+  //     {
+  //       name: 'preventOverflow',
+  //       options: {
+  //         altAxis: true,
+  //       },
+  //     },
+  //   ],
+  // });
+</script>

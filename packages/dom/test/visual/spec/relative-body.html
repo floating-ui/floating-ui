@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../styles.css" />
+
+<style>
+  body {
+    position: relative;
+  }
+</style>
+
+<div id="reference">Ref</div>
+<div id="floating">Float</div>
+
+<script type="module">
+  import {computePosition} from '../dist/index.mjs';
+  import {position} from '../utils.mjs';
+
+  computePosition(reference, floating, {
+    placement: 'right',
+  }).then(position);
+</script>

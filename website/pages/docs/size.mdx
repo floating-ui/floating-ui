@@ -1,0 +1,203 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# size
+
+The `size{:.function}` middleware provides data to change the
+size of the floating element.
+
+For instance, you can resize it so it doesn't overflow the
+available space:
+
+<div className="flex flex-col gap-4">
+  <Chrome center scrollable className="h-96">
+    <Floating
+      tooltipStyle={{
+        height: 200,
+        overflow: 'hidden',
+        maxHeight: 0,
+      }}
+      middleware={[{name: 'size'}]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+        Scroll
+      </div>
+    </Floating>
+  </Chrome>
+</div>
+
+If your floating element's content cannot be resized such as in
+the example, you can make the floating element scrollable with
+`overflow: scroll{:sass}` (or `auto{:.param}`).
+
+## Usage
+
+```js
+import {computePosition, size} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [
+    size({
+      apply({width, height}) {
+        // If your element has a border, ensure your CSS is using
+        // `box-sizing: border-box`
+        Object.assign(floatingEl.style, {
+          maxWidth: `${width}px`,
+          maxHeight: `${height}px`,
+        });
+      },
+    }),
+  ],
+});
+```
+
+## Options
+
+```ts
+type Options = DetectOverflowOptions & {
+  apply(args: Dimensions & ElementRects): void;
+};
+```
+
+### apply
+
+Unlike other middleware, `size{:.function}` is not pure due to
+its inherently mutable nature. When changing the size of the
+`Rect{:.class}`s, the lifecycle must restart, but this requires
+the mutation to occur. Your size-related style mutations should
+occur inside this function.
+
+```js
+size({
+  apply({width, height}) {
+    // Style mutations here
+  },
+});
+```
+
+### ...detectOverflowOptions
+
+All of [detectOverflow](/docs/detectOverflow#options)'s options
+can be passed. For instance:
+
+```js
+size({padding: 5}); // 0 by default
+```
+
+## Using with flip
+
+Using `size{:.function}` together with `flip{:.function}` enables
+some useful behavior. The floating element can be resized, thus
+allowing it to prefer its initial placement as much as possible,
+until it reaches a minimum size, at which point it will flip.
+
+If you're using the `padding{:.objectKey}` option in either
+middleware, ensure they share the **same value**.
+
+### bestFit
+
+The `'bestFit'{:js}` fallback strategy in the `flip{:.function}`
+middleware is the default, which ensures the best fitting
+placement is used. In this scenario, place `size{:.function}`
+**after** `flip{:.function}`:
+
+```js
+const middleware = [
+  flip(),
+  size({
+    apply({width, height}) {
+      // ...
+    },
+  }),
+];
+```
+
+<div className="flex flex-col gap-4">
+  <Chrome center scrollable className="h-96">
+    <Floating
+      tooltipStyle={{
+        height: 200,
+        overflow: 'hidden',
+        maxHeight: 0,
+      }}
+      middleware={[
+        {name: 'flip', options: {padding: 5}},
+        {name: 'size', options: {padding: 5}},
+      ]}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+        Scroll
+      </div>
+    </Floating>
+  </Chrome>
+</div>
+
+This strategy ensures the floating element stays in view at all
+times at the most optimal size.
+
+### initialPlacement
+
+If instead, you want the initial placement to take precedence,
+and are setting a minimum acceptable size, place
+`size{:.function}` **before** `flip{:.function}`:
+
+```js
+const middleware = [
+  size({
+    apply({width, height}) {
+      Object.assign(floatingEl.style, {
+        // Minimum acceptable height is 80px.
+        // `flip` will then take over.
+        maxHeight: `${Math.max(80, height)}px`,
+      });
+    },
+  }),
+  flip({
+    fallbackStrategy: 'initialPlacement',
+  }),
+];
+```
+
+<div className="flex flex-col gap-4">
+  <Chrome center scrollable className="h-96">
+    <Floating
+      tooltipStyle={{
+        height: 200,
+        overflow: 'hidden',
+        maxHeight: 0,
+      }}
+      middleware={[
+        {name: 'size', options: {padding: 5}},
+        {
+          name: 'flip',
+          options: {
+            fallbackStrategy: 'initialPlacement',
+            padding: 5,
+          },
+        },
+      ]}
+      minHeight={70}
+    >
+      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+        Scroll
+      </div>
+    </Floating>
+  </Chrome>
+</div>
+
+## Match reference width
+
+A common feature of select dropdowns is that the dropdown matches
+the width of the reference regardless of its contents. You can
+also use `size{:.function}` for this, as the `Rect{:.class}`s get
+passed in:
+
+```js
+size({
+  apply({reference}) {
+    Object.assign(floatingEl.style, {
+      width: `${reference.width}px`,
+    });
+  },
+});
+```

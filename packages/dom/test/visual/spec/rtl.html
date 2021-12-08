@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../styles.css" />
+
+<!-- Test on Firefox about:config setting layout.scrollbar.side = 3 -->
+<style>
+  body {
+    direction: rtl;
+    overflow: scroll;
+  }
+
+  #reference {
+    position: relative;
+    top: 115px;
+    float: left;
+  }
+
+  #floating {
+    width: 300px;
+  }
+</style>
+
+<div id="reference">Ref</div>
+<div id="floating">Float</div>
+
+<script type="module">
+  import {computePosition, shift} from '../dist/index.mjs';
+  import {position, addEventListeners} from '../utils.mjs';
+
+  addEventListeners(() => {
+    computePosition(reference, floating, {
+      placement: 'left',
+      middleware: [shift({crossAxis: true})],
+    }).then(position);
+  });
+</script>

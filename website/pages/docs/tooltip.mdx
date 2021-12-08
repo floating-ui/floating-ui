@@ -1,0 +1,269 @@
+import Layout from '../../components/Layout';
+export default Layout;
+import 'tippy.js/dist/tippy.css';
+
+# Tooltip
+
+What we'll be building:
+
+<div className="grid place-items-center bg-gray-100 rounded px-4 py-16 text-gray-900 mb-4">
+  <Tippy content="Tooltip">
+    <button className="bg-blue-600 rounded px-2 py-1 text-gray-50">
+      Show tooltip
+    </button>
+  </Tippy>
+</div>
+
+## Basics
+
+With button on your document, like so:
+
+```html
+<button id="myButton">Show tooltip</button>
+```
+
+Call `tippy()` with a CSS selector matching it, and pass it the
+built-in `createRender` function and some `content`:
+
+```js
+import tippy, {createRender} from 'tippy.js';
+
+tippy('#myButton', {
+  render: createRender({
+    content: 'Tooltip',
+  }),
+});
+```
+
+The result so far:
+
+<div className="grid place-items-center bg-gray-100 rounded px-4 py-16 text-gray-900 mb-4">
+  <Tippy
+    animation={false}
+    render={(attrs) => (
+      <div {...attrs} className="text-gray-900">
+        Tooltip
+      </div>
+    )}
+  >
+    <button className="bg-blue-600 rounded px-2 py-1 text-gray-50">
+      Show tooltip
+    </button>
+  </Tippy>
+</div>
+
+By default, the tooltip is positioned above the element if
+there's enough space, and shows it on hover or focus.
+
+## Styling
+
+You can style the tippy from scratch or leverage the package's
+built-in themes.
+
+The dark theme is a `#333`-colored theme that looks like a
+regular tooltip for light mode sites.
+
+```js {2,7}
+import tippy, {createRender} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+
+tippy('#myButton', {
+  render: createRender({
+    content: 'Tooltip',
+    theme: 'dark',
+  }),
+});
+```
+
+<div className="grid place-items-center bg-gray-100 rounded px-4 py-16 text-gray-900 mb-4">
+  <Tippy animation={false} content="Tooltip">
+    <button className="bg-blue-600 rounded px-2 py-1 text-gray-50">
+      Show tooltip
+    </button>
+  </Tippy>
+</div>
+
+## Animation
+
+Next, we can add an opacity transition animation (or fade):
+
+```js {1,3,10-11}
+import tippy, {createRender, animation} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+import 'tippy.js/animations/fade.css';
+
+tippy('#myButton', {
+  render: createRender({
+    content: 'Tooltip',
+    theme: 'dark',
+  }),
+  animation: 'fade',
+  middleware: [animation],
+});
+```
+
+<div className="grid place-items-center bg-gray-100 rounded px-4 py-16 text-gray-900 mb-4">
+  <Tippy content="Tooltip" aria={{content: null}}>
+    <button className="bg-blue-600 rounded px-2 py-1 text-gray-50">
+      Show tooltip
+    </button>
+  </Tippy>
+</div>
+
+## Accessibility
+
+To enable screen reader support, and the ability to dismiss the
+tooltip via `esc`, import the `aria` and `dismiss` middleware:
+
+```js {1,11}
+import tippy, {
+  createRender,
+  animation,
+  aria,
+  dismiss,
+} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+import 'tippy.js/animations/fade.css';
+
+tippy('#myButton', {
+  render: createRender({
+    content: 'Tooltip',
+    theme: 'dark',
+  }),
+  animation: 'fade',
+  middleware: [animation, aria, dismiss],
+});
+```
+
+### Strict accessibility
+
+<Collapsible>
+
+Some guidelines require that the user is able to **hover** over
+the tooltip to prevent it from hiding. In certain layouts this
+can make the tooltip _less_ accessible for sighted users, as it
+becomes less dismissable and more intrusive. It's possible to
+enable this behavior though:
+
+```js {12}
+import tippy, {
+  createRender,
+  animation,
+  aria,
+  dismiss,
+} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+import 'tippy.js/animations/fade.css';
+
+tippy('#myButton', {
+  render: createRender({
+    content: 'Tooltip',
+    theme: 'dark',
+  }),
+  animation: 'fade',
+  middleware: [animation, aria, dismiss],
+  interactive: true,
+});
+```
+
+You probably want to prevent the cursor from changing if they
+land on the tooltip text, too:
+
+```js
+tippy('#myButton', {
+  // ...
+  onCreate({popper}) {
+    popper.style.cursor = 'default';
+  },
+});
+```
+
+</Collapsible>
+
+## Reusability
+
+It's recommended that you create your own high-level wrappers
+around `tippy()` for each floating UI element you make. This way
+you don't need to pass all the middleware and props every time
+you want to add a tooltip to your website.
+
+```js
+// components/ui/tooltip.js
+import tippy, {
+  createRender,
+  animation,
+  aria,
+  dismiss,
+} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+import 'tippy.js/animations/fade.css';
+
+export function tooltip(targets, options = {}) {
+  return tippy(targets, {
+    render: createRender({
+      content: options.content ?? '',
+      theme: options.theme ?? '',
+    }),
+    animation: options.animation ?? 'fade',
+    middleware: [animation, aria, dismiss],
+  });
+}
+```
+
+```js
+// app.js
+import {tooltip} from './components/ui/tooltip';
+
+tooltip('#add-button', {content: 'Add'});
+tooltip('#edit-button', {content: 'Edit'});
+tooltip('#delete-button', {content: 'Delete'});
+```
+
+### Data attributes
+
+As seen above, you need to make a new `tooltip()` call for every
+new element if they have different content. You can leverage the
+`dataAttributes` middleware to reduce this to a single call:
+
+```js {7,19}
+// components/ui/tooltip.js
+import tippy, {
+  createRender,
+  animation,
+  aria,
+  dismiss,
+  dataAttributes,
+} from 'tippy.js';
+import 'tippy.js/themes/dark.css';
+import 'tippy.js/animations/fade.css';
+
+export function tooltip(targets, options = {}) {
+  return tippy(targets, {
+    render: createRender({
+      content: options.content ?? '',
+      theme: options.theme ?? 'dark',
+    }),
+    animation: options.animation ?? 'fade',
+    middleware: [animation, aria, dismiss, dataAttributes],
+  });
+}
+```
+
+```html
+<button data-tippy-content="Add">Icon</button>
+<button data-tippy-content="Edit">Icon</button>
+<button data-tippy-content="Delete">Icon</button>
+```
+
+```js
+// app.js
+import {tooltip} from './components/ui/tooltip';
+
+// One single call, one argument:
+tooltip('[data-tippy-content]');
+```
+
+## Complete
+
+You've now built a fully styled, animated, accessible, and
+reusable tooltip component using Tippy.

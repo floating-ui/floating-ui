@@ -1,0 +1,154 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# detectOverflow
+
+This function computes the overflow offsets of either the
+reference or floating element relative to any clipping
+boundaries.
+
+Almost every middleware provided by the library uses this
+function, making it useful for your own custom middleware.
+
+The function takes two arguments and returns a promise:
+
+```js
+await detectOverflow(middlewareArguments, options);
+```
+
+## Usage
+
+Inside your custom middleware, make your `fn{:.function}`
+`async{:.keyword}` and `await{:js}` it, passing in the
+`middlewareArguments{:.param}`:
+
+```js
+import {detectOverflow} from '@floating-ui/dom';
+
+const middleware = {
+  name: 'middleware',
+  async fn(middlewareArguments) {
+    const overflow = await detectOverflow(middlewareArguments);
+    return {};
+  },
+};
+```
+
+The returned value, `overflow{:.const}`, is a
+`SideObject{:.class}` containing side properties with numbers
+representing offsets.
+
+- A positive number means the element is overflowing the clipping
+  boundary by that number of pixels.
+- A negative number means the element has that number of pixels
+  left before it will overflow the clipping boundary.
+- `0{:js}` means the side lies flush with the clipping boundary.
+
+## Options
+
+`detectOverflow{:.function}` takes options as a second argument.
+
+```js
+await detectOverflow(middlewareArguments, {
+  // options
+});
+```
+
+### boundary
+
+```ts
+type Boundary = 'clippingParents' | Element | Array<Element>;
+```
+
+This describes the clipping element(s) that overflow will be
+checked relative to. The default is `'clippingParents'{:js}`,
+which are the scrolling containers (including
+`overflow: hidden{:sass}` elements) which will cause the
+reference or floating element to be clipped.
+
+```js
+await detectOverflow(middlewareArguments, {
+  boundary: document.querySelector('#container'),
+});
+```
+
+### rootBoundary
+
+```ts
+type RootBoundary = 'viewport' | 'document';
+```
+
+This describes the root boundary that the element will be checked
+for overflow relative to. The default is `'viewport'{:js}`, which
+is the area of the page the user can see on the screen. The other
+option is `'document'{:js}`, which is the entire page outside the
+viewport.
+
+```js
+await detectOverflow(middlewareArguments, {
+  rootBoundary: 'document',
+});
+```
+
+### padding
+
+```ts
+type Padding =
+  | number
+  | Partial<{
+      top: number;
+      right: number;
+      bottom: number;
+      left: number;
+    }>;
+```
+
+This describes the virtual padding around the boundary to check
+for overflow.
+
+```js
+await detectOverflow(middlewareArguments, {
+  // 5px on all sides
+  padding: 5,
+  // Unspecified sides are 0
+  padding: {
+    top: 5,
+    left: 20,
+  },
+});
+```
+
+### elementContext
+
+```ts
+type ElementContext = 'reference' | 'floating';
+```
+
+By default, the floating element is the one being checked for
+overflow.
+
+But you can also change the context to `'reference'{:js}` to
+instead check its overflow relative to its clipping boundary.
+
+```js
+await detectOverflow(middlewareArguments, {
+  elementContext: 'reference', // 'floating' by default
+});
+```
+
+### altBoundary
+
+This is a boolean value which determines whether to check the
+alternate `elementContext{:.objectKey}`'s boundary.
+
+For instance, if the `elementContext{:.objectKey}` is
+`'floating'{:js}`, and you enable this option, then the boundary
+in which overflow is checked for is the `'reference'{:js}`'s
+boundary. This only applies if you are using the default
+`'clippingParents'{:js}` enum as the `boundary{:.objectKey}`.
+
+```js
+await detectOverflow(middlewareArguments, {
+  altBoundary: true, // false by default
+});
+```

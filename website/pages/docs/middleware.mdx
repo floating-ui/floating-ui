@@ -1,0 +1,253 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# Middleware
+
+Middleware are plain objects that modify the positioning
+coordinates in some fashion, or provide useful data for the
+consumer to use. Most of Floating UI's features are implemented
+as a middleware.
+
+`computePosition(){:js}` starts with basic positioning via
+`placement{:.objectKey}`:
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'right',
+  middleware: [],
+});
+```
+
+Middleware are executed as an in-between "middle" step of the
+basic placement computation and eventual return of data to the
+caller.
+
+## Example
+
+```js
+const shiftByOnePixel = {
+  name: 'shiftByOnePixel',
+  fn({x, y}) {
+    return {
+      x: x + 1,
+      y: y + 1,
+    };
+  },
+};
+```
+
+This simple (but not particularly useful) middleware just adds
+`1{:js}` pixel to the coordinates. To use this middleware, add it
+to your `middleware{:.objectKey}` array:
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'right',
+  middleware: [shiftByOnePixel],
+});
+```
+
+Here, `computePosition(){:js}` will compute coordinates that will
+place the floating element to the right of the reference element,
+lying flush with it. Middleware are then executed, resulting in
+these coordinates getting shifted by one pixel. Then that data is
+returned to the caller.
+
+### Shape
+
+A middleware is an object which has a `name{:.objectKey}`
+property and a `fn{:.function}` property. The `fn{:.function}`
+property provides the logic of the middleware, which returns new
+positioning coordinates or useful data.
+
+### Data
+
+Any data can be passed via an optional `data{:.objectKey}`
+property of the object that is returned from `fn{:.function}`.
+This will be accessible to the consumer via the
+`middlewareData{:.param}` property:
+
+```js {7-9}
+const shiftByOnePixel = {
+  name: 'shiftByOnePixel',
+  fn({x, y}) {
+    return {
+      x: x + 1,
+      y: y + 1,
+      data: {
+        amount: 1,
+      },
+    };
+  },
+};
+```
+
+```js
+computePosition(referenceEl, floatingEl, {
+  middleware: [shiftByOnePixel],
+}).then(({middlewareData}) => {
+  console.log(middlewareData.shiftByOnePixel);
+});
+```
+
+### Function
+
+You may notice that Floating UI's core middleware are actually
+functions. This is so you can pass options in:
+
+```js
+const shiftByAmount = (amount = 0) => ({
+  name: 'shiftByAmount',
+  fn: ({x, y}) => ({
+    x: x + amount,
+    y: y + amount,
+  }),
+});
+```
+
+It returns an object and uses a closure to pass the configured
+behavior:
+
+```js
+const middleware = [shiftByAmount(10)];
+```
+
+### Always return an object
+
+Inside `fn{:.function}` make sure to return an object. It doesn't
+need to contain properties, but to remind you that it should be
+pure, you must return an object. Never mutate any values that get
+passed in from `fn{:.function}`.
+
+## MiddlewareArguments
+
+An object is passed to `fn{:.function}` containing useful data
+about the middleware lifecycle being executed.
+
+In the previous examples, we destructured `x{:.param}` and
+`y{:.param}` out of the `fn{:.function}` parameter object. These
+are only two properties that get passed into middleware, but
+there are many more.
+
+The properties passed are below:
+
+```ts
+type MiddlewareArguments = Coords & {
+  initialPlacement: Placement;
+  placement: Placement;
+  strategy: Strategy;
+  middlewareData: MiddlewareData;
+  elements: Elements;
+  rects: ElementRects;
+  platform: Platform;
+};
+```
+
+### x
+
+This is the x-axis coordinate to position the floating element
+to.
+
+### y
+
+This is the y-axis coordinate to position the floating element
+to.
+
+### elements
+
+This is an object containing the reference and floating elements.
+
+### rects
+
+This is an object containing the `Rect{:.class}`s of the
+reference and floating elements, an object of shape
+`{width, height, x, y}`.
+
+### middlewareData
+
+This is an object containing all the data of any middleware at
+the current step in the lifecycle. The lifecycle loops over the
+`middleware{:.objectKey}` array, so later middleware have access
+to data from any middleware run prior.
+
+### strategy
+
+The positioning strategy.
+
+### initialPlacement
+
+The initial (or preferred) placement passed in to
+`computePosition(){:js}`.
+
+### placement
+
+The stateful resultant placement. Middleware like
+`flip{:.function}` change `initialPlacement{:.objectKey}` to a
+new one.
+
+### platform
+
+An object containing methods to make Floating UI work on the
+current platform, e.g. DOM or React Native.
+
+## Ordering
+
+The order in which middleware are placed in the array matters,
+because the middleware lifecycle works by looping over the array,
+meaning later middleware **start from** the coordinates that were
+returned from the previous middleware.
+
+Understanding this can help in knowing which order to place
+middleware in, as placing a middleware before or after another
+can produce a different result.
+
+In general, `offset{:.function}` should always go before other
+middleware, while `arrow{:.function}` after other middleware.
+
+```js
+const middleware = [
+  offset(),
+  // ...
+  arrow({element: arrowElement}),
+];
+```
+
+## Resetting the lifecycle
+
+There are use cases for needing to reset the lifecycle and start
+the process over again when you want to change the placement.
+Both `flip{:.function}` and `autoPlacement{:.function}` use this,
+so that other middleware which modify the coordinates based on
+the current `placement{:.objectKey}` do not perform stale logic.
+
+In order to do this, add a `reset{:.objectKey}` property to the
+returned object from `fn{:.function}`:
+
+```js
+const middleware = {
+  name: 'middleware',
+  fn() {
+    if (someCondition) {
+      return {
+        reset: {
+          placement: nextPlacement,
+        },
+      };
+    }
+
+    return {};
+  },
+};
+```
+
+> Ensure `someCondition{:js}` will evaluate to `false{:js}` at
+> some point, otherwise, this will cause an **infinite loop!**
+> Only specify the `reset{:.objectKey}` property if you intend to
+> change the `placement{:.objectKey}`. When running the library
+> in DEV mode, an error will be thrown to prevent an infinite
+> loop from locking up your application.
+
+Data supplied to `middlewareData{:.param}` is **preserved** by
+doing this, so you can read it at any point after you've reset
+the lifecycle, e.g. if you want to add a `skip{:.objectKey}`
+property to break the condition.

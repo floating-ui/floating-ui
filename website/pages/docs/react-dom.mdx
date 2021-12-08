@@ -1,0 +1,215 @@
+import Layout from '../../components/Layout';
+export default Layout;
+
+# React DOM
+
+```shell
+npm install @floating-ui/react-dom
+```
+
+```shell
+yarn add @floating-ui/react-dom
+```
+
+## Usage
+
+The `useFloating(){:js}` hook accepts all of
+[computePosition's options](/docs/computePosition#options).
+
+```js
+import {useFloating, shift} from '@floating-ui/react-dom';
+
+function App() {
+  const {x, y, reference, floating, strategy} = useFloating({
+    placement: 'right',
+    middleware: [shift()],
+  });
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      <div
+        ref={floating}
+        style={{
+          position: strategy,
+          top: y ?? '',
+          left: x ?? '',
+        }}
+      >
+        Tooltip
+      </div>
+    </>
+  );
+}
+```
+
+`x{:.const}` and `y{:.const}` will be `null` initially, before
+the layout effect has fired.
+
+## Updating
+
+The hook returns an `update(){:js}` function to update the
+position, e.g. in event listeners.
+
+```js
+const {update} = useFloating();
+```
+
+In addition, the `refs{:.const}` containing the actual elements
+are passed back:
+
+```js
+const {refs} = useFloating();
+
+// .current will be filled with the element inside an effect
+// refs.reference.current
+// refs.floating.current
+```
+
+For instance, to update on all relevant nodes, you can import the
+`getScrollParents(){:js}` util from the package:
+
+```js {5,9,15-37}
+import {useEffect} from 'react';
+import {
+  useFloating,
+  shift,
+  getScrollParents,
+} from '@floating-ui/react-dom';
+
+function App() {
+  const {x, y, reference, floating, strategy, update, refs} =
+    useFloating({
+      placement: 'right',
+      middleware: [shift()],
+    });
+
+  // Update on scroll and resize for all relevant nodes
+  useEffect(() => {
+    if (!refs.reference.current || !refs.floating.current) {
+      return;
+    }
+
+    const parents = [
+      ...getScrollParents(refs.reference.current),
+      ...getScrollParents(refs.floating.current),
+    ];
+
+    parents.forEach((parent) => {
+      parent.addEventListener('scroll', update);
+      parent.addEventListener('resize', update);
+    });
+
+    return () => {
+      parents.forEach((parent) => {
+        parent.removeEventListener('scroll', update);
+        parent.removeEventListener('resize', update);
+      });
+    };
+  }, [refs.reference, refs.floating, update]);
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      <div
+        ref={floating}
+        style={{
+          position: strategy,
+          top: y ?? '',
+          left: x ?? '',
+        }}
+      >
+        Tooltip
+      </div>
+    </>
+  );
+}
+```
+
+## middlewareData
+
+This object also gets returned from the hook. This enables you to
+apply positioning styles to an `arrow` element in your JSX, among
+other useful styles.
+
+```js
+const {middlewareData} = useFloating();
+```
+
+## Arrow
+
+A `ref{:.const}` can be passed as the `element{:.objectKey}`:
+
+```js /arrowRef/ {13}
+import {useRef} from 'react';
+import {useFloating, arrow} from '@floating-ui/react-dom';
+
+function App() {
+  const arrowRef = useRef();
+  const {
+    x,
+    y,
+    reference,
+    floating,
+    middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
+  } = useFloating({
+    middleware: [arrow({element: arrowRef})],
+  });
+
+  return (
+    <>
+      <button ref={reference}>My button</button>
+      <div ref={floating}>
+        My tooltip
+        <div ref={arrowRef} />
+      </div>
+    </>
+  );
+}
+```
+
+## Virtual Element
+
+See [Virtual Elements](/docs/virtual-elements) for details.
+
+```js {12-18}
+import {useLayoutEffect} from 'react';
+import {useFloating, shift} from '@floating-ui/react-dom';
+
+function App() {
+  const {x, y, reference, floating, strategy} = useFloating({
+    placement: 'right',
+    middleware: [shift()],
+  });
+
+  useLayoutEffect(() => {
+    // Call reference with the virtual element inside an effect
+    reference({
+      getBoundingClientRect() {
+        return {
+          // ...
+        };
+      },
+    });
+  }, [reference]);
+
+  return (
+    <div
+      ref={floating}
+      style={{
+        position: strategy,
+        top: y ?? '',
+        left: x ?? '',
+      }}
+    >
+      Tooltip
+    </div>
+  );
+}
+```
+
+## Updating middleware
+
+If you intend to make `middleware{:.objectKey}` dynamic, ensure
+you call `update(){:js}` whenever the state changes to compute
+the new position.

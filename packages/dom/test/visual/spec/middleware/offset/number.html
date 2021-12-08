@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="../../../styles.css" />
+
+<div id="reference">Ref</div>
+<div id="floating">Float</div>
+
+<script type="module">
+  import {computePosition, offset} from '../../../dist/index.mjs';
+  import {position} from '../../../utils.mjs';
+
+  computePosition(reference, floating, {
+    placement: 'right',
+    middleware: [offset(20)],
+  }).then(position);
+</script>

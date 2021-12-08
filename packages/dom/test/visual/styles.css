@@ -1,0 +1,73 @@
+body {
+  font-family: Arial !important;
+}
+
+#scroll {
+  overflow: scroll;
+  background-color: #ccc;
+  width: 400px;
+  height: 400px;
+}
+
+#scroll::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 400px;
+}
+
+#scroll::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 400px;
+}
+
+#scroll[data-nested] {
+  width: 350px;
+  height: 350px;
+  background-color: #eee;
+  margin: 0 auto;
+}
+
+#reference {
+  display: grid;
+  place-items: center;
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border: 4px solid;
+  color: black;
+  font-weight: bold;
+}
+
+#floating {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border: 4px solid;
+  color: #0082e1;
+  font-weight: bold;
+}
+
+#floating[data-fixed] {
+  position: fixed;
+}
+
+#arrowElement {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #0082e1;
+}
+
+#clip {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid red;
+  width: 500px;
+  height: 300px;
+}
