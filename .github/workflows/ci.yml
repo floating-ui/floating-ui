@@ -40,3 +40,8 @@ jobs:
       - run: npx playwright install
       - run: npm run build
       - run: npm -w packages/dom run test:functional
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: visual-snapshots-diff
+          path: packages/dom/test/test-results

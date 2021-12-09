@@ -1,7 +1,7 @@
 import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
 import {getWindow} from './window';
-import {isHTMLElement, isTableElement} from './is';
+import {isContainingBlock, isHTMLElement, isTableElement} from './is';
 
 function getTrueOffsetParent(element: Element): Element | null {
   if (
@@ -15,28 +15,13 @@ function getTrueOffsetParent(element: Element): Element | null {
 }
 
 function getContainingBlock(element: Element) {
-  // TODO: Try and use feature detection here instead
-  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
-
   let currentNode: Node | null = getParentNode(element);
 
   while (
     isHTMLElement(currentNode) &&
     !['html', 'body'].includes(getNodeName(currentNode))
   ) {
-    const css = getComputedStyle(currentNode);
-
-    // This is non-exhaustive but covers the most common CSS properties that
-    // create a containing block.
-    // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-    if (
-      css.transform !== 'none' ||
-      css.perspective !== 'none' ||
-      css.contain === 'paint' ||
-      ['transform', 'perspective'].includes(css.willChange) ||
-      (isFirefox && css.willChange === 'filter') ||
-      (isFirefox && css.filter && css.filter !== 'none')
-    ) {
+    if (isContainingBlock(currentNode)) {
       return currentNode;
     } else {
       currentNode = currentNode.parentNode;
@@ -65,7 +50,8 @@ export function getOffsetParent(element: Element): Element | Window {
     offsetParent &&
     (getNodeName(offsetParent) === 'html' ||
       (getNodeName(offsetParent) === 'body' &&
-        getComputedStyle(offsetParent).position === 'static'))
+        getComputedStyle(offsetParent).position === 'static' &&
+        !isContainingBlock(offsetParent)))
   ) {
     return window;
   }
