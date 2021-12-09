@@ -147,7 +147,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto md:block bg-opacity-90 backdrop-filter backdrop-blur-lg z-50',
+            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto md:block bg-opacity-90 backdrop-blur-lg z-50',
             {
               hidden: !navOpen,
             }
@@ -173,8 +173,8 @@ export default function Layout({children}) {
                   <Link href={url}>
                     <a
                       href={url}
-                      className={cn('block w-full py-1', {
-                        'text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400 font-bold':
+                      className={cn('inline-block w-full py-1', {
+                        'text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 font-bold':
                           pathname === url,
                         'hover:text-gray-50': pathname !== url,
                       })}
@@ -189,10 +189,13 @@ export default function Layout({children}) {
                         .map(({url, title, depth}) => (
                           <li
                             key={url}
-                            className={cn(`text-gray-400`, {
-                              'pl-4': depth === 2,
-                              'pl-8': depth === 3,
-                            })}
+                            className={cn(
+                              `text-gray-400 hover:text-gray-50`,
+                              {
+                                'pl-4': depth === 2,
+                                'pl-8': depth === 3,
+                              }
+                            )}
                           >
                             <a
                               href={url}

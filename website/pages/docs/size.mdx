@@ -146,9 +146,9 @@ const middleware = [
   size({
     apply({width, height}) {
       Object.assign(floatingEl.style, {
-        // Minimum acceptable height is 80px.
+        // Minimum acceptable height is 50px.
         // `flip` will then take over.
-        maxHeight: `${Math.max(80, height)}px`,
+        maxHeight: `${Math.max(50, height)}px`,
       });
     },
   }),
@@ -176,7 +176,7 @@ const middleware = [
           },
         },
       ]}
-      minHeight={70}
+      minHeight={50}
     >
       <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
         Scroll

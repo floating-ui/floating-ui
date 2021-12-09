@@ -86,7 +86,7 @@ export function Floating({
             : '',
       }}
     >
-      <div className="p-4">{content ?? 'Floating'}</div>
+      <div className="px-4 py-2">{content ?? 'Floating'}</div>
     </div>
   );
 

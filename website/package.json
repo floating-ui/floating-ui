@@ -20,9 +20,10 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
+    "@tailwindcss/typography": "^0.5.0",
     "autoprefixer": "^10.4.0",
-    "postcss": "^8.3.11",
-    "tailwindcss": "^2.2.19"
+    "postcss": "^8.4.4",
+    "tailwindcss": "^3.0.0"
   },
   "dependencies": {
     "@atomiks/mdx-pretty-code": "^0.0.2",
@@ -30,7 +31,6 @@
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^12.0.3",
     "@reach/skip-nav": "^0.16.0",
-    "@tailwindcss/typography": "^0.4.1",
     "@tippyjs/react": "^4.2.6",
     "classnames": "^2.3.1",
     "next": "^12.0.4",
