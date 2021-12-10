@@ -10,7 +10,7 @@ export const computePosition = (
     | Element
     | {getBoundingClientRect(): ClientRectObject; contextElement?: Element},
   floating: HTMLElement,
-  options: Partial<ComputePositionConfig>
+  options?: Partial<ComputePositionConfig>
 ) => computePositionCore(reference, floating, {platform, ...options});
 
 export {
