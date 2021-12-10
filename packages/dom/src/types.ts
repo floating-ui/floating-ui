@@ -22,24 +22,24 @@ export type DOMDetectOverflowOptions = Omit<
 };
 
 declare const autoPlacement: (
-  options?: AutoPlacementOptions & DOMDetectOverflowOptions
+  options?: Partial<AutoPlacementOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
 declare const shift: (
-  options?: ShiftOptions & DOMDetectOverflowOptions
+  options?: Partial<ShiftOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
 declare const flip: (
-  options?: FlipOptions & DOMDetectOverflowOptions
+  options?: Partial<FlipOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
 declare const size: (
-  options?: SizeOptions & DOMDetectOverflowOptions
+  options?: Partial<SizeOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
 declare const arrow: (options: {
   element: HTMLElement;
-  padding: number | SideObject;
+  padding?: number | SideObject;
 }) => Middleware;
 
 declare const detectOverflow: (
