@@ -188,3 +188,9 @@ main {
   padding: 5px;
   border-radius: 5px;
 }
+
+.prose {
+  font-size: 1.125rem;
+  color: #555;
+  line-height: 1.75;
+}

@@ -9,6 +9,7 @@ export {
   shift,
   limitShift,
   size,
+  inline,
   detectOverflow,
 } from '@floating-ui/core';
 

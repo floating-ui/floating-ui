@@ -24,6 +24,7 @@ export {
   offset,
   shift,
   size,
+  inline,
   detectOverflow,
 } from '@floating-ui/core';
 

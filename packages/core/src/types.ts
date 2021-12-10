@@ -28,6 +28,7 @@ export type Platform = {
     rootBoundary: RootBoundary;
   }) => Promisable<ClientRectObject>;
   getDimensions: (args: {element: any}) => Promisable<Dimensions>;
+  getClientRects: (args: {element: any}) => Promisable<Array<ClientRectObject>>;
 };
 
 export type Coords = {[key in Axis]: number};
@@ -60,6 +61,9 @@ export type MiddlewareData = {
     referenceHiddenOffsets: SideObject;
     escapedOffsets: SideObject;
   };
+  inline?: {
+    skip?: boolean;
+  };
   size?: {
     skip?: boolean;
   };
@@ -91,7 +95,7 @@ export type MiddlewareReturn = Partial<
     data: {
       [key: string]: any;
     };
-    reset: true | {placement?: Placement};
+    reset: true | {placement?: Placement; rects?: true | ElementRects};
   }
 >;
 
@@ -151,3 +155,4 @@ export {hide} from './middleware/hide';
 export {offset} from './middleware/offset';
 export {shift, limitShift} from './middleware/shift';
 export {size} from './middleware/size';
+export {inline} from './middleware/inline';
