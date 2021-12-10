@@ -45,7 +45,7 @@ declare const arrow: (options: {
 declare const detectOverflow: (
   middlewareArguments: MiddlewareArguments,
   options?: Partial<DOMDetectOverflowOptions>
-) => SideObject;
+) => Promise<SideObject>;
 
 export {autoPlacement, shift, arrow, size, flip, detectOverflow};
 export {hide, offset, limitShift} from '@floating-ui/core';
