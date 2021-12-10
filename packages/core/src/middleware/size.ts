@@ -11,11 +11,13 @@ import {
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getAlignment} from '../utils/getAlignment';
 
-export type Options = DetectOverflowOptions & {
+export type Options = {
   apply(args: Dimensions & ElementRects): void;
 };
 
-export const size = (options: Partial<Options> = {}): Middleware => ({
+export const size = (
+  options: Partial<Options & DetectOverflowOptions> = {}
+): Middleware => ({
   name: 'size',
   async fn(middlewareArguments: MiddlewareArguments) {
     const {placement, rects, middlewareData} = middlewareArguments;

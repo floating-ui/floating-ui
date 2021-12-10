@@ -33,14 +33,16 @@ export function getPlacementList(
   });
 }
 
-export type Options = DetectOverflowOptions & {
+export type Options = {
   alignment: Alignment | null;
   crossAxis: boolean;
   allowedPlacements: Array<Placement>;
   autoAlignment: boolean;
 };
 
-export const autoPlacement = (options: Partial<Options> = {}): Middleware => ({
+export const autoPlacement = (
+  options: Partial<Options & DetectOverflowOptions> = {}
+): Middleware => ({
   name: 'autoPlacement',
   async fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, rects, middlewareData, placement} = middlewareArguments;
