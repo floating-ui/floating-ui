@@ -122,7 +122,7 @@ function Placement() {
           ].map(({placement: p, styles}) => (
             <button
               key={p}
-              className="p-4 absolute transform transition hover:scale-125"
+              className="p-4 absolute transition hover:scale-125"
               style={styles}
               onClick={() => setPlacement(p)}
               aria-label={p}
@@ -477,7 +477,7 @@ function HomePage() {
           <div className="flex flex-row justify-center gap-x-4">
             <Link href="/docs/getting-started">
               <a
-                className="flex items-center gap-2 filter transition hover:saturate-110 hover:brightness-125 bg-gradient-to-b from-blue-500 to-blue-600 shadow-lg hover:shadow-xl rounded text-gray-50 px-4 py-3 sm:text-xl font-bold whitespace-nowrap"
+                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-125 bg-gradient-to-b from-blue-500 to-blue-600 shadow-lg hover:shadow-xl rounded text-gray-50 px-4 py-3 sm:text-xl font-bold whitespace-nowrap"
                 href="/docs/getting-started"
               >
                 Get Started <ArrowRight />
@@ -748,7 +748,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block text-4xl lg:text-5xl leading-gradient-heading font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-green-400 via-red-400 to-yellow-100 mt-16">
+          <h2 className="inline-block text-4xl lg:text-5xl leading-gradient-heading font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-green-400 to-yellow-100 mt-16">
             Ready to install?
           </h2>
           <p className="text-2xl lg:text-3xl text-left mb-8">

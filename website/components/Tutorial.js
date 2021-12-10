@@ -286,7 +286,7 @@ export const Result12 = () => {
         My tooltip with more content
         <div
           ref={setArrowEl}
-          className="w-2 h-2 bg-gray-1000 transform rotate-45"
+          className="w-2 h-2 bg-gray-1000 rotate-45"
           style={{
             position: strategy,
             top: arrowY ?? '',
@@ -361,7 +361,7 @@ export const Result13 = () => {
           My tooltip with more content
           <div
             ref={setArrowEl}
-            className="w-2 h-2 bg-gray-1000 transform rotate-45"
+            className="w-2 h-2 bg-gray-1000 rotate-45"
             style={{
               position: strategy,
               top: arrowY ?? '',

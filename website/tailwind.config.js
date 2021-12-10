@@ -2,11 +2,10 @@ const colors = require('tailwindcss/colors');
 
 module.exports = {
   plugins: [require('@tailwindcss/typography')],
-  purge: [
+  content: [
     './pages/**/*.{js,ts,jsx,tsx,md,mdx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
-  darkMode: false,
   theme: {
     extend: {
       typography: {
@@ -17,20 +16,30 @@ module.exports = {
                 paddingLeft: '5%',
                 paddingRight: '5%',
               },
+              padding: '1rem 1.5rem',
+              backgroundColor: '#272935',
               lineHeight: '2.1',
               marginBottom: '0',
-              ' > code': {
+              '> code': {
                 display: 'flex',
                 flexDirection: 'column',
               },
+              fontSize: 'inherit',
             },
             h1: {
+              display: 'inline-block',
+              margin: '0',
               lineHeight: '1.1',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               '@media (max-width: 500px)': {
                 fontSize: '2.25rem',
+              },
+            },
+            h2: {
+              '&:hover > a': {
+                textDecoration: 'underline',
               },
             },
           },
@@ -51,11 +60,15 @@ module.exports = {
             h1: {
               backgroundClip: 'text',
               color: 'transparent',
-              backgroundImage: `linear-gradient(to right, ${colors.yellow['300']}, ${colors.pink['400']})`,
+              backgroundImage: `linear-gradient(to right, ${colors.yellow['300']}, ${colors.orange['300']})`,
             },
             h2: {
               color: '#fff',
               wordBreak: 'break-word',
+              fontSize: '2rem',
+              '> a': {
+                color: 'inherit',
+              },
             },
             h3: {
               color: '#BFC3D9',
@@ -82,11 +95,10 @@ module.exports = {
             },
             a: {
               color: '#87e1fc',
-              fontSize: '',
               textDecoration: 'none',
               borderBottom: '1px solid transparent',
               '&:hover': {
-                borderBottomColor: 'inherit',
+                borderBottomColor: 'inherit !important',
               },
               '&:active': {
                 borderBottomStyle: 'dashed',
@@ -102,6 +114,9 @@ module.exports = {
         },
       },
       colors: {
+        green: colors.emerald,
+        yellow: colors.amber,
+        purple: colors.violet,
         gray: {
           1000: '#1c1d24',
           900: '#1F2028',
@@ -133,13 +148,6 @@ module.exports = {
       lineHeight: {
         'gradient-heading': '1.1 !important',
       },
-    },
-  },
-  variants: {
-    extend: {
-      filter: ['hover'],
-      saturate: ['hover'],
-      brightness: ['hover'],
     },
   },
 };
