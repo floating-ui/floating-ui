@@ -1,3 +1,4 @@
+import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
 import {getWindow} from './window';
 
