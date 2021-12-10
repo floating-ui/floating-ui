@@ -1,14 +1,16 @@
 import {
+  ClientRectObject,
   computePosition as computePositionCore,
   ComputePositionConfig,
-  VirtualElement,
 } from '@floating-ui/core';
 import {platform} from './platform';
 
 export const computePosition = (
-  reference: Element | VirtualElement,
+  reference:
+    | Element
+    | {getBoundingClientRect(): ClientRectObject; contextElement?: Element},
   floating: HTMLElement,
-  options: Partial<ComputePositionConfig>
+  options?: Partial<ComputePositionConfig>
 ) => computePositionCore(reference, floating, {platform, ...options});
 
 export {

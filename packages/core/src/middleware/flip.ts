@@ -8,7 +8,7 @@ import {
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 
-export type Options = DetectOverflowOptions & {
+export type Options = {
   mainAxis: boolean;
   crossAxis: boolean;
   fallbackPlacements: Array<Placement>;
@@ -16,7 +16,9 @@ export type Options = DetectOverflowOptions & {
   flipAlignment: boolean;
 };
 
-export const flip = (options: Partial<Options> = {}): Middleware => ({
+export const flip = (
+  options: Partial<Options & DetectOverflowOptions> = {}
+): Middleware => ({
   name: 'flip',
   async fn(middlewareArguments: MiddlewareArguments) {
     const {placement, middlewareData, rects, initialPlacement} =

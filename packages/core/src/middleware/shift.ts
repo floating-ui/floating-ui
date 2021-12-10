@@ -14,13 +14,15 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 
-type Options = DetectOverflowOptions & {
+export type Options = {
   mainAxis: boolean;
   crossAxis: boolean;
   limiter: (middlewareArguments: MiddlewareArguments) => Coords;
 };
 
-export const shift = (options: Partial<Options> = {}): Middleware => ({
+export const shift = (
+  options: Partial<Options & DetectOverflowOptions> = {}
+): Middleware => ({
   name: 'shift',
   async fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, placement} = middlewareArguments;
