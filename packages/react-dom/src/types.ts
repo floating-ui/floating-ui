@@ -1,7 +1,6 @@
 export {useFloating} from './';
 
 export {
-  arrow,
   autoPlacement,
   flip,
   hide,
@@ -12,3 +11,5 @@ export {
   detectOverflow,
   getScrollParents,
 } from '@floating-ui/dom';
+
+export {arrow} from './';
