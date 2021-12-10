@@ -95,11 +95,10 @@ module.exports = {
             },
             a: {
               color: '#87e1fc',
-              fontSize: '',
               textDecoration: 'none',
               borderBottom: '1px solid transparent',
               '&:hover': {
-                borderBottomColor: 'inherit',
+                borderBottomColor: 'inherit !important',
               },
               '&:active': {
                 borderBottomStyle: 'dashed',
