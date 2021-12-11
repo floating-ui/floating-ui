@@ -8,23 +8,19 @@ import {getDocumentElement} from './utils/getDocumentElement';
 import {getClippingClientRect} from './utils/getClippingClientRect';
 
 export const platform: Platform = {
-  getElementRects: ({reference, floating, strategy}) =>
-    Promise.resolve({
-      reference: getRectRelativeToOffsetParent(
-        reference,
-        getOffsetParent(floating),
-        strategy
-      ),
-      floating: {...getDimensions(floating), x: 0, y: 0},
-    }),
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args) =>
-    Promise.resolve(
-      convertOffsetParentRelativeRectToViewportRelativeRect(args)
+  getElementRects: ({reference, floating, strategy}) => ({
+    reference: getRectRelativeToOffsetParent(
+      reference,
+      getOffsetParent(floating),
+      strategy
     ),
-  getOffsetParent: ({element}) => Promise.resolve(getOffsetParent(element)),
-  isElement: (value) => Promise.resolve(isElement(value)),
-  getDocumentElement: ({element}) =>
-    Promise.resolve(getDocumentElement(element)),
-  getClippingClientRect: (args) => Promise.resolve(getClippingClientRect(args)),
-  getDimensions: ({element}) => Promise.resolve(getDimensions(element)),
+    floating: {...getDimensions(floating), x: 0, y: 0},
+  }),
+  convertOffsetParentRelativeRectToViewportRelativeRect: (args) =>
+    convertOffsetParentRelativeRectToViewportRelativeRect(args),
+  getOffsetParent: ({element}) => getOffsetParent(element),
+  isElement: (value) => isElement(value),
+  getDocumentElement: ({element}) => getDocumentElement(element),
+  getClippingClientRect: (args) => getClippingClientRect(args),
+  getDimensions: ({element}) => getDimensions(element),
 };

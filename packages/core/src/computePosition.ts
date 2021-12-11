@@ -56,13 +56,6 @@ export const computePosition: ComputePosition = async (
       }
     }
 
-    if (i === 0) {
-      ({x, y} = computeCoordsFromPlacement({
-        ...rects,
-        placement: statefulPlacement,
-      }));
-    }
-
     const {name, fn} = middleware[i];
     const {
       x: nextX,
@@ -92,6 +85,11 @@ export const computePosition: ComputePosition = async (
       }
 
       rects = await platform.getElementRects({reference, floating, strategy});
+
+      ({x, y} = computeCoordsFromPlacement({
+        ...rects,
+        placement: statefulPlacement,
+      }));
 
       i = -1;
       continue;

@@ -19,21 +19,21 @@ export type Platform = {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
-  }) => Promise<ElementRects>;
+  }) => ElementRects | Promise<ElementRects>;
   convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
     rect: Rect;
     offsetParent: any;
     strategy: Strategy;
-  }) => Promise<Rect>;
-  getOffsetParent: (args: {element: any}) => Promise<any>;
-  isElement: (value: unknown) => Promise<boolean>;
-  getDocumentElement: (args: {element: any}) => Promise<any>;
+  }) => Rect | Promise<Rect>;
+  getOffsetParent: (args: {element: any}) => any | Promise<any>;
+  isElement: (value: unknown) => boolean | Promise<boolean>;
+  getDocumentElement: (args: {element: any}) => any | Promise<any>;
   getClippingClientRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
-  }) => Promise<ClientRectObject>;
-  getDimensions: (args: {element: any}) => Promise<Dimensions>;
+  }) => ClientRectObject | Promise<ClientRectObject>;
+  getDimensions: (args: {element: any}) => Dimensions | Promise<Dimensions>;
 };
 
 export type Coords = {
