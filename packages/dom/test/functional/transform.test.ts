@@ -13,3 +13,17 @@ test('translated body: positioned on the right', async ({page}) => {
     'transform-body-translate.png'
   );
 });
+
+test('scaled floating: positioned on the right', async ({page}) => {
+  await page.goto('http://localhost:1234/spec/transform/floating-scaled');
+  expect(await page.screenshot()).toMatchSnapshot(
+    'transform-floating-scaled.png'
+  );
+});
+
+test('scaled parent: positioned on the right', async ({page}) => {
+  await page.goto('http://localhost:1234/spec/transform/parent-scaled');
+  expect(await page.screenshot()).toMatchSnapshot(
+    'transform-parent-scaled.png'
+  );
+});
