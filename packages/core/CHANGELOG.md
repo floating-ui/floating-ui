@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 0.2.1
+
+### Patch Changes
+
+- perf: save some bytes and execution
+- fix: CJS build
+
 ## 0.2.0
 
 ### Minor Changes

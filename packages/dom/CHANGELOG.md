@@ -1,5 +1,17 @@
 # @floating-ui/dom
 
+## 0.1.7
+
+### Patch Changes
+
+- fix: transformed body (#1427)
+- fix(types): strict DOM types (#1432)
+- fix: scaled parent (#1435, #1436)
+- fix: CJS build
+- perf: save some bytes and execution
+- Updated dependencies
+  - @floating-ui/core@0.2.1
+
 ## 0.1.6
 
 ### Patch Changes

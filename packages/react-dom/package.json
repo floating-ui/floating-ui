@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-dom",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Floating UI for React DOM",
   "main": "dist/floating-ui.react-dom.cjs",
   "module": "dist/floating-ui.react-dom.esm.js",
@@ -46,7 +46,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.1.6",
+    "@floating-ui/dom": "^0.1.7",
     "use-isomorphic-layout-effect": "^1.1.1"
   },
   "devDependencies": {

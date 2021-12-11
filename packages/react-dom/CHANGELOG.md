@@ -1,5 +1,14 @@
 # @floating-ui/react-dom
 
+## 0.3.3
+
+### Patch Changes
+
+- fix(types): `arrowRef` type
+- fix: CJS build
+- Updated dependencies
+  - @floating-ui/dom@0.1.7
+
 ## 0.3.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @floating-ui/react-native
 
+## 0.3.3
+
+### Patch Changes
+
+- fix(types): `arrowRef` type
+- Updated dependencies
+  - @floating-ui/core@0.2.1
+
 ## 0.3.2
 
 ### Patch Changes
