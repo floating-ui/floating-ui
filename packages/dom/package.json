@@ -26,10 +26,10 @@
   },
   "author": "atomiks",
   "license": "MIT",
-  "bugs": "https://github.com/atomiks/floating-ui",
+  "bugs": "https://github.com/floating-ui/floating-ui",
   "repository": {
     "type": "git",
-    "url": "https://github.com/atomiks/floating-ui.git",
+    "url": "https://github.com/floating-ui/floating-ui.git",
     "directory": "packages/dom"
   },
   "homepage": "https://floating-ui.com",
