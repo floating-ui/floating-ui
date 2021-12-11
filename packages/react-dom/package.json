@@ -2,13 +2,13 @@
   "name": "@floating-ui/react-dom",
   "version": "0.3.2",
   "description": "Floating UI for React DOM",
-  "main": "dist/floating-ui.react-dom.js",
+  "main": "dist/floating-ui.react-dom.cjs",
   "module": "dist/floating-ui.react-dom.esm.js",
   "unpkg": "dist/floating-ui.react-dom.min.js",
   "type": "module",
   "exports": {
     "import": "./dist/floating-ui.react-dom.esm.js",
-    "require": "./dist/floating-ui.react-dom.js"
+    "require": "./dist/floating-ui.react-dom.cjs"
   },
   "sideEffects": false,
   "files": [

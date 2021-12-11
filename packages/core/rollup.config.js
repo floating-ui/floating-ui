@@ -38,6 +38,13 @@ const bundles = [
       format: 'umd',
     },
   },
+  {
+    input,
+    output: {
+      file: path.join(__dirname, 'dist/floating-ui.core.cjs'),
+      format: 'cjs',
+    },
+  },
 ];
 
 const buildExport = bundles.map(({input, output}) => ({

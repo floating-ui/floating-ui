@@ -2,13 +2,13 @@
   "name": "@floating-ui/dom",
   "version": "0.1.6",
   "description": "Floating UI for the web",
-  "main": "dist/floating-ui.dom.js",
+  "main": "dist/floating-ui.dom.cjs",
   "module": "dist/floating-ui.dom.esm.js",
   "unpkg": "dist/floating-ui.dom.min.js",
   "type": "module",
   "exports": {
     "import": "./dist/floating-ui.dom.esm.js",
-    "require": "./dist/floating-ui.dom.js"
+    "require": "./dist/floating-ui.dom.cjs"
   },
   "sideEffects": false,
   "files": [

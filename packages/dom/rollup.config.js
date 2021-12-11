@@ -43,6 +43,13 @@ const bundles = [
       },
     },
   },
+  {
+    input,
+    output: {
+      file: path.join(__dirname, 'dist/floating-ui.dom.cjs'),
+      format: 'cjs',
+    },
+  },
 ];
 
 const buildExport = bundles.map(({input, output}) => ({
