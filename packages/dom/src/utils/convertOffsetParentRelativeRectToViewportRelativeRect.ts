@@ -22,7 +22,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  let offsets = {x: 0, y: 0};
+  const offsets = {x: 0, y: 0};
 
   if (
     isOffsetParentAnElement ||
@@ -36,9 +36,9 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent);
-      offsets.x += offsetParent.clientLeft;
-      offsets.y += offsetParent.clientTop;
+      const offsetRect = getBoundingClientRect(offsetParent, true);
+      offsets.x = offsetRect.x + offsetParent.clientLeft;
+      offsets.y = offsetRect.y + offsetParent.clientTop;
     }
     // This doesn't appear to be need to be negated.
     // else if (documentElement) {

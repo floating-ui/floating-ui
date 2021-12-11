@@ -27,3 +27,12 @@ test('scaled parent: positioned on the right', async ({page}) => {
     'transform-parent-scaled.png'
   );
 });
+
+test('scaled parent: positioned on the right with correct overflow detection', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/spec/transform/parent-scaled-clip');
+  expect(await page.screenshot()).toMatchSnapshot(
+    'transform-parent-scaled-clip.png'
+  );
+});
