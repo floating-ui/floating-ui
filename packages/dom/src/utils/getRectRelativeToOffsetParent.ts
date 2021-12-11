@@ -6,6 +6,14 @@ import {getNodeScroll} from './getNodeScroll';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import {isHTMLElement, isScrollParent} from './is';
 
+function isScaled(element: HTMLElement): boolean {
+  const rect = getBoundingClientRect(element);
+  return (
+    Math.round(rect.width) !== element.offsetWidth ||
+    Math.round(rect.height) !== element.offsetHeight
+  );
+}
+
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
@@ -13,10 +21,13 @@ export function getRectRelativeToOffsetParent(
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
-  const rect = getBoundingClientRect(element);
+  const rect = getBoundingClientRect(
+    element,
+    isOffsetParentAnElement && isScaled(offsetParent)
+  );
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  let offsets = {x: 0, y: 0};
+  const offsets = {x: 0, y: 0};
 
   if (
     isOffsetParentAnElement ||
@@ -30,9 +41,9 @@ export function getRectRelativeToOffsetParent(
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent);
-      offsets.x += offsetParent.clientLeft;
-      offsets.y += offsetParent.clientTop;
+      const offsetRect = getBoundingClientRect(offsetParent, true);
+      offsets.x = offsetRect.x + offsetParent.clientLeft;
+      offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
