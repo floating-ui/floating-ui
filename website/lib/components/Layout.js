@@ -3,7 +3,7 @@ import Code from './Code';
 import Warning from './Warning';
 import Collapsible from './Collapsible';
 import Navigation from './Navigation';
-import Logo from '../assets/logo.svg';
+import Logo from '../../assets/logo.svg';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Head from 'next/head';

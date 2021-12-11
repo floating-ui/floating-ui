@@ -10,9 +10,9 @@ import {Check, ArrowRight, GitHub, Heart} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import Link from 'next/link';
 import Head from 'next/head';
-import DropdownExample from '../components/DropdownExample.js';
+import DropdownExample from '../lib/components/DropdownExample.js';
 import cn from 'classnames';
-import {StaticCode} from '../components/Code';
+import {StaticCode} from '../lib/components/Code';
 
 import Logo from '../assets/logo.svg';
 
