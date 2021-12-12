@@ -18,7 +18,7 @@ import Logo from '../assets/logo.svg';
 
 import Logos from '../lib/components/Logos';
 import Cards from '../lib/components/Cards';
-import {MINI_SPONSORS, SPONSORS} from './data';
+import {MINI_SPONSORS, SPONSORS} from '../data';
 
 function Placement() {
   const [placement, setPlacement] = useState('top');
