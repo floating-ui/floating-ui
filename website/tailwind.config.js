@@ -21,8 +21,8 @@ module.exports = {
               lineHeight: '2.1',
               marginBottom: '0',
               '> code': {
-                display: 'flex',
-                flexDirection: 'column',
+                display: 'table',
+                width: '100%',
               },
               fontSize: 'inherit',
             },
@@ -83,7 +83,6 @@ module.exports = {
             code: {
               color: '#93a4b5',
               borderRadius: '4px',
-              padding: '2px 4px',
               fontWeight: '500',
               background: '#272935',
               '&::before': {
@@ -92,6 +91,9 @@ module.exports = {
               '&::after': {
                 display: 'none',
               },
+            },
+            ':not(pre) > code': {
+              padding: '2px 4px',
             },
             a: {
               color: '#87e1fc',

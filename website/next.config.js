@@ -26,7 +26,7 @@ const prettyCode = createRemarkPlugin({
     });
   },
   onVisitHighlightedLine(node) {
-    node.className = 'bg-gray-700';
+    node.className = 'line bg-gray-700';
   },
   onVisitHighlightedWord(node) {
     Object.assign(node.style, {
