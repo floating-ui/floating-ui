@@ -7,7 +7,7 @@ export const basePlacements: BasePlacement[] = [
   'bottom',
   'left',
 ];
-export const allPlacements = /* #__PURE__ */basePlacements.reduce(
+export const allPlacements = basePlacements.reduce(
   (acc: Placement[], basePlacement) =>
     acc.concat(basePlacement, `${basePlacement}-start`, `${basePlacement}-end`),
   []
