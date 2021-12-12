@@ -57,7 +57,11 @@ const buildExport = bundles.map(({input, output}) => ({
   plugins: [
     commonjs(),
     nodeResolve({extensions: ['.ts']}),
-    babel({babelHelpers: 'bundled', extensions: ['.ts']}),
+    babel({
+      babelHelpers: 'bundled',
+      extensions: ['.ts'],
+      plugins: ['annotate-pure-calls'],
+    }),
     replace({
       __DEV__: output.file.includes('.min.')
         ? 'false'
