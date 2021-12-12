@@ -16,6 +16,10 @@ import {StaticCode} from '../lib/components/Code';
 
 import Logo from '../assets/logo.svg';
 
+import Logos from '../lib/components/Logos';
+import Cards from '../lib/components/Cards';
+import {MINI_SPONSORS, SPONSORS} from './data';
+
 function Placement() {
   const [placement, setPlacement] = useState('top');
 
@@ -541,6 +545,26 @@ function HomePage() {
           <Flip />
         </div>
 
+        <div className="container px-4 py-8 mx-auto max-w-screen-xl">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-orange-400 to-orange-200 text-4xl lg:text-5xl font-bold mt-8 mb-4">
+            Our sponsors.
+          </h2>
+          <p className="text-2xl lg:text-3xl text-left mb-8">
+            Floating UI is proudly sponsored by the following
+            organizations, join them on{' '}
+            <a
+              href="https://opencollective.com/floating-ui"
+              rel="noopener noreferrer"
+              className="text-pink-300"
+            >
+              Open Collective
+            </a>{' '}
+            to support us.
+          </p>
+          <Cards items={SPONSORS} />
+          <Logos items={MINI_SPONSORS} />
+        </div>
+
         <div className="container mx-auto px-4 max-w-screen-xl relative">
           <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 text-4xl lg:text-5xl font-bold mt-8 mb-4">
             Light as a feather.
@@ -738,7 +762,7 @@ function HomePage() {
                 the future of this project through sponsorship:
               </p>
               <a
-                href="https://github.com/sponsors/atomiks"
+                href="https://opencollective.com/floating-ui"
                 className="flex justify-center items-center gap-2 text-xl border-2 border-solid border-pink-300 text-pink-300 rounded px-4 py-2 hover:bg-pink-300 hover:text-gray-900 transition"
               >
                 Sponsor <Heart />
@@ -794,9 +818,8 @@ function HomePage() {
         <div className="flex flex-col gap-3 container mx-auto px-4 max-w-screen-xl">
           <p>© {new Date().getFullYear()} • MIT License</p>
           <p className="text-gray-400">
-            Floating UI is a project by the creator of Tippy.js
-            and co-author of Popper 2, designed to be a
-            next-generation evolution of those libraries.
+            Floating UI is the evolution of Popper 2, designed to
+            bring the project to a new level.
           </p>
           <p className="text-gray-400">
             Floating shapes in the header are licensed under CC
