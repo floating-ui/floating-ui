@@ -16,16 +16,20 @@ import {StaticCode} from '../lib/components/Code';
 
 import Logo from '../assets/logo.svg';
 
+import Logos from '../lib/components/Logos';
+import Cards from '../lib/components/Cards';
+import {MINI_SPONSORS, SPONSORS} from '../data';
+
 function Placement() {
   const [placement, setPlacement] = useState('top');
 
   return (
     <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-blue-800 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
       <div className="lg:col-span-7 overflow-hidden">
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Placement
         </h3>
-        <p className="text-2xl text-blue-200 mb-4">
+        <p className="text-xl text-blue-200 mb-4">
           Position your floating element on 12 core placements.
         </p>
         <div className="rounded-lg bg-gray-800 p-4 overflow-auto w-full">
@@ -181,12 +185,12 @@ function Shift() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-green-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8">
+    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-green-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
       <div className="lg:col-span-7 overflow-hidden">
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Shift
         </h3>
-        <p className="text-2xl text-green-100 mb-4">
+        <p className="text-xl text-green-100 mb-4">
           Shift the floating element in view to prevent overflow.
         </p>
         <div className="rounded-lg bg-gray-800 p-4 overflow-auto">
@@ -196,9 +200,8 @@ function Shift() {
       <div
         ref={setBoundary}
         className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
-        style={{height: 470}}
       >
-        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-solid border-red-400">
+        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-solid border-red-400 h-[450px] lg:h-auto">
           <div
             style={{
               height: 400,
@@ -260,16 +263,16 @@ function Flip() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8">
+    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
       <div className="grid lg:col-span-7 overflow-hidden">
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Flip
         </h3>
-        <p className="text-2xl text-red-100 mb-4">
+        <p className="text-xl text-red-100 mb-4">
           Flip the floating element to the opposite placement to
           prevent overflow.
         </p>
-        <div className="rounded-lg bg-gray-800 p-4 overflow-auto">
+        <div className="rounded-lg bg-gray-800 p-4 overflow-auto mt-auto">
           <StaticCode middleware="flip" placement="top" />
         </div>
       </div>
@@ -277,10 +280,7 @@ function Flip() {
         className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
         ref={setBoundary}
       >
-        <div
-          className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400"
-          style={{height: 485}}
-        >
+        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400 h-[450px] lg:h-auto">
           <div
             style={{
               height: 500,
@@ -339,10 +339,10 @@ function Popovers() {
   return (
     <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-purple-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8">
       <div>
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Popovers
         </h3>
-        <p className="text-2xl text-pink-100 mb-4">
+        <p className="text-xl text-pink-100 mb-4">
           Floating elements displaying rich HTML content
         </p>
       </div>
@@ -358,7 +358,7 @@ function Popovers() {
                     transform: 'rotate(0.001deg)',
                   }}
                 >
-                  <h3 className="text-xl font-bold p-2">
+                  <h3 className="text-lg font-bold p-2">
                     My popover title
                   </h3>
                   <div className="h-px bg-gray-200"></div>
@@ -375,7 +375,7 @@ function Popovers() {
               maxWidth={250}
               aria={{content: 'labelledby'}}
             >
-              <button className="text-lg bg-blue-600 text-gray-50 hover:bg-blue-700 p-3 transition-colors rounded">
+              <button className="text-md bg-blue-600 text-gray-50 hover:bg-blue-700 p-3 transition-colors rounded">
                 View explanation
               </button>
             </Tippy>
@@ -393,10 +393,10 @@ function Dropdowns() {
   return (
     <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-blue-600 via-purple-700 to-pink-600 rounded-lg px-4 py-8 sm:p-8">
       <div>
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Dropdowns
         </h3>
-        <p className="text-2xl mb-4 text-pink-100">
+        <p className="text-xl mb-4 text-pink-100">
           A menu of items and submenus
         </p>
       </div>
@@ -418,10 +418,10 @@ function Tooltips() {
   return (
     <div className="grid lg:grid-cols-2 gap-8 bg-gradient-to-r from-blue-800 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
       <div>
-        <h3 className="text-3xl text-gray-50 font-bold mb-4">
+        <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Tooltips
         </h3>
-        <p className="text-2xl text-blue-200 mb-4">
+        <p className="text-xl text-blue-200 mb-4">
           A floating element to describe an element, e.g. button
         </p>
       </div>
@@ -429,7 +429,7 @@ function Tooltips() {
         <div className="grid items-center h-full bg-gray-300 py-12 text-gray-900 rounded-lg">
           <div className="text-center">
             <Tippy content="Add emoji" offset={[0, 8]}>
-              <button className="text-3xl">🙂</button>
+              <button className="text-2xl">🙂</button>
             </Tippy>
             <div className="text-gray-500">
               Hover, tap, or focus
@@ -451,7 +451,7 @@ function HomePage() {
         </title>
       </Head>
       <header className="from-gray-700 to-gray-800 mb-24 overflow-hidden relative pb-48">
-        <div className="container py-8 mx-auto px-4 text-center max-w-screen-xl">
+        <div className="container py-16 mx-auto px-4 text-center max-w-screen-xl">
           <Logo
             className="mx-auto"
             aria-label="Floating UI logo"
@@ -471,13 +471,13 @@ function HomePage() {
               height={648}
             />
           </div>
-          <h1 className="text-gray-50 mb-8 text-5xl sm:text-6xl font-bold">
+          <h1 className="text-gray-50 mb-8 text-4xl sm:text-5xl font-bold">
             Floating UI
           </h1>
           <div className="flex flex-row justify-center gap-x-4">
             <Link href="/docs/getting-started">
               <a
-                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-125 bg-gradient-to-b from-blue-500 to-blue-600 shadow-lg hover:shadow-xl rounded text-gray-50 px-4 py-3 sm:text-xl font-bold whitespace-nowrap"
+                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-125 bg-gradient-to-b from-blue-500 to-blue-600 shadow-lg hover:shadow-xl rounded text-gray-50 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
                 href="/docs/getting-started"
               >
                 Get Started <ArrowRight />
@@ -485,7 +485,7 @@ function HomePage() {
             </Link>
             <a
               href="https://github.com/floating-ui/floating-ui"
-              className="flex transition hover:shadow-xl items-center gap-2 bg-gray-50 rounded text-gray-900 px-4 py-3 sm:text-xl shadow-lg font-bold"
+              className="flex transition hover:shadow-xl items-center gap-2 bg-gray-50 rounded text-gray-900 px-4 py-3 sm:text-lg shadow-lg font-bold"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -496,10 +496,10 @@ function HomePage() {
       </header>
       <main className="relative -mt-60 sm:-mt-48">
         <div className="container mx-auto px-4 max-w-screen-xl">
-          <h2 className="inline-block text-4xl leading-gradient-heading lg:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
+          <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
             Powerful positioning primitives.
           </h2>
-          <p className="text-2xl lg:text-3xl text-left">
+          <p className="prose text-xl lg:text-2xl text-left">
             Position all types of{' '}
             <Tippy
               content={
@@ -541,23 +541,44 @@ function HomePage() {
           <Flip />
         </div>
 
+        <div className="container px-4 py-8 mx-auto max-w-screen-xl">
+          <h2 className="inline-block text-3xl lg:text-4xl font-bold mt-8 mb-4">
+            Support Floating UI's future.
+          </h2>
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
+            Ongoing work is making Floating UI the best, 100%
+            free solution in this space. We are proudly sponsored
+            by the following organizations, consider joining them
+            on{' '}
+            <a
+              href="https://opencollective.com/floating-ui"
+              rel="noopener noreferrer"
+            >
+              Open Collective
+            </a>
+            !
+          </p>
+          <Cards items={SPONSORS} />
+          <Logos items={MINI_SPONSORS} />
+        </div>
+
         <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 text-4xl lg:text-5xl font-bold mt-8 mb-4">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 text-3xl lg:text-4xl font-bold mt-8 mb-4">
             Light as a feather.
           </h2>
-          <p className="text-2xl lg:text-3xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             The core is only 600 bytes when minified and
             compressed with Brotli. Plus, the architecture is
             super modular, so tree-shaking works like a charm.
           </p>
           <div className="grid items-center py-4">
-            <div className="flex flex-col text-center text-lg sm:text-xl md:text-2xl mx-auto pr-4 sm:pr-20 md:pr-40">
+            <div className="flex flex-col text-center text-md sm:text-lg md:text-xl mx-auto pr-4 sm:pr-20 md:pr-40">
               <div className="mb-2 flex gap-2 items-center justify-center">
                 <code className="flex-1 text-blue-400 text-right">
                   computePosition
                   <span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-gray-400 text-left">
+                <span className="text-md text-gray-400 text-left">
                   &nbsp; 0.6 kB
                 </span>
               </div>
@@ -565,7 +586,7 @@ function HomePage() {
                 <code className="flex-1 text-blue-400 text-right">
                   shift<span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.6 kB
                 </span>
               </div>
@@ -574,7 +595,7 @@ function HomePage() {
                   limitShift
                   <span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.1 kB
                 </span>
               </div>
@@ -582,7 +603,7 @@ function HomePage() {
                 <code className="flex-1 text-blue-400 text-right">
                   flip<span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.5 kB
                 </span>
               </div>
@@ -590,7 +611,7 @@ function HomePage() {
                 <code className="flex-1 text-blue-400 text-right">
                   hide<span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.2 kB
                 </span>
               </div>
@@ -598,7 +619,7 @@ function HomePage() {
                 <code className="flex-1 text-blue-400 text-right">
                   arrow<span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.2 kB
                 </span>
               </div>
@@ -607,7 +628,7 @@ function HomePage() {
                   offset
                   <span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.1 kB
                 </span>
               </div>
@@ -615,7 +636,7 @@ function HomePage() {
                 <code className="flex-1 text-blue-400 text-right">
                   size<span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.2 kB
                 </span>
               </div>
@@ -624,7 +645,7 @@ function HomePage() {
                   autoPlacement
                   <span className="text-blue-200">()</span>
                 </code>
-                <span className="text-lg text-green-400 text-left">
+                <span className="text-md text-green-400 text-left">
                   +0.4 kB
                 </span>
               </div>
@@ -632,7 +653,7 @@ function HomePage() {
                 <code className="flex-1 text-gray-400 text-right">
                   DOM platform
                 </code>
-                <span className="text-lg text-yellow-400 text-left">
+                <span className="text-md text-yellow-400 text-left">
                   +1.9 kB
                 </span>
               </div>
@@ -641,10 +662,10 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block leading-gradient-heading text-4xl lg:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400 mt-16">
+          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400 mt-16">
             Endlessly extensible.
           </h2>
-          <p className="text-2xl lg:text-3xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             The core package exports middleware that cover 99% of
             positioning use cases, but for the remaining 1%, it's
             straightforward to add your own positioning logic.
@@ -652,10 +673,10 @@ function HomePage() {
 
           <div className="grid lg:grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-red-600 to-pink-700 rounded-lg py-6 px-10">
-              <h3 className="text-3xl text-gray-50 font-bold mb-4 text-yellow-100">
+              <h3 className="text-2xl text-gray-50 font-bold mb-4 text-yellow-100">
                 Core middleware
               </h3>
-              <ul className="text-xl text-pink-100 pl-6 flex flex-col gap-2">
+              <ul className="text-lg text-pink-100 pl-6 flex flex-col gap-2">
                 <li className="relative">
                   <Check
                     className="absolute top-1"
@@ -680,10 +701,10 @@ function HomePage() {
               </ul>
             </div>
             <div className="bg-gradient-to-br from-red-600 to-pink-700 rounded-lg py-6 px-10">
-              <h3 className="text-3xl text-gray-50 font-bold mb-4 text-yellow-100">
+              <h3 className="text-2xl text-gray-50 font-bold mb-4 text-yellow-100">
                 Custom middleware
               </h3>
-              <ul className="text-xl text-pink-100 pl-6 flex flex-col gap-2">
+              <ul className="text-lg text-pink-100 pl-6 flex flex-col gap-2">
                 <li className="relative">
                   <Check
                     className="absolute top-1"
@@ -711,10 +732,10 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block leading-gradient-heading text-4xl lg:text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-300 to-green-300 mt-16">
+          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-300 to-green-300 mt-16">
             Components!
           </h2>
-          <p className="text-2xl lg:text-3xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             Higher-level primitives to craft beautiful and
             accessible tooltips, popovers, dropdowns, and more is
             in development.
@@ -726,10 +747,10 @@ function HomePage() {
             <Popovers />
 
             <div className="bg-gradient-to-tr from-gray-700 to to-gray-800 rounded-lg px-4 py-8 sm:p-8">
-              <h3 className="text-3xl text-gray-50 font-bold mb-4">
+              <h3 className="text-2xl text-gray-50 font-bold mb-4">
                 Coming soon
               </h3>
-              <p className="text-xl mb-4">
+              <p className="text-lg mb-4">
                 The{' '}
                 <span className="text-gray-50 font-bold">
                   @floating-ui/components
@@ -738,8 +759,8 @@ function HomePage() {
                 the future of this project through sponsorship:
               </p>
               <a
-                href="https://github.com/sponsors/atomiks"
-                className="flex justify-center items-center gap-2 text-xl border-2 border-solid border-pink-300 text-pink-300 rounded px-4 py-2 hover:bg-pink-300 hover:text-gray-900 transition"
+                href="https://opencollective.com/floating-ui"
+                className="flex justify-center items-center gap-2 text-lg border-2 border-solid border-pink-300 text-pink-300 rounded px-4 py-2 hover:bg-pink-300 hover:text-gray-900 transition"
               >
                 Sponsor <Heart />
               </a>
@@ -748,39 +769,39 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block text-4xl lg:text-5xl leading-gradient-heading font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-green-400 to-yellow-100 mt-16">
+          <h2 className="inline-block text-3xl lg:text-4xl leading-gradient-heading font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-green-400 to-yellow-100 mt-16">
             Ready to install?
           </h2>
-          <p className="text-2xl lg:text-3xl text-left mb-8">
+          <p className="text-xl lg:text-2xl text-left mb-8">
             Start playing via CDN or your package manager.
           </p>
 
           <div className="grid lg:grid-cols-2 gap-4">
             <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
-              <h3 className="text-3xl font-bold mb-4">
+              <h3 className="text-2xl font-bold mb-4">
                 Package Manager
               </h3>
-              <p className="text-xl">
+              <p className="text-lg">
                 Install with npm or Yarn.
               </p>
               <Link href="/docs/getting-started">
                 <a
                   href="/docs/getting-started"
-                  className="text-2xl font-bold flex gap-2 items-center mt-4"
+                  className="text-xl font-bold flex gap-2 items-center mt-4"
                 >
                   Get started <ArrowRight />
                 </a>
               </Link>
             </div>
             <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
-              <h3 className="text-3xl font-bold mb-4">CDN</h3>
-              <p className="text-xl">
+              <h3 className="text-2xl font-bold mb-4">CDN</h3>
+              <p className="text-lg">
                 Install with the unpkg CDN.
               </p>
               <Link href="/docs/getting-started#cdn">
                 <a
                   href="/docs/getting-started#cdn"
-                  className="text-2xl font-bold flex gap-2 items-center mt-4"
+                  className="text-xl font-bold flex gap-2 items-center mt-4"
                 >
                   Get started <ArrowRight />
                 </a>
@@ -794,9 +815,8 @@ function HomePage() {
         <div className="flex flex-col gap-3 container mx-auto px-4 max-w-screen-xl">
           <p>© {new Date().getFullYear()} • MIT License</p>
           <p className="text-gray-400">
-            Floating UI is a project by the creator of Tippy.js
-            and co-author of Popper 2, designed to be a
-            next-generation evolution of those libraries.
+            Floating UI is the evolution of Popper 2, designed to
+            bring the project to a new level.
           </p>
           <p className="text-gray-400">
             Floating shapes in the header are licensed under CC
