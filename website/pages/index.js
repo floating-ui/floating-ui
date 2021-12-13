@@ -185,7 +185,7 @@ function Shift() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-green-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8">
+    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-green-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
       <div className="lg:col-span-7 overflow-hidden">
         <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Shift
@@ -200,9 +200,8 @@ function Shift() {
       <div
         ref={setBoundary}
         className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
-        style={{height: 470}}
       >
-        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-solid border-red-400">
+        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-solid border-red-400 h-[450px] lg:h-auto">
           <div
             style={{
               height: 400,
@@ -264,7 +263,7 @@ function Flip() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8 lg:h-[555px] sm:h-[1100px]">
+    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
       <div className="grid lg:col-span-7 overflow-hidden">
         <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Flip
@@ -281,7 +280,7 @@ function Flip() {
         className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
         ref={setBoundary}
       >
-        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400">
+        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400 h-[450px] lg:h-auto">
           <div
             style={{
               height: 500,
@@ -504,7 +503,7 @@ function HomePage() {
             Position all types of{' '}
             <Tippy
               content={
-                <div className="text-md p-2">
+                <div className="text-lg p-2">
                   A <strong>floating element</strong> is one that
                   floats on top of the UI without disrupting the
                   flow of content, like this one!
@@ -543,19 +542,21 @@ function HomePage() {
         </div>
 
         <div className="container px-4 py-8 mx-auto max-w-screen-xl">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-orange-400 to-orange-200 text-3xl lg:text-4xl font-bold mt-8 mb-4">
-            Support us.
+          <h2 className="inline-block text-3xl lg:text-4xl font-bold mt-8 mb-4">
+            Support Floating UI's future.
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
-            Floating UI is proudly sponsored by the following
-            organizations, join them on{' '}
+            Ongoing work is making Floating UI the best, 100%
+            free solution in this space. We are proudly sponsored
+            by the following organizations, consider joining them
+            on{' '}
             <a
               href="https://opencollective.com/floating-ui"
               rel="noopener noreferrer"
             >
               Open Collective
-            </a>{' '}
-            to support us.
+            </a>
+            !
           </p>
           <Cards items={SPONSORS} />
           <Logos items={MINI_SPONSORS} />
