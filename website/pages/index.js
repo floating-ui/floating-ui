@@ -283,7 +283,7 @@ function Flip() {
       >
         <div
           className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400"
-          style={{height: 485}}
+          style={{height: 450}}
         >
           <div
             style={{
@@ -503,7 +503,7 @@ function HomePage() {
           <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
             Powerful positioning primitives.
           </h2>
-          <p className="text-xl lg:text-2xl text-left">
+          <p className="prose text-xl lg:text-2xl text-left">
             Position all types of{' '}
             <Tippy
               content={
@@ -568,7 +568,7 @@ function HomePage() {
           <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 text-3xl lg:text-4xl font-bold mt-8 mb-4">
             Light as a feather.
           </h2>
-          <p className="text-xl lg:text-2xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             The core is only 600 bytes when minified and
             compressed with Brotli. Plus, the architecture is
             super modular, so tree-shaking works like a charm.
@@ -667,7 +667,7 @@ function HomePage() {
           <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400 mt-16">
             Endlessly extensible.
           </h2>
-          <p className="text-xl lg:text-2xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             The core package exports middleware that cover 99% of
             positioning use cases, but for the remaining 1%, it's
             straightforward to add your own positioning logic.
@@ -737,7 +737,7 @@ function HomePage() {
           <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-300 to-green-300 mt-16">
             Components!
           </h2>
-          <p className="text-xl lg:text-2xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             Higher-level primitives to craft beautiful and
             accessible tooltips, popovers, dropdowns, and more is
             in development.
