@@ -455,7 +455,7 @@ function HomePage() {
         </title>
       </Head>
       <header className="from-gray-700 to-gray-800 mb-24 overflow-hidden relative pb-48">
-        <div className="container py-8 mx-auto px-4 text-center max-w-screen-xl">
+        <div className="container py-16 mx-auto px-4 text-center max-w-screen-xl">
           <Logo
             className="mx-auto"
             aria-label="Floating UI logo"
@@ -547,15 +547,14 @@ function HomePage() {
 
         <div className="container px-4 py-8 mx-auto max-w-screen-xl">
           <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-orange-400 to-orange-200 text-3xl lg:text-4xl font-bold mt-8 mb-4">
-            Our sponsors.
+            Support us.
           </h2>
-          <p className="text-xl lg:text-2xl text-left mb-8">
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
             Floating UI is proudly sponsored by the following
             organizations, join them on{' '}
             <a
               href="https://opencollective.com/floating-ui"
               rel="noopener noreferrer"
-              className="text-pink-300"
             >
               Open Collective
             </a>{' '}
