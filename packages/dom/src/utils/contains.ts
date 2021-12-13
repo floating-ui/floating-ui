@@ -11,7 +11,8 @@ export function contains(parent: Element, child: Element): boolean {
   else if (rootNode && isShadowRoot(rootNode)) {
     let next = child;
     do {
-      if (next && parent.isSameNode(next)) {
+      // use `===` replace node.isSameNode()
+      if (next && parent === next) {
         return true;
       }
       // @ts-ignore: need a better way to handle this...
