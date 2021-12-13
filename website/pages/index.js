@@ -264,7 +264,7 @@ function Flip() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8">
+    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8 lg:h-[555px] sm:h-[1100px]">
       <div className="grid lg:col-span-7 overflow-hidden">
         <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Flip
@@ -273,7 +273,7 @@ function Flip() {
           Flip the floating element to the opposite placement to
           prevent overflow.
         </p>
-        <div className="rounded-lg bg-gray-800 p-4 overflow-auto">
+        <div className="rounded-lg bg-gray-800 p-4 overflow-auto mt-auto">
           <StaticCode middleware="flip" placement="top" />
         </div>
       </div>
@@ -281,10 +281,7 @@ function Flip() {
         className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
         ref={setBoundary}
       >
-        <div
-          className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400"
-          style={{height: 450}}
-        >
+        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400">
           <div
             style={{
               height: 500,
