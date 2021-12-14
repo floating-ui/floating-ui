@@ -1,5 +1,16 @@
 const {createRemarkPlugin} = require('@atomiks/mdx-pretty-code');
 const fs = require('fs');
+const visit = require('unist-util-visit');
+const corePkg = require('../packages/core/package.json');
+const domPkg = require('../packages/dom/package.json');
+
+const replaceVariables = () => (tree) => {
+  visit(tree, 'code', (node) => {
+    node.value = node.value
+      .replace('__CORE_VERSION__', corePkg.version)
+      .replace('__DOM_VERSION__', domPkg.version);
+  });
+};
 
 const prettyCode = createRemarkPlugin({
   shikiOptions: {
@@ -60,7 +71,7 @@ module.exports = {
           loader: '@mdx-js/loader',
           /** @type {import('@mdx-js/loader').Options} */
           options: {
-            remarkPlugins: [prettyCode],
+            remarkPlugins: [replaceVariables, prettyCode],
           },
         },
       ],
