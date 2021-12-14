@@ -15,8 +15,7 @@ If you just want to start learning about the API, skip to the
 ## Setting up
 
 Create a new HTML document with two elements, a `<button>{:html}`
-and a tooltip `<div>{:html}` along with the `unpkg` CDN scripts
-to load Floating UI:
+and a tooltip `<div>{:html}`:
 
 ```html
 <!DOCTYPE html>
@@ -30,9 +29,7 @@ to load Floating UI:
     </button>
     <div id="tooltip" role="tooltip">My tooltip</div>
 
-    <script src="https://unpkg.com/@floating-ui/core"></script>
-    <script src="https://unpkg.com/@floating-ui/dom"></script>
-    <script>
+    <script type="module">
       // Your code will go here.
     </script>
   </body>
@@ -108,16 +105,14 @@ much size as it needs to and is overlaid on top of the UI.
 
 ## Positioning
 
-Inside your `<script>{:html}` tag, add the following code:
+Inside your module `<script>{:html}` tag, add the following code:
 
 ```js
-// First, select the elements on the document
+import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
 
-const {computePosition} = FloatingUIDOM;
-
-// Then position the tooltip
 computePosition(button, tooltip).then(({x, y}) => {
   Object.assign(tooltip.style, {
     left: `${x}px`,
@@ -126,9 +121,8 @@ computePosition(button, tooltip).then(({x, y}) => {
 });
 ```
 
-Above, we call `computePosition(){:js}` (after destructuring it
-from `window.FloatingUIDOM{:js}`) with the button and tooltip
-elements as arguments.
+Above, we call `computePosition(){:js}` with the button and
+tooltip elements as arguments.
 
 It returns a `Promise{:.class}`, so we use the `.then(){:js}`
 method which passes in the calculated `x{:.param}` and
@@ -147,10 +141,10 @@ Floating UI has the `placement{:.objectKey}` option, passed into
 the options object as a third argument:
 
 ```js {7}
+import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
-
-const {computePosition} = FloatingUIDOM;
 
 computePosition(button, tooltip, {
   placement: 'right',
@@ -208,8 +202,14 @@ provide data to the consumer.
 the `'bottom'{:js}` placement automatically without us needing to
 explicitly specify it.
 
-```js /flip/ {1,5}
-const {computePosition, flip} = FloatingUIDOM;
+```js /flip/ {3,11}
+import {
+  computePosition,
+  flip,
+} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
   placement: 'top',
@@ -253,8 +253,15 @@ button, it ends up overflowing the edge.
 To solve this problem, we have the `shift{:.function}`
 middleware:
 
-```js /shift/ {1,5}
-const {computePosition, flip, shift} = FloatingUIDOM;
+```js /shift/ {4,12}
+import {
+  computePosition,
+  flip,
+  shift,
+} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
   placement: 'top',
@@ -277,8 +284,15 @@ As you can see, the tooltip lies fully flush with the edge of the
 document boundary. To add some whitespace, or padding, the
 `shift{:.function}` middleware accepts an options object:
 
-```js /padding/ {5}
-const {computePosition, flip, shift} = FloatingUIDOM;
+```js /padding/ {12}
+import {
+  computePosition,
+  flip,
+  shift,
+} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
   placement: 'top',
@@ -302,8 +316,16 @@ We probably also don't want the tooltip to lie flush with the
 button element. For this, we have the `offset{:.function}`
 middleware:
 
-```js /offset/ {1,5}
-const {computePosition, flip, shift, offset} = FloatingUIDOM;
+```js /offset/ {5,13}
+import {
+  computePosition,
+  flip,
+  shift,
+  offset,
+} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
 
 computePosition(button, tooltip, {
   placement: 'top',
@@ -357,11 +379,18 @@ Then style it:
 Then pass the arrow element into the `arrow{:.function}`
 middleware:
 
-```js /arrow/2 {1,3,12}
-const arrowElement = document.querySelector('#arrow');
+```js {6,11,19}
+import {
+  computePosition,
+  flip,
+  shift,
+  offset,
+  arrow,
+} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
 
-const {computePosition, flip, shift, offset, arrow} =
-  FloatingUIDOM;
+const button = document.querySelector('#button');
+const tooltip = document.querySelector('#tooltip');
+const arrowElement = document.querySelector('#arrow');
 
 computePosition(button, tooltip, {
   placement: 'top',
@@ -473,7 +502,14 @@ Now that the tooltip has everything positioned, we can add
 ```css {2}
 #tooltip {
   display: none;
-  /* ... rest of the CSS ... */
+  position: absolute;
+  background: #222;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 90%;
+  pointer-events: none;
 }
 ```
 

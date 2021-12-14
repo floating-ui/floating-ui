@@ -34,19 +34,24 @@ yarn add @floating-ui/dom
 
 ## CDN
 
-Floating UI can be used via the `unpkg` CDN by adding
-`<script>{:html}` tags to your document before your own scripts:
+Floating UI can be loaded via CDN using ESM or UMD format.
+
+### ESM
 
 ```html
-<script src="https://unpkg.com/@floating-ui/core@0"></script>
-<script src="https://unpkg.com/@floating-ui/dom@0"></script>
+<script type="module">
+  import * as FloatingUIDOM from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+</script>
 ```
 
-> Important: you should open each link to retrieve the latest
-> version to lock it to that version.
+### UMD
 
-All exports will then be available on
-`window.FloatingUIDOM{:js}`.
+```html
+<script src="https://unpkg.com/@floating-ui/core@__CORE_VERSION__"></script>
+<script src="https://unpkg.com/@floating-ui/dom@__DOM_VERSION__"></script>
+```
+
+All exports will be available on `window.FloatingUIDOM{:js}`.
 
 ## Tutorial
 
