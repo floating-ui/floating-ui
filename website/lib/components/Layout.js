@@ -216,7 +216,7 @@ export default function Layout({children}) {
           style={{maxWidth: '75ch'}}
         >
           <SkipNavContent />
-          <article className="prose prose-lg">
+          <article className="prose md:prose-md lg:prose-lg">
             {children}
           </article>
           <Navigation

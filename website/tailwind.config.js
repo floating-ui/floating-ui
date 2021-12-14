@@ -11,41 +11,25 @@ module.exports = {
       typography: {
         lg: {
           css: {
-            pre: {
-              '@media (max-width: 500px)': {
-                paddingLeft: '5%',
-                paddingRight: '5%',
-              },
-              padding: '1rem 1.5rem',
-              backgroundColor: '#272935',
-              lineHeight: '2.1',
-              marginBottom: '0',
-              '> code': {
-                display: 'table',
-                width: '100%',
-              },
-              fontSize: 'inherit',
-            },
             h1: {
-              display: 'inline-block',
-              margin: '0',
-              lineHeight: '1.1',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              '@media (max-width: 500px)': {
-                fontSize: '2.25rem',
-              },
+              fontSize: '3.5rem',
             },
             h2: {
-              '&:hover > a': {
-                textDecoration: 'underline',
-              },
+              fontSize: '2rem',
+            },
+          },
+        },
+        md: {
+          css: {
+            fontSize: '1.125rem',
+            h1: {
+              fontSize: '3rem',
             },
           },
         },
         DEFAULT: {
           css: {
+            fontSize: '1rem',
             maxWidth: '70ch',
             color: '#BFC3D9',
             blockquote: {
@@ -56,18 +40,35 @@ module.exports = {
             },
             pre: {
               color: '#cddbf7',
+              padding: '1rem 1.5rem',
+              backgroundColor: '#272935',
+              lineHeight: '2.1',
+              fontSize: 'inherit',
+              '> code': {
+                display: 'table',
+                width: '100%',
+              },
             },
             h1: {
               backgroundClip: 'text',
               color: 'transparent',
               backgroundImage: `linear-gradient(to right, ${colors.yellow['300']}, ${colors.orange['300']})`,
+              display: 'inline',
+              lineHeight: '1.1',
+              wordBreak: 'break-word',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              fontSize: '2.25rem',
             },
             h2: {
+              fontSize: '1.5rem',
               color: '#fff',
               wordBreak: 'break-word',
-              fontSize: '2rem',
               '> a': {
                 color: 'inherit',
+              },
+              '&:hover > a': {
+                textDecoration: 'underline',
               },
             },
             h3: {
@@ -96,7 +97,7 @@ module.exports = {
               padding: '2px 4px',
             },
             a: {
-              color: '#87e1fc',
+              color: colors.blue[400],
               textDecoration: 'none',
               borderBottom: '1px solid transparent',
               '&:hover': {
