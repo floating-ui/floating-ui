@@ -15,8 +15,13 @@ export const computePosition: ComputePosition = async (
 
   if (__DEV__) {
     if (platform == null) {
-      throw new Error(
-        ['Floating UI Core: `platform` property was not passed.'].join(' ')
+      console.error(
+        [
+          'Floating UI: `platform` property was not passed to config. If you',
+          'want to use Floating UI on the web, install @floating-ui/dom',
+          'instead of the /core package. Otherwise, you can create your own',
+          '`platform`: https://floating-ui.com/docs/platform',
+        ].join(' ')
       );
     }
 
