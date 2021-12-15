@@ -1,6 +1,9 @@
 import type {ComputePosition, ComputePositionReturn} from './types';
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 
+// @ts-ignore: save bytes by returning an empty object in DEV mode
+const EMPTY_OBJECT: ComputePositionReturn = {};
+
 export const computePosition: ComputePosition = async (
   reference,
   floating,
@@ -23,19 +26,23 @@ export const computePosition: ComputePosition = async (
           '`platform`: https://floating-ui.com/docs/platform',
         ].join(' ')
       );
+      return EMPTY_OBJECT;
     }
+  }
 
+  if (__DEV__) {
     if (
       middleware.filter(({name}) => name === 'autoPlacement' || name === 'flip')
         .length > 1
     ) {
-      throw new Error(
+      console.error(
         [
           'Floating UI: duplicate `flip` and/or `autoPlacement`',
           'middleware detected. This will lead to an infinite loop. Ensure only',
           'one of either has been passed to the `middleware` array.',
         ].join(' ')
       );
+      return EMPTY_OBJECT;
     }
   }
 
@@ -51,13 +58,14 @@ export const computePosition: ComputePosition = async (
     if (__DEV__) {
       _debug_loop_count_++;
       if (_debug_loop_count_ > 100) {
-        throw new Error(
+        console.error(
           [
             'Floating UI: The middleware lifecycle appears to be',
             'running in an infinite loop. This is usually caused by a `reset`',
             'continually being returned without a break condition.',
           ].join(' ')
         );
+        return EMPTY_OBJECT;
       }
     }
 
