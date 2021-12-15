@@ -1,13 +1,15 @@
 import {useRef} from 'react';
+import {View} from "react-native";
 import {useFloating, shift, arrow} from '.';
 
 App;
 function App() {
-  const arrowRef = useRef();
+  const arrowRef = useRef(null);
   useFloating();
   const {reference, floating, update} = useFloating({
     placement: 'right',
     middleware: [shift(), arrow({element: arrowRef})],
+    // @ts-expect-error
     strategy: 'fixed',
   });
   reference(null);
@@ -28,4 +30,5 @@ function App() {
   reference(null);
   floating(null);
   update();
+  return <View ref={arrowRef} />
 }

@@ -103,7 +103,7 @@ export const arrow = ({
   element,
   padding,
 }: {
-  element: MutableRefObject<HTMLElement | undefined> | HTMLElement;
+  element: MutableRefObject<HTMLElement | null> | HTMLElement;
   padding?: number | SideObject;
 }): Middleware => {
   function isRef(value: unknown): value is MutableRefObject<unknown> {
