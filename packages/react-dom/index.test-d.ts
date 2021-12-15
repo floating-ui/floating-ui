@@ -3,7 +3,7 @@ import {useFloating, shift, arrow} from '.';
 
 App;
 function App() {
-  const arrowRef = useRef();
+  const arrowRef = useRef(null);
   useFloating();
   const {reference, floating, update} = useFloating({
     placement: 'right',
