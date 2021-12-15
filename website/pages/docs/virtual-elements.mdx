@@ -18,9 +18,11 @@ element's one:
 const virtualEl = {
   getBoundingClientRect() {
     return {
+      x: 0,
+      y: 0,
       top: 0,
-      bottom: 20,
       left: 0,
+      bottom: 20,
       right: 20,
       width: 20,
       height: 20,
@@ -40,8 +42,10 @@ function onClick({clientX, clientY}) {
       return {
         width: 0,
         height: 0,
-        left: clientX,
+        x: clientX,
+        y: clientY,
         top: clientY,
+        left: clientX,
         right: clientX,
         bottom: clientY,
       };

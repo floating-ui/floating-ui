@@ -18,7 +18,7 @@ export default function Cards({items}) {
               className="w-64 rounded-md shadow-lg hover:shadow-xl transition-shadow"
               src={item.image}
             />
-            <div class="px-6 py-4">
+            <div className="px-6 py-4">
               <h1 className="text-center text-2xl">
                 {item.title}
               </h1>

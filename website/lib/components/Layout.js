@@ -147,7 +147,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto md:block bg-opacity-90 backdrop-blur-lg z-50',
+            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto md:block bg-opacity-90 backdrop-blur-lg z-50 border-r border-[rgba(0,0,0,0.25)]',
             {
               hidden: !navOpen,
             }
@@ -171,15 +171,39 @@ export default function Layout({children}) {
               {nav.map(({url, title}) => (
                 <li key={url}>
                   <Link href={url}>
-                    <a
-                      href={url}
-                      className={cn('inline-block w-full py-1', {
-                        'text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 font-bold':
-                          pathname === url,
-                        'hover:text-gray-50': pathname !== url,
-                      })}
-                    >
-                      {title}
+                    <a href={url} className="block my-1">
+                      <span
+                        className={cn(
+                          'flex items-center gap-4 w-full py-1',
+                          {
+                            'hover:text-gray-50':
+                              pathname !== url,
+                          }
+                        )}
+                      >
+                        {pathname === url ? (
+                          <span
+                            className="w-6 h-6 [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-purple-400 to-blue-400"
+                            style={{
+                              '-webkit-mask-image': `url('/icons/${title}.png')`,
+                              maskImage: `url('/icons/${title}.png')`,
+                            }}
+                          ></span>
+                        ) : (
+                          <img
+                            className="w-6 h-6"
+                            src={`/icons/${title}.png`}
+                          />
+                        )}
+                        <span
+                          className={cn('block', {
+                            'text-transparent font-bold bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400':
+                              pathname === url,
+                          })}
+                        >
+                          {title}
+                        </span>
+                      </span>
                     </a>
                   </Link>
                   <ul>
@@ -224,6 +248,18 @@ export default function Layout({children}) {
             next={nav[index + 1]}
           />
         </div>
+        <footer className="text-center text-gray-500 py-8 border-t border-gray-800">
+          <p>© {new Date().getFullYear()} • MIT License</p>
+          <p className="text-sm mt-4">
+            Icons made by Freepik and authors from{' '}
+            <a
+              className="text-blue-500"
+              href="https://www.flaticon.com"
+            >
+              www.flaticon.com
+            </a>
+          </p>
+        </footer>
       </div>
     </MDXProvider>
   );

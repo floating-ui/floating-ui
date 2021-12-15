@@ -14,7 +14,7 @@ module.exports = {
             h1: {
               fontSize: '3.5rem',
             },
-            h2: {
+            'h2 > a': {
               fontSize: '2rem',
             },
           },
@@ -33,7 +33,17 @@ module.exports = {
             maxWidth: '70ch',
             color: '#BFC3D9',
             blockquote: {
-              color: '#BFC3D9',
+              color: colors.purple[300],
+              fontSize: '90%',
+              borderTopRightRadius: '0.25rem',
+              borderBottomRightRadius: '0.25rem',
+              borderLeftColor: colors.purple[400],
+              borderLeftWidth: '1px',
+              backgroundColor: `rgba(200,100,255,0.15)`,
+              padding: '0.25rem 0.5rem 0.25rem 1rem',
+              '> p': {
+                margin: 0,
+              },
             },
             strong: {
               color: '#fff',
@@ -41,7 +51,8 @@ module.exports = {
             pre: {
               color: '#cddbf7',
               padding: '1rem 1.5rem',
-              backgroundColor: '#272935',
+              backgroundColor: '#1c1d24',
+              border: '1px solid rgba(0,0,0,0.25)',
               lineHeight: '2.1',
               fontSize: 'inherit',
               '> code': {
@@ -52,7 +63,7 @@ module.exports = {
             h1: {
               backgroundClip: 'text',
               color: 'transparent',
-              backgroundImage: `linear-gradient(to right, ${colors.yellow['300']}, ${colors.orange['300']})`,
+              backgroundImage: `linear-gradient(to right, ${colors.purple['400']}, ${colors.blue['400']})`,
               display: 'inline',
               lineHeight: '1.1',
               wordBreak: 'break-word',
@@ -61,7 +72,6 @@ module.exports = {
               fontSize: '2.25rem',
             },
             h2: {
-              fontSize: '1.5rem',
               color: '#fff',
               wordBreak: 'break-word',
               '> a': {
@@ -82,19 +92,15 @@ module.exports = {
               color: 'inherit',
             },
             code: {
-              color: '#93a4b5',
+              color: '#a6accd',
               borderRadius: '4px',
               fontWeight: '500',
-              background: '#272935',
               '&::before': {
                 display: 'none',
               },
               '&::after': {
                 display: 'none',
               },
-            },
-            ':not(pre) > code': {
-              padding: '2px 4px',
             },
             a: {
               color: colors.blue[400],

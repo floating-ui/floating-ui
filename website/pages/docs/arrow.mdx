@@ -14,7 +14,8 @@ you want the arrow's position to remain "static".
 
 ## Usage
 
-Add a new element **inside** your floating element:
+Add a new element inside your floating element, ensuring it has
+`position: absolute{:sass}` applied in its CSS:
 
 ```html
 <div id="tooltip">
@@ -23,13 +24,15 @@ Add a new element **inside** your floating element:
 </div>
 ```
 
-And ensure it has `position: absolute{:sass}` applied in its CSS.
+Then, pass the arrow element and assign the dynamic styles:
 
 ```js
 import {computePosition, arrow} from '@floating-ui/dom';
 
 computePosition(referenceEl, floatingEl, {
-  middleware: [arrow({element: arrowElement})],
+  middleware: [
+    arrow({element: document.querySelector('#arrow')}),
+  ],
 }).then(({middlewareData}) => {
   const {x, y} = middlewareData.arrow;
 
@@ -39,6 +42,12 @@ computePosition(referenceEl, floatingEl, {
   });
 });
 ```
+
+This middleware is designed only to position the arrow on one
+axis (`x` for `'top'{:js}` or `'bottom'{:js}` placements). The
+other axis is considered "static", which means it does not need
+to be positioned dynamically.
+[You can see a full styling example in the Tutorial](/docs/tutorial#arrow-middleware).
 
 ## Options
 

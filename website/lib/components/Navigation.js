@@ -3,7 +3,7 @@ import {ArrowLeft, ArrowRight} from 'react-feather';
 
 export default function Navigation({back, next}) {
   return (
-    <div className="flex text-xl sm:text-2xl mt-8 text-blue-400">
+    <div className="flex text-xl sm:text-2xl mt-16 text-blue-400">
       {back ? (
         <Link href={back.url}>
           <a
@@ -24,7 +24,7 @@ export default function Navigation({back, next}) {
           </a>
         </Link>
       ) : (
-        <div />
+        <div className="flex-1" />
       )}
       {next && (
         <Link href={next.url}>

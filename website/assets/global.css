@@ -12,3 +12,13 @@
 .shiki {
   position: relative;
 }
+
+::selection {
+  background-color: #60a5fa;
+  color: black;
+}
+
+code ::selection {
+  background-color: rgba(200, 200, 255, 0.25);
+  color: inherit;
+}

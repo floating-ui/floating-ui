@@ -16,7 +16,7 @@ const prettyCode = createRemarkPlugin({
   shikiOptions: {
     theme: JSON.parse(
       fs.readFileSync(
-        require.resolve('./assets/moonlight-ii.json'),
+        require.resolve('./assets/floating-ui-theme.json'),
         'utf-8'
       )
     ),
@@ -37,11 +37,11 @@ const prettyCode = createRemarkPlugin({
     });
   },
   onVisitHighlightedLine(node) {
-    node.className = 'line bg-gray-700';
+    node.className = 'line bg-gray-800';
   },
   onVisitHighlightedWord(node) {
     Object.assign(node.style, {
-      backgroundColor: 'rgba(0,0,0,0.25)',
+      backgroundColor: 'rgba(200,200,255,0.15)',
       padding: '0.25rem',
       borderRadius: '0.25rem',
     });
