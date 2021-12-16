@@ -232,7 +232,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto md:block bg-opacity-90 backdrop-blur-lg z-50 border-r border-[rgba(0,0,0,0.25)]',
+            'fixed bg-gray-1000 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-opacity-90 backdrop-blur-lg z-50 border-r border-[rgba(0,0,0,0.25)]',
             {
               hidden: !navOpen,
             }

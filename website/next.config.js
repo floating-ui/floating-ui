@@ -30,7 +30,6 @@ const prettyCode = createRemarkPlugin({
   },
   onVisitLine(node) {
     Object.assign(node.style, {
-      display: 'block',
       minHeight: '1rem',
       margin: '0 -1.5rem',
       padding: '0 1.5rem',

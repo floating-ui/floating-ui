@@ -26,7 +26,7 @@ export default function Navigation({back, next}) {
       ) : (
         <div className="flex-1" />
       )}
-      {next && (
+      {next ? (
         <Link href={next.url}>
           <a
             href={next.url}
@@ -45,6 +45,8 @@ export default function Navigation({back, next}) {
             </div>
           </a>
         </Link>
+      ) : (
+        <div className="flex-1" />
       )}
     </div>
   );

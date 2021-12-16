@@ -56,8 +56,7 @@ module.exports = {
               lineHeight: '2.1',
               fontSize: 'inherit',
               '> code': {
-                display: 'table',
-                width: '100%',
+                display: 'grid',
               },
             },
             h1: {
