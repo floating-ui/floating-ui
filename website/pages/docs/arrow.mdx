@@ -29,14 +29,18 @@ Then, pass the arrow element and assign the dynamic styles:
 ```js
 import {computePosition, arrow} from '@floating-ui/dom';
 
+const arrowEl = document.querySelector('#arrow');
+
 computePosition(referenceEl, floatingEl, {
   middleware: [
-    arrow({element: document.querySelector('#arrow')}),
+    arrow({
+      element: arrowEl,
+    }),
   ],
 }).then(({middlewareData}) => {
   const {x, y} = middlewareData.arrow;
 
-  Object.assign(arrowElement.style, {
+  Object.assign(arrowEl.style, {
     left: x != null ? `${x}px` : '',
     top: y != null ? `${y}px` : '',
   });
