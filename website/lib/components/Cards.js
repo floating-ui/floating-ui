@@ -1,11 +1,8 @@
 export default function Cards({items}) {
-  const paddingLeft = Math.floor((3 - items.length) / 2);
   return (
-    <section className="grid grid-cols-1 md:grid-cols-3 my-10">
-      {Array.from({length: paddingLeft}, (_, index) => (
-        <div key={index}>&nbsp;</div>
-      ))}
-
+    <section
+      className={`grid grid-cols-1 md:grid-cols-2 my-10 mx-64`}
+    >
       {items.map((item) => (
         <a
           rel="noopener noreferrer"
