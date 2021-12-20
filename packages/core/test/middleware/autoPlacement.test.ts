@@ -38,7 +38,7 @@ test('start alignment with auto alignment', () => {
       'right-end',
       'left-start',
     ])
-  ).toEqual(['top-start', 'right-end', 'left-start']);
+  ).toEqual(['top-start', 'left-start', 'right-end']);
 });
 
 test('end alignment without auto alignment', () => {
@@ -66,5 +66,5 @@ test('end alignment with auto alignment', () => {
       'right-end',
       'left-start',
     ])
-  ).toEqual(['top-start', 'right-end', 'left-start']);
+  ).toEqual(['right-end', 'top-start', 'left-start']);
 });
