@@ -98,7 +98,7 @@ export const limitShift =
     } = options;
 
     const coords = {x, y};
-    const mainAxis = getMainAxisFromPlacement(getBasePlacement(placement));
+    const mainAxis = getMainAxisFromPlacement(placement);
     const crossAxis = getCrossAxis(mainAxis);
 
     let mainAxisCoord = coords[mainAxis];
@@ -131,16 +131,19 @@ export const limitShift =
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
+      const isOriginSide = ['top', 'left'].includes(
+        getBasePlacement(placement)
+      );
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] -
         (middlewareData.offset?.[mainAxis] ?? 0) +
-        computedOffset.crossAxis;
+        (isOriginSide ? 0 : computedOffset.crossAxis);
       const limitMax =
         rects.reference[crossAxis] +
         rects.reference[len] +
         (middlewareData.offset?.[mainAxis] ?? 0) +
-        computedOffset.crossAxis;
+        (isOriginSide ? computedOffset.crossAxis : 0);
 
       if (crossAxisCoord < limitMin) {
         crossAxisCoord = limitMin;
