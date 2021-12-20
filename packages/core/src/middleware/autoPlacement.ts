@@ -19,14 +19,18 @@ export function getPlacementList(
   autoAlignment: boolean,
   allowedPlacements: Array<Placement>
 ) {
-  const allowedPlacementsSortedByAlignment = [
-    ...allowedPlacements.filter(
-      (placement) => getAlignment(placement) === alignment
-    ),
-    ...allowedPlacements.filter(
-      (placement) => getAlignment(placement) !== alignment
-    ),
-  ];
+  const allowedPlacementsSortedByAlignment = alignment
+    ? [
+        ...allowedPlacements.filter(
+          (placement) => getAlignment(placement) === alignment
+        ),
+        ...allowedPlacements.filter(
+          (placement) => getAlignment(placement) !== alignment
+        ),
+      ]
+    : allowedPlacements.filter(
+        (placement) => getBasePlacement(placement) === placement
+      );
 
   return allowedPlacementsSortedByAlignment.filter((placement) => {
     if (alignment) {
@@ -38,7 +42,7 @@ export function getPlacementList(
       );
     }
 
-    return getBasePlacement(placement) === placement;
+    return true;
   });
 }
 
