@@ -19,7 +19,16 @@ export function getPlacementList(
   autoAlignment: boolean,
   allowedPlacements: Array<Placement>
 ) {
-  return allowedPlacements.filter((placement) => {
+  const allowedPlacementsSortedByAlignment = [
+    ...allowedPlacements.filter(
+      (placement) => getAlignment(placement) === alignment
+    ),
+    ...allowedPlacements.filter(
+      (placement) => getAlignment(placement) !== alignment
+    ),
+  ];
+
+  return allowedPlacementsSortedByAlignment.filter((placement) => {
     if (alignment) {
       return (
         getAlignment(placement) === alignment ||
@@ -116,8 +125,12 @@ export const autoPlacement = (
       .sort(
         crossAxis || (autoAlignment && getAlignment(placement))
           ? (a, b) =>
-              a.overflows.reduce((acc, overflow) => acc + overflow, 0) -
-              b.overflows.reduce((acc, overflow) => acc + overflow, 0)
+              a.overflows
+                .filter((overflow) => overflow > 0)
+                .reduce((acc, overflow) => acc + overflow, 0) -
+              b.overflows
+                .filter((overflow) => overflow > 0)
+                .reduce((acc, overflow) => acc + overflow, 0)
           : (a, b) => a.overflows[0] - b.overflows[0]
       );
     const placementThatFitsOnAllSides = placementsSortedByLeastOverflow.find(
