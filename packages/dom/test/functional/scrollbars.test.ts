@@ -1,16 +1,29 @@
 import {test, expect} from '@playwright/test';
 
-test('not overflowing clipping container on the bottom', async ({page}) => {
-  await page.goto('http://localhost:1234/spec/scroll-border');
-  expect(await page.screenshot()).toMatchSnapshot('scroll-border.png');
-});
+['bottom', 'right', 'left'].forEach((placement) => {
+  test(`correctly avoids scrollbar at ${placement}`, async ({page}) => {
+    await page.goto('http://localhost:1234/scrollbars');
+    await page.evaluate(
+      (placement) =>
+        (
+          document.querySelector(
+            `[data-testid="placement-${placement}"]`
+          ) as HTMLButtonElement
+        )?.click(),
+      placement
+    );
 
-test('not overflowing clipping container on the right', async ({page}) => {
-  await page.goto('http://localhost:1234/spec/scroll-border-right');
-  expect(await page.screenshot()).toMatchSnapshot('scroll-border-right.png');
-});
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${placement}.png`
+    );
 
-test('not overflowing clipping container on the left (RTL)', async ({page}) => {
-  await page.goto('http://localhost:1234/spec/scroll-border-rtl');
-  expect(await page.screenshot()).toMatchSnapshot('scroll-border-rtl.png');
+    await page.evaluate(() =>
+      (
+        document.querySelector('[data-testid="rtl-true"]') as HTMLButtonElement
+      )?.click()
+    );
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${placement}--rtl.png`
+    );
+  });
 });

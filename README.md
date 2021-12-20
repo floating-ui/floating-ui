@@ -73,15 +73,32 @@ in development.
 
 ## Contributing
 
-This project is a monorepo written in TypeScript using npm workspaces. The website
-is using Next.js SSG and Tailwind CSS for styling.
+This project is a monorepo written in TypeScript using npm workspaces. The
+website is using Next.js SSG and Tailwind CSS for styling.
 
-- Clone the repo
+- Fork and clone the repo
 - Install dependencies in root directory with `npm install`
-- `npm run dev` in the root will launch the `@floating-ui/dom` development
-  visual tests at `http://localhost:1234/spec`. You can fiddle around with each
-  test file in `packages/dom/test/visual/spec/`. Reload the page to see your
-  changes.
+- Build initial package dist files with `npm run build`
+
+### Testing grounds
+
+`npm run dev` in the root will launch the `@floating-ui/dom` development visual
+tests at `http://localhost:1234`. The playground uses React to write each test
+route, bundled by Parcel. When making changes to `packages/core` or
+`packages/dom`, Parcel will hot reload the app and display the changes.
+
+Each route has screenshots taken of the page by Playwright to ensure all the
+functionalities work as expected; this is an easy, reliable and high-level way
+of testing the code.
+
+Below the main container are UI controls to turn on certain state and options.
+Every single combination of state is tested visually via the snapshots to cover
+as much as possible.
+
+### Website
+
+`npm -w website run dev` in the root will launch the website at
+`localhost:3000`.
 
 ## License
 

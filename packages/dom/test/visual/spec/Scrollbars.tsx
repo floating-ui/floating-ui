@@ -1,0 +1,89 @@
+import type {Placement} from '@floating-ui/core';
+import {useFloating, shift} from '@floating-ui/react-dom';
+import {allPlacements} from '../utils/allPlacements';
+import {useLayoutEffect, useState} from 'react';
+import {Controls} from '../utils/Controls';
+import {useSize} from '../utils/useSize';
+
+export function Scrollbars() {
+  const [rtl, setRtl] = useState(false);
+  const [placement, setPlacement] = useState<Placement>('bottom');
+  const {x, y, reference, floating, strategy, update} = useFloating({
+    placement,
+    middleware: [shift({crossAxis: true, altBoundary: true})],
+  });
+  const [size, handleSizeChange] = useSize(300);
+
+  useLayoutEffect(update, [size, update, rtl]);
+
+  return (
+    <>
+      <h1>Scrollbars</h1>
+      <p>The floating element should avoid scrollbars.</p>
+      <div
+        className="container"
+        style={{overflow: 'scroll', direction: rtl ? 'rtl' : 'ltr'}}
+      >
+        <div ref={reference} className="reference">
+          Reference
+        </div>
+        <div
+          ref={floating}
+          className="floating"
+          style={{
+            position: strategy,
+            top: y ?? '',
+            left: x ?? '',
+            width: size,
+            height: size,
+          }}
+        >
+          Floating
+        </div>
+      </div>
+
+      <Controls>
+        <label htmlFor="size">Size</label>
+        <input
+          id="size"
+          type="range"
+          min="1"
+          max="400"
+          value={size}
+          onChange={handleSizeChange}
+        />
+      </Controls>
+
+      <Controls>
+        {allPlacements.map((localPlacement) => (
+          <button
+            key={localPlacement}
+            data-testid={`placement-${localPlacement}`}
+            onClick={() => setPlacement(localPlacement)}
+            style={{
+              backgroundColor: localPlacement === placement ? 'black' : '',
+            }}
+          >
+            {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>RTL</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`rtl-${bool}`}
+            onClick={() => setRtl(bool)}
+            style={{
+              backgroundColor: bool === rtl ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+    </>
+  );
+}

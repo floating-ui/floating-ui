@@ -1,0 +1,175 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  padding-bottom: 200px;
+}
+
+nav {
+  background: #edeff7;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  width: 15rem;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+nav h2 {
+  margin-left: 1rem;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav button {
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  padding-left: 2rem;
+  background: none;
+}
+
+.home-button {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: black;
+}
+
+.new-button {
+  background: royalblue;
+  width: max-content;
+  text-decoration: none;
+  color: white;
+  font-size: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.nav-top {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin-left: 1.5rem;
+  gap: 0.5rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+main {
+  margin-left: 15rem;
+  padding-left: 2rem;
+  max-width: 800px;
+}
+
+.reference {
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  background: #ed4f73;
+  color: white;
+}
+
+.floating {
+  display: grid;
+  place-items: center;
+  background: turquoise;
+  width: 80px;
+  height: 80px;
+}
+
+.arrow {
+  width: 15px;
+  height: 15px;
+  background: yellow;
+}
+
+.container {
+  border: 1px solid black;
+  display: grid;
+  place-items: center;
+  width: 700px;
+  height: 500px;
+  margin-bottom: 1rem;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 700px;
+  background: #edeff7;
+  padding: 16px;
+}
+
+.controls button {
+  all: unset;
+  text-align: center;
+  background: royalblue;
+  padding: 8px;
+  color: white;
+  font-size: 1.125rem;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.controls button:hover {
+  background: navy;
+}
+
+.controls button:focus-visible {
+  outline: 2px solid black;
+}
+
+.scroll {
+  display: grid;
+  place-items: center;
+  overflow: scroll;
+  background: #edeff7;
+  border: 1px solid;
+  width: 450px;
+  height: 450px;
+}
+
+.scroll::before {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 750px;
+}
+
+.scroll::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 750px;
+}
+
+.scroll[data-x]::before,
+.scroll[data-x]::after {
+  width: 1500px;
+}
+
+.scroll-indicator {
+  background: #edeff726;
+  z-index: 10;
+  width: fit-content;
+  padding: 5px;
+  border-radius: 5px;
+}
