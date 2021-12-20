@@ -6,6 +6,13 @@ export const SPONSORS = [
     image: '/sponsors/usetiful.jpg',
     url: 'https://www.usetiful.com/',
   },
+  {
+    title: 'Modern Treasury',
+    description:
+      'The one place to keep a business’s money flowing',
+    image: '/sponsors/modern-treasury.jpg',
+    url: 'https://www.moderntreasury.com/',
+  },
 ];
 
 export const MINI_SPONSORS = [
@@ -13,12 +20,6 @@ export const MINI_SPONSORS = [
     logo: '/sponsors/mobilemall.svg',
     label: 'Mobile Mall - Mobile Phone Prices in Pakistan',
     url: 'https://mobilemall.pk/',
-  },
-  {
-    logo: '/sponsors/modern-treasury.svg',
-    label:
-      'Modern Treasury - The one place to keep a business’s money flowing',
-    url: 'https://www.moderntreasury.com/',
   },
   {
     logo: '/sponsors/coupontoaster.svg',
