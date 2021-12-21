@@ -10,7 +10,6 @@ import {
 } from '../detectOverflow';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getAlignment} from '../utils/getAlignment';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 
 export type Options = {
   apply(args: Dimensions & ElementRects): void;
