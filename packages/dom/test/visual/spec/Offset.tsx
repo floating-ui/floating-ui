@@ -1,11 +1,11 @@
 import type {Placement} from '@floating-ui/core';
-import type {Offset as OffsetType} from '@floating-ui/core/src/middleware/offset';
+import type {Options} from '@floating-ui/core/src/middleware/offset';
 import {useFloating, offset} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
 import {useLayoutEffect, useState} from 'react';
 import {Controls} from '../utils/Controls';
 
-const VALUES: Array<{offset: OffsetType; name: string}> = [
+const VALUES: Array<{offset: Options; name: string}> = [
   {offset: 0, name: '0'},
   {offset: 10, name: '10'},
   {offset: -10, name: '-10'},
@@ -20,7 +20,7 @@ const VALUES: Array<{offset: OffsetType; name: string}> = [
 
 export function Offset() {
   const [placement, setPlacement] = useState<Placement>('bottom');
-  const [offsetValue, setOffsetValue] = useState<OffsetType>(0);
+  const [offsetValue, setOffsetValue] = useState<Options>(0);
   const {x, y, reference, floating, strategy, update} = useFloating({
     placement,
     middleware: [offset(offsetValue)],
