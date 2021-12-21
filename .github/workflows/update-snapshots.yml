@@ -17,7 +17,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npx playwright install
       - run: npm run build
-      - run: npm -w packages/dom run test:functional:update
+      - run: npm run test:functional:update
       - uses: EndBug/add-and-commit@v7
         with:
           add: '.'

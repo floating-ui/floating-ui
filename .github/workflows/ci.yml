@@ -39,7 +39,7 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - run: npx playwright install
       - run: npm run build
-      - run: npm -w packages/dom run test:functional
+      - run: npm run test:functional
       - uses: actions/upload-artifact@v2
         if: always()
         with:
