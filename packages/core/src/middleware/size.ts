@@ -41,9 +41,28 @@ export const size = (
       heightSide = isEnd ? 'top' : 'bottom';
     }
 
+    const xMin = Math.max(overflow.left, 0);
+    const xMax = Math.max(overflow.right, 0);
+    const yMin = Math.max(overflow.top, 0);
+    const yMax = Math.max(overflow.bottom, 0);
+
     const dimensions = {
-      height: rects.floating.height - overflow[heightSide],
-      width: rects.floating.width - overflow[widthSide],
+      height:
+        rects.floating.height -
+        (['left', 'right'].includes(placement)
+          ? 2 *
+            (yMin !== 0 || yMax !== 0
+              ? yMin + yMax
+              : Math.max(overflow.top, overflow.bottom))
+          : overflow[heightSide]),
+      width:
+        rects.floating.width -
+        (['top', 'bottom'].includes(placement)
+          ? 2 *
+            (xMin !== 0 || xMax !== 0
+              ? xMin + xMax
+              : Math.max(overflow.left, overflow.right))
+          : overflow[widthSide]),
     };
 
     if (middlewareData.size?.skip) {
