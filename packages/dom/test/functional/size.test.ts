@@ -5,6 +5,15 @@ allPlacements.forEach((placement) => {
   test(`correctly sized for placement ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await page.click(`[data-testid="placement-${placement}"]`);
+
+    await page.evaluate(() => {
+      const scroll = document.querySelector('.scroll');
+      if (scroll) {
+        scroll.scrollLeft = 525;
+        scroll.scrollTop = 605;
+      }
+    });
+
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${placement}.png`
     );
