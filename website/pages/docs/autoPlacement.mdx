@@ -24,9 +24,8 @@ computePosition(referenceEl, floatingEl, {
 ```ts
 type Options = DetectOverflowOptions & {
   alignment: Alignment | null;
-  crossAxis: boolean;
-  allowedPlacements: Array<Placement>;
   autoAlignment: boolean;
+  allowedPlacements: Array<Placement>;
 };
 ```
 
@@ -46,28 +45,6 @@ autoPlacement({
 });
 ```
 
-### crossAxis
-
-Describes whether to check the `crossAxis{:.objectKey}` when
-choosing the ideal placement.
-
-```js
-autoPlacement({
-  crossAxis: true, // false by default
-});
-```
-
-### allowedPlacements
-
-Describes the placements which are allowed to be chosen.
-
-```js
-autoPlacement({
-  // 'right' and 'left' won't be chosen
-  allowedPlacements: ['top', 'bottom'],
-});
-```
-
 ### autoAlignment
 
 When `alignment{:.objectKey}` is specified, this describes
@@ -79,5 +56,16 @@ autoPlacement({
   alignment: 'start',
   // Won't also choose 'end' alignments if those fit better
   autoAlignment: false, // true by default
+});
+```
+
+### allowedPlacements
+
+Describes the placements which are allowed to be chosen.
+
+```js
+autoPlacement({
+  // 'right' and 'left' won't be chosen
+  allowedPlacements: ['top', 'bottom'],
 });
 ```
