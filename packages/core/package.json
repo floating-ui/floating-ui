@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/core",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "main": "dist/floating-ui.core.cjs",
   "module": "dist/floating-ui.core.esm.js",

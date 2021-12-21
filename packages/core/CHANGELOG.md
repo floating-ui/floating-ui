@@ -1,5 +1,18 @@
 # @floating-ui/core
 
+## 0.2.2
+
+### Patch Changes
+
+- fix(limitShift): crossAxis offset (#1457)
+- fix(size): center alignment along crossAxis (#1459)
+- fix(autoPlacement): better algo (#1458)
+  - 🚨 Removed `crossAxis` option as a result
+- refactor(offset): use Options instead of Offset type
+- perf(core): add pure annotation for allPlacements const (#1437)
+- fix: more helpful platform error (#1449)
+- perf: import math fns from utils
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @floating-ui/dom
 
+## 0.1.8
+
+### Patch Changes
+
+- perf: import math fns from utils
+- refactor(dom): use === instead of isSameNode (#1443)
+- Updated dependencies
+  - @floating-ui/core@0.2.2
+
 ## 0.1.7
 
 ### Patch Changes

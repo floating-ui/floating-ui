@@ -1,5 +1,13 @@
 # @floating-ui/react-dom
 
+## 0.3.4
+
+### Patch Changes
+
+- fix(react-dom): arrow element TS definition (#1452)
+- Updated dependencies
+  - @floating-ui/dom@0.1.8
+
 ## 0.3.3
 
 ### Patch Changes

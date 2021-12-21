@@ -1,5 +1,12 @@
 # @floating-ui/react-native
 
+## 0.3.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @floating-ui/core@0.2.2
+
 ## 0.3.3
 
 ### Patch Changes
