@@ -12,7 +12,7 @@ allPlacements.forEach((placement) => {
 });
 
 ['bottom', 'top'].forEach((verticalPlacement) => {
-  test('does not overflow due to size vertical placement', async ({page}) => {
+  test(`does not overflow due to size ${verticalPlacement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
     await page.click(`[data-testid="placement-${verticalPlacement}"]`);
 
@@ -63,7 +63,9 @@ allPlacements.forEach((placement) => {
 });
 
 ['right', 'left'].forEach((horizontalPlacement) => {
-  test('does not overflow due to size horizontal placement', async ({page}) => {
+  test(`does not overflow due to size ${horizontalPlacement}`, async ({
+    page,
+  }) => {
     await page.goto('http://localhost:1234/size');
     await page.click(`[data-testid="placement-${horizontalPlacement}"]`);
 
