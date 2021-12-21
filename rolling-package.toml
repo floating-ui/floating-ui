@@ -1,0 +1,8 @@
+name = "monorepo"
+tag_format = "v{{MAJOR}}.{{MINOR}}.{{PATCH}}"
+
+base_version = [0, 0, 0]
+version_schema = ["MAJOR", "MINOR", "PATCH"]
+
+[scripts]
+  publish = "echo released"

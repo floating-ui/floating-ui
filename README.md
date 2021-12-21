@@ -4,6 +4,8 @@
   
 > **Popper is now Floating UI! For Popper v2, visit [its dedicated branch.](https://github.com/floating-ui/popper-core/tree/v2.x)**
 
+[![Rolling Versions](https://img.shields.io/badge/Rolling%20Versions-Enabled-brightgreen)](https://rollingversions.com/floating-ui/floating-ui)
+
 [Website](https://floating-ui.com)
 
 Floating UI is a low-level library for positioning "floating" elements like

@@ -1,7 +1,7 @@
 {
   "name": "@floating-ui/monorepo",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Floating UI monorepo",
   "workspaces": [
     "./packages/*",
@@ -37,8 +37,5 @@
     "prettier": "^2.5.0",
     "shiki": "^0.9.14",
     "typescript": "^4.5.2"
-  },
-  "dependencies": {
-    "@changesets/cli": "^2.18.1"
   }
 }

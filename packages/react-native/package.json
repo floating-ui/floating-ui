@@ -2,6 +2,9 @@
   "name": "@floating-ui/react-native",
   "version": "0.3.4",
   "description": "Floating UI for React Native",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/floating-ui.react-native.js",
   "module": "dist/floating-ui.react-native.esm.js",
   "sideEffects": false,
