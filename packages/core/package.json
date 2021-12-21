@@ -19,8 +19,8 @@
   "browserslist": "> 0.5%, not dead, not IE 11",
   "scripts": {
     "test": "jest test",
-    "build": "NODE_ENV=build rollup -c",
-    "dev": "NODE_ENV=build rollup -c -w"
+    "dev": "rollup -c -w",
+    "build": "NODE_ENV=build rollup -c"
   },
   "author": "atomiks",
   "license": "MIT",
