@@ -7,8 +7,11 @@
   "unpkg": "dist/floating-ui.dom.min.js",
   "type": "module",
   "exports": {
-    "import": "./dist/floating-ui.dom.esm.js",
-    "require": "./dist/floating-ui.dom.cjs"
+    ".": {
+      "import": "./dist/floating-ui.dom.esm.js",
+      "require": "./dist/floating-ui.dom.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [
