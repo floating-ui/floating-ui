@@ -48,7 +48,6 @@ export function getPlacementList(
 
 export type Options = {
   alignment: Alignment | null;
-  crossAxis: boolean;
   allowedPlacements: Array<Placement>;
   autoAlignment: boolean;
 };
@@ -62,7 +61,6 @@ export const autoPlacement = (
 
     const {
       alignment = null,
-      crossAxis = false,
       allowedPlacements = allPlacements,
       autoAlignment = true,
       ...detectOverflowOptions
@@ -126,17 +124,7 @@ export const autoPlacement = (
 
     const placementsSortedByLeastOverflow = allOverflows
       .slice()
-      .sort(
-        crossAxis || (autoAlignment && getAlignment(placement))
-          ? (a, b) =>
-              a.overflows
-                .filter((overflow) => overflow > 0)
-                .reduce((acc, overflow) => acc + overflow, 0) -
-              b.overflows
-                .filter((overflow) => overflow > 0)
-                .reduce((acc, overflow) => acc + overflow, 0)
-          : (a, b) => a.overflows[0] - b.overflows[0]
-      );
+      .sort((a, b) => a.overflows[0] - b.overflows[0]);
     const placementThatFitsOnAllSides = placementsSortedByLeastOverflow.find(
       ({overflows}) => overflows.every((overflow) => overflow <= 0)
     )?.placement;
