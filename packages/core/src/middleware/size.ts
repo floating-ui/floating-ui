@@ -47,12 +47,10 @@ export const size = (
     const yMin = Math.max(overflow.top, 0);
     const yMax = Math.max(overflow.bottom, 0);
 
-    const isVerticalPlacement = getMainAxisFromPlacement(placement) === 'x';
-
     const dimensions = {
       height:
         rects.floating.height -
-        (!isVerticalPlacement
+        (['left', 'right'].includes(placement)
           ? 2 *
             (yMin !== 0 || yMax !== 0
               ? yMin + yMax
@@ -60,7 +58,7 @@ export const size = (
           : overflow[heightSide]),
       width:
         rects.floating.width -
-        (isVerticalPlacement
+        (['top', 'bottom'].includes(placement)
           ? 2 *
             (xMin !== 0 || xMax !== 0
               ? xMin + xMax
