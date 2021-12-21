@@ -15,6 +15,7 @@ import {getBoundingClientRect} from './getBoundingClientRect';
 import {getParentNode} from './getParentNode';
 import {contains} from './contains';
 import {getNodeName} from './getNodeName';
+import {max, min} from './math';
 
 function getInnerBoundingClientRect(element: Element): ClientRectObject {
   const clientRect = getBoundingClientRect(element);
@@ -97,10 +98,10 @@ export function getClippingClientRect({
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
     const rect = getClientRectFromClippingParent(element, clippingParent);
 
-    accRect.top = Math.max(rect.top, accRect.top);
-    accRect.right = Math.min(rect.right, accRect.right);
-    accRect.bottom = Math.min(rect.bottom, accRect.bottom);
-    accRect.left = Math.max(rect.left, accRect.left);
+    accRect.top = max(rect.top, accRect.top);
+    accRect.right = min(rect.right, accRect.right);
+    accRect.bottom = min(rect.bottom, accRect.bottom);
+    accRect.left = max(rect.left, accRect.left);
 
     return accRect;
   }, getClientRectFromClippingParent(element, firstClippingParent));

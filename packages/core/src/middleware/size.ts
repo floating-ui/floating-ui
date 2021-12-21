@@ -10,6 +10,7 @@ import {
 } from '../detectOverflow';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getAlignment} from '../utils/getAlignment';
+import {max} from '../utils/math';
 
 export type Options = {
   apply(args: Dimensions & ElementRects): void;
@@ -41,10 +42,10 @@ export const size = (
       heightSide = isEnd ? 'top' : 'bottom';
     }
 
-    const xMin = Math.max(overflow.left, 0);
-    const xMax = Math.max(overflow.right, 0);
-    const yMin = Math.max(overflow.top, 0);
-    const yMax = Math.max(overflow.bottom, 0);
+    const xMin = max(overflow.left, 0);
+    const xMax = max(overflow.right, 0);
+    const yMin = max(overflow.top, 0);
+    const yMax = max(overflow.bottom, 0);
 
     const dimensions = {
       height:
@@ -53,7 +54,7 @@ export const size = (
           ? 2 *
             (yMin !== 0 || yMax !== 0
               ? yMin + yMax
-              : Math.max(overflow.top, overflow.bottom))
+              : max(overflow.top, overflow.bottom))
           : overflow[heightSide]),
       width:
         rects.floating.width -
@@ -61,7 +62,7 @@ export const size = (
           ? 2 *
             (xMin !== 0 || xMax !== 0
               ? xMin + xMax
-              : Math.max(overflow.left, overflow.right))
+              : max(overflow.left, overflow.right))
           : overflow[widthSide]),
     };
 
