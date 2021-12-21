@@ -2,6 +2,13 @@
   "name": "@floating-ui/monorepo",
   "private": true,
   "version": "0.0.0",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      1
+    ]
+  },
   "description": "Floating UI monorepo",
   "workspaces": [
     "./packages/*",

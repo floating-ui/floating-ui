@@ -1,6 +1,13 @@
 {
   "name": "@floating-ui/dom",
   "version": "0.1.8",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      0
+    ]
+  },
   "description": "Floating UI for the web",
   "publishConfig": {
     "access": "public"
