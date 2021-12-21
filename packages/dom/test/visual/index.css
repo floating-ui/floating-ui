@@ -67,6 +67,21 @@ nav button {
   gap: 0.5rem;
 }
 
+.nav-link {
+  display: block;
+  text-decoration: none;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  font-size: 1.125rem;
+  padding: 0.25rem 0;
+  color: #646870;
+  text-transform: capitalize;
+}
+
+.nav-link:visited {
+  color: #646870;
+}
+
 h1 {
   font-size: 3rem;
 }

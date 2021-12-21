@@ -73,16 +73,16 @@ function App() {
         </div>
         <ul>
           {ROUTES.map(({path}) => (
-            <Link key={path} to={`/${path}`}>
-              <button
-                style={{
-                  color: pathname === `/${path}` ? 'black' : '',
-                  fontWeight: pathname === `/${path}` ? 'bold' : '',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {path.replace('-', ' ')}
-              </button>
+            <Link
+              key={path}
+              to={`/${path}`}
+              className="nav-link"
+              style={{
+                color: pathname === `/${path}` ? 'black' : '',
+                fontWeight: pathname === `/${path}` ? 'bold' : '',
+              }}
+            >
+              {path.replace('-', ' ')}
             </Link>
           ))}
         </ul>
