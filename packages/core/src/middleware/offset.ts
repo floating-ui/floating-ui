@@ -15,7 +15,7 @@ type OffsetFunction = (args: {
   placement: Placement;
 }) => OffsetValue;
 
-export type Offset = OffsetValue | OffsetFunction;
+export type Options = OffsetValue | OffsetFunction;
 
 export function convertValueToCoords({
   placement,
@@ -24,7 +24,7 @@ export function convertValueToCoords({
 }: {
   placement: Placement;
   rects: {floating: Rect; reference: Rect};
-  value: Offset;
+  value: Options;
 }): Coords {
   const basePlacement = getBasePlacement(placement);
   const multiplier = ['left', 'top'].includes(basePlacement) ? -1 : 1;
@@ -41,7 +41,7 @@ export function convertValueToCoords({
     : {x: mainAxis * multiplier, y: crossAxis};
 }
 
-export const offset = (value: Offset = 0): Middleware => ({
+export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
   fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, placement, rects} = middlewareArguments;
