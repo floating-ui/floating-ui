@@ -197,8 +197,8 @@ middleware **use** the coordinates that were returned from
 previous ones. This means they perform their work based on the
 current positioning state.
 
-Placing three `shiftByOnePixel{:.const}` to the middleware array
-means the coordinates get shifted by 3 pixels in total:
+Three `shiftByOnePixel{:.const}` in the middleware array means
+the coordinates get shifted by 3 pixels in total:
 
 ```js
 const shiftByOnePixel = {
@@ -212,12 +212,16 @@ const middleware = [
 ];
 ```
 
+If the later `shiftByOnePixel` implementations had a condition
+based on the current value of `x` and `y`, the condition can
+change based on their placement in the array.
+
 Understanding this can help in knowing which order to place
 middleware in, as placing a middleware before or after another
 can produce a different result.
 
 In general, `offset{:.function}` should always go at the
-beginning middleware, while `arrow{:.function}` and
+beginning of the middleware array, while `arrow{:.function}` and
 `hide{:.function}` at the end. The other core middleware can be
 shifted around depending on the desired behavior.
 
