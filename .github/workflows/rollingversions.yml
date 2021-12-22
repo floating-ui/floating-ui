@@ -20,6 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
+      - run: npm run build
+      - run: npm run build:typescript
       - run: npx rollingversions publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
