@@ -1,0 +1,23 @@
+name: Functional
+description: Performs functional tests checks
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '17'
+    - uses: bahmutov/npm-install@v1
+    - run: npx playwright install-deps
+      shell: sh
+    - run: npx playwright install
+      shell: sh
+    - run: npm run build
+      shell: sh
+    - run: npm run test:functional
+      shell: sh
+    - uses: actions/upload-artifact@v2
+      if: always()
+      with:
+        name: visual-snapshots-diff
+        path: test-results

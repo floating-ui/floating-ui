@@ -1,7 +1,17 @@
 {
   "name": "@floating-ui/react-dom",
   "version": "0.3.4",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      0
+    ]
+  },
   "description": "Floating UI for React DOM",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/floating-ui.react-dom.cjs",
   "module": "dist/floating-ui.react-dom.esm.js",
   "unpkg": "dist/floating-ui.react-dom.min.js",

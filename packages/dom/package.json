@@ -1,7 +1,17 @@
 {
   "name": "@floating-ui/dom",
   "version": "0.1.8",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      0
+    ]
+  },
   "description": "Floating UI for the web",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/floating-ui.dom.cjs",
   "module": "dist/floating-ui.dom.esm.js",
   "unpkg": "dist/floating-ui.dom.min.js",

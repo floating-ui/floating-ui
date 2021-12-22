@@ -1,7 +1,17 @@
 {
   "name": "@floating-ui/core",
   "version": "0.2.2",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      0
+    ]
+  },
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/floating-ui.core.cjs",
   "module": "dist/floating-ui.core.esm.js",
   "unpkg": "dist/floating-ui.core.min.js",
