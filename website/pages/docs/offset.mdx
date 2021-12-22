@@ -37,8 +37,10 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-This will offset the floating element 10px from its reference
-element.
+## Order
+
+`offset{:.function}` should generally be placed at the beginning
+of your middleware array.
 
 ## Options
 
@@ -76,3 +78,14 @@ offset(({floating, placement}) => ({
     placement === 'top' ? floating.height : floating.width,
 }));
 ```
+
+### Negative values
+
+Using the function technique above in combination with negative
+values enables the ability to "inset" the floating element such
+that it is positioned on top of the reference element in some
+fashion.
+
+This is useful for UI components such as select dropdowns where
+it should be positioned relative to an item inside the dropdown
+list.

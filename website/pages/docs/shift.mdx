@@ -4,7 +4,7 @@ export default Layout;
 # shift
 
 The `shift{:.function}` middleware shifts the floating element in
-order to keep it in view (prevents overflow).
+order to keep it in view.
 
 <div className="flex flex-col gap-4">
   <Chrome>
@@ -47,8 +47,10 @@ type Options = DetectOverflowOptions & {
 
 ### mainAxis
 
-This is the main axis in which shifting is applied, either `x` or
-`y` depending on the placement.
+This is the main axis in which shifting is applied.
+
+- `x`-axis for `'top'{:js}` and `'bottom'{:js}` placements
+- `y`-axis for `'left'{:js}` and `'right'{:js}` placements
 
 ```js
 shift({mainAxis: false}); // true by default
@@ -57,10 +59,11 @@ shift({mainAxis: false}); // true by default
 ### crossAxis
 
 This is the cross axis in which shifting is applied, the opposite
-axis of `mainAxis{:.objectKey}`. Enabling this can lead to the
-floating element **overlapping** the reference element, which is
-generally not desired and is replaced by the `flip{:.function}`
-middleware.
+axis of `mainAxis{:.objectKey}`.
+
+Enabling this can lead to the floating element **overlapping**
+the reference element, which may not desired and is often
+replaced by the `flip{:.function}` middleware.
 
 ```js
 shift({crossAxis: true}); // false by default

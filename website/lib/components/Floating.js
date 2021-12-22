@@ -36,7 +36,7 @@ export function Floating({
                     width,
                     height: minHeight
                       ? Math.max(height, minHeight)
-                      : height,
+                      : Math.max(height, 0),
                   });
                 },
               })
@@ -76,7 +76,7 @@ export function Floating({
         transform: `translate3d(${Math.round(x)}px,${Math.round(
           y
         )}px,0)`,
-        maxHeight: height ? `${height}px` : '',
+        maxHeight: height ?? '',
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
           : '',

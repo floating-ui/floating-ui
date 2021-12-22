@@ -4,9 +4,8 @@ export default Layout;
 # arrow
 
 The `arrow{:.function}` middleware provides data to position an
-inner element of the floating element, usually the triangle or
-caret which points toward the reference element, so that it is
-centered to it.
+inner element of the floating element (usually a triangle or
+caret) so that it is centered to the reference element.
 
 If you're using an aligned placement, like `'top-start'{:js}` or
 `'right-end'{:js}`, you may not need to use this middleware if
@@ -14,8 +13,8 @@ you want the arrow's position to remain "static".
 
 ## Usage
 
-Add a new element inside your floating element, ensuring it has
-`position: absolute{:sass}` applied in its CSS:
+Given an arrow element inside your floating element (with
+`position: absolute{:sass}` applied in its CSS):
 
 ```html
 <div id="tooltip">
@@ -24,7 +23,8 @@ Add a new element inside your floating element, ensuring it has
 </div>
 ```
 
-Then, pass the arrow element and assign the dynamic styles:
+Pass it to the `arrow{:.function}` middleware and assign the
+dynamic styles:
 
 ```js
 import {computePosition, arrow} from '@floating-ui/dom';
@@ -47,17 +47,24 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
+> Don't forget the `null` check! `x` and `y` can be `0` :-)
+
 This middleware is designed only to position the arrow on one
 axis (`x` for `'top'{:js}` or `'bottom'{:js}` placements). The
 other axis is considered "static", which means it does not need
 to be positioned dynamically.
-[You can see a full styling example in the Tutorial](/docs/tutorial#arrow-middleware).
+[You can see a full styling example in the tutorial](/docs/tutorial#arrow-middleware).
+
+## Order
+
+`arrow{:.function}` should generally be placed toward the end of
+your middleware array, after `shift{:.function}` (if used).
 
 ## Options
 
 ```ts
 type Options = {
-  element: any; // `HTMLElement` for the DOM
+  element: HTMLElement;
   padding: Padding;
 };
 ```

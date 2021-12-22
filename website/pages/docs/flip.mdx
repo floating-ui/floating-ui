@@ -4,8 +4,8 @@ export default Layout;
 # flip
 
 The `flip{:.function}` middleware changes the placement of the
-floating element to the opposite one by default in order to
-prevent overflow.
+floating element to the opposite one by default in order to keep
+it in view.
 
 <div className="flex flex-col gap-4">
   <Chrome center scrollable className="h-96">
@@ -46,8 +46,11 @@ type Options = DetectOverflowOptions & {
 
 ### mainAxis
 
-This is the main axis in which overflow is checked, either `x` or
-`y` depending on the placement.
+This is the main axis in which overflow is checked to perform a
+flip.
+
+- `y`-axis for `'top'{:js}` and `'bottom'{:js}` placements
+- `x`-axis for `'left'{:js}` and `'right'{:js}` placements
 
 ```js
 flip({mainAxis: false}); // true by default
@@ -55,8 +58,8 @@ flip({mainAxis: false}); // true by default
 
 ### crossAxis
 
-This is the cross axis in which overflow is checked, the opposite
-axis of `mainAxis{:.objectKey}`.
+This is the cross axis in which overflow is checked to perform a
+flip, the opposite axis of `mainAxis{:.objectKey}`.
 
 ```js
 flip({crossAxis: false}); // true by default
@@ -65,7 +68,8 @@ flip({crossAxis: false}); // true by default
 ### fallbackPlacements
 
 This describes the array of placements to try if the preferred
-`placement{:.objectKey}` doesn't fully fit.
+`placement{:.objectKey}` doesn't fully fit on the axes in which
+overflow is checked (both by default).
 
 ```js
 flip({
@@ -94,9 +98,9 @@ flip({
 
 ### flipAlignment
 
-When an alignment specified, e.g. `'top-start'{:js}` instead of
-just `'top'{:js}`, this will flip to `'top-end'{:js}` if `start`
-doesn't fit.
+When an alignment is specified, e.g. `'top-start'{:js}` instead
+of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
+`start` doesn't fit.
 
 ```js
 flip({flipAlignment: false}); // true by default

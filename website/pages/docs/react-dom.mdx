@@ -145,7 +145,7 @@ import {useRef} from 'react';
 import {useFloating, arrow} from '@floating-ui/react-dom';
 
 function App() {
-  const arrowRef = useRef();
+  const arrowRef = useRef(null);
   const {
     x,
     y,
@@ -166,6 +166,22 @@ function App() {
     </>
   );
 }
+```
+
+### Conditional rendering
+
+If you're conditionally rendering the arrow element (not just the
+floating element), you'll want to utilize the same technique as
+the reference and floating elements which is a callback function
+that calls `update(){:js}` after assigning the ref value.
+
+```js
+<div
+  ref={(node) => {
+    arrowRef.current = node;
+    update();
+  }}
+/>
 ```
 
 ## Virtual Element

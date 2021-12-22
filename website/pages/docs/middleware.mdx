@@ -192,23 +192,41 @@ current platform, e.g. DOM or React Native.
 
 ## Ordering
 
-The order in which middleware are placed in the array matters,
-because the middleware lifecycle works by looping over the array,
-meaning later middleware **start from** the coordinates that were
-returned from the previous middleware.
+The order in which middleware are placed in the array matters, as
+middleware **use** the coordinates that were returned from
+previous ones. This means they perform their work based on the
+current positioning state.
+
+Placing three `shiftByOnePixel{:.const}` to the middleware array
+means the coordinates get shifted by 3 pixels in total:
+
+```js
+const shiftByOnePixel = {
+  name: 'shiftByOnePixel',
+  fn: ({x, y}) => ({x: x + 1, y: y + 1}),
+};
+const middleware = [
+  shiftByOnePixel,
+  shiftByOnePixel,
+  shiftByOnePixel,
+];
+```
 
 Understanding this can help in knowing which order to place
 middleware in, as placing a middleware before or after another
 can produce a different result.
 
-In general, `offset{:.function}` should always go before other
-middleware, while `arrow{:.function}` after other middleware.
+In general, `offset{:.function}` should always go at the
+beginning middleware, while `arrow{:.function}` and
+`hide{:.function}` at the end. The other core middleware can be
+shifted around depending on the desired behavior.
 
 ```js
 const middleware = [
   offset(),
   // ...
   arrow({element: arrowElement}),
+  hide(),
 ];
 ```
 
@@ -221,7 +239,11 @@ so that other middleware which modify the coordinates based on
 the current `placement{:.objectKey}` do not perform stale logic.
 
 In order to do this, add a `reset{:.objectKey}` property to the
-returned object from `fn{:.function}`:
+returned object from `fn{:.function}`.
+
+```ts
+type Reset = true | {placement?: Placement};
+```
 
 ```js
 const middleware = {
@@ -242,10 +264,8 @@ const middleware = {
 
 > Ensure `someCondition{:js}` will evaluate to `false{:js}` at
 > some point, otherwise, this will cause an **infinite loop!**
-> Only specify the `reset{:.objectKey}` property if you intend to
-> change the `placement{:.objectKey}`. When running the library
-> in DEV mode, an error will be thrown to prevent an infinite
-> loop from locking up your application.
+> When running the library in DEV mode, an error will be thrown
+> to prevent an infinite loop from locking up your application.
 
 Data supplied to `middlewareData{:.param}` is **preserved** by
 doing this, so you can read it at any point after you've reset
