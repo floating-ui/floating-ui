@@ -1,9 +1,10 @@
 name: Setup
-description: Setup node and install dependencies 
+description: Setup node and install dependencies
 runs:
   using: composite
   steps:
     - uses: actions/setup-node@v2
       with:
         node-version: '17'
+        registry-url: 'https://registry.npmjs.org'
     - uses: bahmutov/npm-install@v1
