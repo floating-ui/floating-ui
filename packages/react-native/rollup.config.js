@@ -53,10 +53,10 @@ const bundles = [
 const buildExport = bundles.map(({input, output}) => ({
   input,
   output,
-  external: ['react', 'react-native', '@floating-ui/core'],
+  external: ['react', 'react-native'],
   plugins: [
     commonjs(),
-    nodeResolve({extensions: ['.ts']}),
+    nodeResolve({extensions: ['.ts', '.js']}),
     babel({
       babelHelpers: 'bundled',
       extensions: ['.ts'],
