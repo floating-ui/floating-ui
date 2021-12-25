@@ -17,7 +17,10 @@ import {
 export type Options = {
   mainAxis: boolean;
   crossAxis: boolean;
-  limiter: (middlewareArguments: MiddlewareArguments) => Coords;
+  limiter: {
+    fn: (middlewareArguments: MiddlewareArguments) => Coords;
+    options?: any;
+  };
 };
 
 export const shift = (
@@ -30,7 +33,7 @@ export const shift = (
     const {
       mainAxis: checkMainAxis = true,
       crossAxis: checkCrossAxis = false,
-      limiter = ({x, y}) => ({x, y}),
+      limiter = {fn: ({x, y}) => ({x, y})},
       ...detectOverflowOptions
     } = options;
 
@@ -63,7 +66,7 @@ export const shift = (
       crossAxisCoord = within(min, crossAxisCoord, max);
     }
 
-    return limiter({
+    return limiter.fn({
       ...middlewareArguments,
       [mainAxis]: mainAxisCoord,
       [crossAxis]: crossAxisCoord,
@@ -86,11 +89,14 @@ export type LimitShiftOptions = {
   crossAxis: boolean;
 };
 
-export const limitShift =
-  (
-    options: Partial<LimitShiftOptions> = {}
-  ): ((middlewareArguments: MiddlewareArguments) => Coords) =>
-  (middlewareArguments: MiddlewareArguments) => {
+export const limitShift = (
+  options: Partial<LimitShiftOptions> = {}
+): {
+  options: Partial<LimitShiftOffset>;
+  fn: (middlewareArguments: MiddlewareArguments) => Coords;
+} => ({
+  options,
+  fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, placement, rects, middlewareData} = middlewareArguments;
     const {
       offset = 0,
@@ -157,4 +163,5 @@ export const limitShift =
       [mainAxis]: mainAxisCoord,
       [crossAxis]: crossAxisCoord,
     } as Coords;
-  };
+  },
+});
