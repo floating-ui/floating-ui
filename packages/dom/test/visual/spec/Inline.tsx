@@ -1,6 +1,6 @@
 import {Coords, Placement} from '@floating-ui/core';
 import {useFloating, inline, flip} from '@floating-ui/react-dom';
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 
@@ -8,21 +8,19 @@ export function Inline() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [open, setOpen] = useState(false);
   const [connected, setConnected] = useState(false);
-  const [mouseCoords, setMouseCoords] = useState<undefined | Coords>();
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const mouseCoordsRef = useRef<undefined | Coords>();
+  const {x, y, reference, floating, strategy} = useFloating({
     placement,
-    middleware: [inline(mouseCoords), flip()],
+    middleware: [inline(mouseCoordsRef.current), flip()],
   });
 
-  useLayoutEffect(update, [update, mouseCoords]);
-
   const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    setMouseCoords({x: event.clientX, y: event.clientY});
+    mouseCoordsRef.current = {x: event.clientX, y: event.clientY};
     setOpen(true);
   };
 
   const handleMouseLeave = () => {
-    setMouseCoords(undefined);
+    mouseCoordsRef.current = undefined;
     setOpen(false);
   };
 
@@ -99,7 +97,7 @@ export function Inline() {
             key={String(bool)}
             data-testid={`open-${bool}`}
             onClick={() => {
-              setMouseCoords(undefined);
+              mouseCoordsRef.current = undefined;
               setOpen(bool);
             }}
             style={{

@@ -11,6 +11,7 @@ export type Options = Coords & {
 
 export const inline = (options: Partial<Options> = {}): Middleware => ({
   name: 'inline',
+  options,
   async fn(middlewareArguments) {
     const {placement, elements, rects, platform, strategy, middlewareData} =
       middlewareArguments;
