@@ -24,6 +24,7 @@ export const shift = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
   name: 'shift',
+  options,
   async fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, placement} = middlewareArguments;
     const {

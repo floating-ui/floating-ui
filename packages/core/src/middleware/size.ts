@@ -20,6 +20,7 @@ export const size = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
   name: 'size',
+  options,
   async fn(middlewareArguments: MiddlewareArguments) {
     const {placement, rects, middlewareData} = middlewareArguments;
     const {apply, ...detectOverflowOptions} = options;

@@ -12,6 +12,7 @@ export type Options = {
 
 export const arrow = (options: Options): Middleware => ({
   name: 'arrow',
+  options,
   async fn(middlewareArguments: MiddlewareArguments) {
     // Since `element` is required, we don't Partial<> the type
     const {element, padding = 0} = options ?? {};

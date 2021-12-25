@@ -43,6 +43,7 @@ export function convertValueToCoords({
 
 export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
+  options: value,
   fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, placement, rects} = middlewareArguments;
     const diffCoords = convertValueToCoords({placement, rects, value});

@@ -56,6 +56,7 @@ export const autoPlacement = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
   name: 'autoPlacement',
+  options,
   async fn(middlewareArguments: MiddlewareArguments) {
     const {x, y, rects, middlewareData, placement} = middlewareArguments;
 

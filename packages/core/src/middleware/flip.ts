@@ -20,6 +20,7 @@ export const flip = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
   name: 'flip',
+  options,
   async fn(middlewareArguments: MiddlewareArguments) {
     const {placement, middlewareData, rects, initialPlacement} =
       middlewareArguments;
