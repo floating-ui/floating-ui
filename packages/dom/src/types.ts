@@ -49,5 +49,11 @@ declare const detectOverflow: (
 
 export {autoPlacement, shift, arrow, size, flip, detectOverflow};
 export {hide, offset, limitShift} from '@floating-ui/core';
+export type {
+  Platform,
+  Placement,
+  Strategy,
+  Middleware,
+} from '@floating-ui/core';
 export {computePosition} from './';
 export {getScrollParents} from './utils/getScrollParents';

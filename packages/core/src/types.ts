@@ -1,57 +1,41 @@
+export type Alignment = 'start' | 'end';
 export type BasePlacement = 'top' | 'right' | 'bottom' | 'left';
-export type AlignedPlacement =
-  | 'top-start'
-  | 'top-end'
-  | 'right-start'
-  | 'right-end'
-  | 'bottom-start'
-  | 'bottom-end'
-  | 'left-start'
-  | 'left-end';
+export type AlignedPlacement = `${BasePlacement}-${Alignment}`;
 export type Placement = BasePlacement | AlignedPlacement;
 export type Strategy = 'absolute' | 'fixed';
-export type Alignment = 'start' | 'end';
 export type Axis = 'x' | 'y';
 export type Length = 'width' | 'height';
+
+type Promisable<T> = T | Promise<T>;
 
 export type Platform = {
   getElementRects: (args: {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
-  }) => ElementRects | Promise<ElementRects>;
+  }) => Promisable<ElementRects>;
   convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
     rect: Rect;
     offsetParent: any;
     strategy: Strategy;
-  }) => Rect | Promise<Rect>;
-  getOffsetParent: (args: {element: any}) => any | Promise<any>;
-  isElement: (value: unknown) => boolean | Promise<boolean>;
-  getDocumentElement: (args: {element: any}) => any | Promise<any>;
+  }) => Promisable<Rect>;
+  getOffsetParent: (args: {element: any}) => Promisable<any>;
+  isElement: (value: unknown) => Promisable<boolean>;
+  getDocumentElement: (args: {element: any}) => Promisable<any>;
   getClippingClientRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
-  }) => ClientRectObject | Promise<ClientRectObject>;
-  getDimensions: (args: {element: any}) => Dimensions | Promise<Dimensions>;
+  }) => Promisable<ClientRectObject>;
+  getDimensions: (args: {element: any}) => Promisable<Dimensions>;
 };
 
-export type Coords = {
-  x: number;
-  y: number;
-};
+export type Coords = {[key in Axis]: number};
 
-export type SideObject = {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-};
+export type SideObject = {[key in BasePlacement]: number};
 
 export type MiddlewareData = {
-  arrow?: {
-    x?: number;
-    y?: number;
+  arrow?: Partial<Coords> & {
     centerOffset: number;
   };
   autoPlacement?: {
@@ -90,9 +74,7 @@ export type ComputePositionConfig = {
   middleware?: Array<Middleware>;
 };
 
-export type ComputePositionReturn = {
-  x: number;
-  y: number;
+export type ComputePositionReturn = Coords & {
   placement: Placement;
   strategy: Strategy;
   middlewareData: MiddlewareData;
@@ -117,13 +99,10 @@ export type Middleware = {
   name: string;
   fn: (
     middlewareArguments: MiddlewareArguments
-  ) => MiddlewareReturn | Promise<MiddlewareReturn>;
+  ) => Promisable<MiddlewareReturn>;
 };
 
-export type Dimensions = {
-  width: number;
-  height: number;
-};
+export type Dimensions = {[key in Length]: number};
 
 export type Rect = Coords & Dimensions;
 
