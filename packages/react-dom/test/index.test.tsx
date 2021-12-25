@@ -24,7 +24,49 @@ test('`x` and `y` are initially `null`', async () => {
 });
 
 test('middleware is always fresh and does not cause an infinite loop', async () => {
-  function App() {
+  function InlineMiddleware() {
+    const [sizeData, setSizeData] = useState<
+      (ElementRects & Dimensions) | null
+    >(null);
+    const arrowRef = useRef(null);
+    const {reference, floating} = useFloating({
+      placement: 'right',
+      middleware: [
+        offset(),
+        offset(10),
+        offset(() => 5),
+        offset(() => ({crossAxis: 10})),
+        offset({crossAxis: 10, mainAxis: 10}),
+
+        flip({fallbackPlacements: ['top', 'bottom']}),
+
+        shift(),
+        shift({crossAxis: true}),
+        shift({boundary: document.createElement('div')}),
+        shift({boundary: [document.createElement('div')]}),
+        shift({limiter: limitShift()}),
+        shift({limiter: limitShift({offset: 10})}),
+        shift({limiter: limitShift({offset: {crossAxis: 10}})}),
+        shift({limiter: limitShift({offset: () => 5})}),
+        shift({limiter: limitShift({offset: () => ({crossAxis: 10})})}),
+
+        arrow({element: arrowRef}),
+
+        hide(),
+
+        size({apply: setSizeData}),
+      ],
+    });
+
+    return (
+      <>
+        <div ref={reference} />
+        <div ref={floating} style={{height: sizeData?.height ?? ''}} />
+      </>
+    );
+  }
+
+  function StateMiddleware() {
     const [sizeData, setSizeData] = useState<
       (ElementRects & Dimensions) | null
     >(null);
@@ -82,7 +124,9 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
     );
   }
 
-  const {getByTestId} = await waitFor(() => render(<App />));
+  await waitFor(() => render(<InlineMiddleware />));
+
+  const {getByTestId} = await waitFor(() => render(<StateMiddleware />));
   await waitFor(() => fireEvent.click(getByTestId('step1')));
   await waitFor(() => expect(getByTestId('x').textContent).toBe('10'));
 
