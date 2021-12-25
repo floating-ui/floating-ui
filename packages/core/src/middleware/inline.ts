@@ -33,7 +33,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
       })
     );
     const clientRects = Array.from(
-      await platform.getClientRects({element: elements.reference})
+      (await platform.getClientRects?.({element: elements.reference})) ?? []
     );
     const paddingObject = getSideObjectFromPadding(padding);
 

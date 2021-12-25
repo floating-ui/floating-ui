@@ -28,7 +28,9 @@ export type Platform = {
     rootBoundary: RootBoundary;
   }) => Promisable<ClientRectObject>;
   getDimensions: (args: {element: any}) => Promisable<Dimensions>;
-  getClientRects: (args: {element: any}) => Promisable<Array<ClientRectObject>>;
+  getClientRects?: (args: {
+    element: any;
+  }) => Promisable<Array<ClientRectObject>>;
 };
 
 export type Coords = {[key in Axis]: number};
