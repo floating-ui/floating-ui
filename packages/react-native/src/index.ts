@@ -14,7 +14,7 @@ import type {
   SideObject,
 } from '@floating-ui/core';
 import {createPlatform} from './createPlatform';
-import {useLatestRef} from './utils/useLatestRef';
+import {deepEqual} from './utils/deepEqual';
 
 export {
   autoPlacement,
@@ -82,8 +82,16 @@ export const useFloating = ({
     [offsetParent, scrollOffsets, sameScrollView]
   );
 
-  // Memoize middleware internally, to remove the requirement of memoization by consumer
-  const latestMiddleware = useLatestRef(middleware);
+  const [latestMiddleware, setLatestMiddleware] = useState(middleware);
+
+  if (
+    !deepEqual(
+      latestMiddleware?.map(({options}) => options),
+      middleware?.map(({options}) => options)
+    )
+  ) {
+    setLatestMiddleware(middleware);
+  }
 
   const update = useCallback(() => {
     if (!reference.current || !floating.current) {
@@ -91,7 +99,7 @@ export const useFloating = ({
     }
 
     computePosition(reference.current, floating.current, {
-      middleware: latestMiddleware.current,
+      middleware: latestMiddleware,
       platform,
       placement,
     }).then(setData);

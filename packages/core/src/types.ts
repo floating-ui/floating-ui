@@ -97,6 +97,7 @@ export type MiddlewareReturn = Partial<
 
 export type Middleware = {
   name: string;
+  options?: any;
   fn: (
     middlewareArguments: MiddlewareArguments
   ) => Promisable<MiddlewareReturn>;

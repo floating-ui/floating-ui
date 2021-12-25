@@ -8,7 +8,7 @@ import type {
 import {computePosition, arrow as arrowCore} from '@floating-ui/dom';
 import {useCallback, useMemo, useState, useRef, MutableRefObject} from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import {useLatestRef} from './utils/useLatestRef';
+import {deepEqual} from './utils/deepEqual';
 
 export {
   autoPlacement,
@@ -54,8 +54,16 @@ export function useFloating({
     middlewareData: {},
   });
 
-  // Memoize middleware internally, to remove the requirement of memoization by consumer
-  const latestMiddleware = useLatestRef(middleware);
+  const [latestMiddleware, setLatestMiddleware] = useState(middleware);
+
+  if (
+    !deepEqual(
+      latestMiddleware?.map(({options}) => options),
+      middleware?.map(({options}) => options)
+    )
+  ) {
+    setLatestMiddleware(middleware);
+  }
 
   const update = useCallback(() => {
     if (!reference.current || !floating.current) {
@@ -63,7 +71,7 @@ export function useFloating({
     }
 
     computePosition(reference.current, floating.current, {
-      middleware: latestMiddleware.current,
+      middleware: latestMiddleware,
       placement,
       strategy,
     }).then(setData);

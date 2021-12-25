@@ -1,8 +1,9 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {render} from 'react-dom';
-import {useFloating, shift, flip, arrow, getScrollParents} from '../../src';
+import {useFloating, offset, flip, getScrollParents} from '../../src';
 
 function App() {
+  const [middleware, setMiddleware] = useState();
   const arrowRef = useRef();
   const {
     x,
@@ -12,8 +13,8 @@ function App() {
     update,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
-    placement: 'top-end',
-    middleware: [flip(), shift(), arrow({element: arrowRef})],
+    placement: 'right',
+    middleware,
   });
 
   useEffect(() => {
@@ -64,6 +65,10 @@ function App() {
           }}
         ></div>
       </div>
+      <button onClick={() => setMiddleware([])}>[]</button>
+      <button onClick={() => setMiddleware([offset(10)])}>offset(10)</button>
+      <button onClick={() => setMiddleware([offset()])}>offset()</button>
+      <button onClick={() => setMiddleware([flip()])}>flip()</button>
     </>
   );
 }
