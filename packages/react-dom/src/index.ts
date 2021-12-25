@@ -54,14 +54,15 @@ export function useFloating({
     middlewareData: {},
   });
 
-  const middlewareRef = useRef(middleware);
+  const [latestMiddleware, setLatestMiddleware] = useState(middleware);
+
   if (
     !deepEqual(
-      middlewareRef.current?.map(({options}) => options),
+      latestMiddleware?.map(({options}) => options),
       middleware?.map(({options}) => options)
     )
   ) {
-    middlewareRef.current = middleware;
+    setLatestMiddleware(middleware);
   }
 
   const update = useCallback(() => {
@@ -70,12 +71,11 @@ export function useFloating({
     }
 
     computePosition(reference.current, floating.current, {
-      middleware: middlewareRef.current,
+      middleware: latestMiddleware,
       placement,
       strategy,
     }).then(setData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [middlewareRef.current, placement, strategy]);
+  }, [latestMiddleware, placement, strategy]);
 
   useIsomorphicLayoutEffect(update, [update]);
 
