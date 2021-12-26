@@ -18,6 +18,7 @@ export {
   shift,
   limitShift,
   size,
+  inline,
   getScrollParents,
   detectOverflow,
 } from '@floating-ui/dom';

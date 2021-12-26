@@ -85,16 +85,23 @@ export const computePosition: ComputePosition = async (
     middlewareData = {...middlewareData, [name]: data ?? {}};
 
     if (reset) {
-      if (typeof reset === 'object' && reset.placement) {
-        statefulPlacement = reset.placement;
+      if (typeof reset === 'object') {
+        if (reset.placement) {
+          statefulPlacement = reset.placement;
+        }
+
+        if (reset.rects) {
+          rects =
+            reset.rects === true
+              ? await platform.getElementRects({reference, floating, strategy})
+              : reset.rects;
+        }
+
+        ({x, y} = computeCoordsFromPlacement({
+          ...rects,
+          placement: statefulPlacement,
+        }));
       }
-
-      rects = await platform.getElementRects({reference, floating, strategy});
-
-      ({x, y} = computeCoordsFromPlacement({
-        ...rects,
-        placement: statefulPlacement,
-      }));
 
       i = -1;
       continue;

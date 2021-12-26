@@ -8,5 +8,6 @@ export {hide} from './middleware/hide';
 export {offset} from './middleware/offset';
 export {shift, limitShift} from './middleware/shift';
 export {size} from './middleware/size';
+export {inline} from './middleware/inline';
 
 export {rectToClientRect} from './utils/rectToClientRect';

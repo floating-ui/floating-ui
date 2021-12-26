@@ -23,4 +23,5 @@ export const platform: Platform = {
   getDocumentElement: ({element}) => getDocumentElement(element),
   getClippingClientRect: (args) => getClippingClientRect(args),
   getDimensions: ({element}) => getDimensions(element),
+  getClientRects: ({element}) => element.getClientRects(),
 };
