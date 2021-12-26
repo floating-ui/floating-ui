@@ -126,7 +126,19 @@ test('connected placed on right', async ({page}) => {
 
 test('chooses first rect when coords are 1.5px off x, y', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await page.hover('.container strong', {position: {x: -1.5, y: -1.5}});
+
+  const position = await page.evaluate(() => {
+    const strong = document.querySelector('.container strong') as Element;
+    const clientRect = strong.getClientRects()[0];
+    const boundingClientRect = strong.getBoundingClientRect();
+    return {
+      x: clientRect.x - boundingClientRect.x - 1.5,
+      y: clientRect.y - boundingClientRect.y - 1.5,
+    };
+  });
+
+  await page.hover('.container strong', {position});
+
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'first-rect.png'
   );
