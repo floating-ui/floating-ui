@@ -1,3 +1,7 @@
+:root {
+  color-scheme: dark;
+}
+
 [data-reach-skip-nav-link] {
   color: black;
   margin-left: 18rem;
