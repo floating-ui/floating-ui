@@ -31,27 +31,18 @@ export function Inline() {
       <div className="container">
         <p className="prose" style={{padding: 10}}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.{' '}
-          {!connected && (
-            <strong
-              ref={reference}
-              style={{color: 'royalblue'}}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              Nulla rutrum dapibus turpis eu volutpat
-            </strong>
-          )}
-          {connected && (
-            <strong
-              ref={reference}
-              style={{color: 'royalblue'}}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              Nulla rutrum dapibus turpis eu volutpat. Duis cursus nisi massa,
-              non dictum turpis interdum at
-            </strong>
-          )}
+          <strong
+            ref={reference}
+            style={{color: 'royalblue'}}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {`Nulla rutrum dapibus turpis eu volutpat${
+              connected
+                ? ' Duis cursus nisi massa, non dictum turpis interdum at'
+                : ''
+            }`}
+          </strong>
           . Ut eu magna eu augue efficitur bibendum id commodo tellus. Nullam
           gravida, mi nec sodales tincidunt, lorem orci aliquam ex, id commodo
           erat libero ut risus. Nam molestie non lectus sit amet tempus. Vivamus
