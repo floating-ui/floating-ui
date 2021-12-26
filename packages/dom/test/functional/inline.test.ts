@@ -88,7 +88,7 @@ test('chooses left client rect placed on the left', async ({page}) => {
 test('connected placed on top', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
   await page.click('[data-testid="placement-top"]');
-  await page.click('[data-testid="connected-true"]');
+  await page.click('[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'connected-top.png'
@@ -97,7 +97,7 @@ test('connected placed on top', async ({page}) => {
 
 test('connected placed on bottom', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
-  await page.click('[data-testid="connected-true"]');
+  await page.click('[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'connected-bottom.png'
@@ -107,7 +107,7 @@ test('connected placed on bottom', async ({page}) => {
 test('connected placed on left', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
   await page.click('[data-testid="placement-left"]');
-  await page.click('[data-testid="connected-true"]');
+  await page.click('[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'connected-left.png'
@@ -117,7 +117,7 @@ test('connected placed on left', async ({page}) => {
 test('connected placed on right', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
   await page.click('[data-testid="placement-right"]');
-  await page.click('[data-testid="connected-true"]');
+  await page.click('[data-testid="connected-2-joined"]');
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'connected-right.png'
@@ -152,5 +152,15 @@ test('chooses rect based on placement without any mouse coords top', async ({
   await page.click('[data-testid="open-true"]');
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'right-rect-no-coords.png'
+  );
+});
+
+test('correctly centers over two rects', async ({page}) => {
+  await page.goto('http://localhost:1234/inline');
+  await page.click('[data-testid="placement-left"]');
+  await page.click('[data-testid="connected-3"]');
+  await page.click('[data-testid="open-true"]');
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    'left-connected-3.png'
   );
 });

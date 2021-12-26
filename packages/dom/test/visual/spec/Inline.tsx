@@ -4,10 +4,18 @@ import React, {useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 
+type ConnectedStatus = '1' | '2-disjoined' | '2-joined' | '3';
+const CONNECTED_STATUSES: ConnectedStatus[] = [
+  '1',
+  '2-disjoined',
+  '2-joined',
+  '3',
+];
+
 export function Inline() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [open, setOpen] = useState(false);
-  const [connected, setConnected] = useState(false);
+  const [status, setStatus] = useState<ConnectedStatus>('2-disjoined');
   const mouseCoordsRef = useRef<undefined | Coords>();
   const {x, y, reference, floating, strategy} = useFloating({
     placement,
@@ -24,6 +32,25 @@ export function Inline() {
     setOpen(false);
   };
 
+  let text = '';
+  switch (status) {
+    case '1':
+      text = 'test';
+      break;
+    case '2-disjoined':
+      text = 'Nulla rutrum dapibus turpis eu volutpat';
+      break;
+    case '2-joined':
+      text =
+        'Nulla rutrum dapibus turpis eu volutpat. Duis cursus nisi massa, non dictum';
+      break;
+    case '3':
+      text =
+        'Nulla rutrum dapibus turpis eu volutpat. Duis cursus nisi massa, non dictum turpis interdum at. Nulla rutrum dapibus turpis eu volutpat';
+      break;
+    default:
+  }
+
   return (
     <>
       <h1>Inline</h1>
@@ -37,11 +64,7 @@ export function Inline() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {`Nulla rutrum dapibus turpis eu volutpat${
-              connected
-                ? ' Duis cursus nisi massa, non dictum turpis interdum at'
-                : ''
-            }`}
+            {text}
           </strong>
           . Ut eu magna eu augue efficitur bibendum id commodo tellus. Nullam
           gravida, mi nec sodales tincidunt, lorem orci aliquam ex, id commodo
@@ -102,18 +125,18 @@ export function Inline() {
 
       <h2>Connected</h2>
       <Controls>
-        {[true, false].map((bool) => (
+        {CONNECTED_STATUSES.map((localStatus) => (
           <button
-            key={String(bool)}
-            data-testid={`connected-${bool}`}
+            key={localStatus}
+            data-testid={`connected-${localStatus}`}
             onClick={() => {
-              setConnected(bool);
+              setStatus(localStatus);
             }}
             style={{
-              backgroundColor: connected === bool ? 'black' : '',
+              backgroundColor: localStatus === status ? 'black' : '',
             }}
           >
-            {String(bool)}
+            {localStatus}
           </button>
         ))}
       </Controls>

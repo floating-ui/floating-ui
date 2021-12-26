@@ -82,17 +82,32 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
             x: left,
             y: top,
           };
-        } else {
-          const maxRight = max(...clientRects.map((rect) => rect.right));
-          const minLeft = min(...clientRects.map((rect) => rect.left));
-          return (
-            clientRects.find(
-              getBasePlacement(placement) === 'left'
-                ? (rect) => rect.left === minLeft
-                : (rect) => rect.right === maxRight
-            ) ?? fallback
-          );
         }
+
+        const isLeftPlacement = getBasePlacement(placement) === 'left';
+        const maxRight = max(...clientRects.map((rect) => rect.right));
+        const minLeft = min(...clientRects.map((rect) => rect.left));
+        const measureRects = clientRects.filter((rect) =>
+          isLeftPlacement ? rect.left === minLeft : rect.right === maxRight
+        );
+
+        const top = measureRects[0].top;
+        const bottom = measureRects[measureRects.length - 1].bottom;
+        const left = minLeft;
+        const right = maxRight;
+        const width = right - left;
+        const height = bottom - top;
+
+        return {
+          top,
+          bottom,
+          left,
+          right,
+          width,
+          height,
+          x: left,
+          y: top,
+        };
       }
 
       return fallback;
