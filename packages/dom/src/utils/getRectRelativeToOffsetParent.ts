@@ -5,12 +5,13 @@ import {getNodeName} from './getNodeName';
 import {getNodeScroll} from './getNodeScroll';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import {isHTMLElement, isScrollParent} from './is';
+import {round} from './math';
 
 function isScaled(element: HTMLElement): boolean {
   const rect = getBoundingClientRect(element);
   return (
-    Math.round(rect.width) !== element.offsetWidth ||
-    Math.round(rect.height) !== element.offsetHeight
+    round(rect.width) !== element.offsetWidth ||
+    round(rect.height) !== element.offsetHeight
   );
 }
 

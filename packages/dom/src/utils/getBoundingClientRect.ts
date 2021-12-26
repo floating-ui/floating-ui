@@ -1,5 +1,6 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {isHTMLElement} from './is';
+import {round} from './math';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,
@@ -13,11 +14,11 @@ export function getBoundingClientRect(
   if (includeScale && isHTMLElement(element)) {
     scaleX =
       element.offsetWidth > 0
-        ? Math.round(clientRect.width) / element.offsetWidth || 1
+        ? round(clientRect.width) / element.offsetWidth || 1
         : 1;
     scaleY =
       element.offsetHeight > 0
-        ? Math.round(clientRect.height) / element.offsetHeight || 1
+        ? round(clientRect.height) / element.offsetHeight || 1
         : 1;
   }
 
