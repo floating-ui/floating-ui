@@ -1,10 +1,11 @@
 import {test, expect} from '@playwright/test';
 import {allPlacements} from '../visual/utils/allPlacements';
+import {click} from './utils/click';
 
 allPlacements.forEach((placement) => {
   test(`correctly sized for placement ${placement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
-    await page.click(`[data-testid="placement-${placement}"]`);
+    await click(page, `[data-testid="placement-${placement}"]`);
 
     await page.evaluate(() => {
       const scroll = document.querySelector('.scroll');
@@ -23,7 +24,7 @@ allPlacements.forEach((placement) => {
 ['bottom', 'top'].forEach((verticalPlacement) => {
   test(`does not overflow due to size ${verticalPlacement}`, async ({page}) => {
     await page.goto('http://localhost:1234/size');
-    await page.click(`[data-testid="placement-${verticalPlacement}"]`);
+    await click(page, `[data-testid="placement-${verticalPlacement}"]`);
 
     await page.evaluate(() => {
       const scroll = document.querySelector('.scroll');
@@ -76,7 +77,7 @@ allPlacements.forEach((placement) => {
     page,
   }) => {
     await page.goto('http://localhost:1234/size');
-    await page.click(`[data-testid="placement-${horizontalPlacement}"]`);
+    await click(page, `[data-testid="placement-${horizontalPlacement}"]`);
 
     await page.evaluate(() => {
       const scroll = document.querySelector('.scroll');

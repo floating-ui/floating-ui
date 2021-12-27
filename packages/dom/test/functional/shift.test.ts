@@ -3,7 +3,7 @@ import {click} from './utils/click';
 
 test('does not shift when `mainAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="mainAxis-false"]`);
+  await click(page, `[data-testid="mainAxis-false"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -19,7 +19,7 @@ test('does not shift when `mainAxis` is false', async ({page}) => {
 
 test('does shift when `mainAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="mainAxis-true"]`);
+  await click(page, `[data-testid="mainAxis-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -35,7 +35,7 @@ test('does shift when `mainAxis` is true', async ({page}) => {
 
 test('does not shift when `crossAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="crossAxis-false"]`);
+  await click(page, `[data-testid="crossAxis-false"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -51,7 +51,7 @@ test('does not shift when `crossAxis` is false', async ({page}) => {
 
 test('does shift when `crossAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="crossAxis-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -69,7 +69,7 @@ test('stops shifting once opposite edges are aligned when `limitShift` is used a
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="limitShift-true"]`);
+  await click(page, `[data-testid="limitShift-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -87,7 +87,7 @@ test('stops shifting once opposite edges are aligned when `limitShift` is used a
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="limitShift-true"]`);
+  await click(page, `[data-testid="limitShift-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -105,8 +105,8 @@ test('stops shifting on the crossAxis once opposite edges are aligned when `limi
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="crossAxis-true"]`);
-  await page.click(`[data-testid="limitShift-true"]`);
+  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="limitShift-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -124,9 +124,9 @@ test('limitShift does not limit shift when `crossAxis` is false', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="limitShift-true"]`);
-  await page.click(`[data-testid="crossAxis-true"]`);
-  await page.click(`[data-testid="limitShift.crossAxis-false"]`);
+  await click(page, `[data-testid="limitShift-true"]`);
+  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="limitShift.crossAxis-false"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -144,8 +144,8 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/shift');
-  await page.click(`[data-testid="limitShift-true"]`);
-  await page.click(`[data-testid="limitShift.mainAxis-false"]`);
+  await click(page, `[data-testid="limitShift-true"]`);
+  await click(page, `[data-testid="limitShift.mainAxis-false"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
