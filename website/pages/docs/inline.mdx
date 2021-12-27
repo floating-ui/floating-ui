@@ -1,0 +1,102 @@
+import Layout from '../../lib/components/Layout';
+export default Layout;
+
+# inline
+
+The `inline{:.function}` middleware provides improved positioning
+for inline reference elements that span over multiple lines, such
+as hyperlinks or range selections.
+
+This is useful as the default positioning using
+`getBoundingClientRect(){:js}` may appear "detached" when
+measuring over the bounding box.
+
+In the following examples, the `placement{:.objectKey}` is
+`'top'{:js}`.
+
+`middleware:{:.objectKey}` `[]{:js}`
+
+<img
+  width={692}
+  height={256}
+  alt="inline disabled"
+  src="/inline-disabled.png"
+/>
+
+`middleware:{:.objectKey}` `[inline()]{:js}`
+
+<img
+  width={692}
+  height={256}
+  alt="inline enabled"
+  src="/inline-enabled.png"
+/>
+
+## Usage
+
+```js
+import {computePosition, inline} from '@floating-ui/dom';
+
+computePosition(referenceEl, floatingEl, {
+  middleware: [inline()],
+});
+```
+
+### Choosing a rect
+
+By default, `inline(){:js}` infers which of the
+`ClientRect{:.class}`s to choose based on the
+`placement{:.objectKey}`. However, you may want a different rect
+to be chosen.
+
+For instance, if the user hovered over the last client rect, you
+likely want the floating element to be placed there. This logic
+is only applied when the reference element's rects are disjoined.
+
+```js
+function onMouseEnter({clientX, clientY}) {
+  computePosition(referenceEl, floatingEl, {
+    middleware: [inline({x: clientX, y: clientY})],
+  }).then(({x, y}) => {
+    // ...
+  });
+}
+
+inlineElement.addEventListener('mouseenter', onMouseEnter);
+```
+
+## Order
+
+`inline{:.function}` should generally be placed toward the
+beginning of your middleware array, before `flip{:.function}` (if
+used).
+
+## Options
+
+```ts
+type Options = {
+  x: number; // `undefined` by default
+  y: number; // `undefined` by default
+  padding: number; // `2` by default
+};
+```
+
+### x
+
+This is the viewport-relative (client) x-axis coordinate which
+can be passed in to choose a rect.
+
+### y
+
+This is the viewport-relative (client) y-axis coordinate which
+can be passed in to choose a rect.
+
+### padding
+
+> **Experimental**
+
+This describes the padding around a disjoined rect when choosing
+it.
+
+This option's configurability is currently experimental and may
+be removed by v1. You likely don't need to change the default.
