@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import {click} from './utils/click';
 
 ['top', 'right', 'bottom', 'left'].forEach((placement) => {
   [
@@ -14,8 +15,8 @@ import {test, expect} from '@playwright/test';
       page,
     }) => {
       await page.goto('http://localhost:1234/offset');
-      await page.click(`[data-testid="offset-${name}"]`);
-      await page.click(`[data-testid="placement-${placement}"]`);
+      await click(page, `[data-testid="offset-${name}"]`);
+      await click(page, `[data-testid="placement-${placement}"]`);
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${name}-${placement}.png`

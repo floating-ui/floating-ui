@@ -1,8 +1,9 @@
 import {test, expect} from '@playwright/test';
+import {click} from './utils/click';
 
 test('top-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="alignment-start"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top-start.png`
@@ -11,7 +12,7 @@ test('top-start', async ({page}) => {
 
 test('bottom-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="alignment-start"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -27,7 +28,7 @@ test('bottom-start', async ({page}) => {
 
 test('right-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="alignment-start"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -43,7 +44,7 @@ test('right-start', async ({page}) => {
 
 test('left-start', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-start"]`);
+  await click(page, `[data-testid="alignment-start"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -59,7 +60,7 @@ test('left-start', async ({page}) => {
 
 test('top', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="alignment-null"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top.png`
@@ -68,7 +69,7 @@ test('top', async ({page}) => {
 
 test('bottom', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="alignment-null"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -84,7 +85,7 @@ test('bottom', async ({page}) => {
 
 test('right', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="alignment-null"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -100,7 +101,7 @@ test('right', async ({page}) => {
 
 test('left', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="alignment-null"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -116,7 +117,7 @@ test('left', async ({page}) => {
 
 test('top-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="alignment-end"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `top-end.png`
@@ -125,7 +126,7 @@ test('top-end', async ({page}) => {
 
 test('bottom-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="alignment-end"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -141,7 +142,7 @@ test('bottom-end', async ({page}) => {
 
 test('right-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="alignment-end"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -157,7 +158,7 @@ test('right-end', async ({page}) => {
 
 test('left-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-end"]`);
+  await click(page, `[data-testid="alignment-end"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -173,8 +174,8 @@ test('left-end', async ({page}) => {
 
 test('only top, bottom allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
-  await page.click(`[data-testid="allowedPlacements-top,bottom"]`);
+  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="allowedPlacements-top,bottom"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -203,8 +204,8 @@ test('only top, bottom allowed', async ({page}) => {
 
 test('only left, right allowed', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
-  await page.click(`[data-testid="alignment-null"]`);
-  await page.click(`[data-testid="allowedPlacements-left,right"]`);
+  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="allowedPlacements-left,right"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');

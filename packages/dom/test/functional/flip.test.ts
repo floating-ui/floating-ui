@@ -1,8 +1,9 @@
 import {test, expect} from '@playwright/test';
+import {click} from './utils/click';
 
 test('does not flip when `mainAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="mainAxis-false"]`);
+  await click(page, `[data-testid="mainAxis-false"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -18,7 +19,7 @@ test('does not flip when `mainAxis` is false', async ({page}) => {
 
 test('does flip when `mainAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="mainAxis-true"]`);
+  await click(page, `[data-testid="mainAxis-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -34,8 +35,8 @@ test('does flip when `mainAxis` is true', async ({page}) => {
 
 test('does not flip when `crossAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="crossAxis-false"]`);
-  await page.click(`[data-testid="fallbackPlacements-all"]`);
+  await click(page, `[data-testid="crossAxis-false"]`);
+  await click(page, `[data-testid="fallbackPlacements-all"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -51,8 +52,8 @@ test('does not flip when `crossAxis` is false', async ({page}) => {
 
 test('does flip when `crossAxis` is true', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="crossAxis-true"]`);
-  await page.click(`[data-testid="fallbackPlacements-all"]`);
+  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(page, `[data-testid="fallbackPlacements-all"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -70,7 +71,7 @@ test('does not flip when `fallbackPlacements` is an empty array', async ({
   page,
 }) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="fallbackPlacements-[]"]`);
+  await click(page, `[data-testid="fallbackPlacements-[]"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -86,8 +87,8 @@ test('does not flip when `fallbackPlacements` is an empty array', async ({
 
 test('fallbackPlacements: all', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="placement-top-start"]`);
-  await page.click(`[data-testid="fallbackPlacements-all"]`);
+  await click(page, `[data-testid="placement-top-start"]`);
+  await click(page, `[data-testid="fallbackPlacements-all"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `fallbackStrategy-all-top-start.png`
@@ -217,7 +218,7 @@ test('fallbackPlacements: all', async ({page}) => {
 
 test('fallbackStrategy: "bestFit"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="fallbackStrategy-bestFit"]`);
+  await click(page, `[data-testid="fallbackStrategy-bestFit"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
@@ -234,7 +235,7 @@ test('fallbackStrategy: "bestFit"', async ({page}) => {
 
 test('fallbackStrategy: "initialPlacement"', async ({page}) => {
   await page.goto('http://localhost:1234/flip');
-  await page.click(`[data-testid="fallbackStrategy-initialPlacement"]`);
+  await click(page, `[data-testid="fallbackStrategy-initialPlacement"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');

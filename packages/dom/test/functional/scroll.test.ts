@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import {click} from './utils/click';
 
 [
   'referenceScrollParent',
@@ -10,7 +11,7 @@ import {test, expect} from '@playwright/test';
     page,
   }) => {
     await page.goto('http://localhost:1234/scroll');
-    await page.click(`[data-testid="scroll-${node}"]`);
+    await click(page, `[data-testid="scroll-${node}"]`);
 
     if (node === 'body') {
       await page.evaluate(() => window.scrollTo(0, 200));
@@ -20,7 +21,7 @@ import {test, expect} from '@playwright/test';
       `${node}.png`
     );
 
-    await page.click(`[data-testid="strategy-fixed"]`);
+    await click(page, `[data-testid="strategy-fixed"]`);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${node}--fixed.png`
     );
