@@ -57,10 +57,6 @@ export async function detectOverflow(
     })
   );
 
-  // Debug the client rects:
-  // draw(clippingClientRect, 'cyan', 1);
-  // draw(elementClientRect, 'yellow', 2);
-
   // positive = overflowing the clipping rect
   // 0 or negative = within the clipping rect
   return {
@@ -74,26 +70,3 @@ export async function detectOverflow(
       elementClientRect.right - clippingClientRect.right + paddingObject.right,
   };
 }
-
-// function draw(rect, color, id) {
-//   const lastDraw = document.querySelector(`#draw-${id}`);
-
-//   if (document.body.contains(lastDraw)) {
-//     document.body.removeChild(lastDraw);
-//   }
-
-//   const div = document.createElement('div');
-//   div.id = `draw-${id}`;
-
-//   Object.assign(div.style, {
-//     position: 'absolute',
-//     left: `${rect.x}px`,
-//     top: `${rect.y}px`,
-//     width: `${rect.width}px`,
-//     height: `${rect.height}px`,
-//     backgroundColor: color,
-//     opacity: '0.5',
-//   });
-
-//   document.body.append(div);
-// }
