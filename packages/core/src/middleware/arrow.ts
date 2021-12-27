@@ -46,10 +46,8 @@ export const arrow = (options: Options): Middleware => ({
     const arrowOffsetParent = await platform.getOffsetParent({element});
     const clientSize = arrowOffsetParent
       ? axis === 'y'
-        ? // @ts-ignore - fallback to 0
-          arrowOffsetParent.clientHeight || 0
-        : // @ts-ignore - fallback to 0
-          arrowOffsetParent.clientWidth || 0
+        ? arrowOffsetParent.clientHeight || 0
+        : arrowOffsetParent.clientWidth || 0
       : 0;
 
     const centerToReference = endDiff / 2 - startDiff / 2;
