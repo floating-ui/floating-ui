@@ -28,7 +28,7 @@ export const shift = (
 ): Middleware => ({
   name: 'shift',
   options,
-  async fn(middlewareArguments: MiddlewareArguments) {
+  async fn(middlewareArguments) {
     const {x, y, placement} = middlewareArguments;
     const {
       mainAxis: checkMainAxis = true,
@@ -96,7 +96,7 @@ export const limitShift = (
   fn: (middlewareArguments: MiddlewareArguments) => Coords;
 } => ({
   options,
-  fn(middlewareArguments: MiddlewareArguments) {
+  fn(middlewareArguments) {
     const {x, y, placement, rects, middlewareData} = middlewareArguments;
     const {
       offset = 0,

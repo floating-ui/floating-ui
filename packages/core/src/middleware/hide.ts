@@ -1,4 +1,4 @@
-import type {Middleware, MiddlewareArguments, Rect, SideObject} from '../types';
+import type {Middleware, Rect, SideObject} from '../types';
 import {basePlacements} from '../enums';
 import {detectOverflow} from '../detectOverflow';
 
@@ -17,7 +17,7 @@ function isAnySideFullyClipped(overflow: SideObject) {
 
 export const hide = (): Middleware => ({
   name: 'hide',
-  async fn(modifierArguments: MiddlewareArguments) {
+  async fn(modifierArguments) {
     const referenceOverflow = await detectOverflow(modifierArguments, {
       elementContext: 'reference',
     });

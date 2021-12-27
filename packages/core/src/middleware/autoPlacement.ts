@@ -1,9 +1,4 @@
-import type {
-  Middleware,
-  MiddlewareArguments,
-  Placement,
-  Alignment,
-} from '../types';
+import type {Middleware, Placement, Alignment} from '../types';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -57,7 +52,7 @@ export const autoPlacement = (
 ): Middleware => ({
   name: 'autoPlacement',
   options,
-  async fn(middlewareArguments: MiddlewareArguments) {
+  async fn(middlewareArguments) {
     const {x, y, rects, middlewareData, placement} = middlewareArguments;
 
     const {

@@ -1,9 +1,4 @@
-import {
-  Dimensions,
-  ElementRects,
-  Middleware,
-  MiddlewareArguments,
-} from '../types';
+import type {Dimensions, ElementRects, Middleware} from '../types';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -21,7 +16,7 @@ export const size = (
 ): Middleware => ({
   name: 'size',
   options,
-  async fn(middlewareArguments: MiddlewareArguments) {
+  async fn(middlewareArguments) {
     const {placement, rects, middlewareData} = middlewareArguments;
     const {apply, ...detectOverflowOptions} = options;
 

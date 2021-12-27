@@ -1,4 +1,4 @@
-import type {Middleware, MiddlewareArguments, Padding} from '../types';
+import type {Middleware, Padding} from '../types';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
@@ -13,7 +13,7 @@ export type Options = {
 export const arrow = (options: Options): Middleware => ({
   name: 'arrow',
   options,
-  async fn(middlewareArguments: MiddlewareArguments) {
+  async fn(middlewareArguments) {
     // Since `element` is required, we don't Partial<> the type
     const {element, padding = 0} = options ?? {};
     const {x, y, placement, rects, platform} = middlewareArguments;

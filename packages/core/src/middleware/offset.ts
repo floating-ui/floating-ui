@@ -1,10 +1,4 @@
-import type {
-  Placement,
-  Rect,
-  Coords,
-  Middleware,
-  MiddlewareArguments,
-} from '../types';
+import type {Placement, Rect, Coords, Middleware} from '../types';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 
@@ -44,7 +38,7 @@ export function convertValueToCoords({
 export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
   options: value,
-  fn(middlewareArguments: MiddlewareArguments) {
+  fn(middlewareArguments) {
     const {x, y, placement, rects} = middlewareArguments;
     const diffCoords = convertValueToCoords({placement, rects, value});
     return {

@@ -1,4 +1,4 @@
-import type {Placement, Middleware, MiddlewareArguments} from '../types';
+import type {Placement, Middleware} from '../types';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {
@@ -21,7 +21,7 @@ export const flip = (
 ): Middleware => ({
   name: 'flip',
   options,
-  async fn(middlewareArguments: MiddlewareArguments) {
+  async fn(middlewareArguments) {
     const {placement, middlewareData, rects, initialPlacement} =
       middlewareArguments;
 
