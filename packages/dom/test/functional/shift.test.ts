@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import {click} from './utils/click';
 
 test('does not shift when `mainAxis` is false', async ({page}) => {
   await page.goto('http://localhost:1234/shift');
@@ -163,26 +164,31 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
   {name: '50', scrollLeft: 900},
   {name: '-50', scrollLeft: 950},
   {name: 'mA: 50', scrollLeft: 800},
-  // {name: 'cA: 50'},
+  {name: 'cA: 50', scrollTop: 315},
   {name: 'fn => r.width/2', scrollLeft: 800},
-  // {name: 'cA: 50'},
-  // {name: 'fn => cA: f.width/2'},
+  {name: 'fn => cA: f.width/2', scrollTop: 400},
 ].forEach(({name, ...scrollOffsets}) => {
-  // TODO: fix crossAxis offset logic
-  test(`limitShift.offset works for value ${name}`, async ({page}) => {
-    await page.goto('http://localhost:1234/shift');
-    await page.click(`[data-testid="limitShift-true"]`);
-    await page.click(`[data-testid="limitShift.offset-${name}"]`);
+  ['top', 'bottom'].forEach((placement) => {
+    test(`limitShift.offset works for value ${name} ${placement}`, async ({
+      page,
+    }) => {
+      await page.goto('http://localhost:1234/shift');
 
-    await page.evaluate((scrollOffsets) => {
-      const scroll = document.querySelector('.scroll');
-      if (scroll) {
-        Object.assign(scroll, scrollOffsets);
-      }
-    }, scrollOffsets);
+      await click(page, `[data-testid="placement-${placement}"]`);
+      await click(page, `[data-testid="crossAxis-true"]`);
+      await click(page, `[data-testid="limitShift-true"]`);
+      await click(page, `[data-testid="limitShift.offset-${name}"]`);
 
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `limitShift.offset-${name === '-50' ? 'neg50' : name}.png`
-    );
+      await page.evaluate((scrollOffsets) => {
+        const scroll = document.querySelector('.scroll');
+        if (scroll) {
+          Object.assign(scroll, scrollOffsets);
+        }
+      }, scrollOffsets);
+
+      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+        `limitShift.offset-${name === '-50' ? 'neg50' : name}-${placement}.png`
+      );
+    });
   });
 });

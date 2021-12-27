@@ -149,7 +149,7 @@ export const limitShift = (
       const limitMax =
         rects.reference[crossAxis] +
         rects.reference[len] +
-        (middlewareData.offset?.[mainAxis] ?? 0) +
+        (middlewareData.offset?.[mainAxis] ?? 0) -
         (isOriginSide ? computedOffset.crossAxis : 0);
 
       if (crossAxisCoord < limitMin) {
