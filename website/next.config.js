@@ -1,14 +1,24 @@
 const {createRemarkPlugin} = require('@atomiks/mdx-pretty-code');
 const fs = require('fs');
 const visit = require('unist-util-visit');
-const corePkg = require('../packages/core/package.json');
-const domPkg = require('../packages/dom/package.json');
+const NpmApi = require('npm-api');
 
-const replaceVariables = () => (tree) => {
+const replaceVariables = () => async (tree) => {
+  let pkgs = [];
+  try {
+    const npm = new NpmApi();
+    pkgs = await Promise.all([
+      npm.repo('@floating-ui/core').package(),
+      npm.repo('@floating-ui/dom').package(),
+    ]);
+  } catch (e) {
+    pkgs = [{version: 'latest'}, {version: 'latest'}];
+  }
+
   visit(tree, 'code', (node) => {
     node.value = node.value
-      .replace('__CORE_VERSION__', corePkg.version)
-      .replace('__DOM_VERSION__', domPkg.version);
+      .replace('__CORE_VERSION__', pkgs[0].version)
+      .replace('__DOM_VERSION__', pkgs[1].version);
   });
 };
 
