@@ -213,8 +213,8 @@ const middleware = [
 ```
 
 If the later `shiftByOnePixel` implementations had a condition
-based on the current value of `x` and `y`, the condition can
-change based on their placement in the array.
+based on the current value of `x{:.param}` and `y{:.param}`, the
+condition can change based on their placement in the array.
 
 Understanding this can help in knowing which order to place
 middleware in, as placing a middleware before or after another
@@ -236,17 +236,33 @@ const middleware = [
 
 ## Resetting the lifecycle
 
-There are use cases for needing to reset the lifecycle and start
-the process over again when you want to change the placement.
-Both `flip{:.function}` and `autoPlacement{:.function}` use this,
-so that other middleware which modify the coordinates based on
-the current `placement{:.objectKey}` do not perform stale logic.
+There are use cases for needing to reset the middleware lifecycle
+so that other middleware perform fresh logic.
+
+- When `flip{:.function}` and `autoPlacement{:.function}` change
+  the placement, they reset the lifecycle so that other
+  middleware that modify the coordinates based on the current
+  `placement{:.objectKey}` do not perform stale logic.
+- `size{:.function}` resets the lifecycle with the newly applied
+  dimensions, as many middleware read the dimensions to perform
+  their logic.
+- `inline{:.function}` resets the lifecycle when it changes the
+  reference rect to a custom implementation, similar to a
+  [Virtual Element](/docs/virtual-elements).
 
 In order to do this, add a `reset{:.objectKey}` property to the
 returned object from `fn{:.function}`.
 
 ```ts
-type Reset = true | {placement?: Placement};
+type Reset =
+  | true
+  | {
+      placement?: Placement;
+      // `true` will compute the new `rects` if the
+      // dimensions were mutated. Otherwise, you can
+      // return your own new rects.
+      rects?: true | ElementRects;
+    };
 ```
 
 ```js

@@ -91,14 +91,14 @@ module.exports = {
               color: 'inherit',
             },
             code: {
-              color: '#a6accd',
+              color: '#b4c2f0',
               borderRadius: '4px',
               fontWeight: '500',
               '&::before': {
-                display: 'none',
+                color: '#86e1fc',
               },
               '&::after': {
-                display: 'none',
+                color: '#86e1fc',
               },
             },
             a: {

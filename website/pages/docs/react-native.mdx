@@ -191,16 +191,10 @@ the reference and floating elements which is a callback function
 that calls `update(){:js}` after assigning the ref value.
 
 ```js
-<div
+<View
   ref={(node) => {
     arrowRef.current = node;
     update();
   }}
 />
 ```
-
-## Updating middleware
-
-If you intend to make `middleware{:.objectKey}` dynamic, ensure
-you call `update(){:js}` whenever the state changes to compute
-the new position.
