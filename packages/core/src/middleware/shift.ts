@@ -66,11 +66,19 @@ export const shift = (
       crossAxisCoord = within(min, crossAxisCoord, max);
     }
 
-    return limiter.fn({
+    const limitedCoords = limiter.fn({
       ...middlewareArguments,
       [mainAxis]: mainAxisCoord,
       [crossAxis]: crossAxisCoord,
     });
+
+    return {
+      ...limitedCoords,
+      data: {
+        x: limitedCoords.x - x,
+        y: limitedCoords.y - y,
+      },
+    };
   },
 });
 
