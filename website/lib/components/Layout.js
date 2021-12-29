@@ -14,7 +14,6 @@ import {Menu} from 'react-feather';
 import {Chrome} from './Chrome';
 import {Floating} from './Floating';
 import {SkipNavLink, SkipNavContent} from '@reach/skip-nav';
-import '@reach/skip-nav/styles.css';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import {useRef} from 'react';
 
@@ -313,7 +312,7 @@ export default function Layout({children}) {
                       >
                         {pathname === url ? (
                           <span
-                            className="w-6 h-6 [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-purple-400 to-blue-400"
+                            className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-violet-300 to-cyan-400"
                             style={{
                               opacity:
                                 pathname === url ? '1' : '0',
@@ -333,7 +332,7 @@ export default function Layout({children}) {
                         )}
                         <span
                           className={cn('block', {
-                            'text-transparent font-bold bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400':
+                            'text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400':
                               pathname === url,
                             'font-mono [font-size:90%]':
                               mono === true,
@@ -391,7 +390,7 @@ export default function Layout({children}) {
           <p className="text-sm mt-4">
             Icons made by Freepik and authors from{' '}
             <a
-              className="text-blue-500"
+              className="text-blue-400"
               href="https://www.flaticon.com"
             >
               www.flaticon.com

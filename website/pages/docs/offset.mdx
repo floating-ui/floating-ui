@@ -12,7 +12,7 @@ element from its reference element.
       portaled
       middleware={[{name: 'offset', options: 0}]}
     >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 mx-auto bg-blue-600">
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
         0px
       </div>
     </Floating>
@@ -20,7 +20,7 @@ element from its reference element.
       portaled
       middleware={[{name: 'offset', options: 10}]}
     >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 mx-auto bg-blue-600">
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
         10px
       </div>
     </Floating>
@@ -44,19 +44,17 @@ of your middleware array.
 
 ## Options
 
+These are the options you can pass to `offset(){:js}`.
+
 ```ts
 type Options =
-  | OffsetValue
+  | number
+  | {mainAxis?: number; crossAxis?: number}
   | (({
       reference: Rect,
       floating: Rect,
       placement: Placement,
-    }) => OffsetValue);
-
-// Below is the relative type
-type OffsetValue =
-  | number
-  | {mainAxis?: number; crossAxis?: number};
+    }) => number | {mainAxis?: number; crossAxis?: number});
 ```
 
 ```js

@@ -1,4 +1,5 @@
 import 'tailwindcss/tailwind.css';
+import '@reach/skip-nav/styles.css';
 import '../assets/global.css';
 
 import {useAnalytics} from '../lib/hooks/useAnalytics';

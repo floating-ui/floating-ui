@@ -19,7 +19,7 @@ available space:
       }}
       middleware={[{name: 'size', options: {padding: 5}}]}
     >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
         Scroll
       </div>
     </Floating>
@@ -55,9 +55,12 @@ If your element has a border, ensure your CSS is using
 
 ## Options
 
+These are the options you can pass to `size(){:js}`. Each comment
+specifies the default value.
+
 ```ts
 type Options = DetectOverflowOptions & {
-  apply(args: Dimensions & ElementRects): void;
+  apply(args: Dimensions & ElementRects): void; // undefined
 };
 ```
 
@@ -131,7 +134,7 @@ const middleware = [
         {name: 'size', options: {padding: 5}},
       ]}
     >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
         Scroll
       </div>
     </Floating>
@@ -184,7 +187,7 @@ const middleware = [
       ]}
       minHeight={50}
     >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600">
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
         Scroll
       </div>
     </Floating>

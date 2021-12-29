@@ -531,15 +531,14 @@ function hideTooltip() {
   tooltip.style.display = '';
 }
 
-const showEvents = ['mouseenter', 'focus'];
-const hideEvents = ['mouseleave', 'blur'];
-
-showEvents.forEach((e) =>
-  button.addEventListener(e, showTooltip)
-);
-hideEvents.forEach((e) =>
-  button.addEventListener(e, hideTooltip)
-);
+[
+  ['mouseenter', showTooltip],
+  ['mouseleave', hideTooltip],
+  ['focus', showTooltip],
+  ['blur', hideTooltip],
+].forEach(([event, listener]) => {
+  button.addEventListener(event, listener);
+});
 ```
 
 Try hovering or focusing the button:

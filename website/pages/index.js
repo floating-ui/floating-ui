@@ -578,82 +578,35 @@ function HomePage() {
                   computePosition
                   <span className="text-blue-200">()</span>
                 </code>
-                <span className="text-md text-gray-400 text-left">
-                  &nbsp; 0.6 kB
+                <span className="text-md text-gray-400 text-left [font-variant-numeric:tabular-nums]">
+                  <span className="invisible">+</span>0.6 kB
                 </span>
               </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  shift<span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.6 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  limitShift
-                  <span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.1 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  flip<span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.5 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  hide<span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.2 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  arrow<span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.2 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  offset
-                  <span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.1 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  size<span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.2 kB
-                </span>
-              </div>
-              <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
-                  autoPlacement
-                  <span className="text-blue-200">()</span>
-                </code>
-                <span className="text-md text-green-400 text-left">
-                  +0.4 kB
-                </span>
-              </div>
+              {[
+                {name: 'shift', size: '0.6 kB'},
+                {name: 'limitShift', size: '0.2 kB'},
+                {name: 'flip', size: '0.5 kB'},
+                {name: 'hide', size: '0.2 kB'},
+                {name: 'offset', size: '0.1 kB'},
+                {name: 'autoPlacement', size: '0.4 kB'},
+                {name: 'size', size: '0.3 kB'},
+                {name: 'inline', size: '0.6 kB'},
+              ].map(({name, size}) => (
+                <div className="mb-2 flex gap-2 items-center justify-center">
+                  <code className="flex-1 text-blue-400 text-right">
+                    {name}
+                    <span className="text-blue-200">()</span>
+                  </code>
+                  <span className="text-md text-green-400 text-left [font-variant-numeric:tabular-nums]">
+                    +{size}
+                  </span>
+                </div>
+              ))}
               <div className="mb-2 flex gap-3 items-center justify-center">
                 <code className="flex-1 text-gray-400 text-right">
                   DOM platform
                 </code>
-                <span className="text-md text-yellow-400 text-left">
+                <span className="text-md text-yellow-400 text-left [font-variant-numeric:tabular-nums]">
                   +1.9 kB
                 </span>
               </div>

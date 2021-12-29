@@ -38,7 +38,7 @@ module.exports = {
               borderTopRightRadius: '0.25rem',
               borderBottomRightRadius: '0.25rem',
               borderLeftColor: colors.purple[400],
-              borderLeftWidth: '1px',
+              borderLeftWidth: '0.25rem',
               backgroundColor: `rgba(200,100,255,0.15)`,
               padding: '0.25rem 0.5rem 0.25rem 1rem',
               '> p': {
@@ -62,7 +62,7 @@ module.exports = {
             h1: {
               backgroundClip: 'text',
               color: 'transparent',
-              backgroundImage: `linear-gradient(to right, ${colors.purple['400']}, ${colors.blue['400']})`,
+              backgroundImage: `linear-gradient(to right, ${colors.violet['300']}, ${colors.cyan['400']})`,
               display: 'inline',
               lineHeight: '1.1',
               wordBreak: 'break-word',
@@ -92,17 +92,22 @@ module.exports = {
             },
             code: {
               color: '#b4c2f0',
-              borderRadius: '4px',
               fontWeight: '500',
               '&::before': {
-                color: '#86e1fc',
+                display: 'none',
               },
               '&::after': {
-                color: '#86e1fc',
+                display: 'none',
               },
             },
+            ':not(pre) > code': {
+              border: `1px solid ${colors.gray['700']}`,
+              padding: '0.2rem 0.4rem',
+              borderRadius: '4px',
+              backgroundColor: colors.gray['1000'],
+            },
             a: {
-              color: colors.blue[400],
+              color: colors.cyan[400],
               textDecoration: 'none',
               borderBottom: '1px solid transparent',
               '&:hover': {

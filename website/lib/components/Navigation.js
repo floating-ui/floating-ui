@@ -3,7 +3,7 @@ import {ArrowLeft, ArrowRight} from 'react-feather';
 
 export default function Navigation({back, next}) {
   return (
-    <div className="flex text-xl sm:text-2xl mt-16 text-blue-400">
+    <div className="flex text-xl sm:text-2xl mt-16 text-cyan-400">
       {back ? (
         <Link href={back.url}>
           <a
@@ -17,9 +17,11 @@ export default function Navigation({back, next}) {
             </div>
             <div className="flex items-center gap-4">
               <span className="hidden sm:block">
-                <ArrowLeft className="min-width-[24]" />
+                <ArrowLeft className="min-width-[24] text-violet-300" />
               </span>
-              {back.title}
+              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400">
+                {back.title}
+              </span>
             </div>
           </a>
         </Link>
@@ -38,7 +40,9 @@ export default function Navigation({back, next}) {
               <ArrowRight className="min-width-[24] inline" />
             </div>
             <div className="flex items-center gap-4 justify-end">
-              {next.title}{' '}
+              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400">
+                {next.title}
+              </span>{' '}
               <span className="hidden sm:block">
                 <ArrowRight className="min-width-[24]" />
               </span>

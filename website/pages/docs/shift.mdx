@@ -6,24 +6,28 @@ export default Layout;
 The `shift{:.function}` middleware shifts the floating element in
 order to keep it in view.
 
-<div className="flex flex-col gap-4">
-  <Chrome>
-    <Floating
-      content="Element wider than its reference"
-    >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600 font-mono">[]</div>
-    </Floating>
-  </Chrome>
+Without `shift(){:js}`:
 
-  <Chrome>
-    <Floating
-      content="Element wider than its reference"
-      middleware={[{name: 'shift'}]}
-    >
-      <div className="grid place-items-center text-gray-50 w-32 h-32 bg-blue-600 font-mono">[shift()]</div>
-    </Floating>
-  </Chrome>
-</div>
+<Chrome>
+  <Floating content="Floating wider than its reference">
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
+      Ref
+    </div>
+  </Floating>
+</Chrome>
+
+With `shift(){:js}`:
+
+<Chrome>
+  <Floating
+    content="Floating wider than its reference"
+    middleware={[{name: 'shift'}]}
+  >
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
+      Ref
+    </div>
+  </Floating>
+</Chrome>
 
 ## Usage
 
@@ -37,11 +41,17 @@ computePosition(referenceEl, floatingEl, {
 
 ## Options
 
+These are the options you can pass to `shift(){:js}`. Each
+comment specifies the default value.
+
 ```ts
 type Options = DetectOverflowOptions & {
-  mainAxis: boolean;
-  crossAxis: boolean;
-  limiter: (middlewareArguments: MiddlewareArguments) => Coords;
+  mainAxis: boolean; // true
+  crossAxis: boolean; // false
+  limiter: {
+    fn: (middlewareArguments: MiddlewareArguments) => Coords;
+    options?: any;
+  }; // {fn: ({x, y}) => ({x, y})}
 };
 ```
 
@@ -158,3 +168,18 @@ can be passed. For instance:
 ```js
 shift({padding: 5}); // 0 by default
 ```
+
+## Data
+
+The following data is available in `middlewareData.shift{:js}`:
+
+```js
+type Data = {
+  x: number,
+  y: number,
+};
+```
+
+`x{:.objectKey}` and `y{:.objectKey}` represent how much the
+floating element has been shifted along that axis. The values are
+offsets, and therefore can be negative.

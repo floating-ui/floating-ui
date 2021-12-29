@@ -62,10 +62,14 @@ your middleware array, after `shift{:.function}` (if used).
 
 ## Options
 
+These are the options you can pass to `arrow(){:js}`. Each
+comment specifies the default value.
+
 ```ts
 type Options = {
-  element: HTMLElement;
-  padding: Padding;
+  // `element` is required
+  element: HTMLElement; // undefined
+  padding: Padding; // 0
 };
 ```
 
@@ -80,10 +84,6 @@ arrow({
 ```
 
 ### padding
-
-```ts
-type Padding = number | SideObject;
-```
 
 This describes the padding between the arrow and the edges of the
 floating element. If your floating element has

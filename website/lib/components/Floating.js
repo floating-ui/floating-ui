@@ -66,7 +66,7 @@ export function Floating({
 
   const tooltipJsx = (
     <div
-      className="grid place-items-center bg-gray-1000 text-gray-50 z-10"
+      className="grid place-items-center bg-gray-500 text-gray-50 z-10"
       ref={floating}
       style={{
         ...tooltipStyle,

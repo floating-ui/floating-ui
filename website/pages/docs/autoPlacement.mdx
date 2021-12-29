@@ -21,11 +21,14 @@ computePosition(referenceEl, floatingEl, {
 
 ## Options
 
+These are the options you can pass to `autoPlacement(){:js}`.
+Each comment specifies the default value.
+
 ```ts
 type Options = DetectOverflowOptions & {
-  alignment: Alignment | null;
-  autoAlignment: boolean;
-  allowedPlacements: Array<Placement>;
+  alignment: Alignment | null; // null
+  autoAlignment: boolean; // true
+  allowedPlacements: Array<Placement>; // allPlacements
 };
 ```
 

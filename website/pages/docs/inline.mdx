@@ -14,7 +14,7 @@ measuring over the bounding box.
 In the following examples, the `placement{:.objectKey}` is
 `'top'{:js}`.
 
-`middleware:{:.objectKey}` `[]{:js}`
+Without `inline(){:js}`:
 
 <img
   width={692}
@@ -23,7 +23,7 @@ In the following examples, the `placement{:.objectKey}` is
   src="/inline-disabled.png"
 />
 
-`middleware:{:.objectKey}` `[inline()]{:js}`
+With `inline(){:js}`:
 
 <img
   width={692}
@@ -73,11 +73,14 @@ used).
 
 ## Options
 
+These are the options you can pass to `inline(){:js}`. Each
+comment specifies the default value.
+
 ```ts
 type Options = {
-  x: number; // `undefined` by default
-  y: number; // `undefined` by default
-  padding: number | SideObject; // `2` by default
+  x: number; // undefined
+  y: number; // undefined
+  padding: number | SideObject; // 2
 };
 ```
 
