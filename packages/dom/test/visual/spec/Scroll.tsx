@@ -1,6 +1,6 @@
 import {Strategy} from '@floating-ui/core';
 import {useFloating} from '@floating-ui/react-dom';
-import {useState} from 'react';
+import {useLayoutEffect, useState} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 
@@ -24,6 +24,8 @@ export function Scroll() {
     strategy: strategyState,
   });
   const {scrollRef, indicator} = useScroll({refs, update});
+
+  useLayoutEffect(update, [update, node]);
 
   const referenceJsx = (
     <div
