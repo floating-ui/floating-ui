@@ -22,7 +22,7 @@ export function getViewportRect(element: Element): Rect {
     // Safari returns a number <= 0, usually < -1 when pinch-zoomed
     if (
       Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
-      0.001
+      0.01
     ) {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
