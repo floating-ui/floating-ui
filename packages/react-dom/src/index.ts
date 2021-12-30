@@ -108,19 +108,19 @@ export function useFloating({
   );
 }
 
-export const arrow = ({
-  element,
-  padding,
-}: {
+export const arrow = (options: {
   element: MutableRefObject<HTMLElement | null> | HTMLElement;
   padding?: number | SideObject;
 }): Middleware => {
+  const {element, padding} = options;
+
   function isRef(value: unknown): value is MutableRefObject<unknown> {
     return Object.prototype.hasOwnProperty.call(value, 'current');
   }
 
   return {
     name: 'arrow',
+    options,
     fn(args) {
       if (isRef(element)) {
         if (element.current != null) {
