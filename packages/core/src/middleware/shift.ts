@@ -151,13 +151,13 @@ export const limitShift = (
       );
       const limitMin =
         rects.reference[crossAxis] -
-        rects.floating[len] -
-        (middlewareData.offset?.[mainAxis] ?? 0) +
+        rects.floating[len] +
+        (middlewareData.offset?.[crossAxis] ?? 0) +
         (isOriginSide ? 0 : computedOffset.crossAxis);
       const limitMax =
         rects.reference[crossAxis] +
         rects.reference[len] +
-        (middlewareData.offset?.[mainAxis] ?? 0) -
+        (middlewareData.offset?.[crossAxis] ?? 0) -
         (isOriginSide ? computedOffset.crossAxis : 0);
 
       if (crossAxisCoord < limitMin) {
