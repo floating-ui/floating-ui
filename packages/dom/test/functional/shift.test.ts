@@ -194,7 +194,9 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
 });
 
 ['top', 'bottom'].forEach((placement) => {
-  test(`offset is correctly added ${placement}`, async ({page}) => {
+  test(`offset is correctly added when limitShift is enabled ${placement}`, async ({
+    page,
+  }) => {
     await page.goto('http://localhost:1234/shift');
 
     await click(page, `[data-testid="placement-${placement}"]`);
