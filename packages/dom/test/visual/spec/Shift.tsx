@@ -3,6 +3,7 @@ import type {LimitShiftOptions} from '@floating-ui/core/src/middleware/shift';
 import {
   useFloating,
   shift,
+  offset,
   limitShift as limitShiftFn,
 } from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
@@ -38,9 +39,11 @@ export function Shift() {
     useState<LimitShiftOptions['crossAxis']>(true);
   const [limitShiftOffset, setLimitShiftOffset] =
     useState<LimitShiftOptions['offset']>(0);
+  const [offsetValue, setOffsetValue] = useState(0);
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,
     middleware: [
+      offset(offsetValue),
       shift({
         mainAxis,
         crossAxis,
@@ -108,6 +111,20 @@ export function Shift() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>offset</h2>
+      <Controls>
+        {[0, 10].map((value) => (
+          <button
+            key={String(value)}
+            data-testid={`offset-${value}`}
+            onClick={() => setOffsetValue(value)}
+            style={{backgroundColor: offsetValue === value ? 'black' : ''}}
+          >
+            {String(value)}
           </button>
         ))}
       </Controls>

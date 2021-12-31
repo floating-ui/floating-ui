@@ -192,3 +192,44 @@ test('limitShift does not limit shift when `mainAxis` is false', async ({
     });
   });
 });
+
+['top', 'bottom'].forEach((placement) => {
+  test(`offset is correctly added when limitShift is enabled ${placement}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/shift');
+
+    await click(page, `[data-testid="placement-${placement}"]`);
+    await click(page, `[data-testid="offset-10"]`);
+    await click(page, `[data-testid="limitShift-true"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `offset-and-limitShift-${placement}.png`
+    );
+  });
+
+  test(`offset is correctly added when limitShift is enabled ${placement} crossAxis stop check`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/shift');
+
+    await click(page, `[data-testid="placement-${placement}"]`);
+    await click(page, `[data-testid="offset-10"]`);
+    await click(page, `[data-testid="crossAxis-true"]`);
+    await click(page, `[data-testid="limitShift-true"]`);
+
+    await page.evaluate(
+      (scrollTop) => {
+        const scroll = document.querySelector('.scroll');
+        if (scroll) {
+          scroll.scrollTop = scrollTop;
+        }
+      },
+      placement === 'bottom' ? 260 : 950
+    );
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `offset-and-limitShift-stop-check-${placement}.png`
+    );
+  });
+});
