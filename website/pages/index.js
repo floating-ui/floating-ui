@@ -26,27 +26,16 @@ import {
   getScrollParents,
 } from '@floating-ui/react-dom';
 
-const Reference = forwardRef(
-  ({color, className, children}, ref) => {
-    const colorClasses = {
-      red: 'text-red-600 border-red-600 bg-red-100',
-      violet: 'text-violet-600 border-violet-700 bg-violet-100',
-      green: 'text-green-600 border-green-700 bg-green-100',
-      blue: 'text-blue-600 border-blue-700 bg-blue-100',
-      yellow: 'text-yellow-600 border-yellow-600 bg-yellow-100',
-      cyan: 'text-cyan-600 border-cyan-700 bg-cyan-100',
-    }[color];
-
-    return (
-      <button
-        ref={ref}
-        className={`text-sm z-50 font-bold text-violet-600 bg-gray-50 p-2 w-24 h-24 border-2 border-violet-600 border-dashed cursor-default ${colorClasses} ${className}`}
-      >
-        {children}
-      </button>
-    );
-  }
-);
+const Reference = forwardRef(({className, children}, ref) => {
+  return (
+    <button
+      ref={ref}
+      className={`text-sm z-50 font-bold text-gray-900 bg-gray-50 p-2 w-24 h-24 border-2 border-gray-900 border-dashed cursor-default ${className}`}
+    >
+      {children}
+    </button>
+  );
+});
 
 function GridItem({title, description, chrome, titleClass}) {
   return (
@@ -175,9 +164,9 @@ function Placement() {
                 className={cn(
                   'w-5 h-5 rounded-full border-2 border-solid',
                   {
-                    'border-violet-500': placement === p,
-                    'border-gray-400': placement !== p,
-                    'bg-violet-500': placement === p,
+                    'border-gray-500': placement === p,
+                    'border-gray-600': placement !== p,
+                    'bg-gray-500': placement === p,
                   }
                 )}
               />
@@ -202,7 +191,7 @@ function Placement() {
             placement={placement}
             middleware={[{name: 'offset', options: 5}]}
           >
-            <Reference color="violet" />
+            <Reference />
           </Floating>
         </Chrome>
       }
@@ -259,10 +248,7 @@ function Shift() {
                 </div>
               }
             >
-              <Reference
-                color="blue"
-                className="ml-[5%] sm:ml-[33%]"
-              />
+              <Reference className="ml-[5%] sm:ml-[33%]" />
             </Floating>
           </Chrome>
         </div>
@@ -302,7 +288,7 @@ function Flip() {
               ]}
               transition
             >
-              <Reference color="red" />
+              <Reference />
             </Floating>
           </Chrome>
         </div>
@@ -338,7 +324,7 @@ function Size() {
               maxHeight: 0,
             }}
           >
-            <Reference color="green" />
+            <Reference />
           </Floating>
         </Chrome>
       }
@@ -383,10 +369,7 @@ function Arrow() {
               ]}
               arrow
             >
-              <Reference
-                color="yellow"
-                className="ml-[5%] md:ml-[33%]"
-              />
+              <Reference className="ml-[5%] md:ml-[33%]" />
             </Floating>
           </Chrome>
         </div>
@@ -457,7 +440,7 @@ function Virtual() {
           >
             <div
               ref={floating}
-              className="bg-gray-500 text-gray-50 font-bold p-4"
+              className="bg-gray-500 text-gray-50 font-bold p-4 rounded"
               style={{
                 position: 'absolute',
                 top: y ?? '',
