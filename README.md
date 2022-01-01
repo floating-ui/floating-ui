@@ -9,18 +9,16 @@
 [Website](https://floating-ui.com)
 
 Floating UI is a low-level library for positioning "floating" elements like
-tooltips, popovers, dropdowns, menus and more. Since these types of elements
-float on top of the UI without disrupting the flow of content, challenges arise
-when positioning them.
+tooltips, popovers, dropdowns, menus and more while intelligently keeping them
+in view.
 
-Floating UI exposes primitives which enable a floating element to be positioned
-next to a given reference element while appearing in view for the user as best
-as possible. Features include overflow prevention (or collision awareness),
-placement flipping, and more.
+Challenges arise when positioning floating elements as they get taken out of the
+normal layout flow of a document, leading to issues with clipping and overflow,
+which is where this library can help!
 
 - **Tiny**: 600-byte core with highly modular architecture for tree-shaking
-- **Low-level**: Hyper-granular control over positioning behavior
-- **Pure**: Predictable, side-effect free behavior
+- **Low-level**: Granular control over positioning behavior
+- **Pure**: Predictable and side-effect free
 - **Extensible**: Powerful middleware system
 - **Platform-agnostic**: Runs on any JavaScript environment which provides
   measurement APIs, including the web and React Native

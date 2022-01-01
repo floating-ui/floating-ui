@@ -5,80 +5,120 @@ import 'tippy.js/animations/perspective-subtle.css';
 
 import Tippy from '@tippyjs/react';
 import {inlinePositioning} from 'tippy.js';
-import {useState} from 'react';
-import {Check, ArrowRight, GitHub, Heart} from 'react-feather';
+import {forwardRef, useEffect, useRef, useState} from 'react';
+import {ArrowRight, GitHub, Heart} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import Link from 'next/link';
 import Head from 'next/head';
 import DropdownExample from '../lib/components/DropdownExample.js';
 import cn from 'classnames';
-import {StaticCode} from '../lib/components/Code';
+import {Chrome} from '../lib/components/Chrome';
+import {Floating} from '../lib/components/Floating';
 
 import Logo from '../assets/logo.svg';
 
 import Logos from '../lib/components/Logos';
 import Cards from '../lib/components/Cards';
 import {MINI_SPONSORS, SPONSORS} from '../data';
+import {
+  useFloating,
+  shift,
+  getScrollParents,
+} from '@floating-ui/react-dom';
+
+const Reference = forwardRef(
+  ({color, className, children}, ref) => {
+    const colorClasses = {
+      red: 'text-red-600 border-red-600 bg-red-100',
+      violet: 'text-violet-600 border-violet-700 bg-violet-100',
+      green: 'text-green-600 border-green-700 bg-green-100',
+      blue: 'text-blue-600 border-blue-700 bg-blue-100',
+      yellow: 'text-yellow-600 border-yellow-600 bg-yellow-100',
+      cyan: 'text-cyan-600 border-cyan-700 bg-cyan-100',
+    }[color];
+
+    return (
+      <button
+        ref={ref}
+        className={`text-sm z-50 font-bold text-violet-600 bg-gray-50 p-2 w-24 h-24 border-2 border-violet-600 border-dashed cursor-default ${colorClasses} ${className}`}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+
+function GridItem({title, description, chrome, titleClass}) {
+  return (
+    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 rounded-lg px-4 py-8 sm:p-8">
+      <div className="overflow-hidden">
+        <h3 className={`text-3xl font-bold mb-2 ${titleClass}`}>
+          {title}
+        </h3>
+        <p className="text-xl mb-6">{description}</p>
+      </div>
+      <div className="relative items-center bg-gray-800 rounded-lg lg:h-auto">
+        {chrome}
+      </div>
+    </div>
+  );
+}
 
 function Placement() {
   const [placement, setPlacement] = useState('top');
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-blue-800 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
-      <div className="lg:col-span-7 overflow-hidden">
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Placement
-        </h3>
-        <p className="text-xl text-blue-200 mb-4">
-          Position your floating element on 12 core placements.
-        </p>
-        <div className="rounded-lg bg-gray-800 p-4 overflow-auto w-full">
-          <StaticCode placement={placement} />
-        </div>
-      </div>
-      <div className="grid lg:col-span-5 relative items-center bg-gray-800 rounded-lg h-128 lg:h-auto">
-        <div className="text-center">
+    <GridItem
+      titleClass="text-violet-300"
+      title="Placement"
+      description="Places your floating element on 12 core positions."
+      chrome={
+        <Chrome
+          label="Click the dots"
+          center
+          className="grid items-center relative"
+        >
           {[
             {
               placement: 'top',
               styles: {
                 left: 'calc(50% - 10px - 1rem)',
-                top: 25,
+                top: 0,
               },
             },
             {
               placement: 'top-start',
               styles: {
                 left: 'calc(50% - 70px - 1rem)',
-                top: 25,
+                top: 0,
               },
             },
             {
               placement: 'top-end',
               styles: {
                 left: 'calc(50% + 50px - 1rem)',
-                top: 25,
+                top: 0,
               },
             },
             {
               placement: 'bottom',
               styles: {
                 left: 'calc(50% - 10px - 1rem)',
-                bottom: 25,
+                bottom: 0,
               },
             },
             {
               placement: 'bottom-start',
               styles: {
                 left: 'calc(50% - 70px - 1rem)',
-                bottom: 25,
+                bottom: 0,
               },
             },
             {
               placement: 'bottom-end',
               styles: {
                 left: 'calc(50% + 50px - 1rem)',
-                bottom: 25,
+                bottom: 0,
               },
             },
             {
@@ -133,45 +173,40 @@ function Placement() {
             >
               <div
                 className={cn(
-                  ' rounded-full border-2 border-solid border-blue-400',
+                  'w-5 h-5 rounded-full border-2 border-solid',
                   {
-                    'bg-blue-400': placement === p,
+                    'border-violet-500': placement === p,
+                    'border-gray-400': placement !== p,
+                    'bg-violet-500': placement === p,
                   }
                 )}
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
               />
             </button>
           ))}
-          <Tippy
+          <Floating
+            content={
+              <div
+                className="font-bold text-center"
+                style={{
+                  minWidth:
+                    ['top', 'bottom'].includes(
+                      placement.split('-')[0]
+                    ) && placement.includes('-')
+                      ? '8rem'
+                      : '',
+                }}
+              >
+                {placement}
+              </div>
+            }
             placement={placement}
-            visible
-            content="Tooltip"
-            offset={[0, 8]}
-            arrow={false}
-            theme="light-border"
-            popperOptions={{
-              modifiers: [
-                {
-                  name: 'flip',
-                  enabled: false,
-                },
-                {
-                  name: 'preventOverflow',
-                  enabled: false,
-                },
-              ],
-            }}
+            middleware={[{name: 'offset', options: 5}]}
           >
-            <button className="bg-blue-600 rounded text-md text-gray-50 p-2 sm:w-48 h-48">
-              Click the dots
-            </button>
-          </Tippy>
-        </div>
-      </div>
-    </div>
+            <Reference color="violet" />
+          </Floating>
+        </Chrome>
+      }
+    />
   );
 }
 
@@ -185,71 +220,54 @@ function Shift() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-green-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
-      <div className="lg:col-span-7 overflow-hidden">
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Shift
-        </h3>
-        <p className="text-xl text-green-100 mb-4">
-          Shift the floating element in view to prevent overflow.
-        </p>
-        <div className="rounded-lg bg-gray-800 p-4 overflow-auto">
-          <StaticCode middleware="shift" placement="right" />
-        </div>
-      </div>
-      <div
-        ref={setBoundary}
-        className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
-      >
-        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-solid border-red-400 h-[450px] lg:h-auto">
-          <div
-            style={{
-              height: 400,
-              width: 1,
-            }}
-          />
-          <div className="text-center">
-            <Tippy
-              visible={!!boundary}
+    <GridItem
+      title="Shift"
+      titleClass="text-blue-300"
+      description="Shifts your floating element to keep it in view."
+      chrome={
+        <div
+          ref={setBoundary}
+          className="relative overflow-hidden"
+        >
+          <Chrome
+            label="Scroll the container"
+            scrollable
+            relative={false}
+          >
+            <Floating
               placement="right"
+              middleware={[
+                {name: 'offset', options: 5},
+                {
+                  name: 'shift',
+                  options: {
+                    boundary,
+                    rootBoundary: 'document',
+                    padding: {top: 54, bottom: 5},
+                  },
+                },
+              ]}
               content={
-                <div className="px-2 text-center">
-                  <div style={{height: 125}}></div>
-                  <div>Floating</div>
-                  <div>Element</div>
-                  <div style={{height: 125}}></div>
+                <div className="w-24">
+                  <h3 className="font-bold text-xl">Popover</h3>
+                  <p className="text-sm">
+                    Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit. Nullam vitae pellentesque
+                    elit, in dapibus enim. Aliquam hendrerit
+                    iaculis facilisis.
+                  </p>
                 </div>
               }
-              offset={[0, 8]}
-              appendTo={() => boundary ?? document.body}
-              theme="light-border"
-              popperOptions={{
-                modifiers: [
-                  {
-                    name: 'preventOverflow',
-                    options: {
-                      rootBoundary: 'document',
-                      padding: 15,
-                      tether: false,
-                    },
-                  },
-                ],
-              }}
             >
-              <button className="bg-blue-600 rounded text-md text-gray-50 p-2">
-                Scroll
-              </button>
-            </Tippy>
-          </div>
-          <div
-            style={{
-              height: 400,
-              width: 1,
-            }}
-          />
+              <Reference
+                color="blue"
+                className="ml-[5%] sm:ml-[33%]"
+              />
+            </Floating>
+          </Chrome>
         </div>
-      </div>
-    </div>
+      }
+    />
   );
 }
 
@@ -263,75 +281,199 @@ function Flip() {
   }, [boundary]);
 
   return (
-    <div className="mb-4 grid lg:grid-cols-12 gap-8 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg px-4 py-8 sm:p-8 lg:h-[525px]">
-      <div className="grid lg:col-span-7 overflow-hidden">
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Flip
-        </h3>
-        <p className="text-xl text-red-100 mb-4">
-          Flip the floating element to the opposite placement to
-          prevent overflow.
-        </p>
-        <div className="rounded-lg bg-gray-800 p-4 overflow-auto mt-auto">
-          <StaticCode middleware="flip" placement="top" />
+    <GridItem
+      title="Flip"
+      titleClass="text-red-300"
+      description="Changes the placement of your floating element to keep it in view."
+      chrome={
+        <div
+          className="relative overflow-hidden"
+          ref={setBoundary}
+        >
+          <Chrome label="Scroll the container" scrollable center>
+            <Floating
+              content={<strong>Tooltip</strong>}
+              middleware={[
+                {name: 'offset', options: 5},
+                {
+                  name: 'flip',
+                  options: {rootBoundary: 'document'},
+                },
+              ]}
+              transition
+            >
+              <Reference color="red" />
+            </Floating>
+          </Chrome>
         </div>
-      </div>
-      <div
-        className="grid lg:col-span-5 relative overflow-hidden p-2 bg-gray-800 rounded-lg"
-        ref={setBoundary}
-      >
-        <div className="grid relative items-center bg-gray-800 rounded overflow-auto w-full border-4 border-styled border-red-400 h-[450px] lg:h-auto">
-          <div
-            style={{
-              height: 500,
-              width: 1,
+      }
+    />
+  );
+}
+
+function Size() {
+  return (
+    <GridItem
+      title="Size"
+      titleClass="text-green-300"
+      description="Changes the size of your floating element to keep it in view."
+      chrome={
+        <Chrome label="Scroll the container" scrollable center>
+          <Floating
+            content={
+              <div className="grid items-center font-bold">
+                Dropdown
+              </div>
+            }
+            middleware={[
+              {name: 'offset', options: 5},
+              {
+                name: 'size',
+                options: {padding: 8, rootBoundary: 'document'},
+              },
+            ]}
+            tooltipStyle={{
+              height: 300,
+              overflow: 'hidden',
+              maxHeight: 0,
             }}
-          />
-          <div className="text-center">
-            <Tippy
-              visible
-              content={
-                <div className="px-4">
-                  <div style={{height: 30}}></div>
-                  <span>Tooltip</span>
-                  <div style={{height: 30}}></div>
-                </div>
-              }
-              offset={[0, 8]}
-              appendTo="parent"
-              theme="light-border"
-              popperOptions={{
-                modifiers: [
-                  {
-                    name: 'preventOverflow',
-                    options: {
-                      rootBoundary: 'document',
+          >
+            <Reference color="green" />
+          </Floating>
+        </Chrome>
+      }
+    />
+  );
+}
+
+function Arrow() {
+  const [boundary, setBoundary] = useState();
+
+  return (
+    <GridItem
+      title="Arrow"
+      titleClass="text-yellow-300"
+      description="Dynamically positions an arrow element that is center-aware."
+      chrome={
+        <div
+          ref={setBoundary}
+          className="grid lg:col-span-5 relative overflow-hidden"
+        >
+          <Chrome
+            label="Scroll the container"
+            scrollable
+            relative={false}
+          >
+            <Floating
+              placement="right"
+              content={<div className="w-24 h-[18.3rem]" />}
+              middleware={[
+                {name: 'offset', options: 16},
+                {
+                  name: 'shift',
+                  options: {
+                    boundary,
+                    padding: {
+                      top: 54,
+                      bottom: 5,
                     },
+                    rootBoundary: 'document',
                   },
-                  {
-                    name: 'flip',
-                    options: {
-                      rootBoundary: 'document',
-                      padding: 0,
-                    },
-                  },
-                ],
+                },
+              ]}
+              arrow
+            >
+              <Reference
+                color="yellow"
+                className="ml-[5%] md:ml-[33%]"
+              />
+            </Floating>
+          </Chrome>
+        </div>
+      }
+    />
+  );
+}
+
+function Virtual() {
+  const [open, setOpen] = useState(false);
+  const boundaryRef = useRef();
+  const {x, y, reference, floating, refs, update} = useFloating({
+    placement: 'top',
+    middleware: [
+      shift({
+        crossAxis: true,
+        padding: 5,
+        rootBoundary: 'document',
+      }),
+    ],
+  });
+
+  useEffect(() => {
+    function handleMouseMove({clientX, clientY}) {
+      reference({
+        getBoundingClientRect() {
+          return {
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            left: clientX,
+            top: clientY,
+            right: clientX,
+            bottom: clientY,
+          };
+        },
+      });
+    }
+
+    const boundary = boundaryRef.current;
+    boundary.addEventListener('mousemove', handleMouseMove);
+
+    const parents = getScrollParents(refs.floating.current);
+    parents.forEach((parent) => {
+      parent.addEventListener('scroll', update);
+    });
+
+    return () => {
+      boundary.removeEventListener('mousemove', handleMouseMove);
+      parents.forEach((parent) => {
+        parent.removeEventListener('scroll', update);
+      });
+    };
+  }, [reference, refs.floating, update]);
+
+  return (
+    <GridItem
+      title="Virtual"
+      description="Position relative to any coordinates, such as your mouse cursor."
+      chrome={
+        <Chrome label="Move your mouse">
+          <div
+            ref={boundaryRef}
+            className="h-full"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+          >
+            <div
+              ref={floating}
+              className="bg-gray-500 text-gray-50 font-bold p-4"
+              style={{
+                position: 'absolute',
+                top: y ?? '',
+                left: Math.round(x) ?? '',
+                transform: `scale(${open ? '1' : '0'})`,
+                opacity: open ? '1' : '0',
+                transition:
+                  'transform 0.2s ease, opacity 0.1s ease',
               }}
             >
-              <button className="bg-blue-600 rounded text-md text-gray-50 p-2">
-                Scroll
-              </button>
-            </Tippy>
+              Tooltip
+            </div>
           </div>
-          <div
-            style={{
-              height: 500,
-              width: 1,
-            }}
-          />
-        </div>
-      </div>
-    </div>
+        </Chrome>
+      }
+    />
   );
 }
 
@@ -477,7 +619,7 @@ function HomePage() {
           <div className="flex flex-row justify-center gap-x-4">
             <Link href="/docs/getting-started">
               <a
-                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-125 bg-gradient-to-b from-blue-500 to-blue-600 shadow-lg hover:shadow-xl rounded text-gray-50 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
+                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
                 href="/docs/getting-started"
               >
                 Get Started <ArrowRight />
@@ -496,11 +638,11 @@ function HomePage() {
       </header>
       <main className="relative -mt-60 sm:-mt-48">
         <div className="container mx-auto px-4 max-w-screen-xl">
-          <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
+          <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-500">
             Powerful positioning primitives.
           </h2>
           <p className="prose text-xl lg:text-2xl text-left">
-            Position all types of{' '}
+            Floating UI is a powerful toolkit to position{' '}
             <Tippy
               content={
                 <div className="text-lg p-2">
@@ -518,27 +660,30 @@ function HomePage() {
             >
               <span
                 tabIndex={0}
-                className="relative"
+                className="relative text-gray-50"
                 style={{
                   textDecorationLine: 'underline',
                   textDecorationStyle: 'wavy',
-                  textUnderlineOffset: 6,
-                  textDecorationThickness: 2,
+                  textUnderlineOffset: 4,
+                  textDecorationThickness: 1,
                   textDecorationColor:
-                    'rgba(200, 200, 255, 0.25)',
+                    'rgba(255, 255, 255, 0.5)',
                 }}
               >
                 floating elements
               </span>
             </Tippy>{' '}
-            with full control. Tooltips, popovers, dropdowns,
-            menus, and more.
+            while intelligently keeping them in view. Tooltips,
+            popovers, dropdowns, menus, and more.
           </p>
         </div>
-        <div className="container px-4 py-8 mx-auto max-w-screen-xl">
+        <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl">
           <Placement />
           <Shift />
           <Flip />
+          <Size />
+          <Arrow />
+          <Virtual />
         </div>
 
         <div className="container px-4 py-8 mx-auto max-w-screen-xl">
@@ -610,76 +755,6 @@ function HomePage() {
                   +1.9 kB
                 </span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-400 mt-16">
-            Endlessly extensible.
-          </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
-            The core package exports middleware that cover 99% of
-            positioning use cases, but for the remaining 1%, it's
-            straightforward to add your own positioning logic.
-          </p>
-
-          <div className="grid lg:grid-cols-2 gap-4">
-            <div className="bg-gradient-to-br from-red-600 to-pink-700 rounded-lg py-6 px-10">
-              <h3 className="text-2xl text-gray-50 font-bold mb-4 text-yellow-100">
-                Core middleware
-              </h3>
-              <ul className="text-lg text-pink-100 pl-6 flex flex-col gap-2">
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Instantly importable and usable
-                </li>
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Simple and powerful
-                </li>
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Customizable through options
-                </li>
-              </ul>
-            </div>
-            <div className="bg-gradient-to-br from-red-600 to-pink-700 rounded-lg py-6 px-10">
-              <h3 className="text-2xl text-gray-50 font-bold mb-4 text-yellow-100">
-                Custom middleware
-              </h3>
-              <ul className="text-lg text-pink-100 pl-6 flex flex-col gap-2">
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Modify positioning coordinates
-                </li>
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Add custom data
-                </li>
-                <li className="relative">
-                  <Check
-                    className="absolute top-1"
-                    style={{left: '-2rem'}}
-                  />
-                  Add custom behavior
-                </li>
-              </ul>
             </div>
           </div>
         </div>

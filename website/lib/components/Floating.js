@@ -1,4 +1,4 @@
-import {cloneElement, useEffect, useState} from 'react';
+import {cloneElement, useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import * as FloatingUI from '@floating-ui/react-dom';
 
@@ -6,15 +6,18 @@ export function Floating({
   children,
   content,
   tooltipStyle = {},
-  middleware,
+  middleware = [],
   portaled,
   minHeight,
+  transition,
+  arrow,
   ...options
 }) {
   const [{height}, setDimensions] = useState({
     width: null,
     height: null,
   });
+  const arrowRef = useRef();
   const {
     x,
     y,
@@ -25,7 +28,12 @@ export function Floating({
     refs,
   } = FloatingUI.useFloating({
     middleware:
-      middleware
+      [
+        ...middleware,
+        ...(arrow
+          ? [FloatingUI.arrow({element: arrowRef, padding: 5})]
+          : []),
+      ]
         ?.map(({name, options}) =>
           name !== 'size'
             ? FloatingUI[name]?.(options)
@@ -44,6 +52,38 @@ export function Floating({
         .filter((v) => v) ?? [],
     ...options,
   });
+
+  useEffect(() => {
+    function addTransition() {
+      if (transition) {
+        requestAnimationFrame(() => {
+          if (refs.floating.current) {
+            refs.floating.current.style.transition =
+              'transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)';
+          }
+        });
+      }
+    }
+
+    function removeTransition() {
+      if (refs.floating.current) {
+        refs.floating.current.style.transition = '';
+      }
+    }
+
+    if (x != null && transition) {
+      addTransition();
+    }
+
+    window.addEventListener('resize', () => {
+      removeTransition();
+      addTransition();
+    });
+
+    return () => {
+      window.removeEventListener('resize', removeTransition);
+    };
+  }, [x, transition, refs.floating]);
 
   useEffect(() => {
     const nodes = [
@@ -66,16 +106,19 @@ export function Floating({
 
   const tooltipJsx = (
     <div
-      className="grid place-items-center bg-gray-500 text-gray-50 z-10"
+      className="grid place-items-center bg-gray-500 text-gray-50 z-10 rounded"
       ref={floating}
       style={{
         ...tooltipStyle,
         position: 'absolute',
-        left: 0,
-        top: 0,
-        transform: `translate3d(${Math.round(x)}px,${Math.round(
-          y
-        )}px,0)`,
+        left: x != null ? 0 : '',
+        top: y != null ? 0 : '',
+        transform:
+          x != null
+            ? `translate3d(${Math.round(x)}px,${Math.round(
+                y
+              )}px,0)`
+            : '',
         maxHeight: height ?? '',
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
@@ -86,7 +129,23 @@ export function Floating({
             : '',
       }}
     >
-      <div className="px-4 py-2">{content ?? 'Floating'}</div>
+      <div className="px-2 py-2">{content ?? 'Floating'}</div>
+      {arrow && (
+        <div
+          ref={arrowRef}
+          className="w-4 h-4 bg-gray-500 [left:-0.5rem]"
+          style={{
+            position: 'absolute',
+            left: middlewareData.arrow?.x ?? '',
+            top: middlewareData.arrow?.y ?? '',
+            transition: 'transform 0.2s ease',
+            transform:
+              middlewareData.arrow?.centerOffset !== 0
+                ? 'translateX(1rem) rotate(45deg)'
+                : 'rotate(45deg)',
+          }}
+        />
+      )}
     </div>
   );
 

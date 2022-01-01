@@ -4,51 +4,65 @@ import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 export const Chrome = ({
   children,
-  // dark,
   center,
   scrollable,
-  className,
+  relative = true,
+  label,
+  scrollHeight = 305,
 }) => {
   const scrollableRef = useRef();
 
   useIsomorphicLayoutEffect(() => {
     if (scrollable) {
-      scrollableRef.current.scrollTop = 250;
+      scrollableRef.current.scrollTop =
+        scrollableRef.current.scrollHeight / 2 -
+        scrollableRef.current.offsetHeight / 2;
     }
   }, [scrollable]);
 
   return (
-    <div
-      className={
-        `relative bg-gray-50 rounded-lg overflow-hidden text-gray-900` +
-        (className ? ` ${className}` : ' h-64')
-      }
-    >
-      <div className="absolute w-full flex gap-2 bg-gray-100 p-4 z-10 top-0">
+    <div className="rounded-lg overflow-hidden text-gray-900">
+      <div className="bg-gray-100 h-12">
         <div
-          className="rounded-full w-4 h-4"
-          style={{background: '#ec695e'}}
-        />
-        <div
-          className="rounded-full w-4 h-4"
-          style={{background: '#f4bf4f'}}
-        />
-        <div
-          className="rounded-full w-4 h-4"
-          style={{background: '#61c653'}}
-        />
+          className={`absolute flex gap-2 m-4 ${
+            label ? 'hidden sm:flex' : ''
+          }`}
+        >
+          <div
+            className="rounded-full w-4 h-4"
+            style={{background: '#ec695e'}}
+          />
+          <div
+            className="rounded-full w-4 h-4"
+            style={{background: '#f4bf4f'}}
+          />
+          <div
+            className="rounded-full w-4 h-4"
+            style={{background: '#61c653'}}
+          />
+        </div>
+        <div className="flex font-bold justify-center items-center h-12">
+          {label}
+        </div>
       </div>
       <div
         ref={scrollableRef}
-        className={cn('overflow-hidden relative p-2 mt-12', {
-          'grid place-items-center': center,
-          'overflow-scroll': scrollable,
-        })}
-        style={{height: 'calc(100% - 3rem)'}}
+        className={cn(
+          'bg-gray-50 overflow-hidden p-2 h-[20rem]',
+          {
+            'grid place-items-center': center,
+            'overflow-y-auto': scrollable,
+            relative,
+          }
+        )}
       >
-        {scrollable && <div style={{height: 350, width: 1}} />}
+        {scrollable && (
+          <div style={{height: scrollHeight, width: 1}} />
+        )}
         {children}
-        {scrollable && <div style={{height: 350, width: 1}} />}
+        {scrollable && (
+          <div style={{height: scrollHeight, width: 1}} />
+        )}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ floating element in applicable situations, usually when it's not
 within the same clipping context as the reference element.
 
 <div className="flex flex-col gap-4">
-  <Chrome center scrollable className="h-96">
+  <Chrome center scrollable className="h-96" scrollHeight={325}>
     <Floating
       portaled
       middleware={[{name: 'offset', options: 5}, {name: 'hide'}]}

@@ -31,13 +31,13 @@ module.exports = {
           css: {
             fontSize: '1rem',
             maxWidth: '70ch',
-            color: '#BFC3D9',
+            color: '#b0b2c3',
             blockquote: {
-              color: colors.purple[300],
+              color: colors.purple['300'],
               fontSize: '90%',
               borderTopRightRadius: '0.25rem',
               borderBottomRightRadius: '0.25rem',
-              borderLeftColor: colors.purple[400],
+              borderLeftColor: colors.purple['400'],
               borderLeftWidth: '0.25rem',
               backgroundColor: `rgba(200,100,255,0.15)`,
               padding: '0.25rem 0.5rem 0.25rem 1rem',
@@ -74,21 +74,32 @@ module.exports = {
               color: '#fff',
               wordBreak: 'break-word',
               '> a': {
-                color: 'inherit',
+                color: colors.gray['50'],
+                borderBottomColor: 'transparent !important',
               },
-              '&:hover > a': {
-                textDecoration: 'underline',
+              '> a:hover': {
+                borderBottomColor: `${colors.gray['50']} !important`,
               },
             },
             h3: {
               color: '#BFC3D9',
               wordBreak: 'break-word',
+              '> a': {
+                color: colors.gray['50'],
+                borderBottomColor: 'transparent !important',
+              },
+              '> a:hover': {
+                borderBottomColor: `${colors.gray['50']} !important`,
+              },
             },
-            'h2 a': {
-              color: 'inherit',
-            },
-            'h3 a': {
-              color: 'inherit',
+            h4: {
+              '> a': {
+                color: colors.gray['50'],
+                borderBottomColor: 'transparent !important',
+              },
+              '> a:hover': {
+                borderBottomColor: `${colors.gray['50']} !important`,
+              },
             },
             code: {
               color: '#b4c2f0',
@@ -109,12 +120,14 @@ module.exports = {
             a: {
               color: colors.cyan[400],
               textDecoration: 'none',
-              borderBottom: '1px solid transparent',
+              borderBottom: `2px solid ${colors.cyan['900']}`,
+              paddingBottom: '0.1em',
+              transition: 'border-color 0.2s !important',
               '&:hover': {
                 borderBottomColor: 'inherit !important',
               },
               '&:active': {
-                borderBottomStyle: 'dashed',
+                color: `${colors.cyan['100']} !important`,
               },
             },
             'a code': {

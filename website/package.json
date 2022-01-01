@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@atomiks/mdx-pretty-code": "^0.0.2",
-    "@floating-ui/react-dom": "^0.3.2",
+    "@floating-ui/react-dom": "^0.4.1",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^12.0.3",
     "@reach/skip-nav": "^0.16.0",
