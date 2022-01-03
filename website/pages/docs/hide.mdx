@@ -8,14 +8,18 @@ floating element in applicable situations, usually when it's not
 within the same clipping context as the reference element.
 
 <div className="flex flex-col gap-4">
-  <Chrome center scrollable className="h-96" scrollHeight={325}>
+  <Chrome
+    label="Scroll up"
+    center
+    scrollable
+    className="h-96"
+    scrollHeight={325}
+  >
     <Floating
       portaled
       middleware={[{name: 'offset', options: 5}, {name: 'hide'}]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
-        Scroll up
-      </div>
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
     </Floating>
   </Chrome>
 </div>

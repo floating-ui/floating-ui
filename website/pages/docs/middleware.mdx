@@ -5,8 +5,7 @@ export default Layout;
 
 Middleware are plain objects that modify the positioning
 coordinates in some fashion, or provide useful data for the
-consumer to use. Most of Floating UI's features are implemented
-as a middleware.
+consumer to use.
 
 `computePosition(){:js}` starts with basic positioning via
 `placement{:.objectKey}`:
@@ -36,9 +35,9 @@ const shiftByOnePixel = {
 };
 ```
 
-This simple (but not particularly useful) middleware just adds
-`1{:js}` pixel to the coordinates. To use this middleware, add it
-to your `middleware{:.objectKey}` array:
+This (not particularly useful) middleware adds `1{:js}` pixel to
+the coordinates. To use this middleware, add it to your
+`middleware{:.objectKey}` array:
 
 ```js
 computePosition(referenceEl, floatingEl, {
@@ -48,10 +47,10 @@ computePosition(referenceEl, floatingEl, {
 ```
 
 Here, `computePosition(){:js}` will compute coordinates that will
-place the floating element to the right of the reference element,
-lying flush with it. Middleware are then executed, resulting in
-these coordinates getting shifted by one pixel. Then that data is
-returned to the caller.
+place the floating element to the right center of the reference
+element, lying flush with it. Middleware are then executed,
+resulting in these coordinates getting shifted by one pixel. Then
+that data is returned to the caller.
 
 ### Shape
 
@@ -98,6 +97,7 @@ functions. This is so you can pass options in:
 ```js
 const shiftByAmount = (amount = 0) => ({
   name: 'shiftByAmount',
+  options: amount,
   fn: ({x, y}) => ({
     x: x + amount,
     y: y + amount,
@@ -111,6 +111,10 @@ behavior:
 ```js
 const middleware = [shiftByAmount(10)];
 ```
+
+The `options{:.objectKey}` key on a middleware object allows
+libraries like React to compare and update middleware on
+component rerenders.
 
 ### Always return an object
 

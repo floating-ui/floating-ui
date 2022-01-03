@@ -45,10 +45,11 @@ Floating UI does not have opinions about how your elements stack
 on the z-axis. This means your element may be occluded beneath
 another one if it has a higher `z-index`.
 
-Some common workarounds include:
+If you find your floating element is being clipped by another
+element, some common workarounds include:
 
 - Using the `"fixed"{:js}` strategy to "break" the floating
-  element out of a clipping context — use this sparringly.
+  element out of a clipping context — use this sparingly.
 - The floating element can be appended to a root ancestor node
   inside `<body>{:html}`, e.g.
   `<div id="floating-root"></div>{:html}`

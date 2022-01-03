@@ -5,26 +5,33 @@ import 'tippy.js/animations/perspective-subtle.css';
 
 import Tippy from '@tippyjs/react';
 import {inlinePositioning} from 'tippy.js';
-import {forwardRef, useEffect, useRef, useState} from 'react';
-import {ArrowRight, GitHub, Heart} from 'react-feather';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import Link from 'next/link';
-import Head from 'next/head';
-import DropdownExample from '../lib/components/DropdownExample.js';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import cn from 'classnames';
-import {Chrome} from '../lib/components/Chrome';
-import {Floating} from '../lib/components/Floating';
-
-import Logo from '../assets/logo.svg';
-
-import Logos from '../lib/components/Logos';
-import Cards from '../lib/components/Cards';
-import {MINI_SPONSORS, SPONSORS} from '../data';
 import {
   useFloating,
   shift,
   getScrollParents,
 } from '@floating-ui/react-dom';
+import {ArrowRight, GitHub, Heart} from 'react-feather';
+import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import Link from 'next/link';
+import Head from 'next/head';
+
+import DropdownExample from '../lib/components/DropdownExample.js';
+import {Chrome} from '../lib/components/Chrome';
+import {Floating} from '../lib/components/Floating';
+import {Logos} from '../lib/components/Logos';
+import {Cards} from '../lib/components/Cards';
+
+import {MINI_SPONSORS, SPONSORS} from '../data';
+
+import Logo from '../assets/logo.svg';
 
 const Reference = forwardRef(({className, children}, ref) => {
   return (
@@ -392,8 +399,8 @@ function Virtual() {
     ],
   });
 
-  useEffect(() => {
-    function handleMouseMove({clientX, clientY}) {
+  const handleMouseMove = useCallback(
+    ({clientX, clientY}) => {
       reference({
         getBoundingClientRect() {
           return {
@@ -408,8 +415,11 @@ function Virtual() {
           };
         },
       });
-    }
+    },
+    [reference]
+  );
 
+  useEffect(() => {
     const boundary = boundaryRef.current;
     boundary.addEventListener('mousemove', handleMouseMove);
 
@@ -424,7 +434,7 @@ function Virtual() {
         parent.removeEventListener('scroll', update);
       });
     };
-  }, [reference, refs.floating, update]);
+  }, [reference, refs.floating, update, handleMouseMove]);
 
   return (
     <GridItem
@@ -435,7 +445,10 @@ function Virtual() {
           <div
             ref={boundaryRef}
             className="h-full"
-            onMouseEnter={() => setOpen(true)}
+            onMouseEnter={(event) => {
+              handleMouseMove(event);
+              setOpen(true);
+            }}
             onMouseLeave={() => setOpen(false)}
           >
             <div
@@ -462,13 +475,14 @@ function Virtual() {
 
 function Popovers() {
   return (
-    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-purple-600 to-blue-800 rounded-lg px-4 py-8 sm:p-8">
+    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-blue-600 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
       <div>
         <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Popovers
         </h3>
-        <p className="text-xl text-pink-100 mb-4">
-          Floating elements displaying rich HTML content
+        <p className="text-xl text-cyan-100 mb-4">
+          A floating element displaying rich, optionally
+          interactive HTML content.
         </p>
       </div>
       <div className="flex flex-col gap-2">
@@ -516,13 +530,14 @@ function Popovers() {
 
 function Dropdowns() {
   return (
-    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-blue-600 via-purple-700 to-pink-600 rounded-lg px-4 py-8 sm:p-8">
+    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-purple-600 via-purple-700 to-pink-600 rounded-lg px-4 py-8 sm:p-8">
       <div>
         <h3 className="text-2xl text-gray-50 font-bold mb-4">
           Dropdowns
         </h3>
         <p className="text-xl mb-4 text-pink-100">
-          A menu of items and submenus
+          An interactive menu of selectable items and potential
+          submenus.
         </p>
       </div>
       <div className="flex flex-col gap-2">
@@ -547,7 +562,8 @@ function Tooltips() {
           Tooltips
         </h3>
         <p className="text-xl text-blue-200 mb-4">
-          A floating element to describe an element, e.g. button
+          A floating element to describe or add additional
+          information to another element, such as a button.
         </p>
       </div>
       <div className="flex flex-col gap-2 overflow-hidden">
@@ -620,12 +636,12 @@ function HomePage() {
         </div>
       </header>
       <main className="relative -mt-60 sm:-mt-48">
-        <div className="container mx-auto px-4 max-w-screen-xl">
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
           <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-500">
             Powerful positioning primitives.
           </h2>
           <p className="prose text-xl lg:text-2xl text-left">
-            Floating UI is a powerful toolkit to position{' '}
+            Floating UI is a low-level toolkit to position{' '}
             <Tippy
               content={
                 <div className="text-lg p-2">
@@ -669,29 +685,8 @@ function HomePage() {
           <Virtual />
         </div>
 
-        <div className="container px-4 py-8 mx-auto max-w-screen-xl">
-          <h2 className="inline-block text-3xl lg:text-4xl font-bold mt-8 mb-4">
-            Support Floating UI's future.
-          </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
-            Ongoing work is making Floating UI the best, 100%
-            free solution in this space. We are proudly sponsored
-            by the following organizations, consider joining them
-            on{' '}
-            <a
-              href="https://opencollective.com/floating-ui"
-              rel="noopener noreferrer"
-            >
-              Open Collective
-            </a>
-            !
-          </p>
-          <Cards items={SPONSORS} />
-          <Logos items={MINI_SPONSORS} />
-        </div>
-
-        <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-yellow-400 to-yellow-200 text-3xl lg:text-4xl font-bold mt-8 mb-4">
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 via-teal-400 to-orange-300 text-3xl lg:text-4xl font-bold mt-8 mb-4">
             Light as a feather.
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
@@ -699,7 +694,7 @@ function HomePage() {
             compressed with Brotli. Plus, the architecture is
             super modular, so tree-shaking works like a charm.
           </p>
-          <div className="grid items-center py-4">
+          <div className="grid items-center py-8 pb-16">
             <div className="flex flex-col text-center text-md sm:text-lg md:text-xl mx-auto pr-4 sm:pr-20 md:pr-40">
               <div className="mb-2 flex gap-2 items-center justify-center">
                 <code className="flex-1 text-blue-400 text-right">
@@ -742,14 +737,35 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-red-300 to-green-300 mt-16">
+        <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
+          <h2 className="inline-block text-3xl lg:text-4xl text-gray-200 font-bold mt-8 mb-4">
+            Support Floating UI's future.
+          </h2>
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
+            Ongoing work is making Floating UI the best, 100%
+            free solution in this space. We are proudly sponsored
+            by the following organizations, consider joining them
+            on{' '}
+            <a
+              href="https://opencollective.com/floating-ui"
+              rel="noopener noreferrer"
+            >
+              Open Collective
+            </a>
+            !
+          </p>
+          <Cards items={SPONSORS} />
+          <Logos items={MINI_SPONSORS} />
+        </div>
+
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
+          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-pink-400 mt-16">
             Components!
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
-            Higher-level primitives to craft beautiful and
-            accessible tooltips, popovers, dropdowns, and more is
-            in development.
+            The ability to easily craft beautiful and accessible
+            tooltips, popovers, dropdowns, and more is in
+            development.
           </p>
 
           <div className="grid lg:grid-cols-2 gap-4">
@@ -779,12 +795,12 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 max-w-screen-xl relative">
-          <h2 className="inline-block text-3xl lg:text-4xl leading-gradient-heading font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-green-400 to-yellow-100 mt-16">
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
+          <h2 className="inline-block text-3xl lg:text-4xl leading-gradient-heading font-bold mb-4 mt-16">
             Ready to install?
           </h2>
-          <p className="text-xl lg:text-2xl text-left mb-8">
-            Start playing via CDN or your package manager.
+          <p className="prose text-xl lg:text-2xl text-left mb-8">
+            Start playing via your package manager or CDN.
           </p>
 
           <div className="grid lg:grid-cols-2 gap-4">
@@ -793,7 +809,7 @@ function HomePage() {
                 Package Manager
               </h3>
               <p className="text-lg">
-                Install with npm or Yarn.
+                Install with npm, Yarn, or pnpm.
               </p>
               <Link href="/docs/getting-started">
                 <a
@@ -807,7 +823,7 @@ function HomePage() {
             <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
               <h3 className="text-2xl font-bold mb-4">CDN</h3>
               <p className="text-lg">
-                Install with the unpkg CDN.
+                Install with the unpkg or Skypack CDN.
               </p>
               <Link href="/docs/getting-started#cdn">
                 <a

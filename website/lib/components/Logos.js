@@ -1,6 +1,6 @@
 import Tippy from '@tippyjs/react';
 
-export default function Logos({items}) {
+export function Logos({items}) {
   return (
     <div className="gap-8 flex justify-center my-10">
       {items.map((item) => (

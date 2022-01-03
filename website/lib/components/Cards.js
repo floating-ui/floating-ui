@@ -1,4 +1,4 @@
-export default function Cards({items}) {
+export function Cards({items}) {
   return (
     <section className="flex flex-col md:flex-row gap-8 md:gap-2 justify-center my-16">
       {items.map((item) => (
@@ -10,7 +10,7 @@ export default function Cards({items}) {
         >
           <div className="flex flex-col items-center transition-transform">
             <img
-              className="w-64 rounded-md shadow-lg hover:shadow-xl transition-shadow"
+              className="w-56 rounded-md shadow-lg hover:shadow-xl transition-shadow"
               src={item.image}
             />
             <div className="px-6 py-4">

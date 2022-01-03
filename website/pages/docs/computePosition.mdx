@@ -8,14 +8,6 @@ UI. It's a pure function which computes the necessary coordinates
 to position the floating element next to a given reference
 element.
 
-## Arguments
-
-The function takes three arguments and returns a promise:
-
-```js
-computePosition(referenceElement, floatingElement, options);
-```
-
 ## Usage
 
 With two elements on the document like so:
@@ -40,7 +32,7 @@ computePosition(button, tooltip).then(({x, y}) => {
 
 Since a promise is returned, we can chain the `.then(){:js}`
 method which will resolve with the data necessary to position the
-tooltip next to the reference element.
+tooltip next to the button.
 
 `x{:.param}` and `y{:.param}` represent the positioning
 coordinates of the floating element relative to its

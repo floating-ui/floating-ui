@@ -43,10 +43,14 @@ const prettyCode = createRemarkPlugin({
       minHeight: '1rem',
       margin: '0 -1.5rem',
       padding: '0 1.5rem',
+      borderLeft: '2px solid transparent',
     });
   },
   onVisitHighlightedLine(node) {
-    node.className = 'line bg-gray-800';
+    Object.assign(node.style, {
+      backgroundColor: 'rgba(200, 200, 255, 0.07)',
+      borderLeftColor: '#82aaff',
+    });
   },
   onVisitHighlightedWord(node) {
     Object.assign(node.style, {

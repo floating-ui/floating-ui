@@ -1,5 +1,17 @@
 const colors = require('tailwindcss/colors');
 
+const GRAY = {
+  1000: '#18191f',
+  900: '#1F2028',
+  800: '#272935',
+  700: '#353849',
+  600: '#575969',
+
+  200: '#BFC3D9',
+  100: '#dcdfec',
+  50: '#FFF',
+};
+
 module.exports = {
   plugins: [require('@tailwindcss/typography')],
   content: [
@@ -38,7 +50,7 @@ module.exports = {
               borderTopRightRadius: '0.25rem',
               borderBottomRightRadius: '0.25rem',
               borderLeftColor: colors.purple['400'],
-              borderLeftWidth: '0.25rem',
+              borderLeftWidth: '2px',
               backgroundColor: `rgba(200,100,255,0.15)`,
               padding: '0.25rem 0.5rem 0.25rem 1rem',
               '> p': {
@@ -51,8 +63,8 @@ module.exports = {
             pre: {
               color: '#cddbf7',
               padding: '1rem 1.5rem',
-              backgroundColor: '#1c1d24',
-              border: '1px solid rgba(0,0,0,0.25)',
+              backgroundColor: 'rgba(0,0,0,0.1)',
+              border: `1px solid ${GRAY['800']}`,
               lineHeight: '2.1',
               fontSize: 'inherit',
               '> code': {
@@ -74,31 +86,31 @@ module.exports = {
               color: '#fff',
               wordBreak: 'break-word',
               '> a': {
-                color: colors.gray['50'],
+                color: GRAY['50'],
                 borderBottomColor: 'transparent !important',
               },
               '> a:hover': {
-                borderBottomColor: `${colors.gray['50']} !important`,
+                borderBottomColor: `${GRAY['50']} !important`,
               },
             },
             h3: {
               color: '#BFC3D9',
               wordBreak: 'break-word',
               '> a': {
-                color: colors.gray['50'],
+                color: GRAY['50'],
                 borderBottomColor: 'transparent !important',
               },
               '> a:hover': {
-                borderBottomColor: `${colors.gray['50']} !important`,
+                borderBottomColor: `${GRAY['50']} !important`,
               },
             },
             h4: {
               '> a': {
-                color: colors.gray['50'],
+                color: GRAY['50'],
                 borderBottomColor: 'transparent !important',
               },
               '> a:hover': {
-                borderBottomColor: `${colors.gray['50']} !important`,
+                borderBottomColor: `${GRAY['50']} !important`,
               },
             },
             code: {
@@ -112,19 +124,19 @@ module.exports = {
               },
             },
             ':not(pre) > code': {
-              border: `1px solid ${colors.gray['700']}`,
+              border: `1px solid ${GRAY['800']}`,
               padding: '0.2rem 0.4rem',
               borderRadius: '4px',
-              backgroundColor: colors.gray['1000'],
+              backgroundColor: GRAY['1000'],
             },
             a: {
-              color: colors.cyan[400],
+              color: colors.cyan['400'],
               textDecoration: 'none',
               borderBottom: `2px solid ${colors.cyan['900']}`,
               paddingBottom: '0.1em',
               transition: 'border-color 0.2s !important',
               '&:hover': {
-                borderBottomColor: 'inherit !important',
+                borderBottomColor: `${colors.cyan['400']} !important`,
               },
               '&:active': {
                 color: `${colors.cyan['100']} !important`,
@@ -143,17 +155,7 @@ module.exports = {
         green: colors.emerald,
         yellow: colors.amber,
         purple: colors.violet,
-        gray: {
-          1000: '#1c1d24',
-          900: '#1F2028',
-          800: '#272935',
-          700: '#353849',
-          600: '#575969',
-
-          200: '#BFC3D9',
-          100: '#dcdfec',
-          50: '#FFF',
-        },
+        gray: GRAY,
       },
       zIndex: {
         '-1': '-1',
@@ -172,7 +174,7 @@ module.exports = {
         128: '32rem',
       },
       lineHeight: {
-        'gradient-heading': '1.1 !important',
+        'gradient-heading': '1.15 !important',
       },
     },
   },
