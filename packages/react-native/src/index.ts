@@ -67,6 +67,7 @@ export const useFloating = ({
   const reference = useRef<any>();
   const floating = useRef<any>();
   const offsetParent = useRef<any>();
+  const isMountedRef = useRef(true);
 
   const [data, setData] = useState<Data>({
     x: null,
@@ -103,12 +104,22 @@ export const useFloating = ({
       middleware: latestMiddleware,
       platform,
       placement,
-    }).then(setData);
+    }).then((data) => {
+      if (isMountedRef.current) {
+        setData(data);
+      }
+    });
   }, [latestMiddleware, platform, placement]);
 
   useLayoutEffect(() => {
     requestAnimationFrame(update);
   }, [update]);
+
+  useLayoutEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const setReference = useCallback(
     (node) => {
