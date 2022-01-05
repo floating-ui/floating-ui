@@ -3,6 +3,7 @@ import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {within} from '../utils/within';
+import {getAlignment} from '../utils/getAlignment';
 
 export interface Options {
   /**
@@ -43,6 +44,7 @@ export const arrow = (options: Options): Middleware => ({
     const paddingObject = getSideObjectFromPadding(padding);
     const coords = {x, y};
     const axis = getMainAxisFromPlacement(placement);
+    const alignment = getAlignment(placement);
     const length = getLengthFromAxis(axis);
     const arrowDimensions = await platform.getDimensions(element);
     const minProp = axis === 'y' ? 'top' : 'left';
@@ -69,14 +71,23 @@ export const arrow = (options: Options): Middleware => ({
     const centerToReference = endDiff / 2 - startDiff / 2;
 
     // Make sure the arrow doesn't overflow the floating element if the center
-    // point is outside of the floating element's bounds
+    // point is outside the floating element's bounds
     const min = paddingObject[minProp];
     const max = clientSize - arrowDimensions[length] - paddingObject[maxProp];
     const center =
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
 
+    // Make sure that arrow points at the reference
+    const alignmentPadding = alignment === 'start' ? paddingObject[minProp] : paddingObject[maxProp];
+    const alignmentOffset = alignmentPadding > 0 && center !== offset ?
+      center < min
+        ? min - center
+        : max - center
+      : 0;
+
     return {
+      [axis]: coords[axis] - alignmentOffset,
       data: {
         [axis]: offset,
         centerOffset: center - offset,
