@@ -54,6 +54,7 @@ export function useFloating({
     placement: 'bottom',
     middlewareData: {},
   });
+  const isMountedRef = useRef(true);
 
   const [latestMiddleware, setLatestMiddleware] = useState(middleware);
 
@@ -75,10 +76,20 @@ export function useFloating({
       middleware: latestMiddleware,
       placement,
       strategy,
-    }).then(setData);
+    }).then((data) => {
+      if (isMountedRef.current) {
+        setData(data);
+      }
+    });
   }, [latestMiddleware, placement, strategy]);
 
   useIsomorphicLayoutEffect(update, [update]);
+
+  useIsomorphicLayoutEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const setReference = useCallback(
     (node) => {
