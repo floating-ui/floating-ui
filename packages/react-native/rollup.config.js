@@ -18,29 +18,9 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.react-native.esm.min.js'),
-      format: 'esm',
-    },
-  },
-  {
-    input,
-    output: {
       name: 'FloatingUIReactNative',
       file: path.join(__dirname, 'dist/floating-ui.react-native.js'),
-      format: 'umd',
-      globals: {
-        react: 'React',
-        'react-native': 'ReactNative',
-        '@floating-ui/core': 'FloatingUICore',
-      },
-    },
-  },
-  {
-    input,
-    output: {
-      name: 'FloatingUIReactNative',
-      file: path.join(__dirname, 'dist/floating-ui.react-native.min.js'),
-      format: 'umd',
+      format: 'cjs',
       globals: {
         react: 'React',
         'react-native': 'ReactNative',
@@ -53,7 +33,11 @@ const bundles = [
 const buildExport = bundles.map(({input, output}) => ({
   input,
   output,
-  external: ['react', 'react-native'],
+  external: [
+    'react',
+    'react-native',
+    '@floating-ui/core/dist/floating-ui.core',
+  ],
   plugins: [
     commonjs(),
     nodeResolve({extensions: ['.ts', '.js']}),
