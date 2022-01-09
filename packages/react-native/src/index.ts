@@ -128,6 +128,7 @@ export const useFloating = ({
     frames.push(requestAnimationFrame(update));
     return () => {
       frames.forEach(cancelAnimationFrame);
+      animationFrames.current = [];
     };
   }, [update]);
 
