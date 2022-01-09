@@ -6,7 +6,10 @@ import {
   useCallback,
   RefObject,
 } from 'react';
-import {computePosition, arrow as arrowCore} from '@floating-ui/core';
+import {
+  computePosition,
+  arrow as arrowCore,
+} from '@floating-ui/core/dist/floating-ui.core';
 import type {
   Placement,
   Middleware,
@@ -26,7 +29,7 @@ export {
   size,
   inline,
   detectOverflow,
-} from '@floating-ui/core';
+} from '@floating-ui/core/dist/floating-ui.core';
 
 const ORIGIN = {x: 0, y: 0};
 
@@ -67,7 +70,6 @@ export const useFloating = ({
   const reference = useRef<any>();
   const floating = useRef<any>();
   const offsetParent = useRef<any>();
-  const isMountedRef = useRef(true);
 
   const [data, setData] = useState<Data>({
     x: null,
@@ -95,6 +97,16 @@ export const useFloating = ({
     setLatestMiddleware(middleware);
   }
 
+  const animationFrames = useRef<Array<number>>([]);
+
+  const isMountedRef = useRef(true);
+  useLayoutEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   const update = useCallback(() => {
     if (!reference.current || !floating.current) {
       return;
@@ -112,19 +124,17 @@ export const useFloating = ({
   }, [latestMiddleware, platform, placement]);
 
   useLayoutEffect(() => {
-    requestAnimationFrame(update);
-  }, [update]);
-
-  useLayoutEffect(() => {
+    const frames = animationFrames.current;
+    frames.push(requestAnimationFrame(update));
     return () => {
-      isMountedRef.current = false;
+      frames.forEach(cancelAnimationFrame);
     };
-  }, []);
+  }, [update]);
 
   const setReference = useCallback(
     (node) => {
       reference.current = node;
-      requestAnimationFrame(update);
+      animationFrames.current.push(requestAnimationFrame(update));
     },
     [update]
   );
@@ -132,7 +142,7 @@ export const useFloating = ({
   const setFloating = useCallback(
     (node) => {
       floating.current = node;
-      requestAnimationFrame(update);
+      animationFrames.current.push(requestAnimationFrame(update));
     },
     [update]
   );
@@ -140,7 +150,7 @@ export const useFloating = ({
   const setOffsetParent = useCallback(
     (node) => {
       offsetParent.current = node;
-      requestAnimationFrame(update);
+      animationFrames.current.push(requestAnimationFrame(update));
     },
     [update]
   );
