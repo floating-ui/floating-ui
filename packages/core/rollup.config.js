@@ -25,6 +25,13 @@ const bundles = [
   {
     input,
     output: {
+      file: path.join(__dirname, 'dist/floating-ui.core.esm.development.js'),
+      format: 'esm',
+    },
+  },
+  {
+    input,
+    output: {
       name: 'FloatingUICore',
       file: path.join(__dirname, 'dist/floating-ui.core.js'),
       format: 'umd',
@@ -47,6 +54,12 @@ const bundles = [
   },
 ];
 
+const isDevEnv = (file) => file.includes('.development.');
+const isUMD = (file) => file.includes('.core.js');
+const isMinEnv = (file) => file.includes('.min.');
+const isSpecificEnv = (file) => isMinEnv(file) || isDevEnv(file);
+const isDebugAlways = (file) => isDevEnv(file) || isUMD(file) ? 'true' : 'false';
+
 const buildExport = bundles.map(({input, output}) => ({
   input,
   output,
@@ -58,8 +71,8 @@ const buildExport = bundles.map(({input, output}) => ({
       plugins: ['annotate-pure-calls'],
     }),
     replace({
-      __DEV__: output.file.includes('.min.')
-        ? 'false'
+      __DEV__: isSpecificEnv(output.file)
+        ? isDebugAlways(output.file)
         : 'process.env.NODE_ENV !== "production"',
       preventAssignment: true,
     }),
