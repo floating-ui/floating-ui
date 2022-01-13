@@ -60,6 +60,22 @@ function App() {
 `x{:.const}` and `y{:.const}` will be `null{:js}` initially,
 before the layout effect has fired.
 
+## External reference
+
+```js /triggerRef/1-3
+function MyComponent({triggerRef}) {
+  const {reference} = useFloating();
+
+  useLayoutEffect(() => {
+    reference(triggerRef.current);
+  }, [triggerRef]);
+
+  // You may want to use `triggerRef.current` as a dependency
+  // if the value can update. Ensure that a render is being
+  // triggered when this is happening.
+}
+```
+
 ## ScrollView
 
 When your floating element is portaled to the app root, while the
