@@ -1,6 +1,4 @@
 import {MDXProvider} from '@mdx-js/react';
-import Code from './Code';
-import Warning from './Warning';
 import Collapsible from './Collapsible';
 import Navigation from './Navigation';
 import Logo from '../../assets/logo.svg';
@@ -9,7 +7,6 @@ import {useRouter} from 'next/router';
 import Head from 'next/head';
 import cn from 'classnames';
 import {useState, Children} from 'react';
-import Tippy from '@tippyjs/react/headless';
 import {Menu} from 'react-feather';
 import {Chrome} from './Chrome';
 import {Floating} from './Floating';
@@ -163,12 +160,7 @@ const linkify =
   };
 
 const components = {
-  pre: (props) => <div {...props} />,
-  code: (props) => <Code {...props} />,
-  // inlineCode: InlineCode,
-  Warning,
   Collapsible,
-  Tippy,
   Floating,
   Chrome,
   h2: linkify('h2'),
@@ -176,20 +168,6 @@ const components = {
   h4: linkify('h4'),
   h5: linkify('h5'),
   h6: linkify('h6'),
-  span(props) {
-    if (props['data-mdx-pretty-code'] != null) {
-      return (
-        <code
-          data-theme={props['data-theme']}
-          style={{color: props['data-color']}}
-        >
-          {props.children.props.children}
-        </code>
-      );
-    }
-
-    return <span {...props} />;
-  },
   a(props) {
     if (props.href.startsWith('/')) {
       return (

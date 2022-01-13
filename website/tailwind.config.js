@@ -70,6 +70,20 @@ module.exports = {
               '> code': {
                 display: 'grid',
               },
+              '.line': {
+                borderLeft: '2px solid transparent',
+              },
+              '.line.line--highlighted': {
+                borderLeftColor: colors.blue['400'],
+                backgroundColor: colors.gray['800'],
+                margin: '0 -1.5rem',
+                padding: '0 1.5rem',
+              },
+              '.word': {
+                backgroundColor: 'rgba(200,200,255,0.2)',
+                padding: '0.2rem 0.4rem',
+                borderRadius: '0.25rem',
+              },
             },
             h1: {
               backgroundClip: 'text',

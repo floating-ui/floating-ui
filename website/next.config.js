@@ -1,4 +1,4 @@
-const {createRemarkPlugin} = require('@atomiks/mdx-pretty-code');
+const rehypePrettyCode = require('rehype-pretty-code');
 const fs = require('fs');
 const visit = require('unist-util-visit');
 const NpmApi = require('npm-api');
@@ -22,15 +22,13 @@ const replaceVariables = () => async (tree) => {
   });
 };
 
-const prettyCode = createRemarkPlugin({
-  shikiOptions: {
-    theme: JSON.parse(
-      fs.readFileSync(
-        require.resolve('./assets/floating-ui-theme.json'),
-        'utf-8'
-      )
-    ),
-  },
+const rehypePrettyCodeOptions = {
+  theme: JSON.parse(
+    fs.readFileSync(
+      require.resolve('./assets/floating-ui-theme.json'),
+      'utf-8'
+    )
+  ),
   tokensMap: {
     objectKey: 'meta.object-literal.key',
     function: 'entity.name.function',
@@ -39,27 +37,18 @@ const prettyCode = createRemarkPlugin({
     class: 'support.class',
   },
   onVisitLine(node) {
-    Object.assign(node.style, {
-      minHeight: '1rem',
-      margin: '0 -1.5rem',
-      padding: '0 1.5rem',
-      borderLeft: '2px solid transparent',
-    });
+    if (node.children.length === 0) {
+      node.children = [{type: 'text', value: ' '}];
+    }
+    node.properties.className = ['line'];
   },
   onVisitHighlightedLine(node) {
-    Object.assign(node.style, {
-      backgroundColor: 'rgba(200, 200, 255, 0.07)',
-      borderLeftColor: '#82aaff',
-    });
+    node.properties.className = ['line', 'line--highlighted'];
   },
   onVisitHighlightedWord(node) {
-    Object.assign(node.style, {
-      backgroundColor: 'rgba(200,200,255,0.15)',
-      padding: '0.25rem',
-      borderRadius: '0.25rem',
-    });
+    node.properties.className = ['word'];
   },
-});
+};
 
 module.exports = {
   swcMinify: false,
@@ -84,7 +73,10 @@ module.exports = {
           loader: '@mdx-js/loader',
           /** @type {import('@mdx-js/loader').Options} */
           options: {
-            remarkPlugins: [replaceVariables, prettyCode],
+            remarkPlugins: [replaceVariables],
+            rehypePlugins: [
+              [rehypePrettyCode, rehypePrettyCodeOptions],
+            ],
           },
         },
       ],

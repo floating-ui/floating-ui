@@ -27,7 +27,6 @@
     "tailwindcss": "^3.0.0"
   },
   "dependencies": {
-    "@atomiks/mdx-pretty-code": "^0.0.2",
     "@floating-ui/react-dom": "^0.4.1",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^12.0.3",
@@ -40,6 +39,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-feather": "^2.0.9",
+    "rehype-pretty-code": "^0.0.7",
     "shiki": "^0.9.14",
     "unist-util-visit": "^2.0.3",
     "use-isomorphic-layout-effect": "^1.1.1"
