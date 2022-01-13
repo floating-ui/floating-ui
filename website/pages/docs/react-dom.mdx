@@ -65,6 +65,25 @@ function MyComponent({triggerRef}) {
 }
 ```
 
+## Internal refs
+
+```js
+const {refs} = useFloating();
+```
+
+If another library's hook requires a `ref{:.objectKey}` passed to
+it, you can do so:
+
+```js
+const {refs} = useFloating();
+const otherLib = useOtherLib({
+  ref: refs.floating, // or refs.reference
+});
+```
+
+> The `reference` and `floating` values returned from the hook
+> are callback refs. Only pass them to an element's `ref` prop.
+
 ## Updating
 
 The hook returns an `update(){:js}` function to update the
@@ -72,17 +91,6 @@ position, e.g. in event listeners.
 
 ```js
 const {update} = useFloating();
-```
-
-In addition, the `refs{:.const}` containing the actual elements
-are passed back:
-
-```js
-const {refs} = useFloating();
-
-// .current will be filled with the element inside an effect
-// refs.reference.current
-// refs.floating.current
 ```
 
 For instance, to update on all relevant nodes, you can import the
