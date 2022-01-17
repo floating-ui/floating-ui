@@ -19,6 +19,10 @@ const bundles = [
     output: {
       file: path.join(__dirname, 'dist/floating-ui.dom.esm.min.js'),
       format: 'esm',
+      paths: {
+        '@floating-ui/core':
+          '@floating-ui/core/dist/floating-ui.core.esm.min.js',
+      },
     },
   },
   {

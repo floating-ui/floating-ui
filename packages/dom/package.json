@@ -21,7 +21,9 @@
       "import": "./dist/floating-ui.dom.esm.js",
       "require": "./dist/floating-ui.dom.cjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./dist/floating-ui.dom.esm.min.js": "./dist/floating-ui.dom.esm.min.js",
+    "./min": "./dist/floating-ui.dom.esm.min.js"
   },
   "sideEffects": false,
   "files": [
