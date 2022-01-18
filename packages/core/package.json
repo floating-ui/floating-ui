@@ -18,7 +18,11 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/floating-ui.core.esm.js",
+      "import": {
+        "development": "./dist/floating-ui.core.esm.development.js",
+        "production": "./dist/floating-ui.core.esm.min.js",
+        "default": "./dist/floating-ui.core.esm.js"
+      },
       "require": "./dist/floating-ui.core.cjs"
     },
     "./package.json": "./package.json"
