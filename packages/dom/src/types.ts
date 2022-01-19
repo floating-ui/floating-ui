@@ -21,27 +21,54 @@ export type DOMDetectOverflowOptions = Omit<
   boundary: 'clippingParents' | Element | Array<Element>;
 };
 
+/**
+ * Automatically chooses the `placement` which has the most space available.
+ */
 declare const autoPlacement: (
   options?: Partial<AutoPlacementOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
+/**
+ * Shifts the floating element in order to keep it in view when it will overflow
+ * a clipping boundary.
+ */
 declare const shift: (
   options?: Partial<ShiftOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
+/**
+ * Changes the placement of the floating element to one that will fit if the
+ * initially specified `placement` does not.
+ */
 declare const flip: (
   options?: Partial<FlipOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
+/**
+ * Provides data to change the size of the floating element. For instance,
+ * prevent it from overflowing its clipping boundary or match the width of the
+ * reference element.
+ */
 declare const size: (
   options?: Partial<SizeOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
+/**
+ * Positions an inner element of the floating element such that it is centered
+ * to the reference element.
+ */
 declare const arrow: (options: {
   element: HTMLElement;
   padding?: number | SideObject;
 }) => Middleware;
 
+/**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing a given clipping boundary.
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ */
 declare const detectOverflow: (
   middlewareArguments: MiddlewareArguments,
   options?: Partial<DOMDetectOverflowOptions>

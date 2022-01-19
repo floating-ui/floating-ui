@@ -8,9 +8,18 @@ import {getAlignment} from '../utils/getAlignment';
 import {max} from '../utils/math';
 
 export type Options = {
+  /**
+   * Function that is called to perform style mutations to the floating element
+   * to change its size.
+   */
   apply(args: Dimensions & ElementRects): void;
 };
 
+/**
+ * Provides data to change the size of the floating element. For instance,
+ * prevent it from overflowing its clipping boundary or match the width of the
+ * reference element.
+ */
 export const size = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({

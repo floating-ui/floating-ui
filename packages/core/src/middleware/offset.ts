@@ -2,7 +2,18 @@ import type {Placement, Rect, Coords, Middleware} from '../types';
 import {getBasePlacement} from '../utils/getBasePlacement';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 
-type OffsetValue = number | {mainAxis?: number; crossAxis?: number};
+type OffsetValue =
+  | number
+  | {
+      /**
+       * The axis that runs along the side of the floating element.
+       */
+      mainAxis?: number;
+      /**
+       * The axis that runs along the alignment of the floating element.
+       */
+      crossAxis?: number;
+    };
 type OffsetFunction = (args: {
   floating: Rect;
   reference: Rect;
@@ -35,6 +46,9 @@ export function convertValueToCoords({
     : {x: mainAxis * multiplier, y: crossAxis};
 }
 
+/**
+ * Displaces the floating element from its reference element.
+ */
 export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
   options: value,

@@ -15,6 +15,10 @@ function isAnySideFullyClipped(overflow: SideObject) {
   return basePlacements.some((side) => overflow[side] >= 0);
 }
 
+/**
+ * Provides data to hide the floating element in applicable situations, such as
+ * when it is not in the same clipping context as the reference element.
+ */
 export const hide = (): Middleware => ({
   name: 'hide',
   async fn(modifierArguments) {

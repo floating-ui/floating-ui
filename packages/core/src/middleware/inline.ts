@@ -6,9 +6,16 @@ import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
 
 export type Options = Coords & {
+  /**
+   * @experimental
+   */
   padding: Padding;
 };
 
+/**
+ * Provides improved positioning for inline reference elements that can span
+ * over multiple lines, such as hyperlinks or range selections.
+ */
 export const inline = (options: Partial<Options> = {}): Middleware => ({
   name: 'inline',
   options,

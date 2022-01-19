@@ -1,6 +1,14 @@
 import type {ComputePosition, ComputePositionReturn} from './types';
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 
+/**
+ * Computes the `x` and `y` coordinates that will place the floating element
+ * next to a given reference element when it is given a certain positioning
+ * strategy.
+ *
+ * This export does not have any `platform` interface logic. You will need to
+ * write one for the platform you are using Floating UI with.
+ */
 export const computePosition: ComputePosition = async (
   reference,
   floating,

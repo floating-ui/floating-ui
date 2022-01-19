@@ -5,6 +5,11 @@ import {
 } from '@floating-ui/core';
 import {platform} from './platform';
 
+/**
+ * Computes the `x` and `y` coordinates that will place the floating element
+ * next to a given reference element when it is given a certain CSS positioning
+ * strategy.
+ */
 export const computePosition = (
   reference:
     | Element
