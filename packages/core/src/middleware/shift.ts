@@ -15,14 +15,28 @@ import {
 } from '../detectOverflow';
 
 export type Options = {
+  /**
+   * The axis that runs along the alignment of the floating element.
+   */
   mainAxis: boolean;
+  /**
+   * The axis that runs along the side of the floating element.
+   */
   crossAxis: boolean;
+  /**
+   * Accepts a function that limits the shifting done in order to prevent
+   * detachment.
+   */
   limiter: {
     fn: (middlewareArguments: MiddlewareArguments) => Coords;
     options?: any;
   };
 };
 
+/**
+ * Shifts the floating element in order to keep it in view when it will overflow
+ * a clipping boundary.
+ */
 export const shift = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
@@ -83,20 +97,56 @@ export const shift = (
 });
 
 type LimitShiftOffset =
-  | ((args: {
-      placement: Placement;
-      floating: Rect;
-      reference: Rect;
-    }) => number | {mainAxis?: number; crossAxis?: number})
+  | ((args: {placement: Placement; floating: Rect; reference: Rect}) =>
+      | number
+      | {
+          /**
+           * Offset the limiting of the axis that runs along the alignment of the
+           * floating element.
+           */
+          mainAxis?: number;
+          /**
+           * Offset the limiting of the axis that runs along the side of the
+           * floating element.
+           */
+          crossAxis?: number;
+        })
   | number
-  | {mainAxis?: number; crossAxis?: number};
+  | {
+      /**
+       * Offset the limiting of the axis that runs along the alignment of the
+       * floating element.
+       */
+      mainAxis?: number;
+      /**
+       * Offset the limiting of the axis that runs along the side of the
+       * floating element.
+       */
+      crossAxis?: number;
+    };
 
 export type LimitShiftOptions = {
+  /**
+   * Offset when limiting starts. `0` will limit when the opposite edges of the
+   * reference and floating elements are aligned.
+   * - positive = start limiting earlier
+   * - negative = start limiting later
+   */
   offset: LimitShiftOffset;
+  /**
+   * Whether to limit the axis that runs along the alignment of the floating
+   * element.
+   */
   mainAxis: boolean;
+  /**
+   * Whether to limit the axis that runs along the side of the floating element.
+   */
   crossAxis: boolean;
 };
 
+/**
+ * Built-in `limiter` that will stop `shift()` at a certain point.
+ */
 export const limitShift = (
   options: Partial<LimitShiftOptions> = {}
 ): {

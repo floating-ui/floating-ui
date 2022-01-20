@@ -42,11 +42,25 @@ export function getPlacementList(
 }
 
 export type Options = {
+  /**
+   * Choose placements with a particular alignment.
+   */
   alignment: Alignment | null;
+  /**
+   * Which placements are allowed to be chosen. Placements must be within the
+   * `alignment` option set.
+   */
   allowedPlacements: Array<Placement>;
+  /**
+   * Whether to choose placements with the opposite alignment if they will fit
+   * better.
+   */
   autoAlignment: boolean;
 };
 
+/**
+ * Automatically chooses the `placement` which has the most space available.
+ */
 export const autoPlacement = (
   options: Partial<Options & DetectOverflowOptions> = {}
 ): Middleware => ({
