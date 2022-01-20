@@ -41,6 +41,34 @@ Floating UI can be loaded via CDN using ESM or UMD format.
 </script>
 ```
 
+#### Import maps
+
+When working in a low or no build context it can be useful to consume code with bare module specifiers, e.g. `import {computePosition} from '@floating-ui/dom';`. In order to do so, [import maps](https://github.com/WICG/import-maps) clarify the origin of such a references for the browser.
+
+<details>
+<summary>JSPM import map example</summary>
+
+
+```
+<script type="importmap">
+{
+  "imports": {
+    "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@__DOM_VERSION__/dist/floating-ui.dom.esm.js"
+  },
+  "scopes": {
+    "https://ga.jspm.io/": {
+      "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@__CORE_VERSION__/dist/floating-ui.core.esm.js"
+    }
+  }
+}
+</script>
+```
+
+JSPM provides a [generator](https://generator.jspm.io/) for leveraging this API with their CDN.
+
+
+</details>
+
 ### UMD
 
 ```html
@@ -49,6 +77,34 @@ Floating UI can be loaded via CDN using ESM or UMD format.
 ```
 
 All exports will be available on `window.FloatingUIDOM{:js}`.
+
+## Development and production builds
+
+Floating UI is published with default, development, and production builds, using Node's support for [export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+
+- **`"production"`**: excludes all logging, IS minified
+- **`"development"`**: includes logging by default, IS NOT minified
+- **`"default"`**: logs based on the value of `process.env.NODE_ENV !== "production"`, IS NOT minified
+
+You must opt into the development build by specifying the `"development"` or `"production"` export condition in tools that support export conditions. This is done differently for each tool.
+
+<details>
+  <summary>Rollup example</summary>
+
+Opt-into certain conditions using the `@rollup/node-resolve` plugin, you can select the development build with `exportConditions` option:
+
+```js
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+
+export default {
+  // ...
+  plugins: [nodeResolve({
+    exportConditions: ['development']
+  })]
+};
+```
+
+</details>
 
 ## Tutorial
 

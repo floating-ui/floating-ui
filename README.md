@@ -60,6 +60,22 @@ computePosition(referenceElement, floatingElement, {
 
 [Visit the docs for detailed information](https://floating-ui.com/docs/computePosition).
 
+## Development and production builds
+
+Floating UI is published with `"default"`, `"development"`, and `"production"` builds, using Node's support for [export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+
+- `"production"`
+  - excludes all logging features
+  - is minified
+- `"development"`
+  - includes logging features by default
+  - is NOT minified
+- `"default"`
+  - conditionally logs based on the value of `process.env.NODE_ENV`
+  - is NOT minified
+
+You must opt into the development build by specifying the `"development"` or `"production"` export condition in tools that support export conditions. This is done differently for each tool.
+
 ## React
 
 - [React DOM](https://floating-ui.com/docs/react-dom)
