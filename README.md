@@ -62,19 +62,22 @@ computePosition(referenceElement, floatingElement, {
 
 ## Development and production builds
 
-Floating UI is published with `"default"`, `"development"`, and `"production"` builds, using Node's support for [export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+Floating UI is published with default, development, and
+production builds, using Node's support for
+[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
 
-- `"production"`
-  - excludes all logging features
-  - is minified
-- `"development"`
-  - includes logging features by default
-  - is NOT minified
-- `"default"`
-  - conditionally logs based on the value of `process.env.NODE_ENV`
-  - is NOT minified
+- `"default"`: uses `process.env.NODE_ENV`, in which
+  your bundler handles the env variable, dead code elimination,
+  and minification
+- `"production"`: minified with no debug logging
+- `"development"`: unminified with debug logging
 
-You must opt into the development build by specifying the `"development"` or `"production"` export condition in tools that support export conditions. This is done differently for each tool.
+If you're using a bundler like webpack, Vite, or Parcel, this is
+handled for you **automatically**.
+
+If this is not handled, you must opt into one of the builds in
+tools that support export conditions. This is done differently
+for each tool.
 
 ## React
 
