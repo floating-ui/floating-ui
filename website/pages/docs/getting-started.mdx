@@ -29,11 +29,55 @@ npm install @floating-ui/dom
 yarn add @floating-ui/dom
 ```
 
+## Development and production builds
+
+Floating UI is published with default, development, and
+production builds, using Node's support for
+[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+
+- `"default"{:js}`: uses `process.env.NODE_ENV{:js}`, in which
+  your bundler handles the env variable, dead code elimination,
+  and minification
+- `"production"{:js}`: minified with no debug logging
+- `"development"{:js}`: unminified with debug logging
+
+If you're using a bundler like webpack, Vite, or Parcel, this is
+handled for you **automatically**.
+
+If this is not handled, you must opt into one of the builds in
+tools that support export conditions. This is done differently
+for each tool.
+
+<details>
+  <summary>Rollup example</summary>
+
+Using the `@rollup/node-resolve{:.string}` plugin, you can select
+the development build with the `exportConditions{:.objectKey}`
+option:
+
+```js
+import {nodeResolve} from '@rollup/plugin-node-resolve';
+
+export default {
+  // ...
+  plugins: [
+    nodeResolve({
+      exportConditions: ['development'],
+    }),
+  ],
+};
+```
+
+</details>
+
 ## CDN
 
 Floating UI can be loaded via CDN using ESM or UMD format.
 
 ### ESM
+
+[Skypack](https://www.skypack.dev/) lets you load ES modules in
+the browser:
 
 ```html
 <script type="module">
@@ -41,31 +85,36 @@ Floating UI can be loaded via CDN using ESM or UMD format.
 </script>
 ```
 
+Append `?min{:.string}` to the URL in production.
+
 #### Import maps
 
-When working in a low or no build context it can be useful to consume code with bare module specifiers, e.g. `import {computePosition} from '@floating-ui/dom';`. In order to do so, [import maps](https://github.com/WICG/import-maps) clarify the origin of such a references for the browser.
+When working in a low or no build context, it can be useful to
+consume code with bare module specifiers, e.g.
+`import * from '@floating-ui/dom';{:js}`. In order to do so,
+[import maps](https://github.com/WICG/import-maps) clarify the
+origin of such a references for the browser.
 
 <details>
 <summary>JSPM import map example</summary>
 
-
-```
+```mdx
 <script type="importmap">
-{
-  "imports": {
-    "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@__DOM_VERSION__/dist/floating-ui.dom.esm.js"
-  },
-  "scopes": {
-    "https://ga.jspm.io/": {
-      "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@__CORE_VERSION__/dist/floating-ui.core.esm.js"
+  {
+    "imports": {
+      "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@__DOM_VERSION__/dist/floating-ui.dom.esm.js"
+    },
+    "scopes": {
+      "https://ga.jspm.io/": {
+        "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@__CORE_VERSION__/dist/floating-ui.core.esm.js"
+      }
     }
   }
-}
 </script>
 ```
 
-JSPM provides a [generator](https://generator.jspm.io/) for leveraging this API with their CDN.
-
+JSPM provides a [generator](https://generator.jspm.io/) for
+leveraging this API with their CDN.
 
 </details>
 
@@ -77,34 +126,6 @@ JSPM provides a [generator](https://generator.jspm.io/) for leveraging this API 
 ```
 
 All exports will be available on `window.FloatingUIDOM{:js}`.
-
-## Development and production builds
-
-Floating UI is published with default, development, and production builds, using Node's support for [export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
-
-- **`"production"`**: excludes all logging, IS minified
-- **`"development"`**: includes logging by default, IS NOT minified
-- **`"default"`**: logs based on the value of `process.env.NODE_ENV !== "production"`, IS NOT minified
-
-You must opt into the development build by specifying the `"development"` or `"production"` export condition in tools that support export conditions. This is done differently for each tool.
-
-<details>
-  <summary>Rollup example</summary>
-
-Opt-into certain conditions using the `@rollup/node-resolve` plugin, you can select the development build with `exportConditions` option:
-
-```js
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-
-export default {
-  // ...
-  plugins: [nodeResolve({
-    exportConditions: ['development']
-  })]
-};
-```
-
-</details>
 
 ## Tutorial
 
