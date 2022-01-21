@@ -63,8 +63,7 @@ module.exports = {
             pre: {
               color: '#cddbf7',
               padding: '1rem 1.5rem',
-              backgroundColor: 'rgba(0,0,0,0.1)',
-              border: `1px solid ${GRAY['800']}`,
+              backgroundColor: GRAY['800'],
               lineHeight: '2.1',
               fontSize: 'inherit',
               '> code': {
@@ -75,7 +74,7 @@ module.exports = {
               },
               '.line.line--highlighted': {
                 borderLeftColor: colors.blue['400'],
-                backgroundColor: colors.gray['800'],
+                backgroundColor: GRAY['700'],
                 margin: '0 -1.5rem',
                 padding: '0 1.5rem',
               },
@@ -138,10 +137,9 @@ module.exports = {
               },
             },
             ':not(pre) > code': {
-              border: `1px solid ${GRAY['800']}`,
+              borderRadius: '0.25rem',
               padding: '0.2rem 0.4rem',
-              borderRadius: '4px',
-              backgroundColor: GRAY['1000'],
+              backgroundColor: GRAY['800'],
             },
             a: {
               color: colors.cyan['400'],

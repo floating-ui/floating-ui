@@ -46,6 +46,12 @@ function App() {
 `x{:.const}` and `y{:.const}` will be `null{:js}` initially,
 before the layout effect has fired.
 
+`useFloating(){:js}` only calculates the position **once** on
+render, or when the reference/floating elements changed.
+Depending on the context in which the floating element lives,
+you'll likely need to update its position in an effect. See
+[Updating](/docs/react-dom#updating).
+
 ## External reference
 
 As `reference{:.const}` is a callback ref, you can call it with
