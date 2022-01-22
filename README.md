@@ -60,6 +60,25 @@ computePosition(referenceElement, floatingElement, {
 
 [Visit the docs for detailed information](https://floating-ui.com/docs/computePosition).
 
+## Development and production builds
+
+Floating UI is published with default, development, and
+production builds, using Node's support for
+[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+
+- `"default"`: uses `process.env.NODE_ENV`, in which
+  your bundler handles the env variable, dead code elimination,
+  and minification
+- `"production"`: minified with no debug logging
+- `"development"`: unminified with debug logging
+
+If you're using a bundler like webpack, Vite, or Parcel, this is
+handled for you **automatically**.
+
+If this is not handled, you must opt into one of the builds in
+tools that support export conditions. This is done differently
+for each tool.
+
 ## React
 
 - [React DOM](https://floating-ui.com/docs/react-dom)
