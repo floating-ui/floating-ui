@@ -256,3 +256,68 @@ function App() {
   );
 }
 ```
+
+## Testing
+
+During testing, React requires every function that causes the state to change to be called in the [`act`](https://reactjs.org/docs/testing-recipes.html#act) callback. [Testing Library](https://testing-library.com/) already takes care of most of these, but there are still times when you have to do this yourself, for example if your component updates its state 300 ms after mounting, you need to advance timers inside of `act`:
+
+```jsx {9-11}
+import {render, screen, act} from '@testing-library/react';
+import MyComponent from './MyComponent';
+
+describe('MyComponent', () => {
+  it('updates after 300 ms', () => {
+    jest.useFakeTimers();
+    render(<MyComponent />);
+    expect(screen.getByText('same content')).toBeInTheDocument();
+    act(() => {
+      jest.advanceTimersByTime(300);
+    });
+    expect(screen.getByText('different content')).toBeInTheDocument();
+    jest.useRealTimers();
+  });
+}):
+```
+
+If timers were to be advanced outside of the `act` callback, React would log a warning like this:
+
+```
+Warning: An update to App inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+```
+
+When testing components and hooks that use Floating UI it's important to keep in mind that `computePosition` used in `useFloating` is _asynchronous_, so in a synchronous test the state would be updated after the test finishes, causing the warning. One way to avoid it is by wrapping `render` inside an asynchronous `act` (as well as any other action that causes Floating UI state to change):
+
+```jsx
+await act(async () => {
+  render(<MyComponent />);
+});
+```
+
+A more deliberate way of flushing the queue would be:
+
+```jsx
+render(<MyComponent />);
+await act(async () => {});
+```
+
+Otherwise, if you're making assertions about state affected by Floating UI, Testing Library's [`waitFor`](https://testing-library.com/docs/dom-testing-library/api-async/#waitfor) utility might be more appropriate:
+
+```jsx
+render(<MyComponent />);
+await waitFor(() => {
+  expect(screen.getByRole('tooltip')).toHaveStyle({
+    position: 'absolute',
+  });
+});
+```
+
+This would be needed only for the first assertion after the state gets updated.
