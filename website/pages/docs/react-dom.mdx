@@ -256,3 +256,69 @@ function App() {
   );
 }
 ```
+
+## Testing
+
+Floating UI computes the position of your floating element
+asynchronously, so a state update occurs during a Promise
+microtask.
+
+The state update happens **after** your test completes, resulting
+in an act warning like this:
+
+```
+Warning: An update to App inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+```
+
+To fix this, explicitly call `cleanup(){:js}` at the end of your
+test if you don't care about the positioning:
+
+```js /cleanup/
+import {render, cleanup, screen} from '@testing-library/react';
+
+test('example', () => {
+  render(<Tooltip content="hello" open />);
+  expect(screen.getByRole('tooltip').textContent).toBe('hello');
+
+  // The positioning does not matter
+  cleanup();
+});
+```
+
+While `@testing-library/react{:.string}` already does this
+internally, it's executed in the microtask queue following
+Floating UI's update call — so the `act` warning occurs.
+
+> Note: `afterEach(cleanup){:js}` won't work — this is what
+> Testing Library already does. You need to call `cleanup(){:js}`
+> explicitly at the end of each of your tests.
+
+If the position **does** matter in your assertions, ensure you
+wait for the microtask queue to be flushed using
+[waitFor](https://testing-library.com/docs/dom-testing-library/api-async/#waitfor)
+or other async utilities.
+
+```js
+render(<Tooltip open />);
+await waitFor(() => {
+  // The positioning matters, so we make expect(...)
+  // assertions in here.
+});
+```
+
+Or, if needed, you can explicitly flush the queue and let the
+positioning update be executed:
+
+```js
+render(<Tooltip open />);
+await act(async () => {});
+```
