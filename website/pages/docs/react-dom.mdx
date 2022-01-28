@@ -282,8 +282,8 @@ This ensures that you're testing the behavior the user would see in the browser.
 To fix this, explicitly call `cleanup(){:js}` at the end of your
 test if you don't care about the positioning:
 
-```js
-import {render, cleanup} from '@testing-library/react';
+```js /cleanup/
+import {render, cleanup, screen} from '@testing-library/react';
 
 test('example', () => {
   render(<Tooltip content="hello" open />);
