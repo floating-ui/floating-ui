@@ -37,4 +37,9 @@ export const MINI_SPONSORS = [
     label: 'wazirx referral code',
     url: 'https://techbuy.in/wazirx-referral-code/',
   },
+  {
+    logo: '/sponsors/dpcoupon.svg',
+    label: 'dpcoupon - coupon codes and discounts',
+    url: 'https://www.dpcoupon.com/',
+  },
 ];

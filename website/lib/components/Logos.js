@@ -2,13 +2,12 @@ import Tippy from '@tippyjs/react';
 
 export function Logos({items}) {
   return (
-    <div className="gap-8 flex justify-center my-10">
+    <div className="gap-8 flex flex-wrap justify-center my-10">
       {items.map((item) => (
         <Tippy
           key={item.label}
           content={item.label}
           theme="light-border"
-          interactive
           trigger="mouseenter"
           aria={{content: 'labelledby'}}
         >
@@ -18,7 +17,7 @@ export function Logos({items}) {
             rel="noopener noreferrer"
           >
             <img
-              className="aspect-square h-12"
+              className="h-12"
               src={item.logo}
               alt={item.label}
             />
