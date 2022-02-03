@@ -8,23 +8,29 @@ import flowEntry from 'rollup-plugin-flow-entry';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import pkg from '../package.json';
 
-const getFileName = (input) => input.split('/')[1].split('.')[0];
+const getFileName = (input) => input.split('/').reverse()[0].split('.')[0];
 
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js', 'src/enums.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'umd', dir: 'dist' },
   { inputs, format: 'cjs', dir: 'dist', flow: true },
+  { inputs: ['dist/esm/index.js'], format: 'esm', dir: 'dist', minify: true },
+  { inputs: ['lib/index.js'], format: 'esm', dir: 'dist', development: true },
 ];
 
 const configs = bundles
-  .map(({ inputs, dir, format, minify, flow }) =>
+  .map(({ inputs, dir, format, minify, flow, development }) =>
     inputs.map((input) => ({
       input,
       plugins: [
         format === 'umd' &&
           replace({
             __DEV__: minify ? 'false' : 'true',
+          }),
+        format === 'esm' && development &&
+          replace({
+            'process.env.NODE_ENV': '"development"',
           }),
         babel({ babelHelpers: 'bundled' }),
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
@@ -35,12 +41,12 @@ const configs = bundles
         bundleSize(),
         visualizer({
           sourcemap: true,
-          filename: `stats/${getFileName(input)}${minify ? '-min' : ''}.html`,
+          filename: `stats/${getFileName(input)}${development ? '-development' : ''}${minify ? '-min' : ''}.html`,
         }),
       ].filter(Boolean),
       output: {
         name: 'Popper',
-        file: `${dir}/${format}/${getFileName(input)}${
+        file: `${dir}/${format}/${getFileName(input)}${development ? '.development' : ''}${
           minify ? '.min' : ''
         }.js`,
         format,

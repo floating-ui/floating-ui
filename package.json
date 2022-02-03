@@ -5,6 +5,17 @@
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
   "module": "lib/index.js",
+  "exports": {
+    ".": {
+      "import": {
+        "development": "./dist/esm/index.development.js",
+        "production": "./dist/esm/index.min.js",
+        "default": "./lib/index.js"
+      },
+      "require": "./dist/cjs/popper.js"
+    },
+    "./package.json": "./package.json"
+  },
   "unpkg": "dist/umd/popper.min.js",
   "author": "Federico Zivolo <federico.zivolo@gmail.com>",
   "license": "MIT",
