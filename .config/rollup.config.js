@@ -15,8 +15,8 @@ const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'umd', dir: 'dist' },
   { inputs, format: 'cjs', dir: 'dist', flow: true },
-  { inputs: ['lib/index.js'], format: 'esm', dir: 'dist', minify: true },
-  { inputs: ['lib/index.js'], format: 'esm', dir: 'dist', development: true },
+  { inputs: ['src/index.js'], format: 'esm', dir: 'dist', minify: true },
+  { inputs: ['src/index.js'], format: 'esm', dir: 'dist', development: true },
 ];
 
 const configs = bundles
