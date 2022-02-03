@@ -8,14 +8,14 @@ import flowEntry from 'rollup-plugin-flow-entry';
 import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import pkg from '../package.json';
 
-const getFileName = (input) => input.split('/').reverse()[0].split('.')[0];
+const getFileName = (input) => input.split('/')[1].split('.')[0];
 
 const inputs = ['src/popper.js', 'src/popper-lite.js', 'src/popper-base.js', 'src/enums.js'];
 const bundles = [
   { inputs, format: 'umd', dir: 'dist', minify: true, flow: true },
   { inputs, format: 'umd', dir: 'dist' },
   { inputs, format: 'cjs', dir: 'dist', flow: true },
-  { inputs: ['dist/esm/index.js'], format: 'esm', dir: 'dist', minify: true },
+  { inputs: ['lib/index.js'], format: 'esm', dir: 'dist', minify: true },
   { inputs: ['lib/index.js'], format: 'esm', dir: 'dist', development: true },
 ];
 
@@ -28,9 +28,9 @@ const configs = bundles
           replace({
             __DEV__: minify ? 'false' : 'true',
           }),
-        format === 'esm' && development &&
+        format === 'esm' &&
           replace({
-            'process.env.NODE_ENV': '"development"',
+            'process.env.NODE_ENV': development ? '"development"' : '"production"',
           }),
         babel({ babelHelpers: 'bundled' }),
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
