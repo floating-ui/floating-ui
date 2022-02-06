@@ -59,7 +59,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.1.8",
+    "@floating-ui/dom": "^0.2.0",
+    "@floating-ui/core": "^0.4.0",
     "use-isomorphic-layout-effect": "^1.1.1"
   },
   "devDependencies": {
