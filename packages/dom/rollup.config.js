@@ -53,7 +53,7 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.dom.cjs'),
+      file: path.join(__dirname, 'dist/floating-ui.dom.cjs.js'),
       format: 'cjs',
     },
   },
