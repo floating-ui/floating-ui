@@ -12,10 +12,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/floating-ui.core.cjs",
+  "browser": "dist/floating-ui.core.min.js",
+  "main": "dist/floating-ui.core.cjs.js",
   "module": "dist/floating-ui.core.esm.js",
   "unpkg": "dist/floating-ui.core.min.js",
-  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -23,7 +23,7 @@
         "production": "./dist/floating-ui.core.esm.min.js",
         "default": "./dist/floating-ui.core.esm.js"
       },
-      "require": "./dist/floating-ui.core.cjs"
+      "require": "./dist/floating-ui.core.cjs.js"
     },
     "./package.json": "./package.json"
   },

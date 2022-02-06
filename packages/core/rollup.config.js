@@ -48,7 +48,7 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.core.cjs'),
+      file: path.join(__dirname, 'dist/floating-ui.core.cjs.js'),
       format: 'cjs',
     },
   },
