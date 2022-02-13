@@ -2,7 +2,7 @@
 import getWindow from './getWindow';
 import getNodeName from './getNodeName';
 import getComputedStyle from './getComputedStyle';
-import { isHTMLElement } from './instanceOf';
+import { isHTMLElement, isShadowRoot } from './instanceOf';
 import isTableElement from './isTableElement';
 import getParentNode from './getParentNode';
 
@@ -33,6 +33,10 @@ function getContainingBlock(element: Element) {
   }
 
   let currentNode = getParentNode(element);
+
+  if (isShadowRoot(currentNode)) {
+    currentNode = currentNode.host;
+  }
 
   while (
     isHTMLElement(currentNode) &&
