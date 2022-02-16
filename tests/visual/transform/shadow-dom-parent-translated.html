@@ -1,0 +1,59 @@
+<!DOCTYPE html> <title>Transform Visual Test</title>
+
+<style>
+  @import '/tests/visual/reset.css';
+
+  .moved {
+    transform: translate(100px, 100px);
+  }
+</style>
+
+<div class='moved'>
+  <test-element></test-element>
+</div>
+
+<script type="module">
+  import { createPopper } from '../dist/popper.js';
+
+  class TestElement extends HTMLElement {
+    constructor() {
+      super();
+      this.attachShadow({ mode: 'open' });
+      this.shadowRoot.innerHTML = this.template;
+    }
+
+    connectedCallback() {
+      const reference = this.shadowRoot.querySelector('#reference');
+      const popper = this.shadowRoot.querySelector('#popper');
+
+      window.instance = createPopper(reference, popper, {
+        placement: 'bottom-start'
+      });
+    }
+
+    get template() {
+      return `
+                <style>
+  @import '/reset.css';
+
+                  #reference {
+                    width: 200px;
+                    height: 200px;
+                    background-color: red;
+                    box-shadow: inset 0 0 0 1px black;
+                  }
+
+                  #popper {
+                    width: 100px;
+                    height: 100px;
+                    background-color: rebeccapurple;
+                    box-shadow: inset 0 0 0 1px black;
+                  }
+                </style>
+                <div id='reference'>Reference Box</div>
+                <div id='popper'>Popper Box</div>
+            `;
+    }
+  }
+  customElements.define('test-element', TestElement);
+</script>
