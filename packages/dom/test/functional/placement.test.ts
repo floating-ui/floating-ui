@@ -26,3 +26,14 @@ allPlacements.forEach((placement) => {
     );
   });
 });
+
+allPlacements.forEach((placement) => {
+  test(`rtl should be respected ${placement}`, async ({page}) => {
+    await page.goto('http://localhost:1234/placement');
+    await click(page, `[data-testid="rtl-true"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `${placement}-rtl.png`
+    );
+  });
+});

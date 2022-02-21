@@ -8,12 +8,18 @@ export function computeCoordsFromPlacement({
   reference,
   floating,
   placement,
-}: ElementRects & {placement: Placement}): Coords {
+  rtl = false,
+}: ElementRects & {placement: Placement; rtl?: boolean}): Coords {
   const commonX = reference.x + reference.width / 2 - floating.width / 2;
   const commonY = reference.y + reference.height / 2 - floating.height / 2;
+  const mainAxis = getMainAxisFromPlacement(placement);
+  const length = getLengthFromAxis(mainAxis);
+  const commonAlign = reference[length] / 2 - floating[length] / 2;
+  const basePlacement = getBasePlacement(placement);
+  const isVertical = ['top', 'bottom'].includes(basePlacement);
 
   let coords;
-  switch (getBasePlacement(placement)) {
+  switch (basePlacement) {
     case 'top':
       coords = {x: commonX, y: reference.y - floating.height};
       break;
@@ -30,17 +36,12 @@ export function computeCoordsFromPlacement({
       coords = {x: reference.x, y: reference.y};
   }
 
-  const mainAxis = getMainAxisFromPlacement(placement);
-  const length = getLengthFromAxis(mainAxis);
-
   switch (getAlignment(placement)) {
     case 'start':
-      coords[mainAxis] =
-        coords[mainAxis] - (reference[length] / 2 - floating[length] / 2);
+      coords[mainAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
       break;
     case 'end':
-      coords[mainAxis] =
-        coords[mainAxis] + (reference[length] / 2 - floating[length] / 2);
+      coords[mainAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
       break;
     default:
   }
