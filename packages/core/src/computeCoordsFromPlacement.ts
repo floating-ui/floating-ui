@@ -16,7 +16,7 @@ export function computeCoordsFromPlacement({
   const length = getLengthFromAxis(mainAxis);
   const commonAlign = reference[length] / 2 - floating[length] / 2;
   const basePlacement = getBasePlacement(placement);
-  const isVertical = ['top', 'bottom'].includes(basePlacement);
+  const isVertical = mainAxis === 'x';
 
   let coords;
   switch (basePlacement) {
