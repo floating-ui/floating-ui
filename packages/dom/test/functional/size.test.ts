@@ -20,7 +20,9 @@ allPlacements.forEach((placement) => {
     );
   });
 
-  test('correctly sized with rtl enabled', async ({page}) => {
+  test(`placement ${placement} correctly sized with rtl enabled`, async ({
+    page,
+  }) => {
     await page.goto('http://localhost:1234/size');
     await click(page, `[data-testid="placement-${placement}"]`);
     await click(page, `[data-testid="rtl-true"]`);
