@@ -248,7 +248,7 @@ createPopper(button, tooltip, {
 As you make more poppers, you may be finding yourself needing other modifiers
 provided by the library.
 
-See [tree-shaking](https://popper.js.org/docs/v2/tree-shaking/) for more
+See [tree-shaking](https://popper.js.org/docs/v2/performance/#tree-shaking) for more
 information.
 
 ## Distribution targets
