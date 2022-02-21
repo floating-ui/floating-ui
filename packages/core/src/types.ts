@@ -70,6 +70,7 @@ export type MiddlewareData = {
     skip?: boolean;
   };
   offset?: Coords;
+  shift?: Coords;
   [key: string]: any;
 };
 
