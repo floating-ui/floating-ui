@@ -17,6 +17,7 @@ export function autoUpdate(
   update: () => void,
   options: Partial<Options> = {}
 ) {
+  let cleanedUp = false;
   const everyFrame = options.everyFrame;
   const ancestorScroll = options.ancestorScroll && !everyFrame;
   const ancestorResize = options.ancestorResize && !everyFrame;
@@ -47,6 +48,10 @@ export function autoUpdate(
   }
 
   function frameLoop() {
+    if (cleanedUp) {
+      return;
+    }
+
     const nextRefRect = reference.getBoundingClientRect();
 
     if (
@@ -64,6 +69,8 @@ export function autoUpdate(
   }
 
   return () => {
+    cleanedUp = true;
+
     ancestors.forEach((ancestor) => {
       ancestorScroll && ancestor.removeEventListener('scroll', update);
       ancestorResize && ancestor.removeEventListener('resize', update);
