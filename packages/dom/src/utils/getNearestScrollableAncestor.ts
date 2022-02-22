@@ -2,7 +2,7 @@ import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
 import {isScrollParent, isHTMLElement} from './is';
 
-export function getScrollParent(node: Node): HTMLElement {
+export function getNearestScrollableAncestor(node: Node): HTMLElement {
   if (['html', 'body', '#document'].includes(getNodeName(node))) {
     // @ts-ignore assume body is always available
     return node.ownerDocument.body;
@@ -12,5 +12,5 @@ export function getScrollParent(node: Node): HTMLElement {
     return node;
   }
 
-  return getScrollParent(getParentNode(node));
+  return getNearestScrollableAncestor(getParentNode(node));
 }

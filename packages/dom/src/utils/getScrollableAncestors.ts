@@ -1,13 +1,13 @@
-import {getScrollParent} from './getScrollParent';
+import {getNearestScrollableAncestor} from './getNearestScrollableAncestor';
 import {getParentNode} from './getParentNode';
 import {getWindow} from './window';
 import {isScrollParent} from './is';
 
-export function getScrollParents(
+export function getScrollableAncestors(
   node: Node,
   list: Array<Element | Window> = []
 ): Array<Element | Window | VisualViewport> {
-  const scrollParent = getScrollParent(node);
+  const scrollParent = getNearestScrollableAncestor(node);
   const isBody = scrollParent === node.ownerDocument?.body;
   const win = getWindow(scrollParent);
   const target = isBody
@@ -21,5 +21,5 @@ export function getScrollParents(
   return isBody
     ? updatedList
     : // @ts-ignore: isBody tells us target will be an HTMLElement here
-      updatedList.concat(getScrollParents(getParentNode(target)));
+      updatedList.concat(getScrollableAncestors(getParentNode(target)));
 }
