@@ -99,6 +99,7 @@ export const fallback = (options: Partial<FallbackOptions> = {}) => ({
           },
           reset: {
             placement: nextPlacement,
+            skip: false,
           },
         };
       }
@@ -130,9 +131,6 @@ export const fallback = (options: Partial<FallbackOptions> = {}) => ({
 
       if (placement !== resetPlacement) {
         return {
-          data: {
-            skip: true,
-          },
           reset: {
             placement: resetPlacement,
           },
@@ -226,6 +224,7 @@ export const bestFit = (options: Partial<BestFitOptions> = {}) => ({
         y,
         reset: {
           placement: placements[0],
+          skip: false,
         },
       };
     }
@@ -252,6 +251,7 @@ export const bestFit = (options: Partial<BestFitOptions> = {}) => ({
         },
         reset: {
           placement: nextPlacement,
+          skip: false,
         },
       };
     }
@@ -299,13 +299,7 @@ export const adaptivePlacement = (
   name: 'adaptivePlacement',
   options,
   async fn(middlewareArguments) {
-    const {middlewareData} = middlewareArguments;
     const {strategy} = options;
-
-    if (middlewareData.adaptivePlacement?.skip) {
-      return {};
-    }
-
     return (await strategy?.fn(middlewareArguments, options)) ?? {};
   },
 });

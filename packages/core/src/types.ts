@@ -43,7 +43,6 @@ export type MiddlewareData = {
   };
   adaptivePlacement?: {
     index?: number;
-    skip?: boolean;
     overflows: Array<{
       placement: Placement;
       overflows: Array<number>;
@@ -54,12 +53,6 @@ export type MiddlewareData = {
     escaped: boolean;
     referenceHiddenOffsets: SideObject;
     escapedOffsets: SideObject;
-  };
-  inline?: {
-    skip?: boolean;
-  };
-  size?: {
-    skip?: boolean;
   };
   offset?: Coords;
   [key: string]: any;
@@ -89,7 +82,13 @@ export type MiddlewareReturn = Partial<
     data: {
       [key: string]: any;
     };
-    reset: true | {placement?: Placement; rects?: true | ElementRects};
+    reset:
+      | true
+      | {
+          placement?: Placement;
+          rects?: true | ElementRects;
+          skip?: false;
+        };
   }
 >;
 
