@@ -4,7 +4,8 @@
 import {
   useFloating,
   offset,
-  flip,
+  adaptivePlacement,
+  fallback,
   shift,
   size,
   arrow,
@@ -38,7 +39,9 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
         offset(() => ({crossAxis: 10})),
         offset({crossAxis: 10, mainAxis: 10}),
 
-        flip({fallbackPlacements: ['top', 'bottom']}),
+        adaptivePlacement({
+          strategy: fallback({placements: ['top', 'bottom']}),
+        }),
 
         shift(),
         shift({crossAxis: true}),
@@ -78,10 +81,9 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
       offset(() => ({crossAxis: 10})),
       offset({crossAxis: 10, mainAxis: 10}),
 
-      // should also test `autoPlacement.allowedPlacements`
-      // can't have both `flip` and `autoPlacement` in the same middleware
-      // array, or multiple `flip`s
-      flip({fallbackPlacements: ['top', 'bottom']}),
+      adaptivePlacement({
+        strategy: fallback({placements: ['top', 'bottom']}),
+      }),
 
       shift(),
       shift({crossAxis: true}),
@@ -117,7 +119,16 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
           onClick={() => setMiddleware([offset(() => 5)])}
         />
         <button data-testid="step3" onClick={() => setMiddleware([])} />
-        <button data-testid="step4" onClick={() => setMiddleware([flip()])} />
+        <button
+          data-testid="step4"
+          onClick={() =>
+            setMiddleware([
+              adaptivePlacement({
+                strategy: fallback(),
+              }),
+            ])
+          }
+        />
         <div data-testid="x">{x}</div>
         <div data-testid="y">{y}</div>
       </>

@@ -1,13 +1,14 @@
 import type {Placement} from '@floating-ui/core';
-import type {Options} from '@floating-ui/core/src/middleware/flip';
 import {allPlacements} from '../utils/allPlacements';
-import {useFloating, flip} from '@floating-ui/react-dom';
+import {useFloating, adaptivePlacement, fallback} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 
+type NoneFitStrategy = 'bestFit' | 'initialPlacement';
+
 const BOOLS = [true, false];
-const FALLBACK_STRATEGIES: Array<Options['fallbackStrategy']> = [
+const NONE_FIT_STRATEGIES: Array<NoneFitStrategy> = [
   'bestFit',
   'initialPlacement',
 ];
@@ -17,18 +18,20 @@ export function Flip() {
   const [mainAxis, setMainAxis] = useState(true);
   const [crossAxis, setCrossAxis] = useState(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
-  const [fallbackStrategy, setFallbackStrategy] =
-    useState<Options['fallbackStrategy']>('bestFit');
+  const [noneFitStrategy, setNoneFitStrategy] =
+    useState<NoneFitStrategy>('bestFit');
   const [flipAlignment, setFlipAlignment] = useState(true);
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,
     middleware: [
-      flip({
-        mainAxis,
-        crossAxis,
-        fallbackPlacements,
-        fallbackStrategy,
-        flipAlignment,
+      adaptivePlacement({
+        strategy: fallback({
+          mainAxis,
+          crossAxis,
+          placements: fallbackPlacements,
+          noneFitStrategy,
+          autoAlignment: flipAlignment,
+        }),
       }),
     ],
   });
@@ -38,7 +41,7 @@ export function Flip() {
     mainAxis,
     crossAxis,
     fallbackPlacements?.length,
-    fallbackStrategy,
+    noneFitStrategy,
   ]);
 
   const {scrollRef, indicator} = useScroll({refs, update});
@@ -116,7 +119,7 @@ export function Flip() {
         ))}
       </Controls>
 
-      <h2>fallbackPlacements</h2>
+      <h2>placements</h2>
       <Controls>
         {[['undefined'], [], allPlacements].map((localFallbackPlacements) => (
           <button
@@ -156,16 +159,16 @@ export function Flip() {
         ))}
       </Controls>
 
-      <h2>fallbackStrategy</h2>
+      <h2>noneFitStrategy</h2>
       <Controls>
-        {FALLBACK_STRATEGIES.map((localFallbackStrategy) => (
+        {NONE_FIT_STRATEGIES.map((localFallbackStrategy) => (
           <button
             key={localFallbackStrategy}
             data-testid={`fallbackStrategy-${localFallbackStrategy}`}
-            onClick={() => setFallbackStrategy(localFallbackStrategy)}
+            onClick={() => setNoneFitStrategy(localFallbackStrategy)}
             style={{
               backgroundColor:
-                localFallbackStrategy === fallbackStrategy ? 'black' : '',
+                localFallbackStrategy === noneFitStrategy ? 'black' : '',
             }}
           >
             {localFallbackStrategy}

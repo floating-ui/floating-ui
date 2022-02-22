@@ -4,9 +4,8 @@ import type {
   SideObject,
 } from '@floating-ui/core';
 import type {Options as DetectOverflowOptions} from '@floating-ui/core/src/detectOverflow';
-import type {Options as AutoPlacementOptions} from '@floating-ui/core/src/middleware/autoPlacement';
+import type {Options as AdaptivePlacementOptions} from '@floating-ui/core/src/middleware/adaptivePlacement';
 import type {Options as SizeOptions} from '@floating-ui/core/src/middleware/size';
-import type {Options as FlipOptions} from '@floating-ui/core/src/middleware/flip';
 import type {Options as ShiftOptions} from '@floating-ui/core/src/middleware/shift';
 
 export type NodeScroll = {
@@ -22,13 +21,6 @@ export type DOMDetectOverflowOptions = Omit<
 };
 
 /**
- * Automatically chooses the `placement` which has the most space available.
- */
-declare const autoPlacement: (
-  options?: Partial<AutoPlacementOptions & DOMDetectOverflowOptions>
-) => Middleware;
-
-/**
  * Shifts the floating element in order to keep it in view when it will overflow
  * a clipping boundary.
  */
@@ -37,11 +29,11 @@ declare const shift: (
 ) => Middleware;
 
 /**
- * Changes the placement of the floating element to one that will fit if the
- * initially specified `placement` does not.
+ * Changes the placement of the floating element when given a particular
+ * strategy.
  */
-declare const flip: (
-  options?: Partial<FlipOptions & DOMDetectOverflowOptions>
+declare const adaptivePlacement: (
+  options?: Partial<AdaptivePlacementOptions & DOMDetectOverflowOptions>
 ) => Middleware;
 
 /**
@@ -74,8 +66,15 @@ declare const detectOverflow: (
   options?: Partial<DOMDetectOverflowOptions>
 ) => Promise<SideObject>;
 
-export {autoPlacement, shift, arrow, size, flip, detectOverflow};
-export {hide, offset, limitShift, inline} from '@floating-ui/core';
+export {adaptivePlacement, shift, arrow, size, detectOverflow};
+export {
+  hide,
+  offset,
+  limitShift,
+  inline,
+  fallback,
+  bestFit,
+} from '@floating-ui/core';
 export type {
   Platform,
   Placement,

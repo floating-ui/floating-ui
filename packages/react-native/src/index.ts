@@ -20,8 +20,9 @@ import {createPlatform} from './createPlatform';
 import {deepEqual} from './utils/deepEqual';
 
 export {
-  autoPlacement,
-  flip,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   limitShift,
   offset,

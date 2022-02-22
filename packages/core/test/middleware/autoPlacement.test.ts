@@ -1,4 +1,4 @@
-import {getPlacementList} from '../../src/middleware/autoPlacement';
+import {getPlacementList} from '../../src/middleware/adaptivePlacement';
 
 test('base placement', () => {
   expect(

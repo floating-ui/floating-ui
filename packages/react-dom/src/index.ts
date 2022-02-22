@@ -11,8 +11,9 @@ import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import {deepEqual} from './utils/deepEqual';
 
 export {
-  autoPlacement,
-  flip,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   offset,
   shift,

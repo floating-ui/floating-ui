@@ -1,5 +1,5 @@
 import type {Alignment, Placement} from '@floating-ui/core';
-import {useFloating, autoPlacement} from '@floating-ui/react-dom';
+import {useFloating, adaptivePlacement, bestFit} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
@@ -20,10 +20,8 @@ export function AutoPlacement() {
   >();
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     middleware: [
-      autoPlacement({
-        alignment,
-        autoAlignment,
-        allowedPlacements,
+      adaptivePlacement({
+        strategy: bestFit({alignment, autoAlignment, allowedPlacements}),
       }),
     ],
   });

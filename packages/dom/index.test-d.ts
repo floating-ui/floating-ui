@@ -3,8 +3,9 @@ import {
   computePosition,
   shift,
   limitShift,
-  flip,
-  autoPlacement,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   offset,
   size,
@@ -81,8 +82,8 @@ computePosition(document.body, document.body, {
   placement: 'right',
   middleware: [
     shift(),
-    flip(),
-    autoPlacement(),
+    adaptivePlacement({strategy: bestFit()}),
+    adaptivePlacement({strategy: fallback()}),
     offset(),
     hide(),
     size(),
@@ -116,13 +117,13 @@ shift({limiter: limitShift({offset: () => ({mainAxis: 5, crossAxis: 5})})});
 // @ts-expect-error
 shift({limiter: 'test'});
 
-flip({
+adaptivePlacement({
   // @ts-expect-error
   boundary: '',
 });
-flip({boundary: document.body});
-flip({boundary: [document.body]});
-flip({boundary: 'clippingParents'});
+adaptivePlacement({boundary: document.body});
+adaptivePlacement({boundary: [document.body]});
+adaptivePlacement({boundary: 'clippingParents'});
 size({
   // @ts-expect-error
   boundary: '',
@@ -130,7 +131,7 @@ size({
 size({boundary: document.body});
 size({boundary: [document.body]});
 size({boundary: 'clippingParents'});
-autoPlacement({
+adaptivePlacement({
   // @ts-expect-error
   boundary: '',
 });

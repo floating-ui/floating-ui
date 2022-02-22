@@ -1,8 +1,9 @@
 export {useFloating} from './';
 
 export {
-  autoPlacement,
-  flip,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   offset,
   shift,

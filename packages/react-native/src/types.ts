@@ -2,8 +2,9 @@ export {useFloating} from './';
 
 export {
   arrow,
-  autoPlacement,
-  flip,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   offset,
   shift,

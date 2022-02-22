@@ -41,15 +41,7 @@ export type MiddlewareData = {
   arrow?: Partial<Coords> & {
     centerOffset: number;
   };
-  autoPlacement?: {
-    index?: number;
-    skip?: boolean;
-    overflows: Array<{
-      placement: Placement;
-      overflows: Array<number>;
-    }>;
-  };
-  flip?: {
+  adaptivePlacement?: {
     index?: number;
     skip?: boolean;
     overflows: Array<{
@@ -150,9 +142,12 @@ export {computePosition} from './computePosition';
 export {rectToClientRect} from './utils/rectToClientRect';
 export {detectOverflow} from './detectOverflow';
 
+export {
+  adaptivePlacement,
+  fallback,
+  bestFit,
+} from './middleware/adaptivePlacement';
 export {arrow} from './middleware/arrow';
-export {autoPlacement} from './middleware/autoPlacement';
-export {flip} from './middleware/flip';
 export {hide} from './middleware/hide';
 export {offset} from './middleware/offset';
 export {shift, limitShift} from './middleware/shift';

@@ -31,19 +31,6 @@ export const computePosition: ComputePosition = async (
         ].join(' ')
       );
     }
-
-    if (
-      middleware.filter(({name}) => name === 'autoPlacement' || name === 'flip')
-        .length > 1
-    ) {
-      throw new Error(
-        [
-          'Floating UI: duplicate `flip` and/or `autoPlacement`',
-          'middleware detected. This will lead to an infinite loop. Ensure only',
-          'one of either has been passed to the `middleware` array.',
-        ].join(' ')
-      );
-    }
   }
 
   let rects = await platform.getElementRects({reference, floating, strategy});

@@ -20,8 +20,9 @@ export const computePosition = (
 
 export {
   arrow,
-  autoPlacement,
-  flip,
+  adaptivePlacement,
+  fallback,
+  bestFit,
   hide,
   offset,
   shift,
