@@ -42,6 +42,7 @@ export type FallbackOptions = {
 };
 
 export const fallback = (options: Partial<FallbackOptions> = {}) => ({
+  options,
   async fn(
     middlewareArguments: MiddlewareArguments,
     adaptiveOptions: Partial<Options & DetectOverflowOptions>
@@ -193,6 +194,7 @@ export type BestFitOptions = {
 };
 
 export const bestFit = (options: Partial<BestFitOptions> = {}) => ({
+  options,
   async fn(
     middlewareArguments: MiddlewareArguments,
     adaptiveOptions: Partial<Options & DetectOverflowOptions>
