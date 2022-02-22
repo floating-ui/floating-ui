@@ -97,7 +97,13 @@ export type MiddlewareReturn = Partial<
     data: {
       [key: string]: any;
     };
-    reset: true | {placement?: Placement; rects?: true | ElementRects};
+    reset:
+      | true
+      | {
+          placement?: Placement;
+          rects?: true | ElementRects;
+          skip?: false;
+        };
   }
 >;
 
