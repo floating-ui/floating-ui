@@ -46,7 +46,7 @@ export const fallback = (options: Partial<FallbackOptions> = {}) => ({
   async fn(
     middlewareArguments: MiddlewareArguments,
     adaptiveOptions: Partial<Options & DetectOverflowOptions>
-  ) {
+  ): Promise<MiddlewareReturn> {
     const {placement, initialPlacement, middlewareData, rects} =
       middlewareArguments;
 
@@ -196,7 +196,7 @@ export const bestFit = (options: Partial<BestFitOptions> = {}) => ({
   async fn(
     middlewareArguments: MiddlewareArguments,
     adaptiveOptions: Partial<Options & DetectOverflowOptions>
-  ) {
+  ): Promise<MiddlewareReturn> {
     const {x, y, rects, middlewareData, placement} = middlewareArguments;
 
     const {
