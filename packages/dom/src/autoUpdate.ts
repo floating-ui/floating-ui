@@ -15,7 +15,12 @@ export function autoUpdate(
     | {getBoundingClientRect(): ClientRectObject; contextElement?: Element},
   floating: HTMLElement,
   update: () => void,
-  options: Partial<Options> = {}
+  options: Partial<Options> = {
+    ancestorScroll: true,
+    ancestorResize: true,
+    elementResize: true,
+    everyFrame: false,
+  }
 ) {
   let cleanedUp = false;
   const everyFrame = options.everyFrame;
