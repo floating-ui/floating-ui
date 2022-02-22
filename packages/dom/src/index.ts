@@ -31,4 +31,6 @@ export {
   detectOverflow,
 } from '@floating-ui/core';
 
+export {autoUpdate} from './autoUpdate';
+
 export {getScrollableAncestors} from './utils/getScrollableAncestors';

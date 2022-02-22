@@ -83,4 +83,5 @@ export type {
   Middleware,
 } from '@floating-ui/core';
 export {computePosition} from './';
+export {autoUpdate} from './autoUpdate';
 export {getScrollableAncestors} from './utils/getScrollableAncestors';
