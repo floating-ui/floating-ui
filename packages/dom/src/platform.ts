@@ -16,12 +16,11 @@ export const platform: Platform = {
     ),
     floating: {...getDimensions(floating), x: 0, y: 0},
   }),
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args) =>
-    convertOffsetParentRelativeRectToViewportRelativeRect(args),
+  convertOffsetParentRelativeRectToViewportRelativeRect,
   getOffsetParent: ({element}) => getOffsetParent(element),
   isElement: (value) => isElement(value),
   getDocumentElement: ({element}) => getDocumentElement(element),
-  getClippingClientRect: (args) => getClippingClientRect(args),
+  getClippingClientRect,
   getDimensions: ({element}) => getDimensions(element),
   getClientRects: ({element}) => element.getClientRects(),
 };
