@@ -24,6 +24,8 @@ import {Offset} from './spec/Offset';
 import {Hide} from './spec/Hide';
 import {AutoPlacement} from './spec/AutoPlacement';
 import {Inline} from './spec/Inline';
+import {AutoUpdate} from './spec/AutoUpdate';
+
 import {New} from './utils/New';
 
 const ROUTES = [
@@ -43,6 +45,7 @@ const ROUTES = [
   {path: 'hide', component: Hide},
   {path: 'autoPlacement', component: AutoPlacement},
   {path: 'inline', component: Inline},
+  {path: 'AutoUpdate', component: AutoUpdate},
 ];
 
 function App() {

@@ -84,4 +84,4 @@ export type {
 } from '@floating-ui/core';
 export {computePosition} from './';
 export {autoUpdate} from './autoUpdate';
-export {getScrollableAncestors} from './utils/getScrollableAncestors';
+export {getOverflowAncestors} from './utils/getOverflowAncestors';

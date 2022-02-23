@@ -19,8 +19,9 @@ export {
   limitShift,
   size,
   inline,
-  getScrollableAncestors,
+  getOverflowAncestors,
   detectOverflow,
+  autoUpdate,
 } from '@floating-ui/dom';
 
 type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {

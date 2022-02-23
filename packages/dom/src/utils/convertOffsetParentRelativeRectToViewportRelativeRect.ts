@@ -3,7 +3,7 @@ import {getBoundingClientRect} from './getBoundingClientRect';
 import {getNodeScroll} from './getNodeScroll';
 import {getNodeName} from './getNodeName';
 import {getDocumentElement} from './getDocumentElement';
-import {isHTMLElement, isScrollParent} from './is';
+import {isHTMLElement, isOverflowElement} from './is';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   rect,
@@ -30,7 +30,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   ) {
     if (
       getNodeName(offsetParent) !== 'body' ||
-      isScrollParent(documentElement)
+      isOverflowElement(documentElement)
     ) {
       scroll = getNodeScroll(offsetParent);
     }

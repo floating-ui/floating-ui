@@ -1,12 +1,13 @@
 import type {ClientRectObject} from '@floating-ui/core';
-import {getScrollableAncestors} from './utils/getScrollableAncestors';
+import {getBoundingClientRect} from './utils/getBoundingClientRect';
+import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {isElement} from './utils/is';
 
 type Options = {
   ancestorScroll: boolean;
   ancestorResize: boolean;
   elementResize: boolean;
-  everyFrame: boolean;
+  animationFrame: boolean;
 };
 
 export function autoUpdate(
@@ -19,22 +20,26 @@ export function autoUpdate(
     ancestorScroll: true,
     ancestorResize: true,
     elementResize: true,
-    everyFrame: false,
+    animationFrame: false,
   }
 ) {
   let cleanedUp = false;
-  const everyFrame = options.everyFrame;
-  const ancestorScroll = options.ancestorScroll && !everyFrame;
-  const ancestorResize = options.ancestorResize && !everyFrame;
-  const elementResize = options.elementResize && !everyFrame;
+  const animationFrame = options.animationFrame;
+  const ancestorScroll = options.ancestorScroll && !animationFrame;
+  const ancestorResize = options.ancestorResize && !animationFrame;
+  const elementResize = options.elementResize && !animationFrame;
 
-  const ancestors = [
-    ...(isElement(reference) ? getScrollableAncestors(reference) : []),
-    ...getScrollableAncestors(floating),
-  ];
+  const ancestors =
+    ancestorScroll || ancestorResize
+      ? [
+          ...(isElement(reference) ? getOverflowAncestors(reference) : []),
+          ...getOverflowAncestors(floating),
+        ]
+      : [];
 
   ancestors.forEach((ancestor) => {
-    ancestorScroll && ancestor.addEventListener('scroll', update);
+    ancestorScroll &&
+      ancestor.addEventListener('scroll', update, {passive: true});
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 
@@ -46,9 +51,9 @@ export function autoUpdate(
   }
 
   let frameId: number;
-  let prevRefRect = everyFrame ? reference.getBoundingClientRect() : null;
+  let prevRefRect = animationFrame ? getBoundingClientRect(reference) : null;
 
-  if (everyFrame) {
+  if (animationFrame) {
     frameLoop();
   }
 
@@ -57,7 +62,7 @@ export function autoUpdate(
       return;
     }
 
-    const nextRefRect = reference.getBoundingClientRect();
+    const nextRefRect = getBoundingClientRect(reference);
 
     if (
       prevRefRect &&
@@ -81,11 +86,9 @@ export function autoUpdate(
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
 
-    if (elementResize) {
-      observer?.disconnect();
-    }
+    observer?.disconnect();
 
-    if (everyFrame) {
+    if (animationFrame) {
       cancelAnimationFrame(frameId);
     }
   };

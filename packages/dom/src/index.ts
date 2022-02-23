@@ -33,4 +33,4 @@ export {
 
 export {autoUpdate} from './autoUpdate';
 
-export {getScrollableAncestors} from './utils/getScrollableAncestors';
+export {getOverflowAncestors} from './utils/getOverflowAncestors';

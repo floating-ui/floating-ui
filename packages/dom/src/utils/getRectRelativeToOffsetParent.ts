@@ -4,7 +4,7 @@ import {getDocumentElement} from './getDocumentElement';
 import {getNodeName} from './getNodeName';
 import {getNodeScroll} from './getNodeScroll';
 import getWindowScrollBarX from './getWindowScrollBarX';
-import {isHTMLElement, isScrollParent} from './is';
+import {isHTMLElement, isOverflowElement} from './is';
 import {round} from './math';
 
 function isScaled(element: HTMLElement): boolean {
@@ -36,7 +36,7 @@ export function getRectRelativeToOffsetParent(
   ) {
     if (
       getNodeName(offsetParent) !== 'body' ||
-      isScrollParent(documentElement)
+      isOverflowElement(documentElement)
     ) {
       scroll = getNodeScroll(offsetParent);
     }

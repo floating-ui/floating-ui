@@ -124,6 +124,10 @@ main {
   margin-bottom: 1rem;
 }
 
+.container[data-flexible] {
+  width: 100%;
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -193,4 +197,14 @@ main {
   font-size: 1.125rem;
   color: #555;
   line-height: 1.75;
+}
+
+@keyframes scale {
+  from {
+    transform: scale(0.5);
+  }
+
+  to {
+    transform: scale(1.25);
+  }
 }

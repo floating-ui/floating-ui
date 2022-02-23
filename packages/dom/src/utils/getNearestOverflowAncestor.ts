@@ -1,16 +1,16 @@
 import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
-import {isScrollParent, isHTMLElement} from './is';
+import {isOverflowElement, isHTMLElement} from './is';
 
-export function getNearestScrollableAncestor(node: Node): HTMLElement {
+export function getNearestOverflowAncestor(node: Node): HTMLElement {
   if (['html', 'body', '#document'].includes(getNodeName(node))) {
     // @ts-ignore assume body is always available
     return node.ownerDocument.body;
   }
 
-  if (isHTMLElement(node) && isScrollParent(node)) {
+  if (isHTMLElement(node) && isOverflowElement(node)) {
     return node;
   }
 
-  return getNearestScrollableAncestor(getParentNode(node));
+  return getNearestOverflowAncestor(getParentNode(node));
 }
