@@ -6,7 +6,7 @@ import {
 } from '@floating-ui/core';
 import {getViewportRect} from './getViewportRect';
 import {getDocumentRect} from './getDocumentRect';
-import {getScrollParents} from './getScrollParents';
+import {getOverflowAncestors} from './getOverflowAncestors';
 import {getOffsetParent} from './getOffsetParent';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
@@ -52,7 +52,7 @@ function getClientRectFromClippingParent(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingParents(element: Element): Array<Element> {
-  const clippingParents = getScrollParents(getParentNode(element));
+  const clippingParents = getOverflowAncestors(getParentNode(element));
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );

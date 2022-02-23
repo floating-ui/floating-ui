@@ -10,7 +10,8 @@ export {
   size,
   inline,
   detectOverflow,
-  getScrollParents,
+  getOverflowAncestors,
+  autoUpdate,
 } from '@floating-ui/dom';
 
 export type {Platform, Placement, Strategy, Middleware} from '@floating-ui/dom';

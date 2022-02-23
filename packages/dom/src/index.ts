@@ -31,4 +31,6 @@ export {
   detectOverflow,
 } from '@floating-ui/core';
 
-export {getScrollParents} from './utils/getScrollParents';
+export {autoUpdate} from './autoUpdate';
+
+export {getOverflowAncestors} from './utils/getOverflowAncestors';

@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import {getScrollParents, useFloating, shift} from '@floating-ui/react-dom';
+import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
 
 export const useScroll = ({
   refs,
@@ -46,8 +46,8 @@ export const useScroll = ({
     }
 
     const parents = [
-      ...getScrollParents(refs.reference.current),
-      ...getScrollParents(refs.floating.current),
+      ...getOverflowAncestors(refs.reference.current),
+      ...getOverflowAncestors(refs.floating.current),
     ];
 
     const localUpdate = () => {
