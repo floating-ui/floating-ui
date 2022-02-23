@@ -20,6 +20,8 @@ export const computePosition: ComputePosition = async (
     platform,
   } = config;
 
+  const rtl = await platform.isRTL?.(reference);
+
   if (__DEV__) {
     if (platform == null) {
       console.error(
@@ -47,9 +49,11 @@ export const computePosition: ComputePosition = async (
   }
 
   let rects = await platform.getElementRects({reference, floating, strategy});
-
-  let {x, y} = computeCoordsFromPlacement({...rects, placement});
-
+  let {x, y} = computeCoordsFromPlacement({
+    ...rects,
+    placement,
+    rtl,
+  });
   let statefulPlacement = placement;
   let middlewareData = {};
 
@@ -114,6 +118,7 @@ export const computePosition: ComputePosition = async (
         ({x, y} = computeCoordsFromPlacement({
           ...rects,
           placement: statefulPlacement,
+          rtl,
         }));
 
         if (reset.skip !== false) {

@@ -26,7 +26,7 @@ export const size = (
   name: 'size',
   options,
   async fn(middlewareArguments) {
-    const {placement, rects} = middlewareArguments;
+    const {placement, rects, platform, elements} = middlewareArguments;
     const {apply, ...detectOverflowOptions} = options;
 
     const overflow = await detectOverflow(
@@ -34,17 +34,21 @@ export const size = (
       detectOverflowOptions
     );
     const basePlacement = getBasePlacement(placement);
-    const isEnd = getAlignment(placement) === 'end';
+    const alignment = getAlignment(placement);
 
     let heightSide: 'top' | 'bottom';
     let widthSide: 'left' | 'right';
 
     if (basePlacement === 'top' || basePlacement === 'bottom') {
       heightSide = basePlacement;
-      widthSide = isEnd ? 'left' : 'right';
+      widthSide =
+        alignment ===
+        ((await platform.isRTL?.(elements.reference)) ? 'start' : 'end')
+          ? 'left'
+          : 'right';
     } else {
       widthSide = basePlacement;
-      heightSide = isEnd ? 'top' : 'bottom';
+      heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
     const xMin = max(overflow.left, 0);

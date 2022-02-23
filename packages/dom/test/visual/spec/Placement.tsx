@@ -6,13 +6,14 @@ import {Controls} from '../utils/Controls';
 import {useSize} from '../utils/useSize';
 
 export function Placement() {
+  const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<PlacementType>('bottom');
   const {x, y, reference, floating, strategy, update} = useFloating({
     placement,
   });
   const [size, handleSizeChange] = useSize();
 
-  useLayoutEffect(update, [size, update]);
+  useLayoutEffect(update, [size, update, rtl]);
 
   return (
     <>
@@ -21,7 +22,7 @@ export function Placement() {
         The floating element should be correctly positioned when given each of
         the 12 placements.
       </p>
-      <div className="container">
+      <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
         <div ref={reference} className="reference">
           Reference
         </div>
@@ -63,6 +64,22 @@ export function Placement() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>RTL</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`rtl-${bool}`}
+            onClick={() => setRtl(bool)}
+            style={{
+              backgroundColor: rtl === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>
