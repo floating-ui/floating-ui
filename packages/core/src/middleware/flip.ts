@@ -42,8 +42,14 @@ export const flip = (
   name: 'flip',
   options,
   async fn(middlewareArguments) {
-    const {placement, middlewareData, rects, initialPlacement} =
-      middlewareArguments;
+    const {
+      placement,
+      middlewareData,
+      rects,
+      initialPlacement,
+      platform,
+      elements,
+    } = middlewareArguments;
 
     if (middlewareData.flip?.skip) {
       return {};
@@ -82,7 +88,11 @@ export const flip = (
     }
 
     if (checkCrossAxis) {
-      const {main, cross} = getAlignmentSides(placement, rects);
+      const {main, cross} = getAlignmentSides(
+        placement,
+        rects,
+        await platform.isRTL?.(elements.reference)
+      );
       overflows.push(overflow[main], overflow[cross]);
     }
 

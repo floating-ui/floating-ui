@@ -67,7 +67,8 @@ export const autoPlacement = (
   name: 'autoPlacement',
   options,
   async fn(middlewareArguments) {
-    const {x, y, rects, middlewareData, placement} = middlewareArguments;
+    const {x, y, rects, middlewareData, placement, platform, elements} =
+      middlewareArguments;
 
     const {
       alignment = null,
@@ -93,7 +94,11 @@ export const autoPlacement = (
 
     const currentIndex = middlewareData.autoPlacement?.index ?? 0;
     const currentPlacement = placements[currentIndex];
-    const {main, cross} = getAlignmentSides(currentPlacement, rects);
+    const {main, cross} = getAlignmentSides(
+      currentPlacement,
+      rects,
+      await platform.isRTL?.(elements.reference)
+    );
 
     // Make `computeCoords` start from the right place
     if (placement !== currentPlacement) {

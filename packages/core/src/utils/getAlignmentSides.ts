@@ -6,21 +6,22 @@ import {getAlignment} from './getAlignment';
 
 export function getAlignmentSides(
   placement: Placement,
-  rects: ElementRects
+  rects: ElementRects,
+  rtl = false
 ): {
   main: BasePlacement;
   cross: BasePlacement;
 } {
-  const isStart = getAlignment(placement) === 'start';
+  const alignment = getAlignment(placement);
   const mainAxis = getMainAxisFromPlacement(placement);
   const length = getLengthFromAxis(mainAxis);
 
   let mainAlignmentSide: BasePlacement =
     mainAxis === 'x'
-      ? isStart
+      ? alignment === (rtl ? 'end' : 'start')
         ? 'right'
         : 'left'
-      : isStart
+      : alignment === 'start'
       ? 'bottom'
       : 'top';
 

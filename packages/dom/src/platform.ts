@@ -6,6 +6,7 @@ import {convertOffsetParentRelativeRectToViewportRelativeRect} from './utils/con
 import {isElement} from './utils/is';
 import {getDocumentElement} from './utils/getDocumentElement';
 import {getClippingClientRect} from './utils/getClippingClientRect';
+import {getComputedStyle} from './utils/getComputedStyle';
 
 export const platform: Platform = {
   getElementRects: ({reference, floating, strategy}) => ({
@@ -24,4 +25,5 @@ export const platform: Platform = {
   getClippingClientRect: (args) => getClippingClientRect(args),
   getDimensions: ({element}) => getDimensions(element),
   getClientRects: ({element}) => element.getClientRects(),
+  isRTL: (reference) => getComputedStyle(reference).direction === 'rtl',
 };
