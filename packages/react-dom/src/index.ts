@@ -41,8 +41,8 @@ type UseFloatingReturn = Data & {
 
 export function useFloating({
   middleware,
-  placement,
-  strategy,
+  placement = 'bottom',
+  strategy = 'absolute',
 }: Omit<Partial<ComputePositionConfig>, 'platform'> = {}): UseFloatingReturn {
   const reference = useRef<Element | VirtualElement | null>(null);
   const floating = useRef<HTMLElement | null>(null);
@@ -51,8 +51,8 @@ export function useFloating({
     // `computePosition()` has run yet
     x: null,
     y: null,
-    strategy: strategy ?? 'absolute',
-    placement: placement ?? 'bottom',
+    strategy,
+    placement,
     middlewareData: {},
   });
 
