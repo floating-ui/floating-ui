@@ -18,7 +18,7 @@ export type DOMDetectOverflowOptions = Omit<
   DetectOverflowOptions,
   'boundary'
 > & {
-  boundary: 'clippingParents' | Element | Array<Element>;
+  boundary: 'clippingAncestors' | Element | Array<Element>;
 };
 
 /**
