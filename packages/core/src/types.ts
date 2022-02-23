@@ -43,7 +43,6 @@ export type MiddlewareData = {
   };
   autoPlacement?: {
     index?: number;
-    skip?: boolean;
     overflows: Array<{
       placement: Placement;
       overflows: Array<number>;
@@ -51,7 +50,6 @@ export type MiddlewareData = {
   };
   flip?: {
     index?: number;
-    skip?: boolean;
     overflows: Array<{
       placement: Placement;
       overflows: Array<number>;
@@ -62,12 +60,6 @@ export type MiddlewareData = {
     escaped: boolean;
     referenceHiddenOffsets: SideObject;
     escapedOffsets: SideObject;
-  };
-  inline?: {
-    skip?: boolean;
-  };
-  size?: {
-    skip?: boolean;
   };
   offset?: Coords;
   [key: string]: any;
