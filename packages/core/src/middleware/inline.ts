@@ -20,16 +20,12 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
   name: 'inline',
   options,
   async fn(middlewareArguments) {
-    const {placement, elements, rects, platform, strategy, middlewareData} =
+    const {placement, elements, rects, platform, strategy} =
       middlewareArguments;
     // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
     // ClientRect's bounds, despite the event listener being triggered. A
     // padding of 2 seems to handle this issue.
     const {padding = 2, x, y} = options;
-
-    if (middlewareData.inline?.skip) {
-      return {};
-    }
 
     const fallback = rectToClientRect(
       platform.convertOffsetParentRelativeRectToViewportRelativeRect
@@ -123,9 +119,6 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
     }
 
     return {
-      data: {
-        skip: true,
-      },
       reset: {
         rects: await platform.getElementRects({
           reference: {getBoundingClientRect},

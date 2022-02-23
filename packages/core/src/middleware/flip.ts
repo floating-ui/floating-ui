@@ -51,10 +51,6 @@ export const flip = (
       elements,
     } = middlewareArguments;
 
-    if (middlewareData.flip?.skip) {
-      return {};
-    }
-
     const {
       mainAxis: checkMainAxis = true,
       crossAxis: checkCrossAxis = true,
@@ -111,6 +107,7 @@ export const flip = (
             overflows: overflowsData,
           },
           reset: {
+            skip: false,
             placement: nextPlacement,
           },
         };
@@ -142,9 +139,6 @@ export const flip = (
       }
 
       return {
-        data: {
-          skip: true,
-        },
         reset: {
           placement: resetPlacement,
         },
