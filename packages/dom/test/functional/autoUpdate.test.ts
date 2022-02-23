@@ -1,7 +1,7 @@
 import {test, expect} from '@playwright/test';
 import {click} from './utils/click';
 
-['ancestorScroll', 'elementResize'].forEach((option) => {
+['ancestorScroll' /*'elementResize'*/].forEach((option) => {
   [true, false].forEach((bool) => {
     test(`${option}: ${bool}`, async ({page}) => {
       await page.goto('http://localhost:1234/autoUpdate');
