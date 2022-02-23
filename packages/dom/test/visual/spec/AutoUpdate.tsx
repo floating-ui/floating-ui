@@ -33,14 +33,12 @@ export function AutoUpdate() {
   useEffect(() => {
     if (options.elementResize) {
       setReferenceSize(100);
+      setFloatingSize(50);
     } else {
       setReferenceSize(200);
+      setFloatingSize(100);
     }
   }, [options.elementResize]);
-
-  useEffect(() => {
-    setFloatingSize(referenceSize / 2);
-  }, [referenceSize]);
 
   return (
     <>
