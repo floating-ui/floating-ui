@@ -6,6 +6,7 @@ import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 
 export function Size() {
+  const [rtl, setRtl] = useState(false);
   const [sizeData, setSizeData] = useState<ElementRects & Dimensions>();
   const [placement, setPlacement] = useState<Placement>('bottom');
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
@@ -18,15 +19,15 @@ export function Size() {
     ],
   });
 
-  useLayoutEffect(update, [update]);
+  useLayoutEffect(update, [update, rtl]);
 
-  const {scrollRef, indicator} = useScroll({refs, update});
+  const {scrollRef, indicator} = useScroll({refs, update, rtl});
 
   return (
     <>
       <h1>Size</h1>
       <p></p>
-      <div className="container">
+      <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
         <div
           className="scroll"
           data-x
@@ -67,6 +68,22 @@ export function Size() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>RTL</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`rtl-${bool}`}
+            onClick={() => setRtl(bool)}
+            style={{
+              backgroundColor: rtl === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>

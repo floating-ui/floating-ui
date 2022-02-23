@@ -31,6 +31,7 @@ export type Platform = {
   getClientRects?: (args: {
     element: any;
   }) => Promisable<Array<ClientRectObject>>;
+  isRTL?: (reference: ReferenceElement) => Promisable<boolean>;
 };
 
 export type Coords = {[key in Axis]: number};
@@ -70,6 +71,7 @@ export type MiddlewareData = {
     skip?: boolean;
   };
   offset?: Coords;
+  shift?: Coords;
   [key: string]: any;
 };
 

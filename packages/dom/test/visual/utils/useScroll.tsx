@@ -10,12 +10,14 @@ import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
 export const useScroll = ({
   refs,
   update,
+  rtl = false,
 }: {
   refs: {
     reference: MutableRefObject<Element | null>;
     floating: MutableRefObject<HTMLElement | null>;
   };
   update: () => void;
+  rtl?: boolean;
 }) => {
   const {
     x,
@@ -68,7 +70,7 @@ export const useScroll = ({
       const y = scroll.scrollHeight / 2 - scroll.offsetHeight / 2;
       const x = scroll.scrollWidth / 2 - scroll.offsetWidth / 2;
       scroll.scrollTop = y;
-      scroll.scrollLeft = x;
+      scroll.scrollLeft = rtl ? -x : x;
     }
 
     update();
@@ -78,7 +80,7 @@ export const useScroll = ({
         el.removeEventListener('scroll', localUpdate);
       });
     };
-  }, [refs.floating, refs.reference, update, indicatorUpdate]);
+  }, [refs.floating, refs.reference, update, indicatorUpdate, rtl]);
 
   useLayoutEffect(() => {
     reference(refs.reference.current);
