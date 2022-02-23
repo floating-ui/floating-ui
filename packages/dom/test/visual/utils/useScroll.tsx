@@ -6,6 +6,7 @@ import {
   useState,
 } from 'react';
 import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
+import {VirtualElement} from '@floating-ui/core';
 
 export const useScroll = ({
   refs,
@@ -13,7 +14,7 @@ export const useScroll = ({
   rtl = false,
 }: {
   refs: {
-    reference: MutableRefObject<Element | null>;
+    reference: MutableRefObject<Element | VirtualElement | null>;
     floating: MutableRefObject<HTMLElement | null>;
   };
   update: () => void;
@@ -46,7 +47,9 @@ export const useScroll = ({
     }
 
     const parents = [
-      ...getOverflowAncestors(refs.reference.current),
+      ...(refs.reference.current instanceof Element
+        ? getOverflowAncestors(refs.reference.current)
+        : []),
       ...getOverflowAncestors(refs.floating.current),
     ];
 
