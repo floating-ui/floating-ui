@@ -19,6 +19,7 @@ const VALUES: Array<{offset: Options; name: string}> = [
 ];
 
 export function Offset() {
+  const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [offsetValue, setOffsetValue] = useState<Options>(0);
   const {x, y, reference, floating, strategy, update} = useFloating({
@@ -26,13 +27,13 @@ export function Offset() {
     middleware: [offset(offsetValue)],
   });
 
-  useLayoutEffect(update, [offsetValue, update]);
+  useLayoutEffect(update, [offsetValue, update, rtl]);
 
   return (
     <>
       <h1>Offset</h1>
       <p></p>
-      <div className="container">
+      <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
         <div ref={reference} className="reference">
           Reference
         </div>
@@ -79,6 +80,22 @@ export function Offset() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>RTL</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`rtl-${bool}`}
+            onClick={() => setRtl(bool)}
+            style={{
+              backgroundColor: rtl === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>

@@ -1,7 +1,8 @@
 import {test, expect} from '@playwright/test';
+import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 
-['top', 'right', 'bottom', 'left'].forEach((placement) => {
+allPlacements.forEach((placement) => {
   [
     '0',
     '10',
@@ -11,16 +12,20 @@ import {click} from './utils/click';
     '() => -f.height',
     '() => cA: -f.width/2',
   ].forEach((name) => {
-    test(`correctly offset ${name} for placement ${placement}`, async ({
-      page,
-    }) => {
-      await page.goto('http://localhost:1234/offset');
-      await click(page, `[data-testid="offset-${name}"]`);
-      await click(page, `[data-testid="placement-${placement}"]`);
+    [true, false].forEach((rtl) => {
+      const rtlStr = rtl ? 'rtl' : 'ltr';
+      test(`correctly offset ${name} for placement ${placement} (${rtlStr})`, async ({
+        page,
+      }) => {
+        await page.goto('http://localhost:1234/offset');
+        await click(page, `[data-testid="offset-${name}"]`);
+        await click(page, `[data-testid="placement-${placement}"]`);
+        await click(page, `[data-testid="rtl-${rtl}"]`);
 
-      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${name}-${placement}.png`
-      );
+        expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+          `${name}-${placement}-${rtlStr}.png`
+        );
+      });
     });
   });
 });
