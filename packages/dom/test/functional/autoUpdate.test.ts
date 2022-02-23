@@ -20,7 +20,7 @@ test('ancestorResize: false', async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
   await click(page, `[data-testid="ancestorResize-false"]`);
 
-  await page.setViewportSize({width: 700, height: 500});
+  await page.setViewportSize({width: 700, height: 720});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `ancestorResize-false.png`
@@ -31,7 +31,7 @@ test('ancestorResize: true', async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
   await click(page, `[data-testid="ancestorResize-true"]`);
 
-  await page.setViewportSize({width: 700, height: 500});
+  await page.setViewportSize({width: 700, height: 720});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `ancestorResize-true.png`
