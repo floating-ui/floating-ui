@@ -9,25 +9,28 @@ export type Length = 'width' | 'height';
 type Promisable<T> = T | Promise<T>;
 
 export type Platform = {
+  // Required
   getElementRects: (args: {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
   }) => Promisable<ElementRects>;
-  convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
-    rect: Rect;
-    offsetParent: any;
-    strategy: Strategy;
-  }) => Promisable<Rect>;
-  getOffsetParent: (args: {element: any}) => Promisable<any>;
-  isElement: (value: unknown) => Promisable<boolean>;
-  getDocumentElement: (args: {element: any}) => Promisable<any>;
   getClippingClientRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
   }) => Promisable<ClientRectObject>;
   getDimensions: (args: {element: any}) => Promisable<Dimensions>;
+
+  // Optional
+  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+    rect: Rect;
+    offsetParent: any;
+    strategy: Strategy;
+  }) => Promisable<Rect>;
+  getOffsetParent?: (args: {element: any}) => Promisable<any>;
+  isElement?: (value: unknown) => Promisable<boolean>;
+  getDocumentElement?: (args: {element: any}) => Promisable<any>;
   getClientRects?: (args: {
     element: any;
   }) => Promisable<Array<ClientRectObject>>;

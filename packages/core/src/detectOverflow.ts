@@ -59,25 +59,28 @@ export async function detectOverflow(
   const element = elements[altBoundary ? altContext : elementContext];
 
   const clippingClientRect = await platform.getClippingClientRect({
-    element: (await platform.isElement(element))
-      ? element
-      : element.contextElement ||
-        (await platform.getDocumentElement({element: elements.floating})),
+    element:
+      (await platform.isElement?.(element)) ?? true
+        ? element
+        : element.contextElement ||
+          (await platform.getDocumentElement?.({element: elements.floating})),
     boundary,
     rootBoundary,
   });
 
   const elementClientRect = rectToClientRect(
-    await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-      rect:
-        elementContext === 'floating'
-          ? {...rects.floating, x, y}
-          : rects.reference,
-      offsetParent: await platform.getOffsetParent({
-        element: elements.floating,
-      }),
-      strategy,
-    })
+    platform.convertOffsetParentRelativeRectToViewportRelativeRect
+      ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+          rect:
+            elementContext === 'floating'
+              ? {...rects.floating, x, y}
+              : rects.reference,
+          offsetParent: await platform.getOffsetParent?.({
+            element: elements.floating,
+          }),
+          strategy,
+        })
+      : rects[elementContext]
   );
 
   // positive = overflowing the clipping rect

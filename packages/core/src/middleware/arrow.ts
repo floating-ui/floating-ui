@@ -54,7 +54,7 @@ export const arrow = (options: Options): Middleware => ({
       rects.floating[length];
     const startDiff = coords[axis] - rects.reference[axis];
 
-    const arrowOffsetParent = await platform.getOffsetParent({element});
+    const arrowOffsetParent = await platform.getOffsetParent?.({element});
     const clientSize = arrowOffsetParent
       ? axis === 'y'
         ? arrowOffsetParent.clientHeight || 0

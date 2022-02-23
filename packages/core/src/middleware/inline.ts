@@ -32,13 +32,15 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
     }
 
     const fallback = rectToClientRect(
-      await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-        rect: rects.reference,
-        offsetParent: await platform.getOffsetParent({
-          element: elements.floating,
-        }),
-        strategy,
-      })
+      platform.convertOffsetParentRelativeRectToViewportRelativeRect
+        ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+            rect: rects.reference,
+            offsetParent: await platform.getOffsetParent?.({
+              element: elements.floating,
+            }),
+            strategy,
+          })
+        : rects.reference
     );
     const clientRects = Array.from(
       (await platform.getClientRects?.({element: elements.reference})) ?? []
