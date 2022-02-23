@@ -52,6 +52,29 @@ Depending on the context in which the floating element lives,
 you'll likely need to update its position in an effect. See
 [Updating](/docs/react-dom#updating).
 
+### Stable ref prop
+
+The `ref{:.keyword}` prop values `<div ref={reference} />{:js}`
+and `<div ref={floating} />{:js}` must be stable references,
+otherwise an infinite loop will occur.
+
+If you want to merge another ref with it, utilize the
+`useMemo(){:js}` hook (ensuring both of the refs are also
+stable):
+
+```js
+const stableRef = useMemo(
+  () => mergeRefs([userRef, reference]),
+  [userRef, reference]
+);
+
+return <div ref={stableRef} />;
+```
+
+> While `useMemo(){:js}` isn't a semantic guarantee, as long as
+> React doesn't "forget" the memo'd value in an endless loop,
+> this method is fine.
+
 ## External reference
 
 As `reference{:.const}` is a callback ref, you can call it with
@@ -157,16 +180,6 @@ function App() {
     </>
   );
 }
-```
-
-## middlewareData
-
-This object also gets returned from the hook. This enables you to
-apply positioning styles to an arrow element in your JSX, among
-other useful styles.
-
-```js
-const {middlewareData} = useFloating();
 ```
 
 ## Arrow
