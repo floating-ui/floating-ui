@@ -1,7 +1,12 @@
 import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
 import {getWindow} from './window';
-import {isContainingBlock, isHTMLElement, isTableElement} from './is';
+import {
+  isContainingBlock,
+  isHTMLElement,
+  isShadowRoot,
+  isTableElement,
+} from './is';
 
 function getTrueOffsetParent(element: Element): Element | null {
   if (
@@ -16,6 +21,10 @@ function getTrueOffsetParent(element: Element): Element | null {
 
 function getContainingBlock(element: Element) {
   let currentNode: Node | null = getParentNode(element);
+
+  if (isShadowRoot(currentNode)) {
+    currentNode = currentNode.host;
+  }
 
   while (
     isHTMLElement(currentNode) &&
