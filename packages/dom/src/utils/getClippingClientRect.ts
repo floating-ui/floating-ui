@@ -48,7 +48,7 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }
 
-// A "clipping parent" is an overflowable container with the characteristic of
+// A "clipping ancestor" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingAncestors(element: Element): Array<Element> {
@@ -75,7 +75,7 @@ function getClippingAncestors(element: Element): Array<Element> {
 }
 
 // Gets the maximum area that the element is visible in due to any number of
-// clipping parents
+// clipping ancestors
 export function getClippingClientRect({
   element,
   boundary,
