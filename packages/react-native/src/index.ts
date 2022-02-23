@@ -156,11 +156,13 @@ export const useFloating = ({
     [update]
   );
 
+  const refs = useMemo(() => ({reference, floating, offsetParent}), []);
+
   return useMemo(
     () => ({
       ...data,
       update,
-      refs: {reference, floating, offsetParent},
+      refs,
       offsetParent: setOffsetParent,
       reference: setReference,
       floating: setFloating,
@@ -169,7 +171,7 @@ export const useFloating = ({
         scrollEventThrottle: 16,
       },
     }),
-    [data, setReference, setFloating, setOffsetParent, update]
+    [data, refs, setReference, setFloating, setOffsetParent, update]
   );
 };
 

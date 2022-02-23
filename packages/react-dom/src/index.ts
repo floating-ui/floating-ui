@@ -34,7 +34,7 @@ type UseFloatingReturn = Data & {
   reference: (node: Element | VirtualElement | null) => void;
   floating: (node: HTMLElement | null) => void;
   refs: {
-    reference: MutableRefObject<Element | null>;
+    reference: MutableRefObject<Element | VirtualElement | null>;
     floating: MutableRefObject<HTMLElement | null>;
   };
 };
@@ -44,7 +44,7 @@ export function useFloating({
   placement,
   strategy,
 }: Omit<Partial<ComputePositionConfig>, 'platform'> = {}): UseFloatingReturn {
-  const reference = useRef<Element | null>(null);
+  const reference = useRef<Element | VirtualElement | null>(null);
   const floating = useRef<HTMLElement | null>(null);
   const [data, setData] = useState<Data>({
     // Setting these to `null` will allow the consumer to determine if
@@ -52,7 +52,7 @@ export function useFloating({
     x: null,
     y: null,
     strategy: strategy ?? 'absolute',
-    placement: 'bottom',
+    placement: placement ?? 'bottom',
     middlewareData: {},
   });
 
@@ -109,15 +109,17 @@ export function useFloating({
     [update]
   );
 
+  const refs = useMemo(() => ({reference, floating}), []);
+
   return useMemo(
     () => ({
       ...data,
       update,
+      refs,
       reference: setReference,
       floating: setFloating,
-      refs: {reference, floating},
     }),
-    [data, update, setReference, setFloating]
+    [data, update, refs, setReference, setFloating]
   );
 }
 
