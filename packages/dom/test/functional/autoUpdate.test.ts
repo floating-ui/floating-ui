@@ -1,13 +1,13 @@
 import {test, expect} from '@playwright/test';
 import {click} from './utils/click';
 
-['ancestorScroll', 'ancestorResize', 'elementResize'].forEach((option) => {
+['ancestorScroll', 'elementResize'].forEach((option) => {
   [true, false].forEach((bool) => {
     test(`${option}: ${bool}`, async ({page}) => {
       await page.goto('http://localhost:1234/autoUpdate');
       await click(page, `[data-testid="${option}-${bool}"]`);
 
-      await page.evaluate(() => window.scrollTo(0, 200));
+      await page.evaluate(() => window.scrollTo(0, 50));
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${option}-${bool}.png`
@@ -16,26 +16,24 @@ import {click} from './utils/click';
   });
 });
 
-test('animationFrame: false', async ({page}) => {
+test('ancestorResize: false', async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
-  await click(page, `[data-testid="animationFrame-false"]`);
+  await click(page, `[data-testid="ancestorResize-false"]`);
 
-  // Wait 500ms for the animation to complete
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await page.setViewportSize({width: 700, height: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `animationFrame-false.png`
+    `ancestorResize-false.png`
   );
 });
 
-test('animationFrame: true', async ({page}) => {
+test('ancestorResize: true', async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
-  await click(page, `[data-testid="animationFrame-true"]`);
+  await click(page, `[data-testid="ancestorResize-true"]`);
 
-  // Wait 500ms for the animation to complete
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await page.setViewportSize({width: 700, height: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `animationFrame-true.png`
+    `ancestorResize-true.png`
   );
 });

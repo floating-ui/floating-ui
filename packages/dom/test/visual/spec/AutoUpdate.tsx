@@ -31,23 +31,16 @@ export function AutoUpdate() {
   }, [refs.floating, refs.reference, options, update]);
 
   useEffect(() => {
-    if (!options.elementResize) {
-      return;
+    if (options.elementResize) {
+      setReferenceSize(100);
+    } else {
+      setReferenceSize(200);
     }
-
-    const i1 = setInterval(() => {
-      setReferenceSize(200 * Math.random());
-    }, 1000 / 2);
-
-    const i2 = setInterval(() => {
-      setFloatingSize(100 * Math.random());
-    }, 1000);
-
-    return () => {
-      clearInterval(i1);
-      clearInterval(i2);
-    };
   }, [options.elementResize]);
+
+  useEffect(() => {
+    setFloatingSize(referenceSize / 2);
+  }, [referenceSize]);
 
   return (
     <>
