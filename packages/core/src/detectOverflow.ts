@@ -24,7 +24,7 @@ export type Options = {
   elementContext: ElementContext;
   /**
    * Whether to check for overflow using the alternate element's boundary
-   * (`clippingParents` boundary only).
+   * (`clippingAncestors` boundary only).
    */
   altBoundary: boolean;
   /**
@@ -47,7 +47,7 @@ export async function detectOverflow(
   const {x, y, platform, rects, elements, strategy} = middlewareArguments;
 
   const {
-    boundary = 'clippingParents',
+    boundary = 'clippingAncestors',
     rootBoundary = 'viewport',
     elementContext = 'floating',
     altBoundary = false,

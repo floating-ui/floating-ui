@@ -33,7 +33,7 @@ function getInnerBoundingClientRect(element: Element): ClientRectObject {
   };
 }
 
-function getClientRectFromClippingParent(
+function getClientRectFromClippingAncestor(
   element: Element,
   clippingParent: Element | RootBoundary
 ): ClientRectObject {
@@ -51,8 +51,8 @@ function getClientRectFromClippingParent(
 // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
-function getClippingParents(element: Element): Array<Element> {
-  const clippingParents = getOverflowAncestors(getParentNode(element));
+function getClippingAncestors(element: Element): Array<Element> {
+  const clippingAncestors = getOverflowAncestors(getParentNode(element));
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );
@@ -66,11 +66,11 @@ function getClippingParents(element: Element): Array<Element> {
   }
 
   // @ts-ignore isElement check ensures we return Array<Element>
-  return clippingParents.filter(
-    (clippingParent) =>
-      isElement(clippingParent) &&
-      contains(clippingParent, clipperElement) &&
-      getNodeName(clippingParent) !== 'body'
+  return clippingAncestors.filter(
+    (clippingAncestors) =>
+      isElement(clippingAncestors) &&
+      contains(clippingAncestors, clipperElement) &&
+      getNodeName(clippingAncestors) !== 'body'
   );
 }
 
@@ -85,15 +85,15 @@ export function getClippingClientRect({
   boundary: Boundary;
   rootBoundary: RootBoundary;
 }): ClientRectObject {
-  const mainClippingParents =
-    boundary === 'clippingParents'
-      ? getClippingParents(element)
+  const mainClippingAncestors =
+    boundary === 'clippingAncestors'
+      ? getClippingAncestors(element)
       : [].concat(boundary);
-  const clippingParents = [...mainClippingParents, rootBoundary];
-  const firstClippingParent = clippingParents[0];
+  const clippingAncestors = [...mainClippingAncestors, rootBoundary];
+  const firstClippingAncestor = clippingAncestors[0];
 
-  const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
-    const rect = getClientRectFromClippingParent(element, clippingParent);
+  const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
+    const rect = getClientRectFromClippingAncestor(element, clippingAncestor);
 
     accRect.top = max(rect.top, accRect.top);
     accRect.right = min(rect.right, accRect.right);
@@ -101,7 +101,7 @@ export function getClippingClientRect({
     accRect.left = max(rect.left, accRect.left);
 
     return accRect;
-  }, getClientRectFromClippingParent(element, firstClippingParent));
+  }, getClientRectFromClippingAncestor(element, firstClippingAncestor));
 
   clippingRect.width = clippingRect.right - clippingRect.left;
   clippingRect.height = clippingRect.bottom - clippingRect.top;

@@ -103,7 +103,7 @@ shift({
 });
 shift({boundary: document.body});
 shift({boundary: [document.body]});
-shift({boundary: 'clippingParents'});
+shift({boundary: 'clippingAncestors'});
 shift({limiter: limitShift()});
 shift({limiter: limitShift({offset: 5})});
 shift({limiter: limitShift({offset: {mainAxis: 5}})});
@@ -122,21 +122,21 @@ flip({
 });
 flip({boundary: document.body});
 flip({boundary: [document.body]});
-flip({boundary: 'clippingParents'});
+flip({boundary: 'clippingAncestors'});
 size({
   // @ts-expect-error
   boundary: '',
 });
 size({boundary: document.body});
 size({boundary: [document.body]});
-size({boundary: 'clippingParents'});
+size({boundary: 'clippingAncestors'});
 autoPlacement({
   // @ts-expect-error
   boundary: '',
 });
 size({boundary: document.body});
 size({boundary: [document.body]});
-size({boundary: 'clippingParents'});
+size({boundary: 'clippingAncestors'});
 
 offset();
 offset(5);
@@ -181,7 +181,7 @@ const middlewareWDetectOverflow: Middleware = {
     detectOverflow(args);
     detectOverflow(args, {
       elementContext: 'reference',
-      boundary: 'clippingParents',
+      boundary: 'clippingAncestors',
       rootBoundary: 'document',
       padding: 5,
       altBoundary: true,
