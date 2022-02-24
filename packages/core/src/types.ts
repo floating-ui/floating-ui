@@ -1,14 +1,18 @@
 export type Alignment = 'start' | 'end';
-export type BasePlacement = 'top' | 'right' | 'bottom' | 'left';
-export type AlignedPlacement = `${BasePlacement}-${Alignment}`;
-export type Placement = BasePlacement | AlignedPlacement;
+export type Side = 'top' | 'right' | 'bottom' | 'left';
+export type AlignedPlacement = `${Side}-${Alignment}`;
+export type Placement = Side | AlignedPlacement;
 export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
 export type Length = 'width' | 'height';
 
 type Promisable<T> = T | Promise<T>;
 
-export type Platform = {
+/**
+ * Platform interface methods to work with the current platform.
+ * @see https://floating-ui.com/docs/platform
+ */
+export interface Platform {
   // Required
   getElementRects: (args: {
     reference: ReferenceElement;
@@ -35,13 +39,14 @@ export type Platform = {
     element: any;
   }) => Promisable<Array<ClientRectObject>>;
   isRTL?: (reference: ReferenceElement) => Promisable<boolean>;
-};
+}
 
 export type Coords = {[key in Axis]: number};
 
-export type SideObject = {[key in BasePlacement]: number};
+export type SideObject = {[key in Side]: number};
 
-export type MiddlewareData = {
+export interface MiddlewareData {
+  [key: string]: any;
   arrow?: Partial<Coords> & {
     centerOffset: number;
   };
@@ -67,21 +72,20 @@ export type MiddlewareData = {
   };
   offset?: Coords;
   shift?: Coords;
-  [key: string]: any;
-};
+}
 
-export type ComputePositionConfig = {
+export interface ComputePositionConfig {
   platform: Platform;
   placement?: Placement;
   strategy?: Strategy;
   middleware?: Array<Middleware>;
-};
+}
 
-export type ComputePositionReturn = Coords & {
+export interface ComputePositionReturn extends Coords {
   placement: Placement;
   strategy: Strategy;
   middlewareData: MiddlewareData;
-};
+}
 
 export type ComputePosition = (
   reference: unknown,
@@ -89,20 +93,18 @@ export type ComputePosition = (
   config: ComputePositionConfig
 ) => Promise<ComputePositionReturn>;
 
-export type MiddlewareReturn = Partial<
-  Coords & {
-    data: {
-      [key: string]: any;
-    };
-    reset:
-      | true
-      | {
-          placement?: Placement;
-          rects?: true | ElementRects;
-          skip?: false;
-        };
-  }
->;
+export interface MiddlewareReturn extends Partial<Coords> {
+  data?: {
+    [key: string]: any;
+  };
+  reset?:
+    | true
+    | {
+        placement?: Placement;
+        rects?: true | ElementRects;
+        skip?: false;
+      };
+}
 
 export type Middleware = {
   name: string;
@@ -116,11 +118,15 @@ export type Dimensions = {[key in Length]: number};
 
 export type Rect = Coords & Dimensions;
 
-export type ElementRects = {
+export interface ElementRects {
   reference: Rect;
   floating: Rect;
-};
+}
 
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
 export type VirtualElement = {
   getBoundingClientRect(): ClientRectObject;
   contextElement?: any;
@@ -128,12 +134,12 @@ export type VirtualElement = {
 export type ReferenceElement = any;
 export type FloatingElement = any;
 
-export type Elements = {
+export interface Elements {
   reference: ReferenceElement;
   floating: FloatingElement;
-};
+}
 
-export type MiddlewareArguments = Coords & {
+export interface MiddlewareArguments extends Coords {
   initialPlacement: Placement;
   placement: Placement;
   strategy: Strategy;
@@ -141,7 +147,7 @@ export type MiddlewareArguments = Coords & {
   elements: Elements;
   rects: ElementRects;
   platform: Platform;
-};
+}
 
 export type ClientRectObject = Rect & SideObject;
 export type Padding = number | SideObject;

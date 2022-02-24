@@ -1,5 +1,5 @@
 import type {Placement, ElementRects, Coords} from './types';
-import {getBasePlacement} from './utils/getBasePlacement';
+import {getSide} from './utils/getSide';
 import {getAlignment} from './utils/getAlignment';
 import {getMainAxisFromPlacement} from './utils/getMainAxisFromPlacement';
 import {getLengthFromAxis} from './utils/getLengthFromAxis';
@@ -15,11 +15,11 @@ export function computeCoordsFromPlacement({
   const mainAxis = getMainAxisFromPlacement(placement);
   const length = getLengthFromAxis(mainAxis);
   const commonAlign = reference[length] / 2 - floating[length] / 2;
-  const basePlacement = getBasePlacement(placement);
+  const side = getSide(placement);
   const isVertical = mainAxis === 'x';
 
   let coords;
-  switch (basePlacement) {
+  switch (side) {
     case 'top':
       coords = {x: commonX, y: reference.y - floating.height};
       break;

@@ -19,7 +19,7 @@ export const platform: Platform = {
   }),
   convertOffsetParentRelativeRectToViewportRelativeRect,
   getOffsetParent: ({element}) => getOffsetParent(element),
-  isElement: (value) => isElement(value),
+  isElement,
   getDocumentElement: ({element}) => getDocumentElement(element),
   getClippingClientRect,
   getDimensions: ({element}) => getDimensions(element),

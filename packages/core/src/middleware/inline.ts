@@ -1,20 +1,34 @@
-import type {Coords, Middleware, Padding} from '../types';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import type {Middleware, Padding} from '../types';
+import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
 
-export type Options = Coords & {
+export interface Options {
+  /**
+   * Viewport-relative `x` coordinate to choose a `ClientRect`.
+   * @default undefined
+   */
+  x: number;
+
+  /**
+   * Viewport-relative `y` coordinate to choose a `ClientRect`.
+   * @default undefined
+   */
+  y: number;
+
   /**
    * @experimental
+   * @default 2
    */
   padding: Padding;
-};
+}
 
 /**
  * Provides improved positioning for inline reference elements that can span
  * over multiple lines, such as hyperlinks or range selections.
+ * @see https://floating-ui.com/docs/inline
  */
 export const inline = (options: Partial<Options> = {}): Middleware => ({
   name: 'inline',
@@ -68,7 +82,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
         if (getMainAxisFromPlacement(placement) === 'x') {
           const firstRect = clientRects[0];
           const lastRect = clientRects[clientRects.length - 1];
-          const isTop = getBasePlacement(placement) === 'top';
+          const isTop = getSide(placement) === 'top';
 
           const top = firstRect.top;
           const bottom = lastRect.bottom;
@@ -89,11 +103,11 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
           };
         }
 
-        const isLeftPlacement = getBasePlacement(placement) === 'left';
+        const isLeftSide = getSide(placement) === 'left';
         const maxRight = max(...clientRects.map((rect) => rect.right));
         const minLeft = min(...clientRects.map((rect) => rect.left));
         const measureRects = clientRects.filter((rect) =>
-          isLeftPlacement ? rect.left === minLeft : rect.right === maxRight
+          isLeftSide ? rect.left === minLeft : rect.right === maxRight
         );
 
         const top = measureRects[0].top;

@@ -2,30 +2,51 @@ import type {
   Middleware,
   MiddlewareArguments,
   SideObject,
+  ClientRectObject,
+  Padding,
 } from '@floating-ui/core';
-import type {Options as DetectOverflowOptions} from '@floating-ui/core/src/detectOverflow';
+import type {Options as CoreDetectOverflowOptions} from '@floating-ui/core/src/detectOverflow';
 import type {Options as AutoPlacementOptions} from '@floating-ui/core/src/middleware/autoPlacement';
 import type {Options as SizeOptions} from '@floating-ui/core/src/middleware/size';
 import type {Options as FlipOptions} from '@floating-ui/core/src/middleware/flip';
 import type {Options as ShiftOptions} from '@floating-ui/core/src/middleware/shift';
 
-export type NodeScroll = {
+export interface NodeScroll {
   scrollLeft: number;
   scrollTop: number;
-};
+}
 
-export type DOMDetectOverflowOptions = Omit<
-  DetectOverflowOptions,
+export type Boundary = 'clippingAncestors' | Element | Array<Element>;
+
+export type DetectOverflowOptions = Omit<
+  CoreDetectOverflowOptions,
   'boundary'
 > & {
-  boundary: 'clippingAncestors' | Element | Array<Element>;
+  boundary: Boundary;
 };
+
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
+export interface VirtualElement {
+  getBoundingClientRect(): ClientRectObject;
+  contextElement?: Element;
+}
+
+export type ReferenceElement = Element | VirtualElement;
+export type FloatingElement = HTMLElement;
+
+export interface Elements {
+  reference: ReferenceElement;
+  floating: FloatingElement;
+}
 
 /**
  * Automatically chooses the `placement` which has the most space available.
  */
 declare const autoPlacement: (
-  options?: Partial<AutoPlacementOptions & DOMDetectOverflowOptions>
+  options?: Partial<AutoPlacementOptions & DetectOverflowOptions>
 ) => Middleware;
 
 /**
@@ -33,7 +54,7 @@ declare const autoPlacement: (
  * a clipping boundary.
  */
 declare const shift: (
-  options?: Partial<ShiftOptions & DOMDetectOverflowOptions>
+  options?: Partial<ShiftOptions & DetectOverflowOptions>
 ) => Middleware;
 
 /**
@@ -41,7 +62,7 @@ declare const shift: (
  * initially specified `placement` does not.
  */
 declare const flip: (
-  options?: Partial<FlipOptions & DOMDetectOverflowOptions>
+  options?: Partial<FlipOptions & DetectOverflowOptions>
 ) => Middleware;
 
 /**
@@ -50,7 +71,7 @@ declare const flip: (
  * reference element.
  */
 declare const size: (
-  options?: Partial<SizeOptions & DOMDetectOverflowOptions>
+  options?: Partial<SizeOptions & DetectOverflowOptions>
 ) => Middleware;
 
 /**
@@ -59,7 +80,7 @@ declare const size: (
  */
 declare const arrow: (options: {
   element: HTMLElement;
-  padding?: number | SideObject;
+  padding?: Padding;
 }) => Middleware;
 
 /**
@@ -71,7 +92,7 @@ declare const arrow: (options: {
  */
 declare const detectOverflow: (
   middlewareArguments: MiddlewareArguments,
-  options?: Partial<DOMDetectOverflowOptions>
+  options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
 export {autoPlacement, shift, arrow, size, flip, detectOverflow};
@@ -81,6 +102,25 @@ export type {
   Placement,
   Strategy,
   Middleware,
+  Alignment,
+  Side,
+  AlignedPlacement,
+  Axis,
+  Length,
+  Coords,
+  SideObject,
+  Dimensions,
+  Rect,
+  ElementRects,
+  ElementContext,
+  ClientRectObject,
+  Padding,
+  RootBoundary,
+  MiddlewareArguments,
+  MiddlewareReturn,
+  MiddlewareData,
+  ComputePositionConfig,
+  ComputePositionReturn,
 } from '@floating-ui/core';
 export {computePosition} from './';
 export {autoUpdate} from './autoUpdate';

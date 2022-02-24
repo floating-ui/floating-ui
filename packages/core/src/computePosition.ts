@@ -49,11 +49,7 @@ export const computePosition: ComputePosition = async (
   }
 
   let rects = await platform.getElementRects({reference, floating, strategy});
-  let {x, y} = computeCoordsFromPlacement({
-    ...rects,
-    placement,
-    rtl,
-  });
+  let {x, y} = computeCoordsFromPlacement({...rects, placement, rtl});
   let statefulPlacement = placement;
   let middlewareData = {};
 

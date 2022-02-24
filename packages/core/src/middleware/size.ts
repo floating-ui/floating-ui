@@ -3,22 +3,24 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import {getSide} from '../utils/getSide';
 import {getAlignment} from '../utils/getAlignment';
 import {max} from '../utils/math';
 
-export type Options = {
+export interface Options {
   /**
    * Function that is called to perform style mutations to the floating element
    * to change its size.
+   * @default undefined
    */
   apply(args: Dimensions & ElementRects): void;
-};
+}
 
 /**
  * Provides data to change the size of the floating element. For instance,
  * prevent it from overflowing its clipping boundary or match the width of the
  * reference element.
+ * @see https://floating-ui.com/docs/size
  */
 export const size = (
   options: Partial<Options & DetectOverflowOptions> = {}
@@ -33,21 +35,21 @@ export const size = (
       middlewareArguments,
       detectOverflowOptions
     );
-    const basePlacement = getBasePlacement(placement);
+    const side = getSide(placement);
     const alignment = getAlignment(placement);
 
     let heightSide: 'top' | 'bottom';
     let widthSide: 'left' | 'right';
 
-    if (basePlacement === 'top' || basePlacement === 'bottom') {
-      heightSide = basePlacement;
+    if (side === 'top' || side === 'bottom') {
+      heightSide = side;
       widthSide =
         alignment ===
         ((await platform.isRTL?.(elements.reference)) ? 'start' : 'end')
           ? 'left'
           : 'right';
     } else {
-      widthSide = basePlacement;
+      widthSide = side;
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 

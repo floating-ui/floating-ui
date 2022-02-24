@@ -9,7 +9,7 @@ import type {
 import {getSideObjectFromPadding} from './utils/getPaddingObject';
 import {rectToClientRect} from './utils/rectToClientRect';
 
-export type Options = {
+export interface Options {
   /**
    * The clipping element(s) in which overflow will be checked.
    */
@@ -31,7 +31,7 @@ export type Options = {
    * Virtual padding for the resolved overflow offsets.
    */
   padding: Padding;
-};
+}
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the
