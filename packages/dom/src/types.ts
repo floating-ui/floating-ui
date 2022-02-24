@@ -45,6 +45,7 @@ export interface Elements {
 
 /**
  * Automatically chooses the `placement` which has the most space available.
+ * @see https://floating-ui.com/docs/autoPlacement
  */
 declare const autoPlacement: (
   options?: Partial<AutoPlacementOptions & DetectOverflowOptions>
@@ -53,6 +54,7 @@ declare const autoPlacement: (
 /**
  * Shifts the floating element in order to keep it in view when it will overflow
  * a clipping boundary.
+ * @see https://floating-ui.com/docs/shift
  */
 declare const shift: (
   options?: Partial<ShiftOptions & DetectOverflowOptions>
@@ -61,6 +63,7 @@ declare const shift: (
 /**
  * Changes the placement of the floating element to one that will fit if the
  * initially specified `placement` does not.
+ * @see https://floating-ui.com/docs/flip
  */
 declare const flip: (
   options?: Partial<FlipOptions & DetectOverflowOptions>
@@ -70,6 +73,7 @@ declare const flip: (
  * Provides data to change the size of the floating element. For instance,
  * prevent it from overflowing its clipping boundary or match the width of the
  * reference element.
+ * @see https://floating-ui.com/docs/size
  */
 declare const size: (
   options?: Partial<SizeOptions & DetectOverflowOptions>
@@ -78,6 +82,7 @@ declare const size: (
 /**
  * Positions an inner element of the floating element such that it is centered
  * to the reference element.
+ * @see https://floating-ui.com/docs/arrow
  */
 declare const arrow: (options: {
   element: HTMLElement;
@@ -99,6 +104,7 @@ declare const hide: (
  * - positive = overflowing the boundary by that number of pixels
  * - negative = how many pixels left before it will overflow
  * - 0 = lies flush with the boundary
+ * @see https://floating-ui.com/docs/detectOverflow
  */
 declare const detectOverflow: (
   middlewareArguments: MiddlewareArguments,
