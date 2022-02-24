@@ -12,7 +12,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/floating-ui.core.cjs",
+  "main": "dist/floating-ui.core.js",
   "module": "dist/floating-ui.core.esm.js",
   "unpkg": "dist/floating-ui.core.min.js",
   "type": "module",
