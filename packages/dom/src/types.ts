@@ -10,6 +10,7 @@ import type {Options as AutoPlacementOptions} from '@floating-ui/core/src/middle
 import type {Options as SizeOptions} from '@floating-ui/core/src/middleware/size';
 import type {Options as FlipOptions} from '@floating-ui/core/src/middleware/flip';
 import type {Options as ShiftOptions} from '@floating-ui/core/src/middleware/shift';
+import type {Options as HideOptions} from '@floating-ui/core/src/middleware/hide';
 
 export interface NodeScroll {
   scrollLeft: number;
@@ -84,6 +85,15 @@ declare const arrow: (options: {
 }) => Middleware;
 
 /**
+ * Provides data to hide the floating element in applicable situations, such as
+ * when it is not in the same clipping context as the reference element.
+ * @see https://floating-ui.com/docs/hide
+ */
+declare const hide: (
+  options?: Partial<HideOptions & DetectOverflowOptions>
+) => Middleware;
+
+/**
  * Resolves with an object of overflow side offsets that determine how much the
  * element is overflowing a given clipping boundary.
  * - positive = overflowing the boundary by that number of pixels
@@ -95,8 +105,8 @@ declare const detectOverflow: (
   options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
-export {autoPlacement, shift, arrow, size, flip, detectOverflow};
-export {hide, offset, limitShift, inline} from '@floating-ui/core';
+export {autoPlacement, shift, arrow, size, flip, hide, detectOverflow};
+export {offset, limitShift, inline} from '@floating-ui/core';
 export type {
   Platform,
   Placement,

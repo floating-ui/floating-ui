@@ -18,7 +18,10 @@ export function Hide() {
     middlewareData: {hide: {referenceHidden, escaped} = {}},
   } = useFloating({
     placement,
-    middleware: [hide()],
+    middleware: [
+      hide({strategy: 'referenceHidden'}),
+      hide({strategy: 'escaped'}),
+    ],
   });
 
   const {scrollRef, indicator} = useScroll({refs, update});
