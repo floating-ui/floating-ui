@@ -1,6 +1,6 @@
 import type {Placement, Middleware} from '../types';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import {getSide} from '../utils/getSide';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -8,33 +8,39 @@ import {
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 
-export type Options = {
+export interface Options {
   /**
    * The axis that runs along the side of the floating element.
+   * @default true
    */
   mainAxis: boolean;
   /**
    * The axis that runs along the alignment of the floating element.
+   * @default true
    */
   crossAxis: boolean;
   /**
    * Placements to try if the preferred `placement` does not fit.
+   * @default [oppositePlacement] (computed)
    */
   fallbackPlacements: Array<Placement>;
   /**
    * What strategy to use when no placements fit.
+   * @default 'bestFit'
    */
   fallbackStrategy: 'bestFit' | 'initialPlacement';
   /**
    * Whether to flip to placements with the opposite alignment if they fit
    * better.
+   * @default true
    */
   flipAlignment: boolean;
-};
+}
 
 /**
  * Changes the placement of the floating element to one that will fit if the
  * initially specified `placement` does not.
+ * @see https://floating-ui.com/docs/flip
  */
 export const flip = (
   options: Partial<Options & DetectOverflowOptions> = {}
@@ -60,8 +66,8 @@ export const flip = (
       ...detectOverflowOptions
     } = options;
 
-    const basePlacement = getBasePlacement(placement);
-    const isBasePlacement = basePlacement === initialPlacement;
+    const side = getSide(placement);
+    const isBasePlacement = side === initialPlacement;
 
     const fallbackPlacements =
       specifiedFallbackPlacements ||
@@ -80,7 +86,7 @@ export const flip = (
     let overflowsData = middlewareData.flip?.overflows || [];
 
     if (checkMainAxis) {
-      overflows.push(overflow[basePlacement]);
+      overflows.push(overflow[side]);
     }
 
     if (checkCrossAxis) {

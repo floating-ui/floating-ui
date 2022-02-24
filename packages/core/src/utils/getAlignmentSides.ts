@@ -1,4 +1,4 @@
-import type {ElementRects, Placement, BasePlacement} from '../types';
+import type {ElementRects, Placement, Side} from '../types';
 import {getLengthFromAxis} from './getLengthFromAxis';
 import {getMainAxisFromPlacement} from './getMainAxisFromPlacement';
 import {getOppositePlacement} from './getOppositePlacement';
@@ -8,15 +8,12 @@ export function getAlignmentSides(
   placement: Placement,
   rects: ElementRects,
   rtl = false
-): {
-  main: BasePlacement;
-  cross: BasePlacement;
-} {
+): {main: Side; cross: Side} {
   const alignment = getAlignment(placement);
   const mainAxis = getMainAxisFromPlacement(placement);
   const length = getLengthFromAxis(mainAxis);
 
-  let mainAlignmentSide: BasePlacement =
+  let mainAlignmentSide: Side =
     mainAxis === 'x'
       ? alignment === (rtl ? 'end' : 'start')
         ? 'right'

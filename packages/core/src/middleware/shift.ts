@@ -5,7 +5,7 @@ import type {
   MiddlewareArguments,
   Coords,
 } from '../types';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getCrossAxis} from '../utils/getCrossAxis';
 import {within} from '../utils/within';
@@ -14,13 +14,15 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 
-export type Options = {
+export interface Options {
   /**
    * The axis that runs along the alignment of the floating element.
+   * @default true
    */
   mainAxis: boolean;
   /**
    * The axis that runs along the side of the floating element.
+   * @default false
    */
   crossAxis: boolean;
   /**
@@ -31,11 +33,12 @@ export type Options = {
     fn: (middlewareArguments: MiddlewareArguments) => Coords;
     options?: any;
   };
-};
+}
 
 /**
  * Shifts the floating element in order to keep it in view when it will overflow
  * a clipping boundary.
+ * @see https://floating-ui.com/docs/shift
  */
 export const shift = (
   options: Partial<Options & DetectOverflowOptions> = {}
@@ -56,7 +59,7 @@ export const shift = (
       middlewareArguments,
       detectOverflowOptions
     );
-    const mainAxis = getMainAxisFromPlacement(getBasePlacement(placement));
+    const mainAxis = getMainAxisFromPlacement(getSide(placement));
     const crossAxis = getCrossAxis(mainAxis);
 
     let mainAxisCoord = coords[mainAxis];
@@ -196,9 +199,7 @@ export const limitShift = (
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(
-        getBasePlacement(placement)
-      );
+      const isOriginSide = ['top', 'left'].includes(getSide(placement));
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] +

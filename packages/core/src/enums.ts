@@ -1,14 +1,7 @@
-import {Placement} from '..';
-import {BasePlacement} from './types';
+import type {Side, Placement} from './types';
 
-export const basePlacements: BasePlacement[] = [
-  'top',
-  'right',
-  'bottom',
-  'left',
-];
-export const allPlacements = basePlacements.reduce(
-  (acc: Placement[], basePlacement) =>
-    acc.concat(basePlacement, `${basePlacement}-start`, `${basePlacement}-end`),
+export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
+export const allPlacements = sides.reduce(
+  (acc: Placement[], side) => acc.concat(side, `${side}-start`, `${side}-end`),
   []
 );

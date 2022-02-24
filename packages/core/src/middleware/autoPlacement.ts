@@ -3,7 +3,7 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import {getSide} from '../utils/getSide';
 import {getAlignment} from '../utils/getAlignment';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getOppositeAlignmentPlacement} from '../utils/getOppositeAlignmentPlacement';
@@ -23,9 +23,7 @@ export function getPlacementList(
           (placement) => getAlignment(placement) !== alignment
         ),
       ]
-    : allowedPlacements.filter(
-        (placement) => getBasePlacement(placement) === placement
-      );
+    : allowedPlacements.filter((placement) => getSide(placement) === placement);
 
   return allowedPlacementsSortedByAlignment.filter((placement) => {
     if (alignment) {
@@ -41,25 +39,29 @@ export function getPlacementList(
   });
 }
 
-export type Options = {
+export interface Options {
   /**
    * Choose placements with a particular alignment.
+   * @default null
    */
   alignment: Alignment | null;
   /**
    * Which placements are allowed to be chosen. Placements must be within the
    * `alignment` option set.
+   * @default allPlacements (variable)
    */
   allowedPlacements: Array<Placement>;
   /**
    * Whether to choose placements with the opposite alignment if they will fit
    * better.
+   * @default true
    */
   autoAlignment: boolean;
-};
+}
 
 /**
  * Automatically chooses the `placement` which has the most space available.
+ * @see https://floating-ui.com/docs/autoPlacement
  */
 export const autoPlacement = (
   options: Partial<Options & DetectOverflowOptions> = {}
@@ -109,7 +111,7 @@ export const autoPlacement = (
     }
 
     const currentOverflows = [
-      overflow[getBasePlacement(currentPlacement)],
+      overflow[getSide(currentPlacement)],
       overflow[main],
       overflow[cross],
     ];

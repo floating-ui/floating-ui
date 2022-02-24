@@ -1,5 +1,5 @@
 import type {Middleware, Rect, SideObject} from '../types';
-import {basePlacements} from '../enums';
+import {sides} from '../enums';
 import {detectOverflow} from '../detectOverflow';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {
@@ -12,12 +12,13 @@ function getSideOffsets(overflow: SideObject, rect: Rect) {
 }
 
 function isAnySideFullyClipped(overflow: SideObject) {
-  return basePlacements.some((side) => overflow[side] >= 0);
+  return sides.some((side) => overflow[side] >= 0);
 }
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
  * when it is not in the same clipping context as the reference element.
+ * @see https://floating-ui.com/docs/hide
  */
 export const hide = (): Middleware => ({
   name: 'hide',

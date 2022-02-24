@@ -1,20 +1,44 @@
-import type {ClientRectObject} from '@floating-ui/core';
+import type {ReferenceElement, FloatingElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {isElement} from './utils/is';
 
-type Options = {
+export interface Options {
+  /**
+   * Whether to update the position when an overflow ancestor is scrolled.
+   * @default true
+   */
   ancestorScroll: boolean;
-  ancestorResize: boolean;
-  elementResize: boolean;
-  animationFrame: boolean;
-};
 
+  /**
+   * Whether to update the position when an overflow ancestor is resized. This
+   * uses the native `resize` event.
+   * @default true
+   */
+  ancestorResize: boolean;
+
+  /**
+   * Whether to update the position when either the reference or floating
+   * elements resized. This uses a `ResizeObserver`.
+   * @default true
+   */
+  elementResize: boolean;
+
+  /**
+   * Whether to update on every animation frame if necessary. Optimized for
+   * performance so updates are only called when necessary, but use sparingly.
+   * @default false
+   */
+  animationFrame: boolean;
+}
+
+/**
+ * Automatically updates the position of the floating element when necessary.
+ * @see https://floating-ui.com/docs/autoUpdate
+ */
 export function autoUpdate(
-  reference:
-    | Element
-    | {getBoundingClientRect(): ClientRectObject; contextElement?: Element},
-  floating: HTMLElement,
+  reference: ReferenceElement,
+  floating: FloatingElement,
   update: () => void,
   options: Partial<Options> = {
     ancestorScroll: true,

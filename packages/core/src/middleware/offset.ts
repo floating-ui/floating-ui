@@ -1,6 +1,6 @@
 import type {Placement, Rect, Coords, Middleware} from '../types';
 import {getAlignment} from '../utils/getAlignment';
-import {getBasePlacement} from '../utils/getBasePlacement';
+import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 
 type OffsetValue =
@@ -34,10 +34,10 @@ export function convertValueToCoords({
   value: Options;
   rtl?: boolean;
 }): Coords {
-  const basePlacement = getBasePlacement(placement);
+  const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
-  const mainAxisMulti = ['left', 'top'].includes(basePlacement) ? -1 : 1;
+  const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
 
   let crossAxisMulti = 1;
   if (alignment === 'end') {
@@ -61,6 +61,7 @@ export function convertValueToCoords({
 
 /**
  * Displaces the floating element from its reference element.
+ * @see https://floating-ui.com/docs/offset
  */
 export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
