@@ -1,4 +1,8 @@
-import type {ComputePosition, ComputePositionReturn} from './types';
+import type {
+  ComputePosition,
+  ComputePositionReturn,
+  MiddlewareData,
+} from './types';
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 
 /**
@@ -51,7 +55,7 @@ export const computePosition: ComputePosition = async (
   let rects = await platform.getElementRects({reference, floating, strategy});
   let {x, y} = computeCoordsFromPlacement({...rects, placement, rtl});
   let statefulPlacement = placement;
-  let middlewareData = {};
+  let middlewareData: MiddlewareData = {};
 
   const skippedMiddlewareNames = new Set<string>();
 
@@ -96,7 +100,13 @@ export const computePosition: ComputePosition = async (
     x = nextX ?? x;
     y = nextY ?? y;
 
-    middlewareData = {...middlewareData, [name]: data ?? {}};
+    middlewareData = {
+      ...middlewareData,
+      [name]: {
+        ...middlewareData[name],
+        ...data,
+      },
+    };
 
     if (reset) {
       if (typeof reset === 'object') {
