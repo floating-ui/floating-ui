@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # autoPlacement
 
 The `autoPlacement{:.function}` middleware chooses the
@@ -25,11 +22,11 @@ These are the options you can pass to `autoPlacement(){:js}`.
 Each comment specifies the default value.
 
 ```ts
-type Options = DetectOverflowOptions & {
+interface Options extends DetectOverflowOptions {
   alignment: Alignment | null; // null
   autoAlignment: boolean; // true
   allowedPlacements: Array<Placement>; // allPlacements
-};
+}
 ```
 
 ### alignment
@@ -71,4 +68,13 @@ autoPlacement({
   // 'right' and 'left' won't be chosen
   allowedPlacements: ['top', 'bottom'],
 });
+```
+
+### ...detectOverflowOptions
+
+All of [detectOverflow](/docs/detectOverflow#options)'s options
+can be passed. For instance:
+
+```js
+autoPlacement({padding: 5}); // 0 by default
 ```

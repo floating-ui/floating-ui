@@ -1,0 +1,87 @@
+# autoUpdate
+
+This function adds listeners that automatically update the
+position of the floating element when required.
+
+Only call this when the floating element is mounted to the DOM
+(or visible on the screen).
+
+```js /autoUpdate/
+import {computePosition, autoUpdate} from '@floating-ui/dom';
+
+async function update() {
+  const {x, y} = await computePosition(referenceEl, floatingEl);
+}
+
+const cleanup = autoUpdate(referenceEl, floatingEl, update);
+```
+
+It returns a cleanup function that should be invoked when the
+floating element is no longer mounted on the DOM (or visible on
+the screen).
+
+It does not call `update(){:js}` immediately, so for the first
+update, you should call the update function yourself.
+
+## Options
+
+These are the options you can pass as a fourth argument to
+`autoUpdate(){:js}`. Each comment specifies the default value.
+
+```js
+interface Options {
+  ancestorScroll: boolean; // true
+  ancestorResize: boolean; // true
+  elementResize: boolean; // true
+  animationFrame: boolean; // false
+}
+```
+
+### ancestorScroll
+
+Whether to update the position when an overflow ancestor is
+scrolled.
+
+```js
+const cleanup = autoUpdate(referenceEl, floatingEl, update, {
+  ancestorScroll: false, // true by default
+});
+```
+
+### ancestorResize
+
+Whether to update the position when an overflow ancestor is
+resized. This uses the native `resize` event.
+
+```js
+const cleanup = autoUpdate(referenceEl, floatingEl, update, {
+  ancestorResize: false, // true by default
+});
+```
+
+### elementResize
+
+Whether to update the position when either the reference or
+floating elements resized. This uses a `ResizeObserver{:.class}`.
+
+```js
+const cleanup = autoUpdate(referenceEl, floatingEl, update, {
+  elementResize: false, // true by default
+});
+```
+
+### animationFrame
+
+Whether to update the position of the floating element on every
+animation frame if required. This is optimized for performance
+but can still be costly — use this sparingly for things like an
+animated reference element.
+
+Setting this to `true{:js}` **disables** every other listener as
+they become unnecessary.
+
+```js
+const cleanup = autoUpdate(referenceEl, floatingEl, update, {
+  animationFrame: true, // false by default
+});
+```

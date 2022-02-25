@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # React DOM
 
 ```shell
@@ -122,15 +119,16 @@ position, e.g. in event listeners.
 const {update} = useFloating();
 ```
 
-For instance, to update on all relevant nodes, you can import the
-`getScrollParents(){:js}` util from the package:
+The [autoUpdate](/docs/autoUpdate) utility is the recommended way
+to update the floating element when required, but you can use
+whatever method you please.
 
-```js {5,9,15-37}
+```js /autoUpdate/
 import {useEffect} from 'react';
 import {
   useFloating,
   shift,
-  getScrollParents,
+  autoUpdate,
 } from '@floating-ui/react-dom';
 
 function App() {
@@ -140,28 +138,17 @@ function App() {
       middleware: [shift()],
     });
 
-  // Update on scroll and resize for all relevant nodes
   useEffect(() => {
     if (!refs.reference.current || !refs.floating.current) {
       return;
     }
 
-    const parents = [
-      ...getScrollParents(refs.reference.current),
-      ...getScrollParents(refs.floating.current),
-    ];
-
-    parents.forEach((parent) => {
-      parent.addEventListener('scroll', update);
-      parent.addEventListener('resize', update);
-    });
-
-    return () => {
-      parents.forEach((parent) => {
-        parent.removeEventListener('scroll', update);
-        parent.removeEventListener('resize', update);
-      });
-    };
+    // Only call this when the floating element is rendered
+    return autoUpdate(
+      refs.reference.current,
+      refs.floating.current,
+      update
+    );
   }, [refs.reference, refs.floating, update]);
 
   return (

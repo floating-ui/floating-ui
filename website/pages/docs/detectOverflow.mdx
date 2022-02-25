@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # detectOverflow
 
 This function computes the overflow offsets of either the
@@ -57,14 +54,13 @@ await detectOverflow(middlewareArguments, {
 ### boundary
 
 ```ts
-type Boundary = 'clippingParents' | Element | Array<Element>;
+type Boundary = 'clippingAncestors' | Element | Array<Element>;
 ```
 
 This describes the clipping element(s) that overflow will be
-checked relative to. The default is `'clippingParents'{:js}`,
-which are the scrolling containers (including
-`overflow: hidden{:sass}` elements) which will cause the
-reference or floating element to be clipped.
+checked relative to. The default is `'clippingAncestors'{:js}`,
+which are the overflow ancestors which will cause the element to
+be clipped.
 
 ```js
 await detectOverflow(middlewareArguments, {
@@ -80,13 +76,18 @@ type RootBoundary = 'viewport' | 'document';
 
 This describes the root boundary that the element will be checked
 for overflow relative to. The default is `'viewport'{:js}`, which
-is the area of the page the user can see on the screen. The other
-option is `'document'{:js}`, which is the entire page outside the
-viewport.
+is the area of the page the user can see on the screen. This is
+the
+[Visual Viewport](https://developer.mozilla.org/en-US/docs/Web/API/Visual_Viewport_API)
+which correctly handles pinch-zooming and mobile viewports when
+the keyboard is open.
+
+The other option is `'document'{:js}`, which is the entire page
+outside the viewport.
 
 ```js
 await detectOverflow(middlewareArguments, {
-  rootBoundary: 'document',
+  rootBoundary: 'document', // 'viewport' by default
 });
 ```
 
@@ -145,7 +146,7 @@ For instance, if the `elementContext{:.objectKey}` is
 `'floating'{:js}`, and you enable this option, then the boundary
 in which overflow is checked for is the `'reference'{:js}`'s
 boundary. This only applies if you are using the default
-`'clippingParents'{:js}` enum as the `boundary{:.objectKey}`.
+`'clippingAncestors'{:js}` string as the `boundary{:.objectKey}`.
 
 ```js
 await detectOverflow(middlewareArguments, {

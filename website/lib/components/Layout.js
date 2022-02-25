@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import cn from 'classnames';
-import {useState, Children} from 'react';
+import {useState} from 'react';
 import {Menu} from 'react-feather';
 import {Chrome} from './Chrome';
 import {Floating} from './Floating';
@@ -102,6 +102,12 @@ const nav = [
   },
   ...middleware,
   {
+    url: '/docs/autoUpdate',
+    title: 'autoUpdate',
+    icon: 'data:image/png;base64,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',
+    mono: true,
+  },
+  {
     url: '/docs/detectOverflow',
     title: 'detectOverflow',
     icon: 'data:image/png;base64,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',
@@ -140,7 +146,10 @@ const nav = [
 ];
 
 const slugify = (str) =>
-  str.toLowerCase().replace(/[\s.]/g, '-').replace(/[.:]/g, '');
+  str
+    .toLowerCase()
+    .replace(/[\s.]/g, '-')
+    .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
 
 const linkify =
   (Tag) =>
@@ -184,44 +193,62 @@ const components = {
 };
 
 export default function Layout({children}) {
-  const {pathname} = useRouter();
+  const {pathname, events} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
   const navRef = useRef();
   const activeLinkRef = useRef();
-
-  const anchors = Children.toArray(children)
-    .filter(
-      (child) =>
-        child.props?.mdxType &&
-        ['h2', 'h3'].includes(child.props.mdxType)
-    )
-    .map((child) => {
-      const url = slugify(
-        typeof child.props.children === 'string'
-          ? child.props.children
-          : child.props.children.props.children
-      );
-      return {
-        url: `#${url}`,
-        title: child.props.children,
-        depth:
-          (child.props?.mdxType &&
-            parseInt(child.props.mdxType.replace('h', ''), 0)) ??
-          0,
-      };
-    });
+  const [hash, setHash] = useState(null);
 
   useIsomorphicLayoutEffect(() => {
-    if (
-      activeLinkRef.current.offsetTop >
-      navRef.current.offsetHeight
-    ) {
-      navRef.current.scrollTop =
-        activeLinkRef.current.offsetTop -
-        navRef.current.offsetHeight / 2;
+    window.onhashchange = () => {
+      setHash(location.hash);
+    };
+
+    setHash(location.hash);
+
+    function onRouteChangeComplete() {
+      setHash(null);
     }
-  }, []);
+
+    events.on('routeChangeComplete', onRouteChangeComplete);
+    return () => {
+      events.off('routeChangeComplete', onRouteChangeComplete);
+    };
+  }, [events]);
+
+  const articleRef = useRef();
+  const [anchors, setAnchors] = useState([]);
+  useIsomorphicLayoutEffect(() => {
+    const localAnchors = [];
+    articleRef.current
+      .querySelectorAll('h2,h3')
+      .forEach((node) => {
+        localAnchors.push({
+          depth: node.tagName === 'H2' ? 2 : 3,
+          title: node.textContent,
+          url: `#${slugify(node.textContent)}`,
+        });
+      });
+    setAnchors(localAnchors);
+  }, [pathname]);
+
+  let currentParentIndex = null;
+  const anchorsComputed = anchors.map((node, index) => {
+    if (node.depth === 3) {
+      if (currentParentIndex === null) {
+        currentParentIndex = index - 1;
+      }
+
+      return {
+        ...node,
+        parentTitle: anchors[currentParentIndex]?.title,
+      };
+    } else if (node.depth === 2) {
+      currentParentIndex = null;
+      return node;
+    }
+  });
 
   return (
     <MDXProvider components={components}>
@@ -233,7 +260,7 @@ export default function Layout({children}) {
         </title>
       </Head>
       <SkipNavLink />
-      <div className="md:pl-56 lg:pl-72">
+      <div className="md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
         <div className="container pl-4">
           <button
             aria-label="Open menu"
@@ -246,7 +273,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed bg-gray-900 h-full w-72 md:w-56 lg:w-72 top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-opacity-90 backdrop-blur-lg z-50 border-r border-gray-800',
+            'fixed bg-gray-900 h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-opacity-90 backdrop-blur-lg z-50 border-r border-gray-800',
             {
               hidden: !navOpen,
             }
@@ -267,7 +294,7 @@ export default function Layout({children}) {
                 Close
               </button>
             )}
-            <ul className="text-lg px-6 lg:px-8">
+            <ul className="text-lg px-6 xl:px-12">
               {nav.map(({url, title, icon, depth, mono}) => (
                 <li
                   key={url}
@@ -281,19 +308,20 @@ export default function Layout({children}) {
                   })}
                 >
                   <Link href={url}>
-                    <a href={url} className="block my-1">
-                      <span
-                        className={cn(
-                          'flex items-center gap-4 w-full py-1',
-                          {
-                            'hover:text-gray-50':
-                              pathname !== url,
-                          }
-                        )}
-                      >
+                    <a
+                      href={url}
+                      className={cn(
+                        'block hover:bg-gray-700 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg',
+                        {
+                          'bg-gray-200/10 md:bg-gray-700/70 text-gray-100':
+                            pathname === url,
+                        }
+                      )}
+                    >
+                      <span className="flex items-center gap-4 w-full py-1">
                         {pathname === url ? (
                           <span
-                            className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-violet-300 to-cyan-400"
+                            className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-purple-400 via-sky-300 to-purple-100"
                             style={{
                               opacity:
                                 pathname === url ? '1' : '0',
@@ -307,14 +335,15 @@ export default function Layout({children}) {
                             src={icon}
                             style={{
                               display:
-                                pathname !== url ? '' : 'none',
+                                pathname !== url
+                                  ? undefined
+                                  : 'none',
                             }}
                           />
                         )}
                         <span
                           className={cn('block', {
-                            'text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400':
-                              pathname === url,
+                            'font-bold': pathname === url,
                             'font-mono [font-size:90%]':
                               mono === true,
                           })}
@@ -324,41 +353,71 @@ export default function Layout({children}) {
                       </span>
                     </a>
                   </Link>
-                  <ul>
-                    {pathname === url &&
-                      anchors
-                        .filter(({depth}) => depth === 2)
-                        .map(({url, title, depth}) => (
-                          <li
-                            key={url}
-                            className={cn(
-                              `text-gray-400 hover:text-gray-50`,
-                              {
-                                'pl-4': depth === 2,
-                                'pl-8': depth === 3,
-                              }
-                            )}
-                          >
-                            <a
-                              href={url}
-                              className="block w-full truncate"
-                            >
-                              {title}
-                            </a>
-                          </li>
-                        ))}
-                  </ul>
                 </li>
               ))}
             </ul>
           </div>
         </nav>
-        <div
-          className="container px-4 sm:px-8 my-16 mx-auto"
-          style={{maxWidth: '75ch'}}
-        >
+        <aside className="fixed right-0 top-0 pt-8 hidden xl:block w-72 [max-height:100vh] overflow-y-auto">
+          <nav>
+            <h4 className="text-md ml-4 text-gray-500">
+              On this page
+            </h4>
+            <ul className="p-4 pl-2 overflow-hidden">
+              {anchorsComputed
+                .filter(({depth}) => depth === 2)
+                .map(({url, title}) => (
+                  <li key={url}>
+                    <a
+                      href={url}
+                      className={cn(
+                        'block truncate w-full text-lg py-1 px-4 rounded-lg',
+                        {
+                          'bg-gray-200 text-gray-900 font-bold':
+                            hash === url,
+                          'text-gray-300 hover:bg-gray-700 hover:text-gray-50':
+                            hash !== url,
+                        }
+                      )}
+                    >
+                      {title}
+                    </a>
+                    <ul>
+                      {anchorsComputed
+                        .filter(
+                          ({depth, parentTitle}) =>
+                            depth === 3 && parentTitle === title
+                        )
+                        .map(({url, title}) => (
+                          <li key={url}>
+                            <a
+                              href={url}
+                              className={cn(
+                                'block text-md truncate py-1 px-4 ml-4 border-l border-gray-700 w-[calc(100% - 1rem)] rounded-tr-md rounded-br-md',
+                                {
+                                  'bg-gray-200 text-gray-900 font-bold':
+                                    hash === url,
+                                  'text-gray-400 hover:bg-gray-700 hover:text-gray-50':
+                                    hash !== url,
+                                }
+                              )}
+                            >
+                              {title}
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
+                  </li>
+                ))}
+            </ul>
+          </nav>
+        </aside>
+        <div className="container px-6 lg:px-8 my-16 mx-auto [max-width:70ch] xl:[max-width:75ch]">
           <SkipNavContent />
-          <article className="prose md:prose-md lg:prose-lg">
+          <article
+            ref={articleRef}
+            className="prose md:prose-md lg:prose-lg"
+          >
             {children}
           </article>
           <Navigation
@@ -366,19 +425,19 @@ export default function Layout({children}) {
             next={nav[index + 1]}
           />
         </div>
-        <footer className="text-center text-gray-500 py-8 border-t border-gray-800">
-          <p>© {new Date().getFullYear()} • MIT License</p>
-          <p className="text-sm mt-4">
-            Icons made by Freepik and authors from{' '}
-            <a
-              className="text-blue-400"
-              href="https://www.flaticon.com"
-            >
-              www.flaticon.com
-            </a>
-          </p>
-        </footer>
       </div>
+      <footer className="text-center text-gray-500 py-8 border-t border-gray-800 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
+        <p>© {new Date().getFullYear()} • MIT License</p>
+        <p className="text-sm mt-4">
+          Icons made by Freepik and authors from{' '}
+          <a
+            className="text-blue-400"
+            href="https://www.flaticon.com"
+          >
+            www.flaticon.com
+          </a>
+        </p>
+      </footer>
     </MDXProvider>
   );
 }

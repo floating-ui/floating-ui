@@ -87,7 +87,7 @@ module.exports = {
             h1: {
               backgroundClip: 'text',
               color: 'transparent',
-              backgroundImage: `linear-gradient(to right, ${colors.violet['300']}, ${colors.cyan['400']})`,
+              backgroundImage: `linear-gradient(to right, ${colors.purple['400']}, ${colors.sky['300']}, ${colors.purple['100']})`,
               display: 'inline',
               lineHeight: '1.1',
               wordBreak: 'break-word',

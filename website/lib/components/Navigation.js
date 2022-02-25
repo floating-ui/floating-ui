@@ -17,9 +17,9 @@ export default function Navigation({back, next}) {
             </div>
             <div className="flex items-center gap-4">
               <span className="hidden lg:block">
-                <ArrowLeft className="min-width-[24] text-violet-300" />
+                <ArrowLeft className="min-width-[24] text-purple-400" />
               </span>
-              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400">
+              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-purple-400 via-sky-300 to-purple-100">
                 {back.title}
               </span>
             </div>
@@ -37,14 +37,14 @@ export default function Navigation({back, next}) {
           >
             <div className="flex justify-end lg:hidden text-sm items-center text-right mb-2 text-gray-500">
               Next
-              <ArrowRight className="min-width-[24] inline" />
+              <ArrowRight className="min-width-[24] inline text-gray-500" />
             </div>
             <div className="flex items-center gap-4 justify-end">
-              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-violet-300 to-cyan-400">
+              <span className="text-transparent font-bold bg-clip-text bg-gradient-to-r from-purple-400 via-sky-300 to-purple-100">
                 {next.title}
               </span>{' '}
               <span className="hidden lg:block">
-                <ArrowRight className="min-width-[24]" />
+                <ArrowRight className="min-width-[24] text-gray-100" />
               </span>
             </div>
           </a>

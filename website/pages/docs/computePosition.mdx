@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # computePosition
 
 The `computePosition(){:js}` function is at the heart of Floating
@@ -102,6 +99,10 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
+The `-start{:.string}` and `-end{:.string}` alignments are
+[_logical_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties)
+and will adapt to the writing direction (e.g. RTL) as expected.
+
 ### strategy
 
 This is the type of CSS position property to use. Two strings are
@@ -162,51 +163,7 @@ type ComputePositionReturn = {
 
 Since `computePosition{:.function}` is only a single function
 call, it only positions your element once. There are cases in
-which you'll want it to be continually updated:
+which you'll want it to be continually updated so that the
+floating element remains attached to the reference element.
 
-- The reference element is inside a scrolling container, but the
-  floating element is not.
-- The window is being resized.
-- The size of the reference element or floating element changes.
-- The location of the reference element changes (e.g. layout
-  change).
-
-```js
-async function update() {
-  const {x, y} = await computePosition(referenceEl, floatingEl);
-  Object.assign(floatingEl.style, {
-    left: `${x}px`,
-    top: `${y}px`,
-  });
-}
-
-// Initial call
-update();
-
-// Adds event listeners to `window`
-addEventListener('scroll', update);
-addEventListener('resize', update);
-```
-
-A `ResizeObserver{:.class}`, `requestAnimationFrame{:.function}`
-loop, etc. can handle additional cases.
-
-### scrollParents
-
-To update on all relevant nodes, the library exports this util:
-
-```js
-import {getScrollParents} from '@floating-ui/dom';
-
-async function update() {
-  // ...
-}
-
-[
-  ...getScrollParents(referenceEl),
-  ...getScrollParents(floatingEl),
-].forEach((el) => {
-  el.addEventListener('scroll', update);
-  el.addEventListener('resize', update);
-});
-```
+Visit [autoUpdate](/docs/autoUpdate) to do this.

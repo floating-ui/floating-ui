@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # size
 
 The `size{:.function}` middleware provides data to change the
@@ -62,9 +59,9 @@ These are the options you can pass to `size(){:js}`. Each comment
 specifies the default value.
 
 ```ts
-type Options = DetectOverflowOptions & {
+interface Options extends DetectOverflowOptions {
   apply(args: Dimensions & ElementRects): void; // undefined
-};
+}
 ```
 
 ### apply

@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # Middleware
 
 Middleware are plain objects that modify the positioning
@@ -286,12 +283,21 @@ const middleware = {
 };
 ```
 
-> Ensure `someCondition{:js}` will evaluate to `false{:js}` at
-> some point, otherwise, this will cause an **infinite loop!**
-> When running the library in DEV mode, an error will be thrown
-> to prevent an infinite loop from locking up your application.
+Data supplied to `middlewareData{:.param}` is preserved by doing
+this, so you can read it at any point after you've reset the
+lifecycle.
 
-Data supplied to `middlewareData{:.param}` is **preserved** by
-doing this, so you can read it at any point after you've reset
-the lifecycle, e.g. if you want to add a `skip{:.objectKey}`
-property to break the condition.
+### Skipping
+
+By default, a `reset{:.objectKey}` will skip the middleware upon
+the next lifecycle run. To opt out, you can do the following:
+
+```js
+return {
+  reset: {
+    skip: false,
+  },
+};
+```
+
+Be wary of infinite loops!

@@ -1,6 +1,3 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # flip
 
 The `flip{:.function}` middleware changes the placement of the
@@ -41,13 +38,13 @@ These are the options you can pass to `flip(){:js}`. Each comment
 specifies the default value.
 
 ```ts
-type Options = DetectOverflowOptions & {
+interface Options extends DetectOverflowOptions {
   mainAxis: boolean; // true
   crossAxis: boolean; // true
   fallbackPlacements: Array<Placement>; // [oppositePlacement]
   fallbackStrategy: 'bestFit' | 'initialPlacement'; // 'bestFit'
   flipAlignment: boolean; // true
-};
+}
 ```
 
 ### mainAxis
@@ -106,7 +103,7 @@ flip({
 
 When an alignment is specified, e.g. `'top-start'{:js}` instead
 of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
-`start` doesn't fit.
+`start{:.string}` doesn't fit.
 
 ```js
 flip({flipAlignment: false});
