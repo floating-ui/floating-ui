@@ -1,16 +1,24 @@
-import Layout from '../../lib/components/Layout';
-export default Layout;
-
 # Platform
 
 Floating UI works on any platform that can run JavaScript, as
-long as it has adequate measurement APIs for elements.
+long as it has adequate measurement APIs for elements. Possible
+platforms other than the DOM include React Native, Canvas/WebGL,
+etc.
 
-Floating UI works largely with a `Rect{:.class}`, which is an
-object of numbers in the form `{width, height, x, y}`. This data
-can come from anywhere, and the library will perform the right
-computations. `x` and `y` represent the coordinates of the
-element relative to another one.
+The library works largely with a `Rect{:.class}`:
+
+```js
+interface Rect {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}
+```
+
+This data can come from anywhere, and the library will perform
+the right computations. `x{:.objectKey}` and `y{:.objectKey}`
+represent the coordinates of the element relative to another one.
 
 ```js
 import {computePosition} from '@floating-ui/core';
@@ -24,13 +32,15 @@ computePosition(referenceElement, floatingElement, {
 
 ## Methods
 
-A `platform{:.objectKey}` is a plain object consisting of 7
-methods. These methods allow the platform to interface with
-Floating UI's logic.
+A `platform{:.objectKey}` is a plain object consisting of 3
+required and 6 optional methods. These methods allow the platform
+to interface with Floating UI's logic.
 
 Each of these methods can be either async or sync. This enables
 support of platforms whose measurement APIs are async, like React
 Native.
+
+## Required methods
 
 ### getElementRects
 
@@ -50,12 +60,45 @@ function getElementRects({reference, floating, strategy}) {
 
 The `x{:.objectKey}` and `y{:.objectKey}` values of a reference
 `Rect{:.class}` should be its coordinates relative to the
-floating element's `offsetParent` element, not the viewport.
+floating element's `offsetParent` element if required rather than
+the viewport.
 
 #### floating
 
 Both `x{:.objectKey}` and `y{:.objectKey}` are not relevant
 initially, so you can set these both of these to `0{:js}`.
+
+### getDimensions
+
+Returns the dimensions of an element.
+
+```js
+function getDimensions(element) {
+  return {width: 0, height: 0};
+}
+```
+
+### getClippingRect
+
+Returns the `Rect{:.class}` (**relative to the viewport**) whose
+outside bounds will clip the given element. For instance, the
+viewport itself.
+
+```js
+function getClippingRect({element, boundary, rootBoundary}) {
+  return {
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  };
+}
+```
+
+## Optional methods
+
+Depending on the platform you're working with, these may or may
+not be necessary.
 
 ### convertOffsetParentRelativeRectToViewportRelativeRect
 
@@ -80,13 +123,33 @@ Returns the `offsetParent` of a given element. The following four
 properties are what is accessed on an `offsetParent`.
 
 ```js
-function getOffsetParent({element}) {
+function getOffsetParent(element) {
   return {
     clientWidth: 0,
     clientHeight: 0,
     clientLeft: 0,
     clientTop: 0,
   };
+}
+```
+
+### getDocumentElement
+
+Returns the document element.
+
+```js
+function getDocumentElement(element) {
+  return {};
+}
+```
+
+### getClientRects
+
+Returns an array of `ClientRect{:.class}`s.
+
+```js
+function getClientRects(element) {
+  return [];
 }
 ```
 
@@ -100,48 +163,13 @@ function isElement(value) {
 }
 ```
 
-### getDocumentElement
+### isRTL
 
-Returns the document element.
-
-```js
-function getDocumentElement({element}) {
-  return {};
-}
-```
-
-### getDimensions
-
-Return the dimensions of an element.
+Determines if an element is in RTL layout.
 
 ```js
-function getDimensions({element}) {
-  return {width: 0, height: 0};
-}
-```
-
-### getClippingClientRect
-
-Return the `clientRect` (**relative to the viewport**) whose
-outside bounds will clip the given element. For instance, the
-viewport.
-
-```js
-function getClippingClientRect({
-  element,
-  boundary,
-  rootBoundary,
-}) {
-  return {
-    width: 0,
-    height: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    x: 0,
-    y: 0,
-  };
+function isRTL(element) {
+  return false;
 }
 ```
 
@@ -154,13 +182,18 @@ import {computePosition} from '@floating-ui/core';
 
 computePosition(referenceEl, floatingEl, {
   platform: {
+    // Required
     getElementRects,
+    getDimensions,
+    getClippingRect,
+
+    // Optional
     convertOffsetParentRelativeRectToViewportRelativeRect,
     getOffsetParent,
-    isElement,
     getDocumentElement,
-    getDimensions,
-    getClippingClientRect,
+    getClientRects,
+    isElement,
+    isRTL,
   },
 });
 ```

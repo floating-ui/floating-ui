@@ -2,15 +2,13 @@
   color-scheme: dark;
 }
 
-[data-reach-skip-nav-link] {
+[data-reach-skip-nav-link]:focus {
   color: black;
-  margin-left: 18rem;
-}
-
-@media (max-width: 600px) {
-  [data-reach-skip-nav-link] {
-    margin-left: calc(25vw);
-  }
+  z-index: 60;
+  position: fixed;
+  margin: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
 }
 
 .shiki {
