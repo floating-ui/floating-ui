@@ -3,6 +3,7 @@ import {
   ClientRectObject,
   Boundary,
   RootBoundary,
+  Rect,
 } from '@floating-ui/core';
 import {getViewportRect} from './getViewportRect';
 import {getDocumentRect} from './getDocumentRect';
@@ -76,7 +77,7 @@ function getClippingAncestors(element: Element): Array<Element> {
 
 // Gets the maximum area that the element is visible in due to any number of
 // clipping ancestors
-export function getClippingClientRect({
+export function getClippingRect({
   element,
   boundary,
   rootBoundary,
@@ -84,7 +85,7 @@ export function getClippingClientRect({
   element: Element;
   boundary: Boundary;
   rootBoundary: RootBoundary;
-}): ClientRectObject {
+}): Rect {
   const mainClippingAncestors =
     boundary === 'clippingAncestors'
       ? getClippingAncestors(element)
@@ -103,10 +104,10 @@ export function getClippingClientRect({
     return accRect;
   }, getClientRectFromClippingAncestor(element, firstClippingAncestor));
 
-  clippingRect.width = clippingRect.right - clippingRect.left;
-  clippingRect.height = clippingRect.bottom - clippingRect.top;
-  clippingRect.x = clippingRect.left;
-  clippingRect.y = clippingRect.top;
-
-  return clippingRect;
+  return {
+    width: clippingRect.right - clippingRect.left,
+    height: clippingRect.bottom - clippingRect.top,
+    x: clippingRect.left,
+    y: clippingRect.top,
+  };
 }

@@ -44,7 +44,7 @@ export const arrow = (options: Options): Middleware => ({
     const coords = {x, y};
     const axis = getMainAxisFromPlacement(placement);
     const length = getLengthFromAxis(axis);
-    const arrowDimensions = await platform.getDimensions({element});
+    const arrowDimensions = await platform.getDimensions(element);
     const minProp = axis === 'y' ? 'top' : 'left';
     const maxProp = axis === 'y' ? 'bottom' : 'right';
 
@@ -55,7 +55,7 @@ export const arrow = (options: Options): Middleware => ({
       rects.floating[length];
     const startDiff = coords[axis] - rects.reference[axis];
 
-    const arrowOffsetParent = await platform.getOffsetParent?.({element});
+    const arrowOffsetParent = await platform.getOffsetParent?.(element);
     const clientSize = arrowOffsetParent
       ? axis === 'y'
         ? arrowOffsetParent.clientHeight || 0

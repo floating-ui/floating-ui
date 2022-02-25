@@ -19,12 +19,12 @@ export interface Platform {
     floating: FloatingElement;
     strategy: Strategy;
   }) => Promisable<ElementRects>;
-  getClippingClientRect: (args: {
+  getClippingRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
-  }) => Promisable<ClientRectObject>;
-  getDimensions: (args: {element: any}) => Promisable<Dimensions>;
+  }) => Promisable<Rect>;
+  getDimensions: (element: any) => Promisable<Dimensions>;
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
@@ -32,13 +32,11 @@ export interface Platform {
     offsetParent: any;
     strategy: Strategy;
   }) => Promisable<Rect>;
-  getOffsetParent?: (args: {element: any}) => Promisable<any>;
-  isElement?: (value: unknown) => Promisable<boolean>;
-  getDocumentElement?: (args: {element: any}) => Promisable<any>;
-  getClientRects?: (args: {
-    element: any;
-  }) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (reference: ReferenceElement) => Promisable<boolean>;
+  getOffsetParent?: (element: any) => Promisable<any>;
+  isElement?: (value: any) => Promisable<boolean>;
+  getDocumentElement?: (element: any) => Promisable<any>;
+  getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
+  isRTL?: (element: any) => Promisable<boolean>;
 }
 
 export type Coords = {[key in Axis]: number};

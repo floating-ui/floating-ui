@@ -1,9 +1,5 @@
 import {Dimensions} from 'react-native';
-import {
-  Platform,
-  Dimensions as DimensionsType,
-  rectToClientRect,
-} from '@floating-ui/core';
+import {Platform, Dimensions as DimensionsType} from '@floating-ui/core';
 
 const ORIGIN = {x: 0, y: 0};
 
@@ -50,15 +46,13 @@ export const createPlatform = ({
       }
     });
   },
-  getClippingClientRect() {
+  getClippingRect() {
     const {width, height} = Dimensions.get('window');
-    return Promise.resolve(
-      rectToClientRect({
-        width,
-        height,
-        ...(sameScrollView ? scrollOffsets : ORIGIN),
-      })
-    );
+    return Promise.resolve({
+      width,
+      height,
+      ...(sameScrollView ? scrollOffsets : ORIGIN),
+    });
   },
   convertOffsetParentRelativeRectToViewportRelativeRect({rect}) {
     return new Promise((resolve) => {
@@ -73,20 +67,10 @@ export const createPlatform = ({
       }
     });
   },
-  getDocumentElement: () => Promise.resolve({}),
-  // these are the properties accessed on an offsetParent
-  getOffsetParent: () =>
-    Promise.resolve({
-      clientLeft: 0,
-      clientTop: 0,
-      clientWidth: 0,
-      clientHeight: 0,
-    }),
   getDimensions: ({element}) =>
     new Promise((resolve) =>
       element.measure(({width, height}: DimensionsType) =>
         resolve({width, height})
       )
     ),
-  isElement: () => Promise.resolve(true),
 });
