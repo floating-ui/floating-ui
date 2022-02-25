@@ -63,10 +63,10 @@ export interface MiddlewareData {
     }>;
   };
   hide?: {
-    referenceHidden: boolean;
-    escaped: boolean;
-    referenceHiddenOffsets: SideObject;
-    escapedOffsets: SideObject;
+    referenceHidden?: boolean;
+    escaped?: boolean;
+    referenceHiddenOffsets?: SideObject;
+    escapedOffsets?: SideObject;
   };
   offset?: Coords;
   shift?: Coords;
