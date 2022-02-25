@@ -5,10 +5,16 @@ import {getDimensions} from './utils/getDimensions';
 import {convertOffsetParentRelativeRectToViewportRelativeRect} from './utils/convertOffsetParentRelativeRectToViewportRelativeRect';
 import {isElement} from './utils/is';
 import {getDocumentElement} from './utils/getDocumentElement';
-import {getClippingClientRect} from './utils/getClippingClientRect';
+import {getClippingRect} from './utils/getClippingRect';
 import {getComputedStyle} from './utils/getComputedStyle';
 
 export const platform: Platform = {
+  getClippingRect,
+  convertOffsetParentRelativeRectToViewportRelativeRect,
+  isElement,
+  getDimensions,
+  getOffsetParent,
+  getDocumentElement,
   getElementRects: ({reference, floating, strategy}) => ({
     reference: getRectRelativeToOffsetParent(
       reference,
@@ -17,12 +23,6 @@ export const platform: Platform = {
     ),
     floating: {...getDimensions(floating), x: 0, y: 0},
   }),
-  convertOffsetParentRelativeRectToViewportRelativeRect,
-  getOffsetParent: ({element}) => getOffsetParent(element),
-  isElement,
-  getDocumentElement: ({element}) => getDocumentElement(element),
-  getClippingClientRect,
-  getDimensions: ({element}) => getDimensions(element),
-  getClientRects: ({element}) => element.getClientRects(),
-  isRTL: (reference) => getComputedStyle(reference).direction === 'rtl',
+  getClientRects: (element) => element.getClientRects(),
+  isRTL: (element) => getComputedStyle(element).direction === 'rtl',
 };

@@ -45,15 +45,13 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
       platform.convertOffsetParentRelativeRectToViewportRelativeRect
         ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
             rect: rects.reference,
-            offsetParent: await platform.getOffsetParent?.({
-              element: elements.floating,
-            }),
+            offsetParent: await platform.getOffsetParent?.(elements.floating),
             strategy,
           })
         : rects.reference
     );
     const clientRects = Array.from(
-      (await platform.getClientRects?.({element: elements.reference})) ?? []
+      (await platform.getClientRects?.(elements.reference)) ?? []
     );
     const paddingObject = getSideObjectFromPadding(padding);
 
