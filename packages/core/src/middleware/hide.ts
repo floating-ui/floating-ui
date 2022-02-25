@@ -28,7 +28,7 @@ export interface Options {
  * @see https://floating-ui.com/docs/hide
  */
 export const hide = ({
-  strategy,
+  strategy = 'referenceHidden',
   ...detectOverflowOptions
 }: Partial<Options & DetectOverflowOptions> = {}): Middleware => ({
   name: 'hide',
