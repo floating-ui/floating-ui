@@ -4,6 +4,11 @@ import type {
   SideObject,
   ClientRectObject,
   Padding,
+  ElementRects,
+  Strategy,
+  RootBoundary,
+  Rect,
+  Dimensions,
 } from '@floating-ui/core';
 import type {Options as CoreDetectOverflowOptions} from '@floating-ui/core/src/detectOverflow';
 import type {Options as AutoPlacementOptions} from '@floating-ui/core/src/middleware/autoPlacement';
@@ -11,6 +16,35 @@ import type {Options as SizeOptions} from '@floating-ui/core/src/middleware/size
 import type {Options as FlipOptions} from '@floating-ui/core/src/middleware/flip';
 import type {Options as ShiftOptions} from '@floating-ui/core/src/middleware/shift';
 import type {Options as HideOptions} from '@floating-ui/core/src/middleware/hide';
+
+type Promisable<T> = T | Promise<T>;
+
+export interface Platform {
+  // Required
+  getElementRects: (args: {
+    reference: ReferenceElement;
+    floating: FloatingElement;
+    strategy: Strategy;
+  }) => Promisable<ElementRects>;
+  getClippingRect: (args: {
+    element: Element;
+    boundary: Boundary;
+    rootBoundary: RootBoundary;
+  }) => Promisable<Rect>;
+  getDimensions: (element: Element) => Promisable<Dimensions>;
+
+  // Optional
+  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+    rect: Rect;
+    offsetParent: Element;
+    strategy: Strategy;
+  }) => Promisable<Rect>;
+  getOffsetParent?: (element: Element) => Promisable<Element | Window>;
+  isElement?: (value: unknown) => Promisable<boolean>;
+  getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
+  getClientRects?: (element: Element) => Promisable<Array<ClientRectObject>>;
+  isRTL?: (element: Element) => Promisable<boolean>;
+}
 
 export interface NodeScroll {
   scrollLeft: number;
@@ -114,7 +148,6 @@ declare const detectOverflow: (
 export {autoPlacement, shift, arrow, size, flip, hide, detectOverflow};
 export {offset, limitShift, inline} from '@floating-ui/core';
 export type {
-  Platform,
   Placement,
   Strategy,
   Middleware,

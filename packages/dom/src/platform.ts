@@ -1,4 +1,4 @@
-import type {Platform} from '@floating-ui/core';
+import type {Platform} from './types';
 import {getRectRelativeToOffsetParent} from './utils/getRectRelativeToOffsetParent';
 import {getOffsetParent} from './utils/getOffsetParent';
 import {getDimensions} from './utils/getDimensions';
@@ -23,6 +23,6 @@ export const platform: Platform = {
     ),
     floating: {...getDimensions(floating), x: 0, y: 0},
   }),
-  getClientRects: (element) => element.getClientRects(),
+  getClientRects: (element) => Array.from(element.getClientRects()),
   isRTL: (element) => getComputedStyle(element).direction === 'rtl',
 };
