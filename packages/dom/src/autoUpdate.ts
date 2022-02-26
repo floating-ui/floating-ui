@@ -40,18 +40,19 @@ export function autoUpdate(
   reference: ReferenceElement,
   floating: FloatingElement,
   update: () => void,
-  options: Partial<Options> = {
-    ancestorScroll: true,
-    ancestorResize: true,
-    elementResize: true,
-    animationFrame: false,
-  }
+  options: Partial<Options> = {}
 ) {
+  const {
+    ancestorScroll: _ancestorScroll = true,
+    ancestorResize: _ancestorResize = true,
+    elementResize: _elementResize = true,
+    animationFrame = false,
+  } = options;
+
   let cleanedUp = false;
-  const animationFrame = options.animationFrame;
-  const ancestorScroll = options.ancestorScroll && !animationFrame;
-  const ancestorResize = options.ancestorResize && !animationFrame;
-  const elementResize = options.elementResize && !animationFrame;
+  const ancestorScroll = _ancestorScroll && !animationFrame;
+  const ancestorResize = _ancestorResize && !animationFrame;
+  const elementResize = _elementResize && !animationFrame;
 
   const ancestors =
     ancestorScroll || ancestorResize
@@ -111,6 +112,7 @@ export function autoUpdate(
     });
 
     observer?.disconnect();
+    observer = null;
 
     if (animationFrame) {
       cancelAnimationFrame(frameId);
