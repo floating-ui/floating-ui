@@ -50,9 +50,8 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
           })
         : rects.reference
     );
-    const clientRects = Array.from(
-      (await platform.getClientRects?.(elements.reference)) ?? []
-    );
+    const clientRects =
+      (await platform.getClientRects?.(elements.reference)) ?? [];
     const paddingObject = getSideObjectFromPadding(padding);
 
     function getBoundingClientRect() {

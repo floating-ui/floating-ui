@@ -1,4 +1,4 @@
-import type {Placement, Rect, Coords, Middleware} from '../types';
+import type {Placement, Rect, Coords, Middleware, ElementRects} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
@@ -23,17 +23,12 @@ type OffsetFunction = (args: {
 
 export type Options = OffsetValue | OffsetFunction;
 
-export function convertValueToCoords({
-  placement,
-  rects,
-  value,
-  rtl = false,
-}: {
-  placement: Placement;
-  rects: {floating: Rect; reference: Rect};
-  value: Options;
-  rtl?: boolean;
-}): Coords {
+export function convertValueToCoords(
+  placement: Placement,
+  rects: ElementRects,
+  value: Options,
+  rtl = false
+): Coords {
   const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
@@ -69,12 +64,12 @@ export const offset = (value: Options = 0): Middleware => ({
   async fn(middlewareArguments) {
     const {x, y, placement, rects, platform, elements} = middlewareArguments;
 
-    const diffCoords = convertValueToCoords({
+    const diffCoords = convertValueToCoords(
       placement,
       rects,
       value,
-      rtl: await platform.isRTL?.(elements.floating),
-    });
+      await platform.isRTL?.(elements.floating)
+    );
 
     return {
       x: x + diffCoords.x,

@@ -4,12 +4,11 @@ import {getAlignment} from './utils/getAlignment';
 import {getMainAxisFromPlacement} from './utils/getMainAxisFromPlacement';
 import {getLengthFromAxis} from './utils/getLengthFromAxis';
 
-export function computeCoordsFromPlacement({
-  reference,
-  floating,
-  placement,
-  rtl = false,
-}: ElementRects & {placement: Placement; rtl?: boolean}): Coords {
+export function computeCoordsFromPlacement(
+  {reference, floating}: ElementRects,
+  placement: Placement,
+  rtl?: boolean
+): Coords {
   const commonX = reference.x + reference.width / 2 - floating.width / 2;
   const commonY = reference.y + reference.height / 2 - floating.height / 2;
   const mainAxis = getMainAxisFromPlacement(placement);
