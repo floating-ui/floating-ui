@@ -95,7 +95,7 @@ export const autoPlacement = (
     const {main, cross} = getAlignmentSides(
       currentPlacement,
       rects,
-      await platform.isRTL?.(elements.reference)
+      await platform.isRTL?.(elements.floating)
     );
 
     // Make `computeCoords` start from the right place

@@ -93,7 +93,7 @@ export const flip = (
       const {main, cross} = getAlignmentSides(
         placement,
         rects,
-        await platform.isRTL?.(elements.reference)
+        await platform.isRTL?.(elements.floating)
       );
       overflows.push(overflow[main], overflow[cross]);
     }

@@ -45,7 +45,7 @@ export const size = (
       heightSide = side;
       widthSide =
         alignment ===
-        ((await platform.isRTL?.(elements.reference)) ? 'start' : 'end')
+        ((await platform.isRTL?.(elements.floating)) ? 'start' : 'end')
           ? 'left'
           : 'right';
     } else {

@@ -24,7 +24,7 @@ export const computePosition: ComputePosition = async (
     platform,
   } = config;
 
-  const rtl = await platform.isRTL?.(reference);
+  const rtl = await platform.isRTL?.(floating);
 
   if (__DEV__) {
     if (platform == null) {

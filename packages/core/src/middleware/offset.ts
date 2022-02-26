@@ -73,7 +73,7 @@ export const offset = (value: Options = 0): Middleware => ({
       placement,
       rects,
       value,
-      rtl: await platform.isRTL?.(elements.reference),
+      rtl: await platform.isRTL?.(elements.floating),
     });
 
     return {
