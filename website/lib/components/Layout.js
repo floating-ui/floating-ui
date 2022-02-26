@@ -231,6 +231,7 @@ export default function Layout({children}) {
         });
       });
     setAnchors(localAnchors);
+    setNavOpen(false);
   }, [pathname]);
 
   let currentParentIndex = null;
