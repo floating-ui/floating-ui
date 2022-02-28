@@ -42,4 +42,10 @@ export const MINI_SPONSORS = [
     label: 'dpcoupon - coupon codes and discounts',
     url: 'https://www.dpcoupon.com/',
   },
+  {
+    logo: '/sponsors/ggc.svg',
+    label:
+      'ggc - espionner un téléphone Android iPhone Pour Control Parental',
+    url: 'https://www.global-gsm-control.com/',
+  },
 ];
