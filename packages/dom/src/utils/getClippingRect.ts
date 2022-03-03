@@ -13,7 +13,6 @@ import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
 import {isElement, isHTMLElement} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
-import {getParentNode} from './getParentNode';
 import {contains} from './contains';
 import {getNodeName} from './getNodeName';
 import {max, min} from './math';
@@ -53,7 +52,7 @@ function getClientRectFromClippingAncestor(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingAncestors(element: Element): Array<Element> {
-  const clippingAncestors = getOverflowAncestors(getParentNode(element));
+  const clippingAncestors = getOverflowAncestors(element);
   const canEscapeClipping = ['absolute', 'fixed'].includes(
     getComputedStyle(element).position
   );

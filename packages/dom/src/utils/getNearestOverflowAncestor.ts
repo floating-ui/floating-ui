@@ -3,14 +3,16 @@ import {getNodeName} from './getNodeName';
 import {isOverflowElement, isHTMLElement} from './is';
 
 export function getNearestOverflowAncestor(node: Node): HTMLElement {
-  if (['html', 'body', '#document'].includes(getNodeName(node))) {
+  const parentNode = getParentNode(node);
+
+  if (['html', 'body', '#document'].includes(getNodeName(parentNode))) {
     // @ts-ignore assume body is always available
     return node.ownerDocument.body;
   }
 
-  if (isHTMLElement(node) && isOverflowElement(node)) {
-    return node;
+  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+    return parentNode;
   }
 
-  return getNearestOverflowAncestor(getParentNode(node));
+  return getNearestOverflowAncestor(parentNode);
 }
