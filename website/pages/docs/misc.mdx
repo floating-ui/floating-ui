@@ -55,3 +55,27 @@ In the future, Floating UI may
 [enable you to specify elements to avoid](https://github.com/floating-ui/floating-ui/issues/1440),
 so multiple floating elements can avoid colliding with each other
 intelligently without worrying about their `z-index`.
+
+## Handling large content
+
+When your floating elements' width exceeds the viewport's, it can
+result in unexpected behavior.
+
+You can limit the width of the floating element using the
+following CSS:
+
+```css
+.floating {
+  max-width: calc(100vw - 10px);
+}
+```
+
+This will always make it 10 pixels less than the width of the
+viewport.
+
+The constant `10{:js}` shown in the example should be double the
+`padding{:.objectKey}` given to the `shift(){:js}` middleware if
+it's in use.
+
+Alternatively, you may experiment with the [size](/docs/size)
+middleware depending on the axis overflow is occurring.

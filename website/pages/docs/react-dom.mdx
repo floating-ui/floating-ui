@@ -68,10 +68,6 @@ const stableRef = useMemo(
 return <div ref={stableRef} />;
 ```
 
-> While `useMemo(){:js}` isn't a semantic guarantee, as long as
-> React doesn't "forget" the memo'd value in an endless loop,
-> this method is fine.
-
 ## External reference
 
 As `reference{:.const}` is a callback ref, you can call it with
@@ -106,9 +102,6 @@ const otherLib = useOtherLib({
   ref: refs.floating, // or refs.reference
 });
 ```
-
-> The `reference` and `floating` values returned from the hook
-> are callback refs. Only pass them to an element's `ref` prop.
 
 ## Updating
 
@@ -255,6 +248,35 @@ function App() {
     </div>
   );
 }
+```
+
+## Variables inside middleware functions
+
+Variables are not "fresh" inside functions passed to middleware
+as an option. Instead, use a ref to access data inside them.
+
+```js
+const [n, setN] = useState(10);
+const nRef = useRef(10);
+
+useFloating({
+  middleware: [
+    offset(() => {
+      // This won't work
+      return n;
+      // This will work
+      return nRef.current;
+    }),
+  ],
+});
+```
+
+Passing it inside the current component scope works as expected:
+
+```js
+useFloating({
+  middleware: [offset(n)],
+});
 ```
 
 ## Testing

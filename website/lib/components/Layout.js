@@ -1,18 +1,17 @@
 import {MDXProvider} from '@mdx-js/react';
-import Collapsible from './Collapsible';
-import Navigation from './Navigation';
-import Logo from '../../assets/logo.svg';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import cn from 'classnames';
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import {Menu} from 'react-feather';
-import {Chrome} from './Chrome';
-import {Floating} from './Floating';
 import {SkipNavLink, SkipNavContent} from '@reach/skip-nav';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import {useRef} from 'react';
+import Logo from '../../assets/logo.svg';
+import {Chrome} from './Chrome';
+import {Floating} from './Floating';
+import Collapsible from './Collapsible';
+import Navigation from './Navigation';
 
 const middleware = [
   {
@@ -209,6 +208,7 @@ export default function Layout({children}) {
 
     function onRouteChangeComplete() {
       setHash(null);
+      articleRef.current?.focus();
     }
 
     events.on('routeChangeComplete', onRouteChangeComplete);
@@ -413,12 +413,13 @@ export default function Layout({children}) {
             </ul>
           </nav>
         </aside>
-        <div className="container px-6 lg:px-8 my-16 mx-auto [max-width:70ch] xl:[max-width:75ch]">
+        <div
+          ref={articleRef}
+          className="container px-6 lg:px-8 py-16 mx-auto [max-width:70ch] xl:[max-width:75ch] outline-0"
+          tabIndex={-1}
+        >
           <SkipNavContent />
-          <article
-            ref={articleRef}
-            className="prose md:prose-md lg:prose-lg"
-          >
+          <article className="prose md:prose-md lg:prose-lg">
             {children}
           </article>
           <Navigation
