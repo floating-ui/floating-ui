@@ -77,6 +77,7 @@ export const computePosition: ComputePosition = async (
     const {name, fn} = middleware[i];
 
     if (skippedMiddlewareNames.has(name)) {
+      skippedMiddlewareNames.delete(name);
       continue;
     }
 

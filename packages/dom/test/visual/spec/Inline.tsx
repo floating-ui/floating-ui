@@ -1,5 +1,5 @@
 import {Coords, Placement} from '@floating-ui/core';
-import {useFloating, inline, flip} from '@floating-ui/react-dom';
+import {useFloating, inline, flip, size} from '@floating-ui/react-dom';
 import React, {useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -19,7 +19,7 @@ export function Inline() {
   const mouseCoordsRef = useRef<undefined | Coords>();
   const {x, y, reference, floating, strategy} = useFloating({
     placement,
-    middleware: [inline(mouseCoordsRef.current), flip()],
+    middleware: [inline(mouseCoordsRef.current), flip(), size()],
   });
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
