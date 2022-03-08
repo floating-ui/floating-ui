@@ -34,6 +34,11 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
+The value(s) passed are
+[_logical_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
+meaning their effect on the physical result is dependent on the
+writing direction (e.g. RTL).
+
 ## Order
 
 `offset(){:js}` should generally be placed at the beginning of
@@ -41,36 +46,84 @@ your middleware array.
 
 ## Options
 
-These are the options you can pass to `offset(){:js}`.
+These are the options you can pass to `offset(){:js}`. Each
+comment specifies the default value.
 
 ```ts
+interface AxesOffsets {
+  mainAxis?: number; // 0;
+  crossAxis?: number; // 0;
+  alignmentAxis?: number | null; // null;
+}
+
 type Options =
   | number
-  | {mainAxis?: number; crossAxis?: number}
+  | AxesOffsets
   | (({
       reference: Rect,
       floating: Rect,
       placement: Placement,
-    }) => number | {mainAxis?: number; crossAxis?: number});
+    }) => number | AxesOffsets);
 ```
 
+A number represents the distance (gutter or margin) between the
+floating element and the reference element. This is shorthand for
+`mainAxis{:.objectKey}`.
+
 ```js
-// number: distance offset (mainAxis shorthand)
 offset(10);
+```
 
-// object: configure both axes
-offset({
-  mainAxis: 10, // distance
-  crossAxis: 10, // skidding
-});
+### AxesOffsets
 
-// function: takes Rects and placement and return a number
-offset(({reference}) => reference.height);
+This is an object which enables you to individually configure
+each axis.
 
-// function: takes Rects and placement and return an object
-offset(({floating, placement}) => ({
+#### mainAxis
+
+Distance (gutter or margin) between the floating element and the
+reference element.
+
+```js
+offset({mainAxis: 10});
+```
+
+#### crossAxis
+
+Skidding between the floating element and the reference element.
+
+```js
+offset({crossAxis: 10});
+```
+
+#### alignmentAxis
+
+Works on the same axis as `crossAxis{:.objectKey}` but applies
+only to aligned placements and works
+[_logically_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties).
+The offset is inverted for `-end{:.string}` alignments.
+
+This will override the `crossAxis{:.objectKey}` offset.
+
+```js
+offset({alignmentAxis: 10});
+```
+
+### Function
+
+You may also pass a function which returns the previously listed
+values — this enables you to read the dimensions of the reference
+or floating elements and the current `placement{:.objectKey}`.
+
+```js
+offset(({reference, floating, placement}) =>
+  placement === 'bottom' ? floating.width : reference.width
+);
+
+offset(({reference, floating, placement}) => ({
+  mainAxis: placement === 'top' ? 5 : -5,
   crossAxis:
-    placement === 'top' ? floating.height : floating.width,
+    placement === 'right' ? reference.width : floating.width,
 }));
 ```
 
@@ -84,10 +137,3 @@ fashion.
 This is useful for UI components such as select dropdowns where
 it should be positioned relative to an item inside the dropdown
 list.
-
-### Logical values
-
-The value(s) passed are
-[_logical_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
-meaning their effect on the physical result is dependent on the
-alignment and writing direction (e.g. RTL).
