@@ -113,7 +113,6 @@ export const flip = (
             overflows: overflowsData,
           },
           reset: {
-            skip: false,
             placement: nextPlacement,
           },
         };
@@ -144,11 +143,13 @@ export const flip = (
         default:
       }
 
-      return {
-        reset: {
-          placement: resetPlacement,
-        },
-      };
+      if (placement !== resetPlacement) {
+        return {
+          reset: {
+            placement: resetPlacement,
+          },
+        };
+      }
     }
 
     return {};

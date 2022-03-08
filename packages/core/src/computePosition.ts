@@ -57,8 +57,6 @@ export const computePosition: ComputePosition = async (
   let statefulPlacement = placement;
   let middlewareData: MiddlewareData = {};
 
-  const skippedMiddlewareNames = new Set<string>();
-
   let _debug_loop_count_ = 0;
   for (let i = 0; i < middleware.length; i++) {
     if (__DEV__) {
@@ -75,11 +73,6 @@ export const computePosition: ComputePosition = async (
     }
 
     const {name, fn} = middleware[i];
-
-    if (skippedMiddlewareNames.has(name)) {
-      skippedMiddlewareNames.delete(name);
-      continue;
-    }
 
     const {
       x: nextX,
@@ -123,10 +116,6 @@ export const computePosition: ComputePosition = async (
         }
 
         ({x, y} = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
-
-        if (reset.skip !== false) {
-          skippedMiddlewareNames.add(name);
-        }
       }
 
       i = -1;

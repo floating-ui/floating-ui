@@ -77,12 +77,23 @@ export const size = (
           : overflow[widthSide]),
     };
 
+    const prevDimensions = await platform.getDimensions(elements.floating);
+
     apply?.({...dimensions, ...rects});
 
-    return {
-      reset: {
-        rects: true,
-      },
-    };
+    const nextDimensions = await platform.getDimensions(elements.floating);
+
+    if (
+      prevDimensions.width !== nextDimensions.width ||
+      prevDimensions.height !== nextDimensions.height
+    ) {
+      return {
+        reset: {
+          rects: true,
+        },
+      };
+    }
+
+    return {};
   },
 });

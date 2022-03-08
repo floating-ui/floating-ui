@@ -92,6 +92,11 @@ export const autoPlacement = (
 
     const currentIndex = middlewareData.autoPlacement?.index ?? 0;
     const currentPlacement = placements[currentIndex];
+
+    if (currentPlacement == null) {
+      return {};
+    }
+
     const {main, cross} = getAlignmentSides(
       currentPlacement,
       rects,
@@ -104,7 +109,6 @@ export const autoPlacement = (
         x,
         y,
         reset: {
-          skip: false,
           placement: placements[0],
         },
       };
@@ -131,7 +135,6 @@ export const autoPlacement = (
           overflows: allOverflows,
         },
         reset: {
-          skip: false,
           placement: nextPlacement,
         },
       };
@@ -144,12 +147,22 @@ export const autoPlacement = (
       ({overflows}) => overflows.every((overflow) => overflow <= 0)
     )?.placement;
 
-    return {
-      reset: {
-        placement:
-          placementThatFitsOnAllSides ??
-          placementsSortedByLeastOverflow[0].placement,
-      },
-    };
+    const resetPlacement =
+      placementThatFitsOnAllSides ??
+      placementsSortedByLeastOverflow[0].placement;
+
+    if (resetPlacement !== placement) {
+      return {
+        data: {
+          index: currentIndex + 1,
+          overflows: allOverflows,
+        },
+        reset: {
+          placement: resetPlacement,
+        },
+      };
+    }
+
+    return {};
   },
 });
