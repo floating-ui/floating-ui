@@ -43,14 +43,11 @@ export function convertValueToCoords(
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+  const crossAxisMulti = rtl && isVertical ? -1 : 1;
+
   const rawValue =
     typeof value === 'function' ? value({...rects, placement}) : value;
   const isNumber = typeof rawValue === 'number';
-
-  let crossAxisMulti = 1;
-  if (rtl && isVertical) {
-    crossAxisMulti *= -1;
-  }
 
   // eslint-disable-next-line prefer-const
   let {mainAxis, crossAxis, alignmentAxis} = isNumber
