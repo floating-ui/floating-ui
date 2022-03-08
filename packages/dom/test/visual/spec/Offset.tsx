@@ -16,6 +16,8 @@ const VALUES: Array<{offset: Options; name: string}> = [
     offset: ({floating}) => ({crossAxis: -floating.width / 2}),
     name: '() => cA: -f.width/2',
   },
+  {offset: {alignmentAxis: 5}, name: 'aA: 5'},
+  {offset: {alignmentAxis: -10}, name: 'aA: -10'},
 ];
 
 export function Offset() {

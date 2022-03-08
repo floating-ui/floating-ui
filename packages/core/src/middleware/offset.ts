@@ -8,12 +8,22 @@ type OffsetValue =
   | {
       /**
        * The axis that runs along the side of the floating element.
+       * @default 0
        */
       mainAxis?: number;
       /**
        * The axis that runs along the alignment of the floating element.
+       * @default 0
        */
       crossAxis?: number;
+      /**
+       * When set to a number, overrides the `crossAxis` value for aligned
+       * (non-centered/base) placements and works logically. A positive number
+       * will move the floating element in the direction of the opposite edge
+       * to the one that is aligned, while a negative number the reverse.
+       * @default null
+       */
+      alignmentAxis?: number | null;
     };
 type OffsetFunction = (args: {
   floating: Rect;
@@ -33,21 +43,20 @@ export function convertValueToCoords(
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
-
-  let crossAxisMulti = 1;
-  if (alignment === 'end') {
-    crossAxisMulti = -1;
-  }
-  if (rtl && isVertical) {
-    crossAxisMulti *= -1;
-  }
+  const crossAxisMulti = rtl && isVertical ? -1 : 1;
 
   const rawValue =
     typeof value === 'function' ? value({...rects, placement}) : value;
-  const {mainAxis, crossAxis} =
-    typeof rawValue === 'number'
-      ? {mainAxis: rawValue, crossAxis: 0}
-      : {mainAxis: 0, crossAxis: 0, ...rawValue};
+  const isNumber = typeof rawValue === 'number';
+
+  // eslint-disable-next-line prefer-const
+  let {mainAxis, crossAxis, alignmentAxis} = isNumber
+    ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
+    : {mainAxis: 0, crossAxis: 0, alignmentAxis: null, ...rawValue};
+
+  if (alignment && typeof alignmentAxis === 'number') {
+    crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
+  }
 
   return isVertical
     ? {x: crossAxis * crossAxisMulti, y: mainAxis * mainAxisMulti}
