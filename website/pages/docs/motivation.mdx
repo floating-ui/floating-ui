@@ -46,9 +46,9 @@ The differences are summarized as follows:
   control over the middleware lifecycle.
 - 💎 **More features**: New features are easier to support thanks
   to the new architecture, and Floating UI already offers more,
-  like the `size{:.function}` middleware. Importantly, new
-  features are tree-shaken away if you don't use them, so there's
-  no size cost for bundler users.
+  like the `size(){:js}` and `inline(){:js}` middleware.
+  Importantly, new features are tree-shaken away if you don't use
+  them, so there's no size cost for bundler users.
 - 🔮 **More predictable**: Floating UI doesn't perform any
   "magic", like preconfiguring middleware or adding event
   listeners to update the position. This means you use Floating

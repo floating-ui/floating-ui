@@ -1,7 +1,7 @@
 # shift
 
-The `shift{:.function}` middleware shifts the floating element in
-order to keep it in view.
+`shift(){:js}` moves the floating element along the specified
+axes in order to keep it in view.
 
 Without `shift(){:js}`:
 
@@ -66,7 +66,7 @@ axis of `mainAxis{:.objectKey}`.
 
 Enabling this can lead to the floating element **overlapping**
 the reference element, which may not be desired and is often
-replaced by the `flip{:.function}` middleware.
+replaced by the `flip(){:js}` middleware.
 
 ```js
 shift({crossAxis: true}); // false by default

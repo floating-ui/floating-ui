@@ -85,15 +85,13 @@ module.exports = {
               },
             },
             h1: {
-              backgroundClip: 'text',
-              color: 'transparent',
-              backgroundImage: `linear-gradient(to right, ${colors.purple['400']}, ${colors.sky['300']}, ${colors.purple['100']})`,
               display: 'inline',
               lineHeight: '1.1',
               wordBreak: 'break-word',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               fontSize: '2.25rem',
+              color: 'white',
             },
             h2: {
               color: '#fff',

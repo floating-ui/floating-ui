@@ -208,7 +208,9 @@ export default function Layout({children}) {
 
     function onRouteChangeComplete() {
       setHash(null);
-      articleRef.current?.focus();
+      if (window.innerWidth >= 768) {
+        articleRef.current?.focus();
+      }
     }
 
     events.on('routeChangeComplete', onRouteChangeComplete);
@@ -361,7 +363,7 @@ export default function Layout({children}) {
         </nav>
         <aside className="fixed right-0 top-0 pt-8 hidden xl:block w-72 [max-height:100vh] overflow-y-auto">
           <nav>
-            <h4 className="text-md ml-4 text-gray-500">
+            <h4 className="text-md ml-6 text-gray-500">
               On this page
             </h4>
             <ul className="p-4 pl-2 overflow-hidden">
@@ -415,7 +417,7 @@ export default function Layout({children}) {
         </aside>
         <div
           ref={articleRef}
-          className="container px-6 lg:px-8 py-16 mx-auto [max-width:70ch] xl:[max-width:75ch] outline-0"
+          className="container px-6 lg:px-8 my-16 md:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] outline-0"
           tabIndex={-1}
         >
           <SkipNavContent />
@@ -428,7 +430,7 @@ export default function Layout({children}) {
           />
         </div>
       </div>
-      <footer className="text-center text-gray-500 py-8 border-t border-gray-800 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
+      <footer className="text-center text-gray-500 py-8 px-4 border-t border-gray-800 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
         <p>© {new Date().getFullYear()} • MIT License</p>
         <p className="text-sm mt-4">
           Icons made by Freepik and authors from{' '}

@@ -715,7 +715,10 @@ function HomePage() {
                 {name: 'size', size: '0.3 kB'},
                 {name: 'inline', size: '0.6 kB'},
               ].map(({name, size}) => (
-                <div className="mb-2 flex gap-2 items-center justify-center">
+                <div
+                  className="mb-2 flex gap-2 items-center justify-center"
+                  key={name}
+                >
                   <code className="flex-1 text-blue-400 text-right">
                     {name}
                     <span className="text-blue-200">()</span>

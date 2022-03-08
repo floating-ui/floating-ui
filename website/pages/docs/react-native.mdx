@@ -74,11 +74,10 @@ function MyComponent({triggerRef}) {
 
   useLayoutEffect(() => {
     reference(triggerRef.current);
-  }, [triggerRef]);
+  }, [triggerRef.current]);
 
-  // You may want to use `triggerRef.current` as a dependency
-  // if the value can update. Ensure that a render is being
-  // triggered when this is happening.
+  // You may need to disable the React Hooks ESLint rule for the
+  // dependency array.
 }
 ```
 

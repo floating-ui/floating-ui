@@ -1,8 +1,7 @@
 # flip
 
-The `flip{:.function}` middleware changes the placement of the
-floating element to the opposite one by default in order to keep
-it in view.
+`flip(){:js}` changes the placement of the floating element to
+the opposite one by default in order to keep it in view.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -30,7 +29,7 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-> This cannot be used with `autoPlacement{:.function}`.
+> This cannot be used with `autoPlacement(){:js}`.
 
 ## Options
 
@@ -109,10 +108,10 @@ of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
 flip({flipAlignment: false});
 ```
 
-When using this with the `shift{:.function}` middleware, ensure
-`flip{:.function}` is placed **before** `shift{:.function}` in
-your middleware array. This ensures the
-`flipAlignment{:.objectKey}` logic can act before shift's does.
+When using this with the `shift(){:js}` middleware, ensure
+`flip(){:js}` is placed **before** `shift(){:js}` in your
+middleware array. This ensures the `flipAlignment{:.objectKey}`
+logic can act before shift's does.
 
 ### ...detectOverflowOptions
 

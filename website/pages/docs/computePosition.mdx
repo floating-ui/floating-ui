@@ -132,14 +132,14 @@ fashion, or provide useful data to the consumer. 8 core
 middleware are included in the package, which should cover almost
 all use cases:
 
-- `offset{:.function}`
-- `shift{:.function}`
-- `flip{:.function}`
-- `arrow{:.function}`
-- `size{:.function}`
-- `autoPlacement{:.function}`
-- `hide{:.function}`
-- `inline{:.function}`
+- `offset(){:js}`
+- `shift(){:js}`
+- `flip(){:js}`
+- `arrow(){:js}`
+- `size(){:js}`
+- `autoPlacement(){:js}`
+- `hide(){:js}`
+- `inline(){:js}`
 
 These are documented in the navigation bar on the left.
 Importantly, you can also craft your own custom middleware to
@@ -161,9 +161,9 @@ type ComputePositionReturn = {
 
 ## Updating
 
-Since `computePosition{:.function}` is only a single function
-call, it only positions your element once. There are cases in
-which you'll want it to be continually updated so that the
-floating element remains attached to the reference element.
+Since `computePosition(){:js}` is only a single function call, it
+only positions your element once. There are cases in which you'll
+want it to be continually updated so that the floating element
+remains attached to the reference element.
 
 Visit [autoUpdate](/docs/autoUpdate) to do this.

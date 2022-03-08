@@ -51,13 +51,12 @@ you'll likely need to update its position in an effect. See
 
 ### Stable ref prop
 
-The `ref{:.keyword}` prop values `<div ref={reference} />{:js}`
-and `<div ref={floating} />{:js}` must be stable references,
-otherwise an infinite loop will occur.
+Ensure the `ref{:.keyword}` prop values you pass to the reference
+and floating elements remain stable across renders to prevent
+infinite loops.
 
-If you want to merge another ref with it, utilize the
-`useMemo(){:js}` hook (ensuring both of the refs are also
-stable):
+If you want to merge another ref with the one returned from
+`useFloating(){:js}`, memo the value:
 
 ```js
 const stableRef = useMemo(
@@ -79,11 +78,10 @@ function MyComponent({triggerRef}) {
 
   useLayoutEffect(() => {
     reference(triggerRef.current);
-  }, [triggerRef]);
+  }, [triggerRef.current]);
 
-  // You may want to use `triggerRef.current` as a dependency
-  // if the value can update. Ensure that a render is being
-  // triggered when this is happening.
+  // You may need to disable the React Hooks ESLint rule for the
+  // dependency array.
 }
 ```
 

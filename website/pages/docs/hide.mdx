@@ -1,8 +1,8 @@
 # hide
 
-The `hide{:.function}` middleware provides data to hide the
-floating element in applicable situations, usually when it's not
-within the same clipping context as the reference element.
+`hide(){:js}` provides data to hide the floating element in
+applicable situations, usually when it's not within the same
+clipping context as the reference element.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -43,13 +43,13 @@ computePosition(referenceEl, floatingEl, {
 
 ## Order
 
-`hide{:.function}` should generally be placed at the end of your
+`hide(){:js}` should generally be placed at the end of your
 middleware array.
 
 ## Options
 
-These are the options you can pass to `hide{:.function}`. Each
-comment specifies the default value.
+These are the options you can pass to `hide(){:js}`. Each comment
+specifies the default value.
 
 ```js
 interface Options {

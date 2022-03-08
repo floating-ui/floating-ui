@@ -1,8 +1,8 @@
 # inline
 
-The `inline{:.function}` middleware provides improved positioning
-for inline reference elements that span over multiple lines, such
-as hyperlinks or range selections.
+`inline(){:js}` provides improved positioning for inline
+reference elements that span over multiple lines, such as
+hyperlinks or range selections.
 
 This is useful as the default positioning using
 `getBoundingClientRect(){:js}` may appear "detached" when
@@ -64,9 +64,8 @@ referenceEl.addEventListener('mouseenter', onMouseEnter);
 
 ## Order
 
-`inline{:.function}` should generally be placed toward the
-beginning of your middleware array, before `flip{:.function}` (if
-used).
+`inline(){:js}` should generally be placed toward the beginning
+of your middleware array, before `flip(){:js}` (if used).
 
 ## Options
 

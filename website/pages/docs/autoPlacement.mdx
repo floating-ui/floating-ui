@@ -1,8 +1,7 @@
 # autoPlacement
 
-The `autoPlacement{:.function}` middleware chooses the
-`placement{:.objectKey}` automatically (the one with most space
-available).
+`autoPlacement(){:js}` chooses the `placement{:.objectKey}`
+automatically (the one with most space available).
 
 ## Usage
 
@@ -14,7 +13,7 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-> This cannot be used with `flip{:.function}`.
+> This cannot be used with `flip(){:js}`.
 
 ## Options
 
@@ -31,8 +30,8 @@ interface Options extends DetectOverflowOptions {
 
 ### alignment
 
-Without options, `autoPlacement{:.function}` will choose any of
-the `BasePlacement{:.class}`s which fit best, i.e. `'top'{:js}`,
+Without options, `autoPlacement(){:js}` will choose any of the
+`Side{:.class}` placements which fit best, i.e. `'top'{:js}`,
 `'right'{:js}`, `'bottom'{:js}`, or `'left'{:js}`.
 
 By specifying an alignment, it will choose those aligned

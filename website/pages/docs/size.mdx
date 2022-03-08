@@ -1,10 +1,8 @@
 # size
 
-The `size{:.function}` middleware provides data to change the
-size of the floating element.
-
-For instance, you can resize it so it doesn't overflow the
-available space:
+`size(){:js}` provides data to change the size of the floating
+element. For instance, you can resize it so it doesn't overflow
+the available space:
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -67,9 +65,9 @@ interface Options extends DetectOverflowOptions {
 ### apply
 
 Unlike other middleware, in which you assign styles after
-`computePosition(){:js}` has done its work, `size{:.function}`
-has its own `apply{:.function}` function to do the work during
-the lifecycle:
+`computePosition(){:js}` has done its work, `size(){:js}` has its
+own `apply{:.function}` function to do the work during the
+lifecycle:
 
 ```js
 size({
@@ -95,8 +93,8 @@ size({padding: 5}); // 0 by default
 
 ## Using with flip
 
-Using `size{:.function}` together with `flip{:.function}` enables
-some useful behavior. The floating element can be resized, thus
+Using `size(){:js}` together with `flip(){:js}` enables some
+useful behavior. The floating element can be resized, thus
 allowing it to prefer its initial placement as much as possible,
 until it reaches a minimum size, at which point it will flip.
 
@@ -105,10 +103,10 @@ middleware, ensure they share the **same value**.
 
 ### bestFit
 
-The `'bestFit'{:js}` fallback strategy in the `flip{:.function}`
+The `'bestFit'{:js}` fallback strategy in the `flip(){:js}`
 middleware is the default, which ensures the best fitting
-placement is used. In this scenario, place `size{:.function}`
-**after** `flip{:.function}`:
+placement is used. In this scenario, place `size(){:js}`
+**after** `flip(){:js}`:
 
 ```js
 const middleware = [
@@ -150,8 +148,8 @@ times at the most optimal size.
 ### initialPlacement
 
 If instead, you want the initial placement to take precedence,
-and are setting a minimum acceptable size, place
-`size{:.function}` **before** `flip{:.function}`:
+and are setting a minimum acceptable size, place `size(){:js}`
+**before** `flip(){:js}`:
 
 ```js
 const middleware = [
@@ -174,7 +172,7 @@ const middleware = [
 
 A common feature of select dropdowns is that the dropdown matches
 the width of the reference regardless of its contents. You can
-also use `size{:.function}` for this, as the `Rect{:.class}`s get
+also use `size(){:js}` for this, as the `Rect{:.class}`s get
 passed in:
 
 ```js

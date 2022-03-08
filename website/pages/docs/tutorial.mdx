@@ -247,8 +247,7 @@ opposite axis (`x` instead of `y`). Because it's **centered**
 beneath the button, and the tooltip happens to be wider than the
 button, it ends up overflowing the edge.
 
-To solve this problem, we have the `shift{:.function}`
-middleware:
+To solve this problem, we have the `shift(){:js}` middleware:
 
 ```js /shift/ {4,12}
 import {
@@ -273,13 +272,13 @@ computePosition(button, tooltip, {
 
 <T.Result9 />
 
-Now, we can read all the text because the `shift{:.function}`
+Now, we can read all the text because the `shift(){:js}`
 middleware "shifted" the tooltip from its bottom centered
 placement until it was fully in view.
 
 As you can see, the tooltip lies fully flush with the edge of the
 document boundary. To add some whitespace, or padding, the
-`shift{:.function}` middleware accepts an options object:
+`shift(){:js}` middleware accepts an options object:
 
 ```js /padding/ {12}
 import {
@@ -310,8 +309,7 @@ the edge of the boundary.
 ### Offset middleware
 
 We probably also don't want the tooltip to lie flush with the
-button element. For this, we have the `offset{:.function}`
-middleware:
+button element. For this, we have the `offset(){:js}` middleware:
 
 ```js /offset/ {5,13}
 import {
@@ -339,18 +337,18 @@ This will displace the tooltip 6px from the reference element:
 
 <T.Result11 />
 
-> Notice that we put `offset{:.function}` at the start of the
-> array, rather than at the end? Middleware behavior is dependent
-> on **order**. Each middleware returns new coordinates which
-> middleware later in the array will use. The
-> `offset{:.function}` middleware is one that should be before
-> most other ones, because they should modify their coordinates
-> based on the offsetted ones.
+> Notice that we put `offset(){:js}` at the start of the array,
+> rather than at the end? Middleware behavior is dependent on
+> **order**. Each middleware returns new coordinates which
+> middleware later in the array will use. The `offset(){:js}`
+> middleware is one that should be before most other ones,
+> because they should modify their coordinates based on the
+> offsetted ones.
 
 ### Arrow middleware
 
 Most tooltips have an arrow (or triangle / caret) which points
-toward the button. For this, we have the `arrow{:.function}`
+toward the button. For this, we have the `arrow(){:js}`
 middleware, but we first need to add a new element inside of our
 tooltip:
 
@@ -373,8 +371,7 @@ Then style it:
 }
 ```
 
-Then pass the arrow element into the `arrow{:.function}`
-middleware:
+Then pass the arrow element into the `arrow(){:js}` middleware:
 
 ```js {6,11,19}
 import {
@@ -406,10 +403,10 @@ computePosition(button, tooltip, {
 ```
 
 Now we need to add dynamic styles to the arrow element. Unlike
-other middleware, the `arrow{:.function}` middleware doesn't
-modify the main `x{:.param}` and `y{:.param}` coordinates.
-Instead, it provides **data** for us to use. We can access this
-piece of information provided via `middlewareData{:.param}`.
+other middleware, the `arrow(){:js}` middleware doesn't modify
+the main `x{:.param}` and `y{:.param}` coordinates. Instead, it
+provides **data** for us to use. We can access this piece of
+information provided via `middlewareData{:.param}`.
 
 This contains an `arrow` object, referring to the name of the
 `arrow(){:js}` middleware we used:

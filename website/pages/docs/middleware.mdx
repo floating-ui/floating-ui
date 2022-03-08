@@ -221,10 +221,10 @@ Understanding this can help in knowing which order to place
 middleware in, as placing a middleware before or after another
 can produce a different result.
 
-In general, `offset{:.function}` should always go at the
-beginning of the middleware array, while `arrow{:.function}` and
-`hide{:.function}` at the end. The other core middleware can be
-shifted around depending on the desired behavior.
+In general, `offset(){:js}` should always go at the beginning of
+the middleware array, while `arrow(){:js}` and `hide(){:js}` at
+the end. The other core middleware can be shifted around
+depending on the desired behavior.
 
 ```js
 const middleware = [
@@ -240,14 +240,14 @@ const middleware = [
 There are use cases for needing to reset the middleware lifecycle
 so that other middleware perform fresh logic.
 
-- When `flip{:.function}` and `autoPlacement{:.function}` change
-  the placement, they reset the lifecycle so that other
-  middleware that modify the coordinates based on the current
+- When `flip(){:js}` and `autoPlacement(){:js}` change the
+  placement, they reset the lifecycle so that other middleware
+  that modify the coordinates based on the current
   `placement{:.objectKey}` do not perform stale logic.
-- `size{:.function}` resets the lifecycle with the newly applied
+- `size(){:js}` resets the lifecycle with the newly applied
   dimensions, as many middleware read the dimensions to perform
   their logic.
-- `inline{:.function}` resets the lifecycle when it changes the
+- `inline(){:js}` resets the lifecycle when it changes the
   reference rect to a custom implementation, similar to a
   [Virtual Element](/docs/virtual-elements).
 
@@ -286,18 +286,3 @@ const middleware = {
 Data supplied to `middlewareData{:.param}` is preserved by doing
 this, so you can read it at any point after you've reset the
 lifecycle.
-
-### Skipping
-
-By default, a `reset{:.objectKey}` will skip the middleware upon
-the next lifecycle run. To opt out, you can do the following:
-
-```js
-return {
-  reset: {
-    skip: false,
-  },
-};
-```
-
-Be wary of infinite loops!
