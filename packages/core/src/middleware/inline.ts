@@ -129,14 +129,25 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
       return fallback;
     }
 
-    return {
-      reset: {
-        rects: await platform.getElementRects({
-          reference: {getBoundingClientRect},
-          floating: elements.floating,
-          strategy,
-        }),
-      },
-    };
+    const resetRects = await platform.getElementRects({
+      reference: {getBoundingClientRect},
+      floating: elements.floating,
+      strategy,
+    });
+
+    if (
+      rects.reference.x !== resetRects.reference.x ||
+      rects.reference.y !== resetRects.reference.y ||
+      rects.reference.width !== resetRects.reference.width ||
+      rects.reference.height !== resetRects.reference.height
+    ) {
+      return {
+        reset: {
+          rects: resetRects,
+        },
+      };
+    }
+
+    return {};
   },
 });

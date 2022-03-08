@@ -1,6 +1,6 @@
 import {Coords, Placement} from '@floating-ui/core';
 import {useFloating, inline, flip, size} from '@floating-ui/react-dom';
-import React, {useRef, useState} from 'react';
+import React, {useLayoutEffect, useRef, useState} from 'react';
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 
@@ -17,7 +17,7 @@ export function Inline() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<ConnectedStatus>('2-disjoined');
   const mouseCoordsRef = useRef<undefined | Coords>();
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, reference, floating, strategy, update} = useFloating({
     placement,
     middleware: [inline(mouseCoordsRef.current), flip(), size()],
   });
@@ -50,6 +50,8 @@ export function Inline() {
       break;
     default:
   }
+
+  useLayoutEffect(update, [update, status]);
 
   return (
     <>

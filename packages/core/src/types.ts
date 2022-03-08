@@ -100,7 +100,6 @@ export interface MiddlewareReturn extends Partial<Coords> {
     | {
         placement?: Placement;
         rects?: true | ElementRects;
-        skip?: false;
       };
 }
 
