@@ -1,6 +1,5 @@
 import type {
-  Middleware,
-  MiddlewareArguments,
+  Middleware as CoreMiddleware,
   SideObject,
   ClientRectObject,
   Padding,
@@ -9,6 +8,8 @@ import type {
   RootBoundary,
   Rect,
   Dimensions,
+  MiddlewareArguments as CoreMiddlewareArguments,
+  MiddlewareReturn,
 } from '@floating-ui/core';
 import type {Options as CoreDetectOverflowOptions} from '@floating-ui/core/src/detectOverflow';
 import type {Options as AutoPlacementOptions} from '@floating-ui/core/src/middleware/autoPlacement';
@@ -77,6 +78,14 @@ export interface Elements {
   reference: ReferenceElement;
   floating: FloatingElement;
 }
+
+export type MiddlewareArguments = Omit<CoreMiddlewareArguments, 'elements'> & {
+  elements: Elements;
+};
+
+export type Middleware = Omit<CoreMiddleware, 'fn'> & {
+  fn(args: MiddlewareArguments): Promisable<MiddlewareReturn>;
+};
 
 /**
  * Automatically chooses the `placement` which has the most space available.
@@ -151,7 +160,6 @@ export {offset, limitShift, inline} from '@floating-ui/core';
 export type {
   Placement,
   Strategy,
-  Middleware,
   Alignment,
   Side,
   AlignedPlacement,
@@ -166,7 +174,6 @@ export type {
   ClientRectObject,
   Padding,
   RootBoundary,
-  MiddlewareArguments,
   MiddlewareReturn,
   MiddlewareData,
   ComputePositionConfig,
