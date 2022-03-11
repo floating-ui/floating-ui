@@ -1,4 +1,3 @@
-import {Middleware} from '@floating-ui/core';
 import {
   computePosition,
   shift,
@@ -10,6 +9,7 @@ import {
   size,
   arrow,
   detectOverflow,
+  Middleware,
 } from '.';
 
 // @ts-expect-error
@@ -168,7 +168,9 @@ const middlewareWithoutName: Middleware = {
 
 const middleware: Middleware = {
   name: 'test',
-  fn() {
+  fn(args) {
+    const {elements} = args;
+    elements.floating;
     return {};
   },
 };
