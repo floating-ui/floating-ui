@@ -23,6 +23,7 @@ export interface Platform {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
+    strategy: Strategy;
   }) => Promisable<Rect>;
   getDimensions: (element: any) => Promisable<Dimensions>;
 

@@ -1,8 +1,9 @@
-import type {Rect} from '@floating-ui/core';
+import type {Rect, Strategy} from '@floating-ui/core';
 import {getWindow} from './window';
 import {getDocumentElement} from './getDocumentElement';
+import {isLayoutViewport} from './is';
 
-export function getViewportRect(element: Element): Rect {
+export function getViewportRect(element: Element, strategy: Strategy): Rect {
   const win = getWindow(element);
   const html = getDocumentElement(element);
   const visualViewport = win.visualViewport;
@@ -16,14 +17,9 @@ export function getViewportRect(element: Element): Rect {
     width = visualViewport.width;
     height = visualViewport.height;
 
-    // Uses Layout Viewport (like Chrome; Safari does not currently)
-    // In Chrome, it returns a value very close to 0 (+/-) but contains rounding
-    // errors due to floating point numbers, so we need to check precision.
-    // Safari returns a number <= 0, usually < -1 when pinch-zoomed
-    if (
-      Math.abs(win.innerWidth / visualViewport.scale - visualViewport.width) <
-      0.01
-    ) {
+    const layoutViewport = isLayoutViewport(win);
+
+    if (layoutViewport || (!layoutViewport && strategy === 'fixed')) {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
