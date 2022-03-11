@@ -417,7 +417,7 @@ export default function Layout({children}) {
         </aside>
         <div
           ref={articleRef}
-          className="container px-6 lg:px-8 my-16 md:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] outline-0"
+          className="container px-6 lg:px-8 my-16 md:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
           tabIndex={-1}
         >
           <SkipNavContent />
