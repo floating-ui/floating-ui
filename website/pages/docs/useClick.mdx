@@ -1,0 +1,40 @@
+# useClick
+
+Adds click event listeners that change the open state (toggle
+behavior).
+
+```js /useClick/
+import {
+  useFloating,
+  useInteractions,
+  useClick,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useClick(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  enabled?: boolean;
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useClick(context, {
+  enabled: false,
+});
+```

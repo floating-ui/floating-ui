@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/core",
-  "version": "0.2.2",
+  "version": "0.6.1",
   "@rollingversions": {
     "baseVersion": [
       0,
@@ -25,7 +25,8 @@
       },
       "require": "./dist/floating-ui.core.cjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./src/index.ts": "./src/index.ts"
   },
   "sideEffects": false,
   "files": [

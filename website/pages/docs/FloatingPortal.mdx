@@ -1,0 +1,35 @@
+# FloatingPortal
+
+Portals your floating element outside of the main app node.
+
+```js
+import {FloatingPortal} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  // ...
+
+  return (
+    <FloatingPortal>
+      {open && <div>Tooltip<div>}
+    </FloatingPortal>
+  );
+}
+```
+
+> **Don't conditionally render the FloatingPortal**. Instead,
+> conditionally render its children as seen above.
+
+## Props
+
+```js
+interface Props {
+  id?: string;
+}
+```
+
+### id
+
+default: `'floating-ui-root'{:js}`
+
+If this node does not exist on the document, it will be created
+for you.

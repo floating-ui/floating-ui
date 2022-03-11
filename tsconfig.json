@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "es2019"],
+    "lib": ["dom", "es2021"],
+    "target": "es2021",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "noEmit": true,

@@ -1,0 +1,94 @@
+# useDismiss
+
+Adds listeners that dismiss (close) the floating element.
+
+```js /useDismiss/
+import {
+  useFloating,
+  useInteractions,
+  useDismiss,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useDismiss(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  enabled?: boolean;
+  escapeKey?: boolean;
+  referencePointerDown?: boolean;
+  outsidePointerDown?: boolean;
+  ancestorScroll?: boolean;
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useDismiss(context, {
+  enabled: false,
+});
+```
+
+### escapeKey
+
+default: `true{:js}`
+
+Whether to dismiss the floating element using the `esc` key.
+
+```js
+useDismiss(context, {
+  escapeKey: false, // true by default
+});
+```
+
+### referencePointerDown
+
+default: `false{:js}`
+
+Whether to dismiss the floating element when on pointer down of
+the reference element.
+
+```js
+useDismiss(context, {
+  referencePointerDown: true, // false by default
+});
+```
+
+### outsidePointerDown
+
+default: `true{:js}`
+
+Whether to dismiss the floating element when on pointer down
+outside of both the floating and reference elements.
+
+```js
+useDismiss(context, {
+  outsidePointerDown: false, // true by default
+});
+```
+
+### ancestorScroll
+
+default: `false{:js}`
+
+Whether to dismiss the floating element upon scrolling an
+overflow ancestor.
+
+```js
+useDismiss(context, {
+  ancestorScroll: true, // false by default
+});
+```

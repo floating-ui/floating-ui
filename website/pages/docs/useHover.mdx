@@ -1,0 +1,134 @@
+# useHover
+
+Adds hover event listeners that change the open state, like CSS
+`:hover{:.objectKey}`.
+
+```js /useHover/
+import {
+  useFloating,
+  useInteractions,
+  useHover,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useHover(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  enabled?: boolean;
+  mouseOnly?: boolean;
+  delay?: number | Partial<{open: number, close: number}>;
+  restMs?: number;
+  handleClose?:
+    | null
+    | ((
+        context: FloatingContext & {
+          onClose: () => void,
+          tree?: FloatingTreeType | null,
+        }
+      ) => (event: PointerEvent) => void);
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useHover(context, {
+  enabled: false,
+});
+```
+
+### mouseOnly
+
+default: `false{:js}`
+
+Whether the logic only runs for mouse input, ignoring both touch
+and pen pointer inputs.
+
+```js
+useHover(context, {
+  mouseOnly: true,
+});
+```
+
+### delay
+
+default: `0{:js}`
+
+Waits for the specified time when the event listener runs before
+changing the `open{:.const}` state.
+
+```js
+useHover(context, {
+  // both open and close
+  delay: 500,
+
+  // configure them individually
+  delay: {
+    open: 500,
+    close: 0,
+  },
+});
+```
+
+### restMs
+
+default: `0{:js}` (off)
+
+A property to use with `delay{:.objectKey}` that will wait until
+the user's cursor is at "rest" over the reference element,
+without waiting for the delay.
+
+When used in tandem with `delay{:.objectKey}`, the delay will act
+as a fallback value, which means you likely want to make
+`delay{:.objectKey}` a high value.
+
+```js
+useHover(context, {
+  delay: 1000,
+  // Waits 150ms once the user's cursor is at rest
+  restMs: 150,
+});
+```
+
+### handleClose
+
+default: `null{:js}`
+
+Instead of closing the floating element when the cursor leaves
+its reference, we can leave it open until a certain condition is
+satisfied.
+
+The package exports a `safePolygon(){:js}` handler which will
+only close the floating element if the pointer is outside of a
+dynamically computed polygon area.
+
+This allows the user to move the cursor off the reference element
+and towards the floating element without it closing (e.g. it has
+interactive content inside).
+
+```js
+import {
+  useHover,
+  safePolygon,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+useHover(context, {
+  handleClose: safePolygon(),
+});
+```
+
+This handler runs on `pointermove{:.string}`.

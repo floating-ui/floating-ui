@@ -7,29 +7,17 @@ import type {
 } from '@floating-ui/core';
 import {computePosition, arrow as arrowCore} from '@floating-ui/dom';
 import {useCallback, useMemo, useState, useRef, MutableRefObject} from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {deepEqual} from './utils/deepEqual';
 
-export {
-  autoPlacement,
-  flip,
-  hide,
-  offset,
-  shift,
-  limitShift,
-  size,
-  inline,
-  getOverflowAncestors,
-  detectOverflow,
-  autoUpdate,
-} from '@floating-ui/dom';
+export * from '@floating-ui/dom';
 
 type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
 };
 
-type UseFloatingReturn = Data & {
+export type UseFloatingReturn = Data & {
   update: () => void;
   reference: (node: Element | VirtualElement | null) => void;
   floating: (node: HTMLElement | null) => void;
@@ -68,7 +56,7 @@ export function useFloating({
   }
 
   const isMountedRef = useRef(true);
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
@@ -91,7 +79,7 @@ export function useFloating({
     });
   }, [latestMiddleware, placement, strategy]);
 
-  useIsomorphicLayoutEffect(update, [update]);
+  useLayoutEffect(update, [update]);
 
   const setReference = useCallback(
     (node) => {

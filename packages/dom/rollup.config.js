@@ -63,7 +63,8 @@ const isDevEnv = (file) => file.includes('.development.');
 const isUMD = (file) => file.includes('.dom.js');
 const isMinEnv = (file) => file.includes('.min.');
 const isSpecificEnv = (file) => isMinEnv(file) || isDevEnv(file);
-const isDebugAlways = (file) => isDevEnv(file) || isUMD(file) ? 'true' : 'false';
+const isDebugAlways = (file) =>
+  isDevEnv(file) || isUMD(file) ? 'true' : 'false';
 
 const buildExport = bundles.map(({input, output}) => ({
   input,

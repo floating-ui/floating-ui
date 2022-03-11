@@ -1,8 +1,17 @@
 <!DOCTYPE html>
-
+<meta name="viewport" content="width=device-width" />
 <style>
   body {
     font-family: sans-serif;
+    color: rgba(255, 255, 255, 0.9);
+    background: #1d1e20;
+    color-scheme: dark;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
   #reference {
@@ -20,6 +29,11 @@
     padding: 15px;
     width: 500px;
   }
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
 
   #arrow {
     width: 15px;
@@ -29,5 +43,6 @@
 </style>
 
 <div id="root"></div>
+<div id="floating-ui-root"></div>
 
 <script type="module" src="./index.js"></script>

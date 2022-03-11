@@ -1,18 +1,9 @@
 export {useFloating} from './';
+export {arrow} from './';
 
-export {
-  autoPlacement,
-  flip,
-  hide,
-  offset,
-  shift,
-  limitShift,
-  size,
-  inline,
-  detectOverflow,
-  getOverflowAncestors,
-  autoUpdate,
-} from '@floating-ui/dom';
+export type {UseFloatingReturn} from './';
+
+export * from '@floating-ui/dom';
 
 export type {
   Platform,
@@ -39,5 +30,3 @@ export type {
   ComputePositionConfig,
   ComputePositionReturn,
 } from '@floating-ui/dom';
-
-export {arrow} from './';

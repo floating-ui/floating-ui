@@ -1,0 +1,190 @@
+# React DOM Interactions
+
+This package provides interaction primitives in the form of hooks
+and components that compose together to build higher-level
+floating UI components.
+
+It works in tandem with the positioning engine to provide an
+accessible foundation for a `<Tooltip />{:js}`,
+`<Popover />{:js}`, `<Select />{:js}`, `<Dropdown />{:js}` and
+other components.
+
+<div className="flex justify-center md:justify-between items-center flex-wrap gap-2 mx-auto">
+  <img
+    className="relative sm:left-[5rem] top-[1rem] md:top-0 md:left-0 inline-block w-[335px] card"
+    src="/all-inputs.png"
+    alt="Designed for all inputs"
+  />
+  <img
+    className="relative sm:left-[-5rem] top-[-1rem] md:left-0 md:top-0 inline-block w-[335px] card"
+    src="/safe-cursor-polygon.png"
+    alt="Safe cursor polygon"
+  />
+</div>
+
+It is a superset of the React DOM positioning engine package and
+is unrestricting, allowing you to incorporate custom logic
+easily.
+
+[View examples below](/docs/react-dom-interactions#examples).
+
+## Install
+
+```shell
+npm install @floating-ui/react-dom-interactions
+```
+
+## Usage
+
+The `useFloating(){:js}` hook exported from this package accepts
+an `open{:.const}` boolean and `onOpenChange{:.objectKey}` as an
+option to change that value (plus all of the positioning props as
+listed in the [React DOM docs](/docs/react-dom)).
+
+You use this boolean to conditionally render the floating
+element.
+
+```js /open/
+import {useState} from 'react';
+import {useFloating} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  const [open, setOpen] = useState(true);
+  const {x, y, reference, floating, strategy} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      {open && (
+        <div
+          ref={floating}
+          style={{
+            position: strategy,
+            top: y ?? '',
+            left: x ?? '',
+          }}
+        >
+          Tooltip
+        </div>
+      )}
+    </>
+  );
+}
+```
+
+## Hooks
+
+`useInteractions(){:js}` accepts an array of called hooks in the
+following a predictable form:
+
+```js /useInteractions/
+import {
+  useFloating,
+  useInteractions,
+  useHover,
+  useFocus,
+  useRole,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useHover(context, props),
+  useFocus(context, props),
+  useRole(context, props),
+]);
+```
+
+Each hook accepts the `context{:.const}` object which gets
+returned from `useFloating(){:js}` as its first argument. Props
+are passed as a second argument.
+
+This API enables each of the hooks to be fully tree-shakeable.
+The navigation bar on the left explains them in detail.
+
+> Avoid importing all the hooks together like
+> `import * as Interactions from '@floating-ui/react-dom-interactions'{:js}`
+> as this will nullify the benefits tree-shaking.
+
+### Prop getters
+
+`useInteractions(){:js}` returns
+[prop getters](https://kentcdodds.com/blog/how-to-give-rendering-control-to-users-with-prop-getters)
+— functions you call to return props that spread on the elements:
+
+```js
+<>
+  <button {...getReferenceProps({ref: reference})}>
+    My button
+  </button>
+  <div
+    {...getFloatingProps({
+      ref: floating,
+      style: {
+        position: strategy,
+        left: x ?? '',
+        top: y ?? '',
+      },
+    })}
+  >
+    My tooltip
+  </div>
+</>
+```
+
+This pattern enables you to pass event listener props through the
+prop getters, which performs merging of its own internal event
+listeners and your own without overriding them.
+
+### Item prop getters
+
+Currently, the package only provides prop getters for the
+reference and floating elements, which leaves the handling of
+props given to items inside the floating element up to you. This
+gives you full control and the examples below showcase how to do
+this.
+
+In the future, prop getters for items may be provided once a
+desirable API has been worked out.
+
+## Examples
+
+Here are a few example recipes for crafting common UI components
+(hosted on CodeSandbox).
+
+### Tooltip
+
+- [Tooltip](https://codesandbox.io/s/winter-tree-wmmffl?file=/src/Tooltip.tsx)
+- [Animated Tooltip](https://codesandbox.io/s/winter-tree-wmmffl?file=/src/AnimatedTooltip.tsx)
+- [Tooltip Delay Group](https://codesandbox.io/s/icy-water-ktwif6?file=/src/Tooltip.tsx)
+
+### Popover
+
+- [Non-Modal Popover](https://codesandbox.io/s/quizzical-water-b3dedw?file=/src/Popover.tsx)
+- [Modal Popover](https://codesandbox.io/s/optimistic-jennings-jmpgfk?file=/src/Popover.tsx)
+- [Nested Modal Popover](https://codesandbox.io/s/optimistic-jennings-jmpgfk?file=/src/NestedPopover.tsx)
+
+### Dialog
+
+- [Modal Dialog](https://codesandbox.io/s/wandering-dream-qwe6dj?file=/src/App.tsx)
+
+### Dropdown Menu
+
+- [Dropdown Menu (including submenus)](https://codesandbox.io/s/admiring-lamport-5wt3yg?file=/src/DropdownMenu.tsx)
+
+### Context Menu
+
+- [Context Menu](https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx)
+
+### Select (Listbox)
+
+- [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
+- [macOS Select (advanced)](https://codesandbox.io/s/shy-snowflake-kp6479?file=/src/Select.tsx)
+- [Autocomplete](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
+
+The interaction hooks are low-level, so you probably won't be
+using them without wrapping them with your own component API for
+ergonomics.

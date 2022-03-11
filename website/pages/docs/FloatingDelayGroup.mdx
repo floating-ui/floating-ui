@@ -1,0 +1,64 @@
+# FloatingDelayGroup
+
+Provides context for a group of floating elements that should
+share a `delay{:.objectKey}`.
+
+{/* prettier-ignore */}
+```js
+import {
+  FloatingDelayGroup
+} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  return (
+    <FloatingDelayGroup delay={{open: 1000, close: 200}}>
+      <Tooltip label="One">
+        <button>Ref</button>
+      </Tooltip>
+      <Tooltip label="Two">
+        <button>Ref</button>
+      </Tooltip>
+      <Tooltip label="Three">
+        <button>Ref</button>
+      </Tooltip>
+    </FloatingDelayGroup>
+  );
+}
+```
+
+## Example
+
+Relevant APIs to use with a `<FloatingDelayGroup />{:js}`:
+
+- `useDelayGroupContext(){:js}`
+- `useDelayGroup(){:js}` interaction
+
+Wrap your `onOpenChange{:.const}` callback with one that sets the
+current id of the delay group context to the current component.
+
+```js /delay/
+function Tooltip({label}) {
+  const {delay, currentId, setCurrentId} =
+    useDelayGroupContext();
+  const [open, setOpen] = useState(false);
+
+  const onOpenChange = useCallback(
+    (open) => {
+      setOpen(open);
+
+      if (open) {
+        setCurrentId(label);
+      }
+    },
+    [label, setCurrentId]
+  );
+
+  const {context} = useFloating({open, onOpenChange});
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    useDelayGroup(context, {id: label}),
+    useHover(context, {delay}),
+  ]);
+
+  // ...
+}
+```

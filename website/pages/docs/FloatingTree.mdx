@@ -1,0 +1,78 @@
+# FloatingTree
+
+Provides context for nested floating elements when they are not
+children of each other on the DOM (i.e. portalled to a common
+node, rather than their respective parent).
+
+A nested floating element may look like the following, where
+there is a popover **inside** the content of another one:
+
+```js
+import {FloatingTree} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  return (
+    <FloatingTree>
+      <Popover
+        render={() => (
+          <Popover>
+            <button>Child</button>
+          </Popover>
+        )}
+      >
+        <button>Root</button>
+      </Popover>
+    </FloatingTree>
+  );
+}
+```
+
+## Usage
+
+The following creates an infinitely nestable `<Popover />{:js}`
+component. Usage of this component must be wrapped within a
+single `<FloatingTree />{:js}` component as seen in the previous
+code snippet:
+
+```js
+function Popover({children}) {
+  // Subscribe this component to the <FloatingTree />
+  const nodeId = useFloatingNodeId();
+
+  // Pass the subscribed `nodeId` to useFloating()
+  useFloating({
+    nodeId
+  });
+
+  // Wrap the rendered elements in a `<FloatingNode />`,
+  // passing in the subscribed `nodeId`
+  return (
+    <FloatingNode id={nodeId}>
+      {/* reference element */}
+      <FloatingPortal>
+        {open && /* floating element */}
+      </FloatingPortal>
+    </FloatingNode>
+  );
+}
+```
+
+## Hooks
+
+- `useFloatingNodeId(){:js}` subscribes the component to the tree
+  context. Call this only once as it has side effects.
+- `useFloatingParentNodeId(){:js}` returns the parent
+  `FloatingNode{:.class}` id, if it exists. This will be
+  `null{:js}` for roots (not nested).
+- `useFloatingTree(){:js}` for accessing the tree object, which
+  includes an event emitter to communicate across the tree
+  components (`events{:.objectKey}`).
+
+```js
+interface FloatingTreeType {
+  nodesRef: React.MutableRefObject<Array<FloatingNodeType>>;
+  events: FloatingEvents;
+  addNode: (node: FloatingNodeType) => void;
+  removeNode: (node: FloatingNodeType) => void;
+}
+```

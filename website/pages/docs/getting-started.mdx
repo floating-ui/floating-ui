@@ -1,30 +1,127 @@
 # Getting Started
 
-Floating UI is a low-level library for positioning "floating"
-elements like tooltips, popovers, dropdowns, menus and more while
-intelligently keeping them in view.
+Floating UI is a low-level library for creating "floating"
+elements like tooltips, popovers, dropdowns, menus, and more.
 
-Challenges arise when positioning floating elements as they get
-taken out of the normal layout flow of a document, leading to
-issues with clipping and overflow, which is where this library
-can help!
+The library provides two key functionalities:
 
-- **Tiny**: 600-byte core with highly modular architecture for
-  tree-shaking
-- **Low-level**: Granular control over positioning behavior
-- **Pure**: Predictable and side-effect free
-- **Extensible**: Powerful middleware system
-- **Platform-agnostic**: Runs on any JavaScript environment which
-  provides measurement APIs, including the web and
-  [React Native](/docs/react-native)
+- **Positioning primitives**: Ensure your floating element is
+  positioned optimally in the viewport for the user (placement,
+  overflow prevention, clipping detection, and more).
+- **Interaction primitives**: Add accessible interactions that
+  power floating elements (event listeners, dismissing, ARIA
+  attributes, focus trapping, list navigation, and more).
+
+The positioning engine features a tiny 600-byte core with strong
+tree-shaking support, is extensible through custom middleware,
+and can support any platform.
+
+## Install
+
+Choose the package that suits you.
+
+### Vanilla DOM positioning engine
+
+Use with vanilla JavaScript or a non-React framework
+([view tutorial](/docs/tutorial)).
 
 ```shell
 npm install @floating-ui/dom
 ```
 
+### React DOM positioning engine
+
+Use with React DOM ([view docs](/docs/react-dom)).
+
 ```shell
-yarn add @floating-ui/dom
+npm install @floating-ui/react-dom
 ```
+
+### React DOM interactions and positioning engine
+
+Primitive hooks and components, in addition to the positioning
+engine, to use with React DOM
+([view docs](/docs/react-dom-interactions)).
+
+```shell
+npm install @floating-ui/react-dom-interactions
+```
+
+### React Native positioning engine
+
+Use with React Native ([view docs](/docs/react-native)).
+
+```shell
+npm install @floating-ui/react-native
+```
+
+### Canvas or other platforms
+
+Learn about creating a [Platform](/docs/platform).
+
+```shell
+npm install @floating-ui/core
+```
+
+<details>
+  <summary>CDN</summary>
+
+Floating UI can be loaded via CDN using ESM or UMD format.
+
+#### ESM
+
+[Skypack](https://www.skypack.dev/) lets you load ES modules in
+the browser:
+
+```html
+<script type="module">
+  import * as FloatingUIDOM from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+</script>
+```
+
+Append `?min{:.string}` to the URL in production.
+
+#### Import maps
+
+When working in a low or no build context, it can be useful to
+consume code with bare module specifiers, e.g.
+`import * from '@floating-ui/dom';{:js}`. In order to do so,
+[import maps](https://github.com/WICG/import-maps) clarify the
+origin of such a references for the browser.
+
+  <details>
+  <summary>JSPM import map example</summary>
+
+```mdx
+<script type="importmap">
+  {
+    "imports": {
+      "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@__DOM_VERSION__/dist/floating-ui.dom.esm.js"
+    },
+    "scopes": {
+      "https://ga.jspm.io/": {
+        "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@__CORE_VERSION__/dist/floating-ui.core.esm.js"
+      }
+    }
+  }
+</script>
+```
+
+JSPM provides a [generator](https://generator.jspm.io/) for
+leveraging this API with their CDN.
+
+</details>
+
+#### UMD
+
+```html
+<script src="https://unpkg.com/@floating-ui/core@__CORE_VERSION__"></script>
+<script src="https://unpkg.com/@floating-ui/dom@__DOM_VERSION__"></script>
+```
+
+All exports will be available on `window.FloatingUIDOM{:js}`.
+
+</details>
 
 ## Development and production builds
 
@@ -66,65 +163,3 @@ export default {
 ```
 
 </details>
-
-## CDN
-
-Floating UI can be loaded via CDN using ESM or UMD format.
-
-### ESM
-
-[Skypack](https://www.skypack.dev/) lets you load ES modules in
-the browser:
-
-```html
-<script type="module">
-  import * as FloatingUIDOM from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
-</script>
-```
-
-Append `?min{:.string}` to the URL in production.
-
-#### Import maps
-
-When working in a low or no build context, it can be useful to
-consume code with bare module specifiers, e.g.
-`import * from '@floating-ui/dom';{:js}`. In order to do so,
-[import maps](https://github.com/WICG/import-maps) clarify the
-origin of such a references for the browser.
-
-<details>
-<summary>JSPM import map example</summary>
-
-```mdx
-<script type="importmap">
-  {
-    "imports": {
-      "@floating-ui/dom": "https://ga.jspm.io/npm:@floating-ui/dom@__DOM_VERSION__/dist/floating-ui.dom.esm.js"
-    },
-    "scopes": {
-      "https://ga.jspm.io/": {
-        "@floating-ui/core": "https://ga.jspm.io/npm:@floating-ui/core@__CORE_VERSION__/dist/floating-ui.core.esm.js"
-      }
-    }
-  }
-</script>
-```
-
-JSPM provides a [generator](https://generator.jspm.io/) for
-leveraging this API with their CDN.
-
-</details>
-
-### UMD
-
-```html
-<script src="https://unpkg.com/@floating-ui/core@__CORE_VERSION__"></script>
-<script src="https://unpkg.com/@floating-ui/dom@__DOM_VERSION__"></script>
-```
-
-All exports will be available on `window.FloatingUIDOM{:js}`.
-
-## Tutorial
-
-Get up and running with a real practical example by creating a
-[tooltip](/docs/tutorial).
