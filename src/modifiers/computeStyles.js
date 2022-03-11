@@ -120,7 +120,7 @@ export function mapToStyles({
     ) {
       sideY = bottom;
       const offsetY =
-        isFixed && win.visualViewport
+        isFixed && offsetParent === win && win.visualViewport
           ? win.visualViewport.height
           : // $FlowFixMe[prop-missing]
             offsetParent[heightProp];
@@ -134,7 +134,7 @@ export function mapToStyles({
     ) {
       sideX = right;
       const offsetX =
-        isFixed && win.visualViewport
+        isFixed && offsetParent === win && win.visualViewport
           ? win.visualViewport.width
           : // $FlowFixMe[prop-missing]
             offsetParent[widthProp];
