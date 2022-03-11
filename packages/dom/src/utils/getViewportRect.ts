@@ -17,7 +17,7 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     width = visualViewport.width;
     height = visualViewport.height;
 
-    const layoutViewport = isLayoutViewport(win);
+    const layoutViewport = isLayoutViewport();
 
     if (layoutViewport || (!layoutViewport && strategy === 'fixed')) {
       x = visualViewport.offsetLeft;

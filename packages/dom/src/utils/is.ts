@@ -56,10 +56,12 @@ export function isContainingBlock(element: Element): boolean {
   );
 }
 
-// Chrome returns a number very close to 0 (+/- 0.0001 or less), while Safari
-// returns any number >= 0. This check is only relevant when pinch-zooming, when
-// it will be > 0.5.
-export function isLayoutViewport(win: Window): boolean {
-  const vV = win.visualViewport;
-  return vV ? Math.abs(win.innerWidth / vV.scale - vV.width) < 0.5 : true;
+export function isLayoutViewport(): boolean {
+  // Not Safari
+  return !/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  // Feature detection for this fails in various ways
+  // • Always-visible scrollbar or not
+  // • Width of <html>, etc.
+  // const vV = win.visualViewport;
+  // return vV ? Math.abs(win.innerWidth / vV.scale - vV.width) < 0.5 : true;
 }
