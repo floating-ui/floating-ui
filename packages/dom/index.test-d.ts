@@ -170,7 +170,10 @@ const middleware: Middleware = {
   name: 'test',
   fn(args) {
     const {elements} = args;
-    elements.floating;
+    // @ts-expect-error
+    elements.floating.$$unknown$$;
+    // @ts-expect-error
+    elements.reference.focus();
     return {};
   },
 };
