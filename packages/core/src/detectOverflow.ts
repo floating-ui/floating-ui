@@ -73,6 +73,7 @@ export async function detectOverflow(
             (await platform.getDocumentElement?.(elements.floating)),
       boundary,
       rootBoundary,
+      strategy,
     })
   );
 

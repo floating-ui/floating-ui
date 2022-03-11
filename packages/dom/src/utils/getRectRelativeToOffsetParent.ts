@@ -24,7 +24,8 @@ export function getRectRelativeToOffsetParent(
   const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(
     element,
-    isOffsetParentAnElement && isScaled(offsetParent)
+    isOffsetParentAnElement && isScaled(offsetParent),
+    strategy === 'fixed'
   );
 
   let scroll = {scrollLeft: 0, scrollTop: 0};

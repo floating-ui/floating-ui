@@ -4,6 +4,7 @@ import {
   Boundary,
   RootBoundary,
   Rect,
+  Strategy,
 } from '@floating-ui/core';
 import {getViewportRect} from './getViewportRect';
 import {getDocumentRect} from './getDocumentRect';
@@ -17,8 +18,15 @@ import {contains} from './contains';
 import {getNodeName} from './getNodeName';
 import {max, min} from './math';
 
-function getInnerBoundingClientRect(element: Element): ClientRectObject {
-  const clientRect = getBoundingClientRect(element);
+function getInnerBoundingClientRect(
+  element: Element,
+  strategy: Strategy
+): ClientRectObject {
+  const clientRect = getBoundingClientRect(
+    element,
+    false,
+    strategy === 'fixed'
+  );
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
   return {
@@ -35,14 +43,15 @@ function getInnerBoundingClientRect(element: Element): ClientRectObject {
 
 function getClientRectFromClippingAncestor(
   element: Element,
-  clippingParent: Element | RootBoundary
+  clippingParent: Element | RootBoundary,
+  strategy: Strategy
 ): ClientRectObject {
   if (clippingParent === 'viewport') {
-    return rectToClientRect(getViewportRect(element));
+    return rectToClientRect(getViewportRect(element, strategy));
   }
 
   if (isElement(clippingParent)) {
-    return getInnerBoundingClientRect(clippingParent);
+    return getInnerBoundingClientRect(clippingParent, strategy);
   }
 
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
@@ -80,10 +89,12 @@ export function getClippingRect({
   element,
   boundary,
   rootBoundary,
+  strategy,
 }: {
   element: Element;
   boundary: Boundary;
   rootBoundary: RootBoundary;
+  strategy: Strategy;
 }): Rect {
   const mainClippingAncestors =
     boundary === 'clippingAncestors'
@@ -93,7 +104,11 @@ export function getClippingRect({
   const firstClippingAncestor = clippingAncestors[0];
 
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
-    const rect = getClientRectFromClippingAncestor(element, clippingAncestor);
+    const rect = getClientRectFromClippingAncestor(
+      element,
+      clippingAncestor,
+      strategy
+    );
 
     accRect.top = max(rect.top, accRect.top);
     accRect.right = min(rect.right, accRect.right);
@@ -101,7 +116,7 @@ export function getClippingRect({
     accRect.left = max(rect.left, accRect.left);
 
     return accRect;
-  }, getClientRectFromClippingAncestor(element, firstClippingAncestor));
+  }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
 
   return {
     width: clippingRect.right - clippingRect.left,

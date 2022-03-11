@@ -1,10 +1,12 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
-import {isHTMLElement} from './is';
+import {isElement, isHTMLElement, isLayoutViewport} from './is';
 import {round} from './math';
+import {getWindow} from './window';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,
-  includeScale = false
+  includeScale = false,
+  isFixedStrategy = false
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
 
@@ -22,14 +24,26 @@ export function getBoundingClientRect(
         : 1;
   }
 
+  const win = isElement(element) ? getWindow(element) : window;
+  const addVisualOffsets = !isLayoutViewport(win) && isFixedStrategy;
+
+  const x =
+    (clientRect.left + (addVisualOffsets ? win.visualViewport.offsetLeft : 0)) /
+    scaleX;
+  const y =
+    (clientRect.top + (addVisualOffsets ? win.visualViewport.offsetTop : 0)) /
+    scaleY;
+  const width = clientRect.width / scaleX;
+  const height = clientRect.height / scaleY;
+
   return {
-    width: clientRect.width / scaleX,
-    height: clientRect.height / scaleY,
-    top: clientRect.top / scaleY,
-    right: clientRect.right / scaleX,
-    bottom: clientRect.bottom / scaleY,
-    left: clientRect.left / scaleX,
-    x: clientRect.left / scaleX,
-    y: clientRect.top / scaleY,
+    width,
+    height,
+    top: y,
+    right: x + width,
+    bottom: y + height,
+    left: x,
+    x,
+    y,
   };
 }
