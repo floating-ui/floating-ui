@@ -87,8 +87,8 @@ export function Floating({
 
   useEffect(() => {
     const nodes = [
-      ...FloatingUI.getScrollParents(refs.reference.current),
-      ...FloatingUI.getScrollParents(refs.floating.current),
+      ...FloatingUI.getOverflowAncestors(refs.reference.current),
+      ...FloatingUI.getOverflowAncestors(refs.floating.current),
     ];
 
     nodes.forEach((node) => {

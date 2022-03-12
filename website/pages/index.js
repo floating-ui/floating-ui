@@ -16,7 +16,7 @@ import cn from 'classnames';
 import {
   useFloating,
   shift,
-  getScrollParents,
+  getOverflowAncestors,
 } from '@floating-ui/react-dom';
 import {ArrowRight, GitHub, Heart} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
@@ -423,7 +423,7 @@ function Virtual() {
     const boundary = boundaryRef.current;
     boundary.addEventListener('mousemove', handleMouseMove);
 
-    const parents = getScrollParents(refs.floating.current);
+    const parents = getOverflowAncestors(refs.floating.current);
     parents.forEach((parent) => {
       parent.addEventListener('scroll', update);
     });

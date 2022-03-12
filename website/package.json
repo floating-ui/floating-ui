@@ -27,9 +27,9 @@
     "tailwindcss": "^3.0.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^0.4.1",
-    "@mdx-js/loader": "^1.6.22",
-    "@next/mdx": "^12.0.3",
+    "@floating-ui/react-dom": "^0.6.0",
+    "@mdx-js/loader": "^2.0.0",
+    "@next/mdx": "^12.1.0",
     "@reach/skip-nav": "^0.16.0",
     "@tippyjs/react": "^4.2.6",
     "classnames": "^2.3.1",
@@ -39,8 +39,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-feather": "^2.0.9",
-    "rehype-pretty-code": "^0.0.8",
-    "shiki": "^0.9.14",
+    "rehype-pretty-code": "^0.2.4",
+    "shiki": "^0.10.1",
     "unist-util-visit": "^2.0.3",
     "use-isomorphic-layout-effect": "^1.1.1"
   }

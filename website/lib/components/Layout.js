@@ -318,6 +318,8 @@ export default function Layout({children}) {
                         {
                           'bg-gray-200/10 md:bg-gray-700/70 text-gray-100':
                             pathname === url,
+                          'rounded-tl-none rounded-bl-none':
+                            depth > 0,
                         }
                       )}
                     >
