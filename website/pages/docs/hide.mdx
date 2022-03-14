@@ -81,12 +81,15 @@ hide({padding: 5}); // 0 by default
 
 ```ts
 type Data = {
-  referenceHidden: boolean;
-  referenceHiddenOffsets: SideObject;
-  escaped: boolean;
-  escapedOffsets: SideObject;
+  referenceHidden?: boolean;
+  referenceHiddenOffsets?: SideObject;
+  escaped?: boolean;
+  escapedOffsets?: SideObject;
 };
 ```
+
+Depending on the strategy used, these options may exist in the
+data object.
 
 ### referenceHidden
 

@@ -34,21 +34,31 @@ export function Floating({
           ? [FloatingUI.arrow({element: arrowRef, padding: 5})]
           : []),
       ]
-        ?.map(({name, options}) =>
-          name !== 'size'
-            ? FloatingUI[name]?.(options)
-            : FloatingUI.size?.({
-                ...options,
-                apply: ({width, height}) => {
-                  setDimensions({
-                    width,
-                    height: minHeight
-                      ? Math.max(height, minHeight)
-                      : Math.max(height, 0),
-                  });
-                },
-              })
-        )
+        ?.map(({name, options}) => {
+          if (name === 'size') {
+            return FloatingUI.size?.({
+              ...options,
+              apply: ({width, height}) => {
+                setDimensions({
+                  width,
+                  height: minHeight
+                    ? Math.max(height, minHeight)
+                    : Math.max(height, 0),
+                });
+              },
+            });
+          }
+
+          if (name === 'hide') {
+            return [
+              FloatingUI.hide(),
+              FloatingUI.hide({strategy: 'escaped'}),
+            ];
+          }
+
+          return FloatingUI[name]?.(options);
+        })
+        .flat()
         .filter((v) => v) ?? [],
     ...options,
   });
