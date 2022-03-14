@@ -1,6 +1,6 @@
 {
   "name": "@popperjs/core",
-  "version": "2.4.0",
+  "version": "2.11.4",
   "description": "Tooltip and Popover Positioning Engine",
   "main": "dist/cjs/popper.js",
   "main:umd": "dist/umd/popper.js",
@@ -45,7 +45,7 @@
     "build:flow": "flow-copy-source --ignore \"**/*.test.js\" src lib && replace-in-files --string=__DEV__ --replacement=false 'lib/**/*.flow'",
     "build:typescript": "rimraf dist/typescript; flow-to-ts \"src/**/*.js\" --write --inline-utility-types; tsc-silent --project .config/tsconfig.json --createSourceFile .config/createSourceFile.js --suppress @; rimraf \"src/**/*.ts\"",
     "prepublishOnly": "yarn build && pinst --disable",
-    "postinstall": "husky install .config/husky",
+    "prepare": "husky install .config/husky",
     "postpublish": "pinst --enable"
   },
   "prettier": {
