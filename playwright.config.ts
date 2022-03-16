@@ -1,4 +1,5 @@
 import {PlaywrightTestConfig, devices} from '@playwright/test';
+import {devices as replayDevices} from '@replayio/playwright';
 
 const config: PlaywrightTestConfig = {
   use: {
@@ -16,6 +17,18 @@ const config: PlaywrightTestConfig = {
     {
       name: 'chromium',
       use: {...devices['Desktop Chrome']},
+    },
+    {
+      name: 'replay-chromium',
+      use: {
+        ...replayDevices["Replay Chromium"] as any
+      }
+    },
+    {
+      name: 'replay-firefox',
+      use: {
+        ...(replayDevices['Replay Firefox'] as any),
+      },
     },
     // {
     //   name: 'firefox',

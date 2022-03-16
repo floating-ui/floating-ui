@@ -1,5 +1,9 @@
 name: Tests
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   checks:
@@ -25,3 +29,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
       - uses: ./.github/actions/functional
+        with:
+          project: "replay-chromium"
+          issue-number: ${{ github.event.pull_request.number }}
+          apiKey: ${{ secrets.RECORD_REPLAY_API_KEY }}
