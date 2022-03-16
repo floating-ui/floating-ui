@@ -124,7 +124,7 @@ export const computePosition: ComputePosition = async (
   }
 
   return {
-    x,
+    x: x + 20,
     y,
     placement: statefulPlacement,
     strategy,
