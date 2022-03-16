@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.17.1",
+    "@replayio/playwright": "^0.1.0-alpha.6",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
