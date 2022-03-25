@@ -1,16 +1,16 @@
 import {NodeScroll} from '../types';
-import {isWindow} from './window';
+import {isElement} from './is';
 
 export function getNodeScroll(element: Element | Window): NodeScroll {
-  if (isWindow(element)) {
+  if (isElement(element)) {
     return {
-      scrollLeft: element.pageXOffset,
-      scrollTop: element.pageYOffset,
+      scrollLeft: element.scrollLeft,
+      scrollTop: element.scrollTop,
     };
   }
 
   return {
-    scrollLeft: element.scrollLeft,
-    scrollTop: element.scrollTop,
+    scrollLeft: element.pageXOffset,
+    scrollTop: element.pageYOffset,
   };
 }
