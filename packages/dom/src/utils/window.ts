@@ -1,5 +1,11 @@
 export function isWindow(value: any): value is Window {
-  return value?.toString() === '[object Window]';
+  return (
+    value &&
+    value.document &&
+    value.location &&
+    value.alert &&
+    value.setInterval
+  );
 }
 
 export function getWindow(node: Node | Window): Window {
