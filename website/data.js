@@ -48,4 +48,9 @@ export const MINI_SPONSORS = [
       'ggc - espionner un téléphone Android iPhone Pour Control Parental',
     url: 'https://www.global-gsm-control.com/',
   },
+  {
+    logo: '/sponsors/livingfeeds.svg',
+    label: 'Living Feeds',
+    url: 'https://livingfeeds.com/',
+  },
 ];
