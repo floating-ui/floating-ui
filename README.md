@@ -133,11 +133,6 @@ Below the main container are UI controls to turn on certain state and options.
 Every single combination of state is tested visually via the snapshots to cover
 as much as possible.
 
-### Website
-
-`npm -w website run dev` in the root will launch the website at
-`localhost:3000`.
-
 ## Credits
 
 The floating shapes in the banner image are made by the amazing artists

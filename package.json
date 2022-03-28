@@ -12,8 +12,7 @@
   },
   "description": "Floating UI monorepo",
   "workspaces": [
-    "./packages/*",
-    "./website"
+    "./packages/*"
   ],
   "scripts": {
     "dev": "parcel packages/dom/test/visual/index.html",
