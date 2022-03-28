@@ -18,12 +18,11 @@ import {
   shift,
   getOverflowAncestors,
 } from '@floating-ui/react-dom';
-import {ArrowRight, GitHub, Heart} from 'react-feather';
+import {ArrowRight, GitHub} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import Link from 'next/link';
 import Head from 'next/head';
 
-import DropdownExample from '../lib/components/DropdownExample.js';
 import {Chrome} from '../lib/components/Chrome';
 import {Floating} from '../lib/components/Floating';
 import {Logos} from '../lib/components/Logos';
@@ -32,6 +31,7 @@ import {Cards} from '../lib/components/Cards';
 import {MINI_SPONSORS, SPONSORS} from '../data';
 
 import Logo from '../assets/logo.svg';
+import Text from '../assets/text.svg';
 
 const Reference = forwardRef(({className, children}, ref) => {
   return (
@@ -473,135 +473,25 @@ function Virtual() {
   );
 }
 
-function Popovers() {
-  return (
-    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-blue-600 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
-      <div>
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Popovers
-        </h3>
-        <p className="text-xl text-cyan-100 mb-4">
-          A floating element displaying rich, optionally
-          interactive HTML content.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="grid items-center h-full bg-gray-300 py-12 text-gray-900 rounded-lg p-4">
-          <div className="text-center">
-            <Tippy
-              content={
-                <div
-                  className="text-left"
-                  style={{
-                    // Fixes shaky text in Chrome...
-                    transform: 'rotate(0.001deg)',
-                  }}
-                >
-                  <h3 className="text-lg font-bold p-2">
-                    My popover title
-                  </h3>
-                  <div className="h-px bg-gray-200"></div>
-                  <p className="p-2">
-                    My long popover description that spans over
-                    multiple lines.
-                  </p>
-                </div>
-              }
-              theme="light-border"
-              animation="scale-subtle"
-              trigger="click"
-              duration={[250, 150]}
-              maxWidth={250}
-              aria={{content: 'labelledby'}}
-            >
-              <button className="text-md bg-blue-600 text-gray-50 hover:bg-blue-700 p-3 transition-colors rounded">
-                View explanation
-              </button>
-            </Tippy>
-            <div className="text-gray-500 mt-2">
-              Click to open
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Dropdowns() {
-  return (
-    <div className="grid lg:grid-cols-2 gap-4 bg-gradient-to-tr from-purple-600 via-purple-700 to-pink-600 rounded-lg px-4 py-8 sm:p-8">
-      <div>
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Dropdowns
-        </h3>
-        <p className="text-xl mb-4 text-pink-100">
-          An interactive menu of selectable items and potential
-          submenus.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2">
-        <div className="grid items-center h-full bg-gray-300 py-12 text-gray-900 rounded-lg p-4">
-          <div className="text-center">
-            <DropdownExample />
-            <div className="text-gray-500 mt-2">
-              Click to open
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Tooltips() {
-  return (
-    <div className="grid lg:grid-cols-2 gap-8 bg-gradient-to-r from-blue-800 to-purple-700 rounded-lg px-4 py-8 sm:p-8">
-      <div>
-        <h3 className="text-2xl text-gray-50 font-bold mb-4">
-          Tooltips
-        </h3>
-        <p className="text-xl text-blue-200 mb-4">
-          A floating element to describe or add additional
-          information to another element, such as a button.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2 overflow-hidden">
-        <div className="grid items-center h-full bg-gray-300 py-12 text-gray-900 rounded-lg">
-          <div className="text-center">
-            <Tippy content="Add emoji" offset={[0, 8]}>
-              <button className="text-2xl">🙂</button>
-            </Tippy>
-            <div className="text-gray-500">
-              Hover, tap, or focus
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function HomePage() {
   return (
     <>
       <Head>
         <title>
-          Floating UI - Positioning for tooltips, popovers,
-          dropdowns, and more
+          Floating UI - Create tooltips, popovers, dropdowns, and
+          more
         </title>
       </Head>
       <header className="from-gray-700 to-gray-800 mb-24 overflow-hidden relative pb-48">
-        <div className="container py-16 mx-auto px-4 text-center max-w-screen-xl">
+        <div className="container pt-16 mx-auto text-center max-w-screen-xl">
           <Logo
             className="mx-auto"
             aria-label="Floating UI logo"
           />
           <div
-            className="absolute -z-1 w-full"
+            className="absolute -z-1 w-full top-[-3rem]"
             style={{
-              top: '0',
-              left: 'calc(-35rem + 50vw)',
+              left: 'calc(-36.9rem + 50vw)',
               width: 1200,
             }}
           >
@@ -612,13 +502,12 @@ function HomePage() {
               height={648}
             />
           </div>
-          <h1 className="text-gray-50 mb-8 text-4xl sm:text-5xl font-bold">
-            Floating UI
-          </h1>
-          <div className="flex flex-row justify-center gap-x-4">
+          <Text className="mx-auto relative top-[2rem]" />
+
+          <div className="flex flex-row justify-center gap-x-4 mt-24">
             <Link href="/docs/getting-started">
               <a
-                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
+                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-red-300 via-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
                 href="/docs/getting-started"
               >
                 Get Started <ArrowRight />
@@ -637,11 +526,8 @@ function HomePage() {
       </header>
       <main className="relative -mt-60 sm:-mt-48">
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
-          <h2 className="inline-block text-3xl leading-gradient-heading lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-500">
-            Powerful positioning primitives.
-          </h2>
           <p className="prose text-xl lg:text-2xl text-left">
-            Floating UI is a low-level toolkit to position{' '}
+            Floating UI is a low-level toolkit to create{' '}
             <Tippy
               content={
                 <div className="text-lg p-2">
@@ -671,9 +557,8 @@ function HomePage() {
               >
                 floating elements
               </span>
-            </Tippy>{' '}
-            while intelligently keeping them in view. Tooltips,
-            popovers, dropdowns, menus, and more.
+            </Tippy>
+            . Tooltips, popovers, dropdowns, menus, and more.
           </p>
         </div>
         <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl">
@@ -761,7 +646,7 @@ function HomePage() {
           <Logos items={MINI_SPONSORS} />
         </div>
 
-        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
+        {/* <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
           <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-pink-400 mt-16">
             Components!
           </h2>
@@ -796,7 +681,7 @@ function HomePage() {
               </a>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
           <h2 className="inline-block text-3xl lg:text-4xl leading-gradient-heading font-bold mb-4 mt-16">

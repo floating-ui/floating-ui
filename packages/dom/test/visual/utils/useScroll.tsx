@@ -7,6 +7,7 @@ import {
 } from 'react';
 import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
 import {VirtualElement} from '@floating-ui/core';
+import {isElement} from '../../../src/utils/is';
 
 export const useScroll = ({
   refs,
@@ -47,7 +48,7 @@ export const useScroll = ({
     }
 
     const parents = [
-      ...(refs.reference.current instanceof Element
+      ...(isElement(refs.reference.current)
         ? getOverflowAncestors(refs.reference.current)
         : []),
       ...getOverflowAncestors(refs.floating.current),

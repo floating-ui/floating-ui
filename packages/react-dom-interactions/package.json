@@ -1,0 +1,84 @@
+{
+  "name": "@floating-ui/react-dom-interactions",
+  "version": "0.0.6",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      0,
+      0
+    ]
+  },
+  "description": "Floating UI Interactions for React DOM",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/floating-ui.react-dom-interactions.js",
+  "module": "dist/floating-ui.react-dom-interactions.esm.js",
+  "unpkg": "dist/floating-ui.react-dom-interactions.min.js",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/floating-ui.react-dom-interactions.esm.js",
+      "require": "./dist/floating-ui.react-dom-interactions.cjs"
+    },
+    "./package.json": "./package.json",
+    "./src/index.ts": "./src/index.ts"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist/",
+    "index.d.ts",
+    "src/**/*.d.ts"
+  ],
+  "browserslist": "> 0.5%, not dead, not IE 11",
+  "scripts": {
+    "test": "jest test",
+    "build": "NODE_ENV=build rollup -c"
+  },
+  "author": "atomiks",
+  "license": "MIT",
+  "bugs": "https://github.com/floating-ui/floating-ui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/floating-ui/floating-ui.git",
+    "directory": "packages/react-dom-interactions"
+  },
+  "homepage": "https://floating-ui.com/docs/react-dom-interactions",
+  "keywords": [
+    "tooltip",
+    "popover",
+    "dropdown",
+    "menu",
+    "popup",
+    "positioning",
+    "react",
+    "react-dom"
+  ],
+  "dependencies": {
+    "@floating-ui/react-dom": "^0.6.0",
+    "point-in-polygon": "^1.1.0",
+    "use-isomorphic-layout-effect": "^1.1.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^3.0.0",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/react-hooks": "^7.0.2",
+    "@types/jest": "^27.0.3",
+    "@types/point-in-polygon": "^1.1.1",
+    "@types/react": "^17.0.37",
+    "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "framer-motion": "^6.2.8",
+    "jest": "^27.3.1",
+    "react-merge-refs": "^1.1.0",
+    "rollup": "^2.60.1",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.5.2"
+  }
+}

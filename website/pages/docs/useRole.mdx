@@ -1,0 +1,86 @@
+# useRole
+
+Adds relevant screen reader props for a given element
+`role{:.objectKey}`.
+
+```js /useRole/
+import {
+  useFloating,
+  useInteractions,
+  useRole,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useRole(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  enabled?: boolean;
+  role?:
+    | 'dialog'
+    | 'tooltip'
+    | 'menu'
+    | 'listbox'
+    | 'grid'
+    | 'tree';
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useRole(context, {
+  enabled: false,
+});
+```
+
+### role
+
+default: `'dialog'{:js}`
+
+The role of the floating element.
+
+```js
+useRole(context, {
+  role: 'tooltip',
+});
+```
+
+#### Item roles
+
+As only the reference and floating element receives these props,
+you'll need to provide roles for the items inside of the floating
+element.
+
+For instance:
+
+- A `'menu'{:js}` role will require the focusable children to
+  have a role of `'menuitem'{:js}`, `'menuitemcheckbox'{:js}`, or
+  `'menuitemradio'{:js}`.
+- A `'listbox'{:js}` role will require the focusable children to
+  have a role of `'option'{:js}`. If inside a group, then wrapped
+  inside a `'group'{:js}` role that is
+  `aria-labelledby{:.keyword}` the group heading.
+
+Read
+[WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.2/)
+to ensure your item elements have semantic roles and attributes.
+The [examples](/docs/react-dom-interactions#examples) hosted on
+CodeSandbox demonstrate these authoring practices.
+
+Due to the free nature of items that can go inside a floating
+element, an item prop getter is not provided to enable full
+control. In the future, Floating UI may provide one to simplify
+this once a a desirable API has been worked out.

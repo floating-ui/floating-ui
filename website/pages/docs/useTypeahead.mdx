@@ -1,0 +1,143 @@
+# useTypeahead
+
+Provides a matching callback that can be used to focus an item as
+the user types, often used in tandem with
+`useListNavigation(){:js}`.
+
+```js /useTypeahead/
+import {
+  useFloating,
+  useInteractions,
+  useTypeahead,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useTypeahead(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  listRef: React.MutableRefObject<Array<string | null>>;
+  activeIndex: number | null;
+  onMatch?: (index: number) => void;
+  enabled?: boolean;
+  findMatch?:
+    | null
+    | ((
+        list: Array<string | null>,
+        typedString: string
+      ) => string | null | undefined);
+  resetMs?: number;
+  ignoreKeys?: Array<string>;
+  selectedIndex?: number | null;
+}
+```
+
+### listRef
+
+default: empty list
+
+A ref which contains an array of strings whose indices match the
+HTML elements of the list.
+
+### onMatch
+
+default: noop
+
+Callback invoked with the matching index if found as the user
+types.
+
+```js
+const [open, setOpen] = useState(false);
+const [activeIndex, setActiveIndex] = useState(null);
+const [selectedIndex, setSelectedIndex] = useState(null);
+
+useTypeahead(context, {
+  onMatch: open ? setActiveIndex : setSelectedIndex,
+});
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useTypeahead(context, {
+  enabled: false,
+});
+```
+
+### findMatch
+
+default: lowercase finder
+
+If you'd like to implement custom finding logic (for example
+[fuzzy search](https://fusejs.io/)), you can use this callback.
+
+```js
+useTypeahead(context, {
+  findMatch: (list, typedString) =>
+    list.find(
+      (itemString) =>
+        itemString?.toLowerCase().indexOf(typedString) === 0
+    ),
+});
+```
+
+### resetMs
+
+default: `500{:js}`
+
+Debounce timeout which will reset the transient string as the
+user types.
+
+### ignoreKeys
+
+default: `[]{:js}`
+
+Ignore additional keys on top of the navigation-related ones.
+
+```js
+[
+  'Home',
+  'End',
+  'Escape',
+  'Enter',
+  'Tab',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+];
+```
+
+### activeIndex
+
+default: `null{:js}`
+
+The currently active index. This specifies where the typeahead
+starts.
+
+### selectedIndex
+
+default: `null{:js}`
+
+The currently selected index, if any.
+
+## Data
+
+### typing
+
+This hook sets `context.dataRef.current.typing = boolean{:js}` to
+determine if the user is currently typing. If a select option
+needs to be selected with `Space`, but the typeahead also allows
+spaces, this can be used to conditionally run the handler.

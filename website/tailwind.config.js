@@ -29,6 +29,13 @@ module.exports = {
             'h2 > a': {
               fontSize: '2rem',
             },
+            pre: {
+              fontSize: '1.05rem',
+              lineHeight: '2.1',
+            },
+            img: {
+              margin: '0',
+            },
           },
         },
         md: {
@@ -37,21 +44,36 @@ module.exports = {
             h1: {
               fontSize: '3rem',
             },
+            pre: {
+              lineHeight: '2.1',
+            },
+            img: {
+              margin: '0',
+            },
+            '.card': {
+              maxWidth: 'calc(50% - 5px)',
+            },
           },
         },
         DEFAULT: {
           css: {
+            img: {
+              margin: '0',
+            },
+            '.card': {
+              maxWidth: '100%',
+            },
             fontSize: '1rem',
             maxWidth: '70ch',
             color: '#b0b2c3',
             blockquote: {
-              color: colors.purple['300'],
+              color: colors.rose[300],
               fontSize: '90%',
               borderTopRightRadius: '0.25rem',
               borderBottomRightRadius: '0.25rem',
-              borderLeftColor: colors.purple['400'],
+              borderLeftColor: colors.rose[400],
               borderLeftWidth: '2px',
-              backgroundColor: `rgba(200,100,255,0.15)`,
+              backgroundColor: `rgba(255,125,225,0.15)`,
               padding: '0.25rem 0.5rem 0.25rem 1rem',
               '> p': {
                 margin: 0,
@@ -63,9 +85,8 @@ module.exports = {
             pre: {
               color: '#cddbf7',
               padding: '1rem 1.5rem',
-              backgroundColor: GRAY['800'],
-              lineHeight: '2.1',
-              fontSize: 'inherit',
+              lineHeight: '2',
+              backgroundColor: '#282834',
               '> code': {
                 display: 'grid',
               },
@@ -73,15 +94,22 @@ module.exports = {
                 borderLeft: '2px solid transparent',
               },
               '.line.line--highlighted': {
-                borderLeftColor: colors.blue['400'],
-                backgroundColor: GRAY['700'],
+                borderLeftColor: colors.rose[400],
+                backgroundColor: '#3b3547',
                 margin: '0 -1.5rem',
                 padding: '0 1.5rem',
               },
+              span: {
+                position: 'relative',
+                zIndex: '1',
+              },
               '.word': {
                 backgroundColor: 'rgba(200,200,255,0.2)',
-                padding: '0.2rem 0.4rem',
+                padding: '0.2rem 0',
                 borderRadius: '0.25rem',
+                boxShadow:
+                  '-2px 0 0 1px #48485d, 2px 0 0 1px #48485d',
+                zIndex: '0',
               },
             },
             h1: {
@@ -97,31 +125,34 @@ module.exports = {
               color: '#fff',
               wordBreak: 'break-word',
               '> a': {
-                color: GRAY['50'],
-                borderBottomColor: 'transparent !important',
+                color: GRAY[50],
+                borderBottomColor: 'transparent',
               },
               '> a:hover': {
-                borderBottomColor: `${GRAY['50']} !important`,
+                color: GRAY[50],
+                borderBottomColor: GRAY[50],
               },
             },
             h3: {
               color: '#BFC3D9',
               wordBreak: 'break-word',
               '> a': {
-                color: GRAY['50'],
-                borderBottomColor: 'transparent !important',
+                color: GRAY[50],
+                borderBottomColor: 'transparent',
               },
               '> a:hover': {
-                borderBottomColor: `${GRAY['50']} !important`,
+                color: GRAY[50],
+                borderBottomColor: GRAY[50],
               },
             },
             h4: {
               '> a': {
-                color: GRAY['50'],
-                borderBottomColor: 'transparent !important',
+                color: GRAY[50],
+                borderBottomColor: 'transparent',
               },
               '> a:hover': {
-                borderBottomColor: `${GRAY['50']} !important`,
+                color: GRAY[50],
+                borderBottomColor: GRAY[50],
               },
             },
             code: {
@@ -137,19 +168,20 @@ module.exports = {
             ':not(pre) > code': {
               borderRadius: '0.25rem',
               padding: '0.2rem 0.4rem',
-              backgroundColor: GRAY['800'],
+              backgroundColor: '#30303e',
             },
             a: {
-              color: colors.cyan['400'],
+              color: colors.rose[300],
               textDecoration: 'none',
-              borderBottom: `2px solid ${colors.cyan['900']}`,
+              borderBottom: `2px solid #744d60`,
               paddingBottom: '0.1em',
-              transition: 'border-color 0.2s !important',
+              transition: 'border-color 0.15s, color 0.15s',
               '&:hover': {
-                borderBottomColor: `${colors.cyan['400']} !important`,
+                borderBottomColor: `${colors.rose[200]}`,
+                color: `${colors.rose[200]}`,
               },
               '&:active': {
-                color: `${colors.cyan['100']} !important`,
+                borderBottomColor: `${colors.rose[100]}`,
               },
             },
             'a code': {

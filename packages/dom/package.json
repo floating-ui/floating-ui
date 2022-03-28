@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/dom",
-  "version": "0.1.8",
+  "version": "0.4.2",
   "@rollingversions": {
     "baseVersion": [
       0,
@@ -25,7 +25,8 @@
       },
       "require": "./dist/floating-ui.dom.cjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./src/index.ts": "./src/index.ts"
   },
   "sideEffects": false,
   "files": [
@@ -57,7 +58,7 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "^0.2.2"
+    "@floating-ui/core": "^0.6.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",

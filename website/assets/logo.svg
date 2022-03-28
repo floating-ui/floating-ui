@@ -1,19 +1,22 @@
-
-<svg width="150" height="150" viewBox="0 0 271 320" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="271" height="228" rx="50" fill="url(#paint0_linear_30:7)"/>
-<circle cx="75" cy="110" r="20" fill="#333333"/>
-<circle cx="196" cy="110" r="20" fill="#333333"/>
-<mask id="mask0_30:7" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="75" y="76" width="121" height="121">
-<circle cx="135.5" cy="136.5" r="60.5" fill="#333333"/>
+<svg width="140" height="225" viewBox="0 0 373 558" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M179.419 440C178.196 455.92 178.93 492.536 191.651 511.639C207.554 535.519 210 545.574 210 555" stroke="black" stroke-width="6" stroke-linecap="round"/>
+<path d="M176.402 427.5C177.557 425.5 180.443 425.5 181.598 427.5L189.392 441C190.547 443 189.104 445.5 186.794 445.5H171.206C168.896 445.5 167.453 443 168.608 441L176.402 427.5Z" fill="#AD3A56"/>
+<path d="M372.5 203C367.5 311.921 275.884 414.092 179.924 433C83.3334 415.352 5.05052 308.836 0 199.798C1.92661e-05 81.936 95.2731 0 192.551 0C289.828 0 377.92 84.9207 372.5 203Z" fill="url(#paint0_radial_112_6)"/>
+<circle cx="95.5" cy="233.5" r="31.5" fill="#CD0031" fill-opacity="0.5"/>
+<circle cx="267.5" cy="233.5" r="31.5" fill="#CD0031" fill-opacity="0.4"/>
+<ellipse cx="239.5" cy="207" rx="16.5" ry="16" fill="#222222"/>
+<ellipse cx="123.5" cy="207" rx="16.5" ry="16" fill="#222222"/>
+<mask id="mask0_112_6" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="153" y="228" width="58" height="40">
+<path d="M153.886 231.307C153.886 229.65 155.229 228.307 156.886 228.307H207.648C209.305 228.307 210.648 229.65 210.648 231.307V264.409C210.648 266.066 209.305 267.409 207.648 267.409H156.886C155.229 267.409 153.886 266.066 153.886 264.409V231.307Z" fill="#C4C4C4"/>
 </mask>
-<g mask="url(#mask0_30:7)">
-<rect y="152" width="263" height="89" fill="#333333"/>
+<g mask="url(#mask0_112_6)">
+<path d="M210.648 230.199C210.648 245.873 197.941 258.58 182.267 258.58C166.593 258.58 153.886 245.873 153.886 230.199C153.886 214.525 166.593 201.818 182.267 201.818C197.941 201.818 210.648 214.525 210.648 230.199Z" fill="#222222"/>
 </g>
-<path d="M135.5 274L83.1055 219.25L187.895 219.25L135.5 274Z" fill="#E5EAF2"/>
 <defs>
-<linearGradient id="paint0_linear_30:7" x1="135.5" y1="0" x2="135.5" y2="228" gradientUnits="userSpaceOnUse">
-<stop stop-color="white"/>
-<stop offset="1" stop-color="#E5EAF2"/>
-</linearGradient>
+<radialGradient id="paint0_radial_112_6" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(40.404 279.843) rotate(-30.8525) scale(355.186 309.847)">
+<stop stop-color="#FF3767"/>
+<stop offset="0.807292" stop-color="#F36D76"/>
+<stop offset="1" stop-color="#FFE1DA"/>
+</radialGradient>
 </defs>
 </svg>

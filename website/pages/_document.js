@@ -12,11 +12,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link
-            rel="preload"
-            as="image"
-            href="/floating-ui.jpg"
-          />
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`}

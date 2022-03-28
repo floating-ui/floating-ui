@@ -1,0 +1,3 @@
+/**
+ * @jest-environment jsdom
+ */

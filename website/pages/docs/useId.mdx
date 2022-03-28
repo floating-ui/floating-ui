@@ -1,0 +1,14 @@
+# useId
+
+Uses React 18's built-in `useId(){:js}` when available, or falls
+back to a slightly less performant (requiring a double render)
+implementation for earlier React versions.
+
+```js
+import {useId} from '@floating-ui/react-dom-interactions';
+
+// ...
+const id = useId();
+```
+
+This does not get passed to `useInteractions(){:js}`.

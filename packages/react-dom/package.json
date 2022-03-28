@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-dom",
-  "version": "0.3.4",
+  "version": "0.6.0",
   "@rollingversions": {
     "baseVersion": [
       0,
@@ -21,7 +21,8 @@
       "import": "./dist/floating-ui.react-dom.esm.js",
       "require": "./dist/floating-ui.react-dom.cjs"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./src/index.ts": "./src/index.ts"
   },
   "sideEffects": false,
   "files": [
@@ -32,8 +33,7 @@
   "browserslist": "> 0.5%, not dead, not IE 11",
   "scripts": {
     "test": "jest test",
-    "build": "NODE_ENV=build rollup -c",
-    "dev": "parcel test/visual/index.html --dist-dir test/visual/dist"
+    "build": "NODE_ENV=build rollup -c"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -59,7 +59,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.1.8",
+    "@floating-ui/dom": "^0.4.2",
     "use-isomorphic-layout-effect": "^1.1.1"
   },
   "devDependencies": {
@@ -76,7 +76,6 @@
     "@types/react": "^17.0.37",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "jest": "^27.3.1",
-    "parcel": "^2.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "rollup": "^2.60.1",

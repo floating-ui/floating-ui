@@ -1,0 +1,122 @@
+# useFocusTrap
+
+Traps focus in a loop of focusable elements while the floating
+element is open.
+
+```js /useFocusTrap/
+import {
+  useFloating,
+  useInteractions,
+  useFocusTrap,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating();
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useFocusTrap(context, {
+    // props
+  }),
+]);
+```
+
+## Props
+
+```js
+interface Props {
+  enabled?: boolean;
+  modal?: boolean;
+  order?: Array<'reference' | 'floating' | 'content'>;
+  initialContentFocus?:
+    | number
+    | React.MutableRefObject<HTMLElement | null>;
+  inert?: boolean;
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useFocusTrap(context, {
+  enabled: false,
+});
+```
+
+### modal
+
+default: `true{:js}`
+
+Whether the focus trap is "modal", i.e. focus cannot escape the
+floating element and content outside of it is unreachable.
+
+> You must use a Portal when set to `true{:js}` due to
+> `aria-hidden{:.keyword}` being used for wide screen reader
+> support.
+
+```js
+import {FloatingPortal} from '@floating-ui/react-dom-interactions';
+
+function MyComponent() {
+  // ...
+
+  return (
+    <FloatingPortal>
+      <div />
+    </FloatingPortal>
+  );
+}
+```
+
+### order
+
+default: `['content']{:js}`
+
+Determines the order in which focus is navigated.
+
+```js
+useFocusTrap(context, {
+  // Immediately focus the first focusable element inside
+  // of the floating element.
+  order: ['content'],
+
+  // Keeps focus on the reference after opening the
+  // floating element. The next `Tab` key press will
+  // navigate to the first focusable element inside of it.
+  order: ['reference', 'content'],
+
+  // Immediately focus the floating element itself, the
+  // next `Tab` key press will navigate to the first
+  // focusable element inside of it.
+  order: ['floating', 'content'],
+});
+```
+
+### initialContentFocus
+
+default: `0{:js}`
+
+Which element to initially focus when the `'content'{:js}` order
+has started. Can be either a number (focus index) or a React ref.
+
+```js
+useFocusTrap(context, {
+  initialContentFocus: elementRef,
+  initialContentFocus: 1,
+});
+```
+
+### inert
+
+default: `false{:js}`
+
+Determines if focus is trapped, but the tab key does not perform
+any action (i.e., navigation is handled via arrow keys).
+
+```js
+useFocusTrap(context, {
+  inert: true,
+});
+```

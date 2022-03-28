@@ -179,6 +179,8 @@ export type {
   ComputePositionConfig,
   ComputePositionReturn,
 } from '@floating-ui/core';
+
 export {computePosition} from './';
 export {autoUpdate} from './autoUpdate';
+
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
