@@ -122,8 +122,8 @@ website is using Next.js SSG and Tailwind CSS for styling.
 
 `npm run dev` in the root will launch the `@floating-ui/dom` development visual
 tests at `http://localhost:1234`. The playground uses React to write each test
-route, bundled by Vite. When making changes to `packages/core` or
-`packages/dom`, Vite will hot reload the app and display the changes.
+route, bundled by Parcel. When making changes to `packages/core` or
+`packages/dom`, Parcel will hot reload the app and display the changes.
 
 Each route has screenshots taken of the page by Playwright to ensure all the
 functionalities work as expected; this is an easy, reliable and high-level way

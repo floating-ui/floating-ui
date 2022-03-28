@@ -16,9 +16,9 @@
     "./website"
   ],
   "scripts": {
-    "dev": "VITE_ENV=dom vite",
-    "dev:interactions": "VITE_ENV=interactions vite",
-    "test:functional": "npm run dev",
+    "dev": "parcel packages/dom/test/visual/index.html",
+    "dev:interactions": "parcel packages/react-dom-interactions/test/visual/index.html",
+    "test:functional": "npx playwright test packages/dom/test/functional",
     "test:functional:update": "npm run test:functional -- -u",
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react-dom-interactions run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
@@ -26,6 +26,12 @@
     "lint": "eslint . --ext .js,.ts",
     "test:types": "tsc",
     "dev:website": "npm run build && npm -w website run dev"
+  },
+  "alias": {
+    "@floating-ui/core": "@floating-ui/core/src/index.ts",
+    "@floating-ui/dom": "@floating-ui/dom/src/index.ts",
+    "@floating-ui/react-dom": "@floating-ui/react-dom/src/index.ts",
+    "@floating-ui/react-dom-interactions": "@floating-ui/react-dom-interactions/src/index.ts"
   },
   "author": "",
   "license": "MIT",
@@ -40,11 +46,10 @@
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "@vitejs/plugin-react": "^1.2.0",
     "eslint": "^8.3.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "parcel": "^2.4.0",
     "prettier": "^2.5.0",
-    "typescript": "^4.5.2",
-    "vite": "^2.8.6"
+    "typescript": "^4.5.2"
   }
 }
