@@ -18,7 +18,7 @@
   "scripts": {
     "dev": "VITE_ENV=dom vite",
     "dev:interactions": "VITE_ENV=interactions vite",
-    "test:functional": "npx playwright test packages/dom/test/functional",
+    "test:functional": "npm run dev",
     "test:functional:update": "npm run test:functional -- -u",
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react-dom-interactions run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
