@@ -486,7 +486,7 @@ function HomePage() {
         <div className="container pt-16 mx-auto text-center max-w-screen-xl">
           <Logo
             className="mx-auto"
-            aria-label="Floating UI logo"
+            aria-label="Floating UI logo (a cute smiling red balloon)"
           />
           <div
             className="absolute -z-1 w-full top-[-3rem]"
@@ -496,13 +496,17 @@ function HomePage() {
             }}
           >
             <img
+              role="presentation"
               className="select-none"
               src="/floating-ui.jpg"
               width={1167}
               height={648}
             />
           </div>
-          <Text className="mx-auto relative top-[2rem]" />
+          <Text
+            className="mx-auto relative top-[2rem]"
+            aria-label="Floating UI text logo"
+          />
 
           <div className="flex flex-row justify-center gap-x-4 mt-24">
             <Link href="/docs/getting-started">
