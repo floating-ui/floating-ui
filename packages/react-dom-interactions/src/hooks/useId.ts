@@ -25,7 +25,8 @@ function useFloatingId() {
   return id;
 }
 
-const useReactId = (React as any).useId as () => string;
+// `toString()` prevents bundlers from trying to `import { useId } from 'react'`
+const useReactId = (React as any)['useId'.toString()] as () => string;
 
 /**
  * Uses React 18's built-in `useId()` when available, or falls back to a
