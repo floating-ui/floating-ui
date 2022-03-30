@@ -61,12 +61,20 @@ export const useHover = (
   const blockMouseMoveRef = useRef(true);
 
   useLayoutEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     if (!open) {
       pointerTypeRef.current = undefined;
     }
   });
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     function onDismiss() {
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
@@ -77,7 +85,7 @@ export const useHover = (
     return () => {
       events.off('dismiss', onDismiss);
     };
-  }, [events]);
+  }, [enabled, events]);
 
   useEffect(() => {
     if (!enabled || !handleClose) {
@@ -120,6 +128,10 @@ export const useHover = (
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     function onMouseEnter(event: MouseEvent) {
       if (open || (mouseOnly && pointerTypeRef.current !== 'mouse')) {
         return;
@@ -182,6 +194,7 @@ export const useHover = (
       };
     }
   }, [
+    enabled,
     closeWithDelay,
     context,
     delay,
