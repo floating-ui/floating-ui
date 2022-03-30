@@ -53,4 +53,9 @@ export const MINI_SPONSORS = [
     label: 'Living Feeds',
     url: 'https://livingfeeds.com/',
   },
+  {
+    logo: '/sponsors/bestforandroid.svg',
+    label: 'Best Android Apps, Downloads & How to Guides',
+    url: 'https://bestforandroid.com/',
+  },
 ];
