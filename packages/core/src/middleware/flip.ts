@@ -122,16 +122,16 @@ export const flip = (
       switch (fallbackStrategy) {
         case 'bestFit': {
           const placement = overflowsData
-            .slice()
-            .sort(
-              (a, b) =>
-                a.overflows
-                  .filter((overflow) => overflow > 0)
-                  .reduce((acc, overflow) => acc + overflow, 0) -
-                b.overflows
-                  .filter((overflow) => overflow > 0)
-                  .reduce((acc, overflow) => acc + overflow, 0)
-            )[0]?.placement;
+            .map(
+              (d) =>
+                [
+                  d,
+                  d.overflows
+                    .filter((overflow) => overflow > 0)
+                    .reduce((acc, overflow) => acc + overflow, 0),
+                ] as const
+            )
+            .sort((a, b) => a[1] - b[1])[0]?.[0].placement;
           if (placement) {
             resetPlacement = placement;
           }
