@@ -1,12 +1,8 @@
-import React, {createContext, useContext, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 const DEFAULT_ID = 'floating-ui-root';
-
-const FloatingPortalContext = createContext(DEFAULT_ID);
-
-export const useFloatingPortalId = () => useContext(FloatingPortalContext);
 
 /**
  * Portals your floating element outside of the main app node.
@@ -30,6 +26,8 @@ export const FloatingPortal: React.FC<{id?: string}> = ({
     }
 
     const el = portalRef.current;
+    el.setAttribute('data-floating-ui-portal', '');
+
     if (!document.body.contains(el)) {
       document.body.appendChild(el);
     }
@@ -38,11 +36,7 @@ export const FloatingPortal: React.FC<{id?: string}> = ({
   }, [id]);
 
   if (mounted && portalRef.current) {
-    return (
-      <FloatingPortalContext.Provider value={id}>
-        {createPortal(children, portalRef.current)}
-      </FloatingPortalContext.Provider>
-    );
+    return createPortal(children, portalRef.current);
   }
 
   return null;

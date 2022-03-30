@@ -247,6 +247,10 @@ function App() {
                 >
                   <button>Nested</button>
                 </ModalPopover>
+                <input name="test" type="radio" />
+                <input name="test" type="radio" />
+                <input name="test" type="radio" />
+                <input name="test" type="radio" />
                 <button onClick={close}>Close</button>
               </>
             )}

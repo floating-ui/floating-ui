@@ -1,6 +1,5 @@
 import React, {MutableRefObject, useCallback, useEffect, useRef} from 'react';
-import {useFloatingPortalId} from '../FloatingPortal';
-import {useFloatingTree} from '../FloatingTree';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
@@ -9,10 +8,14 @@ import {stopEvent} from '../utils/stopEvent';
 const FOCUSABLE_ELEMENT_SELECTOR =
   'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,object,embed,*[tabindex],*[contenteditable]';
 
+type Order = Array<'reference' | 'floating' | 'content'>;
+
+const DEFAULT_ORDER: Order = ['content'];
+
 export interface Props {
   enabled?: boolean;
   modal?: boolean;
-  order?: Array<'reference' | 'floating' | 'content'>;
+  order?: Order;
   initialContentFocus?: number | MutableRefObject<HTMLElement | null>;
   inert?: boolean;
 }
@@ -31,18 +34,28 @@ function focus(el: HTMLElement | undefined) {
  * @see https://floating-ui.com/docs/useFocusTrap
  */
 export const useFocusTrap = (
-  {open, onOpenChange, refs, nodeId}: FloatingContext,
+  {open, onOpenChange, refs}: FloatingContext,
   {
     enabled = true,
     initialContentFocus = 0,
-    order = ['content'],
+    order = DEFAULT_ORDER,
     modal = true,
     inert = false,
   }: Props = {}
 ): ElementProps => {
-  const portalId = useFloatingPortalId();
-  const tree = useFloatingTree();
-  const indexRef = useRef(0);
+  const beforeRef = useRef<HTMLElement | null>(null);
+  const afterRef = useRef<HTMLElement | null>(null);
+
+  if (__DEV__) {
+    if (modal && order.includes('reference')) {
+      console.warn(
+        [
+          'Floating UI: useFocusTrap() `order` array cannot contain',
+          '"reference" while in `modal` mode.',
+        ].join(' ')
+      );
+    }
+  }
 
   const getFocusableElements = useCallback(() => {
     return order
@@ -69,6 +82,87 @@ export const useFocusTrap = (
       .flat() as Array<HTMLElement>;
   }, [refs.floating, refs.reference, order]);
 
+  // Focus guard elements
+  // https://github.com/w3c/aria-practices/issues/545
+  useLayoutEffect(() => {
+    const floating = refs.floating.current;
+
+    if (!enabled || !open || !floating || !modal) {
+      return;
+    }
+
+    function createFocusGuardElement() {
+      const doc = getDocument(floating);
+      const el = doc.createElement('div');
+      el.tabIndex = 0;
+      Object.assign(el.style, {
+        position: 'fixed',
+        outline: '0',
+        pointerEvents: 'none',
+      });
+      el.setAttribute('aria-hidden', 'true');
+      return el;
+    }
+
+    if (!beforeRef.current) {
+      beforeRef.current = createFocusGuardElement();
+    }
+
+    if (!afterRef.current) {
+      afterRef.current = createFocusGuardElement();
+    }
+
+    const before = beforeRef.current;
+    const after = afterRef.current;
+
+    floating.insertAdjacentElement('beforebegin', before);
+    floating.insertAdjacentElement('afterend', after);
+
+    function onFocus(event: FocusEvent) {
+      stopEvent(event);
+      const focusableElements = getFocusableElements();
+      focusableElements[
+        event.target === after ? 0 : focusableElements.length - 1
+      ]?.focus();
+    }
+
+    before.addEventListener('focus', onFocus);
+    after.addEventListener('focus', onFocus);
+
+    return () => {
+      before.removeEventListener('focus', onFocus);
+      after.removeEventListener('focus', onFocus);
+
+      if (before.parentNode?.contains(before)) {
+        before.parentNode.removeChild(before);
+      }
+
+      if (after.parentNode?.contains(after)) {
+        after.parentNode.removeChild(after);
+      }
+    };
+  }, [enabled, open, modal, inert, getFocusableElements, refs.floating]);
+
+  // Inert
+  useEffect(() => {
+    if (!enabled || !open || !inert) {
+      return;
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Tab') {
+        stopEvent(event);
+      }
+    }
+
+    const doc = getDocument(refs.floating.current);
+    doc.addEventListener('keydown', onKeyDown);
+    return () => {
+      doc.removeEventListener('keydown', onKeyDown);
+    };
+  }, [enabled, open, inert, refs.floating]);
+
+  // Initial focus
   useEffect(() => {
     if (!enabled) {
       return;
@@ -115,66 +209,33 @@ export const useFocusTrap = (
   ]);
 
   useEffect(() => {
-    if (!modal || !enabled) {
+    if (!open || !modal || !enabled) {
       return;
     }
 
     const doc = getDocument(refs.floating.current);
+    const nodes = doc.querySelectorAll(
+      'body > *:not([data-floating-ui-portal]'
+    );
 
-    if (!open) {
-      doc.removeEventListener('keydown', onKeyDown);
-      indexRef.current = 0;
-      return;
-    }
+    const originalValues: Array<string | null> = [];
+    nodes.forEach((node) => {
+      const originalValue = node.getAttribute('aria-hidden');
+      originalValues.push(originalValue);
+      node.setAttribute('aria-hidden', 'true');
+    });
 
-    function onKeyDown(event: KeyboardEvent) {
-      if (
-        tree?.nodesRef.current
-          ?.filter(({parentId}) => parentId === nodeId)
-          .some(({context}) => context?.open)
-      ) {
-        return;
-      }
-
-      if (event.key === 'Tab') {
-        stopEvent(event);
-
-        const focusableElements = getFocusableElements();
-
-        if (inert) {
-          return;
-        }
-
-        if (event.shiftKey) {
-          indexRef.current =
-            indexRef.current === 0
-              ? focusableElements.length - 1
-              : indexRef.current - 1;
-        } else {
-          indexRef.current =
-            indexRef.current === focusableElements.length - 1
-              ? 0
-              : indexRef.current + 1;
-        }
-
-        focus(focusableElements[indexRef.current]);
-      }
-    }
-
-    doc.addEventListener('keydown', onKeyDown);
     return () => {
-      doc.removeEventListener('keydown', onKeyDown);
+      nodes.forEach((node, index) => {
+        const originalValue = originalValues[index];
+        if (originalValue === null) {
+          node.removeAttribute('aria-hidden');
+        } else {
+          node.setAttribute('aria-hidden', originalValue);
+        }
+      });
     };
-  }, [
-    getFocusableElements,
-    tree?.nodesRef,
-    nodeId,
-    open,
-    modal,
-    inert,
-    enabled,
-    refs.floating,
-  ]);
+  }, [open, modal, enabled, refs.floating]);
 
   function onBlur(event: React.FocusEvent) {
     const target = event.relatedTarget as Element | null;
@@ -186,36 +247,6 @@ export const useFocusTrap = (
       onOpenChange(false);
     }
   }
-
-  useEffect(() => {
-    if (!open || !modal || !enabled) {
-      return;
-    }
-
-    const doc = getDocument(refs.floating.current);
-    const portal = doc.querySelector(`#${portalId}`);
-    const nodes = doc.querySelectorAll(`body > *:not(#${portalId})`);
-
-    const originalValues: Array<string | null> = [];
-    nodes.forEach((node) => {
-      const originalValue = node.getAttribute('aria-hidden');
-      originalValues.push(originalValue);
-      node.setAttribute('aria-hidden', 'hidden');
-    });
-
-    return () => {
-      if (portal?.firstElementChild === refs.floating.current) {
-        nodes.forEach((node, index) => {
-          const originalValue = originalValues[index];
-          if (originalValue === null) {
-            node.removeAttribute('aria-hidden');
-          } else {
-            node.setAttribute('aria-hidden', originalValue);
-          }
-        });
-      }
-    };
-  }, [open, modal, portalId, enabled, refs.floating]);
 
   if (!enabled) {
     return {};

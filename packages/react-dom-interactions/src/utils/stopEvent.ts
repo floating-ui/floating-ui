@@ -6,6 +6,7 @@ export function stopEvent(
     | React.KeyboardEvent
     | React.FocusEvent
     | KeyboardEvent
+    | FocusEvent
 ) {
   event.preventDefault();
   event.stopPropagation();

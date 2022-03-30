@@ -85,6 +85,7 @@ useFocusTrap(context, {
   // Keeps focus on the reference after opening the
   // floating element. The next `Tab` key press will
   // navigate to the first focusable element inside of it.
+  // NOTE: only use in non-modal mode.
   order: ['reference', 'content'],
 
   // Immediately focus the floating element itself, the
