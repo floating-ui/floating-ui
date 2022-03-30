@@ -14,6 +14,7 @@ export const useRole = (
   {enabled = true, role = 'dialog'}: Partial<Props> = {}
 ): ElementProps => {
   const rootId = useId();
+  const referenceId = `${rootId}-reference`;
   const floatingProps = {id: rootId, role};
 
   if (!enabled) {
@@ -37,7 +38,15 @@ export const useRole = (
       ...(role === 'listbox' && {
         role: 'combobox',
       }),
+      ...(role === 'menu' && {
+        id: referenceId,
+      }),
     },
-    floating: floatingProps,
+    floating: {
+      ...floatingProps,
+      ...(role === 'menu' && {
+        'aria-labelledby': referenceId,
+      }),
+    },
   };
 };
