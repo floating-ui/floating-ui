@@ -123,12 +123,13 @@ export const flip = (
         case 'bestFit': {
           const placement = overflowsData
             .map((d) => ({
-              ...d,
+              data: d,
               overflowsSum: d.overflows
                 .filter((overflow) => overflow > 0)
                 .reduce((acc, overflow) => acc + overflow, 0),
             }))
-            .sort((a, b) => a.overflowsSum - b.overflowsSum)[0]?.placement;
+            .sort((a, b) => a.overflowsSum - b.overflowsSum)[0]?.data.placement;
+          console.timeEnd('test loop');
           if (placement) {
             resetPlacement = placement;
           }
