@@ -129,7 +129,6 @@ export const flip = (
                 .reduce((acc, overflow) => acc + overflow, 0),
             }))
             .sort((a, b) => a.overflowsSum - b.overflowsSum)[0]?.data.placement;
-          console.timeEnd('test loop');
           if (placement) {
             resetPlacement = placement;
           }
