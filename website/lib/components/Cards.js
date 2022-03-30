@@ -12,6 +12,7 @@ export function Cards({items}) {
             <img
               className="w-56 rounded-md shadow-lg hover:shadow-xl transition-shadow"
               src={item.image}
+              loading="lazy"
             />
             <div className="px-6 py-4">
               <h4 className="text-center text-2xl font-bold mb-2">

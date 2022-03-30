@@ -18,6 +18,7 @@ export function Logos({items}) {
           >
             <img
               className="h-12"
+              loading="lazy"
               src={item.logo}
               alt={item.label}
             />
