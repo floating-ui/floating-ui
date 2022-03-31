@@ -39,7 +39,7 @@ export const useFocus = (
     win.addEventListener('focus', onFocus);
     win.addEventListener('blur', onBlur);
     return () => {
-      win.addEventListener('focus', onFocus);
+      win.removeEventListener('focus', onFocus);
       win.removeEventListener('blur', onBlur);
     };
   }, [refs.floating, open, enabled]);
