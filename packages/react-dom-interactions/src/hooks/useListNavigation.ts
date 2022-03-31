@@ -352,9 +352,10 @@ export const useListNavigation = (
 
   return {
     reference: {
-      ...(virtual && {
-        'aria-activedescendant': activeId,
-      }),
+      ...(virtual &&
+        open && {
+          'aria-activedescendant': activeId,
+        }),
       onPointerEnter: pointerCheck,
       onPointerDown: pointerCheck,
       onKeyDown(event) {
