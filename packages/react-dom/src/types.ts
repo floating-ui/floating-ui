@@ -29,4 +29,5 @@ export type {
   MiddlewareData,
   ComputePositionConfig,
   ComputePositionReturn,
+  VirtualElement,
 } from '@floating-ui/dom';
