@@ -58,4 +58,9 @@ export const MINI_SPONSORS = [
     label: 'Best Android Apps, Downloads & How to Guides',
     url: 'https://bestforandroid.com/',
   },
+  {
+    logo: '/sponsors/titanam.svg',
+    label: 'Titan Asset Management',
+    url: 'https://titanam.co.uk/',
+  },
 ];
