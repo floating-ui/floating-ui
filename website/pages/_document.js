@@ -32,6 +32,7 @@ class MyDocument extends Document {
           <div id="floating-root" />
           <Main />
           <NextScript />
+          <script> </script>
         </body>
       </Html>
     );

@@ -487,6 +487,7 @@ function HomePage() {
   return (
     <>
       <Head>
+        <link rel="preload" as="image" href="/floating-ui.jpg" />
         <title>
           Floating UI - Create tooltips, popovers, dropdowns, and
           more
