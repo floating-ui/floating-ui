@@ -5,6 +5,7 @@ import React, {
   useState,
   SetStateAction,
   useCallback,
+  useMemo,
 } from 'react';
 import {getDelay} from './hooks/useHover';
 import type {FloatingContext} from './types';
@@ -53,7 +54,10 @@ export const FloatingDelayGroup: React.FC<{delay: Delay}> = ({
 
   return (
     <FloatingDelayGroupContext.Provider
-      value={{...state, setState, setCurrentId}}
+      value={useMemo(
+        () => ({...state, setState, setCurrentId}),
+        [state, setState, setCurrentId]
+      )}
     >
       {children}
     </FloatingDelayGroupContext.Provider>

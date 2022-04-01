@@ -1,4 +1,11 @@
-import React, {createContext, useCallback, useContext, useRef} from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {FloatingNodeType, FloatingTreeType} from './types';
 import {useId} from './hooks/useId';
@@ -36,8 +43,11 @@ export const useFloatingNodeId = () => {
  */
 export const FloatingNode: React.FC<{id: string}> = ({children, id}) => {
   const parentId = useFloatingParentNodeId();
+
   return (
-    <FloatingNodeContext.Provider value={{id, parentId}}>
+    <FloatingNodeContext.Provider
+      value={useMemo(() => ({id, parentId}), [id, parentId])}
+    >
       {children}
     </FloatingNodeContext.Provider>
   );
@@ -60,14 +70,19 @@ export const FloatingTree: React.FC = ({children}) => {
     nodesRef.current = nodesRef.current.filter((n) => n !== node);
   }, []);
 
+  const events = useState(() => createPubSub())[0];
+
   return (
     <FloatingTreeContext.Provider
-      value={{
-        nodesRef,
-        addNode,
-        removeNode,
-        events: createPubSub(),
-      }}
+      value={useMemo(
+        () => ({
+          nodesRef,
+          addNode,
+          removeNode,
+          events,
+        }),
+        [nodesRef, addNode, removeNode, events]
+      )}
     >
       {children}
     </FloatingTreeContext.Provider>
