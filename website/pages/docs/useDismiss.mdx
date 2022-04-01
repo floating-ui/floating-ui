@@ -46,11 +46,12 @@ useDismiss(context, {
 
 default: `true{:js}`
 
-Whether to dismiss the floating element using the `esc` key.
+Whether to dismiss the floating element upon pressing the `esc`
+key.
 
 ```js
 useDismiss(context, {
-  escapeKey: false, // true by default
+  escapeKey: false,
 });
 ```
 
@@ -58,12 +59,12 @@ useDismiss(context, {
 
 default: `false{:js}`
 
-Whether to dismiss the floating element when on pointer down of
-the reference element.
+Whether to dismiss the floating element upon pointer down of the
+reference element.
 
 ```js
 useDismiss(context, {
-  referencePointerDown: true, // false by default
+  referencePointerDown: true,
 });
 ```
 
@@ -71,12 +72,12 @@ useDismiss(context, {
 
 default: `true{:js}`
 
-Whether to dismiss the floating element when on pointer down
-outside of both the floating and reference elements.
+Whether to dismiss the floating element upon pointer down outside
+of both the floating and reference elements.
 
 ```js
 useDismiss(context, {
-  outsidePointerDown: false, // true by default
+  outsidePointerDown: false,
 });
 ```
 
@@ -89,6 +90,6 @@ overflow ancestor.
 
 ```js
 useDismiss(context, {
-  ancestorScroll: true, // false by default
+  ancestorScroll: true,
 });
 ```
