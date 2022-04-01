@@ -10,6 +10,10 @@ code {
   -webkit-font-smoothing: auto;
 }
 
+[data-remove-transitions] * {
+  transition: none !important;
+}
+
 [data-reach-skip-nav-link]:focus {
   color: black;
   z-index: 60;

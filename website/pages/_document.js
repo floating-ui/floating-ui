@@ -28,11 +28,13 @@ class MyDocument extends Document {
             }}
           />
         </Head>
-        <body className="bg-gray-900 text-gray-100">
+        <body
+          className="bg-gray-900 text-gray-100"
+          data-remove-transitions=""
+        >
           <div id="floating-root" />
           <Main />
           <NextScript />
-          <script> </script>
         </body>
       </Html>
     );
