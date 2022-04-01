@@ -89,6 +89,7 @@ module.exports = {
               backgroundColor: '#282834',
               '> code': {
                 display: 'grid',
+                width: 'max-content',
               },
               '.line': {
                 borderLeft: '2px solid transparent',
