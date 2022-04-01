@@ -6,8 +6,9 @@ let count = 0;
 const genId = () => `floating-ui-${count++}`;
 
 function useFloatingId() {
-  const initialId = serverHandoffComplete ? genId() : null;
-  const [id, setId] = React.useState(initialId);
+  const [id, setId] = React.useState(() =>
+    serverHandoffComplete ? genId() : null
+  );
 
   useLayoutEffect(() => {
     if (id === null) {
