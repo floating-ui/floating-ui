@@ -142,6 +142,8 @@ export const useHover = (
     }
 
     function onMouseEnter(event: MouseEvent) {
+      clearTimeout(timeoutRef.current);
+
       if (open || (mouseOnly && pointerTypeRef.current !== 'mouse')) {
         return;
       }
@@ -150,7 +152,6 @@ export const useHover = (
       dataRef.current.openEvent = event;
 
       if (delay) {
-        clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
           onOpenChange(true);
         }, getDelay(delay, 'open', pointerTypeRef.current));
