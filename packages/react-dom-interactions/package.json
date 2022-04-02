@@ -55,7 +55,7 @@
     "react-dom"
   ],
   "dependencies": {
-    "@floating-ui/react-dom": "^0.6.0",
+    "@floating-ui/react-dom": "^0.6.1",
     "point-in-polygon": "^1.1.0",
     "use-isomorphic-layout-effect": "^1.1.1"
   },
