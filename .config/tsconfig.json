@@ -3,7 +3,7 @@
   "exclude": ["../**/*.test.ts"],
   "compilerOptions": {
     "target": "es2021",
-    "lib": ["dom", "es2021"],
+    "lib": ["dom", "es2019"],
     "moduleResolution": "node",
     "module": "es2015",
     "removeComments": false,
