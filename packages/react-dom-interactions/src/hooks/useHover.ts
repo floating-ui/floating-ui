@@ -79,12 +79,6 @@ export const useHover = (
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
       blockMouseMoveRef.current = true;
-
-      handlerRef.current &&
-        getDocument(refs.floating.current).removeEventListener(
-          'pointermove',
-          handlerRef.current
-        );
     }
 
     events.on('dismiss', onDismiss);
@@ -129,6 +123,15 @@ export const useHover = (
   function setPointerRef(event: React.PointerEvent) {
     pointerTypeRef.current = event.pointerType;
   }
+
+  useEffect(() => {
+    if (!open && handlerRef.current) {
+      getDocument(refs.floating.current).removeEventListener(
+        'pointermove',
+        handlerRef.current
+      );
+    }
+  }, [open, refs.floating]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -175,11 +178,7 @@ export const useHover = (
           tree,
           x: event.clientX,
           y: event.clientY,
-          onClose() {
-            handlerRef.current &&
-              doc.removeEventListener('pointermove', handlerRef.current);
-            closeWithDelay();
-          },
+          onClose: closeWithDelay,
         });
 
         doc.addEventListener('pointermove', handlerRef.current);
