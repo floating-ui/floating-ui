@@ -43,8 +43,15 @@ export const useFocusTrap = (
     inert = false,
   }: Props = {}
 ): ElementProps => {
+  const initializedRef = useRef(false);
   const beforeRef = useRef<HTMLElement | null>(null);
   const afterRef = useRef<HTMLElement | null>(null);
+  const modalRef = useRef(modal);
+  const orderRef = useRef(order);
+  useLayoutEffect(() => {
+    modalRef.current = modal;
+    orderRef.current = order;
+  });
 
   if (__DEV__) {
     if (modal && order.includes('reference')) {
@@ -58,7 +65,7 @@ export const useFocusTrap = (
   }
 
   const getFocusableElements = useCallback(() => {
-    return order
+    return orderRef.current
       .map((type) => {
         if (isHTMLElement(refs.reference.current) && type === 'reference') {
           return refs.reference.current;
@@ -80,7 +87,9 @@ export const useFocusTrap = (
       })
       .filter(Boolean)
       .flat() as Array<HTMLElement>;
-  }, [refs.floating, refs.reference, order]);
+    // Ignore `order` dep; only respond to changes on `open`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refs.floating, refs.reference]);
 
   // Focus guard elements
   // https://github.com/w3c/aria-practices/issues/545
@@ -194,8 +203,6 @@ export const useFocusTrap = (
           )
         );
       }
-    } else if (modal && isHTMLElement(refs.reference.current)) {
-      focus(refs.reference.current);
     }
   }, [
     getFocusableElements,
@@ -208,6 +215,23 @@ export const useFocusTrap = (
     refs.floating,
   ]);
 
+  // Return focus to reference
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    if (
+      !open &&
+      modalRef.current &&
+      initializedRef.current &&
+      isHTMLElement(refs.reference.current)
+    ) {
+      focus(refs.reference.current);
+    }
+  }, [open, enabled, refs.reference]);
+
+  // Hide all outside nodes from screen readers
   useEffect(() => {
     if (!open || !modal || !enabled) {
       return;
@@ -236,6 +260,13 @@ export const useFocusTrap = (
       });
     };
   }, [open, modal, enabled, refs.floating]);
+
+  useEffect(() => {
+    initializedRef.current = true;
+    return () => {
+      initializedRef.current = false;
+    };
+  }, []);
 
   function onBlur(event: React.FocusEvent) {
     const target = event.relatedTarget as Element | null;
