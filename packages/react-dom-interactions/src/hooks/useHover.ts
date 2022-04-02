@@ -120,18 +120,14 @@ export const useHover = (
     [delay, onOpenChange]
   );
 
-  function setPointerRef(event: React.PointerEvent) {
-    pointerTypeRef.current = event.pointerType;
-  }
-
   useEffect(() => {
-    if (!open && handlerRef.current) {
+    if (!open && enabled && handlerRef.current) {
       getDocument(refs.floating.current).removeEventListener(
         'pointermove',
         handlerRef.current
       );
     }
-  }, [open, refs.floating]);
+  }, [open, enabled, refs.floating]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -216,6 +212,10 @@ export const useHover = (
 
   if (!enabled) {
     return {};
+  }
+
+  function setPointerRef(event: React.PointerEvent) {
+    pointerTypeRef.current = event.pointerType;
   }
 
   return {
