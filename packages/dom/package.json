@@ -74,7 +74,6 @@
     "react-router-dom": "^6.1.1",
     "rollup-plugin-terser": "^7.0.2",
     "serve": "^13.0.2",
-    "ts-jest": "^27.0.7",
-    "typescript": "^4.5.2"
+    "ts-jest": "^27.0.7"
   }
 }
