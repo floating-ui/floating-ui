@@ -89,16 +89,15 @@ module.exports = {
               backgroundColor: '#282834',
               '> code': {
                 display: 'grid',
-                width: 'max-content',
               },
               '.line': {
                 borderLeft: '2px solid transparent',
+                margin: '0 -1.5rem',
+                padding: '0 1.5rem',
               },
               '.line.line--highlighted': {
                 borderLeftColor: colors.rose[400],
                 backgroundColor: '#3b3547',
-                margin: '0 -1.5rem',
-                padding: '0 1.5rem',
               },
               span: {
                 position: 'relative',
