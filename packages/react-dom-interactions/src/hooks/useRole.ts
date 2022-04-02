@@ -8,6 +8,7 @@ export interface Props {
 
 /**
  * Adds relevant screen reader props for a given element `role`.
+ * @see https://floating-ui.com/docs/useRole
  */
 export const useRole = (
   {open}: FloatingContext,
