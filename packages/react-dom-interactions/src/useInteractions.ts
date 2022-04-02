@@ -28,7 +28,8 @@ function mergeProps(
   };
 
   propsList.forEach((props) => {
-    const elementProps = props?.[elementKey] ?? {};
+    const elementProps = ((props && props[elementKey]) ??
+      {}) as React.HTMLProps<Element>;
 
     (
       Object.keys(elementProps) as Array<keyof React.HTMLProps<Element>>
@@ -47,7 +48,7 @@ function mergeProps(
     ...(elementKey === 'floating' && {tabIndex: -1}),
     ...userProps,
     ...propsList.reduce((acc, props) => {
-      Object.assign(acc, props?.[elementKey]);
+      props && Object.assign(acc, props[elementKey]);
       return acc;
     }, {}),
     ...Object.entries(mergePropsMap[elementKey]).reduce(

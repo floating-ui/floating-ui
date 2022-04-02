@@ -47,12 +47,12 @@ export function convertValueToCoords(
 
   const rawValue =
     typeof value === 'function' ? value({...rects, placement}) : value;
-  const isNumber = typeof rawValue === 'number';
 
   // eslint-disable-next-line prefer-const
-  let {mainAxis, crossAxis, alignmentAxis} = isNumber
-    ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
-    : {mainAxis: 0, crossAxis: 0, alignmentAxis: null, ...rawValue};
+  let {mainAxis, crossAxis, alignmentAxis} =
+    typeof rawValue === 'number'
+      ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}
+      : {mainAxis: 0, crossAxis: 0, alignmentAxis: null, ...rawValue};
 
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;

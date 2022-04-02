@@ -49,6 +49,7 @@ export function isContainingBlock(element: Element): boolean {
   return (
     css.transform !== 'none' ||
     css.perspective !== 'none' ||
+    // @ts-ignore (TS 4.1 compat)
     css.contain === 'paint' ||
     ['transform', 'perspective'].includes(css.willChange) ||
     (isFirefox && css.willChange === 'filter') ||

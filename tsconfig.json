@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "es2021"],
-    "target": "es2021",
+    "lib": ["dom", "es2020"],
+    "target": "es2020",
     "skipLibCheck": true,
     "moduleResolution": "node",
     "noEmit": true,
     "resolveJsonModule": true,
     "strict": true,
     "noUnusedLocals": true,
-    "types": ["node", "jest"],
+    "types": ["node", "jest", "resize-observer-browser"],
     "allowJs": true,
     "esModuleInterop": true,
     "jsx": "react-jsx"

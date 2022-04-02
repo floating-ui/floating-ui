@@ -24,6 +24,7 @@ export function getRectRelativeToOffsetParent(
   const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(
     element,
+    // @ts-ignore - checked above (TS 4.1 compat)
     isOffsetParentAnElement && isScaled(offsetParent),
     strategy === 'fixed'
   );
