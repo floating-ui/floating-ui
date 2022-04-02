@@ -79,13 +79,19 @@ export const useHover = (
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
       blockMouseMoveRef.current = true;
+
+      handlerRef.current &&
+        getDocument(refs.floating.current).removeEventListener(
+          'pointermove',
+          handlerRef.current
+        );
     }
 
     events.on('dismiss', onDismiss);
     return () => {
       events.off('dismiss', onDismiss);
     };
-  }, [enabled, events]);
+  }, [enabled, events, refs.floating]);
 
   useEffect(() => {
     if (!enabled || !handleClose) {
