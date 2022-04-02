@@ -33,7 +33,7 @@ export const useTypeahead = (
     onMatch = () => {},
     enabled = true,
     findMatch = null,
-    resetMs = 500,
+    resetMs = 1000,
     ignoreKeys = [],
     selectedIndex = null,
   }: Props = {
