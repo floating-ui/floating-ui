@@ -15,7 +15,7 @@ export const useRole = (
   {enabled = true, role = 'dialog'}: Partial<Props> = {}
 ): ElementProps => {
   const rootId = useId();
-  const referenceId = `${rootId}-reference`;
+  const referenceId = useId();
   const floatingProps = {id: rootId, role};
 
   if (!enabled) {
