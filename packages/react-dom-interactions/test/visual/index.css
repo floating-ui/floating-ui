@@ -1,0 +1,195 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+  padding-bottom: 200px;
+}
+
+nav {
+  background: #edeff7;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  width: 15rem;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
+
+nav h2 {
+  margin-left: 1rem;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav button {
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  padding-left: 2rem;
+  background: none;
+}
+
+.home-button {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: black;
+}
+
+.new-button {
+  background: royalblue;
+  width: max-content;
+  text-decoration: none;
+  color: white;
+  font-size: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.nav-top {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin-left: 1.5rem;
+  gap: 0.5rem;
+}
+
+.nav-link {
+  display: block;
+  text-decoration: none;
+  margin-left: 2rem;
+  margin-right: 1rem;
+  font-size: 1.125rem;
+  padding: 0.25rem 0;
+  color: #646870;
+  text-transform: capitalize;
+}
+
+.nav-link:visited {
+  color: #646870;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+main {
+  margin-left: 15rem;
+  padding-left: 2rem;
+  max-width: 800px;
+}
+
+.container {
+  border: 1px solid black;
+  display: grid;
+  place-items: center;
+  width: 700px;
+  height: 500px;
+  margin-bottom: 1rem;
+}
+
+.container[data-flexible] {
+  width: 100%;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 700px;
+  background: #edeff7;
+  padding: 16px;
+}
+
+.controls button {
+  all: unset;
+  text-align: center;
+  background: royalblue;
+  padding: 8px;
+  color: white;
+  font-size: 1.125rem;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.controls button:hover {
+  background: navy;
+}
+
+.controls button:focus-visible {
+  outline: 2px solid black;
+}
+
+.Tooltip {
+  background: #222;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+.Popover {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.RootMenu {
+  padding: 6px 14px;
+  border: none;
+  font-size: 16px;
+  background: none;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.RootMenu.open {
+  background: #ddd;
+}
+
+.RootMenu:hover {
+  background: #ddd;
+}
+
+.Menu {
+  background: white;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+  outline: 0;
+}
+
+.MenuItem {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.MenuItem.open {
+  background: #ddd;
+}
+
+.MenuItem:focus {
+  background: royalblue;
+  color: white;
+}
