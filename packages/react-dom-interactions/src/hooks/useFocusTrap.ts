@@ -217,7 +217,7 @@ export const useFocusTrap = (
 
   // Return focus to reference
   useEffect(() => {
-    if (!enabled) {
+    if (!enabled || inert) {
       return;
     }
 
@@ -229,7 +229,7 @@ export const useFocusTrap = (
     ) {
       focus(refs.reference.current);
     }
-  }, [open, enabled, refs.reference]);
+  }, [open, enabled, inert, refs.reference]);
 
   // Hide all outside nodes from screen readers
   useEffect(() => {
