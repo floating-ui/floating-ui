@@ -7,11 +7,11 @@ const genId = () => `floating-ui-${count++}`;
 
 function useFloatingId() {
   const [id, setId] = React.useState(() =>
-    serverHandoffComplete ? genId() : null
+    serverHandoffComplete ? genId() : undefined
   );
 
   useLayoutEffect(() => {
-    if (id === null) {
+    if (id == null) {
       setId(genId());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
