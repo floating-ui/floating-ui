@@ -36,7 +36,7 @@
   ],
   "browserslist": "> 0.5%, not dead, not IE 11",
   "scripts": {
-    "dev": "rollup -c -w",
+    "dev": "parcel test/visual/index.html",
     "build": "NODE_ENV=build rollup -c",
     "test": "jest test"
   },

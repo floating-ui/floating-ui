@@ -15,8 +15,6 @@
     "./packages/*"
   ],
   "scripts": {
-    "dev": "parcel packages/dom/test/visual/index.html",
-    "dev:interactions": "parcel packages/react-dom-interactions/test/visual/index.html",
     "test:functional": "npx playwright test packages/dom/test/functional",
     "test:functional:update": "npm run test:functional -- -u",
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react-dom-interactions run build",
