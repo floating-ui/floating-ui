@@ -167,12 +167,17 @@ export const MenuComponent = forwardRef<
 
   useEffect(() => {
     if (open && refs.reference.current && refs.floating.current) {
+      // Opening on pointer, then navigating via arrows in Safari
+      if (!refs.floating.current.contains(document.activeElement)) {
+        refs.floating.current.focus({preventScroll: true});
+      }
+
       return autoUpdate(refs.reference.current, refs.floating.current, update);
     }
   }, [open, update, refs.reference, refs.floating]);
 
   const pointerFocusListeners: React.HTMLProps<HTMLButtonElement> = {
-    onPointerEnter({currentTarget}) {
+    onMouseMove({currentTarget}) {
       if (blockMouseEventsRef.current) {
         return;
       }
@@ -183,7 +188,7 @@ export const MenuComponent = forwardRef<
         setActiveIndex(listItemsRef.current.indexOf(target));
       }
     },
-    onPointerLeave() {
+    onMouseLeave() {
       if (blockMouseEventsRef.current) {
         return;
       }

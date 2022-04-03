@@ -183,6 +183,8 @@ main {
   font-size: 16px;
   text-align: left;
   line-height: 1.5;
+  outline: 0;
+  margin: 0;
 }
 
 .MenuItem.open {
