@@ -38,7 +38,7 @@
   "scripts": {
     "dev": "parcel test/visual/index.html",
     "build": "NODE_ENV=build rollup -c",
-    "test": "jest test"
+    "test": "jest test/unit"
   },
   "author": "atomiks",
   "license": "MIT",

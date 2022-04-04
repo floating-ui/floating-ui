@@ -7,5 +7,7 @@ runs:
       shell: sh
     - run: npm -w packages/core test
       shell: sh
+    - run: npm -w packages/dom test
+      shell: sh
     - run: npm -w packages/react-dom test
       shell: sh
