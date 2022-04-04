@@ -1,5 +1,4 @@
 import {getNearestOverflowAncestor} from './getNearestOverflowAncestor';
-import {getParentNode} from './getParentNode';
 import {getWindow} from './window';
 import {isOverflowElement} from './is';
 
@@ -21,5 +20,5 @@ export function getOverflowAncestors(
   return isBody
     ? updatedList
     : // @ts-ignore: isBody tells us target will be an HTMLElement here
-      updatedList.concat(getOverflowAncestors(getParentNode(target)));
+      updatedList.concat(getOverflowAncestors(target));
 }
