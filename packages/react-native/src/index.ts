@@ -6,10 +6,7 @@ import {
   useCallback,
   RefObject,
 } from 'react';
-import {
-  computePosition,
-  arrow as arrowCore,
-} from '@floating-ui/core/dist/floating-ui.core';
+import {computePosition, arrow as arrowCore} from '@floating-ui/core';
 import type {
   Placement,
   Middleware,
@@ -29,7 +26,7 @@ export {
   size,
   inline,
   detectOverflow,
-} from '@floating-ui/core/dist/floating-ui.core';
+} from '@floating-ui/core';
 
 const ORIGIN = {x: 0, y: 0};
 
