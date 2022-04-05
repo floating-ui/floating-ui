@@ -37,6 +37,7 @@ const bundles = [
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
+        'aria-hidden': 'ariaHidden',
         '@floating-ui/core': 'FloatingUICore',
         '@floating-ui/dom': 'FloatingUIDOM',
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
@@ -55,6 +56,7 @@ const bundles = [
       globals: {
         react: 'React',
         'react-dom': 'ReactDOM',
+        'aria-hidden': 'ariaHidden',
         '@floating-ui/core': 'FloatingUICore',
         '@floating-ui/dom': 'FloatingUIDOM',
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
@@ -79,7 +81,7 @@ const buildExport = bundles.map(({input, output}) => ({
     '@floating-ui/core',
     '@floating-ui/dom',
     '@floating-ui/react-dom',
-  ].concat(output.format !== 'umd' ? 'point-in-polygon' : []),
+  ].concat(output.format !== 'umd' ? ['point-in-polygon', 'aria-hidden'] : []),
   plugins: [
     commonjs(),
     nodeResolve({extensions: ['.ts', '.tsx']}),

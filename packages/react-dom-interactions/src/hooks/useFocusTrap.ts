@@ -1,4 +1,5 @@
 import React, {MutableRefObject, useCallback, useEffect, useRef} from 'react';
+import {hideOthers} from 'aria-hidden';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext} from '../types';
 import {getDocument} from '../utils/getDocument';
@@ -233,32 +234,11 @@ export const useFocusTrap = (
 
   // Hide all outside nodes from screen readers
   useEffect(() => {
-    if (!open || !modal || !enabled) {
+    if (!open || !modal || !enabled || !refs.floating.current) {
       return;
     }
 
-    const doc = getDocument(refs.floating.current);
-    const nodes = doc.querySelectorAll(
-      'body > *:not([data-floating-ui-portal]'
-    );
-
-    const originalValues: Array<string | null> = [];
-    nodes.forEach((node) => {
-      const originalValue = node.getAttribute('aria-hidden');
-      originalValues.push(originalValue);
-      node.setAttribute('aria-hidden', 'true');
-    });
-
-    return () => {
-      nodes.forEach((node, index) => {
-        const originalValue = originalValues[index];
-        if (originalValue === null) {
-          node.removeAttribute('aria-hidden');
-        } else {
-          node.setAttribute('aria-hidden', originalValue);
-        }
-      });
-    };
+    return hideOthers(refs.floating.current);
   }, [open, modal, enabled, refs.floating]);
 
   useEffect(() => {
