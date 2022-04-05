@@ -132,7 +132,7 @@ export type ModifierArguments<Options: Obj> = {
   options: $Shape<Options>,
   name: string,
 };
-export type Modifier<Name, Options> = {|
+export type Modifier<Name, Options: Obj> = {|
   name: Name,
   enabled: boolean,
   phase: ModifierPhases,
