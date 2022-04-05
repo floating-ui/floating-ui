@@ -45,7 +45,7 @@ export function autoUpdate(
   const {
     ancestorScroll: _ancestorScroll = true,
     ancestorResize: _ancestorResize = true,
-    elementResize: _elementResize = true,
+    elementResize: _elementResize = typeof ResizeObserver !== 'undefined',
     animationFrame = false,
   } = options;
 
