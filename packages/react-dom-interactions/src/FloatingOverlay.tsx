@@ -1,6 +1,8 @@
 import React, {forwardRef} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
+const identifier = 'data-floating-ui-scroll-lock';
+
 /**
  * Provides base styling for a fixed overlay element to dim content or block
  * pointer events behind a floating element.
@@ -28,6 +30,12 @@ export const FloatingOverlay = forwardRef<
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
+    const alreadyLocked = document.body.hasAttribute(identifier);
+
+    if (alreadyLocked) {
+      return;
+    }
+
     Object.assign(document.body.style, {
       position: 'fixed',
       overflow: 'hidden',
@@ -36,6 +44,8 @@ export const FloatingOverlay = forwardRef<
       right: '0',
       [paddingProp]: `${scrollbarWidth}px`,
     });
+
+    document.body.setAttribute(identifier, '');
 
     return () => {
       Object.assign(document.body.style, {
@@ -47,6 +57,7 @@ export const FloatingOverlay = forwardRef<
         [paddingProp]: '',
       });
 
+      document.body.removeAttribute(identifier);
       window.scrollTo(scrollX, scrollY);
     };
   }, [lockScroll]);
