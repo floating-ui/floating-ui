@@ -12,6 +12,7 @@ export interface Props {
   referencePointerDown?: boolean;
   outsidePointerDown?: boolean;
   ancestorScroll?: boolean;
+  bubbles?: boolean;
 }
 
 /**
@@ -26,6 +27,7 @@ export const useDismiss = (
     outsidePointerDown = true,
     referencePointerDown = false,
     ancestorScroll = false,
+    bubbles = true,
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();
@@ -44,6 +46,15 @@ export const useDismiss = (
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
+        if (
+          !bubbles &&
+          !refs.floating.current?.contains(
+            getDocument(refs.floating.current).activeElement
+          )
+        ) {
+          return;
+        }
+
         events.emit('dismiss');
         onOpenChange(false);
         focusReference();
@@ -64,6 +75,15 @@ export const useDismiss = (
         (isElement(refs.reference.current) &&
           refs.reference.current.contains(event.target as Element | null)) ||
         targetIsInsideChildren
+      ) {
+        return;
+      }
+
+      if (
+        !bubbles &&
+        !refs.floating.current?.contains(
+          getDocument(refs.floating.current).activeElement
+        )
       ) {
         return;
       }
@@ -122,6 +142,7 @@ export const useDismiss = (
     focusReference,
     ancestorScroll,
     enabled,
+    bubbles,
     refs.floating,
     refs.reference,
   ]);
