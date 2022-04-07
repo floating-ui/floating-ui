@@ -28,7 +28,7 @@ export const useClick = (
           onOpenChange(!open);
         },
       }),
-      onClick(event: React.PointerEvent) {
+      onClick(event) {
         if (pointerDown && pointerTypeRef.current) {
           pointerTypeRef.current = undefined;
           return;
