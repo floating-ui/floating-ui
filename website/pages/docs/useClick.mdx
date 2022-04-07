@@ -24,6 +24,7 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ```js
 interface Props {
   enabled?: boolean;
+  pointerDown?: boolean;
 }
 ```
 
@@ -38,3 +39,11 @@ useClick(context, {
   enabled: false,
 });
 ```
+
+### pointerDown
+
+default: `false{:js}`
+
+Whether to prefer the `pointerdown{:.string}` event over
+`click{:.string}` (for faster feedback). Keyboard clicks will
+continue to work.
