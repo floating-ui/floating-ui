@@ -42,4 +42,5 @@ export interface FloatingTreeType {
 export interface ElementProps {
   reference?: React.HTMLProps<Element>;
   floating?: React.HTMLProps<HTMLElement>;
+  item?: React.HTMLProps<HTMLElement>;
 }

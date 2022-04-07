@@ -1,6 +1,8 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext} from '../types';
+import {getChildren} from '../utils/getChildren';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 
@@ -8,6 +10,8 @@ const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
+const OPEN_CHANGE = 'o';
+const FOCUS_ON_HOVER = 'f';
 
 function findNonDisabledIndex(
   listRef: MutableRefObject<Array<HTMLElement | null>>,
@@ -122,7 +126,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = (
-  {open, onOpenChange, refs}: FloatingContext,
+  {open, onOpenChange, refs, nodeId}: FloatingContext,
   {
     listRef,
     activeIndex,
@@ -141,9 +145,13 @@ export const useListNavigation = (
     onNavigate: () => {},
   }
 ): ElementProps => {
+  const parentId = useFloatingParentNodeId();
+  const tree = useFloatingTree();
+
   const focusOnOpenRef = useRef(focusItemOnOpen);
   const indexRef = useRef(selectedIndex ?? -1);
   const keyRef = useRef('');
+  const initializedRef = useRef(false);
 
   const [activeId, setActiveId] = useState<string | undefined>();
 
@@ -230,12 +238,17 @@ export const useListNavigation = (
       return;
     }
 
-    if (!open && selectedIndex != null) {
-      (refs.reference.current as HTMLElement | null)?.focus({
-        preventScroll: true,
-      });
+    if (!open && initializedRef.current && selectedIndex != null) {
+      (refs.reference.current as HTMLElement | null)?.focus();
     }
   }, [refs.reference, selectedIndex, open, enabled]);
+
+  useLayoutEffect(() => {
+    initializedRef.current = true;
+    return () => {
+      initializedRef.current = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -253,15 +266,73 @@ export const useListNavigation = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, selectedIndex, activeIndex, enabled, focusItemOnOpen]);
 
+  useLayoutEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    function onTreeOpenChange({
+      open,
+      reference,
+      parentId,
+    }: {
+      open: boolean;
+      reference: Element;
+      parentId: string;
+    }) {
+      if (parentId !== nodeId) {
+        return;
+      }
+
+      listRef.current.forEach((item) => {
+        if (item && item !== reference) {
+          item.style.pointerEvents = open ? 'none' : '';
+        }
+      });
+    }
+
+    function onTreeFocusOnHover({
+      parentId,
+      target,
+    }: {
+      parentId: string;
+      target: HTMLButtonElement;
+    }) {
+      if (nodeId === parentId) {
+        onNavigate(listRef.current.indexOf(target));
+      }
+    }
+
+    tree?.events.on(OPEN_CHANGE, onTreeOpenChange);
+    tree?.events.on(FOCUS_ON_HOVER, onTreeFocusOnHover);
+
+    return () => {
+      tree?.events.off(OPEN_CHANGE, onTreeOpenChange);
+      tree?.events.off(FOCUS_ON_HOVER, onTreeFocusOnHover);
+    };
+  }, [
+    listRef,
+    enabled,
+    onNavigate,
+    tree,
+    nodeId,
+    refs.reference,
+    refs.floating,
+  ]);
+
+  useLayoutEffect(() => {
+    tree?.events.emit(OPEN_CHANGE, {
+      open,
+      parentId,
+      reference: refs.reference.current,
+    });
+  }, [tree, open, parentId, refs.reference]);
+
   function pointerCheck(event: React.PointerEvent) {
     if (focusItemOnOpen === 'auto') {
       // undefined or '' depending on the browser
       focusOnOpenRef.current = !event.pointerType;
     }
-  }
-
-  if (!enabled) {
-    return {};
   }
 
   function onFloatingKeyDown(event: React.KeyboardEvent) {
@@ -350,6 +421,10 @@ export const useListNavigation = (
     }
   }
 
+  if (!enabled) {
+    return {};
+  }
+
   return {
     reference: {
       ...(virtual &&
@@ -409,6 +484,40 @@ export const useListNavigation = (
         'aria-activedescendant': activeId,
       }),
       onKeyDown: onFloatingKeyDown,
+    },
+    item: {
+      onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
+      onPointerMove({currentTarget}) {
+        const target = currentTarget as HTMLButtonElement | null;
+        if (target) {
+          const index = listRef.current.indexOf(target);
+
+          if (index !== -1) {
+            indexRef.current = index;
+            onNavigate(index);
+            focusItem(listRef, indexRef);
+          } else {
+            tree?.events.emit(FOCUS_ON_HOVER, {
+              parentId,
+              target: currentTarget,
+            });
+          }
+        }
+      },
+      onPointerLeave() {
+        if (
+          tree &&
+          getChildren(tree, nodeId).filter((node) => node.context?.open)
+            .length !== 0
+        ) {
+          return;
+        }
+
+        (
+          tree?.nodesRef.current.find((node) => node.id === parentId)?.context
+            ?.refs.floating.current ?? refs.floating.current
+        )?.focus({preventScroll: true});
+      },
     },
   };
 };
