@@ -37,6 +37,7 @@ interface Props {
   virtual?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   focusItemOnOpen?: 'auto' | boolean;
+  focusItemOnHover?: boolean;
 }
 ```
 
@@ -195,3 +196,9 @@ useListNavigation(context, {
   focusItemOnOpen: true,
 });
 ```
+
+### focusItemOnHover
+
+default: `true{:js}`
+
+Whether hovering an item synchronizes the focus.

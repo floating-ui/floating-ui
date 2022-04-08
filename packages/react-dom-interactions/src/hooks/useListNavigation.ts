@@ -111,6 +111,7 @@ export interface Props {
   enabled?: boolean;
   selectedIndex?: number | null;
   focusItemOnOpen?: boolean | 'auto';
+  focusItemOnHover?: boolean;
   loop?: boolean;
   nested?: boolean;
   rtl?: boolean;
@@ -136,6 +137,7 @@ export const useListNavigation = (
     rtl = false,
     virtual = false,
     focusItemOnOpen = 'auto',
+    focusItemOnHover = true,
     orientation = 'vertical',
   }: Props = {
     listRef: {current: []},
@@ -449,23 +451,25 @@ export const useListNavigation = (
     },
     item: {
       onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
-      onPointerMove({currentTarget}) {
-        const target = currentTarget as HTMLButtonElement | null;
-        if (target) {
-          const index = getPresentListItems(listRef).indexOf(target);
-          if (index !== -1) {
-            onNavigate(index);
+      ...(focusItemOnHover && {
+        onPointerMove({currentTarget}) {
+          const target = currentTarget as HTMLButtonElement | null;
+          if (target) {
+            const index = getPresentListItems(listRef).indexOf(target);
+            if (index !== -1) {
+              onNavigate(index);
+            }
           }
-        }
-      },
-      onPointerLeave() {
-        if (!blockPointerLeaveRef.current) {
-          onNavigate(null);
-          if (!virtual) {
-            refs.floating.current?.focus({preventScroll: true});
+        },
+        onPointerLeave() {
+          if (!blockPointerLeaveRef.current) {
+            onNavigate(null);
+            if (!virtual) {
+              refs.floating.current?.focus({preventScroll: true});
+            }
           }
-        }
-      },
+        },
+      }),
     },
   };
 };
