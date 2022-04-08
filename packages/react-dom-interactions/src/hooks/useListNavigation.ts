@@ -198,6 +198,7 @@ export const useListNavigation = (
         focusItem(listRef, indexRef);
       } else {
         indexRef.current = selectedIndex ?? -1;
+        focusItem(listRef, indexRef);
       }
     }
   }, [
