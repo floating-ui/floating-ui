@@ -354,13 +354,11 @@ export const useListNavigation = (
     if (event.key === 'Home') {
       indexRef.current = minIndex;
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
 
     if (event.key === 'End') {
       indexRef.current = maxIndex;
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
 
     if (isMainOrientationKey(event.key, orientation)) {
@@ -376,7 +374,6 @@ export const useListNavigation = (
             ? minIndex
             : maxIndex);
         onNavigate(indexRef.current);
-        focusItem(listRef, indexRef);
         return;
       }
 
@@ -417,7 +414,6 @@ export const useListNavigation = (
       }
 
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
   }
 
@@ -493,9 +489,7 @@ export const useListNavigation = (
           const index = listRef.current.indexOf(target);
 
           if (index !== -1) {
-            indexRef.current = index;
             onNavigate(index);
-            focusItem(listRef, indexRef);
           } else {
             tree?.events.emit(FOCUS_ON_HOVER, {
               parentId,
@@ -506,18 +500,14 @@ export const useListNavigation = (
       },
       onPointerLeave() {
         if (
-          virtual ||
-          (tree &&
-            getChildren(tree, nodeId).filter((node) => node.context?.open)
-              .length !== 0)
+          tree &&
+          getChildren(tree, nodeId).filter((node) => node.context?.open)
+            .length !== 0
         ) {
           return;
         }
 
-        (
-          tree?.nodesRef.current.find((node) => node.id === parentId)?.context
-            ?.refs.floating.current ?? refs.floating.current
-        )?.focus({preventScroll: true});
+        onNavigate(null);
       },
     },
   };
