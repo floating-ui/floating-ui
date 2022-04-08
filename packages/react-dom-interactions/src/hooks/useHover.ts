@@ -4,6 +4,7 @@ import {useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, FloatingTreeType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
+import {useLatestRef} from '../utils/useLatestRef';
 
 export function getDelay(
   value: Props['delay'],
@@ -53,6 +54,8 @@ export const useHover = (
   const {open, onOpenChange, dataRef, events, refs} = context;
 
   const tree = useFloatingTree();
+  const onOpenChangeRef = useLatestRef(onOpenChange);
+  const handleCloseRef = useLatestRef(handleClose);
 
   const pointerTypeRef = useRef<string>();
   const timeoutRef = useRef<any>();
@@ -88,13 +91,13 @@ export const useHover = (
   }, [enabled, events, refs.floating]);
 
   useEffect(() => {
-    if (!enabled || !handleClose) {
+    if (!enabled || !handleCloseRef.current) {
       return;
     }
 
     function onLeave() {
       if (dataRef.current.openEvent?.type.includes('mouse')) {
-        onOpenChange(false);
+        onOpenChangeRef.current(false);
       }
     }
 
@@ -103,21 +106,21 @@ export const useHover = (
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs.floating, onOpenChange, enabled, handleClose, dataRef]);
+  }, [refs.floating, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
 
   const closeWithDelay = useCallback(
     (runElseBranch = true) => {
       if (delay) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
-          () => onOpenChange(false),
+          () => onOpenChangeRef.current(false),
           getDelay(delay, 'close', pointerTypeRef.current)
         );
       } else if (runElseBranch) {
-        onOpenChange(false);
+        onOpenChangeRef.current(false);
       }
     },
-    [delay, onOpenChange]
+    [delay, onOpenChangeRef]
   );
 
   useEffect(() => {
@@ -149,28 +152,31 @@ export const useHover = (
 
       if (delay) {
         timeoutRef.current = setTimeout(() => {
-          onOpenChange(true);
+          onOpenChangeRef.current(true);
         }, getDelay(delay, 'open', pointerTypeRef.current));
       } else {
-        onOpenChange(true);
+        onOpenChangeRef.current(true);
       }
     }
 
     function onMouseLeave(event: MouseEvent) {
-      if (dataRef.current.openEvent?.type === 'click') {
+      if (
+        dataRef.current.openEvent?.type === 'click' ||
+        dataRef.current.openEvent?.type === 'pointerdown'
+      ) {
         return;
       }
 
       const doc = getDocument(refs.floating.current);
       clearTimeout(restTimeoutRef.current);
 
-      if (handleClose) {
+      if (handleCloseRef.current) {
         clearTimeout(timeoutRef.current);
 
         handlerRef.current &&
           doc.removeEventListener('pointermove', handlerRef.current);
 
-        handlerRef.current = handleClose({
+        handlerRef.current = handleCloseRef.current({
           ...context,
           tree,
           x: event.clientX,
@@ -200,10 +206,10 @@ export const useHover = (
     closeWithDelay,
     context,
     delay,
-    handleClose,
+    handleCloseRef,
     dataRef,
     mouseOnly,
-    onOpenChange,
+    onOpenChangeRef,
     open,
     tree,
     refs.reference,

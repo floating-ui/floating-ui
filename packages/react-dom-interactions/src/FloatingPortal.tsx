@@ -26,7 +26,6 @@ export const FloatingPortal: React.FC<{id?: string}> = ({
     }
 
     const el = portalRef.current;
-    el.setAttribute('data-floating-ui-portal', '');
 
     if (!document.body.contains(el)) {
       document.body.appendChild(el);

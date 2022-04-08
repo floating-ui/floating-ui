@@ -49,25 +49,13 @@ useFocusTrap(context, {
 
 default: `true{:js}`
 
-Whether the focus trap is "modal", i.e. focus cannot escape the
-floating element and content outside it is unreachable.
-
-> You must use a Portal when set to `true{:js}` due to
-> `aria-hidden{:.keyword}` being used for wide screen reader
-> support.
+Whether the focus trap is "modal", such that focus cannot escape
+the floating element and content outside it is unreachable.
 
 ```js
-import {FloatingPortal} from '@floating-ui/react-dom-interactions';
-
-function MyComponent() {
-  // ...
-
-  return (
-    <FloatingPortal>
-      <div />
-    </FloatingPortal>
-  );
-}
+useFocusTrap(context, {
+  modal: false,
+});
 ```
 
 ### order

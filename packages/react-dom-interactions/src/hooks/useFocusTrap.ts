@@ -1,9 +1,11 @@
 import React, {MutableRefObject, useCallback, useEffect, useRef} from 'react';
+import {hideOthers} from 'aria-hidden';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
+import {useLatestRef} from '../utils/useLatestRef';
 
 const FOCUSABLE_ELEMENT_SELECTOR =
   'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,object,embed,*[tabindex],*[contenteditable]';
@@ -46,12 +48,8 @@ export const useFocusTrap = (
   const initializedRef = useRef(false);
   const beforeRef = useRef<HTMLElement | null>(null);
   const afterRef = useRef<HTMLElement | null>(null);
-  const modalRef = useRef(modal);
-  const orderRef = useRef(order);
-  useLayoutEffect(() => {
-    modalRef.current = modal;
-    orderRef.current = order;
-  });
+  const modalRef = useLatestRef(modal);
+  const orderRef = useLatestRef(order);
 
   if (__DEV__) {
     if (modal && order.includes('reference')) {
@@ -229,36 +227,15 @@ export const useFocusTrap = (
     ) {
       focus(refs.reference.current);
     }
-  }, [open, enabled, inert, refs.reference]);
+  }, [open, enabled, inert, modalRef, refs.reference]);
 
   // Hide all outside nodes from screen readers
   useEffect(() => {
-    if (!open || !modal || !enabled) {
+    if (!open || !modal || !enabled || !refs.floating.current) {
       return;
     }
 
-    const doc = getDocument(refs.floating.current);
-    const nodes = doc.querySelectorAll(
-      'body > *:not([data-floating-ui-portal]'
-    );
-
-    const originalValues: Array<string | null> = [];
-    nodes.forEach((node) => {
-      const originalValue = node.getAttribute('aria-hidden');
-      originalValues.push(originalValue);
-      node.setAttribute('aria-hidden', 'true');
-    });
-
-    return () => {
-      nodes.forEach((node, index) => {
-        const originalValue = originalValues[index];
-        if (originalValue === null) {
-          node.removeAttribute('aria-hidden');
-        } else {
-          node.setAttribute('aria-hidden', originalValue);
-        }
-      });
-    };
+    return hideOthers(refs.floating.current);
   }, [open, modal, enabled, refs.floating]);
 
   useEffect(() => {

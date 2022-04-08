@@ -27,6 +27,7 @@ interface Props {
   referencePointerDown?: boolean;
   outsidePointerDown?: boolean;
   ancestorScroll?: boolean;
+  bubbles?: boolean;
 }
 ```
 
@@ -91,5 +92,26 @@ overflow ancestor.
 ```js
 useDismiss(context, {
   ancestorScroll: true,
+});
+```
+
+### bubbles
+
+default: `true{:js}`
+
+When dealing with nested floating elements, this determines
+whether the dismissal bubbles through the entire
+`<FloatingTree />{:js}` or stops at the current node.
+
+When `false{:js}`, the floating element must have focus inside
+it.
+
+Generally, nested modal dialogs (where focus cannot escape the
+current node) will prefer no bubbling, while other nested
+floating elements will prefer bubbling.
+
+```js
+useDismiss(context, {
+  bubbles: false,
 });
 ```

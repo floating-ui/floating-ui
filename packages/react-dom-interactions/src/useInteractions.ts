@@ -11,11 +11,12 @@ function reducePropsToArrayWithInitValue(userProps?: Record<string, any>) {
 function mergeProps(
   userProps: Record<string, any> | undefined,
   propsList: Array<ElementProps | void>,
-  elementKey: 'reference' | 'floating'
+  elementKey: 'reference' | 'floating' | 'item'
 ) {
   const mergePropsMap: {
     reference: Record<string, Array<(...args: any[]) => void>>;
     floating: Record<string, Array<(...args: any[]) => void>>;
+    item: Record<string, Array<(...args: any[]) => void>>;
   } = {
     reference:
       elementKey === 'reference'
@@ -25,6 +26,8 @@ function mergeProps(
       elementKey === 'floating'
         ? reducePropsToArrayWithInitValue(userProps)
         : {},
+    item:
+      elementKey === 'item' ? reducePropsToArrayWithInitValue(userProps) : {},
   };
 
   propsList.forEach((props) => {
@@ -73,4 +76,6 @@ export const useInteractions = (
     mergeProps(userProps, propsList, 'reference'),
   getFloatingProps: (userProps?: React.HTMLProps<HTMLElement>) =>
     mergeProps(userProps, propsList, 'floating'),
+  getItemProps: (userProps?: React.HTMLProps<HTMLElement>) =>
+    mergeProps(userProps, propsList, 'item'),
 });

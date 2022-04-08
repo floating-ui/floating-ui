@@ -1,8 +1,10 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext} from '../types';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
+import {useLatestRef} from '../utils/useLatestRef';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
@@ -109,6 +111,7 @@ export interface Props {
   enabled?: boolean;
   selectedIndex?: number | null;
   focusItemOnOpen?: boolean | 'auto';
+  focusItemOnHover?: boolean;
   loop?: boolean;
   nested?: boolean;
   rtl?: boolean;
@@ -134,6 +137,7 @@ export const useListNavigation = (
     rtl = false,
     virtual = false,
     focusItemOnOpen = 'auto',
+    focusItemOnHover = true,
     orientation = 'vertical',
   }: Props = {
     listRef: {current: []},
@@ -141,9 +145,15 @@ export const useListNavigation = (
     onNavigate: () => {},
   }
 ): ElementProps => {
+  const parentId = useFloatingParentNodeId();
+  const tree = useFloatingTree();
+
   const focusOnOpenRef = useRef(focusItemOnOpen);
   const indexRef = useRef(selectedIndex ?? -1);
   const keyRef = useRef('');
+  const initializedRef = useRef(false);
+  const onNavigateRef = useLatestRef(onNavigate);
+  const blockPointerLeaveRef = useRef(false);
 
   const [activeId, setActiveId] = useState<string | undefined>();
 
@@ -173,22 +183,38 @@ export const useListNavigation = (
     }
 
     if (open && focusOnOpenRef.current) {
-      onNavigate(indexRef.current);
+      onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
-  }, [open, selectedIndex, listRef, onNavigate, focusItem, enabled]);
+  }, [open, selectedIndex, listRef, onNavigateRef, focusItem, enabled]);
 
   useLayoutEffect(() => {
     if (!enabled) {
       return;
     }
 
-    if (open && activeIndex != null) {
-      indexRef.current = activeIndex;
-      onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
+    if (open) {
+      if (activeIndex != null) {
+        indexRef.current = activeIndex;
+        onNavigateRef.current(indexRef.current);
+        focusItem(listRef, indexRef);
+      } else {
+        indexRef.current = -1;
+        focusItem(listRef, indexRef);
+      }
     }
-  }, [open, activeIndex, listRef, onNavigate, focusItem, enabled]);
+  }, [
+    open,
+    activeIndex,
+    selectedIndex,
+    listRef,
+    onNavigateRef,
+    focusItem,
+    enabled,
+    parentId,
+    refs.floating,
+    tree?.nodesRef,
+  ]);
 
   useLayoutEffect(() => {
     if (selectedIndex != null || !enabled) {
@@ -208,7 +234,7 @@ export const useListNavigation = (
         )
           ? getMaxIndex(listRef)
           : getMinIndex(listRef);
-        onNavigate(indexRef.current);
+        onNavigateRef.current(indexRef.current);
         focusItem(listRef, indexRef);
       }
     }
@@ -218,7 +244,7 @@ export const useListNavigation = (
     open,
     listRef,
     selectedIndex,
-    onNavigate,
+    onNavigateRef,
     focusItem,
     enabled,
     orientation,
@@ -230,12 +256,17 @@ export const useListNavigation = (
       return;
     }
 
-    if (!open && selectedIndex != null) {
-      (refs.reference.current as HTMLElement | null)?.focus({
-        preventScroll: true,
-      });
+    if (!open && initializedRef.current && selectedIndex != null) {
+      (refs.reference.current as HTMLElement | null)?.focus();
     }
   }, [refs.reference, selectedIndex, open, enabled]);
+
+  useLayoutEffect(() => {
+    initializedRef.current = true;
+    return () => {
+      initializedRef.current = false;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -247,11 +278,16 @@ export const useListNavigation = (
         focusOnOpenRef.current = true;
       }
       indexRef.current = selectedIndex ?? activeIndex ?? -1;
-      onNavigate(null);
+      onNavigateRef.current(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, selectedIndex, activeIndex, enabled, focusItemOnOpen]);
+  }, [
+    open,
+    selectedIndex,
+    activeIndex,
+    enabled,
+    focusItemOnOpen,
+    onNavigateRef,
+  ]);
 
   function pointerCheck(event: React.PointerEvent) {
     if (focusItemOnOpen === 'auto') {
@@ -260,11 +296,9 @@ export const useListNavigation = (
     }
   }
 
-  if (!enabled) {
-    return {};
-  }
-
   function onFloatingKeyDown(event: React.KeyboardEvent) {
+    blockPointerLeaveRef.current = true;
+
     if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
       stopEvent(event);
       onOpenChange(false);
@@ -283,13 +317,11 @@ export const useListNavigation = (
     if (event.key === 'Home') {
       indexRef.current = minIndex;
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
 
     if (event.key === 'End') {
       indexRef.current = maxIndex;
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
 
     if (isMainOrientationKey(event.key, orientation)) {
@@ -305,14 +337,13 @@ export const useListNavigation = (
             ? minIndex
             : maxIndex);
         onNavigate(indexRef.current);
-        focusItem(listRef, indexRef);
         return;
       }
 
       if (isMainOrientationToEndKey(event.key, orientation, rtl)) {
         if (loop) {
           indexRef.current =
-            currentIndex === maxIndex
+            currentIndex >= maxIndex
               ? minIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
@@ -328,7 +359,7 @@ export const useListNavigation = (
       } else {
         if (loop) {
           indexRef.current =
-            currentIndex === minIndex
+            currentIndex <= minIndex
               ? maxIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
@@ -346,8 +377,11 @@ export const useListNavigation = (
       }
 
       onNavigate(indexRef.current);
-      focusItem(listRef, indexRef);
     }
+  }
+
+  if (!enabled) {
+    return {};
   }
 
   return {
@@ -359,6 +393,8 @@ export const useListNavigation = (
       onPointerEnter: pointerCheck,
       onPointerDown: pointerCheck,
       onKeyDown(event) {
+        blockPointerLeaveRef.current = true;
+
         if (virtual && open) {
           return onFloatingKeyDown(event);
         }
@@ -409,6 +445,31 @@ export const useListNavigation = (
         'aria-activedescendant': activeId,
       }),
       onKeyDown: onFloatingKeyDown,
+      onPointerMove() {
+        blockPointerLeaveRef.current = false;
+      },
+    },
+    item: {
+      onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
+      ...(focusItemOnHover && {
+        onPointerMove({currentTarget}) {
+          const target = currentTarget as HTMLButtonElement | null;
+          if (target) {
+            const index = getPresentListItems(listRef).indexOf(target);
+            if (index !== -1) {
+              onNavigate(index);
+            }
+          }
+        },
+        onPointerLeave() {
+          if (!blockPointerLeaveRef.current) {
+            onNavigate(null);
+            if (!virtual) {
+              refs.floating.current?.focus({preventScroll: true});
+            }
+          }
+        },
+      }),
     },
   };
 };

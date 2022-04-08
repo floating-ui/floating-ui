@@ -1,7 +1,9 @@
 import type {ElementProps, FloatingContext} from '../types';
+import {useRef} from 'react';
 
 export interface Props {
   enabled?: boolean;
+  pointerDown?: boolean;
 }
 
 /**
@@ -10,15 +12,37 @@ export interface Props {
  */
 export const useClick = (
   {open, onOpenChange, dataRef}: FloatingContext,
-  {enabled = true}: Props = {}
+  {enabled = true, pointerDown = false}: Props = {}
 ): ElementProps => {
+  const pointerTypeRef = useRef<'mouse' | 'pen' | 'touch'>();
+
   if (!enabled) {
     return {};
   }
 
   return {
     reference: {
-      onClick(event: React.PointerEvent) {
+      ...(pointerDown && {
+        onPointerDown(event) {
+          pointerTypeRef.current = event.pointerType;
+
+          if (open) {
+            if (dataRef.current.openEvent?.type === 'pointerdown') {
+              onOpenChange(false);
+            }
+          } else {
+            onOpenChange(true);
+          }
+
+          dataRef.current.openEvent = event.nativeEvent;
+        },
+      }),
+      onClick(event) {
+        if (pointerDown && pointerTypeRef.current) {
+          pointerTypeRef.current = undefined;
+          return;
+        }
+
         if (open) {
           if (dataRef.current.openEvent?.type === 'click') {
             onOpenChange(false);

@@ -5,6 +5,7 @@ import type {ElementProps, FloatingContext} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
+import {useLatestRef} from '../utils/useLatestRef';
 
 export interface Props {
   enabled?: boolean;
@@ -12,6 +13,7 @@ export interface Props {
   referencePointerDown?: boolean;
   outsidePointerDown?: boolean;
   ancestorScroll?: boolean;
+  bubbles?: boolean;
 }
 
 /**
@@ -26,16 +28,23 @@ export const useDismiss = (
     outsidePointerDown = true,
     referencePointerDown = false,
     ancestorScroll = false,
+    bubbles = true,
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();
+  const onOpenChangeRef = useLatestRef(onOpenChange);
+
+  const isFocusInsideFloating = useCallback(() => {
+    return refs.floating.current?.contains(
+      getDocument(refs.floating.current).activeElement
+    );
+  }, [refs.floating]);
 
   const focusReference = useCallback(() => {
     if (isHTMLElement(refs.reference.current)) {
       refs.reference.current.focus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refs.reference.current]);
+  }, [refs.reference]);
 
   useEffect(() => {
     if (!open || !enabled) {
@@ -44,8 +53,12 @@ export const useDismiss = (
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
+        if (!bubbles && !isFocusInsideFloating()) {
+          return;
+        }
+
         events.emit('dismiss');
-        onOpenChange(false);
+        onOpenChangeRef.current(false);
         focusReference();
       }
     }
@@ -68,13 +81,17 @@ export const useDismiss = (
         return;
       }
 
+      if (!bubbles && !isFocusInsideFloating()) {
+        return;
+      }
+
       events.emit('dismiss');
-      onOpenChange(false);
+      onOpenChangeRef.current(false);
       focusReference();
     }
 
     function onScroll() {
-      onOpenChange(false);
+      onOpenChangeRef.current(false);
     }
 
     const doc = getDocument(refs.floating.current);
@@ -118,10 +135,12 @@ export const useDismiss = (
     tree,
     nodeId,
     open,
-    onOpenChange,
+    onOpenChangeRef,
     focusReference,
     ancestorScroll,
     enabled,
+    bubbles,
+    isFocusInsideFloating,
     refs.floating,
     refs.reference,
   ]);
