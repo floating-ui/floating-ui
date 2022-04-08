@@ -2,7 +2,6 @@ import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext} from '../types';
-import {getChildren} from '../utils/getChildren';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -12,7 +11,6 @@ const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 const OPEN_CHANGE = 'o';
-const FOCUS_ON_HOVER = 'f';
 
 function findNonDisabledIndex(
   listRef: MutableRefObject<Array<HTMLElement | null>>,
@@ -154,6 +152,7 @@ export const useListNavigation = (
   const keyRef = useRef('');
   const initializedRef = useRef(false);
   const onNavigateRef = useLatestRef(onNavigate);
+  const blockPointerLeaveRef = useRef(false);
 
   const [activeId, setActiveId] = useState<string | undefined>();
 
@@ -198,7 +197,17 @@ export const useListNavigation = (
       onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
-  }, [open, activeIndex, listRef, onNavigateRef, focusItem, enabled]);
+  }, [
+    open,
+    activeIndex,
+    listRef,
+    onNavigateRef,
+    focusItem,
+    enabled,
+    parentId,
+    refs.floating,
+    tree?.nodesRef,
+  ]);
 
   useLayoutEffect(() => {
     if (selectedIndex != null || !enabled) {
@@ -291,31 +300,17 @@ export const useListNavigation = (
         return;
       }
 
-      listRef.current.forEach((item) => {
+      getPresentListItems(listRef).forEach((item) => {
         if (item && item !== reference) {
           item.style.pointerEvents = open ? 'none' : '';
         }
       });
     }
 
-    function onTreeFocusOnHover({
-      parentId,
-      target,
-    }: {
-      parentId: string;
-      target: HTMLButtonElement;
-    }) {
-      if (nodeId === parentId) {
-        onNavigateRef.current(listRef.current.indexOf(target));
-      }
-    }
-
     tree?.events.on(OPEN_CHANGE, onTreeOpenChange);
-    tree?.events.on(FOCUS_ON_HOVER, onTreeFocusOnHover);
 
     return () => {
       tree?.events.off(OPEN_CHANGE, onTreeOpenChange);
-      tree?.events.off(FOCUS_ON_HOVER, onTreeFocusOnHover);
     };
   }, [
     listRef,
@@ -328,12 +323,16 @@ export const useListNavigation = (
   ]);
 
   useLayoutEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     tree?.events.emit(OPEN_CHANGE, {
       open,
       parentId,
       reference: refs.reference.current,
     });
-  }, [tree, open, parentId, refs.reference]);
+  }, [enabled, tree, open, parentId, refs.reference]);
 
   function pointerCheck(event: React.PointerEvent) {
     if (focusItemOnOpen === 'auto') {
@@ -343,6 +342,8 @@ export const useListNavigation = (
   }
 
   function onFloatingKeyDown(event: React.KeyboardEvent) {
+    blockPointerLeaveRef.current = true;
+
     if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
       stopEvent(event);
       onOpenChange(false);
@@ -437,6 +438,8 @@ export const useListNavigation = (
       onPointerEnter: pointerCheck,
       onPointerDown: pointerCheck,
       onKeyDown(event) {
+        blockPointerLeaveRef.current = true;
+
         if (virtual && open) {
           return onFloatingKeyDown(event);
         }
@@ -487,34 +490,28 @@ export const useListNavigation = (
         'aria-activedescendant': activeId,
       }),
       onKeyDown: onFloatingKeyDown,
+      onPointerMove() {
+        blockPointerLeaveRef.current = false;
+      },
     },
     item: {
       onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
       onPointerMove({currentTarget}) {
         const target = currentTarget as HTMLButtonElement | null;
         if (target) {
-          const index = listRef.current.indexOf(target);
-
+          const index = getPresentListItems(listRef).indexOf(target);
           if (index !== -1) {
             onNavigate(index);
-          } else {
-            tree?.events.emit(FOCUS_ON_HOVER, {
-              parentId,
-              target: currentTarget,
-            });
           }
         }
       },
       onPointerLeave() {
-        if (
-          tree &&
-          getChildren(tree, nodeId).filter((node) => node.context?.open)
-            .length !== 0
-        ) {
-          return;
+        if (!blockPointerLeaveRef.current) {
+          onNavigate(null);
+          if (!virtual) {
+            refs.floating.current?.focus({preventScroll: true});
+          }
         }
-
-        onNavigate(null);
       },
     },
   };
