@@ -32,12 +32,17 @@ export const useDismiss = (
 ): ElementProps => {
   const tree = useFloatingTree();
 
+  const isFocusInsideFloating = useCallback(() => {
+    return refs.floating.current?.contains(
+      getDocument(refs.floating.current).activeElement
+    );
+  }, [refs.floating]);
+
   const focusReference = useCallback(() => {
     if (isHTMLElement(refs.reference.current)) {
       refs.reference.current.focus();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refs.reference.current]);
+  }, [refs.reference]);
 
   useEffect(() => {
     if (!open || !enabled) {
@@ -46,12 +51,7 @@ export const useDismiss = (
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (
-          !bubbles &&
-          !refs.floating.current?.contains(
-            getDocument(refs.floating.current).activeElement
-          )
-        ) {
+        if (!bubbles && !isFocusInsideFloating()) {
           return;
         }
 
@@ -79,12 +79,7 @@ export const useDismiss = (
         return;
       }
 
-      if (
-        !bubbles &&
-        !refs.floating.current?.contains(
-          getDocument(refs.floating.current).activeElement
-        )
-      ) {
+      if (!bubbles && !isFocusInsideFloating()) {
         return;
       }
 
@@ -143,6 +138,7 @@ export const useDismiss = (
     ancestorScroll,
     enabled,
     bubbles,
+    isFocusInsideFloating,
     refs.floating,
     refs.reference,
   ]);
