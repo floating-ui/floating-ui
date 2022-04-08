@@ -10,7 +10,6 @@ const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
-const OPEN_CHANGE = 'o';
 
 function findNonDisabledIndex(
   listRef: MutableRefObject<Array<HTMLElement | null>>,
@@ -125,7 +124,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = (
-  {open, onOpenChange, refs, nodeId}: FloatingContext,
+  {open, onOpenChange, refs}: FloatingContext,
   {
     listRef,
     activeIndex,
@@ -281,58 +280,6 @@ export const useListNavigation = (
     focusItemOnOpen,
     onNavigateRef,
   ]);
-
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    function onTreeOpenChange({
-      open,
-      reference,
-      parentId,
-    }: {
-      open: boolean;
-      reference: Element;
-      parentId: string;
-    }) {
-      if (parentId !== nodeId) {
-        return;
-      }
-
-      getPresentListItems(listRef).forEach((item) => {
-        if (item && item !== reference) {
-          item.style.pointerEvents = open ? 'none' : '';
-        }
-      });
-    }
-
-    tree?.events.on(OPEN_CHANGE, onTreeOpenChange);
-
-    return () => {
-      tree?.events.off(OPEN_CHANGE, onTreeOpenChange);
-    };
-  }, [
-    listRef,
-    enabled,
-    onNavigateRef,
-    tree,
-    nodeId,
-    refs.reference,
-    refs.floating,
-  ]);
-
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    tree?.events.emit(OPEN_CHANGE, {
-      open,
-      parentId,
-      reference: refs.reference.current,
-    });
-  }, [enabled, tree, open, parentId, refs.reference]);
 
   function pointerCheck(event: React.PointerEvent) {
     if (focusItemOnOpen === 'auto') {
