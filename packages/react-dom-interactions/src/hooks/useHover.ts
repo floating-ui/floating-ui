@@ -160,7 +160,10 @@ export const useHover = (
     }
 
     function onMouseLeave(event: MouseEvent) {
-      if (dataRef.current.openEvent?.type === 'click') {
+      if (
+        dataRef.current.openEvent?.type === 'click' ||
+        dataRef.current.openEvent?.type === 'pointerdown'
+      ) {
         return;
       }
 

@@ -23,9 +23,18 @@ export const useClick = (
   return {
     reference: {
       ...(pointerDown && {
-        onPointerDown({pointerType}) {
-          pointerTypeRef.current = pointerType;
-          onOpenChange(!open);
+        onPointerDown(event) {
+          pointerTypeRef.current = event.pointerType;
+
+          if (open) {
+            if (dataRef.current.openEvent?.type === 'pointerdown') {
+              onOpenChange(false);
+            }
+          } else {
+            onOpenChange(true);
+          }
+
+          dataRef.current.openEvent = event.nativeEvent;
         },
       }),
       onClick(event) {
