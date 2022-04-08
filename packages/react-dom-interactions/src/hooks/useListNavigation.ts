@@ -506,9 +506,10 @@ export const useListNavigation = (
       },
       onPointerLeave() {
         if (
-          tree &&
-          getChildren(tree, nodeId).filter((node) => node.context?.open)
-            .length !== 0
+          virtual ||
+          (tree &&
+            getChildren(tree, nodeId).filter((node) => node.context?.open)
+              .length !== 0)
         ) {
           return;
         }
