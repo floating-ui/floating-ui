@@ -191,14 +191,19 @@ export const useListNavigation = (
       return;
     }
 
-    if (open && activeIndex != null) {
-      indexRef.current = activeIndex;
-      onNavigateRef.current(indexRef.current);
-      focusItem(listRef, indexRef);
+    if (open) {
+      if (activeIndex != null) {
+        indexRef.current = activeIndex;
+        onNavigateRef.current(indexRef.current);
+        focusItem(listRef, indexRef);
+      } else {
+        indexRef.current = selectedIndex ?? -1;
+      }
     }
   }, [
     open,
     activeIndex,
+    selectedIndex,
     listRef,
     onNavigateRef,
     focusItem,
@@ -335,7 +340,7 @@ export const useListNavigation = (
       if (isMainOrientationToEndKey(event.key, orientation, rtl)) {
         if (loop) {
           indexRef.current =
-            currentIndex === maxIndex
+            currentIndex >= maxIndex
               ? minIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
@@ -351,7 +356,7 @@ export const useListNavigation = (
       } else {
         if (loop) {
           indexRef.current =
-            currentIndex === minIndex
+            currentIndex <= minIndex
               ? maxIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
