@@ -199,7 +199,7 @@ export const useListNavigation = (
         onNavigateRef.current(indexRef.current);
         focusItem(listRef, indexRef);
       } else {
-        indexRef.current = selectedIndex ?? -1;
+        indexRef.current = -1;
         focusItem(listRef, indexRef);
       }
     }
