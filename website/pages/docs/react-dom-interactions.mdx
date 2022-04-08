@@ -95,11 +95,12 @@ import {
 
 // ...
 const {context} = useFloating();
-const {getReferenceProps, getFloatingProps} = useInteractions([
-  useHover(context, props),
-  useFocus(context, props),
-  useRole(context, props),
-]);
+const {getReferenceProps, getFloatingProps, getItemProps} =
+  useInteractions([
+    useHover(context, props),
+    useFocus(context, props),
+    useRole(context, props),
+  ]);
 ```
 
 Each hook accepts the `context{:.const}` object which gets
@@ -143,16 +144,33 @@ This pattern enables you to pass event listener props through the
 prop getters, which performs merging of its own internal event
 listeners and your own without overriding them.
 
-### Item prop getters
+### Item prop getter
 
-Currently, the package only provides prop getters for the
-reference and floating elements, which leaves the handling of
-props given to items inside the floating element up to you. This
-gives you full control and the examples below showcase how to do
-this.
+When dealing with a list inside your floating element
+(`useListNavigation(){:js}`), pass these props to each item
+element:
 
-In the future, prop getters for items may be provided once a
-desirable API has been worked out.
+```js /getItemProps/
+<div
+  {...getFloatingProps({
+    ref: floating,
+    style: {
+      position: strategy,
+      left: x ?? '',
+      top: y ?? '',
+    },
+  })}
+>
+  <ul>
+    {list.map((item) => (
+      <li {...getItemProps({key: item})}>{item}</li>
+    ))}
+  </ul>
+</div>
+```
+
+Without a list of items, this prop getter can be omitted (e.g. a
+regular tooltip or popover).
 
 ## Examples
 

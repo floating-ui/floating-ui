@@ -12,12 +12,15 @@ import {
 
 // ...
 const {context} = useFloating();
-const {getReferenceProps, getFloatingProps} = useInteractions([
-  useListNavigation(context, {
-    // props
-  }),
-]);
+const {getReferenceProps, getFloatingProps, getItemProps} =
+  useInteractions([
+    useListNavigation(context, {
+      // props
+    }),
+  ]);
 ```
+
+Spread the `getItemProps{:.const}` to each list item.
 
 ## Props
 
