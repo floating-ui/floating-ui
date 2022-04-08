@@ -5,6 +5,7 @@ import type {ElementProps, FloatingContext} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
+import {useLatestRef} from '../utils/useLatestRef';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
@@ -152,6 +153,7 @@ export const useListNavigation = (
   const indexRef = useRef(selectedIndex ?? -1);
   const keyRef = useRef('');
   const initializedRef = useRef(false);
+  const onNavigateRef = useLatestRef(onNavigate);
 
   const [activeId, setActiveId] = useState<string | undefined>();
 
@@ -181,10 +183,10 @@ export const useListNavigation = (
     }
 
     if (open && focusOnOpenRef.current) {
-      onNavigate(indexRef.current);
+      onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
-  }, [open, selectedIndex, listRef, onNavigate, focusItem, enabled]);
+  }, [open, selectedIndex, listRef, onNavigateRef, focusItem, enabled]);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -193,10 +195,10 @@ export const useListNavigation = (
 
     if (open && activeIndex != null) {
       indexRef.current = activeIndex;
-      onNavigate(indexRef.current);
+      onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
-  }, [open, activeIndex, listRef, onNavigate, focusItem, enabled]);
+  }, [open, activeIndex, listRef, onNavigateRef, focusItem, enabled]);
 
   useLayoutEffect(() => {
     if (selectedIndex != null || !enabled) {
@@ -216,7 +218,7 @@ export const useListNavigation = (
         )
           ? getMaxIndex(listRef)
           : getMinIndex(listRef);
-        onNavigate(indexRef.current);
+        onNavigateRef.current(indexRef.current);
         focusItem(listRef, indexRef);
       }
     }
@@ -226,7 +228,7 @@ export const useListNavigation = (
     open,
     listRef,
     selectedIndex,
-    onNavigate,
+    onNavigateRef,
     focusItem,
     enabled,
     orientation,
@@ -260,11 +262,16 @@ export const useListNavigation = (
         focusOnOpenRef.current = true;
       }
       indexRef.current = selectedIndex ?? activeIndex ?? -1;
-      onNavigate(null);
+      onNavigateRef.current(null);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, selectedIndex, activeIndex, enabled, focusItemOnOpen]);
+  }, [
+    open,
+    selectedIndex,
+    activeIndex,
+    enabled,
+    focusItemOnOpen,
+    onNavigateRef,
+  ]);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -299,7 +306,7 @@ export const useListNavigation = (
       target: HTMLButtonElement;
     }) {
       if (nodeId === parentId) {
-        onNavigate(listRef.current.indexOf(target));
+        onNavigateRef.current(listRef.current.indexOf(target));
       }
     }
 
@@ -313,7 +320,7 @@ export const useListNavigation = (
   }, [
     listRef,
     enabled,
-    onNavigate,
+    onNavigateRef,
     tree,
     nodeId,
     refs.reference,

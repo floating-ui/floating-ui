@@ -5,6 +5,7 @@ import type {ElementProps, FloatingContext} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
+import {useLatestRef} from '../utils/useLatestRef';
 
 export interface Props {
   enabled?: boolean;
@@ -31,6 +32,7 @@ export const useDismiss = (
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();
+  const onOpenChangeRef = useLatestRef(onOpenChange);
 
   const isFocusInsideFloating = useCallback(() => {
     return refs.floating.current?.contains(
@@ -56,7 +58,7 @@ export const useDismiss = (
         }
 
         events.emit('dismiss');
-        onOpenChange(false);
+        onOpenChangeRef.current(false);
         focusReference();
       }
     }
@@ -84,12 +86,12 @@ export const useDismiss = (
       }
 
       events.emit('dismiss');
-      onOpenChange(false);
+      onOpenChangeRef.current(false);
       focusReference();
     }
 
     function onScroll() {
-      onOpenChange(false);
+      onOpenChangeRef.current(false);
     }
 
     const doc = getDocument(refs.floating.current);
@@ -133,7 +135,7 @@ export const useDismiss = (
     tree,
     nodeId,
     open,
-    onOpenChange,
+    onOpenChangeRef,
     focusReference,
     ancestorScroll,
     enabled,
