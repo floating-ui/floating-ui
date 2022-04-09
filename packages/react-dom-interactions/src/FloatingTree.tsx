@@ -14,14 +14,15 @@ import {createPubSub} from './createPubSub';
 const FloatingNodeContext = createContext<FloatingNodeType | null>(null);
 const FloatingTreeContext = createContext<FloatingTreeType | null>(null);
 
-export const useFloatingParentNodeId = () =>
+export const useFloatingParentNodeId = (): string | null =>
   useContext(FloatingNodeContext)?.id ?? null;
-export const useFloatingTree = () => useContext(FloatingTreeContext);
+export const useFloatingTree = (): FloatingTreeType | null =>
+  useContext(FloatingTreeContext);
 
 /**
  * Registers a node into the floating tree, returning its id.
  */
-export const useFloatingNodeId = () => {
+export const useFloatingNodeId = (): string => {
   const id = useId();
   const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
@@ -41,7 +42,13 @@ export const useFloatingNodeId = () => {
  * Provides parent node context for nested floating elements.
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export const FloatingNode: React.FC<{id: string}> = ({children, id}) => {
+export const FloatingNode = ({
+  children,
+  id,
+}: {
+  children?: React.ReactNode;
+  id: string;
+}) => {
   const parentId = useFloatingParentNodeId();
 
   return (
@@ -59,7 +66,7 @@ export const FloatingNode: React.FC<{id: string}> = ({children, id}) => {
  * respective parent).
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export const FloatingTree: React.FC = ({children}) => {
+export const FloatingTree = ({children}: {children?: React.ReactNode}) => {
   const nodesRef = useRef<Array<FloatingNodeType>>([]);
 
   const addNode = useCallback((node: FloatingNodeType) => {

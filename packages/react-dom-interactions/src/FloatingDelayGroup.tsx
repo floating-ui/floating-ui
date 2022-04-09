@@ -18,6 +18,11 @@ interface GroupState {
   currentId: any;
 }
 
+interface GroupContext extends GroupState {
+  setCurrentId: React.Dispatch<React.SetStateAction<any>>;
+  setState: React.Dispatch<React.SetStateAction<GroupState>>;
+}
+
 const FloatingDelayGroupContext = createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
@@ -31,16 +36,20 @@ const FloatingDelayGroupContext = createContext<
   setState: () => {},
 });
 
-export const useDelayGroupContext = () => useContext(FloatingDelayGroupContext);
+export const useDelayGroupContext = (): GroupContext =>
+  useContext(FloatingDelayGroupContext);
 
 /**
  * Provides context for a group of floating elements that should share a
  * `delay`.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export const FloatingDelayGroup: React.FC<{delay: Delay}> = ({
+export const FloatingDelayGroup = ({
   children,
   delay,
+}: {
+  children?: React.ReactNode;
+  delay: Delay;
 }) => {
   const [state, setState] = useState<GroupState>({
     delay,

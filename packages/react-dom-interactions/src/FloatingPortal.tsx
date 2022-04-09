@@ -8,9 +8,12 @@ const DEFAULT_ID = 'floating-ui-root';
  * Portals your floating element outside of the main app node.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
-export const FloatingPortal: React.FC<{id?: string}> = ({
+export const FloatingPortal = ({
   children,
   id = DEFAULT_ID,
+}: {
+  children?: React.ReactNode;
+  id?: string;
 }) => {
   const [mounted, setMounted] = useState(false);
   const portalRef = useRef<HTMLDivElement | null>(null);
