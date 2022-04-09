@@ -23,65 +23,81 @@ the screen).
 It does not call `update(){:js}` immediately, so for the first
 update, you should call the update function yourself.
 
+> By default, this requires a `ResizeObserver{:.class}`. To
+> support old browsers, either polyfill this constructor, or
+> disable the `elementResize{:.objectKey}` option and update
+> manually.
+
 ## Options
 
 These are the options you can pass as a fourth argument to
-`autoUpdate(){:js}`. Each comment specifies the default value.
+`autoUpdate(){:js}`.
 
 ```js
 interface Options {
-  ancestorScroll: boolean; // true
-  ancestorResize: boolean; // true
-  elementResize: boolean; // true
-  animationFrame: boolean; // false
+  ancestorScroll?: boolean;
+  ancestorResize?: boolean;
+  elementResize?: boolean;
+  animationFrame?: boolean;
 }
 ```
 
 ### ancestorScroll
+
+default: `true{:js}`
 
 Whether to update the position when an overflow ancestor is
 scrolled.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
-  ancestorScroll: false, // true by default
+  ancestorScroll: false,
 });
 ```
 
 ### ancestorResize
 
+default: `true{:js}`
+
 Whether to update the position when an overflow ancestor is
-resized. This uses the native `resize` event.
+resized. This uses the `resize{:.string}` event.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
-  ancestorResize: false, // true by default
+  ancestorResize: false,
 });
 ```
 
 ### elementResize
+
+default: `true{:js}`
 
 Whether to update the position when either the reference or
 floating elements resized. This uses a `ResizeObserver{:.class}`.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
-  elementResize: false, // true by default
+  elementResize: false,
 });
 ```
 
 ### animationFrame
 
+default: `false{:js}`
+
 Whether to update the position of the floating element on every
 animation frame if required. This is optimized for performance
-but can still be costly — use this sparingly for things like an
-animated reference element.
+but can still be costly.
 
-Setting this to `true{:js}` **disables** every other listener as
-they become unnecessary.
+Setting this to `true{:js}` disables every other listener as they
+become unnecessary.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
-  animationFrame: true, // false by default
+  animationFrame: true,
 });
 ```
+
+This option should be used sparingly but can also automatically
+handle **layout** changes where the reference element moves on
+the screen, which none of the other options can handle.

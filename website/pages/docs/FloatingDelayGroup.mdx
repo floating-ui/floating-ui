@@ -1,7 +1,14 @@
 # FloatingDelayGroup
 
 Provides context for a group of floating elements that should
-share a `delay{:.objectKey}`.
+share a `delay{:.objectKey}` which temporarily becomes `0{:js}`
+after the first floating element of the group opens.
+
+This allows higher discovery of floating elements when they have
+a hover delay (like tooltips) when their reference elements are
+placed near each other.
+
+[View example on CodeSandbox](https://codesandbox.io/s/icy-water-ktwif6?file=/src/Tooltip.tsx)
 
 {/* prettier-ignore */}
 ```js

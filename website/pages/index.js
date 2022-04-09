@@ -653,7 +653,7 @@ function HomePage() {
         </div>
 
         <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
-          <h2 className="inline-block text-3xl lg:text-4xl text-gray-200 font-bold mt-8 mb-4">
+          <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 font-bold mt-8 mb-4">
             Support Floating UI's future.
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
@@ -711,7 +711,7 @@ function HomePage() {
         </div> */}
 
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
-          <h2 className="inline-block text-3xl lg:text-4xl leading-gradient-heading font-bold mb-4 mt-16">
+          <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 leading-gradient-heading font-bold mb-4 mt-16">
             Ready to install?
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
@@ -729,7 +729,7 @@ function HomePage() {
               <Link href="/docs/getting-started">
                 <a
                   href="/docs/getting-started"
-                  className="text-xl font-bold flex gap-2 items-center mt-4"
+                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-300"
                 >
                   Get started <ArrowRight />
                 </a>
@@ -743,7 +743,7 @@ function HomePage() {
               <Link href="/docs/getting-started#cdn">
                 <a
                   href="/docs/getting-started#cdn"
-                  className="text-xl font-bold flex gap-2 items-center mt-4"
+                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-300"
                 >
                   Get started <ArrowRight />
                 </a>

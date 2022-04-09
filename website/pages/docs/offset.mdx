@@ -51,9 +51,9 @@ comment specifies the default value.
 
 ```ts
 interface AxesOffsets {
-  mainAxis?: number; // 0
-  crossAxis?: number; // 0
-  alignmentAxis?: number | null; // null
+  mainAxis?: number;
+  crossAxis?: number;
+  alignmentAxis?: number | null;
 }
 
 type Options =
@@ -81,8 +81,10 @@ each axis.
 
 #### mainAxis
 
-Distance (gutter or margin) between the floating element and the
-reference element.
+default: `0{:js}`
+
+Represents the distance (gutter or margin) between the floating
+element and the reference element.
 
 ```js
 offset({mainAxis: 10});
@@ -90,7 +92,10 @@ offset({mainAxis: 10});
 
 #### crossAxis
 
-Skidding between the floating element and the reference element.
+default: `0{:js}`
+
+Represents the skidding between the floating element and the
+reference element.
 
 ```js
 offset({crossAxis: 10});
@@ -98,12 +103,15 @@ offset({crossAxis: 10});
 
 #### alignmentAxis
 
+default: `null{:js}`
+
 Works on the same axis as `crossAxis{:.objectKey}` but applies
 only to aligned placements and works
 [_logically_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties).
 The offset is inverted for `-end{:.string}` alignments.
 
-This will override the `crossAxis{:.objectKey}` offset.
+This will override the `crossAxis{:.objectKey}` offset when set
+to a number.
 
 ```js
 offset({alignmentAxis: 10});

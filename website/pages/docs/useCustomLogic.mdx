@@ -8,15 +8,19 @@ If you want to pass it into `useInteractions(){:js}`, you can
 return an object with the following shape:
 
 ```js
-const useCustomLogic = (context) => {
-  // Both of these are optional! It's a regular hook,
-  // so you can do anything you want.
+const useCustomLogic = (
+  context: FloatingContext
+): ElementProps => {
+  // Note: all 3 of these properties are optional.
   return {
     reference: {
       // React.HTMLProps
     },
     floating: {
       // React.HTMLProps
+    },
+    item: {
+      // React.HTMLPRops
     },
   };
 };

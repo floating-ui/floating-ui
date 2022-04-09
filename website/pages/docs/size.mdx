@@ -53,16 +53,17 @@ If your element has a border, ensure your CSS is using
 
 ## Options
 
-These are the options you can pass to `size(){:js}`. Each comment
-specifies the default value.
+These are the options you can pass to `size(){:js}`.
 
 ```ts
 interface Options extends DetectOverflowOptions {
-  apply(args: Dimensions & ElementRects): void; // undefined
+  apply?: (args: Dimensions & ElementRects) => void;
 }
 ```
 
 ### apply
+
+default: `undefined{:js}`
 
 Unlike other middleware, in which you assign styles after
 `computePosition(){:js}` has done its work, `size(){:js}` has its

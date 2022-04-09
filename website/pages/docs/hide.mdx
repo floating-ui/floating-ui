@@ -48,16 +48,17 @@ middleware array.
 
 ## Options
 
-These are the options you can pass to `hide(){:js}`. Each comment
-specifies the default value.
+These are the options you can pass to `hide(){:js}`.
 
 ```js
-interface Options {
-  strategy: 'referenceHidden' | 'escaped'; // 'referenceHidden'
+interface Options extends DetectOverflowOptions {
+  strategy?: 'referenceHidden' | 'escaped';
 }
 ```
 
 ### strategy
+
+default: `'referenceHidden'{:js}`
 
 Specifies the type of hiding strategy to use.
 
@@ -80,12 +81,12 @@ hide({padding: 5}); // 0 by default
 ## Data
 
 ```ts
-type Data = {
+interface Data {
   referenceHidden?: boolean;
   referenceHiddenOffsets?: SideObject;
   escaped?: boolean;
   escapedOffsets?: SideObject;
-};
+}
 ```
 
 Depending on the strategy used, these options may exist in the

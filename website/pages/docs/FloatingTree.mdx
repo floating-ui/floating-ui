@@ -1,8 +1,11 @@
 # FloatingTree
 
 Provides context for nested floating elements when they are not
-children of each other on the DOM (i.e. portalled to a common
-node, rather than their respective parent).
+children of each other on the DOM.
+
+> If your elements are not portalled into a common node (e.g.
+> FloatingPortal), then the natural DOM tree hierarchy renders
+> this unnecessary.
 
 A nested floating element may look like the following, where
 there is a popover **inside** the content of another one:
@@ -15,7 +18,7 @@ function App() {
     <FloatingTree>
       <Popover
         render={() => (
-          <Popover>
+          <Popover render={() => 'Nested Popover'}>
             <button>Child</button>
           </Popover>
         )}
@@ -74,5 +77,32 @@ interface FloatingTreeType {
   events: FloatingEvents;
   addNode: (node: FloatingNodeType) => void;
   removeNode: (node: FloatingNodeType) => void;
+}
+```
+
+## FloatingTree wrapper
+
+You can use the following technique to avoid having the consumer
+specify the `<FloatingTree />{:js}` wrapper:
+
+```js
+function PopoverComponent() {
+  // Main logic as seen earlier
+}
+
+// This is the component the consumer uses
+export function Popover(props) {
+  const parentId = useFloatingParentNodeId();
+
+  // This is a root, so we wrap it with the tree
+  if (parentId === null) {
+    return (
+      <FloatingTree>
+        <PopoverComponent {...props} />
+      </FloatingTree>
+    );
+  }
+
+  return <PopoverComponent {...props} />;
 }
 ```

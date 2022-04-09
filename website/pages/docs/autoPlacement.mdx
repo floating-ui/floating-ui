@@ -18,17 +18,18 @@ computePosition(referenceEl, floatingEl, {
 ## Options
 
 These are the options you can pass to `autoPlacement(){:js}`.
-Each comment specifies the default value.
 
 ```ts
 interface Options extends DetectOverflowOptions {
-  alignment: Alignment | null; // null
-  autoAlignment: boolean; // true
-  allowedPlacements: Array<Placement>; // allPlacements
+  alignment?: Alignment | null;
+  autoAlignment?: boolean;
+  allowedPlacements?: Array<Placement>;
 }
 ```
 
 ### alignment
+
+default: `null{:js}`
 
 Without options, `autoPlacement(){:js}` will choose any of the
 `Side{:.class}` placements which fit best, i.e. `'top'{:js}`,
@@ -46,6 +47,8 @@ autoPlacement({
 
 ### autoAlignment
 
+default: `true{:js}`
+
 When `alignment{:.objectKey}` is specified, this describes
 whether to automatically choose placements with the opposite
 alignment if they fit better.
@@ -54,11 +57,13 @@ alignment if they fit better.
 autoPlacement({
   alignment: 'start',
   // Won't also choose 'end' alignments if those fit better
-  autoAlignment: false, // true by default
+  autoAlignment: false,
 });
 ```
 
 ### allowedPlacements
+
+default: computed subset of `ALL_PLACEMENTS{:.const}`
 
 Describes the placements which are allowed to be chosen.
 

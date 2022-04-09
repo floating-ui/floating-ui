@@ -64,12 +64,14 @@ comment specifies the default value.
 
 ```ts
 interface Options {
-  element: HTMLElement; // undefined (required)
-  padding: Padding; // 0
+  element: HTMLElement;
+  padding?: Padding;
 }
 ```
 
 ### element
+
+default: `undefined{:js}`
 
 This is the arrow element to be positioned.
 
@@ -80,6 +82,8 @@ arrow({
 ```
 
 ### padding
+
+default: `0{:js}`
 
 This describes the padding between the arrow and the edges of the
 floating element. If your floating element has
@@ -98,11 +102,11 @@ arrow({
 The following data is available in `middlewareData.arrow{:js}`:
 
 ```ts
-type Data = {
+interface Data {
   x?: number;
   y?: number;
   centerOffset: number;
-};
+}
 ```
 
 ### x

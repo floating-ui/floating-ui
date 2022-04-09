@@ -39,16 +39,18 @@ comment specifies the default value.
 
 ```ts
 interface Options extends DetectOverflowOptions {
-  mainAxis: boolean; // true
-  crossAxis: boolean; // false
-  limiter: {
+  mainAxis?: boolean;
+  crossAxis?: boolean;
+  limiter?: {
     fn: (middlewareArguments: MiddlewareArguments) => Coords;
     options?: any;
-  }; // {fn: ({x, y}) => ({x, y})}
+  };
 }
 ```
 
 ### mainAxis
+
+default: `true{:js}`
 
 This is the main axis in which shifting is applied.
 
@@ -56,10 +58,12 @@ This is the main axis in which shifting is applied.
 - `y`-axis for `'left'{:js}` and `'right'{:js}` placements
 
 ```js
-shift({mainAxis: false}); // true by default
+shift({mainAxis: false});
 ```
 
 ### crossAxis
+
+default: `false{:js}`
 
 This is the cross axis in which shifting is applied, the opposite
 axis of `mainAxis{:.objectKey}`.
@@ -69,10 +73,12 @@ the reference element, which may not be desired and is often
 replaced by the `flip(){:js}` middleware.
 
 ```js
-shift({crossAxis: true}); // false by default
+shift({crossAxis: true});
 ```
 
 ### limiter
+
+default: no-op
 
 This accepts a function that **limits** the shifting done, in
 order to prevent detachment or "overly-eager" behavior. The
@@ -89,25 +95,31 @@ This function itself takes options.
 
 #### limitShift.mainAxis
 
-Whether to apply limiting on the mainAxis.
+default: `true{:js}`
+
+Whether to apply limiting on the main axis.
 
 ```js
 shift({
-  limiter: limitShift({mainAxis: false}), // true by default
+  limiter: limitShift({mainAxis: false}),
 });
 ```
 
 #### limitShift.crossAxis
 
-Whether to apply limiting to the crossAxis.
+default: `true{:js}`
+
+Whether to apply limiting on the cross axis.
 
 ```js
 shift({
-  limiter: limitShift({crossAxis: false}), // true by default
+  limiter: limitShift({crossAxis: false}),
 });
 ```
 
 #### limitShift.offset
+
+default: `0{:js}`
 
 This will offset when the limiting starts. A positive number will
 start limiting earlier, while negative later.
@@ -170,10 +182,10 @@ see [Handling large content](/docs/misc#handling-large-content).
 The following data is available in `middlewareData.shift{:js}`:
 
 ```js
-type Data = {
-  x: number,
-  y: number,
-};
+interface Data {
+  x: number;
+  y: number;
+}
 ```
 
 `x{:.objectKey}` and `y{:.objectKey}` represent how much the

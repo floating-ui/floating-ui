@@ -33,20 +33,21 @@ computePosition(referenceEl, floatingEl, {
 
 ## Options
 
-These are the options you can pass to `flip(){:js}`. Each comment
-specifies the default value.
+These are the options you can pass to `flip(){:js}`.
 
 ```ts
 interface Options extends DetectOverflowOptions {
-  mainAxis: boolean; // true
-  crossAxis: boolean; // true
-  fallbackPlacements: Array<Placement>; // [oppositePlacement]
-  fallbackStrategy: 'bestFit' | 'initialPlacement'; // 'bestFit'
-  flipAlignment: boolean; // true
+  mainAxis?: boolean;
+  crossAxis?: boolean;
+  fallbackPlacements?: Array<Placement>;
+  fallbackStrategy?: 'bestFit' | 'initialPlacement';
+  flipAlignment?: boolean;
 }
 ```
 
 ### mainAxis
+
+default: `true{:js}`
 
 This is the main axis in which overflow is checked to perform a
 flip.
@@ -60,6 +61,8 @@ flip({mainAxis: false});
 
 ### crossAxis
 
+default: `true{:js}`
+
 This is the cross axis in which overflow is checked to perform a
 flip, the opposite axis of `mainAxis{:.objectKey}`.
 
@@ -68,6 +71,8 @@ flip({crossAxis: false});
 ```
 
 ### fallbackPlacements
+
+default: `[oppositePlacement]{:js}`
 
 This describes the array of placements to try if the preferred
 `placement{:.objectKey}` doesn't fully fit on the axes in which
@@ -87,6 +92,8 @@ best-fitting placement will be used.
 
 ### fallbackStrategy
 
+default: `'bestFit'{:js}`
+
 When no placements fit, then you'll want to decide what happens.
 `'bestFit'{:js}` will use the placement which fits best on the
 checked axes. `'initialPlacement'{:js}` will use the initial
@@ -99,6 +106,8 @@ flip({
 ```
 
 ### flipAlignment
+
+default: `true{:js}`
 
 When an alignment is specified, e.g. `'top-start'{:js}` instead
 of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
