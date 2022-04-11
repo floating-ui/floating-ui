@@ -342,3 +342,46 @@ positioning update be executed:
 render(<Tooltip open />);
 await act(async () => {});
 ```
+
+## Types
+
+The `useFloating()` hook is generic, to allow specifying a
+stronger reference type. By default, the reference type is wide,
+allowing `Element | VirtualElement | null`. This can cause issues
+in TypeScript, if you want to reuse the refs returned by the
+hook, as `VirtualElement` does not have most of the native
+methods on elements.
+
+For example, you couldn't check if the reference element contains
+another node. To fix this, you can pass a generic argument to the
+hook the specify a more specific type for the reference:
+
+```tsx
+import {useFloating, shift} from '@floating-ui/react-dom';
+
+function App() {
+  const {reference, floating, refs} =
+    useFloating<HTMLButtonElement>({
+      placement: 'right',
+      middleware: [shift()],
+    });
+
+  useEffect(() => {
+    if (
+      refs.reference.current?.contains(
+        document.querySelector('#another-element')
+      )
+    ) {
+      // All good!
+      // do something
+    }
+  }, [refs.reference.current]);
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      <div ref={floating}>Tooltip</div>
+    </>
+  );
+}
+```
