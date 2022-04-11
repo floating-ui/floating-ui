@@ -1,4 +1,5 @@
-import {render} from 'react-dom';
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
 import {
   BrowserRouter,
   Link,
@@ -66,16 +67,17 @@ function App() {
   );
 }
 
-render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route path="/new" element={<New />} />
-        {ROUTES.map(({path, component: Component}) => (
-          <Route key={path} path={path} element={<Component />} />
-        ))}
-      </Route>
-    </Routes>
-  </BrowserRouter>,
-  document.getElementById('root')
+createRoot(document.getElementById('root') as HTMLElement).render(
+  <StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="/new" element={<New />} />
+          {ROUTES.map(({path, component: Component}) => (
+            <Route key={path} path={path} element={<Component />} />
+          ))}
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </StrictMode>
 );

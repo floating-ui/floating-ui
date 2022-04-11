@@ -81,7 +81,7 @@ export function useFloating({
 
   useLayoutEffect(update, [update]);
 
-  const setReference = useCallback(
+  const setReference: UseFloatingReturn['reference'] = useCallback(
     (node) => {
       reference.current = node;
       update();
@@ -89,7 +89,7 @@ export function useFloating({
     [update]
   );
 
-  const setFloating = useCallback(
+  const setFloating: UseFloatingReturn['floating'] = useCallback(
     (node) => {
       floating.current = node;
       update();
