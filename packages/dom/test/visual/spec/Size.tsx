@@ -4,6 +4,7 @@ import {allPlacements} from '../utils/allPlacements';
 import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
+import {flushSync} from 'react-dom';
 
 export function Size() {
   const [rtl, setRtl] = useState(false);
@@ -13,7 +14,11 @@ export function Size() {
     placement,
     middleware: [
       size({
-        apply: setSizeData,
+        apply: (data) => {
+          flushSync(() => {
+            setSizeData(data);
+          });
+        },
         padding: 10,
       }),
     ],
