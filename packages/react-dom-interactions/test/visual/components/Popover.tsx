@@ -70,14 +70,10 @@ interface Props {
   }) => React.ReactNode;
   placement?: Placement;
   modal?: boolean;
+  children?: React.ReactNode;
 }
 
-export const Popover: React.FC<Props> = ({
-  children,
-  render,
-  placement,
-  modal = true,
-}) => {
+export function Popover({children, render, placement, modal = true}: Props) {
   const [open, setOpen] = useState(false);
 
   const {x, y, reference, floating, strategy, refs, update, context} =
@@ -142,4 +138,4 @@ export const Popover: React.FC<Props> = ({
       </Wrapper>
     </>
   );
-};
+}

@@ -4,7 +4,6 @@ import React, {
   forwardRef,
   isValidElement,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -72,14 +71,15 @@ export const MenuItem = forwardRef<
 interface Props {
   label?: string;
   nested?: boolean;
+  children?: React.ReactNode;
 }
 
 export const MenuComponent = forwardRef<
   any,
   Props & React.HTMLProps<HTMLButtonElement>
->(({children, label}, ref) => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+>(({children, label, ...props}, ref) => {
   const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const listItemsRef = useRef<Array<HTMLButtonElement | null>>([]);
   const listContentRef = useRef(
@@ -88,13 +88,53 @@ export const MenuComponent = forwardRef<
     ) as Array<string | null>
   );
 
-  const blockMouseEventsRef = useRef(false);
-
+  const tree = useFloatingTree();
   const nodeId = useFloatingNodeId();
   const parentId = useFloatingParentNodeId();
-  const tree = useFloatingTree();
   const nested = parentId != null;
 
+  const {x, y, reference, floating, strategy, refs, update, context} =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      middleware: [
+        offset({mainAxis: 4, alignmentAxis: nested ? -5 : 0}),
+        flip(),
+        shift(),
+      ],
+      placement: nested ? 'right-start' : 'bottom-start',
+      nodeId,
+    });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+    useHover(context, {
+      handleClose: safePolygon(),
+      enabled: nested,
+    }),
+    useClick(context),
+    useRole(context, {role: 'menu'}),
+    useDismiss(context),
+    useFocusTrap(context, {inert: true}),
+    useListNavigation(context, {
+      listRef: listItemsRef,
+      activeIndex,
+      nested,
+      onNavigate: setActiveIndex,
+    }),
+    useTypeahead(context, {
+      listRef: listContentRef,
+      onMatch: open ? setActiveIndex : undefined,
+      activeIndex,
+    }),
+  ]);
+
+  useEffect(() => {
+    if (open && refs.reference.current && refs.floating.current) {
+      return autoUpdate(refs.reference.current, refs.floating.current, update);
+    }
+  }, [open, nested, update, refs.reference, refs.floating]);
+
+  // Block pointer events of sibling list items while a nested submenu is open
   useEffect(() => {
     function onTreeOpenChange({
       open,
@@ -117,93 +157,19 @@ export const MenuComponent = forwardRef<
     }
 
     tree?.events.on('openChange', onTreeOpenChange);
+
     return () => {
       tree?.events.off('openChange', onTreeOpenChange);
     };
-  }, [tree, nodeId]);
+  }, [nodeId, tree?.events, refs.reference, refs.floating]);
 
-  const {x, y, reference, floating, strategy, refs, update, context} =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      middleware: [
-        offset({mainAxis: 4, alignmentAxis: nested ? -5 : 0}),
-        flip(),
-        shift(),
-      ],
-      placement: nested ? 'right-start' : 'bottom-start',
-      nodeId,
-    });
-
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context, {
-      handleClose: safePolygon(),
-      enabled: nested,
-    }),
-    useClick(context),
-    useRole(context, {role: 'menu'}),
-    useDismiss(context),
-    useFocusTrap(context, {inert: true}),
-    useListNavigation(context, {
-      listRef: listItemsRef,
-      activeIndex,
-      nested,
-      onNavigate: setActiveIndex,
-    }),
-    useTypeahead(context, {
-      listRef: listContentRef,
-      onMatch: open ? setActiveIndex : undefined,
-      activeIndex,
-    }),
-  ]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     tree?.events.emit('openChange', {
       open,
       parentId,
       reference: refs.reference.current,
     });
   }, [tree, open, parentId, refs.reference]);
-
-  useEffect(() => {
-    if (open && refs.reference.current && refs.floating.current) {
-      // Opening on pointer, then navigating via arrows in Safari
-      if (!refs.floating.current.contains(document.activeElement)) {
-        refs.floating.current.focus({preventScroll: true});
-      }
-
-      return autoUpdate(refs.reference.current, refs.floating.current, update);
-    }
-  }, [open, update, refs.reference, refs.floating]);
-
-  const pointerFocusListeners: React.HTMLProps<HTMLButtonElement> = {
-    onMouseMove({currentTarget}) {
-      if (blockMouseEventsRef.current) {
-        return;
-      }
-
-      const target = currentTarget as HTMLButtonElement | null;
-      if (target) {
-        currentTarget.focus({preventScroll: true});
-        setActiveIndex(listItemsRef.current.indexOf(target));
-      }
-    },
-    onMouseLeave() {
-      if (blockMouseEventsRef.current) {
-        return;
-      }
-
-      if (nested) {
-        tree?.nodesRef.current
-          .find((node) => node.id === parentId)
-          ?.context?.refs.floating.current?.focus({
-            preventScroll: true,
-          });
-      } else {
-        refs.floating.current?.focus({preventScroll: true});
-      }
-    },
-  };
 
   const mergedReferenceRef = useMemo(
     () => mergeRefs([ref, reference]),
@@ -214,13 +180,12 @@ export const MenuComponent = forwardRef<
     <FloatingNode id={nodeId}>
       <button
         {...getReferenceProps({
+          ...props,
           ref: mergedReferenceRef,
-          onKeyDown() {
-            blockMouseEventsRef.current = true;
-          },
+          onClick: ({currentTarget}) =>
+            (currentTarget as HTMLButtonElement).focus(),
           ...(nested
             ? {
-                ...pointerFocusListeners,
                 role: 'menuitem',
                 className: `MenuItem${open ? ' open' : ''}`,
               }
@@ -242,26 +207,22 @@ export const MenuComponent = forwardRef<
                 top: y ?? '',
                 left: x ?? '',
               },
-              onPointerMove() {
-                blockMouseEventsRef.current = false;
-              },
-              onKeyDown() {
-                blockMouseEventsRef.current = true;
-              },
             })}
           >
             {Children.map(
               children,
               (child, index) =>
                 isValidElement(child) &&
-                cloneElement(child, {
-                  role: 'menuitem',
-                  className: 'MenuItem',
-                  ref(node: HTMLButtonElement) {
-                    listItemsRef.current[index] = node;
-                  },
-                  ...pointerFocusListeners,
-                })
+                cloneElement(
+                  child,
+                  getItemProps({
+                    role: 'menuitem',
+                    className: 'MenuItem',
+                    ref(node: HTMLButtonElement) {
+                      listItemsRef.current[index] = node;
+                    },
+                  })
+                )
             )}
           </div>
         )}

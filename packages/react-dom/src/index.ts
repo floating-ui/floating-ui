@@ -7,6 +7,7 @@ import type {
 } from '@floating-ui/core';
 import {computePosition, arrow as arrowCore} from '@floating-ui/dom';
 import {useCallback, useMemo, useState, useRef, MutableRefObject} from 'react';
+import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {deepEqual} from './utils/deepEqual';
 
@@ -74,14 +75,16 @@ export function useFloating({
       strategy,
     }).then((data) => {
       if (isMountedRef.current) {
-        setData(data);
+        flushSync(() => {
+          setData(data);
+        });
       }
     });
   }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(update, [update]);
 
-  const setReference = useCallback(
+  const setReference: UseFloatingReturn['reference'] = useCallback(
     (node) => {
       reference.current = node;
       update();
@@ -89,7 +92,7 @@ export function useFloating({
     [update]
   );
 
-  const setFloating = useCallback(
+  const setFloating: UseFloatingReturn['floating'] = useCallback(
     (node) => {
       floating.current = node;
       update();

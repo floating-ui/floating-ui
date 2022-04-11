@@ -8,6 +8,7 @@ import {
 import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
 import {VirtualElement} from '@floating-ui/core';
 import {isElement} from '../../../src/utils/is';
+import {flushSync} from 'react-dom';
 
 export const useScroll = ({
   refs,
@@ -58,7 +59,9 @@ export const useScroll = ({
       const scroll = scrollRef.current;
 
       if (scroll) {
-        setScroll({scrollX: scroll.scrollLeft, scrollY: scroll.scrollTop});
+        flushSync(() => {
+          setScroll({scrollX: scroll.scrollLeft, scrollY: scroll.scrollTop});
+        });
       }
 
       update();

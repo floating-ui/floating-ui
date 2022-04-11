@@ -20,6 +20,7 @@ interface Props {
   label: string;
   placement?: Placement;
   delay?: Delay;
+  children?: React.ReactNode;
 }
 
 export const Main = () => {
@@ -72,12 +73,12 @@ export const Main = () => {
   );
 };
 
-export const Tooltip: React.FC<Props> = ({
+export function Tooltip({
   children,
   label,
   placement = 'top',
   delay = 0,
-}) => {
+}: Props) {
   const [open, setOpen] = useState(false);
 
   const {x, y, reference, floating, strategy, context, refs, update} =
@@ -122,4 +123,4 @@ export const Tooltip: React.FC<Props> = ({
       )}
     </>
   );
-};
+}

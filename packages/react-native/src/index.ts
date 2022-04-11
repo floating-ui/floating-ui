@@ -129,7 +129,7 @@ export const useFloating = ({
     };
   }, [update]);
 
-  const setReference = useCallback(
+  const setReference: UseFloatingReturn['reference'] = useCallback(
     (node) => {
       reference.current = node;
       animationFrames.current.push(requestAnimationFrame(update));
@@ -137,7 +137,7 @@ export const useFloating = ({
     [update]
   );
 
-  const setFloating = useCallback(
+  const setFloating: UseFloatingReturn['floating'] = useCallback(
     (node) => {
       floating.current = node;
       animationFrames.current.push(requestAnimationFrame(update));
@@ -145,7 +145,7 @@ export const useFloating = ({
     [update]
   );
 
-  const setOffsetParent = useCallback(
+  const setOffsetParent: UseFloatingReturn['offsetParent'] = useCallback(
     (node) => {
       offsetParent.current = node;
       animationFrames.current.push(requestAnimationFrame(update));
