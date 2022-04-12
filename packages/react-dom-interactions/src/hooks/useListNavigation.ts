@@ -251,8 +251,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (!open && initializedRef.current && selectedIndex != null) {
-      (refs.reference.current as HTMLElement | null)?.focus();
+    if (
+      !open &&
+      initializedRef.current &&
+      selectedIndex != null &&
+      isHTMLElement(refs.reference.current)
+    ) {
+      refs.reference.current.focus();
     }
   }, [refs.reference, selectedIndex, open, enabled]);
 
