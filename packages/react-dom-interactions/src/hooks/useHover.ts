@@ -110,7 +110,7 @@ export const useHover = (
 
   const closeWithDelay = useCallback(
     (runElseBranch = true) => {
-      if (delay) {
+      if (delay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
           () => onOpenChangeRef.current(false),
@@ -129,6 +129,7 @@ export const useHover = (
         'pointermove',
         handlerRef.current
       );
+      handlerRef.current = undefined;
     }
   }, [open, enabled, refs.floating]);
 
@@ -143,7 +144,11 @@ export const useHover = (
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
 
-      if (open || (mouseOnly && pointerTypeRef.current !== 'mouse')) {
+      if (
+        open ||
+        (mouseOnly && pointerTypeRef.current !== 'mouse') ||
+        (restMs > 0 && getDelay(delay, 'open') === 0)
+      ) {
         return;
       }
 
@@ -212,6 +217,7 @@ export const useHover = (
     onOpenChangeRef,
     open,
     tree,
+    restMs,
     refs.reference,
     refs.floating,
   ]);
