@@ -1,4 +1,4 @@
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 
 export interface Props {
@@ -10,8 +10,8 @@ export interface Props {
  * Adds relevant screen reader props for a given element `role`.
  * @see https://floating-ui.com/docs/useRole
  */
-export const useRole = (
-  {open}: FloatingContext,
+export const useRole = <RT extends ReferenceType = ReferenceType>(
+  {open}: FloatingContext<RT>,
   {enabled = true, role = 'dialog'}: Partial<Props> = {}
 ): ElementProps => {
   const rootId = useId();

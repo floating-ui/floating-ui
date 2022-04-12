@@ -1,4 +1,4 @@
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useRef} from 'react';
 
 export interface Props {
@@ -10,8 +10,8 @@ export interface Props {
  * Adds click event listeners that change the open state (toggle behavior).
  * @see https://floating-ui.com/docs/useClick
  */
-export const useClick = (
-  {open, onOpenChange, dataRef}: FloatingContext,
+export const useClick = <RT extends ReferenceType = ReferenceType>(
+  {open, onOpenChange, dataRef}: FloatingContext<RT>,
   {enabled = true, pointerDown = false}: Props = {}
 ): ElementProps => {
   const pointerTypeRef = useRef<'mouse' | 'pen' | 'touch'>();
