@@ -132,3 +132,50 @@ useHover(context, {
 ```
 
 This handler runs on `pointermove{:.string}`.
+
+## safePolygon
+
+A "safe" polygon is one that a pointer is safe to traverse as it
+moves off the reference element and toward the floating element
+after hovering it. If the pointer moves outside of this safe
+area, the floating element closes.
+
+It is a dynamic 4-sided polygon (visually a triangle) originating
+from the cursor once it leaves a reference element.
+[You can see what it looks like here](https://twitter.com/atomiksdev/status/1505076100854337539).
+
+This function takes options.
+
+### restMs
+
+default: `0{:js}`
+
+Determines whether to close the floating once the cursor is at
+rest for the specified number of milliseconds mid-traversal. The
+default value (0) will never close it unless the pointer is
+outside the area.
+
+```js
+useHover(context, {
+  handleClose: safePolygon({
+    restMs: 200,
+  }),
+});
+```
+
+### buffer
+
+default: `1{:js}`
+
+Determines the amount of buffer (in pixels) there is around the
+cursor point of the polygon. `0{:js}` will create a perfect
+triangle, while any number greater than 0 creates a quad. A lower
+value is recommended.
+
+```js
+useHover(context, {
+  handleClose: safePolygon({
+    buffer: 0,
+  }),
+});
+```
