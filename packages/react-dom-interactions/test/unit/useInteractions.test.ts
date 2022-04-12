@@ -13,18 +13,28 @@ test('returns prop getters', () => {
 test('correctly merges functions', () => {
   const firstInteractionOnClick = jest.fn();
   const secondInteractionOnClick = jest.fn();
+  const secondInteractionOnKeyDown = jest.fn();
   const userOnClick = jest.fn();
 
   const {getReferenceProps} = useInteractions([
     {reference: {onClick: firstInteractionOnClick}},
-    {reference: {onClick: secondInteractionOnClick}},
+    {
+      reference: {
+        onClick: secondInteractionOnClick,
+        onKeyDown: secondInteractionOnKeyDown,
+      },
+    },
   ]);
 
-  getReferenceProps({onClick: userOnClick}).onClick();
+  const {onClick, onKeyDown} = getReferenceProps({onClick: userOnClick});
+
+  onClick();
+  onKeyDown();
 
   expect(firstInteractionOnClick).toHaveBeenCalledTimes(1);
   expect(secondInteractionOnClick).toHaveBeenCalledTimes(1);
   expect(userOnClick).toHaveBeenCalledTimes(1);
+  expect(secondInteractionOnKeyDown).toHaveBeenCalledTimes(1);
 });
 
 test('does not error with undefined user supplied functions', () => {
