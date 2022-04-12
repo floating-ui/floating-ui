@@ -115,7 +115,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const closeWithDelay = useCallback(
     (runElseBranch = true) => {
-      if (delay) {
+      if (delay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
           () => onOpenChangeRef.current(false),
@@ -128,14 +128,21 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     [delay, onOpenChangeRef]
   );
 
-  useEffect(() => {
-    if (!open && enabled && handlerRef.current) {
+  const cleanupPointerMoveHandler = useCallback(() => {
+    if (handlerRef.current) {
       getDocument(refs.floating.current).removeEventListener(
         'pointermove',
         handlerRef.current
       );
+      handlerRef.current = undefined;
     }
-  }, [open, enabled, refs.floating]);
+  }, [refs.floating]);
+
+  useEffect(() => {
+    if (!open) {
+      cleanupPointerMoveHandler();
+    }
+  }, [open, enabled, cleanupPointerMoveHandler]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -147,12 +154,16 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
+      blockMouseMoveRef.current = false;
 
-      if (open || (mouseOnly && pointerTypeRef.current !== 'mouse')) {
+      if (
+        open ||
+        (mouseOnly && pointerTypeRef.current !== 'mouse') ||
+        (restMs > 0 && getDelay(delay, 'open') === 0)
+      ) {
         return;
       }
 
-      blockMouseMoveRef.current = false;
       dataRef.current.openEvent = event;
 
       if (delay) {
@@ -186,7 +197,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           tree,
           x: event.clientX,
           y: event.clientY,
-          onClose: closeWithDelay,
+          onClose() {
+            cleanupPointerMoveHandler();
+            closeWithDelay();
+          },
         });
 
         doc.addEventListener('pointermove', handlerRef.current);
@@ -217,6 +231,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     onOpenChangeRef,
     open,
     tree,
+    restMs,
+    cleanupPointerMoveHandler,
     refs.reference,
     refs.floating,
   ]);

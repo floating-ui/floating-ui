@@ -7,6 +7,7 @@ allPlacements.forEach((placement) => {
     page,
   }) => {
     await page.goto('http://localhost:1234/arrow');
+    await page.waitForSelector(`[data-testid="placement-${placement}"]`);
     await click(page, `[data-testid="placement-${placement}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(

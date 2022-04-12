@@ -1,71 +1,44 @@
-import React from 'react';
+import * as React from 'react';
 import type {ElementProps} from './types';
 
-function reducePropsToArrayWithInitValue(userProps?: Record<string, any>) {
-  return Object.entries(userProps ?? {}).reduce((acc: any, [key, value]) => {
-    acc[key] = [value];
-    return acc;
-  }, {});
-}
-
 function mergeProps(
-  userProps: Record<string, any> | undefined,
+  userProps: React.HTMLProps<Element> | undefined,
   propsList: Array<ElementProps | void>,
   elementKey: 'reference' | 'floating' | 'item'
-) {
-  const mergePropsMap: {
-    reference: Record<string, Array<(...args: any[]) => void>>;
-    floating: Record<string, Array<(...args: any[]) => void>>;
-    item: Record<string, Array<(...args: any[]) => void>>;
-  } = {
-    reference:
-      elementKey === 'reference'
-        ? reducePropsToArrayWithInitValue(userProps)
-        : {},
-    floating:
-      elementKey === 'floating'
-        ? reducePropsToArrayWithInitValue(userProps)
-        : {},
-    item:
-      elementKey === 'item' ? reducePropsToArrayWithInitValue(userProps) : {},
-  };
-
-  propsList.forEach((props) => {
-    const elementProps = ((props && props[elementKey]) ??
-      {}) as React.HTMLProps<Element>;
-
-    (
-      Object.keys(elementProps) as Array<keyof React.HTMLProps<Element>>
-    ).forEach((propKey) => {
-      if (typeof elementProps[propKey] === 'function') {
-        if (mergePropsMap[elementKey][propKey] == null) {
-          mergePropsMap[elementKey][propKey] = [];
-        }
-
-        mergePropsMap[elementKey][propKey]?.push(elementProps[propKey]);
-      }
-    });
-  });
+): any {
+  const fnsMap: Record<string, Array<(...args: unknown[]) => void>> = {};
 
   return {
     ...(elementKey === 'floating' && {tabIndex: -1}),
     ...userProps,
-    ...propsList.reduce((acc, props) => {
-      props && Object.assign(acc, props[elementKey]);
-      return acc;
-    }, {}),
-    ...Object.entries(mergePropsMap[elementKey]).reduce(
-      (acc: any, [prop, fns]) => {
-        if (prop.indexOf('on') === 0) {
-          acc[prop] = (...args: any[]) => {
-            fns.forEach((fn) => fn(...args));
-          };
+    ...propsList
+      .map((value) => (value ? value[elementKey] : null))
+      .concat(userProps)
+      .reduce((acc: Record<string, unknown>, props) => {
+        if (!props) {
+          return acc;
         }
 
+        Object.entries(props).forEach(([key, value]) => {
+          if (key.indexOf('on') === 0) {
+            if (!fnsMap[key]) {
+              fnsMap[key] = [];
+            }
+
+            if (typeof value === 'function') {
+              fnsMap[key].push(value);
+            }
+
+            acc[key] = (...args: unknown[]) => {
+              fnsMap[key].forEach((fn) => fn(...args));
+            };
+          } else {
+            acc[key] = value;
+          }
+        });
+
         return acc;
-      },
-      {}
-    ),
+      }, {}),
   };
 }
 

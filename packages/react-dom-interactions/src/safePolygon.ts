@@ -7,11 +7,13 @@ import {getChildren} from './utils/getChildren';
 type XY = [number, number];
 
 export function safePolygon({
-  timeout = 0,
+  restMs = 0,
+  buffer = 1,
   debug = null,
 }: Partial<{
-  timeout: number;
-  debug: null | ((points: string | null) => void);
+  restMs: number;
+  buffer: number;
+  debug: null | ((points?: string | null) => void);
 }> = {}) {
   let timeoutId: NodeJS.Timeout;
 
@@ -28,7 +30,9 @@ export function safePolygon({
     tree?: FloatingTreeType | null;
   }) =>
     function onPointerMove(event: PointerEvent) {
-      if (event.pointerType === 'touch') {
+      clearTimeout(timeoutId);
+
+      if (event.pointerType && event.pointerType !== 'mouse') {
         return;
       }
 
@@ -67,7 +71,6 @@ export function safePolygon({
       const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
-      const BUFFER = 1;
 
       // Within the rectangular trough between the two elements
       switch (side) {
@@ -123,34 +126,34 @@ export function safePolygon({
               isFloatingWider
                 ? x
                 : cursorLeaveFromRight
-                ? x + BUFFER
-                : x - BUFFER,
-              y + BUFFER,
+                ? x + buffer
+                : x - buffer,
+              y + buffer,
             ];
             const cursorPointTwo: XY = [
               isFloatingWider
                 ? x
                 : cursorLeaveFromRight
-                ? x - BUFFER
-                : x + BUFFER,
-              y + BUFFER,
+                ? x - buffer
+                : x + buffer,
+              y + buffer,
             ];
             const commonPoints: [XY, XY] = [
               [
                 rect.left,
                 cursorLeaveFromRight
-                  ? rect.bottom - BUFFER
+                  ? rect.bottom - buffer
                   : isFloatingWider
-                  ? rect.bottom - BUFFER
+                  ? rect.bottom - buffer
                   : rect.top,
               ],
               [
                 rect.right,
                 cursorLeaveFromRight
                   ? isFloatingWider
-                    ? rect.bottom - BUFFER
+                    ? rect.bottom - buffer
                     : rect.top
-                  : rect.bottom - BUFFER,
+                  : rect.bottom - buffer,
               ],
             ];
 
@@ -165,34 +168,34 @@ export function safePolygon({
               isFloatingWider
                 ? x
                 : cursorLeaveFromRight
-                ? x + BUFFER
-                : x - BUFFER,
-              y - BUFFER,
+                ? x + buffer
+                : x - buffer,
+              y - buffer,
             ];
             const cursorPointTwo: XY = [
               isFloatingWider
                 ? x
                 : cursorLeaveFromRight
-                ? x - BUFFER
-                : x + BUFFER,
-              y - BUFFER,
+                ? x - buffer
+                : x + buffer,
+              y - buffer,
             ];
             const commonPoints: [XY, XY] = [
               [
                 rect.left,
                 cursorLeaveFromRight
-                  ? rect.top + BUFFER
+                  ? rect.top + buffer
                   : isFloatingWider
-                  ? rect.top + BUFFER
+                  ? rect.top + buffer
                   : rect.bottom,
               ],
               [
                 rect.right,
                 cursorLeaveFromRight
                   ? isFloatingWider
-                    ? rect.top + BUFFER
+                    ? rect.top + buffer
                     : rect.bottom
-                  : rect.top + BUFFER,
+                  : rect.top + buffer,
               ],
             ];
 
@@ -204,36 +207,36 @@ export function safePolygon({
           }
           case 'left': {
             const cursorPointOne: XY = [
-              x + BUFFER,
+              x + buffer,
               isFloatingTaller
                 ? y
                 : cursorLeaveFromBottom
-                ? y - BUFFER
-                : y + BUFFER,
+                ? y - buffer
+                : y + buffer,
             ];
             const cursorPointTwo: XY = [
-              x + BUFFER,
+              x + buffer,
               isFloatingTaller
                 ? y
                 : cursorLeaveFromBottom
-                ? y + BUFFER
-                : y - BUFFER,
+                ? y + buffer
+                : y - buffer,
             ];
             const commonPoints: [XY, XY] = [
               [
                 cursorLeaveFromBottom
-                  ? rect.right - BUFFER
+                  ? rect.right - buffer
                   : isFloatingTaller
-                  ? rect.right - BUFFER
+                  ? rect.right - buffer
                   : rect.left,
                 rect.top,
               ],
               [
                 cursorLeaveFromBottom
                   ? isFloatingTaller
-                    ? rect.right - BUFFER
+                    ? rect.right - buffer
                     : rect.left
-                  : rect.right - BUFFER,
+                  : rect.right - buffer,
                 rect.bottom,
               ],
             ];
@@ -246,36 +249,36 @@ export function safePolygon({
           }
           case 'right': {
             const cursorPointOne: XY = [
-              x - BUFFER,
+              x - buffer,
               isFloatingTaller
                 ? y
                 : cursorLeaveFromBottom
-                ? y + BUFFER
-                : y - BUFFER,
+                ? y + buffer
+                : y - buffer,
             ];
             const cursorPointTwo: XY = [
-              x - BUFFER,
+              x - buffer,
               isFloatingTaller
                 ? y
                 : cursorLeaveFromBottom
-                ? y - BUFFER
-                : y + BUFFER,
+                ? y - buffer
+                : y + buffer,
             ];
             const commonPoints: [XY, XY] = [
               [
                 cursorLeaveFromBottom
-                  ? rect.left + BUFFER
+                  ? rect.left + buffer
                   : isFloatingTaller
-                  ? rect.left + BUFFER
+                  ? rect.left + buffer
                   : rect.right,
                 rect.top,
               ],
               [
                 cursorLeaveFromBottom
                   ? isFloatingTaller
-                    ? rect.left + BUFFER
+                    ? rect.left + buffer
                     : rect.right
-                  : rect.left + BUFFER,
+                  : rect.left + buffer,
                 rect.bottom,
               ],
             ];
@@ -291,15 +294,15 @@ export function safePolygon({
 
       const poly = getPolygon([x, y]);
 
-      if (process.env.NODE_ENV !== 'production') {
-        debug?.(getPolygon([x, y]).slice(0, 4).join(', '));
+      if (__DEV__) {
+        debug?.(poly.slice(0, 4).join(', '));
       }
 
       if (!pointInPolygon([clientX, clientY], poly)) {
         clearTimeout(timeoutId);
         onClose();
-      } else if (timeout) {
-        timeoutId = setTimeout(onClose, timeout);
+      } else if (restMs) {
+        timeoutId = setTimeout(onClose, restMs);
       }
     };
 }
