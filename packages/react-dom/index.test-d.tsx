@@ -30,3 +30,23 @@ function App() {
   update();
   return <div ref={arrowRef} />;
 }
+
+NarrowRefType;
+function NarrowRefType() {
+  const floating1 = useFloating();
+  const floating2 = useFloating<HTMLButtonElement>();
+  const floating3 = useFloating<HTMLAnchorElement>();
+
+  // @ts-expect-error
+  floating1.refs.reference.current?.contains(document.body);
+  floating2.refs.reference.current?.contains(document.body);
+  floating3.refs.reference.current?.contains(document.body);
+  return (
+    <>
+      <button ref={floating1.reference} />
+      <button ref={floating2.reference} />
+      {/* @ts-expect-error */}
+      <button ref={floating3.reference} />
+    </>
+  );
+}
