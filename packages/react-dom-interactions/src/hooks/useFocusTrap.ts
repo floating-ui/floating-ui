@@ -6,6 +6,8 @@ import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
+import {useFloatingTree} from '../FloatingTree';
+import {getChildren} from '../utils/getChildren';
 
 const FOCUSABLE_ELEMENT_SELECTOR =
   'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,object,embed,*[tabindex],*[contenteditable]';
@@ -36,7 +38,7 @@ function focus(el: HTMLElement | undefined) {
  * @see https://floating-ui.com/docs/useFocusTrap
  */
 export const useFocusTrap = (
-  {open, onOpenChange, refs}: FloatingContext,
+  {open, onOpenChange, refs, nodeId}: FloatingContext,
   {
     enabled = true,
     initialContentFocus = 0,
@@ -245,12 +247,20 @@ export const useFocusTrap = (
     };
   }, []);
 
+  const tree = useFloatingTree();
+
   function onBlur(event: React.FocusEvent) {
     const target = event.relatedTarget as Element | null;
     if (
       !refs.floating.current?.contains(target) &&
       isElement(refs.reference.current) &&
-      !refs.reference.current.contains(target)
+      !refs.reference.current.contains(target) &&
+      !(
+        tree &&
+        getChildren(tree, nodeId).some((child) =>
+          child.context?.refs.floating?.current?.contains(target)
+        )
+      )
     ) {
       onOpenChange(false);
     }
