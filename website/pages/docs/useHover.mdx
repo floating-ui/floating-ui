@@ -87,19 +87,23 @@ useHover(context, {
 
 default: `0{:js}` (off)
 
-A property to use with `delay{:.objectKey}` that will wait until
-the user's cursor is at "rest" over the reference element,
-without waiting for the delay.
+Waits until the user's cursor is at "rest" over the reference
+element before changing the open state.
 
-When used in tandem with `delay{:.objectKey}`, the delay will act
-as a fallback value, which means you likely want to make
-`delay{:.objectKey}` a high value.
+You can either:
+
+- Use this on its own, without `delay{:.objectKey}` (which must
+  be set to `0{:js}` which is the default), or
+- Use this as a more eager version of `delay{:.objectKey}`, where
+  `delay{:.objectKey}` will then act as a fallback value.
 
 ```js
 useHover(context, {
-  delay: 1000,
   // Waits 150ms once the user's cursor is at rest
   restMs: 150,
+
+  delay: {open: 1000}, // 1000ms fallback open value
+  delay: 0, // OR no fallback value
 });
 ```
 
