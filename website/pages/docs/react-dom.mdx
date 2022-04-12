@@ -345,18 +345,17 @@ await act(async () => {});
 
 ## Types
 
-The `useFloating()` hook is generic, to allow specifying a
-stronger reference type. By default, the reference type is wide,
-allowing `Element | VirtualElement | null`. This can cause issues
-in TypeScript, if you want to reuse the refs returned by the
-hook, as `VirtualElement` does not have most of the native
-methods on elements.
+The `useFloating(){:js}` hook is generic to allow specifying a
+narrower reference type. By default, the reference type is wide,
+allowing `Element | VirtualElement | null{:js}`.
 
-For example, you couldn't check if the reference element contains
-another node. To fix this, you can pass a generic argument to the
-hook the specify a more specific type for the reference:
+Due to the `VirtualElement{:.class}` type, you couldn't check if
+the reference element contains another node for example.
 
-```tsx
+To fix this, you can pass a generic argument to the hook the
+specify a more specific type for the reference:
+
+```tsx {5,11}
 import {useFloating, shift} from '@floating-ui/react-dom';
 
 function App() {
@@ -367,15 +366,10 @@ function App() {
     });
 
   useEffect(() => {
-    if (
-      refs.reference.current?.contains(
-        document.querySelector('#another-element')
-      )
-    ) {
-      // All good!
+    if (refs.reference.current?.contains(anotherElement)) {
       // do something
     }
-  }, [refs.reference.current]);
+  }, [refs.reference]);
 
   return (
     <>
