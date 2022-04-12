@@ -32,7 +32,7 @@ export function safePolygon({
     function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
 
-      if (event.pointerType !== 'mouse') {
+      if (event.pointerType && event.pointerType !== 'mouse') {
         return;
       }
 
