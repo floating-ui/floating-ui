@@ -193,15 +193,10 @@ export const useListNavigation = (
       return;
     }
 
-    if (open) {
-      if (activeIndex != null) {
-        indexRef.current = activeIndex;
-        onNavigateRef.current(indexRef.current);
-        focusItem(listRef, indexRef);
-      } else {
-        indexRef.current = -1;
-        focusItem(listRef, indexRef);
-      }
+    if (open && activeIndex != null) {
+      indexRef.current = activeIndex;
+      onNavigateRef.current(indexRef.current);
+      focusItem(listRef, indexRef);
     }
   }, [
     open,
@@ -466,6 +461,9 @@ export const useListNavigation = (
             onNavigate(null);
             if (!virtual) {
               refs.floating.current?.focus({preventScroll: true});
+            } else {
+              indexRef.current = -1;
+              focusItem(listRef, indexRef);
             }
           }
         },
