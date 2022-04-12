@@ -143,6 +143,7 @@ export const useHover = (
 
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
+      blockMouseMoveRef.current = false;
 
       if (
         open ||
@@ -152,7 +153,6 @@ export const useHover = (
         return;
       }
 
-      blockMouseMoveRef.current = false;
       dataRef.current.openEvent = event;
 
       if (delay) {
