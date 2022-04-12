@@ -1,7 +1,7 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {useCallback, useEffect} from 'react';
 import {useFloatingTree} from '../FloatingTree';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
@@ -20,8 +20,8 @@ export interface Props {
  * Adds listeners that dismiss (close) the floating element.
  * @see https://floating-ui.com/docs/useDismiss
  */
-export const useDismiss = (
-  {open, onOpenChange, refs, events, nodeId}: FloatingContext,
+export const useDismiss = <RT extends ReferenceType = ReferenceType>(
+  {open, onOpenChange, refs, events, nodeId}: FloatingContext<RT>,
   {
     enabled = true,
     escapeKey = true,

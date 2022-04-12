@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import type {FloatingNodeType, FloatingTreeType} from './types';
+import type {FloatingNodeType, FloatingTreeType, ReferenceType} from './types';
 import {useId} from './hooks/useId';
 import {createPubSub} from './createPubSub';
 
@@ -16,8 +16,10 @@ const FloatingTreeContext = createContext<FloatingTreeType | null>(null);
 
 export const useFloatingParentNodeId = (): string | null =>
   useContext(FloatingNodeContext)?.id ?? null;
-export const useFloatingTree = (): FloatingTreeType | null =>
-  useContext(FloatingTreeContext);
+export const useFloatingTree = <
+  RT extends ReferenceType = ReferenceType
+>(): FloatingTreeType<RT> | null =>
+  useContext(FloatingTreeContext) as FloatingTreeType<RT> | null;
 
 /**
  * Registers a node into the floating tree, returning its id.

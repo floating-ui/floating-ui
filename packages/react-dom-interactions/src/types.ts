@@ -1,5 +1,5 @@
 import React from 'react';
-import type {UseFloatingReturn} from './';
+import type {UseFloatingReturn, ReferenceType} from './';
 
 export * from './';
 export * from '@floating-ui/dom';
@@ -18,7 +18,8 @@ export interface ContextData {
   [key: string]: any;
 }
 
-export interface FloatingContext extends UseFloatingReturn {
+export interface FloatingContext<RT extends ReferenceType = ReferenceType>
+  extends UseFloatingReturn<RT> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
@@ -26,14 +27,14 @@ export interface FloatingContext extends UseFloatingReturn {
   nodeId: string | undefined;
 }
 
-export interface FloatingNodeType {
+export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
   id: string;
   parentId: string | null;
-  context?: FloatingContext;
+  context?: FloatingContext<RT>;
 }
 
-export interface FloatingTreeType {
-  nodesRef: React.MutableRefObject<Array<FloatingNodeType>>;
+export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
+  nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
   events: FloatingEvents;
   addNode: (node: FloatingNodeType) => void;
   removeNode: (node: FloatingNodeType) => void;

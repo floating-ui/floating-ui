@@ -1,7 +1,7 @@
 import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -124,8 +124,8 @@ export interface Props {
  * within the floating element.
  * @see https://floating-ui.com/docs/useListNavigation
  */
-export const useListNavigation = (
-  {open, onOpenChange, refs}: FloatingContext,
+export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
+  {open, onOpenChange, refs}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,

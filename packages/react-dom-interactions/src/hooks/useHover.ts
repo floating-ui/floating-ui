@@ -1,7 +1,12 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingTree} from '../FloatingTree';
-import type {ElementProps, FloatingContext, FloatingTreeType} from '../types';
+import type {
+  ElementProps,
+  FloatingContext,
+  FloatingTreeType,
+  ReferenceType,
+} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -22,14 +27,14 @@ export function getDelay(
   return value?.[prop];
 }
 
-export interface Props {
+export interface Props<RT extends ReferenceType = ReferenceType> {
   enabled?: boolean;
   handleClose?:
     | null
     | ((
-        context: FloatingContext & {
+        context: FloatingContext<RT> & {
           onClose: () => void;
-          tree?: FloatingTreeType | null;
+          tree?: FloatingTreeType<RT> | null;
         }
       ) => (event: PointerEvent) => void);
   restMs?: number;
@@ -41,19 +46,19 @@ export interface Props {
  * Adds hover event listeners that change the open state, like CSS :hover.
  * @see https://floating-ui.com/docs/useHover
  */
-export const useHover = (
-  context: FloatingContext,
+export const useHover = <RT extends ReferenceType = ReferenceType>(
+  context: FloatingContext<RT>,
   {
     enabled = true,
     delay = 0,
     handleClose = null,
     mouseOnly = false,
     restMs = 0,
-  }: Props = {}
+  }: Props<RT> = {}
 ): ElementProps => {
   const {open, onOpenChange, dataRef, events, refs} = context;
 
-  const tree = useFloatingTree();
+  const tree = useFloatingTree<RT>();
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
 

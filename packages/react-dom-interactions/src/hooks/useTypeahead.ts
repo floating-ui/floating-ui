@@ -1,6 +1,6 @@
 import React, {useRef} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {stopEvent} from '../utils/stopEvent';
 
@@ -25,8 +25,8 @@ export interface Props {
  * types, often used in tandem with `useListNavigation()`.
  * @see https://floating-ui.com/docs/useTypeahead
  */
-export const useTypeahead = (
-  {open, dataRef}: FloatingContext,
+export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
+  {open, dataRef}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,

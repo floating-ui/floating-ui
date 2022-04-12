@@ -1,7 +1,7 @@
 import React, {MutableRefObject, useCallback, useEffect, useRef} from 'react';
 import {hideOthers} from 'aria-hidden';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
@@ -37,8 +37,8 @@ function focus(el: HTMLElement | undefined) {
  * open.
  * @see https://floating-ui.com/docs/useFocusTrap
  */
-export const useFocusTrap = (
-  {open, onOpenChange, refs, nodeId}: FloatingContext,
+export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
+  {open, onOpenChange, refs, nodeId}: FloatingContext<RT>,
   {
     enabled = true,
     initialContentFocus = 0,

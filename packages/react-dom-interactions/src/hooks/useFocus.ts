@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import type {ElementProps, FloatingContext} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 
@@ -12,8 +12,8 @@ export interface Props {
  * Adds hover event listeners that change the open state, like CSS :focus.
  * @see https://floating-ui.com/docs/useFocus
  */
-export const useFocus = (
-  {open, onOpenChange, dataRef, refs, events}: FloatingContext,
+export const useFocus = <RT extends ReferenceType = ReferenceType>(
+  {open, onOpenChange, dataRef, refs, events}: FloatingContext<RT>,
   {enabled = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
   const blockFocusRef = useRef(false);

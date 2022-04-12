@@ -20,15 +20,18 @@ type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
   y: number | null;
 };
 
-export type UseFloatingReturn = Data & {
-  update: () => void;
-  reference: (node: Element | VirtualElement | null) => void;
-  floating: (node: HTMLElement | null) => void;
-  refs: {
-    reference: MutableRefObject<Element | VirtualElement | null>;
-    floating: MutableRefObject<HTMLElement | null>;
+export type ReferenceType = Element | VirtualElement;
+
+export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
+  Data & {
+    update: () => void;
+    reference: (node: RT | null) => void;
+    floating: (node: HTMLElement | null) => void;
+    refs: {
+      reference: MutableRefObject<RT | null>;
+      floating: MutableRefObject<HTMLElement | null>;
+    };
   };
-};
 
 export interface Props {
   open: boolean;
@@ -39,20 +42,22 @@ export interface Props {
   nodeId: string;
 }
 
-export function useFloating({
+export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,
   onOpenChange = () => {},
   placement,
   middleware,
   strategy,
   nodeId,
-}: Partial<Props> = {}): UseFloatingReturn & {context: FloatingContext} {
-  const tree = useFloatingTree();
+}: Partial<Props> = {}): UseFloatingReturn<RT> & {
+  context: FloatingContext<RT>;
+} {
+  const tree = useFloatingTree<RT>();
   const dataRef = useRef<ContextData>({});
   const events = useState(() => createPubSub())[0];
-  const floating = usePositionalFloating({placement, middleware, strategy});
+  const floating = usePositionalFloating<RT>({placement, middleware, strategy});
 
-  const context = useMemo<FloatingContext>(
+  const context = useMemo<FloatingContext<RT>>(
     () => ({
       ...floating,
       dataRef,
