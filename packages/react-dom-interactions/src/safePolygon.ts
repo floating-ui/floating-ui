@@ -30,6 +30,8 @@ export function safePolygon({
     tree?: FloatingTreeType | null;
   }) =>
     function onPointerMove(event: PointerEvent) {
+      clearTimeout(timeoutId);
+
       if (event.pointerType !== 'mouse') {
         return;
       }
