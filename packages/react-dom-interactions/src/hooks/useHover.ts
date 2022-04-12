@@ -134,7 +134,7 @@ export const useHover = (
   }, [refs.floating]);
 
   useEffect(() => {
-    if (!open && enabled) {
+    if (!open) {
       cleanupPointerMoveHandler();
     }
   }, [open, enabled, cleanupPointerMoveHandler]);
