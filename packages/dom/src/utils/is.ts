@@ -24,6 +24,11 @@ export function isNode(value: any): value is Node {
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {
+  // Legacy Edge doesn't support ShadowRoot.
+  if (typeof ShadowRoot === 'undefined') {
+    return false;
+  }
+
   const OwnElement = getWindow(node).ShadowRoot;
   return node instanceof OwnElement || node instanceof ShadowRoot;
 }
