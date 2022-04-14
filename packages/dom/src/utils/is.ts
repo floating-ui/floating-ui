@@ -24,6 +24,11 @@ export function isNode(value: any): value is Node {
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {
+  // Browsers without `ShadowRoot` support
+  if (typeof ShadowRoot === 'undefined') {
+    return false;
+  }
+
   const OwnElement = getWindow(node).ShadowRoot;
   return node instanceof OwnElement || node instanceof ShadowRoot;
 }
