@@ -181,6 +181,6 @@ export type {
 } from '@floating-ui/core';
 
 export {computePosition} from './';
-export {autoUpdate} from './autoUpdate';
+export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
 
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
