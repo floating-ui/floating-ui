@@ -24,7 +24,7 @@ export function isNode(value: any): value is Node {
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {
-  // Legacy Edge doesn't support ShadowRoot.
+  // Browsers without `ShadowRoot` support
   if (typeof ShadowRoot === 'undefined') {
     return false;
   }
