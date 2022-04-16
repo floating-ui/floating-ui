@@ -1,0 +1,153 @@
+# FloatingFocusManager
+
+Provides flexible focus management for a floating element.
+
+This component is only rendered when the floating element is
+open.
+
+{/* prettier-ignore */}
+```js /context/
+import {
+  FloatingFocusManager
+} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  const {context} = useFloating();
+
+  return (
+    <>
+      {/* reference element */}
+      {open && (
+        <FloatingFocusManager context={context}>
+          {/* floating element */}
+        </FloatingFocusManager>
+      )}
+    </>
+  );
+}
+```
+
+## Props
+
+```js
+interface Props {
+  context: FloatingContext;
+  order?: Array<'reference' | 'floating' | 'content'>;
+  initialFocus?:
+    | number
+    | React.MutableRefObject<HTMLElement | null>;
+  preventTabbing?: boolean;
+  endGuard?: boolean;
+  returnFocus?: boolean;
+  modal?: boolean;
+}
+```
+
+### context
+
+**Required**
+
+The `context{:.const}` object returned from `useFloating(){:js}`.
+
+```js
+<FloatingFocusManager context={context}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### order
+
+default: `['content']{:js}`
+
+The order in which focus cycles.
+
+```js
+<FloatingFocusManager
+  context={context}
+  // Initially focuses the floating element. Subsequent tabs
+  // will cycle through the tabbable contents of the floating
+  // element.
+  order={['floating', 'content']}
+  // Keeps focus on the reference element. Subsequent tabs
+  // will cycle through the tabbable contents of the floating
+  // element.
+  order={['reference', 'content']}
+>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### initialFocus
+
+default: `0{:js}`
+
+Which element to initially focus. Can be either a number
+(tabbable index) or a React ref.
+
+```js
+<FloatingFocusManager
+  context={context}
+  initialFocus={elementRef}
+>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### preventTabbing
+
+default: `false{:js}`
+
+Determines if the tab key does not perform any action (i.e.
+navigation is handled via arrow keys).
+
+```js
+<FloatingFocusManager context={context} preventTabbing={true}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### endGuard
+
+default: `true{:js}`
+
+Determines if the end focus guard (after the floating element) is
+rendered. If not, focus can escape into the address bar, like in
+native dialogs. This means the floating element must be portalled
+to the very end of the document.
+
+```js
+<FloatingFocusManager context={context} endGuard={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### returnFocus
+
+default: `true{:js}`
+
+Determines if focus should be returned to the last focusable
+element (usually the reference).
+
+```js
+<FloatingFocusManager context={context} returnFocus={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### modal
+
+default: `true{:js}`
+
+Determines if focus is "modal", meaning focus is fully trapped
+inside the floating element and outside content cannot be
+accessed.
+
+> If this is not true, the floating element must be rendered
+> directly after its reference element (e.g. not in a
+> FloatingPortal).
+
+```js
+<FloatingFocusManager context={context} modal={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```

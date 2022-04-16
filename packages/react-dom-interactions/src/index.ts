@@ -90,6 +90,7 @@ export {useInteractions} from './useInteractions';
 export {safePolygon} from './safePolygon';
 export {FloatingPortal} from './FloatingPortal';
 export {FloatingOverlay} from './FloatingOverlay';
+export {FloatingFocusManager} from './FloatingFocusManager';
 export {
   FloatingTree,
   FloatingNode,
