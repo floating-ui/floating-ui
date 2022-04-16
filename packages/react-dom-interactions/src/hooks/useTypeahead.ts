@@ -72,7 +72,11 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (stringRef.current.length > 0) {
+    if (
+      stringRef.current.length > 0 &&
+      stringRef.current[0] !== ' ' &&
+      !stringRef.current.split('').every((char) => char === ' ')
+    ) {
       dataRef.current.typing = true;
 
       if (event.key === ' ') {
