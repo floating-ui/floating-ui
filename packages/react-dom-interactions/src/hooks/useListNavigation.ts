@@ -29,7 +29,7 @@ function findNonDisabledIndex(
       list[index]?.getAttribute('aria-disabled') === 'true')
   );
 
-  return Math.max(0, Math.min(index, list.length - 1));
+  return index;
 }
 
 function doSwitch(
