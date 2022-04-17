@@ -22,13 +22,13 @@ function findNonDisabledIndex(
     index = index + (decrement ? -1 : 1);
   } while (
     index >= 0 &&
-    index < listRef.current.length &&
+    index <= list.length - 1 &&
     (list[index] == null ||
       list[index]?.hasAttribute('disabled') ||
       list[index]?.getAttribute('aria-disabled') === 'true')
   );
 
-  return index === -1 ? 0 : index;
+  return Math.max(0, Math.min(index, list.length - 1));
 }
 
 function doSwitch(
@@ -162,10 +162,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef: React.MutableRefObject<number>
     ) => {
       if (virtual) {
-        const id = listRef.current[indexRef.current]?.id;
-        if (id) {
-          setActiveId(id);
-        }
+        setActiveId(listRef.current[indexRef.current]?.id);
       } else {
         listRef.current[indexRef.current]?.focus({preventScroll: true});
       }
@@ -193,15 +190,24 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open && activeIndex != null) {
-      indexRef.current = activeIndex;
-      onNavigateRef.current(indexRef.current);
-      focusItem(listRef, indexRef);
+    if (open) {
+      if (activeIndex === null) {
+        if (nested && focusOnOpenRef.current) {
+          indexRef.current = getMinIndex(listRef);
+          onNavigateRef.current(activeIndex);
+          focusItem(listRef, indexRef);
+        }
+      } else {
+        indexRef.current = activeIndex;
+        onNavigateRef.current(activeIndex);
+        focusItem(listRef, indexRef);
+      }
     }
   }, [
     open,
     activeIndex,
     selectedIndex,
+    nested,
     listRef,
     onNavigateRef,
     focusItem,
@@ -407,10 +413,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
         if (nested) {
           if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {
-            indexRef.current = getMinIndex(listRef);
             stopEvent(event);
-            onOpenChange(true);
-            onNavigate(indexRef.current);
+
+            if (open) {
+              indexRef.current = getMinIndex(listRef);
+              onNavigate(indexRef.current);
+            } else {
+              onOpenChange(true);
+            }
           }
 
           return;
