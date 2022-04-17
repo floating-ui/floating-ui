@@ -15,17 +15,20 @@ function findNonDisabledIndex(
   listRef: MutableRefObject<Array<HTMLElement | null>>,
   {startingIndex = -1, decrement = false} = {}
 ): number {
-  const list = getPresentListItems(listRef);
+  const list = listRef.current;
 
   let index = startingIndex;
   do {
     index = index + (decrement ? -1 : 1);
   } while (
-    list[index]?.hasAttribute('disabled') ||
-    list[index]?.getAttribute('aria-disabled') === 'true'
+    index >= 0 &&
+    index <= list.length - 1 &&
+    (list[index] == null ||
+      list[index]?.hasAttribute('disabled') ||
+      list[index]?.getAttribute('aria-disabled') === 'true')
   );
 
-  return index === -1 ? 0 : index;
+  return Math.max(0, Math.min(index, list.length - 1));
 }
 
 function doSwitch(
@@ -96,12 +99,8 @@ function getMinIndex(listRef: Props['listRef']) {
 function getMaxIndex(listRef: Props['listRef']) {
   return findNonDisabledIndex(listRef, {
     decrement: true,
-    startingIndex: getPresentListItems(listRef).length,
+    startingIndex: listRef.current.length,
   });
-}
-
-function getPresentListItems(listRef: Props['listRef']) {
-  return listRef.current.filter((item) => item != null) as Array<HTMLElement>;
 }
 
 export interface Props {
@@ -163,11 +162,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef: React.MutableRefObject<number>
     ) => {
       if (virtual) {
-        setActiveId(getPresentListItems(listRef)[indexRef.current]?.id);
+        setActiveId(listRef.current[indexRef.current]?.id);
       } else {
-        getPresentListItems(listRef)[indexRef.current]?.focus({
-          preventScroll: true,
-        });
+        listRef.current[indexRef.current]?.focus({preventScroll: true});
       }
     },
     [virtual]
@@ -193,15 +190,24 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open && activeIndex != null) {
-      indexRef.current = activeIndex;
-      onNavigateRef.current(indexRef.current);
-      focusItem(listRef, indexRef);
+    if (open) {
+      if (activeIndex === null) {
+        if (nested && focusOnOpenRef.current) {
+          indexRef.current = getMinIndex(listRef);
+          onNavigateRef.current(activeIndex);
+          focusItem(listRef, indexRef);
+        }
+      } else {
+        indexRef.current = activeIndex;
+        onNavigateRef.current(activeIndex);
+        focusItem(listRef, indexRef);
+      }
     }
   }, [
     open,
     activeIndex,
     selectedIndex,
+    nested,
     listRef,
     onNavigateRef,
     focusItem,
@@ -407,10 +413,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
         if (nested) {
           if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {
-            indexRef.current = getMinIndex(listRef);
             stopEvent(event);
-            onOpenChange(true);
-            onNavigate(indexRef.current);
+
+            if (open) {
+              indexRef.current = getMinIndex(listRef);
+              onNavigate(indexRef.current);
+            } else {
+              onOpenChange(true);
+            }
           }
 
           return;
@@ -455,7 +465,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onPointerMove({currentTarget}) {
           const target = currentTarget as HTMLButtonElement | null;
           if (target) {
-            const index = getPresentListItems(listRef).indexOf(target);
+            const index = listRef.current.indexOf(target);
             if (index !== -1) {
               onNavigate(index);
             }
