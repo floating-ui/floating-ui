@@ -15,14 +15,17 @@ function findNonDisabledIndex(
   listRef: MutableRefObject<Array<HTMLElement | null>>,
   {startingIndex = -1, decrement = false} = {}
 ): number {
-  const list = getPresentListItems(listRef);
+  const list = listRef.current;
 
   let index = startingIndex;
   do {
     index = index + (decrement ? -1 : 1);
   } while (
-    list[index]?.hasAttribute('disabled') ||
-    list[index]?.getAttribute('aria-disabled') === 'true'
+    index >= 0 &&
+    index < listRef.current.length &&
+    (list[index] == null ||
+      list[index]?.hasAttribute('disabled') ||
+      list[index]?.getAttribute('aria-disabled') === 'true')
   );
 
   return index === -1 ? 0 : index;
@@ -96,12 +99,8 @@ function getMinIndex(listRef: Props['listRef']) {
 function getMaxIndex(listRef: Props['listRef']) {
   return findNonDisabledIndex(listRef, {
     decrement: true,
-    startingIndex: getPresentListItems(listRef).length,
+    startingIndex: listRef.current.length,
   });
-}
-
-function getPresentListItems(listRef: Props['listRef']) {
-  return listRef.current.filter((item) => item != null) as Array<HTMLElement>;
 }
 
 export interface Props {
@@ -163,11 +162,12 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef: React.MutableRefObject<number>
     ) => {
       if (virtual) {
-        setActiveId(getPresentListItems(listRef)[indexRef.current]?.id);
+        const id = listRef.current[indexRef.current]?.id;
+        if (id) {
+          setActiveId(id);
+        }
       } else {
-        getPresentListItems(listRef)[indexRef.current]?.focus({
-          preventScroll: true,
-        });
+        listRef.current[indexRef.current]?.focus({preventScroll: true});
       }
     },
     [virtual]
@@ -455,7 +455,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onPointerMove({currentTarget}) {
           const target = currentTarget as HTMLButtonElement | null;
           if (target) {
-            const index = getPresentListItems(listRef).indexOf(target);
+            const index = listRef.current.indexOf(target);
             if (index !== -1) {
               onNavigate(index);
             }
