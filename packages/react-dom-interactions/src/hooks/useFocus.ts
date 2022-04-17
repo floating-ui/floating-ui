@@ -9,7 +9,7 @@ export interface Props {
 }
 
 /**
- * Adds hover event listeners that change the open state, like CSS :focus.
+ * Adds focus event listeners that change the open state, like CSS :focus.
  * @see https://floating-ui.com/docs/useFocus
  */
 export const useFocus = <RT extends ReferenceType = ReferenceType>(
