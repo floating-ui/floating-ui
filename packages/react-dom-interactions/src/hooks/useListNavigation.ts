@@ -264,10 +264,10 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           rtl
         )
           ? allowEscape
-            ? maxIndex + 1
+            ? listRef.current.length
             : maxIndex
           : allowEscape
-          ? minIndex - 1
+          ? -1
           : minIndex;
 
         onNavigateRef.current(indexRef.current);
@@ -386,8 +386,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         if (loop) {
           indexRef.current =
             currentIndex >= maxIndex
-              ? allowEscape && currentIndex !== maxIndex + 1
-                ? minIndex - 1
+              ? allowEscape && currentIndex !== listRef.current.length
+                ? -1
                 : minIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
@@ -404,8 +404,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         if (loop) {
           indexRef.current =
             currentIndex <= minIndex
-              ? allowEscape && currentIndex !== minIndex - 1
-                ? maxIndex + 1
+              ? allowEscape && currentIndex !== -1
+                ? listRef.current.length
                 : maxIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
