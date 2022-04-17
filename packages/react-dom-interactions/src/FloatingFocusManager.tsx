@@ -214,7 +214,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     return () => {
-      if (modal && returnFocus && isHTMLElement(previouslyFocusedElement)) {
+      if (returnFocus && isHTMLElement(previouslyFocusedElement)) {
         focus(previouslyFocusedElement);
       }
     };
