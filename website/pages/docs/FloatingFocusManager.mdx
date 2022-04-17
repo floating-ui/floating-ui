@@ -2,8 +2,8 @@
 
 Provides flexible focus management for a floating element.
 
-This component is only rendered when the floating element is
-open.
+This component should only be rendered when the floating element
+is open and directly wrap it.
 
 {/* prettier-ignore */}
 ```js /context/
@@ -82,7 +82,8 @@ The order in which focus cycles.
 default: `0{:js}`
 
 Which element to initially focus. Can be either a number
-(tabbable index) or a React ref.
+(tabbable index as specified by the `order{:.objectKey}`) or a
+ref.
 
 ```js
 <FloatingFocusManager
