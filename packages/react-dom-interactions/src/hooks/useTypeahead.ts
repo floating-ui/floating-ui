@@ -103,7 +103,9 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     // Bail out if the list contains a word like "llama" or "aaron". TODO:
     // allow it in this case, too.
     const allowRapidSuccessionOfFirstLetter = listContent.every((text) =>
-      text ? text[0]?.toLowerCase() !== text[1]?.toLowerCase() : true
+      text
+        ? text[0]?.toLocaleLowerCase() !== text[1]?.toLocaleLowerCase()
+        : true
     );
 
     // Allows the user to cycle through items that start with the same letter
@@ -131,7 +133,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     const str = findMatch
       ? findMatch(orderedList, stringRef.current)
       : orderedList.find(
-          (text) => text?.toLowerCase().indexOf(stringRef.current) === 0
+          (text) => text?.toLocaleLowerCase().indexOf(stringRef.current) === 0
         );
 
     const index = str ? listContent.indexOf(str) : -1;
