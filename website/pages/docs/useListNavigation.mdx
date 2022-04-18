@@ -35,6 +35,7 @@ interface Props {
   nested?: boolean;
   rtl?: boolean;
   virtual?: boolean;
+  allowEscape?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   focusItemOnOpen?: 'auto' | boolean;
   focusItemOnHover?: boolean;
@@ -170,6 +171,22 @@ useListNavigation(context, {
 
 > Your virtually-focused list items must have a unique
 > `id{:.keyword}` set on them.
+
+### allowEscape
+
+Determines whether focus can escape the list, such that nothing
+is selected after navigating beyond the boundary of the list. In
+some autocomplete/combobox components, this may be desired, as
+screen readers will return to the input.
+
+> `loop{:.objectKey}` must be `true{:js}`
+
+```js
+useListNavigation(context, {
+  loop: true,
+  allowEscape: true,
+});
+```
 
 ### orientation
 

@@ -5,6 +5,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
+import {usePrevious} from '../utils/usePrevious';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
@@ -28,7 +29,7 @@ function findNonDisabledIndex(
       list[index]?.getAttribute('aria-disabled') === 'true')
   );
 
-  return Math.max(0, Math.min(index, list.length - 1));
+  return index;
 }
 
 function doSwitch(
@@ -111,6 +112,7 @@ export interface Props {
   selectedIndex?: number | null;
   focusItemOnOpen?: boolean | 'auto';
   focusItemOnHover?: boolean;
+  allowEscape?: boolean;
   loop?: boolean;
   nested?: boolean;
   rtl?: boolean;
@@ -131,6 +133,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onNavigate,
     enabled = true,
     selectedIndex = null,
+    allowEscape = false,
     loop = false,
     nested = false,
     rtl = false,
@@ -144,8 +147,20 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onNavigate: () => {},
   }
 ): ElementProps => {
+  if (__DEV__) {
+    if (!loop && allowEscape) {
+      console.warn(
+        [
+          'Floating UI: `useListNavigation` looping must be enabled to allow',
+          'escaping.',
+        ].join(' ')
+      );
+    }
+  }
+
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
+  const previousOpen = usePrevious(open);
 
   const focusOnOpenRef = useRef(focusItemOnOpen);
   const indexRef = useRef(selectedIndex ?? -1);
@@ -179,11 +194,19 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef.current = selectedIndex;
     }
 
-    if (open && focusOnOpenRef.current) {
+    if (!previousOpen && open && focusOnOpenRef.current) {
       onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
-  }, [open, selectedIndex, listRef, onNavigateRef, focusItem, enabled]);
+  }, [
+    open,
+    previousOpen,
+    selectedIndex,
+    listRef,
+    onNavigateRef,
+    focusItem,
+    enabled,
+  ]);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -192,8 +215,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     if (open) {
       if (activeIndex === null) {
-        if (nested && focusOnOpenRef.current) {
-          indexRef.current = getMinIndex(listRef);
+        if (
+          (!previousOpen && focusOnOpenRef.current && selectedIndex == null) ||
+          allowEscape
+        ) {
+          indexRef.current = allowEscape ? -1 : getMinIndex(listRef);
           onNavigateRef.current(activeIndex);
           focusItem(listRef, indexRef);
         }
@@ -205,6 +231,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
   }, [
     open,
+    previousOpen,
     activeIndex,
     selectedIndex,
     nested,
@@ -213,6 +240,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     focusItem,
     enabled,
     parentId,
+    allowEscape,
     refs.floating,
     tree?.nodesRef,
   ]);
@@ -228,13 +256,20 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         (focusOnOpenRef.current &&
           (keyRef.current === ' ' || keyRef.current === 'Enter'))
       ) {
+        const minIndex = getMinIndex(listRef);
+        const maxIndex = getMaxIndex(listRef);
         indexRef.current = isMainOrientationToStartKey(
           keyRef.current,
           orientation,
           rtl
         )
-          ? getMaxIndex(listRef)
-          : getMinIndex(listRef);
+          ? allowEscape
+            ? listRef.current.length
+            : maxIndex
+          : allowEscape
+          ? -1
+          : minIndex;
+
         onNavigateRef.current(indexRef.current);
         focusItem(listRef, indexRef);
       }
@@ -250,6 +285,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     enabled,
     orientation,
     rtl,
+    allowEscape,
   ]);
 
   useLayoutEffect(() => {
@@ -350,7 +386,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         if (loop) {
           indexRef.current =
             currentIndex >= maxIndex
-              ? minIndex
+              ? allowEscape && currentIndex !== listRef.current.length
+                ? -1
+                : minIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
                 });
@@ -366,7 +404,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         if (loop) {
           indexRef.current =
             currentIndex <= minIndex
-              ? maxIndex
+              ? allowEscape && currentIndex !== -1
+                ? listRef.current.length
+                : maxIndex
               : findNonDisabledIndex(listRef, {
                   startingIndex: currentIndex,
                   decrement: true,
@@ -393,7 +433,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   return {
     reference: {
       ...(virtual &&
-        open && {
+        open &&
+        activeIndex != null && {
           'aria-activedescendant': activeId,
         }),
       onPointerEnter: pointerCheck,
@@ -451,9 +492,10 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     },
     floating: {
       'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(virtual && {
-        'aria-activedescendant': activeId,
-      }),
+      ...(virtual &&
+        activeIndex != null && {
+          'aria-activedescendant': activeId,
+        }),
       onKeyDown: onFloatingKeyDown,
       onPointerMove() {
         blockPointerLeaveRef.current = false;
