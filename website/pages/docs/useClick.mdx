@@ -1,7 +1,6 @@
 # useClick
 
-Adds click event listeners that change the open state (toggle
-behavior).
+Adds click event listeners that change the open state.
 
 ```js /useClick/
 import {
@@ -25,6 +24,7 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 interface Props {
   enabled?: boolean;
   pointerDown?: boolean;
+  toggle?: boolean;
 }
 ```
 
@@ -47,3 +47,21 @@ default: `false{:js}`
 Whether to prefer the `pointerdown{:.string}` event over
 `click{:.string}` (for faster feedback). Keyboard clicks will
 continue to work.
+
+```js
+useClick(context, {
+  pointerDown: true,
+});
+```
+
+### toggle
+
+default: `true{:js}`
+
+Whether to toggle the open state with repeated clicks.
+
+```js
+useClick(context, {
+  toggle: false,
+});
+```
