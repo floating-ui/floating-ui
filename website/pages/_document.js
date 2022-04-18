@@ -32,6 +32,7 @@ class MyDocument extends Document {
           className="bg-gray-900 text-gray-100"
           data-remove-transitions=""
         >
+          <div id="focus-root" tabIndex={-1} />
           <div id="floating-root" />
           <Main />
           <NextScript />

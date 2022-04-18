@@ -307,9 +307,11 @@ export default function Layout({children}) {
 
     function onRouteChangeComplete() {
       setHash(null);
+      document.querySelector('#focus-root').focus();
     }
 
     events.on('routeChangeComplete', onRouteChangeComplete);
+
     return () => {
       events.off('routeChangeComplete', onRouteChangeComplete);
     };
