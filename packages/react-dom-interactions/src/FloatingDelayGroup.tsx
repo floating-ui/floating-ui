@@ -87,7 +87,7 @@ export const useDelayGroup = (
     if (currentId && onOpenChange) {
       setState((state) => ({
         ...state,
-        delay: {open: 0, close: getDelay(initialDelay, 'close')},
+        delay: {open: 1, close: getDelay(initialDelay, 'close')},
       }));
 
       if (currentId !== id) {
