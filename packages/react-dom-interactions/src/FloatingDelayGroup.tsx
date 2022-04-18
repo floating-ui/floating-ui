@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import {getDelay} from './hooks/useHover';
 import type {FloatingContext} from './types';
+import {useLatestRef} from './utils/useLatestRef';
 
 type Delay = number | Partial<{open: number; close: number}>;
 
@@ -82,24 +83,25 @@ export const useDelayGroup = (
   {id}: UseGroupOptions
 ) => {
   const {currentId, initialDelay, setState} = useDelayGroupContext();
+  const onOpenChangeRef = useLatestRef(onOpenChange);
 
   useEffect(() => {
-    if (currentId && onOpenChange) {
+    if (currentId && onOpenChangeRef.current) {
       setState((state) => ({
         ...state,
         delay: {open: 1, close: getDelay(initialDelay, 'close')},
       }));
 
       if (currentId !== id) {
-        onOpenChange(false);
+        onOpenChangeRef.current(false);
       }
     }
-  }, [id, onOpenChange, setState, currentId, initialDelay]);
+  }, [id, onOpenChangeRef, setState, currentId, initialDelay]);
 
   useEffect(() => {
-    if (!open && currentId === id && onOpenChange) {
-      onOpenChange(false);
+    if (!open && currentId === id && onOpenChangeRef.current) {
+      onOpenChangeRef.current(false);
       setState((state) => ({...state, delay: initialDelay, currentId: null}));
     }
-  }, [open, setState, currentId, id, onOpenChange, initialDelay]);
+  }, [open, setState, currentId, id, onOpenChangeRef, initialDelay]);
 };
