@@ -14,7 +14,7 @@ export const FloatingPortal = ({
 }: {
   children?: React.ReactNode;
   id?: string;
-}) => {
+}): React.ReactPortal | null => {
   const [mounted, setMounted] = useState(false);
   const portalRef = useRef<HTMLDivElement | null>(null);
 

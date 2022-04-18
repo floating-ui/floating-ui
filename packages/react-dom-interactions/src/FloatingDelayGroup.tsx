@@ -51,7 +51,7 @@ export const FloatingDelayGroup = ({
 }: {
   children?: React.ReactNode;
   delay: Delay;
-}) => {
+}): JSX.Element => {
   const [state, setState] = useState<GroupState>({
     delay,
     initialDelay: delay,

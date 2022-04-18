@@ -50,7 +50,7 @@ export const FloatingNode = ({
 }: {
   children?: React.ReactNode;
   id: string;
-}) => {
+}): JSX.Element => {
   const parentId = useFloatingParentNodeId();
 
   return (
@@ -68,7 +68,11 @@ export const FloatingNode = ({
  * respective parent).
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export const FloatingTree = ({children}: {children?: React.ReactNode}) => {
+export const FloatingTree = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}): JSX.Element => {
   const nodesRef = useRef<Array<FloatingNodeType>>([]);
 
   const addNode = useCallback((node: FloatingNodeType) => {

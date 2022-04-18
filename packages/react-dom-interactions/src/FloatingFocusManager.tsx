@@ -63,7 +63,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   initialFocus = 0,
   returnFocus = true,
   modal = true,
-}: Props<RT>) {
+}: Props<RT>): JSX.Element {
   const orderRef = useLatestRef(order);
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const tree = useFloatingTree();
