@@ -1,5 +1,5 @@
 import {hideOthers} from 'aria-hidden';
-import {useCallback, useEffect, forwardRef, cloneElement} from 'react';
+import React, {useCallback, useEffect, forwardRef, cloneElement} from 'react';
 import {ReferenceType} from '.';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext} from './types';
