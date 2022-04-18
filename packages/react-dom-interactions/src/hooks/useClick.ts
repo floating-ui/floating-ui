@@ -4,6 +4,7 @@ import {useRef} from 'react';
 export interface Props {
   enabled?: boolean;
   pointerDown?: boolean;
+  toggle?: boolean;
 }
 
 /**
@@ -12,7 +13,7 @@ export interface Props {
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
   {open, onOpenChange, dataRef}: FloatingContext<RT>,
-  {enabled = true, pointerDown = false}: Props = {}
+  {enabled = true, pointerDown = false, toggle = true}: Props = {}
 ): ElementProps => {
   const pointerTypeRef = useRef<'mouse' | 'pen' | 'touch'>();
 
@@ -27,7 +28,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           pointerTypeRef.current = event.pointerType;
 
           if (open) {
-            if (dataRef.current.openEvent?.type === 'pointerdown') {
+            if (toggle && dataRef.current.openEvent?.type === 'pointerdown') {
               onOpenChange(false);
             }
           } else {
@@ -44,7 +45,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         }
 
         if (open) {
-          if (dataRef.current.openEvent?.type === 'click') {
+          if (toggle && dataRef.current.openEvent?.type === 'click') {
             onOpenChange(false);
           }
         } else {
