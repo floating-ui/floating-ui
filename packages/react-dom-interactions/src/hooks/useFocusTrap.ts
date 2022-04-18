@@ -33,9 +33,7 @@ function focus(el: HTMLElement | undefined) {
 }
 
 /**
- * Traps focus in a loop of focusable elements while the floating element is
- * open.
- * @see https://floating-ui.com/docs/useFocusTrap
+ * @deprecated Use `<FloatingFocusManager />` instead.
  */
 export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
   {open, onOpenChange, refs, nodeId}: FloatingContext<RT>,
