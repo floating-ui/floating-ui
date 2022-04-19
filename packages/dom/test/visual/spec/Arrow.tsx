@@ -70,9 +70,10 @@ export function Arrow() {
         </div>
       </div>
 
-      <h2>Size</h2>
       <Controls>
+        <label htmlFor="size">Size</label>
         <input
+          id="size"
           type="range"
           min="1"
           max="200"
@@ -80,8 +81,6 @@ export function Arrow() {
           onChange={handleSizeChange}
         />
       </Controls>
-
-      <h2>Placement</h2>
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button
