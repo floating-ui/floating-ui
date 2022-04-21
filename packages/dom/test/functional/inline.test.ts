@@ -2,7 +2,7 @@ import {test, expect} from '@playwright/test';
 import {click} from './utils/click';
 
 const RIGHT_CLIENT_RECT = {x: 600, y: 5};
-const LEFT_CLIENT_RECT = {x: 50, y: 50};
+const LEFT_CLIENT_RECT = {x: 50, y: 45};
 
 test('chooses right client rect placed on bottom', async ({page}) => {
   await page.goto('http://localhost:1234/inline');
@@ -39,19 +39,6 @@ test('chooses left client rect placed on top', async ({page}) => {
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     'left-client-rect-top.png'
-  );
-});
-
-test('chooses left client rect placed on top when it would not fit on top of right rect', async ({
-  page,
-}) => {
-  await page.goto('http://localhost:1234/inline');
-  await click(page, '[data-testid="placement-top"]');
-  await page.evaluate('window.scrollBy(0, 275)');
-  await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
-
-  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-client-rect-top-when-right-top-no-fit.png'
   );
 });
 
