@@ -2,6 +2,7 @@ import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {getDocument} from '../utils/getDocument';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -162,10 +163,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree();
   const previousOpen = usePrevious(open);
 
-  const focusOnOpenRef = useRef(focusItemOnOpen);
+  const focusItemOnOpenRef = useRef(
+    focusItemOnOpen === 'auto' ? false : focusItemOnOpen
+  );
   const indexRef = useRef(selectedIndex ?? -1);
   const keyRef = useRef('');
-  const initializedRef = useRef(false);
   const onNavigateRef = useLatestRef(onNavigate);
   const blockPointerLeaveRef = useRef(false);
 
@@ -194,7 +196,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef.current = selectedIndex;
     }
 
-    if (!previousOpen && open && focusOnOpenRef.current) {
+    if (!previousOpen && open && focusItemOnOpenRef.current) {
       onNavigateRef.current(indexRef.current);
       focusItem(listRef, indexRef);
     }
@@ -214,9 +216,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
 
     if (open) {
-      if (activeIndex === null) {
+      if (activeIndex == null) {
         if (
-          (!previousOpen && focusOnOpenRef.current && selectedIndex == null) ||
+          (!previousOpen &&
+            focusItemOnOpenRef.current &&
+            selectedIndex == null) ||
           allowEscape
         ) {
           indexRef.current = allowEscape ? -1 : getMinIndex(listRef);
@@ -253,7 +257,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     if (open) {
       if (
         isMainOrientationKey(keyRef.current, orientation) ||
-        (focusOnOpenRef.current &&
+        (focusItemOnOpenRef.current &&
           (keyRef.current === ' ' || keyRef.current === 'Enter'))
       ) {
         const minIndex = getMinIndex(listRef);
@@ -295,20 +299,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     if (
       !open &&
-      initializedRef.current &&
+      previousOpen &&
       selectedIndex != null &&
       isHTMLElement(refs.reference.current)
     ) {
       refs.reference.current.focus();
     }
-  }, [refs.reference, selectedIndex, open, enabled]);
-
-  useLayoutEffect(() => {
-    initializedRef.current = true;
-    return () => {
-      initializedRef.current = false;
-    };
-  }, []);
+  }, [refs.reference, selectedIndex, open, previousOpen, enabled]);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -316,9 +313,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
 
     if (!open) {
-      if (focusItemOnOpen === 'auto') {
-        focusOnOpenRef.current = true;
-      }
       indexRef.current = selectedIndex ?? activeIndex ?? -1;
       onNavigateRef.current(null);
     }
@@ -331,12 +325,31 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onNavigateRef,
   ]);
 
-  function pointerCheck(event: React.PointerEvent) {
-    if (focusItemOnOpen === 'auto') {
-      // undefined or '' depending on the browser
-      focusOnOpenRef.current = !event.pointerType;
+  // Ensure the parent floating element has focus when a nested child closes
+  // to allow arrow key navigation to work after the pointer leaves the child.
+  useLayoutEffect(() => {
+    if (!enabled) {
+      return;
     }
-  }
+
+    if (!open && previousOpen) {
+      const parentFloating = tree?.nodesRef.current.find(
+        (node) => node.id === parentId
+      )?.context?.refs.floating.current;
+
+      if (
+        parentFloating &&
+        !parentFloating.contains(getDocument(parentFloating).activeElement)
+      ) {
+        parentFloating.focus({preventScroll: true});
+      }
+    }
+  }, [enabled, open, previousOpen, tree, parentId]);
+
+  useLayoutEffect(() => {
+    focusItemOnOpenRef.current = false;
+    keyRef.current = '';
+  });
 
   function onFloatingKeyDown(event: React.KeyboardEvent) {
     blockPointerLeaveRef.current = true;
@@ -437,8 +450,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         activeIndex != null && {
           'aria-activedescendant': activeId,
         }),
-      onPointerEnter: pointerCheck,
-      onPointerDown: pointerCheck,
       onKeyDown(event) {
         blockPointerLeaveRef.current = true;
 
@@ -447,7 +458,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
 
         if (focusItemOnOpen === 'auto') {
-          focusOnOpenRef.current = true;
+          focusItemOnOpenRef.current = true;
         }
 
         keyRef.current = event.key;

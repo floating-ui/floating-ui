@@ -155,6 +155,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
+      dataRef.current.openEvent = event;
 
       if (
         open ||
@@ -163,8 +164,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       ) {
         return;
       }
-
-      dataRef.current.openEvent = event;
 
       if (delay) {
         timeoutRef.current = setTimeout(() => {
@@ -213,9 +212,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     const reference = refs.reference.current;
 
     if (isElement(reference)) {
+      reference.addEventListener('mousemove', onMouseEnter, {once: true});
       reference.addEventListener('mouseenter', onMouseEnter);
       reference.addEventListener('mouseleave', onMouseLeave);
       return () => {
+        reference.removeEventListener('mousemove', onMouseEnter);
         reference.removeEventListener('mouseenter', onMouseEnter);
         reference.removeEventListener('mouseleave', onMouseLeave);
       };

@@ -159,27 +159,34 @@ rest for the specified number of milliseconds mid-traversal. The
 default value (0) will never close it unless the pointer is
 outside the area.
 
+> **Note:** this applies only if the cursor is not close enough
+> to the floating element to be within the `offset(){:js}`
+> region, so it does not apply too eagerly.
+
 ```js
 useHover(context, {
   handleClose: safePolygon({
-    restMs: 200,
+    restMs: 50,
   }),
 });
 ```
 
 ### buffer
 
-default: `1{:js}`
+default: `0{:js}`
 
 Determines the amount of buffer (in pixels) there is around the
-cursor point of the polygon. `0{:js}` will create a perfect
-triangle, while any number greater than 0 creates a quad. A lower
-value is recommended.
+the polygon.
+
+While the default value should handle the vast majority of cases
+correctly, if you find your floating element is closing
+unexpectedly as the pointer tries to move toward the floating
+element, try increasing this value.
 
 ```js
 useHover(context, {
   handleClose: safePolygon({
-    buffer: 0,
+    buffer: 1,
   }),
 });
 ```
