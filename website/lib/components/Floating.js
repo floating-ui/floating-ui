@@ -1,6 +1,7 @@
-import {cloneElement, useEffect, useRef, useState} from 'react';
+import {cloneElement, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
 import * as FloatingUI from '@floating-ui/react-dom';
+import {autoUpdate} from '@floating-ui/react-dom';
 
 export function Floating({
   children,
@@ -13,10 +14,6 @@ export function Floating({
   arrow,
   ...options
 }) {
-  const [{height}, setDimensions] = useState({
-    width: null,
-    height: null,
-  });
   const arrowRef = useRef();
   const {
     x,
@@ -38,13 +35,15 @@ export function Floating({
           if (name === 'size') {
             return FloatingUI.size?.({
               ...options,
-              apply: ({width, height}) => {
-                setDimensions({
-                  width,
-                  height: minHeight
-                    ? Math.max(height, minHeight)
-                    : Math.max(height, 0),
-                });
+              apply: ({height}) => {
+                Object.assign(
+                  refs.floating.current.style ?? {},
+                  {
+                    maxHeight: minHeight
+                      ? `${Math.max(height, minHeight)}px`
+                      : `${Math.max(height, 0)}px`,
+                  }
+                );
               },
             });
           }
@@ -96,22 +95,13 @@ export function Floating({
   }, [x, transition, refs.floating]);
 
   useEffect(() => {
-    const nodes = [
-      ...FloatingUI.getOverflowAncestors(refs.reference.current),
-      ...FloatingUI.getOverflowAncestors(refs.floating.current),
-    ];
-
-    nodes.forEach((node) => {
-      node.addEventListener('scroll', update);
-      node.addEventListener('resize', update);
-    });
-
-    return () => {
-      nodes.forEach((node) => {
-        node.removeEventListener('scroll', update);
-        node.removeEventListener('resize', update);
-      });
-    };
+    if (refs.reference.current && refs.floating.current) {
+      return autoUpdate(
+        refs.reference.current,
+        refs.floating.current,
+        update
+      );
+    }
   }, [reference, floating, update, refs]);
 
   const tooltipJsx = (
@@ -129,7 +119,6 @@ export function Floating({
                 y
               )}px,0)`
             : '',
-        maxHeight: height ?? '',
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
           : '',
