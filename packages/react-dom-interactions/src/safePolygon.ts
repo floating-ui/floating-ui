@@ -73,7 +73,11 @@ export function safePolygon({
         return;
       }
 
-      const {target, clientX, clientY} = event;
+      const {clientX, clientY} = event;
+      const target =
+        'composedPath' in event
+          ? event.composedPath()[0]
+          : (event as Event).target;
       const targetNode = target as Element | null;
 
       // If the pointer is over the reference or floating element already, there

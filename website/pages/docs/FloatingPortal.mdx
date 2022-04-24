@@ -5,9 +5,7 @@ Portals your floating element outside the main app node.
 ```js
 import {FloatingPortal} from '@floating-ui/react-dom-interactions';
 
-function App() {
-  // ...
-
+function Tooltip() {
   return (
     <FloatingPortal>
       {open && <div>Tooltip<div>}
@@ -24,6 +22,7 @@ function App() {
 ```js
 interface Props {
   id?: string;
+  root?: HTMLElement | null;
 }
 ```
 
@@ -32,4 +31,21 @@ interface Props {
 default: `'floating-ui-root'{:js}`
 
 If this node does not exist on the document, it will be created
-for you.
+for you and will be appended to the end of the `<body>{:html}`.
+
+```js
+<FloatingPortal id="custom-root-id">
+  {open && <div>Tooltip</div>}
+</FloatingPortal>
+```
+
+### root
+
+Alternatively, you may pass the root element itself, which
+supports shadow roots.
+
+```js
+<FloatingPortal root={shadowRootNode}>
+  {open && <div>Tooltip</div>}
+</FloatingPortal>
+```
