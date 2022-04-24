@@ -11,8 +11,7 @@ import {
   hide,
   limitShift,
 } from '../src';
-import {renderHook} from '@testing-library/react-hooks';
-import {render, waitFor, fireEvent} from '@testing-library/react';
+import {render, renderHook, waitFor, fireEvent} from '@testing-library/react';
 import {useRef, useState} from 'react';
 import type {Dimensions, ElementRects} from '@floating-ui/core';
 

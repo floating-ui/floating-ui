@@ -5,4 +5,5 @@ export default {
   globals: {
     __DEV__: true,
   },
+  setupFilesAfterEnv: ['<rootDir>/test/unit/setupJest.ts']
 };
