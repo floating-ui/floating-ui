@@ -22,7 +22,7 @@ export const FloatingPortal = ({
 
   useLayoutEffect(() => {
     const rootNode = rootId ? document.getElementById(rootId) : null;
-    const root = (rootNode?.querySelector(`${id}`) ??
+    const root = (rootNode?.querySelector(`#${id}`) ??
       document.getElementById(id)) as HTMLDivElement | null;
 
     if (root) {
