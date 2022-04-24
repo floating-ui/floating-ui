@@ -2,6 +2,7 @@ import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {useCallback, useEffect} from 'react';
 import {useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {contains} from '../utils/contains';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
@@ -35,7 +36,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   const onOpenChangeRef = useLatestRef(onOpenChange);
 
   const isFocusInsideFloating = useCallback(() => {
-    return refs.floating.current?.contains(
+    return contains(
+      refs.floating.current,
       getDocument(refs.floating.current).activeElement
     );
   }, [refs.floating]);
@@ -67,15 +69,16 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       const targetIsInsideChildren =
         tree &&
         getChildren(tree, nodeId).some((node) =>
-          node.context?.refs.floating.current?.contains(
-            event.target as Element | null
+          contains(
+            node.context?.refs.floating.current ?? null,
+            event.target as HTMLElement | null
           )
         );
 
       if (
-        refs.floating.current?.contains(event.target as Element | null) ||
+        contains(refs.floating.current, event.target as Element | null) ||
         (isElement(refs.reference.current) &&
-          refs.reference.current.contains(event.target as Element | null)) ||
+          contains(refs.reference.current, event.target as Element | null)) ||
         targetIsInsideChildren
       ) {
         return;

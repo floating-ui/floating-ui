@@ -3,6 +3,7 @@ import type {FloatingContext, FloatingTreeType} from './types';
 import pointInPolygon from 'point-in-polygon';
 import {isElement} from './utils/is';
 import {getChildren} from './utils/getChildren';
+import {contains} from './utils/contains';
 
 type XY = [number, number];
 
@@ -42,8 +43,8 @@ export function safePolygon({
       if (
         (event.type === 'pointermove' &&
           isElement(refs.reference.current) &&
-          refs.reference.current.contains(targetNode)) ||
-        refs.floating.current?.contains(targetNode)
+          contains(refs.reference.current, targetNode)) ||
+        contains(refs.floating.current, targetNode)
       ) {
         return;
       }

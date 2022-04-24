@@ -2,6 +2,7 @@ import {hideOthers} from 'aria-hidden';
 import React, {useCallback, useEffect, forwardRef, cloneElement} from 'react';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
+import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
 import {isElement, isHTMLElement} from './utils/is';
@@ -159,13 +160,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     function onFloatingFocusOut(event: FocusEvent) {
       const target = event.relatedTarget as Element | null;
       if (
-        !refs.floating.current?.contains(target) &&
+        !contains(refs.floating.current, target) &&
         isElement(refs.reference.current) &&
-        !refs.reference.current.contains(target) &&
+        !contains(refs.reference.current, target) &&
         !(
           tree &&
           getChildren(tree, nodeId).some((child) =>
-            child.context?.refs.floating.current?.contains(target)
+            contains(child.context?.refs.floating.current ?? null, target)
           )
         )
       ) {

@@ -11,15 +11,19 @@ const DEFAULT_ID = 'floating-ui-root';
 export const FloatingPortal = ({
   children,
   id = DEFAULT_ID,
+  rootId = null,
 }: {
   children?: React.ReactNode;
   id?: string;
+  rootId?: string | null;
 }): React.ReactPortal | null => {
   const [mounted, setMounted] = useState(false);
   const portalRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    const root = document.getElementById(id) as HTMLDivElement | null;
+    const rootNode = rootId ? document.getElementById(rootId) : null;
+    const root = (rootNode?.querySelector(`${id}`) ??
+      document.getElementById(id)) as HTMLDivElement | null;
 
     if (root) {
       portalRef.current = root;
@@ -35,7 +39,7 @@ export const FloatingPortal = ({
     }
 
     setMounted(true);
-  }, [id]);
+  }, [id, rootId]);
 
   if (mounted && portalRef.current) {
     return createPortal(children, portalRef.current);

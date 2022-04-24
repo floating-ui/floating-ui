@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
 import {stopEvent} from '../utils/stopEvent';
 
@@ -65,7 +66,8 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
 
   function onKeyDown(event: React.KeyboardEvent) {
     if (
-      !event.currentTarget.contains(
+      !contains(
+        event.currentTarget,
         getDocument(event.currentTarget as HTMLElement).activeElement
       )
     ) {

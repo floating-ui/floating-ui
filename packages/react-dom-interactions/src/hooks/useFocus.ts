@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 
@@ -82,7 +83,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
           event.type === 'focus' &&
           dataRef.current.openEvent?.type === 'mousedown' &&
           isElement(refs.reference.current) &&
-          refs.reference.current?.contains(
+          contains(
+            refs.reference.current,
             dataRef.current.openEvent?.target as Element | null
           )
         ) {
@@ -98,9 +100,9 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         // clicking into the floating element, prevent it from hiding.
         // Note: it must be focusable, e.g. `tabindex="-1"`.
         if (
-          refs.floating.current?.contains(target) ||
+          contains(refs.floating.current, target) ||
           (isElement(refs.reference.current) &&
-            refs.reference.current.contains(target))
+            contains(refs.reference.current, target))
         ) {
           return;
         }
