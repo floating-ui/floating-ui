@@ -51,14 +51,16 @@ export function safePolygon({
     return function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
 
-      if (!initialized && !timeoutPending) {
+      if (!initialized) {
         // Block the first events to ensure the cursor has moved into the
         // polygon, allowing leeway in rounding errors between the cursor point
         // and the polygon.
-        timeoutPending = true;
-        setTimeout(() => {
-          initialized = true;
-        }, 1000 / 60);
+        if (!timeoutPending) {
+          timeoutPending = true;
+          setTimeout(() => {
+            initialized = true;
+          }, 1000 / 60);
+        }
         return;
       }
 
