@@ -1,6 +1,7 @@
 import React, {useRef} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {activeElement} from '../utils/activeElement';
 import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
 import {stopEvent} from '../utils/stopEvent';
@@ -68,7 +69,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     if (
       !contains(
         event.currentTarget,
-        getDocument(event.currentTarget as HTMLElement).activeElement
+        activeElement(getDocument(event.currentTarget as HTMLElement))
       )
     ) {
       return;

@@ -2,6 +2,7 @@ import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {activeElement} from '../utils/activeElement';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -371,7 +372,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
       if (
         !virtual &&
-        event.currentTarget.ownerDocument.activeElement === event.currentTarget
+        activeElement(event.currentTarget.ownerDocument) === event.currentTarget
       ) {
         indexRef.current =
           selectedIndex ??

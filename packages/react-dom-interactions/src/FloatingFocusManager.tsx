@@ -2,6 +2,7 @@ import {hideOthers} from 'aria-hidden';
 import React, {useCallback, useEffect, forwardRef, cloneElement} from 'react';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
+import {activeElement} from './utils/activeElement';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
@@ -204,8 +205,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     const floating = refs.floating.current;
 
-    const previouslyFocusedElement =
-      getDocument(floating).activeElement ?? document.activeElement;
+    const previouslyFocusedElement = activeElement(getDocument(floating));
 
     if (typeof initialFocus === 'number') {
       focus(getTabbableElements()[initialFocus] ?? floating);
