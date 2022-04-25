@@ -1,14 +1,30 @@
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType} from './types';
-import pointInPolygon from 'point-in-polygon';
 import {isElement} from './utils/is';
 import {getChildren} from './utils/getChildren';
 
-type XY = [number, number];
+type Point = [number, number];
+type Polygon = Point[];
+
+function isPointInPolygon(point: Point, polygon: Polygon) {
+  const [x, y] = point;
+  let isInside = false;
+  const length = polygon.length;
+  for (let i = 0, j = length - 1; i < length; j = i++) {
+    const [xi, yi] = polygon[i] || [0, 0];
+    const [xj, yj] = polygon[j] || [0, 0];
+    const intersect =
+      yi >= y !== yj >= y && x <= ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+    if (intersect) {
+      isInside = !isInside;
+    }
+  }
+  return isInside;
+}
 
 export function safePolygon({
   restMs = 0,
-  buffer = 1,
+  buffer = 0,
   debug = null,
 }: Partial<{
   restMs: number;
@@ -16,6 +32,9 @@ export function safePolygon({
   debug: null | ((points?: string | null) => void);
 }> = {}) {
   let timeoutId: NodeJS.Timeout;
+  let initialized = false;
+  let polygonIsDestroyed = false;
+  let timeoutPending = false;
 
   return ({
     x,
@@ -28,9 +47,27 @@ export function safePolygon({
   }: FloatingContext & {
     onClose: () => void;
     tree?: FloatingTreeType | null;
-  }) =>
-    function onPointerMove(event: PointerEvent) {
+  }) => {
+    return function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
+
+      if (!initialized) {
+        // Block the first events to ensure the cursor has moved into the
+        // polygon, allowing leeway in rounding errors between the cursor point
+        // and the polygon.
+        if (!timeoutPending) {
+          timeoutPending = true;
+          setTimeout(() => {
+            initialized = true;
+          }, 1000 / 60);
+        }
+        return;
+      }
+
+      function close() {
+        clearTimeout(timeoutId);
+        onClose();
+      }
 
       if (event.pointerType && event.pointerType !== 'mouse') {
         return;
@@ -39,20 +76,27 @@ export function safePolygon({
       const {target, clientX, clientY} = event;
       const targetNode = target as Element | null;
 
+      // If the pointer is over the reference or floating element already, there
+      // is no need to run the logic.
       if (
-        (event.type === 'pointermove' &&
-          isElement(refs.reference.current) &&
-          refs.reference.current.contains(targetNode)) ||
-        refs.floating.current?.contains(targetNode)
+        event.type === 'pointermove' &&
+        isElement(refs.reference.current) &&
+        refs.reference.current.contains(targetNode)
       ) {
         return;
       }
 
-      // If any child has a menu open, abort
+      // If any nested child is open, abort.
       if (
         tree &&
         getChildren(tree, nodeId).some(({context}) => context?.open)
       ) {
+        return;
+      }
+
+      // The cursor landed, so we destroy the polygon logic
+      if (refs.floating.current?.contains(targetNode)) {
+        polygonIsDestroyed = true;
         return;
       }
 
@@ -72,7 +116,24 @@ export function safePolygon({
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
 
-      // Within the rectangular trough between the two elements
+      // If the pointer is leaving from the opposite side, the "buffer" logic
+      // creates a point where the floating element remains open, but should be
+      // ignored.
+      // A constant of 1 handles floating point rounding errors.
+      if (
+        (side === 'top' && y >= refRect.bottom - 1) ||
+        (side === 'bottom' && y <= refRect.top + 1) ||
+        (side === 'left' && x >= refRect.right - 1) ||
+        (side === 'right' && x <= refRect.left + 1)
+      ) {
+        return close();
+      }
+
+      // Ignore when the cursor is within the rectangular trough between the
+      // two elements. Since the triangle is created from the cursor point,
+      // which can start beyond the ref element's edge, traversing back and
+      // forth from the ref to the floating element can cause it to close. This
+      // ensures it always remains open in that case.
       switch (side) {
         case 'top':
           if (
@@ -98,47 +159,51 @@ export function safePolygon({
           if (
             clientX >= rect.right &&
             clientX <= refRect.left &&
-            clientY >= rect.left &&
-            clientY <= rect.right
+            clientY >= rect.top &&
+            clientY <= rect.bottom
           ) {
             return;
           }
           break;
         case 'right':
           if (
-            clientX >= rect.right &&
-            clientX <= refRect.left &&
-            clientY >= rect.right &&
-            clientY <= refRect.left
+            clientX >= refRect.right &&
+            clientX <= rect.left &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom
           ) {
             return;
           }
           break;
       }
 
-      function getPolygon([x, y]: XY): Array<XY> {
+      if (polygonIsDestroyed) {
+        return close();
+      }
+
+      function getPolygon([x, y]: Point): Array<Point> {
         const isFloatingWider = rect.width > refRect.width;
         const isFloatingTaller = rect.height > refRect.height;
 
         switch (side) {
           case 'top': {
-            const cursorPointOne: XY = [
+            const cursorPointOne: Point = [
               isFloatingWider
-                ? x
+                ? x + buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer
-                : x - buffer,
-              y + buffer,
+                ? x + buffer * 4
+                : x - buffer * 4,
+              y + buffer + 1,
             ];
-            const cursorPointTwo: XY = [
+            const cursorPointTwo: Point = [
               isFloatingWider
-                ? x
+                ? x - buffer / 2
                 : cursorLeaveFromRight
-                ? x - buffer
-                : x + buffer,
-              y + buffer,
+                ? x + buffer * 4
+                : x - buffer * 4,
+              y + buffer + 1,
             ];
-            const commonPoints: [XY, XY] = [
+            const commonPoints: [Point, Point] = [
               [
                 rect.left,
                 cursorLeaveFromRight
@@ -157,30 +222,26 @@ export function safePolygon({
               ],
             ];
 
-            if (cursorLeaveFromRight) {
-              return [cursorPointOne, cursorPointTwo, ...commonPoints];
-            }
-
-            return [cursorPointOne, ...commonPoints, cursorPointTwo];
+            return [cursorPointOne, cursorPointTwo, ...commonPoints];
           }
           case 'bottom': {
-            const cursorPointOne: XY = [
+            const cursorPointOne: Point = [
               isFloatingWider
-                ? x
+                ? x + buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer
-                : x - buffer,
+                ? x + buffer * 4
+                : x - buffer * 4,
               y - buffer,
             ];
-            const cursorPointTwo: XY = [
+            const cursorPointTwo: Point = [
               isFloatingWider
-                ? x
+                ? x - buffer / 2
                 : cursorLeaveFromRight
-                ? x - buffer
-                : x + buffer,
+                ? x + buffer * 4
+                : x - buffer * 4,
               y - buffer,
             ];
-            const commonPoints: [XY, XY] = [
+            const commonPoints: [Point, Point] = [
               [
                 rect.left,
                 cursorLeaveFromRight
@@ -199,30 +260,26 @@ export function safePolygon({
               ],
             ];
 
-            if (cursorLeaveFromRight) {
-              return [cursorPointOne, cursorPointTwo, ...commonPoints];
-            }
-
-            return [cursorPointOne, ...commonPoints, cursorPointTwo];
+            return [cursorPointOne, cursorPointTwo, ...commonPoints];
           }
           case 'left': {
-            const cursorPointOne: XY = [
-              x + buffer,
+            const cursorPointOne: Point = [
+              x + buffer + 1,
               isFloatingTaller
-                ? y
+                ? y + buffer / 2
                 : cursorLeaveFromBottom
-                ? y - buffer
-                : y + buffer,
+                ? y + buffer * 4
+                : y - buffer * 4,
             ];
-            const cursorPointTwo: XY = [
-              x + buffer,
+            const cursorPointTwo: Point = [
+              x + buffer + 1,
               isFloatingTaller
-                ? y
+                ? y - buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer
-                : y - buffer,
+                ? y + buffer * 4
+                : y - buffer * 4,
             ];
-            const commonPoints: [XY, XY] = [
+            const commonPoints: [Point, Point] = [
               [
                 cursorLeaveFromBottom
                   ? rect.right - buffer
@@ -241,30 +298,26 @@ export function safePolygon({
               ],
             ];
 
-            if (cursorLeaveFromBottom) {
-              return [cursorPointOne, ...commonPoints, cursorPointTwo];
-            }
-
             return [...commonPoints, cursorPointOne, cursorPointTwo];
           }
           case 'right': {
-            const cursorPointOne: XY = [
+            const cursorPointOne: Point = [
               x - buffer,
               isFloatingTaller
-                ? y
+                ? y + buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer
-                : y - buffer,
+                ? y + buffer * 4
+                : y - buffer * 4,
             ];
-            const cursorPointTwo: XY = [
+            const cursorPointTwo: Point = [
               x - buffer,
               isFloatingTaller
-                ? y
+                ? y - buffer / 2
                 : cursorLeaveFromBottom
-                ? y - buffer
-                : y + buffer,
+                ? y + buffer * 4
+                : y - buffer * 4,
             ];
-            const commonPoints: [XY, XY] = [
+            const commonPoints: [Point, Point] = [
               [
                 cursorLeaveFromBottom
                   ? rect.left + buffer
@@ -283,11 +336,7 @@ export function safePolygon({
               ],
             ];
 
-            if (cursorLeaveFromBottom) {
-              return [cursorPointOne, cursorPointTwo, ...commonPoints];
-            }
-
-            return [cursorPointOne, ...commonPoints, cursorPointTwo];
+            return [cursorPointOne, cursorPointTwo, ...commonPoints];
           }
         }
       }
@@ -298,11 +347,11 @@ export function safePolygon({
         debug?.(poly.slice(0, 4).join(', '));
       }
 
-      if (!pointInPolygon([clientX, clientY], poly)) {
-        clearTimeout(timeoutId);
-        onClose();
+      if (!isPointInPolygon([clientX, clientY], poly)) {
+        close();
       } else if (restMs) {
         timeoutId = setTimeout(onClose, restMs);
       }
     };
+  };
 }
