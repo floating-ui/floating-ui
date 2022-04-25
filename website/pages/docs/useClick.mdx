@@ -25,6 +25,7 @@ interface Props {
   enabled?: boolean;
   pointerDown?: boolean;
   toggle?: boolean;
+  ignoreMouse?: boolean;
 }
 ```
 
@@ -63,5 +64,23 @@ Whether to toggle the open state with repeated clicks.
 ```js
 useClick(context, {
   toggle: false,
+});
+```
+
+### ignoreMouse
+
+default: `false{:js}`
+
+Whether to ignore the logic for mouse input (for example, if
+`useHover(){:js}` is also being used).
+
+When `useHover(){:js}` and `useClick(){:js}` are used together,
+clicking the reference element after hovering it will keep the
+floating element open even once the cursor leaves. This may be
+not be desirable in some cases.
+
+```js
+useClick(context, {
+  ignoreMouse: true,
 });
 ```
