@@ -1,4 +1,4 @@
-import {MutableRefObject, useMemo, useRef, useState} from 'react';
+import * as React from 'react';
 import {
   useFloating as usePositionalFloating,
   ComputePositionReturn,
@@ -28,8 +28,8 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     reference: (node: RT | null) => void;
     floating: (node: HTMLElement | null) => void;
     refs: {
-      reference: MutableRefObject<RT | null>;
-      floating: MutableRefObject<HTMLElement | null>;
+      reference: React.MutableRefObject<RT | null>;
+      floating: React.MutableRefObject<HTMLElement | null>;
     };
   };
 
@@ -53,11 +53,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   context: FloatingContext<RT>;
 } {
   const tree = useFloatingTree<RT>();
-  const dataRef = useRef<ContextData>({});
-  const events = useState(() => createPubSub())[0];
+  const dataRef = React.useRef<ContextData>({});
+  const events = React.useState(() => createPubSub())[0];
   const floating = usePositionalFloating<RT>({placement, middleware, strategy});
 
-  const context = useMemo<FloatingContext<RT>>(
+  const context = React.useMemo<FloatingContext<RT>>(
     () => ({
       ...floating,
       dataRef,
@@ -76,7 +76,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     }
   });
 
-  return useMemo(
+  return React.useMemo(
     () => ({
       context,
       ...floating,

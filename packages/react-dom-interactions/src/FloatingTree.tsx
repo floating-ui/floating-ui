@@ -1,25 +1,18 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from './types';
 import {useId} from './hooks/useId';
 import {createPubSub} from './createPubSub';
 
-const FloatingNodeContext = createContext<FloatingNodeType | null>(null);
-const FloatingTreeContext = createContext<FloatingTreeType | null>(null);
+const FloatingNodeContext = React.createContext<FloatingNodeType | null>(null);
+const FloatingTreeContext = React.createContext<FloatingTreeType | null>(null);
 
 export const useFloatingParentNodeId = (): string | null =>
-  useContext(FloatingNodeContext)?.id ?? null;
+  React.useContext(FloatingNodeContext)?.id ?? null;
 export const useFloatingTree = <
   RT extends ReferenceType = ReferenceType
 >(): FloatingTreeType<RT> | null =>
-  useContext(FloatingTreeContext) as FloatingTreeType<RT> | null;
+  React.useContext(FloatingTreeContext) as FloatingTreeType<RT> | null;
 
 /**
  * Registers a node into the floating tree, returning its id.
@@ -55,7 +48,7 @@ export const FloatingNode = ({
 
   return (
     <FloatingNodeContext.Provider
-      value={useMemo(() => ({id, parentId}), [id, parentId])}
+      value={React.useMemo(() => ({id, parentId}), [id, parentId])}
     >
       {children}
     </FloatingNodeContext.Provider>
@@ -73,21 +66,21 @@ export const FloatingTree = ({
 }: {
   children?: React.ReactNode;
 }): JSX.Element => {
-  const nodesRef = useRef<Array<FloatingNodeType>>([]);
+  const nodesRef = React.useRef<Array<FloatingNodeType>>([]);
 
-  const addNode = useCallback((node: FloatingNodeType) => {
+  const addNode = React.useCallback((node: FloatingNodeType) => {
     nodesRef.current = [...nodesRef.current, node];
   }, []);
 
-  const removeNode = useCallback((node: FloatingNodeType) => {
+  const removeNode = React.useCallback((node: FloatingNodeType) => {
     nodesRef.current = nodesRef.current.filter((n) => n !== node);
   }, []);
 
-  const events = useState(() => createPubSub())[0];
+  const events = React.useState(() => createPubSub())[0];
 
   return (
     <FloatingTreeContext.Provider
-      value={useMemo(
+      value={React.useMemo(
         () => ({
           nodesRef,
           addNode,

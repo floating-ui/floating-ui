@@ -1,5 +1,5 @@
 import {hideOthers} from 'aria-hidden';
-import React, {useCallback, useEffect, forwardRef, cloneElement} from 'react';
+import * as React from 'react';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
 import {getChildren} from './utils/getChildren';
@@ -20,7 +20,7 @@ const SELECTOR =
   'iframe,object,embed,area[href],audio[controls],video[controls],' +
   "[contenteditable]:not([contenteditable='false'])";
 
-const FocusGuard = forwardRef<
+const FocusGuard = React.forwardRef<
   HTMLSpanElement,
   React.HTMLProps<HTMLSpanElement>
 >(function FocusGuard(props, ref) {
@@ -68,7 +68,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const tree = useFloatingTree();
 
-  const getTabbableElements = useCallback(() => {
+  const getTabbableElements = React.useCallback(() => {
     return orderRef.current
       .map((type) => {
         if (isHTMLElement(refs.reference.current) && type === 'reference') {
@@ -100,7 +100,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }) as Array<HTMLElement>;
   }, [orderRef, refs.floating, refs.reference]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // If the floating element has no focusable elements inside it, fallback
     // to focusing the floating element and preventing tab navigation
     const noTabbableContentElements =
@@ -155,7 +155,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     refs.reference,
   ]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     function onFloatingFocusOut(event: FocusEvent) {
       const target = event.relatedTarget as Element | null;
       if (
@@ -196,7 +196,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     refs.reference,
   ]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (preventTabbing) {
       return;
     }
@@ -241,7 +241,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           }}
         />
       )}
-      {cloneElement(children, order.includes('floating') ? {tabIndex: 0} : {})}
+      {React.cloneElement(
+        children,
+        order.includes('floating') ? {tabIndex: 0} : {}
+      )}
       {modal && endGuard && (
         <FocusGuard
           onFocus={(event) => {

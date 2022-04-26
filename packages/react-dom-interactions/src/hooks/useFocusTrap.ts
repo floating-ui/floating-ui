@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useEffect, useRef} from 'react';
+import * as React from 'react';
 import {hideOthers} from 'aria-hidden';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
@@ -20,7 +20,7 @@ export interface Props {
   enabled?: boolean;
   modal?: boolean;
   order?: Order;
-  initialContentFocus?: number | MutableRefObject<HTMLElement | null>;
+  initialContentFocus?: number | React.MutableRefObject<HTMLElement | null>;
   inert?: boolean;
 }
 
@@ -45,9 +45,9 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
     inert = false,
   }: Props = {}
 ): ElementProps => {
-  const initializedRef = useRef(false);
-  const beforeRef = useRef<HTMLElement | null>(null);
-  const afterRef = useRef<HTMLElement | null>(null);
+  const initializedRef = React.useRef(false);
+  const beforeRef = React.useRef<HTMLElement | null>(null);
+  const afterRef = React.useRef<HTMLElement | null>(null);
   const modalRef = useLatestRef(modal);
   const orderRef = useLatestRef(order);
 
@@ -62,7 +62,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
     }
   }
 
-  const getFocusableElements = useCallback(() => {
+  const getFocusableElements = React.useCallback(() => {
     return orderRef.current
       .map((type) => {
         if (isHTMLElement(refs.reference.current) && type === 'reference') {
@@ -151,7 +151,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, open, modal, inert, getFocusableElements, refs.floating]);
 
   // Inert
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled || !open || !inert) {
       return;
     }
@@ -170,7 +170,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, open, inert, refs.floating]);
 
   // Initial focus
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) {
       return;
     }
@@ -214,7 +214,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
   ]);
 
   // Return focus to reference
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled || inert) {
       return;
     }
@@ -230,7 +230,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
   }, [open, enabled, inert, modalRef, refs.reference]);
 
   // Hide all outside nodes from screen readers
-  useEffect(() => {
+  React.useEffect(() => {
     if (!open || !modal || !enabled || !refs.floating.current) {
       return;
     }
@@ -238,7 +238,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
     return hideOthers(refs.floating.current);
   }, [open, modal, enabled, refs.floating]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     initializedRef.current = true;
     return () => {
       initializedRef.current = false;

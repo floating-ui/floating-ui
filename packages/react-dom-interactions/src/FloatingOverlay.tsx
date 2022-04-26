@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 const identifier = 'data-floating-ui-scroll-lock';
@@ -9,7 +9,7 @@ const identifier = 'data-floating-ui-scroll-lock';
  * It's a regular `<div>`, so it can be styled via any CSS solution you prefer.
  * @see https://floating-ui.com/docs/FloatingOverlay
  */
-export const FloatingOverlay = forwardRef<
+export const FloatingOverlay = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & {lockScroll?: boolean}
 >(function FloatingOverlay({lockScroll = false, ...rest}, ref) {

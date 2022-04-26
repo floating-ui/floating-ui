@@ -1,5 +1,5 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
-import {useCallback, useEffect} from 'react';
+import * as React from 'react';
 import {useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
@@ -34,19 +34,19 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree();
   const onOpenChangeRef = useLatestRef(onOpenChange);
 
-  const isFocusInsideFloating = useCallback(() => {
+  const isFocusInsideFloating = React.useCallback(() => {
     return refs.floating.current?.contains(
       getDocument(refs.floating.current).activeElement
     );
   }, [refs.floating]);
 
-  const focusReference = useCallback(() => {
+  const focusReference = React.useCallback(() => {
     if (isHTMLElement(refs.reference.current)) {
       refs.reference.current.focus();
     }
   }, [refs.reference]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!open || !enabled) {
       return;
     }

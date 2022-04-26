@@ -1,4 +1,4 @@
-import React, {MutableRefObject, useCallback, useRef, useState} from 'react';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
@@ -14,7 +14,7 @@ const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 
 function findNonDisabledIndex(
-  listRef: MutableRefObject<Array<HTMLElement | null>>,
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   {startingIndex = -1, decrement = false} = {}
 ): number {
   const list = listRef.current;
@@ -163,19 +163,19 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree();
   const previousOpen = usePrevious(open);
 
-  const focusItemOnOpenRef = useRef(
+  const focusItemOnOpenRef = React.useRef(
     focusItemOnOpen === 'auto' ? false : focusItemOnOpen
   );
-  const indexRef = useRef(selectedIndex ?? -1);
-  const keyRef = useRef('');
+  const indexRef = React.useRef(selectedIndex ?? -1);
+  const keyRef = React.useRef('');
   const onNavigateRef = useLatestRef(onNavigate);
-  const blockPointerLeaveRef = useRef(false);
+  const blockPointerLeaveRef = React.useRef(false);
 
-  const [activeId, setActiveId] = useState<string | undefined>();
+  const [activeId, setActiveId] = React.useState<string | undefined>();
 
-  const focusItem = useCallback(
+  const focusItem = React.useCallback(
     (
-      listRef: MutableRefObject<Array<HTMLElement | null>>,
+      listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>
     ) => {
       if (virtual) {

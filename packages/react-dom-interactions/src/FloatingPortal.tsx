@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -11,31 +11,31 @@ const DEFAULT_ID = 'floating-ui-root';
 export const FloatingPortal = ({
   children,
   id = DEFAULT_ID,
+  root = null,
 }: {
   children?: React.ReactNode;
   id?: string;
+  root?: HTMLElement | null;
 }): React.ReactPortal | null => {
-  const [mounted, setMounted] = useState(false);
-  const portalRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = React.useState(false);
+  const portalRef = React.useRef<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
-    const root = document.getElementById(id) as HTMLDivElement | null;
+    const rootNode = root ?? document.getElementById(id);
 
-    if (root) {
-      portalRef.current = root;
+    if (rootNode) {
+      portalRef.current = rootNode;
     } else {
       portalRef.current = document.createElement('div');
       portalRef.current.id = id;
     }
 
-    const el = portalRef.current;
-
-    if (!document.body.contains(el)) {
-      document.body.appendChild(el);
+    if (!root && !document.body.contains(portalRef.current)) {
+      document.body.appendChild(portalRef.current);
     }
 
     setMounted(true);
-  }, [id]);
+  }, [id, root]);
 
   if (mounted && portalRef.current) {
     return createPortal(children, portalRef.current);

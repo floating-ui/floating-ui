@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
@@ -16,9 +16,9 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
   {open, onOpenChange, dataRef, refs, events}: FloatingContext<RT>,
   {enabled = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
-  const blockFocusRef = useRef(false);
+  const blockFocusRef = React.useRef(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) {
       return;
     }
@@ -44,7 +44,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     };
   }, [refs.floating, open, enabled]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) {
       return;
     }

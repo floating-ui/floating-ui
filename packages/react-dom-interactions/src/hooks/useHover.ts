@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingTree} from '../FloatingTree';
 import type {
@@ -62,11 +62,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
 
-  const pointerTypeRef = useRef<string>();
-  const timeoutRef = useRef<any>();
-  const handlerRef = useRef<(event: PointerEvent) => void>();
-  const restTimeoutRef = useRef<any>();
-  const blockMouseMoveRef = useRef(true);
+  const pointerTypeRef = React.useRef<string>();
+  const timeoutRef = React.useRef<any>();
+  const handlerRef = React.useRef<(event: PointerEvent) => void>();
+  const restTimeoutRef = React.useRef<any>();
+  const blockMouseMoveRef = React.useRef(true);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -78,7 +78,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) {
       return;
     }
@@ -95,7 +95,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     };
   }, [enabled, events, refs.floating]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled || !handleCloseRef.current) {
       return;
     }
@@ -113,7 +113,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     };
   }, [refs.floating, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
 
-  const closeWithDelay = useCallback(
+  const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
       if (delay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
@@ -128,7 +128,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     [delay, onOpenChangeRef]
   );
 
-  const cleanupPointerMoveHandler = useCallback(() => {
+  const cleanupPointerMoveHandler = React.useCallback(() => {
     if (handlerRef.current) {
       getDocument(refs.floating.current).removeEventListener(
         'pointermove',
@@ -138,7 +138,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
   }, [refs.floating]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!open) {
       cleanupPointerMoveHandler();
     }
@@ -147,7 +147,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
-  useEffect(() => {
+  React.useEffect(() => {
     if (!enabled) {
       return;
     }

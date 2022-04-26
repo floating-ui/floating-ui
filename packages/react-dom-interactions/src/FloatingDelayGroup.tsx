@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  SetStateAction,
-  useCallback,
-  useMemo,
-} from 'react';
+import * as React from 'react';
 import {getDelay} from './hooks/useHover';
 import type {FloatingContext} from './types';
 import {useLatestRef} from './utils/useLatestRef';
@@ -24,10 +16,10 @@ interface GroupContext extends GroupState {
   setState: React.Dispatch<React.SetStateAction<GroupState>>;
 }
 
-const FloatingDelayGroupContext = createContext<
+const FloatingDelayGroupContext = React.createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
-    setState: React.Dispatch<SetStateAction<GroupState>>;
+    setState: React.Dispatch<React.SetStateAction<GroupState>>;
   }
 >({
   delay: 1000,
@@ -38,7 +30,7 @@ const FloatingDelayGroupContext = createContext<
 });
 
 export const useDelayGroupContext = (): GroupContext =>
-  useContext(FloatingDelayGroupContext);
+  React.useContext(FloatingDelayGroupContext);
 
 /**
  * Provides context for a group of floating elements that should share a
@@ -52,19 +44,19 @@ export const FloatingDelayGroup = ({
   children?: React.ReactNode;
   delay: Delay;
 }): JSX.Element => {
-  const [state, setState] = useState<GroupState>({
+  const [state, setState] = React.useState<GroupState>({
     delay,
     initialDelay: delay,
     currentId: null,
   });
 
-  const setCurrentId = useCallback((currentId: any) => {
+  const setCurrentId = React.useCallback((currentId: any) => {
     setState((state) => ({...state, currentId}));
   }, []);
 
   return (
     <FloatingDelayGroupContext.Provider
-      value={useMemo(
+      value={React.useMemo(
         () => ({...state, setState, setCurrentId}),
         [state, setState, setCurrentId]
       )}
@@ -85,7 +77,7 @@ export const useDelayGroup = (
   const {currentId, initialDelay, setState} = useDelayGroupContext();
   const onOpenChangeRef = useLatestRef(onOpenChange);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (currentId && onOpenChangeRef.current) {
       setState((state) => ({
         ...state,
@@ -98,7 +90,7 @@ export const useDelayGroup = (
     }
   }, [id, onOpenChangeRef, setState, currentId, initialDelay]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!open && currentId === id && onOpenChangeRef.current) {
       onOpenChangeRef.current(false);
       setState((state) => ({...state, delay: initialDelay, currentId: null}));

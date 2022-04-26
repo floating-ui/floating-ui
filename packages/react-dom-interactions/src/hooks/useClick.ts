@@ -1,5 +1,5 @@
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {useRef} from 'react';
+import * as React from 'react';
 import {isHTMLElement} from '../utils/is';
 
 export interface Props {
@@ -22,7 +22,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     ignoreMouse = false,
   }: Props = {}
 ): ElementProps => {
-  const pointerTypeRef = useRef<'mouse' | 'pen' | 'touch'>();
+  const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
 
   function isButton() {
     return (

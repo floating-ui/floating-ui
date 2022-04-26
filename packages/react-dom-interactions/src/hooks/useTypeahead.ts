@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
@@ -41,12 +41,12 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     activeIndex: null,
   }
 ): ElementProps => {
-  const timeoutIdRef = useRef<any>();
-  const stringRef = useRef('');
-  const prevIndexRef = useRef<number | null>(
+  const timeoutIdRef = React.useRef<any>();
+  const stringRef = React.useRef('');
+  const prevIndexRef = React.useRef<number | null>(
     selectedIndex ?? activeIndex ?? -1
   );
-  const matchIndexRef = useRef<number | null>(null);
+  const matchIndexRef = React.useRef<number | null>(null);
 
   useLayoutEffect(() => {
     if (open) {
