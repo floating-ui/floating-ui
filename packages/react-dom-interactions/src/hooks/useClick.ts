@@ -37,25 +37,27 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
 
   return {
     reference: {
-      ...(pointerDown && {
-        onPointerDown(event) {
-          pointerTypeRef.current = event.pointerType;
+      onPointerDown(event) {
+        pointerTypeRef.current = event.pointerType;
 
-          if (pointerTypeRef.current === 'mouse' && ignoreMouse) {
-            return;
+        if (pointerTypeRef.current === 'mouse' && ignoreMouse) {
+          return;
+        }
+
+        if (!pointerDown) {
+          return;
+        }
+
+        if (open) {
+          if (toggle && dataRef.current.openEvent?.type === 'pointerdown') {
+            onOpenChange(false);
           }
+        } else {
+          onOpenChange(true);
+        }
 
-          if (open) {
-            if (toggle && dataRef.current.openEvent?.type === 'pointerdown') {
-              onOpenChange(false);
-            }
-          } else {
-            onOpenChange(true);
-          }
-
-          dataRef.current.openEvent = event.nativeEvent;
-        },
-      }),
+        dataRef.current.openEvent = event.nativeEvent;
+      },
       onClick(event) {
         if (pointerDown && pointerTypeRef.current) {
           pointerTypeRef.current = undefined;
