@@ -17,8 +17,8 @@ import {
   useDismiss,
   useClick,
   useId,
-  useFocusTrap,
   FloatingPortal,
+  FloatingFocusManager,
 } from '@floating-ui/react-dom-interactions';
 import {Controls} from '../utils/Controls';
 
@@ -92,10 +92,6 @@ export function Popover({children, render, placement, modal = true}: Props) {
     useClick(context),
     useRole(context),
     useDismiss(context),
-    useFocusTrap(context, {
-      modal,
-      order: modal ? undefined : ['reference', 'content'],
-    }),
   ]);
 
   useEffect(() => {
@@ -112,28 +108,31 @@ export function Popover({children, render, placement, modal = true}: Props) {
         cloneElement(children, getReferenceProps({ref: reference}))}
       <Wrapper>
         {open && (
-          <div
-            {...getFloatingProps({
-              className: 'Popover',
-              ref: floating,
-              style: {
-                position: strategy,
-                top: y ?? '',
-                left: x ?? '',
-              },
-              'aria-labelledby': labelId,
-              'aria-describedby': descriptionId,
-            })}
+          <FloatingFocusManager
+            context={context}
+            modal={modal}
+            order={modal ? undefined : ['reference', 'content']}
           >
-            {render({
-              labelId,
-              descriptionId,
-              close: () => {
-                setOpen(false);
-                (refs.reference.current as HTMLElement).focus();
-              },
-            })}
-          </div>
+            <div
+              {...getFloatingProps({
+                className: 'Popover',
+                ref: floating,
+                style: {
+                  position: strategy,
+                  top: y ?? '',
+                  left: x ?? '',
+                },
+                'aria-labelledby': labelId,
+                'aria-describedby': descriptionId,
+              })}
+            >
+              {render({
+                labelId,
+                descriptionId,
+                close: () => setOpen(false),
+              })}
+            </div>
+          </FloatingFocusManager>
         )}
       </Wrapper>
     </>
