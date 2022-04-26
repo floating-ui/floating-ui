@@ -9,7 +9,6 @@ import {
   useRole,
   useClick,
   useDismiss,
-  useFocusTrap,
   useListNavigation,
   useTypeahead,
 } from '.';
@@ -53,7 +52,6 @@ function NarrowRefType() {
     useClick(floating2.context),
     useDismiss(floating2.context),
     useFocus(floating2.context),
-    useFocusTrap(floating2.context),
     useHover(floating2.context),
     useListNavigation(floating2.context),
     useRole(floating2.context),
