@@ -155,7 +155,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
-      dataRef.current.openEvent = event;
 
       if (
         open ||
@@ -164,6 +163,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       ) {
         return;
       }
+
+      dataRef.current.openEvent = event;
 
       if (delay) {
         timeoutRef.current = setTimeout(() => {
