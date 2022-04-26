@@ -23,7 +23,7 @@ runs:
       shell: sh
     - run: npm run build
       shell: sh
-    - uses: replayio/action-playwright@ryan-public
+    - uses: replayio/action-playwright@ryan-update-comment-ui
       with:
         public: true
         command: npm run test:functional --
