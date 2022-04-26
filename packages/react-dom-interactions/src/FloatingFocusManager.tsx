@@ -2,6 +2,7 @@ import {hideOthers} from 'aria-hidden';
 import * as React from 'react';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
+import {activeElement} from './utils/activeElement';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
 import {isElement, isHTMLElement} from './utils/is';
@@ -78,7 +79,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         if (refs.floating.current && type === 'floating') {
           return refs.floating.current;
         }
-
         if (type === 'content') {
           return Array.from(
             refs.floating.current?.querySelectorAll(SELECTOR) ?? []
@@ -119,9 +119,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
         const els = getTabbableElements();
 
+        const target =
+          'composedPath' in event
+            ? event.composedPath()[0]
+            : // TS thinks `event` is of type never as it assumes all browsers support composedPath, but browsers without shadow dom don't
+              (event as Event).target;
+
         if (
           orderRef.current[0] === 'reference' &&
-          event.target === refs.reference.current
+          target === refs.reference.current
         ) {
           stopEvent(event);
           if (event.shiftKey) {
@@ -133,7 +139,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
         if (
           orderRef.current[1] === 'floating' &&
-          event.target === refs.floating.current &&
+          target === refs.floating.current &&
           event.shiftKey
         ) {
           stopEvent(event);
@@ -204,7 +210,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const floating = refs.floating.current;
 
     const previouslyFocusedElement =
-      getDocument(floating).activeElement ?? document.activeElement;
+      activeElement(getDocument(floating)) ?? activeElement(document);
 
     if (typeof initialFocus === 'number') {
       focus(getTabbableElements()[initialFocus] ?? floating);

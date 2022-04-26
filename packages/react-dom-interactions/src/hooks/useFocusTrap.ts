@@ -8,6 +8,7 @@ import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
 import {useFloatingTree} from '../FloatingTree';
 import {getChildren} from '../utils/getChildren';
+import {activeElement} from '../utils/activeElement';
 
 const FOCUSABLE_ELEMENT_SELECTOR =
   'a[href],area[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),iframe,object,embed,*[tabindex],*[contenteditable]';
@@ -182,7 +183,7 @@ export const useFocusTrap = <RT extends ReferenceType = ReferenceType>(
         const first = focusableElements[0];
         if (
           first === refs.floating.current &&
-          !first.contains(first.ownerDocument.activeElement)
+          !first.contains(activeElement(first.ownerDocument))
         ) {
           focus(first);
         }

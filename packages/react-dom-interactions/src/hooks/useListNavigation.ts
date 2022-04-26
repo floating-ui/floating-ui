@@ -3,6 +3,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
+import {activeElement} from '../utils/activeElement';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -339,7 +340,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
       if (
         parentFloating &&
-        !parentFloating.contains(getDocument(parentFloating).activeElement)
+        !parentFloating.contains(activeElement(getDocument(parentFloating)))
       ) {
         parentFloating.focus({preventScroll: true});
       }
@@ -384,7 +385,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
       if (
         !virtual &&
-        event.currentTarget.ownerDocument.activeElement === event.currentTarget
+        activeElement(event.currentTarget.ownerDocument) === event.currentTarget
       ) {
         indexRef.current =
           selectedIndex ??

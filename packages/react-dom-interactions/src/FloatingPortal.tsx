@@ -21,7 +21,11 @@ export const FloatingPortal = ({
   const portalRef = React.useRef<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
-    const rootNode = root ?? document.getElementById(id);
+    if (root) {
+      return;
+    }
+
+    const rootNode = document.getElementById(id);
 
     if (rootNode) {
       portalRef.current = rootNode;
@@ -30,12 +34,16 @@ export const FloatingPortal = ({
       portalRef.current.id = id;
     }
 
-    if (!root && !document.body.contains(portalRef.current)) {
+    if (!document.body.contains(portalRef.current)) {
       document.body.appendChild(portalRef.current);
     }
 
     setMounted(true);
   }, [id, root]);
+
+  if (root) {
+    return createPortal(children, root);
+  }
 
   if (mounted && portalRef.current) {
     return createPortal(children, portalRef.current);
