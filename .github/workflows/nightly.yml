@@ -1,0 +1,26 @@
+name: Nightly
+on:
+  workflow_dispatch:
+    inputs:
+      playwright-project:
+        type: choice
+        description: "Playwright project to use"
+        options: 
+        - chromium
+        - replay-chromium
+        - replay-firefox
+  schedule:
+    - cron:  '30 5 * * *'
+
+jobs:
+  functional-tests:
+    name: Functional tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/functional
+        with:
+          project: ${{ github.event.inputs.playwright-project }}
+          apiKey: ${{ secrets.RECORD_REPLAY_API_KEY }}
+          upload-all: true

@@ -9,6 +9,11 @@ inputs:
     description: "Replay.io API Key"
   issue-number:
     description: "Issue / Pull Request on which to comment results"
+<<<<<<< HEAD
+=======
+  upload-all:
+    description: "Upload all replays"
+>>>>>>> origin/master
 runs:
   using: composite
   steps:
@@ -25,7 +30,6 @@ runs:
       shell: sh
     - uses: replayio/action-playwright@ryan-update-comment-ui
       with:
-        public: true
         command: npm run test:functional --
         issue-number: ${{ inputs.issue-number }}
         project: ${{ inputs.project }}

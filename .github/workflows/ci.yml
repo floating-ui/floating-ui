@@ -30,6 +30,6 @@ jobs:
       - uses: ./.github/actions/setup
       - uses: ./.github/actions/functional
         with:
-          project: "replay-firefox"
+          project: "replay-chromium"
           issue-number: ${{ github.event.pull_request.number }}
           apiKey: ${{ secrets.RECORD_REPLAY_API_KEY }}

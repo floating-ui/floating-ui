@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "dev": "npm -w packages/react-dom run build && concurrently 'npm -w packages/core run dev' 'npm -w packages/dom run dev' 'parcel packages/dom/test/visual/index.html'",
-    "test:functional": "npx playwright test packages/dom/test/functional/table.test.ts",
+    "test:functional": "npx playwright test packages/dom/test/functional",
     "test:functional:update": "npm run test:functional -- -u",
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.17.1",
-    "@replayio/playwright": "^0.1.0-alpha.6",
+    "@replayio/playwright": "^0.2.1",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.10",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
