@@ -20,7 +20,6 @@ import {
   useRole,
   useClick,
   useDismiss,
-  useFocusTrap,
   autoUpdate,
   safePolygon,
   FloatingPortal,
@@ -29,6 +28,7 @@ import {
   useFloatingParentNodeId,
   FloatingNode,
   FloatingTree,
+  FloatingFocusManager,
 } from '@floating-ui/react-dom-interactions';
 import mergeRefs from 'react-merge-refs';
 
@@ -114,7 +114,6 @@ export const MenuComponent = forwardRef<
     useClick(context),
     useRole(context, {role: 'menu'}),
     useDismiss(context),
-    useFocusTrap(context, {inert: true}),
     useListNavigation(context, {
       listRef: listItemsRef,
       activeIndex,
@@ -198,33 +197,35 @@ export const MenuComponent = forwardRef<
       </button>
       <FloatingPortal>
         {open && (
-          <div
-            {...getFloatingProps({
-              className: 'Menu',
-              ref: floating,
-              style: {
-                position: strategy,
-                top: y ?? '',
-                left: x ?? '',
-              },
-            })}
-          >
-            {Children.map(
-              children,
-              (child, index) =>
-                isValidElement(child) &&
-                cloneElement(
-                  child,
-                  getItemProps({
-                    role: 'menuitem',
-                    className: 'MenuItem',
-                    ref(node: HTMLButtonElement) {
-                      listItemsRef.current[index] = node;
-                    },
-                  })
-                )
-            )}
-          </div>
+          <FloatingFocusManager context={context} preventTabbing>
+            <div
+              {...getFloatingProps({
+                className: 'Menu',
+                ref: floating,
+                style: {
+                  position: strategy,
+                  top: y ?? '',
+                  left: x ?? '',
+                },
+              })}
+            >
+              {Children.map(
+                children,
+                (child, index) =>
+                  isValidElement(child) &&
+                  cloneElement(
+                    child,
+                    getItemProps({
+                      role: 'menuitem',
+                      className: 'MenuItem',
+                      ref(node: HTMLButtonElement) {
+                        listItemsRef.current[index] = node;
+                      },
+                    })
+                  )
+              )}
+            </div>
+          </FloatingFocusManager>
         )}
       </FloatingPortal>
     </FloatingNode>

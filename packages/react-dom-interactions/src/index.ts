@@ -108,7 +108,6 @@ export {useClick} from './hooks/useClick';
 export {useDismiss} from './hooks/useDismiss';
 export {useId} from './hooks/useId';
 export {useFocus} from './hooks/useFocus';
-export {useFocusTrap} from './hooks/useFocusTrap';
 export {useHover} from './hooks/useHover';
 export {useListNavigation} from './hooks/useListNavigation';
 export {useTypeahead} from './hooks/useTypeahead';
