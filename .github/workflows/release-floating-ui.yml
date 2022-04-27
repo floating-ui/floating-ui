@@ -6,7 +6,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -15,7 +15,7 @@ jobs:
       - uses: ./.github/actions/functional
 
   publish:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: test
     steps:
       - uses: actions/checkout@v2
