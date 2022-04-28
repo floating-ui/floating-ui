@@ -5,10 +5,12 @@ import {useState, useLayoutEffect, useRef} from 'react';
 import {Controls} from '../utils/Controls';
 import {useSize} from '../utils/useSize';
 import {Container} from '../utils/Container';
+import {useBoxSize} from '../utils/useBoxSize';
+import {BoxSizeControl} from '../utils/BoxSizeControl';
 
 export function Complex() {
-  const [size, handleSizeChange] = useSize(150);
-  const [referenceSize, handleReferenceSizeChange] = useSize(160);
+  const [floatingSizeValue, floatingSize, handleFloatingSizeChange] = useBoxSize();
+  const [referenceSizeValue, referenceSize, handleReferenceSizeChange] = useBoxSize();
   const [offsetValue, handleOffsetChange] = useSize(15);
   const [shiftValue, handleShiftChange] = useSize(5);
   const [paddingValue, handlePaddingChange] = useSize(10);
@@ -34,7 +36,7 @@ export function Complex() {
     ],
   });
 
-  useLayoutEffect(update, [update, size, referenceSize, paddingValue]);
+  useLayoutEffect(update, [update, floatingSize, referenceSize, paddingValue]);
 
   const oppositeSidesMap: {[key: string]: string} = {
     top: 'bottom',
@@ -56,7 +58,7 @@ export function Complex() {
         <div
           ref={reference}
           className="reference"
-          style={{ width: referenceSize, height: referenceSize }}
+          style={{ width: referenceSizeValue, height: referenceSizeValue }}
         >
           Reference
         </div>
@@ -67,8 +69,8 @@ export function Complex() {
             position: strategy,
             top: y ?? '',
             left: x ?? '',
-            width: size,
-            height: size,
+            width: floatingSizeValue,
+            height: floatingSizeValue,
           }}
         >
           Floating
@@ -87,28 +89,8 @@ export function Complex() {
         </div>
       </Container>
 
-      <Controls>
-        <label htmlFor="referenceSize">Reference size</label>
-        <input
-          id="referenceSize"
-          type="range"
-          min="1"
-          max="200"
-          value={referenceSize}
-          onChange={handleReferenceSizeChange}
-        />
-      </Controls>
-      <Controls>
-        <label htmlFor="size">Floating size</label>
-        <input
-          id="size"
-          type="range"
-          min="1"
-          max="200"
-          value={size}
-          onChange={handleSizeChange}
-        />
-      </Controls>
+      <BoxSizeControl id="reference-size" label="Reference size" onChange={handleReferenceSizeChange} size={referenceSize} />
+      <BoxSizeControl id="floating-size" label="Floating size" onChange={handleFloatingSizeChange} size={floatingSize} />
       <Controls>
         <label htmlFor="offset">Offset</label>
         <input

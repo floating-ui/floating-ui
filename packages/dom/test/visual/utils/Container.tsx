@@ -1,22 +1,11 @@
 import {useLayoutEffect, useState} from 'react';
 import {Controls} from './Controls';
+import {positions} from './positions';
 
 type Props = {
   children?: React.ReactNode;
   update: () => void;
 };
-
-const positions: string[] = [
-  'top-left',
-  'top',
-  'top-right',
-  'left',
-  'center',
-  'right',
-  'bottom-left',
-  'bottom',
-  'bottom-right'
-];
 
 const getStyleForPosition = (position: string) => {
   switch(position){
