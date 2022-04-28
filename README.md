@@ -10,12 +10,18 @@
 
 The library provides two key functionalities:
 
-- **Positioning primitives**: Ensure your floating element is positioned
-  optimally in the viewport for the user (placement, overflow
-  prevention/clipping detection, and more).
+- **Anchored positioning primitives**: Given a reference element (such as a
+  button), anchor the floating element next to it while simultaneously ensuring
+  it is positioned optimally in view by preventing overflow and clipping. The
+  reference element may be positioned anywhere on the screen and the floating
+  element will remain anchored to it **without** overflowing the viewport edges
+  using various adjustment techniques called
+  [middleware](https://floating-ui.com/docs/middleware).
 - **Interaction primitives**: Add accessible interactions that power floating
-  elements (event listeners, dismissing, ARIA attributes, focus trapping, list
-  navigation, and more).
+  elements to follow WAI-ARIA authoring practices, including event listeners,
+  click outside/escape key dismissing, ARIA attributes, focus trapping, list
+  navigation, typeahead, etc. This functionality is currently available for
+  React DOM but will be made agnostic in the future.
 
 The positioning engine features a tiny 600-byte core with strong tree-shaking
 support, is extensible through custom middleware, and can support any platform.

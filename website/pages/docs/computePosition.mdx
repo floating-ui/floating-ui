@@ -1,9 +1,8 @@
 # computePosition
 
-The `computePosition(){:js}` function is at the heart of Floating
-UI. It's a pure function which computes the necessary coordinates
-to position the floating element next to a given reference
-element.
+The `computePosition(){:js}` function provides anchored
+positioning by computing the necessary positioning coordinates to
+position the floating element next to a given reference element.
 
 ## Usage
 
@@ -162,8 +161,6 @@ type ComputePositionReturn = {
 ## Updating
 
 Since `computePosition(){:js}` is only a single function call, it
-only positions your element once. There are cases in which you'll
-want it to be continually updated so that the floating element
-remains attached to the reference element.
-
-Visit [autoUpdate](/docs/autoUpdate) to do this.
+only positions your element once. To ensure the floating element
+remains anchored to the reference element in a variety of
+scenarios, use the [autoUpdate](/docs/autoUpdate) utility.
