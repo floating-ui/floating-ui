@@ -26,6 +26,7 @@ import {Hide} from './spec/Hide';
 import {AutoPlacement} from './spec/AutoPlacement';
 import {Inline} from './spec/Inline';
 import {AutoUpdate} from './spec/AutoUpdate';
+import {Complex} from './spec/Complex';
 
 import {New} from './utils/New';
 
@@ -47,6 +48,7 @@ const ROUTES = [
   {path: 'autoPlacement', component: AutoPlacement},
   {path: 'inline', component: Inline},
   {path: 'AutoUpdate', component: AutoUpdate},
+  {path: 'complex', component: Complex},
 ];
 
 function App() {
