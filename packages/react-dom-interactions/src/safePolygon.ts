@@ -1,8 +1,7 @@
 import type {Side} from '@floating-ui/core';
-import type {FloatingContext, FloatingTreeType} from './types';
+import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {isElement} from './utils/is';
 import {getChildren} from './utils/getChildren';
-import {ReferenceType} from '.';
 
 type Point = [number, number];
 type Polygon = Point[];
