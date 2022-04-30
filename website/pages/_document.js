@@ -5,7 +5,6 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document';
-import {TRACKING_ID} from '../lib/hooks/useAnalytics';
 
 class MyDocument extends Document {
   render() {
@@ -14,18 +13,9 @@ class MyDocument extends Document {
         <Head>
           <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`}
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-            
-              gtag('config', '${TRACKING_ID}');
-          `,
-            }}
+            defer
+            data-website-id="15719ba2-10f1-4303-8a19-bed14d1e5d4f"
+            src="https://626cfbd8a2fb4e5308c41baf--fantastic-pixie-a91050.netlify.app/floating.js"
           />
         </Head>
         <body
