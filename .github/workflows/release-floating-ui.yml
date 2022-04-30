@@ -22,7 +22,7 @@ jobs:
       - uses: ./.github/actions/setup
       - run: npm run build
       - run: npm run build:typescript
-      - run: npm run clean-packages
+      - run: npm run clean-package-jsons
       - run: npx rollingversions publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
