@@ -11,6 +11,7 @@ import {
   useDismiss,
   useListNavigation,
   useTypeahead,
+  safePolygon,
 } from '.';
 
 App;
@@ -52,7 +53,9 @@ function NarrowRefType() {
     useClick(floating2.context),
     useDismiss(floating2.context),
     useFocus(floating2.context),
-    useHover(floating2.context),
+    useHover(floating2.context, {
+      handleClose: safePolygon(),
+    }),
     useListNavigation(floating2.context),
     useRole(floating2.context),
     useTypeahead(floating2.context),

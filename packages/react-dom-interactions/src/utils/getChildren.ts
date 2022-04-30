@@ -1,6 +1,9 @@
-import type {FloatingTreeType} from '../types';
+import type {FloatingTreeType, ReferenceType} from '../types';
 
-export function getChildren(tree: FloatingTreeType, id: string | undefined) {
+export function getChildren<RT extends ReferenceType = ReferenceType>(
+  tree: FloatingTreeType<RT>,
+  id: string | undefined
+) {
   let allChildren =
     tree?.nodesRef.current.filter(
       (node) => node.parentId === id && node.context?.open

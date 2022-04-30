@@ -2,6 +2,7 @@ import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType} from './types';
 import {isElement} from './utils/is';
 import {getChildren} from './utils/getChildren';
+import {ReferenceType} from '.';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -22,7 +23,7 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
   return isInside;
 }
 
-export function safePolygon({
+export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0,
   debug = null,
@@ -44,9 +45,9 @@ export function safePolygon({
     onClose,
     nodeId,
     tree,
-  }: FloatingContext & {
+  }: FloatingContext<RT> & {
     onClose: () => void;
-    tree?: FloatingTreeType | null;
+    tree?: FloatingTreeType<RT> | null;
   }) => {
     return function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
