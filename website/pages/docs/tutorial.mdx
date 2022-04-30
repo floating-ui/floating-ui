@@ -102,10 +102,11 @@ much size as it needs to and is overlaid on top of the UI.
 
 ## Positioning
 
-Inside your module `<script>{:html}` tag, add the following code:
+Inside your module `<script>{:html}` tag, add the following code
+([play on CodeSandbox if you aren't using a module bundler](https://codesandbox.io/s/floating-ui-dom-template-nzvvx?file=/src/index.js)):
 
 ```js
-import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+import {computePosition} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -138,7 +139,7 @@ Floating UI has the `placement{:.objectKey}` option, passed into
 the options object as a third argument:
 
 ```js {7}
-import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+import {computePosition} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -200,10 +201,7 @@ the `'bottom'{:js}` placement automatically without us needing to
 explicitly specify it.
 
 ```js /flip/ {3,11}
-import {
-  computePosition,
-  flip,
-} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+import {computePosition, flip} from 'h@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -250,11 +248,7 @@ button, it ends up overflowing the edge.
 To solve this problem, we have the `shift(){:js}` middleware:
 
 ```js /shift/ {4,12}
-import {
-  computePosition,
-  flip,
-  shift,
-} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+import {computePosition, flip, shift} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -281,11 +275,7 @@ document boundary. To add some whitespace, or padding, the
 `shift(){:js}` middleware accepts an options object:
 
 ```js /padding/ {12}
-import {
-  computePosition,
-  flip,
-  shift,
-} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+import {computePosition, flip, shift} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -317,7 +307,7 @@ import {
   flip,
   shift,
   offset,
-} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
@@ -380,7 +370,7 @@ import {
   shift,
   offset,
   arrow,
-} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
+} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
 const tooltip = document.querySelector('#tooltip');
