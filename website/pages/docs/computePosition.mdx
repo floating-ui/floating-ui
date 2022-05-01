@@ -1,8 +1,11 @@
 # computePosition
 
-The `computePosition(){:js}` function provides anchored
-positioning by computing the necessary positioning coordinates to
-position the floating element next to a given reference element.
+The `computePosition(){:js}` function returns the `x` and `y`
+coordinates to place a floating element next to a given reference
+element.
+
+Together with [autoUpdate](/docs/autoUpdate), the floating
+element remains “anchored” to the reference element.
 
 ## Usage
 
@@ -74,7 +77,8 @@ computePosition(referenceEl, floatingEl, {
 
 ### placement
 
-This is the core positioning placement. 12 strings are available:
+Where to place the floating element relative to its reference
+element. 12 strings are available:
 
 ```ts
 type Placement =
@@ -117,12 +121,18 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-Instead of applying `position: absolute{:sass}` in your CSS
-before the `computePosition(){:js}` call, you'll now apply
-`position: fixed{:sass}`.
+Apply `position: fixed{:sass}` to your floating element (instead
+of `position: absolute{:sass}`) prior to the
+`computePosition(){:js}` call.
 
-You will want to use `'fixed'{:js}` if your reference element is
-inside a fixed container, but your floating element not.
+The `'fixed'{:js}` strategy is useful in two ways:
+
+- Reduces "jumpiness" caused by needing to reposition the
+  floating element continually while scrolling if the reference
+  element is fixed.
+- Breaks the floating element out of a clipping container (make
+  it top-layer on the UI) more frequently than `'absolute'{:js}`
+  will.
 
 ### middleware
 

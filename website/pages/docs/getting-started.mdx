@@ -1,29 +1,30 @@
 # Getting Started
 
-Floating UI is a low-level library for creating "floating"
+Floating UI is a tiny, low-level library for creating "floating"
 elements like tooltips, popovers, dropdowns, menus, and more.
 
 The library provides two key functionalities:
 
-1. **Anchored positioning primitives**: Given a reference element
-   (such as a button), anchor the floating element next to it
-   while simultaneously ensuring it is positioned optimally in
-   view by preventing overflow and clipping. The reference
-   element may be positioned anywhere on the screen and the
-   floating element will remain anchored to it without
-   overflowing the viewport edges using various adjustment
-   techniques called
-   [middleware](https://floating-ui.com/docs/middleware).
-2. **Interaction primitives**: Add accessible interactions that
-   power floating elements to follow WAI-ARIA authoring
-   practices, including event listeners, click outside/escape key
-   dismissing, ARIA attributes, focus trapping, list navigation,
-   typeahead, etc. This functionality is currently available for
-   React DOM but will be made agnostic in the future.
+### 1. Anchored positioning primitives
 
-The positioning engine features a tiny 600-byte core with strong
-tree-shaking support, is extensible through custom middleware,
-and can support any platform.
+CSS is currently missing a feature called “anchored positioning”
+— the ability to anchor an element (like a tooltip) to another
+one (like a button) while simultaneously keeping it in view as
+best as possible by avoiding clipping and overflow.
+
+Attempting to do fully dynamic anchored positioning with today’s
+plain CSS is not possible. Floating UI provides a JavaScript
+implementation of this feature.
+
+### 2. User interaction primitives
+
+When creating a popover, dropdown menu, select, or combobox
+component that follows WAI-ARIA authoring practices, the
+complexity increases dramatically. Focus traps, indexed
+navigation, and typeahead are difficult to get right.
+
+This functionality is currently available for React DOM but will
+be made agnostic in the future.
 
 ## Install
 
