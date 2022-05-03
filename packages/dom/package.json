@@ -23,8 +23,6 @@
           "development": "./dist/floating-ui.dom.esm.development.js",
           "default": "./dist/floating-ui.dom.esm.min.js"
         },
-        "development": "./dist/floating-ui.dom.esm.development.js",
-        "production": "./dist/floating-ui.dom.esm.min.js",
         "default": "./dist/floating-ui.dom.esm.js"
       },
       "require": "./dist/floating-ui.dom.cjs"
