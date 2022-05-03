@@ -98,16 +98,17 @@ computePosition(referenceElement, floatingElement, {
 
 [Visit the docs for detailed information](https://floating-ui.com/docs/computePosition).
 
-## Development and production builds
+## Package entry points
 
-Floating UI is published with default, development, and production builds, using
-Node's support for
-[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+Floating UI is published with [package entry points](https://nodejs.org/api/packages.html#package-entry-points)
+that leverage various [export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
 
-- `"default"`: uses `process.env.NODE_ENV`, in which your bundler handles the
-  env variable, dead code elimination, and minification
-- `"production"`: minified with no debug logging
-- `"development"`: unminified with debug logging
+- `"require"`: an unminified CJS build that uses `process.env.NODE_ENV`, in which your
+bundler handles the env variable, dead code elimination, and minification
+- `"import"`: an unminified es module build that uses `process.env.NODE_ENV`, in which your
+bundler handles the env variable, dead code elimination, and minification
+- `"browser development"`: an unminified es module build with debug logging
+- `"browser"`: a minified es module build with no debug logging
 
 If you're using a bundler like webpack, Vite, or Parcel, this is handled for you
 **automatically**.
