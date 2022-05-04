@@ -57,16 +57,16 @@ components. The hook injects the node, if it does not yet exist
 in the DOM.
 
 ```js
-const App = () => {
+function App() {
   const portalNode = useFloatingPortalNode({
-    id: 'floating-ui-root',
-    enabled: true,
+    id: 'custom-root-id', // 'floating-ui-root' by default
+    enabled: false, // true by default
   });
 
   if (portalNode) {
-    return React.createPortal(<div></div>, portalNode);
+    return ReactDOM.createPortal(<div></div>, portalNode);
   }
 
   return null;
-};
+}
 ```
