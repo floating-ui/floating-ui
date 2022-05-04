@@ -125,41 +125,24 @@ All exports will be available on `window.FloatingUIDOM{:js}`.
 
 ## Package entry points
 
-Floating UI outlines [package entry points](https://nodejs.org/api/packages.html#package-entry-points)
-via the `exports{:.objectKey}` field and lists entries for the
-the `require{:.objectKey}`, `import{:.objectKey}`, and `browser{:.objectKey}`
-[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
-When leveraging a the library with a full build process, ensure
-that you build tool is aware of, or and can manage, JS leveraging the
-`process.env{:js}` object.
+> Using webpack, Vite, or Parcel? Skip this section as modern
+> bundlers handle this for you.
 
-Floating UI leverages the value of properties of
-this object like `NODE_ENV{:.objectKey}` to customize the features that are available
-within the library. In particular, when `process.env.NODE_ENV !== "production"{:js}`
-debug logging will be `console.warn{:js}`ed into the browser.
+Floating UI uses `process.env.NODE_ENV{:js}` to determine whether
+your build is in development or production mode. This allows us
+to add console warnings and errors during development to help you
+but ensure they get stripped out in production to keep the bundle
+size small.
 
-If you're using a bundler like webpack, Vite, or Parcel, this is
-handled for you **automatically**. While each offers their own advanced
-customization like here in [Vite](https://vitejs.dev/config/#resolve-conditions)
-to ensure you have the ability to make the best decisions for you application.
-
-If this is not handled, as in _no- or low-build environments_,
-you should leverage the `browser{:.objectKey}` export condition
-which does not feature usage of the `process.env{:js}` object.
-This export condition is further broken into `default{:.objectKey}` and
-`development{:.objectKey}` conditions:
-
-- `"development"{:js}`: unminified with debug logging
-- `"default"{:js}`: minified with no debug logging
-
-These are accessed differently for each tool.
+This causes an error in Rollup and low/no-build setups. To solve
+this, Floating UI exports browser-ready ES modules. Leverage the
+"browser" package export condition to use these modules.
 
 <details>
   <summary>Rollup example</summary>
 
-Using the `@rollup/node-resolve{:.string}` plugin, you can select
-the "development" build from the "browser" exports with the
-`exportConditions{:.objectKey}` option:
+The `browser{:.objectKey}` option in the `nodeResolve(){:js}`
+plugin will select browser versions of packages if available.
 
 ```js
 import {nodeResolve} from '@rollup/plugin-node-resolve';
@@ -168,29 +151,14 @@ export default {
   // ...
   plugins: [
     nodeResolve({
-      exportConditions: ['browser', 'development'],
-    }),
-  ],
-};
-```
-
-or, by combining the [`browser{:.objectKey}`](https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser)
-option with the `exportConditions{:.objectKey}` option:
-
-import {nodeResolve} from '@rollup/plugin-node-resolve';
-
-export default {
-  // ...
-  plugins: [
-    nodeResolve({
-      exportConditions: ['development'],
       browser: true,
+
+      // Add this line for development config, omit for
+      // production config
+      exportConditions: ['development'],
     }),
   ],
 };
 ```
-
-Leaving "development" out of these configurations
-will point to the "production" build. 
 
 </details>
