@@ -203,19 +203,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
-    if (preventTabbing) {
-      return;
-    }
-
     const floating = refs.floating.current;
+    const previouslyFocusedElement = activeElement(getDocument(floating));
 
-    const previouslyFocusedElement =
-      activeElement(getDocument(floating)) ?? activeElement(document);
-
-    if (typeof initialFocus === 'number') {
-      focus(getTabbableElements()[initialFocus] ?? floating);
-    } else if (isHTMLElement(initialFocus?.current)) {
-      focus(initialFocus.current ?? floating);
+    if (!preventTabbing) {
+      if (typeof initialFocus === 'number') {
+        focus(getTabbableElements()[initialFocus] ?? floating);
+      } else if (isHTMLElement(initialFocus?.current)) {
+        focus(initialFocus.current);
+      }
     }
 
     return () => {
