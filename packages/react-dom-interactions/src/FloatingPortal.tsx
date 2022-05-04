@@ -52,8 +52,11 @@ export const FloatingPortal = ({
   const portalNode = useFloatingPortalNode({id, enabled: !root});
 
   useLayoutEffect(() => {
+    if (root) {
+      return;
+    }
     setMounted(true);
-  }, []);
+  }, [root]);
 
   if (root) {
     return createPortal(children, root);
