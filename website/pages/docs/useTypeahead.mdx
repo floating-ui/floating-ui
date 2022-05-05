@@ -47,9 +47,16 @@ default: empty list
 A ref which contains an array of strings whose indices match the
 HTML elements of the list.
 
+### activeIndex
+
+default: `null{:js}`
+
+The currently active index. This specifies where the typeahead
+starts.
+
 ### onMatch
 
-default: noop
+default: no-op
 
 Callback invoked with the matching index if found as the user
 types.
@@ -119,13 +126,6 @@ Ignore additional keys on top of the navigation-related ones.
   'ArrowRight',
 ];
 ```
-
-### activeIndex
-
-default: `null{:js}`
-
-The currently active index. This specifies where the typeahead
-starts.
 
 ### selectedIndex
 
