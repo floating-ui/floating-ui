@@ -1,4 +1,4 @@
-import type {Dimensions, ElementRects, Middleware} from '../types';
+import type {Middleware, MiddlewareArguments} from '../types';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -13,7 +13,12 @@ export interface Options {
    * to change its size.
    * @default undefined
    */
-  apply(args: Dimensions & ElementRects): void;
+  apply(
+    args: MiddlewareArguments & {
+      availableWidth: number;
+      availableHeight: number;
+    }
+  ): void;
 }
 
 /**
@@ -59,7 +64,7 @@ export const size = (
     const yMax = max(overflow.bottom, 0);
 
     const dimensions = {
-      height:
+      availableHeight:
         rects.floating.height -
         (['left', 'right'].includes(placement)
           ? 2 *
@@ -67,7 +72,7 @@ export const size = (
               ? yMin + yMax
               : max(overflow.top, overflow.bottom))
           : overflow[heightSide]),
-      width:
+      availableWidth:
         rects.floating.width -
         (['top', 'bottom'].includes(placement)
           ? 2 *
@@ -79,7 +84,10 @@ export const size = (
 
     const prevDimensions = await platform.getDimensions(elements.floating);
 
-    apply?.({...dimensions, ...rects});
+    apply?.({
+      ...middlewareArguments,
+      ...dimensions,
+    });
 
     const nextDimensions = await platform.getDimensions(elements.floating);
 

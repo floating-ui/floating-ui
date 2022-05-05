@@ -1,4 +1,4 @@
-import type {Placement, Rect, Coords, Middleware, ElementRects} from '../types';
+import type {Coords, Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
@@ -25,20 +25,17 @@ type OffsetValue =
        */
       alignmentAxis?: number | null;
     };
-type OffsetFunction = (args: {
-  floating: Rect;
-  reference: Rect;
-  placement: Placement;
-}) => OffsetValue;
+type OffsetFunction = (args: MiddlewareArguments) => OffsetValue;
 
 export type Options = OffsetValue | OffsetFunction;
 
-export function convertValueToCoords(
-  placement: Placement,
-  rects: ElementRects,
-  value: Options,
-  rtl = false
-): Coords {
+export async function convertValueToCoords(
+  middlewareArguments: MiddlewareArguments,
+  value: Options
+): Promise<Coords> {
+  const {placement, platform, elements} = middlewareArguments;
+  const rtl = await platform.isRTL?.(elements.floating);
+
   const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
@@ -46,7 +43,7 @@ export function convertValueToCoords(
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
 
   const rawValue =
-    typeof value === 'function' ? value({...rects, placement}) : value;
+    typeof value === 'function' ? value(middlewareArguments) : value;
 
   // eslint-disable-next-line prefer-const
   let {mainAxis, crossAxis, alignmentAxis} =
@@ -71,14 +68,8 @@ export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
   options: value,
   async fn(middlewareArguments) {
-    const {x, y, placement, rects, platform, elements} = middlewareArguments;
-
-    const diffCoords = convertValueToCoords(
-      placement,
-      rects,
-      value,
-      await platform.isRTL?.(elements.floating)
-    );
+    const {x, y} = middlewareArguments;
+    const diffCoords = await convertValueToCoords(middlewareArguments, value);
 
     return {
       x: x + diffCoords.x,

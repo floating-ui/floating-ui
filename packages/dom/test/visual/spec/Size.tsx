@@ -1,22 +1,21 @@
-import type {Dimensions, ElementRects, Placement} from '@floating-ui/core';
+import type {Placement} from '@floating-ui/core';
 import {useFloating, size} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
 import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
-import {flushSync} from 'react-dom';
 
 export function Size() {
   const [rtl, setRtl] = useState(false);
-  const [sizeData, setSizeData] = useState<ElementRects & Dimensions>();
   const [placement, setPlacement] = useState<Placement>('bottom');
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,
     middleware: [
       size({
-        apply: (data) => {
-          flushSync(() => {
-            setSizeData(data);
+        apply({availableHeight, availableWidth, elements}) {
+          Object.assign(elements.floating.style, {
+            maxWidth: `${availableWidth}px`,
+            maxHeight: `${availableHeight}px`,
           });
         },
         padding: 10,
@@ -50,8 +49,6 @@ export function Size() {
               position: strategy,
               top: y ?? '',
               left: x ?? '',
-              maxHeight: sizeData?.height ?? '',
-              maxWidth: sizeData?.width ?? '',
               width: 400,
               height: 300,
             }}
