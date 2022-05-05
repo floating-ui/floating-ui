@@ -36,9 +36,9 @@ interface Props {
   initialFocus?:
     | number
     | React.MutableRefObject<HTMLElement | null>;
+  returnFocus?: boolean;
   preventTabbing?: boolean;
   endGuard?: boolean;
-  returnFocus?: boolean;
   modal?: boolean;
 }
 ```
@@ -85,6 +85,9 @@ Which element to initially focus. Can be either a number
 (tabbable index as specified by the `order{:.objectKey}`) or a
 ref.
 
+> This does not have an effect when `preventTabbing{:.keyword}`
+> is enabled.
+
 ```js
 <FloatingFocusManager
   context={context}
@@ -94,12 +97,36 @@ ref.
 </FloatingFocusManager>
 ```
 
+### returnFocus
+
+default: `true{:js}`
+
+Determines if focus should be returned to the element that was
+focused prior to opening the floating element (usually the
+reference element).
+
+> This does not have an effect when `preventTabbing{:.keyword}`
+> is enabled.
+
+```js
+<FloatingFocusManager context={context} returnFocus={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
 ### preventTabbing
 
 default: `false{:js}`
 
-Determines if the tab key does not perform any action (i.e.
-navigation is handled via arrow keys).
+Determines if the tab key does not perform any action, so that
+focus cannot escape the floating element. Focus is instead
+handled by `useListNavigation(){:js}` (i.e. arrow key
+navigation).
+
+This prop is required when the focus is
+[modal](/docs/FloatingFocusManager#modal) and the floating
+element is portalled outside of the reference element's DOM
+context.
 
 ```js
 <FloatingFocusManager context={context} preventTabbing={true}>
@@ -122,31 +149,16 @@ to the very end of the document.
 </FloatingFocusManager>
 ```
 
-### returnFocus
-
-default: `true{:js}`
-
-Determines if focus should be returned to the element that was
-focused prior to opening the floating element (usually the
-reference element).
-
-```js
-<FloatingFocusManager context={context} returnFocus={false}>
-  {/* floating element */}
-</FloatingFocusManager>
-```
-
 ### modal
 
 default: `true{:js}`
 
 Determines if focus is "modal", meaning focus is fully trapped
 inside the floating element and outside content cannot be
-accessed.
+accessed. This includes screen reader virtual cursors.
 
-> If this is not true, the floating element must be rendered
-> directly after its reference element (e.g. not in a
-> FloatingPortal).
+> If `false{:js}`, the floating element must be rendered directly
+> after its reference element (e.g. not in a FloatingPortal).
 
 ```js
 <FloatingFocusManager context={context} modal={false}>
