@@ -123,14 +123,18 @@ values — this enables you to read the dimensions of the reference
 or floating elements and the current `placement{:.objectKey}`.
 
 ```js
-offset(({reference, floating, placement}) =>
-  placement === 'bottom' ? floating.width : reference.width
+offset(({rects, placement}) =>
+  placement === 'bottom'
+    ? rects.floating.width
+    : rects.reference.width
 );
 
-offset(({reference, floating, placement}) => ({
+offset(({rects, placement}) => ({
   mainAxis: placement === 'top' ? 5 : -5,
   crossAxis:
-    placement === 'right' ? reference.width : floating.width,
+    placement === 'right'
+      ? rects.reference.width
+      : rects.floating.width,
 }));
 ```
 
