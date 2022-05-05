@@ -12,14 +12,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/floating-ui.react-dom.js",
-  "module": "dist/floating-ui.react-dom.esm.js",
-  "unpkg": "dist/floating-ui.react-dom.min.js",
-  "type": "module",
+  "main": "./dist/floating-ui.react-dom.js",
+  "module": "./dist/floating-ui.react-dom.esm.js",
+  "unpkg": "./dist/floating-ui.react-dom.min.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/floating-ui.react-dom.esm.js",
-      "require": "./dist/floating-ui.react-dom.cjs"
+      "types": "./index.d.ts",
+      "module": "./dist/floating-ui.react-dom.esm.js",
+      "import": "./dist/floating-ui.react-dom.mjs",
+      "default": "./dist/floating-ui.react-dom.js"
     },
     "./package.json": "./package.json",
     "./src/index.ts": "./src/index.ts"

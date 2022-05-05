@@ -48,8 +48,8 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.core.cjs'),
-      format: 'cjs',
+      file: path.join(__dirname, 'dist/floating-ui.core.mjs'),
+      format: 'esm',
     },
   },
 ];
@@ -58,7 +58,8 @@ const isDevEnv = (file) => file.includes('.development.');
 const isUMD = (file) => file.includes('.core.js');
 const isMinEnv = (file) => file.includes('.min.');
 const isSpecificEnv = (file) => isMinEnv(file) || isDevEnv(file);
-const isDebugAlways = (file) => isDevEnv(file) || isUMD(file) ? 'true' : 'false';
+const isDebugAlways = (file) =>
+  isDevEnv(file) || isUMD(file) ? 'true' : 'false';
 
 const buildExport = bundles.map(({input, output}) => ({
   input,
