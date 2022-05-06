@@ -110,11 +110,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   useLayoutEffect(update, [update]);
 
   const runElementMountCallback = useCallback(() => {
-    if (reference.current && floating.current && onElementsMountedRef.current) {
-      if (typeof cleanupRef.current === 'function') {
-        cleanupRef.current();
-      }
+    if (typeof cleanupRef.current === 'function') {
+      cleanupRef.current();
+    }
 
+    if (reference.current && floating.current && onElementsMountedRef.current) {
       cleanupRef.current = onElementsMountedRef.current(
         reference.current,
         floating.current,
