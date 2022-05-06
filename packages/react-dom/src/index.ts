@@ -31,16 +31,35 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     };
   };
 
+function useLatestRef<T>(value: T) {
+  const ref = useRef(value);
+  useLayoutEffect(() => {
+    ref.current = value;
+  });
+  return ref;
+}
+
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   middleware,
   placement = 'bottom',
   strategy = 'absolute',
-}: Omit<
+  onElementsMounted,
+}: {
+  onElementsMounted?: (
+    reference: RT,
+    floating: HTMLElement,
+    update: () => void
+  ) => void | (() => void);
+} & Omit<
   Partial<ComputePositionConfig>,
   'platform'
 > = {}): UseFloatingReturn<RT> {
   const reference = useRef<RT | null>(null);
   const floating = useRef<HTMLElement | null>(null);
+
+  const onElementsMountedRef = useLatestRef(onElementsMounted);
+  const cleanupRef = useRef<void | (() => void)>();
+
   const [data, setData] = useState<Data>({
     // Setting these to `null` will allow the consumer to determine if
     // `computePosition()` has run yet
@@ -90,20 +109,36 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   useLayoutEffect(update, [update]);
 
+  const runElementMountCallback = useCallback(() => {
+    if (reference.current && floating.current && onElementsMountedRef.current) {
+      if (typeof cleanupRef.current === 'function') {
+        cleanupRef.current();
+      }
+
+      cleanupRef.current = onElementsMountedRef.current(
+        reference.current,
+        floating.current,
+        update
+      );
+    }
+  }, [update, onElementsMountedRef]);
+
   const setReference: UseFloatingReturn<RT>['reference'] = useCallback(
     (node) => {
       reference.current = node;
+      runElementMountCallback();
       update();
     },
-    [update]
+    [update, runElementMountCallback]
   );
 
   const setFloating: UseFloatingReturn<RT>['floating'] = useCallback(
     (node) => {
       floating.current = node;
+      runElementMountCallback();
       update();
     },
-    [update]
+    [update, runElementMountCallback]
   );
 
   const refs = useMemo(() => ({reference, floating}), []);

@@ -33,18 +33,24 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     };
   };
 
-export interface Props {
+export interface Props<RT extends ReferenceType = ReferenceType> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   placement: Placement;
   middleware: Array<Middleware>;
   strategy: Strategy;
   nodeId: string;
+  onElementsMounted?: (
+    reference: RT,
+    floating: HTMLElement,
+    update: () => void
+  ) => void | (() => void);
 }
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,
   onOpenChange = () => {},
+  onElementsMounted,
   placement,
   middleware,
   strategy,
@@ -55,7 +61,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const tree = useFloatingTree<RT>();
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
-  const floating = usePositionalFloating<RT>({placement, middleware, strategy});
+  const floating = usePositionalFloating<RT>({
+    placement,
+    middleware,
+    strategy,
+    onElementsMounted,
+  });
 
   const context = React.useMemo<FloatingContext<RT>>(
     () => ({
