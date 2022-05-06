@@ -53,8 +53,8 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.react-dom.cjs'),
-      format: 'cjs',
+      file: path.join(__dirname, 'dist/floating-ui.react-dom.mjs'),
+      format: 'esm',
     },
   },
 ];
