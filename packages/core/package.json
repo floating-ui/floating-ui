@@ -12,20 +12,19 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/floating-ui.core.js",
-  "module": "dist/floating-ui.core.esm.js",
-  "unpkg": "dist/floating-ui.core.min.js",
-  "type": "module",
+  "main": "./dist/floating-ui.core.js",
+  "module": "./dist/floating-ui.core.esm.js",
+  "unpkg": "./dist/floating-ui.core.min.js",
+  "types": "./index.d.ts",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
+      "module": "./dist/floating-ui.core.esm.js",
       "import": {
-        "browser": {
-          "development": "./dist/floating-ui.core.esm.development.js",
-          "default": "./dist/floating-ui.core.esm.min.js"
-        },
-        "default": "./dist/floating-ui.core.esm.js"
+        "development": "./dist/floating-ui.core.esm.development.js",
+        "default": "./dist/floating-ui.core.mjs"
       },
-      "require": "./dist/floating-ui.core.cjs"
+      "default": "./dist/floating-ui.core.js"
     },
     "./package.json": "./package.json",
     "./src/index.ts": "./src/index.ts"

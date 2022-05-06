@@ -1,5 +1,6 @@
 import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
+import {getUAString} from './userAgent';
 import {getWindow} from './window';
 
 declare global {
@@ -45,7 +46,7 @@ export function isTableElement(element: Element): boolean {
 
 export function isContainingBlock(element: Element): boolean {
   // TODO: Try and use feature detection here instead
-  const isFirefox = navigator.userAgent.toLowerCase().includes('firefox');
+  const isFirefox = /firefox/i.test(getUAString());
   const css = getComputedStyle(element);
 
   // This is non-exhaustive but covers the most common CSS properties that
@@ -64,7 +65,7 @@ export function isContainingBlock(element: Element): boolean {
 
 export function isLayoutViewport(): boolean {
   // Not Safari
-  return !/^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  return !/^((?!chrome|android).)*safari/i.test(getUAString());
   // Feature detection for this fails in various ways
   // • Always-visible scrollbar or not
   // • Width of <html>, etc.

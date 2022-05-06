@@ -36,20 +36,25 @@ Object.assign(floatingEl.style, {
 If you're animating the location of the floating element, using
 `transform{:.objectKey}` will offer smoother animations.
 
-## z-index stacking
+## z-index stacking and clipping
 
 Floating UI does not have opinions about how your elements stack
 on the z-axis. This means your element may be occluded beneath
-another one if it has a higher `z-index`.
+another positioned element if it has a higher `z-index`.
 
-If you find your floating element is being clipped by another
-element, some common workarounds include:
+Further, you may find your floating element is being clipped by
+its parent. `computePosition(){:js}` attempts to keep the
+floating element in view as best as possible in this scenario but
+in some cases this cannot be avoided.
 
-- Using the `"fixed"{:js}` strategy to "break" the floating
-  element out of a clipping context — use this sparingly.
+- Using the `'fixed'{:js}` strategy will "break" the floating
+  element out of its parent clipping context in the majority of
+  cases. This allows you to keep the floating element's DOM
+  context in tact.
 - The floating element can be appended to a root ancestor node
   inside `<body>{:html}`, e.g.
-  `<div id="floating-root"></div>{:html}`
+  `<div id="floating-root"></div>{:html}` (also referred to as
+  "portalling")
 
 In the future, Floating UI may
 [enable you to specify elements to avoid](https://github.com/floating-ui/floating-ui/issues/1440),

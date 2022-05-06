@@ -13,6 +13,14 @@ export const SPONSORS = [
     image: '/sponsors/modern-treasury.jpg',
     url: 'https://www.moderntreasury.com/',
   },
+  {
+    title: 'D7mtg',
+    description:
+      'Helping brands express their vision with clarity by design',
+    image: '/sponsors/d7mtg.jpg',
+    url:
+      'https://d7m.tg?utm_source=floating-ui.com&utm_medium=paid_web&utm_campaign=may_2022',
+  },
 ];
 
 export const MINI_SPONSORS = [

@@ -1,11 +1,16 @@
 # useCustomLogic
 
-You can build your own custom hook to perform unique logic. There
-are many widgets that can live inside a floating element (like a
-datepicker), so being able to extend the library is important.
+You can build your own custom hook to perform unique logic that
+is not currently exported by the library.
 
-If you want to pass it into `useInteractions(){:js}`, you can
-return an object with the following shape:
+The hooks exported by the library essentially just return HTML
+props (`onClick{:.keyword}`, `aria-describedby{:.keyword}`, etc.)
+inside a prop getter key, which get merged. You can do the same
+thing.
+
+> As the library is fully tree-shakeable, commonly used features
+> will likely be included in the future to avoid you needing to
+> write custom interaction hooks.
 
 ```js
 const useCustomLogic = (
@@ -15,12 +20,15 @@ const useCustomLogic = (
   return {
     reference: {
       // React.HTMLProps
+      onClick() {
+        console.log('clicked!');
+      },
     },
     floating: {
       // React.HTMLProps
     },
     item: {
-      // React.HTMLPRops
+      // React.HTMLProps
     },
   };
 };
@@ -28,4 +36,4 @@ const useCustomLogic = (
 
 If you have ideas for new hooks or functionality, don't hesitate
 to open a new issue or discussion on the
-[GitHub repo](https://github.com/floating-ui/floating-ui) ❤️!
+[GitHub repo](https://github.com/floating-ui/floating-ui)!

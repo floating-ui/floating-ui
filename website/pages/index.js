@@ -70,7 +70,7 @@ function Placement() {
     <GridItem
       titleClass="text-violet-300"
       title="Placement"
-      description="Places your floating element on 12 core positions."
+      description="Places your floating element relative to another one."
       chrome={
         <Chrome
           label="Click the dots"
@@ -192,7 +192,7 @@ function Placement() {
                       placement.split('-')[0]
                     ) && placement.includes('-')
                       ? '8rem'
-                      : '',
+                      : undefined,
                 }}
               >
                 {placement}
@@ -442,7 +442,7 @@ function Virtual() {
   return (
     <GridItem
       title="Virtual"
-      description="Position relative to any coordinates, such as your mouse cursor."
+      description="Anchor relative to any coordinates, such as your mouse cursor."
       chrome={
         <Chrome label="Move your mouse">
           <div
@@ -459,8 +459,8 @@ function Virtual() {
               className="bg-gray-500 text-gray-50 font-bold p-4 rounded"
               style={{
                 position: 'absolute',
-                top: y ?? '',
-                left: Math.round(x) ?? '',
+                top: y ?? 0,
+                left: Math.round(x) ?? 0,
                 transform: `scale(${open ? '1' : '0'})`,
                 opacity: open ? '1' : '0',
                 transition:

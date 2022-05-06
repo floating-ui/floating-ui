@@ -111,21 +111,21 @@ export function Floating({
       style={{
         ...tooltipStyle,
         position: 'absolute',
-        left: x != null ? 0 : '',
-        top: y != null ? 0 : '',
+        left: 0,
+        top: 0,
         transform:
           x != null
             ? `translate3d(${Math.round(x)}px,${Math.round(
                 y
               )}px,0)`
-            : '',
+            : undefined,
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
-          : '',
+          : undefined,
         visibility:
           middlewareData.hide?.referenceHidden || x == null
             ? 'hidden'
-            : '',
+            : undefined,
       }}
     >
       <div className="px-2 py-2">{content ?? 'Floating'}</div>
@@ -135,8 +135,8 @@ export function Floating({
           className="w-4 h-4 bg-gray-500 [left:-0.5rem]"
           style={{
             position: 'absolute',
-            left: middlewareData.arrow?.x ?? '',
-            top: middlewareData.arrow?.y ?? '',
+            left: middlewareData.arrow?.x ?? -7,
+            top: middlewareData.arrow?.y ?? 0,
             transition: 'transform 0.2s ease',
             transform:
               middlewareData.arrow?.centerOffset !== 0
