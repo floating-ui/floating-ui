@@ -45,14 +45,13 @@ export function autoUpdate(
   const {
     ancestorScroll: _ancestorScroll = true,
     ancestorResize: _ancestorResize = true,
-    elementResize: _elementResize = true,
+    elementResize = true,
     animationFrame = false,
   } = options;
 
   let cleanedUp = false;
   const ancestorScroll = _ancestorScroll && !animationFrame;
   const ancestorResize = _ancestorResize && !animationFrame;
-  const elementResize = _elementResize && !animationFrame;
 
   const ancestors =
     ancestorScroll || ancestorResize
@@ -71,7 +70,7 @@ export function autoUpdate(
   let observer: ResizeObserver | null = null;
   if (elementResize) {
     observer = new ResizeObserver(update);
-    isElement(reference) && observer.observe(reference);
+    isElement(reference) && !animationFrame && observer.observe(reference);
     observer.observe(floating);
   }
 

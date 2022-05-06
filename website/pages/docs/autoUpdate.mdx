@@ -89,8 +89,11 @@ Whether to update the position of the floating element on every
 animation frame if required. This is optimized for performance
 but can still be costly.
 
-Setting this to `true{:js}` disables every other listener as they
-become unnecessary.
+Setting this to `true{:js}` disables the scroll, resize, and
+reference `ResizeObserver{:.class}` listeners as they become
+unnecessary. Only the floating element's
+`ResizeObserver{:.class}` remains active, if
+`elementResize{:.objectKey}` is `true{:js}`.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
