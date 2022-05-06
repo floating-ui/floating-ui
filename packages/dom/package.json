@@ -12,19 +12,22 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.dom.js",
+  "main": "./dist/floating-ui.dom.umd.js",
   "module": "./dist/floating-ui.dom.esm.js",
-  "unpkg": "./dist/floating-ui.dom.min.js",
+  "unpkg": "./dist/floating-ui.dom.umd.min.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
       "module": "./dist/floating-ui.dom.esm.js",
       "import": {
-        "development": "./dist/floating-ui.dom.esm.development.js",
+        "browser": {
+          "development": "./dist/floating-ui.dom.browser.mjs",
+          "default": "./dist/floating-ui.dom.browser.min.mjs"
+        },
         "default": "./dist/floating-ui.dom.mjs"
       },
-      "default": "./dist/floating-ui.dom.js"
+      "default": "./dist/floating-ui.dom.umd.js"
     },
     "./package.json": "./package.json",
     "./src/index.ts": "./src/index.ts"
