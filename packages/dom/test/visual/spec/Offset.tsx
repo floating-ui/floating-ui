@@ -11,9 +11,9 @@ const VALUES: Array<{offset: Options; name: string}> = [
   {offset: -10, name: '-10'},
   {offset: {crossAxis: 10}, name: 'cA: 10'},
   {offset: {mainAxis: 5, crossAxis: -10}, name: 'mA: 5, cA: -10'},
-  {offset: ({floating}) => -floating.height, name: '() => -f.height'},
+  {offset: ({rects}) => -rects.floating.height, name: '() => -f.height'},
   {
-    offset: ({floating}) => ({crossAxis: -floating.width / 2}),
+    offset: ({rects}) => ({crossAxis: -rects.floating.width / 2}),
     name: '() => cA: -f.width/2',
   },
   {offset: {alignmentAxis: 5}, name: 'aA: 5'},

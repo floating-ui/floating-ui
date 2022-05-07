@@ -14,7 +14,6 @@ import {
 import {renderHook} from '@testing-library/react-hooks';
 import {render, waitFor, fireEvent} from '@testing-library/react';
 import {useRef, useState} from 'react';
-import type {Dimensions, ElementRects} from '@floating-ui/core';
 
 test('`x` and `y` are initially `null`', async () => {
   const {result} = renderHook(() => useFloating());
@@ -25,9 +24,6 @@ test('`x` and `y` are initially `null`', async () => {
 
 test('middleware is always fresh and does not cause an infinite loop', async () => {
   function InlineMiddleware() {
-    const [sizeData, setSizeData] = useState<
-      (ElementRects & Dimensions) | null
-    >(null);
     const arrowRef = useRef(null);
     const {reference, floating} = useFloating({
       placement: 'right',
@@ -54,22 +50,25 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
 
         hide(),
 
-        size({apply: setSizeData}),
+        size({
+          apply({availableHeight, elements}) {
+            Object.assign(elements.floating.style, {
+              maxHeight: `${availableHeight}px`,
+            });
+          },
+        }),
       ],
     });
 
     return (
       <>
         <div ref={reference} />
-        <div ref={floating} style={{height: sizeData?.height ?? ''}} />
+        <div ref={floating} />
       </>
     );
   }
 
   function StateMiddleware() {
-    const [sizeData, setSizeData] = useState<
-      (ElementRects & Dimensions) | null
-    >(null);
     const arrowRef = useRef(null);
     const [middleware, setMiddleware] = useState([
       offset(),
@@ -97,7 +96,13 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
 
       hide(),
 
-      size({apply: setSizeData}),
+      size({
+        apply({availableHeight, elements}) {
+          Object.assign(elements.floating.style, {
+            maxHeight: `${availableHeight}px`,
+          });
+        },
+      }),
     ]);
     const {x, y, reference, floating} = useFloating({
       placement: 'right',
@@ -107,7 +112,7 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
     return (
       <>
         <div ref={reference} />
-        <div ref={floating} style={{height: sizeData?.height ?? ''}} />
+        <div ref={floating} />
         <button
           data-testid="step1"
           onClick={() => setMiddleware([offset(10)])}

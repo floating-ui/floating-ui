@@ -36,11 +36,11 @@ import {computePosition, size} from '@floating-ui/dom';
 computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
-      apply({width, height, reference, floating}) {
+      apply({availableWidth, availableHeight, elements}) {
         // Do things with the data, e.g.
-        Object.assign(floatingEl.style, {
-          maxWidth: `${width}px`,
-          maxHeight: `${height}px`,
+        Object.assign(elements.floating.style, {
+          maxWidth: `${availableWidth}px`,
+          maxHeight: `${availableHeight}px`,
         });
       },
     }),
@@ -57,7 +57,12 @@ These are the options you can pass to `size(){:js}`.
 
 ```ts
 interface Options extends DetectOverflowOptions {
-  apply?: (args: Dimensions & ElementRects) => void;
+  apply?: (
+    args: MiddlewareArguments & {
+      availableWidth: number;
+      availableHeight: number;
+    }
+  ) => void;
 }
 ```
 
@@ -72,16 +77,36 @@ lifecycle:
 
 ```js
 size({
-  apply({width, height}) {
+  apply({
+    availableWidth,
+    availableHeight,
+    ...middlewareArguments
+  }) {
     // Style mutations here
   },
 });
 ```
 
-This is because the `x` and `y` coordinates become incorrect
-after you've changed the size, and so changes to the dimensions
-of the floating element need to be performed before the
-coordinates get assigned to it.
+#### availableWidth
+
+Represents how wide the floating element can be before it will
+overflow its clipping context. You'll generally set this as the
+`maxWidth{:.objectKey}` CSS property.
+
+#### availableHeight
+
+Represents how tall the floating element can be before it will
+overflow its clipping context. You'll generally set this as the
+`maxHeight{:.objectKey}` CSS property.
+
+#### ...middlewareArguments
+
+See [MiddlewareArguments](/docs/middleware#middlewarearguments).
+
+Many useful properties are also accessible via this callback,
+such as `rects{:.objectKey}` and `elements{:.objectKey}`, the
+latter of which is useful in the context of React where you need
+access to the floating element and it does not exist in scope.
 
 ### ...detectOverflowOptions
 
@@ -113,7 +138,7 @@ placement is used. In this scenario, place `size(){:js}`
 const middleware = [
   flip(),
   size({
-    apply({width, height}) {
+    apply({availableWidth, availableHeight}) {
       // ...
     },
   }),
@@ -155,11 +180,11 @@ and are setting a minimum acceptable size, place `size(){:js}`
 ```js
 const middleware = [
   size({
-    apply({width, height}) {
-      Object.assign(floatingEl.style, {
+    apply({availableHeight, elements}) {
+      Object.assign(elements.floating.style, {
         // Minimum acceptable height is 50px.
         // `flip` will then take over.
-        maxHeight: `${Math.max(50, height)}px`,
+        maxHeight: `${Math.max(50, availableHeight)}px`,
       });
     },
   }),
@@ -176,11 +201,11 @@ the width of the reference regardless of its contents. You can
 also use `size(){:js}` for this, as the `Rect{:.class}`s get
 passed in:
 
-```js
+```js /rects/
 size({
-  apply({reference}) {
+  apply({rects}) {
     Object.assign(floatingEl.style, {
-      width: `${reference.width}px`,
+      width: `${rects.reference.width}px`,
     });
   },
 });
