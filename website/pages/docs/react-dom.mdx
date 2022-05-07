@@ -128,7 +128,7 @@ reactive.
 
 Think of it like an effect, which should return a cleanup
 function when the elements are not mounted. The default signature
-and `autoUpdate` will do this.
+of `autoUpdate` will do this.
 
 ```js {12} /autoUpdate/1-2
 import {useEffect} from 'react';
@@ -180,7 +180,7 @@ function App() {
 
 The `whileElementsMounted{:.objectKey}` callback also allows you
 to react to the elements mounting/unmounting beyond using the
-`autoUpdate(){:js}` utility, which plain refs do not allow.
+`autoUpdate` utility, which plain refs do not allow.
 
 ## Arrow
 
