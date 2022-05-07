@@ -101,22 +101,44 @@ computePosition(referenceElement, floatingElement, {
 
 [Visit the docs for detailed information](https://floating-ui.com/docs/computePosition).
 
-## Development and production builds
+## Package entry points
 
-Floating UI is published with default, development, and production builds, using
-Node's support for
-[export conditions](https://nodejs.org/api/packages.html#packages_conditional_exports).
+> Using webpack, Vite, or Parcel? Skip this section as modern bundlers handle
+> this for you.
 
-- `"default"`: uses `process.env.NODE_ENV`, in which your bundler handles the
-  env variable, dead code elimination, and minification
-- `"production"`: minified with no debug logging
-- `"development"`: unminified with debug logging
+Floating UI uses `process.env.NODE_ENV` to determine whether your build is in
+development or production mode. This allows us to add console warnings and
+errors during development to help you but ensure they get stripped out in
+production to keep the bundle size small.
 
-If you're using a bundler like webpack, Vite, or Parcel, this is handled for you
-**automatically**.
+This causes an error in Rollup and low/no-build setups. To solve this, Floating
+UI exports browser-ready ES modules. Leverage the "browser" package export
+condition to use these modules.
 
-If this is not handled, you must opt into one of the builds in tools that
-support export conditions. This is done differently for each tool.
+<details>
+  <summary>Rollup example</summary>
+
+The `browser` option in the `nodeResolve()` plugin will select browser versions
+of packages if available.
+
+```js
+import {nodeResolve} from '@rollup/plugin-node-resolve';
+
+export default {
+  // ...
+  plugins: [
+    nodeResolve({
+      browser: true,
+
+      // Add this line for development config, omit for
+      // production config
+      exportConditions: ['development'],
+    }),
+  ],
+};
+```
+
+</details>
 
 ## Contributing
 
