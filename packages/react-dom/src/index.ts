@@ -31,16 +31,37 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     };
   };
 
+export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
+  Partial<ComputePositionConfig>,
+  'platform'
+> & {
+  whileElementsMounted?: (
+    reference: RT,
+    floating: HTMLElement,
+    update: () => void
+  ) => void | (() => void);
+};
+
+function useLatestRef<T>(value: T) {
+  const ref = useRef(value);
+  useLayoutEffect(() => {
+    ref.current = value;
+  });
+  return ref;
+}
+
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   middleware,
   placement = 'bottom',
   strategy = 'absolute',
-}: Omit<
-  Partial<ComputePositionConfig>,
-  'platform'
-> = {}): UseFloatingReturn<RT> {
+  whileElementsMounted,
+}: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const reference = useRef<RT | null>(null);
   const floating = useRef<HTMLElement | null>(null);
+
+  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+  const cleanupRef = useRef<void | (() => void) | null>(null);
+
   const [data, setData] = useState<Data>({
     // Setting these to `null` will allow the consumer to determine if
     // `computePosition()` has run yet
@@ -90,20 +111,41 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   useLayoutEffect(update, [update]);
 
+  const runElementMountCallback = useCallback(() => {
+    if (typeof cleanupRef.current === 'function') {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+
+    if (
+      reference.current &&
+      floating.current &&
+      whileElementsMountedRef.current
+    ) {
+      cleanupRef.current = whileElementsMountedRef.current(
+        reference.current,
+        floating.current,
+        update
+      );
+    }
+  }, [update, whileElementsMountedRef]);
+
   const setReference: UseFloatingReturn<RT>['reference'] = useCallback(
     (node) => {
       reference.current = node;
+      runElementMountCallback();
       update();
     },
-    [update]
+    [update, runElementMountCallback]
   );
 
   const setFloating: UseFloatingReturn<RT>['floating'] = useCallback(
     (node) => {
       floating.current = node;
+      runElementMountCallback();
       update();
     },
-    [update]
+    [update, runElementMountCallback]
   );
 
   const refs = useMemo(() => ({reference, floating}), []);

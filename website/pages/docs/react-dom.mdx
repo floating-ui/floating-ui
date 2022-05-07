@@ -85,6 +85,15 @@ function MyComponent({triggerRef}) {
 }
 ```
 
+The "external reference" pattern is not recommended though. It is
+instead better to utilize the `children` prop as the reference,
+and attach the ref via `cloneElement(){:js}`. This also
+co-locates the reference with the floating component.
+
+```js
+cloneElement(children, {ref: reference});
+```
+
 ## Internal refs
 
 ```js
@@ -110,11 +119,18 @@ position, e.g. in event listeners.
 const {update} = useFloating();
 ```
 
-The [autoUpdate](/docs/autoUpdate) utility is the recommended way
-to update the floating element when required, but you can use
-whatever method you please.
+### autoUpdate
 
-```js /autoUpdate/
+[autoUpdate](/docs/autoUpdate) is a built-in utility that will
+update your floating element when required. Pass it to the
+`whileElementsMounted{:.objectKey}` prop, which is fully
+reactive.
+
+Think of it like an effect, which should return a cleanup
+function when the elements are not mounted. The default signature
+of `autoUpdate` will do this.
+
+```js {12} /autoUpdate/1-2
 import {useEffect} from 'react';
 import {
   useFloating,
@@ -123,24 +139,18 @@ import {
 } from '@floating-ui/react-dom';
 
 function App() {
-  const {x, y, reference, floating, strategy, update, refs} =
+  const {x, y, reference, floating, strategy, refs} =
     useFloating({
-      placement: 'right',
-      middleware: [shift()],
+      // default signature works as expected
+      whileElementsMounted: autoUpdate,
+
+      // or, pass `autoUpdate` options.
+      // make sure to return the cleanup function!
+      whileElementsMounted: (referenceEl, floatingEl, update) =>
+        autoUpdate(referenceEl, floatingEl, update, {
+          animationFrame: true,
+        }),
     });
-
-  useEffect(() => {
-    if (!refs.reference.current || !refs.floating.current) {
-      return;
-    }
-
-    // Only call this when the floating element is rendered
-    return autoUpdate(
-      refs.reference.current,
-      refs.floating.current,
-      update
-    );
-  }, [refs.reference, refs.floating, update]);
 
   return (
     <>
@@ -160,9 +170,21 @@ function App() {
 }
 ```
 
+> **Performance warning**: `autoUpdate` is expensive and should
+> only be active WHILE the floating element is rendered/visible.
+> If your floating element is not conditionally rendered, and
+> instead relies on `visibility` for example, you should instead
+> use an effect to call `autoUpdate`, and only call it when the
+> floating element is visible. Remember to return the cleanup
+> function inside the effect.
+
+The `whileElementsMounted{:.objectKey}` callback also allows you
+to react to the elements mounting/unmounting beyond using the
+`autoUpdate` utility, which plain refs do not allow.
+
 ## Arrow
 
-A `ref{:.const}` can be passed as the `element{:.objectKey}`:
+A ref can be passed as the `element{:.objectKey}`:
 
 ```js /arrowRef/ {13}
 import {useRef} from 'react';
