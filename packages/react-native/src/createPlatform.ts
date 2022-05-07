@@ -1,5 +1,5 @@
 import {Dimensions} from 'react-native';
-import {Platform, Dimensions as DimensionsType} from '@floating-ui/core';
+import {Platform} from '@floating-ui/core';
 
 const ORIGIN = {x: 0, y: 0};
 
@@ -67,9 +67,9 @@ export const createPlatform = ({
       }
     });
   },
-  getDimensions: ({element}) =>
+  getDimensions: (element) =>
     new Promise((resolve) =>
-      element.measure(({width, height}: DimensionsType) =>
+      element.measure((x: number, y: number, width: number, height: number) =>
         resolve({width, height})
       )
     ),
