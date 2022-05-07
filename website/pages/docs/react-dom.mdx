@@ -123,9 +123,12 @@ const {update} = useFloating();
 
 [autoUpdate](/docs/autoUpdate) is a built-in utility that will
 update your floating element when required. Pass it to the
-`onElementsMounted{:.objectKey}` prop, which is fully reactive
-and will add and remove the listeners so that it only active
-while both elements are mounted:
+`whileElementsMounted{:.objectKey}` prop, which is fully
+reactive.
+
+Think of it like an effect, which should return a cleanup
+function when the elements are not mounted. The default signature
+and `autoUpdate` will do this.
 
 ```js {12} /autoUpdate/1-2
 import {useEffect} from 'react';
@@ -138,12 +141,12 @@ import {
 function App() {
   const {x, y, reference, floating, strategy, refs} =
     useFloating({
-      // default signature
-      onElementsMounted: autoUpdate,
+      // default signature works as expected
+      whileElementsMounted: autoUpdate,
 
       // or, pass `autoUpdate` options.
       // make sure to return the cleanup function!
-      onElementsMounted: (referenceEl, floatingEl, update) =>
+      whileElementsMounted: (referenceEl, floatingEl, update) =>
         autoUpdate(referenceEl, floatingEl, update, {
           animationFrame: true,
         }),
@@ -175,8 +178,8 @@ function App() {
 > floating element is visible. Remember to return the cleanup
 > function inside the effect.
 
-The `onElementsMounted{:.objectKey}` callback also allows you to
-react to the elements mounting/unmounting beyond using the
+The `whileElementsMounted{:.objectKey}` callback also allows you
+to react to the elements mounting/unmounting beyond using the
 `autoUpdate(){:js}` utility, which plain refs do not allow.
 
 ## Arrow

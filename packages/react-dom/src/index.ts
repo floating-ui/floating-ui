@@ -35,7 +35,7 @@ export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
   Partial<ComputePositionConfig>,
   'platform'
 > & {
-  onElementsMounted?: (
+  whileElementsMounted?: (
     reference: RT,
     floating: HTMLElement,
     update: () => void
@@ -54,12 +54,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   middleware,
   placement = 'bottom',
   strategy = 'absolute',
-  onElementsMounted,
+  whileElementsMounted,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const reference = useRef<RT | null>(null);
   const floating = useRef<HTMLElement | null>(null);
 
-  const onElementsMountedRef = useLatestRef(onElementsMounted);
+  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const cleanupRef = useRef<void | (() => void) | null>(null);
 
   const [data, setData] = useState<Data>({
@@ -117,14 +117,18 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       cleanupRef.current = null;
     }
 
-    if (reference.current && floating.current && onElementsMountedRef.current) {
-      cleanupRef.current = onElementsMountedRef.current(
+    if (
+      reference.current &&
+      floating.current &&
+      whileElementsMountedRef.current
+    ) {
+      cleanupRef.current = whileElementsMountedRef.current(
         reference.current,
         floating.current,
         update
       );
     }
-  }, [update, onElementsMountedRef]);
+  }, [update, whileElementsMountedRef]);
 
   const setReference: UseFloatingReturn<RT>['reference'] = useCallback(
     (node) => {

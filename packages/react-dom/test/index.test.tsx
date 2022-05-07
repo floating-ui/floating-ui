@@ -143,12 +143,12 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
   await act(async () => {});
 });
 
-describe('onElementsMounted', () => {
+describe('whileElementsMounted', () => {
   test('is called a single time when both elements mount', () => {
     const spy = jest.fn();
 
     function App() {
-      const {reference, floating} = useFloating({onElementsMounted: spy});
+      const {reference, floating} = useFloating({whileElementsMounted: spy});
       return (
         <>
           <button ref={reference} />
@@ -167,7 +167,7 @@ describe('onElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({onElementsMounted: spy});
+      const {reference, floating} = useFloating({whileElementsMounted: spy});
       return (
         <>
           <button ref={reference} onClick={() => setOpen(true)} />
@@ -189,7 +189,7 @@ describe('onElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({onElementsMounted: spy});
+      const {reference, floating} = useFloating({whileElementsMounted: spy});
       return (
         <>
           {open && <button ref={reference} />}
@@ -211,7 +211,7 @@ describe('onElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({onElementsMounted: spy});
+      const {reference, floating} = useFloating({whileElementsMounted: spy});
 
       useEffect(() => {
         setOpen(true);
@@ -237,7 +237,7 @@ describe('onElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(true);
-      const {reference, floating} = useFloating({onElementsMounted: spy});
+      const {reference, floating} = useFloating({whileElementsMounted: spy});
 
       useEffect(() => {
         setOpen(false);

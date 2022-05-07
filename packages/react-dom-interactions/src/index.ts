@@ -40,7 +40,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   middleware: Array<Middleware>;
   strategy: Strategy;
   nodeId: string;
-  onElementsMounted?: (
+  whileElementsMounted?: (
     reference: RT,
     floating: HTMLElement,
     update: () => void
@@ -50,7 +50,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,
   onOpenChange = () => {},
-  onElementsMounted,
+  whileElementsMounted,
   placement,
   middleware,
   strategy,
@@ -65,7 +65,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     placement,
     middleware,
     strategy,
-    onElementsMounted,
+    whileElementsMounted,
   });
 
   const context = React.useMemo<FloatingContext<RT>>(
