@@ -49,3 +49,24 @@ supports shadow roots.
   {open && <div>Tooltip</div>}
 </FloatingPortal>
 ```
+
+## useFloatingPortalNode
+
+Exposes the portal container node for custom use in other
+components. The hook injects the node, if it does not yet exist
+in the DOM.
+
+```js
+function App() {
+  const portalNode = useFloatingPortalNode({
+    id: 'custom-root-id', // 'floating-ui-root' by default
+    enabled: false, // true by default
+  });
+
+  if (portalNode) {
+    return ReactDOM.createPortal(<div></div>, portalNode);
+  }
+
+  return null;
+}
+```

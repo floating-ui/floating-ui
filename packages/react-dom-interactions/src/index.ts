@@ -99,7 +99,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 export * from '@floating-ui/react-dom';
 export {useInteractions} from './useInteractions';
 export {safePolygon} from './safePolygon';
-export {FloatingPortal} from './FloatingPortal';
+export {FloatingPortal, useFloatingPortalNode} from './FloatingPortal';
 export {FloatingOverlay} from './FloatingOverlay';
 export {FloatingFocusManager} from './FloatingFocusManager';
 export {
