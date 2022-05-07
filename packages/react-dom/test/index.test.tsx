@@ -11,16 +11,8 @@ import {
   hide,
   limitShift,
 } from '../src';
-import {renderHook} from '@testing-library/react-hooks';
-import {render, waitFor, fireEvent} from '@testing-library/react';
-import {useRef, useState} from 'react';
-
-test('`x` and `y` are initially `null`', async () => {
-  const {result} = renderHook(() => useFloating());
-
-  expect(result.current.x).toBe(null);
-  expect(result.current.y).toBe(null);
-});
+import {render, fireEvent, screen, cleanup, act} from '@testing-library/react';
+import {useRef, useState, useEffect} from 'react';
 
 test('middleware is always fresh and does not cause an infinite loop', async () => {
   function InlineMiddleware() {
@@ -129,16 +121,142 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
     );
   }
 
-  await waitFor(() => render(<InlineMiddleware />));
+  render(<InlineMiddleware />);
 
-  const {getByTestId} = await waitFor(() => render(<StateMiddleware />));
-  await waitFor(() => fireEvent.click(getByTestId('step1')));
-  await waitFor(() => expect(getByTestId('x').textContent).toBe('10'));
+  const {getByTestId} = render(<StateMiddleware />);
+  fireEvent.click(getByTestId('step1'));
 
-  await waitFor(() => fireEvent.click(getByTestId('step2')));
-  await waitFor(() => expect(getByTestId('x').textContent).toBe('5'));
+  await act(async () => {});
+
+  expect(getByTestId('x').textContent).toBe('10');
+
+  fireEvent.click(getByTestId('step2'));
+
+  await act(async () => {});
+
+  expect(getByTestId('x').textContent).toBe('5');
 
   // No `expect` as this test will fail if a render loop occurs
-  await waitFor(() => fireEvent.click(getByTestId('step3')));
-  await waitFor(() => fireEvent.click(getByTestId('step4')));
+  fireEvent.click(getByTestId('step3'));
+  fireEvent.click(getByTestId('step4'));
+
+  await act(async () => {});
+});
+
+describe('onElementsMounted', () => {
+  test('is called a single time when both elements mount', () => {
+    const spy = jest.fn();
+
+    function App() {
+      const {reference, floating} = useFloating({onElementsMounted: spy});
+      return (
+        <>
+          <button ref={reference} />
+          <div ref={floating} />
+        </>
+      );
+    }
+
+    render(<App />);
+    expect(spy).toHaveBeenCalledTimes(1);
+    cleanup();
+  });
+
+  test('is called a single time after floating mounts conditionally', () => {
+    const spy = jest.fn();
+
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating} = useFloating({onElementsMounted: spy});
+      return (
+        <>
+          <button ref={reference} onClick={() => setOpen(true)} />
+          {open && <div ref={floating} />}
+        </>
+      );
+    }
+
+    render(<App />);
+    expect(spy).toHaveBeenCalledTimes(0);
+    fireEvent.click(screen.getByRole('button'));
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    cleanup();
+  });
+
+  test('is called a single time after reference mounts conditionally', () => {
+    const spy = jest.fn();
+
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating} = useFloating({onElementsMounted: spy});
+      return (
+        <>
+          {open && <button ref={reference} />}
+          <div role="tooltip" ref={floating} onClick={() => setOpen(true)} />
+        </>
+      );
+    }
+
+    render(<App />);
+    expect(spy).toHaveBeenCalledTimes(0);
+    fireEvent.click(screen.getByRole('tooltip'));
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    cleanup();
+  });
+
+  test('is called a single time both elements mount conditionally', () => {
+    const spy = jest.fn();
+
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating} = useFloating({onElementsMounted: spy});
+
+      useEffect(() => {
+        setOpen(true);
+      }, []);
+
+      return (
+        <>
+          {open && <button ref={reference} />}
+          {open && <div role="tooltip" ref={floating} />}
+        </>
+      );
+    }
+
+    render(<App />);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    cleanup();
+  });
+
+  test('calls the cleanup function', () => {
+    const cleanupSpy = jest.fn();
+    const spy = jest.fn(() => cleanupSpy);
+
+    function App() {
+      const [open, setOpen] = useState(true);
+      const {reference, floating} = useFloating({onElementsMounted: spy});
+
+      useEffect(() => {
+        setOpen(false);
+      }, []);
+
+      return (
+        <>
+          {open && <button ref={reference} />}
+          {open && <div role="tooltip" ref={floating} />}
+        </>
+      );
+    }
+
+    render(<App />);
+    expect(cleanupSpy).toHaveBeenCalledTimes(1);
+
+    // Does not get called again post-cleanup
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    cleanup();
+  });
 });

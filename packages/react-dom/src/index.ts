@@ -31,6 +31,17 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     };
   };
 
+export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
+  Partial<ComputePositionConfig>,
+  'platform'
+> & {
+  onElementsMounted?: (
+    reference: RT,
+    floating: HTMLElement,
+    update: () => void
+  ) => void | (() => void);
+};
+
 function useLatestRef<T>(value: T) {
   const ref = useRef(value);
   useLayoutEffect(() => {
@@ -44,21 +55,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   placement = 'bottom',
   strategy = 'absolute',
   onElementsMounted,
-}: {
-  onElementsMounted?: (
-    reference: RT,
-    floating: HTMLElement,
-    update: () => void
-  ) => void | (() => void);
-} & Omit<
-  Partial<ComputePositionConfig>,
-  'platform'
-> = {}): UseFloatingReturn<RT> {
+}: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const reference = useRef<RT | null>(null);
   const floating = useRef<HTMLElement | null>(null);
 
   const onElementsMountedRef = useLatestRef(onElementsMounted);
-  const cleanupRef = useRef<void | (() => void)>();
+  const cleanupRef = useRef<void | (() => void) | null>(null);
 
   const [data, setData] = useState<Data>({
     // Setting these to `null` will allow the consumer to determine if
@@ -112,6 +114,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const runElementMountCallback = useCallback(() => {
     if (typeof cleanupRef.current === 'function') {
       cleanupRef.current();
+      cleanupRef.current = null;
     }
 
     if (reference.current && floating.current && onElementsMountedRef.current) {
