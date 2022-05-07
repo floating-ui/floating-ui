@@ -56,11 +56,15 @@ export const arrow = (options: Options): Middleware => ({
     const startDiff = coords[axis] - rects.reference[axis];
 
     const arrowOffsetParent = await platform.getOffsetParent?.(element);
-    const clientSize = arrowOffsetParent
+    let clientSize = arrowOffsetParent
       ? axis === 'y'
         ? arrowOffsetParent.clientHeight || 0
         : arrowOffsetParent.clientWidth || 0
       : 0;
+
+    if (clientSize === 0) {
+      clientSize = rects.floating[length];
+    }
 
     const centerToReference = endDiff / 2 - startDiff / 2;
 
