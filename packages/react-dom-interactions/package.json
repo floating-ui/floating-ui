@@ -23,8 +23,7 @@
       "import": "./dist/floating-ui.react-dom-interactions.mjs",
       "default": "./dist/floating-ui.react-dom-interactions.js"
     },
-    "./package.json": "./package.json",
-    "./src/index.ts": "./src/index.ts"
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

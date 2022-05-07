@@ -29,8 +29,7 @@
       "module": "./dist/floating-ui.core.esm.js",
       "default": "./dist/floating-ui.core.umd.js"
     },
-    "./package.json": "./package.json",
-    "./src/index.ts": "./src/index.ts"
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [
