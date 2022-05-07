@@ -19,13 +19,6 @@
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "module": {
-        "browser": {
-          "development": "./dist/floating-ui.dom.browser.mjs",
-          "default": "./dist/floating-ui.dom.browser.min.mjs"
-        },
-        "default": "./dist/floating-ui.dom.esm.js"
-      },
       "import": {
         "browser": {
           "development": "./dist/floating-ui.dom.browser.mjs",
@@ -33,6 +26,7 @@
         },
         "default": "./dist/floating-ui.dom.mjs"
       },
+      "module": "./dist/floating-ui.dom.esm.js",
       "default": "./dist/floating-ui.dom.umd.js"
     },
     "./package.json": "./package.json",
