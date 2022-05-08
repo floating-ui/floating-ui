@@ -10,9 +10,7 @@ import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 function focus(el: HTMLElement | undefined) {
-  requestAnimationFrame(() => {
-    el?.focus();
-  });
+  el?.focus();
 }
 
 const SELECTOR =
@@ -40,7 +38,7 @@ const FocusGuard = React.forwardRef<
   );
 });
 
-interface Props<RT extends ReferenceType = ReferenceType> {
+export interface Props<RT extends ReferenceType = ReferenceType> {
   context: FloatingContext<RT>;
   children: JSX.Element;
   order?: Array<'reference' | 'floating' | 'content'>;
