@@ -41,7 +41,7 @@ describe('tooltip', () => {
     cleanup();
   });
 
-  test('adds `aria-describedby` upon open and removes it on close', () => {
+  test('sets correct aria attributes based on the open state', () => {
     render(<App role="tooltip" />);
     const button = screen.getByRole('button');
     fireEvent.click(button);
@@ -53,13 +53,91 @@ describe('tooltip', () => {
 });
 
 describe('dialog', () => {
-  test('works', () => {
-    render(<App role="tooltip" />);
+  test('sets correct aria attributes based on the open state', () => {
+    render(<App role="dialog" />);
+
     const button = screen.getByRole('button');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
     fireEvent.click(button);
-    expect(button.hasAttribute('aria-describedby')).toBe(true);
-    fireEvent.click(button);
+
+    expect(screen.queryByRole('dialog')).toBeInTheDocument();
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('dialog').getAttribute('id')
+    );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    cleanup();
+  });
+});
+
+describe('menu', () => {
+  test('sets correct aria attributes based on the open state', () => {
+    render(<App role="menu" />);
+
+    const button = screen.getByRole('button');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('menu');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('menu')).toBeInTheDocument();
+    expect(button.getAttribute('id')).toBe(
+      screen.getByRole('menu').getAttribute('aria-labelledby')
+    );
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('menu').getAttribute('id')
+    );
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    cleanup();
+  });
+});
+
+describe('listbox', () => {
+  test('sets correct aria attributes based on the open state', () => {
+    render(<App role="listbox" />);
+
+    const button = screen.getByRole('combobox');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).toBeInTheDocument();
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('listbox').getAttribute('id')
+    );
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
     cleanup();
   });
 });

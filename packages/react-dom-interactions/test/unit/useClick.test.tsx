@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {useClick, useFloating, useInteractions} from '../../src';
 import type {Props} from '../../src/hooks/useClick';
 
-function App(props: Props) {
+function App({button = true, ...props}: Props & {button?: boolean}) {
   const [open, setOpen] = useState(false);
   const {reference, floating, context} = useFloating({
     open,
@@ -13,9 +13,11 @@ function App(props: Props) {
     useClick(context, props),
   ]);
 
+  const Tag = button ? 'button' : 'div';
+
   return (
     <>
-      <button {...getReferenceProps({ref: reference})} />
+      <Tag {...getReferenceProps({ref: reference})} data-testid="reference" />
       {open && <div role="tooltip" {...getFloatingProps({ref: floating})} />}
     </>
   );
@@ -110,6 +112,32 @@ describe('`toggle` prop', () => {
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
+    cleanup();
+  });
+});
+
+describe('`ignoreMouse` prop', () => {
+  // TODO — not sure how to test this in JSDOM
+});
+
+describe('non-buttons', () => {
+  test('adds Enter keydown', () => {
+    render(<App button={false} />);
+
+    const button = screen.getByTestId('reference');
+    fireEvent.keyDown(button, {key: 'Enter'});
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('adds Space keyup', () => {
+    render(<App button={false} />);
+
+    const button = screen.getByTestId('reference');
+    fireEvent.keyUp(button, {key: ' '});
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
 });
