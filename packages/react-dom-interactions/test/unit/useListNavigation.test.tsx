@@ -1,6 +1,11 @@
 import {fireEvent, render, screen, cleanup} from '@testing-library/react';
 import {useRef, useState} from 'react';
-import {useListNavigation, useFloating, useInteractions} from '../../src';
+import {
+  useListNavigation,
+  useFloating,
+  useInteractions,
+  useClick,
+} from '../../src';
 import type {Props} from '../../src/hooks/useListNavigation';
 
 function App(props: Omit<Partial<Props>, 'listRef'>) {
@@ -12,6 +17,7 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
     onOpenChange: setOpen,
   });
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+    useClick(context),
     useListNavigation(context, {
       ...props,
       listRef,
@@ -32,6 +38,7 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
             {['one', 'two', 'three'].map((string, index) => (
               <li
                 data-testid={`item-${index}`}
+                aria-selected={activeIndex === index}
                 key={string}
                 tabIndex={-1}
                 {...getItemProps({
@@ -55,7 +62,7 @@ test('opens on ArrowDown and focuses first item', () => {
 
   fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
   expect(screen.getByRole('menu')).toBeInTheDocument();
-  expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+  expect(screen.getByTestId('item-0')).toHaveFocus();
   cleanup();
 });
 
@@ -64,7 +71,7 @@ test('opens on ArrowUp and focuses last item', async () => {
 
   fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
   expect(screen.queryByRole('menu')).toBeInTheDocument();
-  expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+  expect(screen.getByTestId('item-2')).toHaveFocus();
   cleanup();
 });
 
@@ -73,17 +80,17 @@ test('navigates down on ArrowDown', async () => {
 
   fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
   expect(screen.queryByRole('menu')).toBeInTheDocument();
-  expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+  expect(screen.getByTestId('item-0')).toHaveFocus();
 
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+  expect(screen.getByTestId('item-1')).toHaveFocus();
 
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+  expect(screen.getByTestId('item-2')).toHaveFocus();
 
   // Reached the end of the list.
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+  expect(screen.getByTestId('item-2')).toHaveFocus();
 
   cleanup();
 });
@@ -93,17 +100,17 @@ test('navigates up on ArrowUp', async () => {
 
   fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
   expect(screen.queryByRole('menu')).toBeInTheDocument();
-  expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+  expect(screen.getByTestId('item-2')).toHaveFocus();
 
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+  expect(screen.getByTestId('item-1')).toHaveFocus();
 
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+  expect(screen.getByTestId('item-0')).toHaveFocus();
 
   // Reached the end of the list.
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-  expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+  expect(screen.getByTestId('item-0')).toHaveFocus();
 
   cleanup();
 });
@@ -114,17 +121,17 @@ describe('loop', () => {
 
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.queryByRole('menu')).toBeInTheDocument();
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     // Reached the end of the list and loops.
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowDown'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
     cleanup();
   });
@@ -134,17 +141,17 @@ describe('loop', () => {
 
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
     expect(screen.queryByRole('menu')).toBeInTheDocument();
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
     // Reached the end of the list and loops.
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     cleanup();
   });
@@ -156,17 +163,17 @@ describe('orientation', () => {
 
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowRight'});
     expect(screen.queryByRole('menu')).toBeInTheDocument();
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     // Reached the end of the list.
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowRight'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     cleanup();
   });
@@ -176,18 +183,82 @@ describe('orientation', () => {
 
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowLeft'});
     expect(screen.queryByRole('menu')).toBeInTheDocument();
-    expect(document.activeElement).toBe(screen.getByTestId('item-2'));
+    expect(screen.getByTestId('item-2')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
 
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
     // Reached the end of the list.
     fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowLeft'});
-    expect(document.activeElement).toBe(screen.getByTestId('item-0'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
 
+    cleanup();
+  });
+});
+
+describe('focusItemOnOpen', () => {
+  test('true click', () => {
+    render(<App focusItemOnOpen={true} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByTestId('item-0')).toHaveFocus();
+    cleanup();
+  });
+
+  test('false click', () => {
+    render(<App focusItemOnOpen={false} />);
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.getByTestId('item-0')).not.toHaveFocus();
+    cleanup();
+  });
+});
+
+describe('allowEscape', () => {
+  test('true', () => {
+    render(<App allowEscape={true} virtual loop />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
+      'false'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
+      'true'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
+    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
+      'false'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
+      'true'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
+      'true'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
+      'true'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
+      'false'
+    );
+    cleanup();
+  });
+
+  test('false', () => {
+    render(<App allowEscape={false} virtual loop />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
+      'true'
+    );
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
+      'true'
+    );
     cleanup();
   });
 });
