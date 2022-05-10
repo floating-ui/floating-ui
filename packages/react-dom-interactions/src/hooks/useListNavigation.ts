@@ -62,7 +62,9 @@ function isMainOrientationToEndKey(
 ) {
   const vertical = key === ARROW_DOWN;
   const horizontal = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
-  return doSwitch(orientation, vertical, horizontal);
+  return (
+    doSwitch(orientation, vertical, horizontal) || key === 'Enter' || key == ' '
+  );
 }
 
 function isCrossOrientationOpenKey(
