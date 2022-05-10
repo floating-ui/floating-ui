@@ -140,13 +140,24 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }
 ): ElementProps => {
   if (__DEV__) {
-    if (!loop && allowEscape) {
-      console.warn(
-        [
-          'Floating UI: `useListNavigation` looping must be enabled to allow',
-          'escaping.',
-        ].join(' ')
-      );
+    if (allowEscape) {
+      if (!loop) {
+        console.warn(
+          [
+            'Floating UI: `useListNavigation` looping must be enabled to allow',
+            'escaping.',
+          ].join(' ')
+        );
+      }
+
+      if (!virtual) {
+        console.warn(
+          [
+            'Floating UI: `useListNavigation` must be virtual to allow',
+            'escaping.',
+          ].join(' ')
+        );
+      }
     }
   }
 
