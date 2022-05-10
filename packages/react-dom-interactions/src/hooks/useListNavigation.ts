@@ -480,7 +480,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       },
       onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
       ...(focusItemOnHover && {
-        onPointerMove({currentTarget}) {
+        onMouseMove({currentTarget}) {
           const target = currentTarget as HTMLButtonElement | null;
           if (target) {
             const index = listRef.current.indexOf(target);
