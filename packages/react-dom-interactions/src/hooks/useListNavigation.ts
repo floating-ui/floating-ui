@@ -489,7 +489,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             }
           }
         },
-        onPointerLeave() {
+        onMouseLeave() {
           if (!blockPointerLeaveRef.current) {
             onNavigate(null);
             if (!virtual) {
