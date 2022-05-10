@@ -63,7 +63,10 @@ function isMainOrientationToEndKey(
   const vertical = key === ARROW_DOWN;
   const horizontal = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
   return (
-    doSwitch(orientation, vertical, horizontal) || key === 'Enter' || key == ' '
+    doSwitch(orientation, vertical, horizontal) ||
+    key === 'Enter' ||
+    key == ' ' ||
+    key === ''
   );
 }
 
@@ -227,12 +230,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             selectedIndex == null) ||
           allowEscape
         ) {
-          indexRef.current = allowEscape
-            ? -1
-            : isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
+          if (!allowEscape) {
+            indexRef.current =
+              isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
               nested
-            ? getMinIndex(listRef)
-            : getMaxIndex(listRef);
+                ? getMinIndex(listRef)
+                : getMaxIndex(listRef);
+          }
           onNavigateRef.current(activeIndex);
           focusItem(listRef, indexRef);
         }
@@ -439,15 +443,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
 
         if (isMainOrientationKey(event.key, orientation)) {
-          if (selectedIndex == null) {
-            indexRef.current = isMainOrientationToEndKey(
-              event.key,
-              orientation,
-              rtl
-            )
-              ? getMinIndex(listRef)
-              : getMaxIndex(listRef);
-          } else {
+          if (selectedIndex != null) {
             indexRef.current = selectedIndex;
           }
 
