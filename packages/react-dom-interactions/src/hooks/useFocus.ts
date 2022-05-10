@@ -74,9 +74,6 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         blockFocusRef.current = !!(pointerType && keyboardOnly);
       },
       onFocus(event) {
-        // Note: due to the `window` focus/blur listeners, switching between
-        // DevTools touch/normal mode may cause this to fail on the first
-        // focus of the window/touch of the element as it gets set to `false`.
         if (blockFocusRef.current) {
           return;
         }
