@@ -55,16 +55,6 @@ function isMainOrientationKey(key: string, orientation: Props['orientation']) {
   return doSwitch(orientation, vertical, horizontal);
 }
 
-function isMainOrientationToStartKey(
-  key: string,
-  orientation: Props['orientation'],
-  rtl: boolean
-) {
-  const vertical = key === ARROW_UP;
-  const horizontal = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
-  return doSwitch(orientation, vertical, horizontal);
-}
-
 function isMainOrientationToEndKey(
   key: string,
   orientation: Props['orientation'],
@@ -224,11 +214,16 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             selectedIndex == null) ||
           allowEscape
         ) {
-          indexRef.current = allowEscape ? -1 : getMinIndex(listRef);
+          indexRef.current = allowEscape
+            ? -1
+            : isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
+              nested
+            ? getMinIndex(listRef)
+            : getMaxIndex(listRef);
           onNavigateRef.current(activeIndex);
           focusItem(listRef, indexRef);
         }
-      } else {
+      } else if (activeIndex >= 0 && activeIndex < listRef.current.length) {
         indexRef.current = activeIndex;
         onNavigateRef.current(activeIndex);
         focusItem(listRef, indexRef);
@@ -244,53 +239,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onNavigateRef,
     focusItem,
     enabled,
-    parentId,
     allowEscape,
-    refs.floating,
-    tree?.nodesRef,
-  ]);
-
-  useLayoutEffect(() => {
-    if (selectedIndex != null || !enabled) {
-      return;
-    }
-
-    if (open) {
-      if (
-        isMainOrientationKey(keyRef.current, orientation) ||
-        (focusItemOnOpenRef.current &&
-          (keyRef.current === ' ' || keyRef.current === 'Enter'))
-      ) {
-        const minIndex = getMinIndex(listRef);
-        const maxIndex = getMaxIndex(listRef);
-        indexRef.current = isMainOrientationToStartKey(
-          keyRef.current,
-          orientation,
-          rtl
-        )
-          ? allowEscape
-            ? listRef.current.length
-            : maxIndex
-          : allowEscape
-          ? -1
-          : minIndex;
-
-        onNavigateRef.current(indexRef.current);
-        focusItem(listRef, indexRef);
-      }
-    }
-
-    keyRef.current = '';
-  }, [
-    open,
-    listRef,
-    selectedIndex,
-    onNavigateRef,
-    focusItem,
-    enabled,
     orientation,
     rtl,
-    allowEscape,
   ]);
 
   useLayoutEffect(() => {
@@ -317,14 +268,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef.current = selectedIndex ?? activeIndex ?? -1;
       onNavigateRef.current(null);
     }
-  }, [
-    open,
-    selectedIndex,
-    activeIndex,
-    enabled,
-    focusItemOnOpen,
-    onNavigateRef,
-  ]);
+  }, [open, selectedIndex, activeIndex, enabled, onNavigateRef]);
 
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
@@ -348,7 +292,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, open, previousOpen, tree, parentId]);
 
   useLayoutEffect(() => {
-    focusItemOnOpenRef.current = false;
+    if (focusItemOnOpen === 'auto') {
+      focusItemOnOpenRef.current = false;
+    }
     keyRef.current = '';
   });
 
@@ -494,7 +440,10 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
           stopEvent(event);
           onOpenChange(true);
-          onNavigate(indexRef.current);
+
+          if (open) {
+            onNavigate(indexRef.current);
+          }
         }
 
         if (virtual && !open) {
