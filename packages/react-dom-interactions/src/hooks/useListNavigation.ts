@@ -230,7 +230,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             selectedIndex == null) ||
           allowEscape
         ) {
-          if (!allowEscape) {
+          if (!allowEscape && !virtual) {
             indexRef.current =
               isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
               nested
@@ -259,6 +259,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     allowEscape,
     orientation,
     rtl,
+    virtual,
   ]);
 
   useLayoutEffect(() => {
