@@ -10,7 +10,11 @@ import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 function focus(el: HTMLElement | undefined) {
-  el?.focus();
+  // `pointerDown` clicks occur before `focus`, so the button will steal the
+  // focus unless we wait a frame.
+  requestAnimationFrame(() => {
+    el?.focus();
+  });
 }
 
 const SELECTOR =

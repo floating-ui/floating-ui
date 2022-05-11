@@ -10,7 +10,7 @@ export interface Props {
 }
 
 /**
- * Adds click event listeners that change the open state (toggle behavior).
+ * Adds click event listeners that change the open state.
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
@@ -79,6 +79,8 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         dataRef.current.openEvent = event.nativeEvent;
       },
       onKeyDown(event) {
+        pointerTypeRef.current = undefined;
+
         if (isButton()) {
           return;
         }

@@ -7,25 +7,6 @@ import {
   useClick,
 } from '../../src';
 import type {Props} from '../../src/hooks/useListNavigation';
-// import {Menu, MenuItem} from '../visual/components/Menu';
-
-// function MenuApp() {
-//   return (
-//     <Menu>
-//       <MenuItem label="one" />
-//       <MenuItem label="two" />
-//       <Menu label="three">
-//         <MenuItem label="four" />
-//         <MenuItem label="five" />
-//         <Menu label="six">
-//           <MenuItem label="seven" />
-//           <MenuItem label="eight" />
-//           <MenuItem label="nine" />
-//         </Menu>
-//       </Menu>
-//     </Menu>
-//   );
-// }
 
 function App(props: Omit<Partial<Props>, 'listRef'>) {
   const [open, setOpen] = useState(false);

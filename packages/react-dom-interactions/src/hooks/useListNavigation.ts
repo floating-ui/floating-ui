@@ -177,6 +177,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const keyRef = React.useRef('');
   const onNavigateRef = useLatestRef(onNavigate);
   const blockPointerLeaveRef = React.useRef(false);
+  const frameRef = React.useRef(-1);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -185,11 +186,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>
     ) => {
-      if (virtual) {
-        setActiveId(listRef.current[indexRef.current]?.id);
-      } else {
-        listRef.current[indexRef.current]?.focus({preventScroll: true});
-      }
+      // `pointerDown` clicks occur before `focus`, so the button will steal the
+      // focus unless we wait a frame.
+      frameRef.current = requestAnimationFrame(() => {
+        if (virtual) {
+          setActiveId(listRef.current[indexRef.current]?.id);
+        } else {
+          listRef.current[indexRef.current]?.focus({preventScroll: true});
+        }
+      });
     },
     [virtual]
   );
@@ -285,6 +290,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     if (!open) {
       indexRef.current = selectedIndex ?? activeIndex ?? -1;
       onNavigateRef.current(null);
+      cancelAnimationFrame(frameRef.current);
     }
   }, [open, selectedIndex, activeIndex, enabled, onNavigateRef]);
 
