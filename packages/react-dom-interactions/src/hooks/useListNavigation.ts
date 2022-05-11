@@ -349,41 +349,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     keyRef.current = '';
   });
 
-  React.useEffect(() => {
-    if (!enabled || !focusItemOnHover || !open) {
-      return;
-    }
-
-    function onMouseLeave() {
-      if (!blockPointerLeaveRef.current) {
-        indexRef.current = -1;
-        focusItem(listRef, indexRef);
-
-        onNavigateRef.current(null);
-        if (!virtual) {
-          refs.floating.current?.focus({preventScroll: true});
-        }
-      }
-    }
-
-    const floating = refs.floating.current;
-    if (floating) {
-      floating.addEventListener('mouseleave', onMouseLeave);
-      return () => {
-        floating.removeEventListener('mouseleave', onMouseLeave);
-      };
-    }
-  }, [
-    enabled,
-    focusItemOnHover,
-    open,
-    focusItem,
-    listRef,
-    onNavigateRef,
-    virtual,
-    refs.floating,
-  ]);
-
   function onKeyDown(event: React.KeyboardEvent) {
     blockPointerLeaveRef.current = true;
 
@@ -564,6 +529,17 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             const index = listRef.current.indexOf(target);
             if (index !== -1) {
               onNavigate(index);
+            }
+          }
+        },
+        onMouseLeave() {
+          if (!blockPointerLeaveRef.current) {
+            indexRef.current = -1;
+            focusItem(listRef, indexRef);
+
+            onNavigateRef.current(null);
+            if (!virtual) {
+              refs.floating.current?.focus({preventScroll: true});
             }
           }
         },
