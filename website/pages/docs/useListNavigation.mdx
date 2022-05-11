@@ -39,6 +39,8 @@ interface Props {
   orientation?: 'vertical' | 'horizontal' | 'both';
   focusItemOnOpen?: 'auto' | boolean;
   focusItemOnHover?: boolean;
+  openOnArrowKeyDown?: boolean;
+  disabledIndices?: Array<number>;
 }
 ```
 
@@ -219,3 +221,33 @@ useListNavigation(context, {
 default: `true{:js}`
 
 Whether hovering an item synchronizes the focus.
+
+### openOnArrowKeyDown
+
+default: `true{:js}`
+
+Whether pressing an arrow key on the navigation's main axis opens
+the floating element.
+
+```js
+useListNavigation(context, {
+  openOnArrowKeyDown: false,
+});
+```
+
+### disabledIndices
+
+default: `openOnArrowKeyDown ? undefined : []{:js}`
+
+By default elements with either a `disabled{:.keyword}` or
+`aria-disabled{:.keyword}` attribute are skipped in the list
+navigation – however, this requires the items to be rendered.
+
+This prop allows you to manually specify indices which should be
+disabled, overriding the default logic.
+
+```js
+useListNavigation(context, {
+  disabledIndices: [0, 3],
+});
+```
