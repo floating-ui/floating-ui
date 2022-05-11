@@ -10,6 +10,8 @@ import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 function focus(el: HTMLElement | undefined) {
+  // `pointerDown` clicks occur before `focus`, so the button will steal the
+  // focus unless we wait a frame.
   requestAnimationFrame(() => {
     el?.focus();
   });
@@ -40,7 +42,7 @@ const FocusGuard = React.forwardRef<
   );
 });
 
-interface Props<RT extends ReferenceType = ReferenceType> {
+export interface Props<RT extends ReferenceType = ReferenceType> {
   context: FloatingContext<RT>;
   children: JSX.Element;
   order?: Array<'reference' | 'floating' | 'content'>;
@@ -101,6 +103,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [orderRef, refs.floating, refs.reference]);
 
   React.useEffect(() => {
+    if (!modal) {
+      return;
+    }
+
     // If the floating element has no focusable elements inside it, fallback
     // to focusing the floating element and preventing tab navigation
     const noTabbableContentElements =
@@ -122,7 +128,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         const target =
           'composedPath' in event
             ? event.composedPath()[0]
-            : // TS thinks `event` is of type never as it assumes all browsers support composedPath, but browsers without shadow dom don't
+            : // TS thinks `event` is of type never as it assumes all browsers
+              // support composedPath, but browsers without shadow dom don't
               (event as Event).target;
 
         if (
@@ -155,6 +162,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     };
   }, [
     preventTabbing,
+    modal,
     getTabbableElements,
     orderRef,
     refs.floating,
@@ -208,9 +216,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     const floating = refs.floating.current;
-
-    const previouslyFocusedElement =
-      activeElement(getDocument(floating)) ?? activeElement(document);
+    const previouslyFocusedElement = activeElement(getDocument(floating));
 
     if (typeof initialFocus === 'number') {
       focus(getTabbableElements()[initialFocus] ?? floating);

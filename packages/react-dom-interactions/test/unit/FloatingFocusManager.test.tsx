@@ -1,0 +1,326 @@
+import {useRef, useState} from 'react';
+import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {FloatingFocusManager, useFloating} from '../../src';
+import {Props} from '../../src/FloatingFocusManager';
+
+function App(
+  props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>
+) {
+  const ref = useRef<HTMLButtonElement | null>(null);
+  const [open, setOpen] = useState(false);
+  const {reference, floating, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  return (
+    <>
+      <button
+        data-testid="reference"
+        ref={reference}
+        onClick={() => setOpen(!open)}
+      />
+      {open && (
+        <FloatingFocusManager
+          {...props}
+          initialFocus={props.initialFocus === 'two' ? ref : props.initialFocus}
+          context={context}
+        >
+          <div role="dialog" ref={floating} data-testid="floating">
+            <button data-testid="one">close</button>
+            <button data-testid="two" ref={ref}>
+              confirm
+            </button>
+            <button data-testid="three" onClick={() => setOpen(false)}>
+              x
+            </button>
+          </div>
+        </FloatingFocusManager>
+      )}
+    </>
+  );
+}
+
+describe('initialFocus', () => {
+  test('number', () => {
+    const {rerender} = render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    rerender(<App initialFocus={1} />);
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    rerender(<App initialFocus={2} />);
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('ref', () => {
+    render(<App initialFocus="two" />);
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    cleanup();
+  });
+});
+
+describe('returnFocus', () => {
+  test('true', () => {
+    render(<App />);
+
+    screen.getByTestId('reference').focus();
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    fireEvent.click(screen.getByTestId('three'));
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('false', () => {
+    render(<App returnFocus={false} />);
+
+    screen.getByTestId('reference').focus();
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    fireEvent.click(screen.getByTestId('three'));
+    expect(screen.getByTestId('reference')).not.toHaveFocus();
+
+    cleanup();
+  });
+});
+
+describe('endGuard', () => {
+  test('true', async () => {
+    render(<App endGuard={true} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab();
+    await userEvent.tab();
+
+    expect(document.body).not.toHaveFocus();
+  });
+
+  test('false', async () => {
+    render(<App endGuard={false} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab();
+    await userEvent.tab();
+
+    expect(document.body).toHaveFocus();
+  });
+});
+
+describe('endGuard', () => {
+  test('true', async () => {
+    render(<App endGuard={true} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab();
+    await userEvent.tab();
+
+    expect(document.body).not.toHaveFocus();
+  });
+
+  test('false', async () => {
+    render(<App endGuard={false} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab();
+    await userEvent.tab();
+
+    expect(document.body).toHaveFocus();
+  });
+});
+
+describe('preventTabbing', () => {
+  test('true', async () => {
+    render(<App preventTabbing={true} />);
+
+    const prevEl = document.activeElement;
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+
+    expect(prevEl).toBe(document.activeElement);
+  });
+
+  test('false', async () => {
+    render(<App preventTabbing={false} />);
+
+    const prevEl = document.activeElement;
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+
+    expect(prevEl).not.toBe(document.activeElement);
+  });
+});
+
+describe('modal', () => {
+  test('true', async () => {
+    render(<App modal={true} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('false', async () => {
+    render(<App modal={false} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab();
+
+    // Focus leaving the floating element closes it.
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    cleanup();
+  });
+
+  test('false — shift tabbing does not trap focus when reference is in order', async () => {
+    render(<App modal={false} order={['reference', 'content']} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab({shift: true});
+    await userEvent.tab({shift: true});
+
+    expect(
+      screen.getByTestId('floating').contains(document.activeElement)
+    ).toBe(false);
+
+    cleanup();
+  });
+});
+
+describe('order', () => {
+  test('[reference, content]', async () => {
+    render(<App order={['reference', 'content']} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('[floating, content]', async () => {
+    render(<App order={['floating', 'content']} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('[reference, floating, content]', async () => {
+    render(<App order={['reference', 'floating', 'content']} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('one')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('two')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('three')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    await userEvent.tab({shift: true});
+    await userEvent.tab({shift: true});
+    await userEvent.tab({shift: true});
+
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    cleanup();
+  });
+});

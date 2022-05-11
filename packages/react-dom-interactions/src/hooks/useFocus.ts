@@ -16,6 +16,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
   {open, onOpenChange, dataRef, refs, events}: FloatingContext<RT>,
   {enabled = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
+  const pointerTypeRef = React.useRef('');
   const blockFocusRef = React.useRef(false);
 
   React.useEffect(() => {
@@ -27,12 +28,15 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     const win = doc.defaultView ?? window;
 
     function onBlur() {
-      blockFocusRef.current = !open;
+      if (pointerTypeRef.current) {
+        blockFocusRef.current = !open;
+      }
     }
 
     function onFocus() {
       setTimeout(() => {
         blockFocusRef.current = false;
+        pointerTypeRef.current = '';
       });
     }
 
@@ -66,12 +70,10 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
   return {
     reference: {
       onPointerDown({pointerType}) {
+        pointerTypeRef.current = pointerType;
         blockFocusRef.current = !!(pointerType && keyboardOnly);
       },
       onFocus(event) {
-        // Note: due to the `window` focus/blur listeners, switching between
-        // DevTools touch/normal mode may cause this to fail on the first
-        // focus of the window/touch of the element as it gets set to `false`.
         if (blockFocusRef.current) {
           return;
         }

@@ -115,11 +115,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
-      if (delay && !handlerRef.current) {
+      const closeDelay = getDelay(delay, 'close', pointerTypeRef.current);
+      if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
           () => onOpenChangeRef.current(false),
-          getDelay(delay, 'close', pointerTypeRef.current)
+          closeDelay
         );
       } else if (runElseBranch) {
         onOpenChangeRef.current(false);
@@ -166,10 +167,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
       dataRef.current.openEvent = event;
 
-      if (delay) {
+      const openDelay = getDelay(delay, 'open', pointerTypeRef.current);
+
+      if (openDelay) {
         timeoutRef.current = setTimeout(() => {
           onOpenChangeRef.current(true);
-        }, getDelay(delay, 'open', pointerTypeRef.current));
+        }, openDelay);
       } else {
         onOpenChangeRef.current(true);
       }

@@ -11,3 +11,5 @@ runs:
       shell: sh
     - run: npm -w packages/react-dom test
       shell: sh
+    - run: npm -w packages/react-dom-interactions test
+      shell: sh

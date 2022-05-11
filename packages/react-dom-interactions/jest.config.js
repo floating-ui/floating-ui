@@ -5,4 +5,5 @@ module.exports = {
   globals: {
     __DEV__: true,
   },
+  setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts'],
 };
