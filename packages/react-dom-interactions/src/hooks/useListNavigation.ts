@@ -266,21 +266,26 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     if (open) {
       if (activeIndex == null) {
-        if (
-          !previousOpen &&
-          focusItemOnOpenRef.current &&
-          selectedIndex == null
-        ) {
-          if (!allowEscape) {
-            indexRef.current =
-              isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
-              nested
-                ? getMinIndex(listRef, disabledIndicesRef.current)
-                : getMaxIndex(listRef, disabledIndicesRef.current);
+        if (selectedIndex != null) {
+          return;
+        }
 
-            onNavigateRef.current(indexRef.current);
-            focusItem(listRef, indexRef);
-          }
+        // Reset while the floating element was open (e.g. the list changed).
+        if (previousOpen) {
+          indexRef.current = -1;
+          focusItem(listRef, indexRef);
+        }
+
+        // Initial sync
+        if (!previousOpen && focusItemOnOpenRef.current && !allowEscape) {
+          indexRef.current =
+            isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
+            nested
+              ? getMinIndex(listRef, disabledIndicesRef.current)
+              : getMaxIndex(listRef, disabledIndicesRef.current);
+
+          onNavigateRef.current(indexRef.current);
+          focusItem(listRef, indexRef);
         }
       } else if (activeIndex >= 0 && activeIndex < listRef.current.length) {
         indexRef.current = activeIndex;
