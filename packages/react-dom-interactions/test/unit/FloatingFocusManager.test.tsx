@@ -222,6 +222,22 @@ describe('modal', () => {
 
     cleanup();
   });
+
+  test('false — shift tabbing does not trap focus when reference is in order', async () => {
+    render(<App modal={false} order={['reference', 'content']} />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    await userEvent.tab({shift: true});
+    await userEvent.tab({shift: true});
+
+    expect(
+      screen.getByTestId('floating').contains(document.activeElement)
+    ).toBe(false);
+
+    cleanup();
+  });
 });
 
 describe('order', () => {
