@@ -191,11 +191,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree();
   const previousOpen = usePrevious(open);
 
-  const focusItemOnOpenRef = React.useRef(
-    focusItemOnOpen === 'auto' ? false : focusItemOnOpen
-  );
+  const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
-  const keyRef = React.useRef('');
+  const keyRef = React.useRef<null | string>(null);
   const previousOnNavigateRef = useLatestRef(usePrevious(onNavigate));
   const onNavigateRef = useLatestRef(onNavigate);
   const disabledIndicesRef = useLatestRef(disabledIndices);
@@ -277,8 +275,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
 
         // Initial sync
-        if (!previousOpen && focusItemOnOpenRef.current && !allowEscape) {
+        if (
+          !previousOpen &&
+          focusItemOnOpenRef.current &&
+          (keyRef.current != null ||
+            (focusItemOnOpenRef.current === true && keyRef.current == null))
+        ) {
           indexRef.current =
+            keyRef.current == null ||
             isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
             nested
               ? getMinIndex(listRef, disabledIndicesRef.current)
@@ -348,10 +352,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, open, previousOpen, tree, parentId]);
 
   useLayoutEffect(() => {
-    if (focusItemOnOpen === 'auto') {
-      focusItemOnOpenRef.current = false;
-    }
-    keyRef.current = '';
+    keyRef.current = null;
   });
 
   function onKeyDown(event: React.KeyboardEvent) {
@@ -468,11 +469,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           return onKeyDown(event);
         }
 
-        if (focusItemOnOpen === 'auto') {
-          focusItemOnOpenRef.current = true;
-        }
+        const isNavigationKey =
+          event.key.indexOf('Arrow') === 0 ||
+          event.key === 'Enter' ||
+          event.key === ' ' ||
+          event.key === '';
 
-        keyRef.current = event.key;
+        if (isNavigationKey) {
+          keyRef.current = event.key;
+        }
 
         if (nested) {
           if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {

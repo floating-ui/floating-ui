@@ -220,10 +220,6 @@ describe('allowEscape + virtual', () => {
     render(<App allowEscape={true} virtual loop />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'false'
-    );
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
-    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
       'true'
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
