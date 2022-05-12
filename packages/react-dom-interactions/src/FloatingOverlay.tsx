@@ -3,6 +3,25 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 const identifier = 'data-floating-ui-scroll-lock';
 
+interface NavigatorUAData {
+  brands: Array<{brand: string; version: string}>;
+  mobile: boolean;
+  platform: string;
+}
+
+// Avoid Chrome DevTools blue warning
+export function getPlatform(): string {
+  const uaData = (navigator as any).userAgentData as
+    | NavigatorUAData
+    | undefined;
+
+  if (uaData?.platform) {
+    return uaData.platform;
+  }
+
+  return navigator.platform;
+}
+
 /**
  * Provides base styling for a fixed overlay element to dim content or block
  * pointer events behind a floating element.
@@ -18,8 +37,12 @@ export const FloatingOverlay = React.forwardRef<
       return;
     }
 
-    const scrollX = window.pageXOffset;
-    const scrollY = window.pageYOffset;
+    const alreadyLocked = document.body.hasAttribute(identifier);
+    if (alreadyLocked) {
+      return;
+    }
+
+    document.body.setAttribute(identifier, '');
 
     // RTL <body> scrollbar
     const scrollbarX =
@@ -30,22 +53,37 @@ export const FloatingOverlay = React.forwardRef<
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
-    const alreadyLocked = document.body.hasAttribute(identifier);
+    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+    // technique has fewer side effects.
+    if (!/iP(hone|ad|od)|iOS/.test(getPlatform())) {
+      Object.assign(document.body.style, {
+        overflow: 'hidden',
+        [paddingProp]: `${scrollbarWidth}px`,
+      });
 
-    if (alreadyLocked) {
-      return;
+      return () => {
+        document.body.removeAttribute(identifier);
+        Object.assign(document.body.style, {
+          overflow: '',
+          [paddingProp]: '',
+        });
+      };
     }
+
+    // iOS 12 does not support `visuaViewport`.
+    const offsetLeft = window.visualViewport?.offsetLeft ?? 0;
+    const offsetTop = window.visualViewport?.offsetTop ?? 0;
+    const scrollX = window.pageXOffset;
+    const scrollY = window.pageYOffset;
 
     Object.assign(document.body.style, {
       position: 'fixed',
       overflow: 'hidden',
-      top: `-${scrollY}px`,
-      left: `-${scrollX}px`,
+      top: `${-(scrollY - Math.floor(offsetTop))}px`,
+      left: `${-(scrollX - Math.floor(offsetLeft))}px`,
       right: '0',
       [paddingProp]: `${scrollbarWidth}px`,
     });
-
-    document.body.setAttribute(identifier, '');
 
     return () => {
       Object.assign(document.body.style, {
