@@ -15,10 +15,8 @@ export function getPlatform(): string {
     | NavigatorUAData
     | undefined;
 
-  if (uaData?.brands) {
-    return uaData.brands
-      .map((item) => `${item.brand}/${item.version}`)
-      .join(' ');
+  if (uaData?.platform) {
+    return uaData.platform;
   }
 
   return navigator.platform;
@@ -57,7 +55,7 @@ export const FloatingOverlay = React.forwardRef<
 
     // Only iOS doesn't respect `overflow: hidden` on document.body, and this
     // technique has fewer side effects.
-    if (!/iP(hone|ad|od)/.test(getPlatform())) {
+    if (!/iP(hone|ad|od)|iOS/.test(getPlatform())) {
       Object.assign(document.body.style, {
         overflow: 'hidden',
         [paddingProp]: `${scrollbarWidth}px`,
