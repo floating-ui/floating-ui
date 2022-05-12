@@ -177,6 +177,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         isElement(refs.reference.current) &&
         !refs.reference.current.contains(target) &&
         !(
+          tree && getChildren(tree, nodeId).some(({context}) => context?.open)
+        ) &&
+        !(
           tree &&
           getChildren(tree, nodeId).some((child) =>
             child.context?.refs.floating.current?.contains(target)
