@@ -48,7 +48,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
   }: FloatingContext<RT> & {
     onClose: () => void;
     tree?: FloatingTreeType<RT> | null;
-    leave: boolean;
+    leave?: boolean;
   }) => {
     return function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
