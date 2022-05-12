@@ -32,9 +32,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
   debug: null | ((points?: string | null) => void);
 }> = {}) {
   let timeoutId: NodeJS.Timeout;
-  let initialized = false;
   let polygonIsDestroyed = false;
-  let timeoutPending = false;
 
   return ({
     x,
@@ -52,19 +50,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
   }) => {
     return function onPointerMove(event: PointerEvent) {
       clearTimeout(timeoutId);
-
-      if (!initialized && !leave) {
-        // Block the first events to ensure the cursor has moved into the
-        // polygon, allowing leeway in rounding errors between the cursor point
-        // and the polygon.
-        if (!timeoutPending) {
-          timeoutPending = true;
-          setTimeout(() => {
-            initialized = true;
-          }, 1000 / 60);
-        }
-        return;
-      }
 
       function close() {
         clearTimeout(timeoutId);
