@@ -44,20 +44,7 @@ export const FloatingOverlay = React.forwardRef<
       return;
     }
 
-    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
-    // technique has fewer side effects.
-    if (!/iP(hone|ad|od)/.test(getUAString())) {
-      document.body.style.overflow = 'hidden';
-      return () => {
-        document.body.style.overflow = '';
-      };
-    }
-
-    // iOS 12 does not support `visuaViewport`.
-    const offsetLeft = window.visualViewport?.offsetLeft ?? 0;
-    const offsetTop = window.visualViewport?.offsetTop ?? 0;
-    const scrollX = window.pageXOffset;
-    const scrollY = window.pageYOffset;
+    document.body.setAttribute(identifier, '');
 
     // RTL <body> scrollbar
     const scrollbarX =
@@ -68,6 +55,29 @@ export const FloatingOverlay = React.forwardRef<
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
+    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+    // technique has fewer side effects.
+    if (!/iP(hone|ad|od)/.test(getUAString())) {
+      Object.assign(document.body.style, {
+        overflow: 'hidden',
+        [paddingProp]: `${scrollbarWidth}px`,
+      });
+
+      return () => {
+        document.body.removeAttribute(identifier);
+        Object.assign(document.body.style, {
+          overflow: '',
+          [paddingProp]: '',
+        });
+      };
+    }
+
+    // iOS 12 does not support `visuaViewport`.
+    const offsetLeft = window.visualViewport?.offsetLeft ?? 0;
+    const offsetTop = window.visualViewport?.offsetTop ?? 0;
+    const scrollX = window.pageXOffset;
+    const scrollY = window.pageYOffset;
+
     Object.assign(document.body.style, {
       position: 'fixed',
       overflow: 'hidden',
@@ -76,8 +86,6 @@ export const FloatingOverlay = React.forwardRef<
       right: '0',
       [paddingProp]: `${scrollbarWidth}px`,
     });
-
-    document.body.setAttribute(identifier, '');
 
     return () => {
       Object.assign(document.body.style, {
