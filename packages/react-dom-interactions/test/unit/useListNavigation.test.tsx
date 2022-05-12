@@ -220,10 +220,6 @@ describe('allowEscape + virtual', () => {
     render(<App allowEscape={true} virtual loop />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'false'
-    );
-    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
-    expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
       'true'
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
@@ -259,6 +255,47 @@ describe('allowEscape + virtual', () => {
     expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
       'true'
     );
+    cleanup();
+  });
+});
+
+describe('openOnArrowKeyDown', () => {
+  test('true ArrowDown', () => {
+    render(<App openOnArrowKeyDown={true} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('true ArrowUp', () => {
+    render(<App openOnArrowKeyDown={true} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('false ArrowDown', () => {
+    render(<App openOnArrowKeyDown={false} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('false ArrowUp', () => {
+    render(<App openOnArrowKeyDown={false} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    cleanup();
+  });
+});
+
+describe('disabledIndices', () => {
+  test('indicies are skipped in focus order', () => {
+    render(<App disabledIndices={[0]} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
+    expect(screen.getByTestId('item-1')).toHaveFocus();
     cleanup();
   });
 });
