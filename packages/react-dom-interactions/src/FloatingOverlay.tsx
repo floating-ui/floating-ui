@@ -10,7 +10,7 @@ interface NavigatorUAData {
 }
 
 // Avoid Chrome DevTools blue warning
-export function getUAString(): string {
+export function getPlatform(): string {
   const uaData = (navigator as any).userAgentData as
     | NavigatorUAData
     | undefined;
@@ -21,7 +21,7 @@ export function getUAString(): string {
       .join(' ');
   }
 
-  return navigator.userAgent;
+  return navigator.platform;
 }
 
 /**
@@ -57,7 +57,7 @@ export const FloatingOverlay = React.forwardRef<
 
     // Only iOS doesn't respect `overflow: hidden` on document.body, and this
     // technique has fewer side effects.
-    if (!/iP(hone|ad|od)/.test(getUAString())) {
+    if (!/iP(hone|ad|od)/.test(getPlatform())) {
       Object.assign(document.body.style, {
         overflow: 'hidden',
         [paddingProp]: `${scrollbarWidth}px`,
