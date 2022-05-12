@@ -35,6 +35,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
         context: FloatingContext<RT> & {
           onClose: () => void;
           tree?: FloatingTreeType<RT> | null;
+          leave?: boolean;
         }
       ) => (event: PointerEvent) => void);
   restMs?: number;
@@ -213,13 +214,35 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       closeWithDelay();
     }
 
+    // Ensure the floating element closes after scrolling even if the pointer
+    // did not move.
+    // https://github.com/floating-ui/floating-ui/discussions/1692
+    function onPointerLeave(event: PointerEvent) {
+      handleCloseRef.current?.({
+        ...context,
+        tree,
+        x: event.clientX,
+        y: event.clientY,
+        leave: true,
+        onClose() {
+          cleanupPointerMoveHandler();
+          closeWithDelay();
+        },
+      })(event);
+    }
+
+    const floating = refs.floating.current;
     const reference = refs.reference.current;
 
     if (isElement(reference)) {
+      open && reference.addEventListener('pointerleave', onPointerLeave);
+      floating?.addEventListener('pointerleave', onPointerLeave);
       reference.addEventListener('mousemove', onMouseEnter, {once: true});
       reference.addEventListener('mouseenter', onMouseEnter);
       reference.addEventListener('mouseleave', onMouseLeave);
       return () => {
+        open && reference.removeEventListener('pointerleave', onPointerLeave);
+        floating?.removeEventListener('pointerleave', onPointerLeave);
         reference.removeEventListener('mousemove', onMouseEnter);
         reference.removeEventListener('mouseenter', onMouseEnter);
         reference.removeEventListener('mouseleave', onMouseLeave);
@@ -271,7 +294,9 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       onMouseEnter() {
         clearTimeout(timeoutRef.current);
       },
-      onMouseLeave: () => closeWithDelay(false),
+      onMouseLeave() {
+        closeWithDelay(false);
+      },
     },
   };
 };
