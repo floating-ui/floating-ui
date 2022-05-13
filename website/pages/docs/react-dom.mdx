@@ -46,7 +46,7 @@ function App() {
 This will position the `Tooltip` element at the **bottom center**
 of the reference element by default.
 
-- `x{:.const}` and `y{:.const}` are the positoning coordinates.
+- `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
   effect has fired (i.e. SSR).
 - `reference{:.const}` and `floating{:.const}` are callback refs,
@@ -240,6 +240,23 @@ const arrowCallback = useCallback(
 );
 
 <div ref={arrowCallback} />;
+```
+
+### Arrow styles
+
+In the tutorial, it shows you how to
+[style the arrow](https://floating-ui.com/docs/tutorial#arrow-middleware).
+
+This styling relies on the **final** (or resultant) placement,
+which can be different from the preferred one you passed as an
+option to `useFloating(){:js}` (if you're using `flip(){:js}` or
+`autoPlacement(){:js}` middleware).
+
+This final placement gets returned from the hook to enable the
+static side position style:
+
+```js
+const {placement} = useFloating();
 ```
 
 ## Virtual Element
