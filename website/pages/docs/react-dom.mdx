@@ -1,26 +1,29 @@
 # React DOM
 
+This package exports React bindings for the `@floating-ui/dom`
+package — a library that provides “anchored positioning” for a
+floating element to position it next to a given reference
+element.
+
 ```shell
 npm install @floating-ui/react-dom
 ```
 
-This page details the positioning hook. To build interactions for
-floating elements, check out
+If you want to build interactions for floating elements easily,
+in addition to the positioning, check out
 [React DOM Interactions](/docs/react-dom-interactions).
 
 ## Usage
 
-The `useFloating(){:js}` hook accepts all of
-[computePosition's options](/docs/computePosition#options).
+`useFloating(){:js}` wraps `computePosition(){:js}`, and accepts
+all of its [options](/docs/computePosition#options). The most
+basic usage is the following:
 
 ```js
-import {useFloating, shift} from '@floating-ui/react-dom';
+import {useFloating} from '@floating-ui/react-dom';
 
 function App() {
-  const {x, y, reference, floating, strategy} = useFloating({
-    placement: 'right',
-    middleware: [shift()],
-  });
+  const {x, y, reference, floating, strategy} = useFloating();
 
   return (
     <>
@@ -40,25 +43,88 @@ function App() {
 }
 ```
 
-`x{:.const}` and `y{:.const}` will be `null{:js}` initially,
-before the layout effect has fired.
+This will position the `Tooltip` element at the **bottom center**
+of the reference element by default.
+
+- `x{:.const}` and `y{:.const}` are the positoning coordinates.
+  These values are `null{:js}` initially, before the layout
+  effect has fired (i.e. SSR).
+- `reference{:.const}` and `floating{:.const}` are callback refs,
+  not regular refs. This allows the position to be updated when
+  either elements change (e.g. conditional rendering).
+- `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
+  `'fixed'{:js}`
+
+To customize the positioning, view the
+[computePosition options](/docs/computePosition#options).
+Example:
+
+```js
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+} from '@floating-ui/react-dom';
+
+useFloating({
+  placement: 'right',
+  strategy: 'fixed',
+  middleware: [offset(10), flip(), shift()],
+});
+```
+
+## Updating
 
 `useFloating(){:js}` only calculates the position **once** on
-render, or when the reference/floating elements changed.
-Depending on the context in which the floating element lives,
-you'll likely need to update its position in an effect. See
-[Updating](/docs/react-dom#updating).
+render, or when the reference/floating elements changed — for
+example, the floating element gets mounted via conditional
+rendering.
 
-### Stable ref prop
+If the floating element lives in a different `offsetParent`
+context to the reference element, it will need to be updated
+while mounted to remain “anchored”. This includes scrolling and
+resizing the window or the elements themselves.
 
-Ensure the `ref{:.keyword}` prop values you pass to the reference
-and floating elements remain stable across renders to prevent
-infinite loops.
+To do so, use the [autoUpdate](/docs/autoUpdate) utility:
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/react-dom';
+
+function App() {
+  useFloating({
+    whileElementsMounted: autoUpdate,
+
+    // Or, pass options. Ensure the cleanup function is returned.
+    whileElementsMounted: (reference, floating, update) =>
+      autoUpdate(reference, floating, update, {
+        animationFrame: true,
+      }),
+  });
+}
+```
+
+`whileElementsMounted{:.objectKey}` is a fully reactive callback
+prop to handle mounting/unmounting of the elements.
+
+> **Note**: `autoUpdate` is expensive and should only be called
+> when both the reference and floating elements are mounted. If
+> your floating element is NOT conditionally rendered, and
+> instead relies of `visibility` for instance, use an effect
+> instead of this prop.
+
+### Stable ref props
+
+A state update occurs inside the callback ref to ensure the
+position is fresh when the element mounts. If the ref prop is not
+stable, this results in an infinite loop
+[because React calls unstable callback refs thinking it's a new function on each render](https://github.com/facebook/react/issues/6249#issuecomment-195412139).
 
 If you want to merge another ref with the one returned from
 `useFloating(){:js}`, memo the value:
 
 ```js
+// No infinite loop!
 const stableRef = useMemo(
   () => mergeRefs([userRef, reference]),
   [userRef, reference]
@@ -96,8 +162,17 @@ cloneElement(children, {ref: reference});
 
 ## Internal refs
 
+As mentioned previously, `reference{:.const}` and
+`floating{:.const}` are callback refs to handle conditional
+rendering. They aren't suitable for usage as regular refs.
+Instead, access `refs{:.const}`:
+
 ```js
 const {refs} = useFloating();
+
+// Accessing them inside effects or event handlers:
+refs.floating.current;
+refs.reference.current;
 ```
 
 If another library's hook requires a `ref{:.objectKey}` passed to
@@ -109,78 +184,6 @@ const otherLib = useOtherLib({
   ref: refs.floating, // or refs.reference
 });
 ```
-
-## Updating
-
-The hook returns an `update(){:js}` function to update the
-position, e.g. in event listeners.
-
-```js
-const {update} = useFloating();
-```
-
-### autoUpdate
-
-[autoUpdate](/docs/autoUpdate) is a built-in utility that will
-update your floating element when required. Pass it to the
-`whileElementsMounted{:.objectKey}` prop, which is fully
-reactive.
-
-Think of it like an effect, which should return a cleanup
-function when the elements are not mounted. The default signature
-of `autoUpdate` will do this.
-
-```js {12} /autoUpdate/1-2
-import {useEffect} from 'react';
-import {
-  useFloating,
-  shift,
-  autoUpdate,
-} from '@floating-ui/react-dom';
-
-function App() {
-  const {x, y, reference, floating, strategy, refs} =
-    useFloating({
-      // default signature works as expected
-      whileElementsMounted: autoUpdate,
-
-      // or, pass `autoUpdate` options.
-      // make sure to return the cleanup function!
-      whileElementsMounted: (referenceEl, floatingEl, update) =>
-        autoUpdate(referenceEl, floatingEl, update, {
-          animationFrame: true,
-        }),
-    });
-
-  return (
-    <>
-      <button ref={reference}>Button</button>
-      <div
-        ref={floating}
-        style={{
-          position: strategy,
-          top: y ?? '',
-          left: x ?? '',
-        }}
-      >
-        Tooltip
-      </div>
-    </>
-  );
-}
-```
-
-> **Performance warning**: `autoUpdate` is expensive and should
-> only be active WHILE the floating element is rendered/visible.
-> If your floating element is not conditionally rendered, and
-> instead relies on `visibility` for example, you should instead
-> use an effect to call `autoUpdate`, and only call it when the
-> floating element is visible. Remember to return the cleanup
-> function inside the effect.
-
-The `whileElementsMounted{:.objectKey}` callback also allows you
-to react to the elements mounting/unmounting beyond using the
-`autoUpdate` utility, which plain refs do not allow.
 
 ## Arrow
 
@@ -216,36 +219,43 @@ function App() {
 
 ### Conditional rendering
 
-If you're conditionally rendering the arrow element (not just the
-floating element), you'll want to utilize the same technique as
-the reference and floating elements which is a callback function
-that calls `update(){:js}` after assigning the ref value.
+In some cases, you might be conditionally rendering the arrow
+element (not just the floating element). For instance, you're
+demoing a `showArrow={boolean}{:js}` prop for a component while
+it's mounted.
 
-```js
-<div
-  ref={(node) => {
+Utilize the same technique as the reference and floating elements
+which is a callback function that calls `update(){:js}` after
+assigning the ref value.
+
+```js /update/
+const arrowRef = useRef();
+const {update} = useFloating();
+const arrowCallback = useCallback(
+  (node) => {
     arrowRef.current = node;
     update();
-  }}
-/>
+  },
+  [update]
+);
+
+<div ref={arrowCallback} />;
 ```
 
 ## Virtual Element
 
 See [Virtual Elements](/docs/virtual-elements) for details.
 
-```js {12-18}
+```js {10-16}
 import {useLayoutEffect} from 'react';
 import {useFloating, shift} from '@floating-ui/react-dom';
 
 function App() {
-  const {x, y, reference, floating, strategy} = useFloating({
-    placement: 'right',
-    middleware: [shift()],
-  });
+  const {x, y, reference, floating, strategy} = useFloating();
 
   useLayoutEffect(() => {
     // Call reference with the virtual element inside an effect
+    // or event handler.
     reference({
       getBoundingClientRect() {
         return {
@@ -272,8 +282,13 @@ function App() {
 
 ## Variables inside middleware functions
 
-Variables are not "fresh" inside functions passed to middleware
-as an option. Instead, use a ref to access data inside them.
+To support React Fast Refresh, the hook uses a deepEqual utility
+function to ensure the position is updated whenever middleware
+change. Function options are compared as strings.
+
+As a result, variables are not "fresh" inside functions passed to
+middleware as an option. Instead, use a ref to access data inside
+them.
 
 ```js
 const [n, setN] = useState(10);
@@ -301,9 +316,8 @@ useFloating({
 
 ## Testing
 
-Floating UI computes the position of your floating element
-asynchronously, so a state update occurs during a Promise
-microtask.
+The position of your floating element is computed asynchronously,
+so a state update occurs during a Promise microtask.
 
 The state update happens **after** your test completes, resulting
 in an act warning like this:
@@ -321,8 +335,10 @@ act(() => {
 This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
 ```
 
-To fix this, explicitly call `cleanup(){:js}` at the end of your
-test if you don't care about the positioning:
+There are a couple of ways to fix this:
+
+1. Explicitly call `cleanup(){:js}` at the end of your test if
+   you don't care about the positioning:
 
 ```js /cleanup/
 import {render, cleanup, screen} from '@testing-library/react';
@@ -336,33 +352,16 @@ test('example', () => {
 });
 ```
 
-While `@testing-library/react{:.string}` already does this
-internally, it's executed in the microtask queue following
-Floating UI's update call — so the `act` warning occurs.
-
-> Note: `afterEach(cleanup){:js}` won't work — this is what
-> Testing Library already does. You need to call `cleanup(){:js}`
-> explicitly at the end of each of your tests.
-
-If the position **does** matter in your assertions, ensure you
-wait for the microtask queue to be flushed using
-[waitFor](https://testing-library.com/docs/dom-testing-library/api-async/#waitfor)
-or other async utilities.
+2. Flush the microtask queue before the test finishes. This also
+   allows you to ensure the floating element has been
+   successfully positioned.
 
 ```js
-render(<Tooltip open />);
-await waitFor(() => {
-  // The positioning matters, so we make expect(...)
-  // assertions in here.
+test('example', async () => {
+  render(<Tooltip open />);
+  await act(async () => {});
+  // Position is ready, and `act` warning is gone!
 });
-```
-
-Or, if needed, you can explicitly flush the queue and let the
-positioning update be executed:
-
-```js
-render(<Tooltip open />);
-await act(async () => {});
 ```
 
 ## Types
