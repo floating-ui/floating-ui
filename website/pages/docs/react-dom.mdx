@@ -113,6 +113,14 @@ prop to handle mounting/unmounting of the elements.
 > instead relies of `visibility` for instance, use an effect
 > instead of this prop.
 
+Alternatively (or additionally), you may want to update manually
+in some cases. The hook returns an `update(){:js}` function to
+update the position at will:
+
+```js
+const {update} = useFloating();
+```
+
 ### Stable ref props
 
 A state update occurs inside the callback ref to ensure the
