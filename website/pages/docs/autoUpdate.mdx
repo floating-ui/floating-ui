@@ -1,32 +1,38 @@
 # autoUpdate
 
-This function adds listeners that automatically update the
-position of the floating element when required.
+This function adds listeners that automatically call an update
+function when necessary so that the floating element remains
+“anchored” to the reference element in a variety of scenarios
+without detaching.
 
-Only call this when the floating element is mounted to the DOM
-(or visible on the screen).
+```js
+autoUpdate(referenceEl, floatingEl, update, options);
+```
 
-```js /autoUpdate/
+Only call this function when the floating element is mounted to
+the DOM (or visible on the screen).
+
+```js
 import {computePosition, autoUpdate} from '@floating-ui/dom';
 
-async function update() {
-  const {x, y} = await computePosition(referenceEl, floatingEl);
-}
-
-const cleanup = autoUpdate(referenceEl, floatingEl, update);
+const cleanup = autoUpdate(referenceEl, floatingEl, () => {
+  computePosition(referenceEl, floatingEl).then(({x, y}) => {
+    // ...
+  });
+});
 ```
 
 It returns a cleanup function that should be invoked when the
 floating element is no longer mounted on the DOM (or visible on
 the screen).
 
-It does not call `update(){:js}` immediately, so for the first
-update, you should call the update function yourself.
+```js
+// Later, when the element is removed from the screen
+cleanup();
+```
 
-> By default, this requires a `ResizeObserver{:.class}`. To
-> support old browsers, either polyfill this constructor, or
-> disable the `elementResize{:.objectKey}` option and update
-> manually.
+> The update function is called immediately by default and
+> requires a `ResizeObserver{:.class}`.
 
 ## Options
 
@@ -74,6 +80,12 @@ default: `true{:js}`
 
 Whether to update the position when either the reference or
 floating elements resized. This uses a `ResizeObserver{:.class}`.
+
+To support old browsers, polyfill the constructor, or disable
+this option and update manually when the elements resize.
+
+> Disabling this means `autoUpdate(){:js}` will no longer call
+> your update function immediately.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
