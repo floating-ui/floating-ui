@@ -15,7 +15,7 @@ export * from '@floating-ui/dom';
 
 interface CleanupFn {
   (): void;
-  $$immediate: boolean;
+  $$immediate?: boolean;
 }
 
 type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {

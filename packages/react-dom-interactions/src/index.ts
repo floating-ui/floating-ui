@@ -15,6 +15,11 @@ import type {
 import {createPubSub} from './createPubSub';
 import {useFloatingTree} from './FloatingTree';
 
+interface CleanupFn {
+  (): void;
+  $$immediate?: boolean;
+}
+
 type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
@@ -44,7 +49,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | (() => void);
+  ) => void | CleanupFn;
 }
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
