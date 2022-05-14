@@ -13,6 +13,11 @@ import {deepEqual} from './utils/deepEqual';
 
 export * from '@floating-ui/dom';
 
+interface CleanupFn {
+  (): void;
+  $$immediate?: boolean;
+}
+
 type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
@@ -39,7 +44,7 @@ export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | (() => void);
+  ) => void | CleanupFn;
 };
 
 function useLatestRef<T>(value: T) {
@@ -60,7 +65,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const floating = useRef<HTMLElement | null>(null);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-  const cleanupRef = useRef<void | (() => void) | null>(null);
+  const cleanupRef = useRef<CleanupFn | void | null>(null);
 
   const [data, setData] = useState<Data>({
     // Setting these to `null` will allow the consumer to determine if
@@ -83,14 +88,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     setLatestMiddleware(middleware);
   }
 
-  const isMountedRef = useRef(true);
-  useLayoutEffect(() => {
-    isMountedRef.current = true;
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, []);
-
   const update = useCallback(() => {
     if (!reference.current || !floating.current) {
       return;
@@ -109,7 +106,20 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     });
   }, [latestMiddleware, placement, strategy]);
 
-  useLayoutEffect(update, [update]);
+  useLayoutEffect(() => {
+    // Skip first update
+    if (isMountedRef.current) {
+      update();
+    }
+  }, [update]);
+
+  const isMountedRef = useRef(false);
+  useLayoutEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const runElementMountCallback = useCallback(() => {
     if (typeof cleanupRef.current === 'function') {
@@ -117,16 +127,24 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       cleanupRef.current = null;
     }
 
-    if (
-      reference.current &&
-      floating.current &&
-      whileElementsMountedRef.current
-    ) {
-      cleanupRef.current = whileElementsMountedRef.current(
-        reference.current,
-        floating.current,
-        update
-      );
+    if (reference.current && floating.current) {
+      if (whileElementsMountedRef.current) {
+        const cleanupFn = whileElementsMountedRef.current(
+          reference.current,
+          floating.current,
+          update
+        );
+
+        cleanupRef.current = cleanupFn;
+
+        // Per spec, `ResizeObserver` invokes the update function immediately,
+        // so we can skip the update if that is added as an option (the default).
+        if (!(cleanupFn && cleanupFn.$$immediate)) {
+          update();
+        }
+      } else {
+        update();
+      }
     }
   }, [update, whileElementsMountedRef]);
 
@@ -134,18 +152,16 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     (node) => {
       reference.current = node;
       runElementMountCallback();
-      update();
     },
-    [update, runElementMountCallback]
+    [runElementMountCallback]
   );
 
   const setFloating: UseFloatingReturn<RT>['floating'] = useCallback(
     (node) => {
       floating.current = node;
       runElementMountCallback();
-      update();
     },
-    [update, runElementMountCallback]
+    [runElementMountCallback]
   );
 
   const refs = useMemo(() => ({reference, floating}), []);

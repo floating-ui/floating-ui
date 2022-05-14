@@ -49,7 +49,6 @@ export function autoUpdate(
     animationFrame = false,
   } = options;
 
-  let cleanedUp = false;
   const ancestorScroll = _ancestorScroll && !animationFrame;
   const ancestorResize = _ancestorResize && !animationFrame;
 
@@ -82,10 +81,6 @@ export function autoUpdate(
   }
 
   function frameLoop() {
-    if (cleanedUp) {
-      return;
-    }
-
     const nextRefRect = getBoundingClientRect(reference);
 
     if (
@@ -102,9 +97,7 @@ export function autoUpdate(
     frameId = requestAnimationFrame(frameLoop);
   }
 
-  return () => {
-    cleanedUp = true;
-
+  function cleanup() {
     ancestors.forEach((ancestor) => {
       ancestorScroll && ancestor.removeEventListener('scroll', update);
       ancestorResize && ancestor.removeEventListener('resize', update);
@@ -116,5 +109,8 @@ export function autoUpdate(
     if (animationFrame) {
       cancelAnimationFrame(frameId);
     }
-  };
+  }
+
+  cleanup.$$immediate = !!elementResize;
+  return cleanup;
 }
