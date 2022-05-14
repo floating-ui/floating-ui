@@ -1,6 +1,5 @@
 // Fork of `fast-deep-equal` that only does the comparisons we need and compares
 // functions
-// @ts-nocheck
 export function deepEqual(a: any, b: any) {
   if (a === b) {
     return true;

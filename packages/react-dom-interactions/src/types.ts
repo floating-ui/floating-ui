@@ -1,8 +1,14 @@
 import * as React from 'react';
-import type {UseFloatingReturn, ReferenceType} from './';
+import type {
+  ComputePositionReturn,
+  VirtualElement,
+  Placement,
+  Middleware,
+  Strategy,
+} from '@floating-ui/dom';
 
-export * from './';
 export * from '@floating-ui/dom';
+export * from './';
 
 export {arrow} from '@floating-ui/react-dom';
 
@@ -44,4 +50,41 @@ export interface ElementProps {
   reference?: React.HTMLProps<Element>;
   floating?: React.HTMLProps<HTMLElement>;
   item?: React.HTMLProps<HTMLElement>;
+}
+
+interface CleanupFn {
+  (): void;
+  $$immediate?: boolean;
+}
+
+export type ReferenceType = Element | VirtualElement;
+
+export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
+  x: number | null;
+  y: number | null;
+};
+
+export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
+  UseFloatingData & {
+    update: () => void;
+    reference: (node: RT | null) => void;
+    floating: (node: HTMLElement | null) => void;
+    refs: {
+      reference: React.MutableRefObject<RT | null>;
+      floating: React.MutableRefObject<HTMLElement | null>;
+    };
+  };
+
+export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  placement: Placement;
+  middleware: Array<Middleware>;
+  strategy: Strategy;
+  nodeId: string;
+  whileElementsMounted?: (
+    reference: RT,
+    floating: HTMLElement,
+    update: () => void
+  ) => void | CleanupFn;
 }
