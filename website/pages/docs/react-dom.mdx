@@ -15,7 +15,7 @@ in addition to the positioning, check out
 
 ## Usage
 
-`useFloating(){:js}` wraps `computePosition(){:js}`, and accepts
+`useFloating(){:js}` wraps `computePosition(){:js}` and accepts
 all of its [options](/docs/computePosition#options). The most
 basic usage is the following:
 
@@ -43,8 +43,8 @@ function App() {
 }
 ```
 
-This will position the `Tooltip` element at the **bottom center**
-of the reference element by default.
+This will position the floating `Tooltip` element at the **bottom
+center** of the `Button` element by default.
 
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
@@ -107,11 +107,11 @@ function App() {
 `whileElementsMounted{:.objectKey}` is a fully reactive callback
 prop to handle mounting/unmounting of the elements.
 
-> **Note**: `autoUpdate` is expensive and should only be called
-> when both the reference and floating elements are mounted. If
-> your floating element is NOT conditionally rendered, and
-> instead relies of `visibility` for instance, use an effect
-> instead of this prop.
+> `autoUpdate` is expensive and should only be called when both
+> the reference and floating elements are mounted. If your
+> floating element is NOT conditionally rendered, and instead
+> relies of `visibility` for instance, use an effect instead of
+> this prop.
 
 Alternatively (or additionally), you may want to update manually
 in some cases. The hook returns an `update(){:js}` function to
@@ -146,23 +146,22 @@ return <div ref={stableRef} />;
 As `reference{:.const}` is a callback ref, you can call it with
 your external reference element:
 
-```js /triggerRef/1-3
-function MyComponent({triggerRef}) {
+```js /triggerElement/1-3
+function MyComponent({triggerElement}) {
   const {reference} = useFloating();
 
   useLayoutEffect(() => {
-    reference(triggerRef.current);
-  }, [triggerRef.current]);
-
-  // You may need to disable the React Hooks ESLint rule for the
-  // dependency array.
+    reference(triggerElement);
+  }, [triggerElement]);
 }
 ```
 
-The "external reference" pattern is not recommended though. It is
-instead better to utilize the `children` prop as the reference,
-and attach the ref via `cloneElement(){:js}`. This also
-co-locates the reference with the floating component.
+The element should be stored in state rather than a plain ref to
+ensure reactive updating when it changes.
+
+You may instead want to utilize the `children` prop as the
+reference, and attach the ref via `cloneElement(){:js}`. This
+also co-locates the reference with the floating component.
 
 ```js
 cloneElement(children, {ref: reference});
@@ -225,6 +224,23 @@ function App() {
 }
 ```
 
+### Arrow styles
+
+In the tutorial, it shows you how to
+[style the arrow](https://floating-ui.com/docs/tutorial#arrow-middleware).
+
+This styling relies on the **final** (or resultant) placement,
+which can be different from the preferred one you passed as an
+option to `useFloating(){:js}` (if you're using `flip(){:js}` or
+`autoPlacement(){:js}` middleware).
+
+This final placement gets returned from the hook to enable the
+static side position style:
+
+```js
+const {placement} = useFloating();
+```
+
 ### Conditional rendering
 
 In some cases, you might be conditionally rendering the arrow
@@ -248,23 +264,6 @@ const arrowCallback = useCallback(
 );
 
 <div ref={arrowCallback} />;
-```
-
-### Arrow styles
-
-In the tutorial, it shows you how to
-[style the arrow](https://floating-ui.com/docs/tutorial#arrow-middleware).
-
-This styling relies on the **final** (or resultant) placement,
-which can be different from the preferred one you passed as an
-option to `useFloating(){:js}` (if you're using `flip(){:js}` or
-`autoPlacement(){:js}` middleware).
-
-This final placement gets returned from the hook to enable the
-static side position style:
-
-```js
-const {placement} = useFloating();
 ```
 
 ## Virtual Element
