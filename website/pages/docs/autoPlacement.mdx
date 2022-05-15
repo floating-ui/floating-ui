@@ -1,7 +1,35 @@
 # autoPlacement
 
-`autoPlacement(){:js}` chooses the `placement{:.objectKey}`
-automatically (the one with most space available).
+`autoPlacement(){:js}` chooses the placement that has the most
+space available automatically.
+
+You’ll want to use this instead of `flip(){:js}` if you don't
+want to give the floating element a “preferred” placement and let
+it choose a placement for you.
+
+<div className="flex flex-col gap-4">
+  <Chrome
+    label="Scroll the container"
+    center
+    scrollable
+    className="h-96"
+  >
+    <Floating
+      middleware={[
+        {
+          name: 'autoPlacement',
+          options: {allowedPlacements: ['top', 'bottom']},
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-8 h-8 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+</div>
+
+In the above example, the automatic “most space” strategy is
+demonstrated (in contrast to flip’s preferred + fallback “no
+space” one).
 
 ## Usage
 
