@@ -447,7 +447,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      onNavigate(indexRef.current);
+      if (indexRef.current < 0 || indexRef.current >= listRef.current.length) {
+        onNavigate(null);
+      } else {
+        onNavigate(indexRef.current);
+      }
     }
   }
 
