@@ -10,11 +10,6 @@ export * from '@floating-ui/dom';
 export {useFloating} from './';
 export {arrow} from './';
 
-export interface CleanupFn {
-  (): void;
-  $$immediate?: boolean;
-}
-
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
@@ -41,5 +36,5 @@ export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | CleanupFn;
+  ) => void | (() => void);
 };

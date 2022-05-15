@@ -7,7 +7,6 @@ import type {
   UseFloatingReturn,
   UseFloatingData,
   ReferenceType,
-  CleanupFn,
 } from './types';
 import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
@@ -22,7 +21,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const floating = React.useRef<HTMLElement | null>(null);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-  const cleanupRef = React.useRef<CleanupFn | void | null>(null);
+  const cleanupRef = React.useRef<(() => void) | void | null>(null);
 
   const [data, setData] = React.useState<UseFloatingData>({
     // Setting these to `null` will allow the consumer to determine if
@@ -93,12 +92,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
         );
 
         cleanupRef.current = cleanupFn;
-
-        // Per spec, `ResizeObserver` invokes the update function immediately,
-        // so we can skip the update if that is added as an option (the default).
-        if (!(cleanupFn && cleanupFn.$$immediate)) {
-          update();
-        }
       } else {
         update();
       }

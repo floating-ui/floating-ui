@@ -97,7 +97,11 @@ export function autoUpdate(
     frameId = requestAnimationFrame(frameLoop);
   }
 
-  function cleanup() {
+  if (!elementResize) {
+    update();
+  }
+
+  return () => {
     ancestors.forEach((ancestor) => {
       ancestorScroll && ancestor.removeEventListener('scroll', update);
       ancestorResize && ancestor.removeEventListener('resize', update);
@@ -109,8 +113,5 @@ export function autoUpdate(
     if (animationFrame) {
       cancelAnimationFrame(frameId);
     }
-  }
-
-  cleanup.$$immediate = !!elementResize;
-  return cleanup;
+  };
 }
