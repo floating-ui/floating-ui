@@ -258,9 +258,9 @@ describe('allowEscape + virtual', () => {
     cleanup();
   });
 
-  test('true - activeIndex is called with `null` when escaped', () => {
+  test('true - onNavigate is called with `null` when escaped', () => {
     const spy = jest.fn();
-    render(<App allowEscape={true} virtual loop onNavigate={spy} />);
+    render(<App allowEscape virtual loop onNavigate={spy} />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
     expect(spy).toHaveBeenCalledTimes(2);
