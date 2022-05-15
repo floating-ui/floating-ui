@@ -52,11 +52,6 @@ export interface ElementProps {
   item?: React.HTMLProps<HTMLElement>;
 }
 
-interface CleanupFn {
-  (): void;
-  $$immediate?: boolean;
-}
-
 export type ReferenceType = Element | VirtualElement;
 
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
@@ -86,5 +81,5 @@ export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | CleanupFn;
+  ) => void | (() => void);
 }
