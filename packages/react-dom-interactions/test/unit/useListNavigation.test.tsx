@@ -257,6 +257,16 @@ describe('allowEscape + virtual', () => {
     );
     cleanup();
   });
+
+  test('true - onNavigate is called with `null` when escaped', () => {
+    const spy = jest.fn();
+    render(<App allowEscape virtual loop onNavigate={spy} />);
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+    fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenCalledWith(null);
+    cleanup();
+  });
 });
 
 describe('openOnArrowKeyDown', () => {

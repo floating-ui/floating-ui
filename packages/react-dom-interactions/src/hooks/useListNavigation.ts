@@ -14,6 +14,13 @@ const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 
+function isIndexOutOfBounds(
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
+  indexRef: React.MutableRefObject<number>
+) {
+  return indexRef.current < 0 || indexRef.current >= listRef.current.length;
+}
+
 function findNonDisabledIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   {
@@ -291,7 +298,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           onNavigateRef.current(indexRef.current);
           focusItem(listRef, indexRef);
         }
-      } else if (activeIndex >= 0 && activeIndex < listRef.current.length) {
+      } else if (!isIndexOutOfBounds(listRef, indexRef)) {
         indexRef.current = activeIndex;
         focusItem(listRef, indexRef);
       }
@@ -447,7 +454,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      onNavigate(indexRef.current);
+      if (isIndexOutOfBounds(listRef, indexRef)) {
+        onNavigate(null);
+      } else {
+        onNavigate(indexRef.current);
+      }
     }
   }
 
