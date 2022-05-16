@@ -1,5 +1,5 @@
 <p align="center">
-  <img height="560" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Floating UI">
+  <img max-height="560" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Floating UI">
 <p>
 
 > **Popper is now Floating UI! For Popper v2, visit
