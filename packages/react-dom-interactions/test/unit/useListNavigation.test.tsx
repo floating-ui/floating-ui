@@ -309,3 +309,27 @@ describe('disabledIndices', () => {
     cleanup();
   });
 });
+
+describe('focusOnHover', () => {
+  test('true - focuses item on hover and syncs the active index', () => {
+    const spy = jest.fn();
+    render(<App onNavigate={spy} />);
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.mouseMove(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).toHaveFocus();
+    fireEvent.mouseLeave(screen.getByTestId('item-1'));
+    expect(screen.getByRole('menu')).toHaveFocus();
+    expect(spy).toHaveBeenCalledWith(1);
+    cleanup();
+  });
+
+  test('false - does not focus item on hover and does not sync the active index', () => {
+    const spy = jest.fn();
+    render(<App onNavigate={spy} focusItemOnHover={false} />);
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.mouseMove(screen.getByTestId('item-1'));
+    expect(screen.getByTestId('item-1')).not.toHaveFocus();
+    expect(spy).toHaveBeenCalledTimes(0);
+    cleanup();
+  });
+});
