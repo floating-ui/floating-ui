@@ -69,16 +69,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
 
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    if (!open) {
-      pointerTypeRef.current = undefined;
-    }
-  });
-
   React.useEffect(() => {
     if (!enabled) {
       return;
@@ -139,12 +129,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       handlerRef.current = undefined;
     }
   }, [refs.floating]);
-
-  React.useEffect(() => {
-    if (!open) {
-      cleanupPointerMoveHandler();
-    }
-  }, [open, enabled, cleanupPointerMoveHandler]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -264,6 +248,21 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     refs.reference,
     refs.floating,
   ]);
+
+  useLayoutEffect(() => {
+    if (!open) {
+      pointerTypeRef.current = undefined;
+      cleanupPointerMoveHandler();
+    }
+  });
+
+  React.useEffect(() => {
+    return () => {
+      cleanupPointerMoveHandler();
+      clearTimeout(timeoutRef.current);
+      clearTimeout(restTimeoutRef.current);
+    };
+  }, [cleanupPointerMoveHandler]);
 
   if (!enabled) {
     return {};
