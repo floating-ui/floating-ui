@@ -108,18 +108,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     // If the floating element has no focusable elements inside it, fallback
-    // to focusing the floating element and preventing tab navigation, unless
-    // the reference element is a combobox.
+    // to focusing the floating element and preventing tab navigation
     const noTabbableContentElements =
       getTabbableElements().filter(
         (el) =>
           el !== refs.floating.current &&
           // @ts-expect-error
           el !== refs.reference.current
-      ).length === 0 &&
-      (isHTMLElement(refs.reference.current)
-        ? refs.reference.current.getAttribute('role') !== 'combobox'
-        : true);
+      ).length === 0;
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
