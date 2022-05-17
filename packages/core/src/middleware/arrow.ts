@@ -80,7 +80,10 @@ export const arrow = (options: Options): Middleware => ({
 
     // Make sure that arrow points at the reference
     const alignmentPadding = alignment === 'start' ? paddingObject[minProp] : paddingObject[maxProp];
-    const alignmentOffset = alignmentPadding > 0 && center !== offset ?
+    const shouldAddOffset = alignmentPadding > 0
+      && center !== offset
+      && rects.reference[length] <= rects.floating[length];
+    const alignmentOffset = shouldAddOffset ?
       center < min
         ? min - center
         : max - center
