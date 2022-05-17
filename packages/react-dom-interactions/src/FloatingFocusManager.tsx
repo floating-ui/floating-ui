@@ -108,14 +108,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     // If the floating element has no focusable elements inside it, fallback
-    // to focusing the floating element and preventing tab navigation
+    // to focusing the floating element and preventing tab navigation, unless
+    // the reference element is a combobox.
     const noTabbableContentElements =
       getTabbableElements().filter(
         (el) =>
           el !== refs.floating.current &&
           // @ts-expect-error
           el !== refs.reference.current
-      ).length === 0;
+      ).length === 0 &&
+      (isHTMLElement(refs.reference.current)
+        ? refs.reference.current.getAttribute('role') !== 'combobox'
+        : true);
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
@@ -195,7 +199,21 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     if (floating && isHTMLElement(reference)) {
       !modal && floating.addEventListener('focusout', onFloatingFocusOut);
-      const cleanup = modal ? hideOthers(floating) : null;
+
+      let cleanup: () => void;
+      if (modal) {
+        if (orderRef.current.includes('reference')) {
+          hideOthers([reference, floating]);
+        } else {
+          hideOthers(floating);
+        }
+        // Comboboxes should not have "modal" focus management, but every other
+        // node between the input and listbox popup needs to be hidden from
+        // screen readers, so that touch-based screen readers immediately focus
+        // the listbox options.
+      } else if (reference.getAttribute('role') === 'combobox') {
+        hideOthers([reference, floating]);
+      }
 
       return () => {
         !modal && floating.removeEventListener('focusout', onFloatingFocusOut);
@@ -207,6 +225,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     tree,
     modal,
     onOpenChangeRef,
+    orderRef,
     getTabbableElements,
     initialFocus,
     refs.floating,
