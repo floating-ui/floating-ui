@@ -199,16 +199,16 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       let cleanup: () => void;
       if (modal) {
         if (orderRef.current.includes('reference')) {
-          hideOthers([reference, floating]);
+          cleanup = hideOthers([reference, floating]);
         } else {
-          hideOthers(floating);
+          cleanup = hideOthers(floating);
         }
         // Comboboxes should not have "modal" focus management, but every other
         // node between the input and listbox popup needs to be hidden from
         // screen readers, so that touch-based screen readers immediately focus
         // the listbox options.
       } else if (reference.getAttribute('role') === 'combobox') {
-        hideOthers([reference, floating]);
+        cleanup = hideOthers([reference, floating]);
       }
 
       return () => {
