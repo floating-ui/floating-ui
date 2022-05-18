@@ -238,6 +238,44 @@ describe('modal', () => {
 
     cleanup();
   });
+
+  test('false - comboboxes hide all other nodes', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <button
+            role="combobox"
+            data-testid="reference"
+            ref={reference}
+            onFocus={() => setOpen(!open)}
+          />
+          <button data-testid="btn-1" />
+          <button data-testid="btn-2" />
+          {open && (
+            <FloatingFocusManager context={context} modal={false}>
+              <div role="listbox" ref={floating} data-testid="floating" />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.focus(screen.getByTestId('reference'));
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
+
+    cleanup();
+  });
 });
 
 describe('order', () => {
