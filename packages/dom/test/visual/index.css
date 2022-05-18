@@ -118,6 +118,7 @@ main {
 .container {
   border: 1px solid black;
   display: grid;
+  place-items: center;
   width: 700px;
   height: 500px;
   margin-bottom: 1rem;
