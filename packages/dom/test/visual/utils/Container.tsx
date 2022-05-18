@@ -39,6 +39,7 @@ export function Container({children, update}: Props) {
       <div className='container' style={{
         position: 'relative',
         overflow: 'scroll',
+        placeItems: 'initial',
         ...getStyleForPosition(position)
       }}>
         {children}
