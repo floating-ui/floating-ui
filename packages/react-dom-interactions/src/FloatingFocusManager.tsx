@@ -102,6 +102,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }) as Array<HTMLElement>;
   }, [orderRef, refs.floating, refs.reference]);
 
+  const isInputCombobox = React.useCallback(
+    () =>
+      isHTMLElement(refs.reference.current) &&
+      refs.reference.current.getAttribute('role') === 'combobox' &&
+      refs.reference.current.tagName === 'INPUT',
+    [refs]
+  );
+
   React.useEffect(() => {
     if (!modal) {
       return;
@@ -203,12 +211,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         } else {
           cleanup = hideOthers(floating);
         }
-        // Comboboxes should not have "modal" focus management, but every other
-        // node between the input and listbox popup needs to be hidden from
-        // screen readers, so that touch-based screen readers immediately focus
-        // the listbox options.
-      } else if (reference.getAttribute('role') === 'combobox') {
-        cleanup = hideOthers([reference, floating]);
       }
 
       return () => {
@@ -261,6 +263,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       {modal && (
         <FocusGuard
           onFocus={(event) => {
+            if (isInputCombobox()) {
+              return;
+            }
+
             stopEvent(event);
             const els = getTabbableElements();
             if (order[0] === 'reference') {
@@ -278,6 +284,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       {modal && endGuard && (
         <FocusGuard
           onFocus={(event) => {
+            if (isInputCombobox()) {
+              return;
+            }
+
             stopEvent(event);
             focus(getTabbableElements()[0]);
           }}
