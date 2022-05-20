@@ -239,7 +239,7 @@ describe('modal', () => {
     cleanup();
   });
 
-  test('false - comboboxes hide all other nodes', async () => {
+  test('true - comboboxes hide all other nodes', async () => {
     function App() {
       const [open, setOpen] = useState(false);
       const {reference, floating, context} = useFloating({
@@ -249,11 +249,53 @@ describe('modal', () => {
 
       return (
         <>
-          <button
+          <input
             role="combobox"
             data-testid="reference"
             ref={reference}
-            onFocus={() => setOpen(!open)}
+            onFocus={() => setOpen(true)}
+          />
+          <button data-testid="btn-1" />
+          <button data-testid="btn-2" />
+          {open && (
+            <FloatingFocusManager
+              context={context}
+              modal={true}
+              order={['reference']}
+            >
+              <div role="listbox" ref={floating} data-testid="floating" />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.focus(screen.getByTestId('reference'));
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
+
+    cleanup();
+  });
+
+  test('false - comboboxes do not hide all other nodes', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <input
+            role="combobox"
+            data-testid="reference"
+            ref={reference}
+            onFocus={() => setOpen(true)}
           />
           <button data-testid="btn-1" />
           <button data-testid="btn-2" />
@@ -271,8 +313,8 @@ describe('modal', () => {
     fireEvent.focus(screen.getByTestId('reference'));
     expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
-    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
-    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
 
     cleanup();
   });
