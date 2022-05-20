@@ -47,9 +47,15 @@ const Reference = forwardRef(({className, children}, ref) => {
   );
 });
 
-function GridItem({title, description, chrome, titleClass}) {
+function GridItem({
+  title,
+  description,
+  chrome,
+  titleClass,
+  demoLink,
+}) {
   return (
-    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 rounded-lg px-4 py-8 sm:p-8">
+    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 rounded-lg px-4 py-8 sm:p-8 relative">
       <div className="overflow-hidden">
         <h3 className={`text-3xl font-bold mb-2 ${titleClass}`}>
           {title}
@@ -59,6 +65,14 @@ function GridItem({title, description, chrome, titleClass}) {
       <div className="relative items-center bg-gray-800 rounded-lg lg:h-auto">
         {chrome}
       </div>
+      <a
+        className="text-red-300 hover:text-red-200 border-red-300/30 border-b-2 text-center font-bold absolute right-6 top-6"
+        href={demoLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        CodeSandbox
+      </a>
     </div>
   );
 }
@@ -71,6 +85,7 @@ function Placement() {
       titleClass="text-violet-300"
       title="Placement"
       description="Places your floating element relative to another one."
+      demoLink="https://codesandbox.io/s/lively-waterfall-rbc1pi?file=/src/index.js"
       chrome={
         <Chrome
           label="Click the dots"
@@ -223,6 +238,7 @@ function Shift() {
       title="Shift"
       titleClass="text-blue-300"
       description="Shifts your floating element to keep it in view."
+      demoLink="https://codesandbox.io/s/great-lake-5l7m95?file=/src/index.js"
       chrome={
         <div
           ref={setBoundary}
@@ -281,6 +297,7 @@ function Flip() {
       title="Flip"
       titleClass="text-red-300"
       description="Changes the placement of your floating element to keep it in view."
+      demoLink="https://codesandbox.io/s/beautiful-kirch-th1e0j?file=/src/index.js"
       chrome={
         <div
           className="relative overflow-hidden"
@@ -313,6 +330,7 @@ function Size() {
       title="Size"
       titleClass="text-green-300"
       description="Changes the size of your floating element to keep it in view."
+      demoLink="https://codesandbox.io/s/focused-hamilton-qez78d?file=/src/index.js"
       chrome={
         <Chrome label="Scroll the container" scrollable center>
           <Floating
@@ -350,6 +368,7 @@ function Arrow() {
       title="Arrow"
       titleClass="text-yellow-300"
       description="Dynamically positions an arrow element that is center-aware."
+      demoLink="https://codesandbox.io/s/interesting-wescoff-6e1w5i?file=/src/index.js"
       chrome={
         <div
           ref={setBoundary}
@@ -443,6 +462,7 @@ function Virtual() {
     <GridItem
       title="Virtual"
       description="Anchor relative to any coordinates, such as your mouse cursor."
+      demoLink="https://codesandbox.io/s/fancy-worker-xkr8xl?file=/src/index.js"
       chrome={
         <Chrome label="Move your mouse">
           <div
