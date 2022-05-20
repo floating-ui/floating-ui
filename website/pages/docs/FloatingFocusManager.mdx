@@ -165,3 +165,12 @@ accessed. This includes screen reader virtual cursors.
   {/* floating element */}
 </FloatingFocusManager>
 ```
+
+#### Input comboboxes
+
+`<input />{:js}` comboboxes should not be modal when possible.
+When setting them to modal, focus does not become modal but
+screen reader virtual cursors do become modal. Therefore, the
+listbox should have a visually-hidden dismiss button to ensure
+touch-based screen reader users can escape the list without
+needing to select anything.

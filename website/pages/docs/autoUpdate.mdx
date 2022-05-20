@@ -31,8 +31,7 @@ the screen).
 cleanup();
 ```
 
-> The update function is called immediately by default and
-> requires a `ResizeObserver{:.class}`.
+> Requires a `ResizeObserver{:.class}` by default.
 
 ## Options
 
@@ -83,9 +82,6 @@ floating elements resized. This uses a `ResizeObserver{:.class}`.
 
 To support old browsers, polyfill the constructor, or disable
 this option and update manually when the elements resize.
-
-> Disabling this means `autoUpdate(){:js}` will no longer call
-> your update function immediately.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
