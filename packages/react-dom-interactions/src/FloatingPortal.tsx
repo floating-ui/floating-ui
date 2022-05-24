@@ -49,21 +49,13 @@ export const FloatingPortal = ({
   id?: string;
   root?: HTMLElement | null;
 }): React.ReactPortal | null => {
-  const [mounted, setMounted] = React.useState(false);
   const portalNode = useFloatingPortalNode({id, enabled: !root});
-
-  useLayoutEffect(() => {
-    if (root) {
-      return;
-    }
-    setMounted(true);
-  }, [root]);
 
   if (root) {
     return createPortal(children, root);
   }
 
-  if (mounted && portalNode) {
+  if (portalNode) {
     return createPortal(children, portalNode);
   }
 
