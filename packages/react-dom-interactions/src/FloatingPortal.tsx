@@ -23,17 +23,15 @@ export const useFloatingPortalNode = ({
     if (rootNode) {
       setPortalEl(rootNode);
     } else {
-      const newPortalRef = document.createElement('div');
-      newPortalRef.id = id;
-      setPortalEl(newPortalRef);
+      const newPortalEl = document.createElement('div');
+      newPortalEl.id = id;
+      setPortalEl(newPortalEl);
+
+      if (!document.body.contains(newPortalEl)) {
+        document.body.appendChild(newPortalEl);
+      }
     }
   }, [id, enabled]);
-
-  useLayoutEffect(() => {
-    if (portalEl && !document.body.contains(portalEl)) {
-      document.body.appendChild(portalEl);
-    }
-  }, [portalEl]);
 
   return portalEl;
 };
