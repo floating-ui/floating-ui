@@ -11,7 +11,7 @@ export const useFloatingPortalNode = ({
   id?: string;
   enabled?: boolean;
 } = {}) => {
-  const portalRef = React.useRef<HTMLElement | null>(null);
+  const [portalRef, setPortalRef] = React.useState<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -21,18 +21,21 @@ export const useFloatingPortalNode = ({
     const rootNode = document.getElementById(id);
 
     if (rootNode) {
-      portalRef.current = rootNode;
+      setPortalRef(rootNode);
     } else {
-      portalRef.current = document.createElement('div');
-      portalRef.current.id = id;
-    }
-
-    if (!document.body.contains(portalRef.current)) {
-      document.body.appendChild(portalRef.current);
+      const newPortalRef = document.createElement('div');
+      newPortalRef.id = id;
+      setPortalRef(newPortalRef);
     }
   }, [id, enabled]);
 
-  return portalRef.current;
+  useLayoutEffect(() => {
+    if (portalRef && !document.body.contains(portalRef)) {
+      document.body.appendChild(portalRef);
+    }
+  }, [portalRef]);
+
+  return portalRef;
 };
 
 /**
