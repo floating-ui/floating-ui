@@ -232,9 +232,7 @@ describe('modal', () => {
     await userEvent.tab({shift: true});
     await userEvent.tab({shift: true});
 
-    expect(
-      screen.getByTestId('floating').contains(document.activeElement)
-    ).toBe(false);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
     cleanup();
   });
