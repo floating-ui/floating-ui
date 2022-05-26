@@ -245,7 +245,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     mouseOnly,
     onOpenChangeRef,
     open,
-    parentId,
     tree,
     restMs,
     cleanupPointerMoveHandler,
