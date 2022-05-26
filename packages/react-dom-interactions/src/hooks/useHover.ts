@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useFloatingTree} from '../FloatingTree';
+import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -8,8 +8,9 @@ import type {
   ReferenceType,
 } from '../types';
 import {getDocument} from '../utils/getDocument';
-import {isElement} from '../utils/is';
+import {isElement, isHTMLElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
+import {usePrevious} from '../utils/usePrevious';
 
 export function getDelay(
   value: Props['delay'],
@@ -60,8 +61,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const {open, onOpenChange, dataRef, events, refs} = context;
 
   const tree = useFloatingTree<RT>();
+  const parentId = useFloatingParentNodeId();
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
+  const previousOpen = usePrevious(open);
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef<any>();
@@ -242,6 +245,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     mouseOnly,
     onOpenChangeRef,
     open,
+    parentId,
     tree,
     restMs,
     cleanupPointerMoveHandler,
@@ -249,10 +253,43 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     refs.floating,
   ]);
 
+  // Block pointer-events of every element other than the reference and floating
+  // while the floating element is open and has a `handleClose` handler. Also
+  // handles nested floating elements.
+  // https://github.com/floating-ui/floating-ui/issues/1722
   useLayoutEffect(() => {
-    if (!open) {
+    if (open && handleCloseRef.current) {
+      const doc = getDocument(refs.floating.current);
+      doc.body.style.pointerEvents = 'none';
+      const reference =
+        isHTMLElement(refs.reference.current) && refs.reference.current;
+      const floating = refs.floating.current;
+
+      if (reference && floating) {
+        const parentFloating = tree?.nodesRef.current.find(
+          (node) => node.id === parentId
+        )?.context?.refs.floating.current;
+
+        if (parentFloating) {
+          parentFloating.style.pointerEvents = '';
+        }
+
+        reference.style.pointerEvents = 'auto';
+        floating.style.pointerEvents = 'auto';
+
+        return () => {
+          reference.style.pointerEvents = '';
+          floating.style.pointerEvents = '';
+        };
+      }
+    }
+  }, [open, parentId, refs, tree, handleCloseRef]);
+
+  useLayoutEffect(() => {
+    if (previousOpen && !open) {
       pointerTypeRef.current = undefined;
       cleanupPointerMoveHandler();
+      getDocument(refs.floating.current).body.style.pointerEvents = '';
     }
   });
 
