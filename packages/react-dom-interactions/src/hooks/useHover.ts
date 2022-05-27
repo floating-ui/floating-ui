@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useFloatingTree} from '../FloatingTree';
+import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -8,8 +8,9 @@ import type {
   ReferenceType,
 } from '../types';
 import {getDocument} from '../utils/getDocument';
-import {isElement} from '../utils/is';
+import {isElement, isHTMLElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
+import {usePrevious} from '../utils/usePrevious';
 
 export function getDelay(
   value: Props['delay'],
@@ -60,14 +61,17 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const {open, onOpenChange, dataRef, events, refs} = context;
 
   const tree = useFloatingTree<RT>();
+  const parentId = useFloatingParentNodeId();
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
+  const previousOpen = usePrevious(open);
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef<any>();
   const handlerRef = React.useRef<(event: PointerEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
+  const performedPointerEventsMutationRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!enabled) {
@@ -84,7 +88,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       events.off('dismiss', onDismiss);
     };
-  }, [enabled, events, refs.floating]);
+  }, [enabled, events, refs]);
 
   React.useEffect(() => {
     if (!enabled || !handleCloseRef.current) {
@@ -102,7 +106,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs.floating, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
+  }, [refs, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
@@ -128,7 +132,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       );
       handlerRef.current = undefined;
     }
-  }, [refs.floating]);
+  }, [refs]);
+
+  const clearPointerEvents = React.useCallback(() => {
+    getDocument(refs.floating.current).body.style.pointerEvents = '';
+    performedPointerEventsMutationRef.current = false;
+  }, [refs]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -245,14 +254,50 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     restMs,
     cleanupPointerMoveHandler,
-    refs.reference,
-    refs.floating,
+    refs,
   ]);
 
+  // Block pointer-events of every element other than the reference and floating
+  // while the floating element is open and has a `handleClose` handler. Also
+  // handles nested floating elements.
+  // https://github.com/floating-ui/floating-ui/issues/1722
   useLayoutEffect(() => {
-    if (!open) {
+    if (!enabled) {
+      return;
+    }
+
+    if (open && handleCloseRef.current) {
+      getDocument(refs.floating.current).body.style.pointerEvents = 'none';
+      performedPointerEventsMutationRef.current = true;
+      const reference =
+        isHTMLElement(refs.reference.current) && refs.reference.current;
+      const floating = refs.floating.current;
+
+      if (reference && floating) {
+        const parentFloating = tree?.nodesRef.current.find(
+          (node) => node.id === parentId
+        )?.context?.refs.floating.current;
+
+        if (parentFloating) {
+          parentFloating.style.pointerEvents = '';
+        }
+
+        reference.style.pointerEvents = 'auto';
+        floating.style.pointerEvents = 'auto';
+
+        return () => {
+          reference.style.pointerEvents = '';
+          floating.style.pointerEvents = '';
+        };
+      }
+    }
+  }, [enabled, open, parentId, refs, tree, handleCloseRef]);
+
+  useLayoutEffect(() => {
+    if (previousOpen && !open) {
       pointerTypeRef.current = undefined;
       cleanupPointerMoveHandler();
+      clearPointerEvents();
     }
   });
 
@@ -261,8 +306,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       cleanupPointerMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
+
+      if (performedPointerEventsMutationRef.current) {
+        clearPointerEvents();
+      }
     };
-  }, [cleanupPointerMoveHandler]);
+  }, [cleanupPointerMoveHandler, clearPointerEvents]);
 
   if (!enabled) {
     return {};

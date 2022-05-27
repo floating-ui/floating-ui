@@ -3,6 +3,7 @@ import * as React from 'react';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
 import {activeElement} from './utils/activeElement';
+import {getAncestors} from './utils/getAncestors';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
 import {isElement, isHTMLElement} from './utils/is';
@@ -174,12 +175,20 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         !refs.reference.current.contains(relatedTarget);
 
       const isChildOpen =
-        tree && getChildren(tree, nodeId).some(({context}) => context?.open);
+        tree && getChildren(tree.nodesRef.current, nodeId).length > 0;
+
+      const isParentRelated =
+        tree &&
+        event.currentTarget === refs.reference.current &&
+        getAncestors(tree.nodesRef.current, nodeId)?.some((node) =>
+          node.context?.refs.floating.current?.contains(relatedTarget)
+        );
 
       if (
         focusMovedOutsideFloating &&
         focusMovedOutsideReference &&
-        !isChildOpen
+        !isChildOpen &&
+        !isParentRelated
       ) {
         onOpenChangeRef.current(false);
       }
@@ -214,7 +223,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     onOpenChangeRef,
     orderRef,
     getTabbableElements,
-    initialFocus,
     refs,
   ]);
 
@@ -237,14 +245,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         focus(previouslyFocusedElement);
       }
     };
-  }, [
-    preventTabbing,
-    getTabbableElements,
-    initialFocus,
-    modal,
-    returnFocus,
-    refs,
-  ]);
+  }, [preventTabbing, getTabbableElements, initialFocus, returnFocus, refs]);
 
   const isTypeableCombobox = () =>
     isHTMLElement(refs.reference.current) &&
