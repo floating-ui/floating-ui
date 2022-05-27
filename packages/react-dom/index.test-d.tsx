@@ -7,7 +7,18 @@ function App() {
   useFloating();
   const {reference, floating, update} = useFloating({
     placement: 'right',
-    middleware: [shift(), arrow({element: arrowRef})],
+    middleware: [
+      shift(),
+      arrow({element: arrowRef}),
+      {
+        name: 'test',
+        async fn({elements}) {
+          // @ts-expect-error
+          elements.floating.style = '';
+          return {};
+        },
+      },
+    ],
     strategy: 'fixed',
   });
   reference(null);
