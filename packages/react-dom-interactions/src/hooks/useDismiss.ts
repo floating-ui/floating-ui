@@ -68,7 +68,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     function onPointerDown(event: MouseEvent) {
       const targetIsInsideChildren =
         tree &&
-        getChildren(tree, nodeId).some((node) =>
+        getChildren(tree.nodesRef.current, nodeId).some((node) =>
           isEventTargetWithin(event, node.context?.refs.floating.current)
         );
 
