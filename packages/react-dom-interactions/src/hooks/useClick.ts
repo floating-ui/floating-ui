@@ -1,6 +1,7 @@
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import * as React from 'react';
 import {isHTMLElement} from '../utils/is';
+import {isTypeableElement} from '../utils/isTypeableElement';
 
 export interface Props {
   enabled?: boolean;
@@ -31,6 +32,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     );
   }
 
+  function isSpaceIgnored() {
+    return isTypeableElement(refs.reference.current);
+  }
+
   if (!enabled) {
     return {};
   }
@@ -38,6 +43,12 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   return {
     reference: {
       onPointerDown(event) {
+        // Ignore all buttons except for the "main" button.
+        // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+        if (event.button !== 0) {
+          return;
+        }
+
         pointerTypeRef.current = event.pointerType;
 
         if (pointerTypeRef.current === 'mouse' && ignoreMouse) {
@@ -85,7 +96,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (event.key === ' ') {
+        if (event.key === ' ' && !isSpaceIgnored()) {
           // Prvent scrolling
           event.preventDefault();
         }
@@ -101,7 +112,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         }
       },
       onKeyUp(event) {
-        if (isButton()) {
+        if (isButton() || isSpaceIgnored()) {
           return;
         }
 
