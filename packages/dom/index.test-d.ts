@@ -137,6 +137,16 @@ autoPlacement({
 size({boundary: document.body});
 size({boundary: [document.body]});
 size({boundary: 'clippingAncestors'});
+size({
+  apply({elements, availableHeight, availableWidth}) {
+    availableHeight;
+    availableWidth;
+    // @ts-expect-error
+    elements.floating.style = '';
+    // @ts-expect-error
+    elements.reference.style = '';
+  },
+});
 
 offset();
 offset(5);
