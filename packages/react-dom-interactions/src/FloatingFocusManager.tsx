@@ -1,6 +1,6 @@
 import {hideOthers} from 'aria-hidden';
 import * as React from 'react';
-import {useFloatingParentNodeId, useFloatingTree} from './FloatingTree';
+import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
 import {activeElement} from './utils/activeElement';
 import {getAncestors} from './utils/getAncestors';
@@ -71,7 +71,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const orderRef = useLatestRef(order);
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const tree = useFloatingTree();
-  const parentId = useFloatingParentNodeId();
 
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
@@ -220,12 +219,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [
     nodeId,
     tree,
-    parentId,
     modal,
     onOpenChangeRef,
     orderRef,
     getTabbableElements,
-    initialFocus,
     refs,
   ]);
 
@@ -248,14 +245,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         focus(previouslyFocusedElement);
       }
     };
-  }, [
-    preventTabbing,
-    getTabbableElements,
-    initialFocus,
-    modal,
-    returnFocus,
-    refs,
-  ]);
+  }, [preventTabbing, getTabbableElements, initialFocus, returnFocus, refs]);
 
   const isTypeableCombobox = () =>
     isHTMLElement(refs.reference.current) &&
