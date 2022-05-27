@@ -1,5 +1,5 @@
 import type {Placement} from '@floating-ui/core';
-import type {LimitShiftOptions} from '@floating-ui/core/src/middleware/shift';
+import type {LimitShiftOptions} from '@floating-ui/core';
 import {
   useFloating,
   shift,

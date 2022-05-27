@@ -162,6 +162,6 @@ export {autoPlacement, Options as AutoPlacementOptions} from './middleware/autoP
 export {flip, Options as FlipOptions} from './middleware/flip';
 export {hide, Options as HideOptions} from './middleware/hide';
 export {offset, Options as OffsetOptions} from './middleware/offset';
-export {shift, limitShift, Options as ShiftOptions} from './middleware/shift';
+export {shift, limitShift, Options as ShiftOptions, LimitShiftOptions} from './middleware/shift';
 export {size, Options as SizeOptions} from './middleware/size';
 export {inline, Options as InlineOptions} from './middleware/inline';
