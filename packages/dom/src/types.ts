@@ -70,7 +70,7 @@ export type SizeOptions = Omit<CoreSizeOptions, 'apply'> & {
    * @default undefined
    */
   apply(
-    middlewareArguments: MiddlewareArguments & {
+    args: MiddlewareArguments & {
       availableWidth: number;
       availableHeight: number;
     }
