@@ -71,6 +71,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const handlerRef = React.useRef<(event: PointerEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
+  const performedPointerEventsMutationRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!enabled) {
@@ -87,7 +88,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       events.off('dismiss', onDismiss);
     };
-  }, [enabled, events, refs.floating]);
+  }, [enabled, events, refs]);
 
   React.useEffect(() => {
     if (!enabled || !handleCloseRef.current) {
@@ -105,7 +106,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs.floating, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
+  }, [refs, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
@@ -131,7 +132,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       );
       handlerRef.current = undefined;
     }
-  }, [refs.floating]);
+  }, [refs]);
+
+  const clearPointerEvents = React.useCallback(() => {
+    getDocument(refs.floating.current).body.style.pointerEvents = '';
+    performedPointerEventsMutationRef.current = false;
+  }, [refs]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -248,8 +254,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     restMs,
     cleanupPointerMoveHandler,
-    refs.reference,
-    refs.floating,
+    refs,
   ]);
 
   // Block pointer-events of every element other than the reference and floating
@@ -257,9 +262,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   // handles nested floating elements.
   // https://github.com/floating-ui/floating-ui/issues/1722
   useLayoutEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     if (open && handleCloseRef.current) {
-      const doc = getDocument(refs.floating.current);
-      doc.body.style.pointerEvents = 'none';
+      getDocument(refs.floating.current).body.style.pointerEvents = 'none';
+      performedPointerEventsMutationRef.current = true;
       const reference =
         isHTMLElement(refs.reference.current) && refs.reference.current;
       const floating = refs.floating.current;
@@ -282,13 +291,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         };
       }
     }
-  }, [open, parentId, refs, tree, handleCloseRef]);
+  }, [enabled, open, parentId, refs, tree, handleCloseRef]);
 
   useLayoutEffect(() => {
     if (previousOpen && !open) {
       pointerTypeRef.current = undefined;
       cleanupPointerMoveHandler();
-      getDocument(refs.floating.current).body.style.pointerEvents = '';
+      clearPointerEvents();
     }
   });
 
@@ -297,8 +306,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       cleanupPointerMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
+
+      if (performedPointerEventsMutationRef.current) {
+        clearPointerEvents();
+      }
     };
-  }, [cleanupPointerMoveHandler]);
+  }, [cleanupPointerMoveHandler, clearPointerEvents]);
 
   if (!enabled) {
     return {};
