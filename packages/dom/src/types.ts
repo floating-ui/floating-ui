@@ -14,8 +14,9 @@ import type {
   RootBoundary,
   ShiftOptions,
   SideObject,
-  SizeOptions,
-  Strategy
+  SizeOptions as CoreSizeOptions,
+  Strategy,
+  ComputePositionConfig as CoreComputePositionConfig,
 } from '@floating-ui/core';
 
 type Promisable<T> = T | Promise<T>;
@@ -60,6 +61,27 @@ export type DetectOverflowOptions = Omit<
   'boundary'
 > & {
   boundary: Boundary;
+};
+
+export type SizeOptions = Omit<CoreSizeOptions, 'apply'> & {
+  /**
+   * Function that is called to perform style mutations to the floating element
+   * to change its size.
+   * @default undefined
+   */
+  apply(
+    middlewareArguments: MiddlewareArguments & {
+      availableWidth: number;
+      availableHeight: number;
+    }
+  ): void;
+};
+
+export type ComputePositionConfig = Omit<
+  CoreComputePositionConfig,
+  'middleware'
+> & {
+  middleware?: Middleware[];
 };
 
 /**
@@ -176,7 +198,6 @@ export type {
   RootBoundary,
   MiddlewareReturn,
   MiddlewareData,
-  ComputePositionConfig,
   ComputePositionReturn,
 } from '@floating-ui/core';
 
