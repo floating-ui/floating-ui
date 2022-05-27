@@ -1,5 +1,5 @@
 import type {Placement} from '@floating-ui/core';
-import type {Options} from '@floating-ui/core/src/middleware/flip';
+import type {FlipOptions} from '@floating-ui/core';
 import {allPlacements} from '../utils/allPlacements';
 import {useFloating, flip} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect} from 'react';
@@ -7,7 +7,7 @@ import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 
 const BOOLS = [true, false];
-const FALLBACK_STRATEGIES: Array<Options['fallbackStrategy']> = [
+const FALLBACK_STRATEGIES: Array<FlipOptions['fallbackStrategy']> = [
   'bestFit',
   'initialPlacement',
 ];
@@ -18,7 +18,7 @@ export function Flip() {
   const [crossAxis, setCrossAxis] = useState(true);
   const [fallbackPlacements, setFallbackPlacements] = useState<Placement[]>();
   const [fallbackStrategy, setFallbackStrategy] =
-    useState<Options['fallbackStrategy']>('bestFit');
+    useState<FlipOptions['fallbackStrategy']>('bestFit');
   const [flipAlignment, setFlipAlignment] = useState(true);
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,

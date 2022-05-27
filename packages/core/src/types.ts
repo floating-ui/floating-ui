@@ -155,13 +155,13 @@ export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';
 export {rectToClientRect} from './utils/rectToClientRect';
-export {detectOverflow} from './detectOverflow';
+export {detectOverflow, Options as DetectOverflowOptions} from './detectOverflow';
 
-export {arrow} from './middleware/arrow';
-export {autoPlacement} from './middleware/autoPlacement';
-export {flip} from './middleware/flip';
-export {hide} from './middleware/hide';
-export {offset} from './middleware/offset';
-export {shift, limitShift} from './middleware/shift';
-export {size} from './middleware/size';
-export {inline} from './middleware/inline';
+export {arrow, Options as ArrowOptions} from './middleware/arrow';
+export {autoPlacement, Options as AutoPlacementOptions} from './middleware/autoPlacement';
+export {flip, Options as FlipOptions} from './middleware/flip';
+export {hide, Options as HideOptions} from './middleware/hide';
+export {offset, Options as OffsetOptions} from './middleware/offset';
+export {shift, limitShift, Options as ShiftOptions, LimitShiftOptions} from './middleware/shift';
+export {size, Options as SizeOptions} from './middleware/size';
+export {inline, Options as InlineOptions} from './middleware/inline';
