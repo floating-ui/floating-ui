@@ -6,6 +6,7 @@ import {activeElement} from './utils/activeElement';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
 import {isElement, isHTMLElement} from './utils/is';
+import {isTypeableElement, TYPEABLE_SELECTOR} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
@@ -18,10 +19,9 @@ function focus(el: HTMLElement | undefined) {
 }
 
 const SELECTOR =
-  "input:not([type='hidden']):not([disabled]),select:not([disabled])," +
-  'textarea:not([disabled]),a[href],button:not([disabled]),[tabindex],' +
+  'select:not([disabled]),a[href],button:not([disabled]),[tabindex],' +
   'iframe,object,embed,area[href],audio[controls],video[controls],' +
-  "[contenteditable]:not([contenteditable='false'])";
+  TYPEABLE_SELECTOR;
 
 const FocusGuard = React.forwardRef<
   HTMLSpanElement,
@@ -100,15 +100,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           return tabIndex[0].trim() !== '-';
         }
       }) as Array<HTMLElement>;
-  }, [orderRef, refs.floating, refs.reference]);
-
-  const isInputCombobox = React.useCallback(
-    () =>
-      isHTMLElement(refs.reference.current) &&
-      refs.reference.current.getAttribute('role') === 'combobox' &&
-      refs.reference.current.tagName === 'INPUT',
-    [refs]
-  );
+  }, [orderRef, refs]);
 
   React.useEffect(() => {
     if (!modal) {
@@ -168,14 +160,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [
-    preventTabbing,
-    modal,
-    getTabbableElements,
-    orderRef,
-    refs.floating,
-    refs.reference,
-  ]);
+  }, [preventTabbing, modal, getTabbableElements, orderRef, refs]);
 
   React.useEffect(() => {
     function onFocusOut(event: FocusEvent) {
@@ -230,8 +215,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     orderRef,
     getTabbableElements,
     initialFocus,
-    refs.floating,
-    refs.reference,
+    refs,
   ]);
 
   React.useEffect(() => {
@@ -259,15 +243,20 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     initialFocus,
     modal,
     returnFocus,
-    refs.floating,
+    refs,
   ]);
+
+  const isTypeableCombobox = () =>
+    isHTMLElement(refs.reference.current) &&
+    refs.reference.current.getAttribute('role') === 'combobox' &&
+    isTypeableElement(refs.reference.current);
 
   return (
     <>
       {modal && (
         <FocusGuard
           onFocus={(event) => {
-            if (isInputCombobox()) {
+            if (isTypeableCombobox()) {
               return;
             }
 
@@ -288,7 +277,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       {modal && endGuard && (
         <FocusGuard
           onFocus={(event) => {
-            if (isInputCombobox()) {
+            if (isTypeableCombobox()) {
               return;
             }
 

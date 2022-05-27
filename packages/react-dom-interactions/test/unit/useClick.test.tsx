@@ -3,7 +3,11 @@ import {useState} from 'react';
 import {useClick, useFloating, useInteractions} from '../../src';
 import type {Props} from '../../src/hooks/useClick';
 
-function App({button = true, ...props}: Props & {button?: boolean}) {
+function App({
+  button = true,
+  typeable = false,
+  ...props
+}: Props & {button?: boolean; typeable?: boolean}) {
   const [open, setOpen] = useState(false);
   const {reference, floating, context} = useFloating({
     open,
@@ -13,7 +17,7 @@ function App({button = true, ...props}: Props & {button?: boolean}) {
     useClick(context, props),
   ]);
 
-  const Tag = button ? 'button' : 'div';
+  const Tag = typeable ? 'input' : button ? 'button' : 'div';
 
   return (
     <>
@@ -136,6 +140,27 @@ describe('non-buttons', () => {
 
     const button = screen.getByTestId('reference');
     fireEvent.keyUp(button, {key: ' '});
+
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('typeable reference does not receive space key handler', async () => {
+    render(<App typeable={true} />);
+
+    const button = screen.getByTestId('reference');
+    fireEvent.keyDown(button, {key: ' '});
+    fireEvent.keyUp(button, {key: ' '});
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('typeable reference does receive Enter key handler', async () => {
+    render(<App typeable={true} />);
+
+    const button = screen.getByTestId('reference');
+    fireEvent.keyDown(button, {key: 'Enter'});
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {activeElement} from '../utils/activeElement';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 
@@ -28,7 +29,10 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     const win = doc.defaultView ?? window;
 
     function onBlur() {
-      if (pointerTypeRef.current) {
+      if (
+        pointerTypeRef.current &&
+        refs.reference.current === activeElement(doc)
+      ) {
         blockFocusRef.current = !open;
       }
     }
@@ -46,7 +50,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       win.removeEventListener('focus', onFocus);
       win.removeEventListener('blur', onBlur);
     };
-  }, [refs.floating, open, enabled]);
+  }, [refs, open, enabled]);
 
   React.useEffect(() => {
     if (!enabled) {
