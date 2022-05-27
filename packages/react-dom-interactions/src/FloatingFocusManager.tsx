@@ -178,21 +178,23 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
-    function onFloatingFocusOut(event: FocusEvent) {
-      const target = event.relatedTarget as Element | null;
-      if (
-        !refs.floating.current?.contains(target) &&
+    function onFocusOut(event: FocusEvent) {
+      const relatedTarget = event.relatedTarget as Element | null;
+
+      const focusMovedOutsideFloating =
+        !refs.floating.current?.contains(relatedTarget);
+
+      const focusMovedOutsideReference =
         isElement(refs.reference.current) &&
-        !refs.reference.current.contains(target) &&
-        !(
-          tree && getChildren(tree, nodeId).some(({context}) => context?.open)
-        ) &&
-        !(
-          tree &&
-          getChildren(tree, nodeId).some((child) =>
-            child.context?.refs.floating.current?.contains(target)
-          )
-        )
+        !refs.reference.current.contains(relatedTarget);
+
+      const isChildOpen =
+        tree && getChildren(tree, nodeId).some(({context}) => context?.open);
+
+      if (
+        focusMovedOutsideFloating &&
+        focusMovedOutsideReference &&
+        !isChildOpen
       ) {
         onOpenChangeRef.current(false);
       }
@@ -202,7 +204,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const reference = refs.reference.current;
 
     if (floating && isHTMLElement(reference)) {
-      !modal && floating.addEventListener('focusout', onFloatingFocusOut);
+      !modal && floating.addEventListener('focusout', onFocusOut);
+      !modal && reference.addEventListener('focusout', onFocusOut);
 
       let cleanup: () => void;
       if (modal) {
@@ -214,7 +217,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       return () => {
-        !modal && floating.removeEventListener('focusout', onFloatingFocusOut);
+        !modal && floating.removeEventListener('focusout', onFocusOut);
+        !modal && reference.removeEventListener('focusout', onFocusOut);
         cleanup?.();
       };
     }
