@@ -210,7 +210,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     // Ensure the floating element closes after scrolling even if the pointer
     // did not move.
     // https://github.com/floating-ui/floating-ui/discussions/1692
-    function onPointerLeave(event: PointerEvent) {
+    function onScrollMouseLeave(event: MouseEvent) {
       handleCloseRef.current?.({
         ...context,
         tree,
@@ -221,21 +221,21 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           cleanupPointerMoveHandler();
           closeWithDelay();
         },
-      })(event);
+      })(event as PointerEvent);
     }
 
     const floating = refs.floating.current;
     const reference = refs.reference.current;
 
     if (isElement(reference)) {
-      open && reference.addEventListener('pointerleave', onPointerLeave);
-      floating?.addEventListener('pointerleave', onPointerLeave);
+      open && reference.addEventListener('mouseleave', onScrollMouseLeave);
+      floating?.addEventListener('mouseleave', onScrollMouseLeave);
       reference.addEventListener('mousemove', onMouseEnter, {once: true});
       reference.addEventListener('mouseenter', onMouseEnter);
       reference.addEventListener('mouseleave', onMouseLeave);
       return () => {
-        open && reference.removeEventListener('pointerleave', onPointerLeave);
-        floating?.removeEventListener('pointerleave', onPointerLeave);
+        open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
+        floating?.removeEventListener('mouseleave', onScrollMouseLeave);
         reference.removeEventListener('mousemove', onMouseEnter);
         reference.removeEventListener('mouseenter', onMouseEnter);
         reference.removeEventListener('mouseleave', onMouseLeave);
