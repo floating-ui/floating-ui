@@ -90,8 +90,6 @@ export async function detectOverflow(
       : rects[elementContext]
   );
 
-  // positive = overflowing the clipping rect
-  // 0 or negative = within the clipping rect
   return {
     top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
     bottom:

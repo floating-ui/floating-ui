@@ -30,7 +30,7 @@ const bundles = [
   },
 ];
 
-const buildExport = bundles.map(({input, output}) => ({
+export default bundles.map(({input, output}) => ({
   input,
   output,
   external: ['react', 'react-native', '@floating-ui/core'],
@@ -51,5 +51,3 @@ const buildExport = bundles.map(({input, output}) => ({
     output.file.includes('.min.') && terser(),
   ],
 }));
-
-export default buildExport;

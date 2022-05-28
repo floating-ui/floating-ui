@@ -1,13 +1,10 @@
 import {isShadowRoot} from './is';
 
-export function contains(
-  parent: Element | null,
-  child: Element | null
-): boolean {
-  const rootNode = child?.getRootNode?.();
+export function contains(parent: Element, child: Element): boolean {
+  const rootNode = child.getRootNode?.();
 
   // First, attempt with faster native method
-  if (parent?.contains(child)) {
+  if (parent.contains(child)) {
     return true;
   }
   // then fallback to custom implementation with Shadow DOM support
