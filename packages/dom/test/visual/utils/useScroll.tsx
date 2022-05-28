@@ -44,7 +44,7 @@ export const useScroll = ({
   });
 
   useEffect(() => {
-    if (!refs.reference.current || !refs.floating.current) {
+    if (!refs.reference.current) {
       return;
     }
 
@@ -52,7 +52,9 @@ export const useScroll = ({
       ...(isElement(refs.reference.current)
         ? getOverflowAncestors(refs.reference.current)
         : []),
-      ...getOverflowAncestors(refs.floating.current),
+      ...(refs.floating.current
+        ? getOverflowAncestors(refs.floating.current)
+        : []),
     ];
 
     const localUpdate = () => {
