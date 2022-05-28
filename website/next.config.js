@@ -17,8 +17,8 @@ const replaceVariables = () => async (tree) => {
 
   visit(tree, 'code', (node) => {
     node.value = node.value
-      .replace('__CORE_VERSION__', pkgs[0].version)
-      .replace('__DOM_VERSION__', pkgs[1].version);
+      .replaceAll('__CORE_VERSION__', pkgs[0].version)
+      .replaceAll('__DOM_VERSION__', pkgs[1].version);
   });
 };
 
