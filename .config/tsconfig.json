@@ -12,6 +12,7 @@
     "emitDeclarationOnly": true,
     "jsx": "react-jsx",
     "outDir": "../packages",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "strict": true
   }
 }
