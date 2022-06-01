@@ -5,8 +5,8 @@ function mergeProps(
   userProps: React.HTMLProps<Element> | undefined,
   propsList: Array<ElementProps | void>,
   elementKey: 'reference' | 'floating' | 'item'
-): any {
-  const fnsMap: Record<string, Array<(...args: unknown[]) => void>> = {};
+): Record<string, unknown> {
+  const map = new Map<string, Array<(...args: unknown[]) => void>>();
 
   return {
     ...(elementKey === 'floating' && {tabIndex: -1}),
@@ -21,16 +21,16 @@ function mergeProps(
 
         Object.entries(props).forEach(([key, value]) => {
           if (key.indexOf('on') === 0) {
-            if (!fnsMap[key]) {
-              fnsMap[key] = [];
+            if (!map.has(key)) {
+              map.set(key, []);
             }
 
             if (typeof value === 'function') {
-              fnsMap[key].push(value);
+              map.get(key)?.push(value);
             }
 
             acc[key] = (...args: unknown[]) => {
-              fnsMap[key].forEach((fn) => fn(...args));
+              map.get(key)?.forEach((fn) => fn(...args));
             };
           } else {
             acc[key] = value;

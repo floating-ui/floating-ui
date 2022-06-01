@@ -28,7 +28,9 @@ test('correctly merges functions', () => {
 
   const {onClick, onKeyDown} = getReferenceProps({onClick: userOnClick});
 
+  // @ts-expect-error
   onClick();
+  // @ts-expect-error
   onKeyDown();
 
   expect(firstInteractionOnClick).toHaveBeenCalledTimes(1);
@@ -41,6 +43,7 @@ test('does not error with undefined user supplied functions', () => {
   const {getReferenceProps} = useInteractions([{reference: {onClick() {}}}]);
 
   expect(() =>
+    // @ts-expect-error
     getReferenceProps({onClick: undefined}).onClick()
   ).not.toThrowError();
 });
