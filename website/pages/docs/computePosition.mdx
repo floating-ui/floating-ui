@@ -41,7 +41,7 @@ coordinates of the floating element relative to its
 The recommended way to position the tooltip is to use
 `Object.assign(){:js}` on the style object:
 
-```js {6-9,12-15}
+```js {6-11,14-17}
 import {computePosition} from '@floating-ui/dom';
 
 const button = document.querySelector('#button');
@@ -50,6 +50,8 @@ const tooltip = document.querySelector('#tooltip');
 // Can be done in your CSS
 Object.assign(tooltip.style, {
   position: 'absolute',
+  top: '0',
+  left: '0',
 });
 
 computePosition(button, tooltip).then(({x, y}) => {
@@ -60,9 +62,20 @@ computePosition(button, tooltip).then(({x, y}) => {
 });
 ```
 
-Your floating element must have `position: absolute{:sass}`
-**already applied** before `computePosition(){:js}` is called, so
-that its dimensions are read correctly.
+The layout of the floating element prior to being positioned
+matters:
+
+- The CSS position must be `'absolute'{:js}` prior to
+  `computePosition(){:js}` being called. This sets the correct
+  initial dimensions (instead of being "block" layout).
+- Setting `top{:.objectKey}` and `left{:.objectKey}` to
+  `'0'{:js}` initially minimizes layout interference with the
+  dimensions of the element, so that its final dimensions are
+  ready before being positioned.
+
+If your floating element is too big to fit in the viewport prior
+to being positioned, it can cause issues with the calculations.
+Use [size](/docs/size) to constrain its dimensions.
 
 ## Options
 
@@ -136,10 +149,13 @@ The `'fixed'{:js}` strategy is useful in two ways:
 
 ### middleware
 
-Middleware alter the base `placement{:.objectKey}` in some
-fashion, or provide useful data to the consumer. 8 core
-middleware are included in the package, which should cover almost
-all use cases:
+`computePosition(){:js}` starts with a basic placement anchor
+position. To modify this, middleware is used. They alter the
+positioning coordinates from the basic placement to customize the
+position, provide data, or act as "visibility optimization"
+techniques.
+
+The following are included in the package:
 
 - `offset(){:js}`
 - `shift(){:js}`

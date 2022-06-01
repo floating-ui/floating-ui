@@ -93,9 +93,11 @@ size as its contents.
 We can do this in CSS by setting `position: absolute{:sass}` on
 the tooltip element.
 
-```css {2}
+```css {2-4}
 #tooltip {
   position: absolute;
+  top: 0;
+  left: 0;
   background: #222;
   color: white;
   font-weight: bold;
@@ -105,6 +107,11 @@ the tooltip element.
   pointer-events: none;
 }
 ```
+
+Note that `top{:.function}` and `left{:.function}` are set to
+`0{:js}` to minimize layout interference and ensure the floating
+element does not resize after being positioned — especially if it
+is large.
 
 <T.Result3 />
 
@@ -501,6 +508,8 @@ focusing the button.
 #tooltip {
   display: none;
   position: absolute;
+  top: 0;
+  left: 0;
   background: #222;
   color: white;
   font-weight: bold;
