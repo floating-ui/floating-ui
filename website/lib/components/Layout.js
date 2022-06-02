@@ -5,7 +5,7 @@ import Head from 'next/head';
 import cn from 'classnames';
 import {useState, useRef} from 'react';
 import {Menu} from 'react-feather';
-import {SkipNavLink, SkipNavContent} from '@reach/skip-nav';
+import {SkipNavLink, SkipNavContent} from './ReachSkipNav';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 import Logo from '../../assets/logo.svg';
 import {Chrome} from './Chrome';
