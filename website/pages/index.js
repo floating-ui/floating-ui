@@ -798,6 +798,16 @@ function HomePage() {
             </a>
             . Partial modifications were made.
           </p>
+          <p>
+            <a
+              href="https://www.netlify.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400"
+            >
+              This site is powered by Netlify.
+            </a>
+          </p>
         </div>
       </footer>
     </>
