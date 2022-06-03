@@ -38,6 +38,7 @@
     "next": "^12.1.5",
     "npm-api": "^1.0.1",
     "parse-numeric-range": "^1.3.0",
+    "patch-package": "^6.4.7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-feather": "^2.0.10",
