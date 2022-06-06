@@ -68,16 +68,14 @@ export function autoUpdate(
 
   let observer: ResizeObserver | null = null;
   if (elementResize) {
-    observer = new ResizeObserver((props) => {
+    observer = new ResizeObserver(() => {
       // Wrap callback call in requestAnimationFrame to avoid error: "ResizeObserver loop limit exceeded"
       // https://stackoverflow.com/a/58701523
       // REF:
       // - https://github.com/WICG/resize-observer/issues/38
       // - https://github.com/w3c/csswg-drafts/issues/5023
       // - https://github.com/w3c/csswg-drafts/issues/5488
-      requestAnimationFrame(() => {
-        update(props);
-      });
+      requestAnimationFrame(update);
     });
     isElement(reference) && !animationFrame && observer.observe(reference);
     observer.observe(floating);
