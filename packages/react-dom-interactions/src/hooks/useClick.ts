@@ -60,7 +60,12 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         }
 
         if (open) {
-          if (toggle && dataRef.current.openEvent?.type === 'pointerdown') {
+          if (
+            toggle &&
+            (dataRef.current.openEvent
+              ? dataRef.current.openEvent.type === 'pointerdown'
+              : true)
+          ) {
             onOpenChange(false);
           }
         } else {
@@ -80,7 +85,12 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         }
 
         if (open) {
-          if (toggle && dataRef.current.openEvent?.type === 'click') {
+          if (
+            toggle &&
+            (dataRef.current.openEvent
+              ? dataRef.current.openEvent.type === 'click'
+              : true)
+          ) {
             onOpenChange(false);
           }
         } else {
