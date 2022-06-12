@@ -6,9 +6,10 @@ import type {Props} from '../../src/hooks/useClick';
 function App({
   button = true,
   typeable = false,
+  initialOpen = false,
   ...props
-}: Props & {button?: boolean; typeable?: boolean}) {
-  const [open, setOpen] = useState(false);
+}: Props & {button?: boolean; typeable?: boolean; initialOpen?: boolean}) {
+  const [open, setOpen] = useState(initialOpen);
   const {reference, floating, context} = useFloating({
     open,
     onOpenChange: setOpen,
@@ -115,6 +116,17 @@ describe('`toggle` prop', () => {
     fireEvent.click(button);
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+    cleanup();
+  });
+
+  test('`open` state becomes `false` after clicking when initially open', () => {
+    render(<App initialOpen={true} />);
+    const button = screen.getByRole('button');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
     cleanup();
   });
