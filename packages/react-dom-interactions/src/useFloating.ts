@@ -20,12 +20,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   middleware,
   strategy,
   nodeId,
-}: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> & {
-  context: FloatingContext<RT>;
-  refs: UseFloatingReturn<RT>['refs'] & {
-    domReference: React.MutableRefObject<Element | null>;
-  };
-} {
+}: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> {
   const tree = useFloatingTree<RT>();
   const domReferenceRef = React.useRef<Element | null>(null);
   const dataRef = React.useRef<ContextData>({});

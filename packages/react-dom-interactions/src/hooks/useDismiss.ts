@@ -23,7 +23,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, refs, events, nodeId, dataRef}: FloatingContext<RT>,
+  {open, onOpenChange, refs, events, nodeId}: FloatingContext<RT>,
   {
     enabled = true,
     escapeKey = true,
@@ -141,7 +141,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     bubbles,
     isFocusInsideFloating,
     refs,
-    dataRef,
   ]);
 
   if (!enabled) {
