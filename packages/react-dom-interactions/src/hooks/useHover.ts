@@ -118,6 +118,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           closeDelay
         );
       } else if (runElseBranch) {
+        clearTimeout(timeoutRef.current);
         onOpenChangeRef.current(false);
       }
     },

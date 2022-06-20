@@ -103,6 +103,26 @@ describe('delay', () => {
 
     cleanup();
   });
+
+  test('open with close 0', async () => {
+    render(<App delay={{open: 500}} />);
+
+    fireEvent.mouseEnter(screen.getByRole('button'));
+
+    await act(async () => {
+      jest.advanceTimersByTime(499);
+    });
+
+    fireEvent.mouseLeave(screen.getByRole('button'));
+
+    await act(async () => {
+      jest.advanceTimersByTime(1);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+    cleanup();
+  });
 });
 
 test('restMs', async () => {
