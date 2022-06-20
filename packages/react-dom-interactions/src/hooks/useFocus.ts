@@ -30,7 +30,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     function onBlur() {
       if (
         pointerTypeRef.current &&
-        dataRef.current.domReference === activeElement(doc)
+        refs.domReference.current === activeElement(doc)
       ) {
         blockFocusRef.current = !open;
       }
@@ -86,7 +86,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         if (
           event.type === 'focus' &&
           dataRef.current.openEvent?.type === 'mousedown' &&
-          dataRef.current.domReference?.contains(
+          refs.domReference.current?.contains(
             dataRef.current.openEvent?.target as Element | null
           )
         ) {
@@ -103,7 +103,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         // Note: it must be focusable, e.g. `tabindex="-1"`.
         if (
           refs.floating.current?.contains(target) ||
-          dataRef.current.domReference?.contains(target)
+          refs.domReference.current?.contains(target)
         ) {
           return;
         }

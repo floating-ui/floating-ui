@@ -38,7 +38,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     y,
     placement,
     refs,
-    dataRef,
     onClose,
     nodeId,
     tree,
@@ -71,7 +70,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // is no need to run the logic.
       if (
         event.type === 'pointermove' &&
-        dataRef.current.domReference?.contains(targetNode)
+        refs.domReference.current?.contains(targetNode)
       ) {
         return;
       }
@@ -93,7 +92,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       if (
-        !dataRef.current.domReference ||
+        !refs.domReference.current ||
         !refs.floating.current ||
         placement == null ||
         x == null ||
@@ -102,7 +101,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         return;
       }
 
-      const refRect = dataRef.current.domReference.getBoundingClientRect();
+      const refRect = refs.domReference.current.getBoundingClientRect();
       const rect = refs.floating.current.getBoundingClientRect();
       const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;

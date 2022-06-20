@@ -21,7 +21,6 @@ export interface FloatingEvents {
 export interface ContextData {
   openEvent?: MouseEvent | PointerEvent | FocusEvent;
   typing?: boolean;
-  domReference: Element | null;
   [key: string]: any;
 }
 
@@ -68,6 +67,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     refs: {
       reference: React.MutableRefObject<RT | null>;
       floating: React.MutableRefObject<HTMLElement | null>;
+      domReference: React.MutableRefObject<Element | null>;
     };
   };
 

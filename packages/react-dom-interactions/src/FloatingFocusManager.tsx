@@ -76,7 +76,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return orderRef.current
       .map((type) => {
         if (type === 'reference') {
-          return dataRef.current.domReference;
+          return refs.domReference.current;
         }
 
         if (refs.floating.current && type === 'floating') {
@@ -93,10 +93,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       })
       .flat()
       .filter((el) => {
-        if (
-          el === refs.floating.current ||
-          el === dataRef.current.domReference
-        ) {
+        if (el === refs.floating.current || el === refs.domReference.current) {
           return true;
         }
 
@@ -105,7 +102,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           return tabIndex[0].trim() !== '-';
         }
       }) as Array<HTMLElement>;
-  }, [orderRef, dataRef, refs]);
+  }, [orderRef, refs]);
 
   React.useEffect(() => {
     if (!modal) {
@@ -116,8 +113,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // to focusing the floating element and preventing tab navigation
     const noTabbableContentElements =
       getTabbableElements().filter(
-        (el) =>
-          el !== refs.floating.current && el !== dataRef.current.domReference
+        (el) => el !== refs.floating.current && el !== refs.domReference.current
       ).length === 0;
 
     function onKeyDown(event: KeyboardEvent) {
@@ -137,7 +133,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
         if (
           orderRef.current[0] === 'reference' &&
-          target === dataRef.current.domReference
+          target === refs.domReference.current
         ) {
           stopEvent(event);
           if (event.shiftKey) {
@@ -173,15 +169,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         !refs.floating.current?.contains(relatedTarget);
 
       const focusMovedOutsideReference =
-        isElement(dataRef.current.domReference) &&
-        !dataRef.current.domReference.contains(relatedTarget);
+        isElement(refs.domReference.current) &&
+        !refs.domReference.current.contains(relatedTarget);
 
       const isChildOpen =
         tree && getChildren(tree.nodesRef.current, nodeId).length > 0;
 
       const isParentRelated =
         tree &&
-        event.currentTarget === dataRef.current.domReference &&
+        event.currentTarget === refs.domReference.current &&
         getAncestors(tree.nodesRef.current, nodeId)?.some((node) =>
           node.context?.refs.floating.current?.contains(relatedTarget)
         );
@@ -197,7 +193,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     const floating = refs.floating.current;
-    const reference = dataRef.current.domReference;
+    const reference = refs.domReference.current;
 
     if (floating && isHTMLElement(reference)) {
       !modal && floating.addEventListener('focusout', onFocusOut);
@@ -251,8 +247,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [preventTabbing, getTabbableElements, initialFocus, returnFocus, refs]);
 
   const isTypeableCombobox = () =>
-    dataRef.current.domReference?.getAttribute('role') === 'combobox' &&
-    isTypeableElement(dataRef.current.domReference);
+    refs.domReference.current?.getAttribute('role') === 'combobox' &&
+    isTypeableElement(refs.domReference.current);
 
   return (
     <>

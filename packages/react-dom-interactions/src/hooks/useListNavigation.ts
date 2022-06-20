@@ -149,7 +149,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, refs, dataRef}: FloatingContext<RT>,
+  {open, onOpenChange, refs}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
@@ -331,11 +331,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       !open &&
       previousOpen &&
       selectedIndex != null &&
-      isHTMLElement(dataRef.current.domReference)
+      isHTMLElement(refs.domReference.current)
     ) {
-      dataRef.current.domReference.focus();
+      refs.domReference.current.focus();
     }
-  }, [dataRef, selectedIndex, open, previousOpen, enabled]);
+  }, [refs, selectedIndex, open, previousOpen, enabled]);
 
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
@@ -369,8 +369,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       stopEvent(event);
       onOpenChange(false);
 
-      if (isHTMLElement(dataRef.current.domReference)) {
-        dataRef.current.domReference.focus();
+      if (isHTMLElement(refs.domReference.current)) {
+        refs.domReference.current.focus();
       }
 
       return;

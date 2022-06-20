@@ -22,9 +22,13 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   nodeId,
 }: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> & {
   context: FloatingContext<RT>;
+  refs: UseFloatingReturn<RT>['refs'] & {
+    domReference: React.MutableRefObject<Element | null>;
+  };
 } {
   const tree = useFloatingTree<RT>();
-  const dataRef = React.useRef<ContextData>({domReference: null});
+  const domReferenceRef = React.useRef<Element | null>(null);
+  const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
   const floating = usePositionalFloating<RT>({
     placement,
@@ -33,16 +37,25 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     whileElementsMounted,
   });
 
+  const refs = React.useMemo(
+    () => ({
+      ...floating.refs,
+      domReference: domReferenceRef,
+    }),
+    [floating.refs]
+  );
+
   const context = React.useMemo<FloatingContext<RT>>(
     () => ({
       ...floating,
+      refs,
       dataRef,
       nodeId,
       events,
       open,
       onOpenChange,
     }),
-    [floating, dataRef, nodeId, events, open, onOpenChange]
+    [floating, dataRef, nodeId, events, open, onOpenChange, refs]
   );
 
   useLayoutEffect(() => {
@@ -56,20 +69,21 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
     (node) => {
       if (isElement(node) || node === null) {
-        dataRef.current.domReference = node;
+        context.refs.domReference.current = node;
       }
 
       reference(node);
     },
-    [reference]
+    [reference, context.refs]
   );
 
   return React.useMemo(
     () => ({
-      context,
       ...floating,
+      context,
+      refs,
       reference: setReference,
     }),
-    [floating, context, setReference]
+    [floating, refs, context, setReference]
   );
 }

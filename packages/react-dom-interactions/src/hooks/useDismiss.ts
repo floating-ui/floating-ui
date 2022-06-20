@@ -43,10 +43,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   }, [refs]);
 
   const focusReference = React.useCallback(() => {
-    if (isHTMLElement(dataRef.current.domReference)) {
-      dataRef.current.domReference.focus();
+    if (isHTMLElement(refs.domReference.current)) {
+      refs.domReference.current.focus();
     }
-  }, [dataRef]);
+  }, [refs]);
 
   React.useEffect(() => {
     if (!open || !enabled) {
@@ -74,7 +74,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       if (
         isEventTargetWithin(event, refs.floating.current) ||
-        isEventTargetWithin(event, dataRef.current.domReference) ||
+        isEventTargetWithin(event, refs.domReference.current) ||
         targetIsInsideChildren
       ) {
         return;

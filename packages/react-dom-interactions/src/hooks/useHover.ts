@@ -225,7 +225,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     const floating = refs.floating.current;
-    const reference = dataRef.current.domReference;
+    const reference = refs.domReference.current;
 
     if (isElement(reference)) {
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
@@ -269,7 +269,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     if (open && handleCloseRef.current) {
       getDocument(refs.floating.current).body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
-      const reference = dataRef.current.domReference;
+      const reference = refs.domReference.current;
       const floating = refs.floating.current;
 
       if (isHTMLElement(reference) && floating) {

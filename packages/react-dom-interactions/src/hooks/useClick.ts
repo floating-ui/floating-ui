@@ -14,7 +14,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, dataRef}: FloatingContext<RT>,
+  {open, onOpenChange, dataRef, refs}: FloatingContext<RT>,
   {
     enabled = true,
     pointerDown = false,
@@ -25,11 +25,11 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
 
   function isButton() {
-    return dataRef.current.domReference?.tagName === 'BUTTON';
+    return refs.domReference.current?.tagName === 'BUTTON';
   }
 
   function isSpaceIgnored() {
-    return isTypeableElement(dataRef.current.domReference);
+    return isTypeableElement(refs.domReference.current);
   }
 
   if (!enabled) {
