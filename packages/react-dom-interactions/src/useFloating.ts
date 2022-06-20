@@ -10,6 +10,7 @@ import type {
 } from './types';
 import {createPubSub} from './createPubSub';
 import {useFloatingTree} from './FloatingTree';
+import {isElement} from './utils/is';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,
@@ -23,7 +24,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   context: FloatingContext<RT>;
 } {
   const tree = useFloatingTree<RT>();
-  const dataRef = React.useRef<ContextData>({});
+  const dataRef = React.useRef<ContextData>({domReference: null});
   const events = React.useState(() => createPubSub())[0];
   const floating = usePositionalFloating<RT>({
     placement,
@@ -51,11 +52,24 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     }
   });
 
+  const {reference} = floating;
+  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
+    (node) => {
+      if (isElement(node) || node === null) {
+        dataRef.current.domReference = node;
+      }
+
+      reference(node);
+    },
+    [reference]
+  );
+
   return React.useMemo(
     () => ({
       context,
       ...floating,
+      reference: setReference,
     }),
-    [floating, context]
+    [floating, context, setReference]
   );
 }

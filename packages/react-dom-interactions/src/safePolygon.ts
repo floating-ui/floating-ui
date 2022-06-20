@@ -1,6 +1,5 @@
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
-import {isElement} from './utils/is';
 import {getChildren} from './utils/getChildren';
 
 type Point = [number, number];
@@ -39,6 +38,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     y,
     placement,
     refs,
+    dataRef,
     onClose,
     nodeId,
     tree,
@@ -71,8 +71,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // is no need to run the logic.
       if (
         event.type === 'pointermove' &&
-        isElement(refs.reference.current) &&
-        refs.reference.current.contains(targetNode)
+        dataRef.current.domReference?.contains(targetNode)
       ) {
         return;
       }
@@ -94,7 +93,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       if (
-        !refs.reference.current ||
+        !dataRef.current.domReference ||
         !refs.floating.current ||
         placement == null ||
         x == null ||
@@ -103,7 +102,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         return;
       }
 
-      const refRect = refs.reference.current.getBoundingClientRect();
+      const refRect = dataRef.current.domReference.getBoundingClientRect();
       const rect = refs.floating.current.getBoundingClientRect();
       const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;

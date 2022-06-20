@@ -21,6 +21,7 @@ export interface FloatingEvents {
 export interface ContextData {
   openEvent?: MouseEvent | PointerEvent | FocusEvent;
   typing?: boolean;
+  domReference: Element | null;
   [key: string]: any;
 }
 

@@ -23,7 +23,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, refs, events, nodeId}: FloatingContext<RT>,
+  {open, onOpenChange, refs, events, nodeId, dataRef}: FloatingContext<RT>,
   {
     enabled = true,
     escapeKey = true,
@@ -40,13 +40,13 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     return refs.floating.current?.contains(
       activeElement(getDocument(refs.floating.current))
     );
-  }, [refs.floating]);
+  }, [refs]);
 
   const focusReference = React.useCallback(() => {
-    if (isHTMLElement(refs.reference.current)) {
-      refs.reference.current.focus();
+    if (isHTMLElement(dataRef.current.domReference)) {
+      dataRef.current.domReference.focus();
     }
-  }, [refs.reference]);
+  }, [dataRef]);
 
   React.useEffect(() => {
     if (!open || !enabled) {
@@ -74,8 +74,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       if (
         isEventTargetWithin(event, refs.floating.current) ||
-        (isElement(refs.reference.current) &&
-          isEventTargetWithin(event, refs.reference.current)) ||
+        isEventTargetWithin(event, dataRef.current.domReference) ||
         targetIsInsideChildren
       ) {
         return;
@@ -141,8 +140,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     enabled,
     bubbles,
     isFocusInsideFloating,
-    refs.floating,
-    refs.reference,
+    refs,
+    dataRef,
   ]);
 
   if (!enabled) {
