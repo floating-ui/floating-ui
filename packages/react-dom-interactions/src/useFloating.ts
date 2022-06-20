@@ -10,6 +10,7 @@ import type {
 } from './types';
 import {createPubSub} from './createPubSub';
 import {useFloatingTree} from './FloatingTree';
+import {isElement} from './utils/is';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,
@@ -19,10 +20,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   middleware,
   strategy,
   nodeId,
-}: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> & {
-  context: FloatingContext<RT>;
-} {
+}: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> {
   const tree = useFloatingTree<RT>();
+  const domReferenceRef = React.useRef<Element | null>(null);
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
   const floating = usePositionalFloating<RT>({
@@ -32,16 +32,25 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     whileElementsMounted,
   });
 
+  const refs = React.useMemo(
+    () => ({
+      ...floating.refs,
+      domReference: domReferenceRef,
+    }),
+    [floating.refs]
+  );
+
   const context = React.useMemo<FloatingContext<RT>>(
     () => ({
       ...floating,
+      refs,
       dataRef,
       nodeId,
       events,
       open,
       onOpenChange,
     }),
-    [floating, dataRef, nodeId, events, open, onOpenChange]
+    [floating, nodeId, events, open, onOpenChange, refs]
   );
 
   useLayoutEffect(() => {
@@ -51,11 +60,25 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     }
   });
 
+  const {reference} = floating;
+  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
+    (node) => {
+      if (isElement(node) || node === null) {
+        context.refs.domReference.current = node;
+      }
+
+      reference(node);
+    },
+    [reference, context.refs]
+  );
+
   return React.useMemo(
     () => ({
-      context,
       ...floating,
+      context,
+      refs,
+      reference: setReference,
     }),
-    [floating, context]
+    [floating, refs, context, setReference]
   );
 }

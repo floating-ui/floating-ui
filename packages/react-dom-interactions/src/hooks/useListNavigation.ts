@@ -331,11 +331,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       !open &&
       previousOpen &&
       selectedIndex != null &&
-      isHTMLElement(refs.reference.current)
+      isHTMLElement(refs.domReference.current)
     ) {
-      refs.reference.current.focus();
+      refs.domReference.current.focus();
     }
-  }, [refs.reference, selectedIndex, open, previousOpen, enabled]);
+  }, [refs, selectedIndex, open, previousOpen, enabled]);
 
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
@@ -369,8 +369,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       stopEvent(event);
       onOpenChange(false);
 
-      if (isHTMLElement(refs.reference.current)) {
-        refs.reference.current.focus();
+      if (isHTMLElement(refs.domReference.current)) {
+        refs.domReference.current.focus();
       }
 
       return;

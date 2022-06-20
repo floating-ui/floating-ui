@@ -2,7 +2,6 @@ import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {getDocument} from '../utils/getDocument';
-import {isElement} from '../utils/is';
 
 export interface Props {
   enabled?: boolean;
@@ -31,7 +30,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     function onBlur() {
       if (
         pointerTypeRef.current &&
-        refs.reference.current === activeElement(doc)
+        refs.domReference.current === activeElement(doc)
       ) {
         blockFocusRef.current = !open;
       }
@@ -87,8 +86,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         if (
           event.type === 'focus' &&
           dataRef.current.openEvent?.type === 'mousedown' &&
-          isElement(refs.reference.current) &&
-          refs.reference.current?.contains(
+          refs.domReference.current?.contains(
             dataRef.current.openEvent?.target as Element | null
           )
         ) {
@@ -105,8 +103,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         // Note: it must be focusable, e.g. `tabindex="-1"`.
         if (
           refs.floating.current?.contains(target) ||
-          (isElement(refs.reference.current) &&
-            refs.reference.current.contains(target))
+          refs.domReference.current?.contains(target)
         ) {
           return;
         }

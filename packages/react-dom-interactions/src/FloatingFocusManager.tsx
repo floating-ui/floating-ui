@@ -59,7 +59,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
-  context: {refs, nodeId, onOpenChange},
+  context: {refs, nodeId, onOpenChange, dataRef},
   children,
   order = ['content'],
   endGuard = true,
@@ -75,13 +75,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
       .map((type) => {
-        if (isHTMLElement(refs.reference.current) && type === 'reference') {
-          return refs.reference.current;
+        if (type === 'reference') {
+          return refs.domReference.current;
         }
 
         if (refs.floating.current && type === 'floating') {
           return refs.floating.current;
         }
+
         if (type === 'content') {
           return Array.from(
             refs.floating.current?.querySelectorAll(SELECTOR) ?? []
@@ -92,7 +93,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       })
       .flat()
       .filter((el) => {
-        if (el === refs.floating.current || el === refs.reference.current) {
+        if (el === refs.floating.current || el === refs.domReference.current) {
           return true;
         }
 
@@ -112,10 +113,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // to focusing the floating element and preventing tab navigation
     const noTabbableContentElements =
       getTabbableElements().filter(
-        (el) =>
-          el !== refs.floating.current &&
-          // @ts-expect-error
-          el !== refs.reference.current
+        (el) => el !== refs.floating.current && el !== refs.domReference.current
       ).length === 0;
 
     function onKeyDown(event: KeyboardEvent) {
@@ -135,7 +133,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
         if (
           orderRef.current[0] === 'reference' &&
-          target === refs.reference.current
+          target === refs.domReference.current
         ) {
           stopEvent(event);
           if (event.shiftKey) {
@@ -171,15 +169,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         !refs.floating.current?.contains(relatedTarget);
 
       const focusMovedOutsideReference =
-        isElement(refs.reference.current) &&
-        !refs.reference.current.contains(relatedTarget);
+        isElement(refs.domReference.current) &&
+        !refs.domReference.current.contains(relatedTarget);
 
       const isChildOpen =
         tree && getChildren(tree.nodesRef.current, nodeId).length > 0;
 
       const isParentRelated =
         tree &&
-        event.currentTarget === refs.reference.current &&
+        event.currentTarget === refs.domReference.current &&
         getAncestors(tree.nodesRef.current, nodeId)?.some((node) =>
           node.context?.refs.floating.current?.contains(relatedTarget)
         );
@@ -195,7 +193,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     const floating = refs.floating.current;
-    const reference = refs.reference.current;
+    const reference = refs.domReference.current;
 
     if (floating && isHTMLElement(reference)) {
       !modal && floating.addEventListener('focusout', onFocusOut);
@@ -222,6 +220,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     modal,
     onOpenChangeRef,
     orderRef,
+    dataRef,
     getTabbableElements,
     refs,
   ]);
@@ -248,9 +247,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [preventTabbing, getTabbableElements, initialFocus, returnFocus, refs]);
 
   const isTypeableCombobox = () =>
-    isHTMLElement(refs.reference.current) &&
-    refs.reference.current.getAttribute('role') === 'combobox' &&
-    isTypeableElement(refs.reference.current);
+    refs.domReference.current?.getAttribute('role') === 'combobox' &&
+    isTypeableElement(refs.domReference.current);
 
   return (
     <>

@@ -40,13 +40,13 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     return refs.floating.current?.contains(
       activeElement(getDocument(refs.floating.current))
     );
-  }, [refs.floating]);
+  }, [refs]);
 
   const focusReference = React.useCallback(() => {
-    if (isHTMLElement(refs.reference.current)) {
-      refs.reference.current.focus();
+    if (isHTMLElement(refs.domReference.current)) {
+      refs.domReference.current.focus();
     }
-  }, [refs.reference]);
+  }, [refs]);
 
   React.useEffect(() => {
     if (!open || !enabled) {
@@ -74,8 +74,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       if (
         isEventTargetWithin(event, refs.floating.current) ||
-        (isElement(refs.reference.current) &&
-          isEventTargetWithin(event, refs.reference.current)) ||
+        isEventTargetWithin(event, refs.domReference.current) ||
         targetIsInsideChildren
       ) {
         return;
@@ -141,8 +140,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     enabled,
     bubbles,
     isFocusInsideFloating,
-    refs.floating,
-    refs.reference,
+    refs,
   ]);
 
   if (!enabled) {

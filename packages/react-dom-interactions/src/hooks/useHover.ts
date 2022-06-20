@@ -225,7 +225,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     const floating = refs.floating.current;
-    const reference = refs.reference.current;
+    const reference = refs.domReference.current;
 
     if (isElement(reference)) {
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
@@ -269,11 +269,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     if (open && handleCloseRef.current) {
       getDocument(refs.floating.current).body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
-      const reference =
-        isHTMLElement(refs.reference.current) && refs.reference.current;
+      const reference = refs.domReference.current;
       const floating = refs.floating.current;
 
-      if (reference && floating) {
+      if (isHTMLElement(reference) && floating) {
         const parentFloating = tree?.nodesRef.current.find(
           (node) => node.id === parentId
         )?.context?.refs.floating.current;
@@ -291,7 +290,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         };
       }
     }
-  }, [enabled, open, parentId, refs, tree, handleCloseRef]);
+  }, [enabled, open, parentId, refs, tree, handleCloseRef, dataRef]);
 
   useLayoutEffect(() => {
     if (previousOpen && !open) {

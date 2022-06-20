@@ -6,11 +6,18 @@ import type {
   Middleware,
   Strategy,
 } from '@floating-ui/dom';
+import type {UseFloatingReturn as UsePositionFloatingReturn} from '@floating-ui/react-dom';
 
 export * from '@floating-ui/dom';
 export * from './';
 
 export {arrow} from '@floating-ui/react-dom';
+
+interface ExtendedRefs<RT extends ReferenceType = ReferenceType> {
+  reference: React.MutableRefObject<RT | null>;
+  floating: React.MutableRefObject<HTMLElement | null>;
+  domReference: React.MutableRefObject<Element | null>;
+}
 
 export interface FloatingEvents {
   emit(event: string, data?: any): void;
@@ -25,12 +32,13 @@ export interface ContextData {
 }
 
 export interface FloatingContext<RT extends ReferenceType = ReferenceType>
-  extends UseFloatingReturn<RT> {
+  extends UsePositionFloatingReturn<RT> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
+  refs: ExtendedRefs<RT>;
 }
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
@@ -64,10 +72,8 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     update: () => void;
     reference: (node: RT | null) => void;
     floating: (node: HTMLElement | null) => void;
-    refs: {
-      reference: React.MutableRefObject<RT | null>;
-      floating: React.MutableRefObject<HTMLElement | null>;
-    };
+    context: FloatingContext<RT>;
+    refs: ExtendedRefs<RT>;
   };
 
 export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
