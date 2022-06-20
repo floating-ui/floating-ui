@@ -49,7 +49,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       win.removeEventListener('focus', onFocus);
       win.removeEventListener('blur', onBlur);
     };
-  }, [refs, open, enabled, dataRef]);
+  }, [refs, open, enabled]);
 
   React.useEffect(() => {
     if (!enabled) {

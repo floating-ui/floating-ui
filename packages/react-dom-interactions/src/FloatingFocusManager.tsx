@@ -159,7 +159,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [preventTabbing, modal, getTabbableElements, orderRef, dataRef, refs]);
+  }, [preventTabbing, modal, getTabbableElements, orderRef, refs]);
 
   React.useEffect(() => {
     function onFocusOut(event: FocusEvent) {

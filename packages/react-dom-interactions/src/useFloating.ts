@@ -55,7 +55,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       open,
       onOpenChange,
     }),
-    [floating, dataRef, nodeId, events, open, onOpenChange, refs]
+    [floating, nodeId, events, open, onOpenChange, refs]
   );
 
   useLayoutEffect(() => {
