@@ -86,7 +86,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       events.emit('dismiss');
       onOpenChangeRef.current(false);
-      focusReference();
     }
 
     function onScroll() {
