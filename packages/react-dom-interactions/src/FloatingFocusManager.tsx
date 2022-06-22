@@ -59,7 +59,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
-  context: {refs, nodeId, onOpenChange, dataRef},
+  context: {refs, nodeId, onOpenChange, dataRef, events},
   children,
   order = ['content'],
   endGuard = true,
@@ -230,6 +230,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       return;
     }
 
+    let returnFocusValue = returnFocus;
     const floating = refs.floating.current;
     const previouslyFocusedElement = activeElement(getDocument(floating));
 
@@ -239,12 +240,30 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       focus(initialFocus.current ?? floating);
     }
 
+    // Dismissing via outside `pointerdown` should always ignore `returnFocus`
+    // to prevent unwanted scrolling. The `esc` key will continue to focus the
+    // reference.
+    function onDismiss() {
+      returnFocusValue = false;
+    }
+
+    events.on('dismiss', onDismiss);
+
     return () => {
-      if (returnFocus && isHTMLElement(previouslyFocusedElement)) {
+      events.off('dismiss', onDismiss);
+
+      if (returnFocusValue && isHTMLElement(previouslyFocusedElement)) {
         focus(previouslyFocusedElement);
       }
     };
-  }, [preventTabbing, getTabbableElements, initialFocus, returnFocus, refs]);
+  }, [
+    preventTabbing,
+    getTabbableElements,
+    initialFocus,
+    returnFocus,
+    refs,
+    events,
+  ]);
 
   const isTypeableCombobox = () =>
     refs.domReference.current?.getAttribute('role') === 'combobox' &&
