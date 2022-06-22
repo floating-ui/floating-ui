@@ -7,18 +7,18 @@ function getSize(axis, body, html, computedStyle) {
     html[`client${axis}`],
     html[`offset${axis}`],
     html[`scroll${axis}`],
-    isIE(10)
-      ? (parseInt(html[`offset${axis}`]) + 
-      parseInt(computedStyle[`margin${axis === 'Height' ? 'Top' : 'Left'}`]) + 
-      parseInt(computedStyle[`margin${axis === 'Height' ? 'Bottom' : 'Right'}`]))
-    : 0 
+    (isIE(10) || isIE(9))
+      ? (parseInt(html[`offset${axis}`]) +
+        parseInt(computedStyle[`margin${axis === 'Height' ? 'Top' : 'Left'}`]) +
+        parseInt(computedStyle[`margin${axis === 'Height' ? 'Bottom' : 'Right'}`]))
+      : 0
   );
 }
 
 export default function getWindowSizes(document) {
   const body = document.body;
   const html = document.documentElement;
-  const computedStyle = isIE(10) && getComputedStyle(html);
+  const computedStyle = (isIE(10) || isIE(9)) && getComputedStyle(html);
 
   return {
     height: getSize('Height', body, html, computedStyle),

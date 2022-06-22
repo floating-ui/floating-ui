@@ -12,6 +12,7 @@ import isMSBrowser from '@popperjs/test-utils/utils/isMSBrowser';
 import getRect from '../utils/getRect';
 
 const isIE10 = navigator.appVersion.indexOf('MSIE 10') !== -1;
+const isIE9 = navigator.appVersion.indexOf('MSIE 9') !== -1;
 const isIPHONE = window.navigator.userAgent.match(/iPhone/i);
 const arrowSize = 5;
 [true, false].forEach(positionFixed => {
@@ -20,11 +21,11 @@ const arrowSize = 5;
   describe('[core]' + (positionFixed ? ' Fixed' : ''), () => {
 
 
-    beforeEach(function(){
+    beforeEach(function () {
       Popper.Defaults.positionFixed = positionFixed;
     });
 
-    afterEach(function() {
+    afterEach(function () {
       jasmineWrapper.scrollTop = 0;
       jasmineWrapper.scrollLeft = 0;
     });
@@ -115,10 +116,10 @@ const arrowSize = 5;
       prepend(reference, document.body);
       prepend(popper, document.body);
 
-    new Popper(reference, popper, {
-      onCreate(data) {
-        const bottom = getRect(popper).bottom;
-        expect(bottom).toBeApprox(getRect(reference).top);
+      new Popper(reference, popper, {
+        onCreate(data) {
+          const bottom = getRect(popper).bottom;
+          expect(bottom).toBeApprox(getRect(reference).top);
 
           data.instance.destroy();
           document.body.removeChild(popper);
@@ -577,7 +578,7 @@ const arrowSize = 5;
 
     it('inits a popper near a reference element, both inside a fixed element, inside a scrolled body', done => {
       //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
-      if(isIE10 && positionFixed){
+      if ((isIE10 || isIE9) && positionFixed) {
         pending();
       }
       const fixed = document.createElement('div');
@@ -610,7 +611,7 @@ const arrowSize = 5;
 
     it('inits a popper near a reference element, both inside a fixed element with CSS transforms, inside a scrolled body', done => {
       //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
-      if(isIE10 && positionFixed){
+      if ((isIE10 || isIE9) && positionFixed) {
         pending();
       }
       const relative = document.createElement('div');
@@ -829,7 +830,7 @@ const arrowSize = 5;
 
     it('inits a popper with boundariesElement set to viewport, the popper should not be in the viewport', done => {
       //IE10 bug where elements who are checking for getBoundingClientRect too early throe exceptionn
-      if (isIPHONE || (isIE10 && positionFixed)) {
+      if (isIPHONE || ((isIE10 || isIE9) && positionFixed)) {
         pending();
       }
 
@@ -1254,7 +1255,7 @@ const arrowSize = 5;
 
     it('inits a popper near a reference element, both inside an element with CSS translateX', done => {
       //Not relevant for positionFixed cases
-      if(positionFixed) {
+      if (positionFixed) {
         pending();
       }
       const fixed = document.createElement('div');
@@ -1320,7 +1321,7 @@ const arrowSize = 5;
     });
 
     it('inits a popper near the reference element when it is a child of ref and the ref is relatively positioned and the ref contains svg as a first child', done => {
-      if (isIE10 && !positionFixed) {
+      if ((isIE10 || isIE9) && !positionFixed) {
         pending();
       }
       const ref = appendNewRef(1);
@@ -1389,7 +1390,7 @@ const arrowSize = 5;
       // Skip IE10 here because the current implementation doesn't work with it and
       // I don't want to add extra logic to support a "nice to have" feature on an
       // ancient browser
-      if (isIE10) {
+      if (isIE10 || isIE9) {
         pending();
       }
 
@@ -1430,7 +1431,7 @@ const arrowSize = 5;
 
     it('uses a reference object with a referenceNode to position its popper', done => {
       // As above
-      if (isIE10) {
+      if (isIE10 || isIE9) {
         pending();
       }
 
@@ -1498,11 +1499,11 @@ const arrowSize = 5;
 
     it('checks cases where the reference element is fixed in scrolling parent', done => {
       jasmineWrapper.innerHTML = `
-            <div id="scroll" style="height: 100vh; overflow: scroll">                
+            <div id="scroll" style="height: 100vh; overflow: scroll">
                 <div id="reference" style="position: fixed; top: 100px; left: 100px; background: pink">reference</div>
                 <div id="popper" style="background: purple">popper</div>
                 <div style="height: 200vh"></div>
-            </div>                
+            </div>
             `;
 
       const reference = document.getElementById('reference');
@@ -1847,8 +1848,8 @@ const arrowSize = 5;
       });
     });
 
-     // test for #276
-     it('works inside table th elements', done => {
+    // test for #276
+    it('works inside table th elements', done => {
       jasmineWrapper.innerHTML = `
         <style>
           table {
@@ -1910,36 +1911,36 @@ const arrowSize = 5;
           body {
             padding: 100px;
           }
-  
+
           .scrollParent {
             height: 300px;
             width: 300px;
             overflow: auto;
             position: relative;
           }
-  
+
           .scrollContent {
             background: gray;
             padding: 1000px;
           }
-  
+
           #reference {
             background: lightgrey;
             height: 25px;
             width: 100px;
           }
-  
+
           #popper {
             background: cyan;
             height: 150px;
             width: 150px;
           }
-  
+
           [x-out-of-boundaries] {
             visibility: hidden;
           }
         </style>
-  
+
         <div class="scrollParent">
           <div class="scrollContent">
             <div id="reference">ref</div>

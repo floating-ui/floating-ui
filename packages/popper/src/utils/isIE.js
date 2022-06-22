@@ -2,6 +2,7 @@ import isBrowser from './isBrowser';
 
 const isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
 const isIE10 = isBrowser && /MSIE 10/.test(navigator.userAgent);
+const isIE9 = isBrowser && /MSIE 9/.test(navigator.userAgent);
 
 /**
  * Determines if the browser is Internet Explorer
@@ -17,5 +18,8 @@ export default function isIE(version) {
   if (version === 10) {
     return isIE10;
   }
-  return isIE11 || isIE10;
+  if (version === 9) {
+    return isIE9;
+  }
+  return isIE11 || isIE10 || isIE9;
 }

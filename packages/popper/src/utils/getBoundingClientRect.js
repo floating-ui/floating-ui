@@ -19,7 +19,7 @@ export default function getBoundingClientRect(element) {
   // considered in DOM in some circumstances...
   // This isn't reproducible in IE10 compatibility mode of IE11
   try {
-    if (isIE(10)) {
+    if (isIE(10) || isIE(9)) {
       rect = element.getBoundingClientRect();
       const scrollTop = getScroll(element, 'top');
       const scrollLeft = getScroll(element, 'left');
@@ -32,7 +32,7 @@ export default function getBoundingClientRect(element) {
       rect = element.getBoundingClientRect();
     }
   }
-  catch(e){}
+  catch (e) { }
 
   const result = {
     left: rect.left,

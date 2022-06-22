@@ -12,7 +12,7 @@ export default function getOffsetParent(element) {
     return document.documentElement;
   }
 
-  const noOffsetParent = isIE(10) ? document.body : null;
+  const noOffsetParent = (isIE(10) || isIE(9)) ? document.body : null;
 
   // NOTE: 1 DOM access here
   let offsetParent = element.offsetParent || null;
