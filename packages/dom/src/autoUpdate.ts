@@ -68,7 +68,14 @@ export function autoUpdate(
 
   let observer: ResizeObserver | null = null;
   if (elementResize) {
-    observer = new ResizeObserver(update);
+    let initialUpdate = true;
+    observer = new ResizeObserver(() => {
+      if (!initialUpdate) {
+        update();
+      }
+
+      initialUpdate = false;
+    });
     isElement(reference) && !animationFrame && observer.observe(reference);
     observer.observe(floating);
   }
@@ -97,9 +104,7 @@ export function autoUpdate(
     frameId = requestAnimationFrame(frameLoop);
   }
 
-  if (!elementResize) {
-    update();
-  }
+  update();
 
   return () => {
     ancestors.forEach((ancestor) => {
