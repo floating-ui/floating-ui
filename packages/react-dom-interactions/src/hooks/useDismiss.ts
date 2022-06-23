@@ -42,12 +42,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     );
   }, [refs]);
 
-  const focusReference = React.useCallback(() => {
-    if (isHTMLElement(refs.domReference.current)) {
-      refs.domReference.current.focus();
-    }
-  }, [refs]);
-
   React.useEffect(() => {
     if (!open || !enabled) {
       return;
@@ -61,7 +55,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
         events.emit('dismiss');
         onOpenChangeRef.current(false);
-        focusReference();
+
+        if (isHTMLElement(refs.domReference.current)) {
+          refs.domReference.current.focus();
+        }
       }
     }
 
@@ -86,7 +83,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       events.emit('dismiss');
       onOpenChangeRef.current(false);
-      focusReference();
     }
 
     function onScroll() {
@@ -135,7 +131,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     nodeId,
     open,
     onOpenChangeRef,
-    focusReference,
     ancestorScroll,
     enabled,
     bubbles,
