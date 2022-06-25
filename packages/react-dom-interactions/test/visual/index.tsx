@@ -12,6 +12,7 @@ import './index.css';
 import {Main as Tooltip} from './components/Tooltip';
 import {Main as Popover} from './components/Popover';
 import {Main as Menu} from './components/Menu';
+import {Main as MacSelect} from './components/MacSelect';
 
 import {New} from './utils/New';
 
@@ -19,6 +20,7 @@ const ROUTES = [
   {path: 'tooltip', component: Tooltip},
   {path: 'popover', component: Popover},
   {path: 'menu', component: Menu},
+  {path: 'mac-select', component: MacSelect},
 ];
 
 function App() {

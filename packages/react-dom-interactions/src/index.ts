@@ -18,6 +18,7 @@ export {
   useDelayGroup,
   useDelayGroupContext,
 } from './FloatingDelayGroup';
+export {useInnerOffset, inner} from './inner';
 export {useRole} from './hooks/useRole';
 export {useClick} from './hooks/useClick';
 export {useDismiss} from './hooks/useDismiss';
