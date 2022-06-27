@@ -388,6 +388,27 @@ test('example', async () => {
 });
 ```
 
+### Effects
+
+As the position is calculated asynchronously, if you want to
+perform focus, ensure you wait for the position to be ready in
+order to prevent unwanted scrolling. This can be achieved with
+`useLayoutEffect{:.function}` and
+`requestAnimationFrame{:.function}`.
+
+```js
+useLayoutEffect(() => {
+  if (open) {
+    // Runs after microtasks (position calculation) but before paint.
+    requestAnimationFrame(() => {
+      // Position is now ready!
+      someElement.focus();
+      someElement.scrollIntoView();
+    });
+  }
+}, [open]);
+```
+
 ## Types
 
 The `useFloating(){:js}` hook is generic to allow specifying a
