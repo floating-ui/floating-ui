@@ -19,6 +19,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const reference = React.useRef<RT | null>(null);
   const floating = React.useRef<HTMLElement | null>(null);
+  const referenceCheckRef = React.useRef<RT | null>(null);
+  const floatingCheckRef = React.useRef<HTMLElement | null>(null);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const cleanupRef = React.useRef<(() => void) | void | null>(null);
@@ -78,11 +80,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   }, []);
 
   const runElementMountCallback = React.useCallback(() => {
-    if (typeof cleanupRef.current === 'function') {
-      cleanupRef.current();
-      cleanupRef.current = null;
-    }
-
     if (reference.current && floating.current) {
       if (whileElementsMountedRef.current) {
         const cleanupFn = whileElementsMountedRef.current(
@@ -98,20 +95,39 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     }
   }, [update, whileElementsMountedRef]);
 
+  const cleanup = React.useCallback(() => {
+    if (typeof cleanupRef.current === 'function') {
+      cleanupRef.current();
+      cleanupRef.current = null;
+    }
+  }, []);
+
   const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
     (node) => {
+      cleanup();
+
       reference.current = node;
-      runElementMountCallback();
+
+      if (node && referenceCheckRef.current !== node) {
+        referenceCheckRef.current = node;
+        runElementMountCallback();
+      }
     },
-    [runElementMountCallback]
+    [cleanup, runElementMountCallback]
   );
 
   const setFloating: UseFloatingReturn<RT>['floating'] = React.useCallback(
     (node) => {
+      cleanup();
+
       floating.current = node;
-      runElementMountCallback();
+
+      if (node && floatingCheckRef.current !== node) {
+        floatingCheckRef.current = node;
+        runElementMountCallback();
+      }
     },
-    [runElementMountCallback]
+    [cleanup, runElementMountCallback]
   );
 
   const refs = React.useMemo(() => ({reference, floating}), []);
