@@ -24,7 +24,7 @@ function getInnerBoundingClientRect(
 ): ClientRectObject {
   const clientRect = getBoundingClientRect(
     element,
-    false,
+    true,
     strategy === 'fixed'
   );
   const top = clientRect.top + element.clientTop;

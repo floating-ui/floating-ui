@@ -27,14 +27,13 @@ export function getBoundingClientRect(
   const win = isElement(element) ? getWindow(element) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
-  const x =
-    (clientRect.left +
-      (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0)) /
-    scaleX;
-  const y =
-    (clientRect.top +
-      (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0)) /
-    scaleY;
+  const x0 = clientRect.left +
+    (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0);
+  const y0 = clientRect.top +
+    (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0);
+
+  const x = scaleX < 1 ? x0 * scaleX : x0 / scaleX;
+  const y = scaleY < 1 ? y0 * scaleY : y0 / scaleY;
   const width = clientRect.width / scaleX;
   const height = clientRect.height / scaleY;
 
