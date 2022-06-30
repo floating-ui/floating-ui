@@ -352,14 +352,14 @@ export default function Layout({children}) {
     }
   });
 
+  const title = `${
+    nav.find(({url}) => url === pathname)?.title ?? 'Docs'
+  } | Floating UI`;
+
   return (
     <MDXProvider components={components}>
       <Head>
-        <title>
-          {nav.find(({url}) => url === pathname)?.title ??
-            'Docs'}{' '}
-          | Floating UI
-        </title>
+        <title>{title}</title>
       </Head>
       <SkipNavLink />
       <div className="md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
