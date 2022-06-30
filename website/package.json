@@ -27,6 +27,8 @@
     "tailwindcss": "^3.0.23"
   },
   "dependencies": {
+    "@docsearch/css": "^3.1.0",
+    "@docsearch/react": "^3.1.0",
     "@floating-ui/react-dom": "^0.6.3",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
@@ -36,6 +38,7 @@
     "next": "^12.1.5",
     "npm-api": "^1.0.1",
     "parse-numeric-range": "^1.3.0",
+    "patch-package": "^6.4.7",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-feather": "^2.0.10",

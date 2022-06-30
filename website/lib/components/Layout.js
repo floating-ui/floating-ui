@@ -7,6 +7,7 @@ import {useState, useRef} from 'react';
 import {Menu} from 'react-feather';
 import {SkipNavLink, SkipNavContent} from './ReachSkipNav';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import {DocSearch} from '@docsearch/react';
 import Logo from '../../assets/logo.svg';
 import {Chrome} from './Chrome';
 import {Floating} from './Floating';
@@ -351,14 +352,14 @@ export default function Layout({children}) {
     }
   });
 
+  const title = `${
+    nav.find(({url}) => url === pathname)?.title ?? 'Docs'
+  } | Floating UI`;
+
   return (
     <MDXProvider components={components}>
       <Head>
-        <title>
-          {nav.find(({url}) => url === pathname)?.title ??
-            'Docs'}{' '}
-          | Floating UI
-        </title>
+        <title>{title}</title>
       </Head>
       <SkipNavLink />
       <div className="md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
@@ -413,6 +414,13 @@ export default function Layout({children}) {
                 Close
               </button>
             )}
+            <div className="flex flex-col items-stretch p-4 pr-8">
+              <DocSearch
+                appId="0E85PIAI2P"
+                indexName="floating-ui"
+                apiKey="51e39a76760916075e22d9b217f4434f"
+              />
+            </div>
             <ul className="text-lg px-6 xl:px-12">
               {nav.map(({url, title, icon, depth, mono}) => (
                 <li

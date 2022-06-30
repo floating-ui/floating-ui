@@ -36,3 +36,32 @@ code ::selection {
   background-color: rgba(200, 200, 255, 0.25);
   color: inherit;
 }
+
+.DocSearch-Button {
+  background: none;
+  box-shadow: 0 0 0 1px rgba(225, 200, 255, 0.4);
+  color: rgba(225, 200, 255, 0.6);
+}
+
+.DocSearch-Button:hover,
+.DocSearch-Button:focus {
+  background: none;
+  box-shadow: 0 0 0 2px rgba(225, 200, 255, 0.8);
+  color: rgba(225, 200, 255, 0.8);
+}
+
+.DocSearch-Button-Keys {
+  visibility: hidden;
+}
+
+.DocSearch-Button .DocSearch-Search-Icon {
+  color: rgba(225, 200, 255, 0.4);
+}
+
+.DocSearch-Button:hover .DocSearch-Search-Icon {
+  color: rgba(225, 200, 255, 0.8);
+}
+
+.DocSearch-Button:focus .DocSearch-Search-Icon {
+  color: rgba(225, 200, 255, 0.8);
+}

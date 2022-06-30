@@ -9,7 +9,7 @@ import Document, {
 class MyDocument extends Document {
   render() {
     return (
-      <Html>
+      <Html data-theme="dark">
         <Head>
           <script
             async
