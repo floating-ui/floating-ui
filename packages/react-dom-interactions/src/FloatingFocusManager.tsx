@@ -72,6 +72,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const tree = useFloatingTree();
 
+  const root =
+    tree?.nodesRef.current.find((node) => node.id === nodeId)?.parentId == null;
+
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
       .map((type) => {
@@ -226,7 +229,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
-    if (preventTabbing) {
+    // Retain `returnFocus` behavior for root nodes
+    if (preventTabbing && !root) {
       return;
     }
 
@@ -234,17 +238,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const floating = refs.floating.current;
     const previouslyFocusedElement = activeElement(getDocument(floating));
 
-    if (typeof initialFocus === 'number') {
-      focus(getTabbableElements()[initialFocus] ?? floating);
-    } else if (isHTMLElement(initialFocus?.current)) {
-      focus(initialFocus.current ?? floating);
+    if (!preventTabbing) {
+      if (typeof initialFocus === 'number') {
+        focus(getTabbableElements()[initialFocus] ?? floating);
+      } else if (isHTMLElement(initialFocus?.current)) {
+        focus(initialFocus.current ?? floating);
+      }
     }
 
     // Dismissing via outside `pointerdown` should always ignore `returnFocus`
-    // to prevent unwanted scrolling. The `esc` key will continue to focus the
-    // reference.
-    function onDismiss() {
-      returnFocusValue = false;
+    // to prevent unwanted scrolling.
+    function onDismiss(allowReturnFocus = false) {
+      returnFocusValue = allowReturnFocus;
     }
 
     events.on('dismiss', onDismiss);
@@ -263,6 +268,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     returnFocus,
     refs,
     events,
+    root,
   ]);
 
   const isTypeableCombobox = () =>

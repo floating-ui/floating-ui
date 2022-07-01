@@ -317,7 +317,7 @@ describe('focusOnHover', () => {
     fireEvent.click(screen.getByRole('button'));
     fireEvent.mouseMove(screen.getByTestId('item-1'));
     expect(screen.getByTestId('item-1')).toHaveFocus();
-    fireEvent.mouseLeave(screen.getByTestId('item-1'));
+    fireEvent.pointerLeave(screen.getByTestId('item-1'));
     expect(screen.getByRole('menu')).toHaveFocus();
     expect(spy).toHaveBeenCalledWith(1);
     cleanup();
