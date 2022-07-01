@@ -229,6 +229,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
+    // Retain `returnFocus` behavior for root nodes
     if (preventTabbing && !root) {
       return;
     }
@@ -237,10 +238,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const floating = refs.floating.current;
     const previouslyFocusedElement = activeElement(getDocument(floating));
 
-    if (typeof initialFocus === 'number') {
-      focus(getTabbableElements()[initialFocus] ?? floating);
-    } else if (isHTMLElement(initialFocus?.current)) {
-      focus(initialFocus.current ?? floating);
+    if (!preventTabbing) {
+      if (typeof initialFocus === 'number') {
+        focus(getTabbableElements()[initialFocus] ?? floating);
+      } else if (isHTMLElement(initialFocus?.current)) {
+        focus(initialFocus.current ?? floating);
+      }
     }
 
     // Dismissing via outside `pointerdown` should always ignore `returnFocus`
