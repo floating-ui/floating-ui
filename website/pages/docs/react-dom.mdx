@@ -74,6 +74,32 @@ useFloating({
 });
 ```
 
+### Stable ref props
+
+> <span style={{fontFamily: 'sans-serif'}}>⚠️</span> **Warning!** Do not pass unstable inline callbacks to the
+`ref{:.keyword}` prop. This results in an infinite loop because
+a state update occurs inside,
+[but React calls unstable callback refs thinking it's a new function on each render](https://github.com/facebook/react/issues/6249#issuecomment-195412139).
+
+```js
+// ✅ Good
+<div ref={reference} />
+<div ref={floating} />
+
+// ❌ Bad, infinite loop
+<div ref={node => reference(node)} />
+<div ref={node => floating(node)} />
+
+// ✅ Good, memo unstable inline callbacks
+const localRef = useRef();
+const reference = useMemo(
+  () => mergeRefs([floatingReference, localRef]),
+  [floatingReference]
+);
+
+<div ref={reference} />
+```
+
 ## Updating
 
 `useFloating(){:js}` only calculates the position **once** on
@@ -119,26 +145,6 @@ update the position at will:
 
 ```js
 const {update} = useFloating();
-```
-
-### Stable ref props
-
-A state update occurs inside the callback ref to ensure the
-position is fresh when the element mounts. If the ref prop is not
-stable, this results in an infinite loop
-[because React calls unstable callback refs thinking it's a new function on each render](https://github.com/facebook/react/issues/6249#issuecomment-195412139).
-
-If you want to merge another ref with the one returned from
-`useFloating(){:js}`, memo the value:
-
-```js
-// No infinite loop!
-const stableRef = useMemo(
-  () => mergeRefs([userRef, reference]),
-  [userRef, reference]
-);
-
-return <div ref={stableRef} />;
 ```
 
 ## External reference
