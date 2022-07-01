@@ -60,7 +60,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           if (
             toggle &&
             (dataRef.current.openEvent
-              ? dataRef.current.openEvent.type === 'pointerdown'
+              ? dataRef.current.openEvent.type === 'mousedown'
               : true)
           ) {
             onOpenChange(false);

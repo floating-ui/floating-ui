@@ -72,6 +72,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const tree = useFloatingTree();
 
+  const root =
+    tree?.nodesRef.current.find((node) => node.id === nodeId)?.parentId == null;
+
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
       .map((type) => {
@@ -226,7 +229,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
-    if (preventTabbing) {
+    if (preventTabbing && !root) {
       return;
     }
 
@@ -262,6 +265,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     returnFocus,
     refs,
     events,
+    root,
   ]);
 
   const isTypeableCombobox = () =>
