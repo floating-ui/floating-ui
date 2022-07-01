@@ -320,23 +320,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     disabledIndicesRef,
   ]);
 
-  // Return focus to the reference element when `selectedIndex` is a number and
-  // the floating element closes.
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    if (
-      !open &&
-      previousOpen &&
-      selectedIndex != null &&
-      isHTMLElement(refs.domReference.current)
-    ) {
-      refs.domReference.current.focus();
-    }
-  }, [refs, selectedIndex, open, previousOpen, enabled]);
-
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
   useLayoutEffect(() => {
@@ -553,7 +536,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             }
           }
         },
-        onMouseLeave() {
+        onPointerLeave() {
           if (!blockPointerLeaveRef.current) {
             indexRef.current = -1;
             focusItem(listRef, indexRef);

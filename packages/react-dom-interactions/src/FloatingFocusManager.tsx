@@ -241,10 +241,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     // Dismissing via outside `pointerdown` should always ignore `returnFocus`
-    // to prevent unwanted scrolling. The `esc` key will continue to focus the
-    // reference.
-    function onDismiss() {
-      returnFocusValue = false;
+    // to prevent unwanted scrolling.
+    function onDismiss(allowReturnFocus = false) {
+      returnFocusValue = allowReturnFocus;
     }
 
     events.on('dismiss', onDismiss);
