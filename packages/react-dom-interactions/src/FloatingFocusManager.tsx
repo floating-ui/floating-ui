@@ -234,9 +234,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       return;
     }
 
-    let returnFocusValue = returnFocus;
     const floating = refs.floating.current;
-    const previouslyFocusedElement = activeElement(getDocument(floating));
+    const doc = getDocument(floating);
+
+    let returnFocusValue = returnFocus;
+    let previouslyFocusedElement = activeElement(doc);
+
+    if (previouslyFocusedElement === doc.body && refs.domReference.current) {
+      previouslyFocusedElement = refs.domReference.current;
+    }
 
     if (!preventTabbing) {
       if (typeof initialFocus === 'number') {
