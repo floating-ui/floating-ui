@@ -115,9 +115,9 @@ export const inner = (
         refOverflow.top >= -referenceOverflowThreshold ||
         refOverflow.bottom >= -referenceOverflowThreshold
       ) {
-        onFallbackChange(true);
+        flushSync(() => onFallbackChange(true));
       } else {
-        onFallbackChange(false);
+        flushSync(() => onFallbackChange(false));
       }
     }
 
@@ -217,13 +217,13 @@ export const useInnerOffset = (
 
   return {
     floating: {
-      onKeyDown() {
+      onKeyDown({key}) {
         controlledScrollingRef.current = true;
       },
       onWheel() {
         controlledScrollingRef.current = false;
       },
-      onTouchMove() {
+      onPointerMove() {
         controlledScrollingRef.current = false;
       },
       onScroll() {

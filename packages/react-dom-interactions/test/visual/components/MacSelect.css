@@ -18,7 +18,8 @@
 .MacSelect-button {
   all: unset;
   font-size: 15px;
-  padding: 5px 8px;
+  padding: 12px 10px;
+  line-height: 1;
   background: white;
   border-radius: 5px;
   cursor: default;
@@ -44,19 +45,46 @@
   display: block;
   all: unset;
   width: 100%;
-  padding: 8px;
+  padding: 12px 10px;
   border-radius: 5px;
   box-sizing: inherit;
   user-select: none;
+  line-height: 1;
+  scroll-margin: 50px;
 }
 
 .MacSelect-ScrollArrow {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
-  border-radius: 10px;
+  border-radius: 0;
   cursor: default;
   font-size: 12px;
+  line-height: 1;
+  height: 25px;
   user-select: none;
+  position: relative;
+}
+
+.MacSelect-ScrollArrow::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 35px;
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.MacSelect-ScrollArrow[data-dir='up']::before {
+  background: linear-gradient(to bottom, white 50%, transparent);
+  border-radius: 8px 8px 0 0;
+  top: 0;
+}
+
+.MacSelect-ScrollArrow[data-dir='down']::before {
+  background: linear-gradient(to top, white 50%, transparent);
+  border-radius: 0 0 8px 8px;
+  top: -10px;
 }

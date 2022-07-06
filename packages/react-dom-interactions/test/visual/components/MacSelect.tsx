@@ -38,7 +38,7 @@ const fruits = [
   '🍈 Melon',
   '🍐 Pear',
   '🥝 Kiwifruit',
-  '🥭 Tropical Mango',
+  '🥭 Mango',
   '🥥 Coconut',
   '🍅 Tomato',
   '🫐 Blueberry',
@@ -66,11 +66,15 @@ function ScrollArrow({
   onScroll: (amount: number) => void;
   onHide: () => void;
 }) {
+  // Padding for .scrollTop for when to show the scroll arrow
+  const SCROLL_ARROW_PADDING = 15;
+
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     strategy: 'fixed',
     placement: dir === 'up' ? 'top' : 'bottom',
-    middleware: [offset(({rects}) => -rects.floating.height + 1)],
-    whileElementsMounted: autoUpdate,
+    middleware: [offset(({rects}) => -rects.floating.height)],
+    whileElementsMounted: (...args) =>
+      autoUpdate(...args, {animationFrame: true}),
   });
 
   const [element, setElement] = useState<HTMLElement | null>(null);
@@ -155,9 +159,10 @@ function ScrollArrow({
   }
 
   if (
-    (dir === 'up' && scrollTop < 15) ||
+    (dir === 'up' && scrollTop < SCROLL_ARROW_PADDING) ||
     (dir === 'down' &&
-      scrollTop > element.scrollHeight - element.clientHeight - 15)
+      scrollTop >
+        element.scrollHeight - element.clientHeight - SCROLL_ARROW_PADDING)
   ) {
     return null;
   }
@@ -169,11 +174,13 @@ function ScrollArrow({
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       style={{
-        width: element.offsetWidth,
+        width: element.offsetWidth - 2,
         position: strategy,
-        top: y ?? 0,
-        left: x ?? 0,
+        top: 0,
+        left: 0,
+        transform: `translate3d(${x}px, ${y}px, 0)`,
       }}
+      data-dir={dir}
     >
       {dir === 'up' ? '▲' : '▼'}
     </div>
@@ -248,7 +255,6 @@ export function Main() {
       listRef,
       activeIndex,
       selectedIndex,
-      loop: true,
       onNavigate: setActiveIndex,
     }),
     useTypeahead(context, {
@@ -304,7 +310,7 @@ export function Main() {
     if (open && controlledScrolling) {
       requestAnimationFrame(() => {
         if (activeIndex != null) {
-          listRef.current[activeIndex]?.scrollIntoView({block: 'center'});
+          listRef.current[activeIndex]?.scrollIntoView({block: 'nearest'});
         }
       });
     }
@@ -317,7 +323,7 @@ export function Main() {
     if (open && fallback) {
       requestAnimationFrame(() => {
         if (selectedIndex != null) {
-          listRef.current[selectedIndex]?.scrollIntoView({block: 'center'});
+          listRef.current[selectedIndex]?.scrollIntoView({block: 'nearest'});
         }
       });
     }
@@ -414,6 +420,7 @@ export function Main() {
                     const {emoji, text} = getParts(fruit);
                     return (
                       <button
+                        key={fruit}
                         // Prevent immediate selection on touch devices when
                         // pressing the ScrollArrows
                         disabled={blockSelection}
