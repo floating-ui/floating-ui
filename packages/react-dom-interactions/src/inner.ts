@@ -217,7 +217,7 @@ export const useInnerOffset = (
 
   return {
     floating: {
-      onKeyDown({key}) {
+      onKeyDown() {
         controlledScrollingRef.current = true;
       },
       onWheel() {
@@ -237,14 +237,17 @@ export const useInnerOffset = (
           const scrollDiff = el.scrollTop - prevScrollTopRef.current;
 
           if (
-            (overflowRef.current.bottom < -0.5 && scrollDiff < 0) ||
-            (overflowRef.current.top < -0.5 && scrollDiff > 0)
+            (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
+            (overflowRef.current.top < -0.5 && scrollDiff > 1)
           ) {
             flushSync(() => onChange((d) => d + scrollDiff));
           }
         }
 
-        prevScrollTopRef.current = el.scrollTop;
+        // [Firefox] Wait for the height change to have been applied.
+        requestAnimationFrame(() => {
+          prevScrollTopRef.current = el.scrollTop;
+        });
       },
     },
   };

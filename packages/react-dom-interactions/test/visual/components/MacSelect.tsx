@@ -66,9 +66,6 @@ function ScrollArrow({
   onScroll: (amount: number) => void;
   onHide: () => void;
 }) {
-  // Padding for .scrollTop for when to show the scroll arrow
-  const SCROLL_ARROW_PADDING = 15;
-
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     strategy: 'fixed',
     placement: dir === 'up' ? 'top' : 'bottom',
@@ -80,6 +77,8 @@ function ScrollArrow({
   const [element, setElement] = useState<HTMLElement | null>(null);
   const frameRef = useRef<any>();
   const statusRef = useRef<'idle' | 'active'>('idle');
+  // Padding for .scrollTop for when to show the scroll arrow
+  const SCROLL_ARROW_PADDING = 10;
 
   useLayoutEffect(() => {
     if (open) {
@@ -149,10 +148,13 @@ function ScrollArrow({
     cancelAnimationFrame(frameRef.current);
   };
 
-  const floatingCallback = useCallback((node: HTMLElement | null) => {
-    floating(node);
-    arrowRef.current = node;
-  }, []);
+  const floatingCallback = useCallback(
+    (node: HTMLElement | null) => {
+      floating(node);
+      arrowRef.current = node;
+    },
+    [arrowRef, floating]
+  );
 
   if (!element) {
     return null;
@@ -170,17 +172,16 @@ function ScrollArrow({
   return (
     <div
       className="MacSelect-ScrollArrow"
+      data-dir={dir}
       ref={floatingCallback}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       style={{
         width: element.offsetWidth - 2,
         position: strategy,
-        top: 0,
-        left: 0,
-        transform: `translate3d(${x}px, ${y}px, 0)`,
+        top: y ?? 0,
+        left: x ?? 0,
       }}
-      data-dir={dir}
     >
       {dir === 'up' ? '▲' : '▼'}
     </div>
@@ -236,7 +237,7 @@ export function Main() {
             onFallbackChange: setFallback,
             padding: 10,
             minItemsVisible: touch ? 10 : 4,
-            referenceOverflowThreshold: 25,
+            referenceOverflowThreshold: 20,
           }),
           offset({crossAxis: -4}),
         ],
