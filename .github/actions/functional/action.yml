@@ -1,5 +1,12 @@
 name: Functional
 description: Performs functional tests checks
+inputs:
+  apiKey:
+    required: true
+    description: "Replay.io API Key"
+  issue-number:
+    required: true
+    description: "Issue / Pull Request on which to comment results"
 runs:
   using: composite
   steps:
@@ -14,8 +21,11 @@ runs:
       shell: sh
     - run: npm run build
       shell: sh
-    - run: npm run test:functional
-      shell: sh
+    - uses: replayio/action-playwright@v0.4.17
+      with:
+        apiKey: ${{ inputs.apiKey }}
+        issue-number: ${{ inputs.issue-number }}
+        project: replay-firefox
     - uses: actions/upload-artifact@v2
       if: always()
       with:

@@ -1,22 +1,23 @@
 name: Tests
-on: [push, pull_request]
+on: [pull_request]
+# on: [push, pull_request]
 
 jobs:
-  checks:
-    name: Linting and type checking
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup
-      - uses: ./.github/actions/typescript
+  # checks:
+  #   name: Linting and type checking
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/setup
+  #     - uses: ./.github/actions/typescript
 
-  unit-tests:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup
-      - uses: ./.github/actions/unit
+  # unit-tests:
+  #   name: Unit tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/setup
+  #     - uses: ./.github/actions/unit
 
   functional-tests:
     name: Functional tests
@@ -25,3 +26,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
       - uses: ./.github/actions/functional
+        with:
+          apiKey: ${{ secrets.RECORD_REPLAY_API_KEY }}
+          issue-number: ${{ github.event.pull_request.number }}
