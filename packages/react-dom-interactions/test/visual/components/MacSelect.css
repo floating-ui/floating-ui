@@ -1,0 +1,90 @@
+.MacSelect {
+  background: white;
+  font-size: 15px;
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 1px, rgb(0 0 0 / 3%) 0px 100px 80px,
+    rgb(0 0 0 / 2%) 0px 41.7776px 33.4221px,
+    rgb(0 0 0 / 2%) 0px 22.3363px 17.869px,
+    rgb(0 0 0 / 4%) 0px 12.5216px 10.0172px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 5px;
+  outline: 0;
+  user-select: none;
+}
+
+.MacSelect-button {
+  all: unset;
+  font-size: 15px;
+  padding: 12px 10px;
+  line-height: 1;
+  background: white;
+  border-radius: 5px;
+  cursor: default;
+  user-select: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.MacSelect-button:hover {
+  background: rgba(0, 200, 255, 0.2);
+  border-color: transparent;
+}
+
+.MacSelect-button:focus-visible {
+  border-color: royalblue;
+}
+
+.MacSelect::-webkit-scrollbar {
+  display: none;
+}
+
+.MacSelect button {
+  display: block;
+  all: unset;
+  width: 100%;
+  padding: 12px 10px;
+  border-radius: 5px;
+  box-sizing: inherit;
+  user-select: none;
+  line-height: 1;
+  scroll-margin: 50px;
+}
+
+.MacSelect-ScrollArrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0;
+  cursor: default;
+  font-size: 12px;
+  line-height: 1;
+  height: 25px;
+  user-select: none;
+  position: relative;
+}
+
+.MacSelect-ScrollArrow::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 35px;
+  position: absolute;
+  left: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.MacSelect-ScrollArrow[data-dir='up']::before {
+  background: linear-gradient(to bottom, white 50%, transparent);
+  border-radius: 8px 8px 0 0;
+  top: 0;
+}
+
+.MacSelect-ScrollArrow[data-dir='down']::before {
+  background: linear-gradient(to top, white 50%, transparent);
+  border-radius: 0 0 8px 8px;
+  top: -10px;
+}

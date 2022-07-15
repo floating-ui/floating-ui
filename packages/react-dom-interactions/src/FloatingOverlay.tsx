@@ -1,26 +1,8 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+import {getPlatform} from './utils/getPlatform';
 
 const identifier = 'data-floating-ui-scroll-lock';
-
-interface NavigatorUAData {
-  brands: Array<{brand: string; version: string}>;
-  mobile: boolean;
-  platform: string;
-}
-
-// Avoid Chrome DevTools blue warning
-export function getPlatform(): string {
-  const uaData = (navigator as any).userAgentData as
-    | NavigatorUAData
-    | undefined;
-
-  if (uaData?.platform) {
-    return uaData.platform;
-  }
-
-  return navigator.platform;
-}
 
 /**
  * Provides base styling for a fixed overlay element to dim content or block
