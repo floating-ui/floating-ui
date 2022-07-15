@@ -8,7 +8,7 @@ import type {
   ReferenceType,
 } from '../types';
 import {getDocument} from '../utils/getDocument';
-import {isElement, isHTMLElement} from '../utils/is';
+import {isElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
 import {usePrevious} from '../utils/usePrevious';
 
@@ -273,7 +273,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       const reference = refs.domReference.current;
       const floating = refs.floating.current;
 
-      if (isHTMLElement(reference) && floating) {
+      if (isElement(reference) && floating) {
         const parentFloating = tree?.nodesRef.current.find(
           (node) => node.id === parentId
         )?.context?.refs.floating.current;
