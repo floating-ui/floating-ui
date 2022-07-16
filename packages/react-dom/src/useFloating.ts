@@ -33,6 +33,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     middlewareData: {},
   });
 
+  const dataRef = useLatestRef(data);
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
   if (
@@ -53,14 +54,14 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       middleware: latestMiddleware,
       placement,
       strategy,
-    }).then((data) => {
-      if (isMountedRef.current) {
+    }).then((latestData) => {
+      if (isMountedRef.current && !deepEqual(dataRef.current, latestData)) {
         ReactDOM.flushSync(() => {
-          setData(data);
+          setData(latestData);
         });
       }
     });
-  }, [latestMiddleware, placement, strategy]);
+  }, [dataRef, latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
     // Skip first update
