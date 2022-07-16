@@ -1,10 +1,4 @@
-import type {
-  Middleware,
-  Rect,
-  Placement,
-  MiddlewareArguments,
-  Coords,
-} from '../types';
+import type {Middleware, MiddlewareArguments, Coords} from '../types';
 import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getCrossAxis} from '../utils/getCrossAxis';
@@ -100,7 +94,7 @@ export const shift = (
 });
 
 type LimitShiftOffset =
-  | ((args: {placement: Placement; floating: Rect; reference: Rect}) =>
+  | ((args: MiddlewareArguments) =>
       | number
       | {
           /**
@@ -173,7 +167,7 @@ export const limitShift = (
     let crossAxisCoord = coords[crossAxis];
 
     const rawOffset =
-      typeof offset === 'function' ? offset({...rects, placement}) : offset;
+      typeof offset === 'function' ? offset(middlewareArguments) : offset;
     const computedOffset =
       typeof rawOffset === 'number'
         ? {mainAxis: rawOffset, crossAxis: 0}
