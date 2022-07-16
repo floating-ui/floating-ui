@@ -1,6 +1,6 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import * as React from 'react';
-import {useFloatingTree} from '../FloatingTree';
+import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {getChildren} from '../utils/getChildren';
@@ -35,6 +35,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 ): ElementProps => {
   const tree = useFloatingTree();
   const onOpenChangeRef = useLatestRef(onOpenChange);
+  const nested = useFloatingParentNodeId() != null;
 
   const isFocusInsideFloating = React.useCallback(() => {
     return refs.floating.current?.contains(
@@ -77,7 +78,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      events.emit('dismiss');
+      events.emit('dismiss', nested);
       onOpenChangeRef.current(false);
     }
 
@@ -130,6 +131,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     bubbles,
     isFocusInsideFloating,
     refs,
+    nested,
   ]);
 
   if (!enabled) {
