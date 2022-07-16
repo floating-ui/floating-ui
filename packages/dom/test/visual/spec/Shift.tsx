@@ -21,9 +21,9 @@ const LIMIT_SHIFT_OFFSET: Array<{
   {offset: -50, name: '-50'},
   {offset: {mainAxis: 50}, name: 'mA: 50'},
   {offset: {crossAxis: 50}, name: 'cA: 50'},
-  {offset: ({reference}) => reference.width / 2, name: 'fn => r.width/2'},
+  {offset: ({rects}) => rects.reference.width / 2, name: 'fn => r.width/2'},
   {
-    offset: ({reference}) => ({crossAxis: reference.width}),
+    offset: ({rects}) => ({crossAxis: rects.reference.width}),
     name: 'fn => cA: f.width/2',
   },
 ];
