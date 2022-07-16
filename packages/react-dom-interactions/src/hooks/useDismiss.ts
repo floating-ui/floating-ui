@@ -2,7 +2,6 @@ import {getOverflowAncestors} from '@floating-ui/react-dom';
 import * as React from 'react';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
@@ -37,12 +36,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const nested = useFloatingParentNodeId() != null;
 
-  const isFocusInsideFloating = React.useCallback(() => {
-    return refs.floating.current?.contains(
-      activeElement(getDocument(refs.floating.current))
-    );
-  }, [refs]);
-
   React.useEffect(() => {
     if (!open || !enabled) {
       return;
@@ -50,7 +43,11 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (!bubbles && !isFocusInsideFloating()) {
+        if (
+          !bubbles &&
+          tree &&
+          getChildren(tree.nodesRef.current, nodeId).length > 0
+        ) {
           return;
         }
 
@@ -74,7 +71,11 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      if (!bubbles && !isFocusInsideFloating()) {
+      if (
+        !bubbles &&
+        tree &&
+        getChildren(tree.nodesRef.current, nodeId).length > 0
+      ) {
         return;
       }
 
@@ -129,7 +130,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     ancestorScroll,
     enabled,
     bubbles,
-    isFocusInsideFloating,
     refs,
     nested,
   ]);
