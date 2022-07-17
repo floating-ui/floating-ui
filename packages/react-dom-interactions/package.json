@@ -12,16 +12,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.react-dom-interactions.js",
+  "main": "./dist/floating-ui.react-dom-interactions.umd.js",
   "module": "./dist/floating-ui.react-dom-interactions.esm.js",
-  "unpkg": "./dist/floating-ui.react-dom-interactions.min.js",
+  "unpkg": "./dist/floating-ui.react-dom-interactions.umd.min.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
       "module": "./dist/floating-ui.react-dom-interactions.esm.js",
       "import": "./dist/floating-ui.react-dom-interactions.mjs",
-      "default": "./dist/floating-ui.react-dom-interactions.js"
+      "default": "./dist/floating-ui.react-dom-interactions.umd.js"
     },
     "./package.json": "./package.json"
   },
