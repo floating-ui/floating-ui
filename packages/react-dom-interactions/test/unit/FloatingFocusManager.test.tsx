@@ -1,7 +1,18 @@
-import {useRef, useState} from 'react';
+import {cloneElement, useRef, useState} from 'react';
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {FloatingFocusManager, useFloating} from '../../src';
+import {
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingTree,
+  useClick,
+  useDismiss,
+  useFloating,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useInteractions,
+  FloatingPortal,
+} from '../../src';
 import {Props} from '../../src/FloatingFocusManager';
 
 function App(
@@ -92,6 +103,96 @@ describe('returnFocus', () => {
     expect(screen.getByTestId('reference')).not.toHaveFocus();
 
     cleanup();
+  });
+
+  test('always returns to the reference for nested elements', async () => {
+    interface Props {
+      open?: boolean;
+      render: (props: {close: () => void}) => React.ReactNode;
+      children: JSX.Element;
+    }
+
+    const Dialog = ({render, open: passedOpen = false, children}: Props) => {
+      const [open, setOpen] = useState(passedOpen);
+      const nodeId = useFloatingNodeId();
+
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+        nodeId,
+      });
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        useClick(context),
+        useDismiss(context, {bubbles: false}),
+      ]);
+
+      return (
+        <FloatingNode id={nodeId}>
+          {cloneElement(
+            children,
+            getReferenceProps({ref: reference, ...children.props})
+          )}
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context}>
+                <div {...getFloatingProps({ref: floating})}>
+                  {render({
+                    close: () => setOpen(false),
+                  })}
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+        </FloatingNode>
+      );
+    };
+
+    const NestedDialog: React.FC<Props> = (props) => {
+      const parentId = useFloatingParentNodeId();
+
+      if (parentId == null) {
+        return (
+          <FloatingTree>
+            <Dialog {...props} />
+          </FloatingTree>
+        );
+      }
+
+      return <Dialog {...props} />;
+    };
+
+    render(
+      <NestedDialog
+        render={({close}) => (
+          <>
+            <NestedDialog
+              render={({close}) => (
+                <button onClick={close} data-testid="close-nested-dialog" />
+              )}
+            >
+              <button data-testid="open-nested-dialog" />
+            </NestedDialog>
+            <button onClick={close} data-testid="close-dialog" />
+          </>
+        )}
+      >
+        <button data-testid="open-dialog" />
+      </NestedDialog>
+    );
+
+    await userEvent.click(screen.getByTestId('open-dialog'));
+    await userEvent.click(screen.getByTestId('open-nested-dialog'));
+
+    expect(screen.queryByTestId('close-nested-dialog')).toBeInTheDocument();
+
+    fireEvent.pointerDown(document.body);
+
+    expect(screen.queryByTestId('close-nested-dialog')).not.toBeInTheDocument();
+
+    fireEvent.pointerDown(document.body);
+
+    expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
   });
 });
 
