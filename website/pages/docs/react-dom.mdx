@@ -74,32 +74,6 @@ useFloating({
 });
 ```
 
-### Stable ref props
-
-> <span style={{fontFamily: 'sans-serif'}}>⚠️</span> **Warning!** Do not pass unstable inline callbacks to the
-`ref{:.keyword}` prop. This results in an infinite loop because
-a state update occurs inside,
-[but React calls unstable callback refs thinking it's a new function on each render](https://github.com/facebook/react/issues/6249#issuecomment-195412139).
-
-```js
-// ✅ Good
-<div ref={reference} />
-<div ref={floating} />
-
-// ❌ Bad, infinite loop
-<div ref={node => reference(node)} />
-<div ref={node => floating(node)} />
-
-// ✅ Good, memo unstable inline callbacks
-const localRef = useRef();
-const reference = useMemo(
-  () => mergeRefs([floatingReference, localRef]),
-  [floatingReference]
-);
-
-<div ref={reference} />
-```
-
 ## Updating
 
 `useFloating(){:js}` only calculates the position **once** on

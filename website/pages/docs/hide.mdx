@@ -94,8 +94,12 @@ data object.
 
 ### referenceHidden
 
-Determines whether the reference element is currently not visible
-on screen for the user.
+Determines whether the reference element is fully clipped, and is
+not currently visible on screen for the user.
+
+Note that `visibility` and `opacity` styles are not considered,
+only the clipping of its ancestors (scrolling ancestors or
+viewport).
 
 ### referenceHiddenOffsets
 
