@@ -51,7 +51,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        events.emit('dismiss', true);
+        events.emit('dismiss', {preventScroll: false});
         onOpenChangeRef.current(false);
       }
     }
@@ -79,7 +79,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      events.emit('dismiss', nested);
+      events.emit('dismiss', nested ? {preventScroll: true} : false);
       onOpenChangeRef.current(false);
     }
 

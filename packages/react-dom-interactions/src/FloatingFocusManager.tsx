@@ -11,11 +11,11 @@ import {isTypeableElement, TYPEABLE_SELECTOR} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
-function focus(el: HTMLElement | undefined) {
+function focus(el: HTMLElement | undefined, preventScroll = false) {
   // `pointerDown` clicks occur before `focus`, so the button will steal the
   // focus unless we wait a frame.
   requestAnimationFrame(() => {
-    el?.focus();
+    el?.focus({preventScroll});
   });
 }
 
@@ -238,6 +238,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const doc = getDocument(floating);
 
     let returnFocusValue = returnFocus;
+    let preventReturnFocusScroll = false;
     let previouslyFocusedElement = activeElement(doc);
 
     if (previouslyFocusedElement === doc.body && refs.domReference.current) {
@@ -254,8 +255,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // Dismissing via outside `pointerdown` should always ignore `returnFocus`
     // to prevent unwanted scrolling.
-    function onDismiss(allowReturnFocus = false) {
-      returnFocusValue = allowReturnFocus;
+    function onDismiss(
+      allowReturnFocus: boolean | {preventScroll: boolean} = false
+    ) {
+      if (typeof allowReturnFocus === 'object') {
+        returnFocusValue = true;
+        preventReturnFocusScroll = allowReturnFocus.preventScroll;
+      } else {
+        returnFocusValue = allowReturnFocus;
+      }
     }
 
     events.on('dismiss', onDismiss);
@@ -264,7 +272,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       events.off('dismiss', onDismiss);
 
       if (returnFocusValue && isHTMLElement(previouslyFocusedElement)) {
-        focus(previouslyFocusedElement);
+        focus(previouslyFocusedElement, preventReturnFocusScroll);
       }
     };
   }, [
