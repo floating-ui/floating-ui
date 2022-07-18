@@ -17,12 +17,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   strategy = 'absolute',
   whileElementsMounted,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
-  const reference = React.useRef<RT | null>(null);
-  const floating = React.useRef<HTMLElement | null>(null);
-
-  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-  const cleanupRef = React.useRef<(() => void) | void | null>(null);
-
   const [data, setData] = React.useState<UseFloatingData>({
     // Setting these to `null` will allow the consumer to determine if
     // `computePosition()` has run yet
@@ -33,17 +27,23 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     middlewareData: {},
   });
 
-  const dataRef = useLatestRef(data);
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
   if (
     !deepEqual(
-      latestMiddleware?.map(({options}) => options),
-      middleware?.map(({options}) => options)
+      latestMiddleware?.map(({name, options}) => ({name, options})),
+      middleware?.map(({name, options}) => ({name, options}))
     )
   ) {
     setLatestMiddleware(middleware);
   }
+
+  const reference = React.useRef<RT | null>(null);
+  const floating = React.useRef<HTMLElement | null>(null);
+  const cleanupRef = React.useRef<(() => void) | void | null>(null);
+  const dataRef = React.useRef(data);
+
+  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
 
   const update = React.useCallback(() => {
     if (!reference.current || !floating.current) {
@@ -54,14 +54,15 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       middleware: latestMiddleware,
       placement,
       strategy,
-    }).then((latestData) => {
-      if (isMountedRef.current && !deepEqual(dataRef.current, latestData)) {
+    }).then((data) => {
+      if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
+        dataRef.current = data;
         ReactDOM.flushSync(() => {
-          setData(latestData);
+          setData(data);
         });
       }
     });
-  }, [dataRef, latestMiddleware, placement, strategy]);
+  }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
     // Skip first update
