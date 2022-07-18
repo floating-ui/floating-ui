@@ -758,7 +758,7 @@ function HomePage() {
             <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
               <h3 className="text-2xl font-bold mb-4">CDN</h3>
               <p className="text-lg">
-                Install with the unpkg CDN.
+                Install with the jsDelivr CDN.
               </p>
               <Link href="/docs/getting-started#cdn">
                 <a
