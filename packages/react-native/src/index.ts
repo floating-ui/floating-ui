@@ -87,8 +87,8 @@ export const useFloating = ({
 
   if (
     !deepEqual(
-      latestMiddleware?.map(({options}) => options),
-      middleware?.map(({options}) => options)
+      latestMiddleware?.map(({name, options}) => ({name, options})),
+      middleware?.map(({name, options}) => ({name, options}))
     )
   ) {
     setLatestMiddleware(middleware);
