@@ -96,7 +96,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onLeave() {
-      if (dataRef.current.openEvent?.type.includes('mouse')) {
+      const type = dataRef.current.openEvent?.type;
+      if (type?.includes('mouse') && type !== 'mousedown') {
         onOpenChangeRef.current(false);
       }
     }
@@ -148,6 +149,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
+    function isClickLikeOpenEvent() {
+      return dataRef.current.openEvent
+        ? ['click', 'mousedown'].includes(dataRef.current.openEvent.type)
+        : false;
+    }
+
     function onMouseEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
@@ -174,10 +181,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onMouseLeave(event: MouseEvent) {
-      if (
-        dataRef.current.openEvent?.type === 'click' ||
-        dataRef.current.openEvent?.type === 'mousedown'
-      ) {
+      if (isClickLikeOpenEvent()) {
         return;
       }
 
@@ -212,6 +216,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     // did not move.
     // https://github.com/floating-ui/floating-ui/discussions/1692
     function onScrollMouseLeave(event: MouseEvent) {
+      if (isClickLikeOpenEvent()) {
+        return;
+      }
+
       handleCloseRef.current?.({
         ...context,
         tree,
