@@ -176,7 +176,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     function onMouseLeave(event: MouseEvent) {
       if (
         dataRef.current.openEvent?.type === 'click' ||
-        dataRef.current.openEvent?.type === 'pointerdown'
+        dataRef.current.openEvent?.type === 'mousedown'
       ) {
         return;
       }
