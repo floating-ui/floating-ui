@@ -83,18 +83,14 @@ Floating UI can be loaded via CDN using ESM or UMD format.
 ### ESM
 
 ```js
-// development
-import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__';
-
-// production
-import {computePosition} from 'https://cdn.skypack.dev/@floating-ui/dom@__DOM_VERSION__?min';
+import {computePosition} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@__DOM_VERSION__/+esm';
 ```
 
 ### UMD
 
 ```html
-<script src="https://unpkg.com/@floating-ui/core@__CORE_VERSION__"></script>
-<script src="https://unpkg.com/@floating-ui/dom@__DOM_VERSION__"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@__CORE_VERSION__"></script>
+<script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@__DOM_VERSION__"></script>
 ```
 
 All exports will be available on `window.FloatingUIDOM{:js}`.
