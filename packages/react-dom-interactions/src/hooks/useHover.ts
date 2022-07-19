@@ -96,7 +96,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onLeave() {
-      if (dataRef.current.openEvent?.type.includes('mouse')) {
+      const type = dataRef.current.openEvent?.type;
+      if (type?.includes('mouse') && type !== 'mousedown') {
         onOpenChangeRef.current(false);
       }
     }
