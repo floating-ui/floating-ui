@@ -139,8 +139,7 @@ This can also take a function, which provides the
 shift({
   limiter: limitShift({
     // Start limiting by the reference's width earlier
-    offset: ({reference, floating, placement}) =>
-      reference.width,
+    offset: ({rects, placement}) => rects.reference.width,
   }),
 });
 ```
@@ -156,9 +155,9 @@ shift({
       crossAxis: 5,
     },
     // or a function which returns one
-    offset: ({reference, floating, placement}) => ({
-      mainAxis: reference.height,
-      crossAxis: floating.width,
+    offset: ({rects, placement}) => ({
+      mainAxis: rects.reference.height,
+      crossAxis: rects.floating.width,
     }),
   }),
 });
