@@ -32,7 +32,10 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIReactDOM',
-      file: path.join(__dirname, 'dist/floating-ui.react-dom-interactions.js'),
+      file: path.join(
+        __dirname,
+        'dist/floating-ui.react-dom-interactions.umd.js'
+      ),
       format: 'umd',
       globals: {
         react: 'React',
@@ -50,7 +53,7 @@ const bundles = [
       name: 'FloatingUIReactDOM',
       file: path.join(
         __dirname,
-        'dist/floating-ui.react-dom-interactions.min.js'
+        'dist/floating-ui.react-dom-interactions.umd.min.js'
       ),
       format: 'umd',
       globals: {

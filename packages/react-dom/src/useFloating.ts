@@ -17,12 +17,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   strategy = 'absolute',
   whileElementsMounted,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
-  const reference = React.useRef<RT | null>(null);
-  const floating = React.useRef<HTMLElement | null>(null);
-
-  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
-  const cleanupRef = React.useRef<(() => void) | void | null>(null);
-
   const [data, setData] = React.useState<UseFloatingData>({
     // Setting these to `null` will allow the consumer to determine if
     // `computePosition()` has run yet
@@ -37,12 +31,19 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   if (
     !deepEqual(
-      latestMiddleware?.map(({options}) => options),
-      middleware?.map(({options}) => options)
+      latestMiddleware?.map(({name, options}) => ({name, options})),
+      middleware?.map(({name, options}) => ({name, options}))
     )
   ) {
     setLatestMiddleware(middleware);
   }
+
+  const reference = React.useRef<RT | null>(null);
+  const floating = React.useRef<HTMLElement | null>(null);
+  const cleanupRef = React.useRef<(() => void) | void | null>(null);
+  const dataRef = React.useRef(data);
+
+  const whileElementsMountedRef = useLatestRef(whileElementsMounted);
 
   const update = React.useCallback(() => {
     if (!reference.current || !floating.current) {
@@ -54,7 +55,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       placement,
       strategy,
     }).then((data) => {
-      if (isMountedRef.current) {
+      if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
+        dataRef.current = data;
         ReactDOM.flushSync(() => {
           setData(data);
         });

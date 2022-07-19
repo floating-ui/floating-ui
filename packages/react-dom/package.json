@@ -12,16 +12,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.react-dom.js",
+  "main": "./dist/floating-ui.react-dom.umd.js",
   "module": "./dist/floating-ui.react-dom.esm.js",
-  "unpkg": "./dist/floating-ui.react-dom.min.js",
+  "unpkg": "./dist/floating-ui.react-dom.umd.min.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
       "module": "./dist/floating-ui.react-dom.esm.js",
       "import": "./dist/floating-ui.react-dom.mjs",
-      "default": "./dist/floating-ui.react-dom.js"
+      "default": "./dist/floating-ui.react-dom.umd.js"
     },
     "./package.json": "./package.json"
   },
@@ -60,8 +60,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.4.2",
-    "use-isomorphic-layout-effect": "^1.1.1"
+    "@floating-ui/dom": "^0.4.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
@@ -80,6 +79,7 @@
     "react-dom": "^18.0.0",
     "rollup": "^2.60.1",
     "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^27.0.7"
+    "ts-jest": "^27.0.7",
+    "use-isomorphic-layout-effect": "^1.1.1"
   }
 }

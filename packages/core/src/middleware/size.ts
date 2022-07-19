@@ -18,7 +18,7 @@ export interface Options {
       availableWidth: number;
       availableHeight: number;
     }
-  ): void;
+  ): void | Promise<void>;
 }
 
 /**
@@ -34,7 +34,7 @@ export const size = (
   options,
   async fn(middlewareArguments) {
     const {placement, rects, platform, elements} = middlewareArguments;
-    const {apply, ...detectOverflowOptions} = options;
+    const {apply = () => {}, ...detectOverflowOptions} = options;
 
     const overflow = await detectOverflow(
       middlewareArguments,
@@ -82,18 +82,13 @@ export const size = (
           : overflow[widthSide]),
     };
 
-    const prevDimensions = await platform.getDimensions(elements.floating);
-
-    apply?.({
-      ...middlewareArguments,
-      ...dimensions,
-    });
+    await apply({...middlewareArguments, ...dimensions});
 
     const nextDimensions = await platform.getDimensions(elements.floating);
 
     if (
-      prevDimensions.width !== nextDimensions.width ||
-      prevDimensions.height !== nextDimensions.height
+      rects.floating.width !== nextDimensions.width ||
+      rects.floating.height !== nextDimensions.height
     ) {
       return {
         reset: {
