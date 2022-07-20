@@ -58,11 +58,9 @@ interface AxesOffsets {
 type Options =
   | number
   | AxesOffsets
-  | (({
-      reference: Rect,
-      floating: Rect,
-      placement: Placement,
-    }) => number | AxesOffsets);
+  | ((
+      middlewareArguments: MiddlewareArguments
+    ) => number | AxesOffsets);
 ```
 
 A number represents the distance (gutter or margin) between the
@@ -145,6 +143,12 @@ values enables the ability to "inset" the floating element such
 that it is positioned on top of the reference element in some
 fashion.
 
-This is useful for UI components such as select dropdowns where
-it should be positioned relative to an item inside the dropdown
-list.
+For instance, if you wanted to mimic something like
+`'center'{:js}` for `placement{:.objectKey}` (with default
+placement):
+
+```js
+offset(({rects}) => {
+  return -rects.reference.height / 2 - rects.floating.height / 2;
+});
+```

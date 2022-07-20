@@ -173,7 +173,7 @@ extend the behavior of the library.
 ## Return value
 
 ```ts
-type ComputePositionReturn = {
+interface ComputePositionReturn {
   x: number;
   y: number;
   // The stateful placement, which can be different
@@ -181,7 +181,7 @@ type ComputePositionReturn = {
   placement: Placement;
   strategy: Strategy;
   middlewareData: MiddlewareData;
-};
+}
 ```
 
 ## Updating
