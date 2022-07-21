@@ -1,12 +1,7 @@
 # React Native
 
-**Status: Experimental**
-
 Support for React Native is new, and as such the API is not final
-and might not cover various use cases. It also might be buggy so
-consider this a very early alpha.
-
-Please visit the
+and might not cover various use cases. Please visit the
 [GitHub](https://github.com/floating-ui/floating-ui/) and
 contribute to the discussions!
 
@@ -65,15 +60,12 @@ As `reference{:.const}` is a callback ref, you can call it with
 your external reference element:
 
 ```js /triggerRef/1-3
-function MyComponent({triggerRef}) {
+function MyComponent({triggerElement}) {
   const {reference} = useFloating();
 
   useLayoutEffect(() => {
-    reference(triggerRef.current);
-  }, [triggerRef.current]);
-
-  // You may need to disable the React Hooks ESLint rule for the
-  // dependency array.
+    reference(triggerElement);
+  }, [triggerElement]);
 }
 ```
 
