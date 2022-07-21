@@ -1,0 +1,260 @@
+# Migrating from Popper 2 to Floating UI
+
+This page is dedicated to helping you migrate from Popper v2 to
+Floating UI.
+
+**Rebranding:** The library was rebranded to indicate it offers
+more packages and functionality, like the new
+[React DOM Interactions](/docs/react-dom-interactions) package,
+as Popper only ever offered "anchored positioning".
+
+**New API:** The goal of the new API was to make Floating UI
+lower-level and act more like CSS in which you progressively add
+properties to achieve the desired positioning behavior, without
+preconfiguring anything.
+
+Further, we wanted to make the configuration more ergonomic, the
+library smaller and fully tree-shakeable (so new features don't
+bloat bundles if unused), and also wanted to support React
+Native/Canvas, which the new architecture supports.
+
+**Different, but familiar**: Floating UI forked Popper 2 and
+shares a lot of similarities. While the fundamental positioning
+function changed to enable full control, many other parts of the
+API will feel similar.
+
+Similarities include:
+
+- The order of arguments and types of the positioning function
+  are practically identical.
+- `placement{:.objectKey}` and `strategy{:.objectKey}` are the
+  same, passed as a third argument options object.
+- `middleware{:.objectKey}` in Floating UI is conceptually
+  similar to `modifiers{:.objectKey}` from Popper 2.
+- Options passed to middleware have very similar configuration as
+  Popper 2, and APIs like `detectOverflow` and virtual elements
+  are almost identical.
+
+## Change dependencies
+
+First thing's first, uninstall `@popperjs/core` and install
+`@floating-ui/dom`.
+
+```diff
+npm uninstall @popperjs/core
+npm install @floating-ui/dom
+```
+
+## Positioning function change
+
+Popper applied styles and added modifiers for you by default.
+Floating UI on the other hand is completely bare bones — you add
+what you need with nothing preconfigured.
+
+You can think of Floating UI as acting more like CSS, where you
+progressively add properties to achieve the behavior you desire.
+In this sense, it's very low-level intentionally.
+
+In Popper, you called `createPopper(){:js}` like so and it would
+place the popper element for you automatically.
+
+```js
+import {createPopper} from '@popperjs/core';
+
+createPopper(reference, popper);
+```
+
+In Floating UI, it no longer applies styles or adds modifiers
+(now more generically called middleware) for you. Instead it's
+**pure** and only returns data that you can use as you please.
+
+Set up the initial styles on the floating element in your CSS:
+
+```css
+#floating {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+```
+
+Then apply the coordinates using the positioning data resolved by
+the function:
+
+```js
+import {computePosition} from '@floating-ui/dom';
+
+computePosition(reference, floating).then(({x, y}) => {
+  Object.assign(floating.style, {
+    left: `${x}px`,
+    top: `${y}px`,
+  });
+});
+```
+
+Read more about [computePosition here](/docs/computePosition).
+
+## Updating the position automatically
+
+`computePosition(){:js}` is not stateful, it only positions your
+element once.
+
+Popper added listeners automatically to update the position on
+scroll and resize. In Floating UI, you add this yourself, and
+it's much more explicit that it needs to be cleaned up:
+
+```js
+import {computePosition, autoUpdate} from '@floating-ui/dom';
+
+// When the floating element is open on the screen
+const cleanup = autoUpdate(reference, floating, () => {
+  computePosition(reference, floating).then(({x, y}) => {
+    Object.assign(floating.style, {
+      left: `${x}px`,
+      top: `${y}px`,
+    });
+  });
+});
+
+// When the floating element is removed from the screen
+cleanup();
+```
+
+Floating UI also adds `ResizeObserver{:.class}` listeners by
+default, unlike Popper, handling an additional update edge case.
+
+Read more about [autoUpdate here](/docs/autoUpdate).
+
+## Configure middleware
+
+Floating UI honors the `placement{:.objectKey}` you passed in and
+does not modify it by default:
+
+```js
+import {computePosition} from '@floating-ui/dom';
+
+computePosition(reference, floating, {
+  placement: 'top',
+}).then(({x, y}) => {
+  // ...
+});
+```
+
+Even if the floating element will overflow the top of the screen,
+it will still be placed and anchored there.
+
+If you'd like to directly match Popper's default behavior, add in
+`flip(){:js}`, `shift(){:js}` and `limitShift(){:js}`:
+
+```js
+import {
+  computePosition,
+  flip,
+  shift,
+  limitShift,
+} from '@floating-ui/dom';
+
+computePosition(reference, floating, {
+  placement: 'top',
+  middleware: [flip(), shift({limiter: limitShift()})],
+}).then(({x, y}) => {
+  // ...
+});
+```
+
+Unlike Popper 2, the **order of the array matters** and is not
+adjusted for you. The [Middleware](/docs/middleware) page
+explains the concept in detail. Essentially, if you place one of
+the middleware before or after another, the positioning result
+can change. This helps enable full control as sometimes you want
+different behavior based on the ordering.
+
+The `preventOverflow` modifier from Popper is now called `shift`.
+This is because technically many modifiers in Popper 2 "prevented
+overflow", which does not describe what it is actually doing
+unlike `shift`.
+
+You'll hopefully notice the API of middleware in Floating UI
+(modifiers in Popper) is much more ergonomic at the point of the
+function call.
+
+Popper 2:
+
+```js
+createPopper(reference, popper, {
+  modifiers: [
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 10],
+      },
+    },
+  ],
+});
+```
+
+Floating UI:
+
+```js
+computePosition(reference, popper, {
+  middleware: [offset(10)],
+});
+```
+
+- [offset](/docs/offset)
+
+A lot of the options passed in to middleware options are similar
+or the same as Popper 2. To learn about their options, you can
+read their pages on the sidebar on the left.
+
+## Arrows styling
+
+In Popper you could add a `data-popper-arrow{:.keyword}` element
+inside your popper and it'd automatically be picked up and
+styled.
+
+As Floating UI is pure, you now handle these styles yourself, and
+you always pass an element in manually. You can read more about
+this on the [arrow middleware](/docs/arrow) page.
+
+## Auto placement is now a middleware
+
+In Popper 2, this was part of `flip` but now it's separate and is
+no longer a string option for `placement{:.objectKey}`.
+
+Popper 2:
+
+```js
+import {createPopper} from '@popperjs/core';
+
+createPopper(reference, popper, {
+  placement: 'auto',
+});
+```
+
+Floating UI:
+
+```js
+import {computePosition, autoPlacement} from '@floating-ui/dom';
+
+computePosition(reference, floating, {
+  middleware: [autoPlacement()],
+});
+```
+
+## Other
+
+APIs like [detectOverflow](/docs/detectOverflow) and
+[virtual elements](/docs/virtual-elements) are basically the same
+as Popper 2 with only minor differences.
+
+`detectOverflow(){:js}` must now be called with the
+`await{:.keyword}` keyword before it but accepts the same options
+as Popper 2 with minor differences.
+
+## Conclusion
+
+If you think something is missing or are confused, you can open a
+Discussion on the
+[GitHub repo](https://github.com/floating-ui/floating-ui) and
+we'll try to improve this page.
