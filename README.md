@@ -3,7 +3,9 @@
 <p>
 
 > **Popper is now Floating UI! For Popper v2, visit
-> [its dedicated branch.](https://github.com/floating-ui/floating-ui/tree/v2.x)**
+> [its dedicated branch.](https://github.com/floating-ui/floating-ui/tree/v2.x)
+> For help on migrating, check out the
+> [Migration Guide.](https://floating-ui.com/docs/migration)**
 
 [Floating UI](https://floating-ui.com) is a tiny, low-level library for creating
 "floating" elements like tooltips, popovers, dropdowns, menus, and more.
