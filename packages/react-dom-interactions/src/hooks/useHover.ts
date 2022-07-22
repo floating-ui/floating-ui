@@ -73,6 +73,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const blockMouseMoveRef = React.useRef(true);
   const performedPointerEventsMutationRef = React.useRef(false);
 
+  const isHoverOpen = React.useCallback(() => {
+    const type = dataRef.current.openEvent?.type;
+    return type?.includes('mouse') && type !== 'mousedown';
+  }, [dataRef]);
+
   React.useEffect(() => {
     if (!enabled) {
       return;
@@ -96,8 +101,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onLeave() {
-      const type = dataRef.current.openEvent?.type;
-      if (type?.includes('mouse') && type !== 'mousedown') {
+      if (isHoverOpen()) {
         onOpenChangeRef.current(false);
       }
     }
@@ -107,7 +111,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs, onOpenChangeRef, enabled, handleCloseRef, dataRef]);
+  }, [refs, onOpenChangeRef, enabled, handleCloseRef, dataRef, isHoverOpen]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
@@ -200,6 +204,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
+            clearPointerEvents();
             cleanupPointerMoveHandler();
             closeWithDelay();
           },
@@ -227,6 +232,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         y: event.clientY,
         leave: true,
         onClose() {
+          clearPointerEvents();
           cleanupPointerMoveHandler();
           closeWithDelay();
         },
@@ -263,6 +269,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     restMs,
     cleanupPointerMoveHandler,
+    clearPointerEvents,
     refs,
   ]);
 
@@ -275,7 +282,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open && handleCloseRef.current) {
+    if (open && handleCloseRef.current && isHoverOpen()) {
       getDocument(refs.floating.current).body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
       const reference = refs.domReference.current;
@@ -299,7 +306,16 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         };
       }
     }
-  }, [enabled, open, parentId, refs, tree, handleCloseRef, dataRef]);
+  }, [
+    enabled,
+    open,
+    parentId,
+    refs,
+    tree,
+    handleCloseRef,
+    dataRef,
+    isHoverOpen,
+  ]);
 
   useLayoutEffect(() => {
     if (previousOpen && !open) {
@@ -319,7 +335,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         clearPointerEvents();
       }
     };
-  }, [cleanupPointerMoveHandler, clearPointerEvents]);
+  }, [enabled, cleanupPointerMoveHandler, clearPointerEvents]);
 
   if (!enabled) {
     return {};
