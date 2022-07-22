@@ -200,6 +200,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
+            clearPointerEvents();
             cleanupPointerMoveHandler();
             closeWithDelay();
           },
@@ -227,6 +228,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         y: event.clientY,
         leave: true,
         onClose() {
+          clearPointerEvents();
           cleanupPointerMoveHandler();
           closeWithDelay();
         },
@@ -263,6 +265,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     restMs,
     cleanupPointerMoveHandler,
+    clearPointerEvents,
     refs,
   ]);
 
@@ -319,7 +322,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         clearPointerEvents();
       }
     };
-  }, [cleanupPointerMoveHandler, clearPointerEvents]);
+  }, [enabled, cleanupPointerMoveHandler, clearPointerEvents]);
 
   if (!enabled) {
     return {};
