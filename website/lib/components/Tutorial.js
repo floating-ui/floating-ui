@@ -44,7 +44,12 @@ export const Result3 = () => {
   return (
     <Chrome>
       <Button>My button</Button>
-      <div className="absolute bg-gray-900 text-gray-50 rounded font-bold text-sm p-1">
+      <div
+        className="absolute bg-gray-900 text-gray-50 rounded font-bold text-sm p-1 top-0 left-0"
+        style={{
+          pointerEvents: 'none',
+        }}
+      >
         My tooltip
       </div>
     </Chrome>
@@ -62,8 +67,9 @@ export const Result4 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip
@@ -85,8 +91,9 @@ export const Result5 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip
@@ -108,8 +115,8 @@ export const Result6 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
         }}
       >
         My tooltip
@@ -132,8 +139,9 @@ export const Result7 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip
@@ -156,8 +164,9 @@ export const Result8 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip with more content
@@ -180,8 +189,9 @@ export const Result9 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip with more content
@@ -207,8 +217,9 @@ export const Result10 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip with more content
@@ -235,8 +246,9 @@ export const Result11 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip with more content
@@ -279,8 +291,9 @@ export const Result12 = () => {
         className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
         style={{
           position: strategy,
-          top: y ?? '',
-          left: x ?? '',
+          top: y ?? 0,
+          left: x ?? 0,
+          pointerEvents: 'none',
         }}
       >
         My tooltip with more content
@@ -353,8 +366,8 @@ export const Result13 = () => {
           className="bg-gray-900 text-gray-50 rounded font-bold text-sm p-1"
           style={{
             position: strategy,
-            top: y ?? '',
-            left: x ?? '',
+            top: y ?? 0,
+            left: x ?? 0,
             pointerEvents: 'none',
           }}
         >
