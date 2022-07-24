@@ -260,9 +260,7 @@ const linkify =
     );
     return (
       <Tag {...props} id={url}>
-        <a href={`#${url}`} className="inline-block">
-          {children}
-        </a>
+        <a href={`#${url}`}>{children}</a>
       </Tag>
     );
   };
