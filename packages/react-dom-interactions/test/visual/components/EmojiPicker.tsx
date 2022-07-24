@@ -53,11 +53,10 @@ const emojis = [
   },
 ];
 
-type OptionProps = React.HTMLProps<HTMLButtonElement> & {
+type OptionProps = React.HTMLAttributes<HTMLButtonElement> & {
   name: string;
   active: boolean;
   selected: boolean;
-  onClick: () => void;
   children: React.ReactNode;
 };
 
@@ -73,7 +72,6 @@ const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
       ref={ref}
       role="option"
       id={id}
-      key={name}
       aria-selected={selected}
       aria-label={name}
       tabIndex={-1}
@@ -229,6 +227,7 @@ export const Main = () => {
                     {filteredEmojis.map(({name, emoji}, index) => (
                       <Option
                         key={name}
+                        name={name}
                         ref={(node) => {
                           listRef.current[index] = node;
                         }}

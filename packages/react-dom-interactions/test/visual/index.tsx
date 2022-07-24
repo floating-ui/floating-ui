@@ -15,7 +15,6 @@ import {Main as Menu} from './components/Menu';
 import {Main as MacSelect} from './components/MacSelect';
 import {Main as Grid} from './components/Grid';
 import {Main as EmojiPicker} from './components/EmojiPicker';
-import {Main as Autocomplete} from './components/Autocomplete';
 
 import {New} from './utils/New';
 
@@ -26,7 +25,6 @@ const ROUTES = [
   {path: 'mac-select', component: MacSelect},
   {path: 'grid', component: Grid},
   {path: 'emoji-picker', component: EmojiPicker},
-  {path: 'autocomplete', component: Autocomplete},
 ];
 
 function App() {
