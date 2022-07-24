@@ -1,4 +1,4 @@
-import {useState, useRef, useEffect} from 'react';
+import {useState, useRef, useEffect, forwardRef} from 'react';
 import {
   useFloating,
   useInteractions,
@@ -6,10 +6,12 @@ import {
   useClick,
   useDismiss,
   FloatingFocusManager,
+  FloatingPortal,
   useRole,
   offset,
   flip,
   autoUpdate,
+  useId,
 } from '@floating-ui/react-dom-interactions';
 
 const emojis = [
@@ -51,34 +53,82 @@ const emojis = [
   },
 ];
 
+type OptionProps = React.HTMLProps<HTMLButtonElement> & {
+  name: string;
+  active: boolean;
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+};
+
+const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
+  {name, active, selected, children, ...props},
+  ref
+) {
+  const id = useId();
+  return (
+    <button
+      {...props}
+      type="button"
+      ref={ref}
+      role="option"
+      id={id}
+      key={name}
+      aria-selected={selected}
+      aria-label={name}
+      tabIndex={-1}
+      style={{
+        background: active ? 'cyan' : 'none',
+        borderRadius: 4,
+        border: 'none',
+        fontSize: 36,
+        textAlign: 'center',
+        cursor: 'default',
+        userSelect: 'none',
+      }}
+    >
+      {children}
+    </button>
+  );
+});
+
 export const Main = () => {
-  const [emoji, setEmoji] = useState('');
-  const [showPicker, setShowPicker] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
   const {x, y, reference, floating, strategy, context} = useFloating({
     placement: 'bottom-start',
-    open: showPicker,
-    onOpenChange: setShowPicker,
+    open,
+    onOpenChange: setOpen,
     middleware: [offset(8), flip()],
     whileElementsMounted: autoUpdate,
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  // Handles opening the floating element via the Choose Emoji button.
+  const {getReferenceProps, getFloatingProps} = useInteractions([
     useClick(context),
     useDismiss(context),
     useRole(context, {role: 'menu'}),
+  ]);
+
+  // Handles the list navigation where the reference is the inner input, not
+  // the button that opens the floating element.
+  const {
+    getReferenceProps: getInputProps,
+    getFloatingProps: getListFloatingProps,
+    getItemProps,
+  } = useInteractions([
     useListNavigation(context, {
       listRef,
-      onNavigate: showPicker ? setActiveIndex : undefined,
+      onNavigate: open ? setActiveIndex : undefined,
       activeIndex,
       cols: 3,
       orientation: 'horizontal',
       loop: true,
-      openOnArrowKeyDown: false,
       focusItemOnOpen: false,
       virtual: true,
       allowEscape: true,
@@ -86,16 +136,22 @@ export const Main = () => {
   ]);
 
   useEffect(() => {
-    if (!showPicker) {
+    if (!open) {
       setSearch('');
       setActiveIndex(null);
     }
-  }, [showPicker]);
+  }, [open]);
 
   const handleEmojiClick = () => {
     if (activeIndex !== null) {
-      setEmoji(filteredEmojis[activeIndex].emoji);
-      setShowPicker(false);
+      setSelectedEmoji(filteredEmojis[activeIndex].emoji);
+      setOpen(false);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleEmojiClick();
     }
   };
 
@@ -113,9 +169,17 @@ export const Main = () => {
       <h1>Emoji Picker</h1>
       <div className="container">
         <div>
-          {emoji && (
+          {selectedEmoji && (
             <span id="emoji-label">
-              <span style={{fontSize: 36}}>{emoji}</span> is the selected emoji
+              <span
+                style={{fontSize: 36}}
+                aria-label={
+                  emojis.find(({emoji}) => emoji === selectedEmoji)?.name
+                }
+              >
+                {selectedEmoji}
+              </span>{' '}
+              is the selected emoji
             </span>
           )}
           <br />
@@ -126,74 +190,62 @@ export const Main = () => {
           >
             Choose emoji
           </button>
-          {showPicker && (
-            <FloatingFocusManager context={context}>
-              <div
-                ref={floating}
-                style={{
-                  position: strategy,
-                  left: x ?? 0,
-                  top: y ?? 0,
-                  padding: 15,
-                  border: '1px solid black',
-                  background: 'white',
-                }}
-                {...getFloatingProps()}
-              >
-                <input
-                  placeholder="Search emoji"
-                  value={search}
-                  onChange={handleInputChange}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      handleEmojiClick();
-                    }
-                  }}
-                  aria-activedescendant={
-                    activeIndex == null ? undefined : `option-${activeIndex}`
-                  }
-                />
-                <button
-                  aria-label="Close picker"
-                  onClick={() => setShowPicker(false)}
-                >
-                  X
-                </button>
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context}>
                 <div
+                  ref={floating}
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: '50px 50px 50px',
+                    position: strategy,
+                    left: x ?? 0,
+                    top: y ?? 0,
+                    padding: 15,
+                    border: '1px solid black',
+                    background: 'white',
                   }}
-                  role="listbox"
+                  {...getFloatingProps(getListFloatingProps())}
                 >
-                  {filteredEmojis.map(({name, emoji: e}, index) => (
-                    <button
-                      role="option"
-                      id={`option-${index}`}
-                      key={name}
-                      aria-selected={emoji === e}
-                      aria-label={name}
-                      tabIndex={-1}
-                      ref={(node) => {
-                        listRef.current[index] = node;
-                      }}
-                      style={{
-                        background: activeIndex === index ? 'cyan' : 'none',
-                        borderRadius: 4,
-                        border: 'none',
-                        fontSize: 36,
-                      }}
-                      {...getItemProps({
-                        onClick: handleEmojiClick,
-                      })}
-                    >
-                      {e}
-                    </button>
-                  ))}
+                  <input
+                    placeholder="Search emoji"
+                    value={search}
+                    {...getInputProps({
+                      onChange: handleInputChange,
+                      onKeyDown: handleKeyDown,
+                    })}
+                  />
+                  <button
+                    aria-label="Close picker"
+                    onClick={() => setOpen(false)}
+                  >
+                    X
+                  </button>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '50px 50px 50px',
+                    }}
+                    role="listbox"
+                  >
+                    {filteredEmojis.map(({name, emoji}, index) => (
+                      <Option
+                        key={name}
+                        ref={(node) => {
+                          listRef.current[index] = node;
+                        }}
+                        selected={selectedEmoji === emoji}
+                        active={activeIndex === index}
+                        {...getItemProps({
+                          onClick: handleEmojiClick,
+                        })}
+                      >
+                        {emoji}
+                      </Option>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </FloatingFocusManager>
-          )}
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
         </div>
       </div>
     </>
