@@ -171,7 +171,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     focusItemOnOpen = 'auto',
     focusItemOnHover = true,
     openOnArrowKeyDown = true,
-    disabledIndices = openOnArrowKeyDown ? undefined : [],
+    disabledIndices = undefined,
     orientation = 'vertical',
     cols = 1,
   }: Props = {
