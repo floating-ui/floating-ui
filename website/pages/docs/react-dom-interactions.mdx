@@ -27,8 +27,12 @@ other components.
 </div>
 
 It is a superset of the React DOM positioning engine package and
-is unrestricting, allowing you to incorporate custom logic
-easily.
+is unrestricting, allowing you to mix and match your own custom
+logic while using the primitives as helpers to build the
+interactions you need.
+
+This allows you to build bespoke floating elements with fully
+custom interactions.
 
 [View examples below](/docs/react-dom-interactions#examples).
 
@@ -122,27 +126,57 @@ The navigation bar on the left explains them in detail.
 
 ```js
 <>
-  <button {...getReferenceProps({ref: reference})}>
+  <button ref={reference} {...getReferenceProps()}>
     My button
   </button>
   <div
-    {...getFloatingProps({
-      ref: floating,
-      style: {
-        position: strategy,
-        left: x ?? 0,
-        top: y ?? 0,
-      },
-    })}
+    ref={floating}
+    style={{
+      position: strategy,
+      left: x ?? 0,
+      top: y ?? 0,
+    }}
+    {...getFloatingProps()}
   >
     My tooltip
   </div>
 </>
 ```
 
-This pattern enables you to pass event listener props through the
-prop getters, which performs merging of its own internal event
-listeners and your own without overriding them.
+All custom event listener props, such as `onClick{:.keyword}`,
+`onKeyDown{:.keyword}` and more you pass to the element should be
+specified inside the prop getter.
+
+They perform merging of their own internal event listeners and
+your own without overriding them.
+
+```js
+// ❌ Your `onClick` can be overridden
+<div
+  onClick={() => {
+    console.log('Overridden by props below');
+  }}
+  {...getReferenceProps()}
+/>
+```
+
+```js
+// ✅ Merging works inside `getReferenceProps()`
+<div
+  {...getReferenceProps({
+    onClick() {
+      console.log(
+        'This will not override, or be overriden by ',
+        'the interaction hooks.'
+      );
+    },
+  })}
+/>
+```
+
+You may find passing all props through the prop getter helps you
+remember to prevent overriding event handlers, but is not
+currently required for non-event handler function props.
 
 ### Item prop getter
 
@@ -152,18 +186,19 @@ element:
 
 ```js /getItemProps/
 <div
-  {...getFloatingProps({
-    ref: floating,
-    style: {
-      position: strategy,
-      left: x ?? 0,
-      top: y ?? 0,
-    },
-  })}
+  ref={floating}
+  style={{
+    position: strategy,
+    left: x ?? 0,
+    top: y ?? 0,
+  }}
+  {...getFloatingProps()}
 >
   <ul>
     {list.map((item) => (
-      <li {...getItemProps({key: item})}>{item}</li>
+      <li key={item} {...getItemProps()}>
+        {item}
+      </li>
     ))}
   </ul>
 </div>
@@ -172,10 +207,54 @@ element:
 Without a list of items, this prop getter can be omitted (e.g. a
 regular tooltip or popover).
 
+## Changing the positioning reference while retaining events
+
+If you want anchored positioning to be relative to a different
+reference element than the one that receives events, this is
+possible.
+
+You may use a [virtual element](/docs/virtual-elements) that
+copies over the positioning reference's data by calling the
+reference callback ref with it. Make sure you continue to pass
+the callback ref to the element that should receive events as its
+ref prop.
+
+```js {1,5-9,13}
+const positioningRef = useRef();
+const {reference} = useFloating();
+
+useLayoutEffect(() => {
+  reference({
+    getBoundingClientRect: () =>
+      positioningRef.current.getBoundingClientRect(),
+    contextElement: positioningRef.current,
+  });
+}, [reference]);
+
+return (
+  <div ref={positioningRef}>
+    <button ref={reference} {...getReferenceProps()}>
+      Event reference
+    </button>
+  </div>
+);
+```
+
+[View on CodeSandbox](https://codesandbox.io/s/xenodochial-butterfly-1xtup0?file=/src/App.tsx)
+
 ## Examples
 
-Here are a few example recipes for crafting common UI components
-(hosted on CodeSandbox).
+Here are a few examples that show how to compose the interaction
+hooks and components together to build a higher-level component.
+
+> These are just examples. The component APIs are not designed
+> perfectly, but you can use them as a starting point for your
+> own components and design the API however you like.
+>
+> <br />
+> One of the ideas behind the primitive hooks is to give you this
+> freedom without prescribing a restricting component API design upon
+> you.
 
 ### Tooltip
 
@@ -206,7 +285,3 @@ Here are a few example recipes for crafting common UI components
 - [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
 - [macOS Select (advanced)](https://codesandbox.io/s/shy-snowflake-kp6479?file=/src/Select.tsx)
 - [Autocomplete](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
-
-The interaction hooks are low-level, so you probably won't be
-using them without wrapping them with your own component API for
-ergonomics.
