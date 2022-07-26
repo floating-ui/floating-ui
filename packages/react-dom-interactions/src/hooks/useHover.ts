@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
+import {useFloatingTree} from '../FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -61,7 +61,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const {open, onOpenChange, dataRef, events, refs} = context;
 
   const tree = useFloatingTree<RT>();
-  const parentId = useFloatingParentNodeId();
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
   const previousOpen = usePrevious(open);
@@ -271,50 +270,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     cleanupPointerMoveHandler,
     clearPointerEvents,
     refs,
-  ]);
-
-  // Block pointer-events of every element other than the reference and floating
-  // while the floating element is open and has a `handleClose` handler. Also
-  // handles nested floating elements.
-  // https://github.com/floating-ui/floating-ui/issues/1722
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    if (open && handleCloseRef.current && isHoverOpen()) {
-      getDocument(refs.floating.current).body.style.pointerEvents = 'none';
-      performedPointerEventsMutationRef.current = true;
-      const reference = refs.domReference.current;
-      const floating = refs.floating.current;
-
-      if (isElement(reference) && floating) {
-        const parentFloating = tree?.nodesRef.current.find(
-          (node) => node.id === parentId
-        )?.context?.refs.floating.current;
-
-        if (parentFloating) {
-          parentFloating.style.pointerEvents = '';
-        }
-
-        reference.style.pointerEvents = 'auto';
-        floating.style.pointerEvents = 'auto';
-
-        return () => {
-          reference.style.pointerEvents = '';
-          floating.style.pointerEvents = '';
-        };
-      }
-    }
-  }, [
-    enabled,
-    open,
-    parentId,
-    refs,
-    tree,
-    handleCloseRef,
-    dataRef,
-    isHoverOpen,
   ]);
 
   useLayoutEffect(() => {
