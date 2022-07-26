@@ -1,0 +1,64 @@
+.EmojiPicker {
+  box-shadow: rgb(0 0 0 / 50%) 0px 0px 1px, rgb(0 0 0 / 3%) 0px 100px 80px,
+    rgb(0 0 0 / 2%) 0px 41.7776px 33.4221px,
+    rgb(0 0 0 / 2%) 0px 22.3363px 17.869px,
+    rgb(0 0 0 / 4%) 0px 12.5216px 10.0172px;
+  background: white;
+  border-radius: 8px;
+  padding: 10px 15px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.EmojiPicker-button {
+  background: white;
+  border: 1px solid rgba(0, 10, 20, 0.25);
+  border-radius: 50%;
+  padding: 6px 12px;
+  font-weight: 500;
+  font-size: 24px;
+}
+
+.EmojiPicker-search {
+  border: none;
+  padding: 4px 8px;
+  border: 1px solid rgba(0, 10, 20, 0.2);
+  border-radius: 4px;
+  width: 120px;
+}
+
+.EmojiPicker-search:focus {
+  outline: 0;
+  border-color: white;
+  box-shadow: 0 0 0 2px royalblue;
+}
+
+.EmojiPicker-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 2px;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: rgba(0, 10, 20, 0.8);
+  outline: 0;
+}
+
+.EmojiPicker-close:focus-visible {
+  box-shadow: 0 0 0 2px royalblue;
+}
+
+.EmojiPicker-no-results {
+  font-size: 14px;
+  margin: 0;
+}
