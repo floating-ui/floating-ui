@@ -130,11 +130,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // which can start beyond the ref element's edge, traversing back and
       // forth from the ref to the floating element can cause it to close. This
       // ensures it always remains open in that case.
-      // Ignore when the cursor is within the rectangular trough between the
-      // two elements. Since the triangle is created from the cursor point,
-      // which can start beyond the ref element's edge, traversing back and
-      // forth from the ref to the floating element can cause it to close. This
-      // ensures it always remains open in that case.
       let insideRect = false;
       switch (side) {
         case 'top':
