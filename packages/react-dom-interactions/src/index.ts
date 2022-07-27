@@ -2,7 +2,7 @@ export * from '@floating-ui/react-dom';
 
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
-export {safePolygon, SafePolygon} from './safePolygon';
+export {safePolygon, SafePolygon, useSafePolygon} from './safePolygon';
 export {FloatingPortal, useFloatingPortalNode} from './FloatingPortal';
 export {FloatingOverlay} from './FloatingOverlay';
 export {FloatingFocusManager} from './FloatingFocusManager';

@@ -63,6 +63,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree<RT>();
   const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
+  const delayRef = useLatestRef(delay);
   const previousOpen = usePrevious(open);
 
   const pointerTypeRef = React.useRef<string>();
@@ -70,7 +71,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const handlerRef = React.useRef<(event: PointerEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
-  const performedPointerEventsMutationRef = React.useRef(false);
 
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
@@ -114,7 +114,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
-      const closeDelay = getDelay(delay, 'close', pointerTypeRef.current);
+      const closeDelay = getDelay(
+        delayRef.current,
+        'close',
+        pointerTypeRef.current
+      );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
@@ -126,7 +130,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         onOpenChangeRef.current(false);
       }
     },
-    [delay, onOpenChangeRef]
+    [delayRef, onOpenChangeRef]
   );
 
   const cleanupPointerMoveHandler = React.useCallback(() => {
@@ -137,11 +141,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       );
       handlerRef.current = undefined;
     }
-  }, [refs]);
-
-  const clearPointerEvents = React.useCallback(() => {
-    getDocument(refs.floating.current).body.style.pointerEvents = '';
-    performedPointerEventsMutationRef.current = false;
   }, [refs]);
 
   // Registering the mouse events on the reference directly to bypass React's
@@ -165,14 +164,18 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       if (
         open ||
         (mouseOnly && pointerTypeRef.current !== 'mouse') ||
-        (restMs > 0 && getDelay(delay, 'open') === 0)
+        (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
       ) {
         return;
       }
 
       dataRef.current.openEvent = event;
 
-      const openDelay = getDelay(delay, 'open', pointerTypeRef.current);
+      const openDelay = getDelay(
+        delayRef.current,
+        'open',
+        pointerTypeRef.current
+      );
 
       if (openDelay) {
         timeoutRef.current = setTimeout(() => {
@@ -203,7 +206,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
-            clearPointerEvents();
             cleanupPointerMoveHandler();
             closeWithDelay();
           },
@@ -231,7 +233,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         y: event.clientY,
         leave: true,
         onClose() {
-          clearPointerEvents();
           cleanupPointerMoveHandler();
           closeWithDelay();
         },
@@ -259,7 +260,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     enabled,
     closeWithDelay,
     context,
-    delay,
+    delayRef,
     handleCloseRef,
     dataRef,
     mouseOnly,
@@ -268,7 +269,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     restMs,
     cleanupPointerMoveHandler,
-    clearPointerEvents,
     refs,
   ]);
 
@@ -276,7 +276,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     if (previousOpen && !open) {
       pointerTypeRef.current = undefined;
       cleanupPointerMoveHandler();
-      clearPointerEvents();
     }
   });
 
@@ -285,12 +284,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       cleanupPointerMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
-
-      if (performedPointerEventsMutationRef.current) {
-        clearPointerEvents();
-      }
     };
-  }, [enabled, cleanupPointerMoveHandler, clearPointerEvents]);
+  }, [enabled, cleanupPointerMoveHandler]);
 
   if (!enabled) {
     return {};

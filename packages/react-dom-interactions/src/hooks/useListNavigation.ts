@@ -531,6 +531,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           const target = currentTarget as HTMLButtonElement | null;
           if (target) {
             const index = listRef.current.indexOf(target);
+            indexRef.current = index;
+            focusItem(listRef, indexRef);
+
             if (index !== -1) {
               onNavigate(index);
             }

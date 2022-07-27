@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {getChildren} from './utils/getChildren';
@@ -24,15 +25,17 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
   return isInside;
 }
 
+interface SafePolygonProps {
+  restMs: number;
+  buffer: number;
+  setPoints: (newPoints: SvgPoints) => void;
+}
+
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0.5,
   setPoints,
-}: Partial<{
-  restMs: number;
-  buffer: number;
-  setPoints: (newPoints: SvgPoints) => void;
-}> = {}) {
+}: Partial<SafePolygonProps> = {}) {
   let timeoutId: NodeJS.Timeout;
   let polygonIsDestroyed = false;
 
@@ -55,7 +58,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       function close() {
         clearTimeout(timeoutId);
-        setPoints?.([null, null]);
+        ReactDOM.flushSync(() => setPoints?.([null, null]));
         onClose();
       }
 
@@ -377,10 +380,12 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const cursorPoly = getPolygon([x, y]);
       const rectPoly = rectPolygon;
 
-      setPoints?.([
-        insideRect ? null : cursorPoly.slice(0, 4).join(', '),
-        rectPoly.slice(0, 4).join(', '),
-      ]);
+      ReactDOM.flushSync(() => {
+        setPoints?.([
+          insideRect ? null : cursorPoly.slice(0, 4).join(', '),
+          rectPoly.slice(0, 4).join(', '),
+        ]);
+      });
 
       if (insideRect) {
         return;
@@ -398,15 +403,19 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
   };
 }
 
-interface SafePolygonProps {
-  points: SvgPoints;
-  setPoints: (points: SvgPoints) => void;
+interface SafePolygonComponentProps {
+  state: {
+    points: SvgPoints;
+    setPoints: (points: SvgPoints) => void;
+  };
 }
 
 export function SafePolygon({
-  points: [triangle, rect],
-  setPoints,
-}: SafePolygonProps) {
+  state: {
+    points: [triangle, rect],
+    setPoints,
+  },
+}: SafePolygonComponentProps) {
   const setPointsRef = useLatestRef(setPoints);
 
   React.useEffect(() => {
@@ -449,3 +458,16 @@ export function SafePolygon({
     </svg>
   );
 }
+
+export const useSafePolygon = () => {
+  const [points, setPoints] = React.useState<SvgPoints>([null, null]);
+
+  return {
+    polygonState: {points, setPoints},
+    safePolygon<RT extends ReferenceType = ReferenceType>(
+      props?: Partial<SafePolygonProps>
+    ) {
+      return safePolygon<RT>({...props, setPoints});
+    },
+  };
+};
