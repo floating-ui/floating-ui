@@ -1,6 +1,8 @@
+import * as React from 'react';
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {getChildren} from './utils/getChildren';
+import {useLatestRef} from './utils/useLatestRef';
 
 type Point = [number, number];
 type SvgPoints = Array<string | null>;
@@ -99,8 +101,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         placement == null ||
         x == null ||
         y == null ||
-        refs.floating.current?.contains(targetNode) ||
-        refs.domReference.current?.contains(targetNode)
+        refs.floating.current?.contains(event.relatedTarget as Element | null)
       ) {
         return;
       }
@@ -129,6 +130,55 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // which can start beyond the ref element's edge, traversing back and
       // forth from the ref to the floating element can cause it to close. This
       // ensures it always remains open in that case.
+      // Ignore when the cursor is within the rectangular trough between the
+      // two elements. Since the triangle is created from the cursor point,
+      // which can start beyond the ref element's edge, traversing back and
+      // forth from the ref to the floating element can cause it to close. This
+      // ensures it always remains open in that case.
+      let insideRect = false;
+      switch (side) {
+        case 'top':
+          if (
+            clientX >= rect.left &&
+            clientX <= rect.right &&
+            clientY >= rect.top &&
+            clientY <= refRect.top + 1
+          ) {
+            insideRect = true;
+          }
+          break;
+        case 'bottom':
+          if (
+            clientX >= rect.left &&
+            clientX <= rect.right &&
+            clientY >= refRect.bottom - 1 &&
+            clientY <= rect.bottom
+          ) {
+            insideRect = true;
+          }
+          break;
+        case 'left':
+          if (
+            clientX >= rect.left &&
+            clientX <= refRect.left + 1 &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom
+          ) {
+            insideRect = true;
+          }
+          break;
+        case 'right':
+          if (
+            clientX >= refRect.right - 1 &&
+            clientX <= rect.right &&
+            clientY >= rect.top &&
+            clientY <= rect.bottom
+          ) {
+            insideRect = true;
+          }
+          break;
+      }
+
       let rectPolygon: Point[] = [];
       switch (side) {
         case 'top':
@@ -165,14 +215,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
           break;
       }
 
-      if (
-        polygonIsDestroyed &&
-        !leave &&
-        !targetNode?.hasAttribute('data-floating-ui-polygon') &&
-        // Avoid destroying the rect polygon so the cursor can traverse back
-        // and forth without it closing.
-        !isPointInPolygon([clientX, clientY], rectPolygon)
-      ) {
+      if (polygonIsDestroyed && !leave && !insideRect) {
         return close();
       }
 
@@ -340,9 +383,13 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const rectPoly = rectPolygon;
 
       setPoints?.([
-        cursorPoly.slice(0, 4).join(', '),
-        rectPolygon.slice(0, 4).join(', '),
+        insideRect ? null : cursorPoly.slice(0, 4).join(', '),
+        rectPoly.slice(0, 4).join(', '),
       ]);
+
+      if (insideRect) {
+        return;
+      }
 
       if (
         !isPointInPolygon([clientX, clientY], cursorPoly) &&
@@ -358,9 +405,22 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
 interface SafePolygonProps {
   points: SvgPoints;
+  setPoints: (points: SvgPoints) => void;
 }
 
-export function SafePolygon({points: [triangle, rect]}: SafePolygonProps) {
+export function SafePolygon({
+  points: [triangle, rect],
+  setPoints,
+}: SafePolygonProps) {
+  const setPointsRef = useLatestRef(setPoints);
+
+  React.useEffect(() => {
+    const fn = setPointsRef.current;
+    return () => {
+      fn([null, null]);
+    };
+  }, [setPointsRef]);
+
   if (triangle == null && rect == null) {
     return null;
   }
@@ -383,14 +443,12 @@ export function SafePolygon({points: [triangle, rect]}: SafePolygonProps) {
         <polygon
           points={triangle}
           style={{fill: 'transparent', pointerEvents: 'auto'}}
-          data-floating-ui-polygon
         />
       )}
       {rect && (
         <polygon
           points={rect}
           style={{fill: 'transparent', pointerEvents: 'auto'}}
-          data-floating-ui-polygon
         />
       )}
     </svg>
