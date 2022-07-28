@@ -57,6 +57,15 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onPointerDown(event: MouseEvent) {
+      // Clicked on the scrollbar
+      if (
+        isElement(event.target) &&
+        (event.offsetX > event.target.clientWidth ||
+          event.offsetY > event.target.clientHeight)
+      ) {
+        return;
+      }
+
       const targetIsInsideChildren =
         tree &&
         getChildren(tree.nodesRef.current, nodeId).some((node) =>
