@@ -20,7 +20,9 @@ const {getReferenceProps, getFloatingProps, getItemProps} =
   ]);
 ```
 
-Spread the `getItemProps{:.const}` to each list item.
+Spread `getItemProps(){:js}` to each list item. The list items
+must be focusable and should have an appropriate
+`role{:.keyword}` prop based on the role of the floating element.
 
 ## Props
 
@@ -28,7 +30,7 @@ Spread the `getItemProps{:.const}` to each list item.
 interface Props {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
-  onNavigate: (index: number | null) => void;
+  onNavigate?: (index: number | null) => void;
   enabled?: boolean;
   selectedIndex?: number | null;
   loop?: boolean;
@@ -37,6 +39,7 @@ interface Props {
   virtual?: boolean;
   allowEscape?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
+  cols?: number;
   focusItemOnOpen?: 'auto' | boolean;
   focusItemOnHover?: boolean;
   openOnArrowKeyDown?: boolean;
@@ -202,6 +205,18 @@ useListNavigation(context, {
 });
 ```
 
+### cols
+
+default: `1{:js}`
+
+Specifies how many columns the list has (i.e., it’s a grid).
+
+Use an orientation of `'horizontal'{:js}` (e.g. for an emoji
+picker/date picker, where pressing ArrowRight or ArrowLeft can
+change rows), or `'both'{:js}` (where the current row cannot be
+escaped with ArrowRight or ArrowLeft, only ArrowUp and
+ArrowDown).
+
 ### focusItemOnOpen
 
 default: `'auto'{:js}`
@@ -237,7 +252,7 @@ useListNavigation(context, {
 
 ### disabledIndices
 
-default: `openOnArrowKeyDown ? undefined : []{:js}`
+default: `undefined{:js}`
 
 By default elements with either a `disabled{:.keyword}` or
 `aria-disabled{:.keyword}` attribute are skipped in the list
@@ -245,6 +260,9 @@ navigation – however, this requires the items to be rendered.
 
 This prop allows you to manually specify indices which should be
 disabled, overriding the default logic.
+
+For Windows-style select menus, where the menu does not open when
+navigating via arrow keys, specify an empty array.
 
 ```js
 useListNavigation(context, {
