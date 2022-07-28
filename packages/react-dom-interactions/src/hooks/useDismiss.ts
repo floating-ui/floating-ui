@@ -66,7 +66,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           .find((ancestor) => {
             const {overflow, overflowX, overflowY} =
               win.getComputedStyle(ancestor);
-            return /scroll|auto/.test(overflow + overflowX + overflowY);
+            return !/hidden/.test(overflow + overflowX + overflowY);
           });
 
         let xCond = event.offsetX > event.target.clientWidth;
@@ -79,7 +79,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           const isRTL = win.getComputedStyle(scrollEl).direction === 'rtl';
 
           if (isRTL) {
-            xCond = event.offsetX < scrollEl.offsetWidth - scrollEl.clientWidth;
+            xCond =
+              event.offsetX <= scrollEl.offsetWidth - scrollEl.clientWidth;
           }
         }
 
