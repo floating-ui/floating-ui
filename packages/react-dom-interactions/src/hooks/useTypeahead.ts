@@ -86,7 +86,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     if (
       listContent == null ||
       ignoreKeys.includes(event.key) ||
-      // Printable character key
+      // Character key
       event.key.length !== 1 ||
       // Modifier key
       event.ctrlKey ||
