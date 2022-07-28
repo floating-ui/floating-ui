@@ -14,6 +14,10 @@ const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
 const ARROW_RIGHT = 'ArrowRight';
 
+function isDifferentRow(index: number, cols: number, prevRow: number) {
+  return Math.floor(index / cols) !== prevRow;
+}
+
 function isIndexOutOfBounds(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
   index: number
@@ -27,17 +31,19 @@ function findNonDisabledIndex(
     startingIndex = -1,
     decrement = false,
     disabledIndices,
+    amount = 1,
   }: {
     startingIndex?: number;
     decrement?: boolean;
     disabledIndices?: Array<number>;
+    amount?: number;
   } = {}
 ): number {
   const list = listRef.current;
 
   let index = startingIndex;
   do {
-    index = index + (decrement ? -1 : 1);
+    index = index + (decrement ? -amount : amount);
   } while (
     index >= 0 &&
     index <= list.length - 1 &&
@@ -128,7 +134,7 @@ function getMaxIndex(
 export interface Props {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
-  onNavigate: (index: number | null) => void;
+  onNavigate?: (index: number | null) => void;
   enabled?: boolean;
   selectedIndex?: number | null;
   focusItemOnOpen?: boolean | 'auto';
@@ -141,6 +147,7 @@ export interface Props {
   rtl?: boolean;
   virtual?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
+  cols?: number;
 }
 
 /**
@@ -153,7 +160,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   {
     listRef,
     activeIndex,
-    onNavigate,
+    onNavigate = () => {},
     enabled = true,
     selectedIndex = null,
     allowEscape = false,
@@ -164,8 +171,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     focusItemOnOpen = 'auto',
     focusItemOnHover = true,
     openOnArrowKeyDown = true,
-    disabledIndices = openOnArrowKeyDown ? undefined : [],
+    disabledIndices = undefined,
     orientation = 'vertical',
+    cols = 1,
   }: Props = {
     listRef: {current: []},
     activeIndex: null,
@@ -191,6 +199,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           ].join(' ')
         );
       }
+    }
+
+    if (orientation === 'vertical' && cols > 1) {
+      console.warn(
+        [
+          'Floating UI: In grid list navigation mode (`cols` > 1), the',
+          '`orientation` should be either "horizontal" or "both".',
+        ].join(' ')
+      );
     }
   }
 
@@ -371,6 +388,153 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     if (event.key === 'End') {
       indexRef.current = maxIndex;
       onNavigate(indexRef.current);
+    }
+
+    // Grid navigation
+    if (cols > 1) {
+      const prevIndex = indexRef.current;
+
+      if (event.key === ARROW_UP) {
+        stopEvent(event);
+
+        if (prevIndex === -1) {
+          indexRef.current = maxIndex;
+        } else {
+          indexRef.current = findNonDisabledIndex(listRef, {
+            startingIndex: prevIndex,
+            amount: cols,
+            decrement: true,
+            disabledIndices,
+          });
+
+          if (loop && (prevIndex - cols < minIndex || indexRef.current < 0)) {
+            const col = prevIndex % cols;
+            const maxCol = maxIndex % cols;
+            const offset = maxIndex - (maxCol - col);
+
+            if (maxCol === col) {
+              indexRef.current = maxIndex;
+            } else {
+              indexRef.current = maxCol > col ? offset : offset - cols;
+            }
+          }
+        }
+
+        if (isIndexOutOfBounds(listRef, indexRef.current)) {
+          indexRef.current = prevIndex;
+        }
+
+        onNavigate(indexRef.current);
+      }
+
+      if (event.key === ARROW_DOWN) {
+        stopEvent(event);
+
+        if (prevIndex === -1) {
+          indexRef.current = minIndex;
+        } else {
+          indexRef.current = findNonDisabledIndex(listRef, {
+            startingIndex: prevIndex,
+            amount: cols,
+            disabledIndices,
+          });
+
+          if (loop && prevIndex + cols > maxIndex) {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: (prevIndex % cols) - cols,
+              amount: cols,
+              disabledIndices,
+            });
+          }
+        }
+
+        if (isIndexOutOfBounds(listRef, indexRef.current)) {
+          indexRef.current = prevIndex;
+        }
+
+        onNavigate(indexRef.current);
+      }
+
+      // Remains on the same row/column
+      if (orientation === 'both') {
+        const prevRow = Math.floor(prevIndex / cols);
+
+        if (event.key === ARROW_RIGHT) {
+          stopEvent(event);
+
+          if (prevIndex % cols !== cols - 1) {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: prevIndex,
+              disabledIndices,
+            });
+
+            if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+              indexRef.current = findNonDisabledIndex(listRef, {
+                startingIndex: prevIndex - (prevIndex % cols) - 1,
+                disabledIndices,
+              });
+            }
+          } else if (loop) {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: prevIndex - (prevIndex % cols) - 1,
+              disabledIndices,
+            });
+          }
+
+          if (isDifferentRow(indexRef.current, cols, prevRow)) {
+            indexRef.current = prevIndex;
+          }
+        }
+
+        if (event.key === ARROW_LEFT) {
+          stopEvent(event);
+
+          if (prevIndex % cols !== 0) {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: prevIndex,
+              disabledIndices,
+              decrement: true,
+            });
+
+            if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+              indexRef.current = findNonDisabledIndex(listRef, {
+                startingIndex: prevIndex + (cols - (prevIndex % cols)),
+                decrement: true,
+                disabledIndices,
+              });
+            }
+          } else if (loop) {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: prevIndex + (cols - (prevIndex % cols)),
+              decrement: true,
+              disabledIndices,
+            });
+          }
+
+          if (isDifferentRow(indexRef.current, cols, prevRow)) {
+            indexRef.current = prevIndex;
+          }
+        }
+
+        const lastRow = Math.floor(maxIndex / cols) === prevRow;
+
+        if (isIndexOutOfBounds(listRef, indexRef.current)) {
+          if (loop && lastRow) {
+            indexRef.current =
+              event.key === ARROW_LEFT
+                ? maxIndex
+                : findNonDisabledIndex(listRef, {
+                    startingIndex: prevIndex - (prevIndex % cols) - 1,
+                    disabledIndices,
+                  });
+          } else {
+            indexRef.current = prevIndex;
+          }
+        }
+
+        onNavigate(indexRef.current);
+        return;
+      }
     }
 
     if (isMainOrientationKey(event.key, orientation)) {
