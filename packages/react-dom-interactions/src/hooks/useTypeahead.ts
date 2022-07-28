@@ -85,18 +85,13 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
 
     if (
       listContent == null ||
-      [
-        'Home',
-        'End',
-        'Escape',
-        'Enter',
-        'Tab',
-        'ArrowUp',
-        'ArrowDown',
-        'ArrowLeft',
-        'ArrowRight',
-        ...ignoreKeys,
-      ].includes(event.key)
+      ignoreKeys.includes(event.key) ||
+      // Character key
+      event.key.length !== 1 ||
+      // Modifier key
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey
     ) {
       return;
     }
