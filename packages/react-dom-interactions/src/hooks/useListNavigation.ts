@@ -200,6 +200,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         );
       }
     }
+
+    if (orientation === 'vertical' && cols > 1) {
+      console.warn(
+        [
+          'Floating UI: In grid mode (`cols` > 1), the `orientation` should be',
+          'either "horizontal" or "both".',
+        ].join(' ')
+      );
+    }
   }
 
   const parentId = useFloatingParentNodeId();
