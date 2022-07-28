@@ -66,7 +66,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           .find((ancestor) => {
             const {overflow, overflowX, overflowY} =
               win.getComputedStyle(ancestor);
-            return !/hidden/.test(overflow + overflowX + overflowY);
+            return /scroll|auto/.test(overflow + overflowX + overflowY);
           });
 
         let xCond = event.offsetX > event.target.clientWidth;
