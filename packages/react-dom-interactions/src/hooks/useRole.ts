@@ -3,7 +3,14 @@ import {useId} from './useId';
 
 export interface Props {
   enabled?: boolean;
-  role?: 'tooltip' | 'dialog' | 'menu' | 'listbox' | 'grid' | 'tree';
+  role?:
+    | 'tooltip'
+    | 'dialog'
+    | 'alertdialog'
+    | 'menu'
+    | 'listbox'
+    | 'grid'
+    | 'tree';
 }
 
 /**
@@ -34,7 +41,7 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
   return {
     reference: {
       'aria-expanded': open ? 'true' : 'false',
-      'aria-haspopup': role,
+      'aria-haspopup': role === 'alertdialog' ? 'dialog' : role,
       'aria-controls': open ? rootId : undefined,
       ...(role === 'listbox' && {
         role: 'combobox',
