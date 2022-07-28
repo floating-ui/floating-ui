@@ -42,6 +42,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   restMs?: number;
   delay?: number | Partial<{open: number; close: number}>;
   mouseOnly?: boolean;
+  move?: boolean;
 }
 
 /**
@@ -56,6 +57,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     handleClose = null,
     mouseOnly = false,
     restMs = 0,
+    move = true,
   }: Props<RT> = {}
 ): ElementProps => {
   const {open, onOpenChange, dataRef, events, refs} = context;
@@ -254,13 +256,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     if (isElement(reference)) {
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
       floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      reference.addEventListener('mousemove', onMouseEnter, {once: true});
+      move && reference.addEventListener('mousemove', onMouseEnter);
       reference.addEventListener('mouseenter', onMouseEnter);
       reference.addEventListener('mouseleave', onMouseLeave);
       return () => {
         open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
         floating?.removeEventListener('mouseleave', onScrollMouseLeave);
-        reference.removeEventListener('mousemove', onMouseEnter);
+        move && reference.removeEventListener('mousemove', onMouseEnter);
         reference.removeEventListener('mouseenter', onMouseEnter);
         reference.removeEventListener('mouseleave', onMouseLeave);
       };
@@ -270,6 +272,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     context,
     mouseOnly,
     restMs,
+    move,
     closeWithDelay,
     cleanupPointerMoveHandler,
     clearPointerEvents,
