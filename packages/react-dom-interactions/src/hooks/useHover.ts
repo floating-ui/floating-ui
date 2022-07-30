@@ -256,7 +256,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     if (isElement(reference)) {
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
       floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      move && reference.addEventListener('mousemove', onMouseEnter);
+      move &&
+        reference.addEventListener('mousemove', onMouseEnter, {once: true});
       reference.addEventListener('mouseenter', onMouseEnter);
       reference.addEventListener('mouseleave', onMouseLeave);
       return () => {
