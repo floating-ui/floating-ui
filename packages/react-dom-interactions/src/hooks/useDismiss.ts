@@ -59,33 +59,42 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     function onPointerDown(event: MouseEvent) {
       // Check if the click occurred on the scrollbar
       if (isElement(event.target) && refs.floating.current) {
-        const win = refs.floating.current.ownerDocument.defaultView ?? window;
-        const overflowAncestors = getOverflowAncestors(refs.floating.current);
-        const scrollEl = overflowAncestors
-          .filter(isElement)
-          .find((ancestor) => {
-            const {overflow, overflowX, overflowY} =
-              win.getComputedStyle(ancestor);
-            return /scroll|auto/.test(overflow + overflowX + overflowY);
-          });
+        const doc = refs.floating.current.ownerDocument;
+        const win = doc.defaultView ?? window;
 
-        let xCond = event.offsetX > event.target.clientWidth;
+        const isScrollable = (element: Element) => {
+          const {overflow, overflowX, overflowY} =
+            win.getComputedStyle(element);
+          return /scroll|auto|overlay/.test(overflow + overflowX + overflowY);
+        };
 
-        // In some browsers it is possible to change the <body> (or window)
-        // scrollbar to the left side, but is very rare and is difficult to
-        // check for. Plus, for modal dialogs with backdrops, it is more
-        // important that the backdrop is checked but not so much the window.
-        if (isElement(scrollEl)) {
-          const isRTL = win.getComputedStyle(scrollEl).direction === 'rtl';
+        if (
+          isScrollable(event.target) ||
+          event.target === doc.documentElement ||
+          event.target === doc.body
+        ) {
+          const scrollEl = getOverflowAncestors(refs.floating.current)
+            .filter(isElement)
+            .find(isScrollable);
 
-          if (isRTL) {
-            xCond =
-              event.offsetX <= scrollEl.offsetWidth - scrollEl.clientWidth;
+          let xCond = event.offsetX > event.target.clientWidth;
+
+          // In some browsers it is possible to change the <body> (or window)
+          // scrollbar to the left side, but is very rare and is difficult to
+          // check for. Plus, for modal dialogs with backdrops, it is more
+          // important that the backdrop is checked but not so much the window.
+          if (isElement(scrollEl)) {
+            const isRTL = win.getComputedStyle(scrollEl).direction === 'rtl';
+
+            if (isRTL) {
+              xCond =
+                event.offsetX <= scrollEl.offsetWidth - scrollEl.clientWidth;
+            }
           }
-        }
 
-        if (xCond || event.offsetY > event.target.clientHeight) {
-          return;
+          if (xCond || event.offsetY > event.target.clientHeight) {
+            return;
+          }
         }
       }
 
