@@ -60,31 +60,30 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       // Check if the click occurred on the scrollbar
       if (isElement(event.target) && refs.floating.current) {
         const win = refs.floating.current.ownerDocument.defaultView ?? window;
-        const overflowAncestors = getOverflowAncestors(refs.floating.current);
-        const scrollEl = overflowAncestors
-          .filter(isElement)
-          .find((ancestor) => {
-            const {overflow, overflowX, overflowY} =
-              win.getComputedStyle(ancestor);
-            return /scroll|auto/.test(overflow + overflowX + overflowY);
-          });
+        const canScrollX = event.target.scrollWidth > event.target.clientWidth;
+        const canScrollY =
+          event.target.scrollHeight > event.target.clientHeight;
 
-        let xCond = event.offsetX > event.target.clientWidth;
+        let xCond = canScrollY && event.offsetX > event.target.clientWidth;
 
         // In some browsers it is possible to change the <body> (or window)
         // scrollbar to the left side, but is very rare and is difficult to
         // check for. Plus, for modal dialogs with backdrops, it is more
         // important that the backdrop is checked but not so much the window.
-        if (isElement(scrollEl)) {
-          const isRTL = win.getComputedStyle(scrollEl).direction === 'rtl';
+        if (canScrollY) {
+          const isRTL = win.getComputedStyle(event.target).direction === 'rtl';
 
           if (isRTL) {
             xCond =
-              event.offsetX <= scrollEl.offsetWidth - scrollEl.clientWidth;
+              event.offsetX <=
+              event.target.offsetWidth - event.target.clientWidth;
           }
         }
 
-        if (xCond || event.offsetY > event.target.clientHeight) {
+        if (
+          xCond ||
+          (canScrollX && event.offsetY > event.target.clientHeight)
+        ) {
           return;
         }
       }
