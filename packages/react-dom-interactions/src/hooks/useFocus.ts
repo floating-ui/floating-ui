@@ -95,9 +95,9 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         onOpenChange(true);
       },
       onBlur(event) {
+        const target = event.relatedTarget as Element | null;
         // Wait for the window blur listener to fire.
         timeoutRef.current = setTimeout(() => {
-          const target = event.relatedTarget as Element | null;
           // When focusing the reference element (e.g. regular click), then
           // clicking into the floating element, prevent it from hiding.
           // Note: it must be focusable, e.g. `tabindex="-1"`.
