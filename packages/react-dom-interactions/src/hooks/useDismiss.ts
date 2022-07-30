@@ -61,40 +61,31 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       if (isElement(event.target) && refs.floating.current) {
         const doc = refs.floating.current.ownerDocument;
         const win = doc.defaultView ?? window;
+        const canScrollX = event.target.scrollWidth > event.target.clientWidth;
+        const canScrollY =
+          event.target.scrollHeight > event.target.clientHeight;
 
-        const isScrollable = (element: Element) => {
-          const {overflow, overflowX, overflowY} =
-            win.getComputedStyle(element);
-          return /scroll|auto|overlay/.test(overflow + overflowX + overflowY);
-        };
+        let xCond = canScrollY && event.offsetX > event.target.clientWidth;
+
+        // In some browsers it is possible to change the <body> (or window)
+        // scrollbar to the left side, but is very rare and is difficult to
+        // check for. Plus, for modal dialogs with backdrops, it is more
+        // important that the backdrop is checked but not so much the window.
+        if (canScrollY) {
+          const isRTL = win.getComputedStyle(event.target).direction === 'rtl';
+
+          if (isRTL) {
+            xCond =
+              event.offsetX <=
+              event.target.offsetWidth - event.target.clientWidth;
+          }
+        }
 
         if (
-          isScrollable(event.target) ||
-          event.target === doc.documentElement ||
-          event.target === doc.body
+          xCond ||
+          (canScrollX && event.offsetY > event.target.clientHeight)
         ) {
-          const scrollEl = getOverflowAncestors(refs.floating.current)
-            .filter(isElement)
-            .find(isScrollable);
-
-          let xCond = event.offsetX > event.target.clientWidth;
-
-          // In some browsers it is possible to change the <body> (or window)
-          // scrollbar to the left side, but is very rare and is difficult to
-          // check for. Plus, for modal dialogs with backdrops, it is more
-          // important that the backdrop is checked but not so much the window.
-          if (isElement(scrollEl)) {
-            const isRTL = win.getComputedStyle(scrollEl).direction === 'rtl';
-
-            if (isRTL) {
-              xCond =
-                event.offsetX <= scrollEl.offsetWidth - scrollEl.clientWidth;
-            }
-          }
-
-          if (xCond || event.offsetY > event.target.clientHeight) {
-            return;
-          }
+          return;
         }
       }
 
