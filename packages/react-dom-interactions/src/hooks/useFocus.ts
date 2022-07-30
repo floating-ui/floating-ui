@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
 import {getDocument} from '../utils/getDocument';
+import {isHTMLElement} from '../utils/is';
 
 export interface Props {
   enabled?: boolean;
@@ -18,6 +18,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
 ): ElementProps => {
   const pointerTypeRef = React.useRef('');
   const blockFocusRef = React.useRef(false);
+  const timeoutRef = React.useRef<any>();
 
   React.useEffect(() => {
     if (!enabled) {
@@ -28,25 +29,13 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     const win = doc.defaultView ?? window;
 
     function onBlur() {
-      if (
-        pointerTypeRef.current &&
-        refs.domReference.current === activeElement(doc)
-      ) {
-        blockFocusRef.current = !open;
+      if (!open && isHTMLElement(refs.domReference.current)) {
+        refs.domReference.current.blur();
       }
     }
 
-    function onFocus() {
-      setTimeout(() => {
-        blockFocusRef.current = false;
-        pointerTypeRef.current = '';
-      });
-    }
-
-    win.addEventListener('focus', onFocus);
     win.addEventListener('blur', onBlur);
     return () => {
-      win.removeEventListener('focus', onFocus);
       win.removeEventListener('blur', onBlur);
     };
   }, [refs, open, enabled]);
@@ -66,6 +55,12 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     };
   }, [events, enabled]);
 
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   if (!enabled) {
     return {};
   }
@@ -75,6 +70,9 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       onPointerDown({pointerType}) {
         pointerTypeRef.current = pointerType;
         blockFocusRef.current = !!(pointerType && keyboardOnly);
+      },
+      onPointerLeave() {
+        blockFocusRef.current = false;
       },
       onFocus(event) {
         if (blockFocusRef.current) {
@@ -98,18 +96,21 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       },
       onBlur(event) {
         const target = event.relatedTarget as Element | null;
-        // When focusing the reference element (e.g. regular click), then
-        // clicking into the floating element, prevent it from hiding.
-        // Note: it must be focusable, e.g. `tabindex="-1"`.
-        if (
-          refs.floating.current?.contains(target) ||
-          refs.domReference.current?.contains(target)
-        ) {
-          return;
-        }
+        // Wait for the window blur listener to fire.
+        timeoutRef.current = setTimeout(() => {
+          // When focusing the reference element (e.g. regular click), then
+          // clicking into the floating element, prevent it from hiding.
+          // Note: it must be focusable, e.g. `tabindex="-1"`.
+          if (
+            refs.floating.current?.contains(target) ||
+            refs.domReference.current?.contains(target)
+          ) {
+            return;
+          }
 
-        blockFocusRef.current = false;
-        onOpenChange(false);
+          blockFocusRef.current = false;
+          onOpenChange(false);
+        });
       },
     },
   };

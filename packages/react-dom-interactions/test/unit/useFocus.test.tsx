@@ -1,4 +1,4 @@
-import {fireEvent, render, screen, cleanup} from '@testing-library/react';
+import {fireEvent, render, screen, cleanup, act} from '@testing-library/react';
 import {useState} from 'react';
 import {
   useFocus,
@@ -8,6 +8,8 @@ import {
   useInteractions,
 } from '../../src';
 import type {Props} from '../../src/hooks/useFocus';
+
+jest.useFakeTimers();
 
 function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
   const [open, setOpen] = useState(false);
@@ -40,8 +42,11 @@ test('opens on focus', () => {
 test('closes on blur', () => {
   render(<App />);
   const button = screen.getByRole('button');
-  fireEvent.focus(button);
-  fireEvent.blur(button);
+  act(() => button.focus());
+  act(() => button.blur());
+  act(() => {
+    jest.runAllTimers();
+  });
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   cleanup();
 });
