@@ -9,6 +9,8 @@ import {
 } from '../../src';
 import type {Props} from '../../src/hooks/useFocus';
 
+jest.useFakeTimers();
+
 function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
   const [open, setOpen] = useState(false);
   const {reference, floating, context} = useFloating({
@@ -42,6 +44,7 @@ test('closes on blur', () => {
   const button = screen.getByRole('button');
   fireEvent.focus(button);
   fireEvent.blur(button);
+  jest.runAllTimers();
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   cleanup();
 });
