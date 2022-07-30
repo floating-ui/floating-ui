@@ -59,8 +59,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     function onPointerDown(event: MouseEvent) {
       // Check if the click occurred on the scrollbar
       if (isElement(event.target) && refs.floating.current) {
-        const doc = refs.floating.current.ownerDocument;
-        const win = doc.defaultView ?? window;
+        const win = refs.floating.current.ownerDocument.defaultView ?? window;
         const canScrollX = event.target.scrollWidth > event.target.clientWidth;
         const canScrollY =
           event.target.scrollHeight > event.target.clientHeight;
