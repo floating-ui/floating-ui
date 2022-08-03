@@ -28,7 +28,7 @@ export const useCases = [directHostChildTag, deepHostChildTag]
 export function defineElements(): void {
   if (!customElements.get(directHostChildTag)) {
     class DirectHostChild extends HTMLElement implements FloatingUICustomElement {
-      static get observedAttributes() { return ['placement', 'strategy']; }
+      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
 
       reference: HTMLElement;
       floating: HTMLElement;
@@ -49,7 +49,7 @@ export function defineElements(): void {
       attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
-        } else {
+        } else if (name === 'strategy') {
           this.strategy = value as Strategy;
           this.floating.style.position = value;
         }
@@ -70,7 +70,7 @@ export function defineElements(): void {
 
   if (!customElements.get(deepHostChildTag)) {
     class DeepHostChild extends HTMLElement implements FloatingUICustomElement {
-      static get observedAttributes() { return ['placement', 'strategy']; }
+      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
 
       container: HTMLElement;
       reference: HTMLElement;
@@ -94,7 +94,7 @@ export function defineElements(): void {
       attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
-        } else {
+        } else if (name === 'strategy') {
           this.strategy = value as Strategy;
           this.floating.style.position = value;
         }
