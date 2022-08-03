@@ -28,6 +28,7 @@ import {Inline} from './spec/Inline';
 import {AutoUpdate} from './spec/AutoUpdate';
 import {Complex} from './spec/Complex';
 import {Inner} from './spec/Inner';
+import {ShadowDOM} from './spec/ShadowDOM';
 
 import {New} from './utils/New';
 
@@ -51,6 +52,7 @@ const ROUTES = [
   {path: 'AutoUpdate', component: AutoUpdate},
   {path: 'complex', component: Complex},
   {path: 'inner', component: Inner},
+  {path: 'shadow-DOM', component: ShadowDOM},
 ];
 
 function App() {
