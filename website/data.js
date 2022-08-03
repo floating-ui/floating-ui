@@ -76,4 +76,9 @@ export const MINI_SPONSORS = [
     label: 'Dailycontributors Blog',
     url: 'https://dailycontributors.com',
   },
+  {
+    logo: '/sponsors/ariakit.svg',
+    label: 'Ariakit - Toolkit for building accessible UIs',
+    url: 'https://ariakit.org/',
+  },
 ];
