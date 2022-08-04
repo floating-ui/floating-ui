@@ -17,16 +17,21 @@ declare global {
     interface IntrinsicElements {
       ['direct-host-child']: CustomElement<FloatingUICustomElement>;
       ['deep-host-child']: CustomElement<FloatingUICustomElement>;
+      ['relative-position-host']: CustomElement<typeof HTMLElement>;
+      ['shadowed-floating-owner']: CustomElement<FloatingUICustomElement>;
     }
   }
 }
 
 const directHostChildTag = 'direct-host-child';
 const deepHostChildTag = 'deep-host-child';
+const relativePositionHostTag = 'relative-position-host';
+const shadowedFloatingOwnerTag = 'shadowed-floating-owner';
 export const useCases = [directHostChildTag, deepHostChildTag]
 
 export function defineElements(): void {
-  if (!customElements.get(directHostChildTag)) {
+  defineIfNeeded(
+    directHostChildTag,
     class DirectHostChild extends HTMLElement implements FloatingUICustomElement {
       static get observedAttributes() { return ['placement', 'strategy', 'style']; }
 
@@ -65,10 +70,10 @@ export function defineElements(): void {
         this.cleanup?.();
       }
     }
-    customElements.define(directHostChildTag, DirectHostChild);
-  }
+  );
 
-  if (!customElements.get(deepHostChildTag)) {
+  defineIfNeeded(
+    deepHostChildTag,
     class DeepHostChild extends HTMLElement implements FloatingUICustomElement {
       static get observedAttributes() { return ['placement', 'strategy', 'style']; }
 
@@ -110,7 +115,72 @@ export function defineElements(): void {
         this.cleanup?.();
       }
     }
-    customElements.define(deepHostChildTag, DeepHostChild);
+  );
+
+  defineIfNeeded(
+    relativePositionHostTag,
+    class RelativePositionHost extends HTMLElement {
+      constructor() {
+        super();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        const slot = document.createElement('slot');
+        wrapper.append(slot);
+        const style = recreateDocumentStyle();
+        shadow.append(style, wrapper);
+      }
+    },
+  );
+
+  defineIfNeeded(
+    shadowedFloatingOwnerTag,
+    class ShadowedFloatingOwner extends HTMLElement implements FloatingUICustomElement {
+      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
+
+      reference!: HTMLElement;
+      floating: HTMLElement;
+      placement: Placement = defaultOptions.placement;
+      strategy: Strategy = defaultOptions.strategy;
+      cleanup!: () => void;
+
+      constructor() {
+        super();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        this.floating = createFloatingElement();
+        const style = recreateDocumentStyle();
+        shadow.append(style, this.floating);
+      }
+
+      attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
+        if (name === 'placement') {
+          this.placement = value as Placement;
+        } else if (name === 'strategy') {
+          this.strategy = value as Strategy;
+          this.floating.style.position = value;
+        }
+
+        position(this);
+      }
+
+      connectedCallback(): void {
+        this.reference?.remove();
+        this.reference = document.querySelector(`#reference`) as HTMLElement;
+        this.cleanup = setUpAutoUpdate(this);
+      }
+
+      disconnectedCallback(): void {
+        this.cleanup?.();
+      }
+    }
+  );
+}
+
+function defineIfNeeded(tag: string, customElementConstructor: CustomElementConstructor): void {
+  if (!customElements.get(tag)) {
+    customElements.define(tag, customElementConstructor);
   }
 }
 
@@ -139,7 +209,11 @@ const defaultOptions = {
   placement: 'bottom-end',
 } as const;
 
-function position({ floating, placement, reference, strategy }: FloatingUICustomElement): Promise<void> {
+async function position({ floating, placement, reference, strategy }: FloatingUICustomElement): Promise<void> {
+  if (!floating || !reference) {
+    return;
+  }
+
   return computePosition(reference, floating, {
         placement,
         strategy,
@@ -154,6 +228,11 @@ function position({ floating, placement, reference, strategy }: FloatingUICustom
 
 function setUpAutoUpdate(element: FloatingUICustomElement): () => void {
   const { floating, reference } = element;
+
+  if (!floating || !reference) {
+    return () => {};
+  }
+
   return autoUpdate(reference, floating, () => position(element), {
       // ensures initial positioning is accurate
       animationFrame: true
