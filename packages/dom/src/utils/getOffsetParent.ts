@@ -33,7 +33,8 @@ function getContainingBlock(element: Element) {
     if (isContainingBlock(currentNode)) {
       return currentNode;
     } else {
-      currentNode = currentNode.parentNode;
+      const parent = currentNode.parentNode as Node;
+      currentNode = isShadowRoot(parent) ? parent.host : parent;
     }
   }
 
