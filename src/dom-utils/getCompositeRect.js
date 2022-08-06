@@ -30,7 +30,8 @@ export default function getCompositeRect(
   const documentElement = getDocumentElement(offsetParent);
   const rect = getBoundingClientRect(
     elementOrVirtualElement,
-    offsetParentIsScaled
+    offsetParentIsScaled,
+    isFixed
   );
 
   let scroll = { scrollLeft: 0, scrollTop: 0 };
