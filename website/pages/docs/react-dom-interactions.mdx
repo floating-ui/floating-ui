@@ -259,6 +259,48 @@ return (
 
 [View on CodeSandbox](https://codesandbox.io/s/xenodochial-butterfly-1xtup0?file=/src/App.tsx)
 
+## Multiple floating elements on a single reference element
+
+Merge the `reference{:.objectKey}` refs on the element for each
+`useFloating(){:js}`, and call the `getReferenceProps(){:js}`
+prop getters inside one another.
+
+```js {12-16}
+const {reference: tooltipReference} = useFloating();
+const {reference: menuReference} = useFloating();
+
+const {getReferenceProps: getTooltipReferenceProps} =
+  useInteractions([]);
+const {getReferenceProps: getMenuReferenceProps} =
+  useInteractions([]);
+
+return (
+  <>
+    <button
+      // `react-merge-refs` or similar library works fine.
+      ref={mergeRefs([tooltipReference, menuReference])}
+      // You can call one of the prop getters inside another one.
+      // They will merge as expected.
+      {...getTooltipReferenceProps(getMenuReferenceProps())}
+    >
+      Common reference
+    </button>
+  </>
+);
+```
+
+[View on CodeSandbox](https://codesandbox.io/s/trusting-mendeleev-49qn11?file=/src/App.tsx)
+
+## Disabled elements
+
+Disabled elements don't fire events, so tooltips attached to
+disabled buttons don't show. Avoid using the
+`disabled{:.keyword}` prop, and make the button visually disabled
+instead. This ensures you won't need any wrapper tags and makes
+the tooltip accessible to all users.
+
+[View on CodeSandbox](https://codesandbox.io/s/focused-feistel-0q6v43?file=/src/App.tsx)
+
 ## Examples
 
 Here are a few examples that show how to compose the interaction
