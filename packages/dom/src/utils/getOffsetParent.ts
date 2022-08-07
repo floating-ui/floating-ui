@@ -23,11 +23,7 @@ function getTrueOffsetParent(element: Element): Element | null {
  * Polyfills the old offsetParent behavior from before the spec was changed:
  * https://github.com/w3c/csswg-drafts/issues/159
  */
-function composedOffsetParent(element: Element): Element | null {
-  if (!isHTMLElement(element)) {
-    return null;
-  }
-
+function composedOffsetParent(element: HTMLElement): Element | null {
   let { offsetParent } = element;
 
   let ancestor: Element = element;
