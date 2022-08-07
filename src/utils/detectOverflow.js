@@ -1,5 +1,5 @@
 // @flow
-import type { State, SideObject, Padding } from '../types';
+import type { State, SideObject, Padding, PositioningStrategy } from '../types';
 import type { Placement, Boundary, RootBoundary, Context } from '../enums';
 import getClippingRect from '../dom-utils/getClippingRect';
 import getDocumentElement from '../dom-utils/getDocumentElement';
@@ -23,6 +23,7 @@ import expandToHashMap from './expandToHashMap';
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
   placement: Placement,
+  strategy: PositioningStrategy,
   boundary: Boundary,
   rootBoundary: RootBoundary,
   elementContext: Context,
@@ -36,6 +37,7 @@ export default function detectOverflow(
 ): SideObject {
   const {
     placement = state.placement,
+    strategy = state.strategy,
     boundary = clippingParents,
     rootBoundary = viewport,
     elementContext = popper,
@@ -59,7 +61,8 @@ export default function detectOverflow(
       ? element
       : element.contextElement || getDocumentElement(state.elements.popper),
     boundary,
-    rootBoundary
+    rootBoundary,
+    strategy
   );
 
   const referenceClientRect = getBoundingClientRect(state.elements.reference);

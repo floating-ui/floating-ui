@@ -1,5 +1,5 @@
 // @flow
-import type { ClientRectObject } from '../types';
+import type { ClientRectObject, PositioningStrategy } from '../types';
 import type { Boundary, RootBoundary } from '../enums';
 import { viewport } from '../enums';
 import getViewportRect from './getViewportRect';
@@ -16,8 +16,11 @@ import getNodeName from './getNodeName';
 import rectToClientRect from '../utils/rectToClientRect';
 import { max, min } from '../utils/math';
 
-function getInnerBoundingClientRect(element: Element) {
-  const rect = getBoundingClientRect(element);
+function getInnerBoundingClientRect(
+  element: Element,
+  strategy: PositioningStrategy
+) {
+  const rect = getBoundingClientRect(element, false, strategy === 'fixed');
 
   rect.top = rect.top + element.clientTop;
   rect.left = rect.left + element.clientLeft;
@@ -33,12 +36,13 @@ function getInnerBoundingClientRect(element: Element) {
 
 function getClientRectFromMixedType(
   element: Element,
-  clippingParent: Element | RootBoundary
+  clippingParent: Element | RootBoundary,
+  strategy: PositioningStrategy
 ): ClientRectObject {
   return clippingParent === viewport
-    ? rectToClientRect(getViewportRect(element))
+    ? rectToClientRect(getViewportRect(element, strategy))
     : isElement(clippingParent)
-    ? getInnerBoundingClientRect(clippingParent)
+    ? getInnerBoundingClientRect(clippingParent, strategy)
     : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }
 
@@ -72,7 +76,8 @@ function getClippingParents(element: Element): Array<Element> {
 export default function getClippingRect(
   element: Element,
   boundary: Boundary,
-  rootBoundary: RootBoundary
+  rootBoundary: RootBoundary,
+  strategy: PositioningStrategy
 ): ClientRectObject {
   const mainClippingParents =
     boundary === 'clippingParents'
@@ -82,7 +87,7 @@ export default function getClippingRect(
   const firstClippingParent = clippingParents[0];
 
   const clippingRect = clippingParents.reduce((accRect, clippingParent) => {
-    const rect = getClientRectFromMixedType(element, clippingParent);
+    const rect = getClientRectFromMixedType(element, clippingParent, strategy);
 
     accRect.top = max(rect.top, accRect.top);
     accRect.right = min(rect.right, accRect.right);
@@ -90,7 +95,7 @@ export default function getClippingRect(
     accRect.left = max(rect.left, accRect.left);
 
     return accRect;
-  }, getClientRectFromMixedType(element, firstClippingParent));
+  }, getClientRectFromMixedType(element, firstClippingParent, strategy));
 
   clippingRect.width = clippingRect.right - clippingRect.left;
   clippingRect.height = clippingRect.bottom - clippingRect.top;
