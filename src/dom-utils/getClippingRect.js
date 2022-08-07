@@ -37,7 +37,7 @@ function getInnerBoundingClientRect(
 function getClientRectFromMixedType(
   element: Element,
   clippingParent: Element | RootBoundary,
-  strategy: PositioningStrategy,
+  strategy: PositioningStrategy
 ): ClientRectObject {
   return clippingParent === viewport
     ? rectToClientRect(getViewportRect(element, strategy))

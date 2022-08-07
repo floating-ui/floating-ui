@@ -62,7 +62,7 @@ export default function detectOverflow(
       : element.contextElement || getDocumentElement(state.elements.popper),
     boundary,
     rootBoundary,
-    strategy,
+    strategy
   );
 
   const referenceClientRect = getBoundingClientRect(state.elements.reference);

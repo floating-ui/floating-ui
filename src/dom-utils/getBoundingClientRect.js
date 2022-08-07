@@ -1,6 +1,6 @@
 // @flow
 import type { ClientRectObject, VirtualElement } from '../types';
-import { isElement, isHTMLElement}  from './instanceOf';
+import { isElement, isHTMLElement } from './instanceOf';
 import { round } from '../utils/math';
 import getWindow from './getWindow';
 import isLayoutViewport from './isLayoutViewport';
@@ -25,17 +25,20 @@ export default function getBoundingClientRect(
         : 1;
   }
 
-  const {visualViewport} = isElement(element) ? getWindow(element) : window;
+  const { visualViewport } = isElement(element) ? getWindow(element) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
   const x =
-    (clientRect.left + (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) /
+    (clientRect.left +
+      (addVisualOffsets && visualViewport ? visualViewport.offsetLeft : 0)) /
     scaleX;
   const y =
-    (clientRect.top + (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) /
+    (clientRect.top +
+      (addVisualOffsets && visualViewport ? visualViewport.offsetTop : 0)) /
     scaleY;
   const width = clientRect.width / scaleX;
   const height = clientRect.height / scaleY;
+
   return {
     width,
     height,
@@ -44,6 +47,6 @@ export default function getBoundingClientRect(
     bottom: y + height,
     left: x,
     x,
-    y
+    y,
   };
 }
