@@ -39,7 +39,7 @@ function composedOffsetParent(element: Element): Element | null {
     if (assignedSlot) {
       let newOffsetParent = assignedSlot.offsetParent;
 
-      if (getComputedStyle(assignedSlot)['display'] === 'contents') {
+      if (getComputedStyle(assignedSlot).display === 'contents') {
         const hadStyleAttribute = assignedSlot.hasAttribute('style');
         const oldDisplay = assignedSlot.style.display;
         assignedSlot.style.display = getComputedStyle(ancestor).display;
