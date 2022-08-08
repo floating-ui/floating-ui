@@ -1,6 +1,8 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {activeElement} from '../utils/activeElement';
+import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 
@@ -67,9 +69,11 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     // Correctly scope non-portalled floating elements
     if (
       isElement(event.target) &&
-      event.target.closest(
-        '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
-      ) !== event.currentTarget
+      (activeElement(getDocument(event.target)) !== event.currentTarget
+        ? event.target.closest(
+            '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
+          ) !== event.currentTarget
+        : false)
     ) {
       return;
     }
