@@ -1,8 +1,7 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
-import {getDocument} from '../utils/getDocument';
+import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 
 export interface Props {
@@ -65,10 +64,12 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
   }, [open, selectedIndex, activeIndex]);
 
   function onKeyDown(event: React.KeyboardEvent) {
+    // Correctly scope non-portalled floating elements
     if (
-      !event.currentTarget.contains(
-        activeElement(getDocument(event.currentTarget as HTMLElement))
-      )
+      isElement(event.target) &&
+      event.target.closest(
+        '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
+      ) !== event.currentTarget
     ) {
       return;
     }
@@ -129,7 +130,10 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     const str = findMatch
       ? findMatch(orderedList, stringRef.current)
       : orderedList.find(
-          (text) => text?.toLocaleLowerCase().indexOf(stringRef.current) === 0
+          (text) =>
+            text
+              ?.toLocaleLowerCase()
+              .indexOf(stringRef.current.toLocaleLowerCase()) === 0
         );
 
     const index = str ? listContent.indexOf(str) : -1;
