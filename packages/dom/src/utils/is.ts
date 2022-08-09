@@ -36,8 +36,11 @@ export function isShadowRoot(node: Node): node is ShadowRoot {
 
 export function isOverflowElement(element: HTMLElement): boolean {
   // Firefox wants us to check `-x` and `-y` variations as well
-  const {overflow, overflowX, overflowY} = getComputedStyle(element);
-  return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
+  const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
+  return (
+    /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX) &&
+    !['inline', 'contents'].includes(display)
+  );
 }
 
 export function isTableElement(element: Element): boolean {
