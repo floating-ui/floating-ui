@@ -1,6 +1,7 @@
 import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
 import {getWindow} from './window';
+import {getComputedStyle} from './getComputedStyle';
 import {
   isContainingBlock,
   isHTMLElement,
@@ -24,13 +25,13 @@ function getTrueOffsetParent(element: Element): Element | null {
  * https://github.com/w3c/csswg-drafts/issues/159
  */
 function composedOffsetParent(element: HTMLElement): Element | null {
-  let { offsetParent } = element;
+  let {offsetParent} = element;
 
   let ancestor: Element = element;
   let foundInsideSlot = false;
 
   while (ancestor && ancestor !== offsetParent) {
-    const { assignedSlot } = ancestor;
+    const {assignedSlot} = ancestor;
 
     if (assignedSlot) {
       let newOffsetParent = assignedSlot.offsetParent;
@@ -56,7 +57,8 @@ function composedOffsetParent(element: HTMLElement): Element | null {
     } else if (isShadowRoot(ancestor) && ancestor.host && foundInsideSlot) {
       break;
     }
-    ancestor = ((isShadowRoot(ancestor) && ancestor.host) || ancestor.parentNode) as Element;
+    ancestor = ((isShadowRoot(ancestor) && ancestor.host) ||
+      ancestor.parentNode) as Element;
   }
 
   return offsetParent;
