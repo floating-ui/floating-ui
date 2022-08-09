@@ -74,7 +74,7 @@ export type SizeOptions = Omit<CoreSizeOptions, 'apply'> & {
       availableWidth: number;
       availableHeight: number;
     }
-  ): void;
+  ): Promisable<void>;
 };
 
 export type ComputePositionConfig = Omit<
