@@ -120,7 +120,10 @@ flip({
   // @ts-expect-error
   boundary: '',
 });
-flip({boundary: document.body});
+flip({
+  boundary: document.body,
+  padding: {top: 0},
+});
 flip({boundary: [document.body]});
 flip({boundary: 'clippingAncestors'});
 size({
@@ -199,6 +202,13 @@ const middlewareWDetectOverflow: Middleware = {
       boundary: 'clippingAncestors',
       rootBoundary: 'document',
       padding: 5,
+      altBoundary: true,
+    });
+    detectOverflow(args, {
+      elementContext: 'reference',
+      boundary: 'clippingAncestors',
+      rootBoundary: 'document',
+      padding: {bottom: 5},
       altBoundary: true,
     });
 

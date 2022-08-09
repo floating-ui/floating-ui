@@ -148,20 +148,31 @@ export interface MiddlewareArguments extends Coords {
 }
 
 export type ClientRectObject = Rect & SideObject;
-export type Padding = number | SideObject;
+export type Padding = number | Partial<SideObject>;
 export type Boundary = any;
 export type RootBoundary = 'viewport' | 'document';
 export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';
 export {rectToClientRect} from './utils/rectToClientRect';
-export {detectOverflow, Options as DetectOverflowOptions} from './detectOverflow';
+export {
+  detectOverflow,
+  Options as DetectOverflowOptions,
+} from './detectOverflow';
 
 export {arrow, Options as ArrowOptions} from './middleware/arrow';
-export {autoPlacement, Options as AutoPlacementOptions} from './middleware/autoPlacement';
+export {
+  autoPlacement,
+  Options as AutoPlacementOptions,
+} from './middleware/autoPlacement';
 export {flip, Options as FlipOptions} from './middleware/flip';
 export {hide, Options as HideOptions} from './middleware/hide';
 export {offset, Options as OffsetOptions} from './middleware/offset';
-export {shift, limitShift, Options as ShiftOptions, LimitShiftOptions} from './middleware/shift';
+export {
+  shift,
+  limitShift,
+  Options as ShiftOptions,
+  LimitShiftOptions,
+} from './middleware/shift';
 export {size, Options as SizeOptions} from './middleware/size';
 export {inline, Options as InlineOptions} from './middleware/inline';
