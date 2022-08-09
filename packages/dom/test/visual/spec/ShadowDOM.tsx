@@ -5,19 +5,31 @@ import { Controls } from '../utils/Controls';
 import { defineElements } from '../utils/shadowDOM';
 import { allPlacements } from '../utils/allPlacements';
 
-type UseCase = 'direct-host-child' | 'deep-host-child';
-const USE_CASES: UseCase[] = ['direct-host-child', 'deep-host-child'];
+type UseCase = 'direct-host-child' | 'deep-host-child' | 'relative-host-with-shadowed-floating-child';
+const USE_CASES: UseCase[] = ['direct-host-child', 'deep-host-child', 'relative-host-with-shadowed-floating-child'];
 
 const STRATEGIES: Strategy[] = ['absolute', 'fixed'];
+
+type CSSPosition = 'static' | 'relative' | 'absolute';
+const CSS_POSITIONS: CSSPosition[] = ['static', 'relative', 'absolute'];
 
 defineElements();
 
 export function ShadowDOM() {
   const [useCase, setUseCase] = useState<UseCase>('direct-host-child');
   const [placement, setPlacement] = useState<Placement>('bottom');
+  const [cssPosition, setCssPosition] = useState<CSSPosition>('static');
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [withTransform, setWithTransform] = useState<boolean>(false);
   const UseCaseTag = useCase;
+  const hostOptions = {
+    placement,
+    strategy,
+    style: {
+      position: cssPosition,
+      transform: withTransform ? 'translate(0)' : 'none',
+    },
+  };
 
   return (
     <>
@@ -26,11 +38,14 @@ export function ShadowDOM() {
         The floating element should be positioned correctly when contained within shadow DOM.
       </p>
       <div className='container'>
-        <UseCaseTag style={{
-          position: strategy,
-          transform: withTransform ? "translate(0)" : "none"
-        }}
-          placement={placement} strategy={strategy}/>
+        { UseCaseTag === 'relative-host-with-shadowed-floating-child' ?
+          <relative-position-host>
+            <div id='reference' className='reference'>Reference</div>
+            <shadowed-floating-owner {...hostOptions} />
+          </relative-position-host> :
+
+          <UseCaseTag {...hostOptions} />
+        }
       </div>
 
       <h3>Shadow DOM structure</h3>
@@ -48,6 +63,22 @@ export function ShadowDOM() {
             }}
           >
             {localUseCase}
+          </button>
+        ))}
+      </Controls>
+
+      <h3>Host position</h3>
+      <Controls>
+        {CSS_POSITIONS.map((localPosition) => (
+          <button
+            key={String(localPosition)}
+            data-testid={`css-position-${localPosition}`}
+            onClick={() => setCssPosition(localPosition)}
+            style={{
+              backgroundColor: localPosition === cssPosition ? 'black' : '',
+            }}
+          >
+            {String(localPosition)}
           </button>
         ))}
       </Controls>
