@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {useInsertionEffect as _useInsertionEffect} from 'react';
-
-const useInsertionEffect =
-  typeof _useInsertionEffect === 'function' ? _useInsertionEffect : undefined;
 
 type AnyFunction = (...args: any[]) => any;
+
+// `toString()` prevents bundlers from trying to `import { useInsertionEffect } from 'react'`
+const useInsertionEffect = (React as any)['useInsertionEffect'.toString()] as
+  | AnyFunction
+  | undefined;
 
 export function useEvent<T extends AnyFunction>(callback?: T) {
   const ref = React.useRef<AnyFunction | undefined>(() => {
