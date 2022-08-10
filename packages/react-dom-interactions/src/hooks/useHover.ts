@@ -60,7 +60,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move = true,
   }: Props<RT> = {}
 ): ElementProps => {
-  const {open, onOpenChange, dataRef, events, refs} = context;
+  const {open, onOpenChange, dataRef, events, refs, _} = context;
 
   const tree = useFloatingTree<RT>();
   const parentId = useFloatingParentNodeId();
@@ -264,6 +264,9 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       };
     }
   }, [
+    // Ensure the effect is re-run when the reference changes.
+    // https://github.com/floating-ui/floating-ui/issues/1833
+    _.domReference,
     enabled,
     context,
     mouseOnly,

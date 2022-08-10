@@ -39,6 +39,9 @@ export interface FloatingContext<RT extends ReferenceType = ReferenceType>
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
   refs: ExtendedRefs<RT>;
+  _: {
+    domReference: Element | null;
+  };
 }
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {

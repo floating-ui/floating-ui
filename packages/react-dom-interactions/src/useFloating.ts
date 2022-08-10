@@ -22,6 +22,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   strategy,
   nodeId,
 }: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> {
+  const [domReference, setDomReference] = React.useState<Element | null>(null);
   const tree = useFloatingTree<RT>();
   const domReferenceRef = React.useRef<Element | null>(null);
   const dataRef = React.useRef<ContextData>({});
@@ -52,8 +53,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       events,
       open,
       onOpenChange,
+      _: {domReference},
     }),
-    [position, nodeId, events, open, onOpenChange, refs]
+    [position, nodeId, events, open, onOpenChange, refs, domReference]
   );
 
   useLayoutEffect(() => {
@@ -68,6 +70,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     (node) => {
       if (isElement(node) || node === null) {
         context.refs.domReference.current = node;
+        setDomReference(node);
       }
 
       reference(node);
