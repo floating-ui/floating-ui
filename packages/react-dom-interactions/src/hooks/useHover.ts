@@ -64,7 +64,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const tree = useFloatingTree<RT>();
   const parentId = useFloatingParentNodeId();
-  const onOpenChangeRef = useLatestRef(onOpenChange);
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
   const previousOpen = usePrevious(open);
@@ -105,7 +104,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
     function onLeave() {
       if (isHoverOpen()) {
-        onOpenChangeRef.current(false);
+        onOpenChange(false);
       }
     }
 
@@ -114,7 +113,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs, onOpenChangeRef, enabled, handleCloseRef, dataRef, isHoverOpen]);
+  }, [refs, onOpenChange, enabled, handleCloseRef, dataRef, isHoverOpen]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
@@ -125,16 +124,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(
-          () => onOpenChangeRef.current(false),
-          closeDelay
-        );
+        timeoutRef.current = setTimeout(() => onOpenChange(false), closeDelay);
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
-        onOpenChangeRef.current(false);
+        onOpenChange(false);
       }
     },
-    [delayRef, onOpenChangeRef]
+    [delayRef, onOpenChange]
   );
 
   const cleanupPointerMoveHandler = React.useCallback(() => {
@@ -187,10 +183,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
       if (openDelay) {
         timeoutRef.current = setTimeout(() => {
-          onOpenChangeRef.current(true);
+          onOpenChange(true);
         }, openDelay);
       } else {
-        onOpenChangeRef.current(true);
+        onOpenChange(true);
       }
     }
 
@@ -276,13 +272,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     closeWithDelay,
     cleanupPointerMoveHandler,
     clearPointerEvents,
+    onOpenChange,
     open,
     tree,
     refs,
     delayRef,
     handleCloseRef,
     dataRef,
-    onOpenChangeRef,
   ]);
 
   // Block pointer-events of every element other than the reference and floating
