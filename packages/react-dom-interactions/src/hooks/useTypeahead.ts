@@ -66,7 +66,9 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
   }, [open, selectedIndex, activeIndex]);
 
   function onKeyDown(event: React.KeyboardEvent) {
-    // Correctly scope non-portalled floating elements
+    // Correctly scope nested non-portalled floating elements. Since the nested
+    // floating element is inside of the another, we find the closest role
+    // that indicates the floating element scope.
     if (
       isElement(event.target) &&
       (activeElement(getDocument(event.target)) !== event.currentTarget
