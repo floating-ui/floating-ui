@@ -3,6 +3,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {getDocument} from '../utils/getDocument';
+import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 
@@ -69,10 +70,12 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     // Correctly scope nested non-portalled floating elements. Since the nested
     // floating element is inside of the another, we find the closest role
     // that indicates the floating element scope.
+    const target = getTarget(event.nativeEvent);
+
     if (
-      isElement(event.target) &&
-      (activeElement(getDocument(event.target)) !== event.currentTarget
-        ? event.target.closest(
+      isElement(target) &&
+      (activeElement(getDocument(target)) !== event.currentTarget
+        ? target.closest(
             '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
           ) !== event.currentTarget
         : false)
