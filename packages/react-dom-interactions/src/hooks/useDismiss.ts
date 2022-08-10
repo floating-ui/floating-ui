@@ -6,7 +6,6 @@ import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {useLatestRef} from '../utils/useLatestRef';
 
 export interface Props {
   enabled?: boolean;
@@ -33,7 +32,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();
-  const onOpenChangeRef = useLatestRef(onOpenChange);
   const nested = useFloatingParentNodeId() != null;
 
   React.useEffect(() => {
@@ -52,7 +50,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         }
 
         events.emit('dismiss', {preventScroll: false});
-        onOpenChangeRef.current(false);
+        onOpenChange(false);
       }
     }
 
@@ -111,11 +109,11 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       }
 
       events.emit('dismiss', nested ? {preventScroll: true} : false);
-      onOpenChangeRef.current(false);
+      onOpenChange(false);
     }
 
     function onScroll() {
-      onOpenChangeRef.current(false);
+      onOpenChange(false);
     }
 
     const doc = getDocument(refs.floating.current);
@@ -157,7 +155,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     tree,
     nodeId,
     open,
-    onOpenChangeRef,
+    onOpenChange,
     ancestorScroll,
     enabled,
     bubbles,
