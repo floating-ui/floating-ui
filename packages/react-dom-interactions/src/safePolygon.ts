@@ -24,16 +24,18 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0.5,
+  blockPointerEvents = true,
   debug = null,
 }: Partial<{
   restMs: number;
   buffer: number;
+  blockPointerEvents: boolean;
   debug: null | ((points?: string | null) => void);
 }> = {}) {
   let timeoutId: NodeJS.Timeout;
   let polygonIsDestroyed = false;
 
-  return ({
+  const fn = ({
     x,
     y,
     placement,
@@ -345,4 +347,10 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
     };
   };
+
+  fn.__options = {
+    blockPointerEvents,
+  };
+
+  return fn;
 }

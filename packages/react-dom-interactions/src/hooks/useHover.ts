@@ -12,6 +12,19 @@ import {isElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
 import {usePrevious} from '../utils/usePrevious';
 
+interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
+  (
+    context: FloatingContext<RT> & {
+      onClose: () => void;
+      tree?: FloatingTreeType<RT> | null;
+      leave?: boolean;
+    }
+  ): (event: PointerEvent) => void;
+  __options: {
+    blockPointerEvents: boolean;
+  };
+}
+
 export function getDelay(
   value: Props['delay'],
   prop: 'open' | 'close',
@@ -30,15 +43,7 @@ export function getDelay(
 
 export interface Props<RT extends ReferenceType = ReferenceType> {
   enabled?: boolean;
-  handleClose?:
-    | null
-    | ((
-        context: FloatingContext<RT> & {
-          onClose: () => void;
-          tree?: FloatingTreeType<RT> | null;
-          leave?: boolean;
-        }
-      ) => (event: PointerEvent) => void);
+  handleClose?: HandleCloseFn<RT> | null;
   restMs?: number;
   delay?: number | Partial<{open: number; close: number}>;
   mouseOnly?: boolean;
@@ -293,7 +298,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open && handleCloseRef.current && isHoverOpen()) {
+    if (
+      open &&
+      handleCloseRef.current &&
+      handleCloseRef.current.__options.blockPointerEvents &&
+      isHoverOpen()
+    ) {
       getDocument(refs.floating.current).body.style.pointerEvents = 'none';
       performedPointerEventsMutationRef.current = true;
       const reference = refs.domReference.current;
