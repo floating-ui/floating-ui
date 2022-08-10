@@ -34,6 +34,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 ): ElementProps => {
   const tree = useFloatingTree();
   const nested = useFloatingParentNodeId() != null;
+  const insideReactTreeRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!open || !enabled) {
@@ -56,6 +57,15 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onPointerDown(event: MouseEvent) {
+      // Given developers can stop the propagation of the synthetic event,
+      // we can only be confident with a positive value.
+      const insideReactTree = insideReactTreeRef.current;
+      insideReactTreeRef.current = false;
+
+      if (insideReactTree) {
+        return;
+      }
+
       const target = getTarget(event);
 
       // Check if the click occurred on the scrollbar
@@ -171,6 +181,11 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           events.emit('dismiss');
           onOpenChange(false);
         }
+      },
+    },
+    floating: {
+      onPointerDownCapture() {
+        insideReactTreeRef.current = true;
       },
     },
   };

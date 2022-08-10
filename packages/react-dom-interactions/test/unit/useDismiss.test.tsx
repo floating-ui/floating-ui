@@ -1,7 +1,12 @@
 import {useState} from 'react';
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {useDismiss, useInteractions, useFloating} from '../../src';
+import {
+  useDismiss,
+  useInteractions,
+  useFloating,
+  FloatingPortal,
+} from '../../src';
 import type {Props} from '../../src/hooks/useDismiss';
 
 function App(props: Props) {
@@ -78,6 +83,43 @@ describe('false', () => {
     render(<App ancestorScroll={false} />);
     fireEvent.scroll(window);
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+    cleanup();
+  });
+
+  test('does not dismiss when clicking portaled children', async () => {
+    function App() {
+      const [open, setOpen] = useState(true);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        useDismiss(context),
+      ]);
+
+      return (
+        <>
+          <button ref={reference} {...getReferenceProps()} />
+          {open && (
+            <div ref={floating} {...getFloatingProps()}>
+              <FloatingPortal>
+                <button data-testid="portaled-button" />
+              </FloatingPortal>
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.pointerDown(screen.getByTestId('portaled-button'), {
+      bubbles: true,
+    });
+
+    expect(screen.queryByTestId('portaled-button')).toBeInTheDocument();
+
     cleanup();
   });
 });
