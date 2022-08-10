@@ -163,4 +163,6 @@ test('continues working after reference is conditionally rendered', () => {
   fireEvent.mouseEnter(screen.getByRole('button'));
 
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+  cleanup();
 });
