@@ -6,6 +6,7 @@ import {activeElement} from './utils/activeElement';
 import {getAncestors} from './utils/getAncestors';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
+import {getTarget} from './utils/getTarget';
 import {isElement, isHTMLElement} from './utils/is';
 import {isTypeableElement, TYPEABLE_SELECTOR} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
@@ -125,13 +126,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         }
 
         const els = getTabbableElements();
-
-        const target =
-          'composedPath' in event
-            ? event.composedPath()[0]
-            : // TS thinks `event` is of type never as it assumes all browsers
-              // support composedPath, but browsers without shadow dom don't
-              (event as Event).target;
+        const target = getTarget(event);
 
         if (
           orderRef.current[0] === 'reference' &&

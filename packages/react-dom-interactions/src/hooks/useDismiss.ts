@@ -4,6 +4,7 @@ import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
+import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 
@@ -55,33 +56,29 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     }
 
     function onPointerDown(event: MouseEvent) {
-      // Check if the click occurred on the scrollbar
-      if (isElement(event.target) && refs.floating.current) {
-        const win = refs.floating.current.ownerDocument.defaultView ?? window;
-        const canScrollX = event.target.scrollWidth > event.target.clientWidth;
-        const canScrollY =
-          event.target.scrollHeight > event.target.clientHeight;
+      const target = getTarget(event);
 
-        let xCond = canScrollY && event.offsetX > event.target.clientWidth;
+      // Check if the click occurred on the scrollbar
+      if (isElement(target) && refs.floating.current) {
+        const win = refs.floating.current.ownerDocument.defaultView ?? window;
+        const canScrollX = target.scrollWidth > target.clientWidth;
+        const canScrollY = target.scrollHeight > target.clientHeight;
+
+        let xCond = canScrollY && event.offsetX > target.clientWidth;
 
         // In some browsers it is possible to change the <body> (or window)
         // scrollbar to the left side, but is very rare and is difficult to
         // check for. Plus, for modal dialogs with backdrops, it is more
         // important that the backdrop is checked but not so much the window.
         if (canScrollY) {
-          const isRTL = win.getComputedStyle(event.target).direction === 'rtl';
+          const isRTL = win.getComputedStyle(target).direction === 'rtl';
 
           if (isRTL) {
-            xCond =
-              event.offsetX <=
-              event.target.offsetWidth - event.target.clientWidth;
+            xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
           }
         }
 
-        if (
-          xCond ||
-          (canScrollX && event.offsetY > event.target.clientHeight)
-        ) {
+        if (xCond || (canScrollX && event.offsetY > target.clientHeight)) {
           return;
         }
       }
