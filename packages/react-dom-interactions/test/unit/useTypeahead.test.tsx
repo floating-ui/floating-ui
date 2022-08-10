@@ -5,6 +5,7 @@ import {useTypeahead, useFloating, useInteractions} from '../../src';
 import type {Props} from '../../src/hooks/useTypeahead';
 
 jest.useFakeTimers();
+const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
 function App(props: Pick<Props, 'onMatch'> & {list?: Array<string>}) {
   const [open, setOpen] = useState(true);
@@ -40,13 +41,13 @@ test('rapidly focuses list items when they start with the same letter', async ()
   const input = screen.getByRole('combobox');
   input.focus();
 
-  await userEvent.keyboard('t');
+  await user.keyboard('t');
   expect(spy).toHaveBeenCalledWith(1);
 
-  await userEvent.keyboard('t');
+  await user.keyboard('t');
   expect(spy).toHaveBeenCalledWith(2);
 
-  await userEvent.keyboard('t');
+  await user.keyboard('t');
   expect(spy).toHaveBeenCalledWith(1);
 
   cleanup();
@@ -59,10 +60,10 @@ test('bails out of rapid focus of first letter if the list contains a string tha
   const input = screen.getByRole('combobox');
   input.focus();
 
-  await userEvent.keyboard('a');
+  await user.keyboard('a');
   expect(spy).toHaveBeenCalledWith(0);
 
-  await userEvent.keyboard('a');
+  await user.keyboard('a');
   expect(spy).toHaveBeenCalledWith(0);
 
   cleanup();
@@ -77,38 +78,51 @@ test('starts from the current activeIndex and correctly loops', async () => {
   const input = screen.getByRole('combobox');
   input.focus();
 
-  await userEvent.keyboard('t');
-  await userEvent.keyboard('o');
-  await userEvent.keyboard('y');
+  await user.keyboard('t');
+  await user.keyboard('o');
+  await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(0);
 
   spy.mockReset();
 
-  await userEvent.keyboard('t');
-  await userEvent.keyboard('o');
-  await userEvent.keyboard('y');
+  await user.keyboard('t');
+  await user.keyboard('o');
+  await user.keyboard('y');
   expect(spy).not.toHaveBeenCalled();
 
   jest.advanceTimersByTime(1000);
 
-  await userEvent.keyboard('t');
-  await userEvent.keyboard('o');
-  await userEvent.keyboard('y');
+  await user.keyboard('t');
+  await user.keyboard('o');
+  await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(1);
 
   jest.advanceTimersByTime(1000);
 
-  await userEvent.keyboard('t');
-  await userEvent.keyboard('o');
-  await userEvent.keyboard('y');
+  await user.keyboard('t');
+  await user.keyboard('o');
+  await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(2);
 
   jest.advanceTimersByTime(1000);
 
-  await userEvent.keyboard('t');
-  await userEvent.keyboard('o');
-  await userEvent.keyboard('y');
+  await user.keyboard('t');
+  await user.keyboard('o');
+  await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(0);
+
+  cleanup();
+});
+
+test('capslock characters continue to match', async () => {
+  const spy = jest.fn();
+  render(<App onMatch={spy} />);
+
+  const input = screen.getByRole('combobox');
+  input.focus();
+
+  await user.keyboard('{CapsLock}t');
+  expect(spy).toHaveBeenCalledWith(1);
 
   cleanup();
 });
