@@ -5,7 +5,10 @@ import type {Props} from '../../src/hooks/useHover';
 
 jest.useFakeTimers();
 
-function App(props: Props) {
+function App({
+  showReference = true,
+  ...props
+}: Props & {showReference?: boolean}) {
   const [open, setOpen] = useState(false);
   const {reference, floating, context} = useFloating({
     open,
@@ -17,7 +20,7 @@ function App(props: Props) {
 
   return (
     <>
-      <button {...getReferenceProps({ref: reference})} />
+      {showReference && <button {...getReferenceProps({ref: reference})} />}
       {open && <div role="tooltip" {...getFloatingProps({ref: floating})} />}
     </>
   );
@@ -151,4 +154,13 @@ test('restMs', async () => {
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
   cleanup();
+});
+
+test('continues working after reference is conditionally rendered', () => {
+  const {rerender} = render(<App showReference={false} />);
+  rerender(<App showReference />);
+
+  fireEvent.mouseEnter(screen.getByRole('button'));
+
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 });
