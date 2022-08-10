@@ -18,7 +18,7 @@ runs:
       with:
         command: npx playwright test packages/dom/test/functional
         api-key: rwk_cln4p6yp1AzRSj0aHOhwvVhVOBt1mrhoRicOmwcVRJ3
-        project: replay-chromium
+        project: chromium
         upload-all: true
     # - run: npm run test:functional
     #   shell: sh
