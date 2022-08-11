@@ -5,7 +5,7 @@ import { terser } from 'rollup-plugin-terser';
 import visualizer from 'rollup-plugin-visualizer';
 import license from 'rollup-plugin-license';
 import flowEntry from 'rollup-plugin-flow-entry';
-import compiler from '@ampproject/rollup-plugin-closure-compiler';
+//import compiler from '@ampproject/rollup-plugin-closure-compiler';
 import pkg from '../package.json';
 
 const getFileName = (input) => input.split('/')[1].split('.')[0];
@@ -28,7 +28,7 @@ const configs = bundles
           }),
         babel({ babelHelpers: 'bundled' }),
         // The two minifiers together seem to procude a smaller bundle 🤷‍♂️
-        minify && compiler(),
+        // minify && compiler(),
         minify && terser(),
         license({ banner: `@popperjs/core v${pkg.version} - MIT License` }),
         flow && flowEntry({ types: `lib/${getFileName(input)}.js` }),
