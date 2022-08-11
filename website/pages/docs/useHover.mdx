@@ -199,31 +199,32 @@ useHover(context, {
 });
 ```
 
-### Blocking pointer-events
+### blockPointerEvents
 
-By default, the safe polygon blocks all CSS `pointer-events`
-behind the polygon, reference, and floating elements. This is so
-the user does not fire hover events over other elements
-unintentionally while they traverse the polygon.
+default: `true{:js}`
 
-If your reference element is inside a scrollable container, this
-means it cannot be scrolled while the cursor rests over the
-reference element.
-
-There is a workaround for disabling this `pointer-events`
-behavior, but note, if there are items beneath the polygon with
-hover events that can open other floating elements, this results
-in poor UX.
+Whether CSS `pointer-events` behind the polygon, reference, and
+floating elements are blocked. This ensures the user does not
+fire hover events over other elements unintentionally while they
+traverse the polygon.
 
 ```js
-// Place this effect after `useInteractions()` in your component
-useLayoutEffect(() => {
-  if (open && refs.floating.current) {
-    const doc = refs.floating.current.ownerDocument ?? document;
-    doc.body.style.pointerEvents = '';
-  }
-}, [open]);
+useHover(context, {
+  handleClose: safePolygon({
+    blockPointerEvents: false,
+  }),
+});
 ```
+
+However, this does have some side-effects which is why you may
+want to disable it in favor of manually blocking pointer-events
+yourself:
+
+- If the cursor is resting on the reference element, any
+  scrolling containers (except the main window) cannot be
+  scrolled.
+- macOS' auto-hiding scrollbars will appear on scrolling
+  containers (except the main window) in Chrome.
 
 Another option is to add `pointer-events: auto{:sass}` to your
 scrolling container, then add an inner `<div>{:html}` inside the
