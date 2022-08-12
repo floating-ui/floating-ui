@@ -159,6 +159,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [preventTabbing, modal, getTabbableElements, orderRef, refs]);
 
   React.useEffect(() => {
+    let isPointerDown = false;
+
     function onFocusOut(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as Element | null;
 
@@ -183,10 +185,20 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         focusMovedOutsideFloating &&
         focusMovedOutsideReference &&
         !isChildOpen &&
-        !isParentRelated
+        !isParentRelated &&
+        !isPointerDown
       ) {
         onOpenChange(false);
       }
+    }
+
+    function onPointerDown() {
+      // In Safari, buttons *lose* focus when pressing them. This causes the
+      // reference `focusout` to fire, which closes the floating element.
+      isPointerDown = true;
+      setTimeout(() => {
+        isPointerDown = false;
+      });
     }
 
     const floating = refs.floating.current;
@@ -195,6 +207,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     if (floating && isHTMLElement(reference)) {
       !modal && floating.addEventListener('focusout', onFocusOut);
       !modal && reference.addEventListener('focusout', onFocusOut);
+      !modal && reference.addEventListener('pointerdown', onPointerDown);
 
       let cleanup: () => void;
       if (modal) {
@@ -208,6 +221,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       return () => {
         !modal && floating.removeEventListener('focusout', onFocusOut);
         !modal && reference.removeEventListener('focusout', onFocusOut);
+        !modal && reference.removeEventListener('pointerdown', onPointerDown);
         cleanup?.();
       };
     }
