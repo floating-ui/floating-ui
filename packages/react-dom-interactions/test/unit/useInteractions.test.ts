@@ -54,7 +54,9 @@ test('does not break props that start with `on`', () => {
   const props = getReferenceProps({
     // @ts-expect-error
     onlyShowVotes: true,
+    onyx: () => {},
   });
 
-  expect(typeof props.onlyShowVotes).toBe('boolean');
+  expect(props.onlyShowVotes).toBe(true);
+  expect(typeof props.onyx).toBe('function');
 });
