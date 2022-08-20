@@ -26,6 +26,7 @@ interface Props {
   pointerDown?: boolean;
   toggle?: boolean;
   ignoreMouse?: boolean;
+  ignoreKeyboard?: boolean;
 }
 ```
 
@@ -82,5 +83,17 @@ not be desirable in some cases.
 ```js
 useClick(context, {
   ignoreMouse: true,
+});
+```
+
+### ignoreKeyboard
+
+default: `false{:js}`
+
+Whether to ignore the logic for keyboard event.
+
+```js
+useClick(context, {
+  ignoreKeyboard: true,
 });
 ```

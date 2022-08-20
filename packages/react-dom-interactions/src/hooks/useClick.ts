@@ -7,6 +7,7 @@ export interface Props {
   pointerDown?: boolean;
   toggle?: boolean;
   ignoreMouse?: boolean;
+  ignoreKeyboard?: boolean;
 }
 
 /**
@@ -20,6 +21,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     pointerDown = false,
     toggle = true,
     ignoreMouse = false,
+    ignoreKeyboard = false,
   }: Props = {}
 ): ElementProps => {
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
@@ -99,6 +101,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
       onKeyDown(event) {
         pointerTypeRef.current = undefined;
 
+        if (ignoreKeyboard) {
+          return;
+        }
+
         if (isButton()) {
           return;
         }
@@ -119,6 +125,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         }
       },
       onKeyUp(event) {
+        if (ignoreKeyboard) {
+          return;
+        }
+
         if (isButton() || isSpaceIgnored()) {
           return;
         }
