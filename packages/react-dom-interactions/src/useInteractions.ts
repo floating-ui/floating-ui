@@ -27,11 +27,11 @@ function mergeProps(
 
             if (typeof value === 'function') {
               map.get(key)?.push(value);
-            }
 
-            acc[key] = (...args: unknown[]) => {
-              map.get(key)?.forEach((fn) => fn(...args));
-            };
+              acc[key] = (...args: unknown[]) => {
+                map.get(key)?.forEach((fn) => fn(...args));
+              };
+            }
           } else {
             acc[key] = value;
           }
