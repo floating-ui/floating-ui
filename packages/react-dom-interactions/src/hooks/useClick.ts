@@ -2,8 +2,8 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import * as React from 'react';
 import {isTypeableElement} from '../utils/isTypeableElement';
 
-function isButtonTarget(event) {
-  return event.target && event.target.tagName === 'BUTTON';
+function isButtonTarget(event: React.KeyboardEvent<Element>) {
+  return event.target && event.target instanceof HTMLElement && event.target.tagName === 'BUTTON';
 }
 
 export interface Props {
