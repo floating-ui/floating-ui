@@ -178,11 +178,13 @@ export const limitShift = (
       const limitMin =
         rects.reference[mainAxis] -
         rects.floating[len] +
-        computedOffset.mainAxis;
+        computedOffset.mainAxis +
+        (middlewareData.offset?.[mainAxis] ?? 0);
       const limitMax =
         rects.reference[mainAxis] +
         rects.reference[len] -
-        computedOffset.mainAxis;
+        computedOffset.mainAxis +
+        (middlewareData.offset?.[mainAxis] ?? 0);
 
       if (mainAxisCoord < limitMin) {
         mainAxisCoord = limitMin;
