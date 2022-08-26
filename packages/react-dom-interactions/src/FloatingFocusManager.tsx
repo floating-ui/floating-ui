@@ -205,9 +205,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const reference = refs.domReference.current;
 
     if (floating && isHTMLElement(reference)) {
-      !modal && floating.addEventListener('focusout', onFocusOut);
-      !modal && reference.addEventListener('focusout', onFocusOut);
-      !modal && reference.addEventListener('pointerdown', onPointerDown);
+      if (!modal) {
+        floating.addEventListener('focusout', onFocusOut);
+        reference.addEventListener('focusout', onFocusOut);
+        reference.addEventListener('pointerdown', onPointerDown);
+      }
 
       let cleanup: () => void;
       if (modal) {
@@ -219,9 +221,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       return () => {
-        !modal && floating.removeEventListener('focusout', onFocusOut);
-        !modal && reference.removeEventListener('focusout', onFocusOut);
-        !modal && reference.removeEventListener('pointerdown', onPointerDown);
+        if (!modal) {
+          floating.removeEventListener('focusout', onFocusOut);
+          reference.removeEventListener('focusout', onFocusOut);
+          reference.removeEventListener('pointerdown', onPointerDown);
+        }
+
         cleanup?.();
       };
     }
