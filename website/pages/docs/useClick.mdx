@@ -86,14 +86,14 @@ useClick(context, {
 });
 ```
 
-### ignoreKeyboard
+### keyboardHandlers
 
-default: `false{:js}`
+default: `true{:js}`
 
-Whether to ignore the logic for keyboard event.
+Whether to ignore the logic for keyboard event if set false.
 
 ```js
 useClick(context, {
-  ignoreKeyboard: true,
+  keyboardHandlers: false,
 });
 ```
