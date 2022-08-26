@@ -47,3 +47,16 @@ test('does not error with undefined user supplied functions', () => {
     getReferenceProps({onClick: undefined}).onClick()
   ).not.toThrowError();
 });
+
+test('does not break props that start with `on`', () => {
+  const {getReferenceProps} = useInteractions([]);
+
+  const props = getReferenceProps({
+    // @ts-expect-error
+    onlyShowVotes: true,
+    onyx: () => {},
+  });
+
+  expect(props.onlyShowVotes).toBe(true);
+  expect(typeof props.onyx).toBe('function');
+});

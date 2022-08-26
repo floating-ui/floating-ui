@@ -1,6 +1,11 @@
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import * as React from 'react';
 import {isTypeableElement} from '../utils/isTypeableElement';
+import {isHTMLElement} from '../utils/is';
+
+function isButtonTarget(event: React.KeyboardEvent<Element>) {
+  return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
+}
 
 export interface Props {
   enabled?: boolean;
@@ -25,10 +30,6 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   }: Props = {}
 ): ElementProps => {
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
-
-  function isButton() {
-    return refs.domReference.current?.tagName === 'BUTTON';
-  }
 
   function isSpaceIgnored() {
     return isTypeableElement(refs.domReference.current);
@@ -105,7 +106,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (isButton()) {
+        if (isButtonTarget(event)) {
           return;
         }
 
@@ -129,7 +130,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (isButton() || isSpaceIgnored()) {
+        if (isButtonTarget(event) || isSpaceIgnored()) {
           return;
         }
 
