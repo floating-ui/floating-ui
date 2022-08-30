@@ -114,9 +114,9 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     const html = getDocument(refs.floating.current).documentElement;
-    html.addEventListener('mouseleave', onLeave);
+    html.addEventListener('pointerleave', onLeave);
     return () => {
-      html.removeEventListener('mouseleave', onLeave);
+      html.removeEventListener('pointerleave', onLeave);
     };
   }, [refs, onOpenChange, enabled, handleCloseRef, dataRef, isHoverOpen]);
 
@@ -167,7 +167,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         : false;
     }
 
-    function onMouseEnter(event: MouseEvent) {
+    function onPointerEnter(event: MouseEvent) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
 
@@ -195,7 +195,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    function onMouseLeave(event: MouseEvent) {
+    function onPointerLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) {
         return;
       }
@@ -231,7 +231,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     // Ensure the floating element closes after scrolling even if the pointer
     // did not move.
     // https://github.com/floating-ui/floating-ui/discussions/1692
-    function onScrollMouseLeave(event: MouseEvent) {
+    function onScrollPointerLeave(event: MouseEvent) {
       if (isClickLikeOpenEvent()) {
         return;
       }
@@ -254,18 +254,19 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     const reference = refs.domReference.current;
 
     if (isElement(reference)) {
-      open && reference.addEventListener('mouseleave', onScrollMouseLeave);
-      floating?.addEventListener('mouseleave', onScrollMouseLeave);
+      open && reference.addEventListener('pointerleave', onScrollPointerLeave);
+      floating?.addEventListener('pointerleave', onScrollPointerLeave);
       move &&
-        reference.addEventListener('mousemove', onMouseEnter, {once: true});
-      reference.addEventListener('mouseenter', onMouseEnter);
-      reference.addEventListener('mouseleave', onMouseLeave);
+        reference.addEventListener('pointermove', onPointerEnter, {once: true});
+      reference.addEventListener('pointerenter', onPointerEnter);
+      reference.addEventListener('pointerleave', onPointerLeave);
       return () => {
-        open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
-        floating?.removeEventListener('mouseleave', onScrollMouseLeave);
-        move && reference.removeEventListener('mousemove', onMouseEnter);
-        reference.removeEventListener('mouseenter', onMouseEnter);
-        reference.removeEventListener('mouseleave', onMouseLeave);
+        open &&
+          reference.removeEventListener('pointerleave', onScrollPointerLeave);
+        floating?.removeEventListener('pointerleave', onScrollPointerLeave);
+        move && reference.removeEventListener('pointermove', onPointerEnter);
+        reference.removeEventListener('pointerenter', onPointerEnter);
+        reference.removeEventListener('pointerleave', onPointerLeave);
       };
     }
   }, [
@@ -370,7 +371,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     reference: {
       onPointerDown: setPointerRef,
       onPointerEnter: setPointerRef,
-      onMouseMove() {
+      onPointerMove() {
         if (open || restMs === 0) {
           return;
         }
@@ -384,10 +385,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       },
     },
     floating: {
-      onMouseEnter() {
+      onPointerEnter() {
         clearTimeout(timeoutRef.current);
       },
-      onMouseLeave() {
+      onPointerLeave() {
         closeWithDelay(false);
       },
     },

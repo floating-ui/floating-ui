@@ -79,7 +79,7 @@ function App() {
 test('groups delays correctly', async () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-one'));
+  fireEvent.pointerEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
     jest.advanceTimersByTime(1);
@@ -93,7 +93,7 @@ test('groups delays correctly', async () => {
 
   expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-two'));
+  fireEvent.pointerEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
     jest.advanceTimersByTime(1);
@@ -102,7 +102,7 @@ test('groups delays correctly', async () => {
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
   expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
 
-  fireEvent.mouseEnter(screen.getByTestId('reference-three'));
+  fireEvent.pointerEnter(screen.getByTestId('reference-three'));
 
   await act(async () => {
     jest.advanceTimersByTime(1);
@@ -111,7 +111,7 @@ test('groups delays correctly', async () => {
   expect(screen.queryByTestId('floating-two')).not.toBeInTheDocument();
   expect(screen.queryByTestId('floating-three')).toBeInTheDocument();
 
-  fireEvent.mouseLeave(screen.getByTestId('reference-three'));
+  fireEvent.pointerLeave(screen.getByTestId('reference-three'));
 
   await act(async () => {
     jest.advanceTimersByTime(1);

@@ -29,7 +29,7 @@ function App({
 test('opens on mouseenter', () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  fireEvent.pointerEnter(screen.getByRole('button'));
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
   cleanup();
@@ -38,8 +38,8 @@ test('opens on mouseenter', () => {
 test('closes on mouseleave', () => {
   render(<App />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
-  fireEvent.mouseLeave(screen.getByRole('button'));
+  fireEvent.pointerEnter(screen.getByRole('button'));
+  fireEvent.pointerLeave(screen.getByRole('button'));
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
   cleanup();
@@ -49,7 +49,7 @@ describe('delay', () => {
   test('symmetric number', async () => {
     render(<App delay={1000} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    fireEvent.pointerEnter(screen.getByRole('button'));
 
     await act(async () => {
       jest.advanceTimersByTime(999);
@@ -69,7 +69,7 @@ describe('delay', () => {
   test('open', async () => {
     render(<App delay={{open: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    fireEvent.pointerEnter(screen.getByRole('button'));
 
     await act(async () => {
       jest.advanceTimersByTime(499);
@@ -89,8 +89,8 @@ describe('delay', () => {
   test('close', async () => {
     render(<App delay={{close: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
-    fireEvent.mouseLeave(screen.getByRole('button'));
+    fireEvent.pointerEnter(screen.getByRole('button'));
+    fireEvent.pointerLeave(screen.getByRole('button'));
 
     await act(async () => {
       jest.advanceTimersByTime(499);
@@ -110,13 +110,13 @@ describe('delay', () => {
   test('open with close 0', async () => {
     render(<App delay={{open: 500}} />);
 
-    fireEvent.mouseEnter(screen.getByRole('button'));
+    fireEvent.pointerEnter(screen.getByRole('button'));
 
     await act(async () => {
       jest.advanceTimersByTime(499);
     });
 
-    fireEvent.mouseLeave(screen.getByRole('button'));
+    fireEvent.pointerLeave(screen.getByRole('button'));
 
     await act(async () => {
       jest.advanceTimersByTime(1);
@@ -131,13 +131,13 @@ describe('delay', () => {
 test('restMs', async () => {
   render(<App restMs={100} />);
 
-  fireEvent.mouseMove(screen.getByRole('button'));
+  fireEvent.pointerMove(screen.getByRole('button'));
 
   await act(async () => {
     jest.advanceTimersByTime(99);
   });
 
-  fireEvent.mouseMove(screen.getByRole('button'));
+  fireEvent.pointerMove(screen.getByRole('button'));
 
   await act(async () => {
     jest.advanceTimersByTime(1);
@@ -145,7 +145,7 @@ test('restMs', async () => {
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
-  fireEvent.mouseMove(screen.getByRole('button'));
+  fireEvent.pointerMove(screen.getByRole('button'));
 
   await act(async () => {
     jest.advanceTimersByTime(100);
@@ -160,7 +160,7 @@ test('continues working after reference is conditionally rendered', () => {
   const {rerender} = render(<App showReference={false} />);
   rerender(<App showReference />);
 
-  fireEvent.mouseEnter(screen.getByRole('button'));
+  fireEvent.pointerEnter(screen.getByRole('button'));
 
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
