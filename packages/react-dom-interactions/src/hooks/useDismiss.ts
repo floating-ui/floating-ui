@@ -11,8 +11,10 @@ import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 export interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
-  referencePointerDown?: boolean;
-  outsidePointerDown?: boolean;
+  referencePress?: boolean;
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'mouseup';
+  outsidePress?: boolean;
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'mouseup';
   ancestorScroll?: boolean;
   bubbles?: boolean;
 }
@@ -26,8 +28,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   {
     enabled = true,
     escapeKey = true,
-    outsidePointerDown = true,
-    referencePointerDown = false,
+    outsidePress = true,
+    outsidePressEvent = 'pointerdown',
+    referencePress = false,
+    referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles = true,
   }: Props = {}
@@ -56,7 +60,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    function onPointerDown(event: MouseEvent) {
+    function onOutsidePress(event: MouseEvent) {
       // Given developers can stop the propagation of the synthetic event,
       // we can only be confident with a positive value.
       const insideReactTree = insideReactTreeRef.current;
@@ -125,7 +129,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     const doc = getDocument(refs.floating.current);
     escapeKey && doc.addEventListener('keydown', onKeyDown);
-    outsidePointerDown && doc.addEventListener('pointerdown', onPointerDown);
+    outsidePress && doc.addEventListener(outsidePressEvent, onOutsidePress);
 
     const ancestors = (
       ancestorScroll
@@ -149,15 +153,16 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     return () => {
       escapeKey && doc.removeEventListener('keydown', onKeyDown);
-      outsidePointerDown &&
-        doc.removeEventListener('pointerdown', onPointerDown);
+      outsidePress &&
+        doc.removeEventListener(outsidePressEvent, onOutsidePress);
       ancestors.forEach((ancestor) =>
         ancestor.removeEventListener('scroll', onScroll)
       );
     };
   }, [
     escapeKey,
-    outsidePointerDown,
+    outsidePress,
+    outsidePressEvent,
     events,
     tree,
     nodeId,
@@ -174,17 +179,29 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     return {};
   }
 
+  const referencePropKey = {
+    pointerdown: 'onPointerDown',
+    mousedown: 'onMouseDown',
+    mouseup: 'onMouseUp',
+  }[referencePressEvent];
+
+  const floatingPropKey = {
+    pointerdown: 'onPointerDownCapture',
+    mousedown: 'onMouseDownCapture',
+    mouseup: 'onMouseUpCapture',
+  }[outsidePressEvent];
+
   return {
     reference: {
-      onPointerDown() {
-        if (referencePointerDown) {
+      [referencePropKey]: () => {
+        if (referencePress) {
           events.emit('dismiss');
           onOpenChange(false);
         }
       },
     },
     floating: {
-      onPointerDownCapture() {
+      [floatingPropKey]: () => {
         insideReactTreeRef.current = true;
       },
     },
