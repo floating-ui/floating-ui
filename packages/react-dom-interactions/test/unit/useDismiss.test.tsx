@@ -35,14 +35,14 @@ describe('true', () => {
     cleanup();
   });
 
-  test('dismisses with outside pointer down', async () => {
+  test('dismisses with outside pointer press', async () => {
     render(<App />);
     await userEvent.click(document.body);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
   });
 
-  test('dismisses with reference pointer down', async () => {
+  test('dismisses with reference press', async () => {
     render(<App referencePress />);
     await userEvent.click(screen.getByRole('button'));
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -65,7 +65,7 @@ describe('false', () => {
     cleanup();
   });
 
-  test('dismisses with outside pointer down', async () => {
+  test('dismisses with outside press', async () => {
     render(<App outsidePress={false} />);
     await userEvent.click(document.body);
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();

@@ -55,7 +55,7 @@ describe('default', () => {
   });
 });
 
-describe('`pointerDown` prop', () => {
+describe('mousedown `event` prop', () => {
   test('changes `open` state to `true` after click', () => {
     render(<App event="mousedown" />);
     const button = screen.getByRole('button');
@@ -108,7 +108,7 @@ describe('`toggle` prop', () => {
     cleanup();
   });
 
-  test('`open` state remains `true` after two clicks (`pointerDown`)', () => {
+  test('`open` state remains `true` after two clicks with `mousedown`', () => {
     render(<App toggle={false} event="mousedown" />);
     const button = screen.getByRole('button');
 
