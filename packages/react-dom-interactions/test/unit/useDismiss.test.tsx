@@ -43,7 +43,7 @@ describe('true', () => {
   });
 
   test('dismisses with reference pointer down', async () => {
-    render(<App referencePointerDown />);
+    render(<App referencePress />);
     await userEvent.click(screen.getByRole('button'));
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
@@ -66,14 +66,14 @@ describe('false', () => {
   });
 
   test('dismisses with outside pointer down', async () => {
-    render(<App outsidePointerDown={false} />);
+    render(<App outsidePress={false} />);
     await userEvent.click(document.body);
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
 
   test('dismisses with reference pointer down', async () => {
-    render(<App referencePointerDown={false} />);
+    render(<App referencePress={false} />);
     await userEvent.click(screen.getByRole('button'));
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
