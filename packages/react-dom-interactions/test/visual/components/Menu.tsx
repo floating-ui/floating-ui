@@ -116,11 +116,11 @@ export const MenuComponent = forwardRef<
     }),
     useClick(context, {
       toggle: !nested,
-      pointerDown: true,
+      event: 'mousedown',
       ignoreMouse: nested,
     }),
     useRole(context, {role: 'menu'}),
-    useDismiss(context),
+    useDismiss(context, {outsidePressEvent: 'mouseup'}),
     useListNavigation(context, {
       listRef: listItemsRef,
       activeIndex,
