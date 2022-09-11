@@ -8,6 +8,18 @@ import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 
+const bubbleHandlerKeys = {
+  pointerdown: 'onPointerDown',
+  mousedown: 'onMouseDown',
+  mouseup: 'onMouseUp',
+};
+
+const captureHandlerKeys = {
+  pointerdown: 'onPointerDownCapture',
+  mousedown: 'onMouseDownCapture',
+  mouseup: 'onMouseUpCapture',
+};
+
 export interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
@@ -179,21 +191,9 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     return {};
   }
 
-  const referencePropKey = {
-    pointerdown: 'onPointerDown',
-    mousedown: 'onMouseDown',
-    mouseup: 'onMouseUp',
-  }[referencePressEvent];
-
-  const floatingPropKey = {
-    pointerdown: 'onPointerDownCapture',
-    mousedown: 'onMouseDownCapture',
-    mouseup: 'onMouseUpCapture',
-  }[outsidePressEvent];
-
   return {
     reference: {
-      [referencePropKey]: () => {
+      [bubbleHandlerKeys[referencePressEvent]]: () => {
         if (referencePress) {
           events.emit('dismiss');
           onOpenChange(false);
@@ -201,7 +201,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       },
     },
     floating: {
-      [floatingPropKey]: () => {
+      [captureHandlerKeys[outsidePressEvent]]: () => {
         insideReactTreeRef.current = true;
       },
     },
