@@ -127,6 +127,7 @@ export interface ElementRects {
  */
 export type VirtualElement = {
   getBoundingClientRect(): ClientRectObject;
+  ownerDocument?: Document;
   contextElement?: any;
 };
 export type ReferenceElement = any;
