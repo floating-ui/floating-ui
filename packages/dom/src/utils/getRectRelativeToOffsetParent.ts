@@ -52,19 +52,9 @@ export function getRectRelativeToOffsetParent(
     }
   }
 
-  const ownerDocOffset = {x: 0, y: 0};
-
-  // TODO: improve checks
-  if (element?.ownerDocument?.defaultView?.frameElement) {
-    const bcr =
-      element.ownerDocument.defaultView.frameElement.getBoundingClientRect();
-    ownerDocOffset.x = bcr.left;
-    ownerDocOffset.y = bcr.top;
-  }
-
   return {
-    x: rect.left + scroll.scrollLeft - offsets.x + ownerDocOffset.x,
-    y: rect.top + scroll.scrollTop - offsets.y + ownerDocOffset.y,
+    x: rect.left + scroll.scrollLeft - offsets.x,
+    y: rect.top + scroll.scrollTop - offsets.y,
     width: rect.width,
     height: rect.height,
   };
