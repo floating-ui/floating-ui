@@ -1,15 +1,31 @@
-import { useState, useLayoutEffect, useMemo, HTMLProps } from 'react';
+import {
+  HTMLProps,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom'
 
-import type { Placement } from '@floating-ui/core';
-import {useFloating} from '@floating-ui/react-dom';
+import type { Middleware, Placement } from '@floating-ui/core';
+import {
+  autoUpdate,
+  limitShift as limitShiftFn,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
 
-import { Controls } from '../utils/Controls';
-import { defineElements } from '../utils/shadowDOM';
-import { allPlacements } from '../utils/allPlacements';
+import {Controls} from '../utils/Controls';
+import {defineElements} from '../utils/shadowDOM';
+import {allPlacements} from '../utils/allPlacements';
 import {useScroll} from '../utils/useScroll';
+import {useSize} from '../utils/useSize';
 
 defineElements();
+
+const SCENARIOS = ['Reference in iframe', 'Floating in iframe', 'Both in same iframe'] as const;
+type Scenario = typeof SCENARIOS[number];
 
 export const IFrame = ({
   children,
@@ -49,15 +65,46 @@ export const IFrame = ({
 }
 
 export function CrossDocument() {
+  const [scenario, setScenario] = useState<Scenario>('Reference in iframe');
   const [placement, setPlacement] = useState<Placement>('top');
+  const [offsetValue, setOffsetValue] = useState(0);
+  const [enableShift, setEnableShift] = useState(false);
+  const [shiftMainAxis, setShiftMainAxis] = useState(true);
+  const [shiftCrossAxis, setShiftCrossAxis] = useState(false);
+  const [limitShift, setLimitShift] = useState(false);
+  const [rafAutoUpdate, setRafAutoUpdate] = useState(false);
 
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
-    placement
+  const {
+    x,
+    y,
+    reference,
+    floating,
+    strategy,
+    update,
+    refs,
+  } = useFloating({
+    placement,
+    middleware: [
+      offset(offsetValue),
+      enableShift ? shift({
+        mainAxis: shiftMainAxis,
+        crossAxis: shiftCrossAxis,
+        limiter: limitShift
+          ? limitShiftFn()
+          : undefined,
+      }) : null,
+    ].filter((m: Middleware | null): m is Middleware => Boolean(m)),
   });
+
+  const [size, handleSizeChange] = useSize();
+  const {scrollRef, indicator} = useScroll({refs, update});
 
   useLayoutEffect(update, [
     update,
     placement,
+    size,
+    refs.floating,
+    refs.reference,
   ]);
 
   useLayoutEffect(() => {
@@ -67,7 +114,18 @@ export function CrossDocument() {
     setTimeout(() => setPlacement('bottom-start'));
   }, []);
 
-  const {scrollRef, indicator} = useScroll({refs, update});
+  useEffect(() => {
+    if (!refs.reference.current || !refs.floating.current) {
+      return;
+    }
+
+    return autoUpdate(
+      refs.reference.current,
+      refs.floating.current,
+      update,
+      { animationFrame: rafAutoUpdate }
+    );
+  }, [refs.floating, refs.reference, rafAutoUpdate, update]);
 
   const referenceJsx = <div
     ref={reference}
@@ -83,8 +141,10 @@ export function CrossDocument() {
       position: strategy,
       top: y ?? '',
       left: x ?? '',
+      width: size,
+      height: size,
     }}
-    >
+  >
     Floating
   </div>;
 
@@ -101,34 +161,88 @@ export function CrossDocument() {
           position: 'relative'
         }}
       >
-        <IFrame>
-          <div
-            className="scroll"
-            data-x
-            style={{position: 'relative'}}
-            ref={scrollRef}
-            >
-            {indicator}
-            {referenceJsx}
-          </div>
-        </IFrame>
-        {floatingJsx}
+        {scenario === 'Reference in iframe' ? (
+          <>
+            <IFrame>
+              <div
+                className="scroll"
+                style={{position: 'relative'}}
+                data-x
+                ref={scrollRef}
+                >
+                {indicator}
+                {referenceJsx}
+              </div>
+            </IFrame>
+            {floatingJsx}
+          </>
+        // ) : scenario === 'Floating in iframe' ? (
+        //   <>
+        //     <div
+        //       className="scroll"
+        //       data-x
+        //       style={{position: 'relative', zIndex: 1}}
+        //       ref={scrollRef}
+        //       >
+        //       {indicator}
+        //       {referenceJsx}
+        //     </div>
+        //     <IFrame style={{
+        //       position: 'absolute',
+        //       zIndex: 0,
+        //       width: '100%',
+        //       height: '100%',
+        //       inset: 0,
+        //     }}>
+        //       {floatingJsx}
+        //     </IFrame>
+        //   </>
+        ) : scenario === 'Both in same iframe' ? (
+          <IFrame>
+            <div
+              className="scroll"
+              data-x
+              style={{position: 'relative'}}
+              ref={scrollRef}
+              >
+              {indicator}
+              {referenceJsx}
+              {floatingJsx}
+            </div>
+          </IFrame>
+         ) : (
+          null
+        )}
       </div>
 
-      {/* Controls / variations: */}
-      {/* Scenarios:
-          - reference inside iframe, floating in top document
-          - reference in top document, floating inside iframe
-          - reference and floating inside iframes
-       */}
-      {/* Resize iframe */}
-      {/* Scroll iframe */}
+      <h2>Scenarios</h2>
+      <Controls>
+        {SCENARIOS.map((s) => (
+          <button
+            key={s}
+            data-testid={`scenario-${s}`}
+            onClick={() => setScenario(s)}
+            style={{
+              backgroundColor: scenario === s ? 'black' : '',
+            }}
+          >
+            {s}
+          </button>
+        ))}
+      </Controls>
 
-      {/* placements */}
-      {/* positions */}
-      {/* arrow */}
-      {/* should the example allow scrolling for testing shift limiting? */}
-      {/* with autoupdate (incl rAF) */}
+      <h2>Size</h2>
+      <Controls>
+        <label htmlFor="size">Size</label>
+        <input
+          id="size"
+          type="range"
+          min="1"
+          max="200"
+          value={size}
+          onChange={handleSizeChange}
+        />
+      </Controls>
 
       <h2>Placement</h2>
       <Controls>
@@ -142,6 +256,90 @@ export function CrossDocument() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Offset</h2>
+      <Controls>
+        {[0, 10].map((value) => (
+          <button
+            key={String(value)}
+            data-testid={`offset-${value}`}
+            onClick={() => setOffsetValue(value)}
+            style={{backgroundColor: offsetValue === value ? 'black' : ''}}
+          >
+            {String(value)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Shift</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`enableShift-${bool}`}
+            onClick={() => setEnableShift(bool)}
+            style={{backgroundColor: enableShift === bool ? 'black' : ''}}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h3>Shift.mainAxis</h3>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`shiftMainAxis-${bool}`}
+            onClick={() => setShiftMainAxis(bool)}
+            style={{backgroundColor: shiftMainAxis === bool ? 'black' : ''}}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h3>Shift.crossAxis</h3>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`shiftCrossAxis-${bool}`}
+            onClick={() => setShiftCrossAxis(bool)}
+            style={{backgroundColor: shiftCrossAxis === bool ? 'black' : ''}}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h3>Shift.limitShift</h3>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`limitShift-${bool}`}
+            onClick={() => setLimitShift(bool)}
+            style={{backgroundColor: limitShift === bool ? 'black' : ''}}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Use animationFrame strategy for autoUpdates</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`autoUpdateRAF-${bool}`}
+            onClick={() => setRafAutoUpdate(bool)}
+            style={{backgroundColor: rafAutoUpdate === bool ? 'black' : ''}}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>
