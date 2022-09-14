@@ -1,5 +1,9 @@
 import {
+  forwardRef,
+  ForwardedRef,
   HTMLProps,
+  LegacyRef,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -27,46 +31,82 @@ defineElements();
 const SCENARIOS = ['Reference in iframe', 'Floating in iframe', 'Both in same iframe'] as const;
 type Scenario = typeof SCENARIOS[number];
 
-export const IFrame = ({
-  children,
-  ...props
-}: HTMLProps<HTMLIFrameElement>) => {
-  const [contentRef, setContentRef] = useState<HTMLIFrameElement | null>(null)
+function isRef(value: unknown): value is React.MutableRefObject<unknown> {
+  return Object.prototype.hasOwnProperty.call(value, 'current');
+}
 
-  const iFrameHead = contentRef?.contentWindow?.document?.head;
-  const iFrameRoot = contentRef?.contentWindow?.document?.body;
+export const IFrame = forwardRef((
+  {
+    children,
+    ...props
+  }: HTMLProps<HTMLIFrameElement>,
+  forwardedRef: ForwardedRef<HTMLIFrameElement>
+) => {
+  const [contentRef, setContentRef] = useState<HTMLIFrameElement | null>(null);
 
+  const headPortal = useMemo(() => {
+    const iFrameHead = contentRef?.contentWindow?.document?.head;
 
-  const headContent = useMemo(() => (<>
-    {/* Use the same styles as in the top-level document */}
-    {Array.from(contentRef?.ownerDocument.querySelectorAll('link') ?? []).map(
-      ({href}) => <link key={href} rel="stylesheet" href={href} />
-      )}
-    {/* Additional styles needed by the iframe's content */}
-    <style type='text/css'>{`
-      body {
-        /* necessary to override body styles from main stylesheet */
-        padding: 0;
-        /* Center reference inside the iframe */
-        display: grid;
-        place-items: center;
+    if (!iFrameHead) {
+      return null;
+    }
+
+    return createPortal(
+      <>
+        {/* Use the same styles as in the top-level document */}
+        {Array.from(contentRef?.ownerDocument.querySelectorAll('link') ?? []).map(
+          ({href}) => <link key={href} rel="stylesheet" href={href} />
+          )}
+        {/* Additional styles needed by the iframe's content */}
+        <style type='text/css'>{`
+          body {
+            /* necessary to override body styles from main stylesheet */
+            padding: 0;
+            /* Center reference inside the iframe */
+            display: grid;
+            place-items: center;
+          }
+        `}</style>
+      </>,
+      iFrameHead
+    );
+  }, [contentRef]);
+
+  const rootPortal = useMemo(() => {
+    const iFrameRoot = contentRef?.contentWindow?.document?.body;
+
+    if (!iFrameRoot) {
+      return null;
+    }
+
+    return createPortal(children, iFrameRoot);
+  }, [contentRef, children])
+
+  const mergedIframeRef: LegacyRef<HTMLIFrameElement> = useCallback(
+    (node: HTMLIFrameElement | null) => {
+      setContentRef(node);
+      if (forwardedRef && isRef(forwardedRef)) {
+        forwardedRef.current = node;
+      } else if (forwardedRef) {
+        forwardedRef(node);
       }
-    `}</style>
-  </>), [contentRef]);
+    },
+    [forwardedRef]
+  );
 
   return (
-    <iframe {...props} ref={setContentRef}>
+    <iframe {...props} ref={mergedIframeRef}>
       {/* Add styles to the <head> */}
-      {iFrameHead && createPortal(headContent, iFrameHead)}
+      {headPortal}
       {/* Add content to the <body> */}
-      {iFrameRoot && createPortal(children, iFrameRoot)}
+      {rootPortal}
     </iframe>
-  )
-}
+  );
+});
 
 export function CrossDocument() {
   const [scenario, setScenario] = useState<Scenario>('Reference in iframe');
-  const [placement, setPlacement] = useState<Placement>('top');
+  const [placement, setPlacement] = useState<Placement | undefined>(undefined);
   const [offsetValue, setOffsetValue] = useState(0);
   const [enableShift, setEnableShift] = useState(false);
   const [shiftMainAxis, setShiftMainAxis] = useState(true);
@@ -99,19 +139,12 @@ export function CrossDocument() {
   const [size, handleSizeChange] = useSize();
   const {scrollRef, indicator} = useScroll({refs, update});
 
-  useLayoutEffect(update, [
-    update,
-    placement,
-    size,
-    refs.floating,
-    refs.reference,
-  ]);
+  useLayoutEffect(update, [ scenario, update, size ]);
 
   useLayoutEffect(() => {
-    // Hack to force a re-render that also creates new values for
-    // `refs` and/or `update`, so that `useScroll` updates internally
-    // and scrolls the reference element into view.
-    setTimeout(() => setPlacement('bottom-start'));
+    // Hack to force a re-render that also creates new values for `refs` and/or
+    // `update`, so that `useFloating` can compute the position correctly.
+    setTimeout(() => setPlacement('top'), 50);
   }, []);
 
   useEffect(() => {
