@@ -195,8 +195,11 @@ export function CrossDocument() {
         }}
       >
         {scenario === 'Reference in iframe' ? (
-          <>
-            <IFrame>
+          <><IFrame>
+            <IFrame style={{
+              maxWidth: '90%',
+              margin: '0 auto',
+            }}>
               <div
                 className="scroll"
                 style={{position: 'relative'}}
@@ -207,7 +210,8 @@ export function CrossDocument() {
                 {referenceJsx}
               </div>
             </IFrame>
-            {floatingJsx}
+          </IFrame>
+          {floatingJsx}
           </>
         // ) : scenario === 'Floating in iframe' ? (
         //   <>

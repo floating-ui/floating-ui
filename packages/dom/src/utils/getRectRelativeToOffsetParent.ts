@@ -4,8 +4,9 @@ import {getDocumentElement} from './getDocumentElement';
 import {getNodeName} from './getNodeName';
 import {getNodeScroll} from './getNodeScroll';
 import getWindowScrollBarX from './getWindowScrollBarX';
-import {isHTMLElement, isOverflowElement} from './is';
+import {isElement, isHTMLElement, isOverflowElement} from './is';
 import {round} from './math';
+import {getWindow, isWindow} from './window';
 
 function isScaled(element: HTMLElement): boolean {
   const rect = getBoundingClientRect(element);
@@ -54,12 +55,34 @@ export function getRectRelativeToOffsetParent(
 
   const ownerDocOffset = {x: 0, y: 0};
 
+  const referenceWindow = isElement(element) ? getWindow(element) : window;
+  const offsetParentWindow = isWindow(element) ? offsetParent : getWindow(offsetParent);
+  console.log({samesies: referenceWindow === offsetParentWindow, referenceWindow, offsetParentWindow})
+
+
   // TODO: improve checks
-  if (element?.ownerDocument?.defaultView?.frameElement) {
-    const bcr =
-      element.ownerDocument.defaultView.frameElement.getBoundingClientRect();
-    ownerDocOffset.x = bcr.left;
-    ownerDocOffset.y = bcr.top;
+  const MAX_ITERATIONS = 5;
+  let iterationCount = 0;
+  let nextWindow: Window | null = referenceWindow;
+  while (
+    iterationCount < MAX_ITERATIONS &&
+    nextWindow &&
+    nextWindow !== offsetParentWindow
+  ) {
+    iterationCount += 1;
+
+    const iframe: Element | null = nextWindow.frameElement;
+
+    if (iframe === null) {
+      nextWindow = null;
+    }
+
+    const bcr = iframe?.getBoundingClientRect();
+    console.log({iterationCount, bcr});
+    ownerDocOffset.x += bcr?.left ?? 0;
+    ownerDocOffset.y += bcr?.top ?? 0;
+
+    nextWindow = iframe?.ownerDocument?.defaultView ?? null;
   }
 
   return {
