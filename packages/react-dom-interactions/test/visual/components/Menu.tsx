@@ -209,9 +209,9 @@ export const MenuComponent = forwardRef<
         {open && (
           <FloatingFocusManager
             context={context}
-            preventTabbing
             modal={!nested}
             order={['reference', 'content']}
+            returnFocus={!nested}
           >
             <div
               {...getFloatingProps({
@@ -231,6 +231,7 @@ export const MenuComponent = forwardRef<
                   cloneElement(
                     child,
                     getItemProps({
+                      tabIndex: -1,
                       role: 'menuitem',
                       className: 'MenuItem',
                       ref(node: HTMLButtonElement) {

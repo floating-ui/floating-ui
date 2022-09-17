@@ -390,7 +390,7 @@ export function Main() {
           </button>
           {open && (
             <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
-              <FloatingFocusManager context={context} preventTabbing>
+              <FloatingFocusManager context={context}>
                 <div
                   ref={floating}
                   className="MacSelect"
@@ -426,6 +426,7 @@ export function Main() {
                         // pressing the ScrollArrows
                         disabled={blockSelection}
                         aria-selected={selectedIndex === i}
+                        tabIndex={-1}
                         role="option"
                         style={{
                           background:
