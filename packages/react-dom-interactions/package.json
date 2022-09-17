@@ -4,8 +4,8 @@
   "@rollingversions": {
     "baseVersion": [
       0,
-      1,
-      0
+      10,
+      1
     ]
   },
   "description": "Floating UI Interactions for React DOM",

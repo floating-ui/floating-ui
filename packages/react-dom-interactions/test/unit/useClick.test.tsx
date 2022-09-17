@@ -55,9 +55,9 @@ describe('default', () => {
   });
 });
 
-describe('`pointerDown` prop', () => {
+describe('mousedown `event` prop', () => {
   test('changes `open` state to `true` after click', () => {
-    render(<App pointerDown />);
+    render(<App event="mousedown" />);
     const button = screen.getByRole('button');
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('`pointerDown` prop', () => {
   });
 
   test('changes `open` state to `false` after two clicks', () => {
-    render(<App pointerDown />);
+    render(<App event="mousedown" />);
     const button = screen.getByRole('button');
 
     fireEvent.click(button);
@@ -108,8 +108,8 @@ describe('`toggle` prop', () => {
     cleanup();
   });
 
-  test('`open` state remains `true` after two clicks (`pointerDown`)', () => {
-    render(<App toggle={false} pointerDown />);
+  test('`open` state remains `true` after two clicks with `mousedown`', () => {
+    render(<App toggle={false} event="mousedown" />);
     const button = screen.getByRole('button');
 
     fireEvent.click(button);

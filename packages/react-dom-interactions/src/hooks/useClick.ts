@@ -9,7 +9,7 @@ function isButtonTarget(event: React.KeyboardEvent<Element>) {
 
 export interface Props {
   enabled?: boolean;
-  pointerDown?: boolean;
+  event?: 'click' | 'mousedown';
   toggle?: boolean;
   ignoreMouse?: boolean;
   keyboardHandlers?: boolean;
@@ -23,7 +23,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   {open, onOpenChange, dataRef, refs}: FloatingContext<RT>,
   {
     enabled = true,
-    pointerDown = false,
+    event: eventOption = 'click',
     toggle = true,
     ignoreMouse = false,
     keyboardHandlers = true,
@@ -55,7 +55,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (!pointerDown) {
+        if (eventOption === 'click') {
           return;
         }
 
@@ -75,7 +75,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         dataRef.current.openEvent = event.nativeEvent;
       },
       onClick(event) {
-        if (pointerDown && pointerTypeRef.current) {
+        if (eventOption === 'mousedown' && pointerTypeRef.current) {
           pointerTypeRef.current = undefined;
           return;
         }

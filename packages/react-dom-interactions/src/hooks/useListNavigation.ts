@@ -232,7 +232,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>
     ) => {
-      // `pointerDown` clicks occur before `focus`, so the button will steal the
+      // `mousedown` clicks occur before `focus`, so the button will steal the
       // focus unless we wait a frame.
       frameRef.current = requestAnimationFrame(() => {
         if (virtual) {

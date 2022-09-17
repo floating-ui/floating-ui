@@ -19,7 +19,7 @@ function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
   });
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useFocus(context, props),
-    useDismiss(context, {enabled: !!props.dismiss, referencePointerDown: true}),
+    useDismiss(context, {enabled: !!props.dismiss, referencePress: true}),
     useHover(context, {enabled: !!props.hover}),
   ]);
 

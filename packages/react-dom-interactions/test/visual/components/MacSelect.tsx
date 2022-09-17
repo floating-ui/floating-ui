@@ -244,8 +244,8 @@ export function Main() {
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
-    useClick(context, {pointerDown: true}),
-    useDismiss(context, {outsidePointerDown: false}),
+    useClick(context, {event: 'mousedown'}),
+    useDismiss(context, {outsidePress: false}),
     useRole(context, {role: 'listbox'}),
     useInnerOffset(context, {
       enabled: !fallback,

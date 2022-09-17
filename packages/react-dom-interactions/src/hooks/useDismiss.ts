@@ -8,11 +8,25 @@ import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 
+const bubbleHandlerKeys = {
+  pointerdown: 'onPointerDown',
+  mousedown: 'onMouseDown',
+  click: 'onClick',
+};
+
+const captureHandlerKeys = {
+  pointerdown: 'onPointerDownCapture',
+  mousedown: 'onMouseDownCapture',
+  click: 'onClickCapture',
+};
+
 export interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
-  referencePointerDown?: boolean;
-  outsidePointerDown?: boolean;
+  referencePress?: boolean;
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  outsidePress?: boolean;
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean;
 }
@@ -26,8 +40,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   {
     enabled = true,
     escapeKey = true,
-    outsidePointerDown = true,
-    referencePointerDown = false,
+    outsidePress = true,
+    outsidePressEvent = 'pointerdown',
+    referencePress = false,
+    referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles = true,
   }: Props = {}
@@ -56,7 +72,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    function onPointerDown(event: MouseEvent) {
+    function onOutsidePress(event: MouseEvent) {
       // Given developers can stop the propagation of the synthetic event,
       // we can only be confident with a positive value.
       const insideReactTree = insideReactTreeRef.current;
@@ -125,7 +141,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     const doc = getDocument(refs.floating.current);
     escapeKey && doc.addEventListener('keydown', onKeyDown);
-    outsidePointerDown && doc.addEventListener('pointerdown', onPointerDown);
+    outsidePress && doc.addEventListener(outsidePressEvent, onOutsidePress);
 
     const ancestors = (
       ancestorScroll
@@ -149,15 +165,16 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     return () => {
       escapeKey && doc.removeEventListener('keydown', onKeyDown);
-      outsidePointerDown &&
-        doc.removeEventListener('pointerdown', onPointerDown);
+      outsidePress &&
+        doc.removeEventListener(outsidePressEvent, onOutsidePress);
       ancestors.forEach((ancestor) =>
         ancestor.removeEventListener('scroll', onScroll)
       );
     };
   }, [
     escapeKey,
-    outsidePointerDown,
+    outsidePress,
+    outsidePressEvent,
     events,
     tree,
     nodeId,
@@ -176,15 +193,15 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
   return {
     reference: {
-      onPointerDown() {
-        if (referencePointerDown) {
+      [bubbleHandlerKeys[referencePressEvent]]: () => {
+        if (referencePress) {
           events.emit('dismiss');
           onOpenChange(false);
         }
       },
     },
     floating: {
-      onPointerDownCapture() {
+      [captureHandlerKeys[outsidePressEvent]]: () => {
         insideReactTreeRef.current = true;
       },
     },
