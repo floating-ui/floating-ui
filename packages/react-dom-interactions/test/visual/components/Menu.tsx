@@ -139,10 +139,6 @@ export const MenuComponent = forwardRef<
   useEffect(() => {
     function onTreeClick() {
       setOpen(false);
-
-      if (parentId === null) {
-        refs.reference.current?.focus();
-      }
     }
 
     tree?.events.on('click', onTreeClick);
@@ -210,8 +206,8 @@ export const MenuComponent = forwardRef<
           <FloatingFocusManager
             context={context}
             modal={!nested}
-            order={['reference', 'content']}
             returnFocus={!nested}
+            order={['reference', 'content']}
           >
             <div
               {...getFloatingProps({
