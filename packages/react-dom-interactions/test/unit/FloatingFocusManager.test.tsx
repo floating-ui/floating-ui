@@ -248,30 +248,6 @@ describe('endGuard', () => {
   });
 });
 
-describe('preventTabbing', () => {
-  test('true', async () => {
-    render(<App preventTabbing={true} />);
-
-    const prevEl = document.activeElement;
-    fireEvent.click(screen.getByTestId('reference'));
-
-    await userEvent.tab();
-
-    expect(prevEl).toBe(document.activeElement);
-  });
-
-  test('false', async () => {
-    render(<App preventTabbing={false} />);
-
-    const prevEl = document.activeElement;
-    fireEvent.click(screen.getByTestId('reference'));
-
-    await userEvent.tab();
-
-    expect(prevEl).not.toBe(document.activeElement);
-  });
-});
-
 describe('modal', () => {
   test('true', async () => {
     render(<App modal={true} />);

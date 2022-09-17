@@ -139,10 +139,6 @@ export const MenuComponent = forwardRef<
   useEffect(() => {
     function onTreeClick() {
       setOpen(false);
-
-      if (parentId === null) {
-        refs.reference.current?.focus();
-      }
     }
 
     tree?.events.on('click', onTreeClick);
@@ -209,8 +205,8 @@ export const MenuComponent = forwardRef<
         {open && (
           <FloatingFocusManager
             context={context}
-            preventTabbing
             modal={!nested}
+            returnFocus={!nested}
             order={['reference', 'content']}
           >
             <div
@@ -231,6 +227,7 @@ export const MenuComponent = forwardRef<
                   cloneElement(
                     child,
                     getItemProps({
+                      tabIndex: -1,
                       role: 'menuitem',
                       className: 'MenuItem',
                       ref(node: HTMLButtonElement) {

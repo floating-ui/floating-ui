@@ -49,7 +49,6 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   children: JSX.Element;
   order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?: number | React.MutableRefObject<HTMLElement | null>;
-  preventTabbing?: boolean;
   endGuard?: boolean;
   returnFocus?: boolean;
   modal?: boolean;
@@ -64,16 +63,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   children,
   order = ['content'],
   endGuard = true,
-  preventTabbing = false,
   initialFocus = 0,
   returnFocus = true,
   modal = true,
 }: Props<RT>): JSX.Element {
   const orderRef = useLatestRef(order);
   const tree = useFloatingTree();
-
-  const root =
-    tree?.nodesRef.current.find((node) => node.id === nodeId)?.parentId == null;
 
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
@@ -121,7 +116,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
-        if (preventTabbing || noTabbableContentElements) {
+        if (noTabbableContentElements) {
           stopEvent(event);
         }
 
@@ -156,7 +151,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [preventTabbing, modal, getTabbableElements, orderRef, refs]);
+  }, [modal, getTabbableElements, orderRef, refs]);
 
   React.useEffect(() => {
     let isPointerDown = false;
@@ -242,11 +237,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
-    // Retain `returnFocus` behavior for root nodes
-    if (preventTabbing && !root) {
-      return;
-    }
-
     const floating = refs.floating.current;
     const doc = getDocument(floating);
 
@@ -258,14 +248,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       previouslyFocusedElement = refs.domReference.current;
     }
 
-    if (!preventTabbing) {
-      if (typeof initialFocus === 'number') {
-        const el = getTabbableElements()[initialFocus] ?? floating;
-        focus(el, el === floating);
-      } else if (isHTMLElement(initialFocus.current)) {
-        const el = initialFocus.current ?? floating;
-        focus(el, el === floating);
-      }
+    if (typeof initialFocus === 'number') {
+      const el = getTabbableElements()[initialFocus] ?? floating;
+      focus(el, el === floating);
+    } else if (isHTMLElement(initialFocus.current)) {
+      const el = initialFocus.current ?? floating;
+      focus(el, el === floating);
     }
 
     // Dismissing via outside press should always ignore `returnFocus` to
@@ -290,15 +278,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         focus(previouslyFocusedElement, preventReturnFocusScroll);
       }
     };
-  }, [
-    preventTabbing,
-    getTabbableElements,
-    initialFocus,
-    returnFocus,
-    refs,
-    events,
-    root,
-  ]);
+  }, [getTabbableElements, initialFocus, returnFocus, refs, events]);
 
   const isTypeableCombobox = () =>
     refs.domReference.current?.getAttribute('role') === 'combobox' &&
