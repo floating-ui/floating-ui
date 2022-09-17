@@ -11,22 +11,22 @@ import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
   mousedown: 'onMouseDown',
-  mouseup: 'onMouseUp',
+  click: 'onClick',
 };
 
 const captureHandlerKeys = {
   pointerdown: 'onPointerDownCapture',
   mousedown: 'onMouseDownCapture',
-  mouseup: 'onMouseUpCapture',
+  click: 'onClickCapture',
 };
 
 export interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
   referencePress?: boolean;
-  referencePressEvent?: 'pointerdown' | 'mousedown' | 'mouseup';
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   outsidePress?: boolean;
-  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'mouseup';
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean;
 }
