@@ -37,7 +37,6 @@ interface Props {
     | number
     | React.MutableRefObject<HTMLElement | null>;
   returnFocus?: boolean;
-  preventTabbing?: boolean;
   endGuard?: boolean;
   modal?: boolean;
 }
@@ -85,9 +84,6 @@ Which element to initially focus. Can be either a number
 (tabbable index as specified by the `order{:.objectKey}`) or a
 ref.
 
-> This does not have an effect when `preventTabbing{:.keyword}`
-> is enabled.
-
 ```js
 <FloatingFocusManager
   context={context}
@@ -105,31 +101,8 @@ Determines if focus should be returned to the element that was
 focused prior to opening the floating element (usually the
 reference element).
 
-> This does not have an effect when `preventTabbing{:.keyword}`
-> is enabled.
-
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
-  {/* floating element */}
-</FloatingFocusManager>
-```
-
-### preventTabbing
-
-default: `false{:js}`
-
-Determines if the tab key does not perform any action, so that
-focus cannot escape the floating element. Focus is instead
-handled by `useListNavigation(){:js}` (i.e. arrow key
-navigation).
-
-This prop is required when the focus is
-[modal](/docs/FloatingFocusManager#modal) and the floating
-element is portalled outside of the reference element's DOM
-context.
-
-```js
-<FloatingFocusManager context={context} preventTabbing={true}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
@@ -157,20 +130,44 @@ Determines if focus is "modal", meaning focus is fully trapped
 inside the floating element and outside content cannot be
 accessed. This includes screen reader virtual cursors.
 
-> If `false{:js}`, the floating element must be rendered directly
-> after its reference element (e.g. not in a FloatingPortal).
-
 ```js
 <FloatingFocusManager context={context} modal={false}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
 
-#### Input comboboxes
+#### Non-modal behavior
 
-`<input />{:js}` comboboxes should not be modal when possible.
-When setting them to modal, focus does not become modal but
-screen reader virtual cursors do become modal. Therefore, the
-listbox should have a visually-hidden dismiss button to ensure
-touch-based screen reader users can escape the list without
-needing to select anything.
+The floating element must be rendered directly after its
+reference element (e.g. not in a FloatingPortal) when non-modal.
+
+#### Modal behavior
+
+Ensure you have an explicit "close" button. This can be either
+visible to all users, or visually-hidden so it is only available
+to assistive tech.
+
+Touch-based screen readers often will not have an `esc` key
+available to dismiss the element, so an explicit close button is
+required.
+
+You may use the reference element as the close button with some
+components, so the user can navigate to it and use it as a toggle
+to both close and open the floating element. This can be achieved
+with the `order{:.keyword}` prop and adding the reference as a
+string.
+
+#### Comboboxes
+
+The listbox part of a combobox should be rendered directly after
+the input reference element when possible.
+
+If the listbox is portaled, detection is added so that DOM focus
+does not become modal in this case, but screen reader virtual
+cursors do become modal. This ensures a touch user can swipe
+right (e.g. iOS screen reader) to navigate the listbox options
+immediately.
+
+As with all modal-based focus management, the listbox should have
+a visually-hidden dismiss button to ensure touch-based screen
+reader users can escape the list due to a lack of an `esc` key.

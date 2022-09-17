@@ -23,7 +23,7 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ```js
 interface Props {
   enabled?: boolean;
-  pointerDown?: boolean;
+  event?: 'click' | 'mousedown';
   toggle?: boolean;
   ignoreMouse?: boolean;
   keyboardHandlers?: boolean;
@@ -42,17 +42,16 @@ useClick(context, {
 });
 ```
 
-### pointerDown
+### event
 
-default: `false{:js}`
+default: `'click'{:js}`
 
-Whether to prefer the `pointerdown{:.string}` event over
-`click{:.string}` (for faster feedback). Keyboard clicks will
-continue to work.
+The type of event to use to determine a "click" with mouse input.
+Keyboard clicks work as normal.
 
 ```js
 useClick(context, {
-  pointerDown: true,
+  event: 'mousedown',
 });
 ```
 

@@ -24,8 +24,10 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
-  referencePointerDown?: boolean;
-  outsidePointerDown?: boolean;
+  referencePress?: boolean;
+  referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  outsidePress?: boolean;
+  outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean;
 }
@@ -56,29 +58,63 @@ useDismiss(context, {
 });
 ```
 
-### referencePointerDown
+### referencePress
 
 default: `false{:js}`
 
-Whether to dismiss the floating element upon pointer down of the
+Whether to dismiss the floating element upon pressing the
 reference element.
 
 ```js
 useDismiss(context, {
-  referencePointerDown: true,
+  referencePress: true,
 });
 ```
 
-### outsidePointerDown
+### referencePressEvent
 
-default: `true{:js}`
+default: `'pointerdown'{:js}`
 
-Whether to dismiss the floating element upon pointer down outside
-of both the floating and reference elements.
+The type of event to use to determine a "press".
 
 ```js
 useDismiss(context, {
-  outsidePointerDown: false,
+  // eager on both mouse + touch input
+  referencePressEvent: 'pointerdown',
+  // eager on mouse input, lazy on touch input
+  referencePressEvent: 'mousedown',
+  // lazy on both mouse + touch input
+  referencePressEvent: 'click',
+});
+```
+
+### outsidePress
+
+default: `true{:js}`
+
+Whether to dismiss the floating element upon pressing outside of
+both the floating and reference elements.
+
+```js
+useDismiss(context, {
+  outsidePress: false,
+});
+```
+
+### outsidePressEvent
+
+default: `'pointerdown'{:js}`
+
+The type of event to use to determine a "press".
+
+```js
+useDismiss(context, {
+  // eager on both mouse + touch input
+  outsidePressEvent: 'pointerdown',
+  // eager on mouse input, lazy on touch input
+  outsidePressEvent: 'mousedown',
+  // lazy on both mouse + touch input
+  outsidePressEvent: 'click',
 });
 ```
 
