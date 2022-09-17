@@ -120,7 +120,7 @@ export const MenuComponent = forwardRef<
       ignoreMouse: nested,
     }),
     useRole(context, {role: 'menu'}),
-    useDismiss(context, {outsidePressEvent: 'mouseup'}),
+    useDismiss(context),
     useListNavigation(context, {
       listRef: listItemsRef,
       activeIndex,
