@@ -708,7 +708,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
             onNavigate(null);
             if (!virtual) {
-              refs.floating.current?.focus({preventScroll: true});
+              requestAnimationFrame(() => {
+                refs.floating.current?.focus({preventScroll: true});
+              });
             }
           }
         },
