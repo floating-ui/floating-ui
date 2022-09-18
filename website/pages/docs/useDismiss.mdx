@@ -71,6 +71,21 @@ useDismiss(context, {
 });
 ```
 
+#### Keyboard press dismissal
+
+If you'd like to ensure the floating element is also dismissed
+upon "pressing" the reference element via the keyboard, you can
+add in your own handler(s) for this.
+
+```js
+getReferenceProps({
+  // for a native <button>
+  onClick() {
+    setOpen(false);
+  },
+});
+```
+
 ### referencePressEvent
 
 default: `'pointerdown'{:js}`
