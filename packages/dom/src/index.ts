@@ -33,3 +33,5 @@ export {
 export {autoUpdate} from './autoUpdate';
 
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
+
+export {platform} from './platform';
