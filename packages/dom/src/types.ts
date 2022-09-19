@@ -79,9 +79,10 @@ export type SizeOptions = Omit<CoreSizeOptions, 'apply'> & {
 
 export type ComputePositionConfig = Omit<
   CoreComputePositionConfig,
-  'middleware'
+  'middleware' | 'platform'
 > & {
   middleware?: Middleware[];
+  platform?: Platform;
 };
 
 /**
@@ -205,3 +206,4 @@ export {computePosition} from './';
 export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
 
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
+export {platform} from './platform';

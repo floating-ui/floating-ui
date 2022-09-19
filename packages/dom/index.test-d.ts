@@ -10,6 +10,7 @@ import {
   arrow,
   detectOverflow,
   Middleware,
+  platform,
 } from '.';
 
 // @ts-expect-error
@@ -218,4 +219,12 @@ const middlewareWDetectOverflow: Middleware = {
 
 computePosition(document.body, document.body, {
   middleware: [middlewareWithoutName, middleware, middlewareWDetectOverflow],
+});
+
+computePosition(document.body, document.body, {
+  platform: {
+    ...platform,
+    getOffsetParent: (element) =>
+      Promise.resolve((element as HTMLElement).offsetParent || window),
+  },
 });
