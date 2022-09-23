@@ -27,7 +27,7 @@ type Options = {
 type OverflowsMap = { [ComputedPlacement]: number };
 
 export default function computeAutoPlacement(
-  state: $Shape<State>,
+  state: $Shape<State<Placement>>,
   options: Options = {}
 ): Array<ComputedPlacement> {
   const {

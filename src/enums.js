@@ -35,6 +35,7 @@ export type VariationPlacement =
   | 'left-end';
 export type AutoPlacement = 'auto' | 'auto-start' | 'auto-end';
 export type ComputedPlacement = VariationPlacement | BasePlacement;
+export type ResolvedPlacement = ComputedPlacement | BasePlacement;
 export type Placement = AutoPlacement | BasePlacement | VariationPlacement;
 
 export const variationPlacements: Array<VariationPlacement> = basePlacements.reduce(

@@ -32,7 +32,7 @@ export type Options = {
 };
 
 export default function detectOverflow(
-  state: State,
+  state: State<Placement>,
   options: $Shape<Options> = {}
 ): SideObject {
   const {

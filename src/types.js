@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable import/no-unused-modules */
-import type { Placement, ModifierPhases } from './enums';
+import type { Placement, ComputedPlacement, ModifierPhases } from './enums';
 
 import type { PopperOffsetsModifier } from './modifiers/popperOffsets';
 import type { FlipModifier } from './modifiers/flip';
@@ -73,14 +73,14 @@ export type StateOffsets = {|
 
 type OffsetData = { [Placement]: Offsets };
 
-export type State = {|
+export type State<TPlacement = Placement> = {|
   elements: {|
     reference: Element | VirtualElement,
     popper: HTMLElement,
     arrow?: HTMLElement,
   |},
   options: OptionsGeneric<any>,
-  placement: Placement,
+  placement: TPlacement,
   strategy: PositioningStrategy,
   orderedModifiers: Array<Modifier<any, any>>,
   rects: StateRects,
@@ -117,17 +117,17 @@ export type State = {|
 type SetAction<S> = S | ((prev: S) => S);
 
 export type Instance = {|
-  state: State,
+  state: State<Placement>,
   destroy: () => void,
   forceUpdate: () => void,
-  update: () => Promise<$Shape<State>>,
+  update: () => Promise<$Shape<State<ComputedPlacement>>>,
   setOptions: (
     setOptionsAction: SetAction<$Shape<OptionsGeneric<any>>>
-  ) => Promise<$Shape<State>>,
+  ) => Promise<$Shape<State<ComputedPlacement>>>,
 |};
 
 export type ModifierArguments<Options: Obj> = {
-  state: State,
+  state: State<Placement>,
   instance: Instance,
   options: $Shape<Options>,
   name: string,
@@ -138,7 +138,7 @@ export type Modifier<Name, Options: Obj> = {|
   phase: ModifierPhases,
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
-  fn: (ModifierArguments<Options>) => State | void,
+  fn: (ModifierArguments<Options>) => State<Placement> | void,
   effect?: (ModifierArguments<Options>) => (() => void) | void,
   options?: $Shape<Options>,
   data?: Obj,
@@ -161,17 +161,17 @@ export type Options = {|
   placement: Placement,
   modifiers: Array<$Shape<Modifier<any, any>>>,
   strategy: PositioningStrategy,
-  onFirstUpdate?: ($Shape<State>) => void,
+  onFirstUpdate?: ($Shape<State<ComputedPlacement>>) => void,
 |};
 
 export type OptionsGeneric<TModifier> = {|
   placement: Placement,
   modifiers: Array<TModifier>,
   strategy: PositioningStrategy,
-  onFirstUpdate?: ($Shape<State>) => void,
+  onFirstUpdate?: ($Shape<State<ComputedPlacement>>) => void,
 |};
 
-export type UpdateCallback = (State) => void;
+export type UpdateCallback = (State<Placement>) => void;
 
 export type ClientRectObject = {|
   x: number,

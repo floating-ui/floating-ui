@@ -19,7 +19,7 @@ import getBasePlacement from './utils/getBasePlacement';
 import mergeByName from './utils/mergeByName';
 import detectOverflow from './utils/detectOverflow';
 import { isElement } from './dom-utils/instanceOf';
-import { auto } from './enums';
+import { auto, type Placement, type ComputedPlacement } from './enums';
 
 const INVALID_ELEMENT_ERROR =
   'Popper: Invalid reference or popper argument provided. They must be either a DOM element or virtual element.';
@@ -55,7 +55,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     popper: HTMLElement,
     options: $Shape<OptionsGeneric<TModifier>> = defaultOptions
   ): Instance {
-    let state: $Shape<State> = {
+    let state: $Shape<State<Placement>> = {
       placement: 'bottom',
       orderedModifiers: [],
       options: { ...DEFAULT_OPTIONS, ...defaultOptions },
@@ -239,11 +239,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
       // Async and optimistically optimized update – it will not be executed if
       // not necessary (debounced to run at most once-per-tick)
-      update: debounce<$Shape<State>>(
+      update: debounce<$Shape<State<ComputedPlacement>>>(
         () =>
-          new Promise<$Shape<State>>((resolve) => {
+          new Promise<$Shape<State<ComputedPlacement>>>((resolve) => {
             instance.forceUpdate();
-            resolve(state);
+            resolve((state: any));
           })
       ),
 
