@@ -171,8 +171,6 @@ export type OptionsGeneric<TModifier> = {|
   onFirstUpdate?: ($Shape<State>) => void,
 |};
 
-export type UpdateCallback = (State) => void;
-
 export type ClientRectObject = {|
   x: number,
   y: number,
