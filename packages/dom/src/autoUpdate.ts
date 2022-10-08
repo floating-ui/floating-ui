@@ -44,13 +44,12 @@ export function autoUpdate(
 ) {
   const {
     ancestorScroll: _ancestorScroll = true,
-    ancestorResize: _ancestorResize = true,
+    ancestorResize = true,
     elementResize = true,
     animationFrame = false,
   } = options;
 
   const ancestorScroll = _ancestorScroll && !animationFrame;
-  const ancestorResize = _ancestorResize && !animationFrame;
 
   const ancestors =
     ancestorScroll || ancestorResize
