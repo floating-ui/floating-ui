@@ -68,11 +68,19 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
           : (event as Event).target;
       const targetNode = target as Element | null;
 
-      // If the pointer is over the reference or floating element already, there
-      // is no need to run the logic.
+      // If the pointer is over the reference, there is no need to run the logic
       if (
         event.type === 'pointermove' &&
         refs.domReference.current?.contains(targetNode)
+      ) {
+        return;
+      }
+
+      // Prevent overlapping floating element from being stuck in an open-close
+      // loop: https://github.com/floating-ui/floating-ui/issues/1910
+      if (
+        event.type === 'mouseleave' &&
+        refs.floating.current?.contains(event.relatedTarget as Node | null)
       ) {
         return;
       }
