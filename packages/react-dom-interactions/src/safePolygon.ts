@@ -1,6 +1,7 @@
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {getChildren} from './utils/getChildren';
+import {isElement} from './utils/is';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -80,7 +81,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // loop: https://github.com/floating-ui/floating-ui/issues/1910
       if (
         event.type === 'mouseleave' &&
-        refs.floating.current?.contains(event.relatedTarget as Node | null)
+        isElement(event.relatedTarget) &&
+        refs.floating.current?.contains(event.relatedTarget)
       ) {
         return;
       }
