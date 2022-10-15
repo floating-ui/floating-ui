@@ -674,61 +674,23 @@ function HomePage() {
 
         <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
           <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 font-bold mt-8 mb-4">
-            Support Floating UI's future.
+            Support Floating UI's future!
           </h2>
           <p className="prose text-xl lg:text-2xl text-left mb-8">
-            Ongoing work is making Floating UI the best, 100%
-            free solution in this space. We are proudly sponsored
-            by the following organizations, consider joining them
-            on{' '}
+            Floating UI is free open-source software, and we are
+            proudly sponsored by the following organizations,
+            consider joining them on{' '}
             <a
               href="https://opencollective.com/floating-ui"
               rel="noopener noreferrer"
             >
               Open Collective
             </a>
-            !
+            .
           </p>
           <Cards items={SPONSORS} />
           <Logos items={MINI_SPONSORS} />
         </div>
-
-        {/* <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
-          <h2 className="inline-block leading-gradient-heading text-3xl lg:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-500 to-pink-400 mt-16">
-            Components!
-          </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
-            The ability to easily craft beautiful and accessible
-            tooltips, popovers, dropdowns, and more is in
-            development.
-          </p>
-
-          <div className="grid lg:grid-cols-2 gap-4">
-            <Tooltips />
-            <Dropdowns />
-            <Popovers />
-
-            <div className="bg-gradient-to-tr from-gray-700 to to-gray-800 rounded-lg px-4 py-8 sm:p-8">
-              <h3 className="text-2xl text-gray-50 font-bold mb-4">
-                Coming soon
-              </h3>
-              <p className="text-lg mb-4">
-                The{' '}
-                <span className="text-gray-50 font-bold">
-                  @floating-ui/components
-                </span>{' '}
-                package is in development. Consider supporting
-                the future of this project through sponsorship:
-              </p>
-              <a
-                href="https://opencollective.com/floating-ui"
-                className="flex justify-center items-center gap-2 text-lg border-2 border-solid border-pink-300 text-pink-300 rounded px-4 py-2 hover:bg-pink-300 hover:text-gray-900 transition"
-              >
-                Sponsor <Heart />
-              </a>
-            </div>
-          </div>
-        </div> */}
 
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
           <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 leading-gradient-heading font-bold mb-4 mt-16">

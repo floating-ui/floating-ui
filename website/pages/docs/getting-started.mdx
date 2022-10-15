@@ -7,14 +7,10 @@ The library provides two key functionalities:
 
 ### 1. Anchored positioning primitives
 
-CSS is currently missing a feature called “anchored positioning”
-— the ability to anchor an element (like a tooltip) to another
-one (like a button) while simultaneously keeping it in view as
-best as possible by avoiding clipping and overflow.
-
-Attempting to do fully dynamic anchored positioning with today’s
-plain CSS is not possible. Floating UI provides a JavaScript
-implementation of this feature.
+Floating UI provides a JavaScript implementation of “anchored
+positioning” — the ability to anchor an element (like a tooltip)
+to another one (like a button) while simultaneously keeping it in
+view as best as possible with collision detection.
 
 ### 2. User interaction primitives
 
@@ -23,14 +19,13 @@ component that follows WAI-ARIA authoring practices, the
 complexity increases dramatically. Focus traps, indexed
 navigation, and typeahead are difficult to get right.
 
-This functionality is currently available for React DOM but will
-be made agnostic in the future.
+This functionality is currently available for React DOM.
 
 ## Install
 
 Choose the package that suits you.
 
-### Vanilla DOM positioning engine
+### Vanilla DOM positioning
 
 Use with vanilla JavaScript or a non-React framework
 ([view tutorial](/docs/tutorial)).
@@ -39,7 +34,7 @@ Use with vanilla JavaScript or a non-React framework
 npm install @floating-ui/dom
 ```
 
-### React DOM positioning engine
+### React DOM positioning
 
 Use with React DOM ([view docs](/docs/react-dom)).
 
@@ -47,17 +42,16 @@ Use with React DOM ([view docs](/docs/react-dom)).
 npm install @floating-ui/react-dom
 ```
 
-### React DOM interactions and positioning engine
+### React DOM interactions and positioning
 
-Primitive hooks and components, in addition to the positioning
-engine, to use with React DOM
+Craft interactions in addition to anchored positioning
 ([view docs](/docs/react-dom-interactions)).
 
 ```shell
 npm install @floating-ui/react-dom-interactions
 ```
 
-### React Native positioning engine
+### React Native positioning
 
 Use with React Native ([view docs](/docs/react-native)).
 
@@ -75,9 +69,6 @@ npm install @floating-ui/core
 
 ## CDN
 
-<details>
-  <summary>View details</summary>
-
 Floating UI can be loaded via CDN using ESM or UMD format.
 
 ### ESM
@@ -94,8 +85,6 @@ import {computePosition} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@__D
 ```
 
 All exports will be available on `window.FloatingUIDOM{:js}`.
-
-</details>
 
 ## Package entry points
 
@@ -130,6 +119,21 @@ export default {
       // Add this line for development config, omit for
       // production config
       exportConditions: ['development'],
+    }),
+  ],
+};
+```
+
+You may alternatively use the
+[replace](https://www.npmjs.com/package/@rollup/plugin-replace)
+plugin:
+
+```js
+export default {
+  // ...
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
   ],
 };

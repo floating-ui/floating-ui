@@ -93,13 +93,16 @@ import {useFloating, autoUpdate} from '@floating-ui/react-dom';
 
 function App() {
   useFloating({
+    // default
     whileElementsMounted: autoUpdate,
 
-    // Or, pass options. Ensure the cleanup function is returned.
-    whileElementsMounted: (reference, floating, update) =>
-      autoUpdate(reference, floating, update, {
+    // or, pass options
+    whileElementsMounted: (reference, floating, update) => {
+      // IMPORTANT: Make sure the cleanup function is returned!
+      return autoUpdate(reference, floating, update, {
         animationFrame: true,
-      }),
+      });
+    },
   });
 }
 ```
@@ -110,8 +113,8 @@ prop to handle mounting/unmounting of the elements.
 > `autoUpdate` is expensive and should only be called when both
 > the reference and floating elements are mounted. If your
 > floating element is NOT conditionally rendered, and instead
-> relies of `visibility` for instance, use an effect instead of
-> this prop.
+> relies on an `opacity` or `visibility` style for instance, use
+> an effect instead of this prop.
 
 Alternatively (or additionally), you may want to update manually
 in some cases. The hook returns an `update(){:js}` function to
@@ -132,7 +135,7 @@ function MyComponent({triggerElement}) {
 
   useLayoutEffect(() => {
     reference(triggerElement);
-  }, [triggerElement]);
+  }, [reference, triggerElement]);
 }
 ```
 

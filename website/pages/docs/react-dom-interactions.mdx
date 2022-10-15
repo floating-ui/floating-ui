@@ -131,10 +131,6 @@ are passed as a second argument.
 This API enables each of the hooks to be fully tree-shakeable.
 The navigation bar on the left explains them in detail.
 
-> Avoid importing all the hooks together like
-> `import * as Interactions from '@floating-ui/react-dom-interactions'{:js}`
-> as this will nullify the benefits of tree-shaking.
-
 ### Prop getters
 
 `useInteractions(){:js}` returns
@@ -309,11 +305,6 @@ hooks and components together to build a higher-level component.
 > These are just examples. The component APIs are not designed
 > perfectly, but you can use them as a starting point for your
 > own components and design the API however you like.
->
-> <br />
-> One of the ideas behind the primitive hooks is to give you this
-> freedom without prescribing a restricting component API design upon
-> you.
 
 ### Tooltip
 
