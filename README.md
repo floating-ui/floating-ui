@@ -14,13 +14,10 @@ The library provides two key functionalities:
 
 ### 1. Anchored positioning primitives
 
-CSS is currently missing a feature called “anchored positioning” — the ability
-to anchor an element (like a tooltip) to another one (like a button) while
-simultaneously keeping it in view as best as possible by avoiding clipping and
-overflow.
-
-Attempting to do fully dynamic anchored positioning with today’s plain CSS is
-not possible. Floating UI provides a JavaScript implementation of this feature.
+Floating UI provides a JavaScript implementation of “anchored positioning” — the
+ability to anchor an element (like a tooltip) to another one (like a button)
+while simultaneously keeping it in view as best as possible with collision
+detection.
 
 ### 2. User interaction primitives
 
@@ -28,14 +25,13 @@ When creating a popover, dropdown menu, select, or combobox component that
 follows WAI-ARIA authoring practices, the complexity increases dramatically.
 Focus traps, indexed navigation, and typeahead are difficult to get right.
 
-This functionality is currently available for React DOM but will be made
-agnostic in the future.
+This functionality is currently available for React DOM.
 
 ## Install
 
 Choose the package that suits you.
 
-### Vanilla DOM positioning engine
+### Vanilla DOM positioning
 
 Use with vanilla JavaScript or a non-React framework
 ([view tutorial](https://floating-ui.com/docs/tutorial)).
@@ -44,7 +40,7 @@ Use with vanilla JavaScript or a non-React framework
 npm install @floating-ui/dom
 ```
 
-### React DOM positioning engine
+### React DOM positioning
 
 Use with React DOM ([view docs](https://floating-ui.com/docs/react-dom)).
 
@@ -52,17 +48,16 @@ Use with React DOM ([view docs](https://floating-ui.com/docs/react-dom)).
 npm install @floating-ui/react-dom
 ```
 
-### React DOM interactions and positioning engine
+### React DOM interactions and positioning
 
-Primitive hooks and components, in addition to the positioning engine, to use
-with React DOM
+Craft interactions in addition to anchored positioning
 ([view docs](https://floating-ui.com/docs/react-dom-interactions)).
 
 ```shell
 npm install @floating-ui/react-dom-interactions
 ```
 
-### React Native positioning engine
+### React Native positioning
 
 Use with React Native ([view docs](https://floating-ui.com/docs/react-native)).
 
