@@ -29,6 +29,7 @@ import {AutoUpdate} from './spec/AutoUpdate';
 import {Complex} from './spec/Complex';
 import {Inner} from './spec/Inner';
 import {ShadowDOM} from './spec/ShadowDOM';
+import {ContainingBlock} from './spec/ContainingBlock';
 
 import {New} from './utils/New';
 
@@ -53,6 +54,7 @@ const ROUTES = [
   {path: 'complex', component: Complex},
   {path: 'inner', component: Inner},
   {path: 'shadow-DOM', component: ShadowDOM},
+  {path: 'containing-block', component: ContainingBlock},
 ];
 
 function App() {
