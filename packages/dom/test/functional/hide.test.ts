@@ -60,3 +60,33 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     `hide-reference-hidden-no-escape.png`
   );
 });
+
+['a', 'b', 'c', 'd'].forEach((hierarchy) => {
+  test(`floating element is not black ${hierarchy}`, async ({page}) => {
+    await page.goto('http://localhost:1234/hide');
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `not-black-${hierarchy}.png`
+    );
+  });
+});
+
+['e'].forEach((hierarchy) => {
+  test(`floating element is black ${hierarchy}`, async ({page}) => {
+    await page.goto('http://localhost:1234/hide');
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `black-${hierarchy}.png`
+    );
+  });
+});
+
+['f'].forEach((hierarchy) => {
+  test(`floating element is yellow ${hierarchy}`, async ({page}) => {
+    await page.goto('http://localhost:1234/hide');
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `yellow-${hierarchy}.png`
+    );
+  });
+});

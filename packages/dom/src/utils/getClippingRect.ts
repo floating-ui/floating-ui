@@ -17,6 +17,7 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
+  isShadowRoot,
 } from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {contains} from './contains';
@@ -32,9 +33,9 @@ function getNearestParentCapableOfEscapingClipping(
 
   while (
     currentNode &&
+    !isLastTraversableNode(currentNode) &&
     // @ts-expect-error
-    !clippingAncestors.includes(currentNode) &&
-    !isLastTraversableNode(currentNode)
+    !clippingAncestors.includes(currentNode)
   ) {
     if (
       isElement(currentNode) &&
@@ -43,7 +44,8 @@ function getNearestParentCapableOfEscapingClipping(
       break;
     }
 
-    currentNode = getParentNode(currentNode);
+    const parentNode = getParentNode(currentNode);
+    currentNode = isShadowRoot(parentNode) ? parentNode.host : parentNode;
   }
 
   return currentNode;
