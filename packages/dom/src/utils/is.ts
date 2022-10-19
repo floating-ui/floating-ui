@@ -65,7 +65,10 @@ export function isContainingBlock(element: Element): boolean {
     ) ||
     ['paint', 'layout', 'strict', 'content'].some(
       // TS 4.1 compat
-      (value) => (css as any).contain.includes(value)
+      (value) => {
+        const contain = (css as any).contain as string | undefined;
+        return contain != null ? contain.includes(value) : false;
+      }
     )
   );
 }
