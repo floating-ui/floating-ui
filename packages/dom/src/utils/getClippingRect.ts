@@ -12,11 +12,42 @@ import {getOverflowAncestors} from './getOverflowAncestors';
 import {getOffsetParent} from './getOffsetParent';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isHTMLElement} from './is';
+import {
+  isElement,
+  isHTMLElement,
+  isLastTraversableNode,
+  isOverflowElement,
+} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {contains} from './contains';
 import {getNodeName} from './getNodeName';
 import {max, min} from './math';
+import {getParentNode} from './getParentNode';
+
+function getNearestParentCapableOfEscapingClipping(
+  element: Element,
+  clippingAncestors: Array<Element | Window | VisualViewport>
+): Node {
+  let currentNode: Node | null = element;
+
+  while (
+    currentNode &&
+    // @ts-expect-error
+    !clippingAncestors.includes(currentNode) &&
+    !isLastTraversableNode(currentNode)
+  ) {
+    if (
+      isElement(currentNode) &&
+      ['absolute', 'fixed'].includes(getComputedStyle(currentNode).position)
+    ) {
+      break;
+    }
+
+    currentNode = getParentNode(currentNode);
+  }
+
+  return currentNode;
+}
 
 function getInnerBoundingClientRect(
   element: Element,
@@ -62,13 +93,20 @@ function getClientRectFromClippingAncestor(
 // `initial`
 function getClippingAncestors(element: Element): Array<Element> {
   const clippingAncestors = getOverflowAncestors(element);
-  const canEscapeClipping = ['absolute', 'fixed'].includes(
-    getComputedStyle(element).position
+  const nearestEscapableParent = getNearestParentCapableOfEscapingClipping(
+    element,
+    clippingAncestors
   );
-  const clipperElement =
-    canEscapeClipping && isHTMLElement(element)
-      ? getOffsetParent(element)
-      : element;
+
+  let clipperElement: Element | null = null;
+  if (nearestEscapableParent && isHTMLElement(nearestEscapableParent)) {
+    const offsetParent = getOffsetParent(nearestEscapableParent);
+    if (isOverflowElement(nearestEscapableParent)) {
+      clipperElement = nearestEscapableParent;
+    } else if (isHTMLElement(offsetParent)) {
+      clipperElement = offsetParent;
+    }
+  }
 
   if (!isElement(clipperElement)) {
     return [];
@@ -77,6 +115,7 @@ function getClippingAncestors(element: Element): Array<Element> {
   // @ts-ignore isElement check ensures we return Array<Element>
   return clippingAncestors.filter(
     (clippingAncestors) =>
+      clipperElement &&
       isElement(clippingAncestors) &&
       contains(clippingAncestors, clipperElement) &&
       getNodeName(clippingAncestors) !== 'body'

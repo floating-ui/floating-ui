@@ -75,3 +75,7 @@ export function isLayoutViewport(): boolean {
   // const vV = win.visualViewport;
   // return vV ? Math.abs(win.innerWidth / vV.scale - vV.width) < 0.5 : true;
 }
+
+export function isLastTraversableNode(node: Node) {
+  return ['html', 'body', '#document'].includes(getNodeName(node));
+}
