@@ -5,6 +5,7 @@ import {getComputedStyle} from './getComputedStyle';
 import {
   isContainingBlock,
   isHTMLElement,
+  isLastTraversableNode,
   isShadowRoot,
   isTableElement,
 } from './is';
@@ -27,10 +28,7 @@ function getContainingBlock(element: Element) {
     currentNode = currentNode.host;
   }
 
-  while (
-    isHTMLElement(currentNode) &&
-    !['html', 'body'].includes(getNodeName(currentNode))
-  ) {
+  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
     if (isContainingBlock(currentNode)) {
       return currentNode;
     } else {
