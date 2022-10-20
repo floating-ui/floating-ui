@@ -2,7 +2,6 @@ import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
 import {getUAString} from './userAgent';
 import {getWindow} from './window';
-import {VirtualElement} from '../types';
 
 declare global {
   interface Window {
@@ -19,10 +18,6 @@ export function isHTMLElement(value: any): value is HTMLElement {
 
 export function isElement(value: any): value is Element {
   return value instanceof getWindow(value).Element;
-}
-
-export function isVirtualElement(value: any): value is VirtualElement {
-  return 'getBoundingClientRect' in value;
 }
 
 export function isNode(value: any): value is Node {
