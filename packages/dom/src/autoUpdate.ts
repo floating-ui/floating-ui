@@ -1,7 +1,7 @@
 import type {ReferenceElement, FloatingElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
-import {isElement} from './utils/is';
+import {isElement, isVirtualElement} from './utils/is';
 
 export interface Options {
   /**
@@ -55,6 +55,9 @@ export function autoUpdate(
     ancestorScroll || ancestorResize
       ? [
           ...(isElement(reference) ? getOverflowAncestors(reference) : []),
+          ...(isVirtualElement(reference) && reference.contextElement
+            ? getOverflowAncestors(reference.contextElement)
+            : []),
           ...getOverflowAncestors(floating),
         ]
       : [];
