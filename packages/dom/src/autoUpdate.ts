@@ -80,6 +80,13 @@ export function autoUpdate(
       initialUpdate = false;
     });
     isElement(reference) && !animationFrame && observer.observe(reference);
+    if (
+      !isElement(reference) &&
+      isElement(reference.contextElement) &&
+      !animationFrame
+    ) {
+      observer.observe(reference.contextElement);
+    }
     observer.observe(floating);
   }
 
