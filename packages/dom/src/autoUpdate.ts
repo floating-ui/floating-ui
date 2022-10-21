@@ -54,7 +54,11 @@ export function autoUpdate(
   const ancestors =
     ancestorScroll || ancestorResize
       ? [
-          ...(isElement(reference) ? getOverflowAncestors(reference) : []),
+          ...(isElement(reference)
+            ? getOverflowAncestors(reference)
+            : reference.contextElement
+            ? getOverflowAncestors(reference.contextElement)
+            : []),
           ...getOverflowAncestors(floating),
         ]
       : [];
@@ -76,6 +80,9 @@ export function autoUpdate(
       initialUpdate = false;
     });
     isElement(reference) && !animationFrame && observer.observe(reference);
+    if (!isElement(reference) && reference.contextElement && !animationFrame) {
+      observer.observe(reference.contextElement);
+    }
     observer.observe(floating);
   }
 
