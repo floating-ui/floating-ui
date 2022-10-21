@@ -42,7 +42,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-feather": "^2.0.10",
-    "rehype-pretty-code": "^0.2.4",
+    "rehype-pretty-code": "^0.4.0",
     "shiki": "^0.10.1",
     "unist-util-visit": "^2.0.3",
     "use-isomorphic-layout-effect": "^1.1.1"

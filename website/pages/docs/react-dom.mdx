@@ -34,6 +34,7 @@ function App() {
           position: strategy,
           top: y ?? 0,
           left: x ?? 0,
+          width: 'max-content',
         }}
       >
         Tooltip
@@ -49,13 +50,19 @@ center** of the `Button` element by default.
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
   effect has fired (i.e. SSR).
-- `reference{:.const}` and `floating{:.const}` are callback refs,
-  not regular refs. This allows the position to be updated when
-  either elements change (e.g. conditional rendering).
+- `reference{:.const}` and `floating{:.const}` are callback refs
+  that ensures the position is updated when either elements
+  change (e.g. conditional rendering).
 - `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
   `'fixed'{:js}`
 
-To customize the positioning, view the
+> To understand the fallback `?? 0{:js}` values, and the
+> `'max-content'{:js}` width, visit
+> [Initial layout](/docs/computePosition#initial-layout).
+
+### Customizing the positioning
+
+View the
 [computePosition options](/docs/computePosition#options).
 Example:
 
@@ -81,12 +88,10 @@ render, or when the reference/floating elements changed — for
 example, the floating element gets mounted via conditional
 rendering.
 
-If the floating element lives in a different `offsetParent`
-context to the reference element, it will need to be updated
-while mounted to remain “anchored”. This includes scrolling and
-resizing the window or the elements themselves.
-
-To do so, use the [autoUpdate](/docs/autoUpdate) utility:
+To ensure the floating element remains anchored to its reference
+element while scrolling or resizing, pass the
+[autoUpdate](/docs/autoUpdate) utility to the
+`whileElementsMounted{:.objectKey}` prop:
 
 ```js
 import {useFloating, autoUpdate} from '@floating-ui/react-dom';
@@ -108,7 +113,8 @@ function App() {
 ```
 
 `whileElementsMounted{:.objectKey}` is a fully reactive callback
-prop to handle mounting/unmounting of the elements.
+prop to handle mounting/unmounting of the elements, which can be
+useful for other use cases.
 
 > `autoUpdate` is expensive and should only be called when both
 > the reference and floating elements are mounted. If your
@@ -279,6 +285,7 @@ function App() {
         position: strategy,
         top: y ?? 0,
         left: x ?? 0,
+        width: 'max-content',
       }}
     >
       Tooltip

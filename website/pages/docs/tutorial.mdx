@@ -87,11 +87,9 @@ We want it to **float** on top of the UI though, so it doesn’t
 disrupt the flow of the document, and should only take up as much
 size as its contents.
 
-We can do this in CSS by setting `position: absolute{:sass}` on
-the tooltip element.
-
-```css {2-4}
+```css {2-5}
 #tooltip {
+  width: max-content;
   position: absolute;
   top: 0;
   left: 0;
@@ -105,10 +103,8 @@ the tooltip element.
 }
 ```
 
-Note that `top{:.function}` and `left{:.function}` are set to
-`0{:js}` to minimize layout interference and ensure the floating
-element does not resize after being positioned — especially if it
-is large.
+Visit [Initial layout](/docs/computePosition#initial-layout) to
+learn more.
 
 <T.Result3 />
 
@@ -504,6 +500,7 @@ focusing the button.
 ```css {2}
 #tooltip {
   display: none;
+  width: max-content;
   position: absolute;
   top: 0;
   left: 0;
