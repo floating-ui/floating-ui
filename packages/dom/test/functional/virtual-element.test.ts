@@ -23,7 +23,9 @@ test('autoUpdate should respect the `contextElement`', async ({page}) => {
   );
 
   await page.evaluate(() => {
-    const reference = document.querySelector('reference') as HTMLElement | null;
+    const reference = document.querySelector(
+      '.reference'
+    ) as HTMLElement | null;
     if (reference) {
       Object.assign(reference.style, {
         width: '1px',
