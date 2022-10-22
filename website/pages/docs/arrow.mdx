@@ -35,7 +35,7 @@ computePosition(referenceEl, floatingEl, {
     }),
   ],
 }).then(({middlewareData}) => {
-  if (middleware.arrow) {
+  if (middlewareData.arrow) {
     const {x, y} = middlewareData.arrow;
 
     Object.assign(arrowEl.style, {
