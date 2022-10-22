@@ -32,6 +32,7 @@ import {ShadowDOM} from './spec/ShadowDOM';
 import {ContainingBlock} from './spec/ContainingBlock';
 
 import {New} from './utils/New';
+import {VirtualElement} from './spec/VirtualElement';
 
 const ROUTES = [
   {path: 'placement', component: Placement},
@@ -55,6 +56,7 @@ const ROUTES = [
   {path: 'inner', component: Inner},
   {path: 'shadow-DOM', component: ShadowDOM},
   {path: 'containing-block', component: ContainingBlock},
+  {path: 'virtual-element', component: VirtualElement},
 ];
 
 function App() {
