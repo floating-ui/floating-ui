@@ -2,7 +2,7 @@
 
 This function adds listeners that automatically call an update
 function when necessary so that the floating element remains
-“anchored” to the reference element in a variety of scenarios
+anchored to the reference element in a variety of scenarios
 without detaching.
 
 ```js
@@ -94,21 +94,17 @@ const cleanup = autoUpdate(referenceEl, floatingEl, update, {
 default: `false{:js}`
 
 Whether to update the position of the floating element on every
-animation frame if required. This is optimized for performance
-but can still be costly.
+animation frame if required.
 
-Setting this to `true{:js}` disables the scroll, resize, and
-reference `ResizeObserver{:.class}` listeners as they become
-unnecessary. Only the floating element's
-`ResizeObserver{:.class}` remains active, if
-`elementResize{:.objectKey}` is `true{:js}`.
+While this option is optimized for performance, it should be used
+sparingly.
+
+Aside from ensuring anchoring during an animation, it can also
+automatically handle layout changes where the reference element
+moves on the screen not as the result of scrolling or resizing.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
   animationFrame: true,
 });
 ```
-
-This option should be used sparingly but can also automatically
-handle **layout** changes where the reference element moves on
-the screen, which none of the other options can handle.

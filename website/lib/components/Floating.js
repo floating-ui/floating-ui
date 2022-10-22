@@ -35,13 +35,16 @@ export function Floating({
           if (name === 'size') {
             return FloatingUI.size?.({
               ...options,
-              apply: ({height}) => {
+              apply: ({availableHeight}) => {
                 Object.assign(
                   refs.floating.current.style ?? {},
                   {
                     maxHeight: minHeight
-                      ? `${Math.max(height, minHeight)}px`
-                      : `${Math.max(height, 0)}px`,
+                      ? `${Math.max(
+                          availableHeight,
+                          minHeight
+                        )}px`
+                      : `${Math.max(availableHeight, 0)}px`,
                   }
                 );
               },

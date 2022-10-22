@@ -407,12 +407,13 @@ export default function Layout({children}) {
             {navOpen && (
               <button
                 onClick={() => setNavOpen(false)}
-                className="ml-6 my-4 bg-gray-50 text-gray-900 rounded p-2"
+                className="absolute top-2 right-2 bg-gray-50 text-gray-900 w-10 h-10 rounded-full text-3xl flex items-center justify-center"
+                aria-label="Close"
               >
-                Close
+                <span className="relative top-[-1px]">×</span>
               </button>
             )}
-            <div className="flex flex-col items-stretch p-4 pr-8">
+            <div className="flex flex-col items-stretch my-4 mr-4 xl:m-0 xl:p-4 xl:pr-8">
               <DocSearch
                 appId="0E85PIAI2P"
                 indexName="floating-ui"
@@ -436,7 +437,7 @@ export default function Layout({children}) {
                     <a
                       href={url}
                       className={cn(
-                        'block hover:bg-purple-200/20 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg',
+                        'block hover:bg-purple-200/20 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
                         {
                           'bg-purple-200/10 text-gray-100/90':
                             pathname === url,

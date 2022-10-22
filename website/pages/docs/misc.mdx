@@ -36,30 +36,36 @@ Object.assign(floatingEl.style, {
 If you're animating the location of the floating element, using
 `transform{:.objectKey}` will offer smoother animations.
 
-## z-index stacking and clipping
+## z-index stacking
 
 Floating UI does not have opinions about how your elements stack
 on the z-axis. This means your element may be occluded beneath
 another positioned element if it has a higher `z-index`.
 
-Further, you may find your floating element is being clipped by
-its parent. `computePosition(){:js}` attempts to keep the
-floating element in view as best as possible in this scenario but
-in some cases this cannot be avoided.
-
-- Using the `'fixed'{:js}` strategy will "break" the floating
-  element out of its parent clipping context in the majority of
-  cases. This allows you to keep the floating element's DOM
-  context in tact.
-- The floating element can be appended to a root ancestor node
-  inside `<body>{:html}`, e.g.
-  `<div id="floating-root"></div>{:html}` (also referred to as
-  "portalling")
+Due to the complexity of this, it is up to you to handle the z
+indices of various floating elements in your application.
 
 In the future, Floating UI may
 [enable you to specify elements to avoid](https://github.com/floating-ui/floating-ui/issues/1440),
 so multiple floating elements can avoid colliding with each other
 intelligently without worrying about their `z-index`.
+
+## Clipping
+
+Your floating element may get clipped by an ancestor if it has
+`position: relative{:sass}` and `overflow: hidden{:sass}` CSS
+styles, and small enough that the floating element cannot be
+positioned in view properly.
+
+Two solutions include:
+
+- **Portalling**: The floating element can be appended to a
+  container outside of the clipping ancestor.
+- **Use fixed strategy**: Using the `'fixed'{:js}` strategy will
+  "break" the floating element out of its parent clipping context
+  in the majority of cases. This allows you to keep the floating
+  element's DOM context in tact. This is not 100% guaranteed
+  though — portalling is the only 100% reliable method.
 
 ## Handling large content
 
@@ -84,3 +90,21 @@ it's in use.
 
 Alternatively, you may experiment with the [size](/docs/size)
 middleware depending on the axis overflow is occurring.
+
+## Relative units
+
+Floating UI works entirely with pixel units as it is a JavaScript
+library that works with `getBoundingClientRect(){:js}` and other
+measurement properties that return pixels. Further, it is
+cross-platform, and pixels are the most commonly supported unit.
+
+If your CSS uses relative units like `rem`, it is recommended you
+convert the values into pixels before passing them to Floating
+UI.
+
+```js
+computePosition(reference, floating, {
+  // 1rem => 16px
+  middleware: [offset(remToPx(1))],
+});
+```

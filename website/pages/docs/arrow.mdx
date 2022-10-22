@@ -35,12 +35,14 @@ computePosition(referenceEl, floatingEl, {
     }),
   ],
 }).then(({middlewareData}) => {
-  const {x, y} = middlewareData.arrow;
+  if (middleware.arrow) {
+    const {x, y} = middlewareData.arrow;
 
-  Object.assign(arrowEl.style, {
-    left: x != null ? `${x}px` : '',
-    top: y != null ? `${y}px` : '',
-  });
+    Object.assign(arrowEl.style, {
+      left: x != null ? `${x}px` : '',
+      top: y != null ? `${y}px` : '',
+    });
+  }
 });
 ```
 

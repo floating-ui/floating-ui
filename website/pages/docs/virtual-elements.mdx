@@ -11,7 +11,7 @@ A virtual element is a plain object that has a
 element's one:
 
 ```js
-// A virtual element which is 20 x 20 px, starting from (0, 0)
+// A virtual element that is 20 x 20 px starting from (0, 0)
 const virtualEl = {
   getBoundingClientRect() {
     return {
@@ -72,8 +72,7 @@ const virtualEl = {
 };
 ```
 
-This may be required if your virtual element's
-`getBoundingClientRect{:.function}` data is **derived** from a
-real element's one. For instance, you're modifying a real
-reference element's `getBoundingClientRect{:.function}` in some
-way, and using a virtual element enables this.
+This property is useful if your
+`getBoundingClientRect{:.function}` method is derived from a real
+element, to ensure clipping and position update detection works
+as expected.
