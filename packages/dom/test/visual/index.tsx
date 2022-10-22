@@ -56,7 +56,7 @@ const ROUTES = [
   {path: 'inner', component: Inner},
   {path: 'shadow-DOM', component: ShadowDOM},
   {path: 'containing-block', component: ContainingBlock},
-  {path: 'virtual-elements', component: VirtualElement},
+  {path: 'virtual-element', component: VirtualElement},
 ];
 
 function App() {
