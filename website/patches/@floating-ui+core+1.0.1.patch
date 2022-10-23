@@ -1,0 +1,48 @@
+diff --git a/node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs b/node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs
+index 0fdd159..55d9606 100644
+--- a/node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs
++++ b/node_modules/@floating-ui/core/dist/floating-ui.core.browser.mjs
+@@ -349,7 +349,6 @@ const arrow = options => ({
+     const shouldAddOffset = alignmentPadding > 0 && center !== offset && rects.reference[length] <= rects.floating[length];
+     const alignmentOffset = shouldAddOffset ? center < min ? min - center : max - center : 0;
+     return {
+-      [axis]: coords[axis] - alignmentOffset,
+       data: {
+         [axis]: offset,
+         centerOffset: center - offset
+diff --git a/node_modules/@floating-ui/core/dist/floating-ui.core.esm.js b/node_modules/@floating-ui/core/dist/floating-ui.core.esm.js
+index d5d0a7c..21297c6 100644
+--- a/node_modules/@floating-ui/core/dist/floating-ui.core.esm.js
++++ b/node_modules/@floating-ui/core/dist/floating-ui.core.esm.js
+@@ -349,7 +349,6 @@ const arrow = options => ({
+     const shouldAddOffset = alignmentPadding > 0 && center !== offset && rects.reference[length] <= rects.floating[length];
+     const alignmentOffset = shouldAddOffset ? center < min ? min - center : max - center : 0;
+     return {
+-      [axis]: coords[axis] - alignmentOffset,
+       data: {
+         [axis]: offset,
+         centerOffset: center - offset
+diff --git a/node_modules/@floating-ui/core/dist/floating-ui.core.mjs b/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+index d5d0a7c..21297c6 100644
+--- a/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
++++ b/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
+@@ -349,7 +349,6 @@ const arrow = options => ({
+     const shouldAddOffset = alignmentPadding > 0 && center !== offset && rects.reference[length] <= rects.floating[length];
+     const alignmentOffset = shouldAddOffset ? center < min ? min - center : max - center : 0;
+     return {
+-      [axis]: coords[axis] - alignmentOffset,
+       data: {
+         [axis]: offset,
+         centerOffset: center - offset
+diff --git a/node_modules/@floating-ui/core/dist/floating-ui.core.umd.js b/node_modules/@floating-ui/core/dist/floating-ui.core.umd.js
+index 08ce336..881ab91 100644
+--- a/node_modules/@floating-ui/core/dist/floating-ui.core.umd.js
++++ b/node_modules/@floating-ui/core/dist/floating-ui.core.umd.js
+@@ -355,7 +355,6 @@
+       const shouldAddOffset = alignmentPadding > 0 && center !== offset && rects.reference[length] <= rects.floating[length];
+       const alignmentOffset = shouldAddOffset ? center < min ? min - center : max - center : 0;
+       return {
+-        [axis]: coords[axis] - alignmentOffset,
+         data: {
+           [axis]: offset,
+           centerOffset: center - offset
