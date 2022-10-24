@@ -81,4 +81,14 @@ export const MINI_SPONSORS = [
     label: 'Ariakit - Toolkit for building accessible UIs',
     url: 'https://ariakit.org/',
   },
+  {
+    logo: '/sponsors/ibomma.svg',
+    label: 'Ibomma App',
+    url: 'https://theibomma.com/',
+  },
+  {
+    logo: '/sponsors/pacmanblog.svg',
+    label: 'Pacman 30th Anniversary Doodle',
+    url: 'https://pacmanblog.com/',
+  },
 ];
