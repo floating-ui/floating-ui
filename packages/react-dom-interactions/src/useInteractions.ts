@@ -42,13 +42,34 @@ function mergeProps(
   };
 }
 
-export const useInteractions = (
-  propsList: Array<ElementProps | void> = []
-) => ({
-  getReferenceProps: (userProps?: React.HTMLProps<Element>) =>
-    mergeProps(userProps, propsList, 'reference'),
-  getFloatingProps: (userProps?: React.HTMLProps<HTMLElement>) =>
-    mergeProps(userProps, propsList, 'floating'),
-  getItemProps: (userProps?: React.HTMLProps<HTMLElement>) =>
-    mergeProps(userProps, propsList, 'item'),
-});
+export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
+  // The dependencies are a dynamic array, so we can't use the linter's
+  // suggestion to add it to the deps array.
+  const deps = propsList;
+
+  const getReferenceProps = React.useCallback(
+    (userProps?: React.HTMLProps<Element>) =>
+      mergeProps(userProps, propsList, 'reference'),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    deps
+  );
+
+  const getFloatingProps = React.useCallback(
+    (userProps?: React.HTMLProps<HTMLElement>) =>
+      mergeProps(userProps, propsList, 'floating'),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    deps
+  );
+
+  const getItemProps = React.useCallback(
+    (userProps?: React.HTMLProps<HTMLElement>) =>
+      mergeProps(userProps, propsList, 'item'),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    deps
+  );
+
+  return React.useMemo(
+    () => ({getReferenceProps, getFloatingProps, getItemProps}),
+    [getReferenceProps, getFloatingProps, getItemProps]
+  );
+};

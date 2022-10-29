@@ -187,23 +187,32 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     nested,
   ]);
 
-  if (!enabled) {
-    return {};
-  }
+  return React.useMemo(() => {
+    if (!enabled) {
+      return {};
+    }
 
-  return {
-    reference: {
-      [bubbleHandlerKeys[referencePressEvent]]: () => {
-        if (referencePress) {
-          events.emit('dismiss');
-          onOpenChange(false);
-        }
+    return {
+      reference: {
+        [bubbleHandlerKeys[referencePressEvent]]: () => {
+          if (referencePress) {
+            events.emit('dismiss');
+            onOpenChange(false);
+          }
+        },
       },
-    },
-    floating: {
-      [captureHandlerKeys[outsidePressEvent]]: () => {
-        insideReactTreeRef.current = true;
+      floating: {
+        [captureHandlerKeys[outsidePressEvent]]: () => {
+          insideReactTreeRef.current = true;
+        },
       },
-    },
-  };
+    };
+  }, [
+    enabled,
+    events,
+    referencePress,
+    outsidePressEvent,
+    referencePressEvent,
+    onOpenChange,
+  ]);
 };

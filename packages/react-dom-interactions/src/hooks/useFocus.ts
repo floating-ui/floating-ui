@@ -61,57 +61,59 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     };
   }, []);
 
-  if (!enabled) {
-    return {};
-  }
+  return React.useMemo(() => {
+    if (!enabled) {
+      return {};
+    }
 
-  return {
-    reference: {
-      onPointerDown({pointerType}) {
-        pointerTypeRef.current = pointerType;
-        blockFocusRef.current = !!(pointerType && keyboardOnly);
-      },
-      onPointerLeave() {
-        blockFocusRef.current = false;
-      },
-      onFocus(event) {
-        if (blockFocusRef.current) {
-          return;
-        }
+    return {
+      reference: {
+        onPointerDown({pointerType}) {
+          pointerTypeRef.current = pointerType;
+          blockFocusRef.current = !!(pointerType && keyboardOnly);
+        },
+        onPointerLeave() {
+          blockFocusRef.current = false;
+        },
+        onFocus(event) {
+          if (blockFocusRef.current) {
+            return;
+          }
 
-        // Dismiss with click should ignore the subsequent `focus` trigger, but
-        // only if the click originated inside the reference element.
-        if (
-          event.type === 'focus' &&
-          dataRef.current.openEvent?.type === 'mousedown' &&
-          refs.domReference.current?.contains(
-            dataRef.current.openEvent?.target as Element | null
-          )
-        ) {
-          return;
-        }
-
-        dataRef.current.openEvent = event.nativeEvent;
-        onOpenChange(true);
-      },
-      onBlur(event) {
-        const target = event.relatedTarget as Element | null;
-        // Wait for the window blur listener to fire.
-        timeoutRef.current = setTimeout(() => {
-          // When focusing the reference element (e.g. regular click), then
-          // clicking into the floating element, prevent it from hiding.
-          // Note: it must be focusable, e.g. `tabindex="-1"`.
+          // Dismiss with click should ignore the subsequent `focus` trigger, but
+          // only if the click originated inside the reference element.
           if (
-            refs.floating.current?.contains(target) ||
-            refs.domReference.current?.contains(target)
+            event.type === 'focus' &&
+            dataRef.current.openEvent?.type === 'mousedown' &&
+            refs.domReference.current?.contains(
+              dataRef.current.openEvent?.target as Element | null
+            )
           ) {
             return;
           }
 
-          blockFocusRef.current = false;
-          onOpenChange(false);
-        });
+          dataRef.current.openEvent = event.nativeEvent;
+          onOpenChange(true);
+        },
+        onBlur(event) {
+          const target = event.relatedTarget as Element | null;
+          // Wait for the window blur listener to fire.
+          timeoutRef.current = setTimeout(() => {
+            // When focusing the reference element (e.g. regular click), then
+            // clicking into the floating element, prevent it from hiding.
+            // Note: it must be focusable, e.g. `tabindex="-1"`.
+            if (
+              refs.floating.current?.contains(target) ||
+              refs.domReference.current?.contains(target)
+            ) {
+              return;
+            }
+
+            blockFocusRef.current = false;
+            onOpenChange(false);
+          });
+        },
       },
-    },
-  };
+    };
+  }, [enabled, keyboardOnly, refs, dataRef, onOpenChange]);
 };

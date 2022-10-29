@@ -363,358 +363,385 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     keyRef.current = null;
   });
 
-  function onKeyDown(event: React.KeyboardEvent) {
-    blockPointerLeaveRef.current = true;
+  return React.useMemo(() => {
+    if (!enabled) {
+      return {};
+    }
 
-    if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
-      stopEvent(event);
-      onOpenChange(false);
+    const disabledIndices = disabledIndicesRef.current;
 
-      if (isHTMLElement(refs.domReference.current)) {
-        refs.domReference.current.focus();
+    function onKeyDown(event: React.KeyboardEvent) {
+      blockPointerLeaveRef.current = true;
+
+      if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
+        stopEvent(event);
+        onOpenChange(false);
+
+        if (isHTMLElement(refs.domReference.current)) {
+          refs.domReference.current.focus();
+        }
+
+        return;
       }
 
-      return;
-    }
+      const currentIndex = indexRef.current;
+      const minIndex = getMinIndex(listRef, disabledIndices);
+      const maxIndex = getMaxIndex(listRef, disabledIndices);
 
-    const currentIndex = indexRef.current;
-    const minIndex = getMinIndex(listRef, disabledIndices);
-    const maxIndex = getMaxIndex(listRef, disabledIndices);
-
-    if (event.key === 'Home') {
-      indexRef.current = minIndex;
-      onNavigate(indexRef.current);
-    }
-
-    if (event.key === 'End') {
-      indexRef.current = maxIndex;
-      onNavigate(indexRef.current);
-    }
-
-    // Grid navigation
-    if (cols > 1) {
-      const prevIndex = indexRef.current;
-
-      if (event.key === ARROW_UP) {
-        stopEvent(event);
-
-        if (prevIndex === -1) {
-          indexRef.current = maxIndex;
-        } else {
-          indexRef.current = findNonDisabledIndex(listRef, {
-            startingIndex: prevIndex,
-            amount: cols,
-            decrement: true,
-            disabledIndices,
-          });
-
-          if (loop && (prevIndex - cols < minIndex || indexRef.current < 0)) {
-            const col = prevIndex % cols;
-            const maxCol = maxIndex % cols;
-            const offset = maxIndex - (maxCol - col);
-
-            if (maxCol === col) {
-              indexRef.current = maxIndex;
-            } else {
-              indexRef.current = maxCol > col ? offset : offset - cols;
-            }
-          }
-        }
-
-        if (isIndexOutOfBounds(listRef, indexRef.current)) {
-          indexRef.current = prevIndex;
-        }
-
+      if (event.key === 'Home') {
+        indexRef.current = minIndex;
         onNavigate(indexRef.current);
       }
 
-      if (event.key === ARROW_DOWN) {
-        stopEvent(event);
+      if (event.key === 'End') {
+        indexRef.current = maxIndex;
+        onNavigate(indexRef.current);
+      }
 
-        if (prevIndex === -1) {
-          indexRef.current = minIndex;
-        } else {
-          indexRef.current = findNonDisabledIndex(listRef, {
-            startingIndex: prevIndex,
-            amount: cols,
-            disabledIndices,
-          });
+      // Grid navigation
+      if (cols > 1) {
+        const prevIndex = indexRef.current;
 
-          if (loop && prevIndex + cols > maxIndex) {
+        if (event.key === ARROW_UP) {
+          stopEvent(event);
+
+          if (prevIndex === -1) {
+            indexRef.current = maxIndex;
+          } else {
             indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: (prevIndex % cols) - cols,
+              startingIndex: prevIndex,
+              amount: cols,
+              decrement: true,
+              disabledIndices,
+            });
+
+            if (loop && (prevIndex - cols < minIndex || indexRef.current < 0)) {
+              const col = prevIndex % cols;
+              const maxCol = maxIndex % cols;
+              const offset = maxIndex - (maxCol - col);
+
+              if (maxCol === col) {
+                indexRef.current = maxIndex;
+              } else {
+                indexRef.current = maxCol > col ? offset : offset - cols;
+              }
+            }
+          }
+
+          if (isIndexOutOfBounds(listRef, indexRef.current)) {
+            indexRef.current = prevIndex;
+          }
+
+          onNavigate(indexRef.current);
+        }
+
+        if (event.key === ARROW_DOWN) {
+          stopEvent(event);
+
+          if (prevIndex === -1) {
+            indexRef.current = minIndex;
+          } else {
+            indexRef.current = findNonDisabledIndex(listRef, {
+              startingIndex: prevIndex,
               amount: cols,
               disabledIndices,
             });
+
+            if (loop && prevIndex + cols > maxIndex) {
+              indexRef.current = findNonDisabledIndex(listRef, {
+                startingIndex: (prevIndex % cols) - cols,
+                amount: cols,
+                disabledIndices,
+              });
+            }
           }
+
+          if (isIndexOutOfBounds(listRef, indexRef.current)) {
+            indexRef.current = prevIndex;
+          }
+
+          onNavigate(indexRef.current);
         }
 
-        if (isIndexOutOfBounds(listRef, indexRef.current)) {
-          indexRef.current = prevIndex;
-        }
+        // Remains on the same row/column
+        if (orientation === 'both') {
+          const prevRow = Math.floor(prevIndex / cols);
 
-        onNavigate(indexRef.current);
-      }
+          if (event.key === ARROW_RIGHT) {
+            stopEvent(event);
 
-      // Remains on the same row/column
-      if (orientation === 'both') {
-        const prevRow = Math.floor(prevIndex / cols);
+            if (prevIndex % cols !== cols - 1) {
+              indexRef.current = findNonDisabledIndex(listRef, {
+                startingIndex: prevIndex,
+                disabledIndices,
+              });
 
-        if (event.key === ARROW_RIGHT) {
-          stopEvent(event);
-
-          if (prevIndex % cols !== cols - 1) {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex,
-              disabledIndices,
-            });
-
-            if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+              if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+                indexRef.current = findNonDisabledIndex(listRef, {
+                  startingIndex: prevIndex - (prevIndex % cols) - 1,
+                  disabledIndices,
+                });
+              }
+            } else if (loop) {
               indexRef.current = findNonDisabledIndex(listRef, {
                 startingIndex: prevIndex - (prevIndex % cols) - 1,
                 disabledIndices,
               });
             }
-          } else if (loop) {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex - (prevIndex % cols) - 1,
-              disabledIndices,
-            });
+
+            if (isDifferentRow(indexRef.current, cols, prevRow)) {
+              indexRef.current = prevIndex;
+            }
           }
 
-          if (isDifferentRow(indexRef.current, cols, prevRow)) {
-            indexRef.current = prevIndex;
-          }
-        }
+          if (event.key === ARROW_LEFT) {
+            stopEvent(event);
 
-        if (event.key === ARROW_LEFT) {
-          stopEvent(event);
+            if (prevIndex % cols !== 0) {
+              indexRef.current = findNonDisabledIndex(listRef, {
+                startingIndex: prevIndex,
+                disabledIndices,
+                decrement: true,
+              });
 
-          if (prevIndex % cols !== 0) {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex,
-              disabledIndices,
-              decrement: true,
-            });
-
-            if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+              if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
+                indexRef.current = findNonDisabledIndex(listRef, {
+                  startingIndex: prevIndex + (cols - (prevIndex % cols)),
+                  decrement: true,
+                  disabledIndices,
+                });
+              }
+            } else if (loop) {
               indexRef.current = findNonDisabledIndex(listRef, {
                 startingIndex: prevIndex + (cols - (prevIndex % cols)),
                 decrement: true,
                 disabledIndices,
               });
             }
-          } else if (loop) {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex + (cols - (prevIndex % cols)),
-              decrement: true,
-              disabledIndices,
-            });
-          }
 
-          if (isDifferentRow(indexRef.current, cols, prevRow)) {
-            indexRef.current = prevIndex;
-          }
-        }
-
-        const lastRow = Math.floor(maxIndex / cols) === prevRow;
-
-        if (isIndexOutOfBounds(listRef, indexRef.current)) {
-          if (loop && lastRow) {
-            indexRef.current =
-              event.key === ARROW_LEFT
-                ? maxIndex
-                : findNonDisabledIndex(listRef, {
-                    startingIndex: prevIndex - (prevIndex % cols) - 1,
-                    disabledIndices,
-                  });
-          } else {
-            indexRef.current = prevIndex;
-          }
-        }
-
-        onNavigate(indexRef.current);
-        return;
-      }
-    }
-
-    if (isMainOrientationKey(event.key, orientation)) {
-      stopEvent(event);
-
-      // Reset the index if no item is focused.
-      if (
-        open &&
-        !virtual &&
-        activeElement(event.currentTarget.ownerDocument) === event.currentTarget
-      ) {
-        indexRef.current = isMainOrientationToEndKey(
-          event.key,
-          orientation,
-          rtl
-        )
-          ? minIndex
-          : maxIndex;
-        onNavigate(indexRef.current);
-        return;
-      }
-
-      if (isMainOrientationToEndKey(event.key, orientation, rtl)) {
-        if (loop) {
-          indexRef.current =
-            currentIndex >= maxIndex
-              ? allowEscape && currentIndex !== listRef.current.length
-                ? -1
-                : minIndex
-              : findNonDisabledIndex(listRef, {
-                  startingIndex: currentIndex,
-                  disabledIndices,
-                });
-        } else {
-          indexRef.current = Math.min(
-            maxIndex,
-            findNonDisabledIndex(listRef, {
-              startingIndex: currentIndex,
-              disabledIndices,
-            })
-          );
-        }
-      } else {
-        if (loop) {
-          indexRef.current =
-            currentIndex <= minIndex
-              ? allowEscape && currentIndex !== -1
-                ? listRef.current.length
-                : maxIndex
-              : findNonDisabledIndex(listRef, {
-                  startingIndex: currentIndex,
-                  decrement: true,
-                  disabledIndices,
-                });
-        } else {
-          indexRef.current = Math.max(
-            minIndex,
-            findNonDisabledIndex(listRef, {
-              startingIndex: currentIndex,
-              decrement: true,
-              disabledIndices,
-            })
-          );
-        }
-      }
-
-      if (isIndexOutOfBounds(listRef, indexRef.current)) {
-        onNavigate(null);
-      } else {
-        onNavigate(indexRef.current);
-      }
-    }
-  }
-
-  if (!enabled) {
-    return {};
-  }
-
-  return {
-    reference: {
-      ...(virtual &&
-        open &&
-        activeIndex != null && {
-          'aria-activedescendant': activeId,
-        }),
-      onKeyDown(event) {
-        blockPointerLeaveRef.current = true;
-
-        if (virtual && open) {
-          return onKeyDown(event);
-        }
-
-        const isNavigationKey =
-          event.key.indexOf('Arrow') === 0 ||
-          event.key === 'Enter' ||
-          event.key === ' ' ||
-          event.key === '';
-
-        if (isNavigationKey) {
-          keyRef.current = event.key;
-        }
-
-        if (nested) {
-          if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {
-            stopEvent(event);
-
-            if (open) {
-              indexRef.current = getMinIndex(listRef, disabledIndices);
-              onNavigate(indexRef.current);
-            } else {
-              onOpenChange(true);
+            if (isDifferentRow(indexRef.current, cols, prevRow)) {
+              indexRef.current = prevIndex;
             }
           }
 
+          const lastRow = Math.floor(maxIndex / cols) === prevRow;
+
+          if (isIndexOutOfBounds(listRef, indexRef.current)) {
+            if (loop && lastRow) {
+              indexRef.current =
+                event.key === ARROW_LEFT
+                  ? maxIndex
+                  : findNonDisabledIndex(listRef, {
+                      startingIndex: prevIndex - (prevIndex % cols) - 1,
+                      disabledIndices,
+                    });
+            } else {
+              indexRef.current = prevIndex;
+            }
+          }
+
+          onNavigate(indexRef.current);
+          return;
+        }
+      }
+
+      if (isMainOrientationKey(event.key, orientation)) {
+        stopEvent(event);
+
+        // Reset the index if no item is focused.
+        if (
+          open &&
+          !virtual &&
+          activeElement(event.currentTarget.ownerDocument) ===
+            event.currentTarget
+        ) {
+          indexRef.current = isMainOrientationToEndKey(
+            event.key,
+            orientation,
+            rtl
+          )
+            ? minIndex
+            : maxIndex;
+          onNavigate(indexRef.current);
           return;
         }
 
-        if (isMainOrientationKey(event.key, orientation)) {
-          if (selectedIndex != null) {
-            indexRef.current = selectedIndex;
-          }
-
-          stopEvent(event);
-
-          if (!open && openOnArrowKeyDown) {
-            onOpenChange(true);
+        if (isMainOrientationToEndKey(event.key, orientation, rtl)) {
+          if (loop) {
+            indexRef.current =
+              currentIndex >= maxIndex
+                ? allowEscape && currentIndex !== listRef.current.length
+                  ? -1
+                  : minIndex
+                : findNonDisabledIndex(listRef, {
+                    startingIndex: currentIndex,
+                    disabledIndices,
+                  });
           } else {
-            onKeyDown(event);
+            indexRef.current = Math.min(
+              maxIndex,
+              findNonDisabledIndex(listRef, {
+                startingIndex: currentIndex,
+                disabledIndices,
+              })
+            );
           }
-
-          if (open) {
-            onNavigate(indexRef.current);
+        } else {
+          if (loop) {
+            indexRef.current =
+              currentIndex <= minIndex
+                ? allowEscape && currentIndex !== -1
+                  ? listRef.current.length
+                  : maxIndex
+                : findNonDisabledIndex(listRef, {
+                    startingIndex: currentIndex,
+                    decrement: true,
+                    disabledIndices,
+                  });
+          } else {
+            indexRef.current = Math.max(
+              minIndex,
+              findNonDisabledIndex(listRef, {
+                startingIndex: currentIndex,
+                decrement: true,
+                disabledIndices,
+              })
+            );
           }
         }
+
+        if (isIndexOutOfBounds(listRef, indexRef.current)) {
+          onNavigate(null);
+        } else {
+          onNavigate(indexRef.current);
+        }
+      }
+    }
+
+    return {
+      reference: {
+        ...(virtual &&
+          open &&
+          activeIndex != null && {
+            'aria-activedescendant': activeId,
+          }),
+        onKeyDown(event) {
+          blockPointerLeaveRef.current = true;
+
+          if (virtual && open) {
+            return onKeyDown(event);
+          }
+
+          const isNavigationKey =
+            event.key.indexOf('Arrow') === 0 ||
+            event.key === 'Enter' ||
+            event.key === ' ' ||
+            event.key === '';
+
+          if (isNavigationKey) {
+            keyRef.current = event.key;
+          }
+
+          if (nested) {
+            if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {
+              stopEvent(event);
+
+              if (open) {
+                indexRef.current = getMinIndex(listRef, disabledIndices);
+                onNavigate(indexRef.current);
+              } else {
+                onOpenChange(true);
+              }
+            }
+
+            return;
+          }
+
+          if (isMainOrientationKey(event.key, orientation)) {
+            if (selectedIndex != null) {
+              indexRef.current = selectedIndex;
+            }
+
+            stopEvent(event);
+
+            if (!open && openOnArrowKeyDown) {
+              onOpenChange(true);
+            } else {
+              onKeyDown(event);
+            }
+
+            if (open) {
+              onNavigate(indexRef.current);
+            }
+          }
+        },
       },
-    },
-    floating: {
-      'aria-orientation': orientation === 'both' ? undefined : orientation,
-      ...(virtual &&
-        activeIndex != null && {
-          'aria-activedescendant': activeId,
+      floating: {
+        'aria-orientation': orientation === 'both' ? undefined : orientation,
+        ...(virtual &&
+          activeIndex != null && {
+            'aria-activedescendant': activeId,
+          }),
+        onKeyDown,
+        onPointerMove() {
+          blockPointerLeaveRef.current = false;
+        },
+      },
+      item: {
+        onFocus({currentTarget}) {
+          const index = listRef.current.indexOf(currentTarget);
+          if (index !== -1) {
+            onNavigate(index);
+          }
+        },
+        onClick: ({currentTarget}) =>
+          currentTarget.focus({preventScroll: true}), // Safari
+        ...(focusItemOnHover && {
+          onMouseMove({currentTarget}) {
+            const target = currentTarget as HTMLButtonElement | null;
+            if (target) {
+              const index = listRef.current.indexOf(target);
+              if (index !== -1) {
+                onNavigate(index);
+              }
+            }
+          },
+          onPointerLeave() {
+            if (!blockPointerLeaveRef.current) {
+              indexRef.current = -1;
+              focusItem(listRef, indexRef);
+
+              onNavigate(null);
+              if (!virtual) {
+                requestAnimationFrame(() => {
+                  refs.floating.current?.focus({preventScroll: true});
+                });
+              }
+            }
+          },
         }),
-      onKeyDown,
-      onPointerMove() {
-        blockPointerLeaveRef.current = false;
       },
-    },
-    item: {
-      onFocus({currentTarget}) {
-        const index = listRef.current.indexOf(currentTarget);
-        if (index !== -1) {
-          onNavigate(index);
-        }
-      },
-      onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
-      ...(focusItemOnHover && {
-        onMouseMove({currentTarget}) {
-          const target = currentTarget as HTMLButtonElement | null;
-          if (target) {
-            const index = listRef.current.indexOf(target);
-            if (index !== -1) {
-              onNavigate(index);
-            }
-          }
-        },
-        onPointerLeave() {
-          if (!blockPointerLeaveRef.current) {
-            indexRef.current = -1;
-            focusItem(listRef, indexRef);
-
-            onNavigate(null);
-            if (!virtual) {
-              requestAnimationFrame(() => {
-                refs.floating.current?.focus({preventScroll: true});
-              });
-            }
-          }
-        },
-      }),
-    },
-  };
+    };
+  }, [
+    activeId,
+    disabledIndicesRef,
+    listRef,
+    enabled,
+    orientation,
+    rtl,
+    virtual,
+    open,
+    activeIndex,
+    nested,
+    selectedIndex,
+    openOnArrowKeyDown,
+    focusItemOnHover,
+    allowEscape,
+    cols,
+    loop,
+    refs,
+    focusItem,
+    onNavigate,
+    onOpenChange,
+  ]);
 };
