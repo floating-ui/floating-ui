@@ -187,6 +187,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     nested,
   ]);
 
+  React.useEffect(() => {
+    insideReactTreeRef.current = false;
+  }, [outsidePress, outsidePressEvent]);
+
   return React.useMemo(() => {
     if (!enabled) {
       return {};
