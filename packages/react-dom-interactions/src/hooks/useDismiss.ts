@@ -143,33 +143,48 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     escapeKey && doc.addEventListener('keydown', onKeyDown);
     outsidePress && doc.addEventListener(outsidePressEvent, onOutsidePress);
 
-    const ancestors = (
-      ancestorScroll
-        ? [
-            ...(isElement(refs.reference.current)
-              ? getOverflowAncestors(refs.reference.current)
-              : []),
-            ...(isElement(refs.floating.current)
-              ? getOverflowAncestors(refs.floating.current)
-              : []),
-          ]
-        : []
-    ).filter(
-      (ancestor) =>
-        // Ignore the visual viewport for scrolling dismissal (allow pinch-zoom)
-        ancestor !== doc.defaultView?.visualViewport
+    let ancestors: (Element | Window | VisualViewport)[] = [];
+
+    if (ancestorScroll) {
+      if (isElement(refs.domReference.current)) {
+        ancestors = getOverflowAncestors(refs.domReference.current);
+      }
+
+      if (isElement(refs.floating.current)) {
+        ancestors = ancestors.concat(
+          getOverflowAncestors(refs.floating.current)
+        );
+      }
+
+      if (
+        !isElement(refs.reference.current) &&
+        refs.reference.current &&
+        // @ts-expect-error is VirtualElement
+        refs.reference.current.contextElement
+      ) {
+        ancestors = ancestors.concat(
+          // @ts-expect-error is VirtualElement
+          getOverflowAncestors(refs.reference.current.contextElement)
+        );
+      }
+    }
+
+    // Ignore the visual viewport for scrolling dismissal (allow pinch-zoom)
+    ancestors = ancestors.filter(
+      (ancestor) => ancestor !== doc.defaultView?.visualViewport
     );
-    ancestors.forEach((ancestor) =>
-      ancestor.addEventListener('scroll', onScroll, {passive: true})
-    );
+
+    ancestors.forEach((ancestor) => {
+      ancestor.addEventListener('scroll', onScroll, {passive: true});
+    });
 
     return () => {
       escapeKey && doc.removeEventListener('keydown', onKeyDown);
       outsidePress &&
         doc.removeEventListener(outsidePressEvent, onOutsidePress);
-      ancestors.forEach((ancestor) =>
-        ancestor.removeEventListener('scroll', onScroll)
-      );
+      ancestors.forEach((ancestor) => {
+        ancestor.removeEventListener('scroll', onScroll);
+      });
     };
   }, [
     escapeKey,
