@@ -6,14 +6,12 @@ import {
   useInteractions,
   useListNavigation,
   useRole,
-} from '../../src';
-import {render} from '@testing-library/react';
-import {useEffect, useRef, useState} from 'react';
-import {
   useDismiss,
   useHover,
   useTypeahead,
-} from '../../dist/floating-ui.react-dom-interactions.umd';
+} from '../../src';
+import {render} from '@testing-library/react';
+import {useEffect, useRef, useState} from 'react';
 
 test('correctly merges functions', () => {
   const firstInteractionOnClick = jest.fn();
