@@ -10,7 +10,7 @@ import type {
 } from './types';
 import {flushSync} from 'react-dom';
 import {getUserAgent} from './utils/getPlatform';
-import {useLatestRef} from './utils/useLatestRef';
+import {useEvent} from './utils/useEvent';
 
 function getArgsWithCustomFloatingHeight(
   args: MiddlewareArguments,
@@ -142,14 +142,14 @@ export const useInnerOffset = (
   {
     enabled = true,
     overflowRef,
-    onChange,
+    onChange: unstable_onChange,
   }: {
     enabled?: boolean;
     overflowRef: React.MutableRefObject<SideObject | null>;
     onChange: (offset: number | ((offset: number) => number)) => void;
   }
 ): ElementProps => {
-  const onChangeRef = useLatestRef(onChange);
+  const onChange = useEvent(unstable_onChange);
   const controlledScrollingRef = React.useRef(false);
   const prevScrollTopRef = React.useRef<number | null>(null);
   const initialOverflowRef = React.useRef<SideObject | null>(null);
@@ -178,9 +178,7 @@ export const useInnerOffset = (
       if ((!isAtTop && dY > 0) || (!isAtBottom && dY < 0)) {
         e.preventDefault();
         flushSync(() => {
-          onChangeRef.current(
-            (d) => d + Math[method](dY, remainingScroll * sign)
-          );
+          onChange((d) => d + Math[method](dY, remainingScroll * sign));
         });
       } else if (/firefox/i.test(getUserAgent())) {
         // Needed to propagate scrolling during momentum scrolling phase once
@@ -209,46 +207,48 @@ export const useInnerOffset = (
         el.removeEventListener('wheel', onWheel);
       };
     }
-  }, [enabled, open, refs, overflowRef, onChangeRef]);
+  }, [enabled, open, refs, overflowRef, onChange]);
 
-  if (!enabled) {
-    return {};
-  }
+  return React.useMemo(() => {
+    if (!enabled) {
+      return {};
+    }
 
-  return {
-    floating: {
-      onKeyDown() {
-        controlledScrollingRef.current = true;
-      },
-      onWheel() {
-        controlledScrollingRef.current = false;
-      },
-      onPointerMove() {
-        controlledScrollingRef.current = false;
-      },
-      onScroll() {
-        const el = refs.floating.current;
+    return {
+      floating: {
+        onKeyDown() {
+          controlledScrollingRef.current = true;
+        },
+        onWheel() {
+          controlledScrollingRef.current = false;
+        },
+        onPointerMove() {
+          controlledScrollingRef.current = false;
+        },
+        onScroll() {
+          const el = refs.floating.current;
 
-        if (!overflowRef.current || !el || !controlledScrollingRef.current) {
-          return;
-        }
-
-        if (prevScrollTopRef.current !== null) {
-          const scrollDiff = el.scrollTop - prevScrollTopRef.current;
-
-          if (
-            (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
-            (overflowRef.current.top < -0.5 && scrollDiff > 1)
-          ) {
-            flushSync(() => onChange((d) => d + scrollDiff));
+          if (!overflowRef.current || !el || !controlledScrollingRef.current) {
+            return;
           }
-        }
 
-        // [Firefox] Wait for the height change to have been applied.
-        requestAnimationFrame(() => {
-          prevScrollTopRef.current = el.scrollTop;
-        });
+          if (prevScrollTopRef.current !== null) {
+            const scrollDiff = el.scrollTop - prevScrollTopRef.current;
+
+            if (
+              (overflowRef.current.bottom < -0.5 && scrollDiff < -1) ||
+              (overflowRef.current.top < -0.5 && scrollDiff > 1)
+            ) {
+              flushSync(() => onChange((d) => d + scrollDiff));
+            }
+          }
+
+          // [Firefox] Wait for the height change to have been applied.
+          requestAnimationFrame(() => {
+            prevScrollTopRef.current = el.scrollTop;
+          });
+        },
       },
-    },
-  };
+    };
+  }, [enabled, overflowRef, refs, onChange]);
 };

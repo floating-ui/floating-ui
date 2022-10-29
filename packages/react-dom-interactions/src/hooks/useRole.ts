@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 
@@ -23,38 +24,41 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
 ): ElementProps => {
   const rootId = useId();
   const referenceId = useId();
-  const floatingProps = {id: rootId, role};
 
-  if (!enabled) {
-    return {};
-  }
+  return React.useMemo(() => {
+    const floatingProps = {id: rootId, role};
 
-  if (role === 'tooltip') {
+    if (!enabled) {
+      return {};
+    }
+
+    if (role === 'tooltip') {
+      return {
+        reference: {
+          'aria-describedby': open ? rootId : undefined,
+        },
+        floating: floatingProps,
+      };
+    }
+
     return {
       reference: {
-        'aria-describedby': open ? rootId : undefined,
+        'aria-expanded': open ? 'true' : 'false',
+        'aria-haspopup': role === 'alertdialog' ? 'dialog' : role,
+        'aria-controls': open ? rootId : undefined,
+        ...(role === 'listbox' && {
+          role: 'combobox',
+        }),
+        ...(role === 'menu' && {
+          id: referenceId,
+        }),
       },
-      floating: floatingProps,
+      floating: {
+        ...floatingProps,
+        ...(role === 'menu' && {
+          'aria-labelledby': referenceId,
+        }),
+      },
     };
-  }
-
-  return {
-    reference: {
-      'aria-expanded': open ? 'true' : 'false',
-      'aria-haspopup': role === 'alertdialog' ? 'dialog' : role,
-      'aria-controls': open ? rootId : undefined,
-      ...(role === 'listbox' && {
-        role: 'combobox',
-      }),
-      ...(role === 'menu' && {
-        id: referenceId,
-      }),
-    },
-    floating: {
-      ...floatingProps,
-      ...(role === 'menu' && {
-        'aria-labelledby': referenceId,
-      }),
-    },
-  };
+  }, [enabled, role, open, rootId, referenceId]);
 };

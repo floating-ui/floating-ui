@@ -358,38 +358,40 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     };
   }, [enabled, cleanupPointerMoveHandler, clearPointerEvents]);
 
-  if (!enabled) {
-    return {};
-  }
+  return React.useMemo(() => {
+    if (!enabled) {
+      return {};
+    }
 
-  function setPointerRef(event: React.PointerEvent) {
-    pointerTypeRef.current = event.pointerType;
-  }
+    function setPointerRef(event: React.PointerEvent) {
+      pointerTypeRef.current = event.pointerType;
+    }
 
-  return {
-    reference: {
-      onPointerDown: setPointerRef,
-      onPointerEnter: setPointerRef,
-      onMouseMove() {
-        if (open || restMs === 0) {
-          return;
-        }
-
-        clearTimeout(restTimeoutRef.current);
-        restTimeoutRef.current = setTimeout(() => {
-          if (!blockMouseMoveRef.current) {
-            onOpenChange(true);
+    return {
+      reference: {
+        onPointerDown: setPointerRef,
+        onPointerEnter: setPointerRef,
+        onMouseMove() {
+          if (open || restMs === 0) {
+            return;
           }
-        }, restMs);
+
+          clearTimeout(restTimeoutRef.current);
+          restTimeoutRef.current = setTimeout(() => {
+            if (!blockMouseMoveRef.current) {
+              onOpenChange(true);
+            }
+          }, restMs);
+        },
       },
-    },
-    floating: {
-      onMouseEnter() {
-        clearTimeout(timeoutRef.current);
+      floating: {
+        onMouseEnter() {
+          clearTimeout(timeoutRef.current);
+        },
+        onMouseLeave() {
+          closeWithDelay(false);
+        },
       },
-      onMouseLeave() {
-        closeWithDelay(false);
-      },
-    },
-  };
+    };
+  }, [enabled, restMs, open, onOpenChange, closeWithDelay]);
 };
