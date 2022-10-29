@@ -115,6 +115,7 @@ test('prop getters are memoizerd', () => {
         useTypeahead(context, {
           listRef,
           activeIndex: 0,
+          ignoreKeys: [],
           onMatch: () => {},
           findMatch: () => '',
         }),
