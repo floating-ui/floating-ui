@@ -83,7 +83,7 @@ test('does not break props that start with `on`', () => {
   render(<App />);
 });
 
-test('prop getters are memoizerd', () => {
+test('prop getters are memoized', () => {
   function App() {
     const [open, setOpen] = useState(false);
     const [c, setCount] = useState(0);
