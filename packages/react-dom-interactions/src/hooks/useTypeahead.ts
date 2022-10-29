@@ -1,4 +1,3 @@
-import {useLatestRef} from '@floating-ui/react-dom/src/utils/useLatestRef';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
@@ -8,6 +7,7 @@ import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useEvent} from '../utils/useEvent';
+import {useLatestRef} from '../utils/useLatestRef';
 
 export interface Props {
   listRef: React.MutableRefObject<Array<string | null>>;
