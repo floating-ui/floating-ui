@@ -608,7 +608,7 @@ function HomePage() {
             . Tooltips, popovers, dropdowns, menus, and more.
           </p>
         </div>
-        <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl">
+        <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl px-4">
           <Placement />
           <Shift />
           <Flip />
