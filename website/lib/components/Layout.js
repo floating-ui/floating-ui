@@ -302,6 +302,8 @@ export default function Layout({children}) {
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(null);
 
+  const displayNavigation = nav[index] != null;
+
   useIsomorphicLayoutEffect(() => {
     window.onhashchange = () => {
       setHash(location.hash);
@@ -556,10 +558,12 @@ export default function Layout({children}) {
           <article className="prose md:prose-md lg:prose-lg">
             {children}
           </article>
-          <Navigation
-            back={nav[index - 1]}
-            next={nav[index + 1]}
-          />
+          {displayNavigation && (
+            <Navigation
+              back={nav[index - 1]}
+              next={nav[index + 1]}
+            />
+          )}
         </div>
       </div>
       <footer className="text-center text-gray-500 py-8 px-4 border-t border-gray-800 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
