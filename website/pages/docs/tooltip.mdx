@@ -209,8 +209,8 @@ const TooltipAnchor = React.forwardRef(function TooltipAnchor(
   propRef
 ) {
   const ref = React.useMemo(
-    () => mergeRefs([reference, propRef, children.ref]),
-    [reference, propRef, children]
+    () => mergeRefs([state.reference, propRef, children.ref]),
+    [state.reference, propRef, children]
   );
 
   // `asChild` allows the user to pass any element as the anchor
@@ -237,8 +237,8 @@ const TooltipContent = React.forwardRef(function TooltipContent(
   propRef
 ) {
   const ref = React.useMemo(
-    () => mergeRefs([floating, propRef]),
-    [floating, propRef]
+    () => mergeRefs([state.floating, propRef]),
+    [state.floating, propRef]
   );
 
   return (
