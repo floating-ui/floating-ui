@@ -8,7 +8,7 @@ This allows higher discovery of floating elements when they have
 a hover delay (like tooltips) when their reference elements are
 placed near each other.
 
-[View example on CodeSandbox](https://codesandbox.io/s/icy-water-ktwif6?file=/src/Tooltip.tsx)
+[View example on CodeSandbox](https://codesandbox.io/s/nostalgic-meadow-yq11qq?file=/src/Group.tsx)
 
 {/* prettier-ignore */}
 ```js
@@ -43,28 +43,27 @@ Relevant APIs to use with a `<FloatingDelayGroup />{:js}`:
 Wrap your `onOpenChange{:.const}` callback with one that sets the
 current id of the delay group context to the current component.
 
-```js /delay/
+```js {2,11,17,20} /delay/
 function Tooltip({label}) {
-  const {delay, currentId, setCurrentId} =
-    useDelayGroupContext();
+  const {delay, setCurrentId} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
 
-  const onOpenChange = useCallback(
-    (open) => {
+  const {context} = useFloating({
+    open,
+    onOpenChange(open) {
       setOpen(open);
 
       if (open) {
         setCurrentId(label);
       }
     },
-    [label, setCurrentId]
-  );
+  });
 
-  const {context} = useFloating({open, onOpenChange});
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useDelayGroup(context, {id: label}),
     useHover(context, {delay}),
   ]);
+
+  useDelayGroup(context, {id: label});
 
   // ...
 }

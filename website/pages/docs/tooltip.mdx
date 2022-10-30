@@ -1,0 +1,316 @@
+# Tooltip
+
+<div className="mt-6">
+  <img
+    src="/tooltip.svg"
+    alt="Banner graphic showing a tooltip"
+  />
+</div>
+
+A [tooltip](https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/) is
+a popup that displays information related to an element when the
+element receives keyboard focus or the mouse hovers over it.
+
+## Essentials
+
+A fully accessible tooltip widget must fulfill the following
+criteria:
+
+- **Dynamic anchored positioning**: The tooltip will remain
+  attached to its reference element and remain in view for the
+  user regardless of where it is positioned on the screen.
+- **Events**: When the mouse hovers over or focuses the reference
+  element, the tooltip opens. When it leaves/blurs, it closes.
+- **Dismissal**: When the user presses the `esc` key while the
+  tooltip is open, it closes.
+- **Role**: The elements are given relevant role and ARIA
+  attributes to be accessible to screen readers. This includes
+  whether the tooltip acts like a label rather than a
+  description.
+
+With Floating UI Interactions, all of these can be fulfilled and
+you have full control over how the tooltip is positioned and
+behaves.
+
+## Example
+
+This example demonstrates how to create a tooltip for use in a
+single instance to familiarize yourself with the fundamentals.
+
+(In the next section we'll create a realistic reusable component
+API, which goes more in-depth.)
+
+[View and play on CodeSandbox](https://codesandbox.io/s/cranky-river-ifx8s9?file=/src/App.tsx)
+
+```js
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  useHover,
+  useFocus,
+  useDismiss,
+  useRole,
+  useInteractions,
+  FloatingPortal,
+} from '@floating-ui/react-dom-interactions';
+
+function App() {
+  const [open, setOpen] = React.useState(false);
+
+  const {x, y, reference, floating, strategy, context} =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      placement: 'top',
+      // Make sure the tooltip stays on the screen
+      whileElementsMounted: autoUpdate,
+      middleware: [offset(5), flip(), shift()],
+    });
+
+  // Event listeners to change the open state
+  const hover = useHover(context, {move: false});
+  const focus = useFocus(context);
+  const dismiss = useDismiss(context);
+  // Role props for screen readers
+  const role = useRole(context, {role: 'tooltip'});
+
+  // Merge all the interaction into prop getters.
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    hover,
+    focus,
+    dismiss,
+    role,
+  ]);
+
+  return (
+    <>
+      <button ref={reference} {...getReferenceProps()}>
+        Hover or focus me
+      </button>
+      <FloatingPortal>
+        {open && (
+          <div
+            ref={floating}
+            style={{
+              // Positioning styles
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+              width: 'max-content',
+            }}
+            {...getFloatingProps()}
+          >
+            I'm a tooltip!
+          </div>
+        )}
+      </FloatingPortal>
+    </>
+  );
+}
+```
+
+## Reusable Component API
+
+Now, let's create a reusable component API that can be used in a
+variety of different scenarios more easily.
+
+The following API is inspired by Ariakit and Radix UI. It is not
+the only way you can use Floating UI, but it allows the component
+to be either uncontrolled or controlled, and allows you to read
+state to change styles.
+
+```js
+function App() {
+  const state = useTooltipState();
+  return (
+    <>
+      <TooltipAnchor state={state}>My anchor</TooltipAnchor>
+      <TooltipContent state={state}>My tooltip</TooltipContent>
+    </>
+  );
+}
+```
+
+[View and play on CodeSandbox](https://codesandbox.io/s/jovial-artem-03ndp6?file=/src/App.tsx)
+
+### Controller hook
+
+This hook is used to control the state of the tooltip. This
+contains the positioning and interactions logic.
+
+```js
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+  useHover,
+  useFocus,
+  useDismiss,
+  useRole,
+  useInteractions,
+} from '@floating-ui/react-dom-interactions';
+
+function useTooltipState({
+  initialOpen = false,
+  placement = 'top',
+} = {}) {
+  const [open, setOpen] = React.useState(initialOpen);
+
+  const data = useFloating({
+    placement,
+    open,
+    onOpenChange: setOpen,
+    whileElementsMounted: autoUpdate,
+    middleware: [offset(5), flip(), shift()],
+  });
+
+  const context = data.context;
+
+  const hover = useHover(context, {move: false});
+  const focus = useFocus(context);
+  const dismiss = useDismiss(context);
+  const role = useRole(context, {role: 'tooltip'});
+
+  const interactions = useInteractions([
+    hover,
+    focus,
+    dismiss,
+    role,
+  ]);
+
+  return React.useMemo(
+    () => ({
+      open,
+      setOpen,
+      ...interactions,
+      ...data,
+    }),
+    [open, setOpen, interactions, data]
+  );
+}
+```
+
+### Components
+
+These components read the state and render the appropriate
+elements. We wrap them in `forwardRef(){:js}` and merge the refs
+to ensure all refs are preserved and forwarded to the element. We
+also merge props appropriately.
+
+#### TooltipAnchor
+
+```js
+const TooltipAnchor = React.forwardRef(function TooltipAnchor(
+  {children, state, asChild = false, ...props},
+  propRef
+) {
+  const ref = React.useMemo(
+    () => mergeRefs([reference, propRef, children.ref]),
+    [reference, propRef, children]
+  );
+
+  // `asChild` allows the user to pass any element as the anchor
+  if (asChild) {
+    return React.cloneElement(
+      children,
+      state.getReferenceProps({ref, ...props, ...children.props})
+    );
+  }
+
+  return (
+    <button ref={ref} {...state.getReferenceProps(props)}>
+      {children}
+    </button>
+  );
+});
+```
+
+#### TooltipContent
+
+```js
+const TooltipContent = React.forwardRef(function TooltipContent(
+  {state, ...props},
+  propRef
+) {
+  const ref = React.useMemo(
+    () => mergeRefs([floating, propRef]),
+    [floating, propRef]
+  );
+
+  return (
+    <FloatingPortal>
+      {state.open && (
+        <div
+          ref={ref}
+          style={{
+            position: state.strategy,
+            top: state.y ?? 0,
+            left: state.x ?? 0,
+            width: 'max-content',
+            ...props.style,
+          }}
+          {...state.getFloatingProps(props)}
+        />
+      )}
+    </FloatingPortal>
+  );
+});
+```
+
+## Delay groups
+
+One of the most useful UX improvements for tooltips is making
+nearby tooltips share a delay.
+
+In the following example, we also wrap the tooltip in a custom
+API.
+
+```js
+<FloatingDelayGroup delay={200}>
+  <Tooltip label="Unique label 1">
+    <button>Ref 1</button>
+  </Tooltip>
+  <Tooltip label="Unique label 2">
+    <button>Ref 2</button>
+  </Tooltip>
+  <Tooltip label="Unique label 3">
+    <button>Ref 3</button>
+  </Tooltip>
+</FloatingDelayGroup>
+```
+
+- [View and play on CodeSandbox](https://codesandbox.io/s/nostalgic-meadow-yq11qq?file=/src/Group.tsx)
+- [FloatingDelayGroup reference](/docs/FloatingDelayGroup)
+
+## Disabled buttons
+
+Sometimes you want to disable a button, but still show the
+tooltip while it's disabled.
+
+[Disabling a button with a tooltip prevents it from being accessible](/docs/react-dom-interactions#disabled-elements),
+but can be worked around using a different prop. This supplants
+the `disabled{:.keyword}` prop to allow events to fire, including
+keyboard access.
+
+```js
+const Button = React.forwardRef(function Button(
+  {visuallyDisabled, disabled, ...props},
+  ref
+) {
+  return (
+    <button
+      {...props}
+      ref={ref}
+      disabled={visuallyDisabled ? undefined : disabled}
+      aria-disabled={visuallyDisabled ? 'true' : undefined}
+      // You'll want to do this for all relevant event handlers.
+      onClick={visuallyDisabled ? undefined : props.onClick}
+    />
+  );
+});
+```
