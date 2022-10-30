@@ -21,8 +21,6 @@ floating UI components.
   />
 </div>
 
-[View examples below](/docs/react-dom-interactions#examples).
-
 While the positioning package provides the "where" of a floating
 element, this package provides the "when" and "how". When does
 the floating element open on the screen, and how does the user
@@ -44,6 +42,9 @@ other floating components.
 
 All of this is fully treeshakeable, so import what you need and
 the rest will be eliminated by your bundler.
+
+[View examples](/docs/interactions-examples), or read below to
+understand the basics.
 
 ## Install
 
@@ -115,14 +116,15 @@ import {
   useRole,
 } from '@floating-ui/react-dom-interactions';
 
-// ...
+// Inside your component
 const {context} = useFloating();
+
+const hover = useHover(context, props);
+const focus = useFocus(context, props);
+const role = useRole(context, props);
+
 const {getReferenceProps, getFloatingProps, getItemProps} =
-  useInteractions([
-    useHover(context, props),
-    useFocus(context, props),
-    useRole(context, props),
-  ]);
+  useInteractions([hover, focus, role]);
 ```
 
 Each hook accepts the `context{:.const}` object which gets
@@ -299,44 +301,3 @@ instead. This ensures you won't need any wrapper tags and makes
 the tooltip accessible to all users.
 
 [View on CodeSandbox](https://codesandbox.io/s/focused-feistel-0q6v43?file=/src/App.tsx)
-
-## Examples
-
-Here are a few examples that show how to compose the interaction
-hooks and components together to build a higher-level component.
-
-> These are just examples. The component APIs are not designed
-> perfectly, but you can use them as a starting point for your
-> own components and design the API however you like.
-
-### Tooltip
-
-- [Tooltip](https://codesandbox.io/s/winter-tree-wmmffl?file=/src/Tooltip.tsx)
-- [Animated Tooltip](https://codesandbox.io/s/winter-tree-wmmffl?file=/src/AnimatedTooltip.tsx)
-- [Tooltip Delay Group](https://codesandbox.io/s/icy-water-ktwif6?file=/src/Tooltip.tsx)
-
-### Popover
-
-- [Non-Modal Popover](https://codesandbox.io/s/quizzical-water-b3dedw?file=/src/Popover.tsx)
-- [Modal Popover](https://codesandbox.io/s/optimistic-jennings-jmpgfk?file=/src/Popover.tsx)
-- [Nested Modal Popover](https://codesandbox.io/s/optimistic-jennings-jmpgfk?file=/src/NestedPopover.tsx)
-
-### Dialog
-
-- [Modal Dialog](https://codesandbox.io/s/wandering-dream-qwe6dj?file=/src/App.tsx)
-
-### Dropdown Menu
-
-- [Dropdown Menu (including submenus)](https://codesandbox.io/s/admiring-lamport-5wt3yg?file=/src/DropdownMenu.tsx)
-
-### Context Menu
-
-- [Context Menu](https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx)
-
-### Select (Listbox)
-
-- [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
-- [macOS Select](https://codesandbox.io/s/shy-snowflake-kp6479?file=/src/Select.tsx)
-- [Virtualized Select](https://codesandbox.io/s/l10rjs?file=/src/App.tsx)
-- [Autocomplete (combobox)](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
-- [Emoji picker](https://codesandbox.io/s/nameless-glade-kz3pfc?file=/src/App.tsx)
