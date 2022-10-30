@@ -21,8 +21,6 @@ floating UI components.
   />
 </div>
 
-[View examples](/docs/interactions-examples).
-
 While the positioning package provides the "where" of a floating
 element, this package provides the "when" and "how". When does
 the floating element open on the screen, and how does the user
@@ -44,6 +42,9 @@ other floating components.
 
 All of this is fully treeshakeable, so import what you need and
 the rest will be eliminated by your bundler.
+
+[View examples](/docs/interactions-examples), or read below to
+understand the basics.
 
 ## Install
 
@@ -115,14 +116,15 @@ import {
   useRole,
 } from '@floating-ui/react-dom-interactions';
 
-// ...
+// Inside your component
 const {context} = useFloating();
+
+const hover = useHover(context, props);
+const focus = useFocus(context, props);
+const role = useRole(context, props);
+
 const {getReferenceProps, getFloatingProps, getItemProps} =
-  useInteractions([
-    useHover(context, props),
-    useFocus(context, props),
-    useRole(context, props),
-  ]);
+  useInteractions([hover, focus, role]);
 ```
 
 Each hook accepts the `context{:.const}` object which gets

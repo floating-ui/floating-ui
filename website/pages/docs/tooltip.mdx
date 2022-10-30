@@ -4,6 +4,7 @@
   <img
     src="/tooltip.svg"
     alt="Banner graphic showing a tooltip"
+    height={200}
   />
 </div>
 
@@ -75,7 +76,7 @@ function App() {
   // Role props for screen readers
   const role = useRole(context, {role: 'tooltip'});
 
-  // Merge all the interaction into prop getters.
+  // Merge all the interaction into prop getters
   const {getReferenceProps, getFloatingProps} = useInteractions([
     hover,
     focus,
