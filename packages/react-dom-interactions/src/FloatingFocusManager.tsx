@@ -12,11 +12,21 @@ import {isTypeableElement, TYPEABLE_SELECTOR} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
-function focus(el: HTMLElement | undefined, preventScroll = false) {
+function focus(
+  el: HTMLElement | undefined,
+  {
+    preventScroll = false,
+    focusVisible,
+  }: {preventScroll?: boolean; focusVisible?: boolean} = {}
+) {
   // `mousedown` clicks occur before `focus`, so the button will steal the
   // focus unless we wait a frame.
   requestAnimationFrame(() => {
-    el?.focus({preventScroll});
+    el?.focus({
+      preventScroll,
+      // @ts-expect-error
+      focusVisible,
+    });
   });
 }
 
@@ -52,6 +62,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   endGuard?: boolean;
   returnFocus?: boolean;
   modal?: boolean;
+  focusVisible?: boolean;
 }
 
 /**
@@ -66,6 +77,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   initialFocus = 0,
   returnFocus = true,
   modal = true,
+  focusVisible,
 }: Props<RT>): JSX.Element {
   const orderRef = useLatestRef(order);
   const tree = useFloatingTree();
@@ -129,9 +141,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         ) {
           stopEvent(event);
           if (event.shiftKey) {
-            focus(els[els.length - 1]);
+            focus(els[els.length - 1], {focusVisible});
           } else {
-            focus(els[1]);
+            focus(els[1], {focusVisible});
           }
         }
 
@@ -141,7 +153,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           event.shiftKey
         ) {
           stopEvent(event);
-          focus(els[0]);
+          focus(els[0], {focusVisible});
         }
       }
     }
@@ -151,7 +163,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [modal, getTabbableElements, orderRef, refs]);
+  }, [focusVisible, modal, getTabbableElements, orderRef, refs]);
 
   React.useEffect(() => {
     let isPointerDown = false;
@@ -250,10 +262,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     if (typeof initialFocus === 'number') {
       const el = getTabbableElements()[initialFocus] ?? floating;
-      focus(el, el === floating);
+      focus(el, {focusVisible, preventScroll: el === floating});
     } else if (isHTMLElement(initialFocus.current)) {
       const el = initialFocus.current ?? floating;
-      focus(el, el === floating);
+      focus(el, {focusVisible, preventScroll: el === floating});
     }
 
     // Dismissing via outside press should always ignore `returnFocus` to
@@ -275,10 +287,20 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       events.off('dismiss', onDismiss);
 
       if (returnFocusValue && isHTMLElement(previouslyFocusedElement)) {
-        focus(previouslyFocusedElement, preventReturnFocusScroll);
+        focus(previouslyFocusedElement, {
+          focusVisible,
+          preventScroll: preventReturnFocusScroll,
+        });
       }
     };
-  }, [getTabbableElements, initialFocus, returnFocus, refs, events]);
+  }, [
+    focusVisible,
+    getTabbableElements,
+    initialFocus,
+    returnFocus,
+    refs,
+    events,
+  ]);
 
   const isTypeableCombobox = () =>
     refs.domReference.current?.getAttribute('role') === 'combobox' &&
@@ -296,9 +318,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
             stopEvent(event);
             const els = getTabbableElements();
             if (order[0] === 'reference') {
-              focus(els[0]);
+              focus(els[0], {focusVisible});
             } else {
-              focus(els[els.length - 1]);
+              focus(els[els.length - 1], {focusVisible});
             }
           }}
         />
@@ -315,7 +337,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
             }
 
             stopEvent(event);
-            focus(getTabbableElements()[0]);
+            focus(getTabbableElements()[0], {focusVisible});
           }}
         />
       )}
