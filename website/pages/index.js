@@ -55,7 +55,7 @@ function GridItem({
   demoLink,
 }) {
   return (
-    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 rounded-lg px-4 py-8 sm:p-8 relative">
+    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 md:rounded-lg px-4 py-8 sm:p-8 relative">
       <div className="overflow-hidden">
         <h3 className={`text-3xl font-bold mb-2 ${titleClass}`}>
           {title}
@@ -608,7 +608,8 @@ function HomePage() {
             . Tooltips, popovers, dropdowns, menus, and more.
           </p>
         </div>
-        <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl px-4">
+
+        <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl">
           <Placement />
           <Shift />
           <Flip />
