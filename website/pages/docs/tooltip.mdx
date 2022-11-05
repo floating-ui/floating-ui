@@ -128,7 +128,7 @@ function App() {
   return (
     <>
       <TooltipAnchor state={state}>My anchor</TooltipAnchor>
-      <TooltipContent state={state}>My tooltip</TooltipContent>
+      <Tooltip state={state}>My tooltip</Tooltip>
     </>
   );
 }
@@ -206,16 +206,17 @@ also merge props appropriately.
 
 ```js
 const TooltipAnchor = React.forwardRef(function TooltipAnchor(
-  {children, state, asChild = false, ...props},
+  {children, state, asChild, ...props},
   propRef
 ) {
+  const childrenRef = children.ref;
   const ref = React.useMemo(
-    () => mergeRefs([state.reference, propRef, children.ref]),
-    [state.reference, propRef, children.ref]
+    () => mergeRefs([state.reference, propRef, childrenRef]),
+    [state.reference, propRef, childrenRef]
   );
 
   // `asChild` allows the user to pass any element as the anchor
-  if (asChild) {
+  if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
       children,
       state.getReferenceProps({ref, ...props, ...children.props})
@@ -230,10 +231,10 @@ const TooltipAnchor = React.forwardRef(function TooltipAnchor(
 });
 ```
 
-#### TooltipContent
+#### Tooltip
 
 ```js
-const TooltipContent = React.forwardRef(function TooltipContent(
+const Tooltip = React.forwardRef(function Tooltip(
   {state, ...props},
   propRef
 ) {
@@ -251,7 +252,8 @@ const TooltipContent = React.forwardRef(function TooltipContent(
             position: state.strategy,
             top: state.y ?? 0,
             left: state.x ?? 0,
-            width: 'max-content',
+            // Hide during SSR if `initialOpen: true`
+            visibility: state.x == null ? 'hidden' : 'visible',
             ...props.style,
           }}
           {...state.getFloatingProps(props)}
