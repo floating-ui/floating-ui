@@ -39,14 +39,14 @@ computePosition(referenceEl, floatingEl, {
     const {x, y} = middlewareData.arrow;
 
     Object.assign(arrowEl.style, {
-      left: x != null ? `${x}px` : '',
-      top: y != null ? `${y}px` : '',
+      left: x != undefined ? `${x}px` : '',
+      top: y != undefined ? `${y}px` : '',
     });
   }
 });
 ```
 
-> Don't forget the `null` check! `x` and `y` can be `0` :-)
+> Don't forget the `undefined` check! `x` and `y` can be `0` :-)
 
 This middleware is designed only to position the arrow on one
 axis (`x` for `'top'{:js}` or `'bottom'{:js}` placements). The
