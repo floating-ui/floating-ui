@@ -53,12 +53,7 @@ interface Props extends DetectOverflowOptions {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   index: number;
   offset?: number;
-  overflowRef?: {
-    top: number,
-    bottom: number,
-    left: number,
-    right: number,
-  };
+  overflowRef?: React.MutableRefObject<SideObject | null>;
   referenceOverflowThreshold?: number;
   minItemsVisible?: number;
   onFallbackChange?: (fallback: boolean) => void;
