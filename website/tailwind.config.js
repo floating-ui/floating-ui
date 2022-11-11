@@ -126,11 +126,16 @@ module.exports = {
               wordBreak: 'break-word',
               '> a': {
                 color: GRAY[50],
-                borderBottomColor: 'transparent',
+                textDecoration: 'underline',
+                textDecorationColor: 'transparent',
+                textUnderlineOffset: '8px',
+                textDecorationThickness: '2px',
+                transition:
+                  'color 0.2s ease, text-decoration 0.2s ease',
               },
               '> a:hover': {
                 color: GRAY[50],
-                borderBottomColor: GRAY[50],
+                textDecorationColor: GRAY[50],
               },
             },
             h3: {
@@ -138,21 +143,32 @@ module.exports = {
               wordBreak: 'break-word',
               '> a': {
                 color: GRAY[50],
-                borderBottomColor: 'transparent',
+                textDecoration: 'underline',
+                textDecorationColor: 'transparent',
+                textUnderlineOffset: '8px',
+                textDecorationThickness: '2px',
+                transition:
+                  'color 0.2s ease, text-decoration 0.2s ease',
               },
               '> a:hover': {
                 color: GRAY[50],
-                borderBottomColor: GRAY[50],
+                textDecorationColor: GRAY[50],
               },
             },
             h4: {
+              color: '#BFC3D9',
               '> a': {
                 color: GRAY[50],
-                borderBottomColor: 'transparent',
+                textDecoration: 'underline',
+                textDecorationColor: 'transparent',
+                textUnderlineOffset: '8px',
+                textDecorationThickness: '2px',
+                transition:
+                  'color 0.2s ease, text-decoration 0.2s ease',
               },
               '> a:hover': {
                 color: GRAY[50],
-                borderBottomColor: GRAY[50],
+                textDecorationColor: GRAY[50],
               },
             },
             code: {
@@ -169,20 +185,6 @@ module.exports = {
               borderRadius: '0.25rem',
               padding: '0.2rem 0.4rem',
               backgroundColor: '#30303e',
-            },
-            a: {
-              color: colors.rose[300],
-              textDecoration: 'none',
-              borderBottom: `2px solid #744d60`,
-              paddingBottom: '0.1em',
-              transition: 'border-color 0.15s, color 0.15s',
-              '&:hover': {
-                borderBottomColor: `${colors.rose[200]}`,
-                color: `${colors.rose[200]}`,
-              },
-              '&:active': {
-                borderBottomColor: `${colors.rose[100]}`,
-              },
             },
             'a code': {
               color: '#fff',
@@ -209,14 +211,8 @@ module.exports = {
       inset: {
         '-32': '-128px',
       },
-      width: {
-        '1200px': '1200px',
-      },
       height: {
         128: '32rem',
-      },
-      lineHeight: {
-        'gradient-heading': '1.15 !important',
       },
     },
   },

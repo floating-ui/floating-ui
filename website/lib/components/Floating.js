@@ -12,6 +12,7 @@ export function Floating({
   minHeight,
   transition,
   arrow,
+  lockedFromArrow,
   ...options
 }) {
   const arrowRef = useRef();
@@ -29,6 +30,14 @@ export function Floating({
         ...middleware,
         ...(arrow
           ? [FloatingUI.arrow({element: arrowRef, padding: 5})]
+          : []),
+        ...(lockedFromArrow
+          ? [
+              FloatingUI.shift(
+                middleware.find((m) => m.name === 'shift')
+                  .options
+              ),
+            ]
           : []),
       ]
         ?.map(({name, options}) => {

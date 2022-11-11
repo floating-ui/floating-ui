@@ -1,0 +1,254 @@
+# inner
+
+You may want to position the floating element such that an
+_inner_ element inside of it is anchored to the reference
+element. The most common use case for this is a macOS-style
+select menu, where the selected item pops up directly over the
+target button.
+
+Despite being related to positioning, the intricate UX details
+involved requires the modules to be available only for the
+interactions package.
+
+## Usage
+
+There are two modules: `inner(){:js}` and
+`useInnerOffset(){:js}`.
+
+- `inner(){:js}` is a positioning middleware that anchors the
+  reference element to an inner element inside of the floating
+  element.
+
+- `useInnerOffset(){:js}` is an interaction hook that offsets the
+  anchoring upon a `wheel{:.string}` event. This allows the
+  floating element's height to expand, revealing more list items.
+  This is not strictly required but is necessary to match the UX
+  of the macOS-style select menu.
+
+```js /inner/ /useInnerOffset/
+import {
+  inner,
+  useInnerOffset,
+} from '@floating-ui/react-dom-interactions';
+
+// ...
+const {context} = useFloating({
+  middleware: [inner()],
+});
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  useInnerOffset(context),
+]);
+```
+
+## Examples
+
+- [Basic inner anchoring](https://codesandbox.io/s/lively-thunder-qh6gri?file=/src/App.tsx)
+- [Inner anchoring and offset](https://codesandbox.io/s/modest-gianmarco-jx9fri?file=/src/App.tsx)
+- [Inner anchoring with fallback](https://codesandbox.io/s/suspicious-einstein-4ec3n9?file=/src/App.tsx)
+
+## inner Props
+
+```js
+interface Props extends DetectOverflowOptions {
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>;
+  index: number;
+  offset?: number;
+  overflowRef?: {
+    top: number,
+    bottom: number,
+    left: number,
+    right: number,
+  };
+  referenceOverflowThreshold?: number;
+  minItemsVisible?: number;
+  onFallbackChange?: (fallback: boolean) => void;
+}
+```
+
+### listRef
+
+**Required**
+
+default: `[]{:js}`
+
+An ref containing an array of list items inside the floating
+element.
+
+```js
+const listRef = React.useRef([]);
+
+inner({
+  listRef,
+});
+```
+
+### index
+
+**Required**
+
+default: `0{:js}`
+
+The index of the list item that should be anchored to the
+reference element.
+
+```js
+const [index, setIndex] = React.useState(0);
+
+inner({
+  index,
+});
+```
+
+### overflowRef
+
+default: `undefined{:js}`
+
+A ref containing a `SideObject{:.class}`. This is used to
+determine the overflow of the floating element and is required
+when using the `useInnerOffset(){:js}` interaction hook.
+
+```js
+const overflowRef = React.useRef({
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+});
+
+inner({
+  overflowRef,
+});
+```
+
+### referenceOverflowThreshold
+
+default: `0{:js}`
+
+This determines the distance in pixels of the reference element
+from the edges of the boundary. If the reference element is too
+close to the edges of its clipping boundary,
+`onFallbackChange{:.function}` will be invoked to use fallback
+positioning.
+
+```js
+inner({
+  referenceOverflowThreshold: 20,
+});
+```
+
+### minItemsVisible
+
+default: `4{:js}`
+
+Specifies the minimum number of items that should be visible
+before fallback positioning is used.
+`onFallbackChange{:.function}` will be invoked if there are less
+than the number specified visible.
+
+```js
+inner({
+  minItemsVisible: 10,
+});
+```
+
+### offset
+
+default: `0{:js}`
+
+Determines the offset of the anchoring.
+
+```js
+inner({
+  offset: 10,
+});
+```
+
+### onFallbackChange
+
+default: no-op
+
+A callback that is invoked with a boolean when positioning should
+enter fallback mode. You should fallback to middleware that
+create standard anchored positioning when `true{:js}`.
+
+```js
+const [fallback, setFallback] = React.useState(false);
+
+inner({
+  onFallbackChange: setFallback,
+});
+```
+
+## useInnerOffset Props
+
+```js
+interface Props extends DetectOverflowOptions {
+  enabled?: boolean;
+  overflowRef: React.MutableRefObject<SideObject | null>;
+  onChange: (
+    offset: number | ((offset: number) => number)
+  ) => void;
+}
+```
+
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook.
+
+```js
+useInnerOffset(context, {
+  enabled: false,
+});
+```
+
+### overflowRef
+
+**Required**
+
+default: `undefined{:js}`
+
+A ref containing a `SideObject{:.class}`. This is used to
+determine the overflow of the floating element.
+
+```js
+const overflowRef = React.useRef({
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+});
+
+useInnerOffset(context, {
+  overflowRef,
+});
+```
+
+### onChange
+
+**Required**
+
+default: no-op
+
+A callback that is invoked when a new offset upon the
+`wheel{:.string}` event to offset the anchoring, and thus expand
+the floating element's height.
+
+```js
+const [offset, setOffset] = React.useState(0);
+
+const {context} = useFloating({
+  middleware: [
+    inner({
+      // ...
+      offset,
+    }),
+  ],
+});
+
+// ...
+useInnerOffset(context, {
+  onChange: setOffset,
+});
+```

@@ -4,20 +4,21 @@
 floating element (usually a triangle or caret) so that it is
 centered to the reference element.
 
-If you're using an aligned placement, like `'top-start'{:js}` or
-`'right-end'{:js}`, you may not need to use this middleware if
-you want the arrow's position to remain "static".
-
 ## Usage
 
-Given an arrow element inside your floating element (with
-`position: absolute{:sass}` applied in its CSS):
+Given an arrow element inside your floating element:
 
 ```html
 <div id="tooltip">
   Tooltip text
   <div id="arrow"></div>
 </div>
+```
+
+```css
+#arrow {
+  position: absolute;
+}
 ```
 
 Pass it to the `arrow(){:js}` middleware and assign the dynamic
@@ -46,13 +47,27 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-> Don't forget the `null` check! `x` and `y` can be `0` :-)
+> Depending on the placement, either `x` or `y` will be
+> `undefined{:js}`. The above code checks for `null{:js}` and
+> `undefined{:js}` simultaneously. Don't remove `!= null{:js}`,
+> because either value can be falsy (0), causing a bug!
 
 This middleware is designed only to position the arrow on one
 axis (`x` for `'top'{:js}` or `'bottom'{:js}` placements). The
 other axis is considered "static", which means it does not need
 to be positioned dynamically.
-[You can see a full styling example in the tutorial](/docs/tutorial#arrow-middleware).
+
+You may however want to position **both** axes statically in the
+following scenario:
+
+- The reference element is either wider or taller than the
+  floating element;
+- The floating element is using an edge alignment (`-start` or
+  `-end` placement).
+
+A demo handling this case is shown below.
+
+[View dynamic styling for all placements on CodeSandbox](https://codesandbox.io/s/determined-hill-7x5g57?file=/src/index.js)
 
 ## Order
 

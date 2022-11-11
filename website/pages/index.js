@@ -66,7 +66,7 @@ function GridItem({
         {chrome}
       </div>
       <a
-        className="text-red-300 hover:text-red-200 border-red-300/30 border-b-2 text-center font-bold absolute right-6 top-6"
+        className="transition-colors inline-flex items-center gap-1 border-none underline underline-offset-4 font-bold text-blue-300 hover:text-blue-100 decoration-blue-400/60 hover:decoration-blue-200 decoration-2 absolute right-6 top-6"
         href={demoLink}
         target="_blank"
         rel="noopener noreferrer"
@@ -268,8 +268,7 @@ function Shift() {
                   <p className="text-sm">
                     Lorem ipsum dolor sit amet, consectetur
                     adipiscing elit. Nullam vitae pellentesque
-                    elit, in dapibus enim. Aliquam hendrerit
-                    iaculis facilisis.
+                    elit, in dapibus enim.
                   </p>
                 </div>
               }
@@ -397,6 +396,7 @@ function Arrow() {
                 },
               ]}
               arrow
+              lockedFromArrow
             >
               <Reference className="ml-[5%] md:ml-[33%]" />
             </Floating>
@@ -522,8 +522,9 @@ function HomePage() {
           <div
             className="absolute -z-1 w-full top-[-3rem]"
             style={{
-              left: 'calc(-36.9rem + 50vw)',
-              width: 1200,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 'max-content',
             }}
           >
             <img
