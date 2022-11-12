@@ -69,6 +69,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 }: Props<RT>): JSX.Element {
   const orderRef = useLatestRef(order);
   const tree = useFloatingTree();
+  const didFocusOutRef = React.useRef(false);
 
   const getTabbableElements = React.useCallback(() => {
     return orderRef.current
@@ -183,6 +184,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         !isParentRelated &&
         !isPointerDown
       ) {
+        if (relatedTarget) {
+          didFocusOutRef.current = true;
+        }
         onOpenChange(false);
       }
     }
@@ -274,7 +278,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
-      if (returnFocusValue && isHTMLElement(previouslyFocusedElement)) {
+      if (
+        returnFocusValue &&
+        isHTMLElement(previouslyFocusedElement) &&
+        !didFocusOutRef.current
+      ) {
         focus(previouslyFocusedElement, preventReturnFocusScroll);
       }
     };
