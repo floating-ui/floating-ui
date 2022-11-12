@@ -29,16 +29,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
-  if (
-    !deepEqual(
-      latestMiddleware.map((value) =>
-        value ? {name: value.name, options: value.options} : null
-      ),
-      middleware.map((value) =>
-        value ? {name: value.name, options: value.options} : null
-      )
-    )
-  ) {
+  if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
 
