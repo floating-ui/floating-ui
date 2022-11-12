@@ -18,6 +18,9 @@ function App() {
           return {};
         },
       },
+      false && shift(),
+      null,
+      undefined,
     ],
     strategy: 'fixed',
   });

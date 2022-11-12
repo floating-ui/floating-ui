@@ -12,7 +12,7 @@ import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
-  middleware,
+  middleware = [],
   placement = 'bottom',
   strategy = 'absolute',
   whileElementsMounted,
@@ -29,12 +29,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
-  if (
-    !deepEqual(
-      latestMiddleware?.map(({name, options}) => ({name, options})),
-      middleware?.map(({name, options}) => ({name, options}))
-    )
-  ) {
+  if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
 

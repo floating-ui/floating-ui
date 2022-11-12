@@ -81,7 +81,7 @@ export type ComputePositionConfig = Omit<
   CoreComputePositionConfig,
   'middleware' | 'platform'
 > & {
-  middleware?: Middleware[];
+  middleware?: Array<Middleware | null | undefined | false>;
   platform?: Platform;
 };
 

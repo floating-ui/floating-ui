@@ -57,11 +57,11 @@ type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
 
 export const useFloating = ({
   placement = 'bottom',
-  middleware,
+  middleware = [],
   sameScrollView = true,
 }: {
   placement?: Placement;
-  middleware?: Array<Middleware>;
+  middleware?: Array<Middleware | null | undefined | false>;
   sameScrollView?: boolean;
 } = {}): UseFloatingReturn => {
   const reference = useRef<any>();
@@ -85,12 +85,7 @@ export const useFloating = ({
 
   const [latestMiddleware, setLatestMiddleware] = useState(middleware);
 
-  if (
-    !deepEqual(
-      latestMiddleware?.map(({name, options}) => ({name, options})),
-      middleware?.map(({name, options}) => ({name, options}))
-    )
-  ) {
+  if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
 

@@ -77,7 +77,7 @@ export interface ComputePositionConfig {
   platform: Platform;
   placement?: Placement;
   strategy?: Strategy;
-  middleware?: Array<Middleware>;
+  middleware?: Array<Middleware | null | undefined | false>;
 }
 
 export interface ComputePositionReturn extends Coords {
