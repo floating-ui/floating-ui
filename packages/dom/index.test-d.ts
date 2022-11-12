@@ -222,6 +222,10 @@ computePosition(document.body, document.body, {
 });
 
 computePosition(document.body, document.body, {
+  middleware: [null, undefined, false, offset()],
+});
+
+computePosition(document.body, document.body, {
   platform: {
     ...platform,
     getOffsetParent: (element) =>

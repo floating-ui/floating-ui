@@ -1,6 +1,7 @@
 import type {
   ComputePosition,
   ComputePositionReturn,
+  Middleware,
   MiddlewareData,
 } from './types';
 import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
@@ -24,6 +25,7 @@ export const computePosition: ComputePosition = async (
     platform,
   } = config;
 
+  const validMiddleware = middleware.filter(Boolean) as Middleware[];
   const rtl = await platform.isRTL?.(floating);
 
   if (__DEV__) {
@@ -39,14 +41,25 @@ export const computePosition: ComputePosition = async (
     }
 
     if (
-      middleware.filter(({name}) => name === 'autoPlacement' || name === 'flip')
-        .length > 1
+      validMiddleware.filter(
+        ({name}) => name === 'autoPlacement' || name === 'flip'
+      ).length > 1
     ) {
       throw new Error(
         [
-          'Floating UI: duplicate `flip` and/or `autoPlacement`',
-          'middleware detected. This will lead to an infinite loop. Ensure only',
-          'one of either has been passed to the `middleware` array.',
+          'Floating UI: duplicate `flip` and/or `autoPlacement` middleware',
+          'detected. This will lead to an infinite loop. Ensure only one of',
+          'either has been passed to the `middleware` array.',
+        ].join(' ')
+      );
+    }
+
+    if (!reference || !floating) {
+      console.error(
+        [
+          `Floating UI: One or both of the reference and floating elements is`,
+          `not defined yet. Ensure that both elements are created and can be`,
+          `measured at the time computePosition() is called.`,
         ].join(' ')
       );
     }
@@ -58,8 +71,8 @@ export const computePosition: ComputePosition = async (
   let middlewareData: MiddlewareData = {};
   let resetCount = 0;
 
-  for (let i = 0; i < middleware.length; i++) {
-    const {name, fn} = middleware[i];
+  for (let i = 0; i < validMiddleware.length; i++) {
+    const {name, fn} = validMiddleware[i];
 
     const {
       x: nextX,
