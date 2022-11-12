@@ -12,7 +12,7 @@ import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
-  middleware,
+  middleware = [],
   placement = 'bottom',
   strategy = 'absolute',
   whileElementsMounted,
@@ -31,8 +31,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   if (
     !deepEqual(
-      latestMiddleware?.map(({name, options}) => ({name, options})),
-      middleware?.map(({name, options}) => ({name, options}))
+      latestMiddleware.map((value) =>
+        value ? {name: value.name, options: value.options} : null
+      ),
+      middleware.map((value) =>
+        value ? {name: value.name, options: value.options} : null
+      )
     )
   ) {
     setLatestMiddleware(middleware);

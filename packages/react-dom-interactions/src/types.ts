@@ -83,7 +83,7 @@ export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   placement: Placement;
-  middleware: Array<Middleware>;
+  middleware: Array<Middleware | null | undefined | false>;
   strategy: Strategy;
   nodeId: string;
   whileElementsMounted?: (

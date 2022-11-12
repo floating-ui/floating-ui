@@ -20,7 +20,13 @@ function App() {
   useFloating();
   const {reference, floating, update} = useFloating({
     placement: 'right',
-    middleware: [shift(), arrow({element: arrowRef})],
+    middleware: [
+      shift(),
+      arrow({element: arrowRef}),
+      false && shift(),
+      null,
+      undefined,
+    ],
     strategy: 'fixed',
   });
   reference(null);
