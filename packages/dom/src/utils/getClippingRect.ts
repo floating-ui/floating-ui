@@ -22,6 +22,7 @@ import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 
+// Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
   element: Element,
   strategy: Strategy
@@ -47,15 +48,15 @@ function getInnerBoundingClientRect(
 
 function getClientRectFromClippingAncestor(
   element: Element,
-  clippingParent: Element | RootBoundary,
+  clippingAncestor: Element | RootBoundary,
   strategy: Strategy
 ): ClientRectObject {
-  if (clippingParent === 'viewport') {
+  if (clippingAncestor === 'viewport') {
     return rectToClientRect(getViewportRect(element, strategy));
   }
 
-  if (isElement(clippingParent)) {
-    return getInnerBoundingClientRect(clippingParent, strategy);
+  if (isElement(clippingAncestor)) {
+    return getInnerBoundingClientRect(clippingAncestor, strategy);
   }
 
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
@@ -65,13 +66,11 @@ function getClientRectFromClippingAncestor(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingElementAncestors(element: Element): Array<Element> {
-  const overflowAncestors = getOverflowAncestors(element);
+  let result = getOverflowAncestors(element).filter((el) =>
+    isElement(el)
+  ) as Array<Element>;
   let currentNode: Node | null = element;
   let hasEscapableParent = false;
-
-  let result = overflowAncestors.filter((overflowAncestor) =>
-    isElement(overflowAncestor)
-  ) as Array<Element>;
 
   if (isShadowRoot(currentNode)) {
     currentNode = currentNode.host;
@@ -119,11 +118,11 @@ export function getClippingRect({
   rootBoundary: RootBoundary;
   strategy: Strategy;
 }): Rect {
-  const mainClippingAncestors =
+  const elementClippingAncestors =
     boundary === 'clippingAncestors'
       ? getClippingElementAncestors(element)
       : [].concat(boundary);
-  const clippingAncestors = [...mainClippingAncestors, rootBoundary];
+  const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
 
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
