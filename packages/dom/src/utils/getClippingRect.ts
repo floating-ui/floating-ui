@@ -16,7 +16,6 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-  isShadowRoot,
 } from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
@@ -72,10 +71,6 @@ function getClippingElementAncestors(element: Element): Array<Element> {
   let currentNode: Node | null = element;
   let hasEscapableParent = false;
 
-  if (isShadowRoot(currentNode)) {
-    currentNode = currentNode.host;
-  }
-
   while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const position = getComputedStyle(currentNode).position;
     const canEscapeClipping = ['absolute', 'fixed'].includes(position);
@@ -94,8 +89,7 @@ function getClippingElementAncestors(element: Element): Array<Element> {
       result = result.filter((ancestor) => ancestor !== currentNode);
     }
 
-    const parent = getParentNode(currentNode);
-    currentNode = isShadowRoot(parent) ? parent.host : parent;
+    currentNode = getParentNode(currentNode);
   }
 
   if (hasEscapableParent) {
