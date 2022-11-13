@@ -6,7 +6,6 @@ import {
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
-  isShadowRoot,
   isTableElement,
 } from './is';
 
