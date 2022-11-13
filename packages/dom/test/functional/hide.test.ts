@@ -62,7 +62,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
   );
 });
 
-['a', 'b', 'c', 'd'].forEach((hierarchy) => {
+['a', 'b', 'c', 'd', 'g'].forEach((hierarchy) => {
   test(`floating element is not black ${hierarchy}`, async ({page}) => {
     await page.goto('http://localhost:1234/hide');
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
@@ -73,7 +73,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
   });
 });
 
-['e'].forEach((hierarchy) => {
+['e', 'h'].forEach((hierarchy) => {
   test(`floating element is black ${hierarchy}`, async ({page}) => {
     await page.goto('http://localhost:1234/hide');
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);

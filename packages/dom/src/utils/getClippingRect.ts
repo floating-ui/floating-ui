@@ -9,7 +9,6 @@ import {
 import {getViewportRect} from './getViewportRect';
 import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
-import {getOffsetParent} from './getOffsetParent';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
 import {
@@ -20,36 +19,8 @@ import {
   isShadowRoot,
 } from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
-import {contains} from './contains';
-import {getNodeName} from './getNodeName';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
-
-function getNearestParentCapableOfEscapingClipping(
-  element: Element,
-  clippingAncestors: Array<Element | Window | VisualViewport>
-): Node {
-  let currentNode: Node | null = element;
-
-  while (
-    currentNode &&
-    !isLastTraversableNode(currentNode) &&
-    // @ts-expect-error
-    !clippingAncestors.includes(currentNode)
-  ) {
-    if (
-      isElement(currentNode) &&
-      ['absolute', 'fixed'].includes(getComputedStyle(currentNode).position)
-    ) {
-      break;
-    }
-
-    const parentNode = getParentNode(currentNode);
-    currentNode = isShadowRoot(parentNode) ? parentNode.host : parentNode;
-  }
-
-  return currentNode;
-}
 
 function getInnerBoundingClientRect(
   element: Element,
@@ -93,35 +64,46 @@ function getClientRectFromClippingAncestor(
 // A "clipping ancestor" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
-function getClippingAncestors(element: Element): Array<Element> {
-  const clippingAncestors = getOverflowAncestors(element);
-  const nearestEscapableParent = getNearestParentCapableOfEscapingClipping(
-    element,
-    clippingAncestors
-  );
+function getClippingElementAncestors(element: Element): Array<Element> {
+  const overflowAncestors = getOverflowAncestors(element);
+  let currentNode: Node | null = element;
+  let hasEscapableParent = false;
 
-  let clipperElement: Element | null = null;
-  if (nearestEscapableParent && isHTMLElement(nearestEscapableParent)) {
-    const offsetParent = getOffsetParent(nearestEscapableParent);
-    if (isOverflowElement(nearestEscapableParent)) {
-      clipperElement = nearestEscapableParent;
-    } else if (isHTMLElement(offsetParent)) {
-      clipperElement = offsetParent;
-    }
+  let result = overflowAncestors.filter((overflowAncestor) =>
+    isElement(overflowAncestor)
+  ) as Array<Element>;
+
+  if (isShadowRoot(currentNode)) {
+    currentNode = currentNode.host;
   }
 
-  if (!isElement(clipperElement)) {
+  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    const position = getComputedStyle(currentNode).position;
+    const canEscapeClipping = ['absolute', 'fixed'].includes(position);
+    const isPositioned = position !== 'static';
+    const hasOverflowProperty = isOverflowElement(currentNode);
+
+    if (canEscapeClipping) {
+      hasEscapableParent = true;
+    }
+
+    if (isPositioned && hasOverflowProperty) {
+      hasEscapableParent = false;
+    }
+
+    if (hasEscapableParent && hasOverflowProperty) {
+      result = result.filter((ancestor) => ancestor !== currentNode);
+    }
+
+    const parent = getParentNode(currentNode);
+    currentNode = isShadowRoot(parent) ? parent.host : parent;
+  }
+
+  if (hasEscapableParent) {
     return [];
   }
 
-  // @ts-ignore isElement check ensures we return Array<Element>
-  return clippingAncestors.filter(
-    (clippingAncestors) =>
-      clipperElement &&
-      isElement(clippingAncestors) &&
-      contains(clippingAncestors, clipperElement) &&
-      getNodeName(clippingAncestors) !== 'body'
-  );
+  return result;
 }
 
 // Gets the maximum area that the element is visible in due to any number of
@@ -139,7 +121,7 @@ export function getClippingRect({
 }): Rect {
   const mainClippingAncestors =
     boundary === 'clippingAncestors'
-      ? getClippingAncestors(element)
+      ? getClippingElementAncestors(element)
       : [].concat(boundary);
   const clippingAncestors = [...mainClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
