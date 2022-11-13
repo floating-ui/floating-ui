@@ -6,7 +6,6 @@ import {
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
-  isShadowRoot,
   isTableElement,
 } from './is';
 
@@ -24,16 +23,11 @@ function getTrueOffsetParent(element: Element): Element | null {
 function getContainingBlock(element: Element) {
   let currentNode: Node | null = getParentNode(element);
 
-  if (isShadowRoot(currentNode)) {
-    currentNode = currentNode.host;
-  }
-
   while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
     if (isContainingBlock(currentNode)) {
       return currentNode;
     } else {
-      const parent = currentNode.parentNode as Node;
-      currentNode = isShadowRoot(parent) ? parent.host : parent;
+      currentNode = getParentNode(currentNode);
     }
   }
 

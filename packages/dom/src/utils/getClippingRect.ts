@@ -9,48 +9,14 @@ import {
 import {getViewportRect} from './getViewportRect';
 import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
-import {getOffsetParent} from './getOffsetParent';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {
-  isElement,
-  isHTMLElement,
-  isLastTraversableNode,
-  isOverflowElement,
-  isShadowRoot,
-} from './is';
+import {isElement, isLastTraversableNode, isOverflowElement} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
-import {contains} from './contains';
-import {getNodeName} from './getNodeName';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 
-function getNearestParentCapableOfEscapingClipping(
-  element: Element,
-  clippingAncestors: Array<Element | Window | VisualViewport>
-): Node {
-  let currentNode: Node | null = element;
-
-  while (
-    currentNode &&
-    !isLastTraversableNode(currentNode) &&
-    // @ts-expect-error
-    !clippingAncestors.includes(currentNode)
-  ) {
-    if (
-      isElement(currentNode) &&
-      ['absolute', 'fixed'].includes(getComputedStyle(currentNode).position)
-    ) {
-      break;
-    }
-
-    const parentNode = getParentNode(currentNode);
-    currentNode = isShadowRoot(parentNode) ? parentNode.host : parentNode;
-  }
-
-  return currentNode;
-}
-
+// Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
   element: Element,
   strategy: Strategy
@@ -76,15 +42,15 @@ function getInnerBoundingClientRect(
 
 function getClientRectFromClippingAncestor(
   element: Element,
-  clippingParent: Element | RootBoundary,
+  clippingAncestor: Element | RootBoundary,
   strategy: Strategy
 ): ClientRectObject {
-  if (clippingParent === 'viewport') {
+  if (clippingAncestor === 'viewport') {
     return rectToClientRect(getViewportRect(element, strategy));
   }
 
-  if (isElement(clippingParent)) {
-    return getInnerBoundingClientRect(clippingParent, strategy);
+  if (isElement(clippingAncestor)) {
+    return getInnerBoundingClientRect(clippingAncestor, strategy);
   }
 
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
@@ -93,35 +59,39 @@ function getClientRectFromClippingAncestor(
 // A "clipping ancestor" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
-function getClippingAncestors(element: Element): Array<Element> {
-  const clippingAncestors = getOverflowAncestors(element);
-  const nearestEscapableParent = getNearestParentCapableOfEscapingClipping(
-    element,
-    clippingAncestors
-  );
+function getClippingElementAncestors(element: Element): Array<Element> {
+  let result = getOverflowAncestors(element).filter((el) =>
+    isElement(el)
+  ) as Array<Element>;
+  let currentNode: Node | null = element;
+  let hasEscapableParent = false;
 
-  let clipperElement: Element | null = null;
-  if (nearestEscapableParent && isHTMLElement(nearestEscapableParent)) {
-    const offsetParent = getOffsetParent(nearestEscapableParent);
-    if (isOverflowElement(nearestEscapableParent)) {
-      clipperElement = nearestEscapableParent;
-    } else if (isHTMLElement(offsetParent)) {
-      clipperElement = offsetParent;
+  while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    const position = getComputedStyle(currentNode).position;
+    const canEscapeClipping = ['absolute', 'fixed'].includes(position);
+    const isPositioned = position !== 'static';
+    const hasOverflowProperty = isOverflowElement(currentNode);
+
+    if (canEscapeClipping) {
+      hasEscapableParent = true;
     }
+
+    if (isPositioned && hasOverflowProperty) {
+      hasEscapableParent = false;
+    }
+
+    if (hasEscapableParent && hasOverflowProperty) {
+      result = result.filter((ancestor) => ancestor !== currentNode);
+    }
+
+    currentNode = getParentNode(currentNode);
   }
 
-  if (!isElement(clipperElement)) {
+  if (hasEscapableParent) {
     return [];
   }
 
-  // @ts-ignore isElement check ensures we return Array<Element>
-  return clippingAncestors.filter(
-    (clippingAncestors) =>
-      clipperElement &&
-      isElement(clippingAncestors) &&
-      contains(clippingAncestors, clipperElement) &&
-      getNodeName(clippingAncestors) !== 'body'
-  );
+  return result;
 }
 
 // Gets the maximum area that the element is visible in due to any number of
@@ -137,11 +107,11 @@ export function getClippingRect({
   rootBoundary: RootBoundary;
   strategy: Strategy;
 }): Rect {
-  const mainClippingAncestors =
+  const elementClippingAncestors =
     boundary === 'clippingAncestors'
-      ? getClippingAncestors(element)
+      ? getClippingElementAncestors(element)
       : [].concat(boundary);
-  const clippingAncestors = [...mainClippingAncestors, rootBoundary];
+  const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
 
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {

@@ -102,6 +102,36 @@ export function Hide() {
         </div>
       </div>
     );
+  } else if (hierarchy === 'g') {
+    jsx = (
+      <div style={{overflow: 'scroll', height: 0}}>
+        <div style={{overflow: 'hidden'}}>
+          <div style={{position: 'absolute', top: 0, left: 0}}>
+            <div style={{position: 'absolute'}}>
+              <div ref={reference} className="reference">
+                Reference
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (hierarchy === 'h') {
+    jsx = (
+      <div style={{overflow: 'scroll', height: 0}}>
+        <div style={{overflow: 'hidden'}}>
+          <div
+            style={{position: 'absolute', top: 0, left: 0, overflow: 'hidden'}}
+          >
+            <div style={{position: 'absolute'}}>
+              <div ref={reference} className="reference">
+                Reference
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -148,7 +178,7 @@ export function Hide() {
 
       <h2>Hierarchy</h2>
       <Controls>
-        {['a', 'b', 'c', 'd', 'e', 'f'].map((localHierarchy) => (
+        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((localHierarchy) => (
           <button
             key={localHierarchy}
             data-testid={`hierarchy-${localHierarchy}`}
