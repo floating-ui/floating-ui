@@ -11,12 +11,7 @@ import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {
-  isElement,
-  isHTMLElement,
-  isLastTraversableNode,
-  isOverflowElement,
-} from './is';
+import {isElement, isLastTraversableNode, isOverflowElement} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
