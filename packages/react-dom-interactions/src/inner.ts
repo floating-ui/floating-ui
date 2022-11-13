@@ -14,7 +14,7 @@ import {useEvent} from './utils/useEvent';
 
 function getArgsWithCustomFloatingHeight(
   args: MiddlewareArguments,
-  prop: 'offsetHeight' | 'scrollHeight'
+  height: number
 ) {
   return {
     ...args,
@@ -22,7 +22,7 @@ function getArgsWithCustomFloatingHeight(
       ...args.rects,
       floating: {
         ...args.rects.floating,
-        height: args.elements.floating[prop],
+        height,
       },
     },
   };
@@ -35,6 +35,7 @@ export const inner = (
     onFallbackChange?: null | ((fallback: boolean) => void);
     offset?: number;
     overflowRef?: React.MutableRefObject<SideObject | null>;
+    scrollRef?: React.MutableRefObject<HTMLElement | null>;
     minItemsVisible?: number;
     referenceOverflowThreshold?: number;
   } & Partial<DetectOverflowOptions>
@@ -50,6 +51,7 @@ export const inner = (
       index = 0,
       minItemsVisible = 4,
       referenceOverflowThreshold = 0,
+      scrollRef,
       ...detectOverflowOptions
     } = options;
 
@@ -85,8 +87,10 @@ export const inner = (
       ).fn(middlewareArguments)),
     };
 
+    const el = scrollRef?.current ?? floating;
+
     const overflow = await detectOverflow(
-      getArgsWithCustomFloatingHeight(nextArgs, 'scrollHeight'),
+      getArgsWithCustomFloatingHeight(nextArgs, el.scrollHeight),
       detectOverflowOptions
     );
     const refOverflow = await detectOverflow(nextArgs, {
@@ -99,16 +103,16 @@ export const inner = (
 
     const maxHeight = Math.max(
       0,
-      floating.scrollHeight - diffY - Math.max(0, overflow.bottom)
+      el.scrollHeight - diffY - Math.max(0, overflow.bottom)
     );
 
-    floating.style.maxHeight = `${maxHeight}px`;
-    floating.scrollTop = diffY;
+    el.style.maxHeight = `${maxHeight}px`;
+    el.scrollTop = diffY;
 
     // There is not enough space, fallback to standard anchored positioning
     if (onFallbackChange) {
       if (
-        floating.offsetHeight <
+        el.offsetHeight <
           item.offsetHeight *
             Math.min(minItemsVisible, listRef.current.length - 1) -
             1 ||
@@ -125,7 +129,7 @@ export const inner = (
       overflowRef.current = await detectOverflow(
         getArgsWithCustomFloatingHeight(
           {...nextArgs, y: nextY},
-          'offsetHeight'
+          el.offsetHeight
         ),
         detectOverflowOptions
       );
@@ -142,10 +146,12 @@ export const useInnerOffset = (
   {
     enabled = true,
     overflowRef,
+    scrollRef,
     onChange: unstable_onChange,
   }: {
     enabled?: boolean;
     overflowRef: React.MutableRefObject<SideObject | null>;
+    scrollRef?: React.MutableRefObject<HTMLElement | null>;
     onChange: (offset: number | ((offset: number) => number)) => void;
   }
 ): ElementProps => {
@@ -187,7 +193,7 @@ export const useInnerOffset = (
       }
     }
 
-    const el = refs.floating.current;
+    const el = scrollRef?.current ?? refs.floating.current;
 
     if (open && el) {
       el.addEventListener('wheel', onWheel);
@@ -207,7 +213,7 @@ export const useInnerOffset = (
         el.removeEventListener('wheel', onWheel);
       };
     }
-  }, [enabled, open, refs, overflowRef, onChange]);
+  }, [enabled, open, refs, overflowRef, scrollRef, onChange]);
 
   return React.useMemo(() => {
     if (!enabled) {
