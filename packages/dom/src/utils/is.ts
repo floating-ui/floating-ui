@@ -34,7 +34,7 @@ export function isShadowRoot(node: Node): node is ShadowRoot {
   return node instanceof OwnElement || node instanceof ShadowRoot;
 }
 
-export function isOverflowElement(element: HTMLElement): boolean {
+export function isOverflowElement(element: Element): boolean {
   // Firefox wants us to check `-x` and `-y` variations as well
   const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
   return (

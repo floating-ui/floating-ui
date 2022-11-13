@@ -71,7 +71,7 @@ function getClippingElementAncestors(element: Element): Array<Element> {
   let currentNode: Node | null = element;
   let hasEscapableParent = false;
 
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+  while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const position = getComputedStyle(currentNode).position;
     const canEscapeClipping = ['absolute', 'fixed'].includes(position);
     const isPositioned = position !== 'static';
