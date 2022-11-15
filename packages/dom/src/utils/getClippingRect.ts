@@ -11,7 +11,7 @@ import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isLastTraversableNode} from './is';
+import {isElement, isLastTraversableNode, isContainingBlock} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
@@ -69,31 +69,19 @@ function getClippingElementAncestors(element: Element): Array<Element> {
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
-    const {position, transform, perspective, willChange, filter} =
-      computedStyle;
-
-    // for compatibility considerations, some old browsers don't have `contain` and `backdropFilter` CSS properties
-    // ts 4.1 CSSStyleDeclaration doesn't have this properties
-    const contain = (computedStyle as any).contain ?? 'none';
-    const backdropFilter = (computedStyle as any).backdropFilter ?? 'none';
 
     if (
+      computedStyle.position === 'static' &&
       currentContainingBlockComputedStyle &&
       ['absolute', 'fixed'].includes(
         currentContainingBlockComputedStyle.position
       ) &&
-      position === 'static' &&
-      transform === 'none' &&
-      perspective === 'none' &&
-      !['transform', 'perspective'].includes(willChange) &&
-      filter === 'none' &&
-      contain !== 'paint' &&
-      backdropFilter === 'none'
+      !isContainingBlock(currentNode)
     ) {
-      // drop non-containing blocks
+      // Drop non-containing blocks
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
-      // record last containing block for next iter
+      // Record last containing block for next iteration
       currentContainingBlockComputedStyle = computedStyle;
     }
 
