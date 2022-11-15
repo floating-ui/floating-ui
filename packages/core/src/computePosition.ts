@@ -57,9 +57,9 @@ export const computePosition: ComputePosition = async (
     if (!reference || !floating) {
       console.error(
         [
-          `Floating UI: One or both of the reference and floating elements is`,
-          `not defined yet. Ensure that both elements are created and can be`,
-          `measured at the time computePosition() is called.`,
+          'Floating UI: The reference and/or floating element was not defined',
+          'when `computePosition()` was called. Ensure that both elements have',
+          'been created and can be measured.',
         ].join(' ')
       );
     }
