@@ -11,7 +11,7 @@ import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isLastTraversableNode, isOverflowElement} from './is';
+import {isElement, isLastTraversableNode, isContainingBlock} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
@@ -64,31 +64,28 @@ function getClippingElementAncestors(element: Element): Array<Element> {
     isElement(el)
   ) as Array<Element>;
   let currentNode: Node | null = element;
-  let hasEscapableParent = false;
+  let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;
 
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    const position = getComputedStyle(currentNode).position;
-    const canEscapeClipping = ['absolute', 'fixed'].includes(position);
-    const isPositioned = position !== 'static';
-    const hasOverflowProperty = isOverflowElement(currentNode);
+    const computedStyle = getComputedStyle(currentNode);
 
-    if (canEscapeClipping) {
-      hasEscapableParent = true;
-    }
-
-    if (isPositioned && hasOverflowProperty) {
-      hasEscapableParent = false;
-    }
-
-    if (hasEscapableParent && hasOverflowProperty) {
+    if (
+      computedStyle.position === 'static' &&
+      currentContainingBlockComputedStyle &&
+      ['absolute', 'fixed'].includes(
+        currentContainingBlockComputedStyle.position
+      ) &&
+      !isContainingBlock(currentNode)
+    ) {
+      // Drop non-containing blocks
       result = result.filter((ancestor) => ancestor !== currentNode);
+    } else {
+      // Record last containing block for next iteration
+      currentContainingBlockComputedStyle = computedStyle;
     }
 
     currentNode = getParentNode(currentNode);
-  }
-
-  if (hasEscapableParent) {
-    return [];
   }
 
   return result;
