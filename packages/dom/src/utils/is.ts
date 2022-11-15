@@ -51,7 +51,8 @@ export function isContainingBlock(element: Element): boolean {
   // TODO: Try and use feature detection here instead
   const isFirefox = /firefox/i.test(getUAString());
   const css = getComputedStyle(element);
-  const backdropFilter = (css as any).backdropFilter;
+  const backdropFilter =
+    (css as any).backdropFilter || (css as any).WebkitBackdropFilter;
 
   // This is non-exhaustive but covers the most common CSS properties that
   // create a containing block.
