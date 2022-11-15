@@ -15,6 +15,7 @@ import {isElement, isLastTraversableNode, isContainingBlock} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
+import {getNodeName} from './getNodeName';
 
 // Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
@@ -60,8 +61,8 @@ function getClientRectFromClippingAncestor(
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
 function getClippingElementAncestors(element: Element): Array<Element> {
-  let result = getOverflowAncestors(element).filter((el) =>
-    isElement(el)
+  let result = getOverflowAncestors(element).filter(
+    (el) => isElement(el) && getNodeName(el) !== 'body'
   ) as Array<Element>;
   let currentNode: Node | null = element;
   let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;
