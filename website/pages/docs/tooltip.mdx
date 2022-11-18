@@ -16,8 +16,7 @@ it.
 
 ## Essentials
 
-A fully accessible tooltip widget must fulfill the following
-criteria:
+An accessible tooltip component has the following:
 
 - **Dynamic anchored positioning**: The tooltip will remain
   attached to its reference element and remain in view for the
@@ -29,53 +28,107 @@ criteria:
 - **Role**: The elements are given relevant role and ARIA
   attributes to be accessible to screen readers.
 
-With Floating UI Interactions, all of these can be fulfilled and
-you have full control over how the tooltip is positioned and
-behaves.
+## Examples
 
-## Example
+Both of these examples have sections explaining them in-depth
+below.
+
+- [Basic tooltip](https://codesandbox.io/s/cranky-river-ifx8s9?file=/src/App.tsx)
+- [Reusable tooltip component](https://codesandbox.io/s/jovial-artem-03ndp6?file=/src/App.tsx)
+
+## Basic tooltip
 
 This example demonstrates how to create a tooltip for use in a
 single instance to familiarize yourself with the fundamentals.
 
-(In the next section we'll create a realistic reusable component
-API, which goes more in-depth.)
+Let's walkthrough the example:
 
-[View and play on CodeSandbox](https://codesandbox.io/s/cranky-river-ifx8s9?file=/src/App.tsx)
+### Open state
 
-```js
+```js {4}
+import {useState} from 'react';
+
+function Tooltip() {
+  const [open, setOpen] = useState(false);
+}
+```
+
+The `open{:.const}` state determines whether or not the tooltip
+is currently open on the screen. It is used for conditional
+rendering.
+
+### useFloating hook
+
+The `useFloating(){:js}` hook provides positioning and context
+for our tooltip. We need to pass it some information:
+
+- `open`: The open state from our `useState(){:js}` hook above.
+- `onOpenChange{:.objectKey}`: A callback function that will be
+  called when the tooltip is opened or closed. We'll use this to
+  update our `open{:.const}` state.
+- `middleware{:.objectKey}`: Import and pass middleware to the
+  array that ensure the tooltip remains on the screen, no matter
+  where it ends up being positioned.
+- `whileElementsMounted{:.objectKey}`: Ensure the tooltip remains
+  anchored to the reference element by updating the position when
+  necessary, only while both the reference and floating elements
+  are mounted for performance.
+
+```js /useFloating/
 import {
   useFloating,
   autoUpdate,
   offset,
   flip,
   shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-  FloatingPortal,
 } from '@floating-ui/react-dom-interactions';
 
-function App() {
-  const [open, setOpen] = React.useState(false);
+function Tooltip() {
+  const [open, setOpen] = useState(false);
 
   const {x, y, reference, floating, strategy, context} =
     useFloating({
       open,
       onOpenChange: setOpen,
-      placement: 'top',
-      // Make sure the tooltip stays on the screen
+      middleware: [offset(10), flip(), shift()],
       whileElementsMounted: autoUpdate,
-      middleware: [offset(5), flip(), shift()],
+    });
+}
+```
+
+### Interaction hooks
+
+Interaction hooks return objects containing keys of props that
+enable the tooltip to be opened, closed, or accessible to screen
+readers.
+
+Using the `context{:.const}` that was returned from the hook,
+call the interaction hooks:
+
+```js /context/
+import {
+  // ...
+  useHover,
+  useFocus,
+  useDismiss,
+  useRole,
+  useInteractions,
+} from '@floating-ui/react-dom-interactions';
+
+function Tooltip() {
+  const [open, setOpen] = useState(false);
+
+  const {x, y, reference, floating, strategy, context} =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      middleware: [offset(10), flip(), shift()],
+      whileElementsMounted: autoUpdate,
     });
 
-  // Event listeners to change the open state
   const hover = useHover(context, {move: false});
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
-  // Role props for screen readers
   const role = useRole(context, {role: 'tooltip'});
 
   // Merge all the interactions into prop getters
@@ -85,185 +138,109 @@ function App() {
     dismiss,
     role,
   ]);
+}
+```
 
+- `useHover(){:js}` adds the ability to toggle the tooltip open
+  or closed when the reference element is hovered over. The
+  `move{:.objectKey}` option is set to false so that
+  `mousemove{:.string}` events are ignored.
+- `useFocus(){:js}` adds the ability to toggle the tooltip open
+  or closed when the reference element is focused.
+- `useDismiss(){:js}` adds the ability to dismiss the tooltip
+  when the user presses the `esc` key.
+- `useRole(){:js}` adds the correct ARIA attributes for a
+  `tooltip{:.string}` to the tooltip and reference elements.
+
+Finally, `useInteractions(){:js}` merges all of their props into
+prop getters which can be used for rendering.
+
+### Rendering
+
+Now we have all the variables and hooks set up, we can render out
+our elements.
+
+```js
+function Tooltip() {
+  // ...
   return (
     <>
       <button ref={reference} {...getReferenceProps()}>
-        Hover or focus me
+        Reference element
       </button>
-      <FloatingPortal>
-        {open && (
-          <div
-            ref={floating}
-            style={{
-              // Positioning styles
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-              width: 'max-content',
-            }}
-            {...getFloatingProps()}
-          >
-            I'm a tooltip!
-          </div>
-        )}
-      </FloatingPortal>
+      {open && (
+        <div
+          ref={floating}
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+            width: 'max-content',
+          }}
+          {...getFloatingProps()}
+        >
+          Tooltip element
+        </div>
+      )}
     </>
   );
 }
 ```
 
-## Reusable Component API
+- `{...getReferenceProps()}{:js}` /
+  `{...getFloatingProps()}{:js}` spreads the props from the
+  interaction hooks onto the relevant elements. They contain
+  props like `onMouseEnter{:.keyword}`,
+  `aria-describedby{:.keyword}`, etc.
 
-Now, let's create a reusable component API that can be used in a
-variety of different scenarios more easily.
+## Reusable tooltip component
 
-The following API is inspired by Ariakit and Radix UI. It is not
-the only way you can use Floating UI, but it allows the component
-to be either uncontrolled or controlled, and allows you to read
-state to change styles.
+It is better to create a reusable component API that can be used
+in a variety of different scenarios more easily. We can place all
+of our hooks into a single custom hook for better reusability.
+
+This API, inspired by Ariakit, allows you to:
+
+- Read the open state of the tooltip while rendering
+  (`tooltip.open{:js}`), e.g. to change styles
+- Control the tooltip manually beyond the interaction hooks,
+  `tooltip.setOpen(boolean){:js}`
 
 ```js
 function App() {
-  const state = useTooltipState();
+  const tooltip = useTooltip();
   return (
     <>
-      <TooltipAnchor state={state}>My anchor</TooltipAnchor>
-      <Tooltip state={state}>My tooltip</Tooltip>
+      <TooltipAnchor state={tooltip}>My anchor</TooltipAnchor>
+      <Tooltip state={tooltip}>My tooltip</Tooltip>
     </>
   );
 }
 ```
 
-[View and play on CodeSandbox](https://codesandbox.io/s/jovial-artem-03ndp6?file=/src/App.tsx)
-
 ### Controller hook
 
-This hook is used to control the state of the tooltip. This
-contains the positioning and interactions logic.
+- `useTooltip(){:js}`
 
-```js
-import {
-  useFloating,
-  autoUpdate,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useDismiss,
-  useRole,
-  useInteractions,
-} from '@floating-ui/react-dom-interactions';
-
-function useTooltipState({
-  initialOpen = false,
-  placement = 'top',
-} = {}) {
-  const [open, setOpen] = React.useState(initialOpen);
-
-  const data = useFloating({
-    placement,
-    open,
-    onOpenChange: setOpen,
-    whileElementsMounted: autoUpdate,
-    middleware: [offset(5), flip(), shift()],
-  });
-
-  const context = data.context;
-
-  const hover = useHover(context, {move: false});
-  const focus = useFocus(context);
-  const dismiss = useDismiss(context);
-  const role = useRole(context, {role: 'tooltip'});
-
-  const interactions = useInteractions([
-    hover,
-    focus,
-    dismiss,
-    role,
-  ]);
-
-  return React.useMemo(
-    () => ({
-      open,
-      setOpen,
-      ...interactions,
-      ...data,
-    }),
-    [open, setOpen, interactions, data]
-  );
-}
-```
+This hook is used to control the state of the tooltip, accepting
+configuration options. This contains the positioning and
+interactions logic to be passed to the components.
 
 ### Components
 
-These components read the state and render the appropriate
-elements. We wrap them in `forwardRef(){:js}` and merge the refs
-to ensure all refs are preserved and forwarded to the element. We
-also merge props appropriately.
+The components accept the return value of `useTooltip(){:js}` as
+their `state{:.keyword}` prop. These components read the state
+and render the appropriate elements.
 
-#### TooltipAnchor
+The components must be wrapped in `forwardRef(){:js}` to allow
+refs, and should merge the refs to ensure all refs are preserved
+and forwarded to the element. Props are also merged to prevent
+overwriting.
 
-```js
-const TooltipAnchor = React.forwardRef(function TooltipAnchor(
-  {children, state, asChild, ...props},
-  propRef
-) {
-  const childrenRef = children.ref;
-  const ref = React.useMemo(
-    () => mergeRefs([state.reference, propRef, childrenRef]),
-    [state.reference, propRef, childrenRef]
-  );
-
-  // `asChild` allows the user to pass any element as the anchor
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(
-      children,
-      state.getReferenceProps({ref, ...props, ...children.props})
-    );
-  }
-
-  return (
-    <button ref={ref} {...state.getReferenceProps(props)}>
-      {children}
-    </button>
-  );
-});
-```
-
-#### Tooltip
-
-```js
-const Tooltip = React.forwardRef(function Tooltip(
-  {state, ...props},
-  propRef
-) {
-  const ref = React.useMemo(
-    () => mergeRefs([state.floating, propRef]),
-    [state.floating, propRef]
-  );
-
-  return (
-    <FloatingPortal>
-      {state.open && (
-        <div
-          ref={ref}
-          style={{
-            position: state.strategy,
-            top: state.y ?? 0,
-            left: state.x ?? 0,
-            // Hide during SSR if `initialOpen: true`
-            visibility: state.x == null ? 'hidden' : 'visible',
-            ...props.style,
-          }}
-          {...state.getFloatingProps(props)}
-        />
-      )}
-    </FloatingPortal>
-  );
-});
-```
+- `<TooltipAnchor />{:js}` is the anchor button the tooltip is
+  attached to.
+- `<Tooltip />{:js}` is the tooltip element, which can contain
+  any children (React nodes).
 
 ## Delay groups
 

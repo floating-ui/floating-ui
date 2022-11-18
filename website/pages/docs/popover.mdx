@@ -1,0 +1,355 @@
+<div className="mt-6">
+  <img
+    className="select-none"
+    src="/popover.svg"
+    alt="Popover"
+    width={729}
+    height={200}
+    draggable={false}
+  />
+</div>
+
+A popover is an interactive mini-dialog popup that displays
+information related to an anchor element when the element is
+clicked.
+
+## Essentials
+
+An accessible popover component has the following:
+
+- **Dynamic anchored positioning**: The popover will remain
+  attached to its reference element and remain in view for the
+  user regardless of where it is positioned on the screen.
+- **Events**: When the reference element is clicked, it toggles
+  the popover open or closed.
+- **Dismissal**: When the user presses the `esc` key or outside
+  the popover while the it is open, it closes.
+- **Role**: The elements are given relevant role and ARIA
+  attributes to be accessible to screen readers.
+- **Focus management**: Focus is managed for non-modal or modal
+  behavior.
+
+## Examples
+
+Both of these examples have sections explaining them in-depth
+below.
+
+- [Basic popover](https://codesandbox.io/s/withered-shadow-ot38mm?file=/src/App.tsx)
+- [Reusable popover component](https://codesandbox.io/s/nostalgic-noyce-hj7jqz?file=/src/App.tsx)
+
+## Basic popover
+
+This example demonstrates how to create a popover for use in a
+single instance to familiarize yourself with the fundamentals.
+
+Let's walkthrough the example:
+
+### Open state
+
+```js {4}
+import {useState} from 'react';
+
+function Popover() {
+  const [open, setOpen] = useState(false);
+}
+```
+
+The `open{:.const}` state determines whether or not the popover
+is currently open on the screen. It is used for conditional
+rendering.
+
+### useFloating hook
+
+The `useFloating(){:js}` hook provides positioning and context
+for our popover. We need to pass it some information:
+
+- `open`: The open state from our `useState(){:js}` hook above.
+- `onOpenChange{:.objectKey}`: A callback function that will be
+  called when the popover is opened or closed. We'll use this to
+  update our `open{:.const}` state.
+- `middleware{:.objectKey}`: Import and pass middleware to the
+  array that ensure the popover remains on the screen, no matter
+  where it ends up being positioned.
+- `whileElementsMounted{:.objectKey}`: Ensure the popover remains
+  anchored to the reference element by updating the position when
+  necessary, only while both the reference and floating elements
+  are mounted for performance.
+
+```js /useFloating/
+import {
+  useFloating,
+  autoUpdate,
+  offset,
+  flip,
+  shift,
+} from '@floating-ui/react-dom-interactions';
+
+function Popover() {
+  const [open, setOpen] = useState(false);
+
+  const {x, y, reference, floating, strategy, context} =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      middleware: [offset(10), flip(), shift()],
+      whileElementsMounted: autoUpdate,
+    });
+}
+```
+
+### Interaction hooks
+
+Interaction hooks return objects containing keys of props that
+enable the popover to be opened, closed, or accessible to screen
+readers.
+
+Using the `context{:.const}` that was returned from the hook,
+call the interaction hooks:
+
+```js /context/
+import {
+  // ...
+  useClick,
+  useDismiss,
+  useRole,
+  useInteractions,
+} from '@floating-ui/react-dom-interactions';
+
+function Popover() {
+  const [open, setOpen] = useState(false);
+
+  const {x, y, reference, floating, strategy, context} =
+    useFloating({
+      open,
+      onOpenChange: setOpen,
+      middleware: [offset(10), flip(), shift()],
+      whileElementsMounted: autoUpdate,
+    });
+
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const role = useRole(context);
+
+  // Merge all the interactions into prop getters
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    click,
+    dismiss,
+    role,
+  ]);
+}
+```
+
+- `useClick(){:js}` adds the ability to toggle the popover open
+  or closed when the reference element is clicked.
+- `useDismiss(){:js}` adds the ability to dismiss the popover
+  when the user presses the `esc` key or presses outside of the
+  popover.
+- `useRole(){:js}` adds the correct ARIA attributes for a
+  `dialog{:.string}` to the popover and reference elements.
+
+Finally, `useInteractions(){:js}` merges all of their props into
+prop getters which can be used for rendering.
+
+### Rendering
+
+Now we have all the variables and hooks set up, we can render out
+our elements.
+
+```js
+function Popover() {
+  // ...
+  return (
+    <>
+      <button ref={reference} {...getReferenceProps()}>
+        Reference element
+      </button>
+      {open && (
+        <FloatingFocusManager context={context} modal={false}>
+          <div
+            ref={floating}
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+              width: 'max-content',
+            }}
+            {...getFloatingProps()}
+          >
+            Popover element
+          </div>
+        </FloatingFocusManager>
+      )}
+    </>
+  );
+}
+```
+
+- `{...getReferenceProps()}{:js}` /
+  `{...getFloatingProps()}{:js}` spreads the props from the
+  interaction hooks onto the relevant elements. They contain
+  props like `onClick{:.keyword}`, `aria-expanded{:.keyword}`,
+  etc.
+- `<FloatingFocusManager />{:js}` is a component that manages
+  focus of the popover for non-modal or modal behavior. It should
+  directly wrap the floating element and only be rendered when
+  the popover is also rendered.
+  [FloatingFocusManager docs](/docs/FloatingFocusManager).
+
+### Modal and non-modal behavior
+
+In the above example we used non-modal focus management, but the
+focus management behavior of a popover can be either modal or
+non-modal. They are differentiated as follows:
+
+#### Modal
+
+- The popover and its contents are the only elements that can
+  receive focus. When the popover is open, the user cannot
+  interact with the rest of the page (nor can screen readers)
+  until the popover is closed.
+- Can be portalled.
+- Needs an explicit close button (though, it can be visually
+  hidden).
+
+This behavior is the default:
+
+```js
+<FloatingFocusManager context={context}>
+  <div />
+</FloatingFocusManager>
+```
+
+#### Non-modal
+
+- The popover and its contents can receive focus, but the user
+  can still interact with the rest of the page too.
+- When tabbing outside of it, the popover automatically closes
+  when it loses focus and the next focusable element in the
+  natural DOM order receives focus.
+- Cannot be portalled.
+- Does not need an explicit close button.
+
+This behavior can be configured with the `modal{:.keyword}` prop
+like so:
+
+```js
+<FloatingFocusManager context={context} modal={false}>
+  <div />
+</FloatingFocusManager>
+```
+
+## Reusable popover component
+
+It is better to create a reusable component API that can be used
+in a variety of different scenarios more easily. We can place all
+of our hooks into a single custom hook for better reusability.
+
+This API, inspired by Ariakit, allows you to:
+
+- Read the open state of the popover while rendering
+  (`popover.open{:js}`), e.g. to change styles
+- Control the popover manually beyond the interaction hooks,
+  `popover.setOpen(boolean){:js}`
+
+```js
+function App() {
+  const popover = usePopover();
+  return (
+    <>
+      <PopoverAnchor state={popover}>My anchor</PopoverAnchor>
+      <Popover state={popover}>
+        <PopoverHeading>My popover label</PopoverHeading>
+        <PopoverDescription>
+          My popover description
+        </PopoverDescription>
+        <button onClick={() => popover.setOpen(false)}>
+          Close
+        </button>
+      </Popover>
+    </>
+  );
+}
+```
+
+### Controller hook
+
+- `usePopover(){:js}`
+
+This hook is used to control the state of the popover, accepting
+configuration options. This contains the positioning and
+interactions logic to be passed to the components.
+
+### Components
+
+The components accept the return value of `usePopover(){:js}` as
+their `state{:.keyword}` prop. These components read the state
+and render the appropriate elements.
+
+The components must be wrapped in `forwardRef(){:js}` to allow
+refs, and should merge the refs to ensure all refs are preserved
+and forwarded to the element. Props are also merged to prevent
+overwriting.
+
+- `<PopoverAnchor />{:js}` is the anchor button the popover is
+  attached to.
+- `<Popover />{:js}` is the popover element, which can contain
+  any children (React nodes).
+- `<PopoverHeading />{:js}` (optional) is the heading element for
+  the popover.
+- `<PopoverDescription />{:js}` (optional) is the description
+  element for the popover.
+
+### Nesting
+
+If you have a portalled modal popover, and you want to be able to
+nest it to any depth, then you will want to use
+`<FloatingTree />{:js}` and its related hooks and components.
+
+[View FloatingTree example on CodeSandbox](https://codesandbox.io/s/competent-bose-gov4sy?file=/src/App.tsx)
+
+```js {3-4,22,24,32,40} /nodeId/
+import {
+  useFloatingNodeId,
+  FloatingTree,
+  FloatingNode,
+} from '@floating-ui/react-dom-interactions';
+
+function usePopover() {
+  const nodeId = useFloatingNodeId();
+  const data = useFloating({
+    // ...
+    nodeId,
+  });
+
+  return {
+    // ...
+    nodeId,
+  };
+}
+
+function Popover({state}) {
+  return (
+    <FloatingNode id={state.nodeId}>
+      <div>...</div>
+    </FloatingNode>
+  );
+}
+
+function App() {
+  const rootPopover = usePopover();
+  const childPopover = usePopover();
+  return (
+    <FloatingTree>
+      <PopoverAnchor state={rootPopover}>Root</PopoverAnchor>
+      <Popover state={rootPopover}>
+        <PopoverAnchor state={childPopover}>
+          Nested
+        </PopoverAnchor>
+        <Popover state={childPopover}>Nested</Popover>
+      </Popover>
+    </FloatingTree>
+  );
+}
+```
+
+[View documentation for FloatingTree](/docs/FloatingTree).

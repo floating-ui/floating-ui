@@ -49,6 +49,8 @@ interface Props {
 
 ### listRef
 
+**Required**
+
 default: empty list
 
 A ref that holds an array of list items. You can assign each item
@@ -72,14 +74,12 @@ return options.map((option, index) => (
 
 ### activeIndex
 
+**Required**
+
 default: `null{:js}`
 
-The currently active item index, which may or may not be
-selected.
-
-In a `<Select />{:js}`, this is the item that's currently
-highlighted (focused) but not selected. The user may have intent
-to select this item.
+The currently active (i.e. highlighted or focused) item index,
+which may or may not be selected.
 
 ### onNavigate
 
@@ -89,7 +89,7 @@ Callback invoked when the user navigates, passed in the current
 `activeIndex{:.param}`.
 
 ```js
-const [activeIndex, setActiveIndex] = useState(null);
+const [activeIndex, setActiveIndex] = React.useState(null);
 
 useListNavigation(context, {
   onNavigate: setActiveIndex,
@@ -115,8 +115,7 @@ default: `null{:js}`
 The currently selected item index, which may or may not be
 active.
 
-In a `<Select />{:js}`, this is the item shown in the trigger
-button.
+This is the item shown in the trigger button/input.
 
 ### loop
 
@@ -236,6 +235,12 @@ useListNavigation(context, {
 default: `true{:js}`
 
 Whether hovering an item synchronizes the focus.
+
+```js
+useListNavigation(context, {
+  focusItemOnHover: false,
+});
+```
 
 ### openOnArrowKeyDown
 

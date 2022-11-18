@@ -254,6 +254,18 @@ const nav = [
     title: 'Interactions Examples',
     depth: 1,
   },
+  {
+    url: '/docs/tooltip',
+    title: 'Tooltip',
+    depth: 1,
+    hide: true,
+  },
+  {
+    url: '/docs/popover',
+    title: 'Popover',
+    depth: 1,
+    hide: true,
+  },
   ...interactions,
   {
     url: '/docs/motivation',
@@ -393,6 +405,8 @@ export default function Layout({children}) {
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
 
+  console.log({pathname});
+
   return (
     <MDXProvider components={components}>
       <Head>
@@ -460,70 +474,75 @@ export default function Layout({children}) {
               />
             </div>
             <ul className="text-lg px-6 xl:px-12">
-              {nav.map(({url, title, icon, depth, mono}) => (
-                <li
-                  key={url}
-                  ref={
-                    pathname === url ? activeLinkRef : undefined
-                  }
-                  className={cn('inline-block w-full', {
-                    'pl-4': depth === 1,
-                    'border-l border-solid border-gray-700':
-                      depth === 1,
-                  })}
-                >
-                  <Link href={url}>
-                    <a
-                      href={url}
-                      className={cn(
-                        'block hover:bg-purple-200/20 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
-                        {
-                          'bg-purple-200/10 text-gray-100/90':
-                            pathname === url,
-                          'rounded-tl-none rounded-bl-none':
-                            depth > 0,
-                        }
-                      )}
+              {nav.map(
+                ({url, title, icon, depth, mono, hide}) =>
+                  !hide && (
+                    <li
+                      key={url}
+                      ref={
+                        pathname === url
+                          ? activeLinkRef
+                          : undefined
+                      }
+                      className={cn('inline-block w-full', {
+                        'pl-4': depth === 1,
+                        'border-l border-solid border-gray-700':
+                          depth === 1,
+                      })}
                     >
-                      <span className="flex items-center gap-4 w-full py-1">
-                        {pathname === url && icon ? (
-                          <span
-                            className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-red-400 to-pink-200"
-                            style={{
-                              opacity:
-                                pathname === url ? '1' : '0',
-                              WebkitMaskImage: `url(${icon})`,
-                              maskImage: `url(${icon})`,
-                            }}
-                          />
-                        ) : (
-                          icon && (
-                            <img
-                              className="w-6 h-6"
-                              src={icon}
-                              style={{
-                                display:
-                                  pathname !== url
-                                    ? undefined
-                                    : 'none',
-                              }}
-                            />
-                          )
-                        )}
-                        <span
-                          className={cn('block', {
-                            'font-bold': pathname === url,
-                            'font-mono [font-size:90%]':
-                              mono === true,
-                          })}
+                      <Link href={url}>
+                        <a
+                          href={url}
+                          className={cn(
+                            'block hover:bg-purple-200/20 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
+                            {
+                              'bg-purple-200/10 text-gray-100/90':
+                                pathname === url,
+                              'rounded-tl-none rounded-bl-none':
+                                depth > 0,
+                            }
+                          )}
                         >
-                          {title}
-                        </span>
-                      </span>
-                    </a>
-                  </Link>
-                </li>
-              ))}
+                          <span className="flex items-center gap-4 w-full py-1">
+                            {pathname === url && icon ? (
+                              <span
+                                className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-red-400 to-pink-200"
+                                style={{
+                                  opacity:
+                                    pathname === url ? '1' : '0',
+                                  WebkitMaskImage: `url(${icon})`,
+                                  maskImage: `url(${icon})`,
+                                }}
+                              />
+                            ) : (
+                              icon && (
+                                <img
+                                  className="w-6 h-6"
+                                  src={icon}
+                                  style={{
+                                    display:
+                                      pathname !== url
+                                        ? undefined
+                                        : 'none',
+                                  }}
+                                />
+                              )
+                            )}
+                            <span
+                              className={cn('block', {
+                                'font-bold': pathname === url,
+                                'font-mono [font-size:90%]':
+                                  mono === true,
+                              })}
+                            >
+                              {title}
+                            </span>
+                          </span>
+                        </a>
+                      </Link>
+                    </li>
+                  )
+              )}
             </ul>
           </div>
         </nav>

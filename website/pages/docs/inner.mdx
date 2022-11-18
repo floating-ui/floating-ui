@@ -54,6 +54,7 @@ interface Props extends DetectOverflowOptions {
   index: number;
   offset?: number;
   overflowRef?: React.MutableRefObject<SideObject | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null>;
   referenceOverflowThreshold?: number;
   minItemsVisible?: number;
   onFallbackChange?: (fallback: boolean) => void;
@@ -114,6 +115,15 @@ inner({
   overflowRef,
 });
 ```
+
+### scrollRef
+
+default: `undefined{:js}`
+
+An optional ref containing an `HTMLElement{:.class}`. This may be
+used as the scrolling container instead of the floating element —
+for instance, to position inner elements as direct children
+without being interfered by scrolling layout.
 
 ### referenceOverflowThreshold
 
@@ -180,6 +190,7 @@ inner({
 interface Props extends DetectOverflowOptions {
   enabled?: boolean;
   overflowRef: React.MutableRefObject<SideObject | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null>;
   onChange: (
     offset: number | ((offset: number) => number)
   ) => void;
@@ -220,13 +231,22 @@ useInnerOffset(context, {
 });
 ```
 
+### scrollRef
+
+default: `undefined{:js}`
+
+An optional ref containing an `HTMLElement{:.class}`. This may be
+used as the scrolling container instead of the floating element —
+for instance, to position inner elements as direct children
+without being interfered by scrolling layout.
+
 ### onChange
 
 **Required**
 
 default: no-op
 
-A callback that is invoked when a new offset upon the
+A callback that is invoked with a new offset upon the
 `wheel{:.string}` event to offset the anchoring, and thus expand
 the floating element's height.
 
