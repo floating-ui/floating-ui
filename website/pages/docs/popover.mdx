@@ -35,7 +35,7 @@ Both of these examples have sections explaining them in-depth
 below.
 
 - [Basic popover](https://codesandbox.io/s/withered-shadow-ot38mm?file=/src/App.tsx)
-- [Reusable popover component](https://codesandbox.io/s/nostalgic-noyce-hj7jqz?file=/src/App.tsx)
+- [Reusable popover component](https://codesandbox.io/s/distracted-swirles-jo1pvu?file=/src/App.tsx)
 
 ## Basic popover
 
@@ -242,63 +242,64 @@ like so:
 
 ## Reusable popover component
 
-[CodeSandbox demo](https://codesandbox.io/s/nostalgic-noyce-hj7jqz?file=/src/App.tsx)
+[CodeSandbox demo](https://codesandbox.io/s/distracted-swirles-jo1pvu?file=/src/App.tsx)
 
 It is better to create a reusable component API that can be used
 in a variety of different scenarios more easily. We can place all
-of our hooks into a single custom hook for better reusability.
+of our hooks into a single custom hook for better reusability,
+which is then used by a controller component which encapsulates
+the state.
 
-This API, inspired by Ariakit, allows you to:
+The reusable component can:
 
-- Read the open state of the popover while rendering
-  (`popover.open{:js}`), e.g. to change styles
-- Control the popover manually beyond the interaction hooks,
-  `popover.setOpen(boolean){:js}`
+- Be uncontrolled or controlled
+- Accept any element as the `<PopoverTrigger />{:js}`
+- Read the open state to change styles
 
 ```js
 function App() {
-  const popover = usePopover();
   return (
-    <>
-      <PopoverAnchor state={popover}>My anchor</PopoverAnchor>
-      <Popover state={popover}>
-        <PopoverHeading>My popover label</PopoverHeading>
+    <Popover>
+      <PopoverTrigger>My trigger</PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeading>My popover heading</PopoverHeading>
         <PopoverDescription>
           My popover description
         </PopoverDescription>
-        <button onClick={() => popover.setOpen(false)}>
-          Close
-        </button>
-      </Popover>
-    </>
+        <PopoverClose>Close</PopoverClose>
+      </PopoverContent>
+    </Popover>
   );
 }
 ```
 
-### Controller hook
+### Controller component
 
-- `usePopover(){:js}`
+- `<Popover />{:js}`
 
-This hook is used to control the state of the popover, accepting
-configuration options. This contains the positioning and
-interactions logic to be passed to the components.
+This is the controller component that manages the popover's state
+and provides the API to the rest of the components.
 
-### Components
+### Render components
 
-The components accept the return value of `usePopover(){:js}` as
-their `state{:.keyword}` prop. These components read the state
-and render the appropriate elements.
+These components read the context provided by the root Popover
+component and render the appropriate elements.
 
 The components must be wrapped in `forwardRef(){:js}` to allow
 refs, and should merge the refs to ensure all refs are preserved
 and forwarded to the element. Props are also merged to prevent
 overwriting.
 
-- `<PopoverAnchor />{:js}` is the anchor button the popover is
-  attached to.
-- `<Popover />{:js}` is the popover element, which can contain
-  any children (React nodes).
+- `<PopoverTrigger />{:js}` is the trigger button the popover is
+  attached to. This accepts an `asChild{:.keyword}` prop if you
+  want to attach it to a custom element. It also has a
+  `data-state{:.keyword}` attached to style based on the
+  open/closed state.
+- `<PopoverContent />{:js}` is the popover element, which can
+  contain any children (React nodes).
 - `<PopoverHeading />{:js}` (optional) is the heading element for
   the popover.
 - `<PopoverDescription />{:js}` (optional) is the description
   element for the popover.
+- `<PopoverClose />{:js}` (optional) is the close button for the
+  popover when using modal focus management.

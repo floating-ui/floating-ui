@@ -34,7 +34,7 @@ Both of these examples have sections explaining them in-depth
 below.
 
 - [Basic tooltip](https://codesandbox.io/s/cranky-river-ifx8s9?file=/src/App.tsx)
-- [Reusable tooltip component](https://codesandbox.io/s/jovial-artem-03ndp6?file=/src/App.tsx)
+- [Reusable tooltip component](https://codesandbox.io/s/xenodochial-grass-js3bo9?file=/src/App.tsx)
 
 ## Basic tooltip
 
@@ -197,78 +197,82 @@ function Tooltip() {
 
 ## Reusable tooltip component
 
-[CodeSandbox demo](https://codesandbox.io/s/jovial-artem-03ndp6?file=/src/App.tsx)
+[CodeSandbox demo](https://codesandbox.io/s/xenodochial-grass-js3bo9?file=/src/App.tsx)
 
 It is better to create a reusable component API that can be used
 in a variety of different scenarios more easily. We can place all
-of our hooks into a single custom hook for better reusability.
+of our hooks into a single custom hook for better reusability,
+which is then used by a controller component which encapsulates
+the state.
 
-This API, inspired by Ariakit, allows you to:
+The reusable component can:
 
-- Read the open state of the tooltip while rendering
-  (`tooltip.open{:js}`), e.g. to change styles
-- Control the tooltip manually beyond the interaction hooks,
-  `tooltip.setOpen(boolean){:js}`
+- Be uncontrolled or controlled
+- Accept any element as the `<TooltipTrigger />{:js}`
+- Read the open state to change styles
 
 ```js
 function App() {
-  const tooltip = useTooltip();
   return (
-    <>
-      <TooltipAnchor state={tooltip}>My anchor</TooltipAnchor>
-      <Tooltip state={tooltip}>My tooltip</Tooltip>
-    </>
+    <Tooltip>
+      <TooltipTrigger>My trigger</TooltipTrigger>
+      <TooltipContent>My tooltip</TooltipContent>
+    </Tooltip>
   );
 }
 ```
 
-### Controller hook
+### Controller component
 
-- `useTooltip(){:js}`
+- `<Tooltip />{:js}`
 
-This hook is used to control the state of the tooltip, accepting
-configuration options. This contains the positioning and
-interactions logic to be passed to the components.
+This is the controller component that manages the tooltip's state
+and provides the API to the rest of the components.
 
-### Components
+### Render components
 
-The components accept the return value of `useTooltip(){:js}` as
-their `state{:.keyword}` prop. These components read the state
-and render the appropriate elements.
+These components read the context provided by the root Tooltip
+component and render the appropriate elements.
 
 The components must be wrapped in `forwardRef(){:js}` to allow
 refs, and should merge the refs to ensure all refs are preserved
 and forwarded to the element. Props are also merged to prevent
 overwriting.
 
-- `<TooltipAnchor />{:js}` is the anchor button the tooltip is
-  attached to.
-- `<Tooltip />{:js}` is the tooltip element, which can contain
-  any children (React nodes).
+- `<TooltipTrigger />{:js}` is the trigger button the tooltip is
+  attached to. This accepts an `asChild{:.keyword}` prop if you
+  want to attach it to a custom element. It also has a
+  `data-state{:.keyword}` attached to style based on the
+  open/closed state.
+- `<TooltipContent />{:js}` is the tooltip element, which can
+  contain any children (React nodes).
+
+> Tooltips should not contain interactive content. Use a Popover
+> instead!
 
 ## Delay groups
 
 One of the most useful UX improvements for tooltips is making
 nearby tooltips share a delay.
 
-In the following example, we also wrap the tooltip in a custom
-API.
-
 ```js
 <FloatingDelayGroup delay={200}>
-  <Tooltip label="Unique label 1">
-    <button>Ref 1</button>
+  <Tooltip>
+    <TooltipTrigger>Ref 1</TooltipTrigger>
+    <TooltipContent className="Tooltip">Label 1</TooltipContent>
   </Tooltip>
-  <Tooltip label="Unique label 2">
-    <button>Ref 2</button>
+  <Tooltip>
+    <TooltipTrigger>Ref 2</TooltipTrigger>
+    <TooltipContent className="Tooltip">Label 2</TooltipContent>
   </Tooltip>
-  <Tooltip label="Unique label 3">
-    <button>Ref 3</button>
+  <Tooltip>
+    <TooltipTrigger>Ref 3</TooltipTrigger>
+    <TooltipContent className="Tooltip">Label 3</TooltipContent>
   </Tooltip>
 </FloatingDelayGroup>
 ```
 
-- [CodeSandbox demo](https://codesandbox.io/s/nostalgic-meadow-yq11qq?file=/src/Group.tsx)
+- [CodeSandbox demo](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
 - [FloatingDelayGroup reference](/docs/FloatingDelayGroup)
 
 ## Disabled buttons
