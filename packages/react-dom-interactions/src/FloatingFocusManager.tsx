@@ -1,6 +1,7 @@
 import {hideOthers} from 'aria-hidden';
 import {tabbable} from 'tabbable';
 import * as React from 'react';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import type {FloatingContext, ReferenceType} from './types';
@@ -14,6 +15,15 @@ import {isElement, isHTMLElement} from './utils/is';
 import {isTypeableElement} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
+
+const getDisplayCheck = () =>
+  // JSDOM does not support the `tabbable` library.
+  // ResizeObserver is not supported in JSDOM - also check if it
+  // is polyfilled.
+  typeof ResizeObserver === 'function' &&
+  ResizeObserver.toString().includes('[native code]')
+    ? 'full'
+    : 'none';
 
 function focus(el: HTMLElement | undefined, preventScroll = false) {
   // `mousedown` clicks occur before `focus`, so the button will steal the
@@ -67,7 +77,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           }
 
           if (container && type === 'content') {
-            return tabbable(container, {getShadowRoot: true});
+            return tabbable(container, {
+              getShadowRoot: true,
+              displayCheck: getDisplayCheck(),
+            });
           }
 
           return null;
@@ -281,9 +294,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   React.useEffect(() => {
     if (modal && !guards) {
       const tabIndexValues: Array<string | null> = [];
-      const elements = tabbable(document.body, {getShadowRoot: true}).filter(
-        (el) => !refs.floating.current?.contains(el)
-      );
+      const elements = tabbable(document.body, {
+        getShadowRoot: true,
+        displayCheck: getDisplayCheck(),
+      }).filter((el) => !refs.floating.current?.contains(el));
 
       elements.forEach((el, i) => {
         tabIndexValues[i] = el.getAttribute('tabindex');
@@ -303,12 +317,23 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
   }, [modal, guards, refs]);
 
+  // Synchronize the `modal` value to the FloatingPortal context. It will
+  // decicde whether or not it needs to render its own guards.
+  useLayoutEffect(() => {
+    portalContext?.setModal(modal);
+  }, [portalContext, modal]);
+
   React.useImperativeHandle(portalContext?.managerRef, () => ({
-    handleBeforeOutside: () => {
-      focus(getTabbableElements()[0]);
+    handleBeforeOutside() {
+      const els = getTabbableElements().filter(
+        (el) => el !== refs.domReference.current
+      );
+      focus(els[0]);
     },
-    handleAfterOutside: () => {
-      const els = getTabbableElements();
+    handleAfterOutside() {
+      const els = getTabbableElements().filter(
+        (el) => el !== refs.domReference.current
+      );
       focus(els[els.length - 1]);
     },
   }));

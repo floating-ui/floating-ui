@@ -10,6 +10,7 @@ type ManagerRef = null | {
 
 const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
   beforeInsideRef: React.RefObject<HTMLSpanElement>;
   afterInsideRef: React.RefObject<HTMLSpanElement>;
   beforeOutsideRef: React.RefObject<HTMLSpanElement>;
@@ -59,7 +60,7 @@ export const FloatingPortal = ({
   children,
   id = DEFAULT_ID,
   root = null,
-  preserveTabOrder = false,
+  preserveTabOrder = true,
 }: {
   children?: React.ReactNode;
   id?: string;
@@ -67,6 +68,7 @@ export const FloatingPortal = ({
   preserveTabOrder?: boolean;
 }) => {
   const portalNode = useFloatingPortalNode({id, enabled: !root});
+  const [modal, setModal] = React.useState(true);
 
   const beforeOutsideRef = React.useRef<HTMLSpanElement>(null);
   const afterOutsideRef = React.useRef<HTMLSpanElement>(null);
@@ -74,7 +76,8 @@ export const FloatingPortal = ({
   const afterInsideRef = React.useRef<HTMLSpanElement>(null);
   const managerRef = React.useRef<ManagerRef>(null);
 
-  const renderGuards = !!children && !!(root || portalNode) && preserveTabOrder;
+  const renderGuards =
+    !!children && !!(root || portalNode) && preserveTabOrder && !modal;
 
   return (
     <PortalContext.Provider
@@ -86,6 +89,7 @@ export const FloatingPortal = ({
           beforeInsideRef,
           afterInsideRef,
           managerRef,
+          setModal,
         }),
         [preserveTabOrder]
       )}

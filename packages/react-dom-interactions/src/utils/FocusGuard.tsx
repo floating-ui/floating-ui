@@ -7,9 +7,10 @@ export const FocusGuard = React.forwardRef<
   return (
     <span
       {...props}
-      aria-hidden="true"
       ref={ref}
       tabIndex={0}
+      aria-hidden="true"
+      data-floating-ui-focus-guard=""
       style={{
         position: 'fixed',
         opacity: '0',
