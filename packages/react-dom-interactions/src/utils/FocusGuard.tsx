@@ -1,10 +1,4 @@
 import * as React from 'react';
-import {TYPEABLE_SELECTOR} from './isTypeableElement';
-
-export const SELECTOR =
-  'select:not([disabled]),a[href],button:not([disabled]),[tabindex],' +
-  'iframe,object,embed,area[href],audio[controls],video[controls],' +
-  TYPEABLE_SELECTOR;
 
 export const FocusGuard = React.forwardRef<
   HTMLSpanElement,

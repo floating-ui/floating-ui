@@ -686,6 +686,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onPointerMove() {
           blockPointerLeaveRef.current = false;
         },
+        onBlur(event) {
+          if (event.relatedTarget !== refs.domReference.current) {
+            onNavigate(null);
+          }
+        },
       },
       item: {
         onFocus({currentTarget}) {
