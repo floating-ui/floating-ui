@@ -196,9 +196,9 @@ describe('returnFocus', () => {
   });
 });
 
-describe('endGuard', () => {
+describe('guards', () => {
   test('true', async () => {
-    render(<App endGuard={true} />);
+    render(<App guards={true} />);
 
     fireEvent.click(screen.getByTestId('reference'));
 
@@ -210,33 +210,7 @@ describe('endGuard', () => {
   });
 
   test('false', async () => {
-    render(<App endGuard={false} />);
-
-    fireEvent.click(screen.getByTestId('reference'));
-
-    await userEvent.tab();
-    await userEvent.tab();
-    await userEvent.tab();
-
-    expect(document.body).toHaveFocus();
-  });
-});
-
-describe('endGuard', () => {
-  test('true', async () => {
-    render(<App endGuard={true} />);
-
-    fireEvent.click(screen.getByTestId('reference'));
-
-    await userEvent.tab();
-    await userEvent.tab();
-    await userEvent.tab();
-
-    expect(document.body).not.toHaveFocus();
-  });
-
-  test('false', async () => {
-    render(<App endGuard={false} />);
+    render(<App guards={false} />);
 
     fireEvent.click(screen.getByTestId('reference'));
 
