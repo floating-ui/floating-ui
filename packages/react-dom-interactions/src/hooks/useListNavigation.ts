@@ -686,6 +686,17 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onPointerMove() {
           blockPointerLeaveRef.current = false;
         },
+        onBlur(event) {
+          const lostFocusToGuard =
+            event.relatedTarget?.getAttribute('data-floating-ui-focus-guard') !=
+            null;
+
+          // shift+tab back to the reference element should unset the
+          // `activeIndex`.
+          if (lostFocusToGuard) {
+            onNavigate(null);
+          }
+        },
       },
       item: {
         onFocus({currentTarget}) {
