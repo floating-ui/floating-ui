@@ -103,7 +103,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, events, refs]);
 
   React.useEffect(() => {
-    if (!enabled || !handleCloseRef.current) {
+    if (!enabled || !handleCloseRef.current || !open) {
       return;
     }
 
@@ -118,7 +118,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs, onOpenChange, enabled, handleCloseRef, dataRef, isHoverOpen]);
+  }, [refs, open, onOpenChange, enabled, handleCloseRef, dataRef, isHoverOpen]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
