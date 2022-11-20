@@ -1,5 +1,5 @@
 import {hideOthers} from 'aria-hidden';
-import {tabbable} from 'tabbable';
+import {FocusableElement, tabbable} from 'tabbable';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {usePortalContext} from './FloatingPortal';
@@ -16,18 +16,23 @@ import {isTypeableElement} from './utils/isTypeableElement';
 import {stopEvent} from './utils/stopEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
-const getDisplayCheck = () =>
-  // JSDOM does not support the `tabbable` library.
-  // ResizeObserver is not supported in JSDOM - also check if it
-  // is polyfilled.
-  typeof ResizeObserver === 'function' &&
-  ResizeObserver.toString().includes('[native code]')
-    ? 'full'
-    : 'none';
+const getTabbableOptions = () =>
+  ({
+    getShadowRoot: true,
+    displayCheck:
+      // JSDOM does not support the `tabbable` library. To solve this we can
+      // check if `ResizeObserver` is a real function (not polyfilled), which
+      // determines if the current environment is JSDOM-like.
+      typeof ResizeObserver === 'function' &&
+      ResizeObserver.toString().includes('[native code]')
+        ? 'full'
+        : 'none',
+  } as const);
 
-function focus(el: HTMLElement | undefined, preventScroll = false) {
-  // `mousedown` clicks occur before `focus`, so the button will steal the
-  // focus unless we wait a frame.
+function focus(el?: FocusableElement | null, preventScroll = false) {
+  // Queue the focus to right before paint. Runs after microtasks to wait for
+  // the floating element's position to be ready, and prevent focusable buttons
+  // from stealing focus as `mousedown` clicks occur before `focus`.
   requestAnimationFrame(() => {
     el?.focus({preventScroll});
   });
@@ -77,15 +82,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           }
 
           if (container && type === 'content') {
-            return tabbable(container, {
-              getShadowRoot: true,
-              displayCheck: getDisplayCheck(),
-            });
+            return tabbable(container, getTabbableOptions());
           }
-
-          return null;
         })
-        .flat() as Array<HTMLElement>;
+        .flat() as Array<FocusableElement | undefined>;
     },
     [orderRef, refs]
   );
@@ -292,12 +292,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [getTabbableElements, initialFocus, returnFocus, refs, events]);
 
   React.useEffect(() => {
-    if (modal && !guards) {
+    const floating = refs.floating.current;
+
+    if (modal && !guards && floating) {
       const tabIndexValues: Array<string | null> = [];
-      const elements = tabbable(document.body, {
-        getShadowRoot: true,
-        displayCheck: getDisplayCheck(),
-      }).filter((el) => !refs.floating.current?.contains(el));
+      const options = getTabbableOptions();
+      const allTabbable = tabbable(getDocument(floating).body, options);
+      const floatingTabbable = getTabbableElements();
+
+      // Exclude all tabbable elements that are part of the order
+      const elements = allTabbable.filter(
+        (el) => !floatingTabbable.includes(el)
+      );
 
       elements.forEach((el, i) => {
         tabIndexValues[i] = el.getAttribute('tabindex');
@@ -318,7 +324,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [modal, guards, refs]);
 
   // Synchronize the `modal` value to the FloatingPortal context. It will
-  // decicde whether or not it needs to render its own guards.
+  // decide whether or not it needs to render its own guards.
   useLayoutEffect(() => {
     portalContext?.setModal(modal);
   }, [portalContext, modal]);
@@ -364,13 +370,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
                 focus(els[els.length - 1]);
               }
             } else if (portalContext?.preserveTabOrder) {
-              const els = getTabbableElements(document.body);
-              // @ts-expect-error
-              const index = els.indexOf(portalContext.beforeOutsideRef.current);
-              const prevTabbable = els[index - 1];
-              focus(prevTabbable);
-              if (prevTabbable !== refs.domReference.current) {
-                onOpenChange(false);
+              const els = getTabbableElements(
+                getDocument(refs.floating.current).body
+              );
+              if (portalContext.beforeOutsideRef.current) {
+                const index = els.indexOf(
+                  portalContext.beforeOutsideRef.current
+                );
+                const prevTabbable = els[index - 1];
+                focus(prevTabbable);
+                if (prevTabbable !== refs.domReference.current) {
+                  onOpenChange(false);
+                }
               }
             }
           }}
@@ -393,13 +404,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
             if (modal) {
               focus(getTabbableElements()[0]);
             } else if (portalContext?.preserveTabOrder) {
-              const els = getTabbableElements(document.body);
-              // @ts-expect-error
-              const index = els.indexOf(portalContext.afterOutsideRef.current);
-              const nextTabbable = els[index + 1];
-              focus(nextTabbable);
-              if (nextTabbable !== refs.domReference.current) {
-                onOpenChange(false);
+              const els = getTabbableElements(
+                getDocument(refs.floating.current).body
+              );
+              if (portalContext.afterOutsideRef.current) {
+                const index = els.indexOf(
+                  portalContext.afterOutsideRef.current
+                );
+                const nextTabbable = els[index + 1];
+                focus(nextTabbable);
+                if (nextTabbable !== refs.domReference.current) {
+                  onOpenChange(false);
+                }
               }
             }
           }}

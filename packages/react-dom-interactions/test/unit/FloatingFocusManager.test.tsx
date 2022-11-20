@@ -453,3 +453,197 @@ describe('order', () => {
     cleanup();
   });
 });
+
+describe('non-modal + FloatingPortal', () => {
+  test('focuses inside element, tabbing out focuses last document element', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <span tabIndex={0} data-testid="first" />
+          <button
+            data-testid="reference"
+            ref={reference}
+            onClick={() => setOpen(true)}
+          />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context} modal={false}>
+                <div data-testid="floating" ref={floating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          <span tabIndex={0} data-testid="last" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('inside')).toHaveFocus();
+
+    await userEvent.tab();
+
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    expect(screen.getByTestId('last')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('order: [reference, content] focuses reference, then inside, then, last document element', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <span tabIndex={0} data-testid="first" />
+          <button
+            data-testid="reference"
+            ref={reference}
+            onClick={() => setOpen(true)}
+          />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager
+                context={context}
+                modal={false}
+                order={['reference', 'content']}
+              >
+                <div data-testid="floating" ref={floating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          <span tabIndex={0} data-testid="last" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+
+    expect(screen.getByTestId('inside')).toHaveFocus();
+
+    await userEvent.tab();
+
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    expect(screen.getByTestId('last')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('order: [reference, floating, content] focuses reference, then inside, then, last document element', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <span tabIndex={0} data-testid="first" />
+          <button
+            data-testid="reference"
+            ref={reference}
+            onClick={() => setOpen(true)}
+          />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager
+                context={context}
+                modal={false}
+                order={['reference', 'floating', 'content']}
+              >
+                <div data-testid="floating" ref={floating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          <span tabIndex={0} data-testid="last" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    await userEvent.tab();
+
+    expect(screen.getByTestId('inside')).toHaveFocus();
+
+    await userEvent.tab();
+
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    expect(screen.getByTestId('last')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('shift+tab', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <span tabIndex={0} data-testid="first" />
+          <button
+            data-testid="reference"
+            ref={reference}
+            onClick={() => setOpen(true)}
+          />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context} modal={false}>
+                <div data-testid="floating" ref={floating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          <span tabIndex={0} data-testid="last" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+    await userEvent.tab({shift: true});
+
+    expect(screen.queryByTestId('floating')).toBeInTheDocument();
+
+    await userEvent.tab({shift: true});
+
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+
+    cleanup();
+  });
+});
