@@ -256,8 +256,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     if (typeof initialFocus === 'number') {
-      const el = getTabbableElements()[initialFocus] ?? floating;
-      focus(el, el === floating);
+      if (initialFocus !== -1) {
+        const el = getTabbableElements()[initialFocus] ?? floating;
+        focus(el, el === floating);
+      }
     } else if (isHTMLElement(initialFocus.current)) {
       const el = initialFocus.current ?? floating;
       focus(el, el === floating);
