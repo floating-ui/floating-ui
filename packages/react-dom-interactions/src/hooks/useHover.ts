@@ -10,7 +10,6 @@ import type {
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 import {useLatestRef} from '../utils/useLatestRef';
-import {usePrevious} from '../utils/usePrevious';
 
 interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   (
@@ -71,7 +70,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const parentId = useFloatingParentNodeId();
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
-  const previousOpen = usePrevious(open);
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef<any>();
@@ -339,12 +337,15 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   ]);
 
   useLayoutEffect(() => {
-    if (previousOpen && !open) {
+    if (!open) {
       pointerTypeRef.current = undefined;
       cleanupPointerMoveHandler();
-      clearPointerEvents();
+
+      if (performedPointerEventsMutationRef.current) {
+        clearPointerEvents();
+      }
     }
-  });
+  }, [open]);
 
   React.useEffect(() => {
     return () => {

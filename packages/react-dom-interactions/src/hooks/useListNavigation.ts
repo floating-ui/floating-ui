@@ -7,7 +7,6 @@ import {activeElement} from '../utils/activeElement';
 import {isHTMLElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
-import {usePrevious} from '../utils/usePrevious';
 import {useEvent} from '../utils/useEvent';
 
 const ARROW_UP = 'ArrowUp';
@@ -214,9 +213,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
-  const previousOpen = usePrevious(open);
   const onNavigate = useEvent(unstable_onNavigate);
-  const previousOnNavigate = useEvent(usePrevious(unstable_onNavigate));
 
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
@@ -224,6 +221,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const blockPointerLeaveRef = React.useRef(false);
   const frameRef = React.useRef(-1);
+  const previousOnNavigateRef = React.useRef(onNavigate);
+  const previousOpenRef = React.useRef(open);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -252,33 +251,18 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (
-      !previousOpen &&
-      open &&
-      focusItemOnOpenRef.current &&
-      selectedIndex != null
-    ) {
-      onNavigate(selectedIndex);
-    }
-
-    // Unset `activeIndex`. Since the user can specify `onNavigate`
-    // conditionally (onNavigate: open ? setActiveIndex : setSelectedIndex)
-    // we store and call the previous function
-    if (previousOpen && !open) {
+    if (open) {
+      if (focusItemOnOpenRef.current && selectedIndex != null) {
+        onNavigate(selectedIndex);
+      }
+    } else if (previousOpenRef.current) {
+      // Since the user can specify `onNavigate` conditionally
+      // (onNavigate: open ? setActiveIndex : setSelectedIndex),
+      // we store and call the previous function
       cancelAnimationFrame(frameRef.current);
-      indexRef.current = -1;
-      previousOnNavigate(null);
+      previousOnNavigateRef.current(null);
     }
-  }, [
-    open,
-    previousOpen,
-    selectedIndex,
-    listRef,
-    focusItem,
-    enabled,
-    onNavigate,
-    previousOnNavigate,
-  ]);
+  }, [enabled, open, selectedIndex, listRef, focusItem, onNavigate]);
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
@@ -294,14 +278,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
 
         // Reset while the floating element was open (e.g. the list changed).
-        if (previousOpen) {
+        if (previousOpenRef.current) {
           indexRef.current = -1;
           focusItem(listRef, indexRef);
         }
 
         // Initial sync
         if (
-          !previousOpen &&
+          !previousOpenRef.current &&
           focusItemOnOpenRef.current &&
           (keyRef.current != null ||
             (focusItemOnOpenRef.current === true && keyRef.current == null))
@@ -314,7 +298,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               : getMaxIndex(listRef, disabledIndicesRef.current);
 
           onNavigate(indexRef.current);
-          focusItem(listRef, indexRef);
         }
       } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
         indexRef.current = activeIndex;
@@ -322,19 +305,18 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
     }
   }, [
+    enabled,
     open,
-    previousOpen,
     activeIndex,
     selectedIndex,
     nested,
     listRef,
-    onNavigate,
-    focusItem,
-    enabled,
     allowEscape,
     orientation,
     rtl,
     virtual,
+    onNavigate,
+    focusItem,
     disabledIndicesRef,
   ]);
 
@@ -345,7 +327,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (!open && previousOpen) {
+    if (previousOpenRef.current && !open) {
       const parentFloating = tree?.nodesRef.current.find(
         (node) => node.id === parentId
       )?.context?.refs.floating.current;
@@ -357,10 +339,12 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         parentFloating.focus({preventScroll: true});
       }
     }
-  }, [enabled, open, previousOpen, tree, parentId]);
+  }, [enabled, open, tree, parentId]);
 
   useLayoutEffect(() => {
     keyRef.current = null;
+    previousOnNavigateRef.current = onNavigate;
+    previousOpenRef.current = open;
   });
 
   return React.useMemo(() => {
