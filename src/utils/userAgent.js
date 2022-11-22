@@ -10,7 +10,7 @@ interface NavigatorUAData {
 export default function getUAString(): string {
   const uaData = (navigator: Navigator).userAgentData;
 
-  if (uaData?.brands) {
+  if (uaData?.brands && Array.isArray(uaData.brands)) {
     return uaData.brands
       .map((item) => `${item.brand}/${item.version}`)
       .join(' ');
