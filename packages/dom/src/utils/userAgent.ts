@@ -9,7 +9,7 @@ export function getUAString(): string {
     | NavigatorUAData
     | undefined;
 
-  if (uaData?.brands) {
+  if (uaData && Array.isArray(uaData.brands)) {
     return uaData.brands
       .map((item) => `${item.brand}/${item.version}`)
       .join(' ');
