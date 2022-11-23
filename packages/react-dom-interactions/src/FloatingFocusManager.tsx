@@ -80,7 +80,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   );
 
   const getTabbableElements = React.useCallback(
-    (container: HTMLElement | null = null) => {
+    (container?: HTMLElement) => {
       const tabbableContent = getTabbableContent(container);
 
       let orderArr = orderRef.current;
