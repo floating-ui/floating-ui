@@ -108,7 +108,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
   });
 });
 
-['k'].forEach((hierarchy) => {
+['k', 'l'].forEach((hierarchy) => {
   test(`floating element should resize its height and not be clipped ${hierarchy}`, async ({
     page,
   }) => {

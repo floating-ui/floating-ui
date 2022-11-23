@@ -71,17 +71,16 @@ function getClippingElementAncestors(element: Element): Array<Element> {
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
+    const containingBlock = isContainingBlock(currentNode);
 
-    let shouldDropCurrentNode = !isContainingBlock(currentNode);
-    if (!elementIsFixed) {
-      shouldDropCurrentNode =
-        shouldDropCurrentNode &&
+    const shouldDropCurrentNode = elementIsFixed
+      ? !containingBlock && !currentContainingBlockComputedStyle
+      : !containingBlock &&
         computedStyle.position === 'static' &&
         !!currentContainingBlockComputedStyle &&
         ['absolute', 'fixed'].includes(
           currentContainingBlockComputedStyle.position
         );
-    }
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks

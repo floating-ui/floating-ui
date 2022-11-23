@@ -8,7 +8,7 @@ import {useScroll} from '../utils/useScroll';
 export function Hide() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [hierarchy, setHierarchy] = useState('a');
-  const isSizeHierarchy = ['j', 'k'].includes(hierarchy);
+  const isSizeHierarchy = ['j', 'k', 'l'].includes(hierarchy);
 
   const {
     x,
@@ -220,6 +220,29 @@ export function Hide() {
         </div>
       </div>
     );
+  } else if (hierarchy === 'l') {
+    floatingJsx = (
+      <div
+        style={{
+          overflow: 'hidden',
+          position: 'relative',
+          width: 80,
+          height: 40,
+        }}
+      >
+        <div style={{transform: 'translateZ(0)'}}>
+          <div>
+            <div
+              ref={floating}
+              className="floating"
+              style={{position: strategy, top: y ?? 0, left: x ?? 0}}
+            >
+              Floating
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -251,7 +274,7 @@ export function Hide() {
 
       <h2>Hierarchy</h2>
       <Controls>
-        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'].map(
+        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'].map(
           (localHierarchy) => (
             <button
               key={localHierarchy}
