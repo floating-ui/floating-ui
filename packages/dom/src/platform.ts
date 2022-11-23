@@ -16,7 +16,7 @@ export const platform: Platform = {
   getOffsetParent,
   getDocumentElement,
   async getElementRects({reference, floating, strategy}) {
-    const getOffsetParentFn = this.getOffsetParent ?? getOffsetParent;
+    const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
     const getDimensionsFn = this.getDimensions;
     return {
       reference: getRectRelativeToOffsetParent(
