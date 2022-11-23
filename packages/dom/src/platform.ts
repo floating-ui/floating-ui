@@ -15,14 +15,18 @@ export const platform: Platform = {
   getDimensions,
   getOffsetParent,
   getDocumentElement,
-  getElementRects: ({reference, floating, strategy}) => ({
-    reference: getRectRelativeToOffsetParent(
-      reference,
-      getOffsetParent(floating),
-      strategy
-    ),
-    floating: {...getDimensions(floating), x: 0, y: 0},
-  }),
+  async getElementRects({reference, floating, strategy}) {
+    const getOffsetParentFn = this.getOffsetParent ?? getOffsetParent;
+    const getDimensionsFn = this.getDimensions;
+    return {
+      reference: getRectRelativeToOffsetParent(
+        reference,
+        await getOffsetParentFn(floating),
+        strategy
+      ),
+      floating: {x: 0, y: 0, ...(await getDimensionsFn(floating))},
+    };
+  },
   getClientRects: (element) => Array.from(element.getClientRects()),
   isRTL: (element) => getComputedStyle(element).direction === 'rtl',
 };
