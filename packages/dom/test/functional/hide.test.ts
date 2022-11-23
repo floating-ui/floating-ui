@@ -94,3 +94,29 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     );
   });
 });
+
+['j'].forEach((hierarchy) => {
+  test(`floating element should be square, not resized ${hierarchy}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/hide');
+    await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `square-${hierarchy}.png`
+    );
+  });
+});
+
+['k'].forEach((hierarchy) => {
+  test(`floating element should resize its height and not be clipped ${hierarchy}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/hide');
+    await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `resize-height-${hierarchy}.png`
+    );
+  });
+});

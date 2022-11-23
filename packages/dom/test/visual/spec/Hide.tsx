@@ -1,5 +1,5 @@
 import type {Placement} from '@floating-ui/core';
-import {useFloating, hide} from '@floating-ui/react-dom';
+import {useFloating, hide, size} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
 import {useLayoutEffect, useState} from 'react';
 import {Controls} from '../utils/Controls';
@@ -8,6 +8,7 @@ import {useScroll} from '../utils/useScroll';
 export function Hide() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [hierarchy, setHierarchy] = useState('a');
+  const isSizeHierarchy = ['j', 'k'].includes(hierarchy);
 
   const {
     x,
@@ -19,10 +20,23 @@ export function Hide() {
     refs,
     middlewareData: {hide: {referenceHidden, escaped} = {}},
   } = useFloating({
+    strategy: isSizeHierarchy ? 'fixed' : 'absolute',
     placement,
     middleware: [
       hide({strategy: 'referenceHidden'}),
       hide({strategy: 'escaped'}),
+      size({
+        apply: isSizeHierarchy
+          ? ({elements, availableHeight}) => {
+              Object.assign(elements.floating.style, {
+                maxHeight: `${availableHeight}px`,
+              });
+            }
+          : ({elements}) =>
+              Object.assign(elements.floating.style, {
+                maxHeight: '',
+              }),
+      }),
     ],
   });
 
@@ -30,15 +44,28 @@ export function Hide() {
 
   useLayoutEffect(update, [update, hierarchy]);
 
-  let jsx = null;
-  if (hierarchy === 'a') {
-    jsx = (
-      <div ref={reference} className="reference">
-        Reference
-      </div>
-    );
-  } else if (hierarchy === 'b') {
-    jsx = (
+  let referenceJsx = (
+    <div ref={reference} className="reference">
+      Reference
+    </div>
+  );
+  let floatingJsx = (
+    <div
+      ref={floating}
+      className="floating"
+      style={{
+        position: strategy,
+        top: y ?? '',
+        left: x ?? '',
+        backgroundColor: referenceHidden ? 'black' : escaped ? 'yellow' : '',
+      }}
+    >
+      Floating
+    </div>
+  );
+
+  if (hierarchy === 'b') {
+    referenceJsx = (
       <div style={{overflow: 'hidden', height: 0}}>
         <div style={{position: 'absolute', top: 0, left: 0}}>
           <div ref={reference} className="reference">
@@ -48,7 +75,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'c') {
-    jsx = (
+    referenceJsx = (
       <div style={{overflow: 'scroll', height: 0}}>
         <div style={{overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, left: 0}}>
@@ -60,7 +87,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'd') {
-    jsx = (
+    referenceJsx = (
       <div style={{overflow: 'hidden', height: 0}}>
         <div
           ref={reference}
@@ -72,7 +99,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'e') {
-    jsx = (
+    referenceJsx = (
       <div style={{overflow: 'scroll', height: 0, position: 'relative'}}>
         <div style={{overflow: 'hidden'}}>
           <div style={{position: 'absolute'}}>
@@ -84,7 +111,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'f') {
-    jsx = (
+    referenceJsx = (
       <div
         style={{
           overflow: 'scroll',
@@ -103,7 +130,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'g') {
-    jsx = (
+    referenceJsx = (
       <div style={{overflow: 'scroll', height: 0}}>
         <div style={{overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, left: 0}}>
@@ -117,7 +144,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'h') {
-    jsx = (
+    referenceJsx = (
       <div style={{overflow: 'scroll', height: 0}}>
         <div style={{overflow: 'hidden'}}>
           <div
@@ -133,7 +160,7 @@ export function Hide() {
       </div>
     );
   } else if (hierarchy === 'i') {
-    jsx = (
+    referenceJsx = (
       <div style={{position: 'relative'}}>
         <div style={{overflow: 'hidden'}}>
           <div
@@ -154,6 +181,45 @@ export function Hide() {
         </div>
       </div>
     );
+  } else if (hierarchy === 'j') {
+    floatingJsx = (
+      <div
+        style={{
+          overflow: 'hidden',
+          position: 'relative',
+          width: 80,
+          height: 40,
+        }}
+      >
+        <div
+          ref={floating}
+          className="floating"
+          style={{position: strategy, top: y ?? 0, left: x ?? 0}}
+        >
+          Floating
+        </div>
+      </div>
+    );
+  } else if (hierarchy === 'k') {
+    floatingJsx = (
+      <div
+        style={{
+          overflow: 'hidden',
+          position: 'relative',
+          width: 80,
+          height: 40,
+          transform: 'translateZ(0)',
+        }}
+      >
+        <div
+          ref={floating}
+          className="floating"
+          style={{position: strategy, top: y ?? 0, left: x ?? 0}}
+        >
+          Floating
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -163,23 +229,8 @@ export function Hide() {
       <div className="container" style={{position: 'relative'}}>
         <div className="scroll" ref={scrollRef} data-x>
           {indicator}
-          {jsx}
-          <div
-            ref={floating}
-            className="floating"
-            style={{
-              position: strategy,
-              top: y ?? '',
-              left: x ?? '',
-              backgroundColor: referenceHidden
-                ? 'black'
-                : escaped
-                ? 'yellow'
-                : '',
-            }}
-          >
-            Floating
-          </div>
+          {referenceJsx}
+          {floatingJsx}
         </div>
       </div>
 
@@ -200,18 +251,20 @@ export function Hide() {
 
       <h2>Hierarchy</h2>
       <Controls>
-        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'].map((localHierarchy) => (
-          <button
-            key={localHierarchy}
-            data-testid={`hierarchy-${localHierarchy}`}
-            onClick={() => setHierarchy(localHierarchy)}
-            style={{
-              backgroundColor: localHierarchy === hierarchy ? 'black' : '',
-            }}
-          >
-            {localHierarchy}
-          </button>
-        ))}
+        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'].map(
+          (localHierarchy) => (
+            <button
+              key={localHierarchy}
+              data-testid={`hierarchy-${localHierarchy}`}
+              onClick={() => setHierarchy(localHierarchy)}
+              style={{
+                backgroundColor: localHierarchy === hierarchy ? 'black' : '',
+              }}
+            >
+              {localHierarchy}
+            </button>
+          )
+        )}
       </Controls>
     </>
   );
