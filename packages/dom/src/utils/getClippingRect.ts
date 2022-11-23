@@ -64,21 +64,27 @@ function getClippingElementAncestors(element: Element): Array<Element> {
   let result = getOverflowAncestors(element).filter(
     (el) => isElement(el) && getNodeName(el) !== 'body'
   ) as Array<Element>;
-  let currentNode: Node | null = element;
   let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;
+  const elementIsFixed = getComputedStyle(element).position === 'fixed';
+  let currentNode: Node | null = elementIsFixed
+    ? getParentNode(element)
+    : element;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
+    const containingBlock = isContainingBlock(currentNode);
 
-    if (
-      computedStyle.position === 'static' &&
-      currentContainingBlockComputedStyle &&
-      ['absolute', 'fixed'].includes(
-        currentContainingBlockComputedStyle.position
-      ) &&
-      !isContainingBlock(currentNode)
-    ) {
+    const shouldDropCurrentNode = elementIsFixed
+      ? !containingBlock && !currentContainingBlockComputedStyle
+      : !containingBlock &&
+        computedStyle.position === 'static' &&
+        !!currentContainingBlockComputedStyle &&
+        ['absolute', 'fixed'].includes(
+          currentContainingBlockComputedStyle.position
+        );
+
+    if (shouldDropCurrentNode) {
       // Drop non-containing blocks
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
