@@ -69,9 +69,34 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
   const insidePortal = portalContext != null;
 
-  const getTabbableElements = React.useCallback(
+  const getTabbableContent = React.useCallback(
     (container: HTMLElement | null = refs.floating.current) => {
-      return orderRef.current
+      if (!container) {
+        return [];
+      }
+      return tabbable(container, getTabbableOptions());
+    },
+    [refs]
+  );
+
+  const getTabbableElements = React.useCallback(
+    (container: HTMLElement | null = null) => {
+      const tabbableContent = getTabbableContent(container);
+
+      let orderArr = orderRef.current;
+
+      // Make the floating element focusable if it has no tabbable content
+      // elements. This allows non-modal + portal focus management to work
+      // when shift+tabbing to/from the reference element.
+      if (tabbableContent.length === 0 && !orderArr.includes('floating')) {
+        if (orderArr[0] === 'reference') {
+          orderArr = ['reference', 'floating', ...orderArr.slice(1)];
+        } else if (orderArr[0] === 'content') {
+          orderArr = ['floating', 'content', ...orderArr.slice(1)];
+        }
+      }
+
+      return orderArr
         .map((type) => {
           if (refs.domReference.current && type === 'reference') {
             return refs.domReference.current;
@@ -81,13 +106,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
             return refs.floating.current;
           }
 
-          if (container && type === 'content') {
-            return tabbable(container, getTabbableOptions());
+          if (tabbableContent) {
+            return tabbableContent;
           }
         })
-        .flat() as Array<FocusableElement | undefined>;
+        .filter(Boolean)
+        .flat() as Array<FocusableElement>;
     },
-    [orderRef, refs]
+    [orderRef, refs, getTabbableContent]
   );
 
   React.useEffect(() => {
@@ -95,16 +121,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       return;
     }
 
-    // If the floating element has no focusable elements inside it, fallback
-    // to focusing the floating element and preventing tab navigation
-    const noTabbableContentElements =
-      getTabbableElements().filter(
-        (el) => el !== refs.floating.current && el !== refs.domReference.current
-      ).length === 0;
-
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
-        if (noTabbableContentElements) {
+        // If the floating element has no focusable elements inside it, fallback
+        // to focusing the floating element and preventing tab navigation
+        if (getTabbableContent().length === 0) {
           stopEvent(event);
         }
 
@@ -139,7 +160,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [modal, getTabbableElements, orderRef, refs]);
+  }, [modal, orderRef, refs, getTabbableContent]);
 
   React.useEffect(() => {
     let isPointerDown = false;
