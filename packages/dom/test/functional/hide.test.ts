@@ -95,7 +95,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
   });
 });
 
-['j'].forEach((hierarchy) => {
+['j', 'm'].forEach((hierarchy) => {
   test(`floating element should be square, not resized ${hierarchy}`, async ({
     page,
   }) => {
