@@ -345,7 +345,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         clearPointerEvents();
       }
     }
-  }, [open]);
+  }, [open, cleanupPointerMoveHandler, clearPointerEvents]);
 
   React.useEffect(() => {
     return () => {
