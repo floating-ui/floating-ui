@@ -1,10 +1,12 @@
 import {fireEvent, render, screen, cleanup, act} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 import {
   useListNavigation,
   useFloating,
   useInteractions,
   useClick,
+  useDismiss,
 } from '../../src';
 import type {Props} from '../../src/hooks/useListNavigation';
 import {Main as Grid} from '../visual/components/Grid';
@@ -112,6 +114,135 @@ test('navigates up on ArrowUp', async () => {
   // Reached the end of the list.
   fireEvent.keyDown(screen.getByRole('menu'), {key: 'ArrowUp'});
   expect(screen.getByTestId('item-0')).toHaveFocus();
+
+  cleanup();
+});
+
+test('resets indexRef to -1 upon close', async () => {
+  const data = ['a', 'ab', 'abc', 'abcd'];
+
+  function Autocomplete() {
+    const [open, setOpen] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+    const listRef = useRef<Array<HTMLElement | null>>([]);
+
+    const {x, y, reference, floating, strategy, context, refs} =
+      useFloating<HTMLInputElement>({
+        open,
+        onOpenChange: setOpen,
+      });
+
+    const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
+      [
+        useDismiss(context),
+        useListNavigation(context, {
+          listRef,
+          activeIndex,
+          onNavigate: setActiveIndex,
+          virtual: true,
+          loop: true,
+        }),
+      ]
+    );
+
+    function onChange(event: React.ChangeEvent<HTMLInputElement>) {
+      const value = event.target.value;
+      setInputValue(value);
+
+      if (value) {
+        setActiveIndex(null);
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    }
+
+    const items = data.filter((item) =>
+      item.toLowerCase().startsWith(inputValue.toLowerCase())
+    );
+
+    return (
+      <>
+        <input
+          {...getReferenceProps({
+            ref: reference,
+            onChange,
+            value: inputValue,
+            placeholder: 'Enter fruit',
+            'aria-autocomplete': 'list',
+          })}
+          data-testid="reference"
+        />
+        {open && (
+          <div
+            {...getFloatingProps({
+              ref: floating,
+              style: {
+                position: strategy,
+                left: x ?? '',
+                top: y ?? '',
+                background: '#eee',
+                color: 'black',
+                overflowY: 'auto',
+              },
+            })}
+            data-testid="floating"
+          >
+            <ul>
+              {items.map((item, index) => (
+                <li
+                  {...getItemProps({
+                    key: item,
+                    ref(node) {
+                      listRef.current[index] = node;
+                    },
+                    onClick() {
+                      setInputValue(item);
+                      setOpen(false);
+                      refs.reference.current?.focus();
+                    },
+                  })}
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div data-testid="active-index">{activeIndex}</div>
+      </>
+    );
+  }
+
+  render(<Autocomplete />);
+
+  screen.getByTestId('reference').focus();
+  await userEvent.keyboard('a');
+
+  expect(screen.getByTestId('floating')).toBeInTheDocument();
+  expect(screen.getByTestId('active-index').textContent).toBe('');
+
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}');
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByTestId('active-index').textContent).toBe('2');
+
+  await userEvent.keyboard('{Escape}');
+
+  expect(screen.getByTestId('active-index').textContent).toBe('');
+
+  await userEvent.keyboard('{Backspace}');
+  await userEvent.keyboard('a');
+
+  expect(screen.getByTestId('floating')).toBeInTheDocument();
+  expect(screen.getByTestId('active-index').textContent).toBe('');
+
+  await userEvent.keyboard('{ArrowDown}');
+
+  expect(screen.getByTestId('active-index').textContent).toBe('0');
 
   cleanup();
 });

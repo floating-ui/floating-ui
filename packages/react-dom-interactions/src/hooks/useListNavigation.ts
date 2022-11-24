@@ -260,6 +260,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function
       cancelAnimationFrame(frameRef.current);
+      indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
   }, [enabled, open, selectedIndex, listRef, focusItem, onNavigate]);
