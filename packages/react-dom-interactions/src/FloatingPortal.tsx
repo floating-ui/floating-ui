@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {FocusGuard} from './utils/FocusGuard';
+import {FocusGuard, HIDDEN_STYLES} from './utils/FocusGuard';
 
 type ManagerRef = null | {
   handleBeforeOutside: () => void;
@@ -103,7 +103,7 @@ export const FloatingPortal = ({
         />
       )}
       {renderGuards && (
-        <span aria-owns={portalNode?.id} style={{position: 'fixed'}} />
+        <span aria-owns={portalNode?.id} style={HIDDEN_STYLES} />
       )}
       {root
         ? createPortal(children, root)
