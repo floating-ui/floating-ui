@@ -7,9 +7,7 @@ import {FloatingPortal} from '@floating-ui/react-dom-interactions';
 
 function Tooltip() {
   return (
-    <FloatingPortal>
-      {open && <div>Tooltip</div>}
-    </FloatingPortal>
+    <FloatingPortal>{open && <div>Tooltip</div>}</FloatingPortal>
   );
 }
 ```
@@ -23,6 +21,7 @@ function Tooltip() {
 interface Props {
   id?: string;
   root?: HTMLElement | null;
+  preserveTabOrder?: boolean;
 }
 ```
 
@@ -49,6 +48,14 @@ supports shadow roots.
   {open && <div>Tooltip</div>}
 </FloatingPortal>
 ```
+
+### preserveTabOrder
+
+default: `true{:js}`
+
+When using non-modal focus management using
+`<FloatingFocusManager />{:js}`, this will preserve the tab order
+context based on the React tree instead of the DOM tree.
 
 ## useFloatingPortalNode
 

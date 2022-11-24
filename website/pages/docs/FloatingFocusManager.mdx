@@ -39,7 +39,7 @@ interface Props {
     | number
     | React.MutableRefObject<HTMLElement | null>;
   returnFocus?: boolean;
-  endGuard?: boolean;
+  guards?: boolean;
   modal?: boolean;
 }
 ```
@@ -101,7 +101,8 @@ default: `true{:js}`
 
 Determines if focus should be returned to the element that was
 focused prior to opening the floating element (usually the
-reference element).
+reference element). This prop is ignored if the floating element
+lost focus.
 
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
@@ -109,17 +110,16 @@ reference element).
 </FloatingFocusManager>
 ```
 
-### endGuard
+### guards
 
 default: `true{:js}`
 
-Determines if the end focus guard (after the floating element) is
-rendered. If not, focus can escape into the address bar, like in
-native dialogs. This means the floating element must be portalled
-to the very end of the document.
+Determines if the focus guardsare rendered. If not, focus can
+escape into the address bar/console/browser UI, like in native
+dialogs.
 
 ```js
-<FloatingFocusManager context={context} endGuard={false}>
+<FloatingFocusManager context={context} guards={false}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
@@ -140,8 +140,8 @@ accessed. This includes screen reader virtual cursors.
 
 #### Non-modal behavior
 
-The floating element must be rendered directly after its
-reference element (e.g. not in a FloatingPortal) when non-modal.
+The floating element should be rendered after the reference
+element in the React tree — it can be portalled however.
 
 #### Modal behavior
 
