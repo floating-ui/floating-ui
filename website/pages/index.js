@@ -683,6 +683,7 @@ function HomePage() {
             proudly sponsored by the following organizations,
             consider joining them on{' '}
             <a
+              className="text-blue-300 hover:text-blue-100 decoration-blue-400/60 hover:decoration-blue-200 decoration-2"
               href="https://opencollective.com/floating-ui"
               rel="noopener noreferrer"
             >
