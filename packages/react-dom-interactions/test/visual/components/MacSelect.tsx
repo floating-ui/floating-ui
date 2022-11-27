@@ -19,6 +19,7 @@ import {
 } from '@floating-ui/react-dom-interactions';
 import {useCallback, useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
+import {FloatingPortal} from '../../../src';
 
 import './MacSelect.css';
 
@@ -388,113 +389,120 @@ export function Main() {
             <span aria-hidden="true">{emoji}</span>
             <span>{text}</span>
           </button>
-          {open && (
-            <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
-              <FloatingFocusManager context={context}>
-                <div
-                  ref={floating}
-                  className="MacSelect"
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                  }}
-                  {...getFloatingProps({
-                    onScroll({currentTarget}) {
-                      // In React 18, the ScrollArrows need to synchronously
-                      // know this value to prevent painting at the wrong
-                      // time.
-                      flushSync(() => setScrollTop(currentTarget.scrollTop));
-                    },
-                    onKeyDown() {
-                      setControlledScrolling(true);
-                    },
-                    onPointerMove() {
-                      setControlledScrolling(false);
-                    },
-                    onContextMenu(e) {
-                      e.preventDefault();
-                    },
-                  })}
+          <FloatingPortal>
+            {open && (
+              <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
+                <FloatingFocusManager
+                  context={context}
+                  initialFocus={selectedIndex}
+                  visuallyHiddenDismiss
+                  modal={false}
                 >
-                  {fruits.map((fruit, i) => {
-                    const {emoji, text} = getParts(fruit);
-                    return (
-                      <button
-                        key={fruit}
-                        // Prevent immediate selection on touch devices when
-                        // pressing the ScrollArrows
-                        disabled={blockSelection}
-                        aria-selected={selectedIndex === i}
-                        tabIndex={-1}
-                        role="option"
-                        style={{
-                          background:
-                            activeIndex === i
-                              ? 'rgba(0,200,255,0.2)'
-                              : i === selectedIndex
-                              ? 'rgba(0,0,50,0.05)'
-                              : 'transparent',
-                          fontWeight: i === selectedIndex ? 'bold' : '',
-                        }}
-                        ref={(node) => {
-                          listRef.current[i] = node;
-                          listContentRef.current[i] = text;
-                        }}
-                        {...getItemProps({
-                          onTouchStart() {
-                            allowSelectRef.current = true;
-                            allowMouseUpRef.current = false;
-                          },
-                          onKeyDown() {
-                            allowSelectRef.current = true;
-                          },
-                          onClick() {
-                            if (allowSelectRef.current) {
-                              setSelectedIndex(i);
-                              setOpen(false);
-                            }
-                          },
-                          onMouseUp() {
-                            if (!allowMouseUpRef.current) {
-                              return;
-                            }
-
-                            if (allowSelectRef.current) {
-                              setSelectedIndex(i);
-                              setOpen(false);
-                            }
-
-                            // On touch devices, prevent the element from
-                            // immediately closing `onClick` by deferring it
-                            clearTimeout(selectTimeoutRef.current);
-                            selectTimeoutRef.current = setTimeout(() => {
+                  <div
+                    ref={floating}
+                    className="MacSelect"
+                    style={{
+                      position: strategy,
+                      top: y ?? 0,
+                      left: x ?? 0,
+                    }}
+                    {...getFloatingProps({
+                      onScroll({currentTarget}) {
+                        // In React 18, the ScrollArrows need to synchronously
+                        // know this value to prevent painting at the wrong
+                        // time.
+                        flushSync(() => setScrollTop(currentTarget.scrollTop));
+                      },
+                      onKeyDown() {
+                        setControlledScrolling(true);
+                      },
+                      onPointerMove() {
+                        setControlledScrolling(false);
+                      },
+                      onContextMenu(e) {
+                        e.preventDefault();
+                      },
+                    })}
+                  >
+                    {fruits.map((fruit, i) => {
+                      const {emoji, text} = getParts(fruit);
+                      return (
+                        <button
+                          key={fruit}
+                          // Prevent immediate selection on touch devices when
+                          // pressing the ScrollArrows
+                          disabled={blockSelection}
+                          aria-selected={selectedIndex === i}
+                          tabIndex={-1}
+                          role="option"
+                          style={{
+                            background:
+                              activeIndex === i
+                                ? 'rgba(0,200,255,0.2)'
+                                : i === selectedIndex
+                                ? 'rgba(0,0,50,0.05)'
+                                : 'transparent',
+                            fontWeight: i === selectedIndex ? 'bold' : '',
+                          }}
+                          ref={(node) => {
+                            listRef.current[i] = node;
+                            listContentRef.current[i] = text;
+                          }}
+                          {...getItemProps({
+                            onTouchStart() {
                               allowSelectRef.current = true;
-                            });
-                          },
-                        })}
-                      >
-                        <span aria-hidden="true">{emoji}</span>
-                        <span>{text}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </FloatingFocusManager>
-              {(['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
-                <ScrollArrow
-                  key={dir}
-                  dir={dir}
-                  scrollTop={scrollTop}
-                  arrowRef={dir === 'up' ? upArrowRef : downArrowRef}
-                  floatingRef={refs.floating}
-                  open={open}
-                  onScroll={handleArrowScroll}
-                  onHide={handleArrowHide}
-                />
-              ))}
-            </FloatingOverlay>
-          )}
+                              allowMouseUpRef.current = false;
+                            },
+                            onKeyDown() {
+                              allowSelectRef.current = true;
+                            },
+                            onClick() {
+                              if (allowSelectRef.current) {
+                                setSelectedIndex(i);
+                                setOpen(false);
+                              }
+                            },
+                            onMouseUp() {
+                              if (!allowMouseUpRef.current) {
+                                return;
+                              }
+
+                              if (allowSelectRef.current) {
+                                setSelectedIndex(i);
+                                setOpen(false);
+                              }
+
+                              // On touch devices, prevent the element from
+                              // immediately closing `onClick` by deferring it
+                              clearTimeout(selectTimeoutRef.current);
+                              selectTimeoutRef.current = setTimeout(() => {
+                                allowSelectRef.current = true;
+                              });
+                            },
+                          })}
+                        >
+                          <span aria-hidden="true">{emoji}</span>
+                          <span>{text}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </FloatingFocusManager>
+                {(['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
+                  <ScrollArrow
+                    key={dir}
+                    dir={dir}
+                    scrollTop={scrollTop}
+                    arrowRef={dir === 'up' ? upArrowRef : downArrowRef}
+                    floatingRef={refs.floating}
+                    open={open}
+                    onScroll={handleArrowScroll}
+                    onHide={handleArrowHide}
+                  />
+                ))}
+              </FloatingOverlay>
+            )}
+          </FloatingPortal>
         </div>
       </div>
     </>

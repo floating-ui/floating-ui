@@ -1,5 +1,6 @@
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
+import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
 import {isElement} from './utils/is';
 
@@ -72,7 +73,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // If the pointer is over the reference, there is no need to run the logic
       if (
         event.type === 'pointermove' &&
-        refs.domReference.current?.contains(targetNode)
+        contains(refs.domReference.current, targetNode)
       ) {
         return;
       }
@@ -82,7 +83,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       if (
         event.type === 'mouseleave' &&
         isElement(event.relatedTarget) &&
-        refs.floating.current?.contains(event.relatedTarget)
+        contains(refs.floating.current, event.relatedTarget)
       ) {
         return;
       }
@@ -98,7 +99,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       // The cursor landed, so we destroy the polygon logic
-      if (refs.floating.current?.contains(targetNode) && !leave) {
+      if (contains(refs.floating.current, targetNode) && !leave) {
         polygonIsDestroyed = true;
         return;
       }

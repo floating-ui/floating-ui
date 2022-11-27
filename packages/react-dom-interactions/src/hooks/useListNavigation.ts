@@ -4,10 +4,12 @@ import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {activeElement} from '../utils/activeElement';
-import {isHTMLElement} from '../utils/is';
+import {isHTMLElement, isVirtualEvent} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
 import {useEvent} from '../utils/useEvent';
+import {contains} from '../utils/contains';
+import {enqueueFocus} from '../utils/enqueueFocus';
 
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
@@ -213,6 +215,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
+
   const onNavigate = useEvent(unstable_onNavigate);
 
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
@@ -220,7 +223,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const keyRef = React.useRef<null | string>(null);
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const blockPointerLeaveRef = React.useRef(false);
-  const frameRef = React.useRef(-1);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
 
@@ -231,15 +233,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>
     ) => {
-      // `mousedown` clicks occur before `focus`, so the button will steal the
-      // focus unless we wait a frame.
-      frameRef.current = requestAnimationFrame(() => {
-        if (virtual) {
-          setActiveId(listRef.current[indexRef.current]?.id);
-        } else {
-          listRef.current[indexRef.current]?.focus({preventScroll: true});
-        }
-      });
+      if (virtual) {
+        setActiveId(listRef.current[indexRef.current]?.id);
+      } else {
+        enqueueFocus(listRef.current[indexRef.current], true);
+      }
     },
     [virtual]
   );
@@ -259,7 +257,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function
-      cancelAnimationFrame(frameRef.current);
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
@@ -335,7 +332,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
       if (
         parentFloating &&
-        !parentFloating.contains(activeElement(getDocument(parentFloating)))
+        !contains(parentFloating, activeElement(getDocument(parentFloating)))
       ) {
         parentFloating.focus({preventScroll: true});
       }
@@ -660,6 +657,12 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             }
           }
         },
+        onPointerDown(event) {
+          focusItemOnOpenRef.current = focusItemOnOpen;
+          if (focusItemOnOpen === 'auto' && isVirtualEvent(event.nativeEvent)) {
+            focusItemOnOpenRef.current = true;
+          }
+        },
       },
       floating: {
         'aria-orientation': orientation === 'both' ? undefined : orientation,
@@ -671,22 +674,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onPointerMove() {
           blockPointerLeaveRef.current = false;
         },
-        onBlur(event) {
-          const lostFocusToGuard =
-            event.relatedTarget?.getAttribute('data-floating-ui-focus-guard') !=
-            null;
-
-          // shift+tab back to the reference element should unset the
-          // `activeIndex`.
-          if (lostFocusToGuard) {
-            onNavigate(null);
-          }
-        },
       },
       item: {
         onFocus({currentTarget}) {
           const index = listRef.current.indexOf(currentTarget);
-          if (index !== -1) {
+          if (index !== -1 && activeIndex !== index) {
             onNavigate(index);
           }
         },
@@ -697,7 +689,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             const target = currentTarget as HTMLButtonElement | null;
             if (target) {
               const index = listRef.current.indexOf(target);
-              if (index !== -1) {
+              if (index !== -1 && activeIndex !== index) {
                 onNavigate(index);
               }
             }
@@ -707,11 +699,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               indexRef.current = -1;
               focusItem(listRef, indexRef);
 
-              onNavigate(null);
-              if (!virtual) {
-                requestAnimationFrame(() => {
+              if (activeIndex !== null) {
+                onNavigate(null);
+                if (!virtual) {
                   refs.floating.current?.focus({preventScroll: true});
-                });
+                }
               }
             }
           },
@@ -736,6 +728,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     cols,
     loop,
     refs,
+    focusItemOnOpen,
     focusItem,
     onNavigate,
     onOpenChange,

@@ -70,6 +70,8 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
               onOpenChange(false);
             }
           } else {
+            // Prevent stealing focus from the floating element
+            event.preventDefault();
             onOpenChange(true);
           }
 
@@ -112,7 +114,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           }
 
           if (event.key === ' ' && !isSpaceIgnored(refs.domReference.current)) {
-            // Prvent scrolling
+            // Prevent scrolling
             event.preventDefault();
           }
 
