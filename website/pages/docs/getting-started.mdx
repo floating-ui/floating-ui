@@ -5,21 +5,16 @@ elements like tooltips, popovers, dropdowns, menus, and more.
 
 The library provides two key functionalities:
 
-### 1. Anchored positioning primitives
+### 1. Anchor positioning
 
-Floating UI provides a JavaScript implementation of “anchored
-positioning” — the ability to anchor an element (like a tooltip)
-to another one (like a button) while simultaneously keeping it in
-view as best as possible with collision detection.
+Anchor a floating element (like a tooltip) to another element
+(like a button) while simultaneously ensuring it stays in view as
+best as possible with collision detection.
 
-### 2. User interaction primitives
+### 2. User interactions for React
 
-When creating a popover, dropdown menu, select, or combobox
-component that follows WAI-ARIA authoring practices, the
-complexity increases dramatically. Focus traps, indexed
-navigation, and typeahead are difficult to get right.
-
-This functionality is currently available for React DOM.
+Hooks and components for composing interactions to create
+accessible floating UI components.
 
 ## Install
 
@@ -44,7 +39,7 @@ npm install @floating-ui/react-dom
 
 ### React DOM interactions and positioning
 
-Craft interactions in addition to anchored positioning
+Craft interactions in addition to anchor positioning
 ([view docs](/docs/react-dom-interactions)).
 
 ```shell

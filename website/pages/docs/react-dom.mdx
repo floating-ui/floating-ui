@@ -1,7 +1,7 @@
 # React DOM
 
-This package exports React bindings for the `@floating-ui/dom`
-package — a library that provides “anchored positioning” for a
+This package provides React bindings for the `@floating-ui/dom`
+package — a library that provides "anchor positioning" for a
 floating element to position it next to a given reference
 element.
 
@@ -49,7 +49,7 @@ center** of the `Button` element by default.
 
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
-  effect has fired (i.e. SSR).
+  effect has fired (i.e. during SSR).
 - `reference{:.const}` and `floating{:.const}` are callback refs
   that ensure the position is updated when either element changes
   (e.g. conditional rendering).
@@ -116,24 +116,43 @@ function App() {
 prop to handle mounting/unmounting of the elements, which can be
 useful for other use cases.
 
-> `autoUpdate` is expensive and should only be called when both
-> the reference and floating elements are mounted. If your
-> floating element is NOT conditionally rendered, and instead
-> relies on an `opacity` or `visibility` style for instance, use
-> an effect instead of this prop.
+### autoUpdate performance
 
-Alternatively (or additionally), you may want to update manually
-in some cases. The hook returns an `update(){:js}` function to
-update the position at will:
+`autoUpdate` is expensive because it re-renders the host
+component the `useFloating(){:js}` hook lives in on every single
+scroll or resize event. Therefore you should be mindful of the
+following:
+
+- Try not to call `useFloating(){:js}` in a big complex parent
+  component, especially if it renders a list. Instead, create a
+  new child component that only renders out the reference and
+  floating elements. This will keep the high frequency re-renders
+  scoped to the cheap child component.
+- Ensure you are using conditional rendering for the floating
+  element, not an opacity/visibility/display style. If you are
+  using CSS to hide it, instead of conditional rendering, use an
+  effect to register and clean up `autoUpdate` instead of the
+  `whileElementsMounted{:.objectKey}` prop.
+
+### Manual updating
+
+While `autoUpdate` covers most cases where the position of the
+floating element must be updated, it does not cover every single
+one possible due to performance/platform limitations.
+
+The hook returns an `update(){:js}` function to update the
+position at will:
 
 ```js
 const {update} = useFloating();
+
+<Panel onResize={update} />;
 ```
 
 ## External reference
 
-As `reference{:.const}` is a callback ref, you can call it with
-your external reference element:
+As `reference{:.const}` is a callback ref, you can keep the hook
+synchronized with your external element using a layout effect:
 
 ```js /triggerElement/1-3
 function MyComponent({triggerElement}) {
@@ -179,6 +198,30 @@ const {refs} = useFloating();
 const otherLib = useOtherLib({
   ref: refs.floating, // or refs.reference
 });
+```
+
+## Effects
+
+Positioning is done in an async function, which means the
+position is ready during a microtask, after layout effects are
+executed.
+
+Ensure you wait for the position to be ready inside layout
+effects in order to prevent unwanted scrolling. This can be
+achieved with `requestAnimationFrame(){:js}`.
+
+```js
+useLayoutEffect(() => {
+  if (isFloatingElementRendered) {
+    // Runs after microtasks (positioning) but before paint.
+    requestAnimationFrame(() => {
+      // Position is ready inside here. Unwanted scrolling
+      // will no longer occur.
+      someElement.focus();
+      someElement.scrollIntoView();
+    });
+  }
+}, [isFloatingElementRendered]);
 ```
 
 ## Arrow
@@ -376,27 +419,6 @@ test('example', async () => {
   await act(async () => {});
   // Position is ready, and `act` warning is gone!
 });
-```
-
-### Effects
-
-As the position is calculated asynchronously, if you want to
-perform focus, ensure you wait for the position to be ready in
-order to prevent unwanted scrolling. This can be achieved with
-`useLayoutEffect{:.function}` and
-`requestAnimationFrame{:.function}`.
-
-```js
-useLayoutEffect(() => {
-  if (open) {
-    // Runs after microtasks (position calculation) but before paint.
-    requestAnimationFrame(() => {
-      // Position is now ready!
-      someElement.focus();
-      someElement.scrollIntoView();
-    });
-  }
-}, [open]);
 ```
 
 ## Types

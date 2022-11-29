@@ -3,8 +3,8 @@
 `autoPlacement(){:js}` chooses the placement that has the most
 space available automatically.
 
-You’ll want to use this instead of `flip(){:js}` if you don't
-want to give the floating element a “preferred” placement and let
+You'll want to use this instead of `flip(){:js}` if you don't
+want to give the floating element a "preferred" placement and let
 it choose a placement for you.
 
 <div className="flex flex-col gap-4">
@@ -27,9 +27,12 @@ it choose a placement for you.
   </Chrome>
 </div>
 
-In the above example, the automatic “most space” strategy is
-demonstrated (in contrast to flip’s preferred + fallback “no
-space” one).
+In the above example, the automatic "most space" strategy is
+demonstrated (in contrast to flip's preferred + fallback "no
+space" one).
+
+> This cannot be used alongside `flip(){:js}`. See
+> [Conflict with flip](/docs/autoPlacement#conflict-with-flip).
 
 ## Usage
 
@@ -40,8 +43,6 @@ computePosition(referenceEl, floatingEl, {
   middleware: [autoPlacement()],
 });
 ```
-
-> This cannot be used with `flip(){:js}`.
 
 ## Options
 
@@ -110,3 +111,32 @@ can be passed. For instance:
 ```js
 autoPlacement({padding: 5}); // 0 by default
 ```
+
+## Final placement
+
+The placement returned from the function will let you know which
+placement was chosen.
+
+```js
+computePosition(referenceEl, floatingEl, {
+  middleware: [autoPlacement()],
+}).then(({placement}) => {
+  console.log(placement); // 'top', 'bottom', 'left' or 'right'
+});
+```
+
+## Conflict with flip
+
+`flip(){:js}` and `autoPlacement(){:js}` cannot be used together
+inside the same middleware array, make sure you choose only one
+of them to use.
+
+The reason is they both try to perform work on the placement but
+with opposing strategies. Therefore, they will continually try to
+change the result or work of other one, leading to a reset loop.
+
+- `flip(){:js}` — Uses a fallback "no space" strategy. Ensures
+  the user's preferred placement is kept unless there is no space
+  left.
+- `autoPlacement(){:js}` — Uses a primary "most space" strategy.
+  Always chooses the placement with the most space available.

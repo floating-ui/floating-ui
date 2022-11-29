@@ -1,15 +1,14 @@
 # computePosition
 
-The `computePosition(){:js}` function returns the `x` and `y`
-coordinates to place a floating element next to a given reference
-element.
-
-Together with [autoUpdate](/docs/autoUpdate), the floating
-element remains “anchored” to the reference element.
+This is an async function that computes and returns `x{:.param}`
+and `y{:.param}` coordinates to position a floating element next
+to a reference element. [autoUpdate](/docs/autoUpdate) is used
+with it to ensure the floating element remains "anchored" to its
+reference element.
 
 ## Usage
 
-Floating UI works with two elements:
+The function works with two elements:
 
 - **Reference element** — also known as the anchor element, this
   is the element that is being _referred_ to for positioning.
@@ -24,13 +23,17 @@ Floating UI works with two elements:
 <div id="tooltip">My floating element</div>
 ```
 
-First, give the floating element initial CSS styles so that its
-layout is ready for being measured:
+First, give the floating element initial CSS styles so that it
+becomes an absolutely-positioned element that floats on top of
+the UI with layout ready for being measured:
 
 ```css
 #tooltip {
-  width: max-content;
+  /* Float on top of the UI */
   position: absolute;
+
+  /* Avoid layout interference */
+  width: max-content;
   top: 0;
   left: 0;
 }
@@ -73,13 +76,15 @@ To ensure positioning works smoothly, the dimensions of the
 floating element should not change before and after being
 positioned.
 
-The CSS styles applied before `computePosition(){:js}` is called
-therefore have significance:
+The CSS styles applied **before** `computePosition(){:js}` is
+called therefore have significance:
 
 - `position: absolute{:sass}`
 
-This lets the element float on top of the UI with intrinsic
-dimensions based on the content, instead of acting as a block.
+This makes the element float on top of the UI with intrinsic
+dimensions based on the content, instead of acting as a block,
+allowing the `top{:.objectKey}` and `left{:.objectKey}`
+coodinates to take effect.
 
 - `width: max-content{:sass}` (or a fixed value)
 - `top: 0{:sass}`
@@ -88,6 +93,10 @@ dimensions based on the content, instead of acting as a block.
 These properties prevent the floating element from resizing when
 it overflows a container, removing layout interference that can
 cause incorrect measurements.
+
+This lets you place the floating element anywhere in the DOM tree
+and have it be positioned correctly, regardless of the CSS styles
+of any ancestor containers.
 
 ## Options
 
@@ -103,7 +112,9 @@ computePosition(referenceEl, floatingEl, {
 ### placement
 
 Where to place the floating element relative to its reference
-element. 12 strings are available:
+element. By default, this is `'bottom'{:js}`.
+
+12 strings are available:
 
 ```ts
 type Placement =
@@ -146,56 +157,153 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-Apply `position: fixed{:sass}` to your floating element (instead
-of `position: absolute{:sass}`) prior to the
-`computePosition(){:js}` call.
+Ensure your initial layout matches the strategy:
 
-The `'fixed'{:js}` strategy is useful in two ways:
+```css
+#tooltip {
+  position: fixed;
+}
+```
 
-- Reduces "jumpiness" caused by needing to reposition the
-  floating element continually while scrolling if the reference
-  element is fixed.
-- Breaks the floating element out of a clipping container (make
-  it top-layer on the UI) more frequently than `'absolute'{:js}`
-  will.
+These strategies are differentiated as follows:
+
+- `'absolute'{:js}` — the floating element is positioned relative
+  to the nearest ancestor with a CSS `position{:.function}`
+  property of `relative{:.param}` or `absolute{:.param}`. This is
+  the default strategy. With most layouts, this usually requires
+  the browser to do the least work when updating the position.
+- `'fixed'{:js}` — the floating element is positioned relative to
+  its nearest containing block (usually the viewport). This is
+  useful when the reference element is also fixed to reduce
+  jumpiness with positioning while scrolling. It will in many
+  cases also
+  ["break" the floating element out of a clipping ancestor](/docs/misc#clipping).
 
 ### middleware
 
-`computePosition(){:js}` starts with a basic placement anchor
-position. To modify this, middleware are used.
+When you want granular control over how the floating element is
+positioned, middleware are used. They read the current
+coordinates, optionally alter them, and/or provide data to the
+consumer.
 
-These functions alter the positioning coordinates from the basic
-placement to customize the position, provide data, or act as
-techniques to optimize the visibility of the floating element.
+They compose and work together to produce the final coordinates
+which you receive as `x{:.param}` and `y{:.param}`.
 
 The following are included in the package:
 
-- `offset(){:js}`
-- `shift(){:js}`
-- `flip(){:js}`
-- `arrow(){:js}`
-- `size(){:js}`
-- `autoPlacement(){:js}`
-- `hide(){:js}`
-- `inline(){:js}`
+#### Placement modifiers
 
-These are documented in the navigation bar on the left.
-Importantly, you can also craft your own custom middleware to
-extend the behavior of the library.
+These middleware alter the base placement coordinates.
+
+- [offset](/docs/offset) modifies the placement to add distance
+  or margin between the reference and floating elements.
+
+- [inline](/docs/inline) positions the floating element relative
+  to individual client rects rather than the bounding box for
+  better precision.
+
+#### Visibility optimizers
+
+These middleware alter the coordinates to ensure the floating
+element stays on screen optimally.
+
+- [shift](/docs/shift) prevents the floating element from
+  overflowing a clipping container by shifting it to stay in
+  view.
+
+- [flip](/docs/flip) prevents the floating element from
+  overflowing a clipping container by flipping it to the opposite
+  placement to stay in view.
+
+- [autoPlacement](/docs/autoPlacement) is an alternative to
+  `flip{:.function}` that automatically chooses a placement for
+  you using a "most space" strategy.
+
+- [size](/docs/size) resizes the floating element so it will not
+  overflow a clipping ancestor.
+
+#### Data providers
+
+These middleware provide data and do not alter the coordinates.
+
+- [arrow](/docs/arrow) provides data to position an inner element
+  of the floating element such that it is centered to its
+  reference element.
+
+- [hide](/docs/hide) provides data to hide the floating element
+  in applicable situations when it no longer appears attached to
+  its reference element due to different clipping contexts.
+
+#### Custom
+
+You can also craft your own custom middleware to extend the
+behavior of the library. Read [Middleware](/docs/middleware) to
+learn how to create your own.
+
+#### Conditional
+
+Middleware can be called conditionally inside the array inline
+for ergonomics:
+
+```js
+// The array can accept `false`, `null`, or `undefined`
+// inside of it. They get filtered out.
+type MiddlewareOption = Array<
+  Middleware | false | null | undefined
+>;
+```
+
+Often this is useful for higher-level wrapper functions to avoid
+needing the consumer to import middleware themselves:
+
+```js {5-6}
+function wrapper(referenceEl, floatingEl, options) {
+  computePosition(referenceEl, floatingEl, {
+    ...options,
+    middleware: [
+      options.shouldFlip && flip(),
+      options.arrowEl && arrow({element: arrowEl}),
+    ],
+  });
+}
+```
 
 ## Return value
+
+`computePosition(){:js}` returns the following type:
 
 ```ts
 interface ComputePositionReturn {
   x: number;
   y: number;
-  // The stateful placement, which can be different
-  // from the initial `placement` passed as options
   placement: Placement;
   strategy: Strategy;
   middlewareData: MiddlewareData;
 }
 ```
+
+### x
+
+The x-coordinate of the floating element.
+
+### y
+
+The y-coordinate of the floating element.
+
+### placement
+
+The final placement of the floating element, which may be
+different from the initial or preferred one passed in due to
+middleware modifications. This allows you to know which side the
+floating element is placed at.
+
+### strategy
+
+The CSS position property to use.
+
+### middlewareData
+
+The data returned by any middleware used.
 
 ## Updating
 

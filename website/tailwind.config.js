@@ -107,8 +107,7 @@ module.exports = {
                 backgroundColor: 'rgba(200,200,255,0.2)',
                 padding: '0.2rem 0',
                 borderRadius: '0.25rem',
-                boxShadow:
-                  '-2px 0 0 1px #48485d, 2px 0 0 1px #48485d',
+                boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
                 zIndex: '0',
               },
             },
