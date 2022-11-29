@@ -17,10 +17,11 @@ export const useFloatingTree = <
 /**
  * Registers a node into the floating tree, returning its id.
  */
-export const useFloatingNodeId = (): string => {
+export const useFloatingNodeId = (customParentId?: string): string => {
   const id = useId();
   const tree = useFloatingTree();
-  const parentId = useFloatingParentNodeId();
+  const reactParentId = useFloatingParentNodeId();
+  const parentId = customParentId || reactParentId;
 
   useLayoutEffect(() => {
     const node = {id, parentId};

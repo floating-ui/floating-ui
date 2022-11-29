@@ -25,7 +25,7 @@ export interface Props {
   escapeKey?: boolean;
   referencePress?: boolean;
   referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
-  outsidePress?: boolean;
+  outsidePress?: boolean | ((event: MouseEvent) => boolean);
   outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean;
@@ -79,6 +79,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       insideReactTreeRef.current = false;
 
       if (insideReactTree) {
+        return;
+      }
+
+      if (typeof outsidePress === 'function' && !outsidePress(event)) {
         return;
       }
 

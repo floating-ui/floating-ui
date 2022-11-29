@@ -55,6 +55,13 @@ describe('true', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
   });
+
+  test('outsidePress function guard', async () => {
+    render(<App outsidePress={() => false} />);
+    await userEvent.click(document.body);
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+    cleanup();
+  });
 });
 
 describe('false', () => {
@@ -120,6 +127,13 @@ describe('false', () => {
 
     expect(screen.queryByTestId('portaled-button')).toBeInTheDocument();
 
+    cleanup();
+  });
+
+  test('outsidePress function guard', async () => {
+    render(<App outsidePress={() => true} />);
+    await userEvent.click(document.body);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
   });
 });
