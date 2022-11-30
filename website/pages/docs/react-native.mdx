@@ -27,11 +27,12 @@ function App() {
 
   return (
     <View>
-      <View ref={reference}>
+      <View ref={reference} collapsable={false}>
         <Text>Reference</Text>
       </View>
       <View
         ref={floating}
+        collapsable={false}
         style={{
           position: 'absolute',
           top: y ?? 0,
@@ -45,27 +46,46 @@ function App() {
 }
 ```
 
-`x{:.const}` and `y{:.const}` will be `null{:js}` initially,
-before the layout effect has fired.
+This will position the floating element at the **bottom center**
+of the reference element by default.
+
+- `x{:.const}` and `y{:.const}` are the positioning coordinates.
+  These values are `null{:js}` initially, before the layout
+  effect has fired.
+- `reference{:.const}` and `floating{:.const}` are callback refs
+  that ensure the position is updated when either element changes
+  (e.g. conditional rendering).
+
+> `<View collapsable={false} />{:js}` allows measurements to work
+> on Android.
+> [More info here](https://github.com/facebook/react-native/issues/29712).
+
+## Updating
 
 `useFloating(){:js}` only calculates the position **once** on
 render, or when the reference/floating elements changed.
-Depending on the context in which the floating element lives,
-you'll likely need to update its position in an effect. See
-[Updating](/docs/react-native#updating).
+Depending on the context in which the floating element lives, you
+may need to update its position in an effect.
+
+The hook returns an `update(){:js}` function to update the
+position:
+
+```js
+const {update} = useFloating();
+```
 
 ## External reference
 
-As `reference{:.const}` is a callback ref, you can call it with
-your external reference element:
+As `reference{:.const}` is a callback ref, you can keep the hook
+synchronized with your external element using a layout effect:
 
-```js /triggerRef/1-3
+```js /triggerElement/1-3
 function MyComponent({triggerElement}) {
   const {reference} = useFloating();
 
   useLayoutEffect(() => {
     reference(triggerElement);
-  }, [triggerElement]);
+  }, [reference, triggerElement]);
 }
 ```
 
@@ -84,9 +104,6 @@ const otherLib = useOtherLib({
   ref: refs.floating, // or refs.reference
 });
 ```
-
-> The `reference` and `floating` values returned from the hook
-> are callback refs. Only pass them to an element's `ref` prop.
 
 ## ScrollView
 
@@ -108,13 +125,14 @@ function App() {
   return (
     <View>
       <ScrollView {...scrollProps}>
-        <View ref={reference}>
+        <View ref={reference} collapsable={false}>
           <Text>Reference</Text>
         </View>
       </ScrollView>
 
       <View
         ref={floating}
+        collapsable={false}
         style={{
           position: 'absolute',
           top: y ?? 0,
@@ -146,14 +164,15 @@ function App() {
   return (
     <View>
       <ScrollView>
-        <View ref={reference}>
+        <View ref={reference} collapsable={false}>
           <Text>Reference</Text>
         </View>
       </ScrollView>
 
-      <View ref={offsetParent}>
+      <View ref={offsetParent} collapsable={false}>
         <View
           ref={floating}
+          collapsable={false}
           style={{
             position: 'absolute',
             top: y ?? 0,
@@ -166,27 +185,6 @@ function App() {
     </View>
   );
 }
-```
-
-## Updating
-
-The hook returns an `update(){:js}` function to update the
-position:
-
-```js
-const {update} = useFloating();
-```
-
-In addition, the `refs{:.const}` containing the actual elements
-are passed back:
-
-```js
-const {refs} = useFloating();
-
-// .current will be filled with the element inside an effect
-// refs.reference.current
-// refs.floating.current
-// refs.offsetParent.current
 ```
 
 ## Arrow
@@ -220,6 +218,7 @@ that calls `update(){:js}` after assigning the ref value.
 
 ```js
 <View
+  collapsable={false}
   ref={(node) => {
     arrowRef.current = node;
     update();
