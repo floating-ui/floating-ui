@@ -32,6 +32,7 @@ export const useFloatingPortalNode = ({
 } = {}) => {
   const [portalEl, setPortalEl] = React.useState<HTMLElement | null>(null);
   const uniqueId = useId();
+  const portalContext = usePortalContext();
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -44,15 +45,16 @@ export const useFloatingPortalNode = ({
       setPortalEl(rootNode);
     } else {
       const newPortalEl = document.createElement('div');
-      newPortalEl.id = id ?? uniqueId;
+      newPortalEl.id = id || uniqueId;
       newPortalEl.setAttribute('data-floating-ui-portal', '');
       setPortalEl(newPortalEl);
-      document.body.appendChild(newPortalEl);
+      const container = portalContext?.portalNode || document.body;
+      container.appendChild(newPortalEl);
       return () => {
-        document.body.removeChild(newPortalEl);
+        container.removeChild(newPortalEl);
       };
     }
-  }, [id, uniqueId, enabled]);
+  }, [id, portalContext, uniqueId, enabled]);
 
   return portalEl;
 };

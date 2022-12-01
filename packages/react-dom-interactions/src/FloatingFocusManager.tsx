@@ -177,8 +177,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const floating = refs.floating.current;
     const reference = refs.domReference.current;
 
+    // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
-      getDocument(floating).querySelectorAll('[data-floating-ui-portal]')
+      portalContext?.portalNode?.querySelectorAll(
+        '[data-floating-ui-portal]'
+      ) ?? []
     );
 
     function getGuards() {
