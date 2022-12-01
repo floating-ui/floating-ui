@@ -465,7 +465,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       {typeableCombobox ? null : dismissJsx}
       {React.cloneElement(
         children,
-        tabbableContentLength === 0 ? {tabIndex: 0} : {}
+        tabbableContentLength === 0 || order.includes('floating')
+          ? {tabIndex: 0}
+          : {}
       )}
       {dismissJsx}
       {renderGuards && (
