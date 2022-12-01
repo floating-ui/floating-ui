@@ -5,6 +5,7 @@ import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
 import {isHTMLElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
+import {DismissPayload} from './useDismiss';
 
 export interface Props {
   enabled?: boolean;
@@ -56,8 +57,10 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    function onDismiss() {
-      blockFocusRef.current = true;
+    function onDismiss(payload: DismissPayload) {
+      if (payload.type === 'referencePress') {
+        blockFocusRef.current = true;
+      }
     }
 
     events.on('dismiss', onDismiss);

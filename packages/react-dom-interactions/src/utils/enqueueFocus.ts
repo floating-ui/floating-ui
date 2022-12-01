@@ -4,5 +4,5 @@ export function enqueueFocus(
   el: FocusableElement | null,
   preventScroll?: boolean
 ) {
-  requestAnimationFrame(() => el?.focus({preventScroll}));
+  return requestAnimationFrame(() => el?.focus({preventScroll}));
 }

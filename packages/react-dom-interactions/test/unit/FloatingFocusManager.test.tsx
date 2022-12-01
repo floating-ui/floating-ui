@@ -49,6 +49,9 @@ function App(
           </div>
         </FloatingFocusManager>
       )}
+      <div tabIndex={0} data-testid="last">
+        x
+      </div>
     </>
   );
 }
@@ -268,8 +271,13 @@ describe('modal', () => {
 
     await userEvent.tab();
 
+    // Wait for the setTimeout that wraps onOpenChange(false).
+    await new Promise((resolve) => setTimeout(resolve));
+
     // Focus leaving the floating element closes it.
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('last')).toHaveFocus();
 
     cleanup();
   });
@@ -283,7 +291,7 @@ describe('modal', () => {
     await userEvent.tab({shift: true});
     await userEvent.tab({shift: true});
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).toBeInTheDocument();
 
     cleanup();
   });
@@ -636,6 +644,10 @@ describe('non-modal + FloatingPortal', () => {
     render(<App />);
 
     await userEvent.click(screen.getByTestId('reference'));
+    await userEvent.tab({shift: true});
+
+    expect(screen.queryByTestId('floating')).toBeInTheDocument();
+
     await userEvent.tab({shift: true});
 
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();

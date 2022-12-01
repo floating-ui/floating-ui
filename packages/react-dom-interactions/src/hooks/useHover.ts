@@ -83,6 +83,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return type?.includes('mouse') && type !== 'mousedown';
   }, [dataRef]);
 
+  // When dismissing before opening, clear the delay timeouts to cancel it
+  // from showing.
   React.useEffect(() => {
     if (!enabled) {
       return;

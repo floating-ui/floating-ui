@@ -20,8 +20,10 @@ import {
   isOutsideEvent,
 } from './utils/tabbable';
 import {getChildren} from './utils/getChildren';
+import {getAncestors} from './utils/getAncestors';
 import {enqueueFocus} from './utils/enqueueFocus';
 import {contains} from './utils/contains';
+import {DismissPayload} from './hooks/useDismiss';
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -136,7 +138,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
-        if (getTabbableContent().length === 0) {
+        if (getTabbableContent().length === 0 && !typeableCombobox) {
           stopEvent(event);
         }
 
@@ -171,7 +173,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
-  }, [modal, orderRef, refs, getTabbableContent, getTabbableElements]);
+  }, [
+    modal,
+    orderRef,
+    refs,
+    typeableCombobox,
+    getTabbableContent,
+    getTabbableElements,
+  ]);
 
   React.useEffect(() => {
     const floating = refs.floating.current;
@@ -214,39 +223,26 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       });
     }
 
-    function handleFocusInside(event: FocusEvent) {
-      const relatedTarget = event.relatedTarget as Element | null;
-      const node =
-        tree &&
-        [
-          tree.nodesRef.current.find((node) => node.id === nodeId),
-          ...getChildren(tree.nodesRef.current, nodeId),
-        ].find((node) =>
-          contains(node?.context?.refs.floating.current, relatedTarget)
-        );
-
-      const didHitGuard = getGuards().includes(relatedTarget as HTMLElement);
-
-      if (!modal && didHitGuard) {
-        onOpenChange(false);
-      } else if (node && node.context && initialFocusControlled) {
-        node.context.onOpenChange(false);
-      }
-    }
-
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as Element | null;
+
       const movedToUnrelatedNode = !(
         contains(reference, relatedTarget) ||
         contains(floating, relatedTarget) ||
+        contains(relatedTarget, floating) ||
         getGuards().includes(relatedTarget as Element) ||
         getDismissButtons().includes(relatedTarget as Element) ||
         (tree &&
-          getChildren(tree.nodesRef.current, nodeId).find(
+          (getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
               contains(node.context?.refs.floating.current, relatedTarget) ||
               contains(node.context?.refs.domReference.current, relatedTarget)
-          ))
+          ) ||
+            getAncestors(tree.nodesRef.current, nodeId).find(
+              (node) =>
+                node.context?.refs.floating.current === relatedTarget ||
+                node.context?.refs.domReference.current === relatedTarget
+            )))
       );
 
       // Focus did not move inside the floating tree, and there are no tabbable
@@ -259,7 +255,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         relatedTarget !== previouslyFocusedElementRef.current
       ) {
         preventReturnFocusRef.current = true;
-        onOpenChange(false);
+        // On iOS VoiceOver, dismissing the nested submenu will cause the
+        // first item of the list to receive focus. Delaying it appears to fix
+        // the issue.
+        setTimeout(() => onOpenChange(false));
       }
     }
 
@@ -274,25 +273,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         );
       }
 
-      reference.addEventListener('focus', handleFocusInside);
+      reference.addEventListener('focusout', handleFocusOutside);
+      reference.addEventListener('pointerdown', handlePointerDown);
       !modal && floating.addEventListener('focusout', handleFocusOutside);
 
-      const addReferenceListeners =
-        (!modal || typeableCombobox) && (!portalContext || typeableCombobox);
-
-      if (addReferenceListeners) {
-        reference.addEventListener('focusout', handleFocusOutside);
-        reference.addEventListener('pointerdown', handlePointerDown);
-      }
-
       return () => {
-        reference.removeEventListener('focus', handleFocusInside);
+        reference.removeEventListener('focusout', handleFocusOutside);
+        reference.removeEventListener('pointerdown', handlePointerDown);
         !modal && floating.removeEventListener('focusout', handleFocusOutside);
-
-        if (addReferenceListeners) {
-          reference.removeEventListener('focusout', handleFocusOutside);
-          reference.removeEventListener('pointerdown', handlePointerDown);
-        }
 
         cleanup?.();
       };
@@ -372,14 +360,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
-    function onDismiss(
-      allowReturnFocus: boolean | {preventScroll: boolean} = false
-    ) {
-      if (typeof allowReturnFocus === 'object') {
+    function onDismiss(payload: DismissPayload) {
+      if (payload.type !== 'outsidePress') {
+        return;
+      }
+
+      const returnFocus = payload.data.returnFocus;
+
+      if (typeof returnFocus === 'object') {
         returnFocusValue = true;
-        preventReturnFocusScroll = allowReturnFocus.preventScroll;
+        preventReturnFocusScroll = returnFocus.preventScroll;
       } else {
-        returnFocusValue = allowReturnFocus;
+        returnFocusValue = returnFocus;
       }
     }
 

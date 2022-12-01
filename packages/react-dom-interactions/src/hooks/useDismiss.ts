@@ -20,6 +20,13 @@ const captureHandlerKeys = {
   click: 'onClickCapture',
 };
 
+export interface DismissPayload {
+  type: 'outsidePress' | 'referencePress' | 'escapeKey';
+  data: {
+    returnFocus: boolean | {preventScroll: boolean};
+  };
+}
+
 export interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
@@ -67,7 +74,13 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        events.emit('dismiss', {preventScroll: false});
+        events.emit('dismiss', {
+          type: 'escapeKey',
+          data: {
+            returnFocus: {preventScroll: false},
+          },
+        });
+
         onOpenChange(false);
       }
     }
@@ -135,13 +148,13 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      events.emit(
-        'dismiss',
-        nested
-          ? {preventScroll: true}
-          : // Always return focus for touch screen readers
-            isVirtualEvent(event)
-      );
+      events.emit('dismiss', {
+        type: 'outsidePress',
+        data: {
+          returnFocus: nested ? {preventScroll: true} : isVirtualEvent(event),
+        },
+      });
+
       onOpenChange(false);
     }
 
@@ -225,7 +238,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       reference: {
         [bubbleHandlerKeys[referencePressEvent]]: () => {
           if (referencePress) {
-            events.emit('dismiss');
+            events.emit('dismiss', {type: 'referencePress'});
             onOpenChange(false);
           }
         },

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
@@ -225,6 +226,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const blockPointerLeaveRef = React.useRef(false);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
+  const rafId = React.useRef(0);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -236,10 +238,12 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       if (virtual) {
         setActiveId(listRef.current[indexRef.current]?.id);
       } else {
-        enqueueFocus(listRef.current[indexRef.current], true);
+        cancelAnimationFrame(rafId.current);
+        const item = listRef.current[indexRef.current] || refs.floating.current;
+        rafId.current = enqueueFocus(item, true);
       }
     },
-    [virtual]
+    [virtual, refs]
   );
 
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
@@ -257,6 +261,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function
+      cancelAnimationFrame(rafId.current);
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
@@ -706,11 +711,16 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               indexRef.current = -1;
               focusItem(listRef, indexRef);
 
-              if (activeIndex !== null) {
-                onNavigate(null);
-                if (!virtual) {
-                  refs.floating.current?.focus({preventScroll: true});
-                }
+              // Virtual cursor with VoiceOver on iOS needs this to be flushed
+              // synchronously or there is a glitch that prevents nested
+              // submenus from being accessible.
+              flushSync(() => onNavigate(null));
+
+              if (!virtual) {
+                // This also needs to be sync to prevent fast mouse movements
+                // from leaving behind a stale active item when landing on a
+                // disabled button item.
+                refs.floating.current?.focus({preventScroll: true});
               }
             }
           },
