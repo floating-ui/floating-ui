@@ -7,7 +7,7 @@ import type {
   Strategy,
 } from '@floating-ui/dom';
 import type {UseFloatingReturn as UsePositionFloatingReturn} from '@floating-ui/react-dom';
-import {DismissPayload} from './hooks/useDismiss';
+import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '@floating-ui/dom';
 export * from './';
@@ -23,7 +23,7 @@ interface ExtendedRefs<RT extends ReferenceType = ReferenceType> {
 export interface FloatingEvents {
   emit<T extends string>(
     event: T,
-    data: T extends 'dismiss' ? DismissPayload : any
+    data?: T extends 'dismiss' ? DismissPayload : any
   ): void;
   on(event: string, handler: (data: any) => void): void;
   off(event: string, handler: (data: any) => void): void;
