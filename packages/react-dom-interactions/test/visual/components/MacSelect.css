@@ -7,12 +7,12 @@
     rgb(0 0 0 / 4%) 0px 12.5216px 10.0172px;
   border-radius: 8px;
   box-sizing: border-box;
-  overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
   padding: 5px;
   outline: 0;
   user-select: none;
+  width: 160px;
 }
 
 .MacSelect-button {
@@ -63,7 +63,9 @@
   line-height: 1;
   height: 25px;
   user-select: none;
-  position: relative;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
 }
 
 .MacSelect-ScrollArrow::before {
@@ -87,4 +89,12 @@
   background: linear-gradient(to top, white 50%, transparent);
   border-radius: 0 0 8px 8px;
   top: -10px;
+}
+
+.MacSelect-ScrollArrow[data-dir='up'] {
+  top: 0;
+}
+
+.MacSelect-ScrollArrow[data-dir='down'] {
+  bottom: 0;
 }

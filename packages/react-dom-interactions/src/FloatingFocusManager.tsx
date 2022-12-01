@@ -22,9 +22,14 @@ import {
 import {getChildren} from './utils/getChildren';
 import {enqueueFocus} from './utils/enqueueFocus';
 import {contains} from './utils/contains';
+import {IS_LIST_CONTROLLED_ATTRIBUTE} from './hooks/useListNavigation';
 
 function isListControlled(element: HTMLElement | null) {
-  return element && element.hasAttribute('data-floating-ui-list');
+  return (
+    element &&
+    (element.hasAttribute(IS_LIST_CONTROLLED_ATTRIBUTE) ||
+      element.querySelector(`[${IS_LIST_CONTROLLED_ATTRIBUTE}]`) != null)
+  );
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(

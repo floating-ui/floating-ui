@@ -11,6 +11,8 @@ import {useEvent} from '../utils/useEvent';
 import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
 
+export const IS_LIST_CONTROLLED_ATTRIBUTE = 'data-floating-ui-list';
+
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
@@ -674,7 +676,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       floating: {
         // Marker for the FloatingFocusManager to ignore initialFocus even if
         // not explicitly set to -1.
-        'data-floating-ui-list': '',
+        [IS_LIST_CONTROLLED_ATTRIBUTE]: '',
         'aria-orientation': orientation === 'both' ? undefined : orientation,
         ...(virtual &&
           activeIndex != null && {
