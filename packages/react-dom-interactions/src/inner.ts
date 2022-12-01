@@ -232,7 +232,7 @@ export const useInnerOffset = (
           controlledScrollingRef.current = false;
         },
         onScroll() {
-          const el = refs.floating.current;
+          const el = scrollRef?.current || refs.floating.current;
 
           if (!overflowRef.current || !el || !controlledScrollingRef.current) {
             return;
@@ -256,5 +256,5 @@ export const useInnerOffset = (
         },
       },
     };
-  }, [enabled, overflowRef, refs, onChange]);
+  }, [enabled, overflowRef, refs, scrollRef, onChange]);
 };
