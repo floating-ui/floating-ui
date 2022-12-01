@@ -256,5 +256,5 @@ export const useInnerOffset = (
         },
       },
     };
-  }, [enabled, overflowRef, refs, onChange]);
+  }, [enabled, overflowRef, refs, scrollRef, onChange]);
 };
