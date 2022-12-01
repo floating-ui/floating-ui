@@ -100,11 +100,7 @@ export function Popover({children, render, placement, modal = true}: Props) {
         cloneElement(children, getReferenceProps({ref: reference}))}
       <FloatingPortal>
         {open && (
-          <FloatingFocusManager
-            context={context}
-            modal={modal}
-            order={modal ? undefined : ['reference', 'content']}
-          >
+          <FloatingFocusManager context={context} modal={modal}>
             <div
               {...getFloatingProps({
                 className: 'Popover',

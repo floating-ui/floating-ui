@@ -153,12 +153,12 @@ interface ItemProps {
 }
 
 const Item = forwardRef<
-  HTMLLIElement,
-  ItemProps & React.HTMLProps<HTMLLIElement>
+  HTMLDivElement,
+  ItemProps & React.HTMLProps<HTMLDivElement>
 >(({children, active, ...rest}, ref) => {
   const id = useId();
   return (
-    <li
+    <div
       ref={ref}
       role="option"
       id={id}
@@ -172,7 +172,7 @@ const Item = forwardRef<
       }}
     >
       {children}
-    </li>
+    </div>
   );
 });
 
@@ -202,10 +202,10 @@ export function Main() {
     });
 
   useLayoutEffect(() => {
-    // IMPORTANT: When the floating element first opens, this runs when the
-    // styles have **not yet** been applied to the element. This can cause an
-    // infinite loop as `size` has not yet limited the maxHeight, so the whole
-    // page tries to scroll. We must wrap it in rAF.
+    // IMPORTANT: When the floating element first opens, this effect runs when
+    // the styles have **not yet** been applied to the element. A rAF ensures
+    // we wait until the position is ready, and also runs before paint.
+    // https://floating-ui.com/docs/react-dom#effects
     requestAnimationFrame(() => {
       if (activeIndex != null) {
         listRef.current[activeIndex]?.scrollIntoView({block: 'nearest'});
@@ -222,7 +222,6 @@ export function Main() {
       onNavigate: setActiveIndex,
       virtual: true,
       loop: true,
-      allowEscape: true,
     }),
   ]);
 
@@ -231,8 +230,8 @@ export function Main() {
     setInputValue(value);
 
     if (value) {
-      setActiveIndex(null);
       setOpen(true);
+      setActiveIndex(0);
     } else {
       setOpen(false);
     }
@@ -261,53 +260,43 @@ export function Main() {
               setActiveIndex(null);
               setOpen(false);
             }
-
-            if (event.key === 'Tab') {
-              setOpen(false);
-            }
           },
         })}
       />
-      <FloatingPortal preserveTabOrder={false}>
+      <FloatingPortal>
         {open && (
-          <FloatingFocusManager
-            context={context}
-            initialFocus={-1}
-            visuallyHiddenDismiss
-          >
+          <FloatingFocusManager context={context} visuallyHiddenDismiss>
             <div
               {...getFloatingProps({
                 ref: floating,
                 style: {
                   position: strategy,
-                  left: x ?? '',
-                  top: y ?? '',
+                  left: x ?? 0,
+                  top: y ?? 0,
                   background: '#eee',
                   color: 'black',
                   overflowY: 'auto',
                 },
               })}
             >
-              <ul>
-                {items.map((item, index) => (
-                  <Item
-                    {...getItemProps({
-                      key: item,
-                      ref(node) {
-                        listRef.current[index] = node;
-                      },
-                      onClick() {
-                        setInputValue(item);
-                        setOpen(false);
-                        refs.reference.current?.focus();
-                      },
-                    })}
-                    active={activeIndex === index}
-                  >
-                    {item}
-                  </Item>
-                ))}
-              </ul>
+              {items.map((item, index) => (
+                <Item
+                  {...getItemProps({
+                    key: item,
+                    ref(node) {
+                      listRef.current[index] = node;
+                    },
+                    onClick() {
+                      setInputValue(item);
+                      setOpen(false);
+                      refs.reference.current?.focus();
+                    },
+                  })}
+                  active={activeIndex === index}
+                >
+                  {item}
+                </Item>
+              ))}
             </div>
           </FloatingFocusManager>
         )}

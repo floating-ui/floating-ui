@@ -184,8 +184,6 @@ export const MenuComponent = React.forwardRef<
             modal={!nested}
             // Only return focus to the root menu when menus close.
             returnFocus={!nested}
-            // Let the useListNavigation hook handle initial focus.
-            initialFocus={-1}
             // Ensure touch-based screen readers can escape the list without
             // needing to select anything due to the modal focus management
             // on the root menu.

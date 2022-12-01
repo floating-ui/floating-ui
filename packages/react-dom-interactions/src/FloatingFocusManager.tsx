@@ -23,11 +23,16 @@ import {getChildren} from './utils/getChildren';
 import {enqueueFocus} from './utils/enqueueFocus';
 import {contains} from './utils/contains';
 
-function VisuallyHiddenDismiss(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement>
-) {
-  return <button {...props} tabIndex={-1} style={HIDDEN_STYLES} />;
+function isListControlled(element: HTMLElement | null) {
+  return element && element.hasAttribute('data-floating-ui-list');
 }
+
+const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
+  props: React.ButtonHTMLAttributes<HTMLButtonElement>,
+  ref: React.Ref<HTMLButtonElement>
+) {
+  return <button {...props} ref={ref} tabIndex={-1} style={HIDDEN_STYLES} />;
+});
 
 export interface Props<RT extends ReferenceType = ReferenceType> {
   context: FloatingContext<RT>;
@@ -69,10 +74,21 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     number | null
   >(null);
 
+  const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
+  const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
   const previouslyFocusedElementRef = React.useRef<Element | null>(null);
-
   const insidePortal = portalContext != null;
+
+  // If the reference is a combobox and is typeable (e.g. input/textarea),
+  // there are different focus semantics. The guards should not be rendered, but
+  // aria-hidden should be applied to all nodes still. Further, the visually
+  // hidden dismiss button should only appear at the end of the list, not the
+  // start.
+  const typeableCombobox =
+    domReference &&
+    domReference.getAttribute('role') === 'combobox' &&
+    isTypeableElement(domReference);
 
   const getTabbableContent = React.useCallback(
     (container: HTMLElement | null = refs.floating.current) => {
@@ -132,12 +148,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
-        // If the floating element has no focusable elements inside it, fallback
-        // to focusing the floating element and preventing tab navigation
-        if (getTabbableContent().length === 0) {
-          stopEvent(event);
-        }
-
         const els = getTabbableElements();
         const target = getTarget(event);
 
@@ -192,6 +202,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ).filter(Boolean) as Array<Element>;
     }
 
+    function getDismissButtons() {
+      return [
+        startDismissButtonRef.current,
+        endDismissButtonRef.current,
+      ].filter(Boolean) as Array<Element>;
+    }
+
     let isPointerDown = false;
 
     // In Safari, buttons lose focus when pressing them.
@@ -228,6 +245,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(reference, relatedTarget) ||
         contains(floating, relatedTarget) ||
         getGuards().includes(relatedTarget as Element) ||
+        getDismissButtons().includes(relatedTarget as Element) ||
         (tree &&
           getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
@@ -253,7 +271,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     if (floating && isHTMLElement(reference)) {
       let cleanup: () => void;
       if (modal) {
-        const insideNodes = [floating, ...portalNodes];
+        const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
         cleanup = hideOthers(
           orderRef.current.includes('reference')
             ? insideNodes.concat(reference)
@@ -262,26 +280,23 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       reference.addEventListener('focus', handleFocusInside);
+      !modal && floating.addEventListener('focusout', handleFocusOutside);
 
-      if (!modal) {
-        floating.addEventListener('focusout', handleFocusOutside);
+      const addReferenceListeners =
+        (!modal || typeableCombobox) && (!portalContext || typeableCombobox);
 
-        if (!portalContext) {
-          reference.addEventListener('focusout', handleFocusOutside);
-          reference.addEventListener('pointerdown', handlePointerDown);
-        }
+      if (addReferenceListeners) {
+        reference.addEventListener('focusout', handleFocusOutside);
+        reference.addEventListener('pointerdown', handlePointerDown);
       }
 
       return () => {
         reference.removeEventListener('focus', handleFocusInside);
+        !modal && floating.removeEventListener('focusout', handleFocusOutside);
 
-        if (!modal) {
-          floating.removeEventListener('focusout', handleFocusOutside);
-
-          if (!portalContext) {
-            reference.removeEventListener('focusout', handleFocusOutside);
-            reference.removeEventListener('pointerdown', handlePointerDown);
-          }
+        if (addReferenceListeners) {
+          reference.removeEventListener('focusout', handleFocusOutside);
+          reference.removeEventListener('pointerdown', handlePointerDown);
         }
 
         cleanup?.();
@@ -289,13 +304,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
   }, [
     modal,
-    nodeId,
     initialFocus,
+    nodeId,
     tree,
     orderRef,
     refs,
-    onOpenChange,
     portalContext,
+    typeableCombobox,
+    onOpenChange,
   ]);
 
   React.useEffect(() => {
@@ -360,7 +376,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
-    if (!floating.hasAttribute('data-floating-ui-list')) {
+    if (!isListControlled(floating)) {
       enqueueFocus(elToFocus, elToFocus === floating);
     }
 
@@ -399,7 +415,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [portalContext, modal]);
 
   useLayoutEffect(() => {
-    if (getFocusableContent().length === 0) {
+    if (
+      getFocusableContent().length === 0 &&
+      !isListControlled(refs.floating.current)
+    ) {
       setTabbableContentLength(0);
     }
   }, [getFocusableContent, refs]);
@@ -410,30 +429,25 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     () => context as unknown as FloatingContext
   );
 
-  // If the reference is a combobox and is typeable (e.g. input/textarea),
-  // there are different focus semantics. The guards should not be rendered, but
-  // aria-hidden should be applied to all nodes still. Further, the visually
-  // hidden dismiss button should only appear at the end of the list, not the
-  // start.
-  const typeableCombobox =
-    domReference &&
-    domReference.getAttribute('role') === 'combobox' &&
-    isTypeableElement(domReference);
+  const shouldRenderGuards =
+    guards && (insidePortal || modal) && !typeableCombobox;
 
-  const renderGuards = guards && (insidePortal || modal) && !typeableCombobox;
-
-  const dismissJsx =
-    visuallyHiddenDismiss && modal ? (
-      <VisuallyHiddenDismiss onClick={() => onOpenChange(false)}>
+  function renderDismissButton(location: 'start' | 'end') {
+    return visuallyHiddenDismiss && modal ? (
+      <VisuallyHiddenDismiss
+        ref={location === 'start' ? startDismissButtonRef : endDismissButtonRef}
+        onClick={() => onOpenChange(false)}
+      >
         {typeof visuallyHiddenDismiss === 'string'
           ? visuallyHiddenDismiss
           : 'Dismiss'}
       </VisuallyHiddenDismiss>
     ) : null;
+  }
 
   return (
     <>
-      {renderGuards && (
+      {shouldRenderGuards && (
         <FocusGuard
           ref={portalContext?.beforeInsideRef}
           onFocus={(event) => {
@@ -461,15 +475,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         Ensure the first swipe is the list item. The end of the listbox popup
         will have a dismiss button. 
       */}
-      {typeableCombobox ? null : dismissJsx}
+      {typeableCombobox ? null : renderDismissButton('start')}
       {React.cloneElement(
         children,
         tabbableContentLength === 0 || order.includes('floating')
           ? {tabIndex: 0}
           : {}
       )}
-      {dismissJsx}
-      {renderGuards && (
+      {renderDismissButton('end')}
+      {shouldRenderGuards && (
         <FocusGuard
           ref={portalContext?.afterInsideRef}
           onFocus={(event) => {

@@ -81,7 +81,7 @@ export const FloatingPortal = ({
   const afterInsideRef = React.useRef<HTMLSpanElement>(null);
   const contextRef = React.useRef<FloatingContext>(null);
 
-  const renderGuards =
+  const shouldRenderGuards =
     !!children && !!(root || portalNode) && preserveTabOrder && !modal;
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
@@ -126,7 +126,7 @@ export const FloatingPortal = ({
         [preserveTabOrder, portalNode]
       )}
     >
-      {renderGuards && portalNode && (
+      {shouldRenderGuards && portalNode && (
         <FocusGuard
           ref={beforeOutsideRef}
           onFocus={(event) => {
@@ -141,7 +141,7 @@ export const FloatingPortal = ({
           }}
         />
       )}
-      {renderGuards && portalNode && (
+      {shouldRenderGuards && portalNode && (
         <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
       )}
       {root
@@ -149,7 +149,7 @@ export const FloatingPortal = ({
         : portalNode
         ? createPortal(children, portalNode)
         : null}
-      {renderGuards && portalNode && (
+      {shouldRenderGuards && portalNode && (
         <FocusGuard
           ref={afterOutsideRef}
           onFocus={(event) => {
