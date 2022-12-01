@@ -17,8 +17,9 @@ import {
   offset,
   shift,
 } from '@floating-ui/react-dom-interactions';
-import {useCallback, useLayoutEffect, useRef, useState} from 'react';
+import {useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
+import {FloatingPortal} from '../../../src';
 
 import './MacSelect.css';
 
@@ -48,55 +49,74 @@ const getParts = (fruitString: string) => ({
   emoji: fruitString.slice(0, 3),
   text: fruitString.slice(3),
 });
+// Padding for .scrollTop for when to show the scroll arrow
+const SCROLL_ARROW_PADDING = 10;
 
-function ScrollArrow({
+const shouldShowArrow = (
+  scrollRef: React.MutableRefObject<HTMLDivElement | null>,
+  dir: 'down' | 'up'
+) => {
+  if (scrollRef.current) {
+    const {scrollTop, scrollHeight, clientHeight} = scrollRef.current;
+    if (dir === 'up') {
+      return scrollTop >= SCROLL_ARROW_PADDING;
+    }
+
+    if (dir === 'down') {
+      return scrollTop <= scrollHeight - clientHeight - SCROLL_ARROW_PADDING;
+    }
+  }
+
+  return false;
+};
+
+export function ScrollArrow({
   open,
   dir,
-  floatingRef,
-  arrowRef,
+  scrollRef,
   scrollTop,
   onScroll,
+  innerOffset,
   onHide,
 }: {
   open: boolean;
   dir: 'up' | 'down';
-  floatingRef: React.MutableRefObject<HTMLElement | null>;
-  arrowRef: React.MutableRefObject<HTMLElement | null>;
+  scrollRef: React.MutableRefObject<HTMLDivElement | null>;
   scrollTop: number;
+  innerOffset: number;
   onScroll: (amount: number) => void;
   onHide: () => void;
 }) {
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
-    strategy: 'fixed',
-    placement: dir === 'up' ? 'top' : 'bottom',
-    middleware: [offset(({rects}) => -rects.floating.height)],
-    whileElementsMounted: (...args) =>
-      autoUpdate(...args, {animationFrame: true}),
-  });
-
-  const [element, setElement] = useState<HTMLElement | null>(null);
-  const frameRef = useRef<any>();
+  const [show, setShow] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<number>(-1);
   const statusRef = useRef<'idle' | 'active'>('idle');
-  // Padding for .scrollTop for when to show the scroll arrow
-  const SCROLL_ARROW_PADDING = 10;
 
+  // Updates the visibility state of the arrow when necessary.
   useLayoutEffect(() => {
     if (open) {
-      setElement(floatingRef.current);
-      reference(floatingRef.current);
-      requestAnimationFrame(update);
-    } else {
-      cancelAnimationFrame(frameRef.current);
+      // Wait for the floating element to be positioned, and
+      // the item to be scrolled to.
+      requestAnimationFrame(() => {
+        // Paint arrows immediately in React 18.
+        flushSync(() => {
+          if (statusRef.current !== 'active') {
+            setShow(shouldShowArrow(scrollRef, dir));
+          }
+        });
+      });
     }
-  }, [open, floatingRef, reference, update]);
+  }, [open, innerOffset, scrollTop, scrollRef, dir]);
 
+  // While pressing the scroll arrows on touch devices,
+  // prevent selection once they disappear (lift finger)
   useLayoutEffect(() => {
-    if (refs.floating.current == null && statusRef.current === 'active') {
+    if (!show && statusRef.current === 'active') {
       onHide();
     }
     // Assuming `onHide` does not change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scrollTop, refs]);
+  }, [show, scrollTop]);
 
   useLayoutEffect(() => {
     return () => {
@@ -109,7 +129,7 @@ function ScrollArrow({
     let prevNow = Date.now();
 
     function frame() {
-      if (element) {
+      if (scrollRef.current) {
         const currentNow = Date.now();
         const msElapsed = currentNow - prevNow;
         prevNow = currentNow;
@@ -118,14 +138,16 @@ function ScrollArrow({
 
         const remainingPixels =
           dir === 'up'
-            ? element.scrollTop
-            : element.scrollHeight - element.clientHeight - element.scrollTop;
+            ? scrollRef.current.scrollTop
+            : scrollRef.current.scrollHeight -
+              scrollRef.current.clientHeight -
+              scrollRef.current.scrollTop;
 
         const scrollRemaining =
           dir === 'up'
-            ? element.scrollTop - pixelsToScroll > 0
-            : element.scrollTop + pixelsToScroll <
-              element.scrollHeight - element.clientHeight;
+            ? scrollRef.current.scrollTop - pixelsToScroll > 0
+            : scrollRef.current.scrollTop + pixelsToScroll <
+              scrollRef.current.scrollHeight - scrollRef.current.clientHeight;
 
         onScroll(
           dir === 'up'
@@ -135,6 +157,8 @@ function ScrollArrow({
 
         if (scrollRemaining) {
           frameRef.current = requestAnimationFrame(frame);
+        } else {
+          setShow(shouldShowArrow(scrollRef, dir));
         }
       }
     }
@@ -148,39 +172,15 @@ function ScrollArrow({
     cancelAnimationFrame(frameRef.current);
   };
 
-  const floatingCallback = useCallback(
-    (node: HTMLElement | null) => {
-      floating(node);
-      arrowRef.current = node;
-    },
-    [arrowRef, floating]
-  );
-
-  if (!element) {
-    return null;
-  }
-
-  if (
-    (dir === 'up' && scrollTop < SCROLL_ARROW_PADDING) ||
-    (dir === 'down' &&
-      scrollTop >
-        element.scrollHeight - element.clientHeight - SCROLL_ARROW_PADDING)
-  ) {
-    return null;
-  }
-
   return (
     <div
       className="MacSelect-ScrollArrow"
       data-dir={dir}
-      ref={floatingCallback}
+      ref={ref}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       style={{
-        width: element.offsetWidth - 2,
-        position: strategy,
-        top: y ?? 0,
-        left: x ?? 0,
+        visibility: show ? 'visible' : 'hidden',
       }}
     >
       {dir === 'up' ? '▲' : '▼'}
@@ -191,15 +191,14 @@ function ScrollArrow({
 export function Main() {
   const listRef = useRef<Array<HTMLElement | null>>([]);
   const listContentRef = useRef<Array<string | null>>([]);
-  const overflowRef = useRef<null | SideObject>(null);
+  const overflowRef = useRef<SideObject>(null);
   const allowSelectRef = useRef(false);
   const allowMouseUpRef = useRef(true);
   const selectTimeoutRef = useRef<any>();
-  const upArrowRef = useRef<HTMLDivElement | null>(null);
-  const downArrowRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(12);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [fallback, setFallback] = useState(false);
   const [innerOffset, setInnerOffset] = useState(0);
@@ -211,17 +210,17 @@ export function Main() {
   const {x, y, reference, floating, strategy, context, refs} = useFloating({
     placement: 'bottom-start',
     open,
-    onOpenChange: setOpen,
+    onOpenChange: (open) => {
+      setOpen(open);
+    },
     whileElementsMounted: autoUpdate,
     middleware: fallback
       ? [
           offset(5),
-          ...[
-            touch ? shift({crossAxis: true, padding: 10}) : flip({padding: 10}),
-          ],
+          touch ? shift({crossAxis: true, padding: 10}) : flip({padding: 10}),
           size({
-            apply({elements, availableHeight}) {
-              Object.assign(elements.floating.style, {
+            apply({availableHeight}) {
+              Object.assign(scrollRef.current?.style ?? {}, {
                 maxHeight: `${availableHeight}px`,
               });
             },
@@ -232,6 +231,7 @@ export function Main() {
           inner({
             listRef,
             overflowRef,
+            scrollRef,
             index: selectedIndex,
             offset: innerOffset,
             onFallbackChange: setFallback,
@@ -245,12 +245,13 @@ export function Main() {
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
     useClick(context, {event: 'mousedown'}),
-    useDismiss(context, {outsidePress: false}),
+    useDismiss(context),
     useRole(context, {role: 'listbox'}),
     useInnerOffset(context, {
       enabled: !fallback,
       onChange: setInnerOffset,
       overflowRef,
+      scrollRef,
     }),
     useListNavigation(context, {
       listRef,
@@ -283,66 +284,32 @@ export function Main() {
     }
   }, [open]);
 
-  // Replacement for `useDismiss` as the arrows are outside of the floating
-  // element DOM tree.
-  useLayoutEffect(() => {
-    function onPointerDown(e: PointerEvent) {
-      const target = e.target as Node;
-      if (
-        !refs.floating.current?.contains(target) &&
-        !upArrowRef.current?.contains(target) &&
-        !downArrowRef.current?.contains(target)
-      ) {
-        setOpen(false);
-      }
-    }
-
-    if (open) {
-      document.addEventListener('pointerdown', onPointerDown);
-      return () => {
-        document.removeEventListener('pointerdown', onPointerDown);
-      };
-    }
-  }, [open, refs]);
-
   // Scroll the `activeIndex` item into view only in "controlledScrolling"
   // (keyboard nav) mode.
   useLayoutEffect(() => {
-    if (open && controlledScrolling) {
+    if (open && controlledScrolling && activeIndex != null) {
       requestAnimationFrame(() => {
-        if (activeIndex != null) {
-          listRef.current[activeIndex]?.scrollIntoView({block: 'nearest'});
-        }
+        listRef.current[activeIndex]?.scrollIntoView({block: 'nearest'});
       });
     }
 
-    setScrollTop(refs.floating.current?.scrollTop ?? 0);
+    setScrollTop(scrollRef.current?.scrollTop ?? 0);
   }, [open, refs, controlledScrolling, activeIndex]);
 
   // Scroll the `selectedIndex` into view upon opening the floating element.
   useLayoutEffect(() => {
-    if (open && fallback) {
+    if (open && fallback && selectedIndex != null) {
       requestAnimationFrame(() => {
-        if (selectedIndex != null) {
-          listRef.current[selectedIndex]?.scrollIntoView({block: 'nearest'});
-        }
+        listRef.current[selectedIndex]?.scrollIntoView({block: 'nearest'});
       });
     }
   }, [open, fallback, selectedIndex]);
 
-  // Unset the height limiting for fallback mode. This gets executed prior to
-  // the positioning call.
-  useLayoutEffect(() => {
-    if (refs.floating.current && fallback) {
-      refs.floating.current.style.maxHeight = '';
-    }
-  }, [refs, fallback]);
-
   const handleArrowScroll = (amount: number) => {
     if (fallback) {
-      if (refs.floating.current) {
-        refs.floating.current.scrollTop -= amount;
-        flushSync(() => setScrollTop(refs.floating.current?.scrollTop ?? 0));
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop -= amount;
+        flushSync(() => setScrollTop(scrollRef.current?.scrollTop ?? 0));
       }
     } else {
       flushSync(() => setInnerOffset((value) => value - amount));
@@ -363,139 +330,139 @@ export function Main() {
 
   return (
     <>
-      <h1>Inner</h1>
-      <p>
-        Anchors to an element inside the floating element. Once the user has
-        scrolled the floating element, it will no longer anchor to the item
-        inside of it.
-      </p>
-      <div className="container" style={{width: 350}}>
-        <div className="scroll" style={{position: 'relative'}}>
-          <button
-            ref={reference}
-            className="MacSelect-button"
-            {...getReferenceProps({
-              onTouchStart() {
-                setTouch(true);
-              },
-              onPointerMove({pointerType}) {
-                if (pointerType === 'mouse') {
-                  setTouch(false);
-                }
-              },
-            })}
-          >
-            <span aria-hidden="true">{emoji}</span>
-            <span>{text}</span>
-          </button>
+      <h1>Grid</h1>
+      <div className="container">
+        <button
+          ref={reference}
+          className="MacSelect-button"
+          {...getReferenceProps({
+            onTouchStart() {
+              setTouch(true);
+            },
+            onPointerMove({pointerType}) {
+              if (pointerType === 'mouse') {
+                setTouch(false);
+              }
+            },
+          })}
+        >
+          <span aria-hidden="true">{emoji}</span>
+          <span>{text}</span>
+        </button>
+        <FloatingPortal>
           {open && (
             <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
               <FloatingFocusManager context={context}>
                 <div
                   ref={floating}
-                  className="MacSelect"
                   style={{
-                    position: strategy,
+                    position: x == null ? 'fixed' : strategy,
                     top: y ?? 0,
                     left: x ?? 0,
                   }}
-                  {...getFloatingProps({
-                    onScroll({currentTarget}) {
-                      // In React 18, the ScrollArrows need to synchronously
-                      // know this value to prevent painting at the wrong
-                      // time.
-                      flushSync(() => setScrollTop(currentTarget.scrollTop));
-                    },
-                    onKeyDown() {
-                      setControlledScrolling(true);
-                    },
-                    onPointerMove() {
-                      setControlledScrolling(false);
-                    },
-                    onContextMenu(e) {
-                      e.preventDefault();
-                    },
-                  })}
                 >
-                  {fruits.map((fruit, i) => {
-                    const {emoji, text} = getParts(fruit);
-                    return (
-                      <button
-                        key={fruit}
-                        // Prevent immediate selection on touch devices when
-                        // pressing the ScrollArrows
-                        disabled={blockSelection}
-                        aria-selected={selectedIndex === i}
-                        tabIndex={-1}
-                        role="option"
-                        style={{
-                          background:
-                            activeIndex === i
-                              ? 'rgba(0,200,255,0.2)'
-                              : i === selectedIndex
-                              ? 'rgba(0,0,50,0.05)'
-                              : 'transparent',
-                          fontWeight: i === selectedIndex ? 'bold' : '',
-                        }}
-                        ref={(node) => {
-                          listRef.current[i] = node;
-                          listContentRef.current[i] = text;
-                        }}
-                        {...getItemProps({
-                          onTouchStart() {
-                            allowSelectRef.current = true;
-                            allowMouseUpRef.current = false;
-                          },
-                          onKeyDown() {
-                            allowSelectRef.current = true;
-                          },
-                          onClick() {
-                            if (allowSelectRef.current) {
-                              setSelectedIndex(i);
-                              setOpen(false);
-                            }
-                          },
-                          onMouseUp() {
-                            if (!allowMouseUpRef.current) {
-                              return;
-                            }
-
-                            if (allowSelectRef.current) {
-                              setSelectedIndex(i);
-                              setOpen(false);
-                            }
-
-                            // On touch devices, prevent the element from
-                            // immediately closing `onClick` by deferring it
-                            clearTimeout(selectTimeoutRef.current);
-                            selectTimeoutRef.current = setTimeout(() => {
+                  <div
+                    className="MacSelect"
+                    style={{overflowY: 'auto'}}
+                    ref={scrollRef}
+                    {...getFloatingProps({
+                      onScroll({currentTarget}) {
+                        // In React 18, the ScrollArrows need to synchronously
+                        // know this value to prevent painting at the wrong
+                        // time.
+                        flushSync(() => setScrollTop(currentTarget.scrollTop));
+                      },
+                      onKeyDown() {
+                        setControlledScrolling(true);
+                      },
+                      onPointerMove() {
+                        setControlledScrolling(false);
+                      },
+                      onContextMenu(e) {
+                        e.preventDefault();
+                      },
+                    })}
+                  >
+                    {fruits.map((fruit, i) => {
+                      const {emoji, text} = getParts(fruit);
+                      return (
+                        <button
+                          key={fruit}
+                          // Prevent immediate selection on touch devices when
+                          // pressing the ScrollArrows
+                          disabled={blockSelection}
+                          aria-selected={selectedIndex === i}
+                          role="option"
+                          tabIndex={-1}
+                          style={{
+                            background:
+                              activeIndex === i
+                                ? 'rgba(0,200,255,0.2)'
+                                : i === selectedIndex
+                                ? 'rgba(0,0,50,0.05)'
+                                : 'transparent',
+                            fontWeight: i === selectedIndex ? 'bold' : 'normal',
+                          }}
+                          ref={(node) => {
+                            listRef.current[i] = node;
+                            listContentRef.current[i] = text;
+                          }}
+                          {...getItemProps({
+                            onTouchStart() {
                               allowSelectRef.current = true;
-                            });
-                          },
-                        })}
-                      >
-                        <span aria-hidden="true">{emoji}</span>
-                        <span>{text}</span>
-                      </button>
-                    );
-                  })}
+                              allowMouseUpRef.current = false;
+                            },
+                            onKeyDown() {
+                              allowSelectRef.current = true;
+                            },
+                            onClick() {
+                              if (allowSelectRef.current) {
+                                setSelectedIndex(i);
+                                setOpen(false);
+                              }
+                            },
+                            onMouseUp() {
+                              if (!allowMouseUpRef.current) {
+                                return;
+                              }
+
+                              if (allowSelectRef.current) {
+                                setSelectedIndex(i);
+                                setOpen(false);
+                              }
+
+                              // On touch devices, prevent the element from
+                              // immediately closing `onClick` by deferring it
+                              clearTimeout(selectTimeoutRef.current);
+                              selectTimeoutRef.current = setTimeout(() => {
+                                allowSelectRef.current = true;
+                              });
+                            },
+                          })}
+                        >
+                          <span aria-hidden="true">{emoji}</span>
+                          <span>{text}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {(['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
+                    <ScrollArrow
+                      key={dir}
+                      dir={dir}
+                      scrollTop={scrollTop}
+                      scrollRef={scrollRef}
+                      innerOffset={innerOffset}
+                      open={open}
+                      onScroll={handleArrowScroll}
+                      onHide={handleArrowHide}
+                    />
+                  ))}
                 </div>
               </FloatingFocusManager>
-              {(['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
-                <ScrollArrow
-                  key={dir}
-                  dir={dir}
-                  scrollTop={scrollTop}
-                  arrowRef={dir === 'up' ? upArrowRef : downArrowRef}
-                  floatingRef={refs.floating}
-                  open={open}
-                  onScroll={handleArrowScroll}
-                  onHide={handleArrowHide}
-                />
-              ))}
             </FloatingOverlay>
           )}
-        </div>
+        </FloatingPortal>
       </div>
     </>
   );

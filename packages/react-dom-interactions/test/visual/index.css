@@ -146,6 +146,12 @@ main {
   border-radius: 5px;
   padding: 10px;
 }
+html,
+body {
+  height: 100%;
+  font-family: sans-serif;
+  padding: 0 15px;
+}
 
 .RootMenu {
   padding: 6px 14px;
@@ -153,24 +159,22 @@ main {
   font-size: 16px;
   background: none;
   border-radius: 6px;
-  border: 1px solid #ddd;
+  border: 1px solid #d7dce5;
 }
 
-.RootMenu.open {
-  background: #ddd;
-}
-
+.RootMenu.open,
 .RootMenu:hover {
-  background: #ddd;
+  background: #d7dce5;
 }
 
 .Menu {
   background: white;
   padding: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #d7dce5;
   border-radius: 6px;
   box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
   outline: 0;
+  width: max-content;
 }
 
 .MenuItem {
@@ -182,16 +186,18 @@ main {
   border-radius: 4px;
   font-size: 16px;
   text-align: left;
-  line-height: 1.5;
-  outline: 0;
+  line-height: 1.8;
+  min-width: 110px;
   margin: 0;
+  outline: 0;
 }
 
 .MenuItem.open {
-  background: #ddd;
+  background: #d7dce5;
 }
 
-.MenuItem:focus {
+.MenuItem:focus,
+.MenuItem:not([disabled]):active {
   background: royalblue;
   color: white;
 }

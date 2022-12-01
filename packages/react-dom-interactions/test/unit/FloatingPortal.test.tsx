@@ -24,12 +24,6 @@ function App(props: {root?: HTMLElement | null; id?: string}) {
 }
 
 test('creates a id="floating-ui-root" node', () => {
-  render(<App />);
-  expect(document.querySelector('#floating-ui-root')).toBeInTheDocument();
-  cleanup();
-});
-
-test('creates a id="floating-ui-root" node', () => {
   render(<App id="custom-id" />);
   expect(document.querySelector('#custom-id')).toBeInTheDocument();
   cleanup();

@@ -6,7 +6,7 @@
  * @returns Whether the event.target/composedPath is within the node.
  */
 export function isEventTargetWithin(
-  event: Event,
+  event: FocusEvent | MouseEvent,
   node: Node | null | undefined
 ) {
   if (node == null) {

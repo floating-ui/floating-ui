@@ -638,10 +638,6 @@ describe('non-modal + FloatingPortal', () => {
     await userEvent.click(screen.getByTestId('reference'));
     await userEvent.tab({shift: true});
 
-    expect(screen.queryByTestId('floating')).toBeInTheDocument();
-
-    await userEvent.tab({shift: true});
-
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
 
     cleanup();

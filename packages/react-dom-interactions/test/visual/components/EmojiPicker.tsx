@@ -244,7 +244,7 @@ export const Main = () => {
                     className="EmojiPicker-search"
                     placeholder="Search emoji"
                     value={search}
-                    aria-controls={noResultsId}
+                    aria-controls={noResultsId ?? undefined}
                     {...getInputProps({
                       onChange: handleInputChange,
                       onKeyDown: handleKeyDown,

@@ -5,7 +5,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
-import {isElement} from '../utils/is';
+import {isElement, isVirtualEvent} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 
 const bubbleHandlerKeys = {
@@ -131,7 +131,13 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      events.emit('dismiss', nested ? {preventScroll: true} : false);
+      events.emit(
+        'dismiss',
+        nested
+          ? {preventScroll: true}
+          : // Always return focus for touch screen readers
+            isVirtualEvent(event)
+      );
       onOpenChange(false);
     }
 

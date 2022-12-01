@@ -1,10 +1,4 @@
-import React, {
-  Fragment,
-  cloneElement,
-  isValidElement,
-  useEffect,
-  useState,
-} from 'react';
+import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {
   Placement,
   offset,
@@ -100,19 +94,13 @@ export function Popover({children, render, placement, modal = true}: Props) {
     }
   }, [open, update, refs.reference, refs.floating]);
 
-  const Wrapper = modal ? FloatingPortal : Fragment;
-
   return (
     <>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: reference}))}
-      <Wrapper>
+      <FloatingPortal>
         {open && (
-          <FloatingFocusManager
-            context={context}
-            modal={modal}
-            order={modal ? undefined : ['reference', 'content']}
-          >
+          <FloatingFocusManager context={context} modal={modal}>
             <div
               {...getFloatingProps({
                 className: 'Popover',
@@ -134,7 +122,7 @@ export function Popover({children, render, placement, modal = true}: Props) {
             </div>
           </FloatingFocusManager>
         )}
-      </Wrapper>
+      </FloatingPortal>
     </>
   );
 }
