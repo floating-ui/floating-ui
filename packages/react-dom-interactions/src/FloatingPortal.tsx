@@ -42,6 +42,7 @@ export const useFloatingPortalNode = ({
     const rootNode = id ? document.getElementById(id) : null;
 
     if (rootNode) {
+      rootNode.setAttribute('data-floating-ui-portal', '');
       setPortalEl(rootNode);
     } else {
       const newPortalEl = document.createElement('div');
