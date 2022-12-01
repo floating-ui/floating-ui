@@ -87,7 +87,7 @@ export const MenuComponent = React.forwardRef<
     }),
     useClick(context, {
       toggle: !nested,
-      // event: 'mousedown',
+      event: 'mousedown',
       ignoreMouse: nested,
     }),
     useRole(context, {role: 'menu'}),
@@ -188,6 +188,7 @@ export const MenuComponent = React.forwardRef<
             // needing to select anything due to the modal focus management
             // on the root menu.
             visuallyHiddenDismiss
+            initialFocus={-1}
           >
             <div
               ref={floating}

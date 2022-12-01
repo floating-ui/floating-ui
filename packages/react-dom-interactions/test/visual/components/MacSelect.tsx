@@ -210,7 +210,9 @@ export function Main() {
   const {x, y, reference, floating, strategy, context, refs} = useFloating({
     placement: 'bottom-start',
     open,
-    onOpenChange: setOpen,
+    onOpenChange: (open) => {
+      setOpen(open);
+    },
     whileElementsMounted: autoUpdate,
     middleware: fallback
       ? [
@@ -350,7 +352,7 @@ export function Main() {
         <FloatingPortal>
           {open && (
             <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
-              <FloatingFocusManager context={context} initialFocus={-1}>
+              <FloatingFocusManager context={context}>
                 <div
                   ref={floating}
                   style={{
@@ -370,12 +372,8 @@ export function Main() {
                         // time.
                         flushSync(() => setScrollTop(currentTarget.scrollTop));
                       },
-                      onKeyDown(event) {
+                      onKeyDown() {
                         setControlledScrolling(true);
-
-                        if (event.key === 'Tab') {
-                          setOpen(false);
-                        }
                       },
                       onPointerMove() {
                         setControlledScrolling(false);

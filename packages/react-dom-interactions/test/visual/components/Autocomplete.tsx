@@ -231,7 +231,7 @@ export function Main() {
 
     if (value) {
       setOpen(true);
-      setActiveIndex(0);
+      // setActiveIndex(0);
     } else {
       setOpen(false);
     }

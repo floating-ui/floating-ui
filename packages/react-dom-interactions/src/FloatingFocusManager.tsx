@@ -22,15 +22,6 @@ import {
 import {getChildren} from './utils/getChildren';
 import {enqueueFocus} from './utils/enqueueFocus';
 import {contains} from './utils/contains';
-import {IS_LIST_CONTROLLED_ATTRIBUTE} from './hooks/useListNavigation';
-
-function isListControlled(element: HTMLElement | null) {
-  return (
-    element &&
-    (element.hasAttribute(IS_LIST_CONTROLLED_ATTRIBUTE) ||
-      element.querySelector(`[${IS_LIST_CONTROLLED_ATTRIBUTE}]`) != null)
-  );
-}
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -79,6 +70,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     number | null
   >(null);
 
+  // Controlled by `useListNavigation`.
+  const initialFocusControlled =
+    typeof initialFocus === 'number' && initialFocus < 0;
+
   const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
@@ -115,20 +110,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         ? getFocusableContent(container)
         : getTabbableContent(container);
 
-      let orderArr = orderRef.current;
-
-      // Make the floating element focusable if it has no tabbable content
-      // elements. This allows non-modal + portal focus management to work
-      // when shift+tabbing to/from the reference element.
-      if (content.length === 0 && !orderArr.includes('floating')) {
-        if (orderArr[0] === 'reference') {
-          orderArr = ['reference', 'floating', ...orderArr.slice(1)];
-        } else if (orderArr[0] === 'content') {
-          orderArr = ['floating', 'content', ...orderArr.slice(1)];
-        }
-      }
-
-      return orderArr
+      return orderRef.current
         .map((type) => {
           if (refs.domReference.current && type === 'reference') {
             return refs.domReference.current;
@@ -153,6 +135,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
+        // The focus guards have nothing to focus, so we need to stop the event.
+        if (getTabbableContent().length === 0) {
+          stopEvent(event);
+        }
+
         const els = getTabbableElements();
         const target = getTarget(event);
 
@@ -239,7 +226,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
       if (!modal && didHitGuard) {
         onOpenChange(false);
-      } else if (node && node.context) {
+      } else if (node && node.context && initialFocusControlled) {
         node.context.onOpenChange(false);
       }
     }
@@ -316,6 +303,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     refs,
     portalContext,
     typeableCombobox,
+    initialFocusControlled,
     onOpenChange,
   ]);
 
@@ -364,12 +352,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     let returnFocusValue = returnFocus;
     let preventReturnFocusScroll = false;
-    let previouslyFocusedElement =
+    const previouslyFocusedElement =
       refs.domReference.current ?? activeElement(doc);
-
-    if (previouslyFocusedElement === doc.body && refs.domReference.current) {
-      previouslyFocusedElement = refs.domReference.current;
-    }
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
@@ -381,9 +365,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
-    if (!isListControlled(floating)) {
-      enqueueFocus(elToFocus, elToFocus === floating);
-    }
+    !initialFocusControlled && enqueueFocus(elToFocus, elToFocus === floating);
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
@@ -411,7 +393,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         enqueueFocus(previouslyFocusedElement, preventReturnFocusScroll);
       }
     };
-  }, [getTabbableElements, initialFocus, returnFocus, refs, events]);
+  }, [
+    getTabbableElements,
+    initialFocus,
+    returnFocus,
+    refs,
+    events,
+    initialFocusControlled,
+  ]);
 
   // Synchronize the `modal` value to the FloatingPortal context. It will
   // decide whether or not it needs to render its own guards.
@@ -420,13 +409,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [portalContext, modal]);
 
   useLayoutEffect(() => {
-    if (
-      getFocusableContent().length === 0 &&
-      !isListControlled(refs.floating.current)
-    ) {
+    if (getFocusableContent().length === 0 && !initialFocusControlled) {
       setTabbableContentLength(0);
     }
-  }, [getFocusableContent, refs]);
+  }, [getFocusableContent, refs, initialFocusControlled]);
 
   // Let the FloatingPortal's guards close the floating element.
   React.useImperativeHandle(

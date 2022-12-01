@@ -4,5 +4,5 @@ export function enqueueFocus(
   el: FocusableElement | null,
   preventScroll?: boolean
 ) {
-  queueMicrotask(() => el?.focus({preventScroll}));
+  requestAnimationFrame(() => el?.focus({preventScroll}));
 }
