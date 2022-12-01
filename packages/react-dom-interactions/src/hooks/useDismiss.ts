@@ -238,7 +238,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       reference: {
         [bubbleHandlerKeys[referencePressEvent]]: () => {
           if (referencePress) {
-            events.emit('dismiss', {type: 'referencePress'});
+            events.emit('dismiss', {
+              type: 'referencePress',
+              data: {returnFocus: false},
+            });
             onOpenChange(false);
           }
         },
