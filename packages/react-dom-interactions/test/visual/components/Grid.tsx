@@ -32,7 +32,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
     useListNavigation(context, {
       listRef,
       activeIndex,
-      onNavigate: open ? setActiveIndex : undefined,
+      onNavigate: setActiveIndex,
       cols: 5,
       orientation,
       loop,

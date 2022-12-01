@@ -609,13 +609,20 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           }),
         onKeyDown(event) {
           blockPointerLeaveRef.current = true;
+          const isArrowKey = event.key.indexOf('Arrow') === 0;
 
           if (virtual && open) {
             return onKeyDown(event);
           }
 
+          // If a floating element should not open on arrow key down, avoid
+          // setting `activeIndex` while it's closed.
+          if (!open && !openOnArrowKeyDown && isArrowKey) {
+            return;
+          }
+
           const isNavigationKey =
-            event.key.indexOf('Arrow') === 0 ||
+            isArrowKey ||
             event.key === 'Enter' ||
             event.key === ' ' ||
             event.key === '';
@@ -665,6 +672,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         },
       },
       floating: {
+        // Marker for the FloatingFocusManager to ignore initialFocus even if
+        // not explicitly set to -1.
+        'data-floating-ui-list': '',
         'aria-orientation': orientation === 'both' ? undefined : orientation,
         ...(virtual &&
           activeIndex != null && {

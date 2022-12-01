@@ -217,12 +217,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
       if (!modal && didHitGuard) {
         onOpenChange(false);
-      } else if (
-        node &&
-        node.context &&
-        // Ensure backwards-compatibility with the older <Menu /> example.
-        initialFocus === -1
-      ) {
+      } else if (node && node.context) {
         node.context.onOpenChange(false);
       }
     }
@@ -363,7 +358,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         ? focusableElements[initialFocus]
         : initialFocus.current;
 
-    enqueueFocus(elToFocus, elToFocus === floating);
+    // If the `useListNavigation` hook is active, always ignore `initialFocus`
+    // because it has its own handling of the initial focus.
+    if (!floating.hasAttribute('data-floating-ui-list')) {
+      enqueueFocus(elToFocus, elToFocus === floating);
+    }
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
