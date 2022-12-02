@@ -7,6 +7,8 @@ const useInsertionEffect = (React as any)['useInsertionEffect'.toString()] as
   | AnyFunction
   | undefined;
 
+const useSafeInsertionEffect = useInsertionEffect || ((fn) => fn());
+
 export function useEvent<T extends AnyFunction>(callback?: T) {
   const ref = React.useRef<AnyFunction | undefined>(() => {
     if (__DEV__) {
@@ -14,14 +16,9 @@ export function useEvent<T extends AnyFunction>(callback?: T) {
     }
   });
 
-  if (useInsertionEffect) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useInsertionEffect(() => {
-      ref.current = callback;
-    });
-  } else {
+  useSafeInsertionEffect(() => {
     ref.current = callback;
-  }
+  });
 
   return React.useCallback<AnyFunction>(
     (...args) => ref.current?.(...args),
