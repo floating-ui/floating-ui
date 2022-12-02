@@ -26,7 +26,7 @@ interface Props {
   escapeKey?: boolean;
   referencePress?: boolean;
   referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
-  outsidePress?: boolean;
+  outsidePress?: boolean | ((event: MouseEvent) => boolean);
   outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean;
@@ -117,6 +117,34 @@ both the floating and reference elements.
 useDismiss(context, {
   outsidePress: false,
 });
+```
+
+If you have another element, like a toast, that is rendered
+outside the floating element's React tree and don't want the
+floating element to close when pressing it, you can guard the
+check like so:
+
+> Function guard option is available from v0.13.0
+
+```js
+useDismiss(context, {
+  // Same as `true`, but with a custom guard check.
+  outsidePress: (event) => !event.target.closest('.toast'),
+});
+```
+
+```js
+function App() {
+  // The toast is not inside the Dialog's React tree, so we
+  // need to add a guard to consider it a child of the Dialog
+  // to prevent the Dialog's outside press from closing it.
+  return (
+    <>
+      <Dialog />
+      <Toast className="toast" />
+    </>
+  );
+}
 ```
 
 ### outsidePressEvent

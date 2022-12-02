@@ -41,6 +41,7 @@ interface Props {
   returnFocus?: boolean;
   guards?: boolean;
   modal?: boolean;
+  visuallyHiddenDismiss?: boolean | string;
 }
 ```
 
@@ -95,14 +96,27 @@ ref.
 </FloatingFocusManager>
 ```
 
+#### Negative number
+
+You can set this to a negative number to ignore the initial
+focus. This is required to prevent conflicts if your floating
+element has no tabbable content and is instead controlled by the
+`useListNavigation(){:js}` hook which has its own focus
+management.
+
+```js
+<FloatingFocusManager context={context} initialFocus={-1}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
 ### returnFocus
 
 default: `true{:js}`
 
-Determines if focus should be returned to the element that was
-focused prior to opening the floating element (usually the
-reference element). This prop is ignored if the floating element
-lost focus.
+Determines if focus should be returned to the reference element
+(or if that is not available, the previously focused element).
+This prop is ignored if the floating element lost focus.
 
 ```js
 <FloatingFocusManager context={context} returnFocus={false}>
@@ -141,35 +155,56 @@ accessed. This includes screen reader virtual cursors.
 #### Non-modal behavior
 
 The floating element should be rendered after the reference
-element in the React tree — it can be portalled however.
+element in the React tree. It can be portalled however.
 
 #### Modal behavior
 
 Ensure you have an explicit "close" button. This can be either
 visible to all users, or visually-hidden so it is only available
-to assistive tech.
-
+to assistive tech (see
+[visuallyHiddenDismiss](/docs/FloatingFocusManager#visuallyhiddendismiss)).
 Touch-based screen readers often will not have an `esc` key
 available to dismiss the element, so an explicit close button is
-required.
-
-You may use the reference element as the close button with some
-components, so the user can navigate to it and use it as a toggle
-to both close and open the floating element. This can be achieved
-with the `order{:.keyword}` prop and adding the reference as a
-string.
+required, otherwise the user will be trapped in the floating
+element if they don't want to select anything (thus needing to
+reload the page).
 
 #### Comboboxes
 
-The listbox part of a combobox should be rendered directly after
-the input reference element when possible.
+The listbox part (floating element) of a combobox (input +
+listbox popup) can be portalled and accessible to touch screen
+readers when using modal focus management. DOM focus does not
+become modal but screen reader virtual cursors do become modal,
+allowing a touch screen reader to immediately access the
+portalled listbox items.
 
-If the listbox is portaled, detection is added so that DOM focus
-does not become modal in this case, but screen reader virtual
-cursors do become modal. This ensures a touch user can swipe
-right (e.g. iOS screen reader) to navigate the listbox options
-immediately.
+### visuallyHiddenDismiss
 
-As with all modal-based focus management, the listbox should have
-a visually-hidden dismiss button to ensure touch-based screen
-reader users can escape the list due to a lack of an `esc` key.
+default: `false{:js}`
+
+> Available from v0.13.0
+
+If your focus management is modal and there is no explicit close
+button available, you can use this prop to render a
+visually-hidden dismiss button at the start and end of the
+floating element. This allows touch-based screen readers to
+escape the floating element due to lack of an `esc` key.
+
+```js
+<FloatingFocusManager context={context} visuallyHiddenDismiss>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+You can pass a string which will be announced by the screen
+reader, e.g. for languages other than English. The default string
+when using `true{:js}` is `Dismiss{:.string}`.
+
+```js
+<FloatingFocusManager
+  context={context}
+  visuallyHiddenDismiss="Dismiss popup"
+>
+  {/* floating element */}
+</FloatingFocusManager>
+```

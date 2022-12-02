@@ -24,6 +24,17 @@ Spread `getItemProps(){:js}` to each list item. The list items
 must be focusable and should have an appropriate
 `role{:.keyword}` prop based on the role of the floating element.
 
+## Using with FloatingFocusManager
+
+When using the component, set the `initialFocus{:.keyword}` prop
+to `-1{:js}` to avoid focus conflicts with this hook:
+
+```js /initialFocus={-1}/
+<FloatingFocusManager context={context} initialFocus={-1}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
 ## Props
 
 ```js

@@ -27,10 +27,16 @@ interface Props {
 
 ### id
 
-default: `'floating-ui-root'{:js}`
+default: `undefined{:js}`
 
 If this node does not exist on the document, it will be created
-for you and will be appended to the end of the `<body>{:html}`.
+for you and will be appended to the end of the `<body>{:html}`. A
+unique React id is assigned to it. Context is provided so that
+portals nested in one another are appended to their respective
+parent.
+
+By specifying a string, it assumes the container is being
+controlled externally or is static.
 
 ```js
 <FloatingPortal id="custom-root-id">
@@ -56,6 +62,12 @@ default: `true{:js}`
 When using non-modal focus management using
 `<FloatingFocusManager />{:js}`, this will preserve the tab order
 context based on the React tree instead of the DOM tree.
+
+```js
+<FloatingPortal preserveTabOrder={false}>
+  {open && <div>Tooltip</div>}
+</FloatingPortal>
+```
 
 ## useFloatingPortalNode
 
