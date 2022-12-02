@@ -455,9 +455,11 @@ describe('focusOnHover', () => {
     cleanup();
   });
 
-  test('false - does not focus item on hover and does not sync the active index', () => {
+  test('false - does not focus item on hover and does not sync the active index', async () => {
     const spy = jest.fn();
-    render(<App onNavigate={spy} focusItemOnHover={false} />);
+    render(
+      <App onNavigate={spy} focusItemOnOpen={false} focusItemOnHover={false} />
+    );
     fireEvent.click(screen.getByRole('button'));
     fireEvent.mouseMove(screen.getByTestId('item-1'));
     expect(screen.getByTestId('item-1')).not.toHaveFocus();
