@@ -184,19 +184,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ) ?? []
     );
 
-    function getGuards() {
-      return (
-        portalContext
-          ? [
-              portalContext.afterInsideRef.current,
-              portalContext.beforeInsideRef.current,
-              portalContext.afterOutsideRef.current,
-              portalContext.beforeOutsideRef.current,
-            ]
-          : []
-      ).filter(Boolean) as Array<Element>;
-    }
-
     function getDismissButtons() {
       return [
         startDismissButtonRef.current,
@@ -221,8 +208,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(reference, relatedTarget) ||
         contains(floating, relatedTarget) ||
         contains(relatedTarget, floating) ||
-        getGuards().includes(relatedTarget as Element) ||
-        getDismissButtons().includes(relatedTarget as Element) ||
+        contains(portalContext?.portalNode, relatedTarget) ||
         (tree &&
           (getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
@@ -347,7 +333,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
-    !initialFocusControlled && enqueueFocus(elToFocus, elToFocus === floating);
+    !initialFocusControlled &&
+      enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
@@ -376,7 +363,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         isHTMLElement(previouslyFocusedElement) &&
         !preventReturnFocusRef.current
       ) {
-        enqueueFocus(previouslyFocusedElement, preventReturnFocusScroll);
+        enqueueFocus(previouslyFocusedElement, {
+          preventScroll: preventReturnFocusScroll,
+          // When dismissing nested floating elements, by the time the rAF has
+          // executed, the menus will all have been unmounted. When they try
+          // to get focused, the calls get ignored — leaving the root reference
+          // focused as desired.
+          cancelPrevious: false,
+        });
       }
     };
   }, [

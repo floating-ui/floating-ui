@@ -114,6 +114,13 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         onBlur(event) {
           blockFocusRef.current = false;
           const relatedTarget = event.relatedTarget as Element | null;
+
+          // Hit the non-modal focus management portal guard. Focus will be
+          // moved into the floating element immediately after.
+          const movedToFocusGuard = relatedTarget?.hasAttribute(
+            'data-floating-ui-focus-guard'
+          );
+
           // Wait for the window blur listener to fire.
           timeoutRef.current = setTimeout(() => {
             // When focusing the reference element (e.g. regular click), then
@@ -121,7 +128,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
             // Note: it must be focusable, e.g. `tabindex="-1"`.
             if (
               contains(refs.floating.current, relatedTarget) ||
-              contains(refs.domReference.current, relatedTarget)
+              contains(refs.domReference.current, relatedTarget) ||
+              movedToFocusGuard
             ) {
               return;
             }

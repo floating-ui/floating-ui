@@ -249,9 +249,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         setActiveId(listRef.current[indexRef.current]?.id);
       } else {
         const item = listRef.current[indexRef.current] || refs.floating.current;
-        enqueueFocus(
-          item,
-          true,
+        enqueueFocus(item, {
+          preventScroll: true,
           // Mac Safari does not move the virtual cursor unless the focus call
           // is sync. However, for the very first focus call, we need to wait
           // for the position to be ready in order to prevent unwanted
@@ -260,10 +259,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           // subsequent calls. `preventScroll` is supported in modern Safari,
           // so we can use that instead.
           // iOS Safari must be async or the first item will not be focused.
-          isMac() && isSafari()
-            ? isPreventScrollSupported || forceSyncFocus.current
-            : false
-        );
+          sync:
+            isMac() && isSafari()
+              ? isPreventScrollSupported || forceSyncFocus.current
+              : false,
+        });
       }
     },
     [virtual, refs]
