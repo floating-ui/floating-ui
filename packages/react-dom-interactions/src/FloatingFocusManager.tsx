@@ -350,9 +350,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     const focusableElements = getTabbableElements(floating, true);
     const elToFocus =
-      typeof initialFocus === 'number'
+      (typeof initialFocus === 'number'
         ? focusableElements[initialFocus]
-        : initialFocus.current;
+        : initialFocus.current) || floating;
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.

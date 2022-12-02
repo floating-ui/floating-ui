@@ -375,6 +375,30 @@ describe('modal', () => {
 
     cleanup();
   });
+
+  test('fallback to floating element when it has no tabbable content', async () => {
+    function App() {
+      const {reference, floating, context} = useFloating({open: true});
+      return (
+        <>
+          <button data-testid="reference" ref={reference} />
+          <FloatingFocusManager context={context} modal={true}>
+            <div ref={floating} data-testid="floating" tabIndex={-1} />
+          </FloatingFocusManager>
+        </>
+      );
+    }
+
+    render(<App />);
+
+    expect(screen.getByTestId('floating')).toHaveFocus();
+    await userEvent.tab();
+    expect(screen.getByTestId('floating')).toHaveFocus();
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('floating')).toHaveFocus();
+
+    cleanup();
+  });
 });
 
 describe('order', () => {
