@@ -22,7 +22,7 @@ export function getUserAgent(): string {
     | NavigatorUAData
     | undefined;
 
-  if (uaData?.brands) {
+  if (uaData && Array.isArray(uaData.brands)) {
     return uaData.brands
       .map(({brand, version}) => `${brand}/${version}`)
       .join(' ');
