@@ -2,6 +2,7 @@ import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
+import {getTarget} from './utils/getTarget';
 import {isElement} from './utils/is';
 
 type Point = [number, number];
@@ -51,7 +52,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     tree?: FloatingTreeType<RT> | null;
     leave?: boolean;
   }) => {
-    return function onPointerMove(event: PointerEvent) {
+    return function onMouseMove(event: MouseEvent) {
       clearTimeout(timeoutId);
 
       function close() {
@@ -59,21 +60,13 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         onClose();
       }
 
-      if (event.pointerType && event.pointerType !== 'mouse') {
-        return;
-      }
-
       const {clientX, clientY} = event;
-      const target =
-        'composedPath' in event
-          ? event.composedPath()[0]
-          : (event as Event).target;
-      const targetNode = target as Element | null;
+      const target = getTarget(event) as Element | null;
 
       // If the pointer is over the reference, there is no need to run the logic
       if (
-        event.type === 'pointermove' &&
-        contains(refs.domReference.current, targetNode)
+        event.type === 'mousemove' &&
+        contains(refs.domReference.current, target)
       ) {
         return;
       }
@@ -99,7 +92,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       // The cursor landed, so we destroy the polygon logic
-      if (contains(refs.floating.current, targetNode) && !leave) {
+      if (contains(refs.floating.current, target) && !leave) {
         polygonIsDestroyed = true;
         return;
       }

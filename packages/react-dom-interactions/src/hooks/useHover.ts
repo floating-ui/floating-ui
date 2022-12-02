@@ -18,7 +18,7 @@ interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
     }
-  ): (event: PointerEvent) => void;
+  ): (event: MouseEvent) => void;
   __options: {
     blockPointerEvents: boolean;
   };
@@ -73,7 +73,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const pointerTypeRef = React.useRef<string>();
   const timeoutRef = React.useRef<any>();
-  const handlerRef = React.useRef<(event: PointerEvent) => void>();
+  const handlerRef = React.useRef<(event: MouseEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
   const performedPointerEventsMutationRef = React.useRef(false);
@@ -138,10 +138,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     [delayRef, onOpenChange]
   );
 
-  const cleanupPointerMoveHandler = React.useCallback(() => {
+  const cleanupMouseMoveHandler = React.useCallback(() => {
     if (handlerRef.current) {
       getDocument(refs.floating.current).removeEventListener(
-        'pointermove',
+        'mousemove',
         handlerRef.current
       );
       handlerRef.current = undefined;
@@ -207,7 +207,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         clearTimeout(timeoutRef.current);
 
         handlerRef.current &&
-          doc.removeEventListener('pointermove', handlerRef.current);
+          doc.removeEventListener('mousemove', handlerRef.current);
 
         handlerRef.current = handleCloseRef.current({
           ...context,
@@ -216,12 +216,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           y: event.clientY,
           onClose() {
             clearPointerEvents();
-            cleanupPointerMoveHandler();
+            cleanupMouseMoveHandler();
             closeWithDelay();
           },
         });
 
-        doc.addEventListener('pointermove', handlerRef.current);
+        doc.addEventListener('mousemove', handlerRef.current);
         return;
       }
 
@@ -244,10 +244,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         leave: true,
         onClose() {
           clearPointerEvents();
-          cleanupPointerMoveHandler();
+          cleanupMouseMoveHandler();
           closeWithDelay();
         },
-      })(event as PointerEvent);
+      })(event);
     }
 
     const floating = refs.floating.current;
@@ -278,7 +278,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     restMs,
     move,
     closeWithDelay,
-    cleanupPointerMoveHandler,
+    cleanupMouseMoveHandler,
     clearPointerEvents,
     onOpenChange,
     open,
@@ -341,17 +341,17 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   useLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
-      cleanupPointerMoveHandler();
+      cleanupMouseMoveHandler();
 
       if (performedPointerEventsMutationRef.current) {
         clearPointerEvents();
       }
     }
-  }, [open, cleanupPointerMoveHandler, clearPointerEvents]);
+  }, [open, cleanupMouseMoveHandler, clearPointerEvents]);
 
   React.useEffect(() => {
     return () => {
-      cleanupPointerMoveHandler();
+      cleanupMouseMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
 
@@ -359,7 +359,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         clearPointerEvents();
       }
     };
-  }, [enabled, cleanupPointerMoveHandler, clearPointerEvents]);
+  }, [enabled, cleanupMouseMoveHandler, clearPointerEvents]);
 
   return React.useMemo(() => {
     if (!enabled) {
