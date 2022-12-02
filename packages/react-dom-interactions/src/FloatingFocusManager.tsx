@@ -209,6 +209,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(floating, relatedTarget) ||
         contains(relatedTarget, floating) ||
         contains(portalContext?.portalNode, relatedTarget) ||
+        [
+          portalContext?.beforeOutsideRef.current,
+          portalContext?.afterOutsideRef.current,
+        ]
+          .filter(Boolean)
+          .includes(relatedTarget as HTMLSpanElement | null) ||
         (tree &&
           (getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
@@ -244,7 +250,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       if (modal) {
         const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
         cleanup = hideOthers(
-          orderRef.current.includes('reference')
+          orderRef.current.includes('reference') || typeableCombobox
             ? insideNodes.concat(reference)
             : insideNodes
         );

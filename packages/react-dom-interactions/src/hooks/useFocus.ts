@@ -3,7 +3,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
-import {isHTMLElement} from '../utils/is';
+import {isHTMLElement, isElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {DismissPayload} from './useDismiss';
 
@@ -113,13 +113,13 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         },
         onBlur(event) {
           blockFocusRef.current = false;
-          const relatedTarget = event.relatedTarget as Element | null;
+          const relatedTarget = event.relatedTarget;
 
           // Hit the non-modal focus management portal guard. Focus will be
           // moved into the floating element immediately after.
-          const movedToFocusGuard = relatedTarget?.hasAttribute(
-            'data-floating-ui-focus-guard'
-          );
+          const movedToFocusGuard =
+            isElement(relatedTarget) &&
+            relatedTarget.hasAttribute('data-floating-ui-focus-guard');
 
           // Wait for the window blur listener to fire.
           timeoutRef.current = setTimeout(() => {
