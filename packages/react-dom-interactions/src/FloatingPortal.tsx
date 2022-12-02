@@ -15,12 +15,13 @@ import {
 const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;
   portalNode: HTMLElement | null;
-  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setFocusManagerState: React.Dispatch<
+    React.SetStateAction<(FloatingContext & {modal: boolean}) | null>
+  >;
   beforeInsideRef: React.RefObject<HTMLSpanElement>;
   afterInsideRef: React.RefObject<HTMLSpanElement>;
   beforeOutsideRef: React.RefObject<HTMLSpanElement>;
   afterOutsideRef: React.RefObject<HTMLSpanElement>;
-  contextRef?: React.RefObject<FloatingContext>;
 }>(null);
 
 export const useFloatingPortalNode = ({
@@ -76,16 +77,23 @@ export const FloatingPortal = ({
   preserveTabOrder?: boolean;
 }) => {
   const portalNode = useFloatingPortalNode({id, enabled: !root});
-  const [modal, setModal] = React.useState(true);
+  const [focusManagerState, setFocusManagerState] = React.useState<
+    (FloatingContext & {modal: boolean}) | null
+  >(null);
 
   const beforeOutsideRef = React.useRef<HTMLSpanElement>(null);
   const afterOutsideRef = React.useRef<HTMLSpanElement>(null);
   const beforeInsideRef = React.useRef<HTMLSpanElement>(null);
   const afterInsideRef = React.useRef<HTMLSpanElement>(null);
-  const contextRef = React.useRef<FloatingContext>(null);
 
   const shouldRenderGuards =
-    !!children && !!(root || portalNode) && preserveTabOrder && !modal;
+    // The FocusManager and therefore floating element are currently open/
+    // rendered.
+    !!focusManagerState &&
+    // Guards are only for non-modal focus management.
+    !focusManagerState.modal &&
+    !!(root || portalNode) &&
+    preserveTabOrder;
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   React.useEffect(() => {
@@ -122,9 +130,8 @@ export const FloatingPortal = ({
           afterOutsideRef,
           beforeInsideRef,
           afterInsideRef,
-          setModal,
           portalNode,
-          contextRef,
+          setFocusManagerState,
         }),
         [preserveTabOrder, portalNode]
       )}
@@ -138,7 +145,7 @@ export const FloatingPortal = ({
             } else {
               const prevTabbable =
                 getPreviousTabbable() ||
-                contextRef.current?.refs.domReference.current;
+                focusManagerState?.refs.domReference.current;
               prevTabbable?.focus();
             }
           }}
@@ -161,9 +168,9 @@ export const FloatingPortal = ({
             } else {
               const nextTabbable =
                 getNextTabbable() ||
-                contextRef.current?.refs.domReference.current;
+                focusManagerState?.refs.domReference.current;
               nextTabbable?.focus();
-              contextRef.current?.onOpenChange(false);
+              focusManagerState?.onOpenChange(false);
             }
           }}
         />

@@ -388,23 +388,25 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     initialFocusControlled,
   ]);
 
-  // Synchronize the `modal` value to the FloatingPortal context. It will
-  // decide whether or not it needs to render its own guards.
+  // Synchronize the `context` & `modal` value to the FloatingPortal context.
+  // It will decide whether or not it needs to render its own guards.
   useLayoutEffect(() => {
-    portalContext?.setModal(modal);
-  }, [portalContext, modal]);
+    if (!portalContext) return;
+    portalContext.setFocusManagerState({
+      ...context,
+      modal,
+      // Not concerned about the <RT> generic type.
+    } as any);
+    return () => {
+      portalContext.setFocusManagerState(null);
+    };
+  }, [portalContext, modal, context]);
 
   useLayoutEffect(() => {
     if (getTabbableContent().length === 0 && !initialFocusControlled) {
       setTabbableContentLength(0);
     }
   }, [getTabbableContent, refs, initialFocusControlled]);
-
-  // Let the FloatingPortal's guards close the floating element.
-  React.useImperativeHandle(
-    portalContext?.contextRef,
-    () => context as unknown as FloatingContext
-  );
 
   const shouldRenderGuards =
     guards && (insidePortal || modal) && !typeableCombobox;

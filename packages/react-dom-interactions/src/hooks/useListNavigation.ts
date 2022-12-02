@@ -9,6 +9,8 @@ import {
   isHTMLElement,
   isVirtualClick,
   isVirtualPointerEvent,
+  isMac,
+  isSafari,
 } from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
@@ -228,11 +230,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
   const keyRef = React.useRef<null | string>(null);
-  const disabledIndicesRef = useLatestRef(disabledIndices);
   const blockPointerLeaveRef = React.useRef(false);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
   const forceSyncFocus = React.useRef(false);
+
+  const disabledIndicesRef = useLatestRef(disabledIndices);
+  const latestOpenRef = useLatestRef(open);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -248,14 +252,17 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         enqueueFocus(
           item,
           true,
-          // Safari does not move the virtual cursor unless the focus call is
-          // sync. However, for the very first focus call, we need to wait for
-          // the position to be ready in order to prevent unwanted scrolling.
-          // This means the virtual cursor will not move to the first item when
-          // first opening the floating element, but will on subsequent calls.
-          // `preventScroll` is supported in modern Safari, so we can use that
-          // instead.
-          isPreventScrollSupported || forceSyncFocus.current
+          // Mac Safari does not move the virtual cursor unless the focus call
+          // is sync. However, for the very first focus call, we need to wait
+          // for the position to be ready in order to prevent unwanted
+          // scrolling. This means the virtual cursor will not move to the first
+          // item when first opening the floating element, but will on
+          // subsequent calls. `preventScroll` is supported in modern Safari,
+          // so we can use that instead.
+          // iOS Safari must be async or the first item will not be focused.
+          isMac() && isSafari()
+            ? isPreventScrollSupported || forceSyncFocus.current
+            : false
         );
       }
     },
@@ -386,6 +393,16 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     function onKeyDown(event: React.KeyboardEvent) {
       blockPointerLeaveRef.current = true;
       forceSyncFocus.current = true;
+
+      // If the floating element is animating out, ignore navigation. Otherwise,
+      // the `activeIndex` gets set to 0 despite not being open so the next time
+      // the user ArrowDowns, the first item won't be focused.
+      if (
+        !latestOpenRef.current &&
+        event.currentTarget === refs.floating.current
+      ) {
+        return;
+      }
 
       if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
         stopEvent(event);
@@ -771,6 +788,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }, [
     activeId,
     disabledIndicesRef,
+    latestOpenRef,
     listRef,
     enabled,
     orientation,

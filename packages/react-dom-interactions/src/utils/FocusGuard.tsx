@@ -1,21 +1,10 @@
 import * as React from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import {getPlatform} from './getPlatform';
+import {isMac, isSafari} from './is';
 import {useEvent} from './useEvent';
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
 // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/FocusTrap.tsx
-
-export function isSafari() {
-  // Chrome DevTools does not complain about navigator.vendor
-  return /apple/i.test(navigator.vendor);
-}
-
-export function isMac() {
-  return (
-    getPlatform().toLowerCase().startsWith('mac') && !navigator.maxTouchPoints
-  );
-}
 
 export const HIDDEN_STYLES: React.CSSProperties = {
   border: 0,

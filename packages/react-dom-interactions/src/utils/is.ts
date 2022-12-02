@@ -55,3 +55,14 @@ export function isVirtualPointerEvent(event: PointerEvent) {
       event.detail === 0)
   );
 }
+
+export function isSafari() {
+  // Chrome DevTools does not complain about navigator.vendor
+  return /apple/i.test(navigator.vendor);
+}
+
+export function isMac() {
+  return (
+    getPlatform().toLowerCase().startsWith('mac') && !navigator.maxTouchPoints
+  );
+}
