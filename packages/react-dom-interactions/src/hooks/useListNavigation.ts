@@ -16,6 +16,8 @@ import {useEvent} from '../utils/useEvent';
 import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
 
+let isPreventScrollSupported = false;
+
 const ARROW_UP = 'ArrowUp';
 const ARROW_DOWN = 'ArrowDown';
 const ARROW_LEFT = 'ArrowLeft';
@@ -230,7 +232,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const blockPointerLeaveRef = React.useRef(false);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
-  const rafId = React.useRef(0);
+  const forceSyncFocus = React.useRef(false);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -242,13 +244,32 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       if (virtual) {
         setActiveId(listRef.current[indexRef.current]?.id);
       } else {
-        cancelAnimationFrame(rafId.current);
         const item = listRef.current[indexRef.current] || refs.floating.current;
-        rafId.current = enqueueFocus(item, true);
+        enqueueFocus(
+          item,
+          true,
+          // Safari does not move the virtual cursor unless the focus call is
+          // sync. However, for the very first focus call, we need to wait for
+          // the position to be ready in order to prevent unwanted scrolling.
+          // This means the virtual cursor will not move to the first item when
+          // first opening the floating element, but will on subsequent calls.
+          // `preventScroll` is supported in modern Safari, so we can use that
+          // instead.
+          isPreventScrollSupported || forceSyncFocus.current
+        );
       }
     },
     [virtual, refs]
   );
+
+  useLayoutEffect(() => {
+    document.createElement('div').focus({
+      get preventScroll() {
+        isPreventScrollSupported = true;
+        return false;
+      },
+    });
+  }, []);
 
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
   // element. Also, reset `activeIndex` upon closing the floating element.
@@ -265,7 +286,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function
-      cancelAnimationFrame(rafId.current);
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
@@ -280,6 +300,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     if (open) {
       if (activeIndex == null) {
+        forceSyncFocus.current = false;
+
         if (selectedIndex != null) {
           return;
         }
@@ -363,6 +385,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     function onKeyDown(event: React.KeyboardEvent) {
       blockPointerLeaveRef.current = true;
+      forceSyncFocus.current = true;
 
       if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
         stopEvent(event);
