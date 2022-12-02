@@ -5,7 +5,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
-import {isElement, isVirtualEvent} from '../utils/is';
+import {isElement, isVirtualClick, isVirtualPointerEvent} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 
 const bubbleHandlerKeys = {
@@ -151,7 +151,10 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       events.emit('dismiss', {
         type: 'outsidePress',
         data: {
-          returnFocus: nested ? {preventScroll: true} : isVirtualEvent(event),
+          returnFocus: nested
+            ? {preventScroll: true}
+            : isVirtualClick(event) ||
+              isVirtualPointerEvent(event as PointerEvent),
         },
       });
 

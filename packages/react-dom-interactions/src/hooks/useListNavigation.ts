@@ -5,7 +5,11 @@ import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {activeElement} from '../utils/activeElement';
-import {isHTMLElement, isVirtualEvent} from '../utils/is';
+import {
+  isHTMLElement,
+  isVirtualClick,
+  isVirtualPointerEvent,
+} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useLatestRef} from '../utils/useLatestRef';
 import {useEvent} from '../utils/useEvent';
@@ -605,6 +609,23 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
+    function checkVirtualMouse(event: React.PointerEvent) {
+      if (focusItemOnOpen === 'auto' && isVirtualClick(event.nativeEvent)) {
+        focusItemOnOpenRef.current = true;
+      }
+    }
+
+    function checkVirtualPointer(event: React.PointerEvent) {
+      // `pointerdown` fires first, reset the state then perform the checks.
+      focusItemOnOpenRef.current = focusItemOnOpen;
+      if (
+        focusItemOnOpen === 'auto' &&
+        isVirtualPointerEvent(event.nativeEvent)
+      ) {
+        focusItemOnOpenRef.current = true;
+      }
+    }
+
     return {
       reference: {
         ...(virtual &&
@@ -669,12 +690,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             }
           }
         },
-        onPointerDown(event) {
-          focusItemOnOpenRef.current = focusItemOnOpen;
-          if (focusItemOnOpen === 'auto' && isVirtualEvent(event.nativeEvent)) {
-            focusItemOnOpenRef.current = true;
-          }
-        },
+        onPointerDown: checkVirtualPointer,
+        onMouseDown: checkVirtualMouse,
+        onClick: checkVirtualMouse,
       },
       floating: {
         'aria-orientation': orientation === 'both' ? undefined : orientation,

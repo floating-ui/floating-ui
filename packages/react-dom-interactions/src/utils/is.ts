@@ -1,5 +1,5 @@
 import {getDocument} from './getDocument';
-import {getUserAgent} from './getPlatform';
+import {getPlatform, getUserAgent} from './getPlatform';
 
 function getWindow(value: any) {
   return getDocument(value).defaultView ?? window;
@@ -23,29 +23,35 @@ export function isShadowRoot(node: Node): node is ShadowRoot {
   return node instanceof OwnElement || node instanceof ShadowRoot;
 }
 
-// License: https://github.com/adobe/react-spectrum/blob/b35d5c02fe900badccd0cf1a8f23bb593419f238/packages/@react-aria/utils/src/isVirtualEvent.ts#L42
-export function isVirtualEvent(event: MouseEvent | PointerEvent): boolean {
-  function isPointer(event: any): event is PointerEvent {
-    return typeof event.width === 'number';
-  }
-
-  if (isPointer(event)) {
-    return (
-      (event.width === 0 && event.height === 0) ||
-      (event.width <= 1 &&
-        event.height <= 1 &&
-        event.pressure === 0 &&
-        event.detail === 0)
-    );
-  }
-
+// License: https://github.com/adobe/react-spectrum/blob/b35d5c02fe900badccd0cf1a8f23bb593419f238/packages/@react-aria/utils/src/isVirtualEvent.ts
+export function isVirtualClick(event: MouseEvent | PointerEvent): boolean {
   if ((event as any).mozInputSource === 0 && event.isTrusted) {
     return true;
   }
 
-  if (/Android/i.test(getUserAgent()) && (event as PointerEvent).pointerType) {
+  const androidRe = /Android/i;
+  if (
+    (androidRe.test(getPlatform()) || androidRe.test(getUserAgent())) &&
+    (event as PointerEvent).pointerType
+  ) {
     return event.type === 'click' && event.buttons === 1;
   }
 
   return event.detail === 0 && !(event as PointerEvent).pointerType;
+}
+
+export function isVirtualPointerEvent(event: PointerEvent) {
+  return (
+    (event.width === 0 && event.height === 0) ||
+    (event.width === 1 &&
+      event.height === 1 &&
+      event.pressure === 0 &&
+      event.detail === 0 &&
+      event.pointerType !== 'mouse') ||
+    // iOS VoiceOver returns 0.333• for width/height.
+    (event.width < 1 &&
+      event.height < 1 &&
+      event.pressure === 0 &&
+      event.detail === 0)
+  );
 }
