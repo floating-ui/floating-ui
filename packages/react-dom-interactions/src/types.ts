@@ -14,7 +14,7 @@ export * from './';
 
 export {arrow} from '@floating-ui/react-dom';
 
-interface ExtendedRefs<RT extends ReferenceType = ReferenceType> {
+export interface ExtendedRefs<RT extends ReferenceType = ReferenceType> {
   reference: React.MutableRefObject<RT | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
   domReference: React.MutableRefObject<Element | null>;
