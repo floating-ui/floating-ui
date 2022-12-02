@@ -1,5 +1,5 @@
 import {hideOthers} from 'aria-hidden';
-import {focusable, FocusableElement, tabbable} from 'tabbable';
+import {FocusableElement, tabbable} from 'tabbable';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {usePortalContext} from './FloatingPortal';
@@ -99,18 +99,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     [refs]
   );
 
-  const getFocusableContent = React.useCallback(
-    (container: HTMLElement | null = refs.floating.current) => {
-      return container ? focusable(container, getTabbableOptions()) : [];
-    },
-    [refs]
-  );
-
   const getTabbableElements = React.useCallback(
-    (container?: HTMLElement, allFocusable?: boolean) => {
-      const content = allFocusable
-        ? getFocusableContent(container)
-        : getTabbableContent(container);
+    (container?: HTMLElement) => {
+      const content = getTabbableContent(container);
 
       return orderRef.current
         .map((type) => {
@@ -127,7 +118,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         .filter(Boolean)
         .flat() as Array<FocusableElement>;
     },
-    [orderRef, refs, getTabbableContent, getFocusableContent]
+    [orderRef, refs, getTabbableContent]
   );
 
   React.useEffect(() => {
@@ -348,7 +339,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
-    const focusableElements = getTabbableElements(floating, true);
+    const focusableElements = getTabbableElements(floating);
     const elToFocus =
       (typeof initialFocus === 'number'
         ? focusableElements[initialFocus]
@@ -404,10 +395,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [portalContext, modal]);
 
   useLayoutEffect(() => {
-    if (getFocusableContent().length === 0 && !initialFocusControlled) {
+    if (getTabbableContent().length === 0 && !initialFocusControlled) {
       setTabbableContentLength(0);
     }
-  }, [getFocusableContent, refs, initialFocusControlled]);
+  }, [getTabbableContent, refs, initialFocusControlled]);
 
   // Let the FloatingPortal's guards close the floating element.
   React.useImperativeHandle(
