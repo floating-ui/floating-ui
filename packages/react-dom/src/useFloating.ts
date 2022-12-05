@@ -17,15 +17,21 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   strategy = 'absolute',
   whileElementsMounted,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
-  const [data, setData] = React.useState<UseFloatingData>({
-    // Setting these to `null` will allow the consumer to determine if
-    // `computePosition()` has run yet
-    x: null,
-    y: null,
-    strategy,
-    placement,
-    middlewareData: {},
-  });
+  const initialData = React.useMemo(
+    () => ({
+      // Setting these to `null` will allow the consumer to determine if the
+      // floating element has been positioned yet, either due to async
+      // positioning or during SSR.
+      x: null,
+      y: null,
+      strategy,
+      placement,
+      middlewareData: {},
+    }),
+    [strategy, placement]
+  );
+
+  const [data, setData] = React.useState<UseFloatingData>(initialData);
 
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
@@ -111,6 +117,10 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     [runElementMountCallback]
   );
 
+  const reset = React.useCallback(() => {
+    setData(initialData);
+  }, [initialData]);
+
   const refs = React.useMemo(() => ({reference, floating}), []);
 
   return React.useMemo(
@@ -118,9 +128,10 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       ...data,
       update,
       refs,
+      reset,
       reference: setReference,
       floating: setFloating,
     }),
-    [data, update, refs, setReference, setFloating]
+    [data, update, refs, reset, setReference, setFloating]
   );
 }
