@@ -97,7 +97,7 @@ export const FloatingPortal = ({
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   React.useEffect(() => {
-    if (!portalNode || !preserveTabOrder) {
+    if (!portalNode || !preserveTabOrder || focusManagerState?.modal) {
       return;
     }
 
@@ -119,7 +119,7 @@ export const FloatingPortal = ({
       portalNode.removeEventListener('focusin', onFocus, true);
       portalNode.removeEventListener('focusout', onFocus, true);
     };
-  }, [portalNode, preserveTabOrder]);
+  }, [portalNode, preserveTabOrder, focusManagerState?.modal]);
 
   return (
     <PortalContext.Provider
