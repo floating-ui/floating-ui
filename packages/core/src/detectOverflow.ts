@@ -77,17 +77,17 @@ export async function detectOverflow(
     })
   );
 
+  const rect =
+    elementContext === 'floating' ? {...rects.floating, x, y} : rects.reference;
+
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
       ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-          rect:
-            elementContext === 'floating'
-              ? {...rects.floating, x, y}
-              : rects.reference,
+          rect,
           offsetParent: await platform.getOffsetParent?.(elements.floating),
           strategy,
         })
-      : rects[elementContext]
+      : rect
   );
 
   return {
