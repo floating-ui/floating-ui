@@ -27,6 +27,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       strategy,
       placement,
       middlewareData: {},
+      isReady: false,
     }),
     [strategy, placement]
   );
@@ -57,9 +58,10 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       strategy,
     }).then((data) => {
       if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
-        dataRef.current = data;
+        const value = {...data, isReady: true};
+        dataRef.current = value;
         ReactDOM.flushSync(() => {
-          setData(data);
+          setData(value);
         });
       }
     });

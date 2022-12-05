@@ -13,6 +13,7 @@ export {arrow} from './';
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
+  isReady: boolean;
 };
 
 export type ReferenceType = Element | VirtualElement;
