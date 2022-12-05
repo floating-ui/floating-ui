@@ -344,6 +344,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onDismiss(payload: DismissPayload) {
+      if (payload.type === 'escapeKey') {
+        previouslyFocusedElementRef.current = refs.domReference.current;
+      }
+
       if (payload.type !== 'outsidePress') {
         return;
       }
@@ -365,10 +369,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
       if (
         returnFocusValue &&
-        isHTMLElement(previouslyFocusedElement) &&
+        isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
-        enqueueFocus(previouslyFocusedElement, {
+        enqueueFocus(previouslyFocusedElementRef.current, {
           preventScroll: preventReturnFocusScroll,
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try

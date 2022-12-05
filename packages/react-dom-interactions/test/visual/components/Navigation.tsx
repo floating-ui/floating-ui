@@ -9,7 +9,6 @@ import {
   useFocus,
   useInteractions,
   useDismiss,
-  autoUpdate,
   safePolygon,
   FloatingPortal,
   useFloatingTree,
@@ -18,8 +17,6 @@ import {
   FloatingNode,
   FloatingFocusManager,
 } from '@floating-ui/react-dom-interactions';
-
-import './Navigation.css';
 
 interface SubItemProps {
   label: string;
@@ -70,7 +67,6 @@ export const NavigationItem = React.forwardRef<
         shift(),
       ],
       placement: 'right-start',
-      whileElementsMounted: autoUpdate,
     });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
@@ -114,10 +110,6 @@ export const NavigationItem = React.forwardRef<
                 {...getReferenceProps({
                 ...props,
                 className: `NavigationItem`,
-                onClick(event) {
-                    // Normalize button focus in Safari.
-                    (event.currentTarget as HTMLButtonElement).focus();
-                },
                 })}
             >
                 {label}

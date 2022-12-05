@@ -14,6 +14,7 @@ import {
   FloatingPortal,
 } from '../../src';
 import {Props} from '../../src/FloatingFocusManager';
+import {Main as Navigation} from '../visual/components/Navigation';
 
 function App(
   props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>
@@ -679,3 +680,19 @@ describe('non-modal + FloatingPortal', () => {
     cleanup();
   });
 });
+
+describe('Navigation', () => {
+  test('does not focus reference when hovering it', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.unhover(screen.getByText('Product'));
+    expect(screen.getByText('Product')).not.toHaveFocus();
+  });
+
+  test('returns focus to reference when floating element was opened by hover but is closed by esc key', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.keyboard('{Escape}');
+    expect(screen.getByText('Product')).toHaveFocus();
+  });
+})
