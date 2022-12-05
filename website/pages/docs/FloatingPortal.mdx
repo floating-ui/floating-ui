@@ -7,13 +7,17 @@ import {FloatingPortal} from '@floating-ui/react-dom-interactions';
 
 function Tooltip() {
   return (
-    <FloatingPortal>{open && <div>Tooltip</div>}</FloatingPortal>
+    <FloatingPortal>
+      {open && <div>My portalled element</div>}
+    </FloatingPortal>
   );
 }
 ```
 
-> **Don't conditionally render the FloatingPortal**. Instead,
-> conditionally render its children as seen above.
+<Notice type="error" title="Important">
+  Don't conditionally render the FloatingPortal, only its
+  children as seen above.
+</Notice>
 
 ## Props
 

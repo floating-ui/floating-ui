@@ -47,10 +47,12 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-> Depending on the placement, either `x` or `y` will be
-> `undefined{:js}`. The above code checks for `null{:js}` and
-> `undefined{:js}` simultaneously. Don't remove `!= null{:js}`,
-> because either value can be falsy (0), causing a bug!
+<Notice type="error" title="Important">
+  Depending on the placement, either `x` or `y` will be
+  `undefined{:js}`. The above code checks for `null{:js}` and
+  `undefined{:js}` simultaneously. Don't remove `!= null{:js}`,
+  because either value can be falsy (0), causing a bug!
+</Notice>
 
 This middleware is designed only to position the arrow on one
 axis (`x` for `'top'{:js}` or `'bottom'{:js}` placements). The

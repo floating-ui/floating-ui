@@ -3,21 +3,17 @@
 Adds focus-managed indexed navigation via arrow keys to a list of
 items within the floating element.
 
-```js /useListNavigation/
-import {
-  useFloating,
-  useInteractions,
-  useListNavigation,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useListNavigation} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useListNavigation/
 const {context} = useFloating();
+const listNavigation = useListNavigation(context);
 const {getReferenceProps, getFloatingProps, getItemProps} =
-  useInteractions([
-    useListNavigation(context, {
-      // props
-    }),
-  ]);
+  useInteractions([listNavigation]);
 ```
 
 Spread `getItemProps(){:js}` to each list item. The list items
@@ -184,8 +180,10 @@ useListNavigation(context, {
 });
 ```
 
-> Your virtually-focused list items must have a unique
-> `id{:.keyword}` set on them.
+<Notice type="error" title="Required">
+  Your virtually-focused list items must have a unique `id{:.keyword}` set on 
+  them.
+</Notice>
 
 ### allowEscape
 
@@ -194,14 +192,16 @@ is selected after navigating beyond the boundary of the list. In
 some autocomplete/combobox components, this may be desired, as
 screen readers will return to the input.
 
-> `loop{:.objectKey}` must be `true{:js}`
-
 ```js
 useListNavigation(context, {
   loop: true,
   allowEscape: true,
 });
 ```
+
+<Notice type="error" title="Required">
+  The `loop{:.objectKey}` option must be set to `true{:js}`.
+</Notice>
 
 ### orientation
 
@@ -226,6 +226,13 @@ picker/date picker, where pressing ArrowRight or ArrowLeft can
 change rows), or `'both'{:js}` (where the current row cannot be
 escaped with ArrowRight or ArrowLeft, only ArrowUp and
 ArrowDown).
+
+```js
+useListNavigation(context, {
+  // 4 columns, any number of rows
+  cols: 4,
+});
+```
 
 ### focusItemOnOpen
 

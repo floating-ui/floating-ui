@@ -3,19 +3,17 @@
 Adds hover event listeners that change the open state, like CSS
 `:hover{:.objectKey}`.
 
-```js /useHover/
-import {
-  useFloating,
-  useInteractions,
-  useHover,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useHover} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useHover/
 const {context} = useFloating();
+const hover = useHover(context);
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useHover(context, {
-    // props
-  }),
+  hover,
 ]);
 ```
 

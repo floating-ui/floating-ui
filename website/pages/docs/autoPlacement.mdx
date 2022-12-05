@@ -31,9 +31,6 @@ In the above example, the automatic "most space" strategy is
 demonstrated (in contrast to flip's preferred + fallback "no
 space" one).
 
-> This cannot be used alongside `flip(){:js}`. See
-> [Conflict with flip](/docs/autoPlacement#conflict-with-flip).
-
 ## Usage
 
 ```js
@@ -43,6 +40,11 @@ computePosition(referenceEl, floatingEl, {
   middleware: [autoPlacement()],
 });
 ```
+
+<Notice type="warning" title="Note">
+  This is an alternative to `flip(){:js}`, so only one of either can be used.
+  See [Conflict with flip](/docs/autoPlacement#conflict-with-flip).
+</Notice>
 
 ## Options
 

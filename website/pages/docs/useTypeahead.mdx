@@ -4,19 +4,17 @@ Provides a matching callback that can be used to focus an item as
 the user types, often used in tandem with
 `useListNavigation(){:js}`.
 
-```js /useTypeahead/
-import {
-  useFloating,
-  useInteractions,
-  useTypeahead,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useTypeahead} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useTypeahead/
 const {context} = useFloating();
+const typeahead = useTypeahead(context);
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useTypeahead(context, {
-    // props
-  }),
+  typeahead,
 ]);
 ```
 

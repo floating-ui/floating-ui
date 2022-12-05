@@ -2,19 +2,41 @@ import {Zap} from 'react-feather';
 
 # Interactions Examples
 
-These examples are guides that show you how to use the library by
-building common floating UI components. They are not meant to be
-complete applications, but are useful as a starting guide.
+This library is very low-level to enable full control and custom
+component logic.
+
+While this means you can create exactly what you need, and is
+highly scalable as product needs change compared to standard
+component libraries, it can be a bit daunting at first because of
+all the separate modules.
+
+This page provides some examples of how to use the library to
+create some common interactions.
+
+## Full guides
+
+Learn how to build these common floating UI components, complete
+with a reusable component example. These components heavily
+leverage the
+[React Context API](https://beta.reactjs.org/apis/react/useContext)
+to create "compound components", one of the best use cases for
+using context.
 
 - [Tooltip](/docs/tooltip)
 - [Popover](/docs/popover)
+- [Dialog](/docs/dialog)
 
-## CodeSandbox
+## Other
 
-These components have a CodeSandbox example. Dedicated
-documentation for these is coming soon.
+Learn how to create other types of floating UI components by
+reading a CodeSandbox demo. Note that these demos are far less
+complete and may be a bit hard to understand without the full
+guide, but you can tinker with them and see how things work.
 
-- [Modal Dialog](https://codesandbox.io/s/wandering-dream-qwe6dj?file=/src/App.tsx)
+<Notice gap="below">
+  Full guides for these are in the process of being written!
+</Notice>
+
 - [Dropdown Menu (including submenus)](https://codesandbox.io/s/admiring-lamport-5wt3yg?file=/src/DropdownMenu.tsx)
 - [Context Menu](https://codesandbox.io/s/trusting-rui-2duieo?file=/src/ContextMenu.tsx)
 - [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)

@@ -18,16 +18,23 @@ accessible floating UI components.
 
 ## Install
 
-Choose the package that suits you.
+Floating UI is platform-agnostic and supports a variety of
+platforms.
 
 ### Vanilla DOM positioning
 
-Use with vanilla JavaScript or a non-React framework
+Use on the web with vanilla JavaScript or a non-React framework
 ([view tutorial](/docs/tutorial)).
 
 ```shell
 npm install @floating-ui/dom
 ```
+
+<Notice>
+  This library is how you use Floating UI with HTML/SVG elements
+  (`dom` refers to the [Document Object
+  Model](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)).
+</Notice>
 
 ### React DOM positioning
 
@@ -56,7 +63,12 @@ npm install @floating-ui/react-native
 
 ### Canvas or other platforms
 
-Learn about creating a [Platform](/docs/platform).
+If you're targeting a platform other than the vanilla DOM (web),
+React, or React Native, you can create your own
+[Platform](/docs/platform).
+
+This allows you to support things like Canvas/WebGL, or other
+platforms that can run JavaScript.
 
 ```shell
 npm install @floating-ui/core
@@ -83,8 +95,10 @@ All exports will be available on `window.FloatingUIDOM{:js}`.
 
 ## Package entry points
 
-> Using webpack, Vite, or Parcel? Skip this section as modern
-> bundlers handle this for you.
+<Notice>
+  Using webpack, Vite, or Parcel? Skip this section as modern
+  bundlers handle this for you.
+</Notice>
 
 Floating UI uses `process.env.NODE_ENV{:js}` to determine whether
 your build is in development or production mode. This allows us

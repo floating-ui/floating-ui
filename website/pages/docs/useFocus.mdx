@@ -3,19 +3,17 @@
 Adds focus event listeners that change the open state, like CSS
 `:focus{:.objectKey}`.
 
-```js /useFocus/
-import {
-  useFloating,
-  useInteractions,
-  useFocus,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useFocus} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useFocus/
 const {context} = useFloating();
+const focus = useFocus(context);
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useFocus(context, {
-    // props
-  }),
+  focus,
 ]);
 ```
 

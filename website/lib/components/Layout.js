@@ -13,6 +13,7 @@ import {Chrome} from './Chrome';
 import {Floating} from './Floating';
 import Collapsible from './Collapsible';
 import Navigation from './Navigation';
+import Notice from './Notice';
 
 const middleware = [
   {
@@ -266,6 +267,12 @@ const nav = [
     depth: 1,
     hide: true,
   },
+  {
+    url: '/docs/dialog',
+    title: 'Dialog',
+    depth: 1,
+    hide: true,
+  },
   ...interactions,
   {
     url: '/docs/motivation',
@@ -299,6 +306,7 @@ const components = {
   Collapsible,
   Floating,
   Chrome,
+  Notice,
   h2: linkify('h2'),
   h3: linkify('h3'),
   h4: linkify('h4'),

@@ -3,10 +3,6 @@
 Provides context for nested floating elements when they are not
 children of each other on the DOM.
 
-> If your elements are not portalled into a common node (e.g.
-> FloatingPortal), then the natural DOM tree hierarchy renders
-> this unnecessary.
-
 A nested floating element may look like the following, where
 there is a popover **inside** the content of another one:
 
@@ -29,6 +25,13 @@ function App() {
   );
 }
 ```
+
+<Notice>
+  If your floating elements are not portalled, this may not be
+  necessary, however the additional context can help. By always
+  portalling your floating element, you can avoid clipping
+  issues.
+</Notice>
 
 ## Usage
 
@@ -79,6 +82,21 @@ interface FloatingTreeType {
   removeNode: (node: FloatingNodeType) => void;
 }
 ```
+
+## Custom parent
+
+<Notice type="version">Available from v0.13.0</Notice>
+
+By default, the parent node is the closest
+`<FloatingNode />{:js}`, but you can specify a custom parent node
+by passing in the `parentId` to `useFloatingNodeId(){:js}`:
+
+```js
+const nodeId = useFloatingNodeId(parentId);
+```
+
+This is useful if you want to mark a sibling floating element in
+the React tree as the child of another sibling.
 
 ## FloatingTree wrapper
 

@@ -1,37 +1,52 @@
 # autoUpdate
 
-This function adds listeners that automatically call an update
-function when necessary so that the floating element remains
-anchored to the reference element in a variety of scenarios
-without detaching.
+Depending on the DOM layout, the floating element may detach from
+the reference element if the user scrolls or resizes the screen,
+so its position may need to be updated again to ensure it stays
+anchored.
+
+To solve this, `autoUpdate(){:js}` adds listeners that will
+automatically call an update function which invokes
+`computePosition(){:js}` when necessary. Updates typically take
+only 1ms, well within the 120 fps frame budget.
 
 ```js
 autoUpdate(referenceEl, floatingEl, update, options);
 ```
 
-Only call this function when the floating element is mounted to
-the DOM (or visible on the screen).
+Only call this function when the floating element is open on the
+screen.
 
-```js
+```js /position/
 import {computePosition, autoUpdate} from '@floating-ui/dom';
 
-const cleanup = autoUpdate(referenceEl, floatingEl, () => {
+// This function will get called repeatedly.
+function updatePosition() {
   computePosition(referenceEl, floatingEl).then(({x, y}) => {
     // ...
   });
-});
+}
+
+const cleanup = autoUpdate(
+  referenceEl,
+  floatingEl,
+  updatePosition
+);
 ```
 
 It returns a cleanup function that should be invoked when the
-floating element is no longer mounted on the DOM (or visible on
-the screen).
+floating element is removed from the screen.
 
 ```js
 // Later, when the element is removed from the screen
 cleanup();
 ```
 
-> Requires a `ResizeObserver{:.class}` by default.
+<Notice title="Browser support">
+Requires a `ResizeObserver{:.class}` by default, which is supported widely by
+all modern browsers. However, depending on your browser  support requirements, you may 
+need to provide a polyfill for this. You can find the support table on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#browser_compatibility).
+</Notice>
 
 ## Options
 
@@ -88,6 +103,20 @@ const cleanup = autoUpdate(referenceEl, floatingEl, update, {
   elementResize: false,
 });
 ```
+
+<Notice type="note" title="Testing environments">
+JSDOM does not support `ResizeObserver{:.class}`. A polyfill or check like the 
+following will work:
+
+<br />
+
+```js
+autoUpdate(referenceEl, floatingEl, update, {
+  elementResize: typeof ResizeObserver === 'function',
+});
+```
+
+</Notice>
 
 ### animationFrame
 

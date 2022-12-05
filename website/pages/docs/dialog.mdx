@@ -1,0 +1,272 @@
+<div className="mt-6">
+  <img
+    className="select-none"
+    src="/dialog.svg"
+    alt="Dialog"
+    width={729}
+    height={200}
+    draggable={false}
+  />
+</div>
+
+A
+[dialog](https://www.w3.org/WAI/ARIA/apg/example-index/dialog-modal/dialog)
+is a floating element that displays information that requires
+immediate attention, appearing over the page content and blocking
+interactions with the page until it is dismissed.
+
+It has similar interactions to a popover but with two key
+differences:
+
+- It is modal and renders a backdrop behind the dialog that dims
+  the content behind it, making the rest of the page
+  inaccessible.
+- It is centered in the viewport, not anchored to any particular
+  reference element.
+
+## Essentials
+
+An accessible dialog component has the following:
+
+- **Dismissal**: When the user presses the `esc` key or outside
+  the dialog while the it is open, it closes.
+- **Role**: The elements are given relevant role and ARIA
+  attributes to be accessible to screen readers.
+- **Focus management**: Focus is fully trapped inside the dialog
+  and must be dismissed by the user.
+
+## Examples
+
+Both of these examples have sections explaining them in-depth
+below.
+
+- [Basic dialog](https://codesandbox.io/s/stoic-bas-frzus0?file=/src/App.tsx)
+- [Reusable dialog component](https://codesandbox.io/s/charming-bush-47epk2?file=/src/App.tsx)
+
+## Basic dialog
+
+[CodeSandbox demo](https://codesandbox.io/s/stoic-bas-frzus0?file=/src/App.tsx)
+
+This example demonstrates how to create a dialog for use in a
+single instance to familiarize yourself with the fundamentals.
+
+Let's walkthrough the example:
+
+### Open state
+
+```js {4}
+import {useState} from 'react';
+
+function Dialog() {
+  const [open, setOpen] = useState(false);
+}
+```
+
+The `open{:.const}` state determines whether or not the dialog is
+currently open on the screen. It is used for conditional
+rendering.
+
+### useFloating hook
+
+The `useFloating(){:js}` hook provides context for our dialog. We
+need to pass it some information:
+
+- `open`: The open state from our `useState(){:js}` hook above.
+- `onOpenChange{:.objectKey}`: A callback function that will be
+  called when the dialog is opened or closed. We'll use this to
+  update our `open{:.const}` state.
+
+```js /useFloating/
+import {useFloating} from '@floating-ui/react-dom-interactions';
+
+function Dialog() {
+  const [open, setOpen] = useState(false);
+
+  const {reference, floating, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+}
+```
+
+### Interaction hooks
+
+Interaction hooks return objects containing keys of props that
+enable the dialog to be opened, closed, or accessible to screen
+readers.
+
+Using the `context{:.const}` that was returned from the hook,
+call the interaction hooks:
+
+```js /context/
+import {
+  // ...
+  useClick,
+  useDismiss,
+  useRole,
+  useInteractions,
+  useId,
+} from '@floating-ui/react-dom-interactions';
+
+function Dialog() {
+  const [open, setOpen] = useState(false);
+
+  const {reference, floating, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  const click = useClick(context);
+  const dismiss = useDismiss(context, {
+    outsidePressEvent: 'mousedown',
+  });
+  const role = useRole(context);
+
+  // Merge all the interactions into prop getters
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    click,
+    dismiss,
+    role,
+  ]);
+
+  // Set up label and description ids
+  const labelId = useId();
+  const descriptionId = useId();
+}
+```
+
+- `useClick(){:js}` adds the ability to toggle the dialog open or
+  closed when the reference element is clicked. A dialog may not
+  be attached to a reference element though, so this is optional.
+- `useDismiss(){:js}` adds the ability to dismiss the dialog when
+  the user presses the `esc` key or presses outside of the
+  dialog. The `outsidePressEvent{:.objectKey}` option is set to
+  `'mousedown'{:js}` so that touch events become lazy and do not
+  fall through the backdrop, as the default behavior is eagier.
+- `useRole(){:js}` adds the correct ARIA attributes for a
+  `dialog{:.string}` to the dialog and reference elements.
+
+Finally, `useInteractions(){:js}` merges all of their props into
+prop getters which can be used for rendering.
+
+After this:
+
+- `useId(){:js}` generates a unique id for the heading and
+  description elements of the dialog, so that the content of the
+  dialog is announced by screen readers with wide compatibility.
+
+### Rendering
+
+Now we have all the variables and hooks set up, we can render out
+our elements.
+
+```js
+function Dialog() {
+  // ...
+  return (
+    <>
+      <button ref={reference} {...getReferenceProps()}>
+        Reference element
+      </button>
+      {open && (
+        <FloatingOverlay
+          lockScroll
+          style={{background: 'rgba(0, 0, 0, 0.8)'}}
+        >
+          <FloatingFocusManager context={context}>
+            <div
+              ref={floating}
+              aria-labelledby={labelId}
+              aria-describedby={descriptionId}
+              {...getFloatingProps()}
+            >
+              <h2 id={labelId}>Heading element</h2>
+              <p id={descriptionId}>Description element</p>
+              <button onClick={() => setOpen(false)}>
+                Close
+              </button>
+            </div>
+          </FloatingFocusManager>
+        </FloatingOverlay>
+      )}
+    </>
+  );
+}
+```
+
+- `{...getReferenceProps()}{:js}` /
+  `{...getFloatingProps()}{:js}` spreads the props from the
+  interaction hooks onto the relevant elements. They contain
+  props like `onClick{:.keyword}`, `aria-expanded{:.keyword}`,
+  etc.
+- `<FloatingOverlay />{:js}` is a component that renders a
+  backdrop overlay element behind the floating element, with the
+  ability to lock the body scroll.
+  [FloatingOverlay docs](/docs/FloatingOverlay).
+- `<FloatingFocusManager />{:js}` is a component that manages
+  focus of the dialog for modal behavior, trapping focus inside.
+  It should directly wrap the floating element and only be
+  rendered when the dialog is also rendered.
+  [FloatingFocusManager docs](/docs/FloatingFocusManager).
+
+## Reusable dialog component
+
+[CodeSandbox demo](https://codesandbox.io/s/charming-bush-47epk2?file=/src/App.tsx)
+
+It is better to create a reusable component API that can be used
+in a variety of different scenarios more easily. We can place all
+of our hooks into a single custom hook for better reusability,
+which is then used by a controller component which encapsulates
+the state.
+
+The reusable component can:
+
+- Be uncontrolled or controlled
+- Accept any element as the `<DialogTrigger />{:js}`
+- Read the open state to change styles
+
+```js
+function App() {
+  return (
+    <Dialog>
+      <DialogTrigger>My trigger</DialogTrigger>
+      <DialogContent>
+        <DialogHeading>My dialog heading</DialogHeading>
+        <DialogDescription>
+          My dialog description
+        </DialogDescription>
+        <DialogClose>Close</DialogClose>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### Controller component
+
+- `<Dialog />{:js}`
+
+This is the controller component that manages the dialog's state
+and provides the API to the rest of the components.
+
+### Render components
+
+These components read the context provided by the root Dialog
+component and render the appropriate elements.
+
+The components must be wrapped in `forwardRef(){:js}` to allow
+refs, and should merge the refs to ensure all refs are preserved
+and forwarded to the element. Props are also merged to prevent
+overwriting.
+
+- `<DialogTrigger />{:js}` is the trigger button the dialog is
+  attached to. This accepts an `asChild{:.keyword}` prop if you
+  want to attach it to a custom element. It also has a
+  `data-state{:.keyword}` attached to style based on the
+  open/closed state.
+- `<DialogContent />{:js}` is the dialog element, which can
+  contain any children (React nodes).
+- `<DialogHeading />{:js}` is the heading element for the dialog.
+- `<DialogDescription />{:js}` is the description element for the
+  dialog.
+- `<DialogClose />{:js}` is the close button for the dialog.

@@ -2,19 +2,17 @@
 
 Adds click event listeners that change the open state.
 
-```js /useClick/
-import {
-  useFloating,
-  useInteractions,
-  useClick,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useClick} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useClick/
 const {context} = useFloating();
+const click = useClick(context);
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useClick(context, {
-    // props
-  }),
+  click,
 ]);
 ```
 

@@ -3,19 +3,17 @@
 Adds relevant screen reader props for a given element
 `role{:.objectKey}`.
 
-```js /useRole/
-import {
-  useFloating,
-  useInteractions,
-  useRole,
-} from '@floating-ui/react-dom-interactions';
+```js
+import {useRole} from '@floating-ui/react-dom-interactions';
+```
 
-// ...
+Inside your component:
+
+```js /useRole/
 const {context} = useFloating();
+const role = useRole(context);
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useRole(context, {
-    // props
-  }),
+  role,
 ]);
 ```
 

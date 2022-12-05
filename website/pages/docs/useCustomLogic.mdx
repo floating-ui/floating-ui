@@ -8,32 +8,73 @@ props (`onClick{:.keyword}`, `aria-describedby{:.keyword}`, etc.)
 inside a prop getter key, which get merged. You can do the same
 thing.
 
-> As the library is fully tree-shakeable, commonly used features
-> will likely be included in the future to avoid you needing to
-> write custom interaction hooks.
+<Notice>
+  The library is fully tree-shakeable, so we can add new hooks
+  for specific commonly requested features. If you have ideas for
+  new hooks or functionality, don't hesitate to open a new issue
+  or discussion on the [GitHub
+  repo](https://github.com/floating-ui/floating-ui)!
+</Notice>
 
 ```js
 const useCustomLogic = (
   context: FloatingContext
 ): ElementProps => {
   // Note: all 3 of these properties are optional.
-  return {
-    reference: {
-      // React.HTMLProps
-      onClick() {
-        console.log('clicked!');
+  return React.useMemo(
+    () => ({
+      reference: {
+        // React.HTMLProps
+        onClick() {
+          console.log('clicked!');
+        },
       },
-    },
-    floating: {
-      // React.HTMLProps
-    },
-    item: {
-      // React.HTMLProps
-    },
-  };
+      floating: {
+        // React.HTMLProps
+      },
+      item: {
+        // React.HTMLProps
+      },
+    }),
+    []
+  );
 };
 ```
 
-If you have ideas for new hooks or functionality, don't hesitate
-to open a new issue or discussion on the
-[GitHub repo](https://github.com/floating-ui/floating-ui)!
+## Communicating between hooks
+
+Interaction hooks are decoupled, so passing the shared context
+object as a first argument is how they communicate with each
+other.
+
+It has an event emitter attached:
+
+```js
+const {context} = useFloating();
+
+React.useEffect(() => {
+  const handleEvent = () => {};
+  context.events.on('name', handleEvent);
+  return () => {
+    context.events.off('name', handleEvent);
+  };
+}, [context.events]);
+
+return (
+  <div
+    onClick={() => {
+      context.events.emit('name', {foo: 'bar'});
+    }}
+  />
+);
+```
+
+And also a mutable ref to pass state variables around hooks:
+
+```js
+const {context} = useFloating();
+
+React.useEffect(() => {
+  context.dataRef.current = 'foo';
+}, [context]);
+```
