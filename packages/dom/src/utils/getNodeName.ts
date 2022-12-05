@@ -1,5 +1,5 @@
-import {isWindow} from './window';
+import {isNode} from './is';
 
 export function getNodeName(node: Node | Window): string {
-  return isWindow(node) ? '' : node ? (node.nodeName || '').toLowerCase() : '';
+  return isNode(node) ? (node.nodeName || '').toLowerCase() : '';
 }
