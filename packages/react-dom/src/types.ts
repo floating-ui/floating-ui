@@ -20,6 +20,7 @@ export type ReferenceType = Element | VirtualElement;
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   UseFloatingData & {
     update: () => void;
+    reset: () => void;
     reference: (node: RT | null) => void;
     floating: (node: HTMLElement | null) => void;
     refs: {
