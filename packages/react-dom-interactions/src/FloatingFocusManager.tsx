@@ -326,8 +326,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     let returnFocusValue = returnFocus;
     let preventReturnFocusScroll = false;
-    const previouslyFocusedElement =
-      refs.domReference.current ?? activeElement(doc);
+    const previouslyFocusedElement = activeElement(doc);
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
@@ -450,9 +449,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           }}
         />
       )}
-      {/* 
+      {/*
         Ensure the first swipe is the list item. The end of the listbox popup
-        will have a dismiss button. 
+        will have a dismiss button.
       */}
       {typeableCombobox ? null : renderDismissButton('start')}
       {React.cloneElement(
