@@ -248,7 +248,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       if (virtual) {
         setActiveId(listRef.current[indexRef.current]?.id);
       } else {
-        const item = listRef.current[indexRef.current] || refs.floating.current;
+        const item = listRef.current[indexRef.current];
         enqueueFocus(item, {
           preventScroll: true,
           // Mac Safari does not move the virtual cursor unless the focus call
@@ -266,7 +266,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         });
       }
     },
-    [virtual, refs]
+    [virtual]
   );
 
   useLayoutEffect(() => {
@@ -296,7 +296,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
-  }, [enabled, open, selectedIndex, listRef, focusItem, onNavigate]);
+  }, [enabled, open, selectedIndex, onNavigate]);
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
@@ -347,10 +347,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     selectedIndex,
     nested,
     listRef,
-    allowEscape,
     orientation,
     rtl,
-    virtual,
     onNavigate,
     focusItem,
     disabledIndicesRef,
@@ -728,6 +726,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             if (open) {
               onNavigate(indexRef.current);
             }
+          }
+        },
+        onFocus() {
+          if (open) {
+            onNavigate(null);
           }
         },
         onPointerDown: checkVirtualPointer,
