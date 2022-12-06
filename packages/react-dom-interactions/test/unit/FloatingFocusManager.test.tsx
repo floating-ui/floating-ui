@@ -695,4 +695,11 @@ describe('Navigation', () => {
     await userEvent.keyboard('{Escape}');
     expect(screen.getByText('Product')).toHaveFocus();
   });
+
+  test('does not re-open after closing via escape key', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByText('Link 1')).not.toBeInTheDocument();
+  });
 })
