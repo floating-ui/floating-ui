@@ -10,17 +10,24 @@ export function getBoundingClientRect(
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
 
+  let contextRect = clientRect;
+  let elementToCheckForScale = element;
   let scaleX = 1;
   let scaleY = 1;
 
-  if (includeScale && isHTMLElement(element)) {
+  if (!isElement(element) && element.contextElement) {
+    contextRect = element.contextElement.getBoundingClientRect();
+    elementToCheckForScale = element.contextElement;
+  }
+
+  if (includeScale && isHTMLElement(elementToCheckForScale)) {
     scaleX =
-      element.offsetWidth > 0
-        ? round(clientRect.width) / element.offsetWidth || 1
+      elementToCheckForScale.offsetWidth > 0
+        ? round(contextRect.width) / elementToCheckForScale.offsetWidth || 1
         : 1;
     scaleY =
-      element.offsetHeight > 0
-        ? round(clientRect.height) / element.offsetHeight || 1
+      elementToCheckForScale.offsetHeight > 0
+        ? round(contextRect.height) / elementToCheckForScale.offsetHeight || 1
         : 1;
   }
 

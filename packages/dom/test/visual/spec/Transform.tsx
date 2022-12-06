@@ -9,7 +9,8 @@ type Node =
   | 'body'
   | 'html'
   | 'offsetParent'
-  | 'offsetParent-inverse';
+  | 'offsetParent-inverse'
+  | 'virtual';
 const NODES: Node[] = [
   null,
   'reference',
@@ -18,6 +19,7 @@ const NODES: Node[] = [
   'html',
   'offsetParent',
   'offsetParent-inverse',
+  'virtual',
 ];
 
 export function Transform() {
@@ -39,6 +41,7 @@ export function Transform() {
         break;
       case 'offsetParent':
       case 'offsetParent-inverse':
+      case 'virtual':
         element = offsetParentRef.current;
         break;
       default:
@@ -50,6 +53,17 @@ export function Transform() {
         : 'scale(1.2) translate(2rem, -2rem)';
     }
 
+    if (node === 'virtual' && element) {
+      element.style.transform = 'scale(0.5)';
+      const virtualContext = document.querySelector(
+        '#virtual-context'
+      ) as HTMLElement;
+      reference({
+        getBoundingClientRect: () => virtualContext.getBoundingClientRect(),
+        contextElement: virtualContext,
+      });
+    }
+
     update();
 
     return () => {
@@ -57,7 +71,7 @@ export function Transform() {
         element.style.transform = '';
       }
     };
-  }, [node, update]);
+  }, [node, update, reference]);
 
   return (
     <>
@@ -74,6 +88,12 @@ export function Transform() {
           position: node === 'offsetParent' ? 'relative' : undefined,
         }}
       >
+        {node === 'virtual' && (
+          <div
+            id="virtual-context"
+            style={{width: 50, height: 50, background: 'black'}}
+          />
+        )}
         <div
           ref={reference}
           className="reference"
