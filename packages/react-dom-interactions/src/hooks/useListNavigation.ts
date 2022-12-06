@@ -248,7 +248,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       if (virtual) {
         setActiveId(listRef.current[indexRef.current]?.id);
       } else {
-        const item = listRef.current[indexRef.current] || refs.floating.current;
+        const item = listRef.current[indexRef.current];
         enqueueFocus(item, {
           preventScroll: true,
           // Mac Safari does not move the virtual cursor unless the focus call
@@ -266,7 +266,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         });
       }
     },
-    [virtual, refs]
+    [virtual]
   );
 
   useLayoutEffect(() => {
@@ -728,6 +728,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             if (open) {
               onNavigate(indexRef.current);
             }
+          }
+        },
+        onFocus() {
+          if (open) {
+            onNavigate(null);
           }
         },
         onPointerDown: checkVirtualPointer,
