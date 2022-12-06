@@ -1,8 +1,15 @@
-import {useFloating} from '@floating-ui/react-dom';
+import {useFloating, shift} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect, useRef} from 'react';
 import {Controls} from '../utils/Controls';
 
-type Node = null | 'reference' | 'floating' | 'body' | 'html' | 'offsetParent';
+type Node =
+  | null
+  | 'reference'
+  | 'floating'
+  | 'body'
+  | 'html'
+  | 'offsetParent'
+  | 'offsetParent-inverse';
 const NODES: Node[] = [
   null,
   'reference',
@@ -10,11 +17,14 @@ const NODES: Node[] = [
   'body',
   'html',
   'offsetParent',
+  'offsetParent-inverse',
 ];
 
 export function Transform() {
   const [node, setNode] = useState<Node>(null);
-  const {x, y, reference, floating, strategy, update} = useFloating();
+  const {x, y, reference, floating, strategy, update} = useFloating({
+    middleware: node?.includes('inverse') ? [shift({crossAxis: true})] : [],
+  });
   const offsetParentRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -28,13 +38,16 @@ export function Transform() {
         element = document.body;
         break;
       case 'offsetParent':
+      case 'offsetParent-inverse':
         element = offsetParentRef.current;
         break;
       default:
     }
 
     if (element) {
-      element.style.transform = 'scale(1.2) translate(2rem, -2rem)';
+      element.style.transform = node?.includes('inverse')
+        ? 'scale(0.5)'
+        : 'scale(1.2) translate(2rem, -2rem)';
     }
 
     update();
