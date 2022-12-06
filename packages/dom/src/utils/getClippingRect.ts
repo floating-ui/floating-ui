@@ -133,10 +133,12 @@ export function getClippingRect({
     return accRect;
   }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
 
-  return {
+  const rect = {
     width: clippingRect.right - clippingRect.left,
     height: clippingRect.bottom - clippingRect.top,
     x: clippingRect.left,
     y: clippingRect.top,
   };
+
+  return rect;
 }
