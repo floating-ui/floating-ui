@@ -296,7 +296,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
-  }, [enabled, open, selectedIndex, listRef, focusItem, onNavigate]);
+  }, [enabled, open, selectedIndex, onNavigate]);
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
@@ -347,10 +347,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     selectedIndex,
     nested,
     listRef,
-    allowEscape,
     orientation,
     rtl,
-    virtual,
     onNavigate,
     focusItem,
     disabledIndicesRef,
