@@ -344,7 +344,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onDismiss(payload: DismissPayload) {
-      if (payload.type === 'escapeKey') {
+      if (payload.type === 'escapeKey' && refs.domReference.current) {
         previouslyFocusedElementRef.current = refs.domReference.current;
       }
 
@@ -367,7 +367,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
-      if (contains(floating, activeElement(doc))) {
+      if (contains(floating, activeElement(doc)) && refs.domReference.current) {
         previouslyFocusedElementRef.current = refs.domReference.current;
       }
 
