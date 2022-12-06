@@ -367,6 +367,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
+      if (contains(floating, activeElement(doc))) {
+        previouslyFocusedElementRef.current = refs.domReference.current;
+      }
+
       if (
         returnFocusValue &&
         isHTMLElement(previouslyFocusedElementRef.current) &&

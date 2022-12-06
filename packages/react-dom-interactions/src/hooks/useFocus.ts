@@ -109,7 +109,6 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
           }
 
           dataRef.current.openEvent = event.nativeEvent;
-          console.log('open from here');
           onOpenChange(true);
         },
         onBlur(event) {

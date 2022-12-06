@@ -11,9 +11,7 @@ import {
   useDismiss,
   safePolygon,
   FloatingPortal,
-  useFloatingTree,
   useFloatingNodeId,
-  useFloatingParentNodeId,
   FloatingNode,
   FloatingFocusManager,
 } from '@floating-ui/react-dom-interactions';
@@ -52,9 +50,7 @@ export const NavigationItem = React.forwardRef<
   const [open, setOpen] = React.useState(false);
   const hasChildren = !!children;
 
-  const tree = useFloatingTree();
   const nodeId = useFloatingNodeId();
-  const parentId = useFloatingParentNodeId();
 
   const {x, y, reference, floating, strategy, context} =
     useFloating<HTMLAnchorElement>({
@@ -82,20 +78,6 @@ export const NavigationItem = React.forwardRef<
     }),
   ]);
 
-  // Event emitter allows you to communicate across tree components.
-  // This effect closes all menus when an item gets clicked anywhere
-  // in the tree.
-  React.useEffect(() => {
-    function handleTreeClick() {
-      setOpen(false);
-    }
-
-    tree?.events.on('click', handleTreeClick);
-    return () => {
-      tree?.events.off('click', handleTreeClick);
-    };
-  }, [parentId, nodeId, tree]);
-
   const mergedReferenceRef = React.useMemo(
     () => mergeRefs([ref, reference]),
     [reference, ref]
@@ -103,17 +85,17 @@ export const NavigationItem = React.forwardRef<
 
   return (
     <FloatingNode id={nodeId}>
-        <li>
-            <a
-                href={href}
-                ref={mergedReferenceRef}
-                {...getReferenceProps({
-                ...props,
-                className: `NavigationItem`,
-                })}
-            >
-                {label}
-            </a>
+      <li>
+        <a
+          href={href}
+          ref={mergedReferenceRef}
+          {...getReferenceProps({
+          ...props,
+          className: `NavigationItem`,
+          })}
+        >
+          {label}
+        </a>
       </li>
       <FloatingPortal>
         {open && (
@@ -134,8 +116,9 @@ export const NavigationItem = React.forwardRef<
               }}
               {...getFloatingProps()}
             >
-                <ul className="NavigationList">
-              {children}
+              <button type="button" onClick={() => setOpen(false)}>Close</button>
+              <ul className="NavigationList">
+                {children}
               </ul>
             </div>
           </FloatingFocusManager>
@@ -158,9 +141,9 @@ export const Main = () => {
     <Navigation>
       <NavigationItem label="Home" href="#" />
       <NavigationItem label="Product" href="#">
-            <NavigationSubItem label="Link 1" href="#" />
-            <NavigationSubItem label="Link 2" href="#" />
-            <NavigationSubItem label="Link 3" href="#" />
+          <NavigationSubItem label="Link 1" href="#" />
+          <NavigationSubItem label="Link 2" href="#" />
+          <NavigationSubItem label="Link 3" href="#" />
         </NavigationItem>
         <NavigationItem label="About" href="#" />
     </Navigation>
