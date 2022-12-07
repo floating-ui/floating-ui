@@ -7,6 +7,7 @@ import {isElement} from './utils/is';
 import {getDocumentElement} from './utils/getDocumentElement';
 import {getClippingRect} from './utils/getClippingRect';
 import {getComputedStyle} from './utils/getComputedStyle';
+import {getScale} from './utils/getScale';
 
 export const platform: Platform = {
   getClippingRect,
@@ -15,6 +16,7 @@ export const platform: Platform = {
   getDimensions,
   getOffsetParent,
   getDocumentElement,
+  getScale,
   async getElementRects({reference, floating, strategy}) {
     const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
     const getDimensionsFn = this.getDimensions;

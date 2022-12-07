@@ -4,6 +4,7 @@ import {getNodeScroll} from './getNodeScroll';
 import {getNodeName} from './getNodeName';
 import {getDocumentElement} from './getDocumentElement';
 import {isHTMLElement, isOverflowElement} from './is';
+import {getScale} from './getScale';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   rect,
@@ -22,6 +23,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
+  let scale = {x: 1, y: 1};
   const offsets = {x: 0, y: 0};
 
   if (
@@ -37,6 +39,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 
     if (isHTMLElement(offsetParent)) {
       const offsetRect = getBoundingClientRect(offsetParent);
+      scale = getScale(offsetParent);
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
@@ -47,8 +50,9 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   return {
-    ...rect,
-    x: rect.x - scroll.scrollLeft + offsets.x,
-    y: rect.y - scroll.scrollTop + offsets.y,
+    width: rect.width * scale.x,
+    height: rect.height * scale.y,
+    x: rect.x * scale.x - scroll.scrollLeft + offsets.x,
+    y: rect.y * scale.y - scroll.scrollTop + offsets.y,
   };
 }

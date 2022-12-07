@@ -47,6 +47,7 @@ export interface Platform {
   getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
   getClientRects?: (element: Element) => Promisable<Array<ClientRectObject>>;
   isRTL?: (element: Element) => Promisable<boolean>;
+  getScale?: (element: HTMLElement) => Promisable<{x: number; y: number}>;
 }
 
 export interface NodeScroll {

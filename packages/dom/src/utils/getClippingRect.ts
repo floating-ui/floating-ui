@@ -11,33 +11,41 @@ import {getDocumentRect} from './getDocumentRect';
 import {getOverflowAncestors} from './getOverflowAncestors';
 import {getDocumentElement} from './getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isLastTraversableNode, isContainingBlock} from './is';
+import {
+  isElement,
+  isLastTraversableNode,
+  isContainingBlock,
+  isHTMLElement,
+} from './is';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
+import {getScale} from './getScale';
 
 // Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
   element: Element,
   strategy: Strategy
 ): ClientRectObject {
-  const clientRect = getBoundingClientRect(
-    element,
-    false,
-    strategy === 'fixed'
-  );
+  const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
+  const scale = isHTMLElement(element) ? getScale(element) : {x: 1, y: 1};
+  const width = element.clientWidth * scale.x;
+  const height = element.clientHeight * scale.y;
+  const x = left * scale.x;
+  const y = top * scale.y;
+
   return {
-    top,
-    left,
-    x: left,
-    y: top,
-    right: left + element.clientWidth,
-    bottom: top + element.clientHeight,
-    width: element.clientWidth,
-    height: element.clientHeight,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    x,
+    y,
+    width,
+    height,
   };
 }
 
