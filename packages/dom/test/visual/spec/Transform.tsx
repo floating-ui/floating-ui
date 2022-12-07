@@ -138,7 +138,7 @@ export function Transform() {
             top: y ?? '',
             left: x ?? '',
             transform: node === 'floating' ? 'scale(1.25)' : '',
-            // transformOrigin: 'top',
+            transformOrigin: 'top',
           }}
         >
           Floating
