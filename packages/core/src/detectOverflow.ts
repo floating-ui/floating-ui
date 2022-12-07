@@ -5,7 +5,6 @@ import type {
   RootBoundary,
   ElementContext,
   MiddlewareArguments,
-  Rect,
 } from './types';
 import {paintDebugRects} from './utils/debugRects';
 import {getSideObjectFromPadding} from './utils/getPaddingObject';
@@ -40,12 +39,6 @@ export interface Options {
    * @default 0
    */
   padding: Padding;
-  /**
-   * A function that allows you to modify the element rect before it is used to
-   * calculate overflow.
-   * @default (rect) => rect
-   */
-  transformRect: (elementRect: Rect) => Rect;
 }
 
 /**
@@ -68,7 +61,6 @@ export async function detectOverflow(
     elementContext = 'floating',
     altBoundary = false,
     padding = 0,
-    transformRect = (elementRect) => elementRect,
   } = options;
 
   const paddingObject = getSideObjectFromPadding(padding);
@@ -97,15 +89,13 @@ export async function detectOverflow(
     : {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
-    transformRect(
-      platform.convertOffsetParentRelativeRectToViewportRelativeRect
-        ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-            rect,
-            offsetParent,
-            strategy,
-          })
-        : rect
-    )
+    platform.convertOffsetParentRelativeRectToViewportRelativeRect
+      ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+          rect,
+          offsetParent,
+          strategy,
+        })
+      : rect
   );
 
   if (__DEV__) {
