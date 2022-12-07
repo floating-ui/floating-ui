@@ -1,6 +1,30 @@
-import {useFloating, shift} from '@floating-ui/react-dom';
+import {useFloating, shift, autoUpdate} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect, useRef} from 'react';
 import {Controls} from '../utils/Controls';
+
+// The element rect is black, while the clipping rect is blue.
+const debugRectsJsx = (
+  <>
+    <div
+      id="elementRect"
+      style={{
+        position: 'fixed',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 9999,
+        pointerEvents: 'none',
+      }}
+    />
+    <div
+      id="clippingRect"
+      style={{
+        position: 'fixed',
+        backgroundColor: 'rgba(0, 200, 255, 0.25)',
+        zIndex: 9999,
+        pointerEvents: 'none',
+      }}
+    />
+  </>
+);
 
 type Node =
   | null
@@ -25,7 +49,8 @@ const NODES: Node[] = [
 export function Transform() {
   const [node, setNode] = useState<Node>(null);
   const {x, y, reference, floating, strategy, update} = useFloating({
-    middleware: node?.includes('inverse') ? [shift({crossAxis: true})] : [],
+    middleware: [shift({crossAxis: true})],
+    whileElementsMounted: autoUpdate,
   });
   const offsetParentRef = useRef(null);
 
@@ -80,6 +105,7 @@ export function Transform() {
         The floating element should be positioned correctly on the bottom when a
         certain node has been transformed.
       </p>
+      {debugRectsJsx}
       <div
         className="container"
         ref={offsetParentRef}

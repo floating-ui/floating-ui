@@ -38,6 +38,7 @@ export interface Platform {
   getDocumentElement?: (element: any) => Promisable<any>;
   getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
   isRTL?: (element: any) => Promisable<boolean>;
+  getScale?: (element: any) => Promisable<{x: number; y: number}>;
 }
 
 export type Coords = {[key in Axis]: number};

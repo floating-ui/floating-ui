@@ -6,8 +6,11 @@ import type {
   ElementContext,
   MiddlewareArguments,
 } from './types';
+import {paintDebugRects} from './utils/debugRects';
 import {getSideObjectFromPadding} from './utils/getPaddingObject';
 import {rectToClientRect} from './utils/rectToClientRect';
+
+const DEBUG_RECTS = false;
 
 export interface Options {
   /**
@@ -80,24 +83,43 @@ export async function detectOverflow(
   const rect =
     elementContext === 'floating' ? {...rects.floating, x, y} : rects.reference;
 
+  const offsetParent = await platform.getOffsetParent?.(elements.floating);
+  const offsetScale = (await platform.isElement?.(offsetParent))
+    ? (await platform.getScale?.(offsetParent)) || {x: 1, y: 1}
+    : {x: 1, y: 1};
+
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
       ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
           rect,
-          offsetParent: await platform.getOffsetParent?.(elements.floating),
+          offsetParent,
           strategy,
         })
       : rect
   );
 
+  if (__DEV__) {
+    if (DEBUG_RECTS) {
+      paintDebugRects(elementClientRect, clippingClientRect);
+    }
+  }
+
   return {
-    top: clippingClientRect.top - elementClientRect.top + paddingObject.top,
+    top:
+      (clippingClientRect.top - elementClientRect.top + paddingObject.top) /
+      offsetScale.y,
     bottom:
-      elementClientRect.bottom -
-      clippingClientRect.bottom +
-      paddingObject.bottom,
-    left: clippingClientRect.left - elementClientRect.left + paddingObject.left,
+      (elementClientRect.bottom -
+        clippingClientRect.bottom +
+        paddingObject.bottom) /
+      offsetScale.y,
+    left:
+      (clippingClientRect.left - elementClientRect.left + paddingObject.left) /
+      offsetScale.x,
     right:
-      elementClientRect.right - clippingClientRect.right + paddingObject.right,
+      (elementClientRect.right -
+        clippingClientRect.right +
+        paddingObject.right) /
+      offsetScale.x,
   };
 }

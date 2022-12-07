@@ -1,6 +1,6 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+import {getScale} from './getScale';
 import {isElement, isHTMLElement, isLayoutViewport} from './is';
-import {round} from './math';
 import {getWindow} from './window';
 
 export function getBoundingClientRect(
@@ -12,8 +12,7 @@ export function getBoundingClientRect(
 
   let contextRect = clientRect;
   let elementToCheckForScale = element;
-  let scaleX = 1;
-  let scaleY = 1;
+  let scale = {x: 1, y: 1};
 
   if (!isElement(element) && element.contextElement) {
     contextRect = element.contextElement.getBoundingClientRect();
@@ -21,14 +20,7 @@ export function getBoundingClientRect(
   }
 
   if (includeScale && isHTMLElement(elementToCheckForScale)) {
-    scaleX =
-      elementToCheckForScale.offsetWidth > 0
-        ? round(contextRect.width) / elementToCheckForScale.offsetWidth || 1
-        : 1;
-    scaleY =
-      elementToCheckForScale.offsetHeight > 0
-        ? round(contextRect.height) / elementToCheckForScale.offsetHeight || 1
-        : 1;
+    scale = getScale(elementToCheckForScale, contextRect);
   }
 
   const win = isElement(element) ? getWindow(element) : window;
@@ -37,13 +29,13 @@ export function getBoundingClientRect(
   const x =
     (clientRect.left +
       (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0)) /
-    scaleX;
+    scale.x;
   const y =
     (clientRect.top +
       (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0)) /
-    scaleY;
-  const width = clientRect.width / scaleX;
-  const height = clientRect.height / scaleY;
+    scale.y;
+  const width = clientRect.width / scale.x;
+  const height = clientRect.height / scale.y;
 
   return {
     width,
