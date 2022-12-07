@@ -667,7 +667,7 @@ function HomePage() {
                   DOM platform
                 </code>
                 <span className="text-md text-yellow-400 text-left [font-variant-numeric:tabular-nums]">
-                  +1.9 kB
+                  +2.2 kB
                 </span>
               </div>
             </div>
