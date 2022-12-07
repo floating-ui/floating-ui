@@ -68,6 +68,8 @@ export const useFloating = ({
   const floating = useRef<any>();
   const offsetParent = useRef<any>();
 
+  const isUpdateQueuedRef = useRef(false);
+
   const [data, setData] = useState<Data>({
     x: null,
     y: null,
@@ -113,6 +115,8 @@ export const useFloating = ({
         setData(data);
       }
     });
+
+    isUpdateQueuedRef.current = false;
   }, [latestMiddleware, platform, placement]);
 
   useLayoutEffect(() => {
@@ -127,7 +131,8 @@ export const useFloating = ({
   const setReference: UseFloatingReturn['reference'] = useCallback(
     (node) => {
       reference.current = node;
-      animationFrames.current.push(requestAnimationFrame(update));
+      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
+      isUpdateQueuedRef.current = true;
     },
     [update]
   );
@@ -135,7 +140,8 @@ export const useFloating = ({
   const setFloating: UseFloatingReturn['floating'] = useCallback(
     (node) => {
       floating.current = node;
-      animationFrames.current.push(requestAnimationFrame(update));
+      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
+      isUpdateQueuedRef.current = true;
     },
     [update]
   );
@@ -143,7 +149,8 @@ export const useFloating = ({
   const setOffsetParent: UseFloatingReturn['offsetParent'] = useCallback(
     (node) => {
       offsetParent.current = node;
-      animationFrames.current.push(requestAnimationFrame(update));
+      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
+      isUpdateQueuedRef.current = true;
     },
     [update]
   );
