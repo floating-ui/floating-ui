@@ -52,7 +52,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop + offsets.y,
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y,
   };
 }
