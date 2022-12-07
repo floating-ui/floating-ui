@@ -326,8 +326,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     let returnFocusValue = returnFocus;
     let preventReturnFocusScroll = false;
-    const previouslyFocusedElement =
-      refs.domReference.current ?? activeElement(doc);
+    const previouslyFocusedElement = activeElement(doc);
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
@@ -345,6 +344,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
     function onDismiss(payload: DismissPayload) {
+      if (payload.type === 'escapeKey' && refs.domReference.current) {
+        previouslyFocusedElementRef.current = refs.domReference.current;
+      }
+
       if (payload.type !== 'outsidePress') {
         return;
       }
@@ -364,12 +367,16 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
+      if (contains(floating, activeElement(doc)) && refs.domReference.current) {
+        previouslyFocusedElementRef.current = refs.domReference.current;
+      }
+
       if (
         returnFocusValue &&
-        isHTMLElement(previouslyFocusedElement) &&
+        isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
-        enqueueFocus(previouslyFocusedElement, {
+        enqueueFocus(previouslyFocusedElementRef.current, {
           preventScroll: preventReturnFocusScroll,
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try
@@ -450,9 +457,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           }}
         />
       )}
-      {/* 
+      {/*
         Ensure the first swipe is the list item. The end of the listbox popup
-        will have a dismiss button. 
+        will have a dismiss button.
       */}
       {typeableCombobox ? null : renderDismissButton('start')}
       {React.cloneElement(

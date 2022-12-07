@@ -14,6 +14,7 @@ import {
   FloatingPortal,
 } from '../../src';
 import {Props} from '../../src/FloatingFocusManager';
+import {Main as Navigation} from '../visual/components/Navigation';
 
 function App(
   props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>
@@ -679,3 +680,37 @@ describe('non-modal + FloatingPortal', () => {
     cleanup();
   });
 });
+
+describe('Navigation', () => {
+  test('does not focus reference when hovering it', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.unhover(screen.getByText('Product'));
+    expect(screen.getByText('Product')).not.toHaveFocus();
+  });
+
+  test('returns focus to reference when floating element was opened by hover but is closed by esc key', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.keyboard('{Escape}');
+    expect(screen.getByText('Product')).toHaveFocus();
+  });
+
+  test('returns focus to reference when floating element was opened by hover but is closed by an explicit close button', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    await userEvent.click(screen.getByText('Close').parentElement!)
+    await userEvent.keyboard('{Tab}');
+    expect(screen.getByText('Close')).toHaveFocus();
+    await userEvent.keyboard('{Enter}')
+    expect(screen.getByText('Product')).toHaveFocus();
+  });
+
+  test('does not re-open after closing via escape key', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByText('Link 1')).not.toBeInTheDocument();
+  });
+})
