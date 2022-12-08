@@ -24,12 +24,14 @@ interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   };
 }
 
+const mouseLikePointerTypes = ['mouse', 'pen'];
+
 export function getDelay(
   value: Props['delay'],
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
-  if (pointerType && pointerType !== 'mouse') {
+  if (pointerType && !mouseLinkPointerTypes.includes(pointerType)) {
     return 0;
   }
 
@@ -172,7 +174,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       blockMouseMoveRef.current = false;
 
       if (
-        (mouseOnly && pointerTypeRef.current !== 'mouse') ||
+        (mouseOnly && !mouseLikePointerTypes.includes(pointerTypeRef.current)) ||
         (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
       ) {
         return;
