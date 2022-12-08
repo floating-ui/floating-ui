@@ -43,7 +43,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
-    // This doesn't appear to be need to be negated.
+    // This doesn't appear to need to be negated.
     // else if (documentElement) {
     //   offsets.x = getWindowScrollBarX(documentElement);
     // }

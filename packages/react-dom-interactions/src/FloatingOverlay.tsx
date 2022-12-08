@@ -52,7 +52,7 @@ export const FloatingOverlay = React.forwardRef<
       };
     }
 
-    // iOS 12 does not support `visuaViewport`.
+    // iOS 12 does not support `visualViewport`.
     const offsetLeft = window.visualViewport?.offsetLeft ?? 0;
     const offsetTop = window.visualViewport?.offsetTop ?? 0;
     const scrollX = window.pageXOffset;

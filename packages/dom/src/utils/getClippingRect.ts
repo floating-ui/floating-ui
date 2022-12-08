@@ -65,9 +65,9 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
 }
 
-// A "clipping ancestor" is an overflowable container with the characteristic of
-// clipping (or hiding) overflowing elements with a position different from
-// `initial`
+// A "clipping ancestor" is an `overflow` element with the characteristic of
+// clipping (or hiding) child elements. This returns all clipping ancestors
+// of the given element up the tree.
 function getClippingElementAncestors(element: Element): Array<Element> {
   let result = getOverflowAncestors(element).filter(
     (el) => isElement(el) && getNodeName(el) !== 'body'

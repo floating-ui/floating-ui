@@ -350,13 +350,15 @@ This will displace the tooltip 6px from the reference element:
 
 <T.Result11 />
 
-> Notice that we put `offset(){:js}` at the start of the array,
-> rather than at the end? Middleware behavior is dependent on
-> **order**. Each middleware returns new coordinates which
-> middleware later in the array will use. The `offset(){:js}`
-> middleware is one that should be before most other ones,
-> because they should modify their coordinates based on the
-> offsetted ones.
+<Notice>
+  Notice that we put `offset(){:js}` at the start of the array,
+  rather than at the end? Middleware behavior is dependent on
+  **order**. Each middleware returns new coordinates which
+  middleware later in the array will use. The `offset(){:js}`
+  middleware is one that should be before most other ones,
+  because they should modify their coordinates based on the
+  offset ones.
+</Notice>
 
 ### Arrow middleware
 
