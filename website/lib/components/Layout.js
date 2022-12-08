@@ -413,8 +413,6 @@ export default function Layout({children}) {
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
 
-  console.log({pathname});
-
   return (
     <MDXProvider components={components}>
       <Head>
