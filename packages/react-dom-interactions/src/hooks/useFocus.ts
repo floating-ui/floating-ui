@@ -86,7 +86,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
           pointerTypeRef.current = pointerType;
           blockFocusRef.current = !!(pointerType && keyboardOnly);
         },
-        onPointerLeave() {
+        onMouseLeave() {
           blockFocusRef.current = false;
         },
         onFocus(event) {
