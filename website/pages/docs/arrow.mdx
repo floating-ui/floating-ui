@@ -4,6 +4,9 @@
 floating element (usually a triangle or caret) so that it is
 centered to the reference element.
 
+The layout box of the arrow element should be a square with equal
+width and height.
+
 ## Usage
 
 Given an arrow element inside your floating element:
@@ -64,12 +67,13 @@ following scenario:
 
 - The reference element is either wider or taller than the
   floating element;
-- The floating element is using an edge alignment (`-start` or
-  `-end` placement).
+- The floating element is using an edge alignment
+  (`-start{:.string}` or `-end{:.string}` placement).
 
-A demo handling this case is shown below.
+## Visualization
 
-[View dynamic styling for all placements on CodeSandbox](https://codesandbox.io/s/determined-hill-7x5g57?file=/src/index.js)
+To help you understand how this middleware works, here is a
+[visualization tutorial on CodeSandbox](https://codesandbox.io/s/mystifying-kare-ee3hmh?file=/src/index.js).
 
 ## Order
 
