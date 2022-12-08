@@ -176,7 +176,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       blockMouseMoveRef.current = false;
 
       if (
-        (mouseOnly && !mouseLikePointerTypes.includes(pointerTypeRef.current)) ||
+        (mouseOnly &&
+          !mouseLikePointerTypes.includes(pointerTypeRef.current)) ||
         (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
       ) {
         return;
