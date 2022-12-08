@@ -24,14 +24,16 @@ interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   };
 }
 
-const mouseLikePointerTypes = ['mouse', 'pen'];
+// On some Linux machines with Chromium, mouse inputs return a `pointerType` of
+// "pen": https://github.com/floating-ui/floating-ui/issues/2015
+const mouseLikePointerTypes = ['mouse', 'pen', undefined];
 
 export function getDelay(
   value: Props['delay'],
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
-  if (pointerType && !mouseLinkPointerTypes.includes(pointerType)) {
+  if (pointerType && !mouseLikePointerTypes.includes(pointerType)) {
     return 0;
   }
 
