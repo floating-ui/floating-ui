@@ -42,7 +42,7 @@ export function getScale(element: Element | VirtualElement): Coords {
     return matrixScale;
   }
 
-  const rect = element.getBoundingClientRect();
+  const rect = domElement.getBoundingClientRect();
   return {
     x:
       domElement.offsetWidth > 0
