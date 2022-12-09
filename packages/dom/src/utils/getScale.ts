@@ -1,16 +1,52 @@
-import type {Coords, Rect} from '@floating-ui/core';
+import type {Coords} from '@floating-ui/core';
+import type {VirtualElement} from '../types';
+import {isElement, isHTMLElement} from './is';
 import {round} from './math';
 
-export function getScale(element: HTMLElement, paramRect?: Rect): Coords {
-  const rect = paramRect || element.getBoundingClientRect();
+export const FALLBACK_SCALE = {x: 1, y: 1};
+
+function getMatrixScale(element: Element): Coords {
+  const matrix = getComputedStyle(element).transform;
+
+  if (matrix === 'none') {
+    return FALLBACK_SCALE;
+  }
+
+  const matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
+
+  return {
+    x: matrixArr[0],
+    y: matrixArr[3],
+  };
+}
+
+export function getScale(element: Element | VirtualElement): Coords {
+  const domElement =
+    !isElement(element) && element.contextElement
+      ? element.contextElement
+      : isElement(element)
+      ? element
+      : null;
+
+  if (!isHTMLElement(domElement)) {
+    return FALLBACK_SCALE;
+  }
+
+  const matrixScale = getMatrixScale(domElement);
+
+  if (matrixScale.x !== 1 || matrixScale.y !== 1) {
+    return matrixScale;
+  }
+
+  const rect = element.getBoundingClientRect();
   return {
     x:
-      element.offsetWidth > 0
-        ? round(rect.width) / element.offsetWidth || 1
+      domElement.offsetWidth > 0
+        ? round(rect.width) / domElement.offsetWidth || 1
         : 1,
     y:
-      element.offsetHeight > 0
-        ? round(rect.height) / element.offsetHeight || 1
+      domElement.offsetHeight > 0
+        ? round(rect.height) / domElement.offsetHeight || 1
         : 1,
   };
 }

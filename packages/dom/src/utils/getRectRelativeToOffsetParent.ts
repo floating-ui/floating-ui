@@ -5,15 +5,6 @@ import {getNodeName} from './getNodeName';
 import {getNodeScroll} from './getNodeScroll';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import {isHTMLElement, isOverflowElement} from './is';
-import {round} from './math';
-
-function isScaled(element: HTMLElement): boolean {
-  const rect = getBoundingClientRect(element);
-  return (
-    round(rect.width) !== element.offsetWidth ||
-    round(rect.height) !== element.offsetHeight
-  );
-}
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
@@ -22,12 +13,7 @@ export function getRectRelativeToOffsetParent(
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
-  const rect = getBoundingClientRect(
-    element,
-    // @ts-ignore - checked above (TS 4.1 compat)
-    isOffsetParentAnElement && isScaled(offsetParent),
-    strategy === 'fixed'
-  );
+  const rect = getBoundingClientRect(element, true, strategy === 'fixed');
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   const offsets = {x: 0, y: 0};
