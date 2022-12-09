@@ -33,6 +33,7 @@ type Node =
   | 'body'
   | 'html'
   | 'offsetParent'
+  | 'offsetParent-3d'
   | 'offsetParent-inverse'
   | 'virtual';
 const NODES: Node[] = [
@@ -42,6 +43,7 @@ const NODES: Node[] = [
   'body',
   'html',
   'offsetParent',
+  'offsetParent-3d',
   'offsetParent-inverse',
   'virtual',
 ];
@@ -65,6 +67,7 @@ export function Transform() {
         element = document.body;
         break;
       case 'offsetParent':
+      case 'offsetParent-3d':
       case 'offsetParent-inverse':
       case 'virtual':
         element = offsetParentRef.current;
@@ -73,9 +76,16 @@ export function Transform() {
     }
 
     if (element) {
-      element.style.transform = node?.includes('inverse')
-        ? 'scale(0.5)'
-        : 'scale(1.2) translate(2rem, -2rem)';
+      let transform = 'scale(0.5) translate(2rem, -2rem)';
+      switch (node) {
+        case 'offsetParent-inverse':
+          transform = 'scale(0.5)';
+          break;
+        case 'offsetParent-3d':
+          transform = 'scale3d(0.5, 0.2, 0.7) translate3d(2rem, -2rem, 0)';
+          break;
+      }
+      element.style.transform = transform;
     }
 
     if (node === 'virtual' && element) {
