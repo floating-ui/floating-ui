@@ -7,7 +7,7 @@ import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
 import {isElement, isVirtualClick, isVirtualPointerEvent} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {useLatestRef} from '../utils/useLatestRef';
+import {useEvent} from '../utils/useEvent';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
@@ -48,7 +48,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   {
     enabled = true,
     escapeKey = true,
-    outsidePress = true,
+    outsidePress: unstable_outsidePress = true,
     outsidePressEvent = 'pointerdown',
     referencePress = false,
     referencePressEvent = 'pointerdown',
@@ -58,15 +58,21 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 ): ElementProps => {
   const tree = useFloatingTree();
   const nested = useFloatingParentNodeId() != null;
-  const outsidePressRef = useLatestRef(outsidePress);
+  const outsidePressFn = useEvent(
+    typeof unstable_outsidePress === 'function'
+      ? unstable_outsidePress
+      : () => false
+  );
+  const outsidePress =
+    typeof unstable_outsidePress === 'function'
+      ? outsidePressFn
+      : unstable_outsidePress;
   const insideReactTreeRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!open || !enabled) {
       return;
     }
-
-    const outsidePress = outsidePressRef.current;
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -218,7 +224,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     };
   }, [
     escapeKey,
-    outsidePressRef,
+    outsidePress,
     outsidePressEvent,
     events,
     tree,
