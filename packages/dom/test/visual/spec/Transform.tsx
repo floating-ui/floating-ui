@@ -35,6 +35,7 @@ type Node =
   | 'offsetParent'
   | 'offsetParent-3d'
   | 'offsetParent-inverse'
+  | 'offsetParent-reference'
   | 'virtual';
 const NODES: Node[] = [
   null,
@@ -45,6 +46,7 @@ const NODES: Node[] = [
   'offsetParent',
   'offsetParent-3d',
   'offsetParent-inverse',
+  'offsetParent-reference',
   'virtual',
 ];
 
@@ -69,6 +71,7 @@ export function Transform() {
       case 'offsetParent':
       case 'offsetParent-3d':
       case 'offsetParent-inverse':
+      case 'offsetParent-reference':
       case 'virtual':
         element = offsetParentRef.current;
         break;
@@ -134,8 +137,9 @@ export function Transform() {
           ref={reference}
           className="reference"
           style={{
-            transform:
-              node === 'reference' ? 'scale(1.25) translate(2rem, -2rem)' : '',
+            transform: node?.includes('reference')
+              ? 'scale(1.25) translate(2rem, -2rem)'
+              : '',
           }}
         >
           Reference
