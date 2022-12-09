@@ -83,7 +83,11 @@ export function Drawer({children, render}: Props) {
   }, [open, update, refs.reference, refs.floating]);
 
   const content = (
-    <FloatingFocusManager context={context} modal={modal} focusOut={modal}>
+    <FloatingFocusManager
+      context={context}
+      modal={modal}
+      closeOnFocusOut={modal}
+    >
       <div
         {...getFloatingProps({
           className: 'Drawer' + (modal ? ' DrawerModal' : ''),

@@ -42,7 +42,7 @@ interface Props {
   guards?: boolean;
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
-  focusOut?: boolean;
+  closeOnFocusOut?: boolean;
 }
 ```
 
@@ -210,7 +210,7 @@ when using `true{:js}` is `Dismiss{:.string}`.
 </FloatingFocusManager>
 ```
 
-### focusOut
+### closeOnFocusOut
 
 default: `true{:js}`
 
@@ -221,7 +221,7 @@ outside of it, and moves the focus back to the reference element
 or some other previously focused element.
 
 ```js
-<FloatingFocusManager context={context} focusOut={false}>
+<FloatingFocusManager context={context} closeOnFocusOut={false}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
