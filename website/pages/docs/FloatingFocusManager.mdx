@@ -214,11 +214,10 @@ when using `true{:js}` is `Dismiss{:.string}`.
 
 default: `true{:js}`
 
-Determines whether `focusout` event listeners are attached to the
-reference and floating elements. The added listeners control
+Determines whether `focusout` event listeners that control
 whether the floating element should be closed if the focus moves
-outside of it, and moves the focus back to the reference element
-or some other previously focused element.
+outside of it are attached to the reference and floating
+elements. This mostly affects non-modal focus management.
 
 ```js
 <FloatingFocusManager context={context} closeOnFocusOut={false}>
