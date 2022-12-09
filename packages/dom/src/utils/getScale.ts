@@ -8,13 +8,11 @@ export const FALLBACK_SCALE = {x: 1, y: 1};
 
 function getMatrixScale(element: Element): Coords {
   const matrix = getComputedStyle(element).transform;
-
-  if (matrix === 'none') {
-    return FALLBACK_SCALE;
-  }
+  const is3d = matrix.includes('3d');
 
   let matrixArr: Array<number>;
   try {
+    // "none" or an invalid matrix will error out and use the fallback scale
     matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
   } catch (e) {
     return FALLBACK_SCALE;
@@ -22,7 +20,7 @@ function getMatrixScale(element: Element): Coords {
 
   return {
     x: matrixArr[0],
-    y: matrixArr[3],
+    y: matrixArr[is3d ? 5 : 3],
   };
 }
 
