@@ -1,5 +1,6 @@
 import {cloneElement, useRef, useState} from 'react';
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {Context as ResponsiveContext} from 'react-responsive';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
   FloatingFocusManager,
@@ -15,6 +16,7 @@ import {
 } from '../../src';
 import {Props} from '../../src/FloatingFocusManager';
 import {Main as Navigation} from '../visual/components/Navigation';
+import {Main as Drawer} from '../visual/components/Drawer';
 
 function App(
   props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>
@@ -700,10 +702,10 @@ describe('Navigation', () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await userEvent.click(screen.getByText('Close').parentElement!)
+    await userEvent.click(screen.getByText('Close').parentElement!);
     await userEvent.keyboard('{Tab}');
     expect(screen.getByText('Close')).toHaveFocus();
-    await userEvent.keyboard('{Enter}')
+    await userEvent.keyboard('{Enter}');
     expect(screen.getByText('Product')).toHaveFocus();
   });
 
@@ -713,4 +715,19 @@ describe('Navigation', () => {
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByText('Link 1')).not.toBeInTheDocument();
   });
-})
+});
+
+describe('Drawer', () => {
+  test('does not close when clicking another button outside', async () => {
+    render(
+      <ResponsiveContext.Provider value={{width: 1600}}>
+        <Drawer />
+      </ResponsiveContext.Provider>
+    );
+    await userEvent.click(screen.getByText('My button'));
+    expect(screen.queryByText('Close')).toBeInTheDocument();
+    await userEvent.click(screen.getByText('Next button'));
+    await act(async () => {});
+    expect(screen.queryByText('Close')).toBeInTheDocument();
+  });
+});

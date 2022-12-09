@@ -41,6 +41,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   returnFocus?: boolean;
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
+  closeOnFocusOut?: boolean;
 }
 
 /**
@@ -56,6 +57,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   returnFocus = true,
   modal = true,
   visuallyHiddenDismiss = false,
+  closeOnFocusOut = true,
 }: Props<RT>): JSX.Element {
   const {
     refs,
@@ -174,22 +176,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
+    if (!closeOnFocusOut) {
+      return;
+    }
     const floating = refs.floating.current;
     const reference = refs.domReference.current;
-
-    // Don't hide portals nested within the parent portal.
-    const portalNodes = Array.from(
-      portalContext?.portalNode?.querySelectorAll(
-        '[data-floating-ui-portal]'
-      ) ?? []
-    );
-
-    function getDismissButtons() {
-      return [
-        startDismissButtonRef.current,
-        endDismissButtonRef.current,
-      ].filter(Boolean) as Array<Element>;
-    }
 
     let isPointerDown = false;
 
@@ -246,16 +237,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
 
     if (floating && isHTMLElement(reference)) {
-      let cleanup: () => void;
-      if (modal) {
-        const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
-        cleanup = hideOthers(
-          orderRef.current.includes('reference') || typeableCombobox
-            ? insideNodes.concat(reference)
-            : insideNodes
-        );
-      }
-
       reference.addEventListener('focusout', handleFocusOutside);
       reference.addEventListener('pointerdown', handlePointerDown);
       !modal && floating.addEventListener('focusout', handleFocusOutside);
@@ -264,22 +245,40 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         reference.removeEventListener('focusout', handleFocusOutside);
         reference.removeEventListener('pointerdown', handlePointerDown);
         !modal && floating.removeEventListener('focusout', handleFocusOutside);
-
-        cleanup?.();
       };
     }
-  }, [
-    modal,
-    initialFocus,
-    nodeId,
-    tree,
-    orderRef,
-    refs,
-    portalContext,
-    typeableCombobox,
-    initialFocusControlled,
-    onOpenChange,
-  ]);
+  }, [modal, nodeId, tree, refs, portalContext, onOpenChange, closeOnFocusOut]);
+
+  React.useEffect(() => {
+    const floating = refs.floating.current;
+    const reference = refs.domReference.current;
+    // Don't hide portals nested within the parent portal.
+    const portalNodes = Array.from(
+      portalContext?.portalNode?.querySelectorAll(
+        '[data-floating-ui-portal]'
+      ) ?? []
+    );
+
+    function getDismissButtons() {
+      return [
+        startDismissButtonRef.current,
+        endDismissButtonRef.current,
+      ].filter(Boolean) as Array<Element>;
+    }
+
+    if (floating && isHTMLElement(reference) && modal) {
+      const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
+      const cleanup = hideOthers(
+        orderRef.current.includes('reference') || typeableCombobox
+          ? insideNodes.concat(reference)
+          : insideNodes
+      );
+
+      return () => {
+        cleanup();
+      };
+    }
+  }, [modal, orderRef, portalContext, refs, typeableCombobox]);
 
   React.useEffect(() => {
     const floating = refs.floating.current;
