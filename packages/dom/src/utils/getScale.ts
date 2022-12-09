@@ -13,7 +13,12 @@ function getMatrixScale(element: Element): Coords {
     return FALLBACK_SCALE;
   }
 
-  const matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
+  let matrixArr: Array<number>;
+  try {
+    matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
+  } catch (e) {
+    return FALLBACK_SCALE;
+  }
 
   return {
     x: matrixArr[0],
