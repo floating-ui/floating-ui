@@ -259,3 +259,26 @@ body {
   border: 1px solid #d7dce5;
   border-radius: 4px;
 }
+
+.DrawerContainer {
+  display: flex;
+  height: 500px;
+}
+
+.Drawer {
+  background: white;
+  width: 400px;
+  height: 100%;
+  overflow: auto;
+  padding: 1rem;
+  border: 1px solid black;
+  border-left: 0;
+}
+
+.DrawerModal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border: none;
+}

@@ -41,6 +41,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   returnFocus?: boolean;
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
+  focusOut?: boolean;
 }
 
 /**
@@ -56,6 +57,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   returnFocus = true,
   modal = true,
   visuallyHiddenDismiss = false,
+  focusOut = true,
 }: Props<RT>): JSX.Element {
   const {
     refs,
@@ -174,6 +176,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   React.useEffect(() => {
+    if (!focusOut) {
+      return;
+    }
     const floating = refs.floating.current;
     const reference = refs.domReference.current;
 
@@ -279,6 +284,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     typeableCombobox,
     initialFocusControlled,
     onOpenChange,
+    focusOut,
   ]);
 
   React.useEffect(() => {

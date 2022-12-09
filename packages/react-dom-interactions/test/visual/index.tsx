@@ -17,6 +17,7 @@ import {Main as Grid} from './components/Grid';
 import {Main as EmojiPicker} from './components/EmojiPicker';
 import {Main as Autocomplete} from './components/Autocomplete';
 import {Main as Navigation} from './components/Navigation';
+import {Main as Drawer} from './components/Drawer';
 
 import {New} from './utils/New';
 
@@ -29,6 +30,7 @@ const ROUTES = [
   {path: 'emoji-picker', component: EmojiPicker},
   {path: 'autocomplete', component: Autocomplete},
   {path: 'navigation', component: Navigation},
+  {path: 'drawer', component: Drawer},
 ];
 
 function App() {
