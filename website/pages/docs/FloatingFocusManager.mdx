@@ -7,11 +7,8 @@ trapped inside the floating element while it is rendered.
 This component should only be rendered when the floating element
 is open and directly wrap it.
 
-{/* prettier-ignore */}
 ```js /context/
-import {
-  FloatingFocusManager
-} from '@floating-ui/react-dom-interactions';
+import {FloatingFocusManager} from '@floating-ui/react';
 
 function App() {
   const {context} = useFloating();

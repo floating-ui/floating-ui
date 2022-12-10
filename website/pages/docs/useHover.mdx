@@ -4,7 +4,7 @@ Adds hover event listeners that change the open state, like CSS
 `:hover{:.objectKey}`.
 
 ```js
-import {useHover} from '@floating-ui/react-dom-interactions';
+import {useHover} from '@floating-ui/react';
 ```
 
 Inside your component:
@@ -130,10 +130,7 @@ and towards the floating element without it closing (e.g. it has
 interactive content inside).
 
 ```js
-import {
-  useHover,
-  safePolygon,
-} from '@floating-ui/react-dom-interactions';
+import {useHover, safePolygon} from '@floating-ui/react';
 
 // ...
 useHover(context, {

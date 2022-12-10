@@ -36,21 +36,18 @@ Use with vanilla JavaScript or a non-React framework
 npm install @floating-ui/dom
 ```
 
-### React DOM positioning
+### React
 
-Use with React DOM ([view docs](https://floating-ui.com/docs/react-dom)).
+Use with React ([view docs](https://floating-ui.com/docs/react)).
 
 ```shell
-npm install @floating-ui/react-dom
+# Positioning + interactions
+npm install @floating-ui/react
 ```
 
-### React DOM interactions and positioning
-
-Craft interactions in addition to anchor positioning
-([view docs](https://floating-ui.com/docs/react-dom-interactions)).
-
 ```shell
-npm install @floating-ui/react-dom-interactions
+# Positioning only
+npm install @floating-ui/react-dom
 ```
 
 ### React Native positioning

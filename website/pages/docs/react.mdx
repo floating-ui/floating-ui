@@ -1,0 +1,585 @@
+# React
+
+This package provides React bindings for `@floating-ui/dom` — a
+library that provides anchor positioning — and also interaction
+primitives to build floating UI components.
+
+This allows you to create components such as tooltips, popovers,
+dropdown menus, hover cards, modal dialogs, select menus,
+comboboxes, and more.
+
+<div className="hidden flex justify-center md:justify-between items-center flex-wrap gap-2 mx-auto">
+  <img
+    className="relative sm:left-[5rem] top-[1rem] md:top-0 md:left-0 inline-block card"
+    src="/all-inputs.png"
+    alt="Designed for all inputs"
+    width={335}
+    height={225}
+  />
+  <img
+    className="relative sm:left-[-5rem] top-[-1rem] md:left-0 md:top-0 inline-block card"
+    src="/safe-cursor-polygon.png"
+    alt="Safe cursor polygon"
+    width={335}
+    height={225}
+  />
+</div>
+
+## Install
+
+The following package provides all modules:
+
+```shell
+# Positioning + interactions
+npm install @floating-ui/react
+```
+
+If you only want positioning (`@floating-ui/dom` bindings), the
+following package is smaller with no external dependencies.
+
+```shell
+# Positioning only
+npm install @floating-ui/react-dom
+```
+
+The following docs are compatible with _both_ packages above,
+until the Interactions section.
+
+## Usage
+
+`useFloating(){:js}` is the main hook of each package.
+
+```js
+import {useFloating} from '@floating-ui/react';
+
+function App() {
+  const {x, y, reference, floating, strategy} = useFloating();
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      <div
+        ref={floating}
+        style={{
+          position: strategy,
+          top: y ?? 0,
+          left: x ?? 0,
+          width: 'max-content',
+        }}
+      >
+        Tooltip
+      </div>
+    </>
+  );
+}
+```
+
+This will position the floating `Tooltip` element at the **bottom
+center** of the `Button` element by default.
+
+- `x{:.const}` and `y{:.const}` are the positioning coordinates.
+  These values are `null{:js}` initially, before the layout
+  effect has fired (i.e. during SSR).
+- `reference{:.const}` and `floating{:.const}` are callback refs
+  that ensure the position is updated when either element changes
+  (e.g. conditional rendering).
+- `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
+  `'fixed'{:js}`.
+
+<Notice gap="above">
+To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
+</Notice>
+
+## Options
+
+The hook accepts all the
+[options from computePosition](/docs/computePosition#options),
+which allows you to customize the position. Here's an example:
+
+```js
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+} from '@floating-ui/react';
+
+// Inside your component
+useFloating({
+  placement: 'right',
+  middleware: [offset(10), flip(), shift()],
+});
+```
+
+[Middleware](/docs/computePosition#middleware) can alter the
+positioning from the basic `placement{:.objectKey}`, act as
+visibility optimizers, or provide data to use.
+
+The docs for the middleware that were passed are available here:
+
+- [offset](/docs/offset)
+- [flip](/docs/flip)
+- [shift](/docs/shift)
+
+## Updating
+
+The position is only calculated **once** on render, or when the
+`reference{:.const}` or `floating{:.const}` elements change.
+
+To ensure the floating element remains anchored to its reference
+element in a variety of scenarios without detaching — such as
+when scrolling or resizing the page — you can pass the
+[autoUpdate](/docs/autoUpdate) utility to the
+`whileElementsMounted{:.objectKey}` prop:
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/react';
+
+// Inside your component
+useFloating({
+  whileElementsMounted: autoUpdate,
+});
+```
+
+To pass options to `autoUpdate`:
+
+```js
+useFloating({
+  whileElementsMounted(...args) {
+    const cleanup = autoUpdate(...args, {animationFrame: true});
+    // Important! Always return the cleanup function.
+    return cleanup;
+  },
+});
+```
+
+### autoUpdate performance
+
+`autoUpdate` is expensive because it re-renders the host
+component the `useFloating(){:js}` hook lives in on every single
+scroll or resize event. Therefore you should be mindful of the
+following:
+
+- Try not to call `useFloating(){:js}` in a big complex parent
+  component, especially if it renders a list. Instead, create a
+  new child component that only renders out the reference and
+  floating elements. This will keep the high frequency re-renders
+  scoped to the cheap child component.
+- Ensure you are using conditional rendering for the floating
+  element, not an opacity/visibility/display style. If you are
+  using CSS to hide it, instead of conditional rendering, use an
+  effect to register and clean up `autoUpdate` instead of the
+  `whileElementsMounted{:.objectKey}` prop.
+
+### Manual updating
+
+While `autoUpdate` covers most cases where the position of the
+floating element must be updated, it does not cover every single
+one possible due to performance/platform limitations.
+
+The hook returns an `update(){:js}` function to update the
+position at will:
+
+```js
+const {update} = useFloating();
+
+<Panel onResize={update} />;
+```
+
+## Refs
+
+`reference{:.const}` and `floating{:.const}` are callback refs,
+not regular ref objects, so they can handle conditional
+rendering.
+
+If you need to access the actual DOM elements, you can use the
+`refs{:.const}` object:
+
+```js
+const {refs} = useFloating();
+
+// Inside an effect or event handler:
+refs.reference.current;
+refs.floating.current;
+```
+
+If one of the elements is stored outside of the component the
+hook lives in, you can synchronize the hook using layout effects:
+
+```js /triggerElement/
+function MyComponent({referenceElement}) {
+  const {reference} = useFloating();
+
+  React.useLayoutEffect(() => {
+    reference(referenceElement);
+  }, [reference, referenceElement]);
+}
+```
+
+<Notice>
+  Store the external elements in state, not in a ref! You shouldn't
+  read or write refs during render, like `triggerRef.current{:js}`. 
+  An element stored in a ref is not reactive to updates.
+</Notice>
+
+## Effects
+
+Positioning is done in an async function, which means the
+position is ready during a microtask, after layout effects are
+executed.
+
+Ensure you wait for the position to be ready inside layout
+effects in order to prevent unwanted scrolling. This can be
+achieved with `requestAnimationFrame(){:js}`.
+
+```js
+useLayoutEffect(() => {
+  if (isFloatingElementRendered) {
+    // Runs after microtasks (positioning) but before paint.
+    requestAnimationFrame(() => {
+      // Position is ready inside here. Unwanted scrolling
+      // will no longer occur.
+      someElement.focus();
+      someElement.scrollIntoView();
+    });
+  }
+}, [isFloatingElementRendered]);
+```
+
+## Arrow
+
+The `arrow` module exported from this package allows refs in
+addition to elements:
+
+```js
+import {arrow} from '@floating-ui/react';
+
+// Inside your component
+const arrowRef = React.useRef(null);
+useFloating({
+  middleware: [arrow({element: arrowRef})],
+});
+```
+
+If you need your arrow to be _reactive_ to updates (e.g. showing
+or hiding the arrow with conditional rendering while the floating
+element is open), you should use state instead. Alternatively,
+you can use `visibility: hidden{:sass}` CSS to hide it and keep
+using a plain ref.
+
+## Testing
+
+When testing your components, ensure you flush microtasks
+immediately after the floating element renders. This will avoid
+the `act` warning.
+
+```js
+import {act} from '@testing-library/react';
+
+test('something', async () => {
+  render(<Tooltip open />);
+  await act(async () => {}); // Flush microtasks.
+  // Position state is ready by this line.
+});
+```
+
+You may use this a lot, so you can create a custom function:
+
+```js
+const waitForPosition = () => act(async () => {});
+
+test('something', async () => {
+  render(<Tooltip open />);
+  await waitForPosition();
+  expect(screen.getByRole('tooltip')).toBeInTheDocument();
+});
+```
+
+## Narrow reference type
+
+Because the `reference{:.const}` callback ref accepts a
+[virtual element](/docs/virtual-elements), you may need to narrow
+the type when performing DOM operations on the ref:
+
+```js
+const {refs} = useFloating<HTMLButtonElement>();
+// refs.reference.current is now of type HTMLButtonElement
+```
+
+## Variable freshness
+
+When using React state and middleware, variables inside _function
+options_ aren't fresh. This means that if you use a variable
+inside a function option, it will always be the same value, even
+if the variable changes.
+
+```js
+const [value, setValue] = React.useState(0);
+// Fresh:
+offset(value);
+// Not fresh:
+offset(() => value);
+```
+
+You should instead use a ref:
+
+```js
+// Fresh:
+offset(() => valueRef.current);
+```
+
+To update the position when the ref changes, you can call
+`update(){:js}` manually.
+
+---
+
+This is where the compatibility with the leaner
+`@floating-ui/react-dom` package ends. The following docs now
+only apply to `@floating-ui/react`.
+
+[View interactions examples](/docs/interactions-examples), or
+read below to understand the basics.
+
+## Interactions
+
+To add interactions, the hook accepts an `open{:.const}` boolean
+and `onOpenChange{:.objectKey}` as an option to change that
+value. You use this boolean to conditionally render the floating
+element.
+
+```js /open/
+import {useFloating} from '@floating-ui/react';
+
+function App() {
+  const [open, setOpen] = React.useState(false);
+  const {x, y, reference, floating, strategy} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  return (
+    <>
+      <button ref={reference}>Button</button>
+      {open && (
+        <div
+          ref={floating}
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+            width: 'max-content',
+          }}
+        >
+          Tooltip
+        </div>
+      )}
+    </>
+  );
+}
+```
+
+Note that floating components do not always require "anchor
+positioning" — for instance a modal dialog centered in the
+viewport. So the `x{:.const}`, `y{:.const}` and
+`strategy{:.const}` values returned from the hook can be safely
+ignored.
+
+## Hooks
+
+`useInteractions(){:js}` accepts an array of called hooks in the
+following predictable form:
+
+```js /useInteractions/
+import {
+  useFloating,
+  useInteractions,
+  useHover,
+  useFocus,
+  useRole,
+} from '@floating-ui/react';
+
+// Inside your component
+const {context} = useFloating();
+
+const hover = useHover(context, props);
+const focus = useFocus(context, props);
+const role = useRole(context, props);
+
+const {getReferenceProps, getFloatingProps, getItemProps} =
+  useInteractions([hover, focus, role]);
+```
+
+Each hook accepts the `context{:.const}` object which gets
+returned from `useFloating(){:js}` as its first argument. Props
+are passed as a second argument.
+
+This API enables each of the hooks to be fully tree-shakeable.
+The navigation bar on the left explains them in detail.
+
+### Prop getters
+
+`useInteractions(){:js}` returns
+[prop getters](https://kentcdodds.com/blog/how-to-give-rendering-control-to-users-with-prop-getters)
+— functions you call to return props that spread on the elements:
+
+```js
+<>
+  <button ref={reference} {...getReferenceProps()}>
+    My button
+  </button>
+  <div
+    ref={floating}
+    style={{
+      position: strategy,
+      left: x ?? 0,
+      top: y ?? 0,
+      width: 'max-content',
+    }}
+    {...getFloatingProps()}
+  >
+    My tooltip
+  </div>
+</>
+```
+
+All custom event listener props, such as `onClick{:.keyword}`,
+`onKeyDown{:.keyword}` and more you pass to the element should be
+specified inside the prop getter.
+
+They perform merging of their own internal event listeners and
+your own without overriding them.
+
+```js
+// ❌ Your `onClick` can be overridden
+<div
+  onClick={() => {
+    console.log('Overridden by props below');
+  }}
+  {...getReferenceProps()}
+/>
+```
+
+```js
+// ✅ Merging works inside `getReferenceProps()`
+<div
+  {...getReferenceProps({
+    onClick() {
+      console.log(
+        'This will not override, or be overridden by ',
+        'the interaction hooks.'
+      );
+    },
+  })}
+/>
+```
+
+You may find passing all props through the prop getter helps you
+remember to prevent overriding event handlers, but is not
+currently required for non-event handler function props.
+
+### Item prop getter
+
+When dealing with a list inside your floating element
+(`useListNavigation(){:js}`), pass these props to each item
+element:
+
+```js /getItemProps/
+<div
+  ref={floating}
+  style={{
+    position: strategy,
+    left: x ?? 0,
+    top: y ?? 0,
+    width: 'max-content',
+  }}
+  {...getFloatingProps()}
+>
+  <ul>
+    {list.map((item) => (
+      <li key={item} {...getItemProps()}>
+        {item}
+      </li>
+    ))}
+  </ul>
+</div>
+```
+
+Without a list of items, this prop getter can be omitted (e.g. a
+regular tooltip or popover).
+
+## Changing the positioning reference while retaining events
+
+If you want anchor positioning to be relative to a different
+reference element than the one that receives events, this is
+possible.
+
+You may use a [virtual element](/docs/virtual-elements) that
+copies over the positioning reference's data by calling the
+reference callback ref with it. Make sure you continue to pass
+the callback ref to the element that should receive events as its
+ref prop.
+
+```js {1,5-9,13}
+const positioningRef = useRef();
+const {reference} = useFloating();
+
+useLayoutEffect(() => {
+  reference({
+    getBoundingClientRect: () =>
+      positioningRef.current.getBoundingClientRect(),
+    contextElement: positioningRef.current,
+  });
+}, [reference]);
+
+return (
+  <div ref={positioningRef}>
+    <button ref={reference} {...getReferenceProps()}>
+      Event reference
+    </button>
+  </div>
+);
+```
+
+[View on CodeSandbox](https://codesandbox.io/s/xenodochial-butterfly-1xtup0?file=/src/App.tsx)
+
+## Multiple floating elements on a single reference element
+
+Merge the `reference{:.objectKey}` refs on the element for each
+`useFloating(){:js}`, and call the `getReferenceProps(){:js}`
+prop getters inside one another.
+
+```js {12-16}
+const {reference: tooltipReference} = useFloating();
+const {reference: menuReference} = useFloating();
+
+const {getReferenceProps: getTooltipReferenceProps} =
+  useInteractions([]);
+const {getReferenceProps: getMenuReferenceProps} =
+  useInteractions([]);
+
+return (
+  <>
+    <button
+      // `react-merge-refs` or similar library works fine.
+      ref={mergeRefs([tooltipReference, menuReference])}
+      // You can call one of the prop getters inside another one.
+      // They will merge as expected.
+      {...getTooltipReferenceProps(getMenuReferenceProps())}
+    >
+      Common reference
+    </button>
+  </>
+);
+```
+
+[View on CodeSandbox](https://codesandbox.io/s/trusting-mendeleev-49qn11?file=/src/App.tsx)
+
+## Disabled elements
+
+Disabled elements don't fire events, so tooltips attached to
+disabled buttons don't show. Avoid using the
+`disabled{:.keyword}` prop, and make the button visually disabled
+instead. This ensures you won't need any wrapper tags and makes
+the tooltip accessible to all users.
+
+[View on CodeSandbox](https://codesandbox.io/s/focused-feistel-0q6v43?file=/src/App.tsx)
