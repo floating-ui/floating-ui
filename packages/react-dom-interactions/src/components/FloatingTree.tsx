@@ -1,8 +1,8 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import type {FloatingNodeType, FloatingTreeType, ReferenceType} from './types';
-import {useId} from './hooks/useId';
-import {createPubSub} from './createPubSub';
+import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
+import {useId} from '../hooks/useId';
+import {createPubSub} from '../utils/createPubSub';
 
 const FloatingNodeContext = React.createContext<FloatingNodeType | null>(null);
 const FloatingTreeContext = React.createContext<FloatingTreeType | null>(null);

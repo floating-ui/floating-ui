@@ -1,6 +1,9 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
+import {
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from '../components/FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -9,7 +12,7 @@ import type {
 } from '../types';
 import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
-import {useLatestRef} from '../utils/useLatestRef';
+import {useLatestRef} from './utils/useLatestRef';
 
 interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   (

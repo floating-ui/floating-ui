@@ -3,21 +3,24 @@ export * from '@floating-ui/react-dom';
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
 export {safePolygon} from './safePolygon';
-export {FloatingPortal, useFloatingPortalNode} from './FloatingPortal';
-export {FloatingOverlay} from './FloatingOverlay';
-export {FloatingFocusManager} from './FloatingFocusManager';
+export {
+  FloatingPortal,
+  useFloatingPortalNode,
+} from './components/FloatingPortal';
+export {FloatingOverlay} from './components/FloatingOverlay';
+export {FloatingFocusManager} from './components/FloatingFocusManager';
 export {
   FloatingTree,
   FloatingNode,
   useFloatingNodeId,
   useFloatingParentNodeId,
   useFloatingTree,
-} from './FloatingTree';
+} from './components/FloatingTree';
 export {
   FloatingDelayGroup,
   useDelayGroup,
   useDelayGroupContext,
-} from './FloatingDelayGroup';
+} from './components/FloatingDelayGroup';
 export {useInnerOffset, inner} from './inner';
 export {useRole} from './hooks/useRole';
 export {useClick} from './hooks/useClick';

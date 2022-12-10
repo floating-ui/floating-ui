@@ -10,7 +10,7 @@ import type {
 } from './types';
 import {flushSync} from 'react-dom';
 import {getUserAgent} from './utils/getPlatform';
-import {useEvent} from './utils/useEvent';
+import {useEvent} from './hooks/utils/useEvent';
 
 function getArgsWithCustomFloatingHeight(
   args: MiddlewareArguments,

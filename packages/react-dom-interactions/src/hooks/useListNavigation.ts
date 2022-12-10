@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
+import {
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getDocument} from '../utils/getDocument';
 import {activeElement} from '../utils/activeElement';
@@ -13,8 +16,8 @@ import {
   isSafari,
 } from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
-import {useLatestRef} from '../utils/useLatestRef';
-import {useEvent} from '../utils/useEvent';
+import {useLatestRef} from './utils/useLatestRef';
+import {useEvent} from './utils/useEvent';
 import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
 

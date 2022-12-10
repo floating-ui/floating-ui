@@ -1,13 +1,16 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import * as React from 'react';
-import {useFloatingParentNodeId, useFloatingTree} from '../FloatingTree';
+import {
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
 import {isElement, isVirtualClick, isVirtualPointerEvent} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {useEvent} from '../utils/useEvent';
+import {useEvent} from './utils/useEvent';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',

@@ -4,26 +4,26 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
-import type {FloatingContext, ReferenceType} from './types';
-import {activeElement} from './utils/activeElement';
-import {FocusGuard, HIDDEN_STYLES} from './utils/FocusGuard';
-import {getDocument} from './utils/getDocument';
-import {getTarget} from './utils/getTarget';
-import {isHTMLElement} from './utils/is';
-import {isTypeableElement} from './utils/isTypeableElement';
-import {stopEvent} from './utils/stopEvent';
-import {useLatestRef} from './utils/useLatestRef';
+import type {FloatingContext, ReferenceType} from '../types';
+import {activeElement} from '../utils/activeElement';
+import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
+import {getDocument} from '../utils/getDocument';
+import {getTarget} from '../utils/getTarget';
+import {isHTMLElement} from '../utils/is';
+import {isTypeableElement} from '../utils/isTypeableElement';
+import {stopEvent} from '../utils/stopEvent';
+import {useLatestRef} from '../hooks/utils/useLatestRef';
 import {
   getNextTabbable,
   getPreviousTabbable,
   getTabbableOptions,
   isOutsideEvent,
-} from './utils/tabbable';
-import {getChildren} from './utils/getChildren';
-import {getAncestors} from './utils/getAncestors';
-import {enqueueFocus} from './utils/enqueueFocus';
-import {contains} from './utils/contains';
-import {DismissPayload} from './hooks/useDismiss';
+} from '../utils/tabbable';
+import {getChildren} from '../utils/getChildren';
+import {getAncestors} from '../utils/getAncestors';
+import {enqueueFocus} from '../utils/enqueueFocus';
+import {contains} from '../utils/contains';
+import {DismissPayload} from '../hooks/useDismiss';
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,

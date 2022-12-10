@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {getPlatform} from './utils/getPlatform';
+import {getPlatform} from '../utils/getPlatform';
 
 const identifier = 'data-floating-ui-scroll-lock';
 

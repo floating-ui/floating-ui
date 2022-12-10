@@ -14,7 +14,7 @@ import {
   useInteractions,
   FloatingPortal,
 } from '../../src';
-import {Props} from '../../src/FloatingFocusManager';
+import {Props} from '../../src/components/FloatingFocusManager';
 import {Main as Navigation} from '../visual/components/Navigation';
 import {Main as Drawer} from '../visual/components/Drawer';
 

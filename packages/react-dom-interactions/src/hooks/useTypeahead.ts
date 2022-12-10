@@ -6,8 +6,8 @@ import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
 import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
-import {useEvent} from '../utils/useEvent';
-import {useLatestRef} from '../utils/useLatestRef';
+import {useEvent} from './utils/useEvent';
+import {useLatestRef} from './utils/useLatestRef';
 
 export interface Props {
   listRef: React.MutableRefObject<Array<string | null>>;

@@ -8,10 +8,10 @@ import type {
   UseFloatingReturn,
   UseFloatingProps,
 } from './types';
-import {createPubSub} from './createPubSub';
-import {useFloatingTree} from './FloatingTree';
+import {createPubSub} from './utils/createPubSub';
+import {useFloatingTree} from './components/FloatingTree';
 import {isElement} from './utils/is';
-import {useEvent} from './utils/useEvent';
+import {useEvent} from './hooks/utils/useEvent';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,

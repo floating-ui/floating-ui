@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {useId} from './hooks/useId';
-import {FloatingContext} from './types';
-import {FocusGuard, HIDDEN_STYLES} from './utils/FocusGuard';
+import {useId} from '../hooks/useId';
+import {FloatingContext} from '../types';
+import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 import {
   disableFocusInside,
   enableFocusInside,
   getNextTabbable,
   getPreviousTabbable,
   isOutsideEvent,
-} from './utils/tabbable';
+} from '../utils/tabbable';
 
 const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;

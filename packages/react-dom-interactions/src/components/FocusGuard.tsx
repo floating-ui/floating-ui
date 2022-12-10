@@ -1,7 +1,7 @@
 import * as React from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import {isMac, isSafari} from './is';
-import {useEvent} from './useEvent';
+import {isMac, isSafari} from '../utils/is';
+import {useEvent} from '../hooks/utils/useEvent';
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
 // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/FocusTrap.tsx
