@@ -1,6 +1,6 @@
-import {useFloating, arrow} from '@floating-ui/react-dom-interactions';
+import {useFloating, arrow} from '@floating-ui/react';
 import {useRef} from 'react';
-import {Controls} from '../utils/Controls';
+import {Controls} from './Controls';
 
 export function New() {
   const arrowRef = useRef<HTMLDivElement | null>(null);

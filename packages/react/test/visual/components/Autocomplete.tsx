@@ -8,7 +8,7 @@ import {
   useInteractions,
   useListNavigation,
   useRole,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {FloatingFocusManager, FloatingPortal} from '../../../src';
 
 export const data = [

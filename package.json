@@ -17,7 +17,7 @@
   "scripts": {
     "test:functional": "npx playwright test packages/dom/test/functional",
     "test:functional:update": "npm run test:functional -- -u",
-    "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react-dom-interactions run build",
+    "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
     "clean": "rm -rf packages/**/src/[^_]*.d.ts packages/**/src/**/[^_]*.d.ts packages/**/dist",
     "lint": "eslint . --ext .js,.ts",
@@ -28,7 +28,7 @@
     "@floating-ui/core": "@floating-ui/core/src/index.ts",
     "@floating-ui/dom": "@floating-ui/dom/src/index.ts",
     "@floating-ui/react-dom": "@floating-ui/react-dom/src/index.ts",
-    "@floating-ui/react-dom-interactions": "@floating-ui/react-dom-interactions/src/index.ts"
+    "@floating-ui/react": "@floating-ui/react/src/index.ts"
   },
   "author": "",
   "license": "MIT",

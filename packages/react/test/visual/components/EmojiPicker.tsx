@@ -13,7 +13,7 @@ import {
   autoUpdate,
   useId,
   Placement,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 
 import './EmojiPicker.css';
 

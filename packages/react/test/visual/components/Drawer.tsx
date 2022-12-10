@@ -10,7 +10,7 @@ import {
   FloatingPortal,
   FloatingFocusManager,
   FloatingOverlay,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {useMediaQuery} from 'react-responsive';
 
 export const Main = () => {

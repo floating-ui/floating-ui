@@ -11,7 +11,7 @@ import {
   useFocus,
   useRole,
   useDismiss,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {Controls} from '../utils/Controls';
 
 type Delay = number | Partial<{open: number; close: number}>;
