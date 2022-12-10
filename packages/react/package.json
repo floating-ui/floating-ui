@@ -1,11 +1,11 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.0.15",
+  "version": "0.0.0",
   "@rollingversions": {
     "baseVersion": [
       0,
-      10,
-      1
+      14,
+      0
     ]
   },
   "description": "Floating UI for React",
