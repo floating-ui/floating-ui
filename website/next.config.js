@@ -62,6 +62,11 @@ module.exports = {
         permanent: true,
       },
       {
+        source: '/docs/react-dom-interactions',
+        destination: '/docs/react',
+        permanent: true,
+      },
+      {
         source: '/docs/interactions-examples',
         destination: '/docs/react-examples',
         permanent: true,
