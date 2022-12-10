@@ -39,6 +39,7 @@ interface Props {
   guards?: boolean;
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
+  closeOnFocusOut?: boolean;
 }
 ```
 
@@ -202,6 +203,23 @@ when using `true{:js}` is `Dismiss{:.string}`.
   context={context}
   visuallyHiddenDismiss="Dismiss popup"
 >
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### closeOnFocusOut
+
+default: `true{:js}`
+
+<Notice type="version">Available from v0.14.0</Notice>
+
+Determines whether `focusout` event listeners that control
+whether the floating element should be closed if the focus moves
+outside of it are attached to the reference and floating
+elements. This mostly affects non-modal focus management.
+
+```js
+<FloatingFocusManager context={context} closeOnFocusOut={false}>
   {/* floating element */}
 </FloatingFocusManager>
 ```
