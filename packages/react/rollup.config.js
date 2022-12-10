@@ -11,20 +11,14 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(
-        __dirname,
-        'dist/floating-ui.react-dom-interactions.esm.js'
-      ),
+      file: path.join(__dirname, 'dist/floating-ui.react.esm.js'),
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: path.join(
-        __dirname,
-        'dist/floating-ui.react-dom-interactions.esm.min.js'
-      ),
+      file: path.join(__dirname, 'dist/floating-ui.react.esm.min.js'),
       format: 'esm',
     },
   },
@@ -32,10 +26,7 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIReactDOM',
-      file: path.join(
-        __dirname,
-        'dist/floating-ui.react-dom-interactions.umd.js'
-      ),
+      file: path.join(__dirname, 'dist/floating-ui.react.umd.js'),
       format: 'umd',
       globals: {
         react: 'React',
@@ -52,10 +43,7 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIReactDOM',
-      file: path.join(
-        __dirname,
-        'dist/floating-ui.react-dom-interactions.umd.min.js'
-      ),
+      file: path.join(__dirname, 'dist/floating-ui.react.umd.min.js'),
       format: 'umd',
       globals: {
         react: 'React',
@@ -71,7 +59,7 @@ const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.react-dom-interactions.mjs'),
+      file: path.join(__dirname, 'dist/floating-ui.react.mjs'),
       format: 'esm',
     },
   },

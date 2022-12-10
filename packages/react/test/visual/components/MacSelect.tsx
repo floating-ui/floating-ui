@@ -16,7 +16,7 @@ import {
   FloatingOverlay,
   offset,
   shift,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
 import {FloatingPortal} from '../../../src';

@@ -14,7 +14,7 @@ import {
   useFloatingNodeId,
   FloatingNode,
   FloatingFocusManager,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 
 interface SubItemProps {
   label: string;
@@ -24,14 +24,9 @@ interface SubItemProps {
 export const NavigationSubItem = React.forwardRef<
   HTMLAnchorElement,
   SubItemProps & React.HTMLProps<HTMLAnchorElement>
->(({ label, href, ...props }, ref) => {
+>(({label, href, ...props}, ref) => {
   return (
-    <a
-      {...props}
-      ref={ref}
-      href={href}
-      className="NavigationItem"
-    >
+    <a {...props} ref={ref} href={href} className="NavigationItem">
       {label}
     </a>
   );
@@ -57,11 +52,7 @@ export const NavigationItem = React.forwardRef<
       open,
       nodeId,
       onOpenChange: setOpen,
-      middleware: [
-        offset({mainAxis: 4, alignmentAxis: -5 }),
-        flip(),
-        shift(),
-      ],
+      middleware: [offset({mainAxis: 4, alignmentAxis: -5}), flip(), shift()],
       placement: 'right-start',
     });
 
@@ -71,10 +62,10 @@ export const NavigationItem = React.forwardRef<
       enabled: hasChildren,
     }),
     useFocus(context, {
-      enabled: hasChildren
+      enabled: hasChildren,
     }),
     useDismiss(context, {
-        enabled: hasChildren,
+      enabled: hasChildren,
     }),
   ]);
 
@@ -90,8 +81,8 @@ export const NavigationItem = React.forwardRef<
           href={href}
           ref={mergedReferenceRef}
           {...getReferenceProps({
-          ...props,
-          className: `NavigationItem`,
+            ...props,
+            className: `NavigationItem`,
           })}
         >
           {label}
@@ -116,10 +107,10 @@ export const NavigationItem = React.forwardRef<
               }}
               {...getFloatingProps()}
             >
-              <button type="button" onClick={() => setOpen(false)}>Close</button>
-              <ul className="NavigationList">
-                {children}
-              </ul>
+              <button type="button" onClick={() => setOpen(false)}>
+                Close
+              </button>
+              <ul className="NavigationList">{children}</ul>
             </div>
           </FloatingFocusManager>
         )}
@@ -129,11 +120,15 @@ export const NavigationItem = React.forwardRef<
 });
 
 interface NavigationProps {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Navigation = (props: NavigationProps) => {
-  return <nav className="Navigation"><ul className="NavigationList">{props.children}</ul></nav>;
+  return (
+    <nav className="Navigation">
+      <ul className="NavigationList">{props.children}</ul>
+    </nav>
+  );
 };
 
 export const Main = () => {
@@ -141,11 +136,11 @@ export const Main = () => {
     <Navigation>
       <NavigationItem label="Home" href="#" />
       <NavigationItem label="Product" href="#">
-          <NavigationSubItem label="Link 1" href="#" />
-          <NavigationSubItem label="Link 2" href="#" />
-          <NavigationSubItem label="Link 3" href="#" />
-        </NavigationItem>
-        <NavigationItem label="About" href="#" />
+        <NavigationSubItem label="Link 1" href="#" />
+        <NavigationSubItem label="Link 2" href="#" />
+        <NavigationSubItem label="Link 3" href="#" />
+      </NavigationItem>
+      <NavigationItem label="About" href="#" />
     </Navigation>
   );
 };

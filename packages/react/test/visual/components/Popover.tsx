@@ -13,7 +13,7 @@ import {
   useId,
   FloatingPortal,
   FloatingFocusManager,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {Controls} from '../utils/Controls';
 
 export const Main = () => {

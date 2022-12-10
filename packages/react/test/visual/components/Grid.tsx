@@ -5,7 +5,7 @@ import {
   useClick,
   useDismiss,
   useListNavigation,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 import {useRef, useState} from 'react';
 
 interface Props {

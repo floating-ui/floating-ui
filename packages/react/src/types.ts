@@ -10,7 +10,7 @@ import type {UseFloatingReturn as UsePositionFloatingReturn} from '@floating-ui/
 import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '@floating-ui/dom';
-export * from './';
+export * from '.';
 
 export {arrow} from '@floating-ui/react-dom';
 

@@ -21,7 +21,7 @@ import {
   FloatingNode,
   FloatingTree,
   FloatingFocusManager,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 
 interface MenuItemProps {
   label: string;
