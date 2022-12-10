@@ -83,7 +83,7 @@ import {
   offset,
   flip,
   shift,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 
 function Tooltip() {
   const [open, setOpen] = useState(false);
@@ -115,7 +115,7 @@ import {
   useDismiss,
   useRole,
   useInteractions,
-} from '@floating-ui/react-dom-interactions';
+} from '@floating-ui/react';
 
 function Tooltip() {
   const [open, setOpen] = useState(false);
@@ -282,7 +282,7 @@ nearby tooltips share a delay.
 Sometimes you want to disable a button, but still show the
 tooltip while it's disabled.
 
-[Disabling a button with a tooltip prevents it from being accessible](/docs/react-dom-interactions#disabled-elements),
+[Disabling a button with a tooltip prevents it from being accessible](/docs/react#disabled-elements),
 but can be worked around using a different prop. This supplants
 the `disabled{:.keyword}` prop to allow events to fire, including
 keyboard access.

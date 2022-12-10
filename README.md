@@ -25,45 +25,45 @@ components.
 
 ## Install
 
-Choose the package that suits you.
+Floating UI is platform-agnostic and supports a variety of platforms.
 
-### Vanilla DOM positioning
+### Vanilla
 
-Use with vanilla JavaScript or a non-React framework
+Use on the web with vanilla JavaScript or a non-React framework
 ([view tutorial](https://floating-ui.com/docs/tutorial)).
 
 ```shell
 npm install @floating-ui/dom
 ```
 
-### React DOM positioning
+### React
 
-Use with React DOM ([view docs](https://floating-ui.com/docs/react-dom)).
+Use with [React DOM](https://floating-ui.com/docs/react) or
+[React Native](https://floating-ui.com/docs/react-native).
 
 ```shell
+# React DOM — positioning + interactions
+npm install @floating-ui/react
+```
+
+```shell
+# React DOM — positioning only
 npm install @floating-ui/react-dom
 ```
 
-### React DOM interactions and positioning
-
-Craft interactions in addition to anchor positioning
-([view docs](https://floating-ui.com/docs/react-dom-interactions)).
-
 ```shell
-npm install @floating-ui/react-dom-interactions
-```
-
-### React Native positioning
-
-Use with React Native ([view docs](https://floating-ui.com/docs/react-native)).
-
-```shell
+# React Native — positioning only
 npm install @floating-ui/react-native
 ```
 
 ### Canvas or other platforms
 
-Learn about creating a [Platform](https://floating-ui.com/docs/platform).
+If you're targeting a platform other than the vanilla DOM (web), React, or React
+Native, you can create your own
+[Platform](https://floating-ui.com/docs/platform).
+
+This allows you to support things like Canvas/WebGL, or other platforms that can
+run JavaScript.
 
 ```shell
 npm install @floating-ui/core

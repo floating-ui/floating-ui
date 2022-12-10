@@ -6,16 +6,16 @@ or block pointer events behind a floating element.
 It's a regular `<div />{:js}`, so it can be styled via any CSS
 solution you prefer.
 
-{/* prettier-ignore */}
 ```js
-import {FloatingOverlay} from '@floating-ui/react-dom-interactions';
+import {FloatingOverlay} from '@floating-ui/react';
 
-// ...
-<FloatingOverlay>
-  <Dialog>
-    <button>Open</button>
-  </Dialog>
-</FloatingOverlay>
+function App() {
+  return (
+    <FloatingOverlay>
+      <div />
+    </FloatingOverlay>
+  );
+}
 ```
 
 ## Props
