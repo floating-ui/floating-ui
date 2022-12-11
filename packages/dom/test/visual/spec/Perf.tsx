@@ -57,7 +57,7 @@ export function Perf() {
     <>
       <h1>Perf</h1>
       <p>
-        The ref and floating element is nested within 100+ offsetParent
+        The reference and floating elements are nested within 100+ offsetParent
         containers and forced to flip. With 6x CPU slow down on an M1 Mac,
         `computePosition` updates should take less than <strong>15ms</strong>.
       </p>
