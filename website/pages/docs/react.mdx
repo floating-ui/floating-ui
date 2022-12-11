@@ -8,23 +8,6 @@ This allows you to create components such as tooltips, popovers,
 dropdown menus, hover cards, modal dialogs, select menus,
 comboboxes, and more.
 
-<div className="hidden flex justify-center md:justify-between items-center flex-wrap gap-2 mx-auto">
-  <img
-    className="relative sm:left-[5rem] top-[1rem] md:top-0 md:left-0 inline-block card"
-    src="/all-inputs.png"
-    alt="Designed for all inputs"
-    width={335}
-    height={225}
-  />
-  <img
-    className="relative sm:left-[-5rem] top-[-1rem] md:left-0 md:top-0 inline-block card"
-    src="/safe-cursor-polygon.png"
-    alt="Safe cursor polygon"
-    width={335}
-    height={225}
-  />
-</div>
-
 ## Install
 
 The following package provides all modules:
@@ -89,6 +72,14 @@ center** of the `Button` element by default.
 <Notice gap="above">
 To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
 </Notice>
+
+## Return value
+
+The hook
+[returns all the values from computePosition](/docs/computePosition#return-value),
+plus some extras to work with React. This includes data about the
+final placement and middleware data which are useful when
+rendering.
 
 ## Options
 
@@ -341,6 +332,23 @@ only apply to `@floating-ui/react`.
 understand the basics.
 
 ## Interactions
+
+<div className="flex justify-center md:justify-between items-center flex-wrap gap-2 mx-auto">
+  <img
+    className="relative sm:left-[5rem] top-[1rem] md:top-0 md:left-0 inline-block card"
+    src="/all-inputs.png"
+    alt="Designed for all inputs"
+    width={335}
+    height={225}
+  />
+  <img
+    className="relative sm:left-[-5rem] top-[-1rem] md:left-0 md:top-0 inline-block card"
+    src="/safe-cursor-polygon.png"
+    alt="Safe cursor polygon"
+    width={335}
+    height={225}
+  />
+</div>
 
 To add interactions, the hook accepts an `open{:.const}` boolean
 and `onOpenChange{:.objectKey}` as an option to change that
