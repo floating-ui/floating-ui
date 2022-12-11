@@ -3,7 +3,6 @@ import {getBoundingClientRect} from './getBoundingClientRect';
 import {getDocumentElement} from './getDocumentElement';
 import {getNodeName} from './getNodeName';
 import {getNodeScroll} from './getNodeScroll';
-import {FALLBACK_SCALE, getScale} from './getScale';
 import getWindowScrollBarX from './getWindowScrollBarX';
 import {isHTMLElement, isOverflowElement} from './is';
 
@@ -14,16 +13,11 @@ export function getRectRelativeToOffsetParent(
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
-  const offsetScale = isOffsetParentAnElement
-    ? getScale(
-        // TS 4.1 compat
-        offsetParent as Element
-      )
-    : FALLBACK_SCALE;
   const rect = getBoundingClientRect(
     element,
-    offsetScale.x !== 1 || offsetScale.y !== 1,
-    strategy === 'fixed'
+    true,
+    strategy === 'fixed',
+    offsetParent
   );
 
   let scroll = {scrollLeft: 0, scrollTop: 0};

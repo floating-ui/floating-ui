@@ -6,10 +6,22 @@ import {getWindow} from './window';
 export function getBoundingClientRect(
   element: Element | VirtualElement,
   includeScale = false,
-  isFixedStrategy = false
+  isFixedStrategy = false,
+  offsetParent?: Element | Window
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
-  const scale = includeScale ? getScale(element) : FALLBACK_SCALE;
+
+  let scale = FALLBACK_SCALE;
+  if (includeScale) {
+    if (offsetParent) {
+      if (isElement(offsetParent)) {
+        scale = getScale(offsetParent);
+      }
+    } else {
+      scale = getScale(element);
+    }
+  }
+
   const win = isElement(element) ? getWindow(element) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
