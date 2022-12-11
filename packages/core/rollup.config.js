@@ -62,7 +62,7 @@ const bundles = [
 export default bundles.map(({input, output}) => ({
   input,
   output,
-  external: ['esm-env'],
+  external: output.format !== 'umd' ? ['esm-env'] : [],
   plugins: [
     nodeResolve({extensions: ['.ts']}),
     replace({
