@@ -1,3 +1,4 @@
+import {DEV} from 'esm-env';
 import type {
   SideObject,
   Padding,
@@ -98,7 +99,7 @@ export async function detectOverflow(
       : rect
   );
 
-  if (__DEV__) {
+  if (DEV) {
     if (DEBUG_RECTS) {
       paintDebugRects(elementClientRect, clippingClientRect);
     }

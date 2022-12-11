@@ -1,3 +1,4 @@
+import {DEV} from 'esm-env';
 import type {
   ComputePosition,
   ComputePositionReturn,
@@ -28,7 +29,7 @@ export const computePosition: ComputePosition = async (
   const validMiddleware = middleware.filter(Boolean) as Middleware[];
   const rtl = await platform.isRTL?.(floating);
 
-  if (__DEV__) {
+  if (DEV) {
     if (platform == null) {
       console.error(
         [
@@ -102,7 +103,7 @@ export const computePosition: ComputePosition = async (
       },
     };
 
-    if (__DEV__) {
+    if (DEV) {
       if (resetCount > 50) {
         console.warn(
           [

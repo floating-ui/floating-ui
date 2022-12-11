@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {DEV} from 'esm-env';
 import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {
@@ -194,7 +195,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onNavigate: () => {},
   }
 ): ElementProps => {
-  if (__DEV__) {
+  if (DEV) {
     if (allowEscape) {
       if (!loop) {
         console.warn(

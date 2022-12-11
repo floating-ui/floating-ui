@@ -73,5 +73,8 @@
     "rollup": "^2.60.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.0.7"
+  },
+  "dependencies": {
+    "esm-env": "^1.0.0"
   }
 }

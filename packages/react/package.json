@@ -63,6 +63,7 @@
   "dependencies": {
     "@floating-ui/react-dom": "^0.6.1",
     "aria-hidden": "^1.1.3",
+    "esm-env": "^1.0.0",
     "tabbable": "^6.0.1"
   },
   "devDependencies": {

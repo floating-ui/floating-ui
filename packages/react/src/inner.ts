@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {DEV} from 'esm-env';
 import {detectOverflow, offset} from '@floating-ui/react-dom';
 import type {
   SideObject,
@@ -62,7 +63,7 @@ export const inner = (
 
     const item = listRef.current[index];
 
-    if (__DEV__) {
+    if (DEV) {
       if (!middlewareArguments.placement.startsWith('bottom')) {
         console.warn(
           [

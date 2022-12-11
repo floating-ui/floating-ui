@@ -1,3 +1,4 @@
+import {DEV} from 'esm-env';
 import type {Side} from '@floating-ui/core';
 import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
 import {contains} from './utils/contains';
@@ -340,7 +341,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       const poly = getPolygon([x, y]);
 
-      if (__DEV__) {
+      if (DEV) {
         debug?.(poly.slice(0, 4).join(', '));
       }
 

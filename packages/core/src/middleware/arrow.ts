@@ -1,3 +1,4 @@
+import {DEV} from 'esm-env';
 import type {Middleware, Padding} from '../types';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
@@ -33,7 +34,7 @@ export const arrow = (options: Options): Middleware => ({
     const {x, y, placement, rects, platform} = middlewareArguments;
 
     if (element == null) {
-      if (__DEV__) {
+      if (DEV) {
         console.warn(
           'Floating UI: No `element` was passed to the `arrow` middleware.'
         );

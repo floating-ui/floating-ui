@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {DEV} from 'esm-env';
 
 type AnyFunction = (...args: any[]) => any;
 
@@ -11,7 +12,7 @@ const useSafeInsertionEffect = useInsertionEffect || ((fn) => fn());
 
 export function useEvent<T extends AnyFunction>(callback?: T) {
   const ref = React.useRef<AnyFunction | undefined>(() => {
-    if (__DEV__) {
+    if (DEV) {
       throw new Error('Cannot call an event handler while rendering.');
     }
   });
