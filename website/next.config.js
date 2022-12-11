@@ -54,25 +54,6 @@ module.exports = {
   swcMinify: false,
   experimental: {esmExternals: true, scrollRestoration: true},
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
-  async redirects() {
-    return [
-      {
-        source: '/docs/react-dom',
-        destination: '/docs/react',
-        permanent: true,
-      },
-      {
-        source: '/docs/react-dom-interactions',
-        destination: '/docs/react',
-        permanent: true,
-      },
-      {
-        source: '/docs/interactions-examples',
-        destination: '/docs/react-examples',
-        permanent: true,
-      },
-    ];
-  },
   webpack(config, options) {
     config.module.rules.push({
       test: /\.svg$/,

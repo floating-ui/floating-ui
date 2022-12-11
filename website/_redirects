@@ -1,0 +1,4 @@
+# Redirects from what the browser requests to what we serve
+/docs/react-dom               /docs/react
+/docs/react-dom-interactions  /docs/react
+/docs/interactions-examples   /docs/react-examples
