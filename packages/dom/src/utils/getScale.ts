@@ -8,11 +8,16 @@ export const FALLBACK_SCALE = {x: 1, y: 1};
 
 function getMatrixScale(element: Element): Coords {
   const matrix = getComputedStyle(element).transform;
-  const is3d = matrix.includes('3d');
+
+  if (!matrix || matrix === 'none') {
+    return FALLBACK_SCALE;
+  }
+
+  const is3d = /3d/.test(matrix);
 
   let matrixArr: Array<number>;
   try {
-    // "none" or an invalid matrix will error out and use the fallback scale
+    // An invalid matrix will error out and use the fallback scale
     matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
   } catch (e) {
     return FALLBACK_SCALE;
