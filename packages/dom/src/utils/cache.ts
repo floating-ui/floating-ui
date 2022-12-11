@@ -6,7 +6,7 @@ import type {FloatingElement, ReferenceElement} from '../types';
 // cause multiple resets and lifecycle re-runs.
 // Note: we could also cache for the lifetime of a particular DOM node, but
 // the user would have to opt-in to that, and there's likely no need for it.
-export const cache = new Map<
+export const cache = new WeakMap<
   ReferenceElement | FloatingElement,
   Partial<{
     // Minifying these for bundle size reasons.
