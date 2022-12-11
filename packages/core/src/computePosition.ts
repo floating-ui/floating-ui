@@ -25,6 +25,8 @@ export const computePosition: ComputePosition = async (
     platform,
   } = config;
 
+  console.time('Floating UI');
+
   const validMiddleware = middleware.filter(Boolean) as Middleware[];
   const rtl = await platform.isRTL?.(floating);
 
@@ -136,6 +138,8 @@ export const computePosition: ComputePosition = async (
       continue;
     }
   }
+
+  console.timeEnd('Floating UI');
 
   return {
     x,

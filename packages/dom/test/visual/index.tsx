@@ -30,6 +30,7 @@ import {Complex} from './spec/Complex';
 import {Inner} from './spec/Inner';
 import {ShadowDOM} from './spec/ShadowDOM';
 import {ContainingBlock} from './spec/ContainingBlock';
+import {Perf} from './spec/Perf';
 
 import {New} from './utils/New';
 import {VirtualElement} from './spec/VirtualElement';
@@ -57,6 +58,7 @@ const ROUTES = [
   {path: 'shadow-DOM', component: ShadowDOM},
   {path: 'containing-block', component: ContainingBlock},
   {path: 'virtual-element', component: VirtualElement},
+  {path: 'perf', component: Perf},
 ];
 
 function App() {
