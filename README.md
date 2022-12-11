@@ -56,6 +56,12 @@ npm install @floating-ui/react-dom
 npm install @floating-ui/react-native
 ```
 
+### Vue
+
+```shell
+npm install @floating-ui/vue
+```
+
 ### Canvas or other platforms
 
 If you're targeting a platform other than the vanilla DOM (web), React, or React
