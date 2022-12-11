@@ -41,6 +41,9 @@ const bundles = [
       name: 'FloatingUICore',
       file: path.join(__dirname, 'dist/floating-ui.core.umd.js'),
       format: 'umd',
+      globals: {
+        'esm-env': 'esmEnv',
+      },
     },
   },
   {
@@ -49,6 +52,9 @@ const bundles = [
       name: 'FloatingUICore',
       file: path.join(__dirname, 'dist/floating-ui.core.umd.min.js'),
       format: 'umd',
+      globals: {
+        'esm-env': 'esmEnv',
+      },
     },
   },
 ];
@@ -56,6 +62,7 @@ const bundles = [
 export default bundles.map(({input, output}) => ({
   input,
   output,
+  external: ['esm-env'],
   plugins: [
     nodeResolve({extensions: ['.ts']}),
     replace({

@@ -29,6 +29,7 @@ const bundles = [
       file: path.join(__dirname, 'dist/floating-ui.react.umd.js'),
       format: 'umd',
       globals: {
+        'esm-env': 'esmEnv',
         react: 'React',
         'react-dom': 'ReactDOM',
         'aria-hidden': 'ariaHidden',
@@ -46,6 +47,7 @@ const bundles = [
       file: path.join(__dirname, 'dist/floating-ui.react.umd.min.js'),
       format: 'umd',
       globals: {
+        'esm-env': 'esmEnv',
         react: 'React',
         'react-dom': 'ReactDOM',
         'aria-hidden': 'ariaHidden',
@@ -74,7 +76,9 @@ export default bundles.map(({input, output}) => ({
     '@floating-ui/core',
     '@floating-ui/dom',
     '@floating-ui/react-dom',
-  ].concat(output.format !== 'umd' ? ['aria-hidden', 'tabbable'] : []),
+  ].concat(
+    output.format !== 'umd' ? ['aria-hidden', 'tabbable', 'esm-env'] : []
+  ),
   plugins: [
     commonjs(),
     nodeResolve({extensions: ['.ts', '.tsx']}),
