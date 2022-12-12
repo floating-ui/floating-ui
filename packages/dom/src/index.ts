@@ -2,8 +2,6 @@ import type {
   ComputePositionConfig,
   ReferenceElement,
   FloatingElement,
-  VirtualElement,
-  Platform,
 } from './types';
 import {computePosition as computePositionCore} from '@floating-ui/core';
 import {platform} from './platform';
@@ -18,27 +16,13 @@ export const computePosition = (
   floating: FloatingElement,
   options?: Partial<ComputePositionConfig>
 ) => {
-  // The HTML element can also be in the cache when using virtual reference
-  // elements, but since it doesn't change for the given script, we can just
-  // leave it in there.
-  const possibleCachedElements = [reference, floating].concat(
-    reference ? (reference as VirtualElement).contextElement || [] : []
-  );
-
   const cache = new Map<ReferenceElement, Array<Element>>();
   const mergedOptions = {platform, ...options};
-  const mergedPlatform = mergedOptions.platform as Platform & {
-    _c: Map<ReferenceElement, Element[]>;
-  };
+  const platformWithCache = {...mergedOptions.platform, _c: cache};
 
-  mergedPlatform._c = cache;
-
-  const result = computePositionCore(reference, floating, mergedOptions);
-
-  result.then(() => {
-    possibleCachedElements.forEach((el) => {
-      cache.delete(el);
-    });
+  const result = computePositionCore(reference, floating, {
+    ...mergedOptions,
+    platform: platformWithCache,
   });
 
   return result;
