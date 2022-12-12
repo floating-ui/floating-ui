@@ -2,11 +2,9 @@ import type {
   ComputePositionConfig,
   ReferenceElement,
   FloatingElement,
-  VirtualElement,
 } from './types';
 import {computePosition as computePositionCore} from '@floating-ui/core';
 import {platform} from './platform';
-import {clippingAncestorsCache} from './utils/cache';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -18,22 +16,13 @@ export const computePosition = (
   floating: FloatingElement,
   options?: Partial<ComputePositionConfig>
 ) => {
-  // The HTML element can also be in the cache when using virtual reference
-  // elements, but since it doesn't change for the given script, we can just
-  // leave it in there.
-  const possibleCachedElements = [reference, floating].concat(
-    reference ? (reference as VirtualElement).contextElement || [] : []
-  );
+  const cache = new Map<ReferenceElement, Array<Element>>();
+  const mergedOptions = {platform, ...options};
+  const platformWithCache = {...mergedOptions.platform, _c: cache};
 
   const result = computePositionCore(reference, floating, {
-    platform,
-    ...options,
-  });
-
-  result.then(() => {
-    possibleCachedElements.forEach((el) => {
-      clippingAncestorsCache.delete(el);
-    });
+    ...mergedOptions,
+    platform: platformWithCache,
   });
 
   return result;
