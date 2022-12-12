@@ -50,10 +50,6 @@ export interface Platform {
   getScale?: (element: HTMLElement) => Promisable<{x: number; y: number}>;
 }
 
-export type PlatformWithCache = Platform & {
-  _c: Map<ReferenceElement, Element[]>;
-};
-
 export interface NodeScroll {
   scrollLeft: number;
   scrollTop: number;

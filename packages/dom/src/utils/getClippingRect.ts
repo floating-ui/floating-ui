@@ -22,7 +22,11 @@ import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
 import {getScale} from './getScale';
-import {PlatformWithCache} from '../types';
+import {Platform, ReferenceElement} from '../types';
+
+type PlatformWithCache = Platform & {
+  _c: Map<ReferenceElement, Element[]>;
+};
 
 // Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
