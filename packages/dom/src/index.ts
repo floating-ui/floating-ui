@@ -16,16 +16,16 @@ export const computePosition = (
   floating: FloatingElement,
   options?: Partial<ComputePositionConfig>
 ) => {
+  // This caches the expensive `getClippingElementAncestors` function so that
+  // multiple lifecycle resets re-use the same result. It only lives for a
+  // single call. If other functions become expensive, we can add them as well.
   const cache = new Map<ReferenceElement, Array<Element>>();
   const mergedOptions = {platform, ...options};
   const platformWithCache = {...mergedOptions.platform, _c: cache};
-
-  const result = computePositionCore(reference, floating, {
+  return computePositionCore(reference, floating, {
     ...mergedOptions,
     platform: platformWithCache,
   });
-
-  return result;
 };
 
 export {
