@@ -1,37 +1,11 @@
 import type {Coords} from '@floating-ui/core';
 import type {VirtualElement} from '../types';
 import {getComputedStyle} from './getComputedStyle';
-import {getOffsetParent} from './getOffsetParent';
 import {isElement} from './is';
 
 export const FALLBACK_SCALE = {x: 1, y: 1};
 
-function getMatrixScale(element: Element): Coords {
-  const matrix = getComputedStyle(element).transform;
-
-  if (!matrix || matrix === 'none') {
-    return FALLBACK_SCALE;
-  }
-
-  const is3d = /3d/.test(matrix);
-
-  let matrixArr: Array<number>;
-  try {
-    // An invalid matrix will error out and use the fallback scale
-    matrixArr = matrix.split('(')[1].split(')')[0].split(',').map(Number);
-  } catch (e) {
-    return FALLBACK_SCALE;
-  }
-
-  return {
-    x: matrixArr[0],
-    y: matrixArr[is3d ? 5 : 3],
-  };
-}
-
 export function getScale(element: Element | VirtualElement): Coords {
-  let scale = FALLBACK_SCALE;
-
   const domElement =
     !isElement(element) && element.contextElement
       ? element.contextElement
@@ -40,15 +14,27 @@ export function getScale(element: Element | VirtualElement): Coords {
       : null;
 
   if (!domElement) {
-    return scale;
+    return FALLBACK_SCALE;
   }
 
-  let currentElement: Element | Window = domElement;
-  while (currentElement && isElement(currentElement)) {
-    const currentScale = getMatrixScale(currentElement);
-    scale = {x: scale.x * currentScale.x, y: scale.y * currentScale.y};
-    currentElement = getOffsetParent(currentElement);
+  const rect = domElement.getBoundingClientRect();
+  const css = getComputedStyle(domElement);
+
+  let x = rect.width / parseFloat(css.width);
+  let y = rect.height / parseFloat(css.height);
+
+  // 0, NaN, or Infinity should always fallback to 1.
+
+  if (!x || !Number.isFinite(x)) {
+    x = 1;
   }
 
-  return scale;
+  if (!y || !Number.isFinite(y)) {
+    y = 1;
+  }
+
+  return {
+    x,
+    y,
+  };
 }
