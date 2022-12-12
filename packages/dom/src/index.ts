@@ -30,8 +30,10 @@ export const computePosition = (
     ...options,
   });
 
-  possibleCachedElements.forEach((el) => {
-    clippingAncestorsCache.delete(el);
+  result.then(() => {
+    possibleCachedElements.forEach((el) => {
+      clippingAncestorsCache.delete(el);
+    });
   });
 
   return result;
