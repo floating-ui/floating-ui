@@ -3,10 +3,10 @@ import type {
   ReferenceElement,
   FloatingElement,
   VirtualElement,
+  Platform,
 } from './types';
 import {computePosition as computePositionCore} from '@floating-ui/core';
 import {platform} from './platform';
-import {clippingAncestorsCache} from './utils/cache';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -25,14 +25,19 @@ export const computePosition = (
     reference ? (reference as VirtualElement).contextElement || [] : []
   );
 
-  const result = computePositionCore(reference, floating, {
-    platform,
-    ...options,
-  });
+  const cache = new Map<ReferenceElement, Array<Element>>();
+  const mergedOptions = {platform, ...options};
+  const mergedPlatform = mergedOptions.platform as Platform & {
+    _c: Map<ReferenceElement, Element[]>;
+  };
+
+  mergedPlatform._c = cache;
+
+  const result = computePositionCore(reference, floating, mergedOptions);
 
   result.then(() => {
     possibleCachedElements.forEach((el) => {
-      clippingAncestorsCache.delete(el);
+      cache.delete(el);
     });
   });
 

@@ -22,7 +22,7 @@ import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
 import {getScale} from './getScale';
-import {clippingAncestorsCache} from './cache';
+import {PlatformWithCache} from '../types';
 
 // Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
@@ -69,8 +69,11 @@ function getClientRectFromClippingAncestor(
 // A "clipping ancestor" is an `overflow` element with the characteristic of
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
-function getClippingElementAncestors(element: Element): Array<Element> {
-  const cachedResult = clippingAncestorsCache.get(element);
+function getClippingElementAncestors(
+  element: Element,
+  cache: PlatformWithCache['_c']
+): Array<Element> {
+  const cachedResult = cache.get(element);
   if (cachedResult) {
     return cachedResult;
   }
@@ -109,27 +112,30 @@ function getClippingElementAncestors(element: Element): Array<Element> {
     currentNode = getParentNode(currentNode);
   }
 
-  clippingAncestorsCache.set(element, result);
+  cache.set(element, result);
 
   return result;
 }
 
 // Gets the maximum area that the element is visible in due to any number of
 // clipping ancestors
-export function getClippingRect({
-  element,
-  boundary,
-  rootBoundary,
-  strategy,
-}: {
-  element: Element;
-  boundary: Boundary;
-  rootBoundary: RootBoundary;
-  strategy: Strategy;
-}): Rect {
+export function getClippingRect(
+  this: PlatformWithCache,
+  {
+    element,
+    boundary,
+    rootBoundary,
+    strategy,
+  }: {
+    element: Element;
+    boundary: Boundary;
+    rootBoundary: RootBoundary;
+    strategy: Strategy;
+  }
+): Rect {
   const elementClippingAncestors =
     boundary === 'clippingAncestors'
-      ? getClippingElementAncestors(element)
+      ? getClippingElementAncestors(element, this._c)
       : [].concat(boundary);
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
