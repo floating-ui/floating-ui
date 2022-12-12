@@ -33,7 +33,9 @@ type Node =
   | 'body'
   | 'html'
   | 'offsetParent'
+  | 'offsetParent-3d'
   | 'offsetParent-inverse'
+  | 'offsetParent-reference'
   | 'virtual';
 const NODES: Node[] = [
   null,
@@ -42,7 +44,9 @@ const NODES: Node[] = [
   'body',
   'html',
   'offsetParent',
+  'offsetParent-3d',
   'offsetParent-inverse',
+  'offsetParent-reference',
   'virtual',
 ];
 
@@ -65,7 +69,9 @@ export function Transform() {
         element = document.body;
         break;
       case 'offsetParent':
+      case 'offsetParent-3d':
       case 'offsetParent-inverse':
+      case 'offsetParent-reference':
       case 'virtual':
         element = offsetParentRef.current;
         break;
@@ -73,9 +79,16 @@ export function Transform() {
     }
 
     if (element) {
-      element.style.transform = node?.includes('inverse')
-        ? 'scale(0.5)'
-        : 'scale(1.2) translate(2rem, -2rem)';
+      let transform = 'scale(0.5) translate(2rem, -2rem)';
+      switch (node) {
+        case 'offsetParent-inverse':
+          transform = 'scale(0.5)';
+          break;
+        case 'offsetParent-3d':
+          transform = 'scale3d(0.5, 0.2, 0.7) translate3d(2rem, -2rem, 0)';
+          break;
+      }
+      element.style.transform = transform;
     }
 
     if (node === 'virtual' && element) {
@@ -124,8 +137,9 @@ export function Transform() {
           ref={reference}
           className="reference"
           style={{
-            transform:
-              node === 'reference' ? 'scale(1.25) translate(2rem, -2rem)' : '',
+            transform: node?.includes('reference')
+              ? 'scale(1.25) translate(2rem, -2rem)'
+              : '',
           }}
         >
           Reference

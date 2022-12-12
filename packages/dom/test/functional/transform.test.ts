@@ -9,6 +9,8 @@ import {click} from './utils/click';
   'html',
   'offsetParent',
   'offsetParent-inverse',
+  'offsetParent-3d',
+  'offsetParent-reference',
   'virtual',
 ].forEach((node) => {
   test(`correctly positioned on bottom when ${node} has a border`, async ({
