@@ -22,7 +22,7 @@ import {max, min} from './math';
 import {getParentNode} from './getParentNode';
 import {getNodeName} from './getNodeName';
 import {getScale} from './getScale';
-import {cache} from './cache';
+import {clippingAncestorsCache} from './cache';
 
 // Returns the inner client rect, subtracting scrollbars if present
 function getInnerBoundingClientRect(
@@ -70,9 +70,9 @@ function getClientRectFromClippingAncestor(
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
 function getClippingElementAncestors(element: Element): Array<Element> {
-  const cachedResult = cache.get(element);
-  if (cachedResult?.a) {
-    return cachedResult.a;
+  const cachedResult = clippingAncestorsCache.get(element);
+  if (cachedResult) {
+    return cachedResult;
   }
 
   let result = getOverflowAncestors(element).filter(
@@ -109,7 +109,7 @@ function getClippingElementAncestors(element: Element): Array<Element> {
     currentNode = getParentNode(currentNode);
   }
 
-  cache.set(element, {a: result});
+  clippingAncestorsCache.set(element, result);
 
   return result;
 }

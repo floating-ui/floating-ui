@@ -6,7 +6,7 @@ import type {
 } from './types';
 import {computePosition as computePositionCore} from '@floating-ui/core';
 import {platform} from './platform';
-import {cache} from './utils/cache';
+import {clippingAncestorsCache} from './utils/cache';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -31,7 +31,7 @@ export const computePosition = (
   });
 
   possibleCachedElements.forEach((el) => {
-    cache.delete(el);
+    clippingAncestorsCache.delete(el);
   });
 
   return result;
