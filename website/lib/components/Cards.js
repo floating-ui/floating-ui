@@ -18,7 +18,7 @@ export function Cards({items}) {
               <h4 className="text-center text-2xl font-bold mb-2">
                 {item.title}
               </h4>
-              <p className="text-center text-gray-400">
+              <p className="text-center dark:text-gray-400">
                 {item.description}
               </p>
             </div>

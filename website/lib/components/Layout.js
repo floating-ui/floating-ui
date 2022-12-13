@@ -310,9 +310,9 @@ const components = {
   a(props) {
     const className =
       'transition-colors inline-flex items-center border-none underline ' +
-      'underline-offset-4 text-blue-300 hover:text-gray-50 ' +
-      'decoration-blue-400/60 hover:decoration-blue-100/30 decoration-2 ' +
-      'group';
+      'underline-offset-4 text-rose-600 dark:text-rose-300 hover:text-gray-1000 dark:hover:text-gray-50 ' +
+      'decoration-rose-500/80 dark:decoration-rose-300/70 ' +
+      'hover:decoration-gray-1000 dark:hover:decoration-gray-50 decoration-2 group';
 
     if (props.href.startsWith('/')) {
       return (
@@ -333,7 +333,7 @@ const components = {
       >
         <span>{props.children}</span>
         <ExternalLink
-          className="w-5 h-5 text-gray-400 ml-1"
+          className="w-5 h-5 text-gray-800 dark:text-gray-400 ml-1"
           aria-label="Opens in new tab"
         />
       </a>
@@ -427,7 +427,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-gray-900 z-50 border-r border-gray-800',
+            'fixed h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-gray-50 dark:bg-gray-900 z-50 border-r border-gray-1000 dark:border-gray-800 dark:text-gray-100',
             {
               hidden: !navOpen,
             }
@@ -435,7 +435,7 @@ export default function Layout({children}) {
           ref={navRef}
         >
           <div
-            className="w-full h-[25rem] absolute -z-1"
+            className="w-full h-[25rem] absolute -z-1 hidden dark:block"
             style={{
               background: `linear-gradient(
                 195deg,
@@ -495,41 +495,33 @@ export default function Layout({children}) {
                         <a
                           href={url}
                           className={cn(
-                            'block hover:bg-purple-200/20 hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
+                            'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
                             {
-                              'bg-purple-200/10 text-gray-100/90':
+                              'bg-gray-800 hover:bg-gray-700 text-gray-50 dark:bg-purple-200/10 dark:text-gray-100/90':
                                 pathname === url,
+                              'hover:bg-gray-100':
+                                pathname !== url,
                               'rounded-tl-none rounded-bl-none':
                                 depth > 0,
                             }
                           )}
                         >
                           <span className="flex items-center gap-4 w-full py-1">
-                            {pathname === url && icon ? (
+                            {icon && (
                               <span
-                                className="w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gradient-to-r from-red-400 to-pink-200"
+                                className={cn(
+                                  'w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gray-800 dark:bg-gray-100',
+                                  {
+                                    'bg-gray-100 dark:bg-gradient-to-r dark:from-red-400 dark:to-pink-200':
+                                      pathname === url,
+                                  }
+                                )}
                                 aria-hidden="true"
                                 style={{
-                                  opacity:
-                                    pathname === url ? '1' : '0',
                                   WebkitMaskImage: `url(${icon})`,
                                   maskImage: `url(${icon})`,
                                 }}
                               />
-                            ) : (
-                              icon && (
-                                <img
-                                  className="w-6 h-6"
-                                  aria-hidden="true"
-                                  src={icon}
-                                  style={{
-                                    display:
-                                      pathname !== url
-                                        ? undefined
-                                        : 'none',
-                                  }}
-                                />
-                              )
                             )}
                             <span
                               className={cn('block', {
@@ -564,9 +556,9 @@ export default function Layout({children}) {
                       className={cn(
                         'block truncate w-full text-lg py-1 px-4 rounded-lg',
                         {
-                          'bg-purple-300/10 text-gray-100 font-bold':
+                          'bg-gray-800 dark:bg-purple-300/10 text-gray-50 font-bold':
                             hash === url,
-                          'text-gray-300 hover:bg-purple-300/10 hover:text-gray-50':
+                          'dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                             hash !== url,
                         }
                       )}
@@ -586,9 +578,9 @@ export default function Layout({children}) {
                               className={cn(
                                 'block text-md truncate py-1 px-4 ml-4 border-l border-gray-700 w-[calc(100% - 1rem)] rounded-tr-md rounded-br-md',
                                 {
-                                  'bg-purple-300/10 text-gray-100 font-bold':
+                                  'bg-gray-800 text-gray-50 dark:bg-purple-300/10 dark:text-gray-100 font-bold':
                                     hash === url,
-                                  'text-gray-400 hover:bg-purple-300/10 hover:text-gray-50':
+                                  'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                                     hash !== url,
                                 }
                               )}
@@ -606,10 +598,9 @@ export default function Layout({children}) {
         <div
           ref={articleRef}
           className="container px-4 lg:px-8 my-16 md:py-8 lg:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
-          tabIndex={-1}
         >
           <SkipNavContent />
-          <article className="prose md:prose-md lg:prose-lg">
+          <article className="prose prose-floating md:prose-md lg:prose-lg dark:prose-invert">
             {children}
           </article>
           {displayNavigation && (
@@ -620,7 +611,7 @@ export default function Layout({children}) {
           )}
         </div>
       </div>
-      <footer className="text-center text-gray-500 py-8 px-4 border-t border-gray-800 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
+      <footer className="text-center text-gray-500 py-8 px-4 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
         <p>© {new Date().getFullYear()} • MIT License</p>
         <p className="text-sm mt-4">
           Icons made by Freepik and authors from{' '}

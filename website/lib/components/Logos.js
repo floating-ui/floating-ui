@@ -2,7 +2,7 @@ import Tippy from '@tippyjs/react';
 
 export function Logos({items}) {
   return (
-    <div className="gap-8 flex flex-wrap justify-center my-10">
+    <div className="gap-8 flex flex-wrap justify-center my-10 invert dark:invert-0">
       {items.map((item) => (
         <Tippy
           key={item.label}
@@ -13,7 +13,7 @@ export function Logos({items}) {
         >
           <a
             href={item.url}
-            className="opacity-30 hover:opacity-100 transition-opacity"
+            className="opacity-70 dark:opacity-30 hover:opacity-100 transition-opacity"
             rel="noopener noreferrer"
           >
             <img

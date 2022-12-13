@@ -1,6 +1,6 @@
 :root {
-  color-scheme: dark;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
     'Helvetica Neue', sans-serif;
@@ -22,6 +22,7 @@ html[data-theme='dark'] {
 
 code {
   -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 [data-remove-transitions] * {
@@ -51,33 +52,44 @@ code ::selection {
   color: inherit;
 }
 
-.DocSearch-Button {
+.not-prose pre {
+  background: #282834;
+  color: #c7d2f5;
+  padding: 1em;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+  line-height: 2;
+  font-size: 0.9rem;
+}
+
+.not-prose :not(pre) > code {
+  background: #30303e;
+  color: #c7d2f5;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+.DocSearch-Button,
+.DocSearch-Button:hover,
+.DocSearch-Button:focus {
   background: none;
-  box-shadow: 0 0 0 1px rgba(225, 200, 255, 0.4);
-  color: rgba(225, 200, 255, 0.6);
+  box-shadow: 0 0 0 1px black;
+  color: black;
 }
 
 .DocSearch-Button:hover,
 .DocSearch-Button:focus {
-  background: none;
-  box-shadow: 0 0 0 2px rgba(225, 200, 255, 0.8);
-  color: rgba(225, 200, 255, 0.8);
-}
-
-.DocSearch-Button-Keys {
-  visibility: hidden;
+  box-shadow: 0 0 0 2px black;
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
-  color: rgba(225, 200, 255, 0.4);
+  color: black;
 }
 
 .DocSearch-Button:hover .DocSearch-Search-Icon {
-  color: rgba(225, 200, 255, 0.8);
-}
-
-.DocSearch-Button:focus .DocSearch-Search-Icon {
-  color: rgba(225, 200, 255, 0.8);
+  color: black;
 }
 
 .DocSearch-Container {
@@ -91,4 +103,38 @@ code ::selection {
 
 .DocSearch-Hit-title {
   color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+
+  .DocSearch-Button {
+    box-shadow: 0 0 0 1px rgba(225, 200, 255, 0.4);
+    color: rgba(225, 200, 255, 0.6);
+  }
+
+  .DocSearch-Button:hover,
+  .DocSearch-Button:focus {
+    background: none;
+    box-shadow: 0 0 0 2px rgba(225, 200, 255, 0.8);
+    color: rgba(225, 200, 255, 0.8);
+  }
+
+  .DocSearch-Button .DocSearch-Search-Icon {
+    color: rgba(225, 200, 255, 0.4);
+  }
+
+  .DocSearch-Button:hover .DocSearch-Search-Icon {
+    color: rgba(225, 200, 255, 0.8);
+  }
+
+  .DocSearch-Button:focus .DocSearch-Search-Icon {
+    color: rgba(225, 200, 255, 0.8);
+  }
+}
+
+.DocSearch-Button-Keys {
+  visibility: hidden;
 }

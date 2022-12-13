@@ -8,8 +8,10 @@ const GRAY = {
   600: '#575969',
 
   200: '#BFC3D9',
+  150: '#B0B2C3',
   100: '#dcdfec',
-  50: '#FFF',
+  75: '#edf0f6',
+  50: '#fff',
 };
 
 module.exports = {
@@ -20,7 +22,7 @@ module.exports = {
   ],
   theme: {
     extend: {
-      typography: {
+      typography: ({theme}) => ({
         lg: {
           css: {
             h1: {
@@ -57,6 +59,12 @@ module.exports = {
         },
         DEFAULT: {
           css: {
+            '--tw-prose-body': theme('colors.gray[800]'),
+            '--tw-prose-invert-body': theme('colors.gray[150]'),
+            '--tw-prose-bullets': theme('colors.gray[800]'),
+            '--tw-prose-invert-bullets': theme(
+              'colors.gray[150]'
+            ),
             img: {
               margin: '0',
             },
@@ -65,23 +73,6 @@ module.exports = {
             },
             fontSize: '1rem',
             maxWidth: '70ch',
-            color: '#b0b2c3',
-            blockquote: {
-              color: colors.rose[300],
-              fontSize: '90%',
-              borderTopRightRadius: '0.25rem',
-              borderBottomRightRadius: '0.25rem',
-              borderLeftColor: colors.rose[400],
-              borderLeftWidth: '2px',
-              backgroundColor: `rgba(255,125,225,0.15)`,
-              padding: '0.25rem 0.5rem 0.25rem 1rem',
-              '> p': {
-                margin: 0,
-              },
-            },
-            strong: {
-              color: '#fff',
-            },
             pre: {
               color: '#cddbf7',
               padding: '1rem 1.5rem',
@@ -118,46 +109,31 @@ module.exports = {
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               fontSize: '2.25rem',
-              color: 'white',
             },
             h2: {
-              color: '#fff',
               wordBreak: 'break-word',
               '> a': {
-                color: GRAY[50],
                 textDecoration: 'underline',
                 textDecorationColor: 'transparent',
                 textUnderlineOffset: '8px',
                 textDecorationThickness: '2px',
                 transition:
                   'color 0.2s ease, text-decoration 0.2s ease',
-              },
-              '> a:hover': {
-                color: GRAY[50],
-                textDecorationColor: GRAY[50],
               },
             },
             h3: {
-              color: '#BFC3D9',
               wordBreak: 'break-word',
               '> a': {
-                color: GRAY[50],
                 textDecoration: 'underline',
                 textDecorationColor: 'transparent',
                 textUnderlineOffset: '8px',
                 textDecorationThickness: '2px',
                 transition:
                   'color 0.2s ease, text-decoration 0.2s ease',
-              },
-              '> a:hover': {
-                color: GRAY[50],
-                textDecorationColor: GRAY[50],
               },
             },
             h4: {
-              color: '#BFC3D9',
               '> a': {
-                color: GRAY[50],
                 textDecoration: 'underline',
                 textDecorationColor: 'transparent',
                 textUnderlineOffset: '8px',
@@ -165,13 +141,9 @@ module.exports = {
                 transition:
                   'color 0.2s ease, text-decoration 0.2s ease',
               },
-              '> a:hover': {
-                color: GRAY[50],
-                textDecorationColor: GRAY[50],
-              },
             },
             code: {
-              color: '#b4c2f0',
+              color: '#c7d2f5',
               fontWeight: '500',
               '&::before': {
                 display: 'none',
@@ -182,18 +154,15 @@ module.exports = {
             },
             ':not(pre) > code': {
               borderRadius: '0.25rem',
-              padding: '0.2rem 0.4rem',
+              padding: '0.375rem 0.5rem',
               backgroundColor: '#30303e',
-            },
-            'a code': {
-              color: '#fff',
             },
             'blockquote p:first-of-type::before': {
               display: 'none',
             },
           },
         },
-      },
+      }),
       colors: {
         green: colors.emerald,
         yellow: colors.amber,

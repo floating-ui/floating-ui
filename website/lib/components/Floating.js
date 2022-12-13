@@ -118,7 +118,7 @@ export function Floating({
 
   const tooltipJsx = (
     <div
-      className="grid place-items-center bg-gray-500 text-gray-50 z-10 rounded"
+      className="grid place-items-center bg-gray-800 text-gray-50 z-10 rounded"
       ref={floating}
       style={{
         ...tooltipStyle,
@@ -144,7 +144,7 @@ export function Floating({
       {arrow && (
         <div
           ref={arrowRef}
-          className="w-4 h-4 bg-gray-500 [left:-0.5rem]"
+          className="w-4 h-4 bg-gray-800 [left:-0.5rem]"
           style={{
             position: 'absolute',
             left: middlewareData.arrow?.x ?? -7,

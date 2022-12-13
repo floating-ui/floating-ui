@@ -55,7 +55,7 @@ function GridItem({
   demoLink,
 }) {
   return (
-    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-700 md:rounded-lg px-4 py-8 sm:p-8 relative">
+    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-50 dark:bg-gray-700 md:rounded-lg px-4 py-8 sm:p-8 relative">
       <div className="overflow-hidden">
         <h3 className={`text-3xl font-bold mb-2 ${titleClass}`}>
           {title}
@@ -66,7 +66,7 @@ function GridItem({
         {chrome}
       </div>
       <a
-        className="transition-colors inline-flex items-center gap-1 border-none underline underline-offset-4 font-bold text-blue-300 hover:text-blue-100 decoration-blue-400/60 hover:decoration-blue-200 decoration-2 absolute right-6 top-6"
+        className="transition-colors inline-flex items-center gap-1 border-none underline underline-offset-4 font-bold text-rose-500 hover:text-gray-1000 decoration-rose-500/80 hover:decoration-gray-1000 dark:text-rose-300 dark:hover:text-gray-50 dark:decoration-rose-300/80 dark:hover:decoration-gray-50 decoration-2 absolute right-6 top-6"
         href={demoLink}
         target="_blank"
         rel="noopener noreferrer"
@@ -82,7 +82,7 @@ function Placement() {
 
   return (
     <GridItem
-      titleClass="text-violet-300"
+      titleClass="text-violet-600 dark:text-violet-300"
       title="Placement"
       description="Places your floating element relative to another one."
       demoLink="https://codesandbox.io/s/lively-waterfall-rbc1pi?file=/src/index.js"
@@ -189,9 +189,9 @@ function Placement() {
                 className={cn(
                   'w-5 h-5 rounded-full border-2 border-solid',
                   {
-                    'border-gray-500': placement === p,
-                    'border-gray-600': placement !== p,
-                    'bg-gray-500': placement === p,
+                    'border-gray-800': placement === p,
+                    'border-gray-900': placement !== p,
+                    'bg-gray-800': placement === p,
                   }
                 )}
               />
@@ -236,7 +236,7 @@ function Shift() {
   return (
     <GridItem
       title="Shift"
-      titleClass="text-blue-300"
+      titleClass="text-blue-600 dark:text-blue-300"
       description="Shifts your floating element to keep it in view."
       demoLink="https://codesandbox.io/s/great-lake-5l7m95?file=/src/index.js"
       chrome={
@@ -294,7 +294,7 @@ function Flip() {
   return (
     <GridItem
       title="Flip"
-      titleClass="text-red-300"
+      titleClass="text-red-500 dark:text-red-300"
       description="Changes the placement of your floating element to keep it in view."
       demoLink="https://codesandbox.io/s/beautiful-kirch-th1e0j?file=/src/index.js"
       chrome={
@@ -327,7 +327,7 @@ function Size() {
   return (
     <GridItem
       title="Size"
-      titleClass="text-green-300"
+      titleClass="text-green-500 dark:text-green-300"
       description="Changes the size of your floating element to keep it in view."
       demoLink="https://codesandbox.io/s/focused-hamilton-qez78d?file=/src/index.js"
       chrome={
@@ -365,7 +365,7 @@ function Arrow() {
   return (
     <GridItem
       title="Arrow"
-      titleClass="text-yellow-300"
+      titleClass="text-yellow-500 dark:text-yellow-300"
       description="Dynamically positions an arrow element that is center-aware."
       demoLink="https://codesandbox.io/s/interesting-wescoff-6e1w5i?file=/src/index.js"
       chrome={
@@ -476,7 +476,7 @@ function Virtual() {
           >
             <div
               ref={floating}
-              className="bg-gray-500 text-gray-50 font-bold p-4 rounded"
+              className="bg-gray-800 text-gray-50 font-bold p-4 rounded"
               style={{
                 position: 'absolute',
                 top: y ?? 0,
@@ -513,14 +513,15 @@ function HomePage() {
           more
         </title>
       </Head>
-      <header className="from-gray-700 to-gray-800 mb-24 overflow-hidden relative pb-48">
+      <header className="from-gray-700 to-gray-800 mb-12 overflow-hidden relative pb-16 bg-gray-900">
         <div className="container pt-16 mx-auto text-center max-w-screen-xl">
           <Logo
             className="mx-auto"
             aria-label="Floating UI logo (a cute smiling red balloon)"
+            style={{position: 'relative', zIndex: 1}}
           />
           <div
-            className="absolute -z-1 w-full top-[-3rem]"
+            className="absolute w-full top-[-3rem] overflow-hidden"
             style={{
               left: '50%',
               transform: 'translateX(-50%)',
@@ -548,11 +549,11 @@ function HomePage() {
             />
           </div>
           <Text
-            className="mx-auto relative top-[2rem]"
+            className="mx-auto relative top-[2rem] z-1"
             aria-label="Floating UI text logo"
           />
 
-          <div className="flex flex-row justify-center gap-x-4 mt-24">
+          <div className="flex flex-row justify-center gap-x-4 mt-24 z-1 relative">
             <Link href="/docs/getting-started">
               <a
                 className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-red-300 via-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
@@ -572,9 +573,9 @@ function HomePage() {
           </div>
         </div>
       </header>
-      <main className="relative -mt-60 sm:-mt-48">
+      <main className="relative">
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
-          <p className="prose text-xl lg:text-2xl text-left">
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left">
             Floating UI is a low-level toolkit to create{' '}
             <Tippy
               content={
@@ -593,14 +594,12 @@ function HomePage() {
             >
               <span
                 tabIndex={0}
-                className="relative text-gray-50"
+                className="relative text-gray-1000 dark:text-gray-50 decoration-gray-1000 dark:decoration-gray-200"
                 style={{
                   textDecorationLine: 'underline',
                   textDecorationStyle: 'wavy',
-                  textUnderlineOffset: 4,
+                  textUnderlineOffset: 8,
                   textDecorationThickness: 1,
-                  textDecorationColor:
-                    'rgba(255, 255, 255, 0.5)',
                 }}
               >
                 floating elements
@@ -623,7 +622,7 @@ function HomePage() {
           <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 via-teal-400 to-orange-300 text-3xl lg:text-4xl font-bold mt-8 mb-4">
             Light as a feather.
           </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
             The core is only 600 bytes when minified and
             compressed with Brotli. Plus, the architecture is
             super modular, so tree-shaking works like a charm.
@@ -631,11 +630,13 @@ function HomePage() {
           <div className="grid items-center py-8 pb-16">
             <div className="flex flex-col text-center text-md sm:text-lg md:text-xl mx-auto pr-4 sm:pr-20 md:pr-40">
               <div className="mb-2 flex gap-2 items-center justify-center">
-                <code className="flex-1 text-blue-400 text-right">
+                <code className="flex-1 text-blue-600 dark:text-blue-400 text-right">
                   computePosition
-                  <span className="text-blue-200">()</span>
+                  <span className="text-cyan-500 dark:text-cyan-200">
+                    ()
+                  </span>
                 </code>
-                <span className="text-md text-gray-400 text-left [font-variant-numeric:tabular-nums]">
+                <span className="text-md text-gray-600 dark:text-gray-400 text-left [font-variant-numeric:tabular-nums]">
                   <span className="invisible">+</span>0.6 kB
                 </span>
               </div>
@@ -653,20 +654,22 @@ function HomePage() {
                   className="mb-2 flex gap-2 items-center justify-center"
                   key={name}
                 >
-                  <code className="flex-1 text-blue-400 text-right">
+                  <code className="flex-1 text-blue-600 dark:text-blue-400 text-right">
                     {name}
-                    <span className="text-blue-200">()</span>
+                    <span className="text-cyan-500 dark:text-cyan-200">
+                      ()
+                    </span>
                   </code>
-                  <span className="text-md text-green-400 text-left [font-variant-numeric:tabular-nums]">
+                  <span className="text-md text-green-500 dark:text-green-400 text-left [font-variant-numeric:tabular-nums]">
                     +{size}
                   </span>
                 </div>
               ))}
               <div className="mb-2 flex gap-3 items-center justify-center">
-                <code className="flex-1 text-gray-400 text-right">
+                <code className="flex-1 text-gray-600 dark:text-gray-400 text-right">
                   DOM platform
                 </code>
-                <span className="text-md text-yellow-400 text-left [font-variant-numeric:tabular-nums]">
+                <span className="text-md text-yellow-600 dark:text-yellow-400 text-left [font-variant-numeric:tabular-nums]">
                   +2.2 kB
                 </span>
               </div>
@@ -675,15 +678,15 @@ function HomePage() {
         </div>
 
         <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
-          <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 font-bold mt-8 mb-4">
+          <h2 className="inline-block text-3xl lg:text-4xl dark:text-gray-50 font-bold mt-8 mb-4">
             Support Floating UI's future!
           </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
             Floating UI is free open-source software, and we are
             proudly sponsored by the following organizations,
             consider joining them on{' '}
             <a
-              className="text-blue-300 hover:text-blue-100 decoration-blue-400/60 hover:decoration-blue-200 decoration-2"
+              className="transition-colors underline underline-offset-4 font-bold text-rose-500 dark:text-rose-300 hover:text-gray-1000 decoration-rose-500/80 dark:decoration-rose-300/80 hover:decoration-gray-1000 dark:hover:text-gray-50 dark:hover:decoration-gray-50 decoration-2"
               href="https://opencollective.com/floating-ui"
               rel="noopener noreferrer"
             >
@@ -696,15 +699,15 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
-          <h2 className="inline-block text-3xl lg:text-4xl text-gray-50 leading-gradient-heading font-bold mb-4 mt-16">
+          <h2 className="inline-block text-3xl lg:text-4xl dark:text-gray-50 leading-gradient-heading font-bold mb-4 mt-16">
             Ready to install?
           </h2>
-          <p className="prose text-xl lg:text-2xl text-left mb-8">
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
             Start playing via your package manager or CDN.
           </p>
 
           <div className="grid lg:grid-cols-2 gap-4">
-            <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
+            <div className="border dark:border-gray-200 dark:text-gray-100 rounded-lg py-8 px-12">
               <h3 className="text-2xl font-bold mb-4">
                 Package Manager
               </h3>
@@ -714,13 +717,13 @@ function HomePage() {
               <Link href="/docs/getting-started">
                 <a
                   href="/docs/getting-started"
-                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-300"
+                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
                 >
                   Get started <ArrowRight />
                 </a>
               </Link>
             </div>
-            <div className="border-gray-200 border-2 text-gray-100 rounded-lg py-8 px-12">
+            <div className="border dark:border-gray-200 dark:text-gray-100 rounded-lg py-8 px-12">
               <h3 className="text-2xl font-bold mb-4">CDN</h3>
               <p className="text-lg">
                 Install with the jsDelivr CDN.
@@ -728,7 +731,7 @@ function HomePage() {
               <Link href="/docs/getting-started#cdn">
                 <a
                   href="/docs/getting-started#cdn"
-                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-300"
+                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
                 >
                   Get started <ArrowRight />
                 </a>
@@ -738,25 +741,29 @@ function HomePage() {
         </div>
       </main>
 
-      <footer className="text-center text-gray-500 bg-gray-1000 mt-16 py-8">
+      <footer className="text-center dark:text-gray-500 bg-gray-50 dark:bg-gray-1000 mt-16 py-8">
         <div className="flex flex-col gap-3 container mx-auto px-4 max-w-screen-xl">
-          <p>© {new Date().getFullYear()} • MIT License</p>
-          <p className="text-gray-400">
+          <p>
+            <strong>
+              © {new Date().getFullYear()} • MIT License
+            </strong>
+          </p>
+          <p className="dark:text-gray-400">
             Floating UI is the evolution of Popper 2, designed to
             bring the project to a new level.
           </p>
-          <p className="text-gray-400">
+          <p className="dark:text-gray-400">
             Floating shapes in the header are licensed under CC
             BY from{' '}
             <a
-              className="text-blue-400"
+              className="font-bold text-rose-500 dark:text-rose-300"
               href="https://www.figma.com/@killnicole"
             >
               Vic
             </a>{' '}
             and{' '}
             <a
-              className="text-blue-400"
+              className="font-bold text-rose-500 dark:text-rose-300"
               href="https://www.figma.com/@Artstar3d"
             >
               Lisa Star
@@ -768,10 +775,11 @@ function HomePage() {
               href="https://www.netlify.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400"
+              className="font-bold text-rose-500 dark:text-rose-300"
             >
-              This site is powered by Netlify.
+              This site is powered by Netlify
             </a>
+            .
           </p>
         </div>
       </footer>

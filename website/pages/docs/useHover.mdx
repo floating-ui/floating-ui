@@ -162,9 +162,10 @@ rest for the specified number of milliseconds mid-traversal. The
 default value (0) will never close it unless the pointer is
 outside the area.
 
-> **Note:** this applies only if the cursor is not close enough
-> to the floating element to be within the `offset(){:js}`
-> region, so it does not apply too eagerly.
+<Notice>
+This applies only if the cursor is not close enough to the floating element
+to be within the `offset(){:js}` region, so it does not apply too eagerly.
+</Notice>
 
 ```js
 useHover(context, {

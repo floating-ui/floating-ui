@@ -21,8 +21,8 @@ export const Chrome = ({
   }, [scrollable]);
 
   return (
-    <div className="rounded-lg overflow-hidden text-gray-900 [color-scheme:light]">
-      <div className="bg-gray-100 h-12">
+    <div className="rounded-lg overflow-hidden text-gray-900 [color-scheme:light] border dark:border-none border-gray-1000">
+      <div className="bg-gray-75 h-12">
         <div
           className={`absolute flex gap-2 m-4 ${
             label ? 'hidden sm:flex' : ''

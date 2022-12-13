@@ -19,7 +19,7 @@ class MyDocument extends Document {
           /> */}
         </Head>
         <body
-          className="bg-gray-900 text-gray-100"
+          className="bg-gray-75 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
           data-remove-transitions=""
         >
           <div id="focus-root" tabIndex={-1} />
