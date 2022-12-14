@@ -437,7 +437,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-gray-50 dark:bg-gray-900 z-50 border-r border-gray-1000 dark:border-gray-800 dark:text-gray-100',
+            'fixed h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-gray-50 dark:bg-gray-900 z-50 shadow dark:shadow-none dark:border-r dark:border-gray-800 dark:text-gray-100',
             {
               hidden: !navOpen,
             }
@@ -606,7 +606,7 @@ export default function Layout({children}) {
           className="container px-4 lg:px-8 my-16 md:py-8 lg:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
         >
           <SkipNavContent />
-          <article className="prose prose-floating md:prose-md lg:prose-lg dark:prose-invert">
+          <article className="prose prose-floating prose-pre:bg-gray-50 prose-pre:shadow prose-code:shadow dark:prose-pre:bg-gray-800 prose-code:bg-gray-50 dark:prose-code:bg-gray-800 md:prose-md lg:prose-lg dark:prose-invert">
             {children}
           </article>
           {displayNavigation && (

@@ -23,12 +23,20 @@ const replaceVariables = () => async (tree) => {
 };
 
 const rehypePrettyCodeOptions = {
-  theme: JSON.parse(
-    fs.readFileSync(
-      require.resolve('./assets/floating-ui-theme.json'),
-      'utf-8'
-    )
-  ),
+  theme: {
+    dark: JSON.parse(
+      fs.readFileSync(
+        require.resolve('./assets/floating-ui-theme.json'),
+        'utf-8'
+      )
+    ),
+    light: JSON.parse(
+      fs.readFileSync(
+        require.resolve('./assets/floating-ui-light-theme.json'),
+        'utf-8'
+      )
+    ),
+  },
   tokensMap: {
     objectKey: 'meta.object-literal.key',
     function: 'entity.name.function',

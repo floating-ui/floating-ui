@@ -32,8 +32,11 @@ module.exports = {
               fontSize: '2rem',
             },
             pre: {
-              fontSize: '1.05rem',
               lineHeight: '2.1',
+              fontSize: '0.875rem',
+            },
+            code: {
+              fontSize: '0.875rem',
             },
             img: {
               margin: '0',
@@ -74,32 +77,41 @@ module.exports = {
             fontSize: '1rem',
             maxWidth: '70ch',
             pre: {
-              color: '#cddbf7',
               padding: '1rem 1.5rem',
               lineHeight: '2',
-              backgroundColor: '#282834',
               '> code': {
                 display: 'grid',
+                fontSize: 'inherit',
+                boxShadow: 'none',
               },
               '.line': {
-                borderLeft: '2px solid transparent',
-                margin: '0 -1.5rem',
-                padding: '0 1.5rem',
+                margin: '0 -1.5em',
+                padding: '0 1.5em',
               },
-              '.line.line--highlighted': {
+              '.word': {
+                padding: '0.2rem 0',
+                borderRadius: '0.25rem',
+                zIndex: '0',
+              },
+              'code[data-theme="light"] .line--highlighted': {
                 borderLeftColor: colors.rose[400],
-                backgroundColor: '#3b3547',
+                backgroundColor: colors.orange[50],
+              },
+              'code[data-theme="dark"] .line--highlighted': {
+                borderLeftColor: colors.rose[400],
+                backgroundColor: `rgb(221 214 254 / 0.1)`,
+              },
+              'code[data-theme="light"] .word': {
+                backgroundColor: colors.orange[100],
+                boxShadow: `0 0 0 1px ${colors.orange[100]}`,
+              },
+              'code[data-theme="dark"] .word': {
+                backgroundColor: 'rgba(200,200,255,0.2)',
+                boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
               },
               span: {
                 position: 'relative',
                 zIndex: '1',
-              },
-              '.word': {
-                backgroundColor: 'rgba(200,200,255,0.2)',
-                padding: '0.2rem 0',
-                borderRadius: '0.25rem',
-                boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
-                zIndex: '0',
               },
             },
             h1: {
@@ -143,7 +155,6 @@ module.exports = {
               },
             },
             code: {
-              color: '#c7d2f5',
               fontWeight: '500',
               '&::before': {
                 display: 'none',
@@ -154,8 +165,7 @@ module.exports = {
             },
             ':not(pre) > code': {
               borderRadius: '0.25rem',
-              padding: '0.375rem 0.5rem',
-              backgroundColor: '#30303e',
+              padding: '0.3rem 0.4rem',
             },
             'blockquote p:first-of-type::before': {
               display: 'none',
@@ -171,16 +181,6 @@ module.exports = {
       },
       zIndex: {
         '-1': '-1',
-      },
-      backgroundImage: {
-        'gradient-radial':
-          'radial-gradient(circle at 50% 10%, var(--tw-gradient-stops))',
-      },
-      inset: {
-        '-32': '-128px',
-      },
-      height: {
-        128: '32rem',
       },
     },
   },

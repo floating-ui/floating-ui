@@ -9,6 +9,7 @@ export const Chrome = ({
   relative = true,
   label,
   scrollHeight = 305,
+  shadow = true,
 }) => {
   const scrollableRef = useRef();
 
@@ -21,7 +22,15 @@ export const Chrome = ({
   }, [scrollable]);
 
   return (
-    <div className="rounded-lg overflow-hidden text-gray-900 [color-scheme:light] border dark:border-none border-gray-1000">
+    <div
+      className={cn(
+        'rounded-lg overflow-hidden text-gray-900 [color-scheme:light] dark:border-none border-gray-1000',
+        {
+          shadow,
+          'border border-gray-100': shadow,
+        }
+      )}
+    >
       <div className="bg-gray-75 h-12">
         <div
           className={`absolute flex gap-2 m-4 ${

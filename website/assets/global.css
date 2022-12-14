@@ -25,10 +25,6 @@ code {
   -moz-osx-font-smoothing: auto;
 }
 
-:not(pre) > code {
-  filter: brightness(1.075) contrast(0.925);
-}
-
 [data-remove-transitions] * {
   transition: none !important;
 }
@@ -57,8 +53,7 @@ code ::selection {
 }
 
 .not-prose pre {
-  background: #282834;
-  color: #c7d2f5;
+  background: white;
   padding: 1em;
   border-radius: 0.25rem;
   overflow-x: auto;
@@ -67,8 +62,7 @@ code ::selection {
 }
 
 .not-prose :not(pre) > code {
-  background: #30303e;
-  color: #c7d2f5;
+  background: white;
   padding: 0.35rem 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.9rem;
@@ -109,6 +103,10 @@ code ::selection {
   color: white;
 }
 
+.DocSearch-Button-Keys {
+  visibility: hidden;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
@@ -141,8 +139,24 @@ code ::selection {
   .DocSearch-Button:focus .DocSearch-Search-Icon {
     color: rgba(225, 200, 255, 0.8);
   }
+
+  .not-prose :not(pre) > code,
+  .not-prose pre {
+    background: #30303e;
+  }
 }
 
-.DocSearch-Button-Keys {
-  visibility: hidden;
+@media (prefers-color-scheme: dark) {
+  pre[data-theme='light'],
+  code[data-theme='light'] {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: light),
+  (prefers-color-scheme: no-preference) {
+  pre[data-theme='dark'],
+  code[data-theme='dark'] {
+    display: none;
+  }
 }

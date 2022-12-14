@@ -59,14 +59,14 @@ function GridItem({
   demoLink,
 }) {
   return (
-    <div className="flex flex-col overflow-x-hidden justify-between bg-gray-50 dark:bg-gray-700 md:rounded-lg px-4 py-8 sm:p-8 relative">
+    <div className="flex flex-col overflow-x-hidden shadow justify-between bg-gray-50 dark:bg-gray-700 md:rounded-lg px-4 py-8 sm:p-8 relative">
       <div className="overflow-hidden">
         <h3 className={`text-3xl font-bold mb-2 ${titleClass}`}>
           {title}
         </h3>
         <p className="text-xl mb-6">{description}</p>
       </div>
-      <div className="relative items-center bg-gray-800 rounded-lg lg:h-auto">
+      <div className="relative items-center bg-gray-800 rounded-lg lg:h-auto shadow-md">
         {chrome}
       </div>
       <a
@@ -95,6 +95,7 @@ function Placement() {
           label="Click the dots"
           center
           className="grid items-center relative"
+          shadow={false}
         >
           {[
             {
@@ -252,6 +253,7 @@ function Shift() {
             label="Scroll the container"
             scrollable
             relative={false}
+            shadow={false}
           >
             <Floating
               placement="right"
@@ -306,7 +308,12 @@ function Flip() {
           className="relative overflow-hidden"
           ref={setBoundary}
         >
-          <Chrome label="Scroll the container" scrollable center>
+          <Chrome
+            label="Scroll the container"
+            scrollable
+            center
+            shadow={false}
+          >
             <Floating
               content={<strong>Tooltip</strong>}
               middleware={[
@@ -335,7 +342,12 @@ function Size() {
       description="Changes the size of your floating element to keep it in view."
       demoLink="https://codesandbox.io/s/focused-hamilton-qez78d?file=/src/index.js"
       chrome={
-        <Chrome label="Scroll the container" scrollable center>
+        <Chrome
+          label="Scroll the container"
+          scrollable
+          center
+          shadow={false}
+        >
           <Floating
             content={
               <div className="grid items-center font-bold">
@@ -381,6 +393,7 @@ function Arrow() {
             label="Scroll the container"
             scrollable
             relative={false}
+            shadow={false}
           >
             <Floating
               placement="right"
@@ -468,7 +481,7 @@ function Virtual() {
       description="Anchor relative to any coordinates, such as your mouse cursor."
       demoLink="https://codesandbox.io/s/fancy-worker-xkr8xl?file=/src/index.js"
       chrome={
-        <Chrome label="Move your mouse">
+        <Chrome label="Move your mouse" shadow={false}>
           <div
             ref={boundaryRef}
             className="h-full"
@@ -589,7 +602,6 @@ function HomePage() {
                 </div>
               }
               theme="light-border"
-              aria={{content: 'labelledby'}}
               animation="scale-subtle"
               duration={[450, 125]}
               inlinePositioning={true}
@@ -597,6 +609,8 @@ function HomePage() {
             >
               <span
                 tabIndex={0}
+                // VoiceOver
+                role="button"
                 className="relative text-gray-1000 decoration-gray-1000 dark:text-gray-150 dark:decoration-gray-150"
                 style={{
                   textDecorationLine: 'underline',
