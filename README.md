@@ -29,7 +29,7 @@ Floating UI is platform-agnostic and supports a variety of platforms.
 
 ### Vanilla
 
-Use on the web with vanilla JavaScript or a non-React framework
+Use on the web with vanilla JavaScript
 ([view tutorial](https://floating-ui.com/docs/tutorial)).
 
 ```shell
@@ -57,6 +57,8 @@ npm install @floating-ui/react-native
 ```
 
 ### Vue
+
+Use with [Vue](https://floating-ui.com/docs/vue).
 
 ```shell
 npm install @floating-ui/vue
