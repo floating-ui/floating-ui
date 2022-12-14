@@ -5,24 +5,23 @@
 
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
-    <Floating
-      portaled
-      middleware={[{name: 'offset', options: 0}]}
-    >
+    <Floating middleware={[{name: 'offset', options: 0}]}>
       <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
         0px
       </div>
     </Floating>
-    <Floating
-      portaled
-      middleware={[{name: 'offset', options: 10}]}
-    >
+    <Floating middleware={[{name: 'offset', options: 10}]}>
       <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
         10px
       </div>
     </Floating>
   </div>
 </Chrome>
+
+This enables you to not only add distance between the reference
+and floating elements, but also
+[create a wide range of custom placements](/docs/offset#creating-custom-placements)
+not provided by the library.
 
 ## Usage
 
@@ -35,7 +34,7 @@ computePosition(referenceEl, floatingEl, {
 ```
 
 The value(s) passed are
-[_logical_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
+[logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
 meaning their effect on the physical result is dependent on the
 writing direction (e.g. RTL).
 
@@ -114,41 +113,125 @@ to a number.
 offset({alignmentAxis: 10});
 ```
 
-### Function
+## Creating custom placements
 
-You may also pass a function which returns the previously listed
-values — this enables you to read the dimensions of the reference
-or floating elements and the current `placement{:.objectKey}`.
+While you can only choose 12 different placements as part of the
+core library, you can use the `offset(){:js}` middleware to
+create **any** placement you want.
 
-```js
-offset(({rects, placement}) =>
-  placement === 'bottom'
-    ? rects.floating.width
-    : rects.reference.width
-);
-
-offset(({rects, placement}) => ({
-  mainAxis: placement === 'top' ? 5 : -5,
-  crossAxis:
-    placement === 'right'
-      ? rects.reference.width
-      : rects.floating.width,
-}));
-```
-
-### Negative values
-
-Using the function technique above in combination with negative
-values enables the ability to "inset" the floating element such
-that it is positioned on top of the reference element in some
-fashion.
-
-For instance, if you wanted to mimic something like
-`'center'{:js}` for `placement{:.objectKey}` (with default
-placement):
+For example, although the library doesn't provide a placement for
+centering on both axes, offset enables this via the function
+option by allowing you to read the rects:
 
 ```js
-offset(({rects}) => {
-  return -rects.reference.height / 2 - rects.floating.height / 2;
+computePosition(referenceEl, floatingEl, {
+  middleware: [
+    // Assumes placement is 'bottom' (the default)
+    offset(({rects}) => {
+      return (
+        -rects.reference.height / 2 - rects.floating.height / 2
+      );
+    }),
+  ],
 });
 ```
+
+<Chrome center className="pt-16 pb-24">
+  <div className="flex gap-4">
+    <Floating
+      middleware={[
+        {
+          name: 'offset',
+          options: ({rects}) =>
+            -rects.reference.height / 2 -
+            rects.floating.height / 2,
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        10px
+      </div>
+    </Floating>
+  </div>
+</Chrome>
+
+In this case, the function option starts from the default bottom
+placement, then using that starting point, returns an offset to
+center the floating element on both axes.
+
+A diagonal placement is also possible:
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'top-start',
+  middleware: [
+    offset(({rects}) => ({
+      alignmentAxis: -rects.floating.width,
+    })),
+  ],
+});
+```
+
+<Chrome center className="pt-16 pb-24">
+  <div className="flex gap-4">
+    <Floating
+      placement="top-start"
+      middleware={[
+        {
+          name: 'offset',
+          options: ({rects}) => ({
+            alignmentAxis: -rects.floating.width,
+          }),
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </div>
+</Chrome>
+
+This time, `'top-start'{:js}` was used as the starting point.
+
+So, it's straightforward to allow this:
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'center',
+});
+```
+
+With a wrapper, like this:
+
+```js
+import {computePosition as base, offset} from '@floating-ui/dom';
+
+const centerOffset = offset(({rects}) => {
+  return -rects.reference.height / 2 - rects.floating.height / 2;
+});
+
+export function computePosition(
+  referenceEl,
+  floatingEl,
+  options
+) {
+  const isCentered = options.placement === 'center';
+  const placement = isCentered ? 'bottom' : options.placement;
+  const middleware = [
+    isCentered && centerOffset,
+    ...(options.middleware || []),
+  ];
+
+  return base(referenceEl, floatingEl, {
+    ...options,
+    placement,
+    middleware,
+  });
+}
+```
+
+<Notice>
+  What about centering on the screen? You don't need Floating UI
+  to do that 😀 — pure CSS works fine. You only need Floating UI
+  if you want to center over a particular element, not the whole
+  screen.
+</Notice>
