@@ -13,3 +13,5 @@ runs:
       shell: sh
     - run: npm -w packages/react test
       shell: sh
+    - run: npm -w packages/vue test
+      shell: sh

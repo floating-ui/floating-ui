@@ -1,0 +1,236 @@
+# Vue
+
+This package provides Vue bindings for `@floating-ui/dom` — a
+library that provides anchor positioning for a floating element
+to position it next to a given reference element.
+
+## Install
+
+```shell
+npm install @floating-ui/vue
+```
+
+## Usage
+
+`useFloating(){:js}` is the main composable:
+
+```vue
+<script setup>
+import {ref} from 'vue';
+import {useFloating} from '@floating-ui/vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const {x, y, strategy} = useFloating(reference, floating);
+</script>
+
+<template>
+  <button ref="reference">Button</button>
+  <div
+    :style="{
+      position: strategy,
+      top: `${y ?? 0}px`,
+      left: `${x ?? 0}px`,
+      width: 'max-content',
+    }"
+    ref="floating"
+  >
+    Tooltip
+  </div>
+</template>
+```
+
+This will position the floating `Tooltip` element at the **bottom
+center** of the `Button` element by default.
+
+- `x{:.const}` and `y{:.const}` are refs with the positioning
+  coordinates. These ref values are `null{:js}` initially.
+- `strategy{:.const}` is ref with a string value,
+  `'absolute'{:js}` (default) or `'fixed'{:js}`.
+
+<Notice gap="above">
+To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
+</Notice>
+
+## Return value
+
+The composable
+[returns all the values from computePosition](/docs/computePosition#return-value),
+plus some extras to work with Vue. This includes data about the
+final placement and middleware data which are useful when
+rendering.
+
+## Options
+
+The composable accepts all the
+[options from computePosition](/docs/computePosition#options),
+which allows you to customize the position. Here's an example:
+
+```js
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+} from '@floating-ui/vue';
+
+// Inside your component
+useFloating(reference, floating, {
+  placement: 'right',
+  middleware: [offset(10), flip(), shift()],
+});
+```
+
+The composable also accepts `Ref` options:
+
+```js
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+} from '@floating-ui/vue';
+
+// Inside your component
+const placement = ref('right');
+const middleware = ref([offset(10), flip(), shift()]);
+useFloating(reference, floating, {
+  placement,
+  middleware,
+});
+```
+
+[Middleware](/docs/computePosition#middleware) can alter the
+positioning from the basic `placement{:.objectKey}`, act as
+visibility optimizers, or provide data to use.
+
+The docs for the middleware that were passed are available here:
+
+- [offset](/docs/offset)
+- [flip](/docs/flip)
+- [shift](/docs/shift)
+
+## Updating
+
+The position is only calculated **once** on render, or when the
+`reference{:.const}` or `floating{:.const}` elements changed —
+for example, the floating element get mounted via conditional
+rendering.
+
+To ensure the floating element remains anchored to its reference
+element in a variety of scenarios without detaching — such as
+when scrolling or resizing the page — you can pass the
+[autoUpdate](/docs/autoUpdate) utility to the
+`whileElementsMounted{:.objectKey}` prop:
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/vue';
+
+// Inside your component
+useFloating(reference, floating, {
+  whileElementsMounted: autoUpdate,
+});
+```
+
+To pass options to `autoUpdate`:
+
+```js
+useFloating(reference, floating, {
+  whileElementsMounted(...args) {
+    const cleanup = autoUpdate(...args, {animationFrame: true});
+    // Important! Always return the cleanup function.
+    return cleanup;
+  },
+});
+```
+
+### Manual updating
+
+While `autoUpdate` covers most cases where the position of the
+floating element must be updated, it does not cover every single
+one possible due to performance/platform limitations.
+
+The composable returns an `update(){:js}` function to update the
+position at will:
+
+```vue
+<script setup>
+const {update} = useFloating(reference, floating);
+</script>
+
+<template>
+  <Panel @resize="update" />
+</template>
+```
+
+## Custom components
+
+The composable also accepts custom component template refs:
+
+```vue
+<script setup>
+import {ref} from 'vue';
+import {useFloating} from '@floating-ui/vue';
+
+import MyButton from './MyButton.vue';
+import MyTooltip from './MyTooltip.vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const {x, y, strategy} = useFloating(reference, floating);
+</script>
+
+<template>
+  <MyButton ref="reference">Button</MyButton>
+  <MyTooltip ref="floating">Tooltip</MyTooltip>
+</template>
+```
+
+## Arrow
+
+The `arrow` module exported from this package allows template
+refs in addition to elements:
+
+```js
+import {arrow} from '@floating-ui/vue';
+
+// Inside your component
+const floatingArrow = ref(null);
+useFloating({
+  middleware: [arrow({element: floatingArrow})],
+});
+```
+
+## Virtual Element
+
+See [Virtual Elements](/docs/virtual-elements) for details.
+Example:
+
+```vue
+<script setup>
+import {onMounted, ref} from 'vue';
+import {useFloating} from '@floating-ui/vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const {x, y, strategy} = useFloating(reference, floating);
+
+onMounted(() => {
+  /**
+   * Assign the virtual element to reference inside
+   * a lifecycle hook or effect or event handler.
+   */
+  reference.value = {
+    getBoundingClientRect() {
+      return {
+        // ...
+      };
+    },
+  };
+});
+</script>
+
+<template>
+  <div ref="floating">Tooltip</div>
+</template>
+```
