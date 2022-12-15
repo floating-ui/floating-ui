@@ -25,6 +25,10 @@ code {
   -moz-osx-font-smoothing: auto;
 }
 
+:not(pre) > code {
+  filter: brightness(1.075) contrast(0.925);
+}
+
 [data-remove-transitions] * {
   transition: none !important;
 }
@@ -108,6 +112,10 @@ code ::selection {
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
+  }
+
+  :not(pre) > code {
+    filter: none;
   }
 
   .DocSearch-Button {

@@ -1,10 +1,9 @@
 # computePosition
 
-This is an async function that computes and returns `x{:.param}`
-and `y{:.param}` coordinates to position a floating element next
-to a reference element. [autoUpdate](/docs/autoUpdate) is used
-with it to ensure the floating element remains "anchored" to its
-reference element.
+This is an async function that computes and returns x and y
+coordinates to position a floating element next to a reference
+element. [autoUpdate](/docs/autoUpdate) is used with it to ensure
+the floating element remains "anchored" to its reference element.
 
 ## Usage
 
@@ -222,12 +221,12 @@ element stays on screen optimally.
   overflowing a clipping container by flipping it to the opposite
   placement to stay in view.
 
-- [autoPlacement](/docs/autoPlacement) is an alternative to
-  `flip{:.function}` that automatically chooses a placement for
-  you using a "most space" strategy.
+- [autoPlacement](/docs/autoPlacement) automatically chooses a
+  placement for you using a "most space" strategy.
 
-- [size](/docs/size) resizes the floating element so it will not
-  overflow a clipping container.
+- [size](/docs/size) resizes the floating element, for example so
+  it will not overflow a clipping container, or to match the
+  width of the reference element.
 
 #### Data providers
 

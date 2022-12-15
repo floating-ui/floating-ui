@@ -425,7 +425,7 @@ export default function Layout({children}) {
             aria-label="Open menu"
             aria-expanded={navOpen}
             onClick={() => setNavOpen(!navOpen)}
-            className="block -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden"
+            className="block -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden border border-gray-800 dark:border-none"
           >
             <Menu />
           </button>

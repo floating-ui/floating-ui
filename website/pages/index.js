@@ -84,7 +84,7 @@ function Placement() {
     <GridItem
       titleClass="text-violet-600 dark:text-violet-300"
       title="Placement"
-      description="Places your floating element relative to another one."
+      description="Places your floating element relative to another element."
       demoLink="https://codesandbox.io/s/lively-waterfall-rbc1pi?file=/src/index.js"
       chrome={
         <Chrome
@@ -575,8 +575,9 @@ function HomePage() {
       </header>
       <main className="relative">
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
-          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left">
-            Floating UI is a low-level toolkit to create{' '}
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left lg:leading-relaxed dark:-mt-4">
+            A JavaScript library for{' '}
+            <strong>anchor positioning</strong> — anchor a{' '}
             <Tippy
               content={
                 <div className="text-lg p-2">
@@ -594,18 +595,21 @@ function HomePage() {
             >
               <span
                 tabIndex={0}
-                className="relative text-gray-1000 dark:text-gray-50 decoration-gray-1000 dark:decoration-gray-200"
+                className="relative text-gray-1000 decoration-gray-1000 dark:text-gray-150 dark:decoration-gray-150"
                 style={{
                   textDecorationLine: 'underline',
                   textDecorationStyle: 'wavy',
-                  textUnderlineOffset: 8,
+                  textUnderlineOffset: 6,
                   textDecorationThickness: 1,
                 }}
               >
-                floating elements
+                floating element
               </span>
-            </Tippy>
-            . Tooltips, popovers, dropdowns, menus, and more.
+            </Tippy>{' '}
+            next to another element while making sure it stays in
+            view optimally. This lets you position tooltips,
+            popovers, or dropdowns to efficiently float on top of
+            the UI!
           </p>
         </div>
 
@@ -619,13 +623,17 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 via-teal-400 to-orange-300 text-3xl lg:text-4xl font-bold mt-8 mb-4">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 text-3xl lg:text-4xl font-bold mt-8 mb-4">
             Light as a feather.
           </h2>
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8 lg:leading-relaxed">
+            This positioning toolkit has a platform-agnostic 0.6
+            kB core (minified + Brotli compressed), with official
+            bindings for the web, React DOM, React Native, and
+            Vue.
+          </p>
           <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
-            The core is only 600 bytes when minified and
-            compressed with Brotli. Plus, the architecture is
-            super modular, so tree-shaking works like a charm.
+            Each module is fully tree-shakeable by your bundler:
           </p>
           <div className="grid items-center py-8 pb-16">
             <div className="flex flex-col text-center text-md sm:text-lg md:text-xl mx-auto pr-4 sm:pr-20 md:pr-40">
@@ -677,14 +685,41 @@ function HomePage() {
           </div>
         </div>
 
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative mb-24">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-rose-500 dark:from-rose-400 to-pink-500 dark:to-pink-400 text-3xl lg:text-4xl font-bold mt-8 mb-4">
+            Interactions for React.
+          </h2>
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-12 lg:leading-relaxed">
+            In addition to positioning, there are also
+            interaction primitives to build floating UI
+            components with React. This includes event hooks for
+            hover, focus or click, modal and non-modal focus
+            management, keyboard list navigation, typeahead,
+            portals, backdrop overlays, screen reader support,
+            and more.
+          </p>
+          <Link href="/docs/react">
+            <a
+              href="/docs/react"
+              className="transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-4 rounded-md font-bold text-md"
+            >
+              Use Floating UI with React{' '}
+              <ArrowRight
+                className="inline-block relative top-[-1px]"
+                size={20}
+              />
+            </a>
+          </Link>
+        </div>
+
         <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
           <h2 className="inline-block text-3xl lg:text-4xl dark:text-gray-50 font-bold mt-8 mb-4">
-            Support Floating UI's future!
+            Support Floating UI!
           </h2>
-          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
-            Floating UI is free open-source software, and we are
-            proudly sponsored by the following organizations,
-            consider joining them on{' '}
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8 lg:leading-relaxed">
+            Floating UI is free and open source, proudly
+            sponsored by the following organizations — consider
+            joining them on{' '}
             <a
               className="transition-colors underline underline-offset-4 font-bold text-rose-500 dark:text-rose-300 hover:text-gray-1000 decoration-rose-500/80 dark:decoration-rose-300/80 hover:decoration-gray-1000 dark:hover:text-gray-50 dark:hover:decoration-gray-50 decoration-2"
               href="https://opencollective.com/floating-ui"
@@ -702,7 +737,7 @@ function HomePage() {
           <h2 className="inline-block text-3xl lg:text-4xl dark:text-gray-50 leading-gradient-heading font-bold mb-4 mt-16">
             Ready to install?
           </h2>
-          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8 lg:leading-relaxed">
             Start playing via your package manager or CDN.
           </p>
 
