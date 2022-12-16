@@ -19,9 +19,26 @@ export function getScale(element: Element | VirtualElement): Coords {
 
   const rect = domElement.getBoundingClientRect();
   const css = getComputedStyle(domElement);
+  const toNumber = parseFloat;
 
-  let x = rect.width / parseFloat(css.width);
-  let y = rect.height / parseFloat(css.height);
+  let width = toNumber(css.width);
+  let height = toNumber(css.height);
+
+  if (css.boxSizing !== 'border-box') {
+    const pl = toNumber(css.paddingLeft);
+    const pr = toNumber(css.paddingRight);
+    const pt = toNumber(css.paddingTop);
+    const pb = toNumber(css.paddingBottom);
+    const bl = toNumber(css.borderLeftWidth);
+    const br = toNumber(css.borderRightWidth);
+    const bt = toNumber(css.borderTopWidth);
+    const bb = toNumber(css.borderBottomWidth);
+    width += pl + pr + bl + br;
+    height += pt + pb + bt + bb;
+  }
+
+  let x = rect.width / width;
+  let y = rect.height / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
