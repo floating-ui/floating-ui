@@ -13,7 +13,7 @@ export function arrow(options: ArrowOptions): Middleware {
   return {
     name: 'arrow',
     options,
-    fn(args) {
+    fn<T>(args: T) {
       const element = unwrapElement(unref(options.element));
 
       if (element == null) {
