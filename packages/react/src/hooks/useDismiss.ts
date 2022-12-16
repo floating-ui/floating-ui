@@ -71,18 +71,11 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       ? outsidePressFn
       : unstable_outsidePress;
   const insideReactTreeRef = React.useRef(false);
-  const escapeKeyBubbles =
-    typeof bubbles === 'boolean'
-      ? bubbles
-      : bubbles.escapeKey === false
-      ? false
-      : true;
-  const outsidePressBubbles =
-    typeof bubbles === 'boolean'
-      ? bubbles
-      : bubbles.outsidePress === false
-      ? false
-      : true;
+  const allBubbles = typeof bubbles === 'boolean';
+  const escapeKeyBubbles = allBubbles ? bubbles : bubbles.escapeKey ?? true;
+  const outsidePressBubbles = allBubbles
+    ? bubbles
+    : bubbles.outsidePress ?? true;
 
   React.useEffect(() => {
     if (!open || !enabled) {
