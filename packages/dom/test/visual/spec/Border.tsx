@@ -65,6 +65,7 @@ export function Border() {
               ? '10px solid black'
               : '',
           overflow: 'hidden',
+          padding: node === 'content-box' ? 10 : '',
           position:
             node === 'offsetParent' || node === 'content-box'
               ? 'relative'
