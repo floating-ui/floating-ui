@@ -38,6 +38,7 @@ export interface Props {
   referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   outsidePress?: boolean | ((event: MouseEvent) => boolean);
   outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
+  outsidePressBubbles?: boolean;
   ancestorScroll?: boolean;
   bubbles?: boolean;
 }
@@ -57,6 +58,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles = true,
+    outsidePressBubbles = bubbles,
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();
@@ -154,7 +156,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       }
 
       if (
-        !bubbles &&
+        !outsidePressBubbles &&
         tree &&
         getChildren(tree.nodesRef.current, nodeId).length > 0
       ) {
@@ -237,6 +239,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     ancestorScroll,
     enabled,
     bubbles,
+    outsidePressBubbles,
     refs,
     nested,
   ]);
