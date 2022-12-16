@@ -16,7 +16,7 @@ export function arrow(options: ArrowOptions): Middleware {
     fn(args) {
       const element = unwrapElement(unref(options.element));
 
-      if (element == null) {
+      if (!element) {
         return {};
       }
 

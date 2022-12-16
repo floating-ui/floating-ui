@@ -49,7 +49,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   let whileElementsMountedCleanup: void | (() => void);
 
   function update() {
-    if (referenceElement.value == null || floatingElement.value == null) {
+    if (!referenceElement.value || !floatingElement.value) {
       return;
     }
 
@@ -81,7 +81,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       return;
     }
 
-    if (referenceElement.value != null && floatingElement.value != null) {
+    if (referenceElement.value && floatingElement.value) {
       whileElementsMountedCleanup = whileElementsMountedOption(
         referenceElement.value,
         floatingElement.value,
