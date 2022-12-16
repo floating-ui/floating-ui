@@ -24,6 +24,17 @@ const captureHandlerKeys = {
   click: 'onClickCapture',
 };
 
+export const normalizeBubblesProp = (
+  bubbles: boolean | {escapeKey?: boolean; outsidePress?: boolean} = true
+) => {
+  return {
+    escapeKeyBubbles:
+      typeof bubbles === 'boolean' ? bubbles : bubbles.escapeKey ?? true,
+    outsidePressBubbles:
+      typeof bubbles === 'boolean' ? bubbles : bubbles.outsidePress ?? true,
+  };
+};
+
 export interface DismissPayload {
   type: 'outsidePress' | 'referencePress' | 'escapeKey';
   data: {
@@ -71,11 +82,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       ? outsidePressFn
       : unstable_outsidePress;
   const insideReactTreeRef = React.useRef(false);
-  const allBubbles = typeof bubbles === 'boolean';
-  const escapeKeyBubbles = allBubbles ? bubbles : bubbles.escapeKey ?? true;
-  const outsidePressBubbles = allBubbles
-    ? bubbles
-    : bubbles.outsidePress ?? true;
+  const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp(bubbles);
 
   React.useEffect(() => {
     if (!open || !enabled) {
