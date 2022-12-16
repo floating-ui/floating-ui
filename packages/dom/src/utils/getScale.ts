@@ -1,8 +1,7 @@
 import type {Coords} from '@floating-ui/core';
 import type {VirtualElement} from '../types';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isHTMLElement} from './is';
-import {round} from './math';
+import {isElement} from './is';
 
 export const FALLBACK_SCALE = {x: 1, y: 1};
 
@@ -21,28 +20,24 @@ export function getScale(element: Element | VirtualElement): Coords {
   const rect = domElement.getBoundingClientRect();
   const css = getComputedStyle(domElement);
 
-  // Fallback to the old technique because we'd need to take into account the
-  // padding and border. This is usually globally set (and is a better default),
-  // so if there are issues with scale transforms, the user can set it manually.
-  if (css.boxSizing !== 'border-box') {
-    if (!isHTMLElement(element)) {
-      return FALLBACK_SCALE;
-    }
+  let width = parseFloat(css.width);
+  let height = parseFloat(css.height);
 
-    return {
-      x:
-        element.offsetWidth > 0
-          ? round(rect.width) / element.offsetWidth || 1
-          : 1,
-      y:
-        element.offsetHeight > 0
-          ? round(rect.height) / element.offsetHeight || 1
-          : 1,
-    };
+  if (css.boxSizing !== 'border-box') {
+    const pl = parseFloat(css.paddingLeft);
+    const pr = parseFloat(css.paddingRight);
+    const pt = parseFloat(css.paddingTop);
+    const pb = parseFloat(css.paddingBottom);
+    const bl = parseFloat(css.borderLeftWidth);
+    const br = parseFloat(css.borderRightWidth);
+    const bt = parseFloat(css.borderTopWidth);
+    const bb = parseFloat(css.borderBottomWidth);
+    width += pl + pr + bl + br;
+    height += pt + pb + bt + bb;
   }
 
-  let x = rect.width / parseFloat(css.width);
-  let y = rect.height / parseFloat(css.height);
+  let x = rect.width / width;
+  let y = rect.height / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
