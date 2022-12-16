@@ -1,7 +1,8 @@
 import type {Coords} from '@floating-ui/core';
 import type {VirtualElement} from '../types';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement} from './is';
+import {isElement, isHTMLElement} from './is';
+import {round} from './math';
 
 export const FALLBACK_SCALE = {x: 1, y: 1};
 
@@ -19,26 +20,29 @@ export function getScale(element: Element | VirtualElement): Coords {
 
   const rect = domElement.getBoundingClientRect();
   const css = getComputedStyle(domElement);
-  const toNumber = parseFloat;
 
-  let width = toNumber(css.width);
-  let height = toNumber(css.height);
-
+  // Would need to take into account borders, padding, and potential scrollbars
+  // which would require a lot of code. Fallback to the old technique to
+  // determine scale.
   if (css.boxSizing !== 'border-box') {
-    const pl = toNumber(css.paddingLeft);
-    const pr = toNumber(css.paddingRight);
-    const pt = toNumber(css.paddingTop);
-    const pb = toNumber(css.paddingBottom);
-    const bl = toNumber(css.borderLeftWidth);
-    const br = toNumber(css.borderRightWidth);
-    const bt = toNumber(css.borderTopWidth);
-    const bb = toNumber(css.borderBottomWidth);
-    width += pl + pr + bl + br;
-    height += pt + pb + bt + bb;
+    if (!isHTMLElement(domElement)) {
+      return FALLBACK_SCALE;
+    }
+
+    return {
+      x:
+        domElement.offsetWidth > 0
+          ? round(rect.width) / domElement.offsetWidth || 1
+          : 1,
+      y:
+        domElement.offsetHeight > 0
+          ? round(rect.height) / domElement.offsetHeight || 1
+          : 1,
+    };
   }
 
-  let x = rect.width / width;
-  let y = rect.height / height;
+  let x = rect.width / parseFloat(css.width);
+  let y = rect.height / parseFloat(css.height);
 
   // 0, NaN, or Infinity should always fallback to 1.
 
