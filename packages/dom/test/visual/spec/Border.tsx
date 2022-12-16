@@ -2,7 +2,14 @@ import {useFloating} from '@floating-ui/react-dom';
 import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 
-type Node = null | 'reference' | 'floating' | 'body' | 'html' | 'offsetParent';
+type Node =
+  | null
+  | 'reference'
+  | 'floating'
+  | 'body'
+  | 'html'
+  | 'offsetParent'
+  | 'content-box';
 const NODES: Node[] = [
   null,
   'reference',
@@ -10,6 +17,7 @@ const NODES: Node[] = [
   'body',
   'html',
   'offsetParent',
+  'content-box',
 ];
 
 export function Border() {
@@ -52,9 +60,16 @@ export function Border() {
       <div
         className="container"
         style={{
-          border: node === 'offsetParent' ? '10px solid black' : '',
+          border:
+            node === 'offsetParent' || node === 'content-box'
+              ? '10px solid black'
+              : '',
           overflow: 'hidden',
-          position: node === 'offsetParent' ? 'relative' : undefined,
+          position:
+            node === 'offsetParent' || node === 'content-box'
+              ? 'relative'
+              : undefined,
+          boxSizing: node === 'content-box' ? 'unset' : undefined,
         }}
       >
         <div
