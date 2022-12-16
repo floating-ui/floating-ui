@@ -1,18 +1,14 @@
 import type {Coords} from '@floating-ui/core';
 import type {VirtualElement} from '../types';
 import {getComputedStyle} from './getComputedStyle';
-import {isElement, isHTMLElement} from './is';
+import {isHTMLElement} from './is';
 import {round} from './math';
+import {unwrapElement} from './unwrapElement';
 
 export const FALLBACK_SCALE = {x: 1, y: 1};
 
 export function getScale(element: Element | VirtualElement): Coords {
-  const domElement =
-    !isElement(element) && element.contextElement
-      ? element.contextElement
-      : isElement(element)
-      ? element
-      : null;
+  const domElement = unwrapElement(element);
 
   if (!domElement) {
     return FALLBACK_SCALE;

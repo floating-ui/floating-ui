@@ -1,6 +1,7 @@
 import {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {isElement, isLayoutViewport} from './is';
+import {unwrapElement} from './unwrapElement';
 import {getWindow} from './window';
 
 export function getBoundingClientRect(
@@ -10,6 +11,7 @@ export function getBoundingClientRect(
   offsetParent?: Element | Window
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
+  const domElement = unwrapElement(element);
 
   let scale = FALLBACK_SCALE;
   if (includeScale) {
@@ -22,22 +24,22 @@ export function getBoundingClientRect(
     }
   }
 
-  const win = isElement(element) ? getWindow(element) : window;
+  const win = domElement ? getWindow(domElement) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
   let x =
     (clientRect.left +
-      (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0)) /
+      (addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0)) /
     scale.x;
   let y =
     (clientRect.top +
-      (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0)) /
+      (addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0)) /
     scale.y;
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
 
-  if (isElement(element)) {
-    const iframe = element.ownerDocument.defaultView?.frameElement;
+  if (domElement) {
+    const iframe = domElement.ownerDocument.defaultView?.frameElement;
     if (iframe) {
       const iframeScale = getScale(iframe);
       const iframeRect = iframe.getBoundingClientRect();
