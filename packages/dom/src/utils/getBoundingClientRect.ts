@@ -1,4 +1,4 @@
-import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+import {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {isElement, isLayoutViewport} from './is';
 import {getWindow} from './window';
@@ -25,16 +25,30 @@ export function getBoundingClientRect(
   const win = isElement(element) ? getWindow(element) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
-  const x =
+  let x =
     (clientRect.left +
       (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0)) /
     scale.x;
-  const y =
+  let y =
     (clientRect.top +
       (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0)) /
     scale.y;
-  const width = clientRect.width / scale.x;
-  const height = clientRect.height / scale.y;
+  let width = clientRect.width / scale.x;
+  let height = clientRect.height / scale.y;
+
+  if (isElement(element)) {
+    const iframe = element.ownerDocument.defaultView?.frameElement;
+    if (iframe) {
+      const iframeScale = getScale(iframe);
+      const iframeRect = iframe.getBoundingClientRect();
+      x *= iframeScale.x;
+      y *= iframeScale.y;
+      width *= iframeScale.x;
+      height *= iframeScale.y;
+      x += iframeRect.x;
+      y += iframeRect.y;
+    }
+  }
 
   return {
     width,
