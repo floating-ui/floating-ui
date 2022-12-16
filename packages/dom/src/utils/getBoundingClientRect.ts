@@ -39,14 +39,27 @@ export function getBoundingClientRect(
   let height = clientRect.height / scale.y;
 
   if (domElement) {
-    const iframe = domElement.ownerDocument.defaultView?.frameElement;
-    if (iframe) {
+    const win = getWindow(domElement);
+    const iframe = win.frameElement;
+    const offsetWin =
+      offsetParent && isElement(offsetParent)
+        ? getWindow(offsetParent)
+        : offsetParent;
+    const shouldInclude = offsetParent && offsetWin !== win;
+
+    if (iframe && shouldInclude) {
       const iframeScale = getScale(iframe);
       const iframeRect = iframe.getBoundingClientRect();
+      const css = getComputedStyle(iframe);
+
+      iframeRect.x += iframe.clientLeft + parseFloat(css.paddingLeft);
+      iframeRect.y += iframe.clientTop + parseFloat(css.paddingTop);
+
       x *= iframeScale.x;
       y *= iframeScale.y;
       width *= iframeScale.x;
       height *= iframeScale.y;
+
       x += iframeRect.x;
       y += iframeRect.y;
     }

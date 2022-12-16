@@ -7,7 +7,7 @@ import {
 import {useState} from 'react';
 import {createPortal} from 'react-dom';
 
-export function IFrame() {
+function Outside() {
   const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
   const {x, y, reference, floating, strategy} = useFloating({
     whileElementsMounted: autoUpdate,
@@ -15,7 +15,6 @@ export function IFrame() {
       shift({
         crossAxis: true,
         limiter: limitShift(),
-        boundary: iframe || undefined,
       }),
     ],
   });
@@ -24,25 +23,23 @@ export function IFrame() {
 
   return (
     <>
-      <h1>iFrame</h1>
-      <p></p>
+      <h2>Outside</h2>
       <div className="container">
         <iframe
           ref={setIFrame}
-          src="/empty"
           width={350}
           height={350}
-          style={{transform: 'scale(1.5)'}}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
         >
           {mountNode &&
             createPortal(
-              <div style={{width: 1000, height: 1000}}>
+              <div style={{width: 1000, height: 1000, position: 'relative'}}>
                 <button
-                  className="reference"
                   ref={reference}
-                  style={{margin: 500}}
+                  className="reference"
+                  style={{margin: 100}}
                 >
-                  Hello
+                  Reference
                 </button>
               </div>,
               mountNode
@@ -60,6 +57,73 @@ export function IFrame() {
           Floating
         </div>
       </div>
+    </>
+  );
+}
+
+function Inside() {
+  const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
+  const {x, y, reference, floating, strategy} = useFloating({
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      shift({
+        crossAxis: true,
+        limiter: limitShift(),
+      }),
+    ],
+  });
+
+  const mountNode = iframe?.contentWindow?.document.body;
+
+  return (
+    <>
+      <h2>Inside</h2>
+      <div className="container">
+        <iframe
+          ref={setIFrame}
+          width={350}
+          height={350}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
+        >
+          {mountNode &&
+            createPortal(
+              <div style={{width: 1000, height: 1000, position: 'relative'}}>
+                <button
+                  ref={reference}
+                  className="reference"
+                  style={{margin: 100}}
+                >
+                  Reference
+                </button>
+                <div
+                  ref={floating}
+                  style={{
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                    width: 80,
+                    height: 80,
+                    background: '#40e0d0',
+                  }}
+                >
+                  Floating
+                </div>
+              </div>,
+              mountNode
+            )}
+        </iframe>
+      </div>
+    </>
+  );
+}
+
+export function IFrame() {
+  return (
+    <>
+      <h1>iFrame</h1>
+      <p></p>
+      <Outside />
+      <Inside />
     </>
   );
 }
