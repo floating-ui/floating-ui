@@ -24,94 +24,82 @@ allPlacements.forEach((placement) => {
   });
 });
 
-['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end'].forEach(
-  (placement) => {
-    [75, 150].forEach((floatingSize) => {
-      [25, 125].forEach((referenceSize) => {
-        [0, 20].forEach((arrowPadding) => {
-          test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
-            page,
-          }) => {
-            await page.goto('http://localhost:1234/arrow');
-            await click(page, `[data-testid="placement-${placement}"]`);
-            await click(page, `[data-testid="floating-${floatingSize}"]`);
-            await click(page, `[data-testid="reference-${referenceSize}"]`);
-            await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
+['top', 'bottom'].forEach((placement) => {
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-            await page.evaluate(() => {
-              const scroll = document.querySelector('.scroll');
-              if (scroll) {
-                scroll.scrollLeft = 765;
-              }
-            });
-
-            expect(
-              await page.locator('.container').screenshot()
-            ).toMatchSnapshot(
-              `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
-            );
-
-            await page.evaluate(() => {
-              const scroll = document.querySelector('.scroll');
-              if (scroll) {
-                scroll.scrollLeft = 285;
-              }
-            });
-
-            expect(
-              await page.locator('.container').screenshot()
-            ).toMatchSnapshot(
-              `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
-            );
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollLeft = 765;
+            }
           });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollLeft = 285;
+            }
+          });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
         });
       });
     });
-  }
-);
+  });
+});
 
-['left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'].forEach(
-  (placement) => {
-    [75, 150].forEach((floatingSize) => {
-      [25, 125].forEach((referenceSize) => {
-        [0, 20].forEach((arrowPadding) => {
-          test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
-            page,
-          }) => {
-            await page.goto('http://localhost:1234/arrow');
-            await click(page, `[data-testid="placement-${placement}"]`);
-            await click(page, `[data-testid="floating-${floatingSize}"]`);
-            await click(page, `[data-testid="reference-${referenceSize}"]`);
-            await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
+['left', 'right'].forEach((placement) => {
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-            await page.evaluate(() => {
-              const scroll = document.querySelector('.scroll');
-              if (scroll) {
-                scroll.scrollTop = 880;
-              }
-            });
-
-            expect(
-              await page.locator('.container').screenshot()
-            ).toMatchSnapshot(
-              `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
-            );
-
-            await page.evaluate(() => {
-              const scroll = document.querySelector('.scroll');
-              if (scroll) {
-                scroll.scrollTop = 300;
-              }
-            });
-
-            expect(
-              await page.locator('.container').screenshot()
-            ).toMatchSnapshot(
-              `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
-            );
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollTop = 880;
+            }
           });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollTop = 300;
+            }
+          });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
         });
       });
     });
-  }
-);
+  });
+});
