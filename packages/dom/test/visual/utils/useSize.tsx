@@ -1,4 +1,5 @@
 import {useState, useLayoutEffect} from 'react';
+import {flushSync} from 'react-dom';
 
 export const useSize = (
   initialSize = 80,
@@ -7,7 +8,7 @@ export const useSize = (
   const [size, setSize] = useState(initialSize);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSize(Number(event.target.value));
+    flushSync(() => setSize(Number(event.target.value)));
   };
 
   useLayoutEffect(() => {

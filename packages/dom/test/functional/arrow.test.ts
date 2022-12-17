@@ -8,6 +8,7 @@ allPlacements.forEach((placement) => {
   }) => {
     await page.goto('http://localhost:1234/arrow');
     await click(page, `[data-testid="placement-${placement}"]`);
+    await new Promise((resolve) => setTimeout(resolve));
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${placement}.png`
@@ -35,6 +36,8 @@ allPlacements.forEach((placement) => {
 
       (window as any).__handleSizeChange_floating({target: floatingTarget});
     });
+
+    await new Promise((resolve) => setTimeout(resolve));
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${placement}-no-overflow.png`
@@ -70,6 +73,8 @@ allPlacements.forEach((placement) => {
       (window as any).__handleSizeChange_reference({target: referenceTarget});
       (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
     });
+
+    await new Promise((resolve) => setTimeout(resolve));
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${placement}-internal-shift.png`
@@ -116,6 +121,8 @@ allPlacements.forEach((placement) => {
         }
       });
 
+      await new Promise((resolve) => setTimeout(resolve));
+
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${placement}-external-shift-y-left.png`
       );
@@ -126,6 +133,8 @@ allPlacements.forEach((placement) => {
           scroll.scrollLeft = 310;
         }
       });
+
+      await new Promise((resolve) => setTimeout(resolve));
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${placement}-external-shift-y-right.png`
@@ -173,6 +182,8 @@ allPlacements.forEach((placement) => {
         }
       });
 
+      await new Promise((resolve) => setTimeout(resolve));
+
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${placement}-external-shift-y-top.png`
       );
@@ -183,6 +194,8 @@ allPlacements.forEach((placement) => {
           scroll.scrollTop = 320;
         }
       });
+
+      await new Promise((resolve) => setTimeout(resolve));
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${placement}-external-shift-y-bottom.png`
