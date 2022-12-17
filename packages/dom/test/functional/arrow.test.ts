@@ -68,7 +68,7 @@ allPlacements.forEach((placement) => {
 
       (window as any).__handleSizeChange_floating({target: floatingTarget});
       (window as any).__handleSizeChange_reference({target: referenceTarget});
-      (window as any).__handleSizeChange_reference({target: arrowTarget});
+      (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
     });
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
@@ -106,7 +106,7 @@ allPlacements.forEach((placement) => {
 
         (window as any).__handleSizeChange_floating({target: floatingTarget});
         (window as any).__handleSizeChange_reference({target: referenceTarget});
-        (window as any).__handleSizeChange_reference({target: arrowTarget});
+        (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
       });
 
       await page.evaluate(() => {
@@ -163,7 +163,7 @@ allPlacements.forEach((placement) => {
 
         (window as any).__handleSizeChange_floating({target: floatingTarget});
         (window as any).__handleSizeChange_reference({target: referenceTarget});
-        (window as any).__handleSizeChange_reference({target: arrowTarget});
+        (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
       });
 
       await page.evaluate(() => {
