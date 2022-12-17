@@ -25,13 +25,7 @@ export function Arrow() {
   } = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
-    middleware: [
-      shift(),
-      arrow({
-        element: arrowRef,
-        padding,
-      }),
-    ],
+    middleware: [shift(), arrow({element: arrowRef, padding})],
   });
 
   useLayoutEffect(update, [update, padding, referenceSize, floatingSize]);
