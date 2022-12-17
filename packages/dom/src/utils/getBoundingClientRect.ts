@@ -40,20 +40,19 @@ export function getBoundingClientRect(
 
   if (domElement) {
     const win = getWindow(domElement);
-    const iframe = win.frameElement;
     const offsetWin =
       offsetParent && isElement(offsetParent)
         ? getWindow(offsetParent)
         : offsetParent;
-    const shouldInclude = offsetParent && offsetWin !== win;
 
-    if (iframe && shouldInclude) {
-      const iframeScale = getScale(iframe);
-      const iframeRect = iframe.getBoundingClientRect();
-      const css = getComputedStyle(iframe);
+    let currentIFrame = win.frameElement;
+    while (currentIFrame && offsetParent && offsetWin !== win) {
+      const iframeScale = getScale(currentIFrame);
+      const iframeRect = currentIFrame.getBoundingClientRect();
+      const css = getComputedStyle(currentIFrame);
 
-      iframeRect.x += iframe.clientLeft + parseFloat(css.paddingLeft);
-      iframeRect.y += iframe.clientTop + parseFloat(css.paddingTop);
+      iframeRect.x += currentIFrame.clientLeft + parseFloat(css.paddingLeft);
+      iframeRect.y += currentIFrame.clientTop + parseFloat(css.paddingTop);
 
       x *= iframeScale.x;
       y *= iframeScale.y;
@@ -62,6 +61,8 @@ export function getBoundingClientRect(
 
       x += iframeRect.x;
       y += iframeRect.y;
+
+      currentIFrame = getWindow(currentIFrame).frameElement;
     }
   }
 

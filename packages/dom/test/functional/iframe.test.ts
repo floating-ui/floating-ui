@@ -28,4 +28,15 @@ import {click} from './utils/click';
       await page.locator('#inside-container').screenshot()
     ).toMatchSnapshot(`inside-${scroll}.png`);
   });
+
+  test(`[nested] ${scroll} correctly positioned on bottom with clipping detection`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/iframe');
+    await click(page, `[data-testid="scroll-${scroll}"]`);
+
+    expect(
+      await page.locator('#nested-container').screenshot()
+    ).toMatchSnapshot(`nested-${scroll}.png`);
+  });
 });

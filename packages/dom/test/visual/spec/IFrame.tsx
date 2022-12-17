@@ -140,6 +140,92 @@ function Inside({scroll}: {scroll: number[]}) {
   );
 }
 
+function Nested({scroll}: {scroll: number[]}) {
+  const [rootIFrame, setRootIFrame] = useState<HTMLIFrameElement | null>(null);
+  const [nestedIFrame, setNestedIFrame] = useState<HTMLIFrameElement | null>(
+    null
+  );
+
+  const {x, y, reference, floating, strategy} = useFloating({
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      shift({
+        crossAxis: true,
+        limiter: limitShift(),
+        boundary: rootIFrame || undefined,
+      }),
+    ],
+  });
+
+  const rootNode = rootIFrame?.contentWindow?.document.body;
+  const nestedNode = nestedIFrame?.contentWindow?.document.body;
+
+  useLayoutEffect(() => {
+    if (nestedNode && scroll) {
+      nestedNode.scrollLeft = scroll[0];
+      nestedNode.scrollTop = scroll[1];
+    }
+  }, [nestedNode, scroll]);
+
+  return (
+    <>
+      <h2>Nested</h2>
+      <div className="container" id="nested-container">
+        <iframe
+          ref={setRootIFrame}
+          width={350}
+          height={350}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
+        >
+          {rootNode &&
+            createPortal(
+              <div style={{width: 2000, height: 2000, position: 'relative'}}>
+                <iframe
+                  ref={setNestedIFrame}
+                  width={200}
+                  height={200}
+                  style={{transform: 'scale(1.25)', border: '5px solid black'}}
+                >
+                  {nestedNode &&
+                    createPortal(
+                      <div
+                        style={{
+                          width: 2000,
+                          height: 2000,
+                          position: 'relative',
+                        }}
+                      >
+                        <button
+                          ref={reference}
+                          className="reference"
+                          style={{position: 'absolute', left: 1000, top: 1000}}
+                        >
+                          Reference
+                        </button>
+                      </div>,
+                      nestedNode
+                    )}
+                </iframe>
+              </div>,
+              rootNode
+            )}
+        </iframe>
+        <div
+          ref={floating}
+          className="floating"
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+          }}
+        >
+          Floating
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function IFrame() {
   const [scroll, setScroll] = useState(SCROLL[0]);
 
@@ -149,6 +235,7 @@ export function IFrame() {
       <p></p>
       <Outside scroll={scroll} />
       <Inside scroll={scroll} />
+      <Nested scroll={scroll} />
 
       <h2>Scroll position</h2>
       <Controls>
