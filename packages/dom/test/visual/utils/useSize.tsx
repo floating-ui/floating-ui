@@ -1,4 +1,4 @@
-import {useState, useLayoutEffect} from 'react';
+import {useState} from 'react';
 import {flushSync} from 'react-dom';
 
 export const useSize = (
@@ -11,10 +11,7 @@ export const useSize = (
     flushSync(() => setSize(Number(event.target.value)));
   };
 
-  useLayoutEffect(() => {
-    // Allow Playwright tests to easily hook into this handler
-    (window as any)[`__handleSizeChange_${key}`] = handleSizeChange;
-  });
+  (window as any)[`__handleSizeChange_${key}`] = handleSizeChange;
 
   return [size, handleSizeChange];
 };

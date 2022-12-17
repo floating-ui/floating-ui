@@ -73,8 +73,8 @@ export function Arrow() {
             className="floating"
             style={{
               position: strategy,
-              top: y ?? '',
-              left: x ?? '',
+              top: y ?? 0,
+              left: x ?? 0,
               width: floatingSize,
               height: floatingSize,
             }}
@@ -85,8 +85,8 @@ export function Arrow() {
               className="arrow"
               style={{
                 position: 'absolute',
-                top: arrowY ?? '',
-                left: arrowX ?? '',
+                top: arrowY != null ? arrowY : '',
+                left: arrowX != null ? arrowX : '',
                 right: '',
                 bottom: '',
                 [staticSide]: -15,
@@ -96,12 +96,11 @@ export function Arrow() {
         </div>
       </div>
 
-      <h2>Floating size</h2>
       <Controls>
         <div>
-          <label htmlFor="size">Floating size</label>
+          <label htmlFor="floating-size">Floating size</label>
           <input
-            id="size"
+            id="floating-size"
             type="range"
             min="1"
             max="200"
@@ -110,9 +109,9 @@ export function Arrow() {
           />
         </div>
         <div>
-          <label htmlFor="size">Reference size</label>
+          <label htmlFor="reference-size">Reference size</label>
           <input
-            id="size"
+            id="reference-size"
             type="range"
             min="1"
             max="200"
@@ -121,9 +120,9 @@ export function Arrow() {
           />
         </div>
         <div>
-          <label htmlFor="size">Arrow padding</label>
+          <label htmlFor="arrow-size">Arrow padding</label>
           <input
-            id="size"
+            id="arrow-size"
             type="range"
             min="0"
             max="50"
