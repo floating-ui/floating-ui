@@ -77,11 +77,13 @@ export const arrow = (options: Options): Middleware => ({
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
 
-    // Make sure that arrow points at the reference
+    // Make sure the arrow points at the reference, but allow `shift()` to act
+    // upon the offset alignment afterwards by re-running the lifecycle.
+    const hasRun = !!middlewareData.arrow;
     const shouldAddOffset =
+      !hasRun &&
       center !== offset &&
-      rects.reference[length] <= rects.floating[length] &&
-      Math.abs((middlewareData.shift || {x: 0, y: 0})[axis]) <= 0.5;
+      rects.reference[length] <= rects.floating[length];
     const alignmentOffset = shouldAddOffset
       ? center < min
         ? min - center
@@ -90,6 +92,7 @@ export const arrow = (options: Options): Middleware => ({
 
     return {
       [axis]: coords[axis] - alignmentOffset,
+      ...(!hasRun && {reset: true}),
       data: {
         [axis]: offset,
         centerOffset: center - offset,
