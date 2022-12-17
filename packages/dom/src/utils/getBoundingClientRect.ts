@@ -51,8 +51,11 @@ export function getBoundingClientRect(
       const iframeRect = currentIFrame.getBoundingClientRect();
       const css = getComputedStyle(currentIFrame);
 
-      iframeRect.x += currentIFrame.clientLeft + parseFloat(css.paddingLeft);
-      iframeRect.y += currentIFrame.clientTop + parseFloat(css.paddingTop);
+      iframeRect.x +=
+        (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) *
+        iframeScale.x;
+      iframeRect.y +=
+        (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
 
       x *= iframeScale.x;
       y *= iframeScale.y;
