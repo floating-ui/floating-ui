@@ -1,8 +1,12 @@
 import {test, expect} from '@playwright/test';
 import {click} from './utils/click';
-import {SCROLL} from '../visual/spec/IFrame';
 
-SCROLL.forEach((scroll) => {
+[
+  [900, 900],
+  [1090, 900],
+  [665, 900],
+  [865, 665],
+].forEach((scroll) => {
   test(`[outside] correctly positioned on bottom with clipping detection`, async ({
     page,
   }) => {

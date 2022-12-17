@@ -8,7 +8,7 @@ import {useLayoutEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {Controls} from '../utils/Controls';
 
-export const SCROLL = [
+const SCROLL = [
   [900, 900],
   [1090, 900],
   [665, 900],
