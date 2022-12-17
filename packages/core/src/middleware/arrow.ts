@@ -3,7 +3,6 @@ import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {within} from '../utils/within';
-import {getAlignment} from '../utils/getAlignment';
 
 export interface Options {
   /**
@@ -30,7 +29,8 @@ export const arrow = (options: Options): Middleware => ({
   async fn(middlewareArguments) {
     // Since `element` is required, we don't Partial<> the type
     const {element, padding = 0} = options ?? {};
-    const {x, y, placement, rects, platform} = middlewareArguments;
+    const {x, y, placement, rects, platform, middlewareData} =
+      middlewareArguments;
 
     if (element == null) {
       if (__DEV__) {
@@ -44,7 +44,6 @@ export const arrow = (options: Options): Middleware => ({
     const paddingObject = getSideObjectFromPadding(padding);
     const coords = {x, y};
     const axis = getMainAxisFromPlacement(placement);
-    const alignment = getAlignment(placement);
     const length = getLengthFromAxis(axis);
     const arrowDimensions = await platform.getDimensions(element);
     const minProp = axis === 'y' ? 'top' : 'left';
@@ -79,12 +78,10 @@ export const arrow = (options: Options): Middleware => ({
     const offset = within(min, center, max);
 
     // Make sure that arrow points at the reference
-    const alignmentPadding =
-      alignment === 'start' ? paddingObject[minProp] : paddingObject[maxProp];
     const shouldAddOffset =
-      alignmentPadding > 0 &&
       center !== offset &&
-      rects.reference[length] <= rects.floating[length];
+      rects.reference[length] <= rects.floating[length] &&
+      Math.abs((middlewareData.shift || {x: 0, y: 0})[axis]) <= 0.5;
     const alignmentOffset = shouldAddOffset
       ? center < min
         ? min - center
