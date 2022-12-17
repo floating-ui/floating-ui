@@ -1,7 +1,7 @@
 import type {Placement} from '@floating-ui/core';
 import {useFloating, arrow, shift, autoUpdate} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useRef} from 'react';
+import {useState, useRef, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 
@@ -33,6 +33,8 @@ export function Arrow() {
       }),
     ],
   });
+
+  useLayoutEffect(update, [update, padding, referenceSize, floatingSize]);
 
   const oppositeSidesMap: {[key: string]: string} = {
     top: 'bottom',
