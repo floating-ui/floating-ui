@@ -7,7 +7,7 @@ import {click} from './utils/click';
   [665, 900],
   [865, 665],
 ].forEach((scroll) => {
-  test(`[outside] correctly positioned on bottom with clipping detection`, async ({
+  test(`[outside] ${scroll} correctly positioned on bottom with clipping detection`, async ({
     page,
   }) => {
     await page.goto('http://localhost:1234/iframe');
@@ -18,7 +18,7 @@ import {click} from './utils/click';
     ).toMatchSnapshot(`outside-${scroll}.png`);
   });
 
-  test(`[inside] correctly positioned on bottom with clipping detection`, async ({
+  test(`[inside] ${scroll} correctly positioned on bottom with clipping detection`, async ({
     page,
   }) => {
     await page.goto('http://localhost:1234/iframe');
