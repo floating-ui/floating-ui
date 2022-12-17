@@ -3,16 +3,14 @@ import {useFloating, arrow, shift, autoUpdate} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
 import {useState, useRef} from 'react';
 import {Controls} from '../utils/Controls';
-import {useSize} from '../utils/useSize';
 import {useScroll} from '../utils/useScroll';
 
 export function Arrow() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const arrowRef = useRef<HTMLDivElement | null>(null);
-
-  const [floatingSize, handleFloatingSizeChange] = useSize(100, 'floating');
-  const [referenceSize, handleReferenceSizeChange] = useSize(200, 'reference');
-  const [arrowPadding, handleArrowPaddingChange] = useSize(0, 'arrow_padding');
+  const [padding, setPadding] = useState(0);
+  const [floatingSize, setFloatingSize] = useState(75);
+  const [referenceSize, setReferenceSize] = useState(125);
 
   const {
     x,
@@ -31,7 +29,7 @@ export function Arrow() {
       shift(),
       arrow({
         element: arrowRef,
-        padding: arrowPadding,
+        padding,
       }),
     ],
   });
@@ -96,40 +94,52 @@ export function Arrow() {
         </div>
       </div>
 
+      <h2>Reference size</h2>
       <Controls>
-        <div>
-          <label htmlFor="floating-size">Floating size</label>
-          <input
-            id="floating-size"
-            type="range"
-            min="1"
-            max="200"
-            value={floatingSize}
-            onChange={handleFloatingSizeChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="reference-size">Reference size</label>
-          <input
-            id="reference-size"
-            type="range"
-            min="1"
-            max="200"
-            value={referenceSize}
-            onChange={handleReferenceSizeChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="arrow-size">Arrow padding</label>
-          <input
-            id="arrow-size"
-            type="range"
-            min="0"
-            max="50"
-            value={arrowPadding}
-            onChange={handleArrowPaddingChange}
-          />
-        </div>
+        {[25, 125].map((size) => (
+          <button
+            key={size}
+            data-testid={`reference-${size}`}
+            onClick={() => setReferenceSize(size)}
+            style={{
+              backgroundColor: size === referenceSize ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Floating size</h2>
+      <Controls>
+        {[75, 150].map((size) => (
+          <button
+            key={size}
+            data-testid={`floating-${size}`}
+            onClick={() => setFloatingSize(size)}
+            style={{
+              backgroundColor: size === floatingSize ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Arrow padding</h2>
+      <Controls>
+        {[0, 20].map((size) => (
+          <button
+            key={size}
+            data-testid={`arrow-padding-${size}`}
+            onClick={() => setPadding(size)}
+            style={{
+              backgroundColor: size === padding ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
       </Controls>
 
       <Controls>

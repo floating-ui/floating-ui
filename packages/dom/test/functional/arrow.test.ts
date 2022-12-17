@@ -3,190 +3,115 @@ import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 
 allPlacements.forEach((placement) => {
-  test(`arrow should be centered to the reference ${placement}`, async ({
-    page,
-  }) => {
-    await page.goto('http://localhost:1234/arrow');
-    await click(page, `[data-testid="placement-${placement}"]`);
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}.png`
-    );
-  });
-});
-
-allPlacements.forEach((placement) => {
-  test(`arrow should not overflow floating element ${placement}`, async ({
-    page,
-  }) => {
-    await page.goto('http://localhost:1234/arrow');
-    await click(page, `[data-testid="placement-${placement}"]`);
-
-    await page.evaluate(() => {
-      const [floatingTarget] = Array.from(
-        document.querySelectorAll(
-          `input[type="range"]`
-        ) as NodeListOf<HTMLInputElement>
-      );
-
-      if (floatingTarget) {
-        floatingTarget.value = '50';
-      }
-
-      (window as any).__handleSizeChange_floating({target: floatingTarget});
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `centered-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+        });
+      });
     });
-
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}-no-overflow.png`
-    );
-  });
-});
-
-allPlacements.forEach((placement) => {
-  test(`arrow should perform internal shift ${placement}`, async ({page}) => {
-    await page.goto('http://localhost:1234/arrow');
-    await click(page, `[data-testid="placement-${placement}"]`);
-
-    await page.evaluate(() => {
-      const [floatingTarget, referenceTarget, arrowTarget] = Array.from(
-        document.querySelectorAll(
-          `input[type="range"]`
-        ) as NodeListOf<HTMLInputElement>
-      );
-
-      if (floatingTarget) {
-        floatingTarget.value = '100';
-      }
-
-      if (referenceTarget) {
-        referenceTarget.value = '25';
-      }
-
-      if (arrowTarget) {
-        arrowTarget.value = '10';
-      }
-
-      (window as any).__handleSizeChange_floating({target: floatingTarget});
-      (window as any).__handleSizeChange_reference({target: referenceTarget});
-      (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
-    });
-
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}-internal-shift.png`
-    );
   });
 });
 
 ['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end'].forEach(
   (placement) => {
-    test(`arrow should not be centered due to external shift ${placement}`, async ({
-      page,
-    }) => {
-      await page.goto('http://localhost:1234/arrow');
-      await click(page, `[data-testid="placement-${placement}"]`);
+    [75, 150].forEach((floatingSize) => {
+      [25, 125].forEach((referenceSize) => {
+        [0, 20].forEach((arrowPadding) => {
+          test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+            page,
+          }) => {
+            await page.goto('http://localhost:1234/arrow');
+            await click(page, `[data-testid="placement-${placement}"]`);
+            await click(page, `[data-testid="floating-${floatingSize}"]`);
+            await click(page, `[data-testid="reference-${referenceSize}"]`);
+            await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-      await page.evaluate(() => {
-        const [floatingTarget, referenceTarget, arrowTarget] = Array.from(
-          document.querySelectorAll(
-            `input[type="range"]`
-          ) as NodeListOf<HTMLInputElement>
-        );
+            await page.evaluate(() => {
+              const scroll = document.querySelector('.scroll');
+              if (scroll) {
+                scroll.scrollLeft = 765;
+              }
+            });
 
-        if (floatingTarget) {
-          floatingTarget.value = '100';
-        }
+            expect(
+              await page.locator('.container').screenshot()
+            ).toMatchSnapshot(
+              `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            );
 
-        if (referenceTarget) {
-          referenceTarget.value = '25';
-        }
+            await page.evaluate(() => {
+              const scroll = document.querySelector('.scroll');
+              if (scroll) {
+                scroll.scrollLeft = 285;
+              }
+            });
 
-        if (arrowTarget) {
-          arrowTarget.value = '10';
-        }
-
-        (window as any).__handleSizeChange_floating({target: floatingTarget});
-        (window as any).__handleSizeChange_reference({target: referenceTarget});
-        (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
+            expect(
+              await page.locator('.container').screenshot()
+            ).toMatchSnapshot(
+              `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            );
+          });
+        });
       });
-
-      await page.evaluate(() => {
-        const scroll = document.querySelector('.scroll');
-        if (scroll) {
-          scroll.scrollLeft = 740;
-        }
-      });
-
-      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${placement}-external-shift-y-left.png`
-      );
-
-      await page.evaluate(() => {
-        const scroll = document.querySelector('.scroll');
-        if (scroll) {
-          scroll.scrollLeft = 310;
-        }
-      });
-
-      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${placement}-external-shift-y-right.png`
-      );
     });
   }
 );
 
-['right', 'right-start', 'right-end', 'left', 'left-start', 'left-end'].forEach(
+['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end'].forEach(
   (placement) => {
-    test(`arrow should not be centered due to external shift ${placement}`, async ({
-      page,
-    }) => {
-      await page.goto('http://localhost:1234/arrow');
-      await click(page, `[data-testid="placement-${placement}"]`);
+    [75, 150].forEach((floatingSize) => {
+      [25, 125].forEach((referenceSize) => {
+        [0, 20].forEach((arrowPadding) => {
+          test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+            page,
+          }) => {
+            await page.goto('http://localhost:1234/arrow');
+            await click(page, `[data-testid="placement-${placement}"]`);
+            await click(page, `[data-testid="floating-${floatingSize}"]`);
+            await click(page, `[data-testid="reference-${referenceSize}"]`);
+            await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-      await page.evaluate(() => {
-        const [floatingTarget, referenceTarget, arrowTarget] = Array.from(
-          document.querySelectorAll(
-            `input[type="range"]`
-          ) as NodeListOf<HTMLInputElement>
-        );
+            await page.evaluate(() => {
+              const scroll = document.querySelector('.scroll');
+              if (scroll) {
+                scroll.scrollTop = 880;
+              }
+            });
 
-        if (floatingTarget) {
-          floatingTarget.value = '100';
-        }
+            expect(
+              await page.locator('.container').screenshot()
+            ).toMatchSnapshot(
+              `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            );
 
-        if (referenceTarget) {
-          referenceTarget.value = '25';
-        }
+            await page.evaluate(() => {
+              const scroll = document.querySelector('.scroll');
+              if (scroll) {
+                scroll.scrollTop = 300;
+              }
+            });
 
-        if (arrowTarget) {
-          arrowTarget.value = '10';
-        }
-
-        (window as any).__handleSizeChange_floating({target: floatingTarget});
-        (window as any).__handleSizeChange_reference({target: referenceTarget});
-        (window as any).__handleSizeChange_arrow_padding({target: arrowTarget});
+            expect(
+              await page.locator('.container').screenshot()
+            ).toMatchSnapshot(
+              `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            );
+          });
+        });
       });
-
-      await page.evaluate(() => {
-        const scroll = document.querySelector('.scroll');
-        if (scroll) {
-          scroll.scrollTop = 755;
-        }
-      });
-
-      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${placement}-external-shift-y-top.png`
-      );
-
-      await page.evaluate(() => {
-        const scroll = document.querySelector('.scroll');
-        if (scroll) {
-          scroll.scrollTop = 320;
-        }
-      });
-
-      expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${placement}-external-shift-y-bottom.png`
-      );
     });
   }
 );
