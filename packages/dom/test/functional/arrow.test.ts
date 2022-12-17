@@ -70,7 +70,7 @@ allPlacements.forEach((placement) => {
   }
 );
 
-['top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end'].forEach(
+['left', 'left-start', 'left-end', 'right', 'right-start', 'right-end'].forEach(
   (placement) => {
     [75, 150].forEach((floatingSize) => {
       [25, 125].forEach((referenceSize) => {
