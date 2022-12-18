@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.0.0",
+  "version": "0.14.0",
   "@rollingversions": {
     "baseVersion": [
       0,
@@ -61,7 +61,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^0.6.1",
+    "@floating-ui/react-dom": "^0.1.0",
     "aria-hidden": "^1.1.3",
     "tabbable": "^6.0.1"
   },

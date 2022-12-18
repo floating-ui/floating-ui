@@ -1,10 +1,10 @@
 {
   "name": "@floating-ui/dom",
-  "version": "0.4.2",
+  "version": "0.1.0",
   "@rollingversions": {
     "baseVersion": [
       0,
-      0,
+      1,
       0
     ]
   },
@@ -61,7 +61,7 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "^0.6.1"
+    "@floating-ui/core": "^0.1.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",

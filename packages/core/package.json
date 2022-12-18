@@ -1,10 +1,10 @@
 {
   "name": "@floating-ui/core",
-  "version": "0.6.1",
+  "version": "0.1.0",
   "@rollingversions": {
     "baseVersion": [
       0,
-      0,
+      1,
       0
     ]
   },

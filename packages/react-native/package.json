@@ -1,10 +1,10 @@
 {
   "name": "@floating-ui/react-native",
-  "version": "0.6.0",
+  "version": "0.1.0",
   "@rollingversions": {
     "baseVersion": [
       0,
-      0,
+      1,
       0
     ]
   },
@@ -49,7 +49,7 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^0.6.1"
+    "@floating-ui/core": "^0.1.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
