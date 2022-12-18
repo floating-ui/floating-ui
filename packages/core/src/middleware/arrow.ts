@@ -1,5 +1,5 @@
-import {detectOverflow} from '../detectOverflow';
 import type {Middleware, Padding} from '../types';
+import {getAlignment} from '../utils/getAlignment';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
@@ -77,45 +77,25 @@ export const arrow = (options: Options): Middleware => ({
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
 
+    // If the reference is small enough that the arrow's padding causes it to
+    // to point to nothing for an aligned placement, adjust the offset of the
+    // floating element itself. This stops `shift()` from taking action, but can
+    // be worked around by calling it again after the `arrow()` if desired.
     const shouldAddOffset =
-      center !== offset && rects.reference[length] <= rects.floating[length];
+      getAlignment(placement) != null &&
+      center != offset &&
+      rects.reference[length] / 2 -
+        (center < min ? paddingObject[minProp] : paddingObject[maxProp]) -
+        arrowDimensions[length] / 2 <
+        0;
     const alignmentOffset = shouldAddOffset
       ? center < min
         ? min - center
         : max - center
       : 0;
 
-    // When the floating element is larger than the reference element in the
-    // specified dimension (length variable), ensure that the arrow will point
-    // to it by shifting the floating element to take into account the padding.
-    // This prevents it from pointing toward nothing.
-    // However, in this scenario, the arrow will then be prevented from being
-    // able to move itself away from the center — so we need to take the
-    // overflow as a result into consideration. This keeps the behavior
-    // consistent.
-    const nextCoord = coords[axis] - alignmentOffset;
-    const overflow = await detectOverflow({
-      ...middlewareArguments,
-      [axis]: nextCoord,
-    });
-
-    let overflowOffset = 0;
-    if (axis === 'x') {
-      if (overflow.left >= 0) {
-        overflowOffset = overflow.left;
-      } else if (overflow.right >= 0) {
-        overflowOffset = -overflow.right;
-      }
-    } else {
-      if (overflow.top >= 0) {
-        overflowOffset = overflow.top;
-      } else if (overflow.bottom >= 0) {
-        overflowOffset = -overflow.bottom;
-      }
-    }
-
     return {
-      [axis]: nextCoord + overflowOffset,
+      [axis]: coords[axis] - alignmentOffset,
       data: {
         [axis]: offset,
         centerOffset: center - offset,
