@@ -1,13 +1,17 @@
 import type {Placement} from '@floating-ui/core';
-import {useFloating, arrow} from '@floating-ui/react-dom';
+import {useFloating, arrow, shift, autoUpdate} from '@floating-ui/react-dom';
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useLayoutEffect, useRef} from 'react';
+import {useState, useRef, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
-import {useSize} from '../utils/useSize';
+import {useScroll} from '../utils/useScroll';
 
 export function Arrow() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const arrowRef = useRef<HTMLDivElement | null>(null);
+  const [padding, setPadding] = useState(0);
+  const [floatingSize, setFloatingSize] = useState(75);
+  const [referenceSize, setReferenceSize] = useState(125);
+
   const {
     x,
     y,
@@ -17,14 +21,14 @@ export function Arrow() {
     update,
     placement: resultantPlacement,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
+    refs,
   } = useFloating({
     placement,
-    middleware: [arrow({element: arrowRef})],
+    whileElementsMounted: autoUpdate,
+    middleware: [shift({padding: 10}), arrow({element: arrowRef, padding})],
   });
 
-  const [size, handleSizeChange] = useSize(150);
-
-  useLayoutEffect(update, [update, size]);
+  useLayoutEffect(update, [update, padding, referenceSize, floatingSize]);
 
   const oppositeSidesMap: {[key: string]: string} = {
     top: 'bottom',
@@ -35,52 +39,105 @@ export function Arrow() {
 
   const staticSide = oppositeSidesMap[resultantPlacement.split('-')[0]];
 
+  const {scrollRef} = useScroll({refs, update});
+
   return (
     <>
       <h1>Arrow</h1>
       <p></p>
       <div className="container">
-        <div ref={reference} className="reference">
-          Reference
-        </div>
         <div
-          ref={floating}
-          className="floating"
-          style={{
-            position: strategy,
-            top: y ?? '',
-            left: x ?? '',
-            width: size,
-            height: size,
-          }}
+          className="scroll"
+          ref={scrollRef}
+          data-x
+          style={{position: 'relative'}}
         >
-          Floating
           <div
-            ref={arrowRef}
-            className="arrow"
+            ref={reference}
+            className="reference"
             style={{
-              position: 'absolute',
-              top: arrowY ?? '',
-              left: arrowX ?? '',
-              right: '',
-              bottom: '',
-              [staticSide]: -15,
+              width: referenceSize,
+              height: referenceSize,
             }}
-          />
+          >
+            Reference
+          </div>
+          <div
+            ref={floating}
+            className="floating"
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+              width: floatingSize,
+              height: floatingSize,
+            }}
+          >
+            Floating
+            <div
+              ref={arrowRef}
+              className="arrow"
+              style={{
+                position: 'absolute',
+                top: arrowY != null ? arrowY : '',
+                left: arrowX != null ? arrowX : '',
+                right: '',
+                bottom: '',
+                [staticSide]: -15,
+              }}
+            />
+          </div>
         </div>
       </div>
 
+      <h2>Reference size</h2>
       <Controls>
-        <label htmlFor="size">Size</label>
-        <input
-          id="size"
-          type="range"
-          min="1"
-          max="200"
-          value={size}
-          onChange={handleSizeChange}
-        />
+        {[25, 125].map((size) => (
+          <button
+            key={size}
+            data-testid={`reference-${size}`}
+            onClick={() => setReferenceSize(size)}
+            style={{
+              backgroundColor: size === referenceSize ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
       </Controls>
+
+      <h2>Floating size</h2>
+      <Controls>
+        {[75, 150].map((size) => (
+          <button
+            key={size}
+            data-testid={`floating-${size}`}
+            onClick={() => setFloatingSize(size)}
+            style={{
+              backgroundColor: size === floatingSize ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Arrow padding</h2>
+      <Controls>
+        {[0, 20].map((size) => (
+          <button
+            key={size}
+            data-testid={`arrow-padding-${size}`}
+            onClick={() => setPadding(size)}
+            style={{
+              backgroundColor: size === padding ? 'black' : '',
+            }}
+          >
+            {size}
+          </button>
+        ))}
+      </Controls>
+
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button

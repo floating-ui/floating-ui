@@ -3,40 +3,103 @@ import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
 
 allPlacements.forEach((placement) => {
-  test(`arrow should be centered to the reference ${placement}`, async ({
-    page,
-  }) => {
-    await page.goto('http://localhost:1234/arrow');
-    await page.waitForSelector(`[data-testid="placement-${placement}"]`);
-    await click(page, `[data-testid="placement-${placement}"]`);
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}.png`
-    );
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `centered-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+        });
+      });
+    });
   });
 });
 
-allPlacements.forEach((placement) => {
-  test(`arrow should not overflow floating element ${placement}`, async ({
-    page,
-  }) => {
-    await page.goto('http://localhost:1234/arrow');
-    await click(page, `[data-testid="placement-${placement}"]`);
+['top', 'bottom'].forEach((placement) => {
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-    await page.evaluate(() => {
-      const target = document.querySelector(
-        `input[type="range"]`
-      ) as HTMLInputElement;
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollLeft = 765;
+            }
+          });
 
-      if (target) {
-        target.value = '50';
-      }
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
 
-      (window as any).__HANDLE_SIZE_CHANGE__({target});
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollLeft = 285;
+            }
+          });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+        });
+      });
     });
+  });
+});
 
-    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}-no-overflow.png`
-    );
+['left', 'right'].forEach((placement) => {
+  [75, 150].forEach((floatingSize) => {
+    [25, 125].forEach((referenceSize) => {
+      [0, 20].forEach((arrowPadding) => {
+        test(`arrow should not be centered to the reference ${placement} ${floatingSize} ${referenceSize} ${arrowPadding}`, async ({
+          page,
+        }) => {
+          await page.goto('http://localhost:1234/arrow');
+          await click(page, `[data-testid="placement-${placement}"]`);
+          await click(page, `[data-testid="floating-${floatingSize}"]`);
+          await click(page, `[data-testid="reference-${referenceSize}"]`);
+          await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
+
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollTop = 880;
+            }
+          });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+
+          await page.evaluate(() => {
+            const scroll = document.querySelector('.scroll');
+            if (scroll) {
+              scroll.scrollTop = 300;
+            }
+          });
+
+          expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+            `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+          );
+        });
+      });
+    });
   });
 });
