@@ -321,10 +321,8 @@ const components = {
 
     if (props.href.startsWith('/')) {
       return (
-        <Link {...props}>
-          <a {...props} className={className}>
-            <span>{props.children}</span>
-          </a>
+        <Link {...props} className={className}>
+          <span>{props.children}</span>
         </Link>
       );
     }
@@ -459,9 +457,7 @@ export default function Layout({children}) {
           />
           <div className="container mx-auto mb-8">
             <Link href="/">
-              <a href="/">
-                <Logo className="h-28 mx-auto mt-2 mb-1" />
-              </a>
+              <Logo className="h-28 mx-auto mt-2 mb-1" />
             </Link>
             {navOpen && (
               <button
@@ -496,49 +492,47 @@ export default function Layout({children}) {
                           depth === 1,
                       })}
                     >
-                      <Link href={url}>
-                        <a
-                          href={url}
-                          className={cn(
-                            'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
-                            {
-                              'bg-gray-800 hover:bg-gray-700 text-gray-50 dark:bg-purple-200/10 dark:text-gray-100/90':
-                                pathname === url,
-                              'hover:bg-gray-100':
-                                pathname !== url,
-                              'rounded-tl-none rounded-bl-none':
-                                depth > 0,
-                            }
-                          )}
-                        >
-                          <span className="flex items-center gap-4 w-full py-1">
-                            {icon && (
-                              <span
-                                className={cn(
-                                  'w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gray-800 dark:bg-gray-100',
-                                  {
-                                    'bg-gray-100 dark:bg-gradient-to-r dark:from-red-400 dark:to-pink-200':
-                                      pathname === url,
-                                  }
-                                )}
-                                aria-hidden="true"
-                                style={{
-                                  WebkitMaskImage: `url(${icon})`,
-                                  maskImage: `url(${icon})`,
-                                }}
-                              />
-                            )}
+                      <Link
+                        href={url}
+                        className={cn(
+                          'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
+                          {
+                            'bg-gray-800 hover:bg-gray-700 text-gray-50 dark:bg-purple-200/10 dark:text-gray-100/90':
+                              pathname === url,
+                            'hover:bg-gray-100':
+                              pathname !== url,
+                            'rounded-tl-none rounded-bl-none':
+                              depth > 0,
+                          }
+                        )}
+                      >
+                        <span className="flex items-center gap-4 w-full py-1">
+                          {icon && (
                             <span
-                              className={cn('block', {
-                                'font-bold': pathname === url,
-                                'font-mono [font-size:90%]':
-                                  mono === true,
-                              })}
-                            >
-                              {title}
-                            </span>
+                              className={cn(
+                                'w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gray-800 dark:bg-gray-100',
+                                {
+                                  'bg-gray-100 dark:bg-gradient-to-r dark:from-red-400 dark:to-pink-200':
+                                    pathname === url,
+                                }
+                              )}
+                              aria-hidden="true"
+                              style={{
+                                WebkitMaskImage: `url(${icon})`,
+                                maskImage: `url(${icon})`,
+                              }}
+                            />
+                          )}
+                          <span
+                            className={cn('block', {
+                              'font-bold': pathname === url,
+                              'font-mono [font-size:90%]':
+                                mono === true,
+                            })}
+                          >
+                            {title}
                           </span>
-                        </a>
+                        </span>
                       </Link>
                     </li>
                   )

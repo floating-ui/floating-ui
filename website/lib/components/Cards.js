@@ -13,11 +13,14 @@ export function Cards({items}) {
               className="w-56 rounded-md shadow-lg hover:shadow-xl transition-shadow"
               src={item.image}
               loading="lazy"
+              alt="Sponsor logo"
+              width={224}
+              height={168}
             />
             <div className="px-6 py-4">
-              <h4 className="text-center text-2xl font-bold mb-2">
+              <h3 className="text-center text-2xl font-bold mb-2">
                 {item.title}
-              </h4>
+              </h3>
               <p className="text-center dark:text-gray-400">
                 {item.description}
               </p>
