@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {ReactNode, useState} from 'react';
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
@@ -6,8 +6,12 @@ import {
   useInteractions,
   useFloating,
   FloatingPortal,
+  useFloatingNodeId,
+  FloatingNode,
+  FloatingTree,
+  useFloatingParentNodeId,
 } from '../../src';
-import type {Props} from '../../src/hooks/useDismiss';
+import {normalizeBubblesProp, Props} from '../../src/hooks/useDismiss';
 
 function App(props: Props) {
   const [open, setOpen] = useState(true);
@@ -135,5 +139,184 @@ describe('false', () => {
     await userEvent.click(document.body);
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     cleanup();
+  });
+});
+
+describe('bubbles', () => {
+  const Dialog = ({
+    testId,
+    children,
+    ...props
+  }: Props & {testId: string; children: ReactNode}) => {
+    const [open, setOpen] = useState(true);
+    const nodeId = useFloatingNodeId();
+
+    const {reference, floating, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+      nodeId,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useDismiss(context, props),
+    ]);
+
+    return (
+      <FloatingNode id={nodeId}>
+        <button {...getReferenceProps({ref: reference})} />
+        {open && (
+          <div {...getFloatingProps({ref: floating})} data-testid={testId}>
+            {children}
+          </div>
+        )}
+      </FloatingNode>
+    );
+  };
+
+  const NestedDialog = (
+    props: Props & {testId: string; children: ReactNode}
+  ) => {
+    const parentId = useFloatingParentNodeId();
+
+    if (parentId == null) {
+      return (
+        <FloatingTree>
+          <Dialog {...props} />
+        </FloatingTree>
+      );
+    }
+
+    return <Dialog {...props} />;
+  };
+
+  describe('prop resolution', () => {
+    test('undefined', () => {
+      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp();
+
+      expect(escapeKeyBubbles).toBe(true);
+      expect(outsidePressBubbles).toBe(true);
+    });
+
+    test('false', () => {
+      const {escapeKeyBubbles, outsidePressBubbles} =
+        normalizeBubblesProp(false);
+
+      expect(escapeKeyBubbles).toBe(false);
+      expect(outsidePressBubbles).toBe(false);
+    });
+
+    test('{}', () => {
+      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({});
+
+      expect(escapeKeyBubbles).toBe(true);
+      expect(outsidePressBubbles).toBe(true);
+    });
+
+    test('{ escapeKey: false }', () => {
+      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
+        escapeKey: false,
+      });
+
+      expect(escapeKeyBubbles).toBe(false);
+      expect(outsidePressBubbles).toBe(true);
+    });
+
+    test('{ outsidePress: false }', () => {
+      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
+        outsidePress: false,
+      });
+
+      expect(escapeKeyBubbles).toBe(true);
+      expect(outsidePressBubbles).toBe(false);
+    });
+  });
+
+  describe('outsidePress', () => {
+    test('true', async () => {
+      render(
+        <NestedDialog testId="outer">
+          <NestedDialog testId="inner">
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      fireEvent.pointerDown(document.body);
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
+
+    test('false', async () => {
+      render(
+        <NestedDialog testId="outer" bubbles={{outsidePress: false}}>
+          <NestedDialog testId="inner" bubbles={{outsidePress: false}}>
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      fireEvent.pointerDown(document.body);
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+
+      fireEvent.pointerDown(document.body);
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
+  });
+
+  describe('escapeKey', () => {
+    test('true', async () => {
+      render(
+        <NestedDialog testId="outer">
+          <NestedDialog testId="inner">
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
+    test('false', async () => {
+      render(
+        <NestedDialog testId="outer" bubbles={{escapeKey: false}}>
+          <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
   });
 });
