@@ -97,6 +97,7 @@ export const NavigationItem = React.forwardRef<
             initialFocus={-1}
           >
             <div
+              data-testid="subnavigation"
               ref={floating}
               className="SubNavigation"
               style={{

@@ -25,7 +25,7 @@ const captureHandlerKeys = {
 };
 
 export interface DismissPayload {
-  type: 'outsidePress' | 'referencePress' | 'escapeKey';
+  type: 'outsidePress' | 'referencePress' | 'escapeKey' | 'mouseLeave';
   data: {
     returnFocus: boolean | {preventScroll: boolean};
   };
