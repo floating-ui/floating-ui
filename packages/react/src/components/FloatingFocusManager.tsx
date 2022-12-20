@@ -347,7 +347,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         previouslyFocusedElementRef.current = refs.domReference.current;
       }
 
-      if (payload.type !== 'outsidePress') {
+      if (['referencePress', 'escapeKey'].includes(payload.type)) {
         return;
       }
 

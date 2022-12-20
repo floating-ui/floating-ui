@@ -715,6 +715,14 @@ describe('Navigation', () => {
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByText('Link 1')).not.toBeInTheDocument();
   });
+
+  test('closes when unhovering floating element even when focus is inside it', async () => {
+    render(<Navigation />);
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.click(screen.getByTestId('subnavigation'));
+    await userEvent.unhover(screen.getByTestId('subnavigation'));
+    expect(screen.queryByTestId('subnavigation')).not.toBeInTheDocument();
+  });
 });
 
 describe('Drawer', () => {
