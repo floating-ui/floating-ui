@@ -12,6 +12,7 @@ import {click} from './utils/click';
   'offsetParent-3d',
   'offsetParent-reference',
   'virtual',
+  'inline',
 ].forEach((node) => {
   test(`correctly positioned on bottom when ${node} has a border`, async ({
     page,
