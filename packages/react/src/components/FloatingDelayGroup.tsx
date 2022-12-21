@@ -21,8 +21,8 @@ const FloatingDelayGroupContext = React.createContext<
     setState: React.Dispatch<React.SetStateAction<GroupState>>;
   }
 >({
-  delay: 1000,
-  initialDelay: 1000,
+  delay: 0,
+  initialDelay: 0,
   currentId: null,
   setCurrentId: () => {},
   setState: () => {},
