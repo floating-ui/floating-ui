@@ -16,6 +16,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   placement = 'bottom',
   strategy = 'absolute',
   whileElementsMounted,
+  open,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const initialData = React.useMemo(
     () => ({
@@ -27,7 +28,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       strategy,
       placement,
       middlewareData: {},
-      isReady: false,
+      isPositioned: false,
     }),
     [strategy, placement]
   );
@@ -58,7 +59,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       strategy,
     }).then((data) => {
       if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
-        const value = {...data, isReady: true};
+        const value = {...data, isPositioned: true};
         dataRef.current = value;
         ReactDOM.flushSync(() => {
           setData(value);
@@ -66,6 +67,13 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       }
     });
   }, [latestMiddleware, placement, strategy]);
+
+  useLayoutEffect(() => {
+    // Skip first update
+    if (isMountedRef.current) {
+      setData(initialData);
+    }
+  }, [open, initialData]);
 
   useLayoutEffect(() => {
     // Skip first update
@@ -119,10 +127,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     [runElementMountCallback]
   );
 
-  const reset = React.useCallback(() => {
-    setData(initialData);
-  }, [initialData]);
-
   const refs = React.useMemo(() => ({reference, floating}), []);
 
   return React.useMemo(
@@ -130,10 +134,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       ...data,
       update,
       refs,
-      reset,
       reference: setReference,
       floating: setFloating,
     }),
-    [data, update, refs, reset, setReference, setFloating]
+    [data, update, refs, setReference, setFloating]
   );
 }
