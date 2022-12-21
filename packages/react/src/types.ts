@@ -70,8 +70,8 @@ export interface ElementProps {
 export type ReferenceType = Element | VirtualElement;
 
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
-  x: number | null;
-  y: number | null;
+  x: number;
+  y: number;
 };
 
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =

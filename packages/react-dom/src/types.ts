@@ -11,8 +11,8 @@ export {useFloating} from './';
 export {arrow} from './';
 
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
-  x: number | null;
-  y: number | null;
+  x: number;
+  y: number;
   isPositioned: boolean;
 };
 

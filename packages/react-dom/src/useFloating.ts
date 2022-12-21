@@ -20,11 +20,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const initialData = React.useMemo(
     () => ({
-      // Setting these to `null` will allow the consumer to determine if the
-      // floating element has been positioned yet, either due to async
-      // positioning or during SSR.
-      x: null,
-      y: null,
+      x: 0,
+      y: 0,
       strategy,
       placement,
       middlewareData: {},
