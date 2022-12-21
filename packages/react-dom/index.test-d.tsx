@@ -5,7 +5,8 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, update, reset} = useFloating({
+  const {reference, floating, update} = useFloating({
+    open: true,
     placement: 'right',
     middleware: [
       shift(),
@@ -42,7 +43,6 @@ function App() {
   reference(null);
   floating(null);
   update();
-  reset();
   return <div ref={arrowRef} />;
 }
 
