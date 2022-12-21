@@ -70,7 +70,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   useLayoutEffect(() => {
     // Skip first update
-    if (isMountedRef.current && !open) {
+    if (isMountedRef.current && open === false) {
       setData(initialData);
     }
   }, [open, initialData]);
