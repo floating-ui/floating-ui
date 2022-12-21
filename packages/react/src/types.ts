@@ -81,6 +81,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     floating: (node: HTMLElement | null) => void;
     context: FloatingContext<RT>;
     refs: ExtendedRefs<RT>;
+    isPositioned: boolean;
   };
 
 export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
