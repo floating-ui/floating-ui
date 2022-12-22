@@ -12,6 +12,7 @@ import {
   useListNavigation,
   useTypeahead,
   safePolygon,
+  useMergeRefs,
 } from '.';
 
 App;
@@ -47,7 +48,12 @@ function App() {
   reference(null);
   floating(null);
   update();
-  return <div ref={arrowRef} />;
+
+  const ref1 = useRef<HTMLDivElement>(null);
+  const ref2 = useRef<HTMLDivElement>(null);
+  const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
+
+  return <div ref={ref} />;
 }
 
 NarrowRefType;
