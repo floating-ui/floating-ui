@@ -1,6 +1,6 @@
 import type {Coords} from '@floating-ui/core';
 import type {VirtualElement} from '../types';
-import {getComputedStyle} from './getComputedStyle';
+import {getCssDimensions} from './getCssDimensions';
 import {isElement, isHTMLElement} from './is';
 import {round} from './math';
 
@@ -19,23 +19,19 @@ export function getScale(element: Element | VirtualElement): Coords {
   }
 
   const rect = domElement.getBoundingClientRect();
-  const css = getComputedStyle(domElement);
-  const cssWidth = parseFloat(css.width);
-  const cssHeight = parseFloat(css.height);
-  const offsetWidth = domElement.offsetWidth;
-  const offsetHeight = domElement.offsetHeight;
+  const {width, height, fallback} = getCssDimensions(domElement);
 
-  let x = rect.width / cssWidth;
-  let y = rect.height / cssHeight;
+  let x = rect.width / width;
+  let y = rect.height / height;
 
   // • cssWidth/cssHeight can be 'auto' for inline offsetParents, so the
   // values can be `NaN`.
   // • If the offset dimension is more than half a pixel different from the
   // computed dimension, it's either a `content-box` box-sizing, or something
   // else has gone wrong, so fallback.
-  if (round(cssWidth) !== offsetWidth || round(cssHeight) !== offsetHeight) {
-    x = round(rect.width) / offsetWidth;
-    y = round(rect.height) / offsetHeight;
+  if (fallback) {
+    x = round(rect.width) / domElement.offsetWidth;
+    y = round(rect.height) / domElement.offsetHeight;
   }
 
   // 0, NaN, or Infinity should always fallback to 1.
