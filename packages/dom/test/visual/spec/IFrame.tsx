@@ -4,7 +4,7 @@ import {
   limitShift,
   autoUpdate,
 } from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {useLayoutEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {Controls} from '../utils/Controls';
 
@@ -226,16 +226,95 @@ function Nested({scroll}: {scroll: number[]}) {
   );
 }
 
+function Virtual({scroll}: {scroll: number[]}) {
+  const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
+  const referenceRef = useRef<HTMLButtonElement>(null);
+
+  const {x, y, reference, floating, strategy} = useFloating({
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      shift({
+        crossAxis: true,
+        limiter: limitShift(),
+        boundary: iframe || undefined,
+      }),
+    ],
+  });
+
+  const mountNode = iframe?.contentWindow?.document.body;
+
+  useLayoutEffect(() => {
+    const el = referenceRef.current;
+    if (mountNode && el) {
+      reference({
+        getBoundingClientRect: () => el.getBoundingClientRect(),
+        contextElement: el,
+      });
+    }
+  }, [mountNode, reference]);
+
+  useLayoutEffect(() => {
+    if (mountNode && scroll) {
+      mountNode.scrollLeft = scroll[0];
+      mountNode.scrollTop = scroll[1];
+    }
+  }, [mountNode, scroll]);
+
+  return (
+    <>
+      <h2>Virtual</h2>
+      <div className="container" id="virtual-container">
+        <iframe
+          ref={setIFrame}
+          width={350}
+          height={350}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
+        >
+          {mountNode &&
+            createPortal(
+              <div style={{width: 2000, height: 2000, position: 'relative'}}>
+                <button
+                  ref={referenceRef}
+                  className="reference"
+                  style={{
+                    position: 'absolute',
+                    left: 1000,
+                    top: 1000,
+                  }}
+                >
+                  Reference
+                </button>
+              </div>,
+              mountNode
+            )}
+        </iframe>
+        <div
+          ref={floating}
+          className="floating"
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+          }}
+        >
+          Floating
+        </div>
+      </div>
+    </>
+  );
+}
+
 export function IFrame() {
   const [scroll, setScroll] = useState(SCROLL[0]);
 
   return (
     <>
-      <h1>iFrame</h1>
+      <h1>iframe</h1>
       <p></p>
       <Outside scroll={scroll} />
       <Inside scroll={scroll} />
       <Nested scroll={scroll} />
+      <Virtual scroll={scroll} />
 
       <h2>Scroll position</h2>
       <Controls>
