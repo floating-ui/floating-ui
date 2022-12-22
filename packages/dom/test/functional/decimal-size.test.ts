@@ -13,3 +13,12 @@ import {click} from './utils/click';
     );
   });
 });
+
+test(`floating element text should not be truncated`, async ({page}) => {
+  await page.goto('http://localhost:1234/decimal-size');
+  await click(page, `[data-testid="truncate-true"]`);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `truncate.png`
+  );
+});
