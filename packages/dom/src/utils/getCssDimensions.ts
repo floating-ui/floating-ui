@@ -3,8 +3,7 @@ import {round} from './math';
 import {getComputedStyle} from './getComputedStyle';
 
 export function getCssDimensions(
-  element: HTMLElement,
-  autoFallback = true
+  element: HTMLElement
 ): Dimensions & {fallback: boolean} {
   const css = getComputedStyle(element);
   let width = parseFloat(css.width);
@@ -14,7 +13,7 @@ export function getCssDimensions(
   const shouldFallback =
     round(width) !== offsetWidth || round(height) !== offsetHeight;
 
-  if (autoFallback && shouldFallback) {
+  if (shouldFallback) {
     width = offsetWidth;
     height = offsetHeight;
   }

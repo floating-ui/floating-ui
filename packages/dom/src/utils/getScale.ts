@@ -19,20 +19,9 @@ export function getScale(element: Element | VirtualElement): Coords {
   }
 
   const rect = domElement.getBoundingClientRect();
-  const {width, height, fallback} = getCssDimensions(domElement, false);
-
-  let x = rect.width / width;
-  let y = rect.height / height;
-
-  // • cssWidth/cssHeight can be 'auto' for inline offsetParents, so the
-  // values can be `NaN`.
-  // • If the offset dimension is more than half a pixel different from the
-  // computed dimension, it's either a `content-box` box-sizing, or something
-  // else has gone wrong, so fallback.
-  if (fallback) {
-    x = round(rect.width) / domElement.offsetWidth;
-    y = round(rect.height) / domElement.offsetHeight;
-  }
+  const {width, height, fallback} = getCssDimensions(domElement);
+  let x = (fallback ? round(rect.width) : rect.width) / width;
+  let y = (fallback ? round(rect.height) : rect.height) / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
