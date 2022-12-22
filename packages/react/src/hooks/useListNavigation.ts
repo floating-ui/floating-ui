@@ -162,6 +162,7 @@ export interface Props {
   virtual?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
+  scrollIntoView?: boolean | ScrollIntoViewOptions;
 }
 
 /**
@@ -188,6 +189,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     disabledIndices = undefined,
     orientation = 'vertical',
     cols = 1,
+    scrollIntoView = true,
   }: Props = {
     listRef: {current: []},
     activeIndex: null,
@@ -233,13 +235,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
   const keyRef = React.useRef<null | string>(null);
-  const blockPointerLeaveRef = React.useRef(false);
+  const isPointerModalityRef = React.useRef(false);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
   const forceSyncFocus = React.useRef(false);
 
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
+  const scrollIntoViewRef = useLatestRef(scrollIntoView);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -248,10 +251,11 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>
     ) => {
+      const item = listRef.current[indexRef.current];
+
       if (virtual) {
-        setActiveId(listRef.current[indexRef.current]?.id);
+        setActiveId(item?.id);
       } else {
-        const item = listRef.current[indexRef.current];
         enqueueFocus(item, {
           preventScroll: true,
           // Mac Safari does not move the virtual cursor unless the focus call
@@ -268,8 +272,19 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               : false,
         });
       }
+
+      requestAnimationFrame(() => {
+        const scrollIntoView = scrollIntoViewRef.current;
+        if (scrollIntoView && item && !isPointerModalityRef.current) {
+          item.scrollIntoView(
+            typeof scrollIntoView === 'boolean'
+              ? {block: 'nearest', inline: 'nearest'}
+              : scrollIntoView
+          );
+        }
+      });
     },
-    [virtual]
+    [virtual, scrollIntoViewRef]
   );
 
   useLayoutEffect(() => {
@@ -392,7 +407,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     const disabledIndices = disabledIndicesRef.current;
 
     function onKeyDown(event: React.KeyboardEvent) {
-      blockPointerLeaveRef.current = true;
+      isPointerModalityRef.current = false;
       forceSyncFocus.current = true;
 
       // If the floating element is animating out, ignore navigation. Otherwise,
@@ -675,7 +690,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             'aria-activedescendant': activeId,
           }),
         onKeyDown(event) {
-          blockPointerLeaveRef.current = true;
+          isPointerModalityRef.current = false;
           const isArrowKey = event.key.indexOf('Arrow') === 0;
 
           if (virtual && open) {
@@ -748,7 +763,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           }),
         onKeyDown,
         onPointerMove() {
-          blockPointerLeaveRef.current = false;
+          isPointerModalityRef.current = true;
         },
       },
       item: {
@@ -771,21 +786,23 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             }
           },
           onPointerLeave() {
-            if (!blockPointerLeaveRef.current) {
-              indexRef.current = -1;
-              focusItem(listRef, indexRef);
+            if (!isPointerModalityRef.current) {
+              return;
+            }
 
-              // Virtual cursor with VoiceOver on iOS needs this to be flushed
-              // synchronously or there is a glitch that prevents nested
-              // submenus from being accessible.
-              flushSync(() => onNavigate(null));
+            indexRef.current = -1;
+            focusItem(listRef, indexRef);
 
-              if (!virtual) {
-                // This also needs to be sync to prevent fast mouse movements
-                // from leaving behind a stale active item when landing on a
-                // disabled button item.
-                refs.floating.current?.focus({preventScroll: true});
-              }
+            // Virtual cursor with VoiceOver on iOS needs this to be flushed
+            // synchronously or there is a glitch that prevents nested
+            // submenus from being accessible.
+            flushSync(() => onNavigate(null));
+
+            if (!virtual) {
+              // This also needs to be sync to prevent fast mouse movements
+              // from leaving behind a stale active item when landing on a
+              // disabled button item.
+              refs.floating.current?.focus({preventScroll: true});
             }
           },
         }),
