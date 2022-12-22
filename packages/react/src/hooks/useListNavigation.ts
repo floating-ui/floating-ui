@@ -235,7 +235,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
   const keyRef = React.useRef<null | string>(null);
-  const isPointerModalityRef = React.useRef(false);
+  const isPointerModalityRef = React.useRef(true);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
   const forceSyncFocus = React.useRef(false);
@@ -276,7 +276,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       requestAnimationFrame(() => {
         const scrollIntoView = scrollIntoViewRef.current;
         if (scrollIntoView && item && !isPointerModalityRef.current) {
-          item.scrollIntoView(
+          // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
+          // by all browsers.
+          item.scrollIntoView?.(
             typeof scrollIntoView === 'boolean'
               ? {block: 'nearest', inline: 'nearest'}
               : scrollIntoView
