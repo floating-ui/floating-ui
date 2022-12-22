@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export function useMergeRefs<Instance>(
-  refs: Array<React.Ref<Instance> | undefined>
+  refs: Array<React.Ref<Instance>>
 ): React.RefCallback<Instance> | null {
   return React.useMemo(() => {
     if (refs.every((ref) => ref == null)) {
