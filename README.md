@@ -167,7 +167,7 @@ as much as possible.
 ## README Sponsors
 
 <a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer">
-  <img width="100" height="100" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Milford" />
+  <img width="116" height="99" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" />
 </a>
 
 You can sponsor Floating UI in a variety of ways on
