@@ -12,8 +12,7 @@ export function getCssDimensions(
   const offsetWidth = element.offsetWidth;
   const offsetHeight = element.offsetHeight;
   const shouldFallback =
-    round(width) !== element.offsetWidth ||
-    round(height) !== element.offsetHeight;
+    round(width) !== offsetWidth || round(height) !== offsetHeight;
 
   if (autoFallback && shouldFallback) {
     width = offsetWidth;
