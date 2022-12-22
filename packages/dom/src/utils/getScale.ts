@@ -19,7 +19,7 @@ export function getScale(element: Element | VirtualElement): Coords {
   }
 
   const rect = domElement.getBoundingClientRect();
-  const {width, height, fallback} = getCssDimensions(domElement);
+  const {width, height, fallback} = getCssDimensions(domElement, false);
 
   let x = rect.width / width;
   let y = rect.height / height;
