@@ -27,12 +27,13 @@ export interface Options {
  * when it is not in the same clipping context as the reference element.
  * @see https://floating-ui.com/docs/hide
  */
-export const hide = ({
-  strategy = 'referenceHidden',
-  ...detectOverflowOptions
-}: Partial<Options & DetectOverflowOptions> = {}): Middleware => ({
+export const hide = (
+  options: Partial<Options & DetectOverflowOptions> = {}
+): Middleware => ({
   name: 'hide',
+  options,
   async fn(middlewareArguments) {
+    const {strategy = 'referenceHidden', ...detectOverflowOptions} = options;
     const {rects} = middlewareArguments;
 
     switch (strategy) {
