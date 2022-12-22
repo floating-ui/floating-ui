@@ -1,10 +1,10 @@
 {
   "name": "@floating-ui/react-dom",
-  "version": "0.6.1",
+  "version": "0.1.0",
   "@rollingversions": {
     "baseVersion": [
       0,
-      0,
+      1,
       0
     ]
   },
@@ -60,7 +60,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^0.4.2"
+    "@floating-ui/dom": "^0.1.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",

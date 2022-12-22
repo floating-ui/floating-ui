@@ -1,18 +1,17 @@
-import {useState, useLayoutEffect} from 'react';
+import {useState} from 'react';
+import {flushSync} from 'react-dom';
 
 export const useSize = (
-  initialSize = 80
+  initialSize = 80,
+  key = 'floating'
 ): [number, (event: React.ChangeEvent<HTMLInputElement>) => void] => {
   const [size, setSize] = useState(initialSize);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSize(Number(event.target.value));
+    flushSync(() => setSize(Number(event.target.value)));
   };
 
-  useLayoutEffect(() => {
-    // Allow Playwright tests to easily hook into this handler
-    (window as any).__HANDLE_SIZE_CHANGE__ = handleSizeChange;
-  });
+  (window as any)[`__handleSizeChange_${key}`] = handleSizeChange;
 
   return [size, handleSizeChange];
 };

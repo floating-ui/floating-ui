@@ -19,7 +19,7 @@ allPlacements.forEach((placement) => {
         target.value = '200';
       }
 
-      (window as any).__HANDLE_SIZE_CHANGE__({target});
+      (window as any).__handleSizeChange_floating({target});
     }, placement);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
       `${placement}--size.png`

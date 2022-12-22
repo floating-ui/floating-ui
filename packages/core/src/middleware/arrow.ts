@@ -1,9 +1,9 @@
 import type {Middleware, Padding} from '../types';
+import {getAlignment} from '../utils/getAlignment';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {within} from '../utils/within';
-import {getAlignment} from '../utils/getAlignment';
 
 export interface Options {
   /**
@@ -44,7 +44,6 @@ export const arrow = (options: Options): Middleware => ({
     const paddingObject = getSideObjectFromPadding(padding);
     const coords = {x, y};
     const axis = getMainAxisFromPlacement(placement);
-    const alignment = getAlignment(placement);
     const length = getLengthFromAxis(axis);
     const arrowDimensions = await platform.getDimensions(element);
     const minProp = axis === 'y' ? 'top' : 'left';
@@ -78,13 +77,17 @@ export const arrow = (options: Options): Middleware => ({
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
 
-    // Make sure that arrow points at the reference
-    const alignmentPadding =
-      alignment === 'start' ? paddingObject[minProp] : paddingObject[maxProp];
+    // If the reference is small enough that the arrow's padding causes it to
+    // to point to nothing for an aligned placement, adjust the offset of the
+    // floating element itself. This stops `shift()` from taking action, but can
+    // be worked around by calling it again after the `arrow()` if desired.
     const shouldAddOffset =
-      alignmentPadding > 0 &&
-      center !== offset &&
-      rects.reference[length] <= rects.floating[length];
+      getAlignment(placement) != null &&
+      center != offset &&
+      rects.reference[length] / 2 -
+        (center < min ? paddingObject[minProp] : paddingObject[maxProp]) -
+        arrowDimensions[length] / 2 <
+        0;
     const alignmentOffset = shouldAddOffset
       ? center < min
         ? min - center

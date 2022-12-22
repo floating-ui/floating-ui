@@ -21,6 +21,8 @@ export function Logos({items}) {
               loading="lazy"
               src={item.logo}
               alt={item.label}
+              width={48}
+              height={48}
             />
           </a>
         </Tippy>

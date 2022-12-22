@@ -400,9 +400,15 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           clearTimeout(timeoutRef.current);
         },
         onMouseLeave() {
+          events.emit('dismiss', {
+            type: 'mouseLeave',
+            data: {
+              returnFocus: false,
+            },
+          });
           closeWithDelay(false);
         },
       },
     };
-  }, [enabled, restMs, open, onOpenChange, closeWithDelay]);
+  }, [events, enabled, restMs, open, onOpenChange, closeWithDelay]);
 };

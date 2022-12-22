@@ -40,7 +40,11 @@ const Reference = forwardRef(({className, children}, ref) => {
   return (
     <button
       ref={ref}
-      className={`text-sm z-50 font-bold text-gray-900 bg-gray-50 p-2 w-24 h-24 border-2 border-gray-900 border-dashed cursor-default ${className}`}
+      className={cn(
+        `text-sm z-50 font-bold text-gray-900 bg-gray-50 p-2 w-24 h-24 border-2 border-gray-900 border-dashed cursor-default`,
+        className
+      )}
+      aria-label="Reference element"
     >
       {children}
     </button>
@@ -554,13 +558,11 @@ function HomePage() {
           />
 
           <div className="flex flex-row justify-center gap-x-4 mt-24 z-1 relative">
-            <Link href="/docs/getting-started">
-              <a
-                className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-red-300 via-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
-                href="/docs/getting-started"
-              >
-                Get Started <ArrowRight />
-              </a>
+            <Link
+              href="/docs/getting-started"
+              className="flex items-center gap-2 transition hover:saturate-110 hover:brightness-110 bg-gradient-to-br from-red-300 via-violet-300 to-cyan-400 shadow-lg hover:shadow-xl rounded text-gray-900 px-4 py-3 sm:text-lg font-bold whitespace-nowrap"
+            >
+              Get Started <ArrowRight />
             </Link>
             <a
               href="https://github.com/floating-ui/floating-ui"
@@ -668,7 +670,7 @@ function HomePage() {
                       ()
                     </span>
                   </code>
-                  <span className="text-md text-green-500 dark:text-green-400 text-left [font-variant-numeric:tabular-nums]">
+                  <span className="text-md text-green-600 dark:text-green-400 text-left [font-variant-numeric:tabular-nums]">
                     +{size}
                   </span>
                 </div>
@@ -698,17 +700,15 @@ function HomePage() {
             portals, backdrop overlays, screen reader support,
             and more.
           </p>
-          <Link href="/docs/react">
-            <a
-              href="/docs/react"
-              className="transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-4 rounded-md font-bold text-md"
-            >
-              Use Floating UI with React{' '}
-              <ArrowRight
-                className="inline-block relative top-[-1px]"
-                size={20}
-              />
-            </a>
+          <Link
+            href="/docs/react"
+            className="transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-4 rounded-md font-bold text-md"
+          >
+            Use Floating UI with React{' '}
+            <ArrowRight
+              className="inline-block relative top-[-1px]"
+              size={20}
+            />
           </Link>
         </div>
 
@@ -749,13 +749,11 @@ function HomePage() {
               <p className="text-lg">
                 Install with npm, Yarn, or pnpm.
               </p>
-              <Link href="/docs/getting-started">
-                <a
-                  href="/docs/getting-started"
-                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
-                >
-                  Get started <ArrowRight />
-                </a>
+              <Link
+                href="/docs/getting-started"
+                className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
+              >
+                Get started <ArrowRight />
               </Link>
             </div>
             <div className="border dark:border-gray-200 dark:text-gray-100 rounded-lg py-8 px-12">
@@ -763,13 +761,11 @@ function HomePage() {
               <p className="text-lg">
                 Install with the jsDelivr CDN.
               </p>
-              <Link href="/docs/getting-started#cdn">
-                <a
-                  href="/docs/getting-started#cdn"
-                  className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
-                >
-                  Get started <ArrowRight />
-                </a>
+              <Link
+                href="/docs/getting-started#cdn"
+                className="text-xl font-bold flex gap-2 items-center mt-4 text-rose-500 dark:text-rose-300"
+              >
+                Get started <ArrowRight />
               </Link>
             </div>
           </div>

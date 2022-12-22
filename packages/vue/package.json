@@ -65,7 +65,7 @@
     }
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.0.0",
+    "@floating-ui/dom": "^1.0.12",
     "vue-demi": "^0.13.11"
   },
   "devDependencies": {
