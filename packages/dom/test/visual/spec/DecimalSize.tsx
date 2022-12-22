@@ -89,7 +89,7 @@ export function DecimalSize() {
         {[true, false].map((localTruncate) => (
           <button
             key={String(localTruncate)}
-            data-testid={`decimal-size-${localTruncate}`}
+            data-testid={`truncate-${localTruncate}`}
             onClick={() => setTruncate(localTruncate)}
             style={{
               backgroundColor: truncate === localTruncate ? 'black' : '',
