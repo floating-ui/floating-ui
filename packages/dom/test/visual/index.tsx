@@ -30,6 +30,7 @@ import {Inner} from './spec/Inner';
 import {ShadowDOM} from './spec/ShadowDOM';
 import {ContainingBlock} from './spec/ContainingBlock';
 import {Perf} from './spec/Perf';
+import {IFrame} from './spec/IFrame';
 
 import {New} from './utils/New';
 import {VirtualElement} from './spec/VirtualElement';
@@ -57,6 +58,7 @@ const ROUTES = [
   {path: 'containing-block', component: ContainingBlock},
   {path: 'virtual-element', component: VirtualElement},
   {path: 'perf', component: Perf},
+  {path: 'iframe', component: IFrame},
 ];
 
 function App() {

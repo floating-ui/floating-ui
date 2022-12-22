@@ -1,6 +1,7 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {isElement, isLayoutViewport} from './is';
+import {unwrapElement} from './unwrapElement';
 import {getWindow} from './window';
 
 export function getBoundingClientRect(
@@ -10,6 +11,7 @@ export function getBoundingClientRect(
   offsetParent?: Element | Window
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
+  const domElement = unwrapElement(element);
 
   let scale = FALLBACK_SCALE;
   if (includeScale) {
@@ -22,19 +24,50 @@ export function getBoundingClientRect(
     }
   }
 
-  const win = isElement(element) ? getWindow(element) : window;
+  const win = domElement ? getWindow(domElement) : window;
   const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
 
-  const x =
+  let x =
     (clientRect.left +
-      (addVisualOffsets ? win.visualViewport?.offsetLeft ?? 0 : 0)) /
+      (addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0)) /
     scale.x;
-  const y =
+  let y =
     (clientRect.top +
-      (addVisualOffsets ? win.visualViewport?.offsetTop ?? 0 : 0)) /
+      (addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0)) /
     scale.y;
-  const width = clientRect.width / scale.x;
-  const height = clientRect.height / scale.y;
+  let width = clientRect.width / scale.x;
+  let height = clientRect.height / scale.y;
+
+  if (domElement) {
+    const win = getWindow(domElement);
+    const offsetWin =
+      offsetParent && isElement(offsetParent)
+        ? getWindow(offsetParent)
+        : offsetParent;
+
+    let currentIFrame = win.frameElement;
+    while (currentIFrame && offsetParent && offsetWin !== win) {
+      const iframeScale = getScale(currentIFrame);
+      const iframeRect = currentIFrame.getBoundingClientRect();
+      const css = getComputedStyle(currentIFrame);
+
+      iframeRect.x +=
+        (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) *
+        iframeScale.x;
+      iframeRect.y +=
+        (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
+
+      x *= iframeScale.x;
+      y *= iframeScale.y;
+      width *= iframeScale.x;
+      height *= iframeScale.y;
+
+      x += iframeRect.x;
+      y += iframeRect.y;
+
+      currentIFrame = getWindow(currentIFrame).frameElement;
+    }
+  }
 
   return {
     width,
