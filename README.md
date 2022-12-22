@@ -164,6 +164,15 @@ Below the main container are UI controls to turn on certain state and options.
 Every single combination of state is tested visually via the snapshots to cover
 as much as possible.
 
+## README Sponsors
+
+<a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer">
+  <img width="100" height="100" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Milford" />
+</a>
+
+You can sponsor Floating UI in a variety of ways on
+[Open Collective](https://opencollective.com/floating-ui).
+
 ## Credits
 
 The floating shapes in the banner image are made by the amazing artists
