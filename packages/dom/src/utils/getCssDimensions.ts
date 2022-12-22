@@ -1,5 +1,6 @@
 import type {Dimensions} from '@floating-ui/core';
 import {round} from './math';
+import {getComputedStyle} from './getComputedStyle';
 
 export function getCssDimensions(
   element: HTMLElement,
