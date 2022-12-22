@@ -69,10 +69,10 @@
     "vue-demi": "^0.13.11"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.16.4",
-    "@babel/preset-typescript": "^7.16.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
     "@parcel/transformer-vue": "^2.6.0",
-    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-replace": "^3.0.0",
@@ -80,7 +80,7 @@
     "@types/jest": "^27.0.3",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "jest": "^27.3.1",
-    "rollup": "^2.60.1",
+    "rollup": "^2.79.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^27.0.7",
     "vue": "^3.2.45"
