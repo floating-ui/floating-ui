@@ -37,7 +37,6 @@
     "index.d.ts",
     "src/**/*.d.ts"
   ],
-  "browserslist": "> 0.5%, not dead, not IE 11",
   "scripts": {
     "test": "jest test",
     "dev": "rollup -c -w",

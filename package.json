@@ -39,6 +39,14 @@
     "bracketSpacing": false,
     "proseWrap": "always"
   },
+  "browserslist": [
+    "Chrome >= 73",
+    "Firefox >= 78",
+    "Edge >= 79",
+    "Safari >= 12.0",
+    "iOS >= 12.0",
+    "Opera >= 53"
+  ],
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.18.6",
