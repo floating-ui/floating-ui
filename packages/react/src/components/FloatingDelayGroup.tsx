@@ -8,6 +8,7 @@ interface GroupState {
   delay: Delay;
   initialDelay: Delay;
   currentId: any;
+  timeoutMs: number;
 }
 
 interface GroupContext extends GroupState {
@@ -23,6 +24,7 @@ const FloatingDelayGroupContext = React.createContext<
 >({
   delay: 0,
   initialDelay: 0,
+  timeoutMs: 0,
   currentId: null,
   setCurrentId: () => {},
   setState: () => {},
@@ -39,12 +41,15 @@ export const useDelayGroupContext = (): GroupContext =>
 export const FloatingDelayGroup = ({
   children,
   delay,
+  timeoutMs = 0,
 }: {
   children?: React.ReactNode;
   delay: Delay;
+  timeoutMs?: number;
 }): JSX.Element => {
   const [state, setState] = React.useState<GroupState>({
     delay,
+    timeoutMs,
     initialDelay: delay,
     currentId: null,
   });
@@ -73,10 +78,13 @@ export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions
 ) => {
-  const {currentId, initialDelay, setState} = useDelayGroupContext();
+  const {currentId, initialDelay, setState, timeoutMs} = useDelayGroupContext();
+  const timeoutIdRef = React.useRef<number>();
 
   React.useEffect(() => {
     if (currentId) {
+      clearTimeout(timeoutIdRef.current);
+
       setState((state) => ({
         ...state,
         delay: {open: 1, close: getDelay(initialDelay, 'close')},
@@ -89,9 +97,25 @@ export const useDelayGroup = (
   }, [id, onOpenChange, setState, currentId, initialDelay]);
 
   React.useEffect(() => {
-    if (!open && currentId === id) {
+    function unset() {
       onOpenChange(false);
       setState((state) => ({...state, delay: initialDelay, currentId: null}));
     }
-  }, [open, setState, currentId, id, onOpenChange, initialDelay]);
+
+    clearTimeout(timeoutIdRef.current);
+
+    if (!open && currentId === id) {
+      if (timeoutMs) {
+        timeoutIdRef.current = window.setTimeout(unset, timeoutMs);
+      } else {
+        unset();
+      }
+    }
+  }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
+
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timeoutIdRef.current);
+    };
+  }, []);
 };
