@@ -92,7 +92,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
               contextElement: node,
             }
           : node
-      ) as RT;
+      ) as RT | null;
 
       reference(positionReference);
     },
