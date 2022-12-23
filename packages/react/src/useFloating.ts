@@ -73,7 +73,29 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
         setDomReference(node);
       }
 
-      reference(node);
+      if (
+        context.refs.reference.current === null ||
+        isElement(context.refs.reference.current)
+      ) {
+        reference(node);
+      }
+    },
+    [reference, context.refs]
+  );
+
+  const setPositionReference = React.useCallback(
+    (node: RT | null) => {
+      const positionReference = (
+        isElement(node)
+          ? {
+              getBoundingClientRect: () => node.getBoundingClientRect(),
+              contextElement: node,
+            }
+          : node
+      ) as RT;
+
+      context.refs.reference.current = positionReference;
+      reference(positionReference);
     },
     [reference, context.refs]
   );
@@ -84,7 +106,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       context,
       refs,
       reference: setReference,
+      positionReference: setPositionReference,
     }),
-    [position, refs, context, setReference]
+    [position, refs, context, setReference, setPositionReference]
   );
 }
