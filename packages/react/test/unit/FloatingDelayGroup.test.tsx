@@ -125,3 +125,70 @@ test('groups delays correctly', async () => {
 
   expect(screen.queryByTestId('floating-three')).not.toBeInTheDocument();
 });
+
+test('timeoutMs', async () => {
+  function App() {
+    return (
+      <FloatingDelayGroup delay={{open: 1000, close: 100}} timeoutMs={500}>
+        <Tooltip label="one">
+          <button data-testid="reference-one" />
+        </Tooltip>
+        <Tooltip label="two">
+          <button data-testid="reference-two" />
+        </Tooltip>
+        <Tooltip label="three">
+          <button data-testid="reference-three" />
+        </Tooltip>
+      </FloatingDelayGroup>
+    );
+  }
+
+  render(<App />);
+
+  fireEvent.mouseEnter(screen.getByTestId('reference-one'));
+
+  await act(async () => {
+    jest.advanceTimersByTime(1000);
+  });
+
+  fireEvent.mouseLeave(screen.getByTestId('reference-one'));
+
+  expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
+
+  await act(async () => {
+    jest.advanceTimersByTime(499);
+  });
+
+  expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
+
+  fireEvent.mouseEnter(screen.getByTestId('reference-two'));
+
+  await act(async () => {
+    jest.advanceTimersByTime(1);
+  });
+
+  expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
+
+  fireEvent.mouseEnter(screen.getByTestId('reference-three'));
+
+  await act(async () => {
+    jest.advanceTimersByTime(1);
+  });
+
+  expect(screen.queryByTestId('floating-two')).not.toBeInTheDocument();
+  expect(screen.queryByTestId('floating-three')).toBeInTheDocument();
+
+  fireEvent.mouseLeave(screen.getByTestId('reference-three'));
+
+  await act(async () => {
+    jest.advanceTimersByTime(1);
+  });
+
+  expect(screen.queryByTestId('floating-three')).toBeInTheDocument();
+
+  await act(async () => {
+    jest.advanceTimersByTime(99);
+  });
+
+  expect(screen.queryByTestId('floating-three')).not.toBeInTheDocument();
+});
