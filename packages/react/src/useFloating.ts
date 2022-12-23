@@ -94,10 +94,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
           : node
       ) as RT;
 
-      context.refs.reference.current = positionReference;
       reference(positionReference);
     },
-    [reference, context.refs]
+    [reference]
   );
 
   return React.useMemo(
