@@ -1,5 +1,5 @@
 import type {Side} from '@floating-ui/core';
-import type {ReferenceType} from '@floating-ui/react-dom';
+import type {ReferenceType} from './types';
 import type {HandleCloseFn} from './hooks/useHover';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
