@@ -218,6 +218,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
+            removePolygon();
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
@@ -246,6 +247,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         y: event.clientY,
         leave: true,
         onClose() {
+          removePolygon();
           cleanupMouseMoveHandler();
           closeWithDelay();
         },
@@ -288,6 +290,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     delayRef,
     handleCloseRef,
     dataRef,
+    removePolygon,
   ]);
 
   useLayoutEffect(() => {
