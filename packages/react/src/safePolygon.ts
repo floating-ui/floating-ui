@@ -41,7 +41,10 @@ function createPolygonElement(points: Point[], doc: Document) {
 
   const polygon = doc.createElementNS(svgNs, 'polygon');
   polygon.setAttribute('points', points.map(([x, y]) => `${x},${y}`).join(' '));
-  polygon.style.pointerEvents = 'auto';
+  Object.assign(polygon.style, {
+    pointerEvents: 'auto',
+    fill: 'transparent',
+  });
 
   svg.appendChild(polygon);
 
