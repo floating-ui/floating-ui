@@ -1,9 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {
-  useFloatingParentNodeId,
-  useFloatingTree,
-} from '../components/FloatingTree';
+import {useFloatingTree} from '../components/FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -14,17 +11,15 @@ import {getDocument} from '../utils/getDocument';
 import {isElement} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
-interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
+export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   (
     context: FloatingContext<RT> & {
       onClose: () => void;
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
+      polygonRef: React.MutableRefObject<SVGElement | null>;
     }
   ): (event: MouseEvent) => void;
-  __options: {
-    blockPointerEvents: boolean;
-  };
 }
 
 // On some Linux machines with Chromium, mouse inputs return a `pointerType` of
@@ -74,7 +69,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const {open, onOpenChange, dataRef, events, refs, _} = context;
 
   const tree = useFloatingTree<RT>();
-  const parentId = useFloatingParentNodeId();
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
 
@@ -83,12 +77,17 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const handlerRef = React.useRef<(event: MouseEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
-  const performedPointerEventsMutationRef = React.useRef(false);
+  const polygonRef = React.useRef<SVGElement | null>(null);
 
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
     return type?.includes('mouse') && type !== 'mousedown';
   }, [dataRef]);
+
+  const removePolygon = React.useCallback(() => {
+    polygonRef.current?.remove();
+    polygonRef.current = null;
+  }, []);
 
   // When dismissing before opening, clear the delay timeouts to cancel it
   // from showing.
@@ -155,11 +154,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
   }, [refs]);
 
-  const clearPointerEvents = React.useCallback(() => {
-    getDocument(refs.floating.current).body.style.pointerEvents = '';
-    performedPointerEventsMutationRef.current = false;
-  }, [refs]);
-
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
@@ -220,10 +214,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         handlerRef.current = handleCloseRef.current({
           ...context,
           tree,
+          polygonRef,
           x: event.clientX,
           y: event.clientY,
           onClose() {
-            clearPointerEvents();
+            removePolygon();
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
@@ -247,11 +242,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       handleCloseRef.current?.({
         ...context,
         tree,
+        polygonRef,
         x: event.clientX,
         y: event.clientY,
         leave: true,
         onClose() {
-          clearPointerEvents();
+          removePolygon();
           cleanupMouseMoveHandler();
           closeWithDelay();
         },
@@ -287,7 +283,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move,
     closeWithDelay,
     cleanupMouseMoveHandler,
-    clearPointerEvents,
     onOpenChange,
     open,
     tree,
@@ -295,79 +290,25 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     delayRef,
     handleCloseRef,
     dataRef,
-  ]);
-
-  // Block pointer-events of every element other than the reference and floating
-  // while the floating element is open and has a `handleClose` handler. Also
-  // handles nested floating elements.
-  // https://github.com/floating-ui/floating-ui/issues/1722
-  useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
-
-    if (
-      open &&
-      handleCloseRef.current &&
-      handleCloseRef.current.__options.blockPointerEvents &&
-      isHoverOpen()
-    ) {
-      getDocument(refs.floating.current).body.style.pointerEvents = 'none';
-      performedPointerEventsMutationRef.current = true;
-      const reference = refs.domReference.current;
-      const floating = refs.floating.current;
-
-      if (isElement(reference) && floating) {
-        const parentFloating = tree?.nodesRef.current.find(
-          (node) => node.id === parentId
-        )?.context?.refs.floating.current;
-
-        if (parentFloating) {
-          parentFloating.style.pointerEvents = '';
-        }
-
-        reference.style.pointerEvents = 'auto';
-        floating.style.pointerEvents = 'auto';
-
-        return () => {
-          reference.style.pointerEvents = '';
-          floating.style.pointerEvents = '';
-        };
-      }
-    }
-  }, [
-    enabled,
-    open,
-    parentId,
-    refs,
-    tree,
-    handleCloseRef,
-    dataRef,
-    isHoverOpen,
+    removePolygon,
   ]);
 
   useLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       cleanupMouseMoveHandler();
-
-      if (performedPointerEventsMutationRef.current) {
-        clearPointerEvents();
-      }
+      removePolygon();
     }
-  }, [open, cleanupMouseMoveHandler, clearPointerEvents]);
+  }, [open, cleanupMouseMoveHandler, removePolygon]);
 
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
-
-      if (performedPointerEventsMutationRef.current) {
-        clearPointerEvents();
-      }
+      removePolygon();
     };
-  }, [enabled, cleanupMouseMoveHandler, clearPointerEvents]);
+  }, [enabled, cleanupMouseMoveHandler, removePolygon]);
 
   return React.useMemo(() => {
     if (!enabled) {
