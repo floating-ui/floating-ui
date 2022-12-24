@@ -3,6 +3,7 @@ import type {ReferenceType} from '@floating-ui/react-dom';
 import type {HandleCloseFn} from './hooks/useHover';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
+import {getDocument} from './utils/getDocument';
 import {getTarget} from './utils/getTarget';
 import {isElement} from './utils/is';
 
@@ -27,8 +28,8 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
 
 const svgNs = 'http://www.w3.org/2000/svg';
 
-function createPolygonElement(points: Point[]) {
-  const svg = document.createElementNS(svgNs, 'svg');
+function createPolygonElement(points: Point[], doc: Document) {
+  const svg = doc.createElementNS(svgNs, 'svg');
   Object.assign(svg.style, {
     position: 'fixed',
     left: 0,
@@ -38,7 +39,7 @@ function createPolygonElement(points: Point[]) {
     pointerEvents: 'none',
   });
 
-  const polygon = document.createElementNS(svgNs, 'polygon');
+  const polygon = doc.createElementNS(svgNs, 'polygon');
   polygon.setAttribute('points', points.map(([x, y]) => `${x},${y}`).join(' '));
   polygon.style.pointerEvents = 'auto';
 
@@ -359,8 +360,9 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const poly = getPolygon([x, y]);
 
       if (!polygonRef.current && blockPointerEvents && leave) {
-        polygonRef.current = createPolygonElement(poly);
-        document.body.appendChild(polygonRef.current);
+        const doc = getDocument(refs.floating.current);
+        polygonRef.current = createPolygonElement(poly, doc);
+        doc.body.appendChild(polygonRef.current);
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
