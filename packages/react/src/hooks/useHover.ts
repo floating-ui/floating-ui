@@ -8,7 +8,7 @@ import type {
   ReferenceType,
 } from '../types';
 import {getDocument} from '../utils/getDocument';
-import {isElement} from '../utils/is';
+import {isElement, isMouseLikePointerType} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
 export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
@@ -22,16 +22,12 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   ): (event: MouseEvent) => void;
 }
 
-// On some Linux machines with Chromium, mouse inputs return a `pointerType` of
-// "pen": https://github.com/floating-ui/floating-ui/issues/2015
-const mouseLikePointerTypes = ['mouse', 'pen', '', undefined];
-
 export function getDelay(
   value: Props['delay'],
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
-  if (pointerType && !mouseLikePointerTypes.includes(pointerType)) {
+  if (pointerType && !isMouseLikePointerType(pointerType)) {
     return 0;
   }
 
@@ -173,8 +169,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       blockMouseMoveRef.current = false;
 
       if (
-        (mouseOnly &&
-          !mouseLikePointerTypes.includes(pointerTypeRef.current)) ||
+        (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) ||
         (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
       ) {
         return;

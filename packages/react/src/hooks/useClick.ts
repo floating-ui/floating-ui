@@ -1,7 +1,7 @@
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import * as React from 'react';
 import {isTypeableElement} from '../utils/isTypeableElement';
-import {isHTMLElement} from '../utils/is';
+import {isHTMLElement, isMouseLikePointerType} from '../utils/is';
 
 function isButtonTarget(event: React.KeyboardEvent<Element>) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
@@ -52,7 +52,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (pointerTypeRef.current === 'mouse' && ignoreMouse) {
+          if (isMouseLikePointerType(pointerTypeRef.current) && ignoreMouse) {
             return;
           }
 
@@ -83,7 +83,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (pointerTypeRef.current === 'mouse' && ignoreMouse) {
+          if (isMouseLikePointerType(pointerTypeRef.current) && ignoreMouse) {
             return;
           }
 
