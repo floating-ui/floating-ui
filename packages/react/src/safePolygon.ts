@@ -1,5 +1,6 @@
 import type {Side} from '@floating-ui/core';
-import type {FloatingContext, FloatingTreeType, ReferenceType} from './types';
+import type {ReferenceType} from '@floating-ui/react-dom';
+import type {HandleCloseFn} from './hooks/useHover';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
 import {getTarget} from './utils/getTarget';
@@ -24,21 +25,46 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
   return isInside;
 }
 
+function createPolygonElement(points: Point[]) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  Object.assign(svg.style, {
+    position: 'fixed',
+    left: 0,
+    top: 0,
+    pointerEvents: 'none',
+    width: '100%',
+    height: '100%',
+  });
+
+  const polygon = document.createElementNS(
+    'http://www.w3.org/2000/svg',
+    'polygon'
+  );
+  polygon.setAttribute('points', points.map(([x, y]) => `${x},${y}`).join(' '));
+  Object.assign(polygon.style, {
+    fill: 'red',
+    opacity: 0.1,
+    pointerEvents: 'auto',
+  });
+
+  svg.appendChild(polygon);
+
+  return svg;
+}
+
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0.5,
   blockPointerEvents = true,
-  debug = null,
 }: Partial<{
   restMs: number;
   buffer: number;
   blockPointerEvents: boolean;
-  debug: null | ((points?: string | null) => void);
 }> = {}) {
   let timeoutId: NodeJS.Timeout;
   let polygonIsDestroyed = false;
 
-  const fn = ({
+  const fn: HandleCloseFn<RT> = ({
     x,
     y,
     placement,
@@ -47,10 +73,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     nodeId,
     tree,
     leave = false,
-  }: FloatingContext<RT> & {
-    onClose: () => void;
-    tree?: FloatingTreeType<RT> | null;
-    leave?: boolean;
+    polygonRef,
   }) => {
     return function onMouseMove(event: MouseEvent) {
       clearTimeout(timeoutId);
@@ -340,8 +363,9 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       const poly = getPolygon([x, y]);
 
-      if (__DEV__) {
-        debug?.(poly.slice(0, 4).join(', '));
+      if (!polygonRef.current && blockPointerEvents && leave) {
+        polygonRef.current = createPolygonElement(poly);
+        document.body.appendChild(polygonRef.current);
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
@@ -350,10 +374,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         timeoutId = setTimeout(onClose, restMs);
       }
     };
-  };
-
-  fn.__options = {
-    blockPointerEvents,
   };
 
   return fn;
