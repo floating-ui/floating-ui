@@ -25,27 +25,22 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
   return isInside;
 }
 
+const svgNs = 'http://www.w3.org/2000/svg';
+
 function createPolygonElement(points: Point[]) {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const svg = document.createElementNS(svgNs, 'svg');
   Object.assign(svg.style, {
     position: 'fixed',
     left: 0,
     top: 0,
-    pointerEvents: 'none',
     width: '100%',
     height: '100%',
+    pointerEvents: 'none',
   });
 
-  const polygon = document.createElementNS(
-    'http://www.w3.org/2000/svg',
-    'polygon'
-  );
+  const polygon = document.createElementNS(svgNs, 'polygon');
   polygon.setAttribute('points', points.map(([x, y]) => `${x},${y}`).join(' '));
-  Object.assign(polygon.style, {
-    fill: 'red',
-    opacity: 0.1,
-    pointerEvents: 'auto',
-  });
+  polygon.style.pointerEvents = 'auto';
 
   svg.appendChild(polygon);
 
