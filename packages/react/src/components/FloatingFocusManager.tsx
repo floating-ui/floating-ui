@@ -200,12 +200,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(floating, relatedTarget) ||
         contains(relatedTarget, floating) ||
         contains(portalContext?.portalNode, relatedTarget) ||
-        [
-          portalContext?.beforeOutsideRef.current,
-          portalContext?.afterOutsideRef.current,
-        ]
-          .filter(Boolean)
-          .includes(relatedTarget as HTMLSpanElement | null) ||
+        relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
         (tree &&
           (getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
