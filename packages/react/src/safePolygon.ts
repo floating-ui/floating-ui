@@ -37,6 +37,7 @@ function createPolygonElement(points: Point[], doc: Document) {
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
+    zIndex: 2147483647,
   });
 
   const polygon = doc.createElementNS(svgNs, 'polygon');
