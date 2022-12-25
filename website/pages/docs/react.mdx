@@ -309,8 +309,16 @@ the type when performing DOM operations on the ref:
 
 ```js
 const {refs} = useFloating<HTMLButtonElement>();
+
+// @floating-ui/react
+// refs.domReference.current is now of type HTMLButtonElement
+
+// @floating-ui/react-dom
 // refs.reference.current is now of type HTMLButtonElement
 ```
+
+In the full package, it is narrowed on `domReference`, as the
+[position can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events).
 
 ## Variable freshness
 
