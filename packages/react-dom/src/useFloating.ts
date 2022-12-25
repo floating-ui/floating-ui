@@ -16,16 +16,21 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   placement = 'bottom',
   strategy = 'absolute',
   whileElementsMounted,
+  open,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
-  const [data, setData] = React.useState<UseFloatingData>({
-    // Setting these to `null` will allow the consumer to determine if
-    // `computePosition()` has run yet
-    x: null,
-    y: null,
-    strategy,
-    placement,
-    middlewareData: {},
-  });
+  const initialData = React.useMemo(
+    () => ({
+      x: null,
+      y: null,
+      strategy,
+      placement,
+      middlewareData: {},
+      isPositioned: false,
+    }),
+    [strategy, placement]
+  );
+
+  const [data, setData] = React.useState<UseFloatingData>(initialData);
 
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
@@ -51,20 +56,20 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       strategy,
     }).then((data) => {
       if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
-        dataRef.current = data;
+        const value = {...data, isPositioned: true};
+        dataRef.current = value;
         ReactDOM.flushSync(() => {
-          setData(data);
+          setData(value);
         });
       }
     });
   }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
-    // Skip first update
-    if (isMountedRef.current) {
-      update();
+    if (open === false && dataRef.current.isPositioned) {
+      setData((data) => ({...data, isPositioned: false}));
     }
-  }, [update]);
+  }, [open]);
 
   const isMountedRef = React.useRef(false);
   useLayoutEffect(() => {

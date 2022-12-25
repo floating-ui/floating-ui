@@ -28,6 +28,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
   const position = usePosition<RT>({
+    open,
     placement,
     middleware,
     strategy,

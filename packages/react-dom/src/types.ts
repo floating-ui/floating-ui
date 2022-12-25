@@ -13,6 +13,7 @@ export {arrow} from './';
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
   y: number | null;
+  isPositioned: boolean;
 };
 
 export type ReferenceType = Element | VirtualElement;
@@ -37,4 +38,5 @@ export type UseFloatingProps<RT extends ReferenceType = ReferenceType> = Omit<
     floating: HTMLElement,
     update: () => void
   ) => void | (() => void);
+  open?: boolean;
 };

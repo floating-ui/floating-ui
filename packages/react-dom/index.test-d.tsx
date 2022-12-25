@@ -6,6 +6,7 @@ function App() {
   const arrowRef = useRef(null);
   useFloating();
   const {reference, floating, update} = useFloating({
+    open: true,
     placement: 'right',
     middleware: [
       shift(),
