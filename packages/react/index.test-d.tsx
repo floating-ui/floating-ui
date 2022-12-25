@@ -75,8 +75,15 @@ function NarrowRefType() {
 
   // @ts-expect-error
   floating1.refs.reference.current?.contains(document.body);
+  // @ts-expect-error
   floating2.refs.reference.current?.contains(document.body);
+  // @ts-expect-error
   floating3.refs.reference.current?.contains(document.body);
+
+  floating1.refs.domReference.current?.contains(document.body);
+  floating2.refs.domReference.current?.focus();
+  floating3.refs.domReference.current?.focus();
+
   return (
     <>
       <button ref={floating1.reference} />

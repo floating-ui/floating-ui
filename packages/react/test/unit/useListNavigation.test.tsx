@@ -201,7 +201,7 @@ test('resets indexRef to -1 upon close', async () => {
                     onClick() {
                       setInputValue(item);
                       setOpen(false);
-                      refs.reference.current?.focus();
+                      refs.domReference.current?.focus();
                     },
                   })}
                 >

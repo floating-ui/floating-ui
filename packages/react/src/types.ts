@@ -14,10 +14,12 @@ export * from '.';
 
 export {arrow} from '@floating-ui/react-dom';
 
-export interface ExtendedRefs<RT extends ReferenceType = ReferenceType> {
-  reference: React.MutableRefObject<RT | null>;
+export interface ExtendedRefs<RT> {
+  reference: React.MutableRefObject<ReferenceType | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
-  domReference: React.MutableRefObject<Element | null>;
+  domReference: React.MutableRefObject<
+    (RT extends Element ? RT : Element) | null
+  >;
 }
 
 export interface FloatingEvents {
@@ -36,7 +38,7 @@ export interface ContextData {
 }
 
 export interface FloatingContext<RT extends ReferenceType = ReferenceType>
-  extends UsePositionFloatingReturn<RT> {
+  extends Omit<UsePositionFloatingReturn<RT>, 'refs'> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
@@ -79,7 +81,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     update: () => void;
     reference: (node: RT | null) => void;
     floating: (node: HTMLElement | null) => void;
-    positionReference: (node: RT | null) => void;
+    positionReference: (node: ReferenceType | null) => void;
     context: FloatingContext<RT>;
     refs: ExtendedRefs<RT>;
     isPositioned: boolean;

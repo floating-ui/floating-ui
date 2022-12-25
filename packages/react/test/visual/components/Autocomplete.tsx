@@ -265,7 +265,11 @@ export function Main() {
       />
       <FloatingPortal>
         {open && (
-          <FloatingFocusManager context={context} visuallyHiddenDismiss>
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            visuallyHiddenDismiss
+          >
             <div
               {...getFloatingProps({
                 ref: floating,
@@ -289,7 +293,7 @@ export function Main() {
                     onClick() {
                       setInputValue(item);
                       setOpen(false);
-                      refs.reference.current?.focus();
+                      refs.domReference.current?.focus();
                     },
                   })}
                   active={activeIndex === index}

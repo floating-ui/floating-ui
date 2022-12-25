@@ -24,7 +24,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 }: Partial<UseFloatingProps> = {}): UseFloatingReturn<RT> {
   const [domReference, setDomReference] = React.useState<Element | null>(null);
   const tree = useFloatingTree<RT>();
-  const domReferenceRef = React.useRef<Element | null>(null);
+  const domReferenceRef = React.useRef<
+    (RT extends Element ? RT : Element) | null
+  >(null);
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
   const position = usePosition<RT>({
@@ -70,7 +72,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
     (node) => {
       if (isElement(node) || node === null) {
-        context.refs.domReference.current = node;
+        (
+          context.refs.domReference as React.MutableRefObject<Element | null>
+        ).current = node;
         setDomReference(node);
       }
 
@@ -85,17 +89,14 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   );
 
   const setPositionReference = React.useCallback(
-    (node: RT | null) => {
-      const positionReference = (
-        isElement(node)
-          ? {
-              getBoundingClientRect: () => node.getBoundingClientRect(),
-              contextElement: node,
-            }
-          : node
-      ) as RT | null;
-
-      reference(positionReference);
+    (node: ReferenceType | null) => {
+      const positionReference = isElement(node)
+        ? {
+            getBoundingClientRect: () => node.getBoundingClientRect(),
+            contextElement: node,
+          }
+        : node;
+      reference(positionReference as RT | null);
     },
     [reference]
   );
@@ -109,5 +110,5 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       positionReference: setPositionReference,
     }),
     [position, refs, context, setReference, setPositionReference]
-  );
+  ) as UseFloatingReturn<RT>;
 }
