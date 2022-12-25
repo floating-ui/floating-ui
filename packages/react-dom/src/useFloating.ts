@@ -20,8 +20,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
   const initialData = React.useMemo(
     () => ({
-      x: 0,
-      y: 0,
+      x: null,
+      y: null,
       strategy,
       placement,
       middlewareData: {},
@@ -66,18 +66,10 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
-    // Skip first update
-    if (isMountedRef.current && open === false) {
-      setData(initialData);
+    if (open === false && dataRef.current.isPositioned) {
+      setData((data) => ({...data, isPositioned: false}));
     }
-  }, [open, initialData]);
-
-  useLayoutEffect(() => {
-    // Skip first update
-    if (isMountedRef.current) {
-      update();
-    }
-  }, [update]);
+  }, [open]);
 
   const isMountedRef = React.useRef(false);
   useLayoutEffect(() => {
