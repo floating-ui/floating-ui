@@ -166,9 +166,13 @@ as much as possible.
 
 ## README Sponsors
 
-<a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer">
-  <img width="176" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" />
-</a>
+<table>
+  <tr>
+    <td>
+      <a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer"><img width="176" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" /></a>
+    </td>
+  </tr>
+</table>
 
 You can sponsor Floating UI in a variety of ways on
 [Open Collective](https://opencollective.com/floating-ui).
