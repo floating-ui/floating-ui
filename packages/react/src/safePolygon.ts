@@ -5,7 +5,7 @@ import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
 import {getDocument} from './utils/getDocument';
 import {getTarget} from './utils/getTarget';
-import {isElement} from './utils/is';
+import {isElement, isSafari} from './utils/is';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -29,11 +29,13 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
 const svgNs = 'http://www.w3.org/2000/svg';
 
 function createPolygonElement(points: Point[], doc: Document, isRect: boolean) {
+  const addVisualOffsets = isSafari();
+  const win = doc.defaultView || window;
   const svg = doc.createElementNS(svgNs, 'svg');
   Object.assign(svg.style, {
     position: 'fixed',
-    left: 0,
-    top: 0,
+    left: addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0,
+    top: addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0,
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
