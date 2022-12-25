@@ -34,8 +34,8 @@ function createPolygonElement(points: Point[], doc: Document, isRect: boolean) {
   const svg = doc.createElementNS(svgNs, 'svg');
   Object.assign(svg.style, {
     position: 'fixed',
-    left: addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0,
-    top: addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0,
+    left: `${addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0}px`,
+    top: `${addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0}px`,
     width: '100%',
     height: '100%',
     pointerEvents: 'none',
