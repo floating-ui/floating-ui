@@ -212,18 +212,5 @@ useHover(context, {
 });
 ```
 
-However, this does have some side-effects which is why you may
-want to disable it in favor of manually blocking pointer-events
-yourself:
-
-- If the cursor is resting on the reference element, any
-  scrolling containers (except the main window) cannot be
-  scrolled.
-- macOS' auto-hiding scrollbars will appear on scrolling
-  containers (except the main window) in Chrome.
-
-Another option is to add `pointer-events: auto{:sass}` to your
-scrolling container, then add an inner `<div>{:html}` inside the
-scrolling container that wraps all elements inside of it, and
-copies the `<body>{:html}` `pointer-events` style using a
-`MutationObserver{:.class}`.
+You may want to disable this in scenarios where the container
+element listens for mouse events, as they may fire unexpectedly.

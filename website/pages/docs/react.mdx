@@ -217,25 +217,36 @@ function MyComponent({referenceElement}) {
 
 Positioning is done in an async function, which means the
 position is ready during a microtask, after layout effects are
-executed.
+executed. This means initially, the floating element is situated
+at the top-left (0, 0) of its offset container — so calling DOM
+methods that cause side-effects like scrolling will result in
+unexpected behavior.
 
-Ensure you wait for the position to be ready inside layout
-effects in order to prevent unwanted scrolling. This can be
-achieved with `requestAnimationFrame(){:js}`.
+The hook returns an `isPositioned{:.const}` boolean that lets you
+know if the floating element has been positioned:
 
 ```js
+const [open, setOpen] = React.useState(false);
+const {isPositioned} = useFloating({
+  // Synchronize `isPositioned` with an `open` state.
+  open,
+});
+
+// Each time the floating element opens, we want to focus and
+// scroll some element into view.
 useLayoutEffect(() => {
-  if (isFloatingElementRendered) {
-    // Runs after microtasks (positioning) but before paint.
-    requestAnimationFrame(() => {
-      // Position is ready inside here. Unwanted scrolling
-      // will no longer occur.
-      someElement.focus();
-      someElement.scrollIntoView();
-    });
+  if (isPositioned) {
+    someElement.focus();
+    someElement.scrollIntoView();
   }
-}, [isFloatingElementRendered]);
+}, [isPositioned]);
 ```
+
+The `open` option accepts a boolean that represents the
+open/close state of the floating element. This ensures you can
+wait each time it opens when the host component does not unmount,
+which is necessary in cases where the reference element relocates
+on the page.
 
 ## Arrow
 
@@ -519,30 +530,18 @@ regular tooltip or popover).
 
 ## Changing the positioning reference while retaining events
 
-If you want anchor positioning to be relative to a different
-reference element than the one that receives events, this is
-possible.
+<Notice type="version">Available from v0.15.0</Notice>
 
-You may use a [virtual element](/docs/virtual-elements) that
-copies over the positioning reference's data by calling the
-reference callback ref with it. Make sure you continue to pass
-the callback ref to the element that should receive events as its
-ref prop.
+By default, the `reference{:.const}` element is **both** the
+events and position reference. The `positionReference{:.const}`
+callback ref allows you to separate the position to another
+element (either real or virtual):
 
-```js {1,5-9,13}
-const positioningRef = useRef();
-const {reference} = useFloating();
-
-useLayoutEffect(() => {
-  reference({
-    getBoundingClientRect: () =>
-      positioningRef.current.getBoundingClientRect(),
-    contextElement: positioningRef.current,
-  });
-}, [reference]);
+```js
+const {reference, positionReference} = useFloating();
 
 return (
-  <div ref={positioningRef}>
+  <div ref={positionReference}>
     <button ref={reference} {...getReferenceProps()}>
       Event reference
     </button>
@@ -554,11 +553,14 @@ return (
 
 ## Multiple floating elements on a single reference element
 
-Merge the `reference{:.objectKey}` refs on the element for each
-`useFloating(){:js}`, and call the `getReferenceProps(){:js}`
-prop getters inside one another.
+```js
+import {useMergeRefs} from '@floating-ui/react';
+```
 
-```js {12-16}
+Refs can be merged with the `useMergeRefs` hook, and props can be
+merged by calling one of the getters inside of the other:
+
+```js {9-10}
 const {reference: tooltipReference} = useFloating();
 const {reference: menuReference} = useFloating();
 
@@ -567,15 +569,12 @@ const {getReferenceProps: getTooltipReferenceProps} =
 const {getReferenceProps: getMenuReferenceProps} =
   useInteractions([]);
 
+const ref = useMergeRefs([tooltipReference, menuReference]);
+const props = getTooltipReferenceProps(getMenuReferenceProps());
+
 return (
   <>
-    <button
-      // `react-merge-refs` or similar library works fine.
-      ref={mergeRefs([tooltipReference, menuReference])}
-      // You can call one of the prop getters inside another one.
-      // They will merge as expected.
-      {...getTooltipReferenceProps(getMenuReferenceProps())}
-    >
+    <button ref={ref} {...props}>
       Common reference
     </button>
   </>

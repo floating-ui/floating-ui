@@ -51,6 +51,7 @@ interface Props {
   focusItemOnHover?: boolean;
   openOnArrowKeyDown?: boolean;
   disabledIndices?: Array<number>;
+  scrollIntoView?: boolean | ScrollIntoViewOptions;
 }
 ```
 
@@ -290,5 +291,20 @@ navigating via arrow keys, specify an empty array.
 ```js
 useListNavigation(context, {
   disabledIndices: [0, 3],
+});
+```
+
+### scrollIntoView
+
+<Notice type="version">Available from v0.15.0</Notice>
+
+default: `true{:js}`
+
+Whether to scroll the active item into view when navigating. The
+default value uses `nearest{:.string}` options.
+
+```js
+useListNavigation(context, {
+  scrollIntoView: false,
 });
 ```

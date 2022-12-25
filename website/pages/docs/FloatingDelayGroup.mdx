@@ -65,3 +65,48 @@ function Tooltip({label}) {
   // ...
 }
 ```
+
+## Props
+
+```js
+interface Props {
+  delay: Delay;
+  timeoutMs?: number;
+}
+```
+
+### delay
+
+**Required**
+
+default: `0{:js}`
+
+The delay to use for the group.
+
+```js
+<FloatingDelayGroup
+  // Both open and close
+  delay={200}
+  // Or, configured individually
+  delay={{open: 1000, close: 200}}
+>
+  {/* ... */}
+</FloatingDelayGroup>
+```
+
+### timeoutMs
+
+<Notice type="version">Available from v0.15.0</Notice>
+
+default: `0{:js}`
+
+An optional explicit timeout to use for the group, which
+represents when grouping logic will no longer be active. This is
+useful if you want grouping to "last" longer than the close
+delay, for example if there is no close delay at all.
+
+```js
+<FloatingDelayGroup timeoutMs={1000}>
+  {/* ... */}
+</FloatingDelayGroup>
+```
