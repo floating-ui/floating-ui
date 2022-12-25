@@ -19,7 +19,7 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, update} = useFloating({
+  const {reference, floating, positionReference, update} = useFloating({
     placement: 'right',
     middleware: [
       shift(),
@@ -48,6 +48,22 @@ function App() {
   reference(null);
   floating(null);
   update();
+  positionReference({
+    contextElement: document.body,
+    getBoundingClientRect() {
+      return {
+        x: 0,
+        y: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+      };
+    },
+  });
+  positionReference(document.body);
 
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
