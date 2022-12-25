@@ -215,6 +215,10 @@ function MyComponent({referenceElement}) {
 
 ## Effects
 
+<Notice type="version">
+  Available from v0.15.0 (react) or v1.1.0 (react-dom)
+</Notice>
+
 Positioning is done in an async function, which means the
 position is ready during a microtask, after layout effects are
 executed. This means initially, the floating element is situated
@@ -557,8 +561,11 @@ return (
 import {useMergeRefs} from '@floating-ui/react';
 ```
 
-Refs can be merged with the `useMergeRefs` hook, and props can be
-merged by calling one of the getters inside of the other:
+<Notice type="version">Available from v0.15.0</Notice>
+
+Refs can be merged with the [useMergeRefs](/docs/useMergeRefs)
+hook, and props can be merged by calling one of the getters
+inside of the other:
 
 ```js {9-10}
 const {reference: tooltipReference} = useFloating();
