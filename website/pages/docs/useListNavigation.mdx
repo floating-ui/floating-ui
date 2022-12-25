@@ -1,7 +1,7 @@
 # useListNavigation
 
-Adds focus-managed indexed navigation via arrow keys to a list of
-items within the floating element.
+Adds arrow key-based navigation of a list of items, either using
+real DOM focus or virtual focus.
 
 ```js
 import {useListNavigation} from '@floating-ui/react';
@@ -16,8 +16,8 @@ const {getReferenceProps, getFloatingProps, getItemProps} =
   useInteractions([listNavigation]);
 ```
 
-Spread `getItemProps(){:js}` to each list item. The list items
-must be focusable and should have an appropriate
+Spread `getItemProps(){:js}` to each list item. By default, the
+list items must be focusable and should have an appropriate
 `role{:.keyword}` prop based on the role of the floating element.
 
 ## Using with FloatingFocusManager
@@ -51,7 +51,7 @@ interface Props {
   focusItemOnHover?: boolean;
   openOnArrowKeyDown?: boolean;
   disabledIndices?: Array<number>;
-  scrollIntoView?: boolean | ScrollIntoViewOptions;
+  scrollItemIntoView?: boolean | ScrollIntoViewOptions;
 }
 ```
 
@@ -294,7 +294,7 @@ useListNavigation(context, {
 });
 ```
 
-### scrollIntoView
+### scrollItemIntoView
 
 <Notice type="version">Available from v0.15.0</Notice>
 
@@ -305,6 +305,6 @@ default value uses `nearest{:.string}` options.
 
 ```js
 useListNavigation(context, {
-  scrollIntoView: false,
+  scrollItemIntoView: false,
 });
 ```
