@@ -1,6 +1,7 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingTree} from '../components/FloatingTree';
+import {destroyPolygon} from '../safePolygon';
 import type {
   ElementProps,
   FloatingContext,
@@ -79,11 +80,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     const type = dataRef.current.openEvent?.type;
     return type?.includes('mouse') && type !== 'mousedown';
   }, [dataRef]);
-
-  const removePolygon = React.useCallback(() => {
-    polygonRef.current?.remove();
-    polygonRef.current = null;
-  }, []);
 
   // When dismissing before opening, clear the delay timeouts to cancel it
   // from showing.
@@ -213,7 +209,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
-            removePolygon();
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
@@ -240,9 +235,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         polygonRef,
         x: event.clientX,
         y: event.clientY,
-        leave: true,
         onClose() {
-          removePolygon();
           cleanupMouseMoveHandler();
           closeWithDelay();
         },
@@ -285,25 +278,24 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     delayRef,
     handleCloseRef,
     dataRef,
-    removePolygon,
   ]);
 
   useLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       cleanupMouseMoveHandler();
-      removePolygon();
+      destroyPolygon(polygonRef);
     }
-  }, [open, cleanupMouseMoveHandler, removePolygon]);
+  }, [open, cleanupMouseMoveHandler]);
 
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
-      removePolygon();
+      destroyPolygon(polygonRef);
     };
-  }, [enabled, cleanupMouseMoveHandler, removePolygon]);
+  }, [enabled, cleanupMouseMoveHandler]);
 
   return React.useMemo(() => {
     if (!enabled) {
