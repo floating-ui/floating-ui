@@ -162,7 +162,7 @@ export interface Props {
   virtual?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
-  scrollIntoView?: boolean | ScrollIntoViewOptions;
+  scrollItemIntoView?: boolean | ScrollIntoViewOptions;
 }
 
 /**
@@ -189,7 +189,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     disabledIndices = undefined,
     orientation = 'vertical',
     cols = 1,
-    scrollIntoView = true,
+    scrollItemIntoView = true,
   }: Props = {
     listRef: {current: []},
     activeIndex: null,
@@ -242,7 +242,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
-  const scrollIntoViewRef = useLatestRef(scrollIntoView);
+  const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
@@ -274,7 +274,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
 
       requestAnimationFrame(() => {
-        const scrollIntoView = scrollIntoViewRef.current;
+        const scrollIntoView = scrollItemIntoViewRef.current;
         if (scrollIntoView && item && !isPointerModalityRef.current) {
           // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
           // by all browsers.
@@ -286,7 +286,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
       });
     },
-    [virtual, scrollIntoViewRef]
+    [virtual, scrollItemIntoViewRef]
   );
 
   useLayoutEffect(() => {
