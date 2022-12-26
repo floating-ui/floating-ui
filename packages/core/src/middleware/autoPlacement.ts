@@ -42,7 +42,7 @@ export function getPlacementList(
 export interface Options {
   /**
    * Choose placements with a particular alignment.
-   * @default null
+   * @default undefined
    */
   alignment: Alignment | null;
   /**
@@ -73,17 +73,16 @@ export const autoPlacement = (
       middlewareArguments;
 
     const {
-      alignment = null,
+      alignment,
       allowedPlacements = allPlacements,
       autoAlignment = true,
       ...detectOverflowOptions
     } = options;
 
-    const placements = getPlacementList(
-      alignment,
-      autoAlignment,
-      allowedPlacements
-    );
+    const placements =
+      alignment !== undefined || allowedPlacements === allPlacements
+        ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
+        : allowedPlacements;
 
     const overflow = await detectOverflow(
       middlewareArguments,
