@@ -147,9 +147,17 @@ moves off the reference element and toward the floating element
 after hovering it. If the pointer moves outside of this safe
 area, the floating element closes.
 
-It is a dynamic 4-sided polygon (visually a triangle) originating
-from the cursor once it leaves a reference element.
-[You can see what it looks like here](https://twitter.com/atomiksdev/status/1505076100854337539).
+It is a dynamic polygon (either a rect or a triangle) originating
+from the cursor once it leaves a reference element. The triangle
+looks like this:
+
+<video
+  className="rounded-lg"
+  src="/safe-polygon.mp4"
+  autoPlay
+  loop
+  muted
+/>
 
 This function takes options.
 
@@ -212,18 +220,5 @@ useHover(context, {
 });
 ```
 
-However, this does have some side-effects which is why you may
-want to disable it in favor of manually blocking pointer-events
-yourself:
-
-- If the cursor is resting on the reference element, any
-  scrolling containers (except the main window) cannot be
-  scrolled.
-- macOS' auto-hiding scrollbars will appear on scrolling
-  containers (except the main window) in Chrome.
-
-Another option is to add `pointer-events: auto{:sass}` to your
-scrolling container, then add an inner `<div>{:html}` inside the
-scrolling container that wraps all elements inside of it, and
-copies the `<body>{:html}` `pointer-events` style using a
-`MutationObserver{:.class}`.
+You may want to disable this in scenarios where the container
+element listens for mouse events, as they may fire unexpectedly.
