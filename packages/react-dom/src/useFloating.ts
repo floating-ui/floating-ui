@@ -18,19 +18,14 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   whileElementsMounted,
   open,
 }: UseFloatingProps = {}): UseFloatingReturn<RT> {
-  const initialData = React.useMemo(
-    () => ({
-      x: null,
-      y: null,
-      strategy,
-      placement,
-      middlewareData: {},
-      isPositioned: false,
-    }),
-    [strategy, placement]
-  );
-
-  const [data, setData] = React.useState<UseFloatingData>(initialData);
+  const [data, setData] = React.useState<UseFloatingData>({
+    x: null,
+    y: null,
+    strategy,
+    placement,
+    middlewareData: {},
+    isPositioned: false,
+  });
 
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
