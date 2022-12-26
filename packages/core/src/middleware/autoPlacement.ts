@@ -73,17 +73,16 @@ export const autoPlacement = (
       middlewareArguments;
 
     const {
-      alignment = null,
+      alignment,
       allowedPlacements = allPlacements,
       autoAlignment = true,
       ...detectOverflowOptions
     } = options;
 
-    const placements = getPlacementList(
-      alignment,
-      autoAlignment,
-      allowedPlacements
-    );
+    const placements =
+      alignment !== undefined
+        ? getPlacementList(alignment, autoAlignment, allowedPlacements)
+        : allowedPlacements;
 
     const overflow = await detectOverflow(
       middlewareArguments,
