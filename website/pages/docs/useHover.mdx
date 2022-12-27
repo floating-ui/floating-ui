@@ -82,20 +82,22 @@ default: `0{:js}` (off)
 Waits until the user's cursor is at "rest" over the reference
 element before changing the open state.
 
-You can either:
+```js
+useHover(context, {
+  // Waits 150ms once the user's cursor is at rest
+  restMs: 150,
+});
+```
 
-- Use this on its own, without `delay{:.objectKey}` (which must
-  be set to `0{:js}` which is the default), or
-- Use this as a more eager version of `delay{:.objectKey}`, where
-  `delay{:.objectKey}` will then act as a fallback value.
+You can also use a fallback delay if the user's cursor never
+rests, to ensure the floating element will eventually show:
 
 ```js
 useHover(context, {
   // Waits 150ms once the user's cursor is at rest
   restMs: 150,
-
-  delay: {open: 1000}, // 1000ms fallback open value
-  delay: 0, // OR no fallback value
+  // If their cursor never rests, open it after 1000ms (fallback)
+  delay: {open: 1000},
 });
 ```
 
