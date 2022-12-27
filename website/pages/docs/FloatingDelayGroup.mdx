@@ -35,10 +35,15 @@ function App() {
 Relevant APIs to use with a `<FloatingDelayGroup />{:js}`:
 
 - `useDelayGroupContext(){:js}`
-- `useDelayGroup(){:js}` interaction
+- `useDelayGroup(){:js}`
 
-Wrap your `onOpenChange{:.const}` callback with one that sets the
+Wrap your `onOpenChange{:.fn}` callback with one that sets the
 current id of the delay group context to the current component.
+
+<Notice>
+  The `id` must be unique. The label of a tooltip for example is
+  usually unique in a given group.
+</Notice>
 
 ```js {2,11,17,20} /delay/
 function Tooltip({label}) {

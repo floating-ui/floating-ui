@@ -51,6 +51,7 @@ module.exports = {
             },
             pre: {
               lineHeight: '2.1',
+              fontSize: '0.875rem',
             },
             img: {
               margin: '0',

@@ -297,7 +297,7 @@ const waitForPosition = () => act(async () => {});
 test('something', async () => {
   render(<Tooltip open />);
   await waitForPosition();
-  expect(screen.getByRole('tooltip')).toBeInTheDocument();
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 });
 ```
 

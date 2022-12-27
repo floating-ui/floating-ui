@@ -309,7 +309,7 @@ function Flip() {
           ref={setBoundary}
         >
           <Chrome
-            label="Scroll the container"
+            label="Scroll up"
             scrollable
             center
             shadow={false}

@@ -4,12 +4,7 @@
 the opposite one by default in order to keep it in view.
 
 <div className="flex flex-col gap-4">
-  <Chrome
-    label="Scroll the container"
-    center
-    scrollable
-    className="h-96"
-  >
+  <Chrome label="Scroll up" center scrollable className="h-96">
     <Floating middleware={[{name: 'flip'}]}>
       <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
     </Floating>
@@ -156,10 +151,10 @@ of them to use.
 
 The reason is they both try to perform work on the placement but
 with opposing strategies. Therefore, they will continually try to
-change the result or work of other one, leading to a reset loop.
+change the result or work of the other one, leading to a reset
+loop.
 
 - `flip(){:js}` — Uses a fallback "no space" strategy. Ensures
-  the user's preferred placement is kept unless there is no space
-  left.
+  the preferred placement is kept unless there is no space left.
 - `autoPlacement(){:js}` — Uses a primary "most space" strategy.
   Always chooses the placement with the most space available.
