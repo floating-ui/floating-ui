@@ -66,7 +66,7 @@ export const size = (
     const dimensions = {
       availableHeight:
         rects.floating.height -
-        (['left', 'right'].includes(placement)
+        (['left', 'right'].includes(side)
           ? 2 *
             (yMin !== 0 || yMax !== 0
               ? yMin + yMax
@@ -74,7 +74,7 @@ export const size = (
           : overflow[heightSide]),
       availableWidth:
         rects.floating.width -
-        (['top', 'bottom'].includes(placement)
+        (['top', 'bottom'].includes(side)
           ? 2 *
             (xMin !== 0 || xMax !== 0
               ? xMin + xMax
