@@ -147,7 +147,7 @@ export const autoPlacement = (
     )?.placement;
 
     const resetPlacement =
-      placementThatFitsOnAllSides ??
+      placementThatFitsOnAllSides ||
       placementsSortedByLeastOverflow[0].placement;
 
     if (resetPlacement !== placement) {
