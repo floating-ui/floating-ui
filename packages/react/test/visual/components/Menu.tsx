@@ -1,5 +1,4 @@
 import * as React from 'react';
-import mergeRefs from 'react-merge-refs';
 import {
   useFloating,
   offset,
@@ -18,6 +17,7 @@ import {
   useFloatingTree,
   useFloatingNodeId,
   useFloatingParentNodeId,
+  useMergeRefs,
   FloatingNode,
   FloatingTree,
   FloatingFocusManager,
@@ -44,11 +44,10 @@ interface MenuProps {
   nested?: boolean;
   children?: React.ReactNode;
 }
-
 export const MenuComponent = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
->(({children, label, ...props}, ref) => {
+>(({children, label, ...props}, forwardedRef) => {
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
@@ -70,12 +69,12 @@ export const MenuComponent = React.forwardRef<
       open,
       nodeId,
       onOpenChange: setOpen,
+      placement: nested ? 'right-start' : 'bottom-start',
       middleware: [
         offset({mainAxis: 4, alignmentAxis: nested ? -5 : 0}),
         flip(),
         shift(),
       ],
-      placement: nested ? 'right-start' : 'bottom-start',
       whileElementsMounted: autoUpdate,
     });
 
@@ -86,7 +85,7 @@ export const MenuComponent = React.forwardRef<
       delay: {open: 75},
     }),
     useClick(context, {
-      toggle: !nested,
+      toggle: !nested || !allowHover,
       event: 'mousedown',
       ignoreMouse: nested,
     }),
@@ -117,14 +116,16 @@ export const MenuComponent = React.forwardRef<
     return () => {
       tree?.events.off('click', handleTreeClick);
     };
-  }, [parentId, nodeId, tree]);
+  }, [tree]);
 
   // Determine if "hover" logic can run based on the modality of input. This
   // prevents unwanted focus synchronization as menus open and close with
   // keyboard navigation and the cursor is resting on the menu.
   React.useEffect(() => {
-    function onPointerMove() {
-      setAllowHover(true);
+    function onPointerMove({pointerType}: PointerEvent) {
+      if (pointerType === 'mouse') {
+        setAllowHover(true);
+      }
     }
 
     function onKeyDown() {
@@ -144,15 +145,12 @@ export const MenuComponent = React.forwardRef<
     };
   }, [allowHover]);
 
-  const mergedReferenceRef = React.useMemo(
-    () => mergeRefs([ref, reference]),
-    [reference, ref]
-  );
+  const referenceRef = useMergeRefs([reference, forwardedRef]);
 
   return (
     <FloatingNode id={nodeId}>
       <button
-        ref={mergedReferenceRef}
+        ref={referenceRef}
         {...getReferenceProps({
           ...props,
           className: `${nested ? 'MenuItem' : 'RootMenu'}${
@@ -169,7 +167,7 @@ export const MenuComponent = React.forwardRef<
       >
         {label}{' '}
         {nested && (
-          <span aria-hidden="true" style={{marginLeft: 10}}>
+          <span aria-hidden style={{marginLeft: 10}}>
             ➔
           </span>
         )}
@@ -178,16 +176,15 @@ export const MenuComponent = React.forwardRef<
         {open && (
           <FloatingFocusManager
             context={context}
-            // Make the root menu modal but nested submenus non-modal. Prevents
-            // outside interference when using VoiceOver/screen readers.
+            // Prevent outside content interference.
             modal={!nested}
-            // Only return focus to the root menu when menus close.
+            // Only initially focus the root floating menu.
+            initialFocus={nested ? -1 : 0}
+            // Only return focus to the root menu's reference when menus close.
             returnFocus={!nested}
-            // Ensure touch-based screen readers can escape the list without
-            // needing to select anything due to the modal focus management
-            // on the root menu.
+            // Allow touch screen readers to escape the modal root menu
+            // without selecting anything.
             visuallyHiddenDismiss
-            initialFocus={-1}
           >
             <div
               ref={floating}
@@ -198,7 +195,15 @@ export const MenuComponent = React.forwardRef<
                 left: x ?? 0,
                 width: 'max-content',
               }}
-              {...getFloatingProps()}
+              {...getFloatingProps({
+                // Pressing tab dismisses the menu and places focus
+                // back on the trigger.
+                onKeyDown(event) {
+                  if (event.key === 'Tab') {
+                    setOpen(false);
+                  }
+                },
+              })}
             >
               {React.Children.map(
                 children,
