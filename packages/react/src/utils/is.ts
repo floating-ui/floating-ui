@@ -67,8 +67,15 @@ export function isMac() {
   );
 }
 
-export function isMouseLikePointerType(pointerType: string | undefined) {
+export function isMouseLikePointerType(
+  pointerType: string | undefined,
+  strict?: boolean
+) {
   // On some Linux machines with Chromium, mouse inputs return a `pointerType`
   // of "pen": https://github.com/floating-ui/floating-ui/issues/2015
-  return ['mouse', 'pen', '', undefined].includes(pointerType);
+  const values: Array<string | undefined> = ['mouse', 'pen'];
+  if (!strict) {
+    values.push('', undefined);
+  }
+  return values.includes(pointerType);
 }
