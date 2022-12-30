@@ -1,10 +1,15 @@
-import type {Placement} from '../types';
+import type {Alignment} from '../types';
 
-const hash = {start: 'end', end: 'start'};
+const oppositeAlignmentMap = {
+  start: 'end',
+  end: 'start',
+};
 
-export function getOppositeAlignmentPlacement(placement: Placement): Placement {
+export function getOppositeAlignmentPlacement<T extends string>(
+  placement: T
+): T {
   return placement.replace(
     /start|end/g,
-    (matched) => (hash as any)[matched]
-  ) as Placement;
+    (alignment) => oppositeAlignmentMap[alignment as Alignment]
+  ) as T;
 }
