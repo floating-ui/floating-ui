@@ -275,7 +275,7 @@ describe('modal', () => {
     await userEvent.tab();
 
     // Wait for the setTimeout that wraps onOpenChange(false).
-    await new Promise((resolve) => setTimeout(resolve));
+    await act(() => new Promise((resolve) => setTimeout(resolve)));
 
     // Focus leaving the floating element closes it.
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
