@@ -1,4 +1,4 @@
-import type {ComponentPublicInstance, Ref} from 'vue-demi';
+import type {ComponentPublicInstance, ComputedRef, Ref} from 'vue-demi';
 import type {
   ReferenceElement,
   FloatingElement,
@@ -11,7 +11,7 @@ import type {
 
 export * from '.';
 
-export type MaybeReadonlyRef<T> = T | Readonly<Ref<T>>;
+export type MaybeReadonlyRef<T> = T | Readonly<Ref<T> | ComputedRef<T>>;
 
 export type MaybeElement<T> = T | ComponentPublicInstance | null | undefined;
 
