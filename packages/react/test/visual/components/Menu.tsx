@@ -258,25 +258,31 @@ export const Menu = React.forwardRef<
 
 export const Main = () => {
   return (
-    <Menu label="Edit">
-      <MenuItem label="Undo" onClick={() => console.log('Undo')} />
-      <MenuItem label="Redo" />
-      <MenuItem label="Cut" disabled />
-      <Menu label="Copy as">
-        <MenuItem label="Text" />
-        <MenuItem label="Video" />
-        <Menu label="Image">
-          <MenuItem label=".png" />
-          <MenuItem label=".jpg" />
-          <MenuItem label=".svg" />
-          <MenuItem label=".gif" />
+    <>
+      <h1>Menu</h1>
+      <p></p>
+      <div className="container">
+        <Menu label="Edit">
+          <MenuItem label="Undo" onClick={() => console.log('Undo')} />
+          <MenuItem label="Redo" />
+          <MenuItem label="Cut" disabled />
+          <Menu label="Copy as">
+            <MenuItem label="Text" />
+            <MenuItem label="Video" />
+            <Menu label="Image">
+              <MenuItem label=".png" />
+              <MenuItem label=".jpg" />
+              <MenuItem label=".svg" />
+              <MenuItem label=".gif" />
+            </Menu>
+            <MenuItem label="Audio" />
+          </Menu>
+          <Menu label="Share">
+            <MenuItem label="Mail" />
+            <MenuItem label="Instagram" />
+          </Menu>
         </Menu>
-        <MenuItem label="Audio" />
-      </Menu>
-      <Menu label="Share">
-        <MenuItem label="Mail" />
-        <MenuItem label="Instagram" />
-      </Menu>
-    </Menu>
+      </div>
+    </>
   );
 };

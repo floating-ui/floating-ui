@@ -1,4 +1,4 @@
-import React, {forwardRef, useLayoutEffect, useRef, useState} from 'react';
+import {forwardRef, useRef, useState} from 'react';
 import {
   autoUpdate,
   size,
@@ -8,8 +8,9 @@ import {
   useInteractions,
   useListNavigation,
   useRole,
+  FloatingFocusManager,
+  FloatingPortal,
 } from '@floating-ui/react';
-import {FloatingFocusManager, FloatingPortal} from '../../../src';
 
 export const data = [
   'Alfalfa Sprouts',
@@ -201,18 +202,6 @@ export function Main() {
       ],
     });
 
-  useLayoutEffect(() => {
-    // IMPORTANT: When the floating element first opens, this effect runs when
-    // the styles have **not yet** been applied to the element. A rAF ensures
-    // we wait until the position is ready, and also runs before paint.
-    // https://floating-ui.com/docs/react-dom#effects
-    requestAnimationFrame(() => {
-      if (activeIndex != null) {
-        listRef.current[activeIndex]?.scrollIntoView({block: 'nearest'});
-      }
-    });
-  }, [activeIndex]);
-
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
     useRole(context, {role: 'listbox'}),
     useDismiss(context),
@@ -231,7 +220,7 @@ export function Main() {
 
     if (value) {
       setOpen(true);
-      // setActiveIndex(0);
+      setActiveIndex(0);
     } else {
       setOpen(false);
     }
@@ -243,68 +232,72 @@ export function Main() {
 
   return (
     <>
-      <input
-        {...getReferenceProps({
-          ref: reference,
-          onChange,
-          value: inputValue,
-          placeholder: 'Enter fruit',
-          'aria-autocomplete': 'list',
-          onKeyDown(event) {
-            if (
-              event.key === 'Enter' &&
-              activeIndex != null &&
-              items[activeIndex]
-            ) {
-              setInputValue(items[activeIndex]);
-              setActiveIndex(null);
-              setOpen(false);
-            }
-          },
-        })}
-      />
-      <FloatingPortal>
-        {open && (
-          <FloatingFocusManager
-            context={context}
-            initialFocus={-1}
-            visuallyHiddenDismiss
-          >
-            <div
-              {...getFloatingProps({
-                ref: floating,
-                style: {
-                  position: strategy,
-                  left: x ?? 0,
-                  top: y ?? 0,
-                  background: '#eee',
-                  color: 'black',
-                  overflowY: 'auto',
-                },
-              })}
+      <h1>Autocomplete</h1>
+      <p></p>
+      <div className="container">
+        <input
+          {...getReferenceProps({
+            ref: reference,
+            onChange,
+            value: inputValue,
+            placeholder: 'Enter fruit',
+            'aria-autocomplete': 'list',
+            onKeyDown(event) {
+              if (
+                event.key === 'Enter' &&
+                activeIndex != null &&
+                items[activeIndex]
+              ) {
+                setInputValue(items[activeIndex]);
+                setActiveIndex(null);
+                setOpen(false);
+              }
+            },
+          })}
+        />
+        <FloatingPortal>
+          {open && (
+            <FloatingFocusManager
+              context={context}
+              initialFocus={-1}
+              visuallyHiddenDismiss
             >
-              {items.map((item, index) => (
-                <Item
-                  {...getItemProps({
-                    key: item,
-                    ref(node) {
-                      listRef.current[index] = node;
-                    },
-                    onClick() {
-                      setInputValue(item);
-                      setOpen(false);
-                      refs.domReference.current?.focus();
-                    },
-                  })}
-                  active={activeIndex === index}
-                >
-                  {item}
-                </Item>
-              ))}
-            </div>
-          </FloatingFocusManager>
-        )}
-      </FloatingPortal>
+              <div
+                {...getFloatingProps({
+                  ref: floating,
+                  style: {
+                    position: strategy,
+                    left: x ?? 0,
+                    top: y ?? 0,
+                    background: '#eee',
+                    color: 'black',
+                    overflowY: 'auto',
+                  },
+                })}
+              >
+                {items.map((item, index) => (
+                  <Item
+                    {...getItemProps({
+                      key: item,
+                      ref(node) {
+                        listRef.current[index] = node;
+                      },
+                      onClick() {
+                        setInputValue(item);
+                        setOpen(false);
+                        refs.domReference.current?.focus();
+                      },
+                    })}
+                    active={activeIndex === index}
+                  >
+                    {item}
+                  </Item>
+                ))}
+              </div>
+            </FloatingFocusManager>
+          )}
+        </FloatingPortal>
+      </div>
     </>
   );
 }
