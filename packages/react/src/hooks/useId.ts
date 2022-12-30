@@ -35,4 +35,4 @@ const useReactId = (React as any)['useId'.toString()] as () => string;
  * earlier React versions.
  * @see https://floating-ui.com/docs/useId
  */
-export const useId = useReactId ?? useFloatingId;
+export const useId = useReactId || useFloatingId;

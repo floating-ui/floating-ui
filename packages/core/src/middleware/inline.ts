@@ -51,7 +51,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
         : rects.reference
     );
     const clientRects =
-      (await platform.getClientRects?.(elements.reference)) ?? [];
+      (await platform.getClientRects?.(elements.reference)) || [];
     const paddingObject = getSideObjectFromPadding(padding);
 
     function getBoundingClientRect() {
@@ -70,7 +70,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
               x < rect.right + paddingObject.right &&
               y > rect.top - paddingObject.top &&
               y < rect.bottom + paddingObject.bottom
-          ) ?? fallback
+          ) || fallback
         );
       }
 

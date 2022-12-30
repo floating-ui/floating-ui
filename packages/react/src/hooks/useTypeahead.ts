@@ -146,8 +146,8 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       const prevIndex = prevIndexRef.current;
 
       const orderedList = [
-        ...listContent.slice((prevIndex ?? 0) + 1),
-        ...listContent.slice(0, (prevIndex ?? 0) + 1),
+        ...listContent.slice((prevIndex || 0) + 1),
+        ...listContent.slice(0, (prevIndex || 0) + 1),
       ];
 
       const str = findMatchRef.current

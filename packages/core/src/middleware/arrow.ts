@@ -29,7 +29,7 @@ export const arrow = (options: Options): Middleware => ({
   options,
   async fn(middlewareArguments) {
     // Since `element` is required, we don't Partial<> the type
-    const {element, padding = 0} = options ?? {};
+    const {element, padding = 0} = options || {};
     const {x, y, placement, rects, platform} = middlewareArguments;
 
     if (element == null) {

@@ -5,7 +5,7 @@ export function getChildren<RT extends ReferenceType = ReferenceType>(
   id: string | undefined
 ) {
   let allChildren =
-    nodes.filter((node) => node.parentId === id && node.context?.open) ?? [];
+    nodes.filter((node) => node.parentId === id && node.context?.open) || [];
   let currentChildren = allChildren;
 
   while (currentChildren.length) {
@@ -14,7 +14,7 @@ export function getChildren<RT extends ReferenceType = ReferenceType>(
         currentChildren?.some(
           (n) => node.parentId === n.id && node.context?.open
         )
-      ) ?? [];
+      ) || [];
 
     allChildren = allChildren.concat(currentChildren);
   }

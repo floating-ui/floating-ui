@@ -128,7 +128,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       // Check if the click occurred on the scrollbar
       if (isElement(target) && refs.floating.current) {
-        const win = refs.floating.current.ownerDocument.defaultView ?? window;
+        const win = refs.floating.current.ownerDocument.defaultView || window;
         const canScrollX = target.scrollWidth > target.clientWidth;
         const canScrollY = target.scrollHeight > target.clientHeight;
 
