@@ -52,7 +52,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (isMouseLikePointerType(pointerTypeRef.current) && ignoreMouse) {
+          if (
+            isMouseLikePointerType(pointerTypeRef.current, true) &&
+            ignoreMouse
+          ) {
             return;
           }
 
@@ -83,7 +86,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (isMouseLikePointerType(pointerTypeRef.current) && ignoreMouse) {
+          if (
+            isMouseLikePointerType(pointerTypeRef.current, true) &&
+            ignoreMouse
+          ) {
             return;
           }
 

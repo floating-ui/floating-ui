@@ -159,8 +159,7 @@ export const MenuComponent = React.forwardRef<
             open ? ' open' : ''
           }`,
           onClick(event) {
-            // Normalize button focus in Safari.
-            (event.currentTarget as HTMLButtonElement).focus();
+            event.stopPropagation();
           },
           ...(nested && {
             // Indicates this is a nested <Menu /> acting as a <MenuItem />.
