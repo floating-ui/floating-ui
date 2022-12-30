@@ -19,7 +19,7 @@ export interface Options {
   y: number;
 
   /**
-   * @experimental
+   * Represents the padding around a disjoined rect when choosing it.
    * @default 2
    */
   padding: Padding;
