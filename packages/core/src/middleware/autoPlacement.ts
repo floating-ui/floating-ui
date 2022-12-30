@@ -69,7 +69,7 @@ export const autoPlacement = (
   name: 'autoPlacement',
   options,
   async fn(middlewareArguments) {
-    const {x, y, rects, middlewareData, placement, platform, elements} =
+    const {rects, middlewareData, placement, platform, elements} =
       middlewareArguments;
 
     const {
@@ -105,8 +105,6 @@ export const autoPlacement = (
     // Make `computeCoords` start from the right place
     if (placement !== currentPlacement) {
       return {
-        x,
-        y,
         reset: {
           placement: placements[0],
         },
