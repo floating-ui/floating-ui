@@ -123,7 +123,7 @@ export const MenuComponent = React.forwardRef<
   // keyboard navigation and the cursor is resting on the menu.
   React.useEffect(() => {
     function onPointerMove({pointerType}: PointerEvent) {
-      if (pointerType === 'mouse') {
+      if (pointerType !== 'touch') {
         setAllowHover(true);
       }
     }
