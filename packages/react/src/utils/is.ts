@@ -2,7 +2,7 @@ import {getDocument} from './getDocument';
 import {getPlatform, getUserAgent} from './getPlatform';
 
 function getWindow(value: any) {
-  return getDocument(value).defaultView ?? window;
+  return getDocument(value).defaultView || window;
 }
 
 export function isElement(value: any): value is HTMLElement {

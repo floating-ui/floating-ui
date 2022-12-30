@@ -87,7 +87,7 @@ export const inner = (
       ).fn(middlewareArguments)),
     };
 
-    const el = scrollRef?.current ?? floating;
+    const el = scrollRef?.current || floating;
 
     const overflow = await detectOverflow(
       getArgsWithCustomFloatingHeight(nextArgs, el.scrollHeight),
@@ -193,7 +193,7 @@ export const useInnerOffset = (
       }
     }
 
-    const el = scrollRef?.current ?? refs.floating.current;
+    const el = scrollRef?.current || refs.floating.current;
 
     if (open && el) {
       el.addEventListener('wheel', onWheel);

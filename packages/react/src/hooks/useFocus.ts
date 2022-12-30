@@ -30,7 +30,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     }
 
     const doc = getDocument(refs.floating.current);
-    const win = doc.defaultView ?? window;
+    const win = doc.defaultView || window;
 
     // If the reference was focused and the user left the tab/window, and the
     // floating element was not open, the focus should be blocked when they

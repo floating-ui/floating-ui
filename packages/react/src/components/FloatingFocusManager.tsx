@@ -251,7 +251,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const portalNodes = Array.from(
       portalContext?.portalNode?.querySelectorAll(
         '[data-floating-ui-portal]'
-      ) ?? []
+      ) || []
     );
 
     function getDismissButtons() {

@@ -102,7 +102,7 @@ export const flip = (
 
     // One or more sides is overflowing
     if (!overflows.every((side) => side <= 0)) {
-      const nextIndex = (middlewareData.flip?.index ?? 0) + 1;
+      const nextIndex = (middlewareData.flip?.index || 0) + 1;
       const nextPlacement = placements[nextIndex];
 
       if (nextPlacement) {

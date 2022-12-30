@@ -89,7 +89,7 @@ export const autoPlacement = (
       detectOverflowOptions
     );
 
-    const currentIndex = middlewareData.autoPlacement?.index ?? 0;
+    const currentIndex = middlewareData.autoPlacement?.index || 0;
     const currentPlacement = placements[currentIndex];
 
     if (currentPlacement == null) {
@@ -120,7 +120,7 @@ export const autoPlacement = (
     ];
 
     const allOverflows = [
-      ...(middlewareData.autoPlacement?.overflows ?? []),
+      ...(middlewareData.autoPlacement?.overflows || []),
       {placement: currentPlacement, overflows: currentOverflows},
     ];
 

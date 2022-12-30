@@ -53,7 +53,7 @@ export function isOutsideEvent(
 export function disableFocusInside(container: HTMLElement) {
   const tabbableElements = tabbable(container, getTabbableOptions());
   tabbableElements.forEach((element) => {
-    element.dataset.tabindex = element.getAttribute('tabindex') ?? '';
+    element.dataset.tabindex = element.getAttribute('tabindex') || '';
     element.setAttribute('tabindex', '-1');
   });
 }
