@@ -13,7 +13,7 @@ export function getParentNode(node: Node): Node {
     // DOM Element detected.
     node.parentNode ||
     // ShadowRoot detected.
-    (isShadowRoot(node) ? node.host : null) ||
+    (isShadowRoot(node) && node.host) ||
     // Fallback.
     getDocumentElement(node);
 
