@@ -69,7 +69,7 @@ const listContentRef = useRef([]);
 <li
   ref={(node) => {
     listItemsRef.current[index] = node;
-    listContentRef.current[index] = node.textContent;
+    listContentRef.current[index] = node?.textContent ?? null;
   }}
 />
 ```
