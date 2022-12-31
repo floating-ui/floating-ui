@@ -77,6 +77,9 @@ module.exports = {
             },
             fontSize: '1rem',
             maxWidth: '70ch',
+            '[data-rehype-pretty-code-fragment]': {
+              position: 'relative',
+            },
             pre: {
               padding: '1rem 1.5rem',
               lineHeight: '2',
@@ -93,6 +96,20 @@ module.exports = {
                 padding: '0.2rem 0',
                 borderRadius: '0.25rem',
                 zIndex: '0',
+              },
+              '&::before': {
+                position: 'absolute',
+                fontSize: '80%',
+                right: '0.6rem',
+                top: '0.2rem',
+                content: 'attr(data-language)',
+                textTansform: 'uppercase',
+              },
+              '&[data-theme="light"]::before': {
+                color: GRAY[1000],
+              },
+              '&[data-theme="dark"]::before': {
+                color: GRAY[50],
               },
               'code[data-theme="light"] .line--highlighted': {
                 borderLeftColor: colors.rose[400],
