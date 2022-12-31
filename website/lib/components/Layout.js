@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useRef, useState} from 'react';
+import {useMemo, useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -296,16 +296,24 @@ const slugify = (str) =>
     .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
 
 const linkify =
-  (Tag) =>
+  (Tag, headings) =>
   ({children, ...props}) => {
     const url = slugify(
       typeof children !== 'string'
         ? children.props.children
         : children
     );
+
+    const count = headings.filter(
+      (value) => value === url
+    ).length;
+    const id = count === 0 ? url : `${url}-${count}`;
+
+    headings.push(url);
+
     return (
-      <Tag {...props} id={url}>
-        <a href={`#${url}`}>{children}</a>
+      <Tag {...props} id={id}>
+        <a href={`#${id}`}>{children}</a>
       </Tag>
     );
   };
@@ -315,11 +323,6 @@ const components = {
   Floating,
   Chrome,
   Notice,
-  h2: linkify('h2'),
-  h3: linkify('h3'),
-  h4: linkify('h4'),
-  h5: linkify('h5'),
-  h6: linkify('h6'),
   a(props) {
     const className =
       'transition-colors inline-flex items-center border-none underline ' +
@@ -359,6 +362,7 @@ export default function Layout({children}) {
   const navRef = useRef();
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(null);
+  const [headings, setHeadings] = useState([]);
 
   const displayNavigation = nav[index] != null;
 
@@ -383,6 +387,7 @@ export default function Layout({children}) {
 
   const articleRef = useRef();
   const [anchors, setAnchors] = useState([]);
+
   useIsomorphicLayoutEffect(() => {
     const localAnchors = [];
     articleRef.current
@@ -391,11 +396,16 @@ export default function Layout({children}) {
         localAnchors.push({
           depth: node.tagName === 'H2' ? 2 : 3,
           title: node.textContent,
-          url: `#${slugify(node.textContent)}`,
+          url: `#${node.id}`,
         });
       });
+
     setAnchors(localAnchors);
     setNavOpen(false);
+
+    return () => {
+      setHeadings([]);
+    };
   }, [pathname]);
 
   let currentParentIndex = null;
@@ -419,8 +429,20 @@ export default function Layout({children}) {
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
 
+  const computedComponents = useMemo(
+    () => ({
+      ...components,
+      h2: linkify('h2', headings),
+      h3: linkify('h3', headings),
+      h4: linkify('h4', headings),
+      h5: linkify('h5', headings),
+      h6: linkify('h6', headings),
+    }),
+    [headings]
+  );
+
   return (
-    <MDXProvider components={components}>
+    <MDXProvider components={computedComponents}>
       <Head>
         <title>{title}</title>
       </Head>
