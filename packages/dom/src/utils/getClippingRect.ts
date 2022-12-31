@@ -1,28 +1,29 @@
 import {
-  rectToClientRect,
-  ClientRectObject,
   Boundary,
-  RootBoundary,
+  ClientRectObject,
   Rect,
+  rectToClientRect,
+  RootBoundary,
   Strategy,
 } from '@floating-ui/core';
-import {getViewportRect} from './getViewportRect';
-import {getDocumentRect} from './getDocumentRect';
-import {getOverflowAncestors} from './getOverflowAncestors';
-import {getDocumentElement} from './getDocumentElement';
-import {getComputedStyle} from './getComputedStyle';
-import {
-  isElement,
-  isLastTraversableNode,
-  isContainingBlock,
-  isHTMLElement,
-} from './is';
-import {getBoundingClientRect} from './getBoundingClientRect';
-import {max, min} from './math';
-import {getParentNode} from './getParentNode';
-import {getNodeName} from './getNodeName';
-import {getScale} from './getScale';
+
 import {Platform, ReferenceElement} from '../types';
+import {getBoundingClientRect} from './getBoundingClientRect';
+import {getComputedStyle} from './getComputedStyle';
+import {getDocumentElement} from './getDocumentElement';
+import {getDocumentRect} from './getDocumentRect';
+import {getNodeName} from './getNodeName';
+import {getOverflowAncestors} from './getOverflowAncestors';
+import {getParentNode} from './getParentNode';
+import {getScale} from './getScale';
+import {getViewportRect} from './getViewportRect';
+import {
+  isContainingBlock,
+  isElement,
+  isHTMLElement,
+  isLastTraversableNode,
+} from './is';
+import {max, min} from './math';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;

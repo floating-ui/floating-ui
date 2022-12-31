@@ -1,6 +1,7 @@
 import {useRef} from 'react';
 import {View} from "react-native";
-import {useFloating, shift, arrow} from '.';
+
+import {arrow,shift, useFloating} from '.';
 
 App;
 function App() {

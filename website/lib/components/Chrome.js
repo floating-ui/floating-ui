@@ -1,5 +1,5 @@
-import {useRef} from 'react';
 import cn from 'classnames';
+import {useRef} from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 export const Chrome = ({

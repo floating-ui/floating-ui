@@ -1,27 +1,28 @@
+import './MacSelect.css';
+
 import {
-  useFloating,
-  flip,
-  size,
   autoUpdate,
-  SideObject,
-  useInteractions,
-  inner,
-  useInnerOffset,
-  useClick,
-  useListNavigation,
-  useDismiss,
-  useRole,
-  useTypeahead,
+  flip,
   FloatingFocusManager,
   FloatingOverlay,
+  inner,
   offset,
   shift,
+  SideObject,
+  size,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInnerOffset,
+  useInteractions,
+  useListNavigation,
+  useRole,
+  useTypeahead,
 } from '@floating-ui/react';
 import {useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
-import {FloatingPortal} from '../../../src';
 
-import './MacSelect.css';
+import {FloatingPortal} from '../../../src';
 
 const fruits = [
   '🍒 Cherry',

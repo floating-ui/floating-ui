@@ -1,18 +1,19 @@
 /**
  * @jest-environment jsdom
  */
+import {act,cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {useEffect,useRef, useState} from 'react';
+
 import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  size,
   arrow,
+  flip,
   hide,
   limitShift,
+  offset,
+  shift,
+  size,
+  useFloating,
 } from '../src';
-import {render, fireEvent, screen, cleanup, act} from '@testing-library/react';
-import {useRef, useState, useEffect} from 'react';
 
 test('middleware is always fresh and does not cause an infinite loop', async () => {
   function InlineMiddleware() {

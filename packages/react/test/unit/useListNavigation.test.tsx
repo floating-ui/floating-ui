@@ -1,12 +1,13 @@
-import {fireEvent, render, screen, cleanup, act} from '@testing-library/react';
+import {act,cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
+
 import {
-  useListNavigation,
-  useFloating,
-  useInteractions,
   useClick,
   useDismiss,
+  useFloating,
+  useInteractions,
+  useListNavigation,
 } from '../../src';
 import type {Props} from '../../src/hooks/useListNavigation';
 import {Main as Grid} from '../visual/components/Grid';

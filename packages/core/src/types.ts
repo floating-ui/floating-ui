@@ -155,12 +155,10 @@ export type RootBoundary = 'viewport' | 'document';
 export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';
-export {rectToClientRect} from './utils/rectToClientRect';
 export {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from './detectOverflow';
-
 export {arrow, Options as ArrowOptions} from './middleware/arrow';
 export {
   autoPlacement,
@@ -168,12 +166,13 @@ export {
 } from './middleware/autoPlacement';
 export {flip, Options as FlipOptions} from './middleware/flip';
 export {hide, Options as HideOptions} from './middleware/hide';
+export {inline, Options as InlineOptions} from './middleware/inline';
 export {offset, Options as OffsetOptions} from './middleware/offset';
 export {
-  shift,
   limitShift,
-  Options as ShiftOptions,
   LimitShiftOptions,
+  shift,
+  Options as ShiftOptions,
 } from './middleware/shift';
 export {size, Options as SizeOptions} from './middleware/size';
-export {inline, Options as InlineOptions} from './middleware/inline';
+export {rectToClientRect} from './utils/rectToClientRect';

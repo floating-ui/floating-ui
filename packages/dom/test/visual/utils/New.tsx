@@ -1,7 +1,8 @@
 import type {Placement} from '@floating-ui/core';
-import {useFloating, arrow} from '@floating-ui/react-dom';
+import {arrow,useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect, useRef,useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useLayoutEffect, useRef} from 'react';
 import {Controls} from '../utils/Controls';
 import {useSize} from './useSize';
 

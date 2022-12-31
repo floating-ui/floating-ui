@@ -1,14 +1,15 @@
-import {cloneElement, useState} from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
-import {
-  useFloating,
-  useInteractions,
-  useHover,
-  useDelayGroupContext,
-  useDelayGroup,
-  FloatingDelayGroup,
-} from '../../src';
+import {fireEvent,render, screen} from '@testing-library/react';
 import {act} from '@testing-library/react-hooks';
+import {cloneElement, useState} from 'react';
+
+import {
+  FloatingDelayGroup,
+  useDelayGroup,
+  useDelayGroupContext,
+  useFloating,
+  useHover,
+  useInteractions,
+} from '../../src';
 
 jest.useFakeTimers();
 

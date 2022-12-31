@@ -1,24 +1,25 @@
+import './index.css';
+
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import {
   BrowserRouter,
   Link,
-  Routes,
-  Route,
   Outlet,
+  Route,
+  Routes,
   useLocation,
 } from 'react-router-dom';
-import './index.css';
-import {Main as Tooltip} from './components/Tooltip';
-import {Main as Popover} from './components/Popover';
-import {Main as Menu} from './components/Menu';
-import {Main as MacSelect} from './components/MacSelect';
-import {Main as Grid} from './components/Grid';
-import {Main as EmojiPicker} from './components/EmojiPicker';
-import {Main as Autocomplete} from './components/Autocomplete';
-import {Main as Navigation} from './components/Navigation';
-import {Main as Drawer} from './components/Drawer';
 
+import {Main as Autocomplete} from './components/Autocomplete';
+import {Main as Drawer} from './components/Drawer';
+import {Main as EmojiPicker} from './components/EmojiPicker';
+import {Main as Grid} from './components/Grid';
+import {Main as MacSelect} from './components/MacSelect';
+import {Main as Menu} from './components/Menu';
+import {Main as Navigation} from './components/Navigation';
+import {Main as Popover} from './components/Popover';
+import {Main as Tooltip} from './components/Tooltip';
 import {New} from './utils/New';
 
 const ROUTES = [

@@ -1,31 +1,32 @@
-import {
-  useMemo,
-  useState,
-  useLayoutEffect,
-  useRef,
-  useCallback,
-  RefObject,
-} from 'react';
-import {computePosition, arrow as arrowCore} from '@floating-ui/core';
 import type {
-  Placement,
-  Middleware,
   ComputePositionReturn,
+  Middleware,
+  Placement,
   SideObject,
 } from '@floating-ui/core';
+import {arrow as arrowCore,computePosition} from '@floating-ui/core';
+import {
+  RefObject,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
 import {createPlatform} from './createPlatform';
 import {deepEqual} from './utils/deepEqual';
 
 export {
   autoPlacement,
+  detectOverflow,
   flip,
   hide,
+  inline,
   limitShift,
   offset,
   shift,
   size,
-  inline,
-  detectOverflow,
 } from '@floating-ui/core';
 
 const ORIGIN = {x: 0, y: 0};

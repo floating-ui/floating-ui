@@ -1,13 +1,13 @@
-import type {Middleware, Placement, Alignment} from '../types';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import {getSide} from '../utils/getSide';
+import {allPlacements} from '../enums';
+import type {Alignment,Middleware, Placement} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getOppositeAlignmentPlacement} from '../utils/getOppositeAlignmentPlacement';
-import {allPlacements} from '../enums';
+import {getSide} from '../utils/getSide';
 
 export function getPlacementList(
   alignment: Alignment | null,

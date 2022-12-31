@@ -1,5 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+
 import {useFloatingTree} from '../components/FloatingTree';
 import {destroyPolygon} from '../safePolygon';
 import type {

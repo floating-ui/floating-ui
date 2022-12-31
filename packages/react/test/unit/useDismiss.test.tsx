@@ -1,15 +1,16 @@
-import {ReactNode, useState} from 'react';
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {ReactNode, useState} from 'react';
+
 import {
-  useDismiss,
-  useInteractions,
-  useFloating,
-  FloatingPortal,
-  useFloatingNodeId,
   FloatingNode,
+  FloatingPortal,
   FloatingTree,
+  useDismiss,
+  useFloating,
+  useFloatingNodeId,
   useFloatingParentNodeId,
+  useInteractions,
 } from '../../src';
 import {normalizeBubblesProp, Props} from '../../src/hooks/useDismiss';
 

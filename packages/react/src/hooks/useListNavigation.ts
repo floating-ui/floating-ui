@@ -1,25 +1,26 @@
 import * as React from 'react';
 import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+
 import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {getDocument} from '../utils/getDocument';
 import {activeElement} from '../utils/activeElement';
-import {
-  isHTMLElement,
-  isVirtualClick,
-  isVirtualPointerEvent,
-  isMac,
-  isSafari,
-} from '../utils/is';
-import {stopEvent} from '../utils/stopEvent';
-import {useLatestRef} from './utils/useLatestRef';
-import {useEvent} from './utils/useEvent';
 import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
+import {getDocument} from '../utils/getDocument';
+import {
+  isHTMLElement,
+  isMac,
+  isSafari,
+  isVirtualClick,
+  isVirtualPointerEvent,
+} from '../utils/is';
+import {stopEvent} from '../utils/stopEvent';
+import {useEvent} from './utils/useEvent';
+import {useLatestRef} from './utils/useLatestRef';
 
 let isPreventScrollSupported = false;
 

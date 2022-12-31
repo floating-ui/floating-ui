@@ -1,14 +1,15 @@
-import React, {forwardRef} from 'react';
-import {Chrome} from './Chrome';
 import {
-  useFloating,
-  flip,
-  shift,
-  offset,
   arrow,
+  flip,
+  offset,
+  shift,
+  useFloating,
 } from '@floating-ui/react-dom';
+import React, {forwardRef} from 'react';
 import {useState} from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+
+import {Chrome} from './Chrome';
 
 const Button = forwardRef(({children, ...props}, ref) => (
   <button

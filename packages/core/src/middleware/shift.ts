@@ -1,12 +1,12 @@
-import type {Middleware, MiddlewareArguments, Coords} from '../types';
-import {getSide} from '../utils/getSide';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getCrossAxis} from '../utils/getCrossAxis';
-import {within} from '../utils/within';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
+import type {Coords,Middleware, MiddlewareArguments} from '../types';
+import {getCrossAxis} from '../utils/getCrossAxis';
+import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
+import {getSide} from '../utils/getSide';
+import {within} from '../utils/within';
 
 export interface Options {
   /**

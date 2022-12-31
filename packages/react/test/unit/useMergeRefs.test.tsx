@@ -1,5 +1,6 @@
 import {render} from '@testing-library/react';
 import * as React from 'react';
+
 import {useMergeRefs} from '../../src/hooks/useMergeRefs';
 
 test('merges refs and cleans up', () => {

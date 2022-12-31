@@ -1,16 +1,17 @@
-import * as React from 'react';
 import {detectOverflow, offset} from '@floating-ui/react-dom';
-import type {
-  SideObject,
-  DetectOverflowOptions,
-  Middleware,
-  FloatingContext,
-  ElementProps,
-  MiddlewareArguments,
-} from './types';
+import * as React from 'react';
 import {flushSync} from 'react-dom';
-import {getUserAgent} from './utils/getPlatform';
+
 import {useEvent} from './hooks/utils/useEvent';
+import type {
+  DetectOverflowOptions,
+  ElementProps,
+  FloatingContext,
+  Middleware,
+  MiddlewareArguments,
+  SideObject,
+} from './types';
+import {getUserAgent} from './utils/getPlatform';
 
 function getArgsWithCustomFloatingHeight(
   args: MiddlewareArguments,

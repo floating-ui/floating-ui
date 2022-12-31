@@ -1,6 +1,7 @@
 import {Strategy} from '@floating-ui/core';
 import {useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 

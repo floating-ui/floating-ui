@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 

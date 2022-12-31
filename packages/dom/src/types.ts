@@ -1,6 +1,7 @@
 import type {
   AutoPlacementOptions,
   ClientRectObject,
+  ComputePositionConfig as CoreComputePositionConfig,
   DetectOverflowOptions as CoreDetectOverflowOptions,
   Dimensions,
   ElementRects,
@@ -16,7 +17,6 @@ import type {
   SideObject,
   SizeOptions as CoreSizeOptions,
   Strategy,
-  ComputePositionConfig as CoreComputePositionConfig,
 } from '@floating-ui/core';
 
 type Promisable<T> = T | Promise<T>;
@@ -179,32 +179,30 @@ declare const detectOverflow: (
   options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
-export {autoPlacement, shift, arrow, size, flip, hide, detectOverflow};
-export {offset, limitShift, inline} from '@floating-ui/core';
-export type {
-  Placement,
-  Strategy,
-  Alignment,
-  Side,
-  AlignedPlacement,
-  Axis,
-  Length,
-  Coords,
-  SideObject,
-  Dimensions,
-  Rect,
-  ElementRects,
-  ElementContext,
-  ClientRectObject,
-  Padding,
-  RootBoundary,
-  MiddlewareReturn,
-  MiddlewareData,
-  ComputePositionReturn,
-} from '@floating-ui/core';
-
+export {arrow, autoPlacement, detectOverflow,flip, hide, shift, size};
 export {computePosition} from './';
 export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
-
-export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export {platform} from './platform';
+export {getOverflowAncestors} from './utils/getOverflowAncestors';
+export type {
+  AlignedPlacement,
+  Alignment,
+  Axis,
+  ClientRectObject,
+  ComputePositionReturn,
+  Coords,
+  Dimensions,
+  ElementContext,
+  ElementRects,
+  Length,
+  MiddlewareData,
+  MiddlewareReturn,
+  Padding,
+  Placement,
+  Rect,
+  RootBoundary,
+  Side,
+  SideObject,
+  Strategy,
+} from '@floating-ui/core';
+export {inline,limitShift, offset} from '@floating-ui/core';

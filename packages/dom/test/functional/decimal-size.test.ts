@@ -1,4 +1,5 @@
-import {test, expect} from '@playwright/test';
+import {expect,test} from '@playwright/test';
+
 import {click} from './utils/click';
 
 ['.0', '.25', '.5', '.75'].forEach((decimalSize) => {

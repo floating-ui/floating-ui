@@ -1,10 +1,10 @@
 import type {
-  SideObject,
-  Padding,
   Boundary,
-  RootBoundary,
   ElementContext,
   MiddlewareArguments,
+  Padding,
+  RootBoundary,
+  SideObject,
 } from './types';
 import {paintDebugRects} from './utils/debugRects';
 import {getSideObjectFromPadding} from './utils/getPaddingObject';

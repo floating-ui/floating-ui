@@ -1,5 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
+import {cleanup, fireEvent,render, waitFor} from '@testing-library/vue';
+import {defineComponent, effectScope, ref, toRef} from 'vue';
+
 import {
   arrow,
   FloatingElement,
@@ -10,9 +13,7 @@ import {
   Strategy,
   useFloating,
 } from '../src';
-import {UseFloatingOptions, ArrowOptions} from '../src/types';
-import {defineComponent, effectScope, ref, toRef} from 'vue';
-import {render, waitFor, cleanup, fireEvent} from '@testing-library/vue';
+import {ArrowOptions,UseFloatingOptions} from '../src/types';
 
 describe('useFloating', () => {
   function setup(options?: UseFloatingOptions) {

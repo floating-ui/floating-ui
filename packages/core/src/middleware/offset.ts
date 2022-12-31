@@ -1,7 +1,7 @@
 import type {Coords, Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
-import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
+import {getSide} from '../utils/getSide';
 
 type OffsetValue =
   | number

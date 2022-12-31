@@ -1,10 +1,10 @@
+import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 import type {
   ComputePosition,
   ComputePositionReturn,
   Middleware,
   MiddlewareData,
 } from './types';
-import {computeCoordsFromPlacement} from './computeCoordsFromPlacement';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element

@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
+
 import { allPlacements } from '../visual/utils/allPlacements';
-import { click } from './utils/click';
 import { useCases } from '../visual/utils/shadowDOM';
+import { click } from './utils/click';
 
 useCases.forEach(useCase => {
   allPlacements.forEach((placement) => {

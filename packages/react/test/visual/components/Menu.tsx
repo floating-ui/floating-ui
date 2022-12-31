@@ -1,27 +1,27 @@
-import * as React from 'react';
 import {
-  useFloating,
-  offset,
+  autoUpdate,
   flip,
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingPortal,
+  FloatingTree,
+  offset,
+  safePolygon,
   shift,
-  useListNavigation,
-  useHover,
-  useTypeahead,
-  useInteractions,
-  useRole,
   useClick,
   useDismiss,
-  autoUpdate,
-  safePolygon,
-  FloatingPortal,
-  useFloatingTree,
+  useFloating,
   useFloatingNodeId,
   useFloatingParentNodeId,
+  useFloatingTree,
+  useHover,
+  useInteractions,
+  useListNavigation,
   useMergeRefs,
-  FloatingNode,
-  FloatingTree,
-  FloatingFocusManager,
+  useRole,
+  useTypeahead,
 } from '@floating-ui/react';
+import * as React from 'react';
 
 interface MenuItemProps {
   label: string;

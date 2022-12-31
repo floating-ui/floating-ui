@@ -1,13 +1,13 @@
-import type {ComponentPublicInstance, Ref} from 'vue-demi';
 import type {
-  ReferenceElement,
   FloatingElement,
-  Placement,
-  Strategy,
   Middleware,
   MiddlewareData,
   Padding,
+  Placement,
+  ReferenceElement,
+  Strategy,
 } from '@floating-ui/dom';
+import type {ComponentPublicInstance, Ref} from 'vue-demi';
 
 export * from '.';
 

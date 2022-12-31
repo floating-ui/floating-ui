@@ -1,7 +1,7 @@
-import {cloneElement, useEffect, useRef} from 'react';
-import {createPortal} from 'react-dom';
 import * as FloatingUI from '@floating-ui/react-dom';
 import {autoUpdate} from '@floating-ui/react-dom';
+import {cloneElement, useEffect, useRef} from 'react';
+import {createPortal} from 'react-dom';
 
 export function Floating({
   children,

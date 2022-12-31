@@ -1,5 +1,6 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {getDocument} from '../utils/getDocument';

@@ -1,6 +1,7 @@
 import {autoUpdate} from '@floating-ui/react-dom';
 import {useFloating} from '@floating-ui/react-dom';
-import {useState, useEffect} from 'react';
+import {useEffect,useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 
 export function AutoUpdate() {

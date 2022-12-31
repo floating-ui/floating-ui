@@ -1,5 +1,6 @@
 import {autoUpdate, useFloating} from '@floating-ui/react-dom';
 import {useEffect, useRef} from 'react';
+
 import {useScroll} from '../utils/useScroll';
 
 export function VirtualElement() {

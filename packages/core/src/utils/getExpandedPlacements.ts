@@ -1,6 +1,6 @@
 import type {Placement} from '../types';
-import {getOppositePlacement} from './getOppositePlacement';
 import {getOppositeAlignmentPlacement} from './getOppositeAlignmentPlacement';
+import {getOppositePlacement} from './getOppositePlacement';
 
 export function getExpandedPlacements(placement: Placement): Array<Placement> {
   const oppositePlacement = getOppositePlacement(placement);

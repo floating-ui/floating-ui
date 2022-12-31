@@ -1,17 +1,18 @@
-import * as React from 'react';
 import {useFloating as usePosition} from '@floating-ui/react-dom';
+import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
+
+import {useFloatingTree} from './components/FloatingTree';
+import {useEvent} from './hooks/utils/useEvent';
 import type {
-  FloatingContext,
   ContextData,
+  FloatingContext,
   ReferenceType,
-  UseFloatingReturn,
   UseFloatingProps,
+  UseFloatingReturn,
 } from './types';
 import {createPubSub} from './utils/createPubSub';
-import {useFloatingTree} from './components/FloatingTree';
 import {isElement} from './utils/is';
-import {useEvent} from './hooks/utils/useEvent';
 
 export function useFloating<RT extends ReferenceType = ReferenceType>({
   open = false,

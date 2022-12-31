@@ -1,12 +1,13 @@
 import type {Placement} from '@floating-ui/core';
-import {useFloating, arrow, offset, flip, shift} from '@floating-ui/react-dom';
+import {arrow, flip, offset, shift,useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect, useRef,useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useLayoutEffect, useRef} from 'react';
-import {Controls} from '../utils/Controls';
-import {useSize} from '../utils/useSize';
-import {Container} from '../utils/Container';
-import {useBoxSize} from '../utils/useBoxSize';
 import {BoxSizeControl} from '../utils/BoxSizeControl';
+import {Container} from '../utils/Container';
+import {Controls} from '../utils/Controls';
+import {useBoxSize} from '../utils/useBoxSize';
+import {useSize} from '../utils/useSize';
 
 export function Complex() {
   const [floatingSizeValue, floatingSize, handleFloatingSizeChange] = useBoxSize();

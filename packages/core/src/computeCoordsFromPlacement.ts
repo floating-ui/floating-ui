@@ -1,8 +1,8 @@
-import type {Placement, ElementRects, Coords} from './types';
-import {getSide} from './utils/getSide';
+import type {Coords,ElementRects, Placement} from './types';
 import {getAlignment} from './utils/getAlignment';
-import {getMainAxisFromPlacement} from './utils/getMainAxisFromPlacement';
 import {getLengthFromAxis} from './utils/getLengthFromAxis';
+import {getMainAxisFromPlacement} from './utils/getMainAxisFromPlacement';
+import {getSide} from './utils/getSide';
 
 export function computeCoordsFromPlacement(
   {reference, floating}: ElementRects,

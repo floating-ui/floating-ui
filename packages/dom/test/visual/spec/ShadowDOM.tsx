@@ -1,9 +1,9 @@
 import type { Placement, Strategy } from '@floating-ui/core';
-
 import { useState } from 'react';
+
+import { allPlacements } from '../utils/allPlacements';
 import { Controls } from '../utils/Controls';
 import { defineElements } from '../utils/shadowDOM';
-import { allPlacements } from '../utils/allPlacements';
 
 type UseCase = 'direct-host-child' | 'deep-host-child' | 'relative-host-with-shadowed-floating-child';
 const USE_CASES: UseCase[] = ['direct-host-child', 'deep-host-child', 'relative-host-with-shadowed-floating-child'];

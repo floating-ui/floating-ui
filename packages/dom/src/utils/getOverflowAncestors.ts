@@ -1,6 +1,6 @@
 import {getNearestOverflowAncestor} from './getNearestOverflowAncestor';
-import {getWindow} from './window';
 import {isOverflowElement} from './is';
+import {getWindow} from './window';
 
 type OverflowAncestors = Array<Element | Window | VisualViewport>;
 

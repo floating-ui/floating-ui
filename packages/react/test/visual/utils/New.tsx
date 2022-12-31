@@ -1,5 +1,6 @@
-import {useFloating, arrow} from '@floating-ui/react';
+import {arrow,useFloating} from '@floating-ui/react';
 import {useRef} from 'react';
+
 import {Controls} from './Controls';
 
 export function New() {

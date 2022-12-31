@@ -1,4 +1,5 @@
-import {test, expect} from '@playwright/test';
+import {expect,test} from '@playwright/test';
+
 import {click} from './utils/click';
 
 const RIGHT_CLIENT_RECT = {x: 600, y: 5};

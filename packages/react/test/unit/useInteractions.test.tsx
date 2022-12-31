@@ -1,17 +1,18 @@
+import {render} from '@testing-library/react';
+import {useEffect, useRef, useState} from 'react';
+
 import {
   useClick,
+  useDismiss,
   useFloating,
   useFocus,
+  useHover,
   useInnerOffset,
   useInteractions,
   useListNavigation,
   useRole,
-  useDismiss,
-  useHover,
   useTypeahead,
 } from '../../src';
-import {render} from '@testing-library/react';
-import {useEffect, useRef, useState} from 'react';
 
 test('correctly merges functions', () => {
   const firstInteractionOnClick = jest.fn();

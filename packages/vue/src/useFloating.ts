@@ -1,3 +1,9 @@
+import type {
+  FloatingElement,
+  MiddlewareData,
+  ReferenceElement,
+} from '@floating-ui/dom';
+import {computePosition} from '@floating-ui/dom';
 import type {Ref} from 'vue-demi';
 import {
   computed,
@@ -9,12 +15,7 @@ import {
   unref,
   watch,
 } from 'vue-demi';
-import type {
-  FloatingElement,
-  MiddlewareData,
-  ReferenceElement,
-} from '@floating-ui/dom';
-import {computePosition} from '@floating-ui/dom';
+
 import type {
   MaybeElement,
   UseFloatingOptions,

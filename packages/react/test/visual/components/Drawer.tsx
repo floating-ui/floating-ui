@@ -1,16 +1,16 @@
-import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {
   autoUpdate,
-  useFloating,
-  useInteractions,
-  useRole,
-  useDismiss,
-  useClick,
-  useId,
-  FloatingPortal,
   FloatingFocusManager,
   FloatingOverlay,
+  FloatingPortal,
+  useClick,
+  useDismiss,
+  useFloating,
+  useId,
+  useInteractions,
+  useRole,
 } from '@floating-ui/react';
+import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {useMediaQuery} from 'react-responsive';
 
 export const Main = () => {

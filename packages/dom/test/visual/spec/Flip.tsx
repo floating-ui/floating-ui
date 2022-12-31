@@ -1,8 +1,9 @@
 import type {Placement} from '@floating-ui/core';
 import type {FlipOptions} from '@floating-ui/core';
+import {flip,useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect,useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
-import {useFloating, flip} from '@floating-ui/react-dom';
-import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 

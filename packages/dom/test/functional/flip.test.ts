@@ -1,4 +1,5 @@
-import {test, expect} from '@playwright/test';
+import {expect,test} from '@playwright/test';
+
 import {click} from './utils/click';
 
 test('does not flip when `mainAxis` is false', async ({page}) => {

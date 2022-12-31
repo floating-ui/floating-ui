@@ -1,8 +1,8 @@
 import type {ElementRects, Placement, Side} from '../types';
+import {getAlignment} from './getAlignment';
 import {getLengthFromAxis} from './getLengthFromAxis';
 import {getMainAxisFromPlacement} from './getMainAxisFromPlacement';
 import {getOppositePlacement} from './getOppositePlacement';
-import {getAlignment} from './getAlignment';
 
 export function getAlignmentSides(
   placement: Placement,

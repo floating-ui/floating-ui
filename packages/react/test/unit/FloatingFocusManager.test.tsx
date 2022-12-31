@@ -1,10 +1,12 @@
-import {cloneElement, useRef, useState} from 'react';
-import {Context as ResponsiveContext} from 'react-responsive';
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {cloneElement, useRef, useState} from 'react';
+import {Context as ResponsiveContext} from 'react-responsive';
+
 import {
   FloatingFocusManager,
   FloatingNode,
+  FloatingPortal,
   FloatingTree,
   useClick,
   useDismiss,
@@ -12,11 +14,10 @@ import {
   useFloatingNodeId,
   useFloatingParentNodeId,
   useInteractions,
-  FloatingPortal,
 } from '../../src';
 import {Props} from '../../src/components/FloatingFocusManager';
-import {Main as Navigation} from '../visual/components/Navigation';
 import {Main as Drawer} from '../visual/components/Drawer';
+import {Main as Navigation} from '../visual/components/Navigation';
 
 function App(
   props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>

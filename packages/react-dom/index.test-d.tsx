@@ -1,5 +1,6 @@
 import {useRef} from 'react';
-import {useFloating, shift, arrow} from '.';
+
+import {arrow,shift, useFloating} from '.';
 
 App;
 function App() {

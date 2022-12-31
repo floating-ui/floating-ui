@@ -1,5 +1,6 @@
+import {cleanup,fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
-import {fireEvent, render, screen, cleanup} from '@testing-library/react';
+
 import {FloatingPortal, useFloating} from '../../src';
 
 function App(props: {root?: HTMLElement | null; id?: string}) {

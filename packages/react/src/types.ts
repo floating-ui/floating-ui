@@ -1,26 +1,25 @@
-import * as React from 'react';
 import type {
   ComputePositionReturn,
-  VirtualElement,
-  Placement,
   Middleware,
+  Placement,
   Strategy,
+  VirtualElement,
 } from '@floating-ui/dom';
 import type {UseFloatingReturn as UsePositionFloatingReturn} from '@floating-ui/react-dom';
+import * as React from 'react';
+
 import type {DismissPayload} from './hooks/useDismiss';
 
-export * from '@floating-ui/dom';
 export * from '.';
-
-export {arrow} from '@floating-ui/react-dom';
-
-export {Props as UseHoverProps} from './hooks/useHover';
-export {Props as UseFocusProps} from './hooks/useFocus';
 export {Props as UseClickProps} from './hooks/useClick';
 export {Props as UseDismissProps} from './hooks/useDismiss';
-export {Props as UseRoleProps} from './hooks/useRole';
+export {Props as UseFocusProps} from './hooks/useFocus';
+export {Props as UseHoverProps} from './hooks/useHover';
 export {Props as UseListNavigationProps} from './hooks/useListNavigation';
+export {Props as UseRoleProps} from './hooks/useRole';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
+export * from '@floating-ui/dom';
+export {arrow} from '@floating-ui/react-dom';
 
 export interface ExtendedRefs<RT> {
   reference: React.MutableRefObject<ReferenceType | null>;

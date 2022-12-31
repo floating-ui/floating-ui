@@ -1,13 +1,14 @@
 import {
+  arrow,
   autoUpdate,
-  useFloating,
-  offset,
   flip,
-  shift,
   hide,
   limitShift,
-  arrow,
+  offset,
+  shift,
+  useFloating,
 } from '@floating-ui/react-dom';
+
 import {Controls} from '../utils/Controls';
 import {useSize} from '../utils/useSize';
 

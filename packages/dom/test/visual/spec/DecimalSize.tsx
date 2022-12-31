@@ -1,6 +1,7 @@
 import type {Dimensions} from '@floating-ui/core';
-import {useFloating, size as sizeM} from '@floating-ui/react-dom';
-import {useState, useLayoutEffect} from 'react';
+import {size as sizeM,useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect,useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 
 type Size = string;

@@ -1,14 +1,13 @@
-import * as React from 'react';
 import type {
-  ComputePositionReturn,
   ComputePositionConfig,
+  ComputePositionReturn,
   VirtualElement,
 } from '@floating-ui/dom';
-
-export * from '@floating-ui/dom';
+import * as React from 'react';
 
 export {useFloating} from './';
 export {arrow} from './';
+export * from '@floating-ui/dom';
 
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;

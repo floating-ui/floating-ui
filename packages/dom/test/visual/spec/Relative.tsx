@@ -1,5 +1,6 @@
 import {useFloating} from '@floating-ui/react-dom';
-import {useState, useLayoutEffect} from 'react';
+import {useLayoutEffect,useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 
 type Node = null | 'html' | 'body' | 'offsetParent';

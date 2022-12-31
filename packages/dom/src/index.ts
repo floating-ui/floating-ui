@@ -1,10 +1,11 @@
+import {computePosition as computePositionCore} from '@floating-ui/core';
+
+import {platform} from './platform';
 import type {
   ComputePositionConfig,
-  ReferenceElement,
   FloatingElement,
+  ReferenceElement,
 } from './types';
-import {computePosition as computePositionCore} from '@floating-ui/core';
-import {platform} from './platform';
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
@@ -28,21 +29,18 @@ export const computePosition = (
   });
 };
 
+export {autoUpdate} from './autoUpdate';
+export {platform} from './platform';
+export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export {
   arrow,
   autoPlacement,
+  detectOverflow,
   flip,
   hide,
+  inline,
+  limitShift,
   offset,
   shift,
-  limitShift,
   size,
-  inline,
-  detectOverflow,
 } from '@floating-ui/core';
-
-export {autoUpdate} from './autoUpdate';
-
-export {getOverflowAncestors} from './utils/getOverflowAncestors';
-
-export {platform} from './platform';

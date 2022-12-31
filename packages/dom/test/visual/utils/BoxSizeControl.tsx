@@ -1,5 +1,5 @@
-import {Controls} from './Controls';
 import {boxSizes} from './box-sizes';
+import {Controls} from './Controls';
 
 type Props = {
   id: string;

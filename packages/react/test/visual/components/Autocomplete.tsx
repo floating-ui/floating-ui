@@ -1,16 +1,16 @@
-import {forwardRef, useRef, useState} from 'react';
 import {
   autoUpdate,
+  FloatingFocusManager,
+  FloatingPortal,
   size,
-  useId,
   useDismiss,
   useFloating,
+  useId,
   useInteractions,
   useListNavigation,
   useRole,
-  FloatingFocusManager,
-  FloatingPortal,
 } from '@floating-ui/react';
+import {forwardRef, useRef, useState} from 'react';
 
 export const data = [
   'Alfalfa Sprouts',

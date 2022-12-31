@@ -1,13 +1,14 @@
 import type {Placement} from '@floating-ui/core';
 import type {LimitShiftOptions} from '@floating-ui/core';
 import {
-  useFloating,
-  shift,
-  offset,
   limitShift as limitShiftFn,
+  offset,
+  shift,
+  useFloating,
 } from '@floating-ui/react-dom';
+import {useLayoutEffect,useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 

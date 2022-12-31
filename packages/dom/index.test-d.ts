@@ -1,16 +1,16 @@
 import {
-  computePosition,
-  shift,
-  limitShift,
-  flip,
-  autoPlacement,
-  hide,
-  offset,
-  size,
   arrow,
+  autoPlacement,
+  computePosition,
   detectOverflow,
+  flip,
+  hide,
+  limitShift,
   Middleware,
+  offset,
   platform,
+  shift,
+  size,
 } from '.';
 
 // @ts-expect-error

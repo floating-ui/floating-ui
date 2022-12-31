@@ -1,13 +1,13 @@
+import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
-import {getWindow} from './window';
-import {getComputedStyle} from './getComputedStyle';
 import {
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
   isTableElement,
 } from './is';
+import {getWindow} from './window';
 
 function getTrueOffsetParent(element: Element): Element | null {
   if (

@@ -1,13 +1,13 @@
 import type {Platform} from './types';
-import {getRectRelativeToOffsetParent} from './utils/getRectRelativeToOffsetParent';
-import {getOffsetParent} from './utils/getOffsetParent';
-import {getDimensions} from './utils/getDimensions';
 import {convertOffsetParentRelativeRectToViewportRelativeRect} from './utils/convertOffsetParentRelativeRectToViewportRelativeRect';
-import {isElement} from './utils/is';
-import {getDocumentElement} from './utils/getDocumentElement';
 import {getClippingRect} from './utils/getClippingRect';
 import {getComputedStyle} from './utils/getComputedStyle';
+import {getDimensions} from './utils/getDimensions';
+import {getDocumentElement} from './utils/getDocumentElement';
+import {getOffsetParent} from './utils/getOffsetParent';
+import {getRectRelativeToOffsetParent} from './utils/getRectRelativeToOffsetParent';
 import {getScale} from './utils/getScale';
+import {isElement} from './utils/is';
 
 export const platform: Platform = {
   getClippingRect,

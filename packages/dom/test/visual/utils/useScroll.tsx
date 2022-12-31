@@ -1,3 +1,5 @@
+import {VirtualElement} from '@floating-ui/core';
+import {getOverflowAncestors, shift,useFloating} from '@floating-ui/react-dom';
 import {
   MutableRefObject,
   useEffect,
@@ -5,10 +7,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import {getOverflowAncestors, useFloating, shift} from '@floating-ui/react-dom';
-import {VirtualElement} from '@floating-ui/core';
-import {isElement} from '../../../src/utils/is';
 import {flushSync} from 'react-dom';
+
+import {isElement} from '../../../src/utils/is';
 
 export const useScroll = ({
   refs,

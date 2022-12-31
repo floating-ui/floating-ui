@@ -1,19 +1,20 @@
+import {DocSearch} from '@docsearch/react';
 import {MDXProvider} from '@mdx-js/react';
+import cn from 'classnames';
+import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import Head from 'next/head';
-import cn from 'classnames';
-import {useState, useRef} from 'react';
+import {useRef,useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
-import {SkipNavLink, SkipNavContent} from './ReachSkipNav';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
-import {DocSearch} from '@docsearch/react';
+
 import Logo from '../../assets/logo.svg';
 import {Chrome} from './Chrome';
-import {Floating} from './Floating';
 import Collapsible from './Collapsible';
+import {Floating} from './Floating';
 import Navigation from './Navigation';
 import Notice from './Notice';
+import {SkipNavContent,SkipNavLink} from './ReachSkipNav';
 
 const middleware = [
   {

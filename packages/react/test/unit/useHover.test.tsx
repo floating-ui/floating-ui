@@ -1,6 +1,7 @@
+import {act,cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
-import {cleanup, fireEvent, render, screen, act} from '@testing-library/react';
-import {useHover, useInteractions, useFloating} from '../../src';
+
+import {useFloating,useHover, useInteractions} from '../../src';
 import type {Props} from '../../src/hooks/useHover';
 
 jest.useFakeTimers();

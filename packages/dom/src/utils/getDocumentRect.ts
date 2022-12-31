@@ -1,8 +1,9 @@
 import type {Rect} from '@floating-ui/core';
-import {getDocumentElement} from './getDocumentElement';
+
 import {getComputedStyle} from './getComputedStyle';
-import getWindowScrollBarX from './getWindowScrollBarX';
+import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';
+import getWindowScrollBarX from './getWindowScrollBarX';
 import {max} from './math';
 
 // Gets the entire size of the scrollable document area, even extending outside

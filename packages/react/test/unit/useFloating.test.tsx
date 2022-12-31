@@ -1,5 +1,6 @@
 import {render} from '@testing-library/react';
 import {useLayoutEffect} from 'react';
+
 import {useFloating} from '../../src';
 import {isElement} from '../../src/utils/is';
 

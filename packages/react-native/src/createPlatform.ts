@@ -1,5 +1,5 @@
-import {Dimensions} from 'react-native';
 import {Platform} from '@floating-ui/core';
+import {Dimensions} from 'react-native';
 
 const ORIGIN = {x: 0, y: 0};
 

@@ -1,10 +1,11 @@
 import type {Rect, Strategy} from '@floating-ui/core';
+
 import {getBoundingClientRect} from './getBoundingClientRect';
-import {getNodeScroll} from './getNodeScroll';
-import {getNodeName} from './getNodeName';
 import {getDocumentElement} from './getDocumentElement';
-import {isHTMLElement, isOverflowElement} from './is';
+import {getNodeName} from './getNodeName';
+import {getNodeScroll} from './getNodeScroll';
 import {getScale} from './getScale';
+import {isHTMLElement, isOverflowElement} from './is';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   rect,

@@ -1,4 +1,5 @@
 import type {ComponentPublicInstance} from 'vue-demi';
+
 import type {MaybeElement} from '../types';
 
 export function unwrapElement<T>(element: MaybeElement<T>) {

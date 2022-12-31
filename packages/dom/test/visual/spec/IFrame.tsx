@@ -1,11 +1,12 @@
 import {
-  useFloating,
-  shift,
-  limitShift,
   autoUpdate,
+  limitShift,
+  shift,
+  useFloating,
 } from '@floating-ui/react-dom';
 import {useLayoutEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
+
 import {Controls} from '../utils/Controls';
 
 const SCROLL = [

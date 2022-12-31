@@ -1,5 +1,5 @@
-import {getNodeName} from './getNodeName';
 import {getDocumentElement} from './getDocumentElement';
+import {getNodeName} from './getNodeName';
 import {isShadowRoot} from './is';
 
 export function getParentNode(node: Node): Node {

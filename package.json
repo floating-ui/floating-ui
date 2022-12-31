@@ -20,7 +20,7 @@
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
     "clean": "rm -rf packages/**/src/[^_]*.d.ts packages/**/src/**/[^_]*.d.ts packages/**/dist",
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint . --ext .js,.ts,.tsx",
     "test:types": "tsc",
     "dev:website": "npm run build && npm -w website run dev",
     "postinstall": "patch-package"
@@ -62,6 +62,7 @@
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "eslint": "^8.3.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
     "jest": "^29.3.1",
     "jest-environment-jsdom": "^29.3.1",
     "parcel": "^2.6.0",

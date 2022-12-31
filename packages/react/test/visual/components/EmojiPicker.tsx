@@ -1,21 +1,21 @@
-import {useState, useRef, useEffect, forwardRef} from 'react';
+import './EmojiPicker.css';
+
 import {
-  useFloating,
-  useInteractions,
-  useListNavigation,
-  useClick,
-  useDismiss,
+  autoUpdate,
+  flip,
   FloatingFocusManager,
   FloatingPortal,
-  useRole,
   offset,
-  flip,
-  autoUpdate,
-  useId,
   Placement,
+  useClick,
+  useDismiss,
+  useFloating,
+  useId,
+  useInteractions,
+  useListNavigation,
+  useRole,
 } from '@floating-ui/react';
-
-import './EmojiPicker.css';
+import {forwardRef, useEffect, useRef, useState} from 'react';
 
 const emojis = [
   {

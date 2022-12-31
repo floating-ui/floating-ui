@@ -1,10 +1,11 @@
-import {fireEvent, render, screen, cleanup, act} from '@testing-library/react';
+import {act,cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+
 import {
-  useFocus,
   useDismiss,
-  useHover,
   useFloating,
+  useFocus,
+  useHover,
   useInteractions,
 } from '../../src';
 import type {Props} from '../../src/hooks/useFocus';

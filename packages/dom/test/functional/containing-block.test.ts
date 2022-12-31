@@ -1,4 +1,5 @@
-import {test, expect} from '@playwright/test';
+import {expect,test} from '@playwright/test';
+
 import {click} from './utils/click';
 
 ['transform', 'perspective', 'transform, perspective', 'opacity'].forEach(

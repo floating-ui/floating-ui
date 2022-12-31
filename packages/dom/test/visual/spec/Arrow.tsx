@@ -1,7 +1,8 @@
 import type {Placement} from '@floating-ui/core';
-import {useFloating, arrow, shift, autoUpdate} from '@floating-ui/react-dom';
+import {arrow, autoUpdate,shift, useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect,useRef, useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
-import {useState, useRef, useLayoutEffect} from 'react';
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
 

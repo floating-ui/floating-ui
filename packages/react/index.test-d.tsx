@@ -1,18 +1,19 @@
 import {useRef} from 'react';
+
 import {
-  useFloating,
-  shift,
   arrow,
-  useInteractions,
-  useHover,
-  useFocus,
-  useRole,
+  safePolygon,
+  shift,
   useClick,
   useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
   useListNavigation,
-  useTypeahead,
-  safePolygon,
   useMergeRefs,
+  useRole,
+  useTypeahead,
 } from '.';
 
 App;

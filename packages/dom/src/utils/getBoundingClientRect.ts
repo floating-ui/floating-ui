@@ -1,4 +1,5 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {isElement, isLayoutViewport} from './is';
 import {unwrapElement} from './unwrapElement';

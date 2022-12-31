@@ -1,5 +1,5 @@
-import {useRef, useState} from 'react';
 import Tippy from '@tippyjs/react';
+import {useRef, useState} from 'react';
 import {ChevronDown, ChevronRight} from 'react-feather';
 
 export default function DropdownExample() {

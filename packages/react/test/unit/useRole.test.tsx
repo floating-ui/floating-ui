@@ -1,6 +1,7 @@
+import {cleanup, fireEvent,render, screen} from '@testing-library/react';
 import {useState} from 'react';
-import {render, screen, cleanup, fireEvent} from '@testing-library/react';
-import {useInteractions, useFloating, useRole} from '../../src';
+
+import {useFloating, useInteractions, useRole} from '../../src';
 import type {Props} from '../../src/hooks/useRole';
 
 function App(props: Props & {initiallyOpen?: boolean}) {

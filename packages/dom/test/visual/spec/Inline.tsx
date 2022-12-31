@@ -1,6 +1,7 @@
 import {Coords, Placement} from '@floating-ui/core';
-import {useFloating, inline, flip, size} from '@floating-ui/react-dom';
+import {flip, inline, size,useFloating} from '@floating-ui/react-dom';
 import React, {useLayoutEffect, useRef, useState} from 'react';
+
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 

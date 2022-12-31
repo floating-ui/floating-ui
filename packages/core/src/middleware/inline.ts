@@ -1,7 +1,7 @@
 import type {Middleware, Padding} from '../types';
-import {getSide} from '../utils/getSide';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
+import {getSide} from '../utils/getSide';
 import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
 

@@ -1,12 +1,12 @@
-import type {Placement, Middleware} from '../types';
-import {getOppositePlacement} from '../utils/getOppositePlacement';
-import {getSide} from '../utils/getSide';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
+import type {Middleware,Placement} from '../types';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
+import {getOppositePlacement} from '../utils/getOppositePlacement';
+import {getSide} from '../utils/getSide';
 
 export interface Options {
   /**

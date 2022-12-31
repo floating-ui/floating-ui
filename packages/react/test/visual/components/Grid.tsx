@@ -1,9 +1,9 @@
 import {
-  useFloating,
-  useInteractions,
   FloatingFocusManager,
   useClick,
   useDismiss,
+  useFloating,
+  useInteractions,
   useListNavigation,
 } from '@floating-ui/react';
 import {useRef, useState} from 'react';

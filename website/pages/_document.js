@@ -1,10 +1,10 @@
-import React from 'react';
 import Document, {
-  Html,
   Head,
+  Html,
   Main,
   NextScript,
 } from 'next/document';
+import React from 'react';
 
 class MyDocument extends Document {
   render() {

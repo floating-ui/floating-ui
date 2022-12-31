@@ -1,10 +1,10 @@
-import type {Middleware, MiddlewareArguments} from '../types';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import {getSide} from '../utils/getSide';
+import type {Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
+import {getSide} from '../utils/getSide';
 import {max} from '../utils/math';
 
 export interface Options {

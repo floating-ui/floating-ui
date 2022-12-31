@@ -1,6 +1,7 @@
-import {unref} from 'vue-demi';
 import type {Middleware} from '@floating-ui/dom';
 import {arrow as apply} from '@floating-ui/dom';
+import {unref} from 'vue-demi';
+
 import type {ArrowOptions} from './types';
 import {unwrapElement} from './utils/unwrapElement';
 

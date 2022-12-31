@@ -1,19 +1,20 @@
-import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {
-  Placement,
-  offset,
-  flip,
-  shift,
   autoUpdate,
+  flip,
+  FloatingFocusManager,
+  FloatingPortal,
+  offset,
+  Placement,
+  shift,
+  useClick,
+  useDismiss,
   useFloating,
+  useId,
   useInteractions,
   useRole,
-  useDismiss,
-  useClick,
-  useId,
-  FloatingPortal,
-  FloatingFocusManager,
 } from '@floating-ui/react';
+import {cloneElement, isValidElement, useEffect, useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 
 export const Main = () => {

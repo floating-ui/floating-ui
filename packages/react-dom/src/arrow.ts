@@ -1,6 +1,6 @@
-import * as React from 'react';
 import type {Middleware, SideObject} from '@floating-ui/core';
 import {arrow as arrowCore} from '@floating-ui/dom';
+import * as React from 'react';
 
 /**
  * Positions an inner element of the floating element such that it is centered

@@ -1,17 +1,18 @@
-import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {
-  Placement,
-  offset,
-  flip,
-  shift,
   autoUpdate,
-  useFloating,
-  useInteractions,
-  useHover,
-  useFocus,
-  useRole,
+  flip,
+  offset,
+  Placement,
+  shift,
   useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole,
 } from '@floating-ui/react';
+import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
+
 import {Controls} from '../utils/Controls';
 
 type Delay = number | Partial<{open: number; close: number}>;

@@ -1,20 +1,20 @@
+import {
+  flip,
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingPortal,
+  offset,
+  safePolygon,
+  shift,
+  useDismiss,
+  useFloating,
+  useFloatingNodeId,
+  useFocus,
+  useHover,
+  useInteractions,
+} from '@floating-ui/react';
 import * as React from 'react';
 import mergeRefs from 'react-merge-refs';
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-  useHover,
-  useFocus,
-  useInteractions,
-  useDismiss,
-  safePolygon,
-  FloatingPortal,
-  useFloatingNodeId,
-  FloatingNode,
-  FloatingFocusManager,
-} from '@floating-ui/react';
 
 interface SubItemProps {
   label: string;

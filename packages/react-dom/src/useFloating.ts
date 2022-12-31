@@ -1,12 +1,13 @@
+import {computePosition} from '@floating-ui/dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
-import {computePosition} from '@floating-ui/dom';
+
 import type {
+  ReferenceType,
+  UseFloatingData,
   UseFloatingProps,
   UseFloatingReturn,
-  UseFloatingData,
-  ReferenceType,
 } from './types';
 import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
