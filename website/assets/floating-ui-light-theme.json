@@ -750,7 +750,7 @@
       "name": "CSS Units",
       "scope": ["keyword.other.unit"],
       "settings": {
-        "foreground": "#fc7b7b"
+        "foreground": "#cc3043"
       }
     },
     {
