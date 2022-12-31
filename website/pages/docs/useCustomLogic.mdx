@@ -75,6 +75,6 @@ And also a mutable ref to pass state variables around hooks:
 const {context} = useFloating();
 
 React.useEffect(() => {
-  context.dataRef.current = 'foo';
+  context.dataRef.current.foo = 'bar';
 }, [context]);
 ```

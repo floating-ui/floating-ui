@@ -508,37 +508,43 @@ your own without overriding them.
 
 You may find passing all props through the prop getter helps you
 remember to prevent overriding event handlers, but is not
-currently required for non-event handler function props.
+currently required unless the value is a function event handler
+that starts with `on`.
 
-### Item prop getter
+### getItemProps
 
-When dealing with a list inside your floating element
-(`useListNavigation(){:js}`), pass these props to each item
-element:
+This is an _optional_ prop getter that is only used when dealing
+with a list inside your floating element (see
+[useListNavigation](/docs/useListNavigation)).
 
-```js /getItemProps/
-<div
-  ref={floating}
-  style={{
-    position: strategy,
-    left: x ?? 0,
-    top: y ?? 0,
-    width: 'max-content',
-  }}
-  {...getFloatingProps()}
->
-  <ul>
-    {list.map((item) => (
-      <li key={item} {...getItemProps()}>
-        {item}
-      </li>
-    ))}
-  </ul>
-</div>
+## Data
+
+The context object contains a data ref with some information
+available.
+
+```js
+const {context} = useFloating();
+
+useEffect(() => {
+  console.log(context.dataRef.current);
+}, [context]);
 ```
 
-Without a list of items, this prop getter can be omitted (e.g. a
-regular tooltip or popover).
+Currently, only two built-in values are set:
+
+```js
+interface ContextData {
+  // Which event caused the floating element to open.
+  openEvent?: MouseEvent | PointerEvent | FocusEvent;
+
+  // Whether the user is typing currently when `useTypeahead`
+  // is in use.
+  typing?: boolean;
+
+  // Add support for custom data to pass around.
+  [key: string]: any;
+}
+```
 
 ## Changing the positioning reference while retaining events
 
