@@ -4,7 +4,7 @@ interface NavigatorUAData {
   platform: string;
 }
 
-// Avoid Chrome DevTools blue warning
+// Avoid Chrome DevTools blue warning.
 export function getPlatform(): string {
   const uaData = (navigator as any).userAgentData as
     | NavigatorUAData

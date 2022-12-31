@@ -313,7 +313,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     } else if (previousOpenRef.current) {
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
-      // we store and call the previous function
+      // we store and call the previous function.
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
@@ -340,7 +340,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           focusItem(listRef, indexRef);
         }
 
-        // Initial sync
+        // Initial sync.
         if (
           !previousOpenRef.current &&
           focusItemOnOpenRef.current &&
@@ -448,7 +448,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onNavigate(indexRef.current);
       }
 
-      // Grid navigation
+      // Grid navigation.
       if (cols > 1) {
         const prevIndex = indexRef.current;
 
@@ -513,7 +513,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           onNavigate(indexRef.current);
         }
 
-        // Remains on the same row/column
+        // Remains on the same row/column.
         if (orientation === 'both') {
           const prevRow = Math.floor(prevIndex / cols);
 

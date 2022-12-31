@@ -8,13 +8,13 @@ export function getParentNode(node: Node): Node {
   }
 
   const result =
-    // Step into the shadow DOM of the parent of a slotted node
+    // Step into the shadow DOM of the parent of a slotted node.
     (node as any).assignedSlot ||
-    // DOM Element detected
+    // DOM Element detected.
     node.parentNode ||
-    // ShadowRoot detected
+    // ShadowRoot detected.
     (isShadowRoot(node) ? node.host : null) ||
-    // Fallback
+    // Fallback.
     getDocumentElement(node);
 
   return isShadowRoot(result) ? result.host : result;

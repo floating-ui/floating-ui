@@ -2,7 +2,7 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Middleware,Placement} from '../types';
+import type {Middleware, Placement} from '../types';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
@@ -100,13 +100,13 @@ export const flip = (
 
     overflowsData = [...overflowsData, {placement, overflows}];
 
-    // One or more sides is overflowing
+    // One or more sides is overflowing.
     if (!overflows.every((side) => side <= 0)) {
       const nextIndex = (middlewareData.flip?.index || 0) + 1;
       const nextPlacement = placements[nextIndex];
 
       if (nextPlacement) {
-        // Try next placement and re-run the lifecycle
+        // Try next placement and re-run the lifecycle.
         return {
           data: {
             index: nextIndex,

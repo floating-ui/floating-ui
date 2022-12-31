@@ -3,7 +3,7 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import {allPlacements} from '../enums';
-import type {Alignment,Middleware, Placement} from '../types';
+import type {Alignment, Middleware, Placement} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getOppositeAlignmentPlacement} from '../utils/getOppositeAlignmentPlacement';
@@ -102,7 +102,7 @@ export const autoPlacement = (
       await platform.isRTL?.(elements.floating)
     );
 
-    // Make `computeCoords` start from the right place
+    // Make `computeCoords` start from the right place.
     if (placement !== currentPlacement) {
       return {
         reset: {
@@ -124,7 +124,7 @@ export const autoPlacement = (
 
     const nextPlacement = placements[currentIndex + 1];
 
-    // There are more placements to check
+    // There are more placements to check.
     if (nextPlacement) {
       return {
         data: {

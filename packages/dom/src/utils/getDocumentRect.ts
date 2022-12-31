@@ -7,7 +7,7 @@ import getWindowScrollBarX from './getWindowScrollBarX';
 import {max} from './math';
 
 // Gets the entire size of the scrollable document area, even extending outside
-// of the `<html>` and `<body>` rect bounds if horizontally scrollable
+// of the `<html>` and `<body>` rect bounds if horizontally scrollable.
 export function getDocumentRect(element: HTMLElement): Rect {
   const html = getDocumentElement(element);
   const scroll = getNodeScroll(element);

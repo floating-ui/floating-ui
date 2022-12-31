@@ -29,7 +29,7 @@ type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
 };
 
-// Returns the inner client rect, subtracting scrollbars if present
+// Returns the inner client rect, subtracting scrollbars if present.
 function getInnerBoundingClientRect(
   element: Element,
   strategy: Strategy
@@ -107,10 +107,10 @@ function getClippingElementAncestors(
         );
 
     if (shouldDropCurrentNode) {
-      // Drop non-containing blocks
+      // Drop non-containing blocks.
       result = result.filter((ancestor) => ancestor !== currentNode);
     } else {
-      // Record last containing block for next iteration
+      // Record last containing block for next iteration.
       currentContainingBlockComputedStyle = computedStyle;
     }
 
@@ -123,7 +123,7 @@ function getClippingElementAncestors(
 }
 
 // Gets the maximum area that the element is visible in due to any number of
-// clipping ancestors
+// clipping ancestors.
 export function getClippingRect(
   this: PlatformWithCache,
   {

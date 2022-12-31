@@ -1,5 +1,5 @@
 import {getParentNode} from './getParentNode';
-import {isHTMLElement, isLastTraversableNode,isOverflowElement} from './is';
+import {isHTMLElement, isLastTraversableNode, isOverflowElement} from './is';
 
 export function getNearestOverflowAncestor(node: Node): HTMLElement {
   const parentNode = getParentNode(node);

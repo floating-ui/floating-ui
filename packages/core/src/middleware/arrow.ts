@@ -28,7 +28,7 @@ export const arrow = (options: Options): Middleware => ({
   name: 'arrow',
   options,
   async fn(middlewareArguments) {
-    // Since `element` is required, we don't Partial<> the type
+    // Since `element` is required, we don't Partial<> the type.
     const {element, padding = 0} = options || {};
     const {x, y, placement, rects, platform} = middlewareArguments;
 
@@ -70,7 +70,7 @@ export const arrow = (options: Options): Middleware => ({
     const centerToReference = endDiff / 2 - startDiff / 2;
 
     // Make sure the arrow doesn't overflow the floating element if the center
-    // point is outside the floating element's bounds
+    // point is outside the floating element's bounds.
     const min = paddingObject[minProp];
     const max = clientSize - arrowDimensions[length] - paddingObject[maxProp];
     const center =

@@ -55,14 +55,14 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
     const paddingObject = getSideObjectFromPadding(padding);
 
     function getBoundingClientRect() {
-      // There are two rects and they are disjoined
+      // There are two rects and they are disjoined.
       if (
         clientRects.length === 2 &&
         clientRects[0].left > clientRects[1].right &&
         x != null &&
         y != null
       ) {
-        // Find the first rect in which the point is fully inside
+        // Find the first rect in which the point is fully inside.
         return (
           clientRects.find(
             (rect) =>
@@ -74,7 +74,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
         );
       }
 
-      // There are 2 or more connected rects
+      // There are 2 or more connected rects.
       if (clientRects.length >= 2) {
         if (getMainAxisFromPlacement(placement) === 'x') {
           const firstRect = clientRects[0];

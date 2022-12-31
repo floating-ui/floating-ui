@@ -67,7 +67,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
   }, [open]);
 
   useLayoutEffect(() => {
-    // Sync arrow key navigation but not typeahead navigation
+    // Sync arrow key navigation but not typeahead navigation.
     if (open && stringRef.current === '') {
       prevIndexRef.current = selectedIndex ?? activeIndex ?? -1;
     }
@@ -108,9 +108,9 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       if (
         listContent == null ||
         ignoreKeysRef.current.includes(event.key) ||
-        // Character key
+        // Character key.
         event.key.length !== 1 ||
-        // Modifier key
+        // Modifier key.
         event.ctrlKey ||
         event.metaKey ||
         event.altKey
@@ -127,7 +127,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       );
 
       // Allows the user to cycle through items that start with the same letter
-      // in rapid succession
+      // in rapid succession.
       if (
         allowRapidSuccessionOfFirstLetter &&
         stringRef.current === event.key
