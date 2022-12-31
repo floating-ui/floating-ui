@@ -1,11 +1,11 @@
-import {
+import type {
   Boundary,
   ClientRectObject,
   Rect,
-  rectToClientRect,
   RootBoundary,
   Strategy,
 } from '@floating-ui/core';
+import {rectToClientRect} from '@floating-ui/core';
 
 import {Platform, ReferenceElement} from '../types';
 import {getBoundingClientRect} from './getBoundingClientRect';
@@ -33,7 +33,7 @@ type PlatformWithCache = Platform & {
 function getInnerBoundingClientRect(
   element: Element,
   strategy: Strategy
-): ClientRectObject {
+): Rect {
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
@@ -44,14 +44,10 @@ function getInnerBoundingClientRect(
   const y = top * scale.y;
 
   return {
-    top: y,
-    left: x,
-    right: x + width,
-    bottom: y + height,
-    x,
-    y,
     width,
     height,
+    x,
+    y,
   };
 }
 
@@ -65,7 +61,9 @@ function getClientRectFromClippingAncestor(
   }
 
   if (isElement(clippingAncestor)) {
-    return getInnerBoundingClientRect(clippingAncestor, strategy);
+    return rectToClientRect(
+      getInnerBoundingClientRect(clippingAncestor, strategy)
+    );
   }
 
   return rectToClientRect(getDocumentRect(getDocumentElement(element)));
