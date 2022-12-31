@@ -55,25 +55,23 @@ useTypeahead(context, {
 });
 ```
 
-You can derive these strings when assigning the node:
+You can derive these strings when assigning the node if the
+strings are not available up front:
 
 ```js
-// HTMLElements for `useListNavigation`
-const listItemsRef = useRef();
-// Strings for `useTypeahead`
-const listContentRef = useRef();
+// Array<HTMLElement | null> for `useListNavigation`
+const listItemsRef = useRef([]);
+// Array<string | null> for `useTypeahead`
+const listContentRef = useRef([]);
 ```
 
-```js {6}
-['one', 'two', 'three'].map((option) => (
-  <li
-    key={option}
-    ref={(node) => {
-      listItemsRef.current[index] = node;
-      listContentRef.current[index] = node.textContent;
-    }}
-  />
-));
+```js {4}
+<li
+  ref={(node) => {
+    listItemsRef.current[index] = node;
+    listContentRef.current[index] = node.textContent;
+  }}
+/>
 ```
 
 ### activeIndex
