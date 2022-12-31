@@ -7,6 +7,8 @@ export default function Notice({
   children,
   className,
 }) {
+  const ChildrenTag = type === 'version' ? 'strong' : 'span';
+
   return (
     <aside
       className={cn(
@@ -26,10 +28,12 @@ export default function Notice({
         }
       )}
     >
-      <strong className="block mt-1 mb-2 text-gray-900 dark:text-gray-100">
-        {title[0].toUpperCase() + title.slice(1)}
-      </strong>
-      <span>{children}</span>
+      {type !== 'version' && (
+        <strong className="block mt-1 mb-2 text-gray-900 dark:text-gray-100">
+          {title[0].toUpperCase() + title.slice(1)}
+        </strong>
+      )}
+      <ChildrenTag>{children}</ChildrenTag>
     </aside>
   );
 }
