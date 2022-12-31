@@ -40,17 +40,58 @@ interface Props {
 
 ### listRef
 
+**Required**
+
 default: empty list
 
 A ref which contains an array of strings whose indices match the
 HTML elements of the list.
 
+```js
+const listRef = useRef(['one', 'two', 'three']);
+
+useTypeahead(context, {
+  listRef,
+});
+```
+
+You can derive these strings when assigning the node:
+
+```js
+// HTMLElements for `useListNavigation`
+const listItemsRef = useRef();
+// Strings for `useTypeahead`
+const listContentRef = useRef();
+```
+
+```js {6}
+['one', 'two', 'three'].map((option) => (
+  <li
+    key={option}
+    ref={(node) => {
+      listItemsRef.current[index] = node;
+      listContentRef.current[index] = node.textContent;
+    }}
+  />
+));
+```
+
 ### activeIndex
+
+**Required**
 
 default: `null{:js}`
 
 The currently active index. This specifies where the typeahead
 starts.
+
+```js
+const [activeIndex, setActiveIndex] = useState(null);
+
+useTypeahead(context, {
+  activeIndex,
+});
+```
 
 ### onMatch
 
@@ -105,17 +146,37 @@ default: `1000{:js}`
 Debounce timeout which will reset the transient string as the
 user types.
 
+```js
+useTypeahead(context, {
+  resetMs: 500,
+});
+```
+
 ### ignoreKeys
 
 default: `[]{:js}`
 
-Keys to ignore.
+Optional keys to ignore.
+
+```js
+useTypeahead(context, {
+  ignoreKeys: ['I', 'G', 'N', 'O', 'R', 'E'],
+});
+```
 
 ### selectedIndex
 
 default: `null{:js}`
 
-The currently selected index, if any.
+The currently selected index, if available.
+
+```js
+const [selectedIndex, setSelectedIndex] = useState(null);
+
+useTypeahead(context, {
+  selectedIndex,
+});
+```
 
 ## Data
 

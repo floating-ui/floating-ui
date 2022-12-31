@@ -89,6 +89,14 @@ default: `null{:js}`
 The currently active (i.e. highlighted or focused) item index,
 which may or may not be selected.
 
+```js
+const [activeIndex, setActiveIndex] = useState(null);
+
+useListNavigation(context, {
+  activeIndex,
+});
+```
+
 ### onNavigate
 
 default: no-op
@@ -124,6 +132,14 @@ The currently selected item index, which may or may not be
 active.
 
 This is the item shown in the trigger button/input.
+
+```js
+const [selectedIndex, setSelectedIndex] = useState(null);
+
+useListNavigation(context, {
+  selectedIndex,
+});
+```
 
 ### loop
 

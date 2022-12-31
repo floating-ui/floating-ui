@@ -44,4 +44,11 @@ default: `true{:js}`
 
 Whether the state only changes if the `focus{:.string}` event was
 triggered via keyboard rather than any pointer inputs
-(mouse/touch/pen).
+(mouse/touch/pen). Programmatic `.focus(){:js}` calls are
+considered as keyboard.
+
+```js
+useFocus(context, {
+  keyboardOnly: false,
+});
+```

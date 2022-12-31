@@ -64,7 +64,7 @@ changing the `open{:.const}` state.
 
 ```js
 useHover(context, {
-  // both open and close
+  // both open and close in ms
   delay: 500,
 
   // configure them individually
@@ -84,24 +84,25 @@ element before changing the open state.
 
 ```js
 useHover(context, {
-  // Waits 150ms once the user's cursor is at rest
+  // waits 150 ms once the user's cursor is at rest
   restMs: 150,
 });
 ```
 
 You can also use a fallback delay if the user's cursor never
-rests, to ensure the floating element will eventually show:
+rests, to ensure the floating element will eventually open:
 
 ```js
 useHover(context, {
-  // Waits 150ms once the user's cursor is at rest
   restMs: 150,
-  // If their cursor never rests, open it after 1000ms (fallback)
+  // if their cursor never rests, open it after 1000 ms (fallback)
   delay: {open: 1000},
 });
 ```
 
 ### move
+
+default: `true{:js}`
 
 Whether moving the cursor over the floating element will open it,
 without a regular hover event required.
@@ -111,7 +112,7 @@ closed. Uses the `'mousemove'{:js}` event.
 
 ```js
 useHover(context, {
-  move: false, // true by default
+  move: false,
 });
 ```
 

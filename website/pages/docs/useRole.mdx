@@ -1,7 +1,7 @@
 # useRole
 
-Adds relevant screen reader props for a given element
-`role{:.objectKey}`.
+Adds base screen reader props to the reference and floating
+elements for a given `role{:.objectKey}`.
 
 ```js
 import {useRole} from '@floating-ui/react';
@@ -61,7 +61,7 @@ useRole(context, {
 
 As only the reference and floating element receives these props,
 you'll need to provide roles for the items inside the floating
-element.
+element if required.
 
 For instance:
 
