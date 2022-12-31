@@ -12,7 +12,9 @@ the opposite one by default in order to keep it in view.
 </div>
 
 It also has the ability to flip to _any_ placement, not just the
-opposite one.
+opposite one. You can use a series of "fallback" placements,
+where each placement is progressively tried until the one that
+fits can be used.
 
 ## Usage
 
@@ -48,7 +50,7 @@ interface Options extends DetectOverflowOptions {
 default: `true{:js}`
 
 This is the main axis in which overflow is checked to perform a
-flip.
+flip. By disabling this, it will ignore overflow.
 
 - `y`-axis for `'top'{:js}` and `'bottom'{:js}` placements
 - `x`-axis for `'left'{:js}` and `'right'{:js}` placements
@@ -62,7 +64,8 @@ flip({mainAxis: false});
 default: `true{:js}`
 
 This is the cross axis in which overflow is checked to perform a
-flip, the opposite axis of `mainAxis{:.objectKey}`.
+flip, the opposite axis of `mainAxis{:.objectKey}`. By disabling
+this, it will ignore overflow.
 
 ```js
 flip({crossAxis: false});
@@ -87,6 +90,32 @@ set to `'top'{:js}`, but that doesn't fit, then `'right'{:js}`
 will be used instead. If `'right'{:js}` also doesn't fit, then
 `'bottom'{:js}` will be used. If none of these fit, then the
 best-fitting placement will be used.
+
+#### Axis change
+
+As `flip(){:js}` does not change the axis of placement due to the
+ambiguity of the desired order, a `'left'{:js}` or `'right'{:js}`
+placement on a small screen (like a mobile viewport), may result
+in overflow.
+
+If it's not known whether `'top'{:js}` or `'bottom'{:js}` should
+be preferred on a mobile screen, then allowing the consumer of a
+component to manually specify the value is a good idea.
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'right',
+  middleware: [
+    flip({
+      // Should 'top' or 'bottom' be preferred first?
+      fallbackPlacements: ['left', 'top', 'bottom'],
+    }),
+  ],
+});
+```
+
+The same concept applies on the reverse axes, although is less
+common.
 
 ### fallbackStrategy
 

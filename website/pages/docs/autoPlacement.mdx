@@ -60,7 +60,7 @@ interface Options extends DetectOverflowOptions {
 
 ### alignment
 
-default: `null{:js}`
+default: `undefined{:js}`
 
 Without options, `autoPlacement(){:js}` will choose any of the
 `Side{:.class}` placements which fit best, i.e. `'top'{:js}`,
@@ -94,7 +94,7 @@ autoPlacement({
 
 ### allowedPlacements
 
-default: computed subset of `ALL_PLACEMENTS{:.const}`
+default: computed subset of `allPlacements{:.const}`
 
 Describes the placements which are allowed to be chosen.
 
@@ -102,6 +102,13 @@ Describes the placements which are allowed to be chosen.
 autoPlacement({
   // 'right' and 'left' won't be chosen
   allowedPlacements: ['top', 'bottom'],
+});
+```
+
+```js
+autoPlacement({
+  // Only choose these placements
+  allowedPlacements: ['top-start', 'bottom-end'],
 });
 ```
 
