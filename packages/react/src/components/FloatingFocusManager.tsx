@@ -75,14 +75,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   >(null);
 
   // Controlled by `useListNavigation`.
-  const initialFocusControlled =
+  const ignoreInitialFocus =
     typeof initialFocus === 'number' && initialFocus < 0;
 
   const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
   const previouslyFocusedElementRef = React.useRef<Element | null>(null);
-  const insidePortal = portalContext != null;
+  const isInsidePortal = portalContext != null;
 
   // If the reference is a combobox and is typeable (e.g. input/textarea),
   // there are different focus semantics. The guards should not be rendered, but
@@ -307,14 +307,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     }
   }, [modal, guards, refs, getTabbableElements]);
 
-  // Layout effect to ensure that the previouslyFocusedElement is set before
-  // focus is moved inside the floating element via hooks like
-  // useListNavigation.
   useLayoutEffect(() => {
     const floating = refs.floating.current;
-    if (!floating) {
-      return;
-    }
+    if (!floating) return;
 
     const doc = getDocument(floating);
 
@@ -332,7 +327,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
-    !initialFocusControlled &&
+    !ignoreInitialFocus &&
       enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
 
     // Dismissing via outside press should always ignore `returnFocus` to
@@ -386,7 +381,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     returnFocus,
     refs,
     events,
-    initialFocusControlled,
+    ignoreInitialFocus,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
@@ -404,13 +399,27 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [portalContext, modal, context]);
 
   useLayoutEffect(() => {
-    if (getTabbableContent().length === 0 && !initialFocusControlled) {
-      setTabbableContentLength(0);
+    const floating = refs.floating.current;
+
+    if (ignoreInitialFocus || !floating) return;
+
+    function setState() {
+      setTabbableContentLength(getTabbableContent().length);
     }
-  }, [getTabbableContent, refs, initialFocusControlled]);
+
+    setState();
+
+    if (typeof MutationObserver === 'function') {
+      const observer = new MutationObserver(setState);
+      observer.observe(floating, {childList: true, subtree: true});
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [getTabbableContent, ignoreInitialFocus, refs]);
 
   const shouldRenderGuards =
-    guards && (insidePortal || modal) && !typeableCombobox;
+    guards && (isInsidePortal || modal) && !typeableCombobox;
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
