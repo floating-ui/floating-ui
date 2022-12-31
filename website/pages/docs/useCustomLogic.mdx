@@ -21,7 +21,7 @@ const useCustomLogic = (
   context: FloatingContext
 ): ElementProps => {
   // Note: all 3 of these properties are optional.
-  return React.useMemo(
+  return useMemo(
     () => ({
       reference: {
         // React.HTMLProps
@@ -52,7 +52,7 @@ It has an event emitter attached:
 ```js
 const {context} = useFloating();
 
-React.useEffect(() => {
+useEffect(() => {
   const handleEvent = () => {};
   context.events.on('name', handleEvent);
   return () => {
@@ -74,7 +74,7 @@ And also a mutable ref to pass state variables around hooks:
 ```js
 const {context} = useFloating();
 
-React.useEffect(() => {
+useEffect(() => {
   context.dataRef.current.foo = 'bar';
 }, [context]);
 ```

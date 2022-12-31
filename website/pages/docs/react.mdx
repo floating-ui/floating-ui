@@ -201,7 +201,7 @@ hook lives in, you can synchronize the hook using layout effects:
 function MyComponent({referenceElement}) {
   const {reference} = useFloating();
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     reference(referenceElement);
   }, [reference, referenceElement]);
 }
@@ -230,7 +230,7 @@ The hook returns an `isPositioned{:.const}` boolean that lets you
 know if the floating element has been positioned:
 
 ```js
-const [open, setOpen] = React.useState(false);
+const [open, setOpen] = useState(false);
 const {isPositioned} = useFloating({
   // Synchronize `isPositioned` with an `open` state.
   open,
@@ -261,7 +261,7 @@ addition to elements:
 import {arrow} from '@floating-ui/react';
 
 // Inside your component
-const arrowRef = React.useRef(null);
+const arrowRef = useRef(null);
 useFloating({
   middleware: [arrow({element: arrowRef})],
 });
@@ -328,7 +328,7 @@ inside a function option, it will always be the same value, even
 if the variable changes.
 
 ```js
-const [value, setValue] = React.useState(0);
+const [value, setValue] = useState(0);
 // Fresh:
 offset(value);
 // Not fresh:
@@ -384,7 +384,7 @@ element.
 import {useFloating} from '@floating-ui/react';
 
 function App() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const {x, y, reference, floating, strategy} = useFloating({
     open,
     onOpenChange: setOpen,

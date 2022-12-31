@@ -68,7 +68,7 @@ An ref containing an array of list items inside the floating
 element.
 
 ```js
-const listRef = React.useRef([]);
+const listRef = useRef([]);
 
 inner({
   listRef,
@@ -85,7 +85,7 @@ The index of the list item that should be anchored to the
 reference element.
 
 ```js
-const [index, setIndex] = React.useState(0);
+const [index, setIndex] = useState(0);
 
 inner({
   index,
@@ -101,7 +101,7 @@ determine the overflow of the floating element and is required
 when using the `useInnerOffset(){:js}` interaction hook.
 
 ```js
-const overflowRef = React.useRef({
+const overflowRef = useRef({
   top: 0,
   bottom: 0,
   left: 0,
@@ -174,7 +174,7 @@ enter fallback mode. You should fallback to middleware that
 create standard anchor positioning when `true{:js}`.
 
 ```js
-const [fallback, setFallback] = React.useState(false);
+const [fallback, setFallback] = useState(false);
 
 inner({
   onFallbackChange: setFallback,
@@ -216,7 +216,7 @@ A ref containing a `SideObject{:.class}`. This is used to
 determine the overflow of the floating element.
 
 ```js
-const overflowRef = React.useRef({
+const overflowRef = useRef({
   top: 0,
   bottom: 0,
   left: 0,
@@ -248,7 +248,7 @@ A callback that is invoked with a new offset upon the
 the floating element's height.
 
 ```js
-const [offset, setOffset] = React.useState(0);
+const [offset, setOffset] = useState(0);
 
 const {context} = useFloating({
   middleware: [
