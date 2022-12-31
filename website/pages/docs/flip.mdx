@@ -93,10 +93,10 @@ best-fitting placement will be used.
 
 #### Axis change
 
-As `flip(){:js}` does not change the axis of placement due to the
-ambiguity of the desired order, a `'left'{:js}` or `'right'{:js}`
-placement on a small screen (like a mobile viewport), may result
-in overflow.
+The axis of placement is not changed by default due to the
+ambiguity of the desired order — this means a `'left'{:js}` or
+`'right'{:js}` placement on a small screen (like a mobile
+viewport) may result in overflow.
 
 If it's not known whether `'top'{:js}` or `'bottom'{:js}` should
 be preferred on a mobile screen, then allowing the consumer of a
@@ -114,7 +114,7 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-The same concept applies on the reverse axes, although is less
+The same concept applies on the reverse axis, although is less
 common.
 
 ### fallbackStrategy
