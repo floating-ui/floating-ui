@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useRef,useState} from 'react';
+import {useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -14,7 +14,7 @@ import Collapsible from './Collapsible';
 import {Floating} from './Floating';
 import Navigation from './Navigation';
 import Notice from './Notice';
-import {SkipNavContent,SkipNavLink} from './ReachSkipNav';
+import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
 
 const middleware = [
   {
@@ -431,7 +431,7 @@ export default function Layout({children}) {
             aria-label="Open menu"
             aria-expanded={navOpen}
             onClick={() => setNavOpen(!navOpen)}
-            className="block -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden border border-gray-800 dark:border-none"
+            className="block -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden shadow"
           >
             <Menu />
           </button>
