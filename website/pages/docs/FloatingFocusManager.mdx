@@ -108,6 +108,23 @@ management.
 </FloatingFocusManager>
 ```
 
+If there is no list navigation, then `modal{:.keyword}`
+behavior's focus trap will no longer work. To maintain the trap,
+you can place the initial focus on the floating element:
+
+```js /refs/
+const {context, refs} = useFloating();
+
+return (
+  <FloatingFocusManager
+    context={context}
+    initialFocus={refs.floating}
+  >
+    {/* floating element */}
+  </FloatingFocusManager>
+);
+```
+
 ### returnFocus
 
 default: `true{:js}`
