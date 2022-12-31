@@ -39,8 +39,9 @@ challenges and build accessible floating UI components.
 
 ## Install
 
-To install Floating UI, you can use a package manager like npm or a CDN. There
-are different versions available for different platforms.
+To install Floating UI, you can use a package manager like npm or a
+[CDN](https://floating-ui.com/docs/getting-started#cdn). There are different
+versions available for different platforms.
 
 ### Vanilla
 
