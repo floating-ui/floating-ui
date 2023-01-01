@@ -2,9 +2,10 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Middleware, Placement} from '../types';
+import type {Alignment, Middleware, Placement} from '../types';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
+import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
 import {getSide} from '../utils/getSide';
 
@@ -35,6 +36,11 @@ export interface Options {
    * @default true
    */
   flipAlignment: boolean;
+  /**
+   * Whether to flip the axis, and if so, decide the direction to prefer.
+   * @default true
+   */
+  flipAxis: false | Alignment;
 }
 
 /**
@@ -63,17 +69,24 @@ export const flip = (
       fallbackPlacements: specifiedFallbackPlacements,
       fallbackStrategy = 'bestFit',
       flipAlignment = true,
+      flipAxis = false,
       ...detectOverflowOptions
     } = options;
 
     const side = getSide(placement);
-    const isBasePlacement = side === initialPlacement;
+    const isBasePlacement = getSide(initialPlacement) === initialPlacement;
 
     const fallbackPlacements =
       specifiedFallbackPlacements ||
       (isBasePlacement || !flipAlignment
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
+
+    if (!specifiedFallbackPlacements && flipAxis) {
+      fallbackPlacements.push(
+        ...getOppositeAxisPlacements(initialPlacement, flipAlignment, flipAxis)
+      );
+    }
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
