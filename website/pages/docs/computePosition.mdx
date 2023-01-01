@@ -2,8 +2,9 @@
 
 This is an async function that computes and returns x and y
 coordinates to position a floating element next to a reference
-element. [autoUpdate](/docs/autoUpdate) is used with it to ensure
-the floating element remains "anchored" to its reference element.
+element. [`autoUpdate`](/docs/autoUpdate) is used with it to
+ensure the floating element remains "anchored" to its reference
+element.
 
 ## Usage
 
@@ -201,31 +202,31 @@ The following are included in the package:
 
 These middleware alter the base placement coordinates.
 
-- [offset](/docs/offset) modifies the placement to add distance
+- [`offset`](/docs/offset) modifies the placement to add distance
   or margin between the reference and floating elements.
 
-- [inline](/docs/inline) positions the floating element relative
-  to individual client rects rather than the bounding box for
-  better precision.
+- [`inline`](/docs/inline) positions the floating element
+  relative to individual client rects rather than the bounding
+  box for better precision.
 
 #### Visibility optimizers
 
 These middleware alter the coordinates to ensure the floating
 element stays on screen optimally.
 
-- [shift](/docs/shift) prevents the floating element from
+- [`shift`](/docs/shift) prevents the floating element from
   overflowing a clipping container by shifting it to stay in
   view.
 
-- [flip](/docs/flip) prevents the floating element from
+- [`flip`](/docs/flip) prevents the floating element from
   overflowing a clipping container by flipping it to the opposite
   placement to stay in view.
 
-- [autoPlacement](/docs/autoPlacement) automatically chooses a
+- [`autoPlacement`](/docs/autoPlacement) automatically chooses a
   placement for you using a "most space" strategy.
 
-- [size](/docs/size) resizes the floating element, for example so
-  it will not overflow a clipping container, or to match the
+- [`size`](/docs/size) resizes the floating element, for example
+  so it will not overflow a clipping container, or to match the
   width of the reference element.
 
 #### Data providers
@@ -233,11 +234,11 @@ element stays on screen optimally.
 These middleware only provide data and do not alter the
 coordinates.
 
-- [arrow](/docs/arrow) provides data to position an inner element
-  of the floating element such that it is centered to its
+- [`arrow`](/docs/arrow) provides data to position an inner
+  element of the floating element such that it is centered to its
   reference element.
 
-- [hide](/docs/hide) provides data to hide the floating element
+- [`hide`](/docs/hide) provides data to hide the floating element
   in applicable situations when it no longer appears attached to
   its reference element due to different clipping contexts.
 
@@ -317,4 +318,4 @@ The data returned by any middleware used.
 Since `computePosition(){:js}` is only a single function call, it
 only positions your element once. To ensure the floating element
 remains anchored to the reference element in a variety of
-scenarios, use the [autoUpdate](/docs/autoUpdate) utility.
+scenarios, use the [`autoUpdate`](/docs/autoUpdate) utility.

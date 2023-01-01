@@ -333,7 +333,7 @@ const components = {
       'transition-colors inline-flex items-center border-none underline ' +
       'underline-offset-4 text-rose-600 dark:text-rose-300 hover:text-gray-1000 dark:hover:text-gray-50 ' +
       'decoration-rose-500/80 dark:decoration-rose-300/70 ' +
-      'hover:decoration-gray-1000 dark:hover:decoration-gray-50 decoration-2 group';
+      'hover:decoration-gray-1000 dark:hover:decoration-gray-50 decoration-1 group';
 
     if (props.href.startsWith('/')) {
       return (

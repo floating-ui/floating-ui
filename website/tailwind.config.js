@@ -69,6 +69,13 @@ module.exports = {
             '--tw-prose-invert-bullets': theme(
               'colors.gray[150]'
             ),
+            'a code': {
+              color: 'inherit !important',
+            },
+            'a:has(code)': {
+              textDecorationThickness: '1px',
+              textUnderlineOffset: '3px',
+            },
             img: {
               margin: '0',
             },
