@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useRef, useState} from 'react';
+import {useMemo, useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -316,6 +316,8 @@ const linkify =
     ).length;
     const id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
 
+    headings.push({url, pathname});
+
     return (
       <Tag {...props} id={id}>
         <a href={`#${id}`}>{children}</a>
@@ -360,8 +362,6 @@ const components = {
   },
 };
 
-const initialHeadings = [];
-
 export default function Layout({children}) {
   const {pathname, events} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
@@ -369,14 +369,6 @@ export default function Layout({children}) {
   const navRef = useRef();
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(null);
-  const [computedComponents, setComputedComponents] = useState({
-    ...components,
-    h2: linkify('h2', initialHeadings, pathname),
-    h3: linkify('h3', initialHeadings, pathname),
-    h4: linkify('h4', initialHeadings, pathname),
-    h5: linkify('h5', initialHeadings, pathname),
-    h6: linkify('h6', initialHeadings, pathname),
-  });
 
   const displayNavigation = nav[index] != null;
 
@@ -388,15 +380,6 @@ export default function Layout({children}) {
     setHash(location.hash);
 
     function onRouteChangeComplete() {
-      const headings = [];
-      setComputedComponents({
-        ...components,
-        h2: linkify('h2', headings, pathname),
-        h3: linkify('h3', headings, pathname),
-        h4: linkify('h4', headings, pathname),
-        h5: linkify('h5', headings, pathname),
-        h6: linkify('h6', headings, pathname),
-      });
       setHash(null);
       document.querySelector('#focus-root').focus();
     }
@@ -447,6 +430,18 @@ export default function Layout({children}) {
   const title = `${
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
+
+  const computedComponents = useMemo(() => {
+    const headings = [];
+    return {
+      ...components,
+      h2: linkify('h2', headings, pathname),
+      h3: linkify('h3', headings, pathname),
+      h4: linkify('h4', headings, pathname),
+      h5: linkify('h5', headings, pathname),
+      h6: linkify('h6', headings, pathname),
+    };
+  }, [pathname]);
 
   return (
     <MDXProvider components={computedComponents}>
