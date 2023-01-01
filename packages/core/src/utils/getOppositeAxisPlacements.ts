@@ -17,6 +17,8 @@ function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
     case 'left':
     case 'right':
       return isStart ? tb : bt;
+    default:
+      return [];
   }
 }
 
