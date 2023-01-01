@@ -18,6 +18,11 @@ export type MaybeElement<T> = T | ComponentPublicInstance | null | undefined;
 export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
   {
     /**
+     * Represents the open/close state of the floating element.
+     * @default true
+     */
+    open?: MaybeReadonlyRef<boolean | undefined>;
+    /**
      * Where to place the floating element relative to its reference element.
      * @default 'bottom'
      */
@@ -64,6 +69,10 @@ export type UseFloatingReturn = {
    * Additional data from middleware.
    */
   middlewareData: Readonly<Ref<MiddlewareData>>;
+  /**
+   * The boolean that let you know if the floating element has been positioned.
+   */
+  isPositioned: Readonly<Ref<boolean>>;
   /**
    * The function to update floating position manually.
    */

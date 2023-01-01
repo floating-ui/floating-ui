@@ -186,6 +186,41 @@ const {x, y, strategy} = useFloating(reference, floating);
 </template>
 ```
 
+## Effects
+
+Positioning is done in an async function, which means the
+position is ready during a microtask, after layout effects are
+executed. This means initially, the floating element is situated
+at the top-left (0, 0) of its offset container — so calling DOM
+methods that cause side-effects like scrolling will result in
+unexpected behavior.
+
+The composable returns an `isPositioned{:.const}` boolean ref
+that lets you know if the floating element has been positioned:
+
+```js
+const open = ref(false);
+const {isPositioned} = useFloating(reference, floating, {
+  // Synchronize `isPositioned` with an `open` ref.
+  open,
+});
+
+// Each time the floating element opens, we want to focus and
+// scroll some element into view.
+watch(isPositioned, (isPositioned) => {
+  if (isPositioned) {
+    someElement.focus();
+    someElement.scrollIntoView();
+  }
+});
+```
+
+The `open` option accepts a boolean ref that represents the
+open/close state of the floating element. This ensures you can
+wait each time it opens when the host component does not unmount,
+which is necessary in cases where the reference element relocates
+on the page.
+
 ## Arrow
 
 The `arrow` module exported from this package allows template
