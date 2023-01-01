@@ -2,7 +2,7 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Alignment, Middleware, Placement} from '../types';
+import type {Middleware, Placement} from '../types';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
@@ -31,16 +31,17 @@ export interface Options {
    */
   fallbackStrategy: 'bestFit' | 'initialPlacement';
   /**
+   * Whether to allow fallback to the opposite axis, and if so, which
+   * dimension along the axis to prefer.
+   * @default 'none' (disallow fallback)
+   */
+  fallbackAxisDimension: 'none' | 'start' | 'end';
+  /**
    * Whether to flip to placements with the opposite alignment if they fit
    * better.
    * @default true
    */
   flipAlignment: boolean;
-  /**
-   * Whether to flip the axis, and if so, decide the direction to prefer.
-   * @default true
-   */
-  flipAxis: false | Alignment;
 }
 
 /**
@@ -68,8 +69,8 @@ export const flip = (
       crossAxis: checkCrossAxis = true,
       fallbackPlacements: specifiedFallbackPlacements,
       fallbackStrategy = 'bestFit',
+      fallbackAxisDimension = 'none',
       flipAlignment = true,
-      flipAxis = false,
       ...detectOverflowOptions
     } = options;
 
@@ -83,12 +84,12 @@ export const flip = (
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
-    if (!specifiedFallbackPlacements && flipAxis) {
+    if (!specifiedFallbackPlacements && fallbackAxisDimension) {
       fallbackPlacements.push(
         ...getOppositeAxisPlacements(
           initialPlacement,
           flipAlignment,
-          flipAxis,
+          fallbackAxisDimension,
           rtl
         )
       );
