@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useMemo, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -296,7 +296,7 @@ const slugify = (str) =>
     .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
 
 const linkify =
-  (Tag, headings) =>
+  (Tag, headings, pathname) =>
   ({children, ...props}) => {
     const url = slugify(
       typeof children !== 'string'
@@ -304,12 +304,17 @@ const linkify =
         : children
     );
 
-    const count = headings.filter(
-      (value) => value === url
-    ).length;
-    const id = count === 0 ? url : `${url}-${count}`;
+    if (
+      headings.some((heading) => heading.pathname !== pathname)
+    ) {
+      // Reset the headings store.
+      headings.length = 0;
+    }
 
-    headings.push(url);
+    const dupeCount = headings.filter(
+      ({url: u}) => u === url
+    ).length;
+    const id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
 
     return (
       <Tag {...props} id={id}>
@@ -355,6 +360,8 @@ const components = {
   },
 };
 
+const initialHeadings = [];
+
 export default function Layout({children}) {
   const {pathname, events} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
@@ -362,7 +369,14 @@ export default function Layout({children}) {
   const navRef = useRef();
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(null);
-  const [headings, setHeadings] = useState([]);
+  const [computedComponents, setComputedComponents] = useState({
+    ...components,
+    h2: linkify('h2', initialHeadings, pathname),
+    h3: linkify('h3', initialHeadings, pathname),
+    h4: linkify('h4', initialHeadings, pathname),
+    h5: linkify('h5', initialHeadings, pathname),
+    h6: linkify('h6', initialHeadings, pathname),
+  });
 
   const displayNavigation = nav[index] != null;
 
@@ -374,6 +388,15 @@ export default function Layout({children}) {
     setHash(location.hash);
 
     function onRouteChangeComplete() {
+      const headings = [];
+      setComputedComponents({
+        ...components,
+        h2: linkify('h2', headings, pathname),
+        h3: linkify('h3', headings, pathname),
+        h4: linkify('h4', headings, pathname),
+        h5: linkify('h5', headings, pathname),
+        h6: linkify('h6', headings, pathname),
+      });
       setHash(null);
       document.querySelector('#focus-root').focus();
     }
@@ -383,7 +406,7 @@ export default function Layout({children}) {
     return () => {
       events.off('routeChangeComplete', onRouteChangeComplete);
     };
-  }, [events]);
+  }, [events, pathname]);
 
   const articleRef = useRef();
   const [anchors, setAnchors] = useState([]);
@@ -402,10 +425,6 @@ export default function Layout({children}) {
 
     setAnchors(localAnchors);
     setNavOpen(false);
-
-    return () => {
-      setHeadings([]);
-    };
   }, [pathname]);
 
   let currentParentIndex = null;
@@ -428,18 +447,6 @@ export default function Layout({children}) {
   const title = `${
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
-
-  const computedComponents = useMemo(
-    () => ({
-      ...components,
-      h2: linkify('h2', headings),
-      h3: linkify('h3', headings),
-      h4: linkify('h4', headings),
-      h5: linkify('h5', headings),
-      h6: linkify('h6', headings),
-    }),
-    [headings]
-  );
 
   return (
     <MDXProvider components={computedComponents}>
