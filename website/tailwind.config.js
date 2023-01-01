@@ -33,10 +33,11 @@ module.exports = {
             },
             pre: {
               lineHeight: '2.1',
-              fontSize: '0.875rem',
+              fontSize: '0.9375rem',
+              padding: '1rem 1.5rem',
             },
             code: {
-              fontSize: '0.875rem',
+              fontSize: '0.9375rem',
             },
             img: {
               margin: '0',
@@ -51,6 +52,9 @@ module.exports = {
             },
             pre: {
               lineHeight: '2.1',
+              fontSize: '0.875rem',
+            },
+            code: {
               fontSize: '0.875rem',
             },
             img: {
@@ -96,8 +100,8 @@ module.exports = {
                 boxShadow: 'none',
               },
               '.line': {
-                margin: '0 -1.5em',
-                padding: '0 1.5em',
+                margin: '0 -1.5rem',
+                padding: '0 1.5rem',
               },
               '.word': {
                 padding: '0.2rem 0',
@@ -137,6 +141,9 @@ module.exports = {
               span: {
                 position: 'relative',
                 zIndex: '1',
+              },
+              code: {
+                fontSize: 'inherit',
               },
             },
             h1: {
