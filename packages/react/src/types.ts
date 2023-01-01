@@ -18,6 +18,7 @@ export {Props as UseHoverProps} from './hooks/useHover';
 export {Props as UseListNavigationProps} from './hooks/useListNavigation';
 export {Props as UseRoleProps} from './hooks/useRole';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
+export {InnerProps, UseInnerOffsetProps} from './inner';
 export * from '@floating-ui/dom';
 export {arrow} from '@floating-ui/react-dom';
 

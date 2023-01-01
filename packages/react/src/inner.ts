@@ -29,20 +29,27 @@ function getArgsWithCustomFloatingHeight(
   };
 }
 
+export interface InnerProps {
+  listRef: React.MutableRefObject<Array<HTMLElement | null>>;
+  index: number;
+  onFallbackChange?: null | ((fallback: boolean) => void);
+  offset?: number;
+  overflowRef?: React.MutableRefObject<SideObject | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  minItemsVisible?: number;
+  referenceOverflowThreshold?: number;
+}
+
+/**
+ * Positions the floating element such that an inner element inside
+ * of it is anchored to the reference element.
+ * @see https://floating-ui.com/docs/inner
+ */
 export const inner = (
-  options: {
-    listRef: React.MutableRefObject<Array<HTMLElement | null>>;
-    index: number;
-    onFallbackChange?: null | ((fallback: boolean) => void);
-    offset?: number;
-    overflowRef?: React.MutableRefObject<SideObject | null>;
-    scrollRef?: React.MutableRefObject<HTMLElement | null>;
-    minItemsVisible?: number;
-    referenceOverflowThreshold?: number;
-  } & Partial<DetectOverflowOptions>
+  props: InnerProps & Partial<DetectOverflowOptions>
 ): Middleware => ({
   name: 'inner',
-  options,
+  options: props,
   async fn(middlewareArguments) {
     const {
       listRef,
@@ -54,7 +61,7 @@ export const inner = (
       referenceOverflowThreshold = 0,
       scrollRef,
       ...detectOverflowOptions
-    } = options;
+    } = props;
 
     const {
       rects,
@@ -142,6 +149,18 @@ export const inner = (
   },
 });
 
+export interface UseInnerOffsetProps {
+  enabled?: boolean;
+  overflowRef: React.MutableRefObject<SideObject | null>;
+  scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  onChange: (offset: number | ((offset: number) => number)) => void;
+}
+
+/**
+ * Changes the `inner` middleware's `offset` upon a `wheel` event to
+ * expand the floating element's height, revealing more list items.
+ * @see https://floating-ui.com/docs/inner
+ */
 export const useInnerOffset = (
   {open, refs}: FloatingContext,
   {
@@ -149,12 +168,7 @@ export const useInnerOffset = (
     overflowRef,
     scrollRef,
     onChange: unstable_onChange,
-  }: {
-    enabled?: boolean;
-    overflowRef: React.MutableRefObject<SideObject | null>;
-    scrollRef?: React.MutableRefObject<HTMLElement | null>;
-    onChange: (offset: number | ((offset: number) => number)) => void;
-  }
+  }: UseInnerOffsetProps
 ): ElementProps => {
   const onChange = useEvent(unstable_onChange);
   const controlledScrollingRef = React.useRef(false);
