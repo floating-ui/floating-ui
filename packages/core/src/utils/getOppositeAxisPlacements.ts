@@ -3,23 +3,19 @@ import {getAlignment} from './getAlignment';
 import {getOppositeAlignmentPlacement} from './getOppositeAlignmentPlacement';
 import {getSide} from './getSide';
 
-function getSideList(side: Side, sideAlignment: Alignment): Placement[] {
+function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
   const lr: Placement[] = ['left', 'right'];
   const rl: Placement[] = ['right', 'left'];
   const tb: Placement[] = ['top', 'bottom'];
   const bt: Placement[] = ['bottom', 'top'];
 
-  const isStart = sideAlignment === 'start';
-  const isEnd = sideAlignment === 'end';
-
   switch (side) {
-    case 'bottom':
-      return isEnd ? rl : lr;
     case 'top':
+    case 'bottom':
+      if (rtl) return isStart ? rl : lr;
       return isStart ? lr : rl;
-    case 'right':
-      return isEnd ? bt : tb;
     case 'left':
+    case 'right':
       return isStart ? tb : bt;
   }
 }
@@ -27,10 +23,11 @@ function getSideList(side: Side, sideAlignment: Alignment): Placement[] {
 export function getOppositeAxisPlacements(
   placement: Placement,
   flipAlignment: boolean,
-  sideAlignment: Alignment
+  sideAlignment: Alignment,
+  rtl?: boolean
 ): Placement[] {
   const alignment = getAlignment(placement);
-  let list = getSideList(getSide(placement), sideAlignment);
+  let list = getSideList(getSide(placement), sideAlignment === 'start', rtl);
 
   if (alignment) {
     list = list.map((side) => `${side}-${alignment}` as Placement);

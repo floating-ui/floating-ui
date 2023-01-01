@@ -233,3 +233,49 @@ describe('end alignment', () => {
     ]);
   });
 });
+
+describe('rtl', () => {
+  test('top', () => {
+    expect(getOppositeAxisPlacements('top', true, 'start', true)).toEqual([
+      'right',
+      'left',
+    ]);
+    expect(getOppositeAxisPlacements('top', true, 'end', true)).toEqual([
+      'left',
+      'right',
+    ]);
+  });
+
+  test('bottom', () => {
+    expect(getOppositeAxisPlacements('bottom', true, 'start', true)).toEqual([
+      'right',
+      'left',
+    ]);
+    expect(getOppositeAxisPlacements('bottom', true, 'end', true)).toEqual([
+      'left',
+      'right',
+    ]);
+  });
+
+  test('left', () => {
+    expect(getOppositeAxisPlacements('left', true, 'start', true)).toEqual([
+      'top',
+      'bottom',
+    ]);
+    expect(getOppositeAxisPlacements('left', true, 'end', true)).toEqual([
+      'bottom',
+      'top',
+    ]);
+  });
+
+  test('right', () => {
+    expect(getOppositeAxisPlacements('right', true, 'start', true)).toEqual([
+      'top',
+      'bottom',
+    ]);
+    expect(getOppositeAxisPlacements('right', true, 'end', true)).toEqual([
+      'bottom',
+      'top',
+    ]);
+  });
+});

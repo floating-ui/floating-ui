@@ -75,6 +75,7 @@ export const flip = (
 
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+    const rtl = await platform.isRTL?.(elements.floating);
 
     const fallbackPlacements =
       specifiedFallbackPlacements ||
@@ -84,7 +85,12 @@ export const flip = (
 
     if (!specifiedFallbackPlacements && flipAxis) {
       fallbackPlacements.push(
-        ...getOppositeAxisPlacements(initialPlacement, flipAlignment, flipAxis)
+        ...getOppositeAxisPlacements(
+          initialPlacement,
+          flipAlignment,
+          flipAxis,
+          rtl
+        )
       );
     }
 
@@ -103,11 +109,7 @@ export const flip = (
     }
 
     if (checkCrossAxis) {
-      const {main, cross} = getAlignmentSides(
-        placement,
-        rects,
-        await platform.isRTL?.(elements.floating)
-      );
+      const {main, cross} = getAlignmentSides(placement, rects, rtl);
       overflows.push(overflow[main], overflow[cross]);
     }
 
