@@ -39,9 +39,10 @@ These are the options you can pass to `flip(){:js}`.
 interface Options extends DetectOverflowOptions {
   mainAxis?: boolean;
   crossAxis?: boolean;
+  fallbackAxisSideDirection?: 'none' | 'start' | 'end';
+  flipAlignment?: boolean;
   fallbackPlacements?: Array<Placement>;
   fallbackStrategy?: 'bestFit' | 'initialPlacement';
-  flipAlignment?: boolean;
 }
 ```
 
@@ -56,7 +57,9 @@ flip. By disabling this, it will ignore overflow.
 - `x`-axis for `'left'{:js}` and `'right'{:js}` placements
 
 ```js
-flip({mainAxis: false});
+flip({
+  mainAxis: false,
+});
 ```
 
 ### crossAxis
@@ -68,16 +71,113 @@ flip, the opposite axis of `mainAxis{:.objectKey}`. By disabling
 this, it will ignore overflow.
 
 ```js
-flip({crossAxis: false});
+flip({
+  crossAxis: false,
+});
 ```
+
+### fallbackAxisSideDirection
+
+<Notice type="version">Since `core@1.1.0`</Notice>
+
+default: `'none'{:js}`
+
+Whether to allow fallback to the opposite axis if no placements
+along the preferred placement axis fit, and if so, which side
+direction along that axis to choose. If necessary, it will
+fallback to the other direction.
+
+- `'none'{:js}` signals that no fallback to the opposite axis
+  should take place.
+- `'start'{:js}` represents `'top'{:js}` or `'left'{:js}`.
+- `'end'{:js}` represents `'bottom'{:js}` or `'right'{:js}`.
+
+<Notice gap="above">
+  In RTL writing direction, the x-axis directions are reversed.
+</Notice>
+
+For instance, by default, if the initial `placement{:.objectKey}`
+is set to `'right'{:js}`, then the placements to try (in order)
+are:
+
+`['right', 'left']{:js}`
+
+On a narrow viewport, it's possible or even likely that _neither_
+of these will fit.
+
+By specifying a string other than `'none'{:js}`, you allow
+placements along the opposite axis of the initial placement to be
+tried. The direction determines which side of placement is tried
+first:
+
+```js
+flip({
+  fallbackAxisSideDirection: 'start',
+});
+```
+
+The above results in: `['right', 'left', 'top', 'bottom']{:js}`.
+
+```js
+flip({
+  fallbackAxisSideDirection: 'end',
+});
+```
+
+The above results in: `['right', 'left', 'bottom', 'top']{:js}`.
+
+As an example, if you'd like a tooltip that has a placement of
+`'right'{:js}` to be placed on top on mobile (assuming it doesn't
+fit), then you'd use `'start'{:js}`. For an interactive popover,
+you likely want to use `'end'{:js}` so it's placed on the bottom,
+closer to the user's fingers.
+
+#### Combining with shift
+
+If `shift(){:js}` is in use in the middleware array, you may
+desire to disable `crossAxis{:.objectKey}` overflow checking,
+which will allow `shift(){:js}` to perform its work without
+falling back to the opposite axis (therefore preserving the
+original axis as best as possible):
+
+```js {4}
+const middleware = [
+  flip({
+    fallbackAxisSideDirection: 'start',
+    crossAxis: false,
+  }),
+  shift(),
+];
+```
+
+This will depend on the desired positioning you want to achieve.
+
+### flipAlignment
+
+default: `true{:js}`
+
+When an alignment is specified, e.g. `'top-start'{:js}` instead
+of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
+`start{:.string}` doesn't fit.
+
+```js
+flip({
+  flipAlignment: false,
+});
+```
+
+When using this with the `shift(){:js}` middleware, ensure
+`flip(){:js}` is placed **before** `shift(){:js}` in your
+middleware array. This ensures the `flipAlignment{:.objectKey}`
+logic can act before `shift(){:js}`'s does.
 
 ### fallbackPlacements
 
 default: `[oppositePlacement]{:js}`
 
-This describes the array of placements to try if the preferred
-`placement{:.objectKey}` doesn't fully fit on the axes in which
-overflow is checked (both by default).
+This describes an **explicit** array of placements to try if the
+initial `placement{:.objectKey}` doesn't fit on the axes in which
+overflow is checked.
 
 ```js
 flip({
@@ -85,37 +185,18 @@ flip({
 });
 ```
 
-If the `placement{:.objectKey}` in `computePosition(){:js}` is
-set to `'top'{:js}`, but that doesn't fit, then `'right'{:js}`
-will be used instead. If `'right'{:js}` also doesn't fit, then
-`'bottom'{:js}` will be used. If none of these fit, then the
-best-fitting placement will be used.
+In the above example, if `placement{:.objectKey}` is set to
+`'top'{:js}`, then the placements to try (in order) are:
 
-#### Axis change
+`['top', 'right', 'bottom']{:js}`
 
-The axis of placement is not changed by default due to the
-ambiguity of the desired order — this means a `'left'{:js}` or
-`'right'{:js}` placement on a small screen (like a mobile
-viewport) may result in overflow.
-
-If it's not known whether `'top'{:js}` or `'bottom'{:js}` should
-be preferred on a mobile screen, then allowing the consumer of a
-component to manually specify the value is a good idea.
-
-```js
-computePosition(referenceEl, floatingEl, {
-  placement: 'right',
-  middleware: [
-    flip({
-      // Should 'top' or 'bottom' be preferred first?
-      fallbackPlacements: ['left', 'top', 'bottom'],
-    }),
-  ],
-});
-```
-
-The same concept applies on the reverse axis, although is less
-common.
+<Notice>
+  The options `flipAlignment{:.objectKey}` and
+  `fallbackAxisSideDirection{:.objectKey}` no longer have an effect if
+  this option is explicitly specified, as they are only shortcuts to
+  create a computed list of fallback placements. To ensure your
+  explicit list is preferred, they will be ignored.
+</Notice>
 
 ### fallbackStrategy
 
@@ -132,30 +213,15 @@ flip({
 });
 ```
 
-### flipAlignment
-
-default: `true{:js}`
-
-When an alignment is specified, e.g. `'top-start'{:js}` instead
-of just `'top'{:js}`, this will flip to `'top-end'{:js}` if
-`start{:.string}` doesn't fit.
-
-```js
-flip({flipAlignment: false});
-```
-
-When using this with the `shift(){:js}` middleware, ensure
-`flip(){:js}` is placed **before** `shift(){:js}` in your
-middleware array. This ensures the `flipAlignment{:.objectKey}`
-logic can act before shift's does.
-
 ### ...detectOverflowOptions
 
 All of [`detectOverflow`](/docs/detectOverflow#options)'s options
 can be passed. For instance:
 
 ```js
-flip({padding: 5}); // 0 by default
+flip({
+  padding: 5, // 0 by default
+});
 ```
 
 ## Final placement
