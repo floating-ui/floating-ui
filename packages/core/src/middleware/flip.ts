@@ -5,6 +5,7 @@ import {
 import type {Middleware, Placement} from '../types';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
+import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
 import {getSide} from '../utils/getSide';
 
@@ -29,6 +30,12 @@ export interface Options {
    * @default 'bestFit'
    */
   fallbackStrategy: 'bestFit' | 'initialPlacement';
+  /**
+   * Whether to allow fallback to the opposite axis, and if so, which
+   * dimension along the axis to prefer.
+   * @default 'none' (disallow fallback)
+   */
+  fallbackAxisDimension: 'none' | 'start' | 'end';
   /**
    * Whether to flip to placements with the opposite alignment if they fit
    * better.
@@ -62,18 +69,31 @@ export const flip = (
       crossAxis: checkCrossAxis = true,
       fallbackPlacements: specifiedFallbackPlacements,
       fallbackStrategy = 'bestFit',
+      fallbackAxisDimension = 'none',
       flipAlignment = true,
       ...detectOverflowOptions
     } = options;
 
     const side = getSide(placement);
-    const isBasePlacement = side === initialPlacement;
+    const isBasePlacement = getSide(initialPlacement) === initialPlacement;
+    const rtl = await platform.isRTL?.(elements.floating);
 
     const fallbackPlacements =
       specifiedFallbackPlacements ||
       (isBasePlacement || !flipAlignment
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
+
+    if (!specifiedFallbackPlacements && fallbackAxisDimension !== 'none') {
+      fallbackPlacements.push(
+        ...getOppositeAxisPlacements(
+          initialPlacement,
+          flipAlignment,
+          fallbackAxisDimension,
+          rtl
+        )
+      );
+    }
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
@@ -90,11 +110,7 @@ export const flip = (
     }
 
     if (checkCrossAxis) {
-      const {main, cross} = getAlignmentSides(
-        placement,
-        rects,
-        await platform.isRTL?.(elements.floating)
-      );
+      const {main, cross} = getAlignmentSides(placement, rects, rtl);
       overflows.push(overflow[main], overflow[cross]);
     }
 
