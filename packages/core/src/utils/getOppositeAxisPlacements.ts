@@ -25,11 +25,11 @@ function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
 export function getOppositeAxisPlacements(
   placement: Placement,
   flipAlignment: boolean,
-  dimension: 'none' | Alignment,
+  direction: 'none' | Alignment,
   rtl?: boolean
 ): Placement[] {
   const alignment = getAlignment(placement);
-  let list = getSideList(getSide(placement), dimension === 'start', rtl);
+  let list = getSideList(getSide(placement), direction === 'start', rtl);
 
   if (alignment) {
     list = list.map((side) => `${side}-${alignment}` as Placement);
