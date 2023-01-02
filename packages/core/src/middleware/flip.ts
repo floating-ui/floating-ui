@@ -84,7 +84,7 @@ export const flip = (
         ? [getOppositePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
-    if (!specifiedFallbackPlacements && fallbackAxisDimension) {
+    if (!specifiedFallbackPlacements && fallbackAxisDimension !== 'none') {
       fallbackPlacements.push(
         ...getOppositeAxisPlacements(
           initialPlacement,
