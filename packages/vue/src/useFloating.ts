@@ -36,6 +36,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   options: UseFloatingOptions<T> = {}
 ): UseFloatingReturn {
   const whileElementsMountedOption = options.whileElementsMounted;
+  const openOption = computed(() => unref(options.open) ?? true);
   const middlewareOption = computed(() => unref(options.middleware));
   const placementOption = computed(() => unref(options.placement) ?? 'bottom');
   const strategyOption = computed(() => unref(options.strategy) ?? 'absolute');
@@ -46,6 +47,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const strategy = ref(strategyOption.value);
   const placement = ref(placementOption.value);
   const middlewareData = shallowRef<MiddlewareData>({});
+  const isPositioned = ref(false);
 
   let whileElementsMountedCleanup: void | (() => void);
 
@@ -64,6 +66,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       strategy.value = position.strategy;
       placement.value = position.placement;
       middlewareData.value = position.middlewareData;
+      isPositioned.value = true;
     });
   }
 
@@ -92,10 +95,17 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     }
   }
 
+  function reset() {
+    if (!openOption.value) {
+      isPositioned.value = false;
+    }
+  }
+
   watch([middlewareOption, placementOption, strategyOption], update, {
     flush: 'sync',
   });
   watch([referenceElement, floatingElement], attach, {flush: 'sync'});
+  watch(openOption, reset, {flush: 'sync'});
 
   if (getCurrentScope()) {
     onScopeDispose(cleanup);
@@ -107,6 +117,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     strategy: shallowReadonly(strategy),
     placement: shallowReadonly(placement),
     middlewareData: shallowReadonly(middlewareData),
+    isPositioned: shallowReadonly(isPositioned),
     update,
   };
 }
