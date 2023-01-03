@@ -76,7 +76,7 @@ To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` widt
 ## Return value
 
 The hook
-[returns all the values from computePosition](/docs/computePosition#return-value),
+[returns all the values from `computePosition`](/docs/computePosition#return-value),
 plus some extras to work with React. This includes data about the
 final placement and middleware data which are useful when
 rendering.
@@ -84,7 +84,7 @@ rendering.
 ## Options
 
 The hook accepts all the
-[options from computePosition](/docs/computePosition#options),
+[options from `computePosition`](/docs/computePosition#options),
 which allows you to customize the position. Here's an example:
 
 ```js
@@ -108,9 +108,9 @@ visibility optimizers, or provide data to use.
 
 The docs for the middleware that were passed are available here:
 
-- [offset](/docs/offset)
-- [flip](/docs/flip)
-- [shift](/docs/shift)
+- [`offset`](/docs/offset)
+- [`flip`](/docs/flip)
+- [`shift`](/docs/shift)
 
 ## Updating
 
@@ -120,7 +120,7 @@ The position is only calculated **once** on render, or when the
 To ensure the floating element remains anchored to its reference
 element in a variety of scenarios without detaching — such as
 when scrolling or resizing the page — you can pass the
-[autoUpdate](/docs/autoUpdate) utility to the
+[`autoUpdate`](/docs/autoUpdate) utility to the
 `whileElementsMounted{:.objectKey}` prop:
 
 ```js
@@ -216,7 +216,7 @@ function MyComponent({referenceElement}) {
 ## Effects
 
 <Notice type="version">
-  Since v0.15.0 (react) or v1.1.0 (react-dom)
+  Since `react@0.15.0` or `react-dom@1.1.0`
 </Notice>
 
 Positioning is done in an async function, which means the
@@ -548,7 +548,7 @@ interface ContextData {
 
 ## Changing the positioning reference while retaining events
 
-<Notice type="version">Since v0.15.0</Notice>
+<Notice type="version">Since `v0.15.0`</Notice>
 
 By default, the `reference{:.const}` element is **both** the
 events and position reference. The `positionReference{:.const}`
@@ -575,7 +575,7 @@ return (
 import {useMergeRefs} from '@floating-ui/react';
 ```
 
-<Notice type="version">Since v0.15.0</Notice>
+<Notice type="version">Since `v0.15.0`</Notice>
 
 Refs can be merged with the [useMergeRefs](/docs/useMergeRefs)
 hook, and props can be merged by calling one of the getters
