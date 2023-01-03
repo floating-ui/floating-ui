@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useMemo, useRef, useState} from 'react';
+import {Fragment, useMemo, useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -338,6 +338,21 @@ const components = {
   Floating,
   Chrome,
   Notice,
+  h1(props) {
+    // Split a camel/PascalCased string into parts. A word break oppportunity
+    // element gets inserted after each part.
+    const parts = props.children?.split(/(?=[A-Z])/g) ?? '';
+    return (
+      <h1 {...props}>
+        {parts.map((part) => (
+          <Fragment key={part}>
+            {part}
+            <wbr />
+          </Fragment>
+        ))}
+      </h1>
+    );
+  },
   a(props) {
     const className =
       'transition-colors inline-flex items-center border-none underline ' +
