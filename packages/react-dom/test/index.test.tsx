@@ -1,8 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-import {act,cleanup, fireEvent, render, screen} from '@testing-library/react';
-import {useEffect,useRef, useState} from 'react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {useEffect, useRef, useState} from 'react';
 
 import {
   arrow,
@@ -260,4 +260,48 @@ describe('whileElementsMounted', () => {
 
     cleanup();
   });
+});
+
+test('unstable callback refs', async () => {
+  function App() {
+    const {reference, floating} = useFloating();
+
+    return (
+      <>
+        <div ref={(node) => reference(node)} />
+        <div ref={(node) => floating(node)} />
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await act(async () => {});
+
+  cleanup();
+});
+
+test('callback refs invoked during render', async () => {
+  function App() {
+    const [r, setR] = useState<HTMLDivElement | null>(null);
+    const [f, setF] = useState<HTMLDivElement | null>(null);
+
+    const {reference, floating} = useFloating();
+
+    reference(r);
+    floating(f);
+
+    return (
+      <>
+        <div ref={setR} />
+        <div ref={setF} />
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await act(async () => {});
+
+  cleanup();
 });
