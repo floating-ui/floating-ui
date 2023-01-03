@@ -57,7 +57,12 @@ is only applied when the reference element's rects are disjoined.
 ```js
 function onMouseEnter({clientX, clientY}) {
   computePosition(referenceEl, floatingEl, {
-    middleware: [inline({x: clientX, y: clientY})],
+    middleware: [
+      inline({
+        x: clientX,
+        y: clientY,
+      }),
+    ],
   }).then(({x, y}) => {
     // ...
   });

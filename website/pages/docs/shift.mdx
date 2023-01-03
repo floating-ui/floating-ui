@@ -57,7 +57,9 @@ This is the main axis in which shifting is applied.
 - `y`-axis for `'left'{:js}` and `'right'{:js}` placements
 
 ```js
-shift({mainAxis: false});
+shift({
+  mainAxis: false,
+});
 ```
 
 ### crossAxis
@@ -72,7 +74,9 @@ the reference element, which may not be desired and is often
 replaced by the `flip(){:js}` middleware.
 
 ```js
-shift({crossAxis: true});
+shift({
+  crossAxis: true,
+});
 ```
 
 ### limiter
@@ -87,7 +91,9 @@ elements are aligned.
 ```js
 import {shift, limitShift} from '@floating-ui/dom';
 
-shift({limiter: limitShift()});
+shift({
+  limiter: limitShift(),
+});
 ```
 
 This function itself takes options.
@@ -100,7 +106,9 @@ Whether to apply limiting on the main axis.
 
 ```js
 shift({
-  limiter: limitShift({mainAxis: false}),
+  limiter: limitShift({
+    mainAxis: false,
+  }),
 });
 ```
 
@@ -112,7 +120,9 @@ Whether to apply limiting on the cross axis.
 
 ```js
 shift({
-  limiter: limitShift({crossAxis: false}),
+  limiter: limitShift({
+    crossAxis: false,
+  }),
 });
 ```
 
@@ -169,7 +179,9 @@ All of [`detectOverflow`](/docs/detectOverflow#options)'s options
 can be passed. For instance:
 
 ```js
-shift({padding: 5}); // 0 by default
+shift({
+  padding: 5, // 0 by default
+});
 ```
 
 If you find the padding does not get applied on the right side,
