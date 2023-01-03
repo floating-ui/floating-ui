@@ -17,6 +17,7 @@ export {
   useFloatingTree,
 } from './components/FloatingTree';
 export {useClick} from './hooks/useClick';
+export {useCSSTransition} from './hooks/useCSSTransition';
 export {useDismiss} from './hooks/useDismiss';
 export {useFocus} from './hooks/useFocus';
 export {useHover} from './hooks/useHover';
@@ -25,7 +26,7 @@ export {useListNavigation} from './hooks/useListNavigation';
 export {useMergeRefs} from './hooks/useMergeRefs';
 export {useRole} from './hooks/useRole';
 export {useTypeahead} from './hooks/useTypeahead';
-export {inner,useInnerOffset} from './inner';
+export {inner, useInnerOffset} from './inner';
 export {safePolygon} from './safePolygon';
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
