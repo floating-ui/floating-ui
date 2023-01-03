@@ -51,8 +51,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
       placement,
       strategy,
     }).then((data) => {
-      if (isMountedRef.current && !deepEqual(dataRef.current, data)) {
-        const value = {...data, isPositioned: true};
+      const value = {...data, isPositioned: true};
+      if (isMountedRef.current && !deepEqual(dataRef.current, value)) {
         dataRef.current = value;
         ReactDOM.flushSync(() => {
           setData(value);
