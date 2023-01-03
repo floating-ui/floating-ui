@@ -98,16 +98,20 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
     (node) => {
-      reference.current = node;
-      runElementMountCallback();
+      if (reference.current !== node) {
+        reference.current = node;
+        runElementMountCallback();
+      }
     },
     [runElementMountCallback]
   );
 
   const setFloating: UseFloatingReturn<RT>['floating'] = React.useCallback(
     (node) => {
-      floating.current = node;
-      runElementMountCallback();
+      if (floating.current !== node) {
+        floating.current = node;
+        runElementMountCallback();
+      }
     },
     [runElementMountCallback]
   );
