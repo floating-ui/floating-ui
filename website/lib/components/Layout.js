@@ -298,11 +298,19 @@ const slugify = (str) =>
 const linkify =
   (Tag, headings, pathname) =>
   ({children, ...props}) => {
-    const url = slugify(
-      typeof children !== 'string'
-        ? children.props.children
-        : children
-    );
+    let stringChildren = children;
+
+    if (Array.isArray(stringChildren)) {
+      stringChildren = stringChildren
+        .map((value) =>
+          typeof value === 'string'
+            ? value
+            : value.props?.children ?? ''
+        )
+        .join('');
+    }
+
+    const url = slugify(stringChildren);
 
     if (
       headings.some((heading) => heading.pathname !== pathname)
