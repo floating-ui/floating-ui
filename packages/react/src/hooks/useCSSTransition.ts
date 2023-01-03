@@ -49,10 +49,15 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
+  const [initiated, setInitiated] = React.useState(false);
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
   const isMounted = useDelayUnmount(open, closeDuration);
 
-  if (!isMounted && Object.keys(styles).length !== 0) {
+  // `initiated` check prevents this `setState` call from breaking
+  // <FloatingPortal />. This call is necessary to ensure subsequent opens after
+  // the initial one allows the correct side animation to play when the
+  // placement has changed.
+  if (initiated && !isMounted && Object.keys(styles).length !== 0) {
     setStyles({});
   }
 
@@ -96,8 +101,12 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
           ...toValue,
         });
       });
-      return () => cancelAnimationFrame(frame);
+
+      return () => {
+        cancelAnimationFrame(frame);
+      };
     } else {
+      setInitiated(true);
       const value = exitValue || fromValue;
       setStyles({
         transitionProperty: Object.keys(value).join(','),
