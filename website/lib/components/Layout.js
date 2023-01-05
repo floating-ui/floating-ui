@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {Fragment, useMemo, useRef, useState} from 'react';
+import {Fragment, memo, useMemo, useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -302,9 +302,8 @@ const slugify = (str) =>
     .replace(/[\s.]/g, '-')
     .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
 
-const linkify =
-  (Tag, headings, pathname) =>
-  ({children, ...props}) => {
+const linkify = (Tag, headings, pathname) =>
+  memo(({children, ...props}) => {
     let stringChildren = children;
 
     if (Array.isArray(stringChildren)) {
@@ -328,23 +327,19 @@ const linkify =
 
     let id = url;
 
-    if (
-      !headings.every((heading) => heading.pathname === pathname)
-    ) {
-      const dupeCount = headings.filter(
-        ({url: u}) => u === url
-      ).length;
-      id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
+    const dupeCount = headings.filter(
+      ({url: u}) => u === url
+    ).length;
+    id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
 
-      headings.push({url, pathname});
-    }
+    headings.push({url, pathname});
 
     return (
       <Tag {...props} id={id}>
         <a href={`#${id}`}>{children}</a>
       </Tag>
     );
-  };
+  });
 
 const components = {
   Collapsible,
@@ -401,25 +396,46 @@ const components = {
   },
 };
 
-export default function Layout({children}) {
-  const {pathname, events} = useRouter();
+export default function RootLayout(props) {
+  const {pathname} = useRouter();
+
+  const computedComponents = useMemo(() => {
+    const headings = [];
+    return {
+      ...components,
+      h2: linkify('h2', headings, pathname),
+      h3: linkify('h3', headings, pathname),
+      h4: linkify('h4', headings, pathname),
+      h5: linkify('h5', headings, pathname),
+      h6: linkify('h6', headings, pathname),
+    };
+  }, [pathname]);
+
+  return (
+    <MDXProvider components={computedComponents}>
+      <Layout {...props} />
+    </MDXProvider>
+  );
+}
+
+function Layout({children}) {
+  const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
   const navRef = useRef();
   const activeLinkRef = useRef();
-  const [hash, setHash] = useState(null);
+  const [hash, setHash] = useState(
+    asPath.slice(asPath.indexOf('#'))
+  );
 
   const displayNavigation = nav[index] != null;
 
   useIsomorphicLayoutEffect(() => {
-    window.onhashchange = () => {
-      setHash(location.hash);
-    };
+    setHash(asPath.slice(asPath.indexOf('#')));
+  }, [asPath]);
 
-    setHash(location.hash);
-
+  useIsomorphicLayoutEffect(() => {
     function onRouteChangeComplete() {
-      setHash(null);
       document.querySelector('#focus-root').focus();
     }
 
@@ -470,20 +486,8 @@ export default function Layout({children}) {
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
 
-  const computedComponents = useMemo(() => {
-    const headings = [];
-    return {
-      ...components,
-      h2: linkify('h2', headings, pathname),
-      h3: linkify('h3', headings, pathname),
-      h4: linkify('h4', headings, pathname),
-      h5: linkify('h5', headings, pathname),
-      h6: linkify('h6', headings, pathname),
-    };
-  }, [pathname]);
-
   return (
-    <MDXProvider components={computedComponents}>
+    <>
       <Head>
         <title>{title}</title>
       </Head>
@@ -621,7 +625,7 @@ export default function Layout({children}) {
                 .filter(({depth}) => depth === 2)
                 .map(({url, title}) => (
                   <li key={url}>
-                    <a
+                    <Link
                       href={url}
                       className={cn(
                         'block truncate w-full text-lg py-1 px-4 rounded-lg',
@@ -634,7 +638,7 @@ export default function Layout({children}) {
                       )}
                     >
                       {title}
-                    </a>
+                    </Link>
                     <ul>
                       {anchorsComputed
                         .filter(
@@ -643,7 +647,7 @@ export default function Layout({children}) {
                         )
                         .map(({url, title}) => (
                           <li key={url}>
-                            <a
+                            <Link
                               href={url}
                               className={cn(
                                 'block text-md truncate py-1 px-4 ml-4 border-l border-gray-700 w-[calc(100% - 1rem)] rounded-tr-md rounded-br-md',
@@ -656,7 +660,7 @@ export default function Layout({children}) {
                               )}
                             >
                               {title}
-                            </a>
+                            </Link>
                           </li>
                         ))}
                     </ul>
@@ -693,6 +697,6 @@ export default function Layout({children}) {
           </a>
         </p>
       </footer>
-    </MDXProvider>
+    </>
   );
 }
