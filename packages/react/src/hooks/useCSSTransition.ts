@@ -35,7 +35,7 @@ interface UseCSSTransitionReturn {
 /**
  * Provides data to apply CSS transitions to a floating element, correctly
  * handling placement-aware transitions.
- * @see https://floating-ui.com/docs/useCSSTransition
+ * @see https://floating-ui.com/docs/useCSSTransition#usecsstransition
  */
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   {open, refs}: FloatingContext<RT>,
@@ -97,7 +97,7 @@ export interface UseCSSTransitionStyleProps extends Props {
  * Provides styles to apply CSS transitions to a floating element, correctly
  * handling placement-aware transitions. Higher-level wrapper around
  * `useCSSTransition`.
- * @see https://floating-ui.com/docs/useCSSTransition
+ * @see https://floating-ui.com/docs/useCSSTransition#usecsstransitionstyles
  */
 export function useCSSTransitionStyles<
   RT extends ReferenceType = ReferenceType
