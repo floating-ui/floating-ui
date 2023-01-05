@@ -62,9 +62,9 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
     const el = refs.floating.current;
     if (!el) return;
 
-    setStatus('initial');
-
     if (open) {
+      setStatus('initial');
+
       const frame = requestAnimationFrame(() => {
         setStatus('open');
       });
@@ -149,11 +149,13 @@ export function useCSSTransitionStyles<
         return acc;
       }, {});
 
-    setStyles((styles) => ({
-      transitionProperty: styles.transitionProperty,
-      ...commonStyles,
-      ...initialStyles,
-    }));
+    if (status === 'initial') {
+      setStyles((styles) => ({
+        transitionProperty: styles.transitionProperty,
+        ...commonStyles,
+        ...initialStyles,
+      }));
+    }
 
     if (status === 'open') {
       setStyles({
