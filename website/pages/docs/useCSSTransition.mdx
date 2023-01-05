@@ -1,0 +1,401 @@
+# useCSSTransition
+
+<Notice type="version" gap="above">
+  Since `v0.16.0`
+</Notice>
+
+<Notice type="error" title="Unreleased">
+  The version containing this API has not yet been released on
+  npm.
+</Notice>
+
+Provides plain CSS transitions for a floating element, including
+correct handling of "placement-aware" transitions. If you're
+using a spring library like `framer-motion` or `react-spring`,
+then this may not be necessary.
+
+There are two different hooks you can use:
+
+- [useCSSTransitionStyles](/docs/useCSSTransition#useCSSTransitionStyles)
+  — a high level wrapper around `useCSSTransition` that returns
+  computed styles for you. This is simpler and can handle the
+  majority of use cases.
+- [useCSSTransition](/docs/useCSSTransition#useCSSTransition) — a
+  low level hook that returns data that can be computed by you.
+  This is more complex but allows for deeper configuration and
+  allows styling in `.css` stylesheets, rather than inline
+  styles.
+
+## useCSSTransitionStyles
+
+This hook provides computed inline styles that you can spread
+into the `style{:.keyword}` prop for a floating element.
+
+Like the interaction hooks, this hook accepts the
+`context{:.const}` object returned from `useFloating(){:js}`:
+
+```js /context/
+function App() {
+  const {context} = useFloating();
+  const {isMounted, styles} = useCSSTransitionStyles(context);
+
+  return (
+    isMounted && (
+      <div
+        style={{
+          // Transition styles
+          ...styles,
+        }}
+      >
+        Tooltip
+      </div>
+    )
+  );
+}
+```
+
+- `isMounted{:.const}` is a boolean that determines whether or
+  not the floating element is mounted on the screen, which allows
+  for unmounting animations to play. This replaces the
+  `open{:.const}` state variable.
+- `styles{:.const}` is an object of inline transition styles
+  (`React.CSSProperties{:ts}`).
+
+The hook defaults to a basic opacity fade transition with a
+duration of 250ms.
+
+## useCSSTransitionStyles Props
+
+```ts
+interface Props {
+  duration?: number | Partial<{open: boolean; close: boolean}>;
+  initialStyles?: CSSStylesProperty;
+  openStyles?: CSSStylesProperty;
+  closeStyles?: CSSStylesProperty;
+  commonStyles?: CSSStylesProperty;
+}
+```
+
+### duration
+
+default: `250{:js}`
+
+Specifies the length of the transition in ms.
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  duration: 1000,
+});
+```
+
+### initialStyles
+
+default: `{opacity: 0}`
+
+Specifies the initial styles of the floating element:
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  initialStyles: {
+    transform: 'scale(0.8)',
+  },
+});
+```
+
+This will implicitly transition to an empty transform string,
+i.e., no transform (`scale(1)`).
+
+For placement-aware styles, you can define a function:
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  initialStyles: ({side}) => ({
+    transform:
+      side === 'top' || side === 'bottom'
+        ? 'scaleY(0.5)'
+        : 'scaleX(0.5)',
+  }),
+});
+```
+
+The function takes the following parameters:
+
+```ts
+interface Params {
+  side: Side;
+  placement: Placement;
+}
+```
+
+- `side{:.objectKey}` represents a physical side, with the vast
+  majority of transitions, you'll likely only need to be
+  concerned about the side.
+- `placement{:.objectKey}` represents the whole placement string
+  in cases where you want to also change the transition based on
+  the alignment.
+
+### closeStyles
+
+default: `undefined{:js}`
+
+By default, transitions are symmetrical, but if you want an
+asymmetric transition, then you can specify the following option:
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  closeStyles: {transform: 'scale(2)'},
+  // or, for side-aware styles:
+  closeStyles: ({side}) => ({
+    transform:
+      side === 'top' || side === 'bottom'
+        ? 'scaleY(2)'
+        : 'scaleX(2)',
+  }),
+});
+```
+
+### openStyles
+
+default: `undefined{:js}`
+
+Usually a transition should open at the default property, for
+example `opacity: 1{:sass}` or no transform. If you want the open
+state to transition to a non-default style, this can be
+specified:
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  openStyles: {transform: 'scale(1.1)'},
+  // or, for side-aware styles:
+  openStyles: ({side}) => ({
+    transform:
+      side === 'top' || side === 'bottom'
+        ? 'scaleY(1.1)'
+        : 'scaleX(1.1)',
+  }),
+});
+```
+
+### commonStyles
+
+default: `undefined{:js}`
+
+If a style should be shared across all the different states, then
+this option can be specified. For instance, a transform origin
+should be shared:
+
+```js
+const {isMounted, styles} = useCSSTransitionStyles(context, {
+  commonStyles: {transformOrigin: 'bottom'},
+  // or, for side-aware styles:
+  commonStyles: ({side}) => ({
+    transformOrigin: {
+      top: 'bottom',
+      bottom: 'top',
+      left: 'right',
+      right: 'left',
+    }[side],
+  }),
+});
+```
+
+## useCSSTransition
+
+This hook provides a `status{:.const}` string that determines if
+the floating element is in one of three states:
+
+```ts
+type Status = 'closed' | 'initial' | 'open';
+```
+
+The floating element cycles through the order as seen below:
+
+```text
+closed -> initial -> open -> initial -> closed
+```
+
+Like the interaction hooks, this hook accepts the
+`context{:.const}` object returned from `useFloating(){:js}`:
+
+```js /context/
+function App() {
+  const {context, placement} = useFloating();
+  const {isMounted, status} = useCSSTransition(context);
+
+  return (
+    isMounted && (
+      <div id="floating" data-status={status}>
+        Tooltip
+      </div>
+    )
+  );
+}
+```
+
+- `isMounted{:.const}` is a boolean that determines whether or
+  not the floating element is mounted on the screen, which allows
+  for unmounting animations to play. This replaces the
+  `open{:.const}` state variable.
+- `status{:.const}` is the status string (`Status{:.class}`).
+
+Above, we apply a `data-status{:.keyword}` attribute to the
+floating element. This can be used to target the transition
+status in our CSS.
+
+To define an opacity fade CSS transition:
+
+```css
+#floating {
+  transition-property: opacity;
+}
+#floating[data-status='open'],
+#floating[data-status='close'] {
+  transition-duration: 200ms;
+}
+#floating[data-status='initial'] {
+  opacity: 0;
+}
+```
+
+- `transition-property: opacity{:sass}` is applied to **all**
+  states. This allows the transition to be interruptible.
+
+For the status, DOM insertion CSS transitions can be a bit
+unintuitive, but the statuses map to the following:
+
+- `'closed'{:js}` represents the element is unmounted from the
+  screen. No transitions or styles need to be applied in this
+  state.
+- `'initial'{:js}` indicates the initial styles of the floating
+  element — when opening, as soon as it has been inserted into
+  the DOM, or when closing, the styles to transition back to.
+- `'open'{:js}` indicates the floating element is in the open
+  state (1 frame after `'initial'{:js}`) and begins transitioning
+  in.
+
+### Asymmetric transitions
+
+To allow for asymmetric transitions, where the close transition
+is different from the initial one, you can target a `close`
+status:
+
+```js /symmetric/
+const {isMounted, status} = useCSSTransition(context, {
+  symmetric: false,
+});
+```
+
+This adds a new string, `'close'{:js}`:
+
+```js
+type Status = 'closed' | 'intitial' | 'open' | 'close';
+```
+
+The transition order is:
+
+```text
+closed -> initial -> open -> close -> closed
+```
+
+`'close'{:js}` indicates the floating element is in the close
+state and begins transitioning out.
+
+```css
+#floating {
+  transition-property: opacity, transform;
+}
+#floating[data-status='initial'] {
+  opacity: 0;
+  transform: scale(0);
+}
+#floating[data-status='open'] {
+  opacity: 1;
+  transform: scale(1);
+  transition-duration: 250ms;
+}
+#floating[data-status='close'] {
+  opacity: 0;
+  transform: scale(2);
+  transition-duration: 250ms;
+}
+```
+
+### Placement-aware transitions
+
+A placement-aware transition may look like:
+
+```js /placement/
+const {context, placement} = useFloating();
+const {isMounted, status} = useCSSTransition(context);
+
+return (
+  isMounted && (
+    <div
+      id="floating"
+      data-placement={placement}
+      data-status={status}
+    >
+      Tooltip
+    </div>
+  )
+);
+```
+
+```css
+#floating {
+  transition-property: opacity, transform;
+}
+#floating[data-status='open'],
+#floating[data-status='close'] {
+  transition-duration: 250ms;
+}
+#floating[data-status='initial'] {
+  opacity: 0;
+}
+#floating[data-status='initial'][data-placement^='top'] {
+  transform: translateY(5px);
+}
+#floating[data-status='initial'][data-placement^='bottom'] {
+  transform: translateY(-5px);
+}
+#floating[data-status='initial'][data-placement^='left'] {
+  transform: translateX(5px);
+}
+#floating[data-status='initial'][data-placement^='right'] {
+  transform: translateX(-5px);
+}
+```
+
+## useCSSTransition Props
+
+```ts
+interface Props {
+  duration?: number | Partial<{open: boolean; close: boolean}>;
+  symmetric?: boolean;
+}
+```
+
+### duration
+
+default: `250{:js}`
+
+Specifies the length of the transition in ms.
+
+```js
+const {isMounted, status} = useCSSTransition(context, {
+  duration: 1000,
+});
+```
+
+### symmetric
+
+default: `true{:js}`
+
+Whether the transition is symmetric. This makes defining
+symmetric transitions (most common) less verbose by default.
+
+```js
+const {isMounted, status} = useCSSTransition(context, {
+  symmetric: false,
+});
+```
