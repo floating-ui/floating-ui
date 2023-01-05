@@ -28,7 +28,6 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
 
 export interface Props {
   duration?: number | Partial<{open: number; close: number}>;
-  symmetric?: boolean;
 }
 
 type Status = 'closed' | 'initial' | 'open' | 'close';
@@ -45,7 +44,7 @@ interface UseFloatingTransitionReturn {
  */
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   {placement, open, refs}: FloatingContext<RT>,
-  {duration = 250, symmetric = true}: Props = {}
+  {duration = 250}: Props = {}
 ): UseFloatingTransitionReturn {
   const side = placement.split('-')[0] as Side;
   const isNumberDuration = typeof duration === 'number';
@@ -80,9 +79,9 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
       };
     } else {
       setInitiated(true);
-      setStatus(symmetric ? 'initial' : 'close');
+      setStatus('close');
     }
-  }, [open, symmetric, refs, placement, side, openDuration, closeDuration]);
+  }, [open, refs, placement, side, openDuration, closeDuration]);
 
   return {
     isMounted,
@@ -94,7 +93,7 @@ type CSSStylesProperty =
   | React.CSSProperties
   | ((props: {side: Side; placement: Placement}) => React.CSSProperties);
 
-interface StyleProps extends Props {
+export interface UseCSSTransitionStyleProps extends Props {
   initialStyles?: CSSStylesProperty;
   openStyles?: CSSStylesProperty;
   closeStyles?: CSSStylesProperty;
@@ -117,7 +116,7 @@ export function useCSSTransitionStyles<
     closeStyles: unstable_close,
     commonStyles: unstable_common,
     duration = 250,
-  }: StyleProps = {}
+  }: UseCSSTransitionStyleProps = {}
 ): {
   isMounted: boolean;
   styles: React.CSSProperties;
@@ -125,10 +124,7 @@ export function useCSSTransitionStyles<
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
-  const {isMounted, status} = useCSSTransition(context, {
-    duration,
-    symmetric: false,
-  });
+  const {isMounted, status} = useCSSTransition(context, {duration});
 
   const initialRef = useLatestRef(unstable_initial);
   const openRef = useLatestRef(unstable_open);

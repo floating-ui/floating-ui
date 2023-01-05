@@ -4,6 +4,7 @@ import {
   offset,
   Placement,
   shift,
+  useCSSTransitionStyles,
   useDismiss,
   useFloating,
   useFocus,
@@ -103,19 +104,41 @@ export function Tooltip({
     }
   }, [refs.reference, refs.floating, update, open]);
 
+  const {isMounted, styles} = useCSSTransitionStyles(context, {
+    duration: 1000,
+    initialStyles: ({side}) => ({
+      opacity: 0,
+      transform: {
+        top: 'translateY(5px)',
+        right: 'translateX(-5px)',
+        bottom: 'translateY(-5px)',
+        left: 'translateX(5px)',
+      }[side],
+    }),
+    commonStyles: ({side}) => ({
+      transformOrigin: {
+        top: 'bottom',
+        left: 'right',
+        bottom: 'top',
+        right: 'left',
+      }[side],
+    }),
+  });
+
   return (
     <>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: reference}))}
-      {open && (
+      {isMounted && (
         <div
           {...getFloatingProps({
             ref: floating,
             className: 'Tooltip',
             style: {
               position: strategy,
-              top: y ?? '',
-              left: x ?? '',
+              top: y ?? 0,
+              left: x ?? 0,
+              ...styles,
             },
           })}
         >

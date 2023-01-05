@@ -202,16 +202,16 @@ const {isMounted, styles} = useCSSTransitionStyles(context, {
 ## useCSSTransition
 
 This hook provides a `status{:.const}` string that determines if
-the floating element is in one of three states:
+the floating element is in one of four states:
 
 ```ts
-type Status = 'closed' | 'initial' | 'open';
+type Status = 'closed' | 'initial' | 'open' | 'close';
 ```
 
 The floating element cycles through the order as seen below:
 
 ```text
-closed -> initial -> open -> initial -> closed
+closed -> initial -> open -> close -> closed
 ```
 
 Like the interaction hooks, this hook accepts the
@@ -252,7 +252,8 @@ To define an opacity fade CSS transition:
 #floating[data-status='close'] {
   transition-duration: 250ms;
 }
-#floating[data-status='initial'] {
+#floating[data-status='initial'],
+#floating[data-status='close'] {
   opacity: 0;
 }
 ```
@@ -263,46 +264,22 @@ To define an opacity fade CSS transition:
 For the status, DOM insertion CSS transitions can be a bit
 unintuitive, but the statuses map to the following:
 
-- `'closed'{:js}` represents the element is unmounted from the
+- `'closed'{:js}` indicates the element is unmounted from the
   screen. No transitions or styles need to be applied in this
   state.
 - `'initial'{:js}` indicates the initial styles of the floating
   element — when opening, as soon as it has been inserted into
-  the DOM, or when closing, the styles to transition back to and
-  when transitioning out.
+  the DOM.
 - `'open'{:js}` indicates the floating element is in the open
   state (1 frame after `'initial'{:js}`) and begins transitioning
   in.
+- `'close'{:js}` indicates the floating element is in the close
+  state and begins transitioning out.
 
 The transition duration must match the `duration{:.objectKey}`
 option passed to the hook.
 
 ### Asymmetric transitions
-
-To allow for asymmetric transitions, where the close transition
-is different from the initial one, you can target a `close`
-status:
-
-```js /symmetric/
-const {isMounted, status} = useCSSTransition(context, {
-  symmetric: false,
-});
-```
-
-This adds a new string, `'close'{:js}`:
-
-```js
-type Status = 'closed' | 'initial' | 'open' | 'close';
-```
-
-The transition order is:
-
-```text
-closed -> initial -> open -> close -> closed
-```
-
-`'close'{:js}` indicates the floating element is in the close
-state and begins transitioning out.
 
 ```css
 #floating {
@@ -353,19 +330,24 @@ return (
 #floating[data-status='close'] {
   transition-duration: 250ms;
 }
-#floating[data-status='initial'] {
+#floating[data-status='initial'],
+#floating[data-status='close'] {
   opacity: 0;
 }
-#floating[data-status='initial'][data-placement^='top'] {
+#floating[data-status='initial'][data-placement^='top'],
+#floating[data-status='close'][data-placement^='top'] {
   transform: translateY(5px);
 }
-#floating[data-status='initial'][data-placement^='bottom'] {
+#floating[data-status='initial'][data-placement^='bottom'],
+#floating[data-status='close'][data-placement^='top'] {
   transform: translateY(-5px);
 }
-#floating[data-status='initial'][data-placement^='left'] {
+#floating[data-status='initial'][data-placement^='left'],
+#floating[data-status='close'][data-placement^='top'] {
   transform: translateX(5px);
 }
-#floating[data-status='initial'][data-placement^='right'] {
+#floating[data-status='initial'][data-placement^='right'],
+#floating[data-status='close'][data-placement^='top'] {
   transform: translateX(-5px);
 }
 ```
@@ -375,7 +357,6 @@ return (
 ```ts
 interface Props {
   duration?: number | Partial<{open: boolean; close: boolean}>;
-  symmetric?: boolean;
 }
 ```
 
@@ -388,18 +369,5 @@ Specifies the length of the transition in ms.
 ```js
 const {isMounted, status} = useCSSTransition(context, {
   duration: 1000,
-});
-```
-
-### symmetric
-
-default: `true{:js}`
-
-Whether the transition is symmetric. This makes defining
-symmetric transitions (most common) less verbose by default.
-
-```js
-const {isMounted, status} = useCSSTransition(context, {
-  symmetric: false,
 });
 ```
