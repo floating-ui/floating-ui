@@ -1,12 +1,7 @@
-import type {
-  FloatingContext,
-  Placement,
-  ReferenceType,
-  Side,
-} from '@floating-ui/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
+import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
 
 function useDelayUnmount(open: boolean, durationMs: number): boolean {
@@ -32,7 +27,7 @@ export interface Props {
 
 type Status = 'closed' | 'initial' | 'open' | 'close';
 
-interface UseFloatingTransitionReturn {
+interface UseCSSTransitionReturn {
   isMounted: boolean;
   status: Status;
 }
@@ -45,7 +40,7 @@ interface UseFloatingTransitionReturn {
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   {placement, open, refs}: FloatingContext<RT>,
   {duration = 250}: Props = {}
-): UseFloatingTransitionReturn {
+): UseCSSTransitionReturn {
   const side = placement.split('-')[0] as Side;
   const isNumberDuration = typeof duration === 'number';
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;
@@ -91,7 +86,7 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
 
 type CSSStylesProperty =
   | React.CSSProperties
-  | ((props: {side: Side; placement: Placement}) => React.CSSProperties);
+  | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
 
 export interface UseCSSTransitionStyleProps extends Props {
   initialStyles?: CSSStylesProperty;
@@ -155,7 +150,7 @@ export function useCSSTransitionStyles<
       }, {});
 
     setStyles((styles) => ({
-      ...styles,
+      transitionProperty: styles.transitionProperty,
       ...commonStyles,
       ...initialStyles,
     }));
