@@ -73,19 +73,25 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
   const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
     (node) => {
       if (isElement(node) || node === null) {
-        (
-          context.refs.domReference as React.MutableRefObject<Element | null>
-        ).current = node;
+        (refs.domReference as React.MutableRefObject<Element | null>).current =
+          node;
         setDomReference(node);
       }
 
       // Backwards-compatibility for passing a virtual element to `reference`
       // after it has set the DOM reference.
-      if ((node && !isElement(node)) || node === null) {
+      if (
+        // Allow setting DOM references back to `null`.
+        (isElement(refs.reference.current) && node === null) ||
+        // Don't allow setting virtual elements using the old technique back to
+        // `null` to support `positionReference` + an unstable `reference`
+        // callback ref.
+        (node && !isElement(node))
+      ) {
         reference(node);
       }
     },
-    [reference, context.refs]
+    [reference, refs]
   );
 
   const setPositionReference = React.useCallback(
