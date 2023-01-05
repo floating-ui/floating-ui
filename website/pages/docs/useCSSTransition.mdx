@@ -9,7 +9,7 @@
   npm.
 </Notice>
 
-Provides plain CSS transitions for a floating element, including
+Provides CSS transitions for a floating element, including
 correct handling of "placement-aware" transitions. If you're
 using a spring library like `framer-motion` or `react-spring`,
 then this may not be necessary.
@@ -250,7 +250,7 @@ To define an opacity fade CSS transition:
 }
 #floating[data-status='open'],
 #floating[data-status='close'] {
-  transition-duration: 200ms;
+  transition-duration: 250ms;
 }
 #floating[data-status='initial'] {
   opacity: 0;
@@ -268,10 +268,14 @@ unintuitive, but the statuses map to the following:
   state.
 - `'initial'{:js}` indicates the initial styles of the floating
   element — when opening, as soon as it has been inserted into
-  the DOM, or when closing, the styles to transition back to.
+  the DOM, or when closing, the styles to transition back to and
+  when transitioning out.
 - `'open'{:js}` indicates the floating element is in the open
   state (1 frame after `'initial'{:js}`) and begins transitioning
   in.
+
+The transition duration must match the `duration{:.objectKey}`
+option passed to the hook.
 
 ### Asymmetric transitions
 
@@ -288,7 +292,7 @@ const {isMounted, status} = useCSSTransition(context, {
 This adds a new string, `'close'{:js}`:
 
 ```js
-type Status = 'closed' | 'intitial' | 'open' | 'close';
+type Status = 'closed' | 'initial' | 'open' | 'close';
 ```
 
 The transition order is:
