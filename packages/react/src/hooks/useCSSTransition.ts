@@ -25,7 +25,7 @@ export interface Props {
   duration?: number | Partial<{open: number; close: number}>;
 }
 
-type Status = 'closed' | 'initial' | 'open' | 'close';
+type Status = 'unmounted' | 'initial' | 'open' | 'close';
 
 interface UseCSSTransitionReturn {
   isMounted: boolean;
@@ -45,15 +45,15 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
   const [initiated, setInitiated] = React.useState(false);
-  const [status, setStatus] = React.useState<Status>('closed');
+  const [status, setStatus] = React.useState<Status>('unmounted');
   const isMounted = useDelayUnmount(open, closeDuration);
 
   // `initiated` check prevents this `setState` call from breaking
   // <FloatingPortal />. This call is necessary to ensure subsequent opens
   // after the initial one allows the correct side animation to play when the
   // placement has changed.
-  if (initiated && !isMounted && status !== 'closed') {
-    setStatus('closed');
+  if (initiated && !isMounted && status !== 'unmounted') {
+    setStatus('unmounted');
   }
 
   useLayoutEffect(() => {
@@ -87,10 +87,10 @@ type CSSStylesProperty =
   | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
 
 export interface UseCSSTransitionStyleProps extends Props {
-  initialStyles?: CSSStylesProperty;
-  openStyles?: CSSStylesProperty;
-  closeStyles?: CSSStylesProperty;
-  commonStyles?: CSSStylesProperty;
+  initial?: CSSStylesProperty;
+  open?: CSSStylesProperty;
+  close?: CSSStylesProperty;
+  common?: CSSStylesProperty;
 }
 
 /**
@@ -104,10 +104,10 @@ export function useCSSTransitionStyles<
 >(
   context: FloatingContext<RT>,
   {
-    initialStyles: unstable_initial = {opacity: 0},
-    openStyles: unstable_open,
-    closeStyles: unstable_close,
-    commonStyles: unstable_common,
+    initial: unstable_initial = {opacity: 0},
+    open: unstable_open,
+    close: unstable_close,
+    common: unstable_common,
     duration = 250,
   }: UseCSSTransitionStyleProps = {}
 ): {

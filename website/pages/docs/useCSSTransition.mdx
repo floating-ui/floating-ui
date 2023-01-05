@@ -69,10 +69,10 @@ duration of 250ms.
 ```ts
 interface Props {
   duration?: number | Partial<{open: boolean; close: boolean}>;
-  initialStyles?: CSSStylesProperty;
-  openStyles?: CSSStylesProperty;
-  closeStyles?: CSSStylesProperty;
-  commonStyles?: CSSStylesProperty;
+  initial?: CSSStylesProperty;
+  open?: CSSStylesProperty;
+  close?: CSSStylesProperty;
+  common?: CSSStylesProperty;
 }
 ```
 
@@ -88,7 +88,7 @@ const {isMounted, styles} = useCSSTransitionStyles(context, {
 });
 ```
 
-### initialStyles
+### initial
 
 default: `{opacity: 0}`
 
@@ -96,7 +96,7 @@ Specifies the initial styles of the floating element:
 
 ```js
 const {isMounted, styles} = useCSSTransitionStyles(context, {
-  initialStyles: {
+  initial: {
     transform: 'scale(0.8)',
   },
 });
@@ -109,7 +109,7 @@ For placement-aware styles, you can define a function:
 
 ```js
 const {isMounted, styles} = useCSSTransitionStyles(context, {
-  initialStyles: ({side}) => ({
+  initial: ({side}) => ({
     transform:
       side === 'top' || side === 'bottom'
         ? 'scaleY(0.5)'
@@ -134,7 +134,7 @@ interface Params {
   in cases where you want to also change the transition based on
   the alignment.
 
-### closeStyles
+### close
 
 default: `undefined{:js}`
 
@@ -143,9 +143,9 @@ asymmetric transition, then you can specify the following option:
 
 ```js
 const {isMounted, styles} = useCSSTransitionStyles(context, {
-  closeStyles: {transform: 'scale(2)'},
+  close: {transform: 'scale(2)'},
   // or, for side-aware styles:
-  closeStyles: ({side}) => ({
+  close: ({side}) => ({
     transform:
       side === 'top' || side === 'bottom'
         ? 'scaleY(2)'
@@ -154,7 +154,7 @@ const {isMounted, styles} = useCSSTransitionStyles(context, {
 });
 ```
 
-### openStyles
+### open
 
 default: `undefined{:js}`
 
@@ -165,9 +165,9 @@ specified:
 
 ```js
 const {isMounted, styles} = useCSSTransitionStyles(context, {
-  openStyles: {transform: 'scale(1.1)'},
+  open: {transform: 'scale(1.1)'},
   // or, for side-aware styles:
-  openStyles: ({side}) => ({
+  open: ({side}) => ({
     transform:
       side === 'top' || side === 'bottom'
         ? 'scaleY(1.1)'
@@ -176,7 +176,7 @@ const {isMounted, styles} = useCSSTransitionStyles(context, {
 });
 ```
 
-### commonStyles
+### common
 
 default: `undefined{:js}`
 
@@ -186,9 +186,9 @@ should be shared:
 
 ```js
 const {isMounted, styles} = useCSSTransitionStyles(context, {
-  commonStyles: {transformOrigin: 'bottom'},
+  common: {transformOrigin: 'bottom'},
   // or, for side-aware styles:
-  commonStyles: ({side}) => ({
+  common: ({side}) => ({
     transformOrigin: {
       top: 'bottom',
       bottom: 'top',
@@ -205,13 +205,13 @@ This hook provides a `status{:.const}` string that determines if
 the floating element is in one of four states:
 
 ```ts
-type Status = 'closed' | 'initial' | 'open' | 'close';
+type Status = 'unmounted' | 'initial' | 'open' | 'close';
 ```
 
 The floating element cycles through the order as seen below:
 
 ```text
-closed -> initial -> open -> close -> closed
+unmounted -> initial -> open -> close -> unmounted
 ```
 
 Like the interaction hooks, this hook accepts the
@@ -264,7 +264,7 @@ To define an opacity fade CSS transition:
 For the status, DOM insertion CSS transitions can be a bit
 unintuitive, but the statuses map to the following:
 
-- `'closed'{:js}` indicates the element is unmounted from the
+- `'unmounted'{:js}` indicates the element is unmounted from the
   screen. No transitions or styles need to be applied in this
   state.
 - `'initial'{:js}` indicates the initial styles of the floating
