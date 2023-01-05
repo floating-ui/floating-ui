@@ -23,10 +23,13 @@ const PortalContext = React.createContext<null | {
   afterInsideRef: React.RefObject<HTMLSpanElement>;
   beforeOutsideRef: React.RefObject<HTMLSpanElement>;
   afterOutsideRef: React.RefObject<HTMLSpanElement>;
+  shouldRenderGuards: boolean;
 }>(null);
 
+const DEFAULT_ID = 'floating-ui-root';
+
 export const useFloatingPortalNode = ({
-  id,
+  id = DEFAULT_ID,
   enabled = true,
 }: {
   id?: string;
@@ -41,22 +44,39 @@ export const useFloatingPortalNode = ({
       return;
     }
 
-    const rootNode = id ? document.getElementById(id) : null;
+    let rootNode = id ? document.getElementById(id) : null;
 
-    if (rootNode) {
-      rootNode.setAttribute('data-floating-ui-portal', '');
-      setPortalEl(rootNode);
-    } else {
+    if (!rootNode) {
       const newPortalEl = document.createElement('div');
-      newPortalEl.id = id || uniqueId;
-      newPortalEl.setAttribute('data-floating-ui-portal', '');
-      setPortalEl(newPortalEl);
+      newPortalEl.id = id;
+
       const container = portalContext?.portalNode || document.body;
+      // TODO: this should be cleaned up as well?
       container.appendChild(newPortalEl);
-      return () => {
-        container.removeChild(newPortalEl);
-      };
+
+      rootNode = newPortalEl;
     }
+
+    // TODO: In case of a Tooltip that does not have any focus handling, the floating element subroot is unnnecessary.
+    // this condition is not correct, would likely have to be a new prop on FloatingPortal passed in here.
+
+    // if (portalContext?.shouldRenderGuards) {
+    const newPortalEl = document.createElement('div');
+    newPortalEl.id = uniqueId;
+    newPortalEl.setAttribute('data-floating-ui-portal', '');
+    setPortalEl(newPortalEl);
+
+    // TODO: not sure about this logic - I think it should actually prefer the custom root node, if that is specified?
+    // In case of a Drawer that is opened from a portaled Popover, for example - it should still append the drawer to the custom root.
+    const container = portalContext?.portalNode || rootNode;
+    container.appendChild(newPortalEl);
+
+    return () => {
+      container.removeChild(newPortalEl);
+    };
+    // } else {
+    //   setPortalEl(rootNode);
+    // }
   }, [id, portalContext, uniqueId, enabled]);
 
   return portalEl;
@@ -132,9 +152,10 @@ export const FloatingPortal = ({
           beforeInsideRef,
           afterInsideRef,
           portalNode,
+          shouldRenderGuards,
           setFocusManagerState,
         }),
-        [preserveTabOrder, portalNode]
+        [preserveTabOrder, portalNode, shouldRenderGuards]
       )}
     >
       {shouldRenderGuards && portalNode && (
