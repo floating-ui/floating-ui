@@ -81,7 +81,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
       // Backwards-compatibility for passing a virtual element to `reference`
       // after it has set the DOM reference.
-      if (node && !isElement(node)) {
+      if ((node && !isElement(node)) || node === null) {
         reference(node);
       }
     },
