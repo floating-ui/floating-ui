@@ -739,4 +739,18 @@ describe('Drawer', () => {
     await act(async () => {});
     expect(screen.queryByText('Close')).toBeInTheDocument();
   });
+
+  test('closeOnFocusOut=false - does not close when tabbing out', async () => {
+    render(
+      <ResponsiveContext.Provider value={{width: 1600}}>
+        <Drawer />
+      </ResponsiveContext.Provider>
+    );
+    await userEvent.click(screen.getByText('My button'));
+    expect(screen.queryByText('Close')).toBeInTheDocument();
+    await userEvent.keyboard('{Tab}');
+    await act(async () => {});
+    expect(document.activeElement).toBe(screen.getByText('Next button'));
+    expect(screen.queryByText('Close')).toBeInTheDocument();
+  });
 });
