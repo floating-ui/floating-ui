@@ -28,6 +28,7 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
 
 export interface Props {
   duration?: number | Partial<{open: number; close: number}>;
+  symmetric?: boolean;
 }
 
 type Status = 'closed' | 'initial' | 'open' | 'close';
@@ -43,7 +44,7 @@ interface UseFloatingTransitionReturn {
  */
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   {placement, open, refs}: FloatingContext<RT>,
-  {duration = 250}: Props = {}
+  {duration = 250, symmetric = true}: Props = {}
 ): UseFloatingTransitionReturn {
   const side = placement.split('-')[0] as Side;
   const isNumberDuration = typeof duration === 'number';
@@ -78,9 +79,9 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
       };
     } else {
       setInitiated(true);
-      setStatus('close');
+      setStatus(symmetric ? 'initial' : 'close');
     }
-  }, [open, refs, placement, side, openDuration, closeDuration]);
+  }, [open, symmetric, refs, placement, side, openDuration, closeDuration]);
 
   return {
     isMounted,
@@ -122,7 +123,10 @@ export function useCSSTransitionStyles<
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
-  const {isMounted, status} = useCSSTransition(context, {duration});
+  const {isMounted, status} = useCSSTransition(context, {
+    duration,
+    symmetric: false,
+  });
 
   const initialRef = useLatestRef(unstable_initial);
   const openRef = useLatestRef(unstable_open);
