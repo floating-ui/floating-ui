@@ -17,7 +17,10 @@ export {
   useFloatingTree,
 } from './components/FloatingTree';
 export {useClick} from './hooks/useClick';
-export {useCSSTransition} from './hooks/useCSSTransition';
+export {
+  useCSSTransition,
+  useCSSTransitionStyles,
+} from './hooks/useCSSTransition';
 export {useDismiss} from './hooks/useDismiss';
 export {useFocus} from './hooks/useFocus';
 export {useHover} from './hooks/useHover';

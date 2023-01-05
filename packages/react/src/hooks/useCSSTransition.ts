@@ -1,7 +1,12 @@
+import type {
+  FloatingContext,
+  Placement,
+  ReferenceType,
+  Side,
+} from '@floating-ui/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {FloatingContext, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
 
 function useDelayUnmount(open: boolean, durationMs: number): boolean {
@@ -21,85 +26,51 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
   return isMounted;
 }
 
-type CSSStylesProperty =
-  | React.CSSProperties
-  | ((side: Side) => React.CSSProperties);
-
 export interface Props {
-  from?: CSSStylesProperty;
-  to?: CSSStylesProperty;
-  exit?: CSSStylesProperty;
   duration?: number | Partial<{open: number; close: number}>;
 }
 
+type Status = 'closed' | 'initial' | 'open' | 'close';
+
+interface UseFloatingTransitionReturn {
+  isMounted: boolean;
+  status: Status;
+}
+
+/**
+ * Provides data to apply CSS transitions to a floating element, correctly
+ * handling placement-aware transitions.
+ */
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
   {placement, open, refs}: FloatingContext<RT>,
-  {
-    from: unstable_from = {opacity: 0},
-    to: unstable_to,
-    exit: unstable_exit,
-    duration = 250,
-  }: Props = {}
-): {
-  isMounted: boolean;
-  styles: React.CSSProperties;
-} {
+  {duration = 250}: Props = {}
+): UseFloatingTransitionReturn {
   const side = placement.split('-')[0] as Side;
   const isNumberDuration = typeof duration === 'number';
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
   const [initiated, setInitiated] = React.useState(false);
-  const [styles, setStyles] = React.useState<React.CSSProperties>({});
+  const [status, setStatus] = React.useState<Status>('closed');
   const isMounted = useDelayUnmount(open, closeDuration);
 
   // `initiated` check prevents this `setState` call from breaking
-  // <FloatingPortal />. This call is necessary to ensure subsequent opens after
-  // the initial one allows the correct side animation to play when the
+  // <FloatingPortal />. This call is necessary to ensure subsequent opens
+  // after the initial one allows the correct side animation to play when the
   // placement has changed.
-  if (initiated && !isMounted && Object.keys(styles).length !== 0) {
-    setStyles({});
+  if (initiated && !isMounted && status !== 'closed') {
+    setStatus('closed');
   }
-
-  const fromRef = useLatestRef(unstable_from);
-  const toRef = useLatestRef(unstable_to);
-  const exitRef = useLatestRef(unstable_exit);
 
   useLayoutEffect(() => {
     const el = refs.floating.current;
     if (!el) return;
 
-    const from = fromRef.current;
-    const exit = exitRef.current;
-    const to = toRef.current;
-
-    const fromValue = typeof from === 'function' ? from(side) : from;
-    const exitValue = typeof exit === 'function' ? exit(side) : exit;
-    const toWithFallback =
-      to ||
-      (() =>
-        Object.keys(fromValue).reduce((acc: Record<string, ''>, key) => {
-          acc[key] = '';
-          return acc;
-        }, {}));
-
-    setStyles((styles) => ({
-      // Preserve transition properties
-      ...styles,
-      ...fromValue,
-    }));
+    setStatus('initial');
 
     if (open) {
       const frame = requestAnimationFrame(() => {
-        const toValue =
-          typeof toWithFallback === 'function'
-            ? toWithFallback(side)
-            : toWithFallback;
-        setStyles({
-          transitionProperty: Object.keys(toValue).join(','),
-          transitionDuration: `${openDuration}ms`,
-          ...toValue,
-        });
+        setStatus('open');
       });
 
       return () => {
@@ -107,23 +78,114 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
       };
     } else {
       setInitiated(true);
-      const value = exitValue || fromValue;
+      setStatus('close');
+    }
+  }, [open, refs, placement, side, openDuration, closeDuration]);
+
+  return {
+    isMounted,
+    status,
+  };
+}
+
+type CSSStylesProperty =
+  | React.CSSProperties
+  | ((props: {side: Side; placement: Placement}) => React.CSSProperties);
+
+interface StyleProps extends Props {
+  initialStyles?: CSSStylesProperty;
+  openStyles?: CSSStylesProperty;
+  closeStyles?: CSSStylesProperty;
+  commonStyles?: CSSStylesProperty;
+}
+
+/**
+ * Provides styles to apply CSS transitions to a floating element, correctly
+ * handling placement-aware transitions. Higher-level wrapper around
+ * `useCSSTransition`.
+ */
+export function useCSSTransitionStyles<
+  RT extends ReferenceType = ReferenceType
+>(
+  context: FloatingContext<RT>,
+  {
+    initialStyles: unstable_initial = {opacity: 0},
+    openStyles: unstable_open,
+    closeStyles: unstable_close,
+    commonStyles: unstable_common,
+    duration = 250,
+  }: StyleProps = {}
+): {
+  isMounted: boolean;
+  styles: React.CSSProperties;
+} {
+  const placement = context.placement;
+  const side = placement.split('-')[0] as Side;
+  const [styles, setStyles] = React.useState<React.CSSProperties>({});
+  const {isMounted, status} = useCSSTransition(context, {duration});
+
+  const initialRef = useLatestRef(unstable_initial);
+  const openRef = useLatestRef(unstable_open);
+  const closeRef = useLatestRef(unstable_close);
+  const commonRef = useLatestRef(unstable_common);
+
+  const isNumberDuration = typeof duration === 'number';
+  const openDuration = (isNumberDuration ? duration : duration.open) || 0;
+  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
+
+  useLayoutEffect(() => {
+    const fnArgs = {side, placement};
+
+    const initial = initialRef.current;
+    const close = closeRef.current;
+    const open = openRef.current;
+    const common = commonRef.current;
+
+    const initialStyles =
+      typeof initial === 'function' ? initial(fnArgs) : initial;
+    const closeStyles = typeof close === 'function' ? close(fnArgs) : close;
+    const commonStyles = typeof common === 'function' ? common(fnArgs) : common;
+    const openStyles =
+      (typeof open === 'function' ? open(fnArgs) : open) ||
+      Object.keys(initialStyles).reduce((acc: Record<string, ''>, key) => {
+        acc[key] = '';
+        return acc;
+      }, {});
+
+    setStyles((styles) => ({
+      ...styles,
+      ...commonStyles,
+      ...initialStyles,
+    }));
+
+    if (status === 'open') {
       setStyles({
-        transitionProperty: Object.keys(value).join(','),
+        transitionProperty: Object.keys(openStyles).join(','),
+        transitionDuration: `${openDuration}ms`,
+        ...commonStyles,
+        ...openStyles,
+      });
+    }
+
+    if (status === 'close') {
+      const styles = closeStyles || initialStyles;
+      setStyles({
+        transitionProperty: Object.keys(styles).join(','),
         transitionDuration: `${closeDuration}ms`,
-        ...value,
+        ...commonStyles,
+        ...styles,
       });
     }
   }, [
-    open,
-    refs,
-    placement,
     side,
-    openDuration,
+    placement,
     closeDuration,
-    fromRef,
-    exitRef,
-    toRef,
+    closeRef,
+    initialRef,
+    openRef,
+    commonRef,
+    openDuration,
+    status,
   ]);
 
   return {
