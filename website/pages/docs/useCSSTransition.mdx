@@ -16,12 +16,12 @@ then this may not be necessary.
 
 There are two different hooks you can use:
 
-- [useCSSTransitionStyles](/docs/useCSSTransition#useCSSTransitionStyles)
+- [`useCSSTransitionStyles`](/docs/useCSSTransition#usecsstransitionstyles)
   — a high level wrapper around `useCSSTransition` that returns
   computed styles for you. This is simpler and can handle the
   majority of use cases.
-- [useCSSTransition](/docs/useCSSTransition#useCSSTransition) — a
-  low level hook that returns data that can be computed by you.
+- [`useCSSTransition`](/docs/useCSSTransition#usecsstransition) —
+  a low level hook that returns data that can be computed by you.
   This is more complex but allows for deeper configuration and
   allows styling in `.css` stylesheets, rather than inline
   styles.
@@ -303,8 +303,6 @@ option passed to the hook.
 
 ### Placement-aware transitions
 
-A placement-aware transition may look like:
-
 ```js /placement/
 const {context, placement} = useFloating();
 const {isMounted, status} = useCSSTransition(context);
@@ -339,15 +337,15 @@ return (
   transform: translateY(5px);
 }
 #floating[data-status='initial'][data-placement^='bottom'],
-#floating[data-status='close'][data-placement^='top'] {
+#floating[data-status='close'][data-placement^='bottom'] {
   transform: translateY(-5px);
 }
 #floating[data-status='initial'][data-placement^='left'],
-#floating[data-status='close'][data-placement^='top'] {
+#floating[data-status='close'][data-placement^='left'] {
   transform: translateX(5px);
 }
 #floating[data-status='initial'][data-placement^='right'],
-#floating[data-status='close'][data-placement^='top'] {
+#floating[data-status='close'][data-placement^='right'] {
   transform: translateX(-5px);
 }
 ```

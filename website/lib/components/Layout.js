@@ -326,12 +326,18 @@ const linkify =
       headings.length = 0;
     }
 
-    const dupeCount = headings.filter(
-      ({url: u}) => u === url
-    ).length;
-    const id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
+    let id = url;
 
-    headings.push({url, pathname});
+    if (
+      !headings.every((heading) => heading.pathname === pathname)
+    ) {
+      const dupeCount = headings.filter(
+        ({url: u}) => u === url
+      ).length;
+      id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
+
+      headings.push({url, pathname});
+    }
 
     return (
       <Tag {...props} id={id}>
@@ -349,14 +355,17 @@ const components = {
     // Split a camel/PascalCased string into parts. A word break oppportunity
     // element gets inserted after each part.
     const parts = props.children?.split(/(?=[A-Z])/g) ?? '';
+
     return (
       <h1 {...props}>
-        {parts.map((part) => (
-          <Fragment key={part}>
-            {part}
-            <wbr />
-          </Fragment>
-        ))}
+        {parts.every((part) => part.length > 1)
+          ? parts.map((part) => (
+              <Fragment key={part}>
+                {part}
+                <wbr />
+              </Fragment>
+            ))
+          : props.children}
       </h1>
     );
   },
