@@ -38,12 +38,10 @@ interface UseCSSTransitionReturn {
  * @see https://floating-ui.com/docs/useCSSTransition
  */
 export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
-  {placement, open, refs}: FloatingContext<RT>,
+  {open, refs}: FloatingContext<RT>,
   {duration = 250}: Props = {}
 ): UseCSSTransitionReturn {
-  const side = placement.split('-')[0] as Side;
   const isNumberDuration = typeof duration === 'number';
-  const openDuration = (isNumberDuration ? duration : duration.open) || 0;
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
   const [initiated, setInitiated] = React.useState(false);
