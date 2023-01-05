@@ -76,7 +76,7 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
       setInitiated(true);
       setStatus('close');
     }
-  }, [open, refs, placement, side, openDuration, closeDuration]);
+  }, [open, refs]);
 
   return {
     isMounted,
