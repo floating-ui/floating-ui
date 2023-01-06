@@ -219,10 +219,10 @@ Like the interaction hooks, this hook accepts the
 ```js /context/
 function App() {
   const {context, placement} = useFloating();
-  const status = useTransitionStatus(context);
+  const {isMounted, status} = useTransitionStatus(context);
 
   return (
-    status !== 'unmounted' && (
+    isMounted && (
       <div id="floating" data-status={status}>
         Tooltip
       </div>
@@ -304,10 +304,10 @@ option passed to the hook.
 
 ```js /placement/
 const {context, placement} = useFloating();
-const status = useTransitionStatus(context);
+const {isMounted, status} = useTransitionStatus(context);
 
 return (
-  status !== 'unmounted' && (
+  isMounted && (
     <div
       id="floating"
       data-placement={placement}
