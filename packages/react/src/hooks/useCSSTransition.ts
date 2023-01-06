@@ -4,6 +4,14 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
 
+// Converts a JS style key like `backgroundColor` to a CSS transition-property
+// like `background-color`.
+const camelCaseToKebabCase = (str: string): string =>
+  str.replace(
+    /[A-Z]+(?![a-z])|[A-Z]/g,
+    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase()
+  );
+
 function useDelayUnmount(open: boolean, durationMs: number): boolean {
   const [isMounted, setIsMounted] = React.useState(open);
 
@@ -157,7 +165,9 @@ export function useCSSTransitionStyles<
 
     if (status === 'open') {
       setStyles({
-        transitionProperty: Object.keys(openStyles).join(','),
+        transitionProperty: Object.keys(openStyles)
+          .map(camelCaseToKebabCase)
+          .join(','),
         transitionDuration: `${openDuration}ms`,
         ...commonStyles,
         ...openStyles,
@@ -167,7 +177,9 @@ export function useCSSTransitionStyles<
     if (status === 'close') {
       const styles = closeStyles || initialStyles;
       setStyles({
-        transitionProperty: Object.keys(styles).join(','),
+        transitionProperty: Object.keys(styles)
+          .map(camelCaseToKebabCase)
+          .join(','),
         transitionDuration: `${closeDuration}ms`,
         ...commonStyles,
         ...styles,
