@@ -17,12 +17,12 @@ necessary.
 
 There are two different hooks you can use:
 
-- [`useTransitionStyles`](/docs/useTransition#useTransitionstyles)
+- [`useTransitionStyles`](/docs/useTransition#usetransitionstyles)
   — a high level wrapper around `useTransitionStatus` that
   returns computed styles for you. This is simpler and can handle
   the majority of use cases.
-- [`useTransitionStatus`](/docs/useTransition#useTransition) — a
-  low level hook that returns a status string to compute the
+- [`useTransitionStatus`](/docs/useTransition#usetransitionstatus)
+  — a low level hook that returns a status string to compute the
   styles yourself.
 
 ## useTransitionStyles
@@ -364,7 +364,7 @@ default: `250{:js}`
 Specifies the length of the transition in ms.
 
 ```js
-const {isMounted, status} = useTransition(context, {
+const {isMounted, status} = useTransitionStatus(context, {
   duration: 1000,
 });
 ```
