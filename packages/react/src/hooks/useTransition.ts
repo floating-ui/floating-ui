@@ -35,20 +35,15 @@ export interface Props {
 
 type Status = 'unmounted' | 'initial' | 'open' | 'close';
 
-interface UseCSSTransitionReturn {
-  isMounted: boolean;
-  status: Status;
-}
-
 /**
- * Provides data to apply CSS transitions to a floating element, correctly
- * handling placement-aware transitions.
- * @see https://floating-ui.com/docs/useCSSTransition#usecsstransition
+ * Provides a status string to apply CSS transitions to a floating element,
+ * correctly handling placement-aware transitions.
+ * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
-export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
+export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   {open, refs}: FloatingContext<RT>,
   {duration = 250}: Props = {}
-): UseCSSTransitionReturn {
+): Status {
   const isNumberDuration = typeof duration === 'number';
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
@@ -84,17 +79,14 @@ export function useCSSTransition<RT extends ReferenceType = ReferenceType>(
     }
   }, [open, refs]);
 
-  return {
-    isMounted,
-    status,
-  };
+  return status;
 }
 
 type CSSStylesProperty =
   | React.CSSProperties
   | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
 
-export interface UseCSSTransitionStyleProps extends Props {
+export interface UseTransitionStylesProps extends Props {
   initial?: CSSStylesProperty;
   open?: CSSStylesProperty;
   close?: CSSStylesProperty;
@@ -107,9 +99,7 @@ export interface UseCSSTransitionStyleProps extends Props {
  * `useCSSTransition`.
  * @see https://floating-ui.com/docs/useCSSTransition#usecsstransitionstyles
  */
-export function useCSSTransitionStyles<
-  RT extends ReferenceType = ReferenceType
->(
+export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   {
     initial: unstable_initial = {opacity: 0},
@@ -117,7 +107,7 @@ export function useCSSTransitionStyles<
     close: unstable_close,
     common: unstable_common,
     duration = 250,
-  }: UseCSSTransitionStyleProps = {}
+  }: UseTransitionStylesProps = {}
 ): {
   isMounted: boolean;
   styles: React.CSSProperties;
@@ -125,7 +115,7 @@ export function useCSSTransitionStyles<
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
-  const {isMounted, status} = useCSSTransition(context, {duration});
+  const status = useTransitionStatus(context, {duration});
 
   const initialRef = useLatestRef(unstable_initial);
   const openRef = useLatestRef(unstable_open);
@@ -198,7 +188,7 @@ export function useCSSTransitionStyles<
   ]);
 
   return {
-    isMounted,
+    isMounted: status !== 'unmounted',
     styles,
   };
 }

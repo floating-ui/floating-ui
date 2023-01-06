@@ -1,4 +1,4 @@
-# useCSSTransition
+# useTransition
 
 <Notice type="version" gap="above">
   Since `v0.16.0`
@@ -9,24 +9,23 @@
   npm.
 </Notice>
 
-Provides CSS transitions for a floating element, including
-correct handling of "placement-aware" transitions. If you're
-using a spring library like `framer-motion` or `react-spring`,
-then this may not be necessary.
+Provides a transitions to apply CSS transitions to a floating
+element, including correct handling of "placement-aware"
+transitions. If you're using a spring library like
+`framer-motion` or `react-spring`, then this may not be
+necessary.
 
 There are two different hooks you can use:
 
-- [`useCSSTransitionStyles`](/docs/useCSSTransition#usecsstransitionstyles)
-  — a high level wrapper around `useCSSTransition` that returns
-  computed styles for you. This is simpler and can handle the
-  majority of use cases.
-- [`useCSSTransition`](/docs/useCSSTransition#usecsstransition) —
-  a low level hook that returns data that can be computed by you.
-  This is more complex but allows for deeper configuration and
-  allows styling in `.css` stylesheets, rather than inline
-  styles.
+- [`useTransitionStyles`](/docs/useTransition#useTransitionstyles)
+  — a high level wrapper around `useTransitionStatus` that
+  returns computed styles for you. This is simpler and can handle
+  the majority of use cases.
+- [`useTransitionStatus`](/docs/useTransition#useTransition) — a
+  low level hook that returns a status string to compute the
+  styles yourself.
 
-## useCSSTransitionStyles
+## useTransitionStyles
 
 This hook provides computed inline styles that you can spread
 into the `style{:.keyword}` prop for a floating element.
@@ -37,7 +36,7 @@ Like the interaction hooks, this hook accepts the
 ```js /context/
 function App() {
   const {context} = useFloating();
-  const {isMounted, styles} = useCSSTransitionStyles(context);
+  const {isMounted, styles} = useTransitionStyles(context);
 
   return (
     isMounted && (
@@ -64,7 +63,7 @@ function App() {
 The hook defaults to a basic opacity fade transition with a
 duration of 250ms.
 
-## useCSSTransitionStyles Props
+## useTransitionStyles Props
 
 ```ts
 interface Props {
@@ -83,7 +82,7 @@ default: `250{:js}`
 Specifies the length of the transition in ms.
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   duration: 1000,
 });
 ```
@@ -95,7 +94,7 @@ default: `{opacity: 0}`
 Specifies the initial styles of the floating element:
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   initial: {
     transform: 'scale(0.8)',
   },
@@ -108,7 +107,7 @@ i.e., no transform (`scale(1)`).
 For placement-aware styles, you can define a function:
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   initial: ({side}) => ({
     transform:
       side === 'top' || side === 'bottom'
@@ -142,7 +141,7 @@ By default, transitions are symmetrical, but if you want an
 asymmetric transition, then you can specify the following option:
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   close: {transform: 'scale(2)'},
   // or, for side-aware styles:
   close: ({side}) => ({
@@ -164,7 +163,7 @@ state to transition to a non-default style, this can be
 specified:
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   open: {transform: 'scale(1.1)'},
   // or, for side-aware styles:
   open: ({side}) => ({
@@ -185,7 +184,7 @@ this option can be specified. For instance, a transform origin
 should be shared:
 
 ```js
-const {isMounted, styles} = useCSSTransitionStyles(context, {
+const {isMounted, styles} = useTransitionStyles(context, {
   common: {transformOrigin: 'bottom'},
   // or, for side-aware styles:
   common: ({side}) => ({
@@ -199,7 +198,7 @@ const {isMounted, styles} = useCSSTransitionStyles(context, {
 });
 ```
 
-## useCSSTransition
+## useTransition
 
 This hook provides a `status{:.const}` string that determines if
 the floating element is in one of four states:
@@ -220,10 +219,10 @@ Like the interaction hooks, this hook accepts the
 ```js /context/
 function App() {
   const {context, placement} = useFloating();
-  const {isMounted, status} = useCSSTransition(context);
+  const status = useTransitionStatus(context);
 
   return (
-    isMounted && (
+    status !== 'unmounted' && (
       <div id="floating" data-status={status}>
         Tooltip
       </div>
@@ -305,10 +304,10 @@ option passed to the hook.
 
 ```js /placement/
 const {context, placement} = useFloating();
-const {isMounted, status} = useCSSTransition(context);
+const status = useTransitionStatus(context);
 
 return (
-  isMounted && (
+  status !== 'unmounted' && (
     <div
       id="floating"
       data-placement={placement}
@@ -350,7 +349,7 @@ return (
 }
 ```
 
-## useCSSTransition Props
+## useTransition Props
 
 ```ts
 interface Props {
@@ -365,7 +364,7 @@ default: `250{:js}`
 Specifies the length of the transition in ms.
 
 ```js
-const {isMounted, status} = useCSSTransition(context, {
+const {isMounted, status} = useTransition(context, {
   duration: 1000,
 });
 ```

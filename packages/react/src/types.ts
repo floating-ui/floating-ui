@@ -12,15 +12,15 @@ import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '.';
 export {Props as UseClickProps} from './hooks/useClick';
-export {
-  Props as UseCSSTransitionProps,
-  UseCSSTransitionStyleProps,
-} from './hooks/useCSSTransition';
 export {Props as UseDismissProps} from './hooks/useDismiss';
 export {Props as UseFocusProps} from './hooks/useFocus';
 export {Props as UseHoverProps} from './hooks/useHover';
 export {Props as UseListNavigationProps} from './hooks/useListNavigation';
 export {Props as UseRoleProps} from './hooks/useRole';
+export {
+  Props as UseTransitionStatusProps,
+  UseTransitionStylesProps,
+} from './hooks/useTransition';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
 export {InnerProps, UseInnerOffsetProps} from './inner';
 export * from '@floating-ui/dom';
