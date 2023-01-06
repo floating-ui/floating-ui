@@ -4,13 +4,13 @@ import {
   offset,
   Placement,
   shift,
-  useCSSTransitionStyles,
   useDismiss,
   useFloating,
   useFocus,
   useHover,
   useInteractions,
   useRole,
+  useTransitionStyles,
 } from '@floating-ui/react';
 import {cloneElement, isValidElement, useState} from 'react';
 
@@ -98,7 +98,7 @@ export function Tooltip({
     useDismiss(context),
   ]);
 
-  const {isMounted, styles} = useCSSTransitionStyles(context, {
+  const {isMounted, styles} = useTransitionStyles(context, {
     duration: {open: 750, close: 250},
     initial: ({side}) => ({
       opacity: 0,
