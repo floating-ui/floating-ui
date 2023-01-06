@@ -43,7 +43,10 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   {open, refs}: FloatingContext<RT>,
   {duration = 250}: Props = {}
-): Status {
+): {
+  isMounted: boolean;
+  status: Status;
+} {
   const isNumberDuration = typeof duration === 'number';
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
@@ -79,7 +82,10 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
     }
   }, [open, refs]);
 
-  return status;
+  return {
+    isMounted,
+    status,
+  };
 }
 
 type CSSStylesProperty =
@@ -115,7 +121,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const [styles, setStyles] = React.useState<React.CSSProperties>({});
-  const status = useTransitionStatus(context, {duration});
+  const {isMounted, status} = useTransitionStatus(context, {duration});
 
   const initialRef = useLatestRef(unstable_initial);
   const openRef = useLatestRef(unstable_open);
@@ -188,7 +194,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   ]);
 
   return {
-    isMounted: status !== 'unmounted',
+    isMounted,
     styles,
   };
 }
