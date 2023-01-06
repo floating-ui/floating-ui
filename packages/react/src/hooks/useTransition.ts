@@ -101,9 +101,8 @@ export interface UseTransitionStylesProps extends Props {
 
 /**
  * Provides styles to apply CSS transitions to a floating element, correctly
- * handling placement-aware transitions. Higher-level wrapper around
- * `useCSSTransition`.
- * @see https://floating-ui.com/docs/useCSSTransition#usecsstransitionstyles
+ * handling placement-aware transitions. Wrapper around `useTransitionStatus`.
+ * @see https://floating-ui.com/docs/useTransition#usetransitionstyles
  */
 export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
