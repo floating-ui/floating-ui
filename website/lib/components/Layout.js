@@ -314,9 +314,13 @@ const linkify = (Tag, headings, pathname) =>
             : value.props?.children ?? ''
         )
         .join('');
+    } else if (typeof stringChildren !== 'string') {
+      stringChildren = stringChildren.props?.children;
     }
 
-    const url = slugify(stringChildren);
+    const url = slugify(
+      typeof stringChildren === 'string' ? stringChildren : ''
+    );
 
     if (
       headings.some((heading) => heading.pathname !== pathname)
