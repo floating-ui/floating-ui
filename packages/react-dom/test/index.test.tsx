@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 
 import {
   arrow,
@@ -304,4 +304,48 @@ test('callback refs invoked during render', async () => {
   await act(async () => {});
 
   cleanup();
+});
+
+test('isPositioned', async () => {
+  const spy = jest.fn();
+
+  function App() {
+    const [open, setOpen] = useState(false);
+    const {reference, floating, isPositioned} = useFloating({
+      open,
+    });
+
+    useLayoutEffect(() => {
+      spy(isPositioned);
+    }, [isPositioned]);
+
+    return (
+      <>
+        <button ref={reference} onClick={() => setOpen((v) => !v)} />
+        {open && <div ref={floating} />}
+      </>
+    );
+  }
+
+  const {getByRole} = render(<App />);
+
+  fireEvent.click(getByRole('button'));
+
+  expect(spy.mock.calls[0][0]).toBe(false);
+
+  await act(async () => {});
+
+  expect(spy.mock.calls[1][0]).toBe(true);
+
+  fireEvent.click(getByRole('button'));
+
+  expect(spy.mock.calls[2][0]).toBe(false);
+
+  fireEvent.click(getByRole('button'));
+  await act(async () => {});
+
+  expect(spy.mock.calls[3][0]).toBe(true);
+
+  fireEvent.click(getByRole('button'));
+  expect(spy.mock.calls[4][0]).toBe(false);
 });

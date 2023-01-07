@@ -63,6 +63,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
 
   useLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
+      dataRef.current.isPositioned = false;
       setData((data) => ({...data, isPositioned: false}));
     }
   }, [open]);
