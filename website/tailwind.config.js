@@ -38,6 +38,7 @@ module.exports = {
             },
             code: {
               fontSize: '0.9375rem',
+              whiteSpace: 'pre',
             },
             img: {
               margin: '0',
@@ -56,6 +57,7 @@ module.exports = {
             },
             code: {
               fontSize: '0.875rem',
+              whiteSpace: 'pre',
             },
             img: {
               margin: '0',
@@ -144,6 +146,7 @@ module.exports = {
               },
               code: {
                 fontSize: 'inherit',
+                whiteSpace: 'pre',
               },
             },
             h1: {
