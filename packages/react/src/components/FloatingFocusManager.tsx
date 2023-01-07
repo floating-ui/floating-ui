@@ -366,14 +366,26 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
-        enqueueFocus(previouslyFocusedElementRef.current, {
-          preventScroll: preventReturnFocusScroll,
-          // When dismissing nested floating elements, by the time the rAF has
-          // executed, the menus will all have been unmounted. When they try
-          // to get focused, the calls get ignored — leaving the root reference
-          // focused as desired.
-          cancelPrevious: false,
-        });
+        if (!refs.domReference.current) {
+          enqueueFocus(previouslyFocusedElementRef.current, {
+            // When dismissing nested floating elements, by the time the rAF has
+            // executed, the menus will all have been unmounted. When they try
+            // to get focused, the calls get ignored — leaving the root
+            // reference focused as desired.
+            cancelPrevious: false,
+            preventScroll: preventReturnFocusScroll,
+          });
+        } else {
+          // In Safari, `useListNavigation` moves focus sync, so making this
+          // sync ensures the initial item remains focused despite this being
+          // invoked in Strict Mode due to double-invoked useEffects. This also
+          // has the positive side effect of closing a modally focus-managed
+          // <Menu> on `Tab` keydown to move naturally to the next focusable
+          // element.
+          previouslyFocusedElementRef.current?.focus({
+            preventScroll: preventReturnFocusScroll,
+          });
+        }
       }
     };
   }, [
