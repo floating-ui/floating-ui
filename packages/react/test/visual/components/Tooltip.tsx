@@ -10,8 +10,9 @@ import {
   useHover,
   useInteractions,
   useRole,
+  useTransitionStyles,
 } from '@floating-ui/react';
-import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
+import {cloneElement, isValidElement, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
@@ -82,13 +83,13 @@ export function Tooltip({
 }: Props) {
   const [open, setOpen] = useState(false);
 
-  const {x, y, reference, floating, strategy, context, refs, update} =
-    useFloating({
-      placement,
-      open,
-      onOpenChange: setOpen,
-      middleware: [offset(5), flip(), shift({padding: 8})],
-    });
+  const {x, y, reference, floating, strategy, context} = useFloating({
+    placement,
+    open,
+    onOpenChange: setOpen,
+    middleware: [offset(5), flip(), shift({padding: 8})],
+    whileElementsMounted: autoUpdate,
+  });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useHover(context, {delay}),
@@ -97,27 +98,43 @@ export function Tooltip({
     useDismiss(context),
   ]);
 
-  useEffect(() => {
-    if (refs.reference.current && refs.floating.current && open) {
-      return autoUpdate(refs.reference.current, refs.floating.current, update);
-    }
-  }, [refs.reference, refs.floating, update, open]);
+  const {isMounted, styles} = useTransitionStyles(context, {
+    duration: {open: 750, close: 250},
+    initial: ({side}) => ({
+      opacity: 0,
+      transform: {
+        top: 'translateY(5px)',
+        right: 'translateX(-5px)',
+        bottom: 'translateY(-5px)',
+        left: 'translateX(5px)',
+      }[side],
+    }),
+    common: ({side}) => ({
+      transitionTimingFunction: 'cubic-bezier(.18,.87,.4,.97)',
+      transformOrigin: {
+        top: 'bottom',
+        left: 'right',
+        bottom: 'top',
+        right: 'left',
+      }[side],
+    }),
+  });
 
   return (
     <>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: reference}))}
-      {open && (
+      {isMounted && (
         <div
-          {...getFloatingProps({
-            ref: floating,
-            className: 'Tooltip',
-            style: {
-              position: strategy,
-              top: y ?? '',
-              left: x ?? '',
-            },
-          })}
+          ref={floating}
+          className="Tooltip"
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+            ...styles,
+          }}
+          {...getFloatingProps()}
         >
           {label}
         </div>
