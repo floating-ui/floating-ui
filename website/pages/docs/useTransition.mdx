@@ -11,9 +11,7 @@
 
 Provides the ability to apply CSS transitions to a floating
 element, including correct handling of "placement-aware"
-transitions. If you're using a spring library like
-`framer-motion` or `react-spring`, then this may not be
-necessary.
+transitions.
 
 There are two different hooks you can use:
 
@@ -96,13 +94,15 @@ Specifies the initial styles of the floating element:
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
   initial: {
+    opacity: 0,
     transform: 'scale(0.8)',
   },
 });
 ```
 
-This will implicitly transition to an empty transform string,
-i.e., no transform (`scale(1)`).
+This will implicitly transition to empty strings for each value
+(their defaults of `opacity: 1{:sass}` and
+`transform: scale(1){:sass}`).
 
 For placement-aware styles, you can define a function:
 
@@ -126,7 +126,7 @@ interface Params {
 }
 ```
 
-- `side{:.objectKey}` represents a physical side, with the vast
+- `side{:.objectKey}` represents a physical side — with the vast
   majority of transitions, you'll likely only need to be
   concerned about the side.
 - `placement{:.objectKey}` represents the whole placement string
@@ -137,14 +137,18 @@ interface Params {
 
 default: `undefined{:js}`
 
-By default, transitions are symmetrical, but if you want an
-asymmetric transition, then you can specify the following option:
+By default, transitions are symmetric, but if you want an
+asymmetric transition, then you can specify `close` styles:
 
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
-  close: {transform: 'scale(2)'},
+  close: {
+    opacity: 0,
+    transform: 'scale(2)',
+  },
   // or, for side-aware styles:
   close: ({side}) => ({
+    opacity: 0,
     transform:
       side === 'top' || side === 'bottom'
         ? 'scaleY(2)'
@@ -159,12 +163,14 @@ default: `undefined{:js}`
 
 Usually a transition should open at the default property, for
 example `opacity: 1{:sass}` or no transform. If you want the open
-state to transition to a non-default style, this can be
+state to transition to a non-default style, `open` styles can be
 specified:
 
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
-  open: {transform: 'scale(1.1)'},
+  open: {
+    transform: 'scale(1.1)',
+  },
   // or, for side-aware styles:
   open: ({side}) => ({
     transform:
@@ -179,13 +185,14 @@ const {isMounted, styles} = useTransitionStyles(context, {
 
 default: `undefined{:js}`
 
-If a style should be shared across all the different states, then
-this option can be specified. For instance, a transform origin
-should be shared:
+If a style is common across all states, then this option can be
+specified. For instance, a transform origin should be shared:
 
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
-  common: {transformOrigin: 'bottom'},
+  common: {
+    transformOrigin: 'bottom',
+  },
   // or, for side-aware styles:
   common: ({side}) => ({
     transformOrigin: {
@@ -260,18 +267,15 @@ To define an opacity fade CSS transition:
 - `transition-property: opacity{:sass}` is applied to **all**
   states. This allows the transition to be interruptible.
 
-For the status, DOM insertion CSS transitions can be a bit
-unintuitive, but the statuses map to the following:
+The statuses map to the following:
 
 - `'unmounted'{:js}` indicates the element is unmounted from the
   screen. No transitions or styles need to be applied in this
   state.
 - `'initial'{:js}` indicates the initial styles of the floating
-  element — when opening, as soon as it has been inserted into
-  the DOM.
+  element as soon as it has been inserted into the DOM.
 - `'open'{:js}` indicates the floating element is in the open
-  state (1 frame after `'initial'{:js}`) and begins transitioning
-  in.
+  state (1 frame after insertion) and begins transitioning in.
 - `'close'{:js}` indicates the floating element is in the close
   state and begins transitioning out.
 
