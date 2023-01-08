@@ -8,17 +8,39 @@ import type {
   UseFloatingData,
   UseFloatingProps,
   UseFloatingReturn,
+  VirtualElement,
 } from './types';
 import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
-export function useFloating<RT extends ReferenceType = ReferenceType>({
-  middleware = [],
-  placement = 'bottom',
-  strategy = 'absolute',
-  whileElementsMounted,
-  open,
-}: UseFloatingProps = {}): UseFloatingReturn<RT> {
+function isExternalElement(value: any): value is Element | VirtualElement {
+  if (value === null) {
+    return true;
+  }
+  return value ? !!value.getBoundingClientRect : false;
+}
+
+export function useFloating<RT extends ReferenceType = ReferenceType>(
+  externalReferenceOrOptions: RT | null | UseFloatingProps,
+  externalFloating: HTMLElement | null,
+  options: UseFloatingProps = {}
+): UseFloatingReturn<RT> {
+  const isExternalSyncOverload =
+    externalReferenceOrOptions &&
+    !isExternalElement(externalReferenceOrOptions);
+
+  if (isExternalSyncOverload) {
+    options = externalReferenceOrOptions;
+  }
+
+  const {
+    placement = 'bottom',
+    strategy = 'absolute',
+    middleware = [],
+    whileElementsMounted,
+    open,
+  } = options;
+
   const [data, setData] = React.useState<UseFloatingData>({
     x: null,
     y: null,
@@ -28,25 +50,35 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     isPositioned: false,
   });
 
+  const [internalReference, setReference] = React.useState<RT | null>(null);
+  const [internalFloating, setFloating] = React.useState<HTMLElement | null>(
+    null
+  );
+
+  const reference = isExternalElement(externalReferenceOrOptions)
+    ? externalReferenceOrOptions
+    : internalReference;
+  const floating = isExternalElement(externalFloating)
+    ? externalFloating
+    : internalFloating;
+
   const [latestMiddleware, setLatestMiddleware] = React.useState(middleware);
 
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
 
-  const reference = React.useRef<RT | null>(null);
-  const floating = React.useRef<HTMLElement | null>(null);
   const cleanupRef = React.useRef<(() => void) | void | null>(null);
   const dataRef = React.useRef(data);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
 
   const update = React.useCallback(() => {
-    if (!reference.current || !floating.current) {
+    if (!reference || !floating) {
       return;
     }
 
-    computePosition(reference.current, floating.current, {
+    computePosition(reference, floating, {
       middleware: latestMiddleware,
       placement,
       strategy,
@@ -59,7 +91,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
         });
       }
     });
-  }, [latestMiddleware, placement, strategy]);
+  }, [reference, floating, latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
@@ -76,17 +108,17 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
     };
   }, []);
 
-  const runElementMountCallback = React.useCallback(() => {
+  useLayoutEffect(() => {
     if (typeof cleanupRef.current === 'function') {
       cleanupRef.current();
       cleanupRef.current = null;
     }
 
-    if (reference.current && floating.current) {
+    if (reference && floating) {
       if (whileElementsMountedRef.current) {
         const cleanupFn = whileElementsMountedRef.current(
-          reference.current,
-          floating.current,
+          reference,
+          floating,
           update
         );
 
@@ -95,38 +127,32 @@ export function useFloating<RT extends ReferenceType = ReferenceType>({
         update();
       }
     }
-  }, [update, whileElementsMountedRef]);
+  }, [reference, floating, update, whileElementsMountedRef]);
 
-  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
-    (node) => {
-      if (reference.current !== node) {
-        reference.current = node;
-        runElementMountCallback();
-      }
-    },
-    [runElementMountCallback]
+  const refs = React.useMemo(
+    () => ({
+      reference: {current: reference},
+      floating: {current: floating},
+      setReference,
+      setFloating,
+    }),
+    [reference, floating]
   );
 
-  const setFloating: UseFloatingReturn<RT>['floating'] = React.useCallback(
-    (node) => {
-      if (floating.current !== node) {
-        floating.current = node;
-        runElementMountCallback();
-      }
-    },
-    [runElementMountCallback]
+  const elements = React.useMemo(
+    () => ({reference, floating}),
+    [reference, floating]
   );
-
-  const refs = React.useMemo(() => ({reference, floating}), []);
 
   return React.useMemo(
     () => ({
       ...data,
       update,
       refs,
+      elements,
       reference: setReference,
       floating: setFloating,
     }),
-    [data, update, refs, setReference, setFloating]
+    [data, update, refs, elements]
   );
 }
