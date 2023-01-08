@@ -349,3 +349,25 @@ test('isPositioned', async () => {
   fireEvent.click(getByRole('button'));
   expect(spy.mock.calls[4][0]).toBe(false);
 });
+
+test('external elements sync', async () => {
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
+    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const {x, y} = useFloating(referenceEl, floatingEl);
+
+    return (
+      <>
+        <div ref={setReferenceEl} />
+        <div ref={setFloatingEl} />
+        <div data-testid="value">{`${x},${y}`}</div>
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+
+  await act(async () => {});
+
+  expect(getByTestId('value').textContent).toBe('0,0');
+});
