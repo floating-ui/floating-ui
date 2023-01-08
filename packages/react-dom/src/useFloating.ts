@@ -14,10 +14,7 @@ import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
 function isExternalElement(value: any): value is Element | VirtualElement {
-  if (value === null) {
-    return true;
-  }
-  return value ? !!value.getBoundingClientRect : false;
+  return value ? !!value.getBoundingClientRect : value === null;
 }
 
 export function useFloating<RT extends ReferenceType = ReferenceType>(
@@ -25,11 +22,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   externalFloating?: HTMLElement | null,
   options: UseFloatingProps = {}
 ): UseFloatingReturn<RT> {
-  const isUsingExternalSync = !!(
-    externalReferenceOrOptions && isExternalElement(externalReferenceOrOptions)
-  );
+  const isExternalSync = isExternalElement(externalReferenceOrOptions);
 
-  if (externalReferenceOrOptions && !isUsingExternalSync) {
+  if (externalReferenceOrOptions && !isExternalSync) {
     options = externalReferenceOrOptions;
   }
 
@@ -89,11 +84,11 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, []);
 
   useLayoutEffect(() => {
-    if (isUsingExternalSync) {
+    if (isExternalSync) {
       referenceRef.current = reference;
       floatingRef.current = floating;
     }
-  }, [isUsingExternalSync, reference, floating]);
+  }, [isExternalSync, reference, floating]);
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {

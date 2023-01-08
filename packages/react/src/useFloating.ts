@@ -18,10 +18,7 @@ import {createPubSub} from './utils/createPubSub';
 import {isElement} from './utils/is';
 
 function isExternalElement(value: any): value is Element | VirtualElement {
-  if (value === null) {
-    return true;
-  }
-  return value ? !!value.getBoundingClientRect : false;
+  return value ? !!value.getBoundingClientRect : value === null;
 }
 
 export function useFloating<RT extends ReferenceType = ReferenceType>(
@@ -81,13 +78,38 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     [position.refs]
   );
 
+  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
+    (node) => {
+      if (isElement(node) || node === null) {
+        (domReferenceRef as React.MutableRefObject<Element | null>).current =
+          node;
+        setDomReference(node);
+      }
+
+      // Backwards-compatibility for passing a virtual element to `reference`
+      // after it has set the DOM reference.
+      if (
+        isElement(position.refs.reference.current) ||
+        position.refs.reference.current === null ||
+        // Don't allow setting virtual elements using the old technique back to
+        // `null` to support `positionReference` + an unstable `reference`
+        // callback ref.
+        (node !== null && !isElement(node))
+      ) {
+        position.refs.setReference(node);
+      }
+    },
+    [position.refs]
+  );
+
   const refs = React.useMemo(
     () => ({
       ...position.refs,
-      domReference: domReferenceRef,
+      setReference,
       setPositionReference,
+      domReference: domReferenceRef,
     }),
-    [position.refs, setPositionReference]
+    [position.refs, setReference, setPositionReference]
   );
 
   const elements = React.useMemo(
@@ -96,30 +118,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       domReference: domReference,
     }),
     [position.elements, domReference]
-  );
-
-  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
-    (node) => {
-      if (isElement(node) || node === null) {
-        (refs.domReference as React.MutableRefObject<Element | null>).current =
-          node;
-        setDomReference(node);
-      }
-
-      // Backwards-compatibility for passing a virtual element to `reference`
-      // after it has set the DOM reference.
-      if (
-        isElement(refs.reference.current) ||
-        refs.reference.current === null ||
-        // Don't allow setting virtual elements using the old technique back to
-        // `null` to support `positionReference` + an unstable `reference`
-        // callback ref.
-        (node !== null && !isElement(node))
-      ) {
-        refs.setReference(node);
-      }
-    },
-    [refs]
   );
 
   const onOpenChange = useEvent(unstable_onOpenChange);
