@@ -59,7 +59,13 @@ export interface Props {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, refs, events, nodeId}: FloatingContext<RT>,
+  {
+    open,
+    onOpenChange,
+    events,
+    nodeId,
+    elements: {reference, domReference, floating},
+  }: FloatingContext<RT>,
   {
     enabled = true,
     escapeKey = true,
@@ -128,8 +134,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       const target = getTarget(event);
 
       // Check if the click occurred on the scrollbar
-      if (isElement(target) && refs.floating.current) {
-        const win = refs.floating.current.ownerDocument.defaultView || window;
+      if (isElement(target) && floating) {
+        const win = floating.ownerDocument.defaultView || window;
         const canScrollX = target.scrollWidth > target.clientWidth;
         const canScrollY = target.scrollHeight > target.clientHeight;
 
@@ -155,12 +161,12 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       const targetIsInsideChildren =
         tree &&
         getChildren(tree.nodesRef.current, nodeId).some((node) =>
-          isEventTargetWithin(event, node.context?.refs.floating.current)
+          isEventTargetWithin(event, node.context?.elements.floating)
         );
 
       if (
-        isEventTargetWithin(event, refs.floating.current) ||
-        isEventTargetWithin(event, refs.domReference.current) ||
+        isEventTargetWithin(event, floating) ||
+        isEventTargetWithin(event, domReference) ||
         targetIsInsideChildren
       ) {
         return;
@@ -191,32 +197,30 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       onOpenChange(false);
     }
 
-    const doc = getDocument(refs.floating.current);
+    const doc = getDocument(floating);
     escapeKey && doc.addEventListener('keydown', onKeyDown);
     outsidePress && doc.addEventListener(outsidePressEvent, onOutsidePress);
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
 
     if (ancestorScroll) {
-      if (isElement(refs.domReference.current)) {
-        ancestors = getOverflowAncestors(refs.domReference.current);
+      if (isElement(domReference)) {
+        ancestors = getOverflowAncestors(domReference);
       }
 
-      if (isElement(refs.floating.current)) {
-        ancestors = ancestors.concat(
-          getOverflowAncestors(refs.floating.current)
-        );
+      if (isElement(floating)) {
+        ancestors = ancestors.concat(getOverflowAncestors(floating));
       }
 
       if (
-        !isElement(refs.reference.current) &&
-        refs.reference.current &&
+        !isElement(reference) &&
+        reference &&
         // @ts-expect-error is VirtualElement
-        refs.reference.current.contextElement
+        reference.contextElement
       ) {
         ancestors = ancestors.concat(
           // @ts-expect-error is VirtualElement
-          getOverflowAncestors(refs.reference.current.contextElement)
+          getOverflowAncestors(reference.contextElement)
         );
       }
     }
@@ -239,6 +243,9 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       });
     };
   }, [
+    floating,
+    domReference,
+    reference,
     escapeKey,
     outsidePress,
     outsidePressEvent,
@@ -251,7 +258,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     enabled,
     escapeKeyBubbles,
     outsidePressBubbles,
-    refs,
     nested,
   ]);
 

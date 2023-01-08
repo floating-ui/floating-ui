@@ -65,7 +65,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     nodeId,
     onOpenChange,
     events,
-    elements: {domReference},
+    elements: {domReference, floating},
   } = context;
 
   const orderRef = useLatestRef(order);
@@ -96,10 +96,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     isTypeableElement(domReference);
 
   const getTabbableContent = React.useCallback(
-    (container: HTMLElement | null = refs.floating.current) => {
+    (container: HTMLElement | null = floating) => {
       return container ? tabbable(container, getTabbableOptions()) : [];
     },
-    [refs]
+    [floating]
   );
 
   const getTabbableElements = React.useCallback(
@@ -108,12 +108,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
       return orderRef.current
         .map((type) => {
-          if (refs.domReference.current && type === 'reference') {
-            return refs.domReference.current;
+          if (domReference && type === 'reference') {
+            return domReference;
           }
 
-          if (refs.floating.current && type === 'floating') {
-            return refs.floating.current;
+          if (floating && type === 'floating') {
+            return floating;
           }
 
           return content;
@@ -121,7 +121,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         .filter(Boolean)
         .flat() as Array<FocusableElement>;
     },
-    [orderRef, refs, getTabbableContent]
+    [domReference, floating, orderRef, getTabbableContent]
   );
 
   React.useEffect(() => {
@@ -139,10 +139,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         const els = getTabbableElements();
         const target = getTarget(event);
 
-        if (
-          orderRef.current[0] === 'reference' &&
-          target === refs.domReference.current
-        ) {
+        if (orderRef.current[0] === 'reference' && target === domReference) {
           stopEvent(event);
           if (event.shiftKey) {
             enqueueFocus(els[els.length - 1]);
@@ -153,7 +150,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
         if (
           orderRef.current[1] === 'floating' &&
-          target === refs.floating.current &&
+          target === floating &&
           event.shiftKey
         ) {
           stopEvent(event);
@@ -162,12 +159,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
     }
 
-    const doc = getDocument(refs.floating.current);
+    const doc = getDocument(floating);
     doc.addEventListener('keydown', onKeyDown);
     return () => {
       doc.removeEventListener('keydown', onKeyDown);
     };
   }, [
+    domReference,
+    floating,
     modal,
     orderRef,
     refs,
@@ -180,8 +179,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     if (!closeOnFocusOut) {
       return;
     }
-    const floating = refs.floating.current;
-    const reference = refs.domReference.current;
 
     let isPointerDown = false;
 
@@ -197,7 +194,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       const relatedTarget = event.relatedTarget as Element | null;
 
       const movedToUnrelatedNode = !(
-        contains(reference, relatedTarget) ||
+        contains(domReference, relatedTarget) ||
         contains(floating, relatedTarget) ||
         contains(relatedTarget, floating) ||
         contains(portalContext?.portalNode, relatedTarget) ||
@@ -205,13 +202,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         (tree &&
           (getChildren(tree.nodesRef.current, nodeId).find(
             (node) =>
-              contains(node.context?.refs.floating.current, relatedTarget) ||
-              contains(node.context?.refs.domReference.current, relatedTarget)
+              contains(node.context?.elements.floating, relatedTarget) ||
+              contains(node.context?.elements.domReference, relatedTarget)
           ) ||
             getAncestors(tree.nodesRef.current, nodeId).find(
               (node) =>
-                node.context?.refs.floating.current === relatedTarget ||
-                node.context?.refs.domReference.current === relatedTarget
+                node.context?.elements.floating === relatedTarget ||
+                node.context?.elements.domReference === relatedTarget
             )))
       );
 
@@ -232,22 +229,29 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
     }
 
-    if (floating && isHTMLElement(reference)) {
-      reference.addEventListener('focusout', handleFocusOutside);
-      reference.addEventListener('pointerdown', handlePointerDown);
+    if (floating && isHTMLElement(domReference)) {
+      domReference.addEventListener('focusout', handleFocusOutside);
+      domReference.addEventListener('pointerdown', handlePointerDown);
       !modal && floating.addEventListener('focusout', handleFocusOutside);
 
       return () => {
-        reference.removeEventListener('focusout', handleFocusOutside);
-        reference.removeEventListener('pointerdown', handlePointerDown);
+        domReference.removeEventListener('focusout', handleFocusOutside);
+        domReference.removeEventListener('pointerdown', handlePointerDown);
         !modal && floating.removeEventListener('focusout', handleFocusOutside);
       };
     }
-  }, [modal, nodeId, tree, refs, portalContext, onOpenChange, closeOnFocusOut]);
+  }, [
+    domReference,
+    floating,
+    modal,
+    nodeId,
+    tree,
+    portalContext,
+    onOpenChange,
+    closeOnFocusOut,
+  ]);
 
   React.useEffect(() => {
-    const floating = refs.floating.current;
-    const reference = refs.domReference.current;
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
       portalContext?.portalNode?.querySelectorAll(
@@ -262,11 +266,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ].filter(Boolean) as Array<Element>;
     }
 
-    if (floating && isHTMLElement(reference) && modal) {
+    if (floating && isHTMLElement(domReference) && modal) {
       const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
       const cleanup = hideOthers(
         orderRef.current.includes('reference') || typeableCombobox
-          ? insideNodes.concat(reference)
+          ? insideNodes.concat(domReference)
           : insideNodes
       );
 
@@ -274,11 +278,16 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         cleanup();
       };
     }
-  }, [modal, orderRef, portalContext, refs, typeableCombobox]);
+  }, [
+    domReference,
+    floating,
+    modal,
+    orderRef,
+    portalContext,
+    typeableCombobox,
+  ]);
 
   React.useEffect(() => {
-    const floating = refs.floating.current;
-
     if (modal && !guards && floating) {
       const tabIndexValues: Array<string | null> = [];
       const options = getTabbableOptions();
@@ -306,10 +315,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         });
       };
     }
-  }, [modal, guards, refs, getTabbableElements]);
+  }, [floating, modal, guards, getTabbableElements]);
 
   useLayoutEffect(() => {
-    const floating = refs.floating.current;
     if (!floating) return;
 
     const doc = getDocument(floating);
@@ -389,6 +397,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
     };
   }, [
+    floating,
     getTabbableElements,
     initialFocus,
     returnFocus,
@@ -412,8 +421,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [portalContext, modal, context]);
 
   useLayoutEffect(() => {
-    const floating = refs.floating.current;
-
     if (ignoreInitialFocus || !floating) return;
 
     function setState() {
@@ -429,7 +436,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         observer.disconnect();
       };
     }
-  }, [getTabbableContent, ignoreInitialFocus, refs]);
+  }, [floating, getTabbableContent, ignoreInitialFocus, refs]);
 
   const shouldRenderGuards =
     guards && (isInsidePortal || modal) && !typeableCombobox;

@@ -4,7 +4,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
-import {isElement,isHTMLElement} from '../utils/is';
+import {isElement, isHTMLElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {DismissPayload} from './useDismiss';
 
@@ -18,7 +18,13 @@ export interface Props {
  * @see https://floating-ui.com/docs/useFocus
  */
 export const useFocus = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, dataRef, refs, events}: FloatingContext<RT>,
+  {
+    open,
+    onOpenChange,
+    dataRef,
+    events,
+    elements: {domReference, floating},
+  }: FloatingContext<RT>,
   {enabled = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
   const pointerTypeRef = React.useRef('');
@@ -30,7 +36,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    const doc = getDocument(refs.floating.current);
+    const doc = getDocument(floating);
     const win = doc.defaultView || window;
 
     // If the reference was focused and the user left the tab/window, and the
@@ -39,9 +45,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     function onBlur() {
       if (
         !open &&
-        isHTMLElement(refs.domReference.current) &&
-        refs.domReference.current ===
-          activeElement(getDocument(refs.domReference.current))
+        isHTMLElement(domReference) &&
+        domReference === activeElement(getDocument(domReference))
       ) {
         blockFocusRef.current = true;
       }
@@ -51,7 +56,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     return () => {
       win.removeEventListener('blur', onBlur);
     };
-  }, [refs, open, enabled]);
+  }, [floating, domReference, open, enabled]);
 
   React.useEffect(() => {
     if (!enabled) {
@@ -101,10 +106,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
             event.type === 'focus' &&
             dataRef.current.openEvent?.type === 'mousedown' &&
             dataRef.current.openEvent &&
-            isEventTargetWithin(
-              dataRef.current.openEvent,
-              refs.domReference.current
-            )
+            isEventTargetWithin(dataRef.current.openEvent, domReference)
           ) {
             return;
           }
@@ -128,8 +130,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
             if (
-              contains(refs.floating.current, relatedTarget) ||
-              contains(refs.domReference.current, relatedTarget) ||
+              contains(floating, relatedTarget) ||
+              contains(domReference, relatedTarget) ||
               movedToFocusGuard
             ) {
               return;
@@ -140,5 +142,5 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         },
       },
     };
-  }, [enabled, keyboardOnly, refs, dataRef, onOpenChange]);
+  }, [enabled, keyboardOnly, domReference, floating, dataRef, onOpenChange]);
 };

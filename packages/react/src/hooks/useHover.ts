@@ -64,7 +64,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move = true,
   }: Props<RT> = {}
 ): ElementProps => {
-  const {open, onOpenChange, dataRef, events, refs, elements} = context;
+  const {
+    open,
+    onOpenChange,
+    dataRef,
+    events,
+    elements: {domReference, floating},
+  } = context;
 
   const tree = useFloatingTree<RT>();
   const handleCloseRef = useLatestRef(handleClose);
@@ -99,7 +105,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     return () => {
       events.off('dismiss', onDismiss);
     };
-  }, [enabled, events, refs]);
+  }, [enabled, events]);
 
   React.useEffect(() => {
     if (!enabled || !handleCloseRef.current || !open) {
@@ -112,12 +118,20 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    const html = getDocument(refs.floating.current).documentElement;
+    const html = getDocument(floating).documentElement;
     html.addEventListener('mouseleave', onLeave);
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [refs, open, onOpenChange, enabled, handleCloseRef, dataRef, isHoverOpen]);
+  }, [
+    floating,
+    open,
+    onOpenChange,
+    enabled,
+    handleCloseRef,
+    dataRef,
+    isHoverOpen,
+  ]);
 
   const closeWithDelay = React.useCallback(
     (runElseBranch = true) => {
@@ -139,13 +153,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
 
   const cleanupMouseMoveHandler = React.useCallback(() => {
     if (handlerRef.current) {
-      getDocument(refs.floating.current).removeEventListener(
+      getDocument(floating).removeEventListener(
         'mousemove',
         handlerRef.current
       );
       handlerRef.current = undefined;
     }
-  }, [refs]);
+  }, [floating]);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -194,7 +208,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      const doc = getDocument(refs.floating.current);
+      const doc = getDocument(floating);
       clearTimeout(restTimeoutRef.current);
 
       if (handleCloseRef.current) {
@@ -243,28 +257,25 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       })(event);
     }
 
-    const floating = refs.floating.current;
-    const reference = elements.domReference;
-
-    if (isElement(reference)) {
-      open && reference.addEventListener('mouseleave', onScrollMouseLeave);
+    if (isElement(domReference)) {
+      open && domReference.addEventListener('mouseleave', onScrollMouseLeave);
       floating?.addEventListener('mouseleave', onScrollMouseLeave);
       move &&
-        reference.addEventListener('mousemove', onMouseEnter, {once: true});
-      reference.addEventListener('mouseenter', onMouseEnter);
-      reference.addEventListener('mouseleave', onMouseLeave);
+        domReference.addEventListener('mousemove', onMouseEnter, {once: true});
+      domReference.addEventListener('mouseenter', onMouseEnter);
+      domReference.addEventListener('mouseleave', onMouseLeave);
       return () => {
-        open && reference.removeEventListener('mouseleave', onScrollMouseLeave);
+        open &&
+          domReference.removeEventListener('mouseleave', onScrollMouseLeave);
         floating?.removeEventListener('mouseleave', onScrollMouseLeave);
-        move && reference.removeEventListener('mousemove', onMouseEnter);
-        reference.removeEventListener('mouseenter', onMouseEnter);
-        reference.removeEventListener('mouseleave', onMouseLeave);
+        move && domReference.removeEventListener('mousemove', onMouseEnter);
+        domReference.removeEventListener('mouseenter', onMouseEnter);
+        domReference.removeEventListener('mouseleave', onMouseLeave);
       };
     }
   }, [
-    // Ensure the effect is re-run when the reference changes.
-    // https://github.com/floating-ui/floating-ui/issues/1833
-    elements.domReference,
+    domReference,
+    floating,
     enabled,
     context,
     mouseOnly,
@@ -275,7 +286,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     open,
     tree,
-    refs,
     delayRef,
     handleCloseRef,
     dataRef,
