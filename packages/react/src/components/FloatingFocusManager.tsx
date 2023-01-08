@@ -65,7 +65,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     nodeId,
     onOpenChange,
     events,
-    _: {domReference},
+    elements: {domReference},
   } = context;
 
   const orderRef = useLatestRef(order);

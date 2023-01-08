@@ -32,6 +32,13 @@ export interface ExtendedRefs<RT> {
   domReference: React.MutableRefObject<
     (RT extends Element ? RT : Element) | null
   >;
+  setPositionReference: (node: RT | null) => void;
+}
+
+export interface ExtendedElements {
+  reference: ReferenceType | null;
+  floating: HTMLElement | null;
+  domReference: Element | null;
 }
 
 export interface FloatingEvents {
@@ -50,16 +57,14 @@ export interface ContextData {
 }
 
 export interface FloatingContext<RT extends ReferenceType = ReferenceType>
-  extends Omit<UsePositionFloatingReturn<RT>, 'refs'> {
+  extends Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
   refs: ExtendedRefs<RT>;
-  _: {
-    domReference: Element | null;
-  };
+  elements: ExtendedElements;
 }
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {

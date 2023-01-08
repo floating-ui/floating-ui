@@ -64,7 +64,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move = true,
   }: Props<RT> = {}
 ): ElementProps => {
-  const {open, onOpenChange, dataRef, events, refs, _} = context;
+  const {open, onOpenChange, dataRef, events, refs, elements} = context;
 
   const tree = useFloatingTree<RT>();
   const handleCloseRef = useLatestRef(handleClose);
@@ -244,7 +244,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     const floating = refs.floating.current;
-    const reference = refs.domReference.current;
+    const reference = elements.domReference;
 
     if (isElement(reference)) {
       open && reference.addEventListener('mouseleave', onScrollMouseLeave);
@@ -264,7 +264,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   }, [
     // Ensure the effect is re-run when the reference changes.
     // https://github.com/floating-ui/floating-ui/issues/1833
-    _.domReference,
+    elements.domReference,
     enabled,
     context,
     mouseOnly,
