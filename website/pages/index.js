@@ -647,7 +647,16 @@ function HomePage() {
             Vue.
           </p>
           <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8">
-            Each module is fully tree-shakeable by your bundler:
+            Each module is{' '}
+            <a
+              href="https://bundlejs.com/?q=%40floating-ui%2Fdom&treeshake=%5B%7B%0A++computePosition%2Cshift%2ClimitShift%2Cflip%2Chide%2Coffset%2Carrow%2CautoPlacement%2Csize%2Cinline%2CautoUpdate%0A%7D%5D&config=%7B%22compression%22%3A%22brotli%22%7D"
+              className="transition-colors underline underline-offset-4 font-bold text-rose-500 dark:text-rose-300 hover:text-gray-1000 decoration-rose-500/80 dark:decoration-rose-300/80 hover:decoration-gray-1000 dark:hover:text-gray-50 dark:hover:decoration-gray-50 decoration-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              fully tree-shakeable
+            </a>{' '}
+            by your bundler:
           </p>
           <div className="grid items-center py-8 pb-16">
             <div className="flex flex-col text-center text-md sm:text-lg md:text-xl mx-auto pr-4 sm:pr-20 md:pr-40">
@@ -665,12 +674,14 @@ function HomePage() {
               {[
                 {name: 'shift', size: '0.6 kB'},
                 {name: 'limitShift', size: '0.2 kB'},
-                {name: 'flip', size: '0.5 kB'},
+                {name: 'flip', size: '0.8 kB'},
                 {name: 'hide', size: '0.2 kB'},
                 {name: 'offset', size: '0.1 kB'},
+                {name: 'arrow', size: '0.5 kB'},
                 {name: 'autoPlacement', size: '0.4 kB'},
                 {name: 'size', size: '0.3 kB'},
                 {name: 'inline', size: '0.6 kB'},
+                {name: 'autoUpdate', size: '0.3 kB'},
               ].map(({name, size}) => (
                 <div
                   className="mb-2 flex gap-2 items-center justify-center"
@@ -692,7 +703,7 @@ function HomePage() {
                   DOM platform
                 </code>
                 <span className="text-md text-yellow-600 dark:text-yellow-400 text-left [font-variant-numeric:tabular-nums]">
-                  +2.2 kB
+                  +2.5 kB
                 </span>
               </div>
             </div>
@@ -735,6 +746,7 @@ function HomePage() {
             <a
               className="transition-colors underline underline-offset-4 font-bold text-rose-500 dark:text-rose-300 hover:text-gray-1000 decoration-rose-500/80 dark:decoration-rose-300/80 hover:decoration-gray-1000 dark:hover:text-gray-50 dark:hover:decoration-gray-50 decoration-2"
               href="https://opencollective.com/floating-ui"
+              target="_blank"
               rel="noopener noreferrer"
             >
               Open Collective
