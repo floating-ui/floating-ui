@@ -13,12 +13,14 @@ import {
 } from '../utils/tabbable';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
+type FocusManagerState =
+  | (FloatingContext & {modal: boolean; closeOnFocusOut: boolean})
+  | null;
+
 const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;
   portalNode: HTMLElement | null;
-  setFocusManagerState: React.Dispatch<
-    React.SetStateAction<(FloatingContext & {modal: boolean}) | null>
-  >;
+  setFocusManagerState: React.Dispatch<React.SetStateAction<FocusManagerState>>;
   beforeInsideRef: React.RefObject<HTMLSpanElement>;
   afterInsideRef: React.RefObject<HTMLSpanElement>;
   beforeOutsideRef: React.RefObject<HTMLSpanElement>;
@@ -78,9 +80,8 @@ export const FloatingPortal = ({
   preserveTabOrder?: boolean;
 }) => {
   const portalNode = useFloatingPortalNode({id, enabled: !root});
-  const [focusManagerState, setFocusManagerState] = React.useState<
-    (FloatingContext & {modal: boolean}) | null
-  >(null);
+  const [focusManagerState, setFocusManagerState] =
+    React.useState<FocusManagerState>(null);
 
   const beforeOutsideRef = React.useRef<HTMLSpanElement>(null);
   const afterOutsideRef = React.useRef<HTMLSpanElement>(null);
@@ -171,7 +172,8 @@ export const FloatingPortal = ({
                 getNextTabbable() ||
                 focusManagerState?.refs.domReference.current;
               nextTabbable?.focus();
-              focusManagerState?.onOpenChange(false);
+              focusManagerState?.closeOnFocusOut &&
+                focusManagerState?.onOpenChange(false);
             }
           }}
         />

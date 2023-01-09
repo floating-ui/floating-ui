@@ -404,12 +404,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     portalContext.setFocusManagerState({
       ...context,
       modal,
+      closeOnFocusOut,
       // Not concerned about the <RT> generic type.
     } as any);
     return () => {
       portalContext.setFocusManagerState(null);
     };
-  }, [portalContext, modal, context]);
+  }, [portalContext, modal, closeOnFocusOut, context]);
 
   useLayoutEffect(() => {
     const floating = refs.floating.current;
