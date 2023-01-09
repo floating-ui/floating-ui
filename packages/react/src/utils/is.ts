@@ -5,7 +5,7 @@ function getWindow(value: any) {
   return getDocument(value).defaultView || window;
 }
 
-export function isElement(value: any): value is HTMLElement {
+export function isElement(value: any): value is Element {
   return value ? value instanceof getWindow(value).Element : false;
 }
 

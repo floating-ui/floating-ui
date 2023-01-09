@@ -8,26 +8,13 @@ import type {
   UseFloatingData,
   UseFloatingProps,
   UseFloatingReturn,
-  VirtualElement,
 } from './types';
 import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
-function isExternalElement(value: any): value is Element | VirtualElement {
-  return value ? !!value.getBoundingClientRect : value === null;
-}
-
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  externalReferenceOrOptions?: RT | null | UseFloatingProps,
-  externalFloating?: HTMLElement | null,
   options: UseFloatingProps = {}
 ): UseFloatingReturn<RT> {
-  const isExternalSync = isExternalElement(externalReferenceOrOptions);
-
-  if (externalReferenceOrOptions && !isExternalSync) {
-    options = externalReferenceOrOptions;
-  }
-
   const {
     placement = 'bottom',
     strategy = 'absolute',
@@ -57,17 +44,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
 
-  const [internalReference, _setReference] = React.useState<RT | null>(null);
-  const [internalFloating, _setFloating] = React.useState<HTMLElement | null>(
-    null
-  );
-
-  const reference = isExternalElement(externalReferenceOrOptions)
-    ? externalReferenceOrOptions
-    : internalReference;
-  const floating = isExternalElement(externalFloating)
-    ? externalFloating
-    : internalFloating;
+  const [reference, _setReference] = React.useState<RT | null>(null);
+  const [floating, _setFloating] = React.useState<HTMLElement | null>(null);
 
   const setReference = React.useCallback((node: RT | null) => {
     if (referenceRef.current !== node) {
@@ -82,13 +60,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       _setFloating(node);
     }
   }, []);
-
-  useLayoutEffect(() => {
-    if (isExternalSync) {
-      referenceRef.current = reference;
-      floatingRef.current = floating;
-    }
-  }, [isExternalSync, reference, floating]);
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {

@@ -1,7 +1,4 @@
-import {
-  useFloating as usePosition,
-  VirtualElement,
-} from '@floating-ui/react-dom';
+import {useFloating as usePosition} from '@floating-ui/react-dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -10,6 +7,7 @@ import {useEvent} from './hooks/utils/useEvent';
 import type {
   ContextData,
   FloatingContext,
+  NarrowedElement,
   ReferenceType,
   UseFloatingProps,
   UseFloatingReturn,
@@ -17,53 +15,19 @@ import type {
 import {createPubSub} from './utils/createPubSub';
 import {isElement} from './utils/is';
 
-function isExternalElement(value: any): value is Element | VirtualElement {
-  return value ? !!value.getBoundingClientRect : value === null;
-}
-
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  externalReferenceOrOptions?: RT | null | Partial<UseFloatingProps>,
-  externalFloating?: HTMLElement | null,
   options: Partial<UseFloatingProps> = {}
 ): UseFloatingReturn<RT> {
-  const isExternalSync = isExternalElement(externalReferenceOrOptions);
+  const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
-  if (externalReferenceOrOptions && !isExternalSync) {
-    options = externalReferenceOrOptions;
-  }
-
-  const {
-    open = false,
-    onOpenChange: unstable_onOpenChange,
-    whileElementsMounted,
-    placement,
-    middleware,
-    strategy,
-    nodeId,
-  } = options;
-
+  const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
-  const domReferenceRef = React.useRef<
-    (RT extends Element ? RT : Element) | null
-  >(null);
+  const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
 
-  const position = usePosition<RT>(
-    isExternalSync
-      ? externalReferenceOrOptions
-      : {open, placement, middleware, strategy, whileElementsMounted},
-    isExternalSync ? externalFloating : undefined,
-    isExternalSync ? options : undefined
-  );
-
-  const [domReference, setDomReference] = React.useState<Element | null>(null);
-
-  useLayoutEffect(() => {
-    if (isExternalSync && isElement(externalReferenceOrOptions)) {
-      setDomReference(externalReferenceOrOptions);
-    }
-  }, [isExternalSync, externalReferenceOrOptions]);
+  const [domReference, setDomReference] =
+    React.useState<NarrowedElement<RT> | null>(null);
 
   const setPositionReference = React.useCallback(
     (node: ReferenceType | null) => {
@@ -78,12 +42,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     [position.refs]
   );
 
-  const setReference: UseFloatingReturn<RT>['reference'] = React.useCallback(
-    (node) => {
+  const setReference = React.useCallback(
+    (node: RT | null) => {
       if (isElement(node) || node === null) {
         (domReferenceRef as React.MutableRefObject<Element | null>).current =
           node;
-        setDomReference(node);
+        setDomReference(node as NarrowedElement<RT> | null);
       }
 
       // Backwards-compatibility for passing a virtual element to `reference`

@@ -4,7 +4,7 @@ import type {
   Placement,
   SideObject,
 } from '@floating-ui/core';
-import {arrow as arrowCore,computePosition} from '@floating-ui/core';
+import {arrow as arrowCore, computePosition} from '@floating-ui/core';
 import {
   RefObject,
   useCallback,
@@ -40,6 +40,14 @@ type UseFloatingReturn = Data & {
     reference: RefObject<any>;
     floating: RefObject<any>;
     offsetParent: RefObject<any>;
+    setReference: (node: any) => void;
+    setFloating: (node: any) => void;
+    setOffsetParent: (node: any) => void;
+  };
+  elements: {
+    reference: any;
+    floating: any;
+    offsetParent: any;
   };
   scrollProps: {
     onScroll: (event: {
@@ -65,11 +73,13 @@ export const useFloating = ({
   middleware?: Array<Middleware | null | undefined | false>;
   sameScrollView?: boolean;
 } = {}): UseFloatingReturn => {
-  const reference = useRef<any>();
-  const floating = useRef<any>();
-  const offsetParent = useRef<any>();
+  const [reference, _setReference] = useState(null);
+  const [floating, _setFloating] = useState(null);
+  const [offsetParent, _setOffsetParent] = useState(null);
 
-  const isUpdateQueuedRef = useRef(false);
+  const referenceRef = useRef<any>(null);
+  const floatingRef = useRef<any>(null);
+  const offsetParentRef = useRef<any>(null);
 
   const [data, setData] = useState<Data>({
     x: null,
@@ -92,7 +102,48 @@ export const useFloating = ({
     setLatestMiddleware(middleware);
   }
 
-  const animationFrames = useRef<Array<number>>([]);
+  const setReference = useCallback((node: any) => {
+    if (referenceRef.current !== node) {
+      referenceRef.current = node;
+      _setReference(node);
+    }
+  }, []);
+
+  const setFloating = useCallback((node: any) => {
+    if (floatingRef.current !== node) {
+      floatingRef.current = node;
+      _setFloating(node);
+    }
+  }, []);
+
+  const setOffsetParent = useCallback((node: any) => {
+    if (offsetParentRef.current !== node) {
+      offsetParentRef.current = node;
+      _setOffsetParent(node);
+    }
+  }, []);
+
+  const update = useCallback(() => {
+    if (!referenceRef.current || !floatingRef.current) {
+      return;
+    }
+
+    computePosition(referenceRef.current, floatingRef.current, {
+      middleware: latestMiddleware,
+      platform,
+      placement,
+    }).then((data) => {
+      if (isMountedRef.current) {
+        setData(data);
+      }
+    });
+  }, [latestMiddleware, platform, placement]);
+
+  useLayoutEffect(() => {
+    if (isMountedRef.current) {
+      update();
+    }
+  }, [reference, floating, offsetParent, update]);
 
   const isMountedRef = useRef(true);
   useLayoutEffect(() => {
@@ -102,67 +153,33 @@ export const useFloating = ({
     };
   }, []);
 
-  const update = useCallback(() => {
-    if (!reference.current || !floating.current) {
-      return;
-    }
-
-    computePosition(reference.current, floating.current, {
-      middleware: latestMiddleware,
-      platform,
-      placement,
-    }).then((data) => {
-      if (isMountedRef.current) {
-        setData(data);
-      }
-    });
-
-    isUpdateQueuedRef.current = false;
-  }, [latestMiddleware, platform, placement]);
-
-  useLayoutEffect(() => {
-    const frames = animationFrames.current;
-    frames.push(requestAnimationFrame(update));
-    return () => {
-      frames.forEach(cancelAnimationFrame);
-      animationFrames.current = [];
-    };
-  }, [update]);
-
-  const setReference: UseFloatingReturn['reference'] = useCallback(
-    (node) => {
-      reference.current = node;
-      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
-      isUpdateQueuedRef.current = true;
-    },
-    [update]
+  const refs = useMemo(
+    () => ({
+      reference: referenceRef,
+      floating: floatingRef,
+      offsetParent: offsetParentRef,
+      setReference,
+      setFloating,
+      setOffsetParent,
+    }),
+    [setReference, setFloating, setOffsetParent]
   );
 
-  const setFloating: UseFloatingReturn['floating'] = useCallback(
-    (node) => {
-      floating.current = node;
-      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
-      isUpdateQueuedRef.current = true;
-    },
-    [update]
+  const elements = useMemo(
+    () => ({
+      reference,
+      floating,
+      offsetParent,
+    }),
+    [reference, floating, offsetParent]
   );
-
-  const setOffsetParent: UseFloatingReturn['offsetParent'] = useCallback(
-    (node) => {
-      offsetParent.current = node;
-      if (!isUpdateQueuedRef.current) animationFrames.current.push(requestAnimationFrame(update));
-      isUpdateQueuedRef.current = true;
-    },
-    [update]
-  );
-
-  const refs = useMemo(() => ({reference, floating, offsetParent}), []);
 
   return useMemo(
     () => ({
       ...data,
       update,
       refs,
+      elements,
       offsetParent: setOffsetParent,
       reference: setReference,
       floating: setFloating,
@@ -171,7 +188,7 @@ export const useFloating = ({
         scrollEventThrottle: 16,
       },
     }),
-    [data, refs, setReference, setFloating, setOffsetParent, update]
+    [data, refs, elements, setReference, setFloating, setOffsetParent, update]
   );
 };
 
