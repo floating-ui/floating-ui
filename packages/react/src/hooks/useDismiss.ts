@@ -9,7 +9,12 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
-import {isElement, isVirtualClick, isVirtualPointerEvent} from '../utils/is';
+import {
+  isElement,
+  isHTMLElement,
+  isVirtualClick,
+  isVirtualPointerEvent,
+} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {useEvent} from './utils/useEvent';
 
@@ -134,7 +139,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       const target = getTarget(event);
 
       // Check if the click occurred on the scrollbar
-      if (isElement(target) && floating) {
+      if (isHTMLElement(target) && floating) {
         const win = floating.ownerDocument.defaultView || window;
         const canScrollX = target.scrollWidth > target.clientWidth;
         const canScrollY = target.scrollHeight > target.clientHeight;
@@ -212,14 +217,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         ancestors = ancestors.concat(getOverflowAncestors(floating));
       }
 
-      if (
-        !isElement(reference) &&
-        reference &&
-        // @ts-expect-error is VirtualElement
-        reference.contextElement
-      ) {
+      if (!isElement(reference) && reference && reference.contextElement) {
         ancestors = ancestors.concat(
-          // @ts-expect-error is VirtualElement
           getOverflowAncestors(reference.contextElement)
         );
       }

@@ -258,19 +258,18 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     if (isElement(domReference)) {
-      open && domReference.addEventListener('mouseleave', onScrollMouseLeave);
+      const ref = domReference as unknown as HTMLElement;
+      open && ref.addEventListener('mouseleave', onScrollMouseLeave);
       floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      move &&
-        domReference.addEventListener('mousemove', onMouseEnter, {once: true});
-      domReference.addEventListener('mouseenter', onMouseEnter);
-      domReference.addEventListener('mouseleave', onMouseLeave);
+      move && ref.addEventListener('mousemove', onMouseEnter, {once: true});
+      ref.addEventListener('mouseenter', onMouseEnter);
+      ref.addEventListener('mouseleave', onMouseLeave);
       return () => {
-        open &&
-          domReference.removeEventListener('mouseleave', onScrollMouseLeave);
+        open && ref.removeEventListener('mouseleave', onScrollMouseLeave);
         floating?.removeEventListener('mouseleave', onScrollMouseLeave);
-        move && domReference.removeEventListener('mousemove', onMouseEnter);
-        domReference.removeEventListener('mouseenter', onMouseEnter);
-        domReference.removeEventListener('mouseleave', onMouseLeave);
+        move && ref.removeEventListener('mousemove', onMouseEnter);
+        ref.removeEventListener('mouseenter', onMouseEnter);
+        ref.removeEventListener('mouseleave', onMouseLeave);
       };
     }
   }, [

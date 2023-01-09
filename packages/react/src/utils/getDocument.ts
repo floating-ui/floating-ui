@@ -1,3 +1,3 @@
-export function getDocument(floating: HTMLElement | null) {
-  return floating?.ownerDocument || document;
+export function getDocument(node: Element | null) {
+  return node?.ownerDocument || document;
 }
