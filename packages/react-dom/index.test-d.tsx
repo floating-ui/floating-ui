@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react';
+import {useRef} from 'react';
 
 import {arrow, shift, useFloating} from '.';
 
@@ -75,27 +75,6 @@ function NarrowRefType() {
       <button ref={floating2.reference} />
       {/* @ts-expect-error */}
       <button ref={floating3.reference} />
-    </>
-  );
-}
-
-ExternalSync;
-function ExternalSync() {
-  const [reference, setReference] = useState<HTMLElement | null>(null);
-  const [floating, setFloating] = useState<HTMLElement | null>(null);
-  const {x, y, strategy} = useFloating(reference, floating);
-
-  return (
-    <>
-      <button ref={setReference} />
-      <button
-        ref={setFloating}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-        }}
-      />
     </>
   );
 }

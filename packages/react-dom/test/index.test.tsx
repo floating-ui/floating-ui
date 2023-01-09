@@ -354,7 +354,15 @@ test('external elements sync', async () => {
   function App() {
     const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
     const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
-    const {x, y} = useFloating(referenceEl, floatingEl);
+    const {x, y, refs} = useFloating();
+
+    useLayoutEffect(() => {
+      refs.setReference(referenceEl);
+    }, [refs, referenceEl]);
+
+    useLayoutEffect(() => {
+      refs.setFloating(floatingEl);
+    }, [refs, floatingEl]);
 
     return (
       <>
