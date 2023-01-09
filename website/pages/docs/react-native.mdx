@@ -23,7 +23,6 @@ import {useFloating, shift} from '@floating-ui/react-native';
 
 function App() {
   const {x, y, reference, floating} = useFloating({
-    placement: 'right',
     middleware: [shift()],
   });
 
@@ -121,7 +120,6 @@ import {useFloating} from '@floating-ui/react-native';
 
 function App() {
   const {x, y, reference, floating, scrollProps} = useFloating({
-    placement: 'right',
     sameScrollView: false,
   });
 
@@ -160,7 +158,6 @@ import {useFloating} from '@floating-ui/react-native';
 
 function App() {
   const {x, y, reference, floating, offsetParent} = useFloating({
-    placement: 'right',
     sameScrollView: false,
   });
 
