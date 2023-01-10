@@ -40,7 +40,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const referenceRef = React.useRef<RT | null>(null);
   const floatingRef = React.useRef<HTMLElement | null>(null);
-  const cleanupRef = React.useRef<(() => void) | void | null>(null);
+  const dataRef = React.useRef(data);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
 
@@ -71,16 +71,19 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       placement,
       strategy,
     }).then((data) => {
-      if (isMountedRef.current) {
+      const fullData = {...data, isPositioned: true};
+      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+        dataRef.current = fullData;
         ReactDOM.flushSync(() => {
-          setData({...data, isPositioned: true});
+          setData(fullData);
         });
       }
     });
   }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
-    if (open === false) {
+    if (open === false && !dataRef.current.isPositioned) {
+      dataRef.current.isPositioned = false;
       setData((data) => ({...data, isPositioned: false}));
     }
   }, [open]);
@@ -94,20 +97,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, []);
 
   useLayoutEffect(() => {
-    if (typeof cleanupRef.current === 'function') {
-      cleanupRef.current();
-      cleanupRef.current = null;
-    }
-
     if (reference && floating) {
       if (whileElementsMountedRef.current) {
-        const cleanupFn = whileElementsMountedRef.current(
-          reference,
-          floating,
-          update
-        );
-
-        cleanupRef.current = cleanupFn;
+        return whileElementsMountedRef.current(reference, floating, update);
       } else {
         update();
       }
