@@ -39,8 +39,8 @@ export const createPlatform = ({
         );
       };
 
-      if (offsetParent.current) {
-        offsetParent.current.measure(onMeasure);
+      if (offsetParent) {
+        offsetParent.measure(onMeasure);
       } else {
         onMeasure();
       }
@@ -60,8 +60,8 @@ export const createPlatform = ({
         resolve({...rect, x: rect.x + offsetX, y: rect.y + offsetY});
       };
 
-      if (offsetParent.current) {
-        offsetParent.current.measure(onMeasure);
+      if (offsetParent) {
+        offsetParent.measure(onMeasure);
       } else {
         onMeasure();
       }

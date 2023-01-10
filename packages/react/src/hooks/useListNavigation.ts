@@ -172,7 +172,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, refs}: FloatingContext<RT>,
+  {open, onOpenChange, elements: {domReference, floating}}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
@@ -385,7 +385,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     if (previousOpenRef.current && !open) {
       const parentFloating = tree?.nodesRef.current.find(
         (node) => node.id === parentId
-      )?.context?.refs.floating.current;
+      )?.context?.elements.floating;
 
       if (
         parentFloating &&
@@ -416,10 +416,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // If the floating element is animating out, ignore navigation. Otherwise,
       // the `activeIndex` gets set to 0 despite not being open so the next time
       // the user ArrowDowns, the first item won't be focused.
-      if (
-        !latestOpenRef.current &&
-        event.currentTarget === refs.floating.current
-      ) {
+      if (!latestOpenRef.current && event.currentTarget === floating) {
         return;
       }
 
@@ -427,8 +424,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         stopEvent(event);
         onOpenChange(false);
 
-        if (isHTMLElement(refs.domReference.current)) {
-          refs.domReference.current.focus();
+        if (isHTMLElement(domReference)) {
+          domReference.focus();
         }
 
         return;
@@ -805,13 +802,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               // This also needs to be sync to prevent fast mouse movements
               // from leaving behind a stale active item when landing on a
               // disabled button item.
-              refs.floating.current?.focus({preventScroll: true});
+              floating?.focus({preventScroll: true});
             }
           },
         }),
       },
     };
   }, [
+    domReference,
+    floating,
     activeId,
     disabledIndicesRef,
     latestOpenRef,
@@ -829,7 +828,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     allowEscape,
     cols,
     loop,
-    refs,
     focusItemOnOpen,
     focusItem,
     onNavigate,

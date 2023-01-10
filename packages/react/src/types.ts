@@ -26,12 +26,21 @@ export {InnerProps, UseInnerOffsetProps} from './inner';
 export * from '@floating-ui/dom';
 export {arrow} from '@floating-ui/react-dom';
 
+export type NarrowedElement<T> = T extends Element ? T : Element;
+
 export interface ExtendedRefs<RT> {
   reference: React.MutableRefObject<ReferenceType | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
-  domReference: React.MutableRefObject<
-    (RT extends Element ? RT : Element) | null
-  >;
+  domReference: React.MutableRefObject<NarrowedElement<RT> | null>;
+  setReference: (node: RT | null) => void;
+  setFloating: (node: HTMLElement | null) => void;
+  setPositionReference: (node: RT | null) => void;
+}
+
+export interface ExtendedElements<RT> {
+  reference: ReferenceType | null;
+  floating: HTMLElement | null;
+  domReference: NarrowedElement<RT> | null;
 }
 
 export interface FloatingEvents {
@@ -50,16 +59,14 @@ export interface ContextData {
 }
 
 export interface FloatingContext<RT extends ReferenceType = ReferenceType>
-  extends Omit<UsePositionFloatingReturn<RT>, 'refs'> {
+  extends Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
   refs: ExtendedRefs<RT>;
-  _: {
-    domReference: Element | null;
-  };
+  elements: ExtendedElements<RT>;
 }
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
@@ -96,6 +103,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     positionReference: (node: ReferenceType | null) => void;
     context: FloatingContext<RT>;
     refs: ExtendedRefs<RT>;
+    elements: ExtendedElements<RT>;
     isPositioned: boolean;
   };
 

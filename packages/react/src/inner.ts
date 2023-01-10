@@ -162,7 +162,7 @@ export interface UseInnerOffsetProps {
  * @see https://floating-ui.com/docs/inner
  */
 export const useInnerOffset = (
-  {open, refs}: FloatingContext,
+  {open, elements}: FloatingContext,
   {
     enabled = true,
     overflowRef,
@@ -208,7 +208,7 @@ export const useInnerOffset = (
       }
     }
 
-    const el = scrollRef?.current || refs.floating.current;
+    const el = scrollRef?.current || elements.floating;
 
     if (open && el) {
       el.addEventListener('wheel', onWheel);
@@ -228,7 +228,7 @@ export const useInnerOffset = (
         el.removeEventListener('wheel', onWheel);
       };
     }
-  }, [enabled, open, refs, overflowRef, scrollRef, onChange]);
+  }, [enabled, open, elements.floating, overflowRef, scrollRef, onChange]);
 
   return React.useMemo(() => {
     if (!enabled) {
@@ -247,7 +247,7 @@ export const useInnerOffset = (
           controlledScrollingRef.current = false;
         },
         onScroll() {
-          const el = scrollRef?.current || refs.floating.current;
+          const el = scrollRef?.current || elements.floating;
 
           if (!overflowRef.current || !el || !controlledScrollingRef.current) {
             return;
@@ -271,5 +271,5 @@ export const useInnerOffset = (
         },
       },
     };
-  }, [enabled, overflowRef, refs, scrollRef, onChange]);
+  }, [enabled, overflowRef, elements.floating, scrollRef, onChange]);
 };

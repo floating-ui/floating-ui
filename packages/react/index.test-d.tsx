@@ -97,9 +97,21 @@ function NarrowRefType() {
   // @ts-expect-error
   floating3.refs.reference.current?.contains(document.body);
 
+  // @ts-expect-error
+  floating1.elements.reference?.contains(document.body);
+  // @ts-expect-error
+  floating2.elements.reference?.contains(document.body);
+  // @ts-expect-error
+  floating3.elements.reference?.contains(document.body);
+
   floating1.refs.domReference.current?.contains(document.body);
   floating2.refs.domReference.current?.focus();
   floating3.refs.domReference.current?.focus();
+
+  // @ts-expect-error
+  floating1.elements.domReference?.focus();
+  floating2.elements.domReference?.focus();
+  floating3.elements.domReference?.focus();
 
   return (
     <>
@@ -107,6 +119,9 @@ function NarrowRefType() {
       <button ref={floating2.reference} />
       {/* @ts-expect-error */}
       <button ref={floating3.reference} />
+      <button ref={floating1.refs.setReference} />
+      <button ref={floating1.refs.setFloating} />
+      <button ref={floating1.refs.setPositionReference} />
     </>
   );
 }

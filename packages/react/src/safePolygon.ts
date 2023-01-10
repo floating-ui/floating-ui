@@ -81,7 +81,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     x,
     y,
     placement,
-    refs,
+    elements,
     onClose,
     nodeId,
     tree,
@@ -97,8 +97,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       clearTimeout(timeoutId);
 
       if (
-        !refs.domReference.current ||
-        !refs.floating.current ||
+        !elements.domReference ||
+        !elements.floating ||
         placement == null ||
         x == null ||
         y == null
@@ -109,8 +109,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const {clientX, clientY} = event;
       const target = getTarget(event) as Element | null;
       const isLeave = event.type === 'mouseleave';
-      const isOverReference = contains(refs.domReference.current, target);
-      const isOverFloating = contains(refs.floating.current, target);
+      const isOverReference = contains(elements.domReference, target);
+      const isOverFloating = contains(elements.floating, target);
 
       if (!isLeave && isOverReference) {
         destroyPolygon(polygonRef);
@@ -130,7 +130,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       if (
         isLeave &&
         isElement(event.relatedTarget) &&
-        contains(refs.floating.current, event.relatedTarget)
+        contains(elements.floating, event.relatedTarget)
       ) {
         return;
       }
@@ -159,8 +159,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         return;
       }
 
-      const refRect = refs.domReference.current.getBoundingClientRect();
-      const rect = refs.floating.current.getBoundingClientRect();
+      const refRect = elements.domReference.getBoundingClientRect();
+      const rect = elements.floating.getBoundingClientRect();
       const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
@@ -403,7 +403,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const poly = isInsideRect ? rectPoly : getPolygon([x, y]);
 
       if (!polygonRef.current && blockPointerEvents && isLeave) {
-        const doc = getDocument(refs.floating.current);
+        const doc = getDocument(elements.floating);
         polygonRef.current = createPolygonElement(poly, doc, isInsideRect);
         doc.body.appendChild(polygonRef.current);
       }

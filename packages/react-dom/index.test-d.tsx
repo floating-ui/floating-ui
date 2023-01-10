@@ -1,6 +1,6 @@
 import {useRef} from 'react';
 
-import {arrow,shift, useFloating} from '.';
+import {arrow, shift, useFloating} from '.';
 
 App;
 function App() {
@@ -45,6 +45,18 @@ function App() {
   floating(null);
   update();
   return <div ref={arrowRef} />;
+}
+
+Setters;
+function Setters() {
+  const {refs} = useFloating();
+
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} />
+    </>
+  );
 }
 
 NarrowRefType;

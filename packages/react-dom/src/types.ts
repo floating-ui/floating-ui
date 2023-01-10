@@ -25,6 +25,12 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     refs: {
       reference: React.MutableRefObject<RT | null>;
       floating: React.MutableRefObject<HTMLElement | null>;
+      setReference: (node: RT | null) => void;
+      setFloating: (node: HTMLElement | null) => void;
+    };
+    elements: {
+      reference: RT | null;
+      floating: HTMLElement | null;
     };
   };
 
