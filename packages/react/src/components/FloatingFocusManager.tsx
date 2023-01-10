@@ -65,6 +65,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     nodeId,
     onOpenChange,
     events,
+    dataRef,
     elements: {domReference, floating},
   } = context;
 
@@ -83,6 +84,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
   const previouslyFocusedElementRef = React.useRef<Element | null>(null);
+  const isPointerDownRef = React.useRef(false);
+
   const isInsidePortal = portalContext != null;
 
   // If the reference is a combobox and is typeable (e.g. input/textarea),
@@ -180,13 +183,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       return;
     }
 
-    let isPointerDown = false;
-
     // In Safari, buttons lose focus when pressing them.
     function handlePointerDown() {
-      isPointerDown = true;
+      isPointerDownRef.current = true;
       setTimeout(() => {
-        isPointerDown = false;
+        isPointerDownRef.current = false;
       });
     }
 
@@ -217,7 +218,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       if (
         relatedTarget &&
         movedToUnrelatedNode &&
-        !isPointerDown &&
+        !isPointerDownRef.current &&
         // Fix React 18 Strict Mode returnFocus due to double rendering.
         relatedTarget !== previouslyFocusedElementRef.current
       ) {
@@ -325,6 +326,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     let returnFocusValue = returnFocus;
     let preventReturnFocusScroll = false;
     const previouslyFocusedElement = activeElement(doc);
+    const contextData = dataRef.current;
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
@@ -374,7 +376,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
-        if (!refs.domReference.current) {
+        // `isPointerDownRef.current` to avoid the focus ring from appearing on
+        // the reference element when click-toggling it.
+        if (!refs.domReference.current || isPointerDownRef.current) {
           enqueueFocus(previouslyFocusedElementRef.current, {
             // When dismissing nested floating elements, by the time the rAF has
             // executed, the menus will all have been unmounted. When they try
@@ -384,6 +388,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
             preventScroll: preventReturnFocusScroll,
           });
         } else {
+          // If the user has specified a `keydown` listener that calls
+          // setOpen(false) (e.g. selecting an item and closing the floating
+          // element), then sync return focus causes `useClick` to immediately
+          // re-open it, unless they call `event.preventDefault()` in the
+          // `keydown` listener. This helps keep backwards compatibility with
+          // older examples.
+          contextData.__syncReturnFocus = true;
+
           // In Safari, `useListNavigation` moves focus sync, so making this
           // sync ensures the initial item remains focused despite this being
           // invoked in Strict Mode due to double-invoked useEffects. This also
@@ -393,6 +405,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           previouslyFocusedElementRef.current?.focus({
             preventScroll: preventReturnFocusScroll,
           });
+
+          setTimeout(() => {
+            // This isn't an actual property the user should access, make sure
+            // it doesn't persist.
+            delete contextData.__syncReturnFocus;
+          });
         }
       }
     };
@@ -401,6 +419,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     getTabbableElements,
     initialFocus,
     returnFocus,
+    dataRef,
     refs,
     events,
     ignoreInitialFocus,
