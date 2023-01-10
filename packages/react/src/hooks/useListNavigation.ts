@@ -789,11 +789,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           onMouseMove({currentTarget}) {
             syncCurrentTarget(currentTarget);
           },
-          onMouseEnter({currentTarget}) {
-            if (isPointerModalityRef.current) {
-              syncCurrentTarget(currentTarget);
-            }
-          },
           onPointerLeave() {
             if (!isPointerModalityRef.current) {
               return;
