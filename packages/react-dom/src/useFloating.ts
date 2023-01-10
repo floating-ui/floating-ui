@@ -82,7 +82,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, [latestMiddleware, placement, strategy]);
 
   useLayoutEffect(() => {
-    if (open === false && !dataRef.current.isPositioned) {
+    if (open === false && dataRef.current.isPositioned) {
       dataRef.current.isPositioned = false;
       setData((data) => ({...data, isPositioned: false}));
     }
