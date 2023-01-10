@@ -682,6 +682,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
+    function syncCurrentTarget(currentTarget: HTMLElement | null) {
+      const index = listRef.current.indexOf(currentTarget);
+      if (index !== -1 && activeIndex !== index) {
+        onNavigate(index);
+      }
+    }
+
     return {
       reference: {
         ...(virtual &&
@@ -768,21 +775,17 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       },
       item: {
         onFocus({currentTarget}) {
-          const index = listRef.current.indexOf(currentTarget);
-          if (index !== -1 && activeIndex !== index) {
-            onNavigate(index);
-          }
+          syncCurrentTarget(currentTarget);
         },
         onClick: ({currentTarget}) =>
           currentTarget.focus({preventScroll: true}), // Safari
         ...(focusItemOnHover && {
           onMouseMove({currentTarget}) {
-            const target = currentTarget as HTMLButtonElement | null;
-            if (target) {
-              const index = listRef.current.indexOf(target);
-              if (index !== -1 && activeIndex !== index) {
-                onNavigate(index);
-              }
+            syncCurrentTarget(currentTarget);
+          },
+          onMouseEnter({currentTarget}) {
+            if (isPointerModalityRef.current) {
+              syncCurrentTarget(currentTarget);
             }
           },
           onPointerLeave() {
