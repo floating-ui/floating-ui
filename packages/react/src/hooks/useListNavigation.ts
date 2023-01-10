@@ -250,7 +250,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const focusItem = React.useCallback(
     (
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-      indexRef: React.MutableRefObject<number>
+      indexRef: React.MutableRefObject<number>,
+      forceScrollIntoView = false
     ) => {
       const item = listRef.current[indexRef.current];
 
@@ -275,14 +276,19 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
 
       requestAnimationFrame(() => {
-        const scrollIntoView = scrollItemIntoViewRef.current;
-        if (scrollIntoView && item && !isPointerModalityRef.current) {
+        const scrollIntoViewOptions = scrollItemIntoViewRef.current;
+        const shouldScrollIntoView =
+          scrollIntoViewOptions &&
+          item &&
+          (forceScrollIntoView ? true : !isPointerModalityRef.current);
+
+        if (shouldScrollIntoView) {
           // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
           // by all browsers.
           item.scrollIntoView?.(
-            typeof scrollIntoView === 'boolean'
+            typeof scrollIntoViewOptions === 'boolean'
               ? {block: 'nearest', inline: 'nearest'}
-              : scrollIntoView
+              : scrollIntoViewOptions
           );
         }
       });
@@ -358,7 +364,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
       } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
         indexRef.current = activeIndex;
-        focusItem(listRef, indexRef);
+        focusItem(listRef, indexRef, activeIndex === selectedIndex);
       }
     }
   }, [
