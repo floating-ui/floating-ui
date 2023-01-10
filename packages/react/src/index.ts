@@ -1,3 +1,7 @@
+// Fix webpack 4 bug, this export must come first:
+// https://github.com/floating-ui/floating-ui/issues/2110
+/* eslint-disable-next-line */
+export * from '@floating-ui/react-dom';
 export {
   FloatingDelayGroup,
   useDelayGroup,
@@ -30,4 +34,3 @@ export {inner, useInnerOffset} from './inner';
 export {safePolygon} from './safePolygon';
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
-export * from '@floating-ui/react-dom';
