@@ -34,7 +34,7 @@ export interface ExtendedRefs<RT> {
   domReference: React.MutableRefObject<NarrowedElement<RT> | null>;
   setReference: (node: RT | null) => void;
   setFloating: (node: HTMLElement | null) => void;
-  setPositionReference: (node: RT | null) => void;
+  setPositionReference: (node: ReferenceType | null) => void;
 }
 
 export interface ExtendedElements<RT> {

@@ -113,6 +113,21 @@ function NarrowRefType() {
   floating2.elements.domReference?.focus();
   floating3.elements.domReference?.focus();
 
+  floating2.refs.setPositionReference({
+    getBoundingClientRect() {
+      return {
+        x: 0,
+        y: 0,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+      };
+    },
+  });
+
   return (
     <>
       <button ref={floating1.reference} />
