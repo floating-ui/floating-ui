@@ -90,7 +90,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   // aria-hidden should be applied to all nodes still. Further, the visually
   // hidden dismiss button should only appear at the end of the list, not the
   // start.
-  const typeableCombobox =
+  const isTypeableCombobox =
     domReference &&
     domReference.getAttribute('role') === 'combobox' &&
     isTypeableElement(domReference);
@@ -132,7 +132,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
-        if (getTabbableContent().length === 0 && !typeableCombobox) {
+        if (getTabbableContent().length === 0 && !isTypeableCombobox) {
           stopEvent(event);
         }
 
@@ -170,7 +170,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     modal,
     orderRef,
     refs,
-    typeableCombobox,
+    isTypeableCombobox,
     getTabbableContent,
     getTabbableElements,
   ]);
@@ -266,11 +266,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ].filter(Boolean) as Array<Element>;
     }
 
-    if (floating && isHTMLElement(domReference) && modal) {
+    if (floating && modal) {
       const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
       const cleanup = hideOthers(
-        orderRef.current.includes('reference') || typeableCombobox
-          ? insideNodes.concat(domReference)
+        orderRef.current.includes('reference') || isTypeableCombobox
+          ? insideNodes.concat(domReference || [])
           : insideNodes
       );
 
@@ -284,7 +284,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     modal,
     orderRef,
     portalContext,
-    typeableCombobox,
+    isTypeableCombobox,
   ]);
 
   React.useEffect(() => {
@@ -439,7 +439,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [floating, getTabbableContent, ignoreInitialFocus, refs]);
 
   const shouldRenderGuards =
-    guards && (isInsidePortal || modal) && !typeableCombobox;
+    guards && (isInsidePortal || modal) && !isTypeableCombobox;
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
@@ -484,7 +484,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         Ensure the first swipe is the list item. The end of the listbox popup
         will have a dismiss button.
       */}
-      {typeableCombobox ? null : renderDismissButton('start')}
+      {isTypeableCombobox ? null : renderDismissButton('start')}
       {React.cloneElement(
         children,
         tabbableContentLength === 0 || order.includes('floating')
