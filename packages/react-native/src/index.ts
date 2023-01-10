@@ -140,9 +140,10 @@ export const useFloating = ({
   }, [latestMiddleware, platform, placement]);
 
   useLayoutEffect(() => {
-    if (isMountedRef.current) {
-      update();
-    }
+    const frame = requestAnimationFrame(update);
+    return () => {
+      cancelAnimationFrame(frame);
+    };
   }, [reference, floating, offsetParent, update]);
 
   const isMountedRef = useRef(true);
