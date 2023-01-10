@@ -22,17 +22,17 @@ import {View, Text} from 'react-native';
 import {useFloating, shift} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, reference, floating} = useFloating({
+  const {x, y, refs} = useFloating({
     middleware: [shift()],
   });
 
   return (
     <View>
-      <View ref={reference} collapsable={false}>
+      <View ref={refs.setReference} collapsable={false}>
         <Text>Reference</Text>
       </View>
       <View
-        ref={floating}
+        ref={refs.setFloating}
         collapsable={false}
         style={{
           position: 'absolute',
@@ -119,20 +119,20 @@ import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, reference, floating, scrollProps} = useFloating({
+  const {x, y, refs, scrollProps} = useFloating({
     sameScrollView: false,
   });
 
   return (
     <View>
       <ScrollView {...scrollProps}>
-        <View ref={reference} collapsable={false}>
+        <View ref={refs.setReference} collapsable={false}>
           <Text>Reference</Text>
         </View>
       </ScrollView>
 
       <View
-        ref={floating}
+        ref={refs.setFloating}
         collapsable={false}
         style={{
           position: 'absolute',
@@ -157,21 +157,21 @@ import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, reference, floating, offsetParent} = useFloating({
+  const {x, y, refs} = useFloating({
     sameScrollView: false,
   });
 
   return (
     <View>
       <ScrollView>
-        <View ref={reference} collapsable={false}>
+        <View ref={refs.setReference} collapsable={false}>
           <Text>Reference</Text>
         </View>
       </ScrollView>
 
-      <View ref={offsetParent} collapsable={false}>
+      <View ref={refs.setOffsetParent} collapsable={false}>
         <View
-          ref={floating}
+          ref={refs.setFloating}
           collapsable={false}
           style={{
             position: 'absolute',

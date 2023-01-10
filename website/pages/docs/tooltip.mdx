@@ -88,13 +88,12 @@ import {
 function Tooltip() {
   const [open, setOpen] = useState(false);
 
-  const {x, y, reference, floating, strategy, context} =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      middleware: [offset(10), flip(), shift()],
-      whileElementsMounted: autoUpdate,
-    });
+  const {x, y, strategy, refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
 }
 ```
 
@@ -120,13 +119,12 @@ import {
 function Tooltip() {
   const [open, setOpen] = useState(false);
 
-  const {x, y, reference, floating, strategy, context} =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      middleware: [offset(10), flip(), shift()],
-      whileElementsMounted: autoUpdate,
-    });
+  const {x, y, strategy, refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
 
   const hover = useHover(context, {move: false});
   const focus = useFocus(context);
@@ -167,12 +165,12 @@ function Tooltip() {
   // ...
   return (
     <>
-      <button ref={reference} {...getReferenceProps()}>
+      <button ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </button>
       {open && (
         <div
-          ref={floating}
+          ref={refs.setFloating}
           style={{
             position: strategy,
             top: y ?? 0,

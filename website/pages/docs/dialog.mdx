@@ -82,7 +82,7 @@ import {useFloating} from '@floating-ui/react';
 function Dialog() {
   const [open, setOpen] = useState(false);
 
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -111,7 +111,7 @@ import {
 function Dialog() {
   const [open, setOpen] = useState(false);
 
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -165,7 +165,7 @@ function Dialog() {
   // ...
   return (
     <>
-      <button ref={reference} {...getReferenceProps()}>
+      <button ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </button>
       {open && (
@@ -175,7 +175,7 @@ function Dialog() {
         >
           <FloatingFocusManager context={context}>
             <div
-              ref={floating}
+              ref={refs.setFloating}
               aria-labelledby={labelId}
               aria-describedby={descriptionId}
               {...getFloatingProps()}

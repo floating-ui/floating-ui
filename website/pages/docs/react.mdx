@@ -36,13 +36,13 @@ until the Interactions section.
 import {useFloating} from '@floating-ui/react';
 
 function App() {
-  const {x, y, reference, floating, strategy} = useFloating();
+  const {x, y, strategy, refs} = useFloating();
 
   return (
     <>
-      <button ref={reference}>Button</button>
+      <button ref={refs.setReference}>Button</button>
       <div
-        ref={floating}
+        ref={refs.setFloating}
         style={{
           position: strategy,
           top: y ?? 0,
@@ -63,9 +63,9 @@ center** of the `Button` element by default.
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
   effect has fired (i.e. during SSR).
-- `reference{:.const}` and `floating{:.const}` are callback refs
-  that ensure the position is updated when either element changes
-  (e.g. conditional rendering).
+- `refs{:.const}` contains setter function refs that ensure the
+  position is updated when either element changes (e.g.
+  conditional rendering).
 - `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
   `'fixed'{:js}`.
 
@@ -179,12 +179,7 @@ const {update} = useFloating();
 
 ## Refs
 
-`reference{:.const}` and `floating{:.const}` are callback refs,
-not regular ref objects, so they can handle conditional
-rendering.
-
-If you need to access the actual DOM elements, you can use the
-`refs{:.const}` object:
+To access the DOM elements:
 
 ```js
 const {refs} = useFloating();
@@ -199,11 +194,11 @@ hook lives in, you can synchronize the hook using layout effects:
 
 ```js /triggerElement/
 function MyComponent({referenceElement}) {
-  const {reference} = useFloating();
+  const {refs} = useFloating();
 
   useLayoutEffect(() => {
-    reference(referenceElement);
-  }, [reference, referenceElement]);
+    refs.setReference(referenceElement);
+  }, [refs, referenceElement]);
 }
 ```
 
@@ -385,17 +380,17 @@ import {useFloating} from '@floating-ui/react';
 
 function App() {
   const [open, setOpen] = useState(false);
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, strategy, refs} = useFloating({
     open,
     onOpenChange: setOpen,
   });
 
   return (
     <>
-      <button ref={reference}>Button</button>
+      <button ref={refs.setReference}>Button</button>
       {open && (
         <div
-          ref={floating}
+          ref={refs.setFloating}
           style={{
             position: strategy,
             top: y ?? 0,
@@ -457,11 +452,11 @@ The navigation bar on the left explains them in detail.
 
 ```js
 <>
-  <button ref={reference} {...getReferenceProps()}>
+  <button ref={refs.setReference} {...getReferenceProps()}>
     My button
   </button>
   <div
-    ref={floating}
+    ref={refs.setFloating}
     style={{
       position: strategy,
       left: x ?? 0,
@@ -556,11 +551,11 @@ callback ref allows you to separate the position to another
 element (either real or virtual):
 
 ```js
-const {reference, positionReference} = useFloating();
+const {refs} = useFloating();
 
 return (
-  <div ref={positionReference}>
-    <button ref={reference} {...getReferenceProps()}>
+  <div ref={refs.setPositionReference}>
+    <button ref={refs.setReference} {...getReferenceProps()}>
       Event reference
     </button>
   </div>
@@ -581,24 +576,25 @@ Refs can be merged with the [`useMergeRefs`](/docs/useMergeRefs)
 hook, and props can be merged by calling one of the getters
 inside of the other:
 
-```js {9-10}
-const {reference: tooltipReference} = useFloating();
-const {reference: menuReference} = useFloating();
+```js {9-12}
+const {refs: tooltipRefs} = useFloating();
+const {refs: menuRefs} = useFloating();
 
 const {getReferenceProps: getTooltipReferenceProps} =
   useInteractions([]);
 const {getReferenceProps: getMenuReferenceProps} =
   useInteractions([]);
 
-const ref = useMergeRefs([tooltipReference, menuReference]);
+const ref = useMergeRefs([
+  tooltipRefs.setReference,
+  menuRefs.setReference,
+]);
 const props = getTooltipReferenceProps(getMenuReferenceProps());
 
 return (
-  <>
-    <button ref={ref} {...props}>
-      Common reference
-    </button>
-  </>
+  <button ref={ref} {...props}>
+    Common reference
+  </button>
 );
 ```
 
