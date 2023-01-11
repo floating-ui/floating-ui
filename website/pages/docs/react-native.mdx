@@ -114,7 +114,7 @@ reference element is inside a `<ScrollView />{:jsx}`, you pass
 the `sameScrollView{:.objectKey}` option, and spread
 `scrollProps{:.const}` to the component:
 
-```jsx /scrollProps/ {7}
+```jsx /scrollProps/ {6}
 import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
@@ -207,21 +207,4 @@ function App() {
 
   // Pass the `arrowRef` to the element
 }
-```
-
-### Conditional rendering
-
-If you're conditionally rendering the arrow element (not just the
-floating element), you'll want to utilize the same technique as
-the reference and floating elements which is a callback function
-that calls `update(){:js}` after assigning the ref value.
-
-```js
-<View
-  collapsable={false}
-  ref={(node) => {
-    arrowRef.current = node;
-    update();
-  }}
-/>
 ```
