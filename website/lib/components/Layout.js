@@ -574,7 +574,7 @@ function Layout({children}) {
                       <Link
                         href={url}
                         className={cn(
-                          'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75',
+                          'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75 break-words',
                           {
                             'bg-gray-800 hover:bg-gray-700 text-gray-50 dark:bg-purple-200/10 dark:text-gray-100/90':
                               pathname === url,
@@ -603,7 +603,7 @@ function Layout({children}) {
                             />
                           )}
                           <span
-                            className={cn('block', {
+                            className={cn('block truncate', {
                               'font-bold': pathname === url,
                               'font-mono [font-size:90%]':
                                 mono === true,
