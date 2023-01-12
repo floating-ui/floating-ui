@@ -89,13 +89,12 @@ import {
 function Popover() {
   const [open, setOpen] = useState(false);
 
-  const {x, y, reference, floating, strategy, context} =
-    useFloating({
-      open,
-      onOpenChange: setOpen,
-      middleware: [offset(10), flip(), shift()],
-      whileElementsMounted: autoUpdate,
-    });
+  const {x, y, strategy, refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+    middleware: [offset(10), flip(), shift()],
+    whileElementsMounted: autoUpdate,
+  });
 }
 ```
 
@@ -162,13 +161,13 @@ function Popover() {
   // ...
   return (
     <>
-      <button ref={reference} {...getReferenceProps()}>
+      <button ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </button>
       {open && (
         <FloatingFocusManager context={context} modal={false}>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             style={{
               position: strategy,
               top: y ?? 0,

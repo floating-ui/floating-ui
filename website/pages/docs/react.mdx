@@ -36,13 +36,13 @@ until the Interactions section.
 import {useFloating} from '@floating-ui/react';
 
 function App() {
-  const {x, y, reference, floating, strategy} = useFloating();
+  const {x, y, strategy, refs} = useFloating();
 
   return (
     <>
-      <button ref={reference}>Button</button>
+      <button ref={refs.setReference}>Button</button>
       <div
-        ref={floating}
+        ref={refs.setFloating}
         style={{
           position: strategy,
           top: y ?? 0,
@@ -62,12 +62,13 @@ center** of the `Button` element by default.
 
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
-  effect has fired (i.e. during SSR).
-- `reference{:.const}` and `floating{:.const}` are callback refs
-  that ensure the position is updated when either element changes
-  (e.g. conditional rendering).
-- `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
-  `'fixed'{:js}`.
+  effect has fired (such as during SSR).
+- `strategy{:.const}` is the positioning strategy,
+  `'absolute'{:js}` (default) or `'fixed'{:js}`.
+- `refs.setReference{:js}` and `refs.setFloating{:js}` are
+  function refs that get called with the elements and update the
+  position when they change (such as with conditional rendering),
+  unlike with plain refs.
 
 <Notice gap="above">
 To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
@@ -179,12 +180,7 @@ const {update} = useFloating();
 
 ## Refs
 
-`reference{:.const}` and `floating{:.const}` are callback refs,
-not regular ref objects, so they can handle conditional
-rendering.
-
-If you need to access the actual DOM elements, you can use the
-`refs{:.const}` object:
+To access the DOM elements, you can either access the refs:
 
 ```js
 const {refs} = useFloating();
@@ -194,23 +190,35 @@ refs.reference.current;
 refs.floating.current;
 ```
 
-If one of the elements is stored outside of the component the
-hook lives in, you can synchronize the hook using layout effects:
+Or the elements directly:
 
-```js /triggerElement/
-function MyComponent({referenceElement}) {
-  const {reference} = useFloating();
+```js
+const {elements} = useFloating();
+
+// During render, unlike the refs:
+elements.reference;
+elements.floating;
+```
+
+External elements can be synchronized like so, if they live
+outside the component:
+
+```js
+function MyComponent({referenceEl, floatingEl}) {
+  const {refs} = useFloating();
 
   useLayoutEffect(() => {
-    reference(referenceElement);
-  }, [reference, referenceElement]);
+    refs.setReference(referenceEl);
+    refs.setFloating(floatingEl);
+  }, [refs, referenceEl, floatingEl]);
 }
 ```
 
 <Notice>
-  Store the external elements in state, not in a ref! You shouldn't
-  read or write refs during render, like `triggerRef.current{:js}`. 
-  An element stored in a ref is not reactive to updates.
+  Make sure the external elements are stored in state, not in a
+  ref. React does not permit reading or writing refs during
+  render, and they are not reactive to updates, so the position
+  won't update if the element changes.
 </Notice>
 
 ## Effects
@@ -385,17 +393,17 @@ import {useFloating} from '@floating-ui/react';
 
 function App() {
   const [open, setOpen] = useState(false);
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, strategy, refs} = useFloating({
     open,
     onOpenChange: setOpen,
   });
 
   return (
     <>
-      <button ref={reference}>Button</button>
+      <button ref={refs.setReference}>Button</button>
       {open && (
         <div
-          ref={floating}
+          ref={refs.setFloating}
           style={{
             position: strategy,
             top: y ?? 0,
@@ -457,11 +465,11 @@ The navigation bar on the left explains them in detail.
 
 ```js
 <>
-  <button ref={reference} {...getReferenceProps()}>
+  <button ref={refs.setReference} {...getReferenceProps()}>
     My button
   </button>
   <div
-    ref={floating}
+    ref={refs.setFloating}
     style={{
       position: strategy,
       left: x ?? 0,
@@ -550,17 +558,18 @@ interface ContextData {
 
 <Notice type="version">Since `v0.15.0`</Notice>
 
-By default, the `reference{:.const}` element is **both** the
-events and position reference. The `positionReference{:.const}`
-callback ref allows you to separate the position to another
-element (either real or virtual):
+By default, the `refs.setReference{:js}` element is **both** the
+events and position reference. The
+`refs.setPositionReference{:js}` callback ref allows you to
+separate the position to another element (either real or
+virtual):
 
 ```js
-const {reference, positionReference} = useFloating();
+const {refs} = useFloating();
 
 return (
-  <div ref={positionReference}>
-    <button ref={reference} {...getReferenceProps()}>
+  <div ref={refs.setPositionReference}>
+    <button ref={refs.setReference} {...getReferenceProps()}>
       Event reference
     </button>
   </div>
@@ -581,24 +590,25 @@ Refs can be merged with the [`useMergeRefs`](/docs/useMergeRefs)
 hook, and props can be merged by calling one of the getters
 inside of the other:
 
-```js {9-10}
-const {reference: tooltipReference} = useFloating();
-const {reference: menuReference} = useFloating();
+```js {9-12}
+const {refs: tooltipRefs} = useFloating();
+const {refs: menuRefs} = useFloating();
 
 const {getReferenceProps: getTooltipReferenceProps} =
   useInteractions([]);
 const {getReferenceProps: getMenuReferenceProps} =
   useInteractions([]);
 
-const ref = useMergeRefs([tooltipReference, menuReference]);
+const ref = useMergeRefs([
+  tooltipRefs.setReference,
+  menuRefs.setReference,
+]);
 const props = getTooltipReferenceProps(getMenuReferenceProps());
 
 return (
-  <>
-    <button ref={ref} {...props}>
-      Common reference
-    </button>
-  </>
+  <button ref={ref} {...props}>
+    Common reference
+  </button>
 );
 ```
 
