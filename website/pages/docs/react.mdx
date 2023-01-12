@@ -62,12 +62,13 @@ center** of the `Button` element by default.
 
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
-  effect has fired (i.e. during SSR).
-- `refs{:.const}` contains setter function refs that ensure the
-  position is updated when either element changes (e.g.
-  conditional rendering).
-- `strategy{:.const}` is a string, `'absolute'{:js}` (default) or
-  `'fixed'{:js}`.
+  effect has fired (such as during SSR).
+- `strategy{:.const}` is the positioning strategy,
+  `'absolute'{:js}` (default) or `'fixed'{:js}`.
+- `refs.setReference{:js}` and `refs.setFloating{:js}` are
+  function refs that get called with the elements and update the
+  position when they change (such as with conditional rendering),
+  unlike with plain refs.
 
 <Notice gap="above">
 To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
@@ -179,7 +180,7 @@ const {update} = useFloating();
 
 ## Refs
 
-To access the DOM elements:
+To access the DOM elements, you can either access the refs:
 
 ```js
 const {refs} = useFloating();
@@ -189,23 +190,35 @@ refs.reference.current;
 refs.floating.current;
 ```
 
-If one of the elements is stored outside of the component the
-hook lives in, you can synchronize the hook using layout effects:
+Or the elements directly:
 
-```js /triggerElement/
-function MyComponent({referenceElement}) {
+```js
+const {elements} = useFloating();
+
+// During render, unlike the refs:
+elements.reference;
+elements.floating;
+```
+
+External elements can be synchronized like so, if they live
+outside the component:
+
+```js
+function MyComponent({referenceEl, floatingEl}) {
   const {refs} = useFloating();
 
   useLayoutEffect(() => {
-    refs.setReference(referenceElement);
-  }, [refs, referenceElement]);
+    refs.setReference(referenceEl);
+    refs.setFloating(floatingEl);
+  }, [refs, referenceEl, floatingEl]);
 }
 ```
 
 <Notice>
-  Store the external elements in state, not in a ref! You shouldn't
-  read or write refs during render, like `triggerRef.current{:js}`. 
-  An element stored in a ref is not reactive to updates.
+  Make sure the external elements are stored in state, not in a
+  ref. React does not permit reading or writing refs during
+  render, and they are not reactive to updates, so the position
+  won't update if the element changes.
 </Notice>
 
 ## Effects
@@ -545,10 +558,11 @@ interface ContextData {
 
 <Notice type="version">Since `v0.15.0`</Notice>
 
-By default, the `reference{:.const}` element is **both** the
-events and position reference. The `positionReference{:.const}`
-callback ref allows you to separate the position to another
-element (either real or virtual):
+By default, the `refs.setReference{:js}` element is **both** the
+events and position reference. The
+`refs.setPositionReference{:js}` callback ref allows you to
+separate the position to another element (either real or
+virtual):
 
 ```js
 const {refs} = useFloating();

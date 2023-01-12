@@ -53,9 +53,10 @@ of the reference element by default.
 - `x{:.const}` and `y{:.const}` are the positioning coordinates.
   These values are `null{:js}` initially, before the layout
   effect has fired.
-- `reference{:.const}` and `floating{:.const}` are callback refs
-  that ensure the position is updated when either element changes
-  (e.g. conditional rendering).
+- `refs.setReference{:js}` and `refs.setFloating{:js}` are
+  function refs that get called with the elements and update the
+  position when they change (such as with conditional rendering),
+  unlike with plain refs.
 
 <Notice gap="above">
   `<View collapsable={false} />{:js}` allows measurements to work
@@ -76,35 +77,40 @@ position:
 const {update} = useFloating();
 ```
 
-## External reference
+## Refs
 
-As `reference{:.const}` is a callback ref, you can keep the hook
-synchronized with your external element using a layout effect:
+To access the elements, you can either access the refs:
 
-```js /triggerElement/1-3
-function MyComponent({triggerElement}) {
-  const {reference} = useFloating();
+```js
+const {refs} = useFloating();
+
+// Inside an effect or event handler:
+refs.reference.current;
+refs.floating.current;
+```
+
+Or the elements directly:
+
+```js
+const {elements} = useFloating();
+
+// During render, unlike the refs:
+elements.reference;
+elements.floating;
+```
+
+External elements can be synchronized like so, if they live
+outside the component:
+
+```js
+function MyComponent({referenceEl, floatingEl}) {
+  const {refs} = useFloating();
 
   useLayoutEffect(() => {
-    reference(triggerElement);
-  }, [reference, triggerElement]);
+    refs.setReference(referenceEl);
+    refs.setFloating(floatingEl);
+  }, [refs, referenceEl, floatingEl]);
 }
-```
-
-## Internal refs
-
-```js
-const {refs} = useFloating();
-```
-
-If another library's hook requires a `ref{:.objectKey}` passed to
-it, you can do so:
-
-```js
-const {refs} = useFloating();
-const otherLib = useOtherLib({
-  ref: refs.floating, // or refs.reference
-});
 ```
 
 ## ScrollView
@@ -149,8 +155,7 @@ function App() {
 
 ## offsetParent
 
-Pass this to the floating element's `offsetParent{:.const}`, if
-required:
+Pass this to the floating element's `offsetParent``, if required:
 
 ```jsx /offsetParent/
 import {View, Text, ScrollView} from 'react-native';
