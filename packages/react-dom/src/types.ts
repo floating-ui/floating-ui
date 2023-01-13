@@ -7,6 +7,38 @@ import * as React from 'react';
 
 export {arrow} from './arrow';
 export {useFloating} from './useFloating';
+export type {
+  AlignedPlacement,
+  Alignment,
+  Axis,
+  Boundary,
+  ClientRectObject,
+  ComputePositionConfig,
+  ComputePositionReturn,
+  Coords,
+  DetectOverflowOptions,
+  Dimensions,
+  ElementContext,
+  ElementRects,
+  FloatingElement,
+  Length,
+  Middleware,
+  MiddlewareArguments,
+  MiddlewareData,
+  MiddlewareReturn,
+  NodeScroll,
+  Padding,
+  Placement,
+  Platform,
+  Rect,
+  ReferenceElement,
+  RootBoundary,
+  Side,
+  SideObject,
+  SizeOptions,
+  Strategy,
+  VirtualElement,
+} from '@floating-ui/dom';
 export {
   autoPlacement,
   autoUpdate,
