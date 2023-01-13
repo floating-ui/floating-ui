@@ -30,5 +30,19 @@ export {inner, useInnerOffset} from './inner';
 export {safePolygon} from './safePolygon';
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
-export * from '@floating-ui/dom';
+export {
+  autoPlacement,
+  autoUpdate,
+  computePosition,
+  detectOverflow,
+  flip,
+  getOverflowAncestors,
+  hide,
+  inline,
+  limitShift,
+  offset,
+  platform,
+  shift,
+  size,
+} from '@floating-ui/dom';
 export {arrow} from '@floating-ui/react-dom';
