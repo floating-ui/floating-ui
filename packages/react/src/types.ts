@@ -103,7 +103,6 @@ export interface FloatingEvents {
 export interface ContextData {
   openEvent?: MouseEvent | PointerEvent | FocusEvent;
   typing?: boolean;
-  escapeKeyBubbles?: boolean;
   [key: string]: any;
 }
 

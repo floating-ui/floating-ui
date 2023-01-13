@@ -102,7 +102,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    dataRef.current.escapeKeyBubbles = escapeKeyBubbles;
+    dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -113,7 +113,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           children.forEach((child) => {
             if (
               child.context?.open &&
-              !child.context.dataRef.current.escapeKeyBubbles
+              !child.context.dataRef.current.__escapeKeyBubbles
             ) {
               shouldDismiss = false;
               return;
