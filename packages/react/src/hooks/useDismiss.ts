@@ -103,6 +103,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     }
 
     dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
+    dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -191,12 +192,23 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      if (
-        !outsidePressBubbles &&
-        tree &&
-        getChildren(tree.nodesRef.current, nodeId).length > 0
-      ) {
-        return;
+      const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+      if (children.length > 0) {
+        let shouldDismiss = true;
+
+        children.forEach((child) => {
+          if (
+            child.context?.open &&
+            !child.context.dataRef.current.__outsidePressBubbles
+          ) {
+            shouldDismiss = false;
+            return;
+          }
+        });
+
+        if (!shouldDismiss) {
+          return;
+        }
       }
 
       events.emit('dismiss', {
