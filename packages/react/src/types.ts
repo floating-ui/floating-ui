@@ -23,8 +23,6 @@ export {
 } from './hooks/useTransition';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
 export {InnerProps, UseInnerOffsetProps} from './inner';
-export * from '@floating-ui/dom';
-export {arrow} from '@floating-ui/react-dom';
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 
