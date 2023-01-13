@@ -106,8 +106,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (tree && getChildren(tree.nodesRef.current, nodeId).length > 0) {
-          const children = getChildren(tree.nodesRef.current, nodeId);
+        const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+        if (children.length > 0) {
           let shouldDismiss = true;
 
           children.forEach((child) => {
