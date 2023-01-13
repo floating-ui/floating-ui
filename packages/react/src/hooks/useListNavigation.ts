@@ -394,10 +394,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
 
     if (previousOpenRef.current && !open) {
-      const parentFloating = tree
-        ?.getNodesRef()
-        .current.find((node) => node.id === parentId)?.context
-        ?.elements.floating;
+      const parentFloating = tree?.nodesRef.current.find(
+        (node) => node.id === parentId
+      )?.context?.elements.floating;
 
       if (
         parentFloating &&

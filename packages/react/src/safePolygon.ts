@@ -158,7 +158,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       // If any nested child is open, abort.
       if (
         tree &&
-        getChildren(tree.getNodesRef().current, nodeId).some(
+        getChildren(tree.nodesRef.current, nodeId).some(
           ({context}) => context?.open
         )
       ) {

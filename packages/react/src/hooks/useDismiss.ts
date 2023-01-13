@@ -106,11 +106,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        if (
-          tree &&
-          getChildren(tree.getNodesRef().current, nodeId).length > 0
-        ) {
-          const children = getChildren(tree.getNodesRef().current, nodeId);
+        if (tree && getChildren(tree.nodesRef.current, nodeId).length > 0) {
+          const children = getChildren(tree.nodesRef.current, nodeId);
           let shouldDismiss = true;
 
           children.forEach((child) => {
@@ -182,7 +179,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       const targetIsInsideChildren =
         tree &&
-        getChildren(tree.getNodesRef().current, nodeId).some((node) =>
+        getChildren(tree.nodesRef.current, nodeId).some((node) =>
           isEventTargetWithin(event, node.context?.elements.floating)
         );
 
@@ -197,7 +194,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       if (
         !outsidePressBubbles &&
         tree &&
-        getChildren(tree.getNodesRef().current, nodeId).length > 0
+        getChildren(tree.nodesRef.current, nodeId).length > 0
       ) {
         return;
       }

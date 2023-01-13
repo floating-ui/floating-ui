@@ -101,7 +101,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   );
 
   useLayoutEffect(() => {
-    const node = tree?.getNodesRef().current.find((node) => node.id === nodeId);
+    const node = tree?.nodesRef.current.find((node) => node.id === nodeId);
     if (node) {
       node.context = context;
     }

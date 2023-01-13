@@ -125,7 +125,7 @@ export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
 }
 
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
-  getNodesRef: () => React.MutableRefObject<Array<FloatingNodeType<RT>>>;
+  nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
   events: FloatingEvents;
   addNode: (node: FloatingNodeType) => void;
   removeNode: (node: FloatingNodeType) => void;

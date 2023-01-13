@@ -2,7 +2,6 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
-import {useEvent} from '../hooks/utils/useEvent';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 
@@ -81,18 +80,16 @@ export const FloatingTree = ({
 
   const events = React.useState(() => createPubSub())[0];
 
-  const getNodesRef = useEvent(() => nodesRef);
-
   return (
     <FloatingTreeContext.Provider
       value={React.useMemo(
         () => ({
-          getNodesRef,
+          nodesRef,
           addNode,
           removeNode,
           events,
         }),
-        [getNodesRef, addNode, removeNode, events]
+        [nodesRef, addNode, removeNode, events]
       )}
     >
       {children}
