@@ -209,12 +209,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(portalContext?.portalNode, relatedTarget) ||
         relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
         (tree &&
-          (getChildren(tree.nodesRef.current, nodeId).find(
+          (getChildren(tree.getNodesRef().current, nodeId).find(
             (node) =>
               contains(node.context?.elements.floating, relatedTarget) ||
               contains(node.context?.elements.domReference, relatedTarget)
           ) ||
-            getAncestors(tree.nodesRef.current, nodeId).find(
+            getAncestors(tree.getNodesRef().current, nodeId).find(
               (node) =>
                 node.context?.elements.floating === relatedTarget ||
                 node.context?.elements.domReference === relatedTarget

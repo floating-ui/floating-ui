@@ -103,6 +103,7 @@ export interface FloatingEvents {
 export interface ContextData {
   openEvent?: MouseEvent | PointerEvent | FocusEvent;
   typing?: boolean;
+  escapeKeyBubbles?: boolean;
   [key: string]: any;
 }
 
@@ -124,7 +125,7 @@ export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
 }
 
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
-  nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
+  getNodesRef: () => React.MutableRefObject<Array<FloatingNodeType<RT>>>;
   events: FloatingEvents;
   addNode: (node: FloatingNodeType) => void;
   removeNode: (node: FloatingNodeType) => void;

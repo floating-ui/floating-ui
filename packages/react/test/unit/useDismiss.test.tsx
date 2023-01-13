@@ -319,5 +319,29 @@ describe('bubbles', () => {
       expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
       cleanup();
     });
+
+    test('mixed', async () => {
+      render(
+        <NestedDialog testId="outer" bubbles={{escapeKey: true}}>
+          <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
   });
 });

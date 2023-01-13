@@ -2,13 +2,17 @@ import {
   autoUpdate,
   flip,
   FloatingFocusManager,
+  FloatingNode,
   FloatingPortal,
+  FloatingTree,
   offset,
   Placement,
   shift,
   useClick,
   useDismiss,
   useFloating,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
   useId,
   useInteractions,
   useRole,
@@ -27,10 +31,37 @@ export const Main = () => {
       <div className="container">
         <Popover
           modal={modal}
+          bubbles={true}
           render={({labelId, descriptionId, close}) => (
             <>
               <h2 id={labelId}>A label/title</h2>
               <p id={descriptionId}>A description/paragraph</p>
+              <Popover
+                modal={modal}
+                bubbles={true}
+                render={({labelId, descriptionId, close}) => (
+                  <>
+                    <h2 id={labelId}>A label/title</h2>
+                    <p id={descriptionId}>A description/paragraph</p>
+                    <Popover
+                      modal={modal}
+                      bubbles={false}
+                      render={({labelId, descriptionId, close}) => (
+                        <>
+                          <h2 id={labelId}>A label/title</h2>
+                          <p id={descriptionId}>A description/paragraph</p>
+                          <button onClick={close}>Close</button>
+                        </>
+                      )}
+                    >
+                      <button>My button</button>
+                    </Popover>
+                    <button onClick={close}>Close</button>
+                  </>
+                )}
+              >
+                <button>My button</button>
+              </Popover>
               <button onClick={close}>Close</button>
             </>
           )}
@@ -66,13 +97,22 @@ interface Props {
   placement?: Placement;
   modal?: boolean;
   children?: React.ReactNode;
+  bubbles?: boolean;
 }
 
-export function Popover({children, render, placement, modal = true}: Props) {
+function PopoverComponent({
+  children,
+  render,
+  placement,
+  modal = true,
+  bubbles = true,
+}: Props) {
   const [open, setOpen] = useState(false);
 
+  const nodeId = useFloatingNodeId();
   const {x, y, reference, floating, strategy, refs, update, context} =
     useFloating({
+      nodeId,
       open,
       onOpenChange: setOpen,
       middleware: [offset(5), flip(), shift()],
@@ -86,7 +126,9 @@ export function Popover({children, render, placement, modal = true}: Props) {
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useClick(context),
     useRole(context),
-    useDismiss(context),
+    useDismiss(context, {
+      bubbles,
+    }),
   ]);
 
   useEffect(() => {
@@ -96,7 +138,7 @@ export function Popover({children, render, placement, modal = true}: Props) {
   }, [open, update, refs.reference, refs.floating]);
 
   return (
-    <>
+    <FloatingNode id={nodeId}>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: reference}))}
       <FloatingPortal>
@@ -124,6 +166,21 @@ export function Popover({children, render, placement, modal = true}: Props) {
           </FloatingFocusManager>
         )}
       </FloatingPortal>
-    </>
+    </FloatingNode>
   );
+}
+
+export function Popover(props: Props) {
+  const parentId = useFloatingParentNodeId();
+
+  // This is a root, so we wrap it with the tree
+  if (parentId === null) {
+    return (
+      <FloatingTree>
+        <PopoverComponent {...props} />
+      </FloatingTree>
+    );
+  }
+
+  return <PopoverComponent {...props} />;
 }

@@ -70,6 +70,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     events,
     nodeId,
     elements: {reference, domReference, floating},
+    dataRef,
   }: FloatingContext<RT>,
   {
     enabled = true,
@@ -101,14 +102,30 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
+    dataRef.current.escapeKeyBubbles = escapeKeyBubbles;
+
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         if (
-          !escapeKeyBubbles &&
           tree &&
-          getChildren(tree.nodesRef.current, nodeId).length > 0
+          getChildren(tree.getNodesRef().current, nodeId).length > 0
         ) {
-          return;
+          const children = getChildren(tree.getNodesRef().current, nodeId);
+          let shouldDismiss = true;
+
+          children.forEach((child) => {
+            if (
+              child.context?.open &&
+              !child.context.dataRef.current.escapeKeyBubbles
+            ) {
+              shouldDismiss = false;
+              return;
+            }
+          });
+
+          if (!shouldDismiss) {
+            return;
+          }
         }
 
         events.emit('dismiss', {
@@ -165,7 +182,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
       const targetIsInsideChildren =
         tree &&
-        getChildren(tree.nodesRef.current, nodeId).some((node) =>
+        getChildren(tree.getNodesRef().current, nodeId).some((node) =>
           isEventTargetWithin(event, node.context?.elements.floating)
         );
 
@@ -180,7 +197,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       if (
         !outsidePressBubbles &&
         tree &&
-        getChildren(tree.nodesRef.current, nodeId).length > 0
+        getChildren(tree.getNodesRef().current, nodeId).length > 0
       ) {
         return;
       }
@@ -242,6 +259,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       });
     };
   }, [
+    dataRef,
     floating,
     domReference,
     reference,
