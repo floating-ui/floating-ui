@@ -5,9 +5,56 @@ import type {
 } from '@floating-ui/dom';
 import * as React from 'react';
 
-export {useFloating} from './';
-export {arrow} from './';
-export * from '@floating-ui/dom';
+export {arrow} from './arrow';
+export {useFloating} from './useFloating';
+export type {
+  AlignedPlacement,
+  Alignment,
+  Axis,
+  Boundary,
+  ClientRectObject,
+  ComputePositionConfig,
+  ComputePositionReturn,
+  Coords,
+  DetectOverflowOptions,
+  Dimensions,
+  ElementContext,
+  ElementRects,
+  Elements,
+  FloatingElement,
+  Length,
+  Middleware,
+  MiddlewareArguments,
+  MiddlewareData,
+  MiddlewareReturn,
+  NodeScroll,
+  Padding,
+  Placement,
+  Platform,
+  Rect,
+  ReferenceElement,
+  RootBoundary,
+  Side,
+  SideObject,
+  SizeOptions,
+  Strategy,
+  VirtualElement,
+} from '@floating-ui/dom';
+export {
+  autoPlacement,
+  autoUpdate,
+  computePosition,
+  detectOverflow,
+  flip,
+  getOverflowAncestors,
+  hide,
+  inline,
+  limitShift,
+  offset,
+  platform,
+  shift,
+  size,
+} from '@floating-ui/dom';
 
 export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
   x: number | null;
