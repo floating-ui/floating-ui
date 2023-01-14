@@ -134,7 +134,7 @@ export const useDelayGroup = (
         });
       });
       return () => {
-        [frame, subFrame].forEach((frame) => cancelAnimationFrame(frame));
+        [frame, subFrame].forEach((f) => cancelAnimationFrame(f));
       };
     } else {
       setIsGrouped(false);
