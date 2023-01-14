@@ -23,7 +23,6 @@ export {
 } from './hooks/useTransition';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
 export {InnerProps, UseInnerOffsetProps} from './inner';
-export {useFloating} from './useFloating';
 export type {
   AlignedPlacement,
   Alignment,
@@ -37,6 +36,7 @@ export type {
   Dimensions,
   ElementContext,
   ElementRects,
+  Elements,
   FloatingElement,
   Length,
   Middleware,

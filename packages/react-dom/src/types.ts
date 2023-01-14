@@ -20,6 +20,7 @@ export type {
   Dimensions,
   ElementContext,
   ElementRects,
+  Elements,
   FloatingElement,
   Length,
   Middleware,
