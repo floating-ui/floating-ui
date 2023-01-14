@@ -111,6 +111,26 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const isLeave = event.type === 'mouseleave';
       const isOverReference = contains(elements.domReference, target);
       const isOverFloating = contains(elements.floating, target);
+      const refRect = elements.domReference.getBoundingClientRect();
+      const rect = elements.floating.getBoundingClientRect();
+      const side = placement.split('-')[0] as Side;
+      const cursorLeaveFromRight = x > rect.right - rect.width / 2;
+      const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
+      const isOverFloatingRect =
+        // Account for the polygon blocking pointer-events.
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom;
+
+      // The cursor landed, so we destroy the polygon logic.
+      if (isOverFloatingRect && polygonRef.current?.dataset.type !== 'rect') {
+        destroyPolygon(polygonRef);
+      }
+
+      if (isOverFloating) {
+        hasLanded = true;
+      }
 
       if (!isLeave && isOverReference) {
         destroyPolygon(polygonRef);
@@ -144,26 +164,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       ) {
         return;
       }
-
-      if (isOverFloating) {
-        hasLanded = true;
-      }
-
-      // The cursor landed, so we destroy the polygon logic
-      if (
-        isOverFloating &&
-        !isLeave &&
-        polygonRef.current?.dataset.type !== 'rect'
-      ) {
-        destroyPolygon(polygonRef);
-        return;
-      }
-
-      const refRect = elements.domReference.getBoundingClientRect();
-      const rect = elements.floating.getBoundingClientRect();
-      const side = placement.split('-')[0] as Side;
-      const cursorLeaveFromRight = x > rect.right - rect.width / 2;
-      const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
 
       // If the pointer is leaving from the opposite side, the "buffer" logic
       // creates a point where the floating element remains open, but should be
