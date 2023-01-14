@@ -10,17 +10,18 @@ interface GroupState {
   initialDelay: Delay;
   currentId: any;
   timeoutMs: number;
+  isInstantPhase: boolean;
 }
 
 interface GroupContext extends GroupState {
   setCurrentId: React.Dispatch<React.SetStateAction<any>>;
-  setState: React.Dispatch<React.SetStateAction<GroupState>>;
+  setState: React.Dispatch<Partial<GroupState>>;
 }
 
 const FloatingDelayGroupContext = React.createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
-    setState: React.Dispatch<React.SetStateAction<GroupState>>;
+    setState: React.Dispatch<Partial<GroupState>>;
   }
 >({
   delay: 0,
@@ -29,6 +30,7 @@ const FloatingDelayGroupContext = React.createContext<
   currentId: null,
   setCurrentId: () => {},
   setState: () => {},
+  isInstantPhase: false,
 });
 
 export const useDelayGroupContext = (): GroupContext =>
@@ -48,16 +50,41 @@ export const FloatingDelayGroup = ({
   delay: Delay;
   timeoutMs?: number;
 }): JSX.Element => {
-  const [state, setState] = React.useState<GroupState>({
-    delay,
-    timeoutMs,
-    initialDelay: delay,
-    currentId: null,
-  });
+  const [state, setState] = React.useReducer(
+    (prev: GroupState, next: Partial<GroupState>): GroupState => ({
+      ...prev,
+      ...next,
+    }),
+    {
+      delay,
+      timeoutMs,
+      initialDelay: delay,
+      currentId: null,
+      isInstantPhase: false,
+    }
+  );
 
   const setCurrentId = React.useCallback((currentId: any) => {
-    setState((state) => ({...state, currentId}));
+    setState({currentId});
   }, []);
+
+  React.useEffect(() => {
+    if (state.currentId) {
+      let subFrame: number;
+      const frame = requestAnimationFrame(() => {
+        subFrame = requestAnimationFrame(() => {
+          setState({isInstantPhase: true});
+        });
+      });
+
+      return () => {
+        cancelAnimationFrame(frame);
+        cancelAnimationFrame(subFrame);
+      };
+    } else {
+      setState({isInstantPhase: false});
+    }
+  }, [state.currentId]);
 
   return (
     <FloatingDelayGroupContext.Provider
@@ -78,21 +105,21 @@ interface UseGroupOptions {
 export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions
-): {isGrouped: boolean} => {
+) => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
   const timeoutIdRef = React.useRef<number>();
-
-  const [isGrouped, setIsGrouped] = React.useState(false);
 
   React.useEffect(() => {
     if (currentId) {
       clearTimeout(timeoutIdRef.current);
 
-      setState((state) => ({
-        ...state,
-        delay: {open: 1, close: getDelay(initialDelay, 'close')},
-      }));
+      setState({
+        delay: {
+          open: 1,
+          close: getDelay(initialDelay, 'close'),
+        },
+      });
 
       if (currentId !== id) {
         onOpenChange(false);
@@ -103,7 +130,7 @@ export const useDelayGroup = (
   React.useEffect(() => {
     function unset() {
       onOpenChange(false);
-      setState((state) => ({...state, delay: initialDelay, currentId: null}));
+      setState({delay: initialDelay, currentId: null});
     }
 
     clearTimeout(timeoutIdRef.current);
@@ -120,34 +147,12 @@ export const useDelayGroup = (
   React.useEffect(() => {
     if (open) {
       setCurrentId(id);
-    } else {
-      setIsGrouped(false);
     }
   }, [open, setCurrentId, id]);
-
-  React.useEffect(() => {
-    if (currentId) {
-      let subFrame: number;
-      const frame = requestAnimationFrame(() => {
-        subFrame = requestAnimationFrame(() => {
-          setIsGrouped(true);
-        });
-      });
-      return () => {
-        [frame, subFrame].forEach((f) => cancelAnimationFrame(f));
-      };
-    } else {
-      setIsGrouped(false);
-    }
-  }, [currentId]);
 
   React.useEffect(() => {
     return () => {
       clearTimeout(timeoutIdRef.current);
     };
   }, []);
-
-  return {
-    isGrouped,
-  };
 };

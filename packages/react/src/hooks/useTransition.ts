@@ -58,9 +58,11 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   // <FloatingPortal />. This call is necessary to ensure subsequent opens
   // after the initial one allows the correct side animation to play when the
   // placement has changed.
-  if (initiated && !isMounted && status !== 'unmounted') {
-    setStatus('unmounted');
-  }
+  useLayoutEffect(() => {
+    if (initiated && !isMounted) {
+      setStatus('unmounted');
+    }
+  }, [initiated, isMounted]);
 
   useLayoutEffect(() => {
     if (!floating) return;
