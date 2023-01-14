@@ -78,10 +78,12 @@ interface UseGroupOptions {
 export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions
-) => {
+): {isGrouped: boolean} => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
   const timeoutIdRef = React.useRef<number>();
+
+  const [isGrouped, setIsGrouped] = React.useState(false);
 
   React.useEffect(() => {
     if (currentId) {
@@ -118,12 +120,33 @@ export const useDelayGroup = (
   React.useEffect(() => {
     if (open) {
       setCurrentId(id);
+    } else {
+      setIsGrouped(false);
     }
   }, [open, setCurrentId, id]);
+
+  React.useEffect(() => {
+    if (currentId) {
+      const frame = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsGrouped(true);
+        });
+      });
+      return () => {
+        cancelAnimationFrame(frame);
+      };
+    } else {
+      setIsGrouped(false);
+    }
+  }, [currentId]);
 
   React.useEffect(() => {
     return () => {
       clearTimeout(timeoutIdRef.current);
     };
   }, []);
+
+  return {
+    isGrouped,
+  };
 };
