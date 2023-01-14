@@ -30,7 +30,15 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
   ref: React.Ref<HTMLButtonElement>
 ) {
-  return <button {...props} ref={ref} tabIndex={-1} style={HIDDEN_STYLES} />;
+  return (
+    <button
+      {...props}
+      type="button"
+      ref={ref}
+      tabIndex={-1}
+      style={HIDDEN_STYLES}
+    />
+  );
 });
 
 export interface Props<RT extends ReferenceType = ReferenceType> {
