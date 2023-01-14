@@ -79,7 +79,8 @@ export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions
 ) => {
-  const {currentId, initialDelay, setState, timeoutMs} = useDelayGroupContext();
+  const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
+    useDelayGroupContext();
   const timeoutIdRef = React.useRef<number>();
 
   React.useEffect(() => {
@@ -113,6 +114,12 @@ export const useDelayGroup = (
       }
     }
   }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
+
+  React.useEffect(() => {
+    if (open) {
+      setCurrentId(id);
+    }
+  }, [open, setCurrentId, id]);
 
   React.useEffect(() => {
     return () => {

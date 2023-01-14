@@ -19,15 +19,12 @@ interface Props {
 }
 
 export const Tooltip = ({children, label}: Props) => {
-  const {delay, setCurrentId} = useDelayGroupContext();
+  const {delay} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
 
   const {x, y, reference, floating, strategy, context} = useFloating({
     open,
-    onOpenChange(open) {
-      setOpen(open);
-      open && setCurrentId(label);
-    },
+    onOpenChange: setOpen,
   });
 
   const {getReferenceProps} = useInteractions([
