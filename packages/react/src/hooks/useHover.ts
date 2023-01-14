@@ -82,6 +82,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
   const polygonRef = React.useRef<SVGElement | null>(null);
+  const unbindMouseMoveRef = React.useRef(() => {});
 
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
@@ -152,14 +153,9 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   );
 
   const cleanupMouseMoveHandler = React.useCallback(() => {
-    if (handlerRef.current) {
-      getDocument(floating).removeEventListener(
-        'mousemove',
-        handlerRef.current
-      );
-      handlerRef.current = undefined;
-    }
-  }, [floating]);
+    unbindMouseMoveRef.current();
+    handlerRef.current = undefined;
+  }, []);
 
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
@@ -208,14 +204,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
+      unbindMouseMoveRef.current();
+
       const doc = getDocument(floating);
       clearTimeout(restTimeoutRef.current);
 
       if (handleCloseRef.current) {
         clearTimeout(timeoutRef.current);
-
-        handlerRef.current &&
-          doc.removeEventListener('mousemove', handlerRef.current);
 
         handlerRef.current = handleCloseRef.current({
           ...context,
@@ -229,7 +224,13 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           },
         });
 
-        doc.addEventListener('mousemove', handlerRef.current);
+        const handler = handlerRef.current;
+
+        doc.addEventListener('mousemove', handler);
+        unbindMouseMoveRef.current = () => {
+          doc.removeEventListener('mousemove', handler);
+        };
+
         return;
       }
 
