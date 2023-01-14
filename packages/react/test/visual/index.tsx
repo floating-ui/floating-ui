@@ -19,6 +19,7 @@ import {Main as MacSelect} from './components/MacSelect';
 import {Main as Menu} from './components/Menu';
 import {Main as Navigation} from './components/Navigation';
 import {Main as Popover} from './components/Popover';
+import {Main as Select} from './components/Select';
 import {Main as Tooltip} from './components/Tooltip';
 import {New} from './utils/New';
 
@@ -26,6 +27,7 @@ const ROUTES = [
   {path: 'tooltip', component: Tooltip},
   {path: 'popover', component: Popover},
   {path: 'menu', component: Menu},
+  {path: 'select', component: Select},
   {path: 'mac-select', component: MacSelect},
   {path: 'grid', component: Grid},
   {path: 'emoji-picker', component: EmojiPicker},

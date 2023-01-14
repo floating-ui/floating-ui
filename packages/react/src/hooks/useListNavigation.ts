@@ -240,6 +240,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
   const forceSyncFocus = React.useRef(false);
+  const forceScrollIntoViewRef = React.useRef(false);
 
   const disabledIndicesRef = useLatestRef(disabledIndices);
   const latestOpenRef = useLatestRef(open);
@@ -280,7 +281,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         const shouldScrollIntoView =
           scrollIntoViewOptions &&
           item &&
-          (forceScrollIntoView ? true : !isPointerModalityRef.current);
+          (forceScrollIntoView || !isPointerModalityRef.current);
 
         if (shouldScrollIntoView) {
           // JSDOM doesn't support `.scrollIntoView()` but it's widely supported
@@ -314,6 +315,9 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
     if (open) {
       if (focusItemOnOpenRef.current && selectedIndex != null) {
+        // Regardless of the pointer modality, we want to ensure the selected
+        // item comes into view when the floating element is opened.
+        forceScrollIntoViewRef.current = true;
         onNavigate(selectedIndex);
       }
     } else if (previousOpenRef.current) {
@@ -364,7 +368,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
       } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
         indexRef.current = activeIndex;
-        focusItem(listRef, indexRef, activeIndex === selectedIndex);
+        focusItem(listRef, indexRef, forceScrollIntoViewRef.current);
+        forceScrollIntoViewRef.current = false;
       }
     }
   }, [
