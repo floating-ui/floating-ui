@@ -179,7 +179,7 @@ declare const detectOverflow: (
   options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
-export {arrow, autoPlacement, detectOverflow,flip, hide, shift, size};
+export {arrow, autoPlacement, detectOverflow, flip, hide, shift, size};
 export {computePosition} from './';
 export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
 export {platform} from './platform';
@@ -205,4 +205,4 @@ export type {
   SideObject,
   Strategy,
 } from '@floating-ui/core';
-export {inline,limitShift, offset} from '@floating-ui/core';
+export {inline, limitShift, offset} from '@floating-ui/core';

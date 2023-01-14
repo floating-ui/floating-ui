@@ -1,4 +1,4 @@
-import {cleanup, fireEvent,render, screen} from '@testing-library/react';
+import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {useFloating, useInteractions, useRole} from '../../src';

@@ -9,25 +9,25 @@ type Props = {
 };
 
 const getStyleForPosition = (position: string) => {
-  switch(position){
+  switch (position) {
     case 'top-left':
       return {};
     case 'top':
-      return { justifyItems: 'center' };
+      return {justifyItems: 'center'};
     case 'top-right':
-      return { justifyItems: 'end' };
+      return {justifyItems: 'end'};
     case 'left':
-      return { alignItems: 'center' };
+      return {alignItems: 'center'};
     case 'center':
-      return { placeItems: 'center' };
+      return {placeItems: 'center'};
     case 'right':
-      return { alignItems: 'center', justifyItems: 'end' };
+      return {alignItems: 'center', justifyItems: 'end'};
     case 'bottom-left':
-      return { alignItems: 'end' };
+      return {alignItems: 'end'};
     case 'bottom':
-      return { alignItems: 'end', justifyItems: 'center' };
+      return {alignItems: 'end', justifyItems: 'center'};
     case 'bottom-right':
-      return { alignItems: 'end', justifyItems: 'end' };
+      return {alignItems: 'end', justifyItems: 'end'};
   }
 };
 
@@ -37,12 +37,15 @@ export function Container({children, update}: Props) {
 
   return (
     <>
-      <div className='container' style={{
-        position: 'relative',
-        overflow: 'scroll',
-        placeItems: 'initial',
-        ...getStyleForPosition(position)
-      }}>
+      <div
+        className="container"
+        style={{
+          position: 'relative',
+          overflow: 'scroll',
+          placeItems: 'initial',
+          ...getStyleForPosition(position),
+        }}
+      >
         {children}
       </div>
       <h3>Reference position</h3>

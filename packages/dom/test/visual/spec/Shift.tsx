@@ -6,7 +6,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
-import {useLayoutEffect,useState} from 'react';
+import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';

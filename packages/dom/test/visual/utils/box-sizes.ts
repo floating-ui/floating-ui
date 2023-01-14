@@ -1,6 +1,1 @@
-export const boxSizes: string[] = [
-  'large',
-  'medium',
-  'small',
-  'tiny',
-];
+export const boxSizes: string[] = ['large', 'medium', 'small', 'tiny'];

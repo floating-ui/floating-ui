@@ -1,6 +1,6 @@
 import type {Placement} from '@floating-ui/core';
 import type {OffsetOptions} from '@floating-ui/core';
-import {offset,useFloating} from '@floating-ui/react-dom';
+import {offset, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';

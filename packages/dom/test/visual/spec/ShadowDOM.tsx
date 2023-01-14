@@ -1,12 +1,19 @@
-import type { Placement, Strategy } from '@floating-ui/core';
-import { useState } from 'react';
+import type {Placement, Strategy} from '@floating-ui/core';
+import {useState} from 'react';
 
-import { allPlacements } from '../utils/allPlacements';
-import { Controls } from '../utils/Controls';
-import { defineElements } from '../utils/shadowDOM';
+import {allPlacements} from '../utils/allPlacements';
+import {Controls} from '../utils/Controls';
+import {defineElements} from '../utils/shadowDOM';
 
-type UseCase = 'direct-host-child' | 'deep-host-child' | 'relative-host-with-shadowed-floating-child';
-const USE_CASES: UseCase[] = ['direct-host-child', 'deep-host-child', 'relative-host-with-shadowed-floating-child'];
+type UseCase =
+  | 'direct-host-child'
+  | 'deep-host-child'
+  | 'relative-host-with-shadowed-floating-child';
+const USE_CASES: UseCase[] = [
+  'direct-host-child',
+  'deep-host-child',
+  'relative-host-with-shadowed-floating-child',
+];
 
 const STRATEGIES: Strategy[] = ['absolute', 'fixed'];
 
@@ -35,17 +42,20 @@ export function ShadowDOM() {
     <>
       <h1>Shadow DOM</h1>
       <p>
-        The floating element should be positioned correctly when contained within shadow DOM.
+        The floating element should be positioned correctly when contained
+        within shadow DOM.
       </p>
-      <div className='container'>
-        { UseCaseTag === 'relative-host-with-shadowed-floating-child' ?
+      <div className="container">
+        {UseCaseTag === 'relative-host-with-shadowed-floating-child' ? (
           <relative-position-host>
-            <div id='reference' className='reference'>Reference</div>
+            <div id="reference" className="reference">
+              Reference
+            </div>
             <shadowed-floating-owner {...hostOptions} />
-          </relative-position-host> :
-
+          </relative-position-host>
+        ) : (
           <UseCaseTag {...hostOptions} />
-        }
+        )}
       </div>
 
       <h3>Shadow DOM structure</h3>
@@ -54,12 +64,9 @@ export function ShadowDOM() {
           <button
             key={localUseCase}
             data-testid={`use-case-${localUseCase}`}
-            onClick={() =>
-              setUseCase(localUseCase)
-            }
+            onClick={() => setUseCase(localUseCase)}
             style={{
-              backgroundColor:
-                localUseCase === useCase ? 'black' : '',
+              backgroundColor: localUseCase === useCase ? 'black' : '',
             }}
           >
             {localUseCase}
@@ -91,7 +98,8 @@ export function ShadowDOM() {
             data-testid={`with-transform-${localWithTransform}`}
             onClick={() => setWithTransform(localWithTransform)}
             style={{
-              backgroundColor: localWithTransform === withTransform ? 'black' : '',
+              backgroundColor:
+                localWithTransform === withTransform ? 'black' : '',
             }}
           >
             {String(localWithTransform)}

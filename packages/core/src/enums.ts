@@ -1,4 +1,4 @@
-import type {AlignedPlacement,Placement, Side} from './types';
+import type {AlignedPlacement, Placement, Side} from './types';
 
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
 export const allPlacements = sides.reduce(

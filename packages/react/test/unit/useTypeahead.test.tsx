@@ -1,8 +1,8 @@
-import {cleanup,render, screen} from '@testing-library/react';
+import {cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 
-import {useFloating, useInteractions,useTypeahead} from '../../src';
+import {useFloating, useInteractions, useTypeahead} from '../../src';
 import type {Props} from '../../src/hooks/useTypeahead';
 
 jest.useFakeTimers();

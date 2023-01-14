@@ -1,4 +1,4 @@
-import {expect,test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
 test('should be anchored on bottom', async ({page}) => {
   await page.goto('http://localhost:1234/virtual-element');

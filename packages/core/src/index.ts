@@ -6,6 +6,6 @@ export {flip} from './middleware/flip';
 export {hide} from './middleware/hide';
 export {inline} from './middleware/inline';
 export {offset} from './middleware/offset';
-export {limitShift,shift} from './middleware/shift';
+export {limitShift, shift} from './middleware/shift';
 export {size} from './middleware/size';
 export {rectToClientRect} from './utils/rectToClientRect';

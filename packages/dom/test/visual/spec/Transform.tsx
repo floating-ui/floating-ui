@@ -1,5 +1,5 @@
-import {autoUpdate,shift, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useRef,useState} from 'react';
+import {autoUpdate, shift, useFloating} from '@floating-ui/react-dom';
+import {useLayoutEffect, useRef, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 

@@ -1,4 +1,4 @@
-import {expect,test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';

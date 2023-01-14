@@ -1,5 +1,10 @@
-import { autoUpdate, computePosition, Placement, Strategy } from '@floating-ui/dom';
-import { HTMLAttributes } from 'react';
+import {
+  autoUpdate,
+  computePosition,
+  Placement,
+  Strategy,
+} from '@floating-ui/dom';
+import {HTMLAttributes} from 'react';
 
 interface FloatingUICustomElement {
   reference: HTMLElement;
@@ -9,7 +14,7 @@ interface FloatingUICustomElement {
   cleanup: () => void;
 }
 
-type CustomElement<T> = Partial<T & HTMLAttributes<T> & { children: any }>;
+type CustomElement<T> = Partial<T & HTMLAttributes<T> & {children: any}>;
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -27,13 +32,18 @@ const directHostChildTag = 'direct-host-child';
 const deepHostChildTag = 'deep-host-child';
 const relativePositionHostTag = 'relative-position-host';
 const shadowedFloatingOwnerTag = 'shadowed-floating-owner';
-export const useCases = [directHostChildTag, deepHostChildTag]
+export const useCases = [directHostChildTag, deepHostChildTag];
 
 export function defineElements(): void {
   defineIfNeeded(
     directHostChildTag,
-    class DirectHostChild extends HTMLElement implements FloatingUICustomElement {
-      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
+    class DirectHostChild
+      extends HTMLElement
+      implements FloatingUICustomElement
+    {
+      static get observedAttributes() {
+        return ['placement', 'strategy', 'style'];
+      }
 
       reference: HTMLElement;
       floating: HTMLElement;
@@ -44,14 +54,17 @@ export function defineElements(): void {
       constructor() {
         super();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.attachShadow({mode: 'open'});
         this.reference = createReferenceElement();
         this.floating = createFloatingElement();
         const style = recreateDocumentStyle();
         shadow.append(style, this.reference, this.floating);
       }
 
-      attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
+      attributeChangedCallback<
+        N extends Extract<keyof this, 'placement' | 'strategy'>,
+        V extends Placement | Strategy
+      >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
         } else if (name === 'strategy') {
@@ -75,7 +88,9 @@ export function defineElements(): void {
   defineIfNeeded(
     deepHostChildTag,
     class DeepHostChild extends HTMLElement implements FloatingUICustomElement {
-      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
+      static get observedAttributes() {
+        return ['placement', 'strategy', 'style'];
+      }
 
       container: HTMLElement;
       reference: HTMLElement;
@@ -87,7 +102,7 @@ export function defineElements(): void {
       constructor() {
         super();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.attachShadow({mode: 'open'});
         this.reference = createReferenceElement();
         this.floating = createFloatingElement();
         this.container = document.createElement('div');
@@ -96,7 +111,10 @@ export function defineElements(): void {
         shadow.append(style, this.container);
       }
 
-      attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
+      attributeChangedCallback<
+        N extends Extract<keyof this, 'placement' | 'strategy'>,
+        V extends Placement | Strategy
+      >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
         } else if (name === 'strategy') {
@@ -123,7 +141,7 @@ export function defineElements(): void {
       constructor() {
         super();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.attachShadow({mode: 'open'});
         const wrapper = document.createElement('div');
         wrapper.style.position = 'relative';
         const slot = document.createElement('slot');
@@ -131,13 +149,18 @@ export function defineElements(): void {
         const style = recreateDocumentStyle();
         shadow.append(style, wrapper);
       }
-    },
+    }
   );
 
   defineIfNeeded(
     shadowedFloatingOwnerTag,
-    class ShadowedFloatingOwner extends HTMLElement implements FloatingUICustomElement {
-      static get observedAttributes() { return ['placement', 'strategy', 'style']; }
+    class ShadowedFloatingOwner
+      extends HTMLElement
+      implements FloatingUICustomElement
+    {
+      static get observedAttributes() {
+        return ['placement', 'strategy', 'style'];
+      }
 
       reference!: HTMLElement;
       floating: HTMLElement;
@@ -148,13 +171,16 @@ export function defineElements(): void {
       constructor() {
         super();
 
-        const shadow = this.attachShadow({ mode: 'open' });
+        const shadow = this.attachShadow({mode: 'open'});
         this.floating = createFloatingElement();
         const style = recreateDocumentStyle();
         shadow.append(style, this.floating);
       }
 
-      attributeChangedCallback<N extends Extract<keyof this, 'placement' | 'strategy'>, V extends Placement | Strategy>(name: N, _oldValue: V, value: V): void {
+      attributeChangedCallback<
+        N extends Extract<keyof this, 'placement' | 'strategy'>,
+        V extends Placement | Strategy
+      >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
         } else if (name === 'strategy') {
@@ -178,7 +204,10 @@ export function defineElements(): void {
   );
 }
 
-function defineIfNeeded(tag: string, customElementConstructor: CustomElementConstructor): void {
+function defineIfNeeded(
+  tag: string,
+  customElementConstructor: CustomElementConstructor
+): void {
   if (!customElements.get(tag)) {
     customElements.define(tag, customElementConstructor);
   }
@@ -186,7 +215,9 @@ function defineIfNeeded(tag: string, customElementConstructor: CustomElementCons
 
 function recreateDocumentStyle(): HTMLStyleElement {
   const style = document.createElement('style');
-  style.textContent = Array.from(document.styleSheets[0].cssRules).map(rule => rule.cssText).join('\n');
+  style.textContent = Array.from(document.styleSheets[0].cssRules)
+    .map((rule) => rule.cssText)
+    .join('\n');
   return style;
 }
 
@@ -209,33 +240,37 @@ const defaultOptions = {
   placement: 'bottom-end',
 } as const;
 
-async function position({ floating, placement, reference, strategy }: FloatingUICustomElement): Promise<void> {
+async function position({
+  floating,
+  placement,
+  reference,
+  strategy,
+}: FloatingUICustomElement): Promise<void> {
   if (!floating || !reference) {
     return;
   }
 
   return computePosition(reference, floating, {
-        placement,
-        strategy,
-      }).then(({ x, y }) => {
-        Object.assign(floating.style, {
-          position: strategy,
-          left: `${x ?? 0}px`,
-          top: `${y ?? 0}px`,
-        });
-      });
+    placement,
+    strategy,
+  }).then(({x, y}) => {
+    Object.assign(floating.style, {
+      position: strategy,
+      left: `${x ?? 0}px`,
+      top: `${y ?? 0}px`,
+    });
+  });
 }
 
 function setUpAutoUpdate(element: FloatingUICustomElement): () => void {
-  const { floating, reference } = element;
+  const {floating, reference} = element;
 
   if (!floating || !reference) {
     return () => {};
   }
 
   return autoUpdate(reference, floating, () => position(element), {
-      // ensures initial positioning is accurate
-      animationFrame: true
-    }
-  );
+    // ensures initial positioning is accurate
+    animationFrame: true,
+  });
 }

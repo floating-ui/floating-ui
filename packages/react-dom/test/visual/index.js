@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {render} from 'react-dom';
 
-import {flip, getScrollParents,offset, useFloating} from '../../src';
+import {flip, getScrollParents, offset, useFloating} from '../../src';
 
 function App() {
   const [middleware, setMiddleware] = useState();

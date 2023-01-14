@@ -1,4 +1,4 @@
-import type {FloatingElement,ReferenceElement} from './types';
+import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {isElement} from './utils/is';
