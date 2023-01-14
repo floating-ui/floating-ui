@@ -127,13 +127,14 @@ export const useDelayGroup = (
 
   React.useEffect(() => {
     if (currentId) {
+      let subFrame: number;
       const frame = requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+        subFrame = requestAnimationFrame(() => {
           setIsGrouped(true);
         });
       });
       return () => {
-        cancelAnimationFrame(frame);
+        [frame, subFrame].forEach((frame) => cancelAnimationFrame(frame));
       };
     } else {
       setIsGrouped(false);
