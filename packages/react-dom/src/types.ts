@@ -10,6 +10,7 @@ export {useFloating} from './useFloating';
 export type {
   AlignedPlacement,
   Alignment,
+  AutoUpdateOptions,
   Axis,
   Boundary,
   ClientRectObject,

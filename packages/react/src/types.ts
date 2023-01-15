@@ -26,6 +26,7 @@ export {InnerProps, UseInnerOffsetProps} from './inner';
 export type {
   AlignedPlacement,
   Alignment,
+  AutoUpdateOptions,
   Axis,
   Boundary,
   ClientRectObject,
