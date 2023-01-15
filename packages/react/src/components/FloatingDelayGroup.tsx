@@ -65,25 +65,22 @@ export const FloatingDelayGroup = ({
     }
   );
 
+  const initialCurrentIdRef = React.useRef<any>(null);
+
   const setCurrentId = React.useCallback((currentId: any) => {
     setState({currentId});
   }, []);
 
   useLayoutEffect(() => {
     if (state.currentId) {
-      let subFrame: number;
-      const frame = requestAnimationFrame(() => {
-        subFrame = requestAnimationFrame(() => {
-          setState({isInstantPhase: true});
-        });
-      });
-
-      return () => {
-        cancelAnimationFrame(frame);
-        cancelAnimationFrame(subFrame);
-      };
+      if (initialCurrentIdRef.current === null) {
+        initialCurrentIdRef.current = state.currentId;
+      } else {
+        setState({isInstantPhase: true});
+      }
     } else {
       setState({isInstantPhase: false});
+      initialCurrentIdRef.current = null;
     }
   }, [state.currentId]);
 
