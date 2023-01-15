@@ -106,12 +106,9 @@ export const useDelayGroup = (
 ) => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
-  const timeoutIdRef = React.useRef<number>();
 
   React.useEffect(() => {
     if (currentId) {
-      clearTimeout(timeoutIdRef.current);
-
       setState({
         delay: {
           open: 1,
@@ -131,11 +128,12 @@ export const useDelayGroup = (
       setState({delay: initialDelay, currentId: null});
     }
 
-    clearTimeout(timeoutIdRef.current);
-
     if (!open && currentId === id) {
       if (timeoutMs) {
-        timeoutIdRef.current = window.setTimeout(unset, timeoutMs);
+        const timeout = window.setTimeout(unset, timeoutMs);
+        return () => {
+          clearTimeout(timeout);
+        };
       } else {
         unset();
       }
@@ -147,10 +145,4 @@ export const useDelayGroup = (
       setCurrentId(id);
     }
   }, [open, setCurrentId, id]);
-
-  React.useEffect(() => {
-    return () => {
-      clearTimeout(timeoutIdRef.current);
-    };
-  }, []);
 };
