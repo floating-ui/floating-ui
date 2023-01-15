@@ -1,4 +1,5 @@
 import * as React from 'react';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingContext} from '../types';
@@ -10,17 +11,18 @@ interface GroupState {
   initialDelay: Delay;
   currentId: any;
   timeoutMs: number;
+  isInstantPhase: boolean;
 }
 
 interface GroupContext extends GroupState {
   setCurrentId: React.Dispatch<React.SetStateAction<any>>;
-  setState: React.Dispatch<React.SetStateAction<GroupState>>;
+  setState: React.Dispatch<Partial<GroupState>>;
 }
 
 const FloatingDelayGroupContext = React.createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
-    setState: React.Dispatch<React.SetStateAction<GroupState>>;
+    setState: React.Dispatch<Partial<GroupState>>;
   }
 >({
   delay: 0,
@@ -29,6 +31,7 @@ const FloatingDelayGroupContext = React.createContext<
   currentId: null,
   setCurrentId: () => {},
   setState: () => {},
+  isInstantPhase: false,
 });
 
 export const useDelayGroupContext = (): GroupContext =>
@@ -48,16 +51,38 @@ export const FloatingDelayGroup = ({
   delay: Delay;
   timeoutMs?: number;
 }): JSX.Element => {
-  const [state, setState] = React.useState<GroupState>({
-    delay,
-    timeoutMs,
-    initialDelay: delay,
-    currentId: null,
-  });
+  const [state, setState] = React.useReducer(
+    (prev: GroupState, next: Partial<GroupState>): GroupState => ({
+      ...prev,
+      ...next,
+    }),
+    {
+      delay,
+      timeoutMs,
+      initialDelay: delay,
+      currentId: null,
+      isInstantPhase: false,
+    }
+  );
+
+  const initialCurrentIdRef = React.useRef<any>(null);
 
   const setCurrentId = React.useCallback((currentId: any) => {
-    setState((state) => ({...state, currentId}));
+    setState({currentId});
   }, []);
+
+  useLayoutEffect(() => {
+    if (state.currentId) {
+      if (initialCurrentIdRef.current === null) {
+        initialCurrentIdRef.current = state.currentId;
+      } else {
+        setState({isInstantPhase: true});
+      }
+    } else {
+      setState({isInstantPhase: false});
+      initialCurrentIdRef.current = null;
+    }
+  }, [state.currentId]);
 
   return (
     <FloatingDelayGroupContext.Provider
@@ -81,16 +106,15 @@ export const useDelayGroup = (
 ) => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
-  const timeoutIdRef = React.useRef<number>();
 
   React.useEffect(() => {
     if (currentId) {
-      clearTimeout(timeoutIdRef.current);
-
-      setState((state) => ({
-        ...state,
-        delay: {open: 1, close: getDelay(initialDelay, 'close')},
-      }));
+      setState({
+        delay: {
+          open: 1,
+          close: getDelay(initialDelay, 'close'),
+        },
+      });
 
       if (currentId !== id) {
         onOpenChange(false);
@@ -101,14 +125,15 @@ export const useDelayGroup = (
   React.useEffect(() => {
     function unset() {
       onOpenChange(false);
-      setState((state) => ({...state, delay: initialDelay, currentId: null}));
+      setState({delay: initialDelay, currentId: null});
     }
-
-    clearTimeout(timeoutIdRef.current);
 
     if (!open && currentId === id) {
       if (timeoutMs) {
-        timeoutIdRef.current = window.setTimeout(unset, timeoutMs);
+        const timeout = window.setTimeout(unset, timeoutMs);
+        return () => {
+          clearTimeout(timeout);
+        };
       } else {
         unset();
       }
@@ -120,10 +145,4 @@ export const useDelayGroup = (
       setCurrentId(id);
     }
   }, [open, setCurrentId, id]);
-
-  React.useEffect(() => {
-    return () => {
-      clearTimeout(timeoutIdRef.current);
-    };
-  }, []);
 };
