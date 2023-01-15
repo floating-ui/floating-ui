@@ -1,9 +1,13 @@
 import {
   autoUpdate,
   flip,
+  FloatingDelayGroup,
+  FloatingPortal,
   offset,
   Placement,
   shift,
+  useDelayGroup,
+  useDelayGroupContext,
   useDismiss,
   useFloating,
   useFocus,
@@ -12,7 +16,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
-import {cloneElement, isValidElement, useState} from 'react';
+import {cloneElement, isValidElement, useId, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
@@ -35,9 +39,23 @@ export const Main = () => {
         A floating element that displays a label describing another element.
       </p>
       <div className="container">
-        <Tooltip label="My tooltip" delay={delay}>
+        <Tooltip label="My tooltip 3" delay={delay}>
           <button>My button</button>
         </Tooltip>
+
+        <div>
+          <FloatingDelayGroup delay={{open: 500, close: 200}} timeoutMs={200}>
+            <Tooltip label="My tooltip" delay={delay}>
+              <button>My button</button>
+            </Tooltip>
+            <Tooltip label="My tooltip 2" delay={delay}>
+              <button>My button</button>
+            </Tooltip>
+            <Tooltip label="My tooltip 3" delay={delay}>
+              <button>My button</button>
+            </Tooltip>
+          </FloatingDelayGroup>
+        </div>
       </div>
       <Controls>
         <button
@@ -81,9 +99,11 @@ export function Tooltip({
   placement = 'top',
   delay = 0,
 }: Props) {
+  const {delay: groupDelay, currentId, isInstantPhase} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
+  const id = useId();
 
-  const {x, y, reference, floating, strategy, context} = useFloating({
+  const {x, y, strategy, refs, context} = useFloating({
     placement,
     open,
     onOpenChange: setOpen,
@@ -92,23 +112,35 @@ export function Tooltip({
   });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context, {delay}),
+    useHover(context, {
+      delay: groupDelay === 0 ? delay : groupDelay,
+      move: false,
+    }),
     useFocus(context),
     useRole(context, {role: 'tooltip'}),
     useDismiss(context),
   ]);
 
+  useDelayGroup(context, {id});
+
+  const instantDuration = 0;
+  const openDuration = 750;
+  const closeDuration = 250;
+
   const {isMounted, styles} = useTransitionStyles(context, {
-    duration: {open: 750, close: 250},
-    initial: ({side}) => ({
+    duration: isInstantPhase
+      ? {
+          open: instantDuration,
+          close: currentId === id ? closeDuration : instantDuration,
+        }
+      : {
+          open: openDuration,
+          close: closeDuration,
+        },
+    initial: {
       opacity: 0,
-      transform: {
-        top: 'translateY(5px)',
-        right: 'translateX(-5px)',
-        bottom: 'translateY(-5px)',
-        left: 'translateX(5px)',
-      }[side],
-    }),
+      scale: '0.925',
+    },
     common: ({side}) => ({
       transitionTimingFunction: 'cubic-bezier(.18,.87,.4,.97)',
       transformOrigin: {
@@ -123,22 +155,24 @@ export function Tooltip({
   return (
     <>
       {isValidElement(children) &&
-        cloneElement(children, getReferenceProps({ref: reference}))}
-      {isMounted && (
-        <div
-          ref={floating}
-          className="Tooltip"
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
-            ...styles,
-          }}
-          {...getFloatingProps()}
-        >
-          {label}
-        </div>
-      )}
+        cloneElement(children, getReferenceProps({ref: refs.setReference}))}
+      <FloatingPortal>
+        {isMounted && (
+          <div
+            ref={refs.setFloating}
+            className="Tooltip"
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+              ...styles,
+            }}
+            {...getFloatingProps()}
+          >
+            {label}
+          </div>
+        )}
+      </FloatingPortal>
     </>
   );
 }
