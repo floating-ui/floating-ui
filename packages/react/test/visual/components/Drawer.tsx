@@ -13,7 +13,14 @@ import {
 import React, {cloneElement, isValidElement, useEffect, useState} from 'react';
 import {useMediaQuery} from 'react-responsive';
 
+import {Controls} from '../utils/Controls';
+
 export const Main = () => {
+  const [isTriggerExternal, setTriggerExternal] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [externalRef, setExternalRef] = React.useState<HTMLElement | null>(
+    null
+  );
   return (
     <>
       <h1>Drawer</h1>
@@ -23,7 +30,25 @@ export const Main = () => {
       </p>
       <div className="DrawerContainer">
         <div className="container">
+          {isTriggerExternal ? (
+            <button
+              ref={(el) => setExternalRef(el)}
+              onClick={() => setOpen((prevOpen) => !prevOpen)}
+            >
+              External reference
+            </button>
+          ) : null}
+          <button>Random button</button>
           <Drawer
+            open={open}
+            onOpenChange={setOpen}
+            trigger={
+              isTriggerExternal ? (
+                externalRef
+              ) : (
+                <button>Internal reference</button>
+              )
+            }
             render={({labelId, descriptionId, close}) => (
               <>
                 <h2 id={labelId}>A label/title</h2>
@@ -31,13 +56,26 @@ export const Main = () => {
                 <button onClick={close}>Close</button>
               </>
             )}
-          >
-            <button>My button</button>
-          </Drawer>
+          />
           <button>Next button</button>
         </div>
         <div id="drawer-root"></div>
       </div>
+      <h2>External reference</h2>
+      <Controls>
+        <button
+          onClick={() => setTriggerExternal(true)}
+          style={{background: isTriggerExternal ? 'black' : ''}}
+        >
+          true
+        </button>
+        <button
+          onClick={() => setTriggerExternal(false)}
+          style={{background: !isTriggerExternal ? 'black' : ''}}
+        >
+          false
+        </button>
+      </Controls>
     </>
   );
 };
@@ -47,19 +85,38 @@ interface Props {
     labelId: string;
     descriptionId: string;
   }) => React.ReactNode;
-  children?: React.ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  trigger?: React.ReactElement | HTMLElement | null;
 }
 
-export function Drawer({children, render}: Props) {
-  const [open, setOpen] = useState(false);
+export function Drawer({trigger, render, open: propOpen, onOpenChange}: Props) {
+  const [stateOpen, setStateOpen] = useState(false);
+  const controlled = propOpen !== undefined;
+  const open = controlled ? propOpen : stateOpen;
+  const setOpen = (nextOpen: boolean) => {
+    if (!controlled) {
+      setStateOpen(nextOpen);
+    }
+
+    onOpenChange?.(nextOpen);
+  };
 
   const isLargeScreen = useMediaQuery({
-    query: '(min-width: 1400px)',
+    query: '(min-width: 1000px)',
   });
-  const {reference, floating, refs, update, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
-  });
+  const {reference, floating, refs, update, context} = useFloating<HTMLElement>(
+    {
+      open,
+      onOpenChange: setOpen,
+    }
+  );
+
+  React.useLayoutEffect(() => {
+    if (trigger instanceof HTMLElement) {
+      refs.setReference(trigger);
+    }
+  }, [refs, trigger]);
 
   const id = useId();
   const labelId = `${id}-label`;
@@ -87,6 +144,7 @@ export function Drawer({children, render}: Props) {
       context={context}
       modal={modal}
       closeOnFocusOut={modal}
+      order={['reference', 'floating']}
     >
       <div
         {...getFloatingProps({
@@ -107,8 +165,8 @@ export function Drawer({children, render}: Props) {
 
   return (
     <>
-      {isValidElement(children) &&
-        cloneElement(children, getReferenceProps({ref: reference}))}
+      {isValidElement(trigger) &&
+        cloneElement(trigger, getReferenceProps({ref: reference}))}
       <FloatingPortal id="drawer-root">
         {open &&
           (modal ? (
