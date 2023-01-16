@@ -1,34 +1,48 @@
 # React
 
-This package provides React bindings for `@floating-ui/dom` — a
-library that provides anchor positioning — and also interaction
-primitives to build floating UI components.
+This package provides React bindings for `@floating-ui/dom`, a
+library that provides anchor positioning, and also interaction
+primitives to build floating UI components. This allows you to
+create components such as tooltips, popovers, dropdown menus,
+hover cards, modal dialogs, select menus, comboboxes, and more.
 
-This allows you to create components such as tooltips, popovers,
-dropdown menus, hover cards, modal dialogs, select menus,
-comboboxes, and more.
+**Note that this library is intentionally low-level and provides
+primitives, rather than pre-built components — this means you use
+the library build your own components**. This makes it flexible,
+but more complex to use. If you're looking for pre-built
+components, you will likely find other libraries better suited
+for your use case.
 
 ## Install
 
 The following package provides all modules:
 
 ```shell
-# Positioning + interactions
 npm install @floating-ui/react
 ```
 
-If you only want positioning (`@floating-ui/dom` bindings), the
-following package is smaller with no external dependencies.
+If you only want positioning, without any interactions necessary,
+the following package is smaller in size. The above is superset
+and uses this one as a dependency.
 
 ```shell
-# Positioning only
 npm install @floating-ui/react-dom
 ```
 
-The following docs are compatible with _both_ packages above,
-until the Interactions section.
-
 ## Usage
+
+There are two main parts to creating floating elements:
+
+- [Positioning](/docs/react#positioning) — available for both
+  packages
+- [Interactions](/docs/react#interactions) — available for
+  `@floating-ui/react`
+
+Both the Positioning and Interactions sections should be read in
+order before reading the API docs for the hooks and components in
+the left navigation bar (`useHover`, `useFocus`, etc.)
+
+## Positioning
 
 `useFloating(){:js}` is the main hook of each package.
 
