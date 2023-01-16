@@ -275,6 +275,30 @@ describe('bubbles', () => {
       expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
       cleanup();
     });
+
+    test('mixed', async () => {
+      render(
+        <NestedDialog testId="outer" bubbles={{outsidePress: true}}>
+          <NestedDialog testId="inner" bubbles={{outsidePress: false}}>
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      fireEvent.pointerDown(document.body);
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+
+      fireEvent.pointerDown(document.body);
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
   });
 
   describe('escapeKey', () => {
@@ -299,6 +323,30 @@ describe('bubbles', () => {
     test('false', async () => {
       render(
         <NestedDialog testId="outer" bubbles={{escapeKey: false}}>
+          <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
+            <button>test button</button>
+          </NestedDialog>
+        </NestedDialog>
+      );
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByTestId('outer')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
+      cleanup();
+    });
+
+    test('mixed', async () => {
+      render(
+        <NestedDialog testId="outer" bubbles={{escapeKey: true}}>
           <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
             <button>test button</button>
           </NestedDialog>
