@@ -439,6 +439,20 @@ viewport. So the `x{:.const}`, `y{:.const}` and
 `strategy{:.const}` values returned from the hook can be safely
 ignored.
 
+### enabled
+
+default: `true{:js}`
+
+Conditionally enable/disable the hook. This acts as a global
+default value for the `enabled` option on the hooks mentioned
+below.
+
+```js
+useFloating({
+  enabled: false,
+});
+```
+
 ## Hooks
 
 `useInteractions(){:js}` accepts an array of called hooks in the
