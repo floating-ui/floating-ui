@@ -80,6 +80,31 @@ To help you understand how this middleware works, here is a
 `arrow(){:js}` should generally be placed toward the end of your
 middleware array, after `shift(){:js}` (if used).
 
+## Placement
+
+To know which side the floating element is actually placed at for
+the static axis offset of the arrow, the placement is returned:
+
+```js
+computePosition(referenceEl, floatingEl, {
+  placement: 'top',
+  middleware: [flip(), arrow({element: arrowEl})],
+}).then((data) => {
+  // The final placement can be 'bottom' or 'top'
+  const placement = data.placement;
+});
+```
+
+### React
+
+```js
+// The final placement can be 'bottom' or 'top'
+const {placement} = useFloating({
+  placement: 'top',
+  middleware: [flip(), arrow({element: arrowEl})],
+});
+```
+
 ## Options
 
 These are the options you can pass to `arrow(){:js}`.
