@@ -56,7 +56,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
 export const useHover = <RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   {
-    enabled = true,
+    enabled: enabledOption = true,
     delay = 0,
     handleClose = null,
     mouseOnly = false,
@@ -65,12 +65,14 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   }: Props<RT> = {}
 ): ElementProps => {
   const {
+    enabled: enabledGlobal,
     open,
     onOpenChange,
     dataRef,
     events,
     elements: {domReference, floating},
   } = context;
+  const enabled = !enabledGlobal ? false : enabledOption;
 
   const tree = useFloatingTree<RT>();
   const handleCloseRef = useLatestRef(handleClose);

@@ -65,6 +65,7 @@ export interface Props {
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   {
+    enabled: enabledGlobal,
     open,
     onOpenChange,
     events,
@@ -73,7 +74,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     dataRef,
   }: FloatingContext<RT>,
   {
-    enabled = true,
+    enabled: enabledOption = true,
     escapeKey = true,
     outsidePress: unstable_outsidePress = true,
     outsidePressEvent = 'pointerdown',
@@ -83,6 +84,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     bubbles = true,
   }: Props = {}
 ): ElementProps => {
+  const enabled = !enabledGlobal ? false : enabledOption;
   const tree = useFloatingTree();
   const nested = useFloatingParentNodeId() != null;
   const outsidePressFn = useEvent(

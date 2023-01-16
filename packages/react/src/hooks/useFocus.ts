@@ -19,14 +19,16 @@ export interface Props {
  */
 export const useFocus = <RT extends ReferenceType = ReferenceType>(
   {
+    enabled: enabledGlobal,
     open,
     onOpenChange,
     dataRef,
     events,
     elements: {domReference, floating},
   }: FloatingContext<RT>,
-  {enabled = true, keyboardOnly = true}: Props = {}
+  {enabled: enabledOption = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
+  const enabled = !enabledGlobal ? false : enabledOption;
   const pointerTypeRef = React.useRef('');
   const blockFocusRef = React.useRef(false);
   const timeoutRef = React.useRef<any>();

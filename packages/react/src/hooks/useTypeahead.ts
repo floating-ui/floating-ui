@@ -32,12 +32,12 @@ export interface Props {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
-  {open, dataRef}: FloatingContext<RT>,
+  {enabled: enabledGlobal, open, dataRef}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
     onMatch: unstable_onMatch = () => {},
-    enabled = true,
+    enabled: enabledOption = true,
     findMatch = null,
     resetMs = 1000,
     ignoreKeys = [],
@@ -47,6 +47,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     activeIndex: null,
   }
 ): ElementProps => {
+  const enabled = !enabledGlobal ? false : enabledOption;
   const timeoutIdRef = React.useRef<any>();
   const stringRef = React.useRef('');
   const prevIndexRef = React.useRef<number | null>(

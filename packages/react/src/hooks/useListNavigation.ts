@@ -172,12 +172,17 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, elements: {domReference, floating}}: FloatingContext<RT>,
+  {
+    enabled: enabledGlobal,
+    open,
+    onOpenChange,
+    elements: {domReference, floating},
+  }: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
     onNavigate: unstable_onNavigate = () => {},
-    enabled = true,
+    enabled: enabledOption = true,
     selectedIndex = null,
     allowEscape = false,
     loop = false,
@@ -228,6 +233,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
   }
 
+  const enabled = !enabledGlobal ? false : enabledOption;
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
 

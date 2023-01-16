@@ -108,6 +108,7 @@ export interface ContextData {
 
 export interface FloatingContext<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> {
+  enabled: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   events: FloatingEvents;
@@ -156,6 +157,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   };
 
 export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
+  enabled: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   placement: Placement;

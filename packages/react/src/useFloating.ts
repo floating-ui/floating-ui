@@ -18,7 +18,12 @@ import {isElement} from './utils/is';
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: Partial<UseFloatingProps> = {}
 ): UseFloatingReturn<RT> {
-  const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
+  const {
+    enabled = true,
+    open = false,
+    onOpenChange: unstable_onOpenChange,
+    nodeId,
+  } = options;
 
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
@@ -96,8 +101,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       events,
       open,
       onOpenChange,
+      enabled,
     }),
-    [position, nodeId, events, open, onOpenChange, refs, elements]
+    [position, nodeId, events, open, onOpenChange, refs, elements, enabled]
   );
 
   useLayoutEffect(() => {
