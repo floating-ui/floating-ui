@@ -1,6 +1,7 @@
 # FloatingPortal
 
-Portals your floating element outside the main app node.
+Portals a floating element outside of the app root into a given
+container element.
 
 ```js
 import {FloatingPortal} from '@floating-ui/react';
@@ -82,7 +83,7 @@ in the DOM.
 ```js
 function App() {
   const portalNode = useFloatingPortalNode({
-    id: 'custom-root-id', // 'floating-ui-root' by default
+    id: 'custom-root-id',
     enabled: false, // true by default
   });
 

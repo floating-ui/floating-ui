@@ -7,20 +7,80 @@ real DOM focus or virtual focus.
 import {useListNavigation} from '@floating-ui/react';
 ```
 
-Inside your component:
+## Usage
 
-```js /useListNavigation/
-const {context} = useFloating();
-const listNavigation = useListNavigation(context);
-const {getReferenceProps, getFloatingProps, getItemProps} =
-  useInteractions([listNavigation]);
+This hook is an interaction hook that returns event handler props
+and ARIA attribute props.
+
+To use it, pass it the `context{:.const}` object returned from
+`useFloating(){:js}`, and then feed its result into the
+`useInteractions(){:js}` array. The returned prop getters are
+then spread onto the elements for rendering.
+`getItemProps(){:js}` is spread to each list item.
+
+The `listRef{:.const}` holds an array of HTML elements. The
+`activeIndex{:.const}` determines which index of the list is
+currently active (focused or highlighted).
+
+When using real DOM focus (default), the list items **must be
+focusable** and should have an appropriate `role{:.keyword}` prop
+based on the role of the floating element.
+
+```js /context/
+function App() {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const {x, y, strategy, refs, context} = useFloating({
+    open: true,
+  });
+
+  const listRef = useRef([]);
+
+  const listNavigation = useListNavigation(context, {
+    listRef,
+    activeIndex,
+    onNavigate: setActiveIndex,
+  });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([listNavigation]);
+
+  const items = ['one', 'two', 'three'];
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <div
+        ref={refs.setFloating}
+        style={{
+          position: strategy,
+          top: y ?? 0,
+          left: x ?? 0,
+        }}
+        {...getFloatingProps()}
+      >
+        {items.map((item, index) => (
+          <div
+            key={item}
+            // Make these elements focusable using a roving tabIndex.
+            tabIndex={activeIndex === index ? 0 : -1}
+            ref={(node) => {
+              listRef.current[index] = node;
+            }}
+            {...getItemProps()}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
 ```
 
-Spread `getItemProps(){:js}` to each list item. By default, the
-list items must be focusable and should have an appropriate
-`role{:.keyword}` prop based on the role of the floating element.
-
-## Using with FloatingFocusManager
+## Using with `FloatingFocusManager`
 
 When using the component, set the `initialFocus{:.keyword}` prop
 to `-1{:js}` to avoid focus conflicts with this hook:
@@ -30,6 +90,11 @@ to `-1{:js}` to avoid focus conflicts with this hook:
   {/* floating element */}
 </FloatingFocusManager>
 ```
+
+## Examples
+
+- [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
+- [Combobox](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
 
 ## Props
 

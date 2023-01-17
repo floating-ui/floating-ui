@@ -8,14 +8,68 @@ the user types, often used in tandem with
 import {useTypeahead} from '@floating-ui/react';
 ```
 
-Inside your component:
+## Usage
 
-```js /useTypeahead/
-const {context} = useFloating();
-const typeahead = useTypeahead(context);
-const {getReferenceProps, getFloatingProps} = useInteractions([
-  typeahead,
-]);
+This hook is an interaction hook that returns event handler
+props.
+
+To use it, pass it the `context{:.const}` object returned from
+`useFloating(){:js}`, and then feed its result into the
+`useInteractions(){:js}` array. The returned prop getters are
+then spread onto the elements for rendering.
+
+`useListNavigation(){:js}` is responsible for synchronizing the
+index for focus.
+
+```js /context/
+function App() {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const {x, y, strategy, refs, context} = useFloating({
+    open: true,
+  });
+
+  const items = ['one', 'two', 'three'];
+
+  const listRef = useRef(items);
+
+  const typeahead = useTypeahead(context, {
+    listRef,
+    activeIndex,
+    onMatch: setActiveIndex,
+  });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([typeahead]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <div
+        ref={refs.setFloating}
+        style={{
+          position: strategy,
+          top: y ?? 0,
+          left: x ?? 0,
+        }}
+        {...getFloatingProps()}
+      >
+        {items.map((item, index) => (
+          <div
+            key={item}
+            // Make these elements focusable using a roving tabIndex.
+            tabIndex={activeIndex === index ? 0 : -1}
+            {...getItemProps()}
+          >
+            {item}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
 ```
 
 ## Props

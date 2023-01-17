@@ -32,40 +32,42 @@ function App() {
 
 ## Example
 
-Relevant APIs to use with a `<FloatingDelayGroup />{:js}`:
+These hooks are used:
 
-- `useDelayGroupContext(){:js}`
-- `useDelayGroup(){:js}`
-
-Wrap your `onOpenChange{:.fn}` callback with one that sets the
-current id of the delay group context to the current component.
+- `useDelayGroupContext(){:js}` — accessible due to a
+  `<FloatingDelayGroup />{:js}` context wrapper, which provides
+  the contextual delay for the group.
+- `useDelayGroup(){:js}` — a hook called inside the component.
 
 <Notice>
   The `id` must be unique. The label of a tooltip for example is
-  usually unique in a given group.
+  usually unique in a given group, but you could use the `useId(){:js}` hook.
 </Notice>
 
-```js {2,11,17,20} /delay/
-function Tooltip({label}) {
-  const {delay, setCurrentId} = useDelayGroupContext();
+```js {2,13,20-23} /delay/
+function Tooltip() {
+  const {delay} = useDelayGroupContext();
+  const id = useId();
+
   const [open, setOpen] = useState(false);
 
   const {context} = useFloating({
     open,
-    onOpenChange(open) {
-      setOpen(open);
+    onOpenChange: setOpen,
+  });
 
-      if (open) {
-        setCurrentId(label);
-      }
-    },
+  const hover = useHover(context, {
+    delay,
   });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context, {delay}),
+    hover,
   ]);
 
-  useDelayGroup(context, {id: label});
+  useDelayGroup(context, {
+    // Must be unique
+    id,
+  });
 
   // ...
 }
@@ -106,12 +108,46 @@ The delay to use for the group.
 default: `0{:js}`
 
 An optional explicit timeout to use for the group, which
-represents when grouping logic will no longer be active. This is
-useful if you want grouping to "last" longer than the close
-delay, for example if there is no close delay at all.
+represents when grouping logic will no longer be active after the
+close delay completes. This is useful if you want grouping to
+"last" longer than the close delay, for example if there is no
+close delay at all.
 
 ```js
-<FloatingDelayGroup timeoutMs={1000}>
+<FloatingDelayGroup timeoutMs={500}>
   {/* ... */}
 </FloatingDelayGroup>
+```
+
+## Transitions
+
+<Notice type="version">Since `v0.18.0`</Notice>
+
+The `isInstantPhase{:.const}` boolean determines whether the
+delay is currently in the instant phase. This allows you to make
+transitions instant/faster. See
+[`useTransitionStyles`](/docs/useTransition#usetransitionstyles).
+
+```js /isInstantPhase/
+const {currentId, isInstantPhase} = useDelayGroupContext();
+const id = useId();
+
+useDelayGroup(context, {
+  id,
+});
+
+const instantDuration = 0;
+const duration = 200;
+
+const {isMounted, styles} = useTransitionStyles(context, {
+  duration: isInstantPhase
+    ? {
+        open: instantDuration,
+        // `id` is this component's `id`
+        // `currentId` is the current group's `id`
+        close: currentId === id ? duration : instantDuration,
+      }
+    : duration,
+  // ...
+});
 ```

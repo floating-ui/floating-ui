@@ -47,16 +47,19 @@ module.exports = {
         },
         md: {
           css: {
-            fontSize: '1.125rem',
+            fontSize: '1.075rem',
             h1: {
               fontSize: '3rem',
+            },
+            'h2 > a': {
+              fontSize: '2rem',
             },
             pre: {
               lineHeight: '2.1',
               fontSize: '0.875rem',
             },
             code: {
-              fontSize: '0.875rem',
+              fontSize: '0.875em',
               whiteSpace: 'pre',
             },
             img: {

@@ -6,14 +6,52 @@ Adds listeners that dismiss (close) the floating element.
 import {useDismiss} from '@floating-ui/react';
 ```
 
-Inside your component:
+## Usage
 
-```js /useDismiss/
-const {context} = useFloating();
-const dismiss = useDismiss(context);
-const {getReferenceProps, getFloatingProps} = useInteractions([
-  dismiss,
-]);
+This hook is an interaction hook that returns event handler
+props.
+
+To use it, pass it the `context{:.const}` object returned from
+`useFloating(){:js}`, and then feed its result into the
+`useInteractions(){:js}` array. The returned prop getters are
+then spread onto the elements for rendering.
+
+```js {9-13} /context/
+function App() {
+  const [open, setOpen] = useState(false);
+
+  const {x, y, strategy, refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  const dismiss = useDismiss(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    dismiss,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      {open && (
+        <div
+          ref={refs.setFloating}
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+          }}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      )}
+    </>
+  );
+}
 ```
 
 ## Props

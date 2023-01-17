@@ -7,14 +7,52 @@ Adds focus event listeners that change the open state, like CSS
 import {useFocus} from '@floating-ui/react';
 ```
 
-Inside your component:
+## Usage
 
-```js /useFocus/
-const {context} = useFloating();
-const focus = useFocus(context);
-const {getReferenceProps, getFloatingProps} = useInteractions([
-  focus,
-]);
+This hook is an interaction hook that returns event handler
+props.
+
+To use it, pass it the `context{:.const}` object returned from
+`useFloating(){:js}`, and then feed its result into the
+`useInteractions(){:js}` array. The returned prop getters are
+then spread onto the elements for rendering.
+
+```js {9-13} /context/
+function App() {
+  const [open, setOpen] = useState(false);
+
+  const {x, y, strategy, refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+  });
+
+  const focus = useFocus(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    focus,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      {open && (
+        <div
+          ref={refs.setFloating}
+          style={{
+            position: strategy,
+            top: y ?? 0,
+            left: x ?? 0,
+          }}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      )}
+    </>
+  );
+}
 ```
 
 ## Props
