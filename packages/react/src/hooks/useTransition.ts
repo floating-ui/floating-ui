@@ -41,7 +41,7 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
-  {open, elements: {floating}}: FloatingContext<RT>,
+  {open}: FloatingContext<RT>,
   {duration = 250}: Props = {}
 ): {
   isMounted: boolean;
@@ -65,8 +65,6 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   }, [initiated, isMounted]);
 
   useLayoutEffect(() => {
-    if (!floating) return;
-
     if (open) {
       setStatus('initial');
 
@@ -81,7 +79,7 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
       setInitiated(true);
       setStatus('close');
     }
-  }, [open, floating]);
+  }, [open]);
 
   return {
     isMounted,

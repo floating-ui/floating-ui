@@ -172,7 +172,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, elements: {domReference, floating}}: FloatingContext<RT>,
+  {open, onOpenChange, refs, elements: {domReference}}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
@@ -427,7 +427,10 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       // If the floating element is animating out, ignore navigation. Otherwise,
       // the `activeIndex` gets set to 0 despite not being open so the next time
       // the user ArrowDowns, the first item won't be focused.
-      if (!latestOpenRef.current && event.currentTarget === floating) {
+      if (
+        !latestOpenRef.current &&
+        event.currentTarget === refs.floating.current
+      ) {
         return;
       }
 
@@ -811,7 +814,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
               // This also needs to be sync to prevent fast mouse movements
               // from leaving behind a stale active item when landing on a
               // disabled button item.
-              floating?.focus({preventScroll: true});
+              refs.floating.current?.focus({preventScroll: true});
             }
           },
         }),
@@ -819,7 +822,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     };
   }, [
     domReference,
-    floating,
+    refs,
     activeId,
     disabledIndicesRef,
     latestOpenRef,

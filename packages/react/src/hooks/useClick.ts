@@ -25,7 +25,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, dataRef, refs}: FloatingContext<RT>,
+  {open, onOpenChange, dataRef, elements: {domReference}}: FloatingContext<RT>,
   {
     enabled = true,
     event: eventOption = 'click',
@@ -124,7 +124,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (event.key === ' ' && !isSpaceIgnored(refs.domReference.current)) {
+          if (event.key === ' ' && !isSpaceIgnored(domReference)) {
             // Prevent scrolling
             event.preventDefault();
           }
@@ -144,10 +144,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (
-            isButtonTarget(event) ||
-            isSpaceIgnored(refs.domReference.current)
-          ) {
+          if (isButtonTarget(event) || isSpaceIgnored(domReference)) {
             return;
           }
 
@@ -169,7 +166,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     eventOption,
     ignoreMouse,
     keyboardHandlers,
-    refs,
+    domReference,
     toggle,
     open,
     onOpenChange,
