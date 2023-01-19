@@ -140,6 +140,7 @@ export const FloatingPortal = ({
     >
       {shouldRenderGuards && portalNode && (
         <FocusGuard
+          data-type="outside"
           ref={beforeOutsideRef}
           onFocus={(event) => {
             if (isOutsideEvent(event, portalNode)) {
@@ -163,6 +164,7 @@ export const FloatingPortal = ({
         : null}
       {shouldRenderGuards && portalNode && (
         <FocusGuard
+          data-type="outside"
           ref={afterOutsideRef}
           onFocus={(event) => {
             if (isOutsideEvent(event, portalNode)) {

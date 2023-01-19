@@ -122,7 +122,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
           // moved into the floating element immediately after.
           const movedToFocusGuard =
             isElement(relatedTarget) &&
-            relatedTarget.hasAttribute('data-floating-ui-focus-guard');
+            relatedTarget.hasAttribute('data-floating-ui-focus-guard') &&
+            relatedTarget.getAttribute('data-type') === 'outside';
 
           // Wait for the window blur listener to fire.
           timeoutRef.current = setTimeout(() => {

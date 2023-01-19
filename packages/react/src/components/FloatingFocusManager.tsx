@@ -486,6 +486,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     <>
       {shouldRenderGuards && (
         <FocusGuard
+          data-type="inside"
           ref={portalContext?.beforeInsideRef}
           onFocus={(event) => {
             if (modal) {
@@ -522,6 +523,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       {renderDismissButton('end')}
       {shouldRenderGuards && (
         <FocusGuard
+          data-type="inside"
           ref={portalContext?.afterInsideRef}
           onFocus={(event) => {
             if (modal) {

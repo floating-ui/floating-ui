@@ -1,7 +1,10 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
-import {useState} from 'react';
+import userEvent from '@testing-library/user-event';
+import {cloneElement, useState} from 'react';
 
 import {
+  FloatingFocusManager,
+  useClick,
   useDismiss,
   useFloating,
   useFocus,
@@ -63,4 +66,76 @@ test('does not open with a reference pointerDown dismissal', async () => {
 
 test('does not open when window blurs then receives focus', async () => {
   // TODO — not sure how to test this in JSDOM
+});
+
+test('blurs when hitting an "inside" focus guard', async () => {
+  jest.useRealTimers();
+
+  function Tooltip({children}: {children: JSX.Element}) {
+    const [open, setOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useFocus(context),
+    ]);
+
+    return (
+      <>
+        {cloneElement(children, getReferenceProps({ref: refs.setReference}))}
+        {open && (
+          <div role="tooltip" ref={refs.setFloating} {...getFloatingProps()}>
+            Label
+          </div>
+        )}
+      </>
+    );
+  }
+
+  function App() {
+    const [open, setOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useClick(context),
+    ]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()} />
+        {open && (
+          <FloatingFocusManager context={context}>
+            <div ref={refs.setFloating} {...getFloatingProps()}>
+              <button />
+              <Tooltip>
+                <button />
+              </Tooltip>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.click(screen.getByRole('button'));
+
+  await userEvent.tab();
+
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+  await userEvent.tab();
+
+  // Wait for the window blur listener timeout in `onBlur()`.
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 });
