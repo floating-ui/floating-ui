@@ -51,6 +51,11 @@ export const MenuComponent = React.forwardRef<
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
+  const [hasLanded, setHasLanded] = React.useState(false);
+
+  if (hasLanded && !open) {
+    setHasLanded(false);
+  }
 
   const listItemsRef = React.useRef<Array<HTMLButtonElement | null>>([]);
   const listContentRef = React.useRef(
@@ -80,7 +85,10 @@ export const MenuComponent = React.forwardRef<
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
     useHover(context, {
-      handleClose: safePolygon({restMs: 25}),
+      handleClose: safePolygon({
+        restMs: 25,
+        requireIntent: true,
+      }),
       enabled: nested && allowHover,
       delay: {open: 75},
     }),
@@ -112,11 +120,29 @@ export const MenuComponent = React.forwardRef<
       setOpen(false);
     }
 
+    function onSubMenuOpen(event: {nodeId: string; parentId: string}) {
+      if (event.nodeId !== nodeId && event.parentId === parentId) {
+        setOpen(false);
+      }
+    }
+
     tree?.events.on('click', handleTreeClick);
+    tree?.events.on('menuopen', onSubMenuOpen);
+
     return () => {
       tree?.events.off('click', handleTreeClick);
+      tree?.events.off('menuopen', onSubMenuOpen);
     };
-  }, [tree]);
+  }, [tree, nodeId, parentId]);
+
+  React.useEffect(() => {
+    if (open) {
+      tree?.events.emit('menuopen', {
+        parentId,
+        nodeId,
+      });
+    }
+  }, [tree, open, nodeId, parentId]);
 
   // Determine if "hover" logic can run based on the modality of input. This
   // prevents unwanted focus synchronization as menus open and close with
@@ -151,13 +177,16 @@ export const MenuComponent = React.forwardRef<
     <FloatingNode id={nodeId}>
       <button
         ref={referenceRef}
+        data-open={open ? '' : undefined}
+        data-landed={hasLanded ? '' : undefined}
         {...getReferenceProps({
           ...props,
-          className: `${nested ? 'MenuItem' : 'RootMenu'}${
-            open ? ' open' : ''
-          }`,
+          className: `${nested ? 'MenuItem' : 'RootMenu'}`,
           onClick(event) {
             event.stopPropagation();
+          },
+          onMouseEnter() {
+            setHasLanded(false);
           },
           ...(nested && {
             // Indicates this is a nested <Menu /> acting as a <MenuItem />.
@@ -222,8 +251,11 @@ export const MenuComponent = React.forwardRef<
                         child.props.onClick?.(event);
                         tree?.events.emit('click');
                       },
+                      onFocus() {
+                        setHasLanded(true);
+                      },
                       // Allow focus synchronization if the cursor did not move.
-                      onPointerEnter() {
+                      onMouseEnter() {
                         if (allowHover) {
                           setActiveIndex(index);
                         }

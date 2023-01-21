@@ -2,7 +2,7 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useFloatingTree} from '../components/FloatingTree';
-import {destroyPolygon} from '../safePolygon';
+import {destroyPolygon, SafePolygonOptions} from '../safePolygon';
 import type {
   ElementProps,
   FloatingContext,
@@ -10,7 +10,7 @@ import type {
   ReferenceType,
 } from '../types';
 import {getDocument} from '../utils/getDocument';
-import {isElement, isMouseLikePointerType} from '../utils/is';
+import {isElement, isMouseLikePointerType, isSafari} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
 export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
@@ -20,8 +20,10 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
       polygonRef: React.MutableRefObject<SVGElement | null>;
+      ignoreTriangle: boolean;
     }
   ): (event: MouseEvent) => void;
+  __options: SafePolygonOptions;
 }
 
 export function getDelay(
@@ -83,6 +85,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const blockMouseMoveRef = React.useRef(true);
   const polygonRef = React.useRef<SVGElement | null>(null);
   const unbindMouseMoveRef = React.useRef(() => {});
+  const cleanupInitialBlockingElementsRef = React.useRef(() => {});
+  const initialElementsCreatedRef = React.useRef(false);
+  const isCursorMovingFastRef = React.useRef(false);
+  const prevTimeRef = React.useRef(0);
+  const prevCoordsRef = React.useRef({x: -1, y: -1});
 
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
@@ -157,6 +164,100 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     handlerRef.current = undefined;
   }, []);
 
+  const cleanupInitialBlockingElements = React.useCallback(
+    (cleanup?: () => void) => {
+      if (cleanup) {
+        cleanup();
+      } else {
+        cleanupInitialBlockingElementsRef.current();
+      }
+      initialElementsCreatedRef.current = false;
+    },
+    []
+  );
+
+  const createInitialBlockingElements = React.useCallback(
+    (event: MouseEvent) => {
+      if (!domReference) return;
+
+      const {top, right, bottom, left, width} =
+        domReference.getBoundingClientRect();
+
+      const addVisualOffsets = isSafari();
+      const leftOffset = addVisualOffsets ? visualViewport?.offsetLeft || 0 : 0;
+      const topOffset = addVisualOffsets ? visualViewport?.offsetTop || 0 : 0;
+
+      if (
+        event.clientY <= top ||
+        event.clientX >= right ||
+        event.clientY >= bottom ||
+        event.clientX <= left
+      ) {
+        return;
+      }
+
+      const doc = getDocument(domReference);
+      const topNode = doc.createElement('div');
+      const rightNode = doc.createElement('div');
+      const bottomNode = doc.createElement('div');
+      const leftNode = doc.createElement('div');
+      const viewportWidth = doc.documentElement.clientWidth;
+      const viewportHeight = doc.documentElement.clientHeight;
+
+      const commonStyles = {
+        position: 'fixed',
+        background: 'none',
+        opacity: 0,
+        zIndex: 2147483647,
+      };
+
+      Object.assign(topNode.style, {
+        ...commonStyles,
+        top: `${topOffset}px`,
+        left: `${left + leftOffset}px`,
+        width: `${width}px`,
+        height: `${top}px`,
+      });
+
+      Object.assign(rightNode.style, {
+        ...commonStyles,
+        top: `${topOffset}px`,
+        left: `${right + leftOffset}px`,
+        width: `${viewportWidth - right}px`,
+        height: `${viewportHeight}px`,
+      });
+
+      Object.assign(bottomNode.style, {
+        ...commonStyles,
+        top: `${bottom + topOffset}px`,
+        left: `${left + leftOffset}px`,
+        width: `${width}px`,
+        height: `${viewportHeight - bottom}px`,
+      });
+
+      Object.assign(leftNode.style, {
+        ...commonStyles,
+        top: `${topOffset}px`,
+        left: `${leftOffset}px`,
+        width: `${left}px`,
+        height: `${viewportHeight}px`,
+      });
+
+      doc.body.appendChild(topNode);
+      doc.body.appendChild(rightNode);
+      doc.body.appendChild(bottomNode);
+      doc.body.appendChild(leftNode);
+
+      return () => {
+        topNode.remove();
+        rightNode.remove();
+        bottomNode.remove();
+        leftNode.remove();
+      };
+    },
+    [domReference]
+  );
+
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
@@ -216,12 +317,19 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           ...context,
           tree,
           polygonRef,
+          ignoreTriangle: !isCursorMovingFastRef.current,
           x: event.clientX,
           y: event.clientY,
           onClose() {
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
+        });
+
+        // Make sure the polygon has painted before removing the nodes.
+        const cleanupFn = cleanupInitialBlockingElementsRef.current;
+        setTimeout(() => {
+          cleanupInitialBlockingElements(cleanupFn);
         });
 
         const handler = handlerRef.current;
@@ -251,6 +359,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         polygonRef,
         x: event.clientX,
         y: event.clientY,
+        ignoreTriangle: !isCursorMovingFastRef.current,
         onClose() {
           cleanupMouseMoveHandler();
           closeWithDelay();
@@ -258,15 +367,53 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       })(event);
     }
 
+    function handleIntentCheck(event: MouseEvent) {
+      if (!handleCloseRef.current) return;
+
+      const safePolygonOptions = handleCloseRef.current.__options;
+
+      if (!safePolygonOptions.blockPointerEvents) {
+        isCursorMovingFastRef.current = true;
+        return;
+      }
+
+      const now = Date.now();
+      const currentCoords = {x: event.clientX, y: event.clientY};
+      const prevCoords = prevCoordsRef.current;
+
+      const distanceBetweenPoints = Math.sqrt(
+        Math.pow(currentCoords.x - prevCoords.x, 2) +
+          Math.pow(currentCoords.y - prevCoords.y, 2)
+      );
+      const speed = distanceBetweenPoints / (now - prevTimeRef.current);
+
+      prevCoordsRef.current = currentCoords;
+      prevTimeRef.current = now;
+
+      isCursorMovingFastRef.current = safePolygonOptions.requireIntent
+        ? speed >= 0.15
+        : true;
+
+      if (isCursorMovingFastRef.current && !initialElementsCreatedRef.current) {
+        const cleanup = createInitialBlockingElements(event);
+        if (cleanup) {
+          initialElementsCreatedRef.current = true;
+          cleanupInitialBlockingElementsRef.current = cleanup;
+        }
+      }
+    }
+
     if (isElement(domReference)) {
       const ref = domReference as unknown as HTMLElement;
       open && ref.addEventListener('mouseleave', onScrollMouseLeave);
+      open && ref.addEventListener('mousemove', handleIntentCheck);
       floating?.addEventListener('mouseleave', onScrollMouseLeave);
       move && ref.addEventListener('mousemove', onMouseEnter, {once: true});
       ref.addEventListener('mouseenter', onMouseEnter);
       ref.addEventListener('mouseleave', onMouseLeave);
       return () => {
         open && ref.removeEventListener('mouseleave', onScrollMouseLeave);
+        open && ref.removeEventListener('mousemove', handleIntentCheck);
         floating?.removeEventListener('mouseleave', onScrollMouseLeave);
         move && ref.removeEventListener('mousemove', onMouseEnter);
         ref.removeEventListener('mouseenter', onMouseEnter);
@@ -289,24 +436,28 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     delayRef,
     handleCloseRef,
     dataRef,
+    createInitialBlockingElements,
+    cleanupInitialBlockingElements,
   ]);
 
   useLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       cleanupMouseMoveHandler();
+      cleanupInitialBlockingElements();
       destroyPolygon(polygonRef);
     }
-  }, [open, cleanupMouseMoveHandler]);
+  }, [open, cleanupMouseMoveHandler, cleanupInitialBlockingElements]);
 
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
+      cleanupInitialBlockingElements();
       destroyPolygon(polygonRef);
     };
-  }, [enabled, cleanupMouseMoveHandler]);
+  }, [enabled, cleanupMouseMoveHandler, cleanupInitialBlockingElements]);
 
   return React.useMemo(() => {
     if (!enabled) {

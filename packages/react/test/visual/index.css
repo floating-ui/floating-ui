@@ -162,7 +162,7 @@ body {
   border: 1px solid #d7dce5;
 }
 
-.RootMenu.open,
+.RootMenu[data-open],
 .RootMenu:hover {
   background: #d7dce5;
 }
@@ -192,10 +192,11 @@ body {
   outline: 0;
 }
 
-.MenuItem.open {
+.MenuItem[data-open][data-landed] {
   background: #d7dce5;
 }
 
+.MenuItem[data-open]:not([data-landed]),
 .MenuItem:focus,
 .MenuItem:not([disabled]):active {
   background: royalblue;

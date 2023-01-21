@@ -23,6 +23,7 @@ export {
 } from './hooks/useTransition';
 export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
 export {InnerProps, UseInnerOffsetProps} from './inner';
+export type {SafePolygonOptions} from './safePolygon';
 export type {
   AlignedPlacement,
   Alignment,

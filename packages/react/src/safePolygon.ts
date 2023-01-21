@@ -64,15 +64,26 @@ export function destroyPolygon(ref: React.MutableRefObject<SVGElement | null>) {
   }
 }
 
-export function safePolygon<RT extends ReferenceType = ReferenceType>({
-  restMs = 0,
-  buffer = 0.5,
-  blockPointerEvents = true,
-}: Partial<{
+export interface SafePolygonOptions {
   restMs: number;
   buffer: number;
   blockPointerEvents: boolean;
-}> = {}) {
+  requireIntent: boolean;
+}
+
+const defaultOptions = {
+  restMs: 0,
+  buffer: 0.5,
+  blockPointerEvents: true,
+  requireIntent: false,
+};
+
+export function safePolygon<RT extends ReferenceType = ReferenceType>(
+  options: Partial<SafePolygonOptions> = {}
+) {
+  const mergedOptions = {...defaultOptions, ...options};
+  const {restMs, buffer, blockPointerEvents} = mergedOptions;
+
   let timeoutId: NodeJS.Timeout;
   let isInsideRect = false;
   let hasLanded = false;
@@ -86,6 +97,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     nodeId,
     tree,
     polygonRef,
+    ignoreTriangle,
   }) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
@@ -402,7 +414,12 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       const poly = isInsideRect ? rectPoly : getPolygon([x, y]);
 
-      if (!polygonRef.current && blockPointerEvents && isLeave) {
+      if (
+        !polygonRef.current &&
+        blockPointerEvents &&
+        isLeave &&
+        !ignoreTriangle
+      ) {
         const doc = getDocument(elements.floating);
         polygonRef.current = createPolygonElement(poly, doc, isInsideRect);
         doc.body.appendChild(polygonRef.current);
@@ -410,15 +427,19 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       if (isInsideRect) {
         return;
+      } else if ((hasLanded && !restMs) || ignoreTriangle) {
+        return close();
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
         close();
       } else if (restMs && !hasLanded) {
-        timeoutId = setTimeout(onClose, restMs);
+        timeoutId = setTimeout(close, restMs);
       }
     };
   };
+
+  fn.__options = mergedOptions;
 
   return fn;
 }
