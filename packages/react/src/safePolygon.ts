@@ -97,7 +97,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
     nodeId,
     tree,
     polygonRef,
-    ignoreTriangle,
+    ignore,
   }) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
@@ -414,12 +414,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
 
       const poly = isInsideRect ? rectPoly : getPolygon([x, y]);
 
-      if (
-        !polygonRef.current &&
-        blockPointerEvents &&
-        isLeave &&
-        !ignoreTriangle
-      ) {
+      if (!polygonRef.current && blockPointerEvents && isLeave && !ignore) {
         const doc = getDocument(elements.floating);
         polygonRef.current = createPolygonElement(poly, doc, isInsideRect);
         doc.body.appendChild(polygonRef.current);
@@ -427,7 +422,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
 
       if (isInsideRect) {
         return;
-      } else if ((hasLanded && !restMs) || ignoreTriangle) {
+      } else if ((hasLanded && !restMs) || ignore) {
         return close();
       }
 

@@ -20,7 +20,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
       polygonRef: React.MutableRefObject<SVGElement | null>;
-      ignoreTriangle: boolean;
+      ignore: boolean;
     }
   ): (event: MouseEvent) => void;
   __options: SafePolygonOptions;
@@ -317,7 +317,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           ...context,
           tree,
           polygonRef,
-          ignoreTriangle: !hasIntentRef.current,
+          ignore: !hasIntentRef.current,
           x: event.clientX,
           y: event.clientY,
           onClose() {
@@ -359,7 +359,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         polygonRef,
         x: event.clientX,
         y: event.clientY,
-        ignoreTriangle: !hasIntentRef.current,
+        ignore: !hasIntentRef.current,
         onClose() {
           cleanupMouseMoveHandler();
           closeWithDelay();
