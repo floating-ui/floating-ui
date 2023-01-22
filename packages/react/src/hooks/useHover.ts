@@ -87,7 +87,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const unbindMouseMoveRef = React.useRef(() => {});
   const cleanupInitialBlockingElementsRef = React.useRef(() => {});
   const initialElementsCreatedRef = React.useRef(false);
-  const isCursorMovingFastRef = React.useRef(false);
+  const hasIntentRef = React.useRef(false);
   const prevTimeRef = React.useRef(0);
   const prevCoordsRef = React.useRef({x: -1, y: -1});
 
@@ -317,7 +317,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           ...context,
           tree,
           polygonRef,
-          ignoreTriangle: !isCursorMovingFastRef.current,
+          ignoreTriangle: !hasIntentRef.current,
           x: event.clientX,
           y: event.clientY,
           onClose() {
@@ -359,7 +359,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         polygonRef,
         x: event.clientX,
         y: event.clientY,
-        ignoreTriangle: !isCursorMovingFastRef.current,
+        ignoreTriangle: !hasIntentRef.current,
         onClose() {
           cleanupMouseMoveHandler();
           closeWithDelay();
@@ -373,7 +373,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       const safePolygonOptions = handleCloseRef.current.__options;
 
       if (!safePolygonOptions.blockPointerEvents) {
-        isCursorMovingFastRef.current = true;
+        hasIntentRef.current = true;
         return;
       }
 
@@ -390,11 +390,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       prevCoordsRef.current = currentCoords;
       prevTimeRef.current = now;
 
-      isCursorMovingFastRef.current = safePolygonOptions.requireIntent
+      hasIntentRef.current = safePolygonOptions.requireIntent
         ? speed >= 0.15
         : true;
 
-      if (isCursorMovingFastRef.current && !initialElementsCreatedRef.current) {
+      if (hasIntentRef.current && !initialElementsCreatedRef.current) {
         const cleanup = createInitialBlockingElements(event);
         if (cleanup) {
           initialElementsCreatedRef.current = true;
