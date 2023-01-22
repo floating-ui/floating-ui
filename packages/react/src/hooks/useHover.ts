@@ -183,9 +183,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       const {top, right, bottom, left, width} =
         domReference.getBoundingClientRect();
 
+      const vV = getDocument(domReference).defaultView?.visualViewport;
       const addVisualOffsets = isSafari();
-      const leftOffset = addVisualOffsets ? visualViewport?.offsetLeft || 0 : 0;
-      const topOffset = addVisualOffsets ? visualViewport?.offsetTop || 0 : 0;
+      const leftOffset = addVisualOffsets ? vV?.offsetLeft || 0 : 0;
+      const topOffset = addVisualOffsets ? vV?.offsetTop || 0 : 0;
 
       if (
         event.clientY <= top ||
