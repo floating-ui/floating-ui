@@ -23,7 +23,8 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     dataRef,
     events,
-    elements: {domReference, floating},
+    refs,
+    elements: {floating, domReference},
   }: FloatingContext<RT>,
   {enabled = true, keyboardOnly = true}: Props = {}
 ): ElementProps => {
@@ -131,7 +132,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
             if (
-              contains(floating, relatedTarget) ||
+              contains(refs.floating.current, relatedTarget) ||
               contains(domReference, relatedTarget) ||
               movedToFocusGuard
             ) {
@@ -143,5 +144,5 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         },
       },
     };
-  }, [enabled, keyboardOnly, domReference, floating, dataRef, onOpenChange]);
+  }, [enabled, keyboardOnly, domReference, refs, dataRef, onOpenChange]);
 };

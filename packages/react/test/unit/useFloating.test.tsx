@@ -1,7 +1,14 @@
-import {render} from '@testing-library/react';
-import {useLayoutEffect} from 'react';
+import {render, screen} from '@testing-library/react';
+import {useCallback, useLayoutEffect} from 'react';
 
-import {useFloating} from '../../src';
+import {
+  useClick,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+} from '../../src';
 import {isElement} from '../../src/utils/is';
 
 describe('positionReference', () => {
@@ -107,4 +114,40 @@ describe('positionReference', () => {
     expect(getByTestId('reference-text').textContent).toBe('reference');
     expect(getByTestId('position-reference-text').textContent).toBe('218');
   });
+});
+
+describe('#2129: interactions.getFloatingProps as a dep does not cause setState loop', () => {
+  function App() {
+    const {refs, context} = useFloating({
+      open: true,
+    });
+
+    const interactions = useInteractions([
+      useHover(context),
+      useClick(context),
+      useFocus(context),
+      useDismiss(context),
+    ]);
+
+    const Tooltip = useCallback(() => {
+      return (
+        <div
+          data-testid="floating"
+          ref={refs.setFloating}
+          {...interactions.getFloatingProps()}
+        />
+      );
+    }, [refs, interactions]);
+
+    return (
+      <>
+        <div ref={refs.setReference} {...interactions.getReferenceProps()} />
+        <Tooltip />
+      </>
+    );
+  }
+
+  render(<App />);
+
+  expect(screen.queryByTestId('floating')).toBeInTheDocument();
 });
