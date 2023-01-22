@@ -694,6 +694,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
 
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
+      if (!open) return;
       const index = listRef.current.indexOf(currentTarget);
       if (index !== -1 && activeIndex !== index) {
         onNavigate(index);
