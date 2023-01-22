@@ -144,6 +144,10 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
         hasLanded = true;
       }
 
+      if (isOverReference) {
+        hasLanded = false;
+      }
+
       if (!isLeave && isOverReference) {
         destroyPolygon(polygonRef);
         return;
