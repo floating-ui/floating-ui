@@ -1,4 +1,4 @@
-import type {Side} from '@floating-ui/core';
+import type {Rect, Side} from '@floating-ui/core';
 
 import type {HandleCloseFn} from './hooks/useHover';
 import type {ReferenceType} from './types';
@@ -25,6 +25,15 @@ function isPointInPolygon(point: Point, polygon: Polygon) {
     }
   }
   return isInside;
+}
+
+function isInside(point: Point, rect: Rect) {
+  return (
+    point[0] >= rect.x &&
+    point[0] <= rect.x + rect.width &&
+    point[1] >= rect.y &&
+    point[1] <= rect.y + rect.height
+  );
 }
 
 const svgNs = 'http://www.w3.org/2000/svg';
@@ -107,10 +116,11 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       const {clientX, clientY} = event;
+      const clientPoint: Point = [clientX, clientY];
       const target = getTarget(event) as Element | null;
       const isLeave = event.type === 'mouseleave';
-      const isOverReference = contains(elements.domReference, target);
-      const isOverFloating = contains(elements.floating, target);
+      const isOverFloatingEl = contains(elements.floating, target);
+      const isOverReferenceEl = contains(elements.domReference, target);
       const refRect = elements.domReference.getBoundingClientRect();
       const rect = elements.floating.getBoundingClientRect();
       const side = placement.split('-')[0] as Side;
@@ -118,28 +128,30 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
       const isOverFloatingRect =
         // Account for the polygon blocking pointer-events.
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom;
+        isInside(clientPoint, rect);
+      const isOverReferenceRect = isInside(clientPoint, refRect);
 
       // The cursor landed, so we destroy the polygon logic.
       if (isOverFloatingRect && polygonRef.current?.dataset.type !== 'rect') {
         destroyPolygon(polygonRef);
       }
 
-      if (isOverFloating) {
+      if (isOverFloatingEl) {
         hasLanded = true;
       }
 
-      if (!isLeave && isOverReference) {
+      if (isOverReferenceEl) {
+        hasLanded = false;
+      }
+
+      if (isOverReferenceEl && !isLeave) {
         destroyPolygon(polygonRef);
         return;
       }
 
       if (
         !isLeave &&
-        (isOverReference ||
+        (isOverReferenceEl ||
           (isInsideRect && contains(polygonRef.current, target)))
       ) {
         return;
@@ -410,12 +422,14 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       if (isInsideRect) {
         return;
+      } else if (hasLanded && !isOverReferenceRect) {
+        return close();
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
         close();
       } else if (restMs && !hasLanded) {
-        timeoutId = setTimeout(onClose, restMs);
+        timeoutId = setTimeout(close, restMs);
       }
     };
   };
