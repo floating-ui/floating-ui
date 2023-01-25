@@ -60,7 +60,7 @@ duration of 250ms.
 
 ```ts
 interface UseTransitionStylesProps {
-  duration?: number | Partial<{open: boolean; close: boolean}>;
+  duration?: number | Partial<{open: number; close: number}>;
   initial?: CSSStylesProperty;
   open?: CSSStylesProperty;
   close?: CSSStylesProperty;
@@ -76,7 +76,14 @@ Specifies the length of the transition in ms.
 
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
-  duration: 1000,
+  // Configure both open and close durations:
+  duration: 200,
+
+  // Or, configure open and close durations separately:
+  duration: {
+    open: 200,
+    close: 100,
+  },
 });
 ```
 
@@ -352,7 +359,7 @@ return (
 
 ```ts
 interface UseTransitionStatusProps {
-  duration?: number | Partial<{open: boolean; close: boolean}>;
+  duration?: number | Partial<{open: number; close: number}>;
 }
 ```
 
@@ -364,6 +371,13 @@ Specifies the length of the transition in ms.
 
 ```js
 const {isMounted, status} = useTransitionStatus(context, {
-  duration: 1000,
+  // Configure both open and close durations:
+  duration: 200,
+
+  // Or, configure open and close durations separately:
+  duration: {
+    open: 200,
+    close: 100,
+  },
 });
 ```
