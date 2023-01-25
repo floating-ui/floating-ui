@@ -18,11 +18,11 @@ then spread onto the elements for rendering.
 
 ```js {9-13} /context/
 function App() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {x, y, strategy, refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
   const dismiss = useDismiss(context);
@@ -36,7 +36,7 @@ function App() {
       <div ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </div>
-      {open && (
+      {isOpen && (
         <div
           ref={refs.setFloating}
           style={{
@@ -56,7 +56,7 @@ function App() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   enabled?: boolean;
   escapeKey?: boolean;
@@ -67,7 +67,7 @@ interface Props {
   ancestorScroll?: boolean;
   bubbles?:
     | boolean
-    | {escapeKey?: boolean, outsidePress?: boolean};
+    | {escapeKey?: boolean; outsidePress?: boolean};
 }
 ```
 
@@ -161,8 +161,6 @@ If you have another element, like a toast, that is rendered
 outside the floating element's React tree and don't want the
 floating element to close when pressing it, you can guard the
 check like so:
-
-<Notice type="version">Since `v0.13.0`</Notice>
 
 ```js
 useDismiss(context, {

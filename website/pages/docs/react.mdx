@@ -8,20 +8,30 @@ This allows you to create components such as tooltips, popovers,
 dropdown menus, hover cards, modal dialogs, select menus,
 comboboxes, and more.
 
-<Notice>
-  This library is intentionally low-level and provides
-  primitives, rather than pre-built components — **this means you
-  use the library to build your own components**. This makes it
-  flexible, but more complex to use. If you're looking for
-  something simple, you will likely find other libraries better
-  suited for your use case.
-</Notice>
+## Library goals
+
+The goal of this library is to provide **building blocks** to
+create your own floating UI components, handling difficult parts
+like accessibility and positioning for you, but not offering
+pre-built components. In theory, this allows you to build any
+type of component you desire, since you can add your own custom
+logic on top.
+
+If you're looking for flexibility and are comfortable building
+your own components, this library is hopefully what you're
+looking for. If instead, you're looking for something simpler and
+ready-made, you will likely find other libraries better suited
+for your use case. React component libraries that use Floating UI
+behind the scenes for positioning include
+[Radix UI](https://www.radix-ui.com/),
+[Mantine](https://mantine.dev/), [Ariakit](https://ariakit.org/),
+among others.
 
 ## Install
 
 The following package provides all modules:
 
-```shell
+```bash
 npm install @floating-ui/react
 ```
 
@@ -29,9 +39,16 @@ If you only want positioning, without any interactions necessary,
 the following package is smaller in size. The above is a superset
 and uses this one as a dependency.
 
-```shell
+```bash
 npm install @floating-ui/react-dom
 ```
+
+This documentation refers to the latest version of the library.
+If you find a feature is missing locally, make sure you have
+upgraded to the latest version:
+
+- [Latest `@floating-ui/react` versions](https://www.npmjs.com/package/@floating-ui/react?activeTab=versions)
+- [Latest `@floating-ui/react-dom` versions](https://www.npmjs.com/package/@floating-ui/react-dom?activeTab=versions)
 
 ## Usage
 
@@ -130,6 +147,9 @@ The docs for the middleware that were passed are available here:
 - [`offset`](/docs/offset)
 - [`flip`](/docs/flip)
 - [`shift`](/docs/shift)
+
+All of these are re-exported from the base `@floating-ui/dom`
+library.
 
 ## Updating
 
@@ -241,10 +261,6 @@ function MyComponent({referenceEl, floatingEl}) {
 
 ## Effects
 
-<Notice type="version">
-  Since `react@0.15.0` or `react-dom@1.1.0`
-</Notice>
-
 Positioning is done in an async function, which means the
 position is ready during a microtask, after layout effects are
 executed. This means initially, the floating element is situated
@@ -256,10 +272,10 @@ The hook returns an `isPositioned{:.const}` boolean that lets you
 know if the floating element has been positioned:
 
 ```js
-const [open, setOpen] = useState(false);
+const [isOpen, setIsOpen] = useState(false);
 const {isPositioned} = useFloating({
   // Synchronize `isPositioned` with an `open` state.
-  open,
+  open: isOpen,
 });
 
 // Each time the floating element opens, we want to focus and
@@ -272,11 +288,11 @@ useLayoutEffect(() => {
 }, [isPositioned]);
 ```
 
-The `open` option accepts a boolean that represents the
-open/close state of the floating element. This ensures you can
-wait each time it opens when the host component does not unmount,
-which is necessary in cases where the reference element relocates
-on the page.
+The `open{:.objectKey}` option accepts a boolean that represents
+the open/close state of the floating element. This ensures you
+can wait each time it opens when the host component does not
+unmount, which is necessary in cases where the reference element
+relocates on the page.
 
 ## Arrow
 
@@ -289,7 +305,11 @@ import {arrow} from '@floating-ui/react';
 // Inside your component
 const arrowRef = useRef(null);
 useFloating({
-  middleware: [arrow({element: arrowRef})],
+  middleware: [
+    arrow({
+      element: arrowRef,
+    }),
+  ],
 });
 ```
 
@@ -298,6 +318,9 @@ or hiding the arrow with conditional rendering while the floating
 element is open), you should use state instead. Alternatively,
 you can use `visibility: hidden{:sass}` CSS to hide it and keep
 using a plain ref.
+
+For details on creating an arrow element, see the
+[`arrow` middleware](/docs/arrow) page.
 
 ## Testing
 
@@ -401,25 +424,30 @@ understand the basics.
   />
 </div>
 
-To add interactions, the hook accepts an `open{:.const}` boolean
-and `onOpenChange{:.objectKey}` as an option to change that
-value. You use this boolean to conditionally render the floating
-element.
+To add interactions, such as the ability to only show a floating
+element while hovering over its reference element, the hook must
+first accept the following two options:
 
-```js /open/
+- `open{:.objectKey}` — a boolean that represents whether the
+  floating element is currently rendered.
+- `onOpenChange{:.objectKey}` — a state setter called when the
+  open state should change.
+
+```js {7-8} /isOpen/
 import {useFloating} from '@floating-ui/react';
 
 function App() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const {x, y, strategy, refs} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
   return (
     <>
       <button ref={refs.setReference}>Button</button>
-      {open && (
+      {isOpen && (
         <div
           ref={refs.setFloating}
           style={{
@@ -443,43 +471,42 @@ viewport. So the `x{:.const}`, `y{:.const}` and
 `strategy{:.const}` values returned from the hook can be safely
 ignored.
 
-## Hooks
+## Interaction hooks
 
-`useInteractions(){:js}` accepts an array of called hooks in the
-following predictable form:
+`useInteractions(){:js}` is a separate hook that accepts an array
+of interaction hooks and returns prop getters.
 
-```js /useInteractions/
+Each interaction hook accepts the `context{:.const}` object which
+gets returned from `useFloating(){:js}` as its first argument:
+
+```js /context/
 import {
   useFloating,
   useInteractions,
   useHover,
   useFocus,
-  useRole,
 } from '@floating-ui/react';
 
 // Inside your component
-const {context} = useFloating();
+const {refs, context} = useFloating();
 
-const hover = useHover(context, props);
-const focus = useFocus(context, props);
-const role = useRole(context, props);
+const hover = useHover(context);
+const focus = useFocus(context);
 
-const {getReferenceProps, getFloatingProps, getItemProps} =
-  useInteractions([hover, focus, role]);
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  hover,
+  focus,
+]);
 ```
 
-Each hook accepts the `context{:.const}` object which gets
-returned from `useFloating(){:js}` as its first argument. Props
-are passed as a second argument.
-
-This API enables each of the hooks to be fully tree-shakeable.
-The navigation bar on the left explains them in detail.
+This API enables each of the hooks to be fully tree-shakeable and
+opt-in. The navigation bar on the left explains them in detail.
 
 ### Prop getters
 
-`useInteractions(){:js}` returns
-[prop getters](https://kentcdodds.com/blog/how-to-give-rendering-control-to-users-with-prop-getters)
-— functions you call to return props that spread on the elements:
+The prop getters are used to add event listeners, among other
+functionality, to the reference and floating elements. When
+called, they return an object of props like `onFocus{:.keyword}`.
 
 ```js
 <>
@@ -503,30 +530,26 @@ The navigation bar on the left explains them in detail.
 
 All custom event listener props, such as `onClick{:.keyword}`,
 `onKeyDown{:.keyword}` and more you pass to the element should be
-specified inside the prop getter.
-
-They perform merging of their own internal event listeners and
-your own without overriding them.
+specified inside the prop getter. They perform merging of their
+own internal event listeners and your own without overriding
+them.
 
 ```js
-// ❌ Your `onClick` can be overridden
+// ❌ Your `onClick` can be overridden:
 <div
   onClick={() => {
-    console.log('Overridden by props below');
+    // Potentially overwritten by the props below.
   }}
   {...getReferenceProps()}
 />
 ```
 
 ```js
-// ✅ Merging works inside `getReferenceProps()`
+// ✅ Merging works inside `getReferenceProps()`:
 <div
   {...getReferenceProps({
     onClick() {
-      console.log(
-        'This will not override, or be overridden by ',
-        'the interaction hooks.'
-      );
+      // Will not be overwritten.
     },
   })}
 />
@@ -538,6 +561,10 @@ currently required unless the value is a function event handler
 that starts with `on`.
 
 ### `getItemProps`
+
+```js
+const {getItemProps} = useInteractions([]);
+```
 
 This is an _optional_ prop getter that is only used when dealing
 with a list inside your floating element (see
@@ -574,8 +601,6 @@ interface ContextData {
 
 ## Changing the positioning reference while retaining events
 
-<Notice type="version">Since `v0.15.0`</Notice>
-
 By default, the `refs.setReference{:js}` element is **both** the
 events and position reference. The
 `refs.setPositionReference{:js}` callback ref allows you to
@@ -586,19 +611,20 @@ virtual):
 const {refs} = useFloating();
 
 return (
-  <div ref={refs.setPositionReference}>
+  <>
     <button ref={refs.setReference} {...getReferenceProps()}>
       Event reference
     </button>
-  </div>
+    <button ref={refs.setPositionReference}>
+      Position reference
+    </button>
+  </>
 );
 ```
 
 [View on CodeSandbox](https://codesandbox.io/s/xenodochial-butterfly-1xtup0?file=/src/App.tsx)
 
 ## Multiple floating elements on a single reference element
-
-<Notice type="version">Since `v0.15.0`</Notice>
 
 ```js
 import {useMergeRefs} from '@floating-ui/react';

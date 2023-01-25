@@ -19,11 +19,11 @@ then spread onto the elements for rendering.
 
 ```js {9-13} /context/
 function App() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {x, y, strategy, refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
   const hover = useHover(context);
@@ -37,7 +37,7 @@ function App() {
       <div ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </div>
-      {open && (
+      {isOpen && (
         <div
           ref={refs.setFloating}
           style={{
@@ -61,11 +61,11 @@ function App() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   enabled?: boolean;
   mouseOnly?: boolean;
-  delay?: number | Partial<{open: number, close: number}>;
+  delay?: number | Partial<{open: number; close: number}>;
   restMs?: number;
   move?: boolean;
   handleClose?: null | HandleCloseFn;

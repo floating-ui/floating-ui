@@ -40,7 +40,7 @@ component. Usage of this component must be wrapped within a
 single `<FloatingTree />{:js}` component as seen in the previous
 code snippet:
 
-```js
+```js /nodeId/
 function Popover({children}) {
   // Subscribe this component to the <FloatingTree />
   const nodeId = useFloatingNodeId();
@@ -50,13 +50,12 @@ function Popover({children}) {
     nodeId
   });
 
-  // Wrap the rendered elements in a `<FloatingNode />`,
+  // Wrap the rendered element(s) in a `<FloatingNode />`,
   // passing in the subscribed `nodeId`
   return (
     <FloatingNode id={nodeId}>
-      {/* reference element */}
       <FloatingPortal>
-        {open && /* floating element */}
+        {isOpen && /* floating element */}
       </FloatingPortal>
     </FloatingNode>
   );
@@ -84,8 +83,6 @@ interface FloatingTreeType {
 ```
 
 ## Custom parent
-
-<Notice type="version">Since `v0.13.0`</Notice>
 
 By default, the parent node is the closest
 `<FloatingNode />{:js}`, but you can specify a custom parent node

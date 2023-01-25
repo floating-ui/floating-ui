@@ -98,7 +98,7 @@ to `-1{:js}` to avoid focus conflicts with this hook:
 
 ## Props
 
-```js
+```ts
 interface Props {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
@@ -376,8 +376,6 @@ useListNavigation(context, {
 ```
 
 ### scrollItemIntoView
-
-<Notice type="version">Since `v0.15.0`</Notice>
 
 default: `true{:js}`
 

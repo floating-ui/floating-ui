@@ -20,7 +20,7 @@ function App() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   lockScroll?: boolean;
 }
@@ -31,6 +31,12 @@ interface Props {
 Whether the `<body>{:html}` is prevented from scrolling while the
 overlay is rendered. Uses a robust technique that works on iOS
 and handles horizontal scrolling.
+
+```js
+<FloatingOverlay lockScroll>
+  {/* floating element */}
+</FloatingOverlay>
+```
 
 If you need a more advanced solution, or find enabling this prop
 causes unwanted side effects in your application,

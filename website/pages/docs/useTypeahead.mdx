@@ -74,7 +74,7 @@ function App() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   listRef: React.MutableRefObject<Array<string | null>>;
   activeIndex: number | null;
@@ -153,12 +153,12 @@ Callback invoked with the matching index if found as the user
 types.
 
 ```js
-const [open, setOpen] = useState(false);
+const [isOpen, setIsOpen] = useState(false);
 const [activeIndex, setActiveIndex] = useState(null);
 const [selectedIndex, setSelectedIndex] = useState(null);
 
 useTypeahead(context, {
-  onMatch: open ? setActiveIndex : setSelectedIndex,
+  onMatch: isOpen ? setActiveIndex : setSelectedIndex,
 });
 ```
 

@@ -1,7 +1,7 @@
-const rehypePrettyCode = require('rehype-pretty-code');
-const fs = require('fs');
-const visit = require('unist-util-visit');
-const NpmApi = require('npm-api');
+import {readFileSync} from 'fs';
+import NpmApi from 'npm-api';
+import rehypePrettyCode from 'rehype-pretty-code';
+import visit from 'unist-util-visit';
 
 const replaceVariables = () => async (tree) => {
   let pkgs = [];
@@ -25,15 +25,19 @@ const replaceVariables = () => async (tree) => {
 const rehypePrettyCodeOptions = {
   theme: {
     dark: JSON.parse(
-      fs.readFileSync(
-        require.resolve('./assets/floating-ui-theme.json'),
-        'utf-8'
+      readFileSync(
+        new URL(
+          './assets/floating-ui-theme.json',
+          import.meta.url
+        )
       )
     ),
     light: JSON.parse(
-      fs.readFileSync(
-        require.resolve('./assets/floating-ui-light-theme.json'),
-        'utf-8'
+      readFileSync(
+        new URL(
+          './assets/floating-ui-light-theme.json',
+          import.meta.url
+        )
       )
     ),
   },
@@ -58,7 +62,7 @@ const rehypePrettyCodeOptions = {
   },
 };
 
-module.exports = {
+export default {
   swcMinify: false,
   experimental: {esmExternals: true, scrollRestoration: true},
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],

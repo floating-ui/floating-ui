@@ -8,8 +8,6 @@ This allows higher discovery of floating elements when they have
 a hover delay (like tooltips) when their reference elements are
 placed near each other.
 
-[View example on CodeSandbox](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
-
 ```js
 import {FloatingDelayGroup} from '@floating-ui/react';
 
@@ -32,6 +30,10 @@ function App() {
 
 ## Example
 
+- [Tooltip delay group](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
+
+## Hooks
+
 These hooks are used:
 
 - `useDelayGroupContext(){:js}` — accessible due to a
@@ -39,7 +41,7 @@ These hooks are used:
   the contextual delay for the group.
 - `useDelayGroup(){:js}` — a hook called inside the component.
 
-<Notice>
+<Notice gap="above">
   The `id` must be unique. The label of a tooltip for example is
   usually unique in a given group, but you could use the `useId(){:js}` hook.
 </Notice>
@@ -49,11 +51,11 @@ function Tooltip() {
   const {delay} = useDelayGroupContext();
   const id = useId();
 
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
   const hover = useHover(context, {
@@ -75,7 +77,7 @@ function Tooltip() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   delay: Delay;
   timeoutMs?: number;
@@ -103,8 +105,6 @@ The delay to use for the group.
 
 ### timeoutMs
 
-<Notice type="version">Since `v0.15.0`</Notice>
-
 default: `0{:js}`
 
 An optional explicit timeout to use for the group, which
@@ -120,8 +120,6 @@ close delay at all.
 ```
 
 ## Transitions
-
-<Notice type="version">Since `v0.18.0`</Notice>
 
 The `isInstantPhase{:.const}` boolean determines whether the
 delay is currently in the instant phase. This allows you to make

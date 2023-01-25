@@ -58,11 +58,11 @@ Let's walk through the example:
 import {useState} from 'react';
 
 function Dialog() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 }
 ```
 
-The `open{:.const}` state determines whether or not the dialog is
+`isOpen{:.const}` determines whether or not the dialog is
 currently open on the screen. It is used for conditional
 rendering.
 
@@ -71,20 +71,21 @@ rendering.
 The `useFloating(){:js}` hook provides context for our dialog. We
 need to pass it some information:
 
-- `open`: The open state from our `useState(){:js}` hook above.
+- `open{:.objectKey}`: The open state from our `useState(){:js}`
+  hook above.
 - `onOpenChange{:.objectKey}`: A callback function that will be
   called when the dialog is opened or closed. We'll use this to
-  update our `open{:.const}` state.
+  update our `isOpen{:.const}` state.
 
 ```js /useFloating/
 import {useFloating} from '@floating-ui/react';
 
 function Dialog() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 }
 ```
@@ -109,11 +110,11 @@ import {
 } from '@floating-ui/react';
 
 function Dialog() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
   const click = useClick(context);
@@ -168,7 +169,7 @@ function Dialog() {
       <button ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </button>
-      {open && (
+      {isOpen && (
         <FloatingOverlay
           lockScroll
           style={{background: 'rgba(0, 0, 0, 0.8)'}}
@@ -182,7 +183,7 @@ function Dialog() {
             >
               <h2 id={labelId}>Heading element</h2>
               <p id={descriptionId}>Description element</p>
-              <button onClick={() => setOpen(false)}>
+              <button onClick={() => setIsOpen(false)}>
                 Close
               </button>
             </div>

@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       {/* reference element */}
-      {open && (
+      {isOpen && (
         <FloatingFocusManager context={context}>
           {/* floating element */}
         </FloatingFocusManager>
@@ -28,7 +28,7 @@ function App() {
 
 ## Props
 
-```js
+```ts
 interface Props {
   context: FloatingContext;
   order?: Array<'reference' | 'floating' | 'content'>;
@@ -197,8 +197,6 @@ portalled listbox items.
 
 default: `false{:js}`
 
-<Notice type="version">Since `v0.13.0`</Notice>
-
 If your focus management is modal and there is no explicit close
 button available, you can use this prop to render a
 visually-hidden dismiss button at the start and end of the
@@ -227,8 +225,6 @@ when using `true{:js}` is `Dismiss{:.string}`.
 ### closeOnFocusOut
 
 default: `true{:js}`
-
-<Notice type="version">Since `v0.14.0`</Notice>
 
 Determines whether `focusout` event listeners that control
 whether the floating element should be closed if the focus moves

@@ -51,12 +51,12 @@ Let's walk through the example:
 import {useState} from 'react';
 
 function Tooltip() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 }
 ```
 
-The `open{:.const}` state determines whether or not the tooltip
-is currently open on the screen. It is used for conditional
+`isOpen{:.const}` determines whether or not the tooltip is
+currently open on the screen. It is used for conditional
 rendering.
 
 ### useFloating hook
@@ -64,10 +64,11 @@ rendering.
 The `useFloating(){:js}` hook provides positioning and context
 for our tooltip. We need to pass it some information:
 
-- `open`: The open state from our `useState(){:js}` hook above.
+- `open{:.objectKey}`: The open state from our `useState(){:js}`
+  hook above.
 - `onOpenChange{:.objectKey}`: A callback function that will be
   called when the tooltip is opened or closed. We'll use this to
-  update our `open{:.const}` state.
+  update our `isOpen{:.const}` state.
 - `middleware{:.objectKey}`: Import and pass middleware to the
   array that ensure the tooltip remains on the screen, no matter
   where it ends up being positioned.
@@ -86,11 +87,11 @@ import {
 } from '@floating-ui/react';
 
 function Tooltip() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {x, y, strategy, refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
     middleware: [offset(10), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
@@ -117,11 +118,11 @@ import {
 } from '@floating-ui/react';
 
 function Tooltip() {
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const {x, y, strategy, refs, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
     middleware: [offset(10), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
@@ -168,7 +169,7 @@ function Tooltip() {
       <button ref={refs.setReference} {...getReferenceProps()}>
         Reference element
       </button>
-      {open && (
+      {isOpen && (
         <div
           ref={refs.setFloating}
           style={{
