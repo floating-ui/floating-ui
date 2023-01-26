@@ -1,11 +1,20 @@
 # arrow
 
-`arrow(){:js}` provides data to position an inner element of the
-floating element (usually a triangle or caret) so that it is
-centered to the reference element.
+A data provider that provides data to position an inner element
+of the floating element (usually a triangle or caret) so that it
+is centered to the reference element.
+
+<div className="flex flex-col gap-4">
+  <Chrome center className="h-96">
+    <Floating arrow>
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+</div>
 
 The layout box of the arrow element should be a square with equal
-width and height.
+width and height. Inner or pseudo-elements may have a different
+aspect ratio.
 
 ## Usage
 

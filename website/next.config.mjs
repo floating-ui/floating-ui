@@ -1,6 +1,7 @@
 import {readFileSync} from 'fs';
 import NpmApi from 'npm-api';
 import rehypePrettyCode from 'rehype-pretty-code';
+import remarkSmartypants from 'remark-smartypants';
 import visit from 'unist-util-visit';
 
 const replaceVariables = () => async (tree) => {
@@ -57,8 +58,21 @@ const rehypePrettyCodeOptions = {
   onVisitHighlightedLine(node) {
     node.properties.className = ['line', 'line--highlighted'];
   },
-  onVisitHighlightedWord(node) {
+  onVisitHighlightedWord(node, id) {
     node.properties.className = ['word'];
+
+    if (id) {
+      // If the word spans across syntax boundaries (e.g. punctuation), remove
+      // colors from the child nodes.
+      if (node.properties['data-rehype-pretty-code-wrapper']) {
+        node.children.forEach((childNode) => {
+          childNode.properties.style = '';
+        });
+      }
+
+      node.properties.style = '';
+      node.properties['data-word-id'] = id;
+    }
   },
 };
 
@@ -86,7 +100,7 @@ export default {
           /** @type {import('@mdx-js/loader').Options} */
           options: {
             providerImportSource: '@mdx-js/react',
-            remarkPlugins: [replaceVariables],
+            remarkPlugins: [replaceVariables, remarkSmartypants],
             rehypePlugins: [
               [rehypePrettyCode, rehypePrettyCodeOptions],
             ],

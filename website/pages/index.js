@@ -249,7 +249,7 @@ function Shift() {
         >
           <Chrome
             label="Scroll the container"
-            scrollable
+            scrollable="y"
             relative={false}
             shadow={false}
           >
@@ -308,7 +308,7 @@ function Flip() {
         >
           <Chrome
             label="Scroll up"
-            scrollable
+            scrollable="y"
             center
             shadow={false}
           >
@@ -342,7 +342,7 @@ function Size() {
       chrome={
         <Chrome
           label="Scroll the container"
-          scrollable
+          scrollable="y"
           center
           shadow={false}
         >
@@ -389,7 +389,7 @@ function Arrow() {
         >
           <Chrome
             label="Scroll the container"
-            scrollable
+            scrollable="y"
             relative={false}
             shadow={false}
           >

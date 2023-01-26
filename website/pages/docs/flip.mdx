@@ -1,17 +1,25 @@
 # flip
 
-`flip(){:js}` changes the placement of the floating element to
-the opposite one by default in order to keep it in view.
+A visibility optimizer that changes the placement of the floating
+element in order to keep it in view. By default, only the
+opposite placement is tried.
 
 <div className="flex flex-col gap-4">
-  <Chrome label="Scroll up" center scrollable className="h-96">
+  <Chrome
+    label="Scroll up"
+    center
+    scrollable="y"
+    className="h-96"
+  >
     <Floating middleware={[{name: 'flip'}]}>
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
+        Default
+      </div>
     </Floating>
   </Chrome>
 </div>
 
-It also has the ability to flip to _any_ placement, not just the
+It has the ability to flip to any placement, not just the
 opposite one. You can use a series of "fallback" placements,
 where each placement is progressively tried until the one that
 fits can be used.
@@ -28,7 +36,7 @@ computePosition(referenceEl, floatingEl, {
 
 <Notice type="warning" title="Note">
   This is an alternative to `autoPlacement(){:js}`, so only one of either can be used.
-  See [Conflict with autoPlacement](/docs/flip#conflict-with-autoplacement).
+  See [how they differ here](/docs/flip#conflict-with-autoplacement).
 </Notice>
 
 ## Options
@@ -62,6 +70,29 @@ flip({
 });
 ```
 
+<div className="flex flex-col gap-4">
+  <Chrome
+    label="Scroll up"
+    center
+    scrollable="y"
+    className="h-96"
+  >
+    <Floating
+      content="I will ignore main axis overflow"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            mainAxis: false,
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+</div>
+
 ### crossAxis
 
 default: `true{:js}`
@@ -75,6 +106,54 @@ flip({
   crossAxis: false,
 });
 ```
+
+<div className="flex flex-col gap-4">
+  <Chrome
+    label="Scroll around"
+    center
+    scrollable="both"
+    className="h-96"
+  >
+    <Floating
+      placement="bottom-start"
+      content="I will check cross axis overflow (default)"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            crossAxis: true,
+            rootBoundary: 'document'
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+
+  <Chrome
+    label="Scroll around"
+    center
+    scrollable="both"
+    className="h-96"
+  >
+    <Floating
+      placement="bottom-start"
+      content="I will ignore cross axis overflow"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            crossAxis: false,
+            rootBoundary: 'document'
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+</div>
 
 ### fallbackAxisSideDirection
 
@@ -131,6 +210,83 @@ As an example, if you'd like a tooltip that has a placement of
 fit), then you'd use `'start'{:js}`. For an interactive popover,
 you likely want to use `'end'{:js}` so it's placed on the bottom,
 closer to the user's fingers.
+
+In each of the following demos, the `placement{:.objectKey}` is
+`'right'{:js}`.
+
+<div className="flex flex-col gap-4">
+  <Chrome
+    label="Scroll horizontally"
+    center
+    scrollable="x"
+    className="h-96"
+  >
+    <Floating
+      placement="right"
+      content="fallbackAxisSideDirection is set to 'none' (default)"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            fallbackAxisSideDirection: 'none',
+            rootBoundary: 'document'
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed mt-12" />
+    </Floating>
+    <p>Notice that it can overflow.</p>
+  </Chrome>
+
+<Chrome
+  label="Scroll horizontally"
+  center
+  scrollable="x"
+  className="h-96"
+>
+  <Floating
+    placement="right"
+    content="fallbackAxisSideDirection is set to 'start'"
+    middleware={[
+      {
+        name: 'flip',
+        options: {
+          fallbackAxisSideDirection: 'start',
+          rootBoundary: 'document',
+        },
+      },
+    ]}
+  >
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed mt-12" />
+  </Floating>
+  <p>Notice that it prefers `top` if it doesn't fit.</p>
+</Chrome>
+
+  <Chrome
+    label="Scroll horizontally"
+    center
+    scrollable="x"
+    className="h-96"
+  >
+    <Floating
+      placement="right"
+      content="fallbackAxisSideDirection is set to 'end'"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            fallbackAxisSideDirection: 'end',
+            rootBoundary: 'document'
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed mt-12" />
+    </Floating>
+    <p>Notice that it prefers `bottom` if it doesn't fit.</p>
+  </Chrome>
+</div>
 
 #### Combining with `shift`
 
@@ -190,7 +346,32 @@ In the above example, if `placement{:.objectKey}` is set to
 
 `['top', 'right', 'bottom']{:js}`
 
-<Notice>
+<div className="flex flex-col gap-4">
+  <Chrome
+    label="Scroll down"
+    center
+    scrollable="y"
+    className="h-96"
+  >
+    <Floating
+      placement="top"
+      content="Floating"
+      middleware={[
+        {
+          name: 'flip',
+          options: {
+            fallbackPlacements: ['right', 'bottom'],
+            rootBoundary: 'document',
+          },
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    </Floating>
+  </Chrome>
+</div>
+
+<Notice gap="above">
   The options `flipAlignment{:.objectKey}` and
   `fallbackAxisSideDirection{:.objectKey}` no longer have an effect if
   this option is explicitly specified, as they are only shortcuts to

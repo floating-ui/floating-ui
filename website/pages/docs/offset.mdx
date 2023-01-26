@@ -1,7 +1,7 @@
 # offset
 
-`offset(){:js}` displaces the floating element from its core
-`placement{:.objectKey}` along the specified axes.
+A placement modifier that translates the floating element along
+the specified axes.
 
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
@@ -36,7 +36,7 @@ computePosition(referenceEl, floatingEl, {
 The value(s) passed are
 [logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
 meaning their effect on the physical result is dependent on the
-writing direction (e.g. RTL).
+placement, writing direction (e.g. RTL), or alignment.
 
 ## Order
 
@@ -70,12 +70,10 @@ floating element and the reference element. This is shorthand for
 offset(10);
 ```
 
-### AxesOffsets
+An object can also be passed, which enables you to individually
+configure each axis.
 
-This is an object which enables you to individually configure
-each axis.
-
-#### mainAxis
+### mainAxis
 
 default: `0{:js}`
 
@@ -88,7 +86,68 @@ offset({
 });
 ```
 
-#### crossAxis
+Here's how it looks on the four sides:
+
+<Chrome center className="pt-16 pb-24" tall>
+  <div className="flex flex-col md:flex-row gap-4 mt-4">
+    <Floating
+      placement="top"
+      middleware={[
+        {
+          name: 'offset',
+          options: 10,
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top
+      </div>
+    </Floating>
+    <Floating
+      placement="bottom"
+      middleware={[
+        {
+          name: 'offset',
+          options: 10,
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        bottom
+      </div>
+    </Floating>
+  </div>
+  <div className="flex flex-col md:flex-row gap-4">
+    <Floating
+      placement="left"
+      middleware={[
+        {
+          name: 'offset',
+          options: 10,
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        left
+      </div>
+    </Floating>
+    <Floating
+      placement="right"
+      middleware={[
+        {
+          name: 'offset',
+          options: 10,
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        right
+      </div>
+    </Floating>
+  </div>
+</Chrome>
+
+### crossAxis
 
 default: `0{:js}`
 
@@ -97,17 +156,78 @@ reference element.
 
 ```js
 offset({
-  crossAxis: 10,
+  crossAxis: 20,
 });
 ```
 
-#### alignmentAxis
+Here's how it looks on the four sides:
+
+<Chrome center className="pt-16 pb-24" tall>
+  <div className="flex flex-col md:flex-row gap-4 mt-4">
+    <Floating
+      placement="top"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top
+      </div>
+    </Floating>
+    <Floating
+      placement="bottom"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        bottom
+      </div>
+    </Floating>
+  </div>
+  <div className="flex flex-col md:flex-row gap-4">
+    <Floating
+      placement="left"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        left
+      </div>
+    </Floating>
+    <Floating
+      placement="right"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        right
+      </div>
+    </Floating>
+  </div>
+</Chrome>
+
+### alignmentAxis
 
 default: `null{:js}`
 
 Works on the same axis as `crossAxis{:.objectKey}` but applies
 only to aligned placements and works
-[_logically_](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties).
+[logically](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties).
 The offset is inverted for `-end{:.string}` alignments.
 
 This will override the `crossAxis{:.objectKey}` offset when set
@@ -115,9 +235,74 @@ to a number.
 
 ```js
 offset({
-  alignmentAxis: 10,
+  alignmentAxis: 20,
 });
 ```
+
+Here's how it differentiates from `crossAxis{:.objectKey}`:
+
+<Chrome center className="pt-16 pb-24" tall>
+  <div className="flex gap-4 flex-col md:flex-row mt-4">
+    <Floating
+      placement="top-start"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top-start <br />{' '}
+        <strong className="text-inherit">(crossAxis)</strong>
+      </div>
+    </Floating>
+    <Floating
+      placement="top-end"
+      middleware={[
+        {
+          name: 'offset',
+          options: {crossAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top-end <br />{' '}
+        <strong className="text-inherit">(crossAxis)</strong>
+      </div>
+    </Floating>
+  </div>
+  <div className="flex gap-4 flex-col md:flex-row gap-4">
+    <Floating
+      placement="top-start"
+      middleware={[
+        {
+          name: 'offset',
+          options: {alignmentAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top-start <br />{' '}
+        <strong className="text-inherit">(alignmentAxis)</strong>
+      </div>
+    </Floating>
+    <Floating
+      placement="top-end"
+      middleware={[
+        {
+          name: 'offset',
+          options: {alignmentAxis: 20},
+        },
+      ]}
+    >
+      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+        top-end <br />{' '}
+        <strong className="text-inherit">(alignmentAxis)</strong>
+      </div>
+    </Floating>
+  </div>
+</Chrome>
 
 ## Creating custom placements
 

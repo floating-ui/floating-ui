@@ -366,7 +366,8 @@ const {refs} = useFloating<HTMLButtonElement>();
 // refs.reference.current is now of type HTMLButtonElement
 ```
 
-In the full package, it is narrowed on `domReference`, as the
+In the full package, it is narrowed on `refs.domReference{:js}`,
+as the
 [position can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events).
 
 ## Variable freshness
@@ -428,12 +429,13 @@ To add interactions, such as the ability to only show a floating
 element while hovering over its reference element, the hook must
 first accept the following two options:
 
-- `open{:.objectKey}` — a boolean that represents whether the
-  floating element is currently rendered.
-- `onOpenChange{:.objectKey}` — a state setter called when the
-  open state should change.
+- `open{:.objectKey}` — a
+  <WordHighlight id="a">boolean</WordHighlight> that represents whether
+  the floating element is currently rendered.
+- `onOpenChange{:.objectKey}` — a <WordHighlight id="b">state
+  setter</WordHighlight> called when the open state changes.
 
-```js {7-8} /isOpen/
+```js /isOpen/#a /setIsOpen/#b
 import {useFloating} from '@floating-ui/react';
 
 function App() {

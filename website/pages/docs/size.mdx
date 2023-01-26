@@ -1,14 +1,14 @@
 # size
 
-`size(){:js}` provides data to change the size of the floating
-element. For instance, you can resize it so it doesn't overflow
-the available space:
+A visibility optimizer and data provider that allows you to
+change the size of the floating element. For instance, you can
+resize it so it doesn't overflow the available space:
 
 <div className="flex flex-col gap-4">
   <Chrome
     label="Scroll the container"
     center
-    scrollable
+    scrollable="y"
     className="h-96"
   >
     <Floating
@@ -148,7 +148,7 @@ const middleware = [
   <Chrome
     label="Scroll the container"
     center
-    scrollable
+    scrollable="y"
     className="h-96"
   >
     <Floating

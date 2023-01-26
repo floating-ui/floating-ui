@@ -15,6 +15,7 @@ import {Floating} from './Floating';
 import Navigation from './Navigation';
 import Notice from './Notice';
 import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
+import {WordHighlight} from './WordHighlight';
 
 const middleware = [
   {
@@ -302,21 +303,25 @@ const slugify = (str) =>
     .replace(/[\s.]/g, '-')
     .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
 
+const getStringChildren = (children) => {
+  if (Array.isArray(children)) {
+    return children
+      .map((value) =>
+        typeof value === 'string'
+          ? value
+          : value.props?.children ?? ''
+      )
+      .join('');
+  } else if (typeof children !== 'string') {
+    return children.props?.children;
+  }
+
+  return children;
+};
+
 const linkify = (Tag, headings, pathname) =>
   memo(({children, ...props}) => {
-    let stringChildren = children;
-
-    if (Array.isArray(stringChildren)) {
-      stringChildren = stringChildren
-        .map((value) =>
-          typeof value === 'string'
-            ? value
-            : value.props?.children ?? ''
-        )
-        .join('');
-    } else if (typeof stringChildren !== 'string') {
-      stringChildren = stringChildren.props?.children;
-    }
+    let stringChildren = getStringChildren(children);
 
     const url = slugify(
       typeof stringChildren === 'string' ? stringChildren : ''
@@ -350,6 +355,7 @@ const components = {
   Floating,
   Chrome,
   Notice,
+  WordHighlight,
   h1(props) {
     // Split a camel/PascalCased string into parts. A word break oppportunity
     // element gets inserted after each part.
@@ -400,29 +406,7 @@ const components = {
   },
 };
 
-export default function RootLayout(props) {
-  const {pathname} = useRouter();
-
-  const computedComponents = useMemo(() => {
-    const headings = [];
-    return {
-      ...components,
-      h2: linkify('h2', headings, pathname),
-      h3: linkify('h3', headings, pathname),
-      h4: linkify('h4', headings, pathname),
-      h5: linkify('h5', headings, pathname),
-      h6: linkify('h6', headings, pathname),
-    };
-  }, [pathname]);
-
-  return (
-    <MDXProvider components={computedComponents}>
-      <Layout {...props} />
-    </MDXProvider>
-  );
-}
-
-function Layout({children}) {
+export default function Layout({children}) {
   const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
@@ -490,8 +474,20 @@ function Layout({children}) {
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
 
+  const computedComponents = useMemo(() => {
+    const headings = [];
+    return {
+      ...components,
+      h2: linkify('h2', headings, pathname),
+      h3: linkify('h3', headings, pathname),
+      h4: linkify('h4', headings, pathname),
+      h5: linkify('h5', headings, pathname),
+      h6: linkify('h6', headings, pathname),
+    };
+  }, [pathname]);
+
   return (
-    <>
+    <MDXProvider components={computedComponents}>
       <Head>
         <title>{title}</title>
       </Head>
@@ -502,7 +498,7 @@ function Layout({children}) {
             aria-label="Open menu"
             aria-expanded={navOpen}
             onClick={() => setNavOpen(!navOpen)}
-            className="block -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden shadow"
+            className="block fixed z-10 top-1 -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden shadow"
           >
             <Menu />
           </button>
@@ -675,10 +671,17 @@ function Layout({children}) {
         </aside>
         <div
           ref={articleRef}
-          className="container px-4 lg:px-8 my-16 md:py-8 lg:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
+          className="container px-4 lg:px-8 my-16 mt-24 md:py-8 lg:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
         >
           <SkipNavContent />
-          <article className="prose prose-floating prose-pre:bg-gray-50 prose-pre:shadow prose-code:shadow dark:prose-pre:bg-gray-800 prose-code:bg-gray-50 dark:prose-code:bg-gray-800 md:prose-md lg:prose-lg dark:prose-invert">
+          <article
+            className="
+              prose prose-floating prose-pre:bg-gray-50 prose-pre:shadow 
+              prose-code:shadow dark:prose-pre:bg-gray-800 prose-code:bg-gray-50
+              dark:prose-code:bg-gray-700/70 dark:prose-invert md:prose-md
+              lg:prose-lg 
+            "
+          >
             {children}
           </article>
           {displayNavigation && (
@@ -701,6 +704,6 @@ function Layout({children}) {
           </a>
         </p>
       </footer>
-    </>
+    </MDXProvider>
   );
 }

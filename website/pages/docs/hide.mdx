@@ -1,6 +1,6 @@
 # hide
 
-`hide(){:js}` provides data to hide the floating element in
+A data provider that allows you to hide the floating element in
 applicable situations, usually when it's not within the same
 clipping context as the reference element.
 
@@ -8,7 +8,7 @@ clipping context as the reference element.
   <Chrome
     label="Scroll up"
     center
-    scrollable
+    scrollable="y"
     className="h-96"
     scrollHeight={325}
   >
@@ -50,7 +50,7 @@ middleware array.
 
 These are the options you can pass to `hide(){:js}`.
 
-```js
+```ts
 interface Options extends DetectOverflowOptions {
   strategy?: 'referenceHidden' | 'escaped';
 }

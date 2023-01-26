@@ -1,26 +1,19 @@
 # shift
 
-`shift(){:js}` moves the floating element along the specified
-axes in order to keep it in view.
+A visibility optimizer that shifts the floating element along the
+specified axes in order to keep it in view.
 
-Without `shift(){:js}`:
-
-<Chrome>
-  <Floating content="Floating wider than its reference">
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
-  </Floating>
-</Chrome>
-
-With `shift(){:js}`:
-
-<Chrome>
+<Chrome label="Scroll horizontally" center scrollable="x">
   <Floating
-    content="Floating wider than its reference"
+    content="I am wider than my reference element"
     middleware={[{name: 'shift'}]}
   >
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
   </Floating>
 </Chrome>
+
+In the above example, the placement is set to `'bottom'{:js}`,
+but is allowed to be shifted to prevent overflow.
 
 ## Usage
 
@@ -62,6 +55,15 @@ shift({
 });
 ```
 
+<Chrome label="Scroll horizontally" center scrollable="x">
+  <Floating
+    content="I am wider than my reference element"
+    middleware={[{name: 'shift', options: {mainAxis: false}}]}
+  >
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
+  </Floating>
+</Chrome>
+
 ### crossAxis
 
 default: `false{:js}`
@@ -78,6 +80,21 @@ shift({
   crossAxis: true,
 });
 ```
+
+<Chrome label="Scroll down" center scrollable="y">
+  <Floating
+    placement="top"
+    content="I can overlap my reference element"
+    middleware={[
+      {
+        name: 'shift',
+        options: {crossAxis: true, rootBoundary: 'document'},
+      },
+    ]}
+  >
+    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
+  </Floating>
+</Chrome>
 
 ### limiter
 

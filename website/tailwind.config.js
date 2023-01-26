@@ -143,13 +143,35 @@ module.exports = {
                 backgroundColor: 'rgba(200,200,255,0.2)',
                 boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
               },
+              'code[data-theme="dark"] [data-word-id="a"]': {
+                backgroundColor: theme.colors.rose[800],
+                color: theme.colors.rose[200],
+                boxShadow: `0 0 0 1px ${theme.colors.rose[800]}`,
+              },
+              'code[data-theme="dark"] [data-word-id="b"]': {
+                backgroundColor: theme.colors.cyan[800],
+                color: theme.colors.cyan[200],
+                boxShadow: `0 0 0 1px ${theme.colors.cyan[800]}`,
+              },
+              'code[data-theme="light"] [data-word-id="a"]': {
+                backgroundColor: theme.colors.rose[100],
+                color: theme.colors.rose[900],
+                boxShadow: `0 0 0 1px ${theme.colors.rose[100]}`,
+              },
+              'code[data-theme="light"] [data-word-id="b"]': {
+                backgroundColor: theme.colors.cyan[100],
+                color: theme.colors.cyan[900],
+                boxShadow: `0 0 0 1px ${theme.colors.cyan[100]}`,
+              },
               span: {
                 position: 'relative',
                 zIndex: '1',
               },
               code: {
                 fontSize: 'inherit',
+                background: 'inherit',
                 whiteSpace: 'pre',
+                border: 'none',
               },
             },
             h1: {
@@ -163,33 +185,18 @@ module.exports = {
             h2: {
               wordBreak: 'break-word',
               '> a': {
-                textDecoration: 'underline',
-                textDecorationColor: 'transparent',
-                textUnderlineOffset: '8px',
-                textDecorationThickness: '2px',
-                transition:
-                  'color 0.2s ease, text-decoration 0.2s ease',
+                textDecoration: 'none',
               },
             },
             h3: {
               wordBreak: 'break-word',
               '> a': {
-                textDecoration: 'underline',
-                textDecorationColor: 'transparent',
-                textUnderlineOffset: '8px',
-                textDecorationThickness: '2px',
-                transition:
-                  'color 0.2s ease, text-decoration 0.2s ease',
+                textDecoration: 'none',
               },
             },
             h4: {
               '> a': {
-                textDecoration: 'underline',
-                textDecorationColor: 'transparent',
-                textUnderlineOffset: '8px',
-                textDecorationThickness: '2px',
-                transition:
-                  'color 0.2s ease, text-decoration 0.2s ease',
+                textDecoration: 'none',
               },
             },
             code: {

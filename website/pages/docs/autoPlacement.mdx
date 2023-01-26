@@ -1,17 +1,14 @@
 # autoPlacement
 
-`autoPlacement(){:js}` chooses the placement that has the most
-space available automatically.
-
-You'll want to use this instead of `flip(){:js}` if you don't
-want to give the floating element a "preferred" placement and let
-it choose a placement for you.
+A visibility optimizer that chooses the placement that has the
+most space available automatically, without needing to specify a
+preferred placement.
 
 <div className="flex flex-col gap-4">
   <Chrome
     label="Scroll the container"
     center
-    scrollable
+    scrollable="y"
     className="h-96"
   >
     <Floating
@@ -27,10 +24,6 @@ it choose a placement for you.
   </Chrome>
 </div>
 
-In the above example, the automatic "most space" strategy is
-demonstrated (in contrast to flip's preferred + fallback "no
-space" one).
-
 ## Usage
 
 ```js
@@ -43,7 +36,7 @@ computePosition(referenceEl, floatingEl, {
 
 <Notice type="warning" title="Note">
   This is an alternative to `flip(){:js}`, so only one of either can be used.
-  See [Conflict with flip](/docs/autoPlacement#conflict-with-flip).
+  See [how they differ here](/docs/autoPlacement#conflict-with-flip).
 </Notice>
 
 ## Options

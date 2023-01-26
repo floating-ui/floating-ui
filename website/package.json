@@ -30,7 +30,7 @@
   "dependencies": {
     "@docsearch/css": "^3.1.0",
     "@docsearch/react": "^3.1.0",
-    "@floating-ui/react-dom": "^1.0.0",
+    "@floating-ui/react-dom": "^1.2.1",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
     "@next/mdx": "^12.1.5",
@@ -43,7 +43,8 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-feather": "^2.0.10",
-    "rehype-pretty-code": "^0.4.0",
+    "rehype-pretty-code": "^0.9.2",
+    "remark-smartypants": "^2.0.0",
     "shiki": "^0.12.1",
     "unist-util-visit": "^2.0.3",
     "use-isomorphic-layout-effect": "^1.1.1"

@@ -6,6 +6,7 @@ import {createPortal} from 'react-dom';
 export function Floating({
   children,
   content,
+  strategy: strategyOption,
   tooltipStyle = {},
   middleware = [],
   portaled,
@@ -21,10 +22,13 @@ export function Floating({
     y,
     reference,
     floating,
-    update,
     middlewareData,
     refs,
+    placement,
+    strategy,
   } = FloatingUI.useFloating({
+    whileElementsMounted: autoUpdate,
+    strategy: strategyOption,
     middleware:
       [
         ...middleware,
@@ -106,15 +110,12 @@ export function Floating({
     };
   }, [x, transition, refs.floating]);
 
-  useEffect(() => {
-    if (refs.reference.current && refs.floating.current) {
-      return autoUpdate(
-        refs.reference.current,
-        refs.floating.current,
-        update
-      );
-    }
-  }, [reference, floating, update, refs]);
+  const staticSide = {
+    left: 'right',
+    right: 'left',
+    top: 'bottom',
+    bottom: 'top',
+  }[placement.split('-')[0]];
 
   const tooltipJsx = (
     <div
@@ -122,7 +123,7 @@ export function Floating({
       ref={floating}
       style={{
         ...tooltipStyle,
-        position: 'absolute',
+        position: strategy,
         left: 0,
         top: 0,
         transform:
@@ -147,13 +148,26 @@ export function Floating({
           className="w-4 h-4 bg-gray-800 [left:-0.5rem]"
           style={{
             position: 'absolute',
-            left: middlewareData.arrow?.x ?? -7,
-            top: middlewareData.arrow?.y ?? 0,
-            transition: 'transform 0.2s ease',
-            transform:
-              middlewareData.arrow?.centerOffset !== 0
+            left:
+              middlewareData.arrow?.x != null
+                ? middlewareData.arrow?.x
+                : '',
+            top:
+              middlewareData.arrow?.y != null
+                ? middlewareData?.arrow?.y
+                : '',
+            right: '',
+            bottom: '',
+            [staticSide]: lockedFromArrow ? -7 : '-1rem',
+            background: lockedFromArrow ? '' : 'red',
+            transition: lockedFromArrow
+              ? 'transform 0.2s ease'
+              : 'none',
+            transform: lockedFromArrow
+              ? middlewareData.arrow?.centerOffset !== 0
                 ? 'translateX(1rem) rotate(45deg)'
-                : 'rotate(45deg)',
+                : 'rotate(45deg)'
+              : '',
           }}
         />
       )}
