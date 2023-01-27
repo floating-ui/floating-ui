@@ -23,17 +23,22 @@ throughout the docs, you can use transform styles instead to
 position the floating element for increased performance.
 
 ```js
+function roundByDPR(value) {
+  const dpr = window.devicePixelRatio || 1;
+  return Math.round(value * dpr) / dpr;
+}
+
 Object.assign(floatingEl.style, {
   top: '0',
   left: '0',
-  transform: `translate(${Math.round(x)}px,${Math.round(y)}px)`,
+  transform: `translate(${roundByDPR(x)}px,${roundByDPR(y)}px)`,
 });
 ```
 
-`x` and `y` can contain decimals, so unless the
-`transform{:.objectKey}` translation is placed evenly on the
-device's subpixel grid, then there will be blurring. You can
-check `window.devicePixelRatio{:js}` to round by DPR.
+`x` and `y` can contain fractional numbers (decimal), so there
+will be blurring unless we place it evenly on the device's pixel
+grid. The rounding method above ensures the floating element is
+positioned optimally for the screen.
 
 ### 3D transforms
 
@@ -44,12 +49,19 @@ You can also promote the floating element to its own layer:
 Object.assign(floatingEl.style, {
   top: '0',
   left: '0',
-  transform: `translate3d(${Math.round(x)}px,${Math.round(y)}px,0)`,
+  transform: `translate3d(${roundByDPR(x)}px,${roundByDPR(y)}px,0)`,
 });
 ```
 
 If you're animating the location of the floating element, using
 `transform{:.objectKey}` will offer smoother animations.
+
+<Notice type="warning">
+  3D transforms can sometimes result in blurry text on some
+  Windows devices with scaling. You may only want to use 3D
+  transforms on high PPI displays, and 2D transforms on low PPI
+  displays.
+</Notice>
 
 ## z-index stacking
 

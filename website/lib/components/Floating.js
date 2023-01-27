@@ -1,7 +1,10 @@
-import * as FloatingUI from '@floating-ui/react-dom';
-import {autoUpdate} from '@floating-ui/react-dom';
-import {cloneElement, useEffect, useRef} from 'react';
-import {createPortal} from 'react-dom';
+import * as FloatingUI from '@floating-ui/react';
+import {cloneElement, Fragment, useEffect, useRef} from 'react';
+
+function roundByDPR(value) {
+  const dpr = window.devicePixelRatio || 1;
+  return Math.round(value * dpr) / dpr;
+}
 
 export function Floating({
   children,
@@ -17,66 +20,58 @@ export function Floating({
   ...options
 }) {
   const arrowRef = useRef();
-  const {
-    x,
-    y,
-    reference,
-    floating,
-    middlewareData,
-    refs,
-    placement,
-    strategy,
-  } = FloatingUI.useFloating({
-    whileElementsMounted: autoUpdate,
-    strategy: strategyOption,
-    middleware:
-      [
-        ...middleware,
-        ...(arrow
-          ? [FloatingUI.arrow({element: arrowRef, padding: 5})]
-          : []),
-        ...(lockedFromArrow
-          ? [
-              FloatingUI.shift(
-                middleware.find((m) => m.name === 'shift')
-                  .options
-              ),
-            ]
-          : []),
-      ]
-        ?.map(({name, options}) => {
-          if (name === 'size') {
-            return FloatingUI.size?.({
-              ...options,
-              apply: ({availableHeight}) => {
-                Object.assign(
-                  refs.floating.current.style ?? {},
-                  {
-                    maxHeight: minHeight
-                      ? `${Math.max(
-                          availableHeight,
-                          minHeight
-                        )}px`
-                      : `${Math.max(availableHeight, 0)}px`,
-                  }
-                );
-              },
-            });
-          }
+  const {x, y, middlewareData, refs, placement, strategy} =
+    FloatingUI.useFloating({
+      whileElementsMounted: FloatingUI.autoUpdate,
+      strategy: strategyOption,
+      middleware:
+        [
+          ...middleware,
+          ...(arrow
+            ? [FloatingUI.arrow({element: arrowRef, padding: 5})]
+            : []),
+          ...(lockedFromArrow
+            ? [
+                FloatingUI.shift(
+                  middleware.find((m) => m.name === 'shift')
+                    .options
+                ),
+              ]
+            : []),
+        ]
+          ?.map(({name, options}) => {
+            if (name === 'size') {
+              return FloatingUI.size?.({
+                ...options,
+                apply: ({availableHeight}) => {
+                  Object.assign(
+                    refs.floating.current.style ?? {},
+                    {
+                      maxHeight: minHeight
+                        ? `${Math.max(
+                            availableHeight,
+                            minHeight
+                          )}px`
+                        : `${Math.max(availableHeight, 0)}px`,
+                    }
+                  );
+                },
+              });
+            }
 
-          if (name === 'hide') {
-            return [
-              FloatingUI.hide(),
-              FloatingUI.hide({strategy: 'escaped'}),
-            ];
-          }
+            if (name === 'hide') {
+              return [
+                FloatingUI.hide(),
+                FloatingUI.hide({strategy: 'escaped'}),
+              ];
+            }
 
-          return FloatingUI[name]?.(options);
-        })
-        .flat()
-        .filter((v) => v) ?? [],
-    ...options,
-  });
+            return FloatingUI[name]?.(options);
+          })
+          .flat()
+          .filter((v) => v) ?? [],
+      ...options,
+    });
 
   useEffect(() => {
     function addTransition() {
@@ -96,17 +91,19 @@ export function Floating({
       }
     }
 
+    function handleResize() {
+      removeTransition();
+      addTransition();
+    }
+
     if (x != null && transition) {
       addTransition();
     }
 
-    window.addEventListener('resize', () => {
-      removeTransition();
-      addTransition();
-    });
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', removeTransition);
+      window.removeEventListener('resize', handleResize);
     };
   }, [x, transition, refs.floating]);
 
@@ -117,21 +114,19 @@ export function Floating({
     bottom: 'top',
   }[placement.split('-')[0]];
 
+  const roundedX = x != null ? roundByDPR(x) : 0;
+  const roundedY = y != null ? roundByDPR(y) : 0;
+
   const tooltipJsx = (
     <div
       className="grid place-items-center bg-gray-800 text-gray-50 z-10 rounded"
-      ref={floating}
+      ref={refs.setFloating}
       style={{
         ...tooltipStyle,
         position: strategy,
         left: 0,
         top: 0,
-        transform:
-          x != null
-            ? `translate3d(${Math.round(x)}px,${Math.round(
-                y
-              )}px,0)`
-            : undefined,
+        transform: `translate3d(${roundedX}px,${roundedY}px,0)`,
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
           : undefined,
@@ -150,16 +145,16 @@ export function Floating({
             position: 'absolute',
             left:
               middlewareData.arrow?.x != null
-                ? middlewareData.arrow?.x
-                : '',
+                ? middlewareData.arrow.x
+                : undefined,
             top:
               middlewareData.arrow?.y != null
-                ? middlewareData?.arrow?.y
-                : '',
-            right: '',
-            bottom: '',
+                ? middlewareData.arrow.y
+                : undefined,
+            right: undefined,
+            bottom: undefined,
             [staticSide]: lockedFromArrow ? -7 : '-1rem',
-            background: lockedFromArrow ? '' : 'red',
+            background: lockedFromArrow ? 'inherit' : 'red',
             transition: lockedFromArrow
               ? 'transform 0.2s ease'
               : 'none',
@@ -174,15 +169,14 @@ export function Floating({
     </div>
   );
 
+  const Wrapper = portaled
+    ? FloatingUI.FloatingPortal
+    : Fragment;
+
   return (
     <>
-      {cloneElement(children, {ref: reference})}
-      {portaled && typeof document !== 'undefined'
-        ? createPortal(
-            tooltipJsx,
-            document.getElementById('floating-root')
-          )
-        : tooltipJsx}
+      {cloneElement(children, {ref: refs.setReference})}
+      <Wrapper>{tooltipJsx}</Wrapper>
     </>
   );
 }

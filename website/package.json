@@ -30,11 +30,10 @@
   "dependencies": {
     "@docsearch/css": "^3.1.0",
     "@docsearch/react": "^3.1.0",
-    "@floating-ui/react-dom": "^1.2.1",
+    "@floating-ui/react": "^0.18.1",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
     "@next/mdx": "^12.1.5",
-    "@tippyjs/react": "^4.2.6",
     "classnames": "^2.3.1",
     "next": "^13.0.7",
     "npm-api": "^1.0.1",

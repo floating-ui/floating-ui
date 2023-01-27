@@ -27,7 +27,6 @@ class MyDocument extends Document {
           data-remove-transitions=""
         >
           <div id="focus-root" tabIndex={-1} />
-          <div id="floating-root" />
           <Main />
           <NextScript />
         </body>

@@ -61,36 +61,38 @@ export const Chrome = ({
           {label}
         </div>
       </div>
-      <div
-        ref={scrollableRef}
-        className={cn(
-          'bg-gray-50 overflow-hidden p-2 h-[20rem]',
-          {
-            'grid place-items-center': center,
-            'overflow-y-auto': scrollableY,
-            'overflow-x-auto': scrollableX,
-            'h-[50rem] md:h-[30rem]': tall,
-            relative,
-          }
-        )}
-      >
-        {isScrollable && (
-          <div
-            style={{
-              height: scrollableY ? scrollHeight : 1,
-              width: scrollableX ? '76rem' : 1,
-            }}
-          />
-        )}
-        {children}
-        {isScrollable && (
-          <div
-            style={{
-              height: scrollableY ? scrollHeight : 1,
-              width: scrollableX ? '76rem' : 1,
-            }}
-          />
-        )}
+      <div className="will-change-transform">
+        <div
+          ref={scrollableRef}
+          className={cn(
+            'bg-gray-50 overflow-hidden p-2 h-[20rem]',
+            {
+              'grid place-items-center': center,
+              'overflow-y-auto': scrollableY,
+              'overflow-x-auto': scrollableX,
+              'h-[50rem] md:h-[30rem]': tall,
+              relative,
+            }
+          )}
+        >
+          {isScrollable && (
+            <div
+              style={{
+                height: scrollableY ? scrollHeight : 1,
+                width: scrollableX ? '76rem' : 1,
+              }}
+            />
+          )}
+          {children}
+          {isScrollable && (
+            <div
+              style={{
+                height: scrollableY ? scrollHeight : 1,
+                width: scrollableX ? '76rem' : 1,
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import {
   offset,
   shift,
   useFloating,
-} from '@floating-ui/react-dom';
+} from '@floating-ui/react';
 import React, {forwardRef} from 'react';
 import {useState} from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
