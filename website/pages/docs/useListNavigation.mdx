@@ -80,10 +80,25 @@ function App() {
 }
 ```
 
+## Examples
+
+- [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
+- [Combobox](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
+
 ## Using with `FloatingFocusManager`
 
-When using the component, set the `initialFocus{:.keyword}` prop
-to `-1{:js}` to avoid focus conflicts with this hook:
+`useListNavigation(){:js}` and `<FloatingFocusManager>{:js}` both
+manage focus but in different ways. To ensure they work together
+properly, the initial point of focus needs to be considered.
+
+The focus manager by default focuses the first _tabbable_ (not
+focusable) element inside of the floating element. If none are,
+it falls back to the floating element itself. This allows keydown
+events to work for pointer input (e.g. open with mouse, then
+start navigating with arrow keys).
+
+For a combobox, where the input should keep focus, set it to
+`-1{:js}` so focus doesn't move at all:
 
 ```js /initialFocus={-1}/
 <FloatingFocusManager context={context} initialFocus={-1}>
@@ -91,10 +106,25 @@ to `-1{:js}` to avoid focus conflicts with this hook:
 </FloatingFocusManager>
 ```
 
-## Examples
+For other types of components, like a Menu or a Select — where
+you want focus to move inside the floating element — the default
+value works, but makes sure your list items aren't tabbable if
+the `activeIndex` is `null{:js}`.
 
-- [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
-- [Combobox](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
+```js
+// Not focusable, not tabbable.
+<div />
+// Tabbable and focusable.
+<div tabIndex={0} />
+// Not tabbable, but focusable.
+<div tabIndex={-1} />
+```
+
+A roving tabIndex is the recommended strategy:
+
+```js
+<div tabIndex={activeIndex === index ? 0 : -1} />
+```
 
 ## Props
 
