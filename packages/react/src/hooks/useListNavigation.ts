@@ -415,7 +415,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   const hasActiveIndex = activeIndex != null;
 
-  const getItemProps = React.useMemo(() => {
+  const item = React.useMemo(() => {
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
       if (!open) return;
       const index = listRef.current.indexOf(currentTarget);
@@ -825,7 +825,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           isPointerModalityRef.current = true;
         },
       },
-      item: getItemProps,
+      item,
     };
   }, [
     domReference,
@@ -849,6 +849,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     focusItemOnOpen,
     onNavigate,
     onOpenChange,
-    getItemProps,
+    item,
   ]);
 };
