@@ -413,6 +413,52 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     previousOpenRef.current = open;
   });
 
+  const hasActiveIndex = activeIndex != null;
+
+  const getItemProps = React.useMemo(() => {
+    function syncCurrentTarget(currentTarget: HTMLElement | null) {
+      if (!open) return;
+      const index = listRef.current.indexOf(currentTarget);
+      if (index !== -1) {
+        onNavigate(index);
+      }
+    }
+
+    const props: ElementProps['item'] = {
+      onFocus({currentTarget}) {
+        syncCurrentTarget(currentTarget);
+      },
+      onClick: ({currentTarget}) => currentTarget.focus({preventScroll: true}), // Safari
+      ...(focusItemOnHover && {
+        onMouseMove({currentTarget}) {
+          syncCurrentTarget(currentTarget);
+        },
+        onPointerLeave() {
+          if (!isPointerModalityRef.current) {
+            return;
+          }
+
+          indexRef.current = -1;
+          focusItem(listRef, indexRef);
+
+          // Virtual cursor with VoiceOver on iOS needs this to be flushed
+          // synchronously or there is a glitch that prevents nested
+          // submenus from being accessible.
+          flushSync(() => onNavigate(null));
+
+          if (!virtual) {
+            // This also needs to be sync to prevent fast mouse movements
+            // from leaving behind a stale active item when landing on a
+            // disabled button item.
+            refs.floating.current?.focus({preventScroll: true});
+          }
+        },
+      }),
+    };
+
+    return props;
+  }, [open, refs, focusItem, focusItemOnHover, listRef, onNavigate, virtual]);
+
   return React.useMemo(() => {
     if (!enabled) {
       return {};
@@ -696,21 +742,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    function syncCurrentTarget(currentTarget: HTMLElement | null) {
-      if (!open) return;
-      const index = listRef.current.indexOf(currentTarget);
-      if (index !== -1 && activeIndex !== index) {
-        onNavigate(index);
-      }
-    }
+    const ariaActiveDescendantProp = virtual &&
+      open &&
+      hasActiveIndex && {
+        'aria-activedescendant': activeId,
+      };
 
     return {
       reference: {
-        ...(virtual &&
-          open &&
-          activeIndex != null && {
-            'aria-activedescendant': activeId,
-          }),
+        ...ariaActiveDescendantProp,
         onKeyDown(event) {
           isPointerModalityRef.current = false;
           const isArrowKey = event.key.indexOf('Arrow') === 0;
@@ -779,47 +819,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       },
       floating: {
         'aria-orientation': orientation === 'both' ? undefined : orientation,
-        ...(virtual &&
-          activeIndex != null && {
-            'aria-activedescendant': activeId,
-          }),
+        ...ariaActiveDescendantProp,
         onKeyDown,
         onPointerMove() {
           isPointerModalityRef.current = true;
         },
       },
-      item: {
-        onFocus({currentTarget}) {
-          syncCurrentTarget(currentTarget);
-        },
-        onClick: ({currentTarget}) =>
-          currentTarget.focus({preventScroll: true}), // Safari
-        ...(focusItemOnHover && {
-          onMouseMove({currentTarget}) {
-            syncCurrentTarget(currentTarget);
-          },
-          onPointerLeave() {
-            if (!isPointerModalityRef.current) {
-              return;
-            }
-
-            indexRef.current = -1;
-            focusItem(listRef, indexRef);
-
-            // Virtual cursor with VoiceOver on iOS needs this to be flushed
-            // synchronously or there is a glitch that prevents nested
-            // submenus from being accessible.
-            flushSync(() => onNavigate(null));
-
-            if (!virtual) {
-              // This also needs to be sync to prevent fast mouse movements
-              // from leaving behind a stale active item when landing on a
-              // disabled button item.
-              refs.floating.current?.focus({preventScroll: true});
-            }
-          },
-        }),
-      },
+      item: getItemProps,
     };
   }, [
     domReference,
@@ -833,17 +839,16 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     rtl,
     virtual,
     open,
-    activeIndex,
+    hasActiveIndex,
     nested,
     selectedIndex,
     openOnArrowKeyDown,
-    focusItemOnHover,
     allowEscape,
     cols,
     loop,
     focusItemOnOpen,
-    focusItem,
     onNavigate,
     onOpenChange,
+    getItemProps,
   ]);
 };
