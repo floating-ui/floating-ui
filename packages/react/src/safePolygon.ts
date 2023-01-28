@@ -4,9 +4,8 @@ import type {HandleCloseFn} from './hooks/useHover';
 import type {ReferenceType} from './types';
 import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
-import {getDocument} from './utils/getDocument';
 import {getTarget} from './utils/getTarget';
-import {isElement, isSafari} from './utils/is';
+import {isElement} from './utils/is';
 
 type Point = [number, number];
 type Polygon = Point[];
@@ -36,47 +35,10 @@ function isInside(point: Point, rect: Rect) {
   );
 }
 
-const svgNs = 'http://www.w3.org/2000/svg';
-
-function createPolygonElement(points: Point[], doc: Document, isRect: boolean) {
-  const addVisualOffsets = isSafari();
-  const win = doc.defaultView || window;
-  const svg = doc.createElementNS(svgNs, 'svg');
-  Object.assign(svg.style, {
-    position: 'fixed',
-    left: `${addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0}px`,
-    top: `${addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0}px`,
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    zIndex: 2147483647,
-  });
-  svg.setAttribute('data-type', isRect ? 'rect' : 'triangle');
-
-  const polygon = doc.createElementNS(svgNs, 'polygon');
-  polygon.setAttribute('points', points.map(([x, y]) => `${x},${y}`).join(' '));
-  Object.assign(polygon.style, {
-    pointerEvents: 'auto',
-    fill: 'transparent',
-    opacity: 0,
-  });
-
-  svg.appendChild(polygon);
-
-  return svg;
-}
-
-export function destroyPolygon(ref: React.MutableRefObject<SVGElement | null>) {
-  if (ref.current) {
-    ref.current.remove();
-    ref.current = null;
-  }
-}
-
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0.5,
-  blockPointerEvents = true,
+  blockPointerEvents = false,
 }: Partial<{
   restMs: number;
   buffer: number;
@@ -94,11 +56,9 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     onClose,
     nodeId,
     tree,
-    polygonRef,
   }) => {
     return function onMouseMove(event: MouseEvent) {
       function close() {
-        destroyPolygon(polygonRef);
         clearTimeout(timeoutId);
         onClose();
       }
@@ -126,15 +86,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       const side = placement.split('-')[0] as Side;
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
-      const isOverFloatingRect =
-        // Account for the polygon blocking pointer-events.
-        isInside(clientPoint, rect);
       const isOverReferenceRect = isInside(clientPoint, refRect);
-
-      // The cursor landed, so we destroy the polygon logic.
-      if (isOverFloatingRect && polygonRef.current?.dataset.type !== 'rect') {
-        destroyPolygon(polygonRef);
-      }
 
       if (isOverFloatingEl) {
         hasLanded = true;
@@ -145,15 +97,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       }
 
       if (isOverReferenceEl && !isLeave) {
-        destroyPolygon(polygonRef);
-        return;
-      }
-
-      if (
-        !isLeave &&
-        (isOverReferenceEl ||
-          (isInsideRect && contains(polygonRef.current, target)))
-      ) {
+        hasLanded = true;
         return;
       }
 
@@ -414,12 +358,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       const poly = isInsideRect ? rectPoly : getPolygon([x, y]);
 
-      if (!polygonRef.current && blockPointerEvents && isLeave) {
-        const doc = getDocument(elements.floating);
-        polygonRef.current = createPolygonElement(poly, doc, isInsideRect);
-        doc.body.appendChild(polygonRef.current);
-      }
-
       if (isInsideRect) {
         return;
       } else if (hasLanded && !isOverReferenceRect) {
@@ -432,6 +370,10 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         timeoutId = setTimeout(close, restMs);
       }
     };
+  };
+
+  fn.__options = {
+    blockPointerEvents,
   };
 
   return fn;

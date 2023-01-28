@@ -1,8 +1,10 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useFloatingTree} from '../components/FloatingTree';
-import {destroyPolygon} from '../safePolygon';
+import {
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from '../components/FloatingTree';
 import type {
   ElementProps,
   FloatingContext,
@@ -13,15 +15,19 @@ import {getDocument} from '../utils/getDocument';
 import {isElement, isMouseLikePointerType} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
+const safePolygonIdentifier = 'data-floating-ui-safe-polygon';
+
 export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   (
     context: FloatingContext<RT> & {
       onClose: () => void;
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
-      polygonRef: React.MutableRefObject<SVGElement | null>;
     }
   ): (event: MouseEvent) => void;
+  __options: {
+    blockPointerEvents: boolean;
+  };
 }
 
 export function getDelay(
@@ -70,9 +76,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     dataRef,
     events,
     elements: {domReference, floating},
+    refs,
   } = context;
 
   const tree = useFloatingTree<RT>();
+  const parentId = useFloatingParentNodeId();
   const handleCloseRef = useLatestRef(handleClose);
   const delayRef = useLatestRef(delay);
 
@@ -81,7 +89,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const handlerRef = React.useRef<(event: MouseEvent) => void>();
   const restTimeoutRef = React.useRef<any>();
   const blockMouseMoveRef = React.useRef(true);
-  const polygonRef = React.useRef<SVGElement | null>(null);
+  const performedPointerEventsMutationRef = React.useRef(false);
   const unbindMouseMoveRef = React.useRef(() => {});
 
   const isHoverOpen = React.useCallback(() => {
@@ -157,6 +165,15 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     handlerRef.current = undefined;
   }, []);
 
+  const clearPointerEvents = React.useCallback(() => {
+    if (performedPointerEventsMutationRef.current) {
+      const body = getDocument(refs.floating.current).body;
+      body.style.pointerEvents = '';
+      body.removeAttribute(safePolygonIdentifier);
+      performedPointerEventsMutationRef.current = false;
+    }
+  }, [refs]);
+
   // Registering the mouse events on the reference directly to bypass React's
   // delegation system. If the cursor was on a disabled element and then entered
   // the reference (no gap), `mouseenter` doesn't fire in the delegation system.
@@ -215,10 +232,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         handlerRef.current = handleCloseRef.current({
           ...context,
           tree,
-          polygonRef,
           x: event.clientX,
           y: event.clientY,
           onClose() {
+            clearPointerEvents();
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
@@ -248,7 +265,6 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       handleCloseRef.current?.({
         ...context,
         tree,
-        polygonRef,
         x: event.clientX,
         y: event.clientY,
         onClose() {
@@ -283,6 +299,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move,
     closeWithDelay,
     cleanupMouseMoveHandler,
+    clearPointerEvents,
     onOpenChange,
     open,
     tree,
@@ -291,22 +308,73 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     dataRef,
   ]);
 
+  // Block pointer-events of every element other than the reference and floating
+  // while the floating element is open and has a `handleClose` handler. Also
+  // handles nested floating elements.
+  // https://github.com/floating-ui/floating-ui/issues/1722
+  useLayoutEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
+    if (
+      open &&
+      handleCloseRef.current?.__options.blockPointerEvents &&
+      isHoverOpen()
+    ) {
+      const body = getDocument(floating).body;
+      body.setAttribute(safePolygonIdentifier, '');
+      body.style.pointerEvents = 'none';
+      performedPointerEventsMutationRef.current = true;
+
+      if (isElement(domReference) && floating) {
+        const ref = domReference as unknown as HTMLElement | SVGSVGElement;
+
+        const parentFloating = tree?.nodesRef.current.find(
+          (node) => node.id === parentId
+        )?.context?.elements.floating;
+
+        if (parentFloating) {
+          parentFloating.style.pointerEvents = '';
+        }
+
+        ref.style.pointerEvents = 'auto';
+        floating.style.pointerEvents = 'auto';
+
+        return () => {
+          ref.style.pointerEvents = '';
+          floating.style.pointerEvents = '';
+        };
+      }
+    }
+  }, [
+    enabled,
+    open,
+    parentId,
+    floating,
+    domReference,
+    tree,
+    handleCloseRef,
+    dataRef,
+    isHoverOpen,
+  ]);
+
   useLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       cleanupMouseMoveHandler();
-      destroyPolygon(polygonRef);
+      clearPointerEvents();
     }
-  }, [open, cleanupMouseMoveHandler]);
+  }, [open, cleanupMouseMoveHandler, clearPointerEvents]);
 
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();
       clearTimeout(timeoutRef.current);
       clearTimeout(restTimeoutRef.current);
-      destroyPolygon(polygonRef);
+      clearPointerEvents();
     };
-  }, [enabled, cleanupMouseMoveHandler]);
+  }, [enabled, cleanupMouseMoveHandler, clearPointerEvents]);
 
   return React.useMemo(() => {
     if (!enabled) {
