@@ -65,11 +65,12 @@ export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
   const getItemProps = React.useCallback(
     (userProps?: React.HTMLProps<HTMLElement>) =>
       mergeProps(userProps, propsList, 'item'),
-    // `activeIndex` can change frequently, this allows the consumer to avoid
-    // re-rendering all list items when memo'ing item components and placing
-    // `getItemProps` as a dependency.
+    // Granularly check for `item` changes, because the `getItemProps` getter
+    // should be as referentially stable as possible since it may be passed as
+    // a prop to many components. All `item` key values must therefore be
+    // memoized.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    deps.map((props) => props?.item)
+    propsList.map((key) => key?.item)
   );
 
   return React.useMemo(
