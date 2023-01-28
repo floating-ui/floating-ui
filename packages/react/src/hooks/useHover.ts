@@ -235,6 +235,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
           x: event.clientX,
           y: event.clientY,
           onClose() {
+            clearPointerEvents();
             cleanupMouseMoveHandler();
             closeWithDelay();
           },
@@ -298,6 +299,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     move,
     closeWithDelay,
     cleanupMouseMoveHandler,
+    clearPointerEvents,
     onOpenChange,
     open,
     tree,

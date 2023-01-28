@@ -38,7 +38,7 @@ function isInside(point: Point, rect: Rect) {
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
   restMs = 0,
   buffer = 0.5,
-  blockPointerEvents = true,
+  blockPointerEvents = false,
 }: Partial<{
   restMs: number;
   buffer: number;
