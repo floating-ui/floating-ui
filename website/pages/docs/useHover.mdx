@@ -185,6 +185,9 @@ useHover(context, {
 
 This handler runs on `mousemove{:.string}`.
 
+For a simpler alternative, depending on the type of floating
+element, you can use a short close delay instead.
+
 ## safePolygon
 
 A "safe" polygon is one that a pointer is safe to traverse as it
@@ -248,9 +251,25 @@ useHover(context, {
 });
 ```
 
+#### Ignoring the triangle
+
+If you only want the offset portion (rectangle bridge) between
+the reference and floating elements to be considered, you can set
+the value to `-Infinity{:js}`.
+
+```js
+useHover(context, {
+  handleClose: safePolygon({
+    // Don't generate a triangle polygon, only consider the
+    // rectangular bridge between the elements.
+    buffer: -Infinity,
+  }),
+});
+```
+
 ### blockPointerEvents
 
-default: `true{:js}`
+default: `false{:js}`
 
 Whether CSS `pointer-events` behind the polygon, reference, and
 floating elements are blocked. This ensures the user does not
@@ -260,10 +279,44 @@ traverse the polygon.
 ```js
 useHover(context, {
   handleClose: safePolygon({
-    blockPointerEvents: false,
+    blockPointerEvents: true,
   }),
 });
 ```
 
-You may want to disable this in scenarios where the container
-element listens for mouse events, as they may fire unexpectedly.
+This has some side-effects:
+
+- While hovering over the reference element, if it's inside a
+  scrolling container, it cannot be scrolled (the main window is
+  unaffected).
+- macOS' auto-hiding scrollbars appear on scrolling containers
+  (except the main window) in Chrome.
+- Container elements that listen for `mouseleave` events may fire
+  unexpectedly.
+
+For the first two points, A
+`[data-floating-ui-safe-polygon]{:.keyword}` selector is
+available as a parent, so scrolling containers can negate the
+`pointer-events{:.function}` style:
+
+```css
+[data-floating-ui-safe-polygon] .scroll {
+  pointer-events: auto;
+}
+
+[data-floating-ui-safe-polygon] .scroll > div {
+  pointer-events: none;
+}
+```
+
+```js
+<div className="scroll">
+  <div>
+    Content inside here will remain blocked without affecting the
+    scrolling parent.
+  </div>
+</div>
+```
+
+Leaving the option disabled for testing environments will also
+help prevent problems.

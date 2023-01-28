@@ -97,8 +97,8 @@ it falls back to the floating element itself. This allows keydown
 events to work for pointer input (e.g. open with mouse, then
 start navigating with arrow keys).
 
-For a combobox, where the input should keep focus, set it to
-`-1{:js}` so focus doesn't move at all:
+1. For a combobox, where the input should keep focus, set it to
+   `-1{:js}` so focus doesn't move at all:
 
 ```js /initialFocus={-1}/
 <FloatingFocusManager context={context} initialFocus={-1}>
@@ -106,10 +106,10 @@ For a combobox, where the input should keep focus, set it to
 </FloatingFocusManager>
 ```
 
-For other types of components, like a Menu or a Select — where
-you want focus to move inside the floating element — the default
-value works, but makes sure your list items aren't tabbable if
-the `activeIndex` is `null{:js}`.
+2. For other types of components, like a Menu or a Select — where
+   you want focus to move inside the floating element — the
+   default value works, but make sure your list items aren't
+   tabbable if the `activeIndex` is `null{:js}`.
 
 ```js
 // Not focusable, not tabbable.
