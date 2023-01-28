@@ -34,7 +34,7 @@ export interface Platform {
     rootBoundary: RootBoundary;
     strategy: Strategy;
   }) => Promisable<Rect>;
-  getDimensions: (element: HTMLElement) => Promisable<Dimensions>;
+  getDimensions: (element: Element) => Promisable<Dimensions>;
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
@@ -153,7 +153,7 @@ declare const size: (
  * @see https://floating-ui.com/docs/arrow
  */
 declare const arrow: (options: {
-  element: HTMLElement;
+  element: Element;
   padding?: Padding;
 }) => Middleware;
 

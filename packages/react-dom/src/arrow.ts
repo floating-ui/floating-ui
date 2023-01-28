@@ -9,7 +9,7 @@ import * as React from 'react';
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (options: {
-  element: React.MutableRefObject<HTMLElement | null> | HTMLElement;
+  element: React.MutableRefObject<Element | null> | Element;
   padding?: number | SideObject;
 }): Middleware => {
   const {element, padding} = options;
