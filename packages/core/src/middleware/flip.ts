@@ -3,7 +3,6 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Middleware, Placement} from '../types';
-import {getAlignment} from '../utils/getAlignment';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
@@ -117,11 +116,11 @@ export const flip = (
 
     overflowsData = [...overflowsData, {placement, overflows}];
 
-    // One or more sides is overflowing.
-    if (!overflows.every((side) => side <= 0)) {
-      const nextIndex = (middlewareData.flip?.index || 0) + 1;
-      const nextPlacement = placements[nextIndex];
+    const nextIndex = (middlewareData.flip?.index || 0) + 1;
+    const nextPlacement = placements[nextIndex];
 
+    // In fallback mode, only check the mainAxis side of overflow.
+    if (!overflows.slice(0, nextPlacement ? 3 : 1).every((side) => side <= 0)) {
       if (nextPlacement) {
         // Try next placement and re-run the lifecycle.
         return {
@@ -144,10 +143,6 @@ export const flip = (
                 [
                   d,
                   d.overflows
-                    .slice(
-                      0,
-                      getAlignment(d.placement) && flipAlignment ? 3 : 1
-                    )
                     .filter((overflow) => overflow > 0)
                     .reduce((acc, overflow) => acc + overflow, 0),
                 ] as const
