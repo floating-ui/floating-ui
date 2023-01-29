@@ -116,11 +116,11 @@ export const flip = (
 
     overflowsData = [...overflowsData, {placement, overflows}];
 
-    const nextIndex = (middlewareData.flip?.index || 0) + 1;
-    const nextPlacement = placements[nextIndex];
+    // One or more sides is overflowing.
+    if (!overflows.every((side) => side <= 0)) {
+      const nextIndex = (middlewareData.flip?.index || 0) + 1;
+      const nextPlacement = placements[nextIndex];
 
-    // In fallback mode, only check the mainAxis side of overflow.
-    if (!overflows.slice(0, nextPlacement ? 3 : 1).every((side) => side <= 0)) {
       if (nextPlacement) {
         // Try next placement and re-run the lifecycle.
         return {
@@ -134,29 +134,36 @@ export const flip = (
         };
       }
 
-      let resetPlacement: Placement = 'bottom';
-      switch (fallbackStrategy) {
-        case 'bestFit': {
-          const placement = overflowsData
-            .map(
-              (d) =>
-                [
-                  d,
-                  d.overflows
-                    .filter((overflow) => overflow > 0)
-                    .reduce((acc, overflow) => acc + overflow, 0),
-                ] as const
-            )
-            .sort((a, b) => a[1] - b[1])[0]?.[0].placement;
-          if (placement) {
-            resetPlacement = placement;
+      // First, try to use the one that fits on mainAxis side of overflow.
+      let resetPlacement = overflowsData
+        .map((d) => [d.placement, d.overflows[0]] as const)
+        .find((d) => d[1] <= 0)?.[0];
+
+      // Otherwise fallback.
+      if (!resetPlacement) {
+        switch (fallbackStrategy) {
+          case 'bestFit': {
+            const placement = overflowsData
+              .map(
+                (d) =>
+                  [
+                    d.placement,
+                    d.overflows
+                      .filter((overflow) => overflow > 0)
+                      .reduce((acc, overflow) => acc + overflow, 0),
+                  ] as const
+              )
+              .sort((a, b) => a[1] - b[1])[0]?.[0];
+            if (placement) {
+              resetPlacement = placement;
+            }
+            break;
           }
-          break;
+          case 'initialPlacement':
+            resetPlacement = initialPlacement;
+            break;
+          default:
         }
-        case 'initialPlacement':
-          resetPlacement = initialPlacement;
-          break;
-        default:
       }
 
       if (placement !== resetPlacement) {
