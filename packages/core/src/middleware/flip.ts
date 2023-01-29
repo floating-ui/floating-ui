@@ -134,29 +134,36 @@ export const flip = (
         };
       }
 
-      let resetPlacement: Placement = 'bottom';
-      switch (fallbackStrategy) {
-        case 'bestFit': {
-          const placement = overflowsData
-            .map(
-              (d) =>
-                [
-                  d,
-                  d.overflows
-                    .filter((overflow) => overflow > 0)
-                    .reduce((acc, overflow) => acc + overflow, 0),
-                ] as const
-            )
-            .sort((a, b) => a[1] - b[1])[0]?.[0].placement;
-          if (placement) {
-            resetPlacement = placement;
+      // First, try to use the one that fits on mainAxis side of overflow.
+      let resetPlacement = overflowsData.find(
+        (d) => d.overflows[0] <= 0
+      )?.placement;
+
+      // Otherwise fallback.
+      if (!resetPlacement) {
+        switch (fallbackStrategy) {
+          case 'bestFit': {
+            const placement = overflowsData
+              .map(
+                (d) =>
+                  [
+                    d.placement,
+                    d.overflows
+                      .filter((overflow) => overflow > 0)
+                      .reduce((acc, overflow) => acc + overflow, 0),
+                  ] as const
+              )
+              .sort((a, b) => a[1] - b[1])[0]?.[0];
+            if (placement) {
+              resetPlacement = placement;
+            }
+            break;
           }
-          break;
+          case 'initialPlacement':
+            resetPlacement = initialPlacement;
+            break;
+          default:
         }
-        case 'initialPlacement':
-          resetPlacement = initialPlacement;
-          break;
-        default:
       }
 
       if (placement !== resetPlacement) {
