@@ -135,9 +135,9 @@ export const flip = (
       }
 
       // First, try to use the one that fits on mainAxis side of overflow.
-      let resetPlacement = overflowsData
-        .map((d) => [d.placement, d.overflows[0]] as const)
-        .find((d) => d[1] <= 0)?.[0];
+      let resetPlacement = overflowsData.find(
+        (d) => d.overflows[0] <= 0
+      )?.placement;
 
       // Otherwise fallback.
       if (!resetPlacement) {
