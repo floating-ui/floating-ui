@@ -7,11 +7,9 @@ import {FloatingContext} from '../types';
 import {
   disableFocusInside,
   enableFocusInside,
-  getNextTabbable,
-  getPreviousTabbable,
   isOutsideEvent,
 } from '../utils/tabbable';
-import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
+import {HIDDEN_STYLES} from './FocusGuard';
 
 type FocusManagerState =
   | (FloatingContext & {modal: boolean; closeOnFocusOut: boolean})
@@ -23,8 +21,6 @@ const PortalContext = React.createContext<null | {
   setFocusManagerState: React.Dispatch<React.SetStateAction<FocusManagerState>>;
   beforeInsideRef: React.RefObject<HTMLSpanElement>;
   afterInsideRef: React.RefObject<HTMLSpanElement>;
-  beforeOutsideRef: React.RefObject<HTMLSpanElement>;
-  afterOutsideRef: React.RefObject<HTMLSpanElement>;
 }>(null);
 
 export const useFloatingPortalNode = ({
@@ -141,22 +137,6 @@ export const FloatingPortal = ({
       )}
     >
       {shouldRenderGuards && portalNode && (
-        <FocusGuard
-          data-type="outside"
-          ref={beforeOutsideRef}
-          onFocus={(event) => {
-            if (isOutsideEvent(event, portalNode)) {
-              beforeInsideRef.current?.focus();
-            } else {
-              const prevTabbable =
-                getPreviousTabbable() ||
-                focusManagerState?.refs.domReference.current;
-              prevTabbable?.focus();
-            }
-          }}
-        />
-      )}
-      {shouldRenderGuards && portalNode && (
         <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
       )}
       {root
@@ -164,24 +144,6 @@ export const FloatingPortal = ({
         : portalNode
         ? createPortal(children, portalNode)
         : null}
-      {shouldRenderGuards && portalNode && (
-        <FocusGuard
-          data-type="outside"
-          ref={afterOutsideRef}
-          onFocus={(event) => {
-            if (isOutsideEvent(event, portalNode)) {
-              afterInsideRef.current?.focus();
-            } else {
-              const nextTabbable =
-                getNextTabbable() ||
-                focusManagerState?.refs.domReference.current;
-              nextTabbable?.focus();
-              focusManagerState?.closeOnFocusOut &&
-                focusManagerState?.onOpenChange(false);
-            }
-          }}
-        />
-      )}
     </PortalContext.Provider>
   );
 };

@@ -20,6 +20,7 @@ import {
   getNextTabbable,
   getPreviousTabbable,
   getTabbableOptions,
+  isNextTabbableFrom,
   isOutsideEvent,
 } from '../utils/tabbable';
 import {usePortalContext} from './FloatingPortal';
@@ -136,36 +137,47 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   );
 
   React.useEffect(() => {
-    if (!modal) {
-      return;
-    }
-
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
-        // The focus guards have nothing to focus, so we need to stop the event.
-        if (getTabbableContent().length === 0 && !isTypeableCombobox) {
-          stopEvent(event);
-        }
-
-        const els = getTabbableElements();
         const target = getTarget(event);
-
-        if (orderRef.current[0] === 'reference' && target === domReference) {
-          stopEvent(event);
-          if (event.shiftKey) {
-            enqueueFocus(els[els.length - 1]);
-          } else {
-            enqueueFocus(els[1]);
+        if (modal) {
+          // The focus guards have nothing to focus, so we need to stop the event.
+          if (getTabbableContent().length === 0 && !isTypeableCombobox) {
+            stopEvent(event);
           }
-        }
 
-        if (
-          orderRef.current[1] === 'floating' &&
-          target === floating &&
-          event.shiftKey
-        ) {
-          stopEvent(event);
-          enqueueFocus(els[0]);
+          const els = getTabbableElements();
+
+          if (orderRef.current[0] === 'reference' && target === domReference) {
+            stopEvent(event);
+            if (event.shiftKey) {
+              enqueueFocus(els[els.length - 1]);
+            } else {
+              enqueueFocus(els[1]);
+            }
+          }
+
+          if (
+            orderRef.current[1] === 'floating' &&
+            target === floating &&
+            event.shiftKey
+          ) {
+            stopEvent(event);
+            enqueueFocus(els[0]);
+          }
+        } else {
+          if (target === domReference && !event.shiftKey) {
+            stopEvent(event);
+            enqueueFocus(portalContext?.beforeInsideRef.current);
+          }
+
+          if (
+            isNextTabbableFrom(domReference as unknown as HTMLElement) &&
+            event.shiftKey
+          ) {
+            stopEvent(event);
+            enqueueFocus(portalContext?.afterInsideRef.current);
+          }
         }
       }
     }
@@ -184,6 +196,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     isTypeableCombobox,
     getTabbableContent,
     getTabbableElements,
+    portalContext?.beforeInsideRef,
+    portalContext?.afterInsideRef,
   ]);
 
   React.useEffect(() => {
@@ -503,7 +517,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
                 const nextTabbable = getNextTabbable() || domReference;
                 nextTabbable?.focus();
               } else {
-                portalContext.beforeOutsideRef.current?.focus();
+                (domReference as unknown as HTMLElement)?.focus();
               }
             }
           }}
@@ -537,7 +551,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
                 const prevTabbable = getPreviousTabbable() || domReference;
                 prevTabbable?.focus();
               } else {
-                portalContext.afterOutsideRef.current?.focus();
+                const nextTabbable = getNextTabbable(
+                  domReference as unknown as HTMLElement
+                );
+                nextTabbable.focus();
+
+                closeOnFocusOut && onOpenChange(false);
               }
             }
           }}

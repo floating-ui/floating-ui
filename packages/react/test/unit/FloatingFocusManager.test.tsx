@@ -682,6 +682,71 @@ describe('non-modal + FloatingPortal', () => {
 
     cleanup();
   });
+
+  test('tabbable elements in between reference and floating', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <span tabIndex={0} data-testid="first" />
+          <button
+            data-testid="reference"
+            ref={reference}
+            onClick={() => setOpen(true)}
+          />
+          <span tabIndex={0} data-testid="between-first" />
+          <span tabIndex={0} data-testid="between-last" />
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager
+                context={context}
+                modal={false}
+                order={['reference', 'content']}
+              >
+                <div data-testid="floating" ref={floating}>
+                  <span tabIndex={0} data-testid="inside" />
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          <span tabIndex={0} data-testid="last" />
+        </>
+      );
+    }
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('reference'));
+
+    await userEvent.tab();
+    expect(screen.getByTestId('inside')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
+    expect(screen.getByTestId('between-first')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('between-last')).toHaveFocus();
+
+    await userEvent.tab();
+    expect(screen.getByTestId('last')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('between-last')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('between-first')).toHaveFocus();
+
+    await userEvent.tab({shift: true});
+    expect(screen.getByTestId('reference')).toHaveFocus();
+
+    cleanup();
+  });
 });
 
 describe('Navigation', () => {

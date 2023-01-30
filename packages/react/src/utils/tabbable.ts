@@ -19,7 +19,8 @@ export const getTabbableOptions = () =>
 
 export function getTabbableIn(
   container: HTMLElement,
-  direction: 'next' | 'prev'
+  direction: 'next' | 'prev',
+  from?: HTMLElement | null
 ) {
   const allTabbable = tabbable(container, getTabbableOptions());
 
@@ -27,19 +28,29 @@ export function getTabbableIn(
     allTabbable.reverse();
   }
 
-  const activeIndex = allTabbable.indexOf(
-    activeElement(getDocument(container)) as HTMLElement
-  );
+  const fromElement =
+    from ?? (activeElement(getDocument(container)) as HTMLElement);
+
+  const activeIndex = allTabbable.indexOf(fromElement);
   const nextTabbableElements = allTabbable.slice(activeIndex + 1);
   return nextTabbableElements[0];
 }
 
-export function getNextTabbable() {
-  return getTabbableIn(document.body, 'next');
+export function getNextTabbable(from?: HTMLElement | null) {
+  return getTabbableIn(document.body, 'next', from);
 }
 
-export function getPreviousTabbable() {
-  return getTabbableIn(document.body, 'prev');
+export function getPreviousTabbable(from?: HTMLElement | null) {
+  return getTabbableIn(document.body, 'prev', from);
+}
+
+export function isNextTabbableFrom(from?: HTMLElement | null) {
+  const container = document.body;
+  const allTabbable = tabbable(container, getTabbableOptions());
+  const activeEl = activeElement(getDocument(container)) as HTMLElement;
+  const activeIndex = allTabbable.indexOf(activeEl);
+
+  return allTabbable[activeIndex - 1] === from;
 }
 
 export function isOutsideEvent(
