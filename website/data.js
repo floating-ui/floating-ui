@@ -91,4 +91,9 @@ export const MINI_SPONSORS = [
     label: 'Pacman 30th Anniversary Doodle',
     url: 'https://pacmanblog.com/',
   },
+  {
+    logo: '/sponsors/pyjobs.svg',
+    label: 'PyJobs - Jobs for Python Developers',
+    url: 'https://www.pyjobs.com/',
+  },
 ];
