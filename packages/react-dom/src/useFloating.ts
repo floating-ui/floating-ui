@@ -62,15 +62,24 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, []);
 
   const update = React.useCallback(() => {
-    if (!referenceRef.current || !floatingRef.current) {
+    const referenceElement = referenceRef.current;
+    const floatingElement = floatingRef.current;
+
+    if (!referenceElement || !floatingElement) {
       return;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, {
+    computePosition(referenceElement, floatingElement, {
       middleware: latestMiddleware,
       placement,
       strategy,
     }).then((data) => {
+      if (
+        referenceElement !== referenceRef.current ||
+        floatingElement !== floatingRef.current
+      ) {
+        return;
+      }
       const fullData = {...data, isPositioned: true};
       if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
         dataRef.current = fullData;
