@@ -2,7 +2,7 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Middleware, MiddlewareArguments} from '../types';
+import type {ElementRects, Middleware, MiddlewareArguments, SideObject} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getSide} from '../utils/getSide';
 import {max} from '../utils/math';
@@ -58,29 +58,25 @@ export const size = (
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
-    const xMin = max(overflow.left, 0);
-    const xMax = max(overflow.right, 0);
-    const yMin = max(overflow.top, 0);
-    const yMax = max(overflow.bottom, 0);
+    //compute available dimensions:
 
     const dimensions = {
-      availableHeight:
-        rects.floating.height -
-        (['left', 'right'].includes(placement)
-          ? 2 *
-            (yMin !== 0 || yMax !== 0
-              ? yMin + yMax
-              : max(overflow.top, overflow.bottom))
-          : overflow[heightSide]),
-      availableWidth:
-        rects.floating.width -
-        (['top', 'bottom'].includes(placement)
-          ? 2 *
-            (xMin !== 0 || xMax !== 0
-              ? xMin + xMax
-              : max(overflow.left, overflow.right))
-          : overflow[widthSide]),
+      availableHeight: ['left', 'right'].includes(placement)
+      ? -Math.min(overflow.top, overflow.bottom) - Math.max(overflow.top, overflow.bottom)
+      : -overflow[heightSide],
+
+      availableWidth: ['top', 'bottom'].includes(placement)
+      ? -Math.min(overflow.left, overflow.right) - Math.max(overflow.left, overflow.right)
+      : -overflow[widthSide]
     };
+
+    if (dimensions.availableHeight >= 0) dimensions.availableHeight += rects.floating.height;
+    else dimensions.availableHeight = 0;
+
+    if (dimensions.availableWidth >= 0) dimensions.availableWidth += rects.floating.width;
+    else dimensions.availableWidth = 0;
+
+    //call apply using the dimensions and reset if necessary:
 
     await apply({...middlewareArguments, ...dimensions});
 
