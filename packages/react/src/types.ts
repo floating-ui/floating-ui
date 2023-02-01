@@ -3,9 +3,9 @@ import type {
   Middleware,
   Placement,
   Strategy,
+  UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
-} from '@floating-ui/dom';
-import type {UseFloatingReturn as UsePositionFloatingReturn} from '@floating-ui/react-dom';
+} from '@floating-ui/react-dom';
 import * as React from 'react';
 
 import type {DismissPayload} from './hooks/useDismiss';
@@ -56,8 +56,9 @@ export type {
   SizeOptions,
   Strategy,
   VirtualElement,
-} from '@floating-ui/dom';
+} from '@floating-ui/react-dom';
 export {
+  arrow,
   autoPlacement,
   autoUpdate,
   computePosition,
@@ -71,8 +72,7 @@ export {
   platform,
   shift,
   size,
-} from '@floating-ui/dom';
-export {arrow} from '@floating-ui/react-dom';
+} from '@floating-ui/react-dom';
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 

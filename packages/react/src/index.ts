@@ -31,6 +31,7 @@ export {safePolygon} from './safePolygon';
 export {useFloating} from './useFloating';
 export {useInteractions} from './useInteractions';
 export {
+  arrow,
   autoPlacement,
   autoUpdate,
   computePosition,
@@ -44,5 +45,4 @@ export {
   platform,
   shift,
   size,
-} from '@floating-ui/dom';
-export {arrow} from '@floating-ui/react-dom';
+} from '@floating-ui/react-dom';
