@@ -334,7 +334,7 @@ test('placement does not reset', async ({page}) => {
   });
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-top-start.png`
+    `reset-top-start.png`
   );
 });
 
