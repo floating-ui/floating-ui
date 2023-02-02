@@ -346,7 +346,7 @@ test('placement is not sticky', async ({page}) => {
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
     if (scroll) {
-      scroll.scrollTop = 700;
+      scroll.scrollTop = 705;
       scroll.scrollLeft = 700;
     }
   });
