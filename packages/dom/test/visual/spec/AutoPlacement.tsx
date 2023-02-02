@@ -1,9 +1,9 @@
 import type {Alignment, Placement} from '@floating-ui/core';
 import {
   autoPlacement,
-  useFloating,
-  shift,
   autoUpdate,
+  shift,
+  useFloating,
 } from '@floating-ui/react-dom';
 import {useState} from 'react';
 
@@ -138,7 +138,7 @@ export function AutoPlacement() {
 
       <h2>crossAxis</h2>
       <Controls>
-        {[true, false].map((bool) => (
+        {BOOLS.map((bool) => (
           <button
             key={String(bool)}
             data-testid={`crossAxis-${bool}`}
@@ -154,7 +154,7 @@ export function AutoPlacement() {
 
       <h2>Add shift</h2>
       <Controls>
-        {[true, false].map((bool) => (
+        {BOOLS.map((bool) => (
           <button
             key={String(bool)}
             data-testid={`shift-${bool}`}
