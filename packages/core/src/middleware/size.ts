@@ -5,6 +5,7 @@ import {
 import type {Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getSide} from '../utils/getSide';
+import {max} from '../utils/math';
 
 export interface Options {
   /**
@@ -57,25 +58,45 @@ export const size = (
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
-    //compute available dimensions:
+    const xMin = max(overflow.left, 0);
+    const xMax = max(overflow.right, 0);
+    const yMin = max(overflow.top, 0);
+    const yMax = max(overflow.bottom, 0);
+
+    const hasShift = !!middlewareArguments.middlewareData.shift;
+    const isXCenterPlacement = ['left', 'right'].includes(placement);
+    const isYCenterPlacement = ['top', 'bottom'].includes(placement);
 
     const dimensions = {
-      availableHeight: ['left', 'right'].includes(placement)
-      ? -Math.min(overflow.top, overflow.bottom) - Math.max(overflow.top, overflow.bottom)
-      : -overflow[heightSide],
-
-      availableWidth: ['top', 'bottom'].includes(placement)
-      ? -Math.min(overflow.left, overflow.right) - Math.max(overflow.left, overflow.right)
-      : -overflow[widthSide]
+      availableHeight:
+        rects.floating.height -
+        (isXCenterPlacement
+          ? 2 *
+            (yMin !== 0 || yMax !== 0
+              ? yMin + yMax
+              : max(overflow.top, overflow.bottom))
+          : overflow[heightSide]),
+      availableWidth:
+        rects.floating.width -
+        (isYCenterPlacement
+          ? 2 *
+            (xMin !== 0 || xMax !== 0
+              ? xMin + xMax
+              : max(overflow.left, overflow.right))
+          : overflow[widthSide]),
     };
 
-    if (dimensions.availableHeight >= 0) dimensions.availableHeight += rects.floating.height;
-    else dimensions.availableHeight = 0;
+    if (hasShift) {
+      if (isXCenterPlacement) {
+        dimensions.availableHeight =
+          -overflow.top - overflow.bottom + rects.floating.height;
+      }
 
-    if (dimensions.availableWidth >= 0) dimensions.availableWidth += rects.floating.width;
-    else dimensions.availableWidth = 0;
-
-    //call apply using the dimensions and reset if necessary:
+      if (isYCenterPlacement) {
+        dimensions.availableWidth =
+          -overflow.left - overflow.right + rects.floating.width;
+      }
+    }
 
     await apply({...middlewareArguments, ...dimensions});
 
