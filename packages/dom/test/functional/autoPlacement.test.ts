@@ -241,6 +241,13 @@ test('most space for crossAxis', async ({page}) => {
     `[data-testid="allowedPlacements-top-start,top-end,bottom-start,bottom-end"]`
   );
 
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 525;
+    }
+  });
+
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `crossAxis-top-start.png`
   );
@@ -334,6 +341,7 @@ test('placement does not reset', async ({page}) => {
 test('placement is not sticky', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
   await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="shift-true"]`);
 
   await page.evaluate(() => {
     const scroll = document.querySelector('.scroll');
