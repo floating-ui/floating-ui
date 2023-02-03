@@ -9,7 +9,7 @@ import {
 } from './is';
 import {getWindow} from './window';
 
-type Polyfill = (element: Element) => Element | null;
+type Polyfill = (element: HTMLElement) => Element | null;
 
 function getTrueOffsetParent(
   element: Element,
@@ -47,7 +47,7 @@ function getContainingBlock(element: Element) {
 // such as table ancestors and cross browser bugs.
 export function getOffsetParent(
   element: Element,
-  polyfill?: (element: Element) => Element | null
+  polyfill?: Polyfill
 ): Element | Window {
   const window = getWindow(element);
 
