@@ -1,6 +1,11 @@
 import type {Alignment, Placement} from '@floating-ui/core';
-import {autoPlacement, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {
+  autoPlacement,
+  autoUpdate,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 import {useScroll} from '../utils/useScroll';
@@ -11,6 +16,7 @@ const ALLOWED_PLACEMENTS: Array<Placement[] | undefined> = [
   undefined,
   ['top', 'bottom'],
   ['left', 'right'],
+  ['top-start', 'top-end', 'bottom-start', 'bottom-end'],
 ];
 
 export function AutoPlacement() {
@@ -19,22 +25,21 @@ export function AutoPlacement() {
   const [allowedPlacements, setAllowedPlacements] = useState<
     Placement[] | undefined
   >();
+  const [crossAxis, setCrossAxis] = useState(false);
+  const [addShift, setAddShift] = useState(false);
+
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
+    whileElementsMounted: autoUpdate,
     middleware: [
       autoPlacement({
         alignment,
         autoAlignment,
         allowedPlacements,
+        crossAxis,
       }),
+      addShift && shift(),
     ],
   });
-
-  useLayoutEffect(update, [
-    update,
-    alignment,
-    autoAlignment,
-    allowedPlacements,
-  ]);
 
   const {scrollRef, indicator} = useScroll({refs, update});
 
@@ -50,7 +55,18 @@ export function AutoPlacement() {
           ref={scrollRef}
         >
           {indicator}
-          <div ref={reference} className="reference">
+          <div
+            ref={reference}
+            className="reference"
+            style={
+              addShift
+                ? {
+                    width: 50,
+                    height: 25,
+                  }
+                : {}
+            }
+          >
             Reference
           </div>
           <div
@@ -60,6 +76,10 @@ export function AutoPlacement() {
               position: strategy,
               top: y ?? '',
               left: x ?? '',
+              ...(addShift && {
+                width: 250,
+                height: 250,
+              }),
             }}
           >
             Floating
@@ -112,6 +132,38 @@ export function AutoPlacement() {
             }}
           >
             {String(localAllowedPlacements)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>crossAxis</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`crossAxis-${bool}`}
+            onClick={() => setCrossAxis(bool)}
+            style={{
+              backgroundColor: bool === crossAxis ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Add shift</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`shift-${bool}`}
+            onClick={() => setAddShift(bool)}
+            style={{
+              backgroundColor: bool === addShift ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>

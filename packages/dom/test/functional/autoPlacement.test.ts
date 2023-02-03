@@ -232,3 +232,162 @@ test('only left, right allowed', async ({page}) => {
     `allowedPlacements-left.png`
   );
 });
+
+test('most space for crossAxis', async ({page}) => {
+  await page.goto('http://localhost:1234/autoPlacement');
+  await click(page, `[data-testid="crossAxis-true"]`);
+  await click(
+    page,
+    `[data-testid="allowedPlacements-top-start,top-end,bottom-start,bottom-end"]`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 525;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `crossAxis-top-start.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 550;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `crossAxis-top-end.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollTop = 650;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `crossAxis-bottom-end.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 500;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `crossAxis-bottom-start.png`
+  );
+});
+
+test('placement does not reset', async ({page}) => {
+  await page.goto('http://localhost:1234/autoPlacement');
+  await click(
+    page,
+    `[data-testid="allowedPlacements-top-start,top-end,bottom-start,bottom-end"]`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 800;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `reset-top-end.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollTop = 650;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `reset-bottom-end.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 250;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `reset-bottom-start.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollTop = 500;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `reset-top-start.png`
+  );
+});
+
+test('placement is not sticky', async ({page}) => {
+  await page.goto('http://localhost:1234/autoPlacement');
+  await click(page, `[data-testid="alignment-null"]`);
+  await click(page, `[data-testid="shift-true"]`);
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollTop = 705;
+      scroll.scrollLeft = 700;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `sticky-bottom.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 700;
+      scroll.scrollTop = 350;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `sticky-top.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 750;
+      scroll.scrollTop = 725;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `sticky-right-1.png`
+  );
+
+  await page.evaluate(() => {
+    const scroll = document.querySelector('.scroll');
+    if (scroll) {
+      scroll.scrollLeft = 750;
+      scroll.scrollTop = 350;
+    }
+  });
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `sticky-right-2.png`
+  );
+});
