@@ -73,15 +73,21 @@ export function isContainingBlock(element: Element): boolean {
   );
 }
 
-export function isLayoutViewport(): boolean {
+/**
+ * Determines whether or not `.getBoundingClientRect()` is affected by visual
+ * viewport offsets. In Safari, the `x`/`y` offsets are values relative to the
+ * visual viewport, while in other engines, they are values relative to the
+ * layout viewport.
+ */
+export function isClientRectVisualViewportBased(): boolean {
   // TODO: Try to use feature detection here instead. Feature detection for
-  // this can fail in various ways, making the userAgent check the most:
+  // this can fail in various ways, making the userAgent check the most
   // reliable:
   // • Always-visible scrollbar or not
   // • Width of <html>
 
-  // Not Safari.
-  return !/^((?!chrome|android).)*safari/i.test(getUAString());
+  // Is Safari.
+  return /^((?!chrome|android).)*safari/i.test(getUAString());
 }
 
 export function isLastTraversableNode(node: Node) {

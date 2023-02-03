@@ -18,12 +18,14 @@ import {getParentNode} from './getParentNode';
 import {getScale} from './getScale';
 import {getViewportRect} from './getViewportRect';
 import {
+  isClientRectVisualViewportBased,
   isContainingBlock,
   isElement,
   isHTMLElement,
   isLastTraversableNode,
 } from './is';
 import {max, min} from './math';
+import {getWindow} from './window';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
@@ -65,7 +67,13 @@ function getClientRectFromClippingAncestor(
   } else if (isElement(clippingAncestor)) {
     rect = getInnerBoundingClientRect(clippingAncestor, strategy);
   } else {
-    rect = clippingAncestor;
+    const mutableRect = {...clippingAncestor};
+    if (isClientRectVisualViewportBased()) {
+      const win = getWindow(element);
+      mutableRect.x -= win.visualViewport?.offsetLeft || 0;
+      mutableRect.y -= win.visualViewport?.offsetTop || 0;
+    }
+    rect = mutableRect;
   }
 
   return rectToClientRect(rect);
