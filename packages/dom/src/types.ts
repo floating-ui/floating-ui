@@ -58,7 +58,7 @@ export interface NodeScroll {
   scrollTop: number;
 }
 
-export type Boundary = 'clippingAncestors' | Element | Array<Element>;
+export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
 
 export type DetectOverflowOptions = Omit<
   CoreDetectOverflowOptions,
