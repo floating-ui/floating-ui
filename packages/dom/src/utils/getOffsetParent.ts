@@ -9,12 +9,21 @@ import {
 } from './is';
 import {getWindow} from './window';
 
-function getTrueOffsetParent(element: Element): Element | null {
+type Polyfill = (element: Element) => Element | null;
+
+function getTrueOffsetParent(
+  element: Element,
+  polyfill?: Polyfill
+): Element | null {
   if (
     !isHTMLElement(element) ||
     getComputedStyle(element).position === 'fixed'
   ) {
     return null;
+  }
+
+  if (polyfill) {
+    return polyfill(element);
   }
 
   return element.offsetParent;
@@ -36,10 +45,13 @@ function getContainingBlock(element: Element) {
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
 // such as table ancestors and cross browser bugs.
-export function getOffsetParent(element: Element): Element | Window {
+export function getOffsetParent(
+  element: Element,
+  polyfill?: (element: Element) => Element | null
+): Element | Window {
   const window = getWindow(element);
 
-  let offsetParent = getTrueOffsetParent(element);
+  let offsetParent = getTrueOffsetParent(element, polyfill);
 
   while (
     offsetParent &&
