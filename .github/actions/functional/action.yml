@@ -3,9 +3,7 @@ description: Performs functional tests checks
 runs:
   using: composite
   steps:
-    - run: npx playwright install-deps
-      shell: sh
-    - run: npx playwright install
+    - run: npx playwright install --with-deps chromium
       shell: sh
     - run: npm run build
       shell: sh

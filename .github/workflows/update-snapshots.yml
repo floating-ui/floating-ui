@@ -9,9 +9,9 @@ jobs:
     name: Functional
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/setup
-      - run: npx playwright install-deps
-      - run: npx playwright install
+      - run: npx playwright install --with-deps chromium
       - run: npm run build
       - run: npm run test:functional:update
       - uses: EndBug/add-and-commit@v7
