@@ -72,8 +72,8 @@ export const offset = (value: Options = 0): Middleware => ({
     const diffCoords = await convertValueToCoords(middlewareArguments, value);
 
     return {
-      x: x + diffCoords.x + 10,
-      y: y + diffCoords.y + 10,
+      x: x + diffCoords.x,
+      y: y + diffCoords.y,
       data: diffCoords,
     };
   },
