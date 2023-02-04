@@ -19,6 +19,7 @@ allPlacements.forEach((placement) => {
         page,
       }) => {
         await page.goto('http://localhost:1234/offset');
+
         await click(page, `[data-testid="offset-${name}"]`);
         await click(page, `[data-testid="placement-${placement}"]`);
         await click(page, `[data-testid="rtl-${rtl}"]`);

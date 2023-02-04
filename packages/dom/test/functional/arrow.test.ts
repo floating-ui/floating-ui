@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test';
 
 import {allPlacements} from '../visual/utils/allPlacements';
 import {click} from './utils/click';
+import {scroll} from './utils/scroll';
 
 allPlacements.forEach((placement) => {
   [75, 150].forEach((floatingSize) => {
@@ -38,23 +39,13 @@ allPlacements.forEach((placement) => {
           await click(page, `[data-testid="reference-${referenceSize}"]`);
           await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-          await page.evaluate(() => {
-            const scroll = document.querySelector('.scroll');
-            if (scroll) {
-              scroll.scrollLeft = 765;
-            }
-          });
+          await scroll(page, {x: 765});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
             `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
           );
 
-          await page.evaluate(() => {
-            const scroll = document.querySelector('.scroll');
-            if (scroll) {
-              scroll.scrollLeft = 285;
-            }
-          });
+          await scroll(page, {x: 285});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
             `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
@@ -78,23 +69,13 @@ allPlacements.forEach((placement) => {
           await click(page, `[data-testid="reference-${referenceSize}"]`);
           await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
-          await page.evaluate(() => {
-            const scroll = document.querySelector('.scroll');
-            if (scroll) {
-              scroll.scrollTop = 880;
-            }
-          });
+          await scroll(page, {y: 880});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
             `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
           );
 
-          await page.evaluate(() => {
-            const scroll = document.querySelector('.scroll');
-            if (scroll) {
-              scroll.scrollTop = 300;
-            }
-          });
+          await scroll(page, {y: 300});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
             `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
