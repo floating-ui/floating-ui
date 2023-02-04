@@ -42,7 +42,10 @@ export interface Platform {
     offsetParent: Element;
     strategy: Strategy;
   }) => Promisable<Rect>;
-  getOffsetParent?: (element: Element) => Promisable<Element | Window>;
+  getOffsetParent?: (
+    element: Element,
+    polyfill?: (element: HTMLElement) => Element | null
+  ) => Promisable<Element | Window>;
   isElement?: (value: unknown) => Promisable<boolean>;
   getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
   getClientRects?: (element: Element) => Promisable<Array<ClientRectObject>>;
