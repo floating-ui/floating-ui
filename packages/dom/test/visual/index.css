@@ -191,6 +191,7 @@ main {
   width: fit-content;
   padding: 5px;
   border-radius: 5px;
+  display: none;
 }
 
 .prose {
