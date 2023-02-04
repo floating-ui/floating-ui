@@ -3,9 +3,29 @@ description: Setup node and install dependencies
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v3
+    - name: Checkout
+      uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
         registry-url: 'https://registry.npmjs.org'
-    - uses: bahmutov/npm-install@v1
+
+    - name: Cache npm
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: npm-${{ hashFiles('package-lock.json') }}
+        restore-keys: npm-
+
+    - name: Cache node_modules
+      uses: actions/cache@v3
+      id: cache-node-modules
+      with:
+        path: |
+          node_modules
+          packages/*/node_modules
+        key: modules-${{ hashFiles('package-lock.json') }}
+
+    - name: Install dependencies
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: npm ci
