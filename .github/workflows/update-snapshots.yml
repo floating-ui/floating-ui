@@ -9,10 +9,7 @@ jobs:
     name: Functional
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - uses: ./.github/actions/setup
       - run: npx playwright install-deps
       - run: npx playwright install
       - run: npm run build
