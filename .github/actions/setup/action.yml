@@ -10,23 +10,5 @@ runs:
         cache: 'npm'
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Cache npm
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: npm-${{ hashFiles('package-lock.json') }}
-        restore-keys: npm-
-
-    - name: Cache node_modules
-      uses: actions/cache@v3
-      id: cache-node-modules
-      with:
-        path: |
-          node_modules
-          packages/*/node_modules
-        key: modules-${{ hashFiles('package-lock.json') }}
-
     - name: Install dependencies
-      shell: bash
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
-      run: npm ci
+      uses: bahmutov/npm-install@v1
