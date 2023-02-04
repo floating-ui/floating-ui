@@ -4,6 +4,7 @@ import {
 } from '../detectOverflow';
 import type {Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
+import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
 import {max} from '../utils/math';
 
@@ -42,6 +43,7 @@ export const size = (
     );
     const side = getSide(placement);
     const alignment = getAlignment(placement);
+    const axis = getMainAxisFromPlacement(placement);
 
     let heightSide: 'top' | 'bottom';
     let widthSide: 'left' | 'right';
@@ -63,26 +65,28 @@ export const size = (
     const yMin = max(overflow.top, 0);
     const yMax = max(overflow.bottom, 0);
 
-    const dimensions = {
-      availableHeight:
-        rects.floating.height -
-        (['left', 'right'].includes(placement)
-          ? 2 *
-            (yMin !== 0 || yMax !== 0
-              ? yMin + yMax
-              : max(overflow.top, overflow.bottom))
-          : overflow[heightSide]),
-      availableWidth:
-        rects.floating.width -
-        (['top', 'bottom'].includes(placement)
-          ? 2 *
+    let availableHeight = rects.floating.height - overflow[heightSide];
+    let availableWidth = rects.floating.width - overflow[widthSide];
+
+    if (!middlewareArguments.middlewareData.shift && !alignment) {
+      if (axis === 'x') {
+        availableWidth =
+          rects.floating.width -
+          2 *
             (xMin !== 0 || xMax !== 0
               ? xMin + xMax
-              : max(overflow.left, overflow.right))
-          : overflow[widthSide]),
-    };
+              : max(overflow.left, overflow.right));
+      } else {
+        availableHeight =
+          rects.floating.height -
+          2 *
+            (yMin !== 0 || yMax !== 0
+              ? yMin + yMax
+              : max(overflow.top, overflow.bottom));
+      }
+    }
 
-    await apply({...middlewareArguments, ...dimensions});
+    await apply({...middlewareArguments, availableWidth, availableHeight});
 
     const nextDimensions = await platform.getDimensions(elements.floating);
 
