@@ -111,7 +111,7 @@ test('right-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
   await click(page, `[data-testid="alignment-end"]`);
 
-  await scroll(page, {y: 550});
+  await scroll(page, {x: 550});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `right-end.png`
@@ -122,7 +122,7 @@ test('left-end', async ({page}) => {
   await page.goto('http://localhost:1234/autoPlacement');
   await click(page, `[data-testid="alignment-end"]`);
 
-  await scroll(page, {y: 550});
+  await scroll(page, {x: 550});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `left-end.png`
