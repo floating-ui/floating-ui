@@ -34,3 +34,22 @@ useCases.forEach((useCase) => {
     });
   });
 });
+
+test('relative position host polyfill', async ({page}) => {
+  await page.goto('http://localhost:1234/shadow-DOM');
+
+  await click(
+    page,
+    '[data-testid="use-case-relative-host-with-shadowed-floating-child"]'
+  );
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `without-polyfill.png`
+  );
+
+  await click(page, '[data-testid="polyfill-true"]');
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `with-polyfill.png`
+  );
+});
