@@ -1,5 +1,7 @@
 import {expect, test} from '@playwright/test';
 
+import {scroll} from './utils/scroll';
+
 test('should be anchored on bottom', async ({page}) => {
   await page.goto('http://localhost:1234/virtual-element');
 
@@ -11,16 +13,13 @@ test('should be anchored on bottom', async ({page}) => {
 test('autoUpdate should respect the `contextElement`', async ({page}) => {
   await page.goto('http://localhost:1234/virtual-element');
 
-  await page.evaluate(() => {
-    const scroll = document.querySelector('.scroll');
-    if (scroll) {
-      scroll.scrollLeft = 800;
-    }
-  });
+  await scroll(page, {x: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `scroll.png`
   );
+
+  await page.waitForSelector('.reference');
 
   await page.evaluate(() => {
     const reference = document.querySelector(

@@ -1,6 +1,8 @@
 import {PlaywrightTestConfig} from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
+  workers: 4,
+  fullyParallel: true,
   use: {
     launchOptions: {
       ignoreDefaultArgs: ['--hide-scrollbars'],
