@@ -45,10 +45,26 @@ These are the options you can pass to `autoPlacement(){:js}`.
 
 ```ts
 interface Options extends DetectOverflowOptions {
+  crossAxis?: boolean;
   alignment?: Alignment | null;
   autoAlignment?: boolean;
   allowedPlacements?: Array<Placement>;
 }
+```
+
+### crossAxis
+
+default: `false{:js}`
+
+Determines whether a "most space" strategy is also used for the
+cross axis (which runs along the alignment of the floating
+element). May be desirable when the
+`allowedPlacements{:.objectKey}` are all on the same axis.
+
+```js
+autoPlacement({
+  crossAxis: true,
+});
 ```
 
 ### alignment

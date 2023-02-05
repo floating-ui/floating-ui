@@ -54,13 +54,17 @@ await detectOverflow(middlewareArguments, {
 ### boundary
 
 ```ts
-type Boundary = 'clippingAncestors' | Element | Array<Element>;
+type Boundary =
+  | 'clippingAncestors'
+  | Element
+  | Array<Element>
+  | Rect;
 ```
 
-This describes the clipping element(s) that overflow will be
-checked relative to. The default is `'clippingAncestors'{:js}`,
-which are the overflow ancestors which will cause the element to
-be clipped.
+This describes the clipping element(s) or area that overflow will
+be checked relative to. The default is
+`'clippingAncestors'{:js}`, which are the overflow ancestors
+which will cause the element to be clipped.
 
 ```js
 await detectOverflow(middlewareArguments, {
@@ -71,7 +75,7 @@ await detectOverflow(middlewareArguments, {
 ### rootBoundary
 
 ```ts
-type RootBoundary = 'viewport' | 'document';
+type RootBoundary = 'viewport' | 'document' | Rect;
 ```
 
 This describes the root boundary that the element will be checked
@@ -82,12 +86,27 @@ the
 which correctly handles pinch-zooming and mobile viewports when
 the keyboard is open.
 
-The other option is `'document'{:js}`, which is the entire page
-outside the viewport.
+The other string option is `'document'{:js}`, which is the entire
+page outside the viewport.
 
 ```js
 await detectOverflow(middlewareArguments, {
   rootBoundary: 'document', // 'viewport' by default
+});
+```
+
+You may also pass a `Rect{:.class}` object to define a custom
+boundary area (relative to the viewport).
+
+```js
+await detectOverflow(middlewareArguments, {
+  // Layout viewport, instead of the visual viewport
+  rootBoundary: {
+    x: 0,
+    y: 0,
+    width: document.documentElement.clientWidth,
+    height: document.documentElement.clientHeight,
+  },
 });
 ```
 
