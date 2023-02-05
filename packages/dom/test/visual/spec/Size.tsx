@@ -57,8 +57,8 @@ export function Size() {
               position: strategy,
               top: y ?? '',
               left: x ?? '',
-              width: 800,
-              height: 800,
+              width: 400,
+              height: 300,
               ...(addFlipShift && {
                 width: 600,
                 height: 600,
