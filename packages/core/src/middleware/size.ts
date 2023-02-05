@@ -44,6 +44,7 @@ export const size = (
     const side = getSide(placement);
     const alignment = getAlignment(placement);
     const axis = getMainAxisFromPlacement(placement);
+    const isXAxis = axis === 'x';
     const {width, height} = rects.floating;
 
     let heightSide: 'top' | 'bottom';
@@ -61,16 +62,25 @@ export const size = (
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
-    let availableHeight = min(
-      // Maximum clipping viewport height
-      height - overflow.bottom - overflow.top,
-      height - overflow[heightSide]
-    );
-    let availableWidth = min(
-      // Maximum clipping viewport width
-      width - overflow.right - overflow.left,
-      width - overflow[widthSide]
-    );
+    const overflowAvailableHeight = height - overflow[heightSide];
+    const overflowAvailableWidth = width - overflow[widthSide];
+
+    let availableHeight = overflowAvailableHeight;
+    let availableWidth = overflowAvailableWidth;
+
+    if (isXAxis) {
+      availableWidth = min(
+        // Maximum clipping viewport width
+        width - overflow.right - overflow.left,
+        overflowAvailableWidth
+      );
+    } else {
+      availableHeight = min(
+        // Maximum clipping viewport height
+        height - overflow.bottom - overflow.top,
+        overflowAvailableHeight
+      );
+    }
 
     if (!middlewareArguments.middlewareData.shift && !alignment) {
       const xMin = max(overflow.left, 0);
@@ -78,7 +88,7 @@ export const size = (
       const yMin = max(overflow.top, 0);
       const yMax = max(overflow.bottom, 0);
 
-      if (axis === 'x') {
+      if (isXAxis) {
         availableWidth =
           width -
           2 *
