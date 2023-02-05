@@ -159,3 +159,15 @@ test('fallbackStrategy: "initialPlacement"', async ({page}) => {
     `fallbackStrategy-initialPlacement.png`
   );
 });
+
+test('falls back to only checking mainAxis overflow first', async ({page}) => {
+  await page.goto('http://localhost:1234/flip');
+  await click(page, `[data-testid="placement-right"]`);
+  await click(page, `[data-testid="shift-true"]`);
+
+  await scroll(page, {x: 780, y: 600});
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `fallback-shift-main-axis.png`
+  );
+});

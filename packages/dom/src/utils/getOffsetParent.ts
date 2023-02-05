@@ -58,7 +58,7 @@ export function getOffsetParent(
     isTableElement(offsetParent) &&
     getComputedStyle(offsetParent).position === 'static'
   ) {
-    offsetParent = getTrueOffsetParent(offsetParent);
+    offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
 
   if (
