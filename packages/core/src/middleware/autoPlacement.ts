@@ -41,28 +41,31 @@ export function getPlacementList(
 
 export interface Options {
   /**
-   * Whether to check for most space along the crossAxis of the placement (the
-   * axis that runs along the alignment).
+   * The axis that runs along the alignment of the floating element. Determines
+   * whether to check for most space along this axis.
    * @default false
    */
   crossAxis: boolean;
+
   /**
    * Choose placements with a particular alignment.
    * @default undefined
    */
   alignment: Alignment | null;
+
   /**
-   * Which placements are allowed to be chosen. Placements must be within the
-   * `alignment` option set.
-   * @default allPlacements (variable)
-   */
-  allowedPlacements: Array<Placement>;
-  /**
-   * Whether to choose placements with the opposite alignment if they will fit
-   * better.
+   * Whether to choose placements with the opposite alignment if the preferred
+   * alignment does not fit.
    * @default true
    */
   autoAlignment: boolean;
+
+  /**
+   * Which placements are allowed to be chosen. Placements must be within the
+   * `alignment` option if explicitly set.
+   * @default allPlacements (variable)
+   */
+  allowedPlacements: Array<Placement>;
 }
 
 /**

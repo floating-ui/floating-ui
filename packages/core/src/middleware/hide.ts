@@ -19,12 +19,16 @@ function isAnySideFullyClipped(overflow: SideObject) {
 }
 
 export interface Options {
+  /**
+   * The strategy used to determine when to hide the floating element.
+   */
   strategy: 'referenceHidden' | 'escaped';
 }
 
 /**
- * Provides data to hide the floating element in applicable situations, such as
- * when it is not in the same clipping context as the reference element.
+ * A data provider that allows you to hide the floating element in applicable
+ * situations, usually when it’s not within the same clipping context as the
+ * reference element.
  * @see https://floating-ui.com/docs/hide
  */
 export const hide = (

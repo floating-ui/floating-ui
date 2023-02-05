@@ -10,15 +10,19 @@ import {within} from '../utils/within';
 
 export interface Options {
   /**
-   * The axis that runs along the alignment of the floating element.
+   * The axis that runs along the alignment of the floating element. Determines
+   * whether overflow along this axis is checked to perform shifting.
    * @default true
    */
   mainAxis: boolean;
+
   /**
-   * The axis that runs along the side of the floating element.
+   * The axis that runs along the side of the floating element. Determines
+   * whether overflow along this axis is checked to perform shifting.
    * @default false
    */
   crossAxis: boolean;
+
   /**
    * Accepts a function that limits the shifting done in order to prevent
    * detachment.
@@ -30,8 +34,8 @@ export interface Options {
 }
 
 /**
- * Shifts the floating element in order to keep it in view when it will overflow
- * a clipping boundary.
+ * A visibility optimizer that shifts the floating element along the specified
+ * axes in order to keep it in view.
  * @see https://floating-ui.com/docs/shift
  */
 export const shift = (

@@ -13,7 +13,7 @@ type Polyfill = (element: HTMLElement) => Element | null;
 
 function getTrueOffsetParent(
   element: Element,
-  polyfill?: Polyfill
+  polyfill: Polyfill | undefined
 ): Element | null {
   if (
     !isHTMLElement(element) ||

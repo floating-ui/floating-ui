@@ -77,6 +77,7 @@ configure each axis.
 
 default: `0{:js}`
 
+The axis that runs along the side of the floating element.
 Represents the distance (gutter or margin) between the floating
 element and the reference element.
 
@@ -151,6 +152,7 @@ Here's how it looks on the four sides:
 
 default: `0{:js}`
 
+The axis that runs along the alignment of the floating element.
 Represents the skidding between the floating element and the
 reference element.
 
@@ -225,13 +227,14 @@ Here's how it looks on the four sides:
 
 default: `null{:js}`
 
-Works on the same axis as `crossAxis{:.objectKey}` but applies
-only to aligned placements and works
-[logically](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties).
-The offset is inverted for `-end{:.string}` alignments.
+The same axis as `crossAxis{:.objectKey}` but applies only to
+aligned placements and inverts the `end{:.string}` alignment.
+When set to a number, it overrides the `crossAxis{:.objectKey}`
+value.
 
-This will override the `crossAxis{:.objectKey}` offset when set
-to a number.
+A positive number will move the floating element in the direction
+of the opposite edge to the one that is aligned, while a negative
+number the reverse.
 
 ```js
 offset({

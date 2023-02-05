@@ -60,10 +60,12 @@ interface Options extends DetectOverflowOptions {
 
 default: `'referenceHidden'{:js}`
 
-Specifies the type of hiding strategy to use.
+The strategy used to determine when to hide the floating element.
 
 ```js
-hide({strategy: 'escaped'}); // 'referenceHidden' by default
+hide({
+  strategy: 'escaped',
+}); // 'referenceHidden' by default
 ```
 
 If you'd like to use multiple strategies, call `hide(){:js}`

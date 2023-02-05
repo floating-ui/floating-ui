@@ -11,6 +11,7 @@ export interface Options {
    * @default undefined
    */
   element: any;
+
   /**
    * The padding between the arrow element and the floating element edges.
    * Useful when the floating element has rounded corners.
@@ -20,8 +21,9 @@ export interface Options {
 }
 
 /**
- * Positions an inner element of the floating element such that it is centered
- * to the reference element.
+ * A data provider that provides data to position an inner element of the
+ * floating element (usually a triangle or caret) so that it is centered to the
+ * reference element.
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (options: Options): Middleware => ({

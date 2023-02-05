@@ -3,8 +3,9 @@ import {arrow as arrowCore} from '@floating-ui/dom';
 import * as React from 'react';
 
 /**
- * Positions an inner element of the floating element such that it is centered
- * to the reference element.
+ * A data provider that provides data to position an inner element of the
+ * floating element (usually a triangle or caret) so that it is centered to the
+ * reference element.
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
