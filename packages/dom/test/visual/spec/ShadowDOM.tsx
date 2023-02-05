@@ -28,10 +28,13 @@ export function ShadowDOM() {
   const [cssPosition, setCssPosition] = useState<CSSPosition>('static');
   const [strategy, setStrategy] = useState<Strategy>('absolute');
   const [withTransform, setWithTransform] = useState<boolean>(false);
+  const [polyfill, setPolyfill] = useState('false');
+
   const UseCaseTag = useCase;
   const hostOptions = {
     placement,
     strategy,
+    polyfill,
     style: {
       position: cssPosition,
       transform: withTransform ? 'translate(0)' : 'none',
@@ -135,6 +138,22 @@ export function ShadowDOM() {
             }}
           >
             {localStrategy}
+          </button>
+        ))}
+      </Controls>
+
+      <h3>Polyfill</h3>
+      <Controls>
+        {['true', 'false'].map((strBool) => (
+          <button
+            key={strBool}
+            data-testid={`polyfill-${strBool}`}
+            onClick={() => setPolyfill(strBool)}
+            style={{
+              backgroundColor: strBool === polyfill ? 'black' : '',
+            }}
+          >
+            {strBool}
           </button>
         ))}
       </Controls>

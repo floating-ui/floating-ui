@@ -9,7 +9,7 @@ import {getRectRelativeToOffsetParent} from './utils/getRectRelativeToOffsetPare
 import {getScale} from './utils/getScale';
 import {isElement} from './utils/is';
 
-export const platform: Platform = {
+export const platform: Required<Platform> = {
   getClippingRect,
   convertOffsetParentRelativeRectToViewportRelativeRect,
   isElement,
