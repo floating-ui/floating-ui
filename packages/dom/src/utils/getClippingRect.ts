@@ -18,12 +18,14 @@ import {getParentNode} from './getParentNode';
 import {getScale} from './getScale';
 import {getViewportRect} from './getViewportRect';
 import {
+  isClientRectVisualViewportBased,
   isContainingBlock,
   isElement,
   isHTMLElement,
   isLastTraversableNode,
 } from './is';
 import {max, min} from './math';
+import {getWindow} from './window';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
@@ -56,17 +58,25 @@ function getClientRectFromClippingAncestor(
   clippingAncestor: Element | RootBoundary,
   strategy: Strategy
 ): ClientRectObject {
+  let rect: Rect;
+
   if (clippingAncestor === 'viewport') {
-    return rectToClientRect(getViewportRect(element, strategy));
+    rect = getViewportRect(element, strategy);
+  } else if (clippingAncestor === 'document') {
+    rect = getDocumentRect(getDocumentElement(element));
+  } else if (isElement(clippingAncestor)) {
+    rect = getInnerBoundingClientRect(clippingAncestor, strategy);
+  } else {
+    const mutableRect = {...clippingAncestor};
+    if (isClientRectVisualViewportBased()) {
+      const win = getWindow(element);
+      mutableRect.x -= win.visualViewport?.offsetLeft || 0;
+      mutableRect.y -= win.visualViewport?.offsetTop || 0;
+    }
+    rect = mutableRect;
   }
 
-  if (isElement(clippingAncestor)) {
-    return rectToClientRect(
-      getInnerBoundingClientRect(clippingAncestor, strategy)
-    );
-  }
-
-  return rectToClientRect(getDocumentRect(getDocumentElement(element)));
+  return rectToClientRect(rect);
 }
 
 // A "clipping ancestor" is an `overflow` element with the characteristic of
@@ -143,20 +153,23 @@ export function getClippingRect(
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
 
-  const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
-    const rect = getClientRectFromClippingAncestor(
-      element,
-      clippingAncestor,
-      strategy
-    );
+  const clippingRect = clippingAncestors.reduce(
+    (accRect: ClientRectObject, clippingAncestor) => {
+      const rect = getClientRectFromClippingAncestor(
+        element,
+        clippingAncestor,
+        strategy
+      );
 
-    accRect.top = max(rect.top, accRect.top);
-    accRect.right = min(rect.right, accRect.right);
-    accRect.bottom = min(rect.bottom, accRect.bottom);
-    accRect.left = max(rect.left, accRect.left);
+      accRect.top = max(rect.top, accRect.top);
+      accRect.right = min(rect.right, accRect.right);
+      accRect.bottom = min(rect.bottom, accRect.bottom);
+      accRect.left = max(rect.left, accRect.left);
 
-    return accRect;
-  }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
+      return accRect;
+    },
+    getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy)
+  );
 
   return {
     width: clippingRect.right - clippingRect.left,

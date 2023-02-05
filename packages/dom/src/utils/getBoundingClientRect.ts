@@ -1,7 +1,7 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 
 import {FALLBACK_SCALE, getScale} from './getScale';
-import {isElement, isLayoutViewport} from './is';
+import {isClientRectVisualViewportBased, isElement} from './is';
 import {unwrapElement} from './unwrapElement';
 import {getWindow} from './window';
 
@@ -26,7 +26,7 @@ export function getBoundingClientRect(
   }
 
   const win = domElement ? getWindow(domElement) : window;
-  const addVisualOffsets = !isLayoutViewport() && isFixedStrategy;
+  const addVisualOffsets = isClientRectVisualViewportBased() && isFixedStrategy;
 
   let x =
     (clientRect.left +

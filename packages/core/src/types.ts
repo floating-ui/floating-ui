@@ -151,7 +151,7 @@ export interface MiddlewareArguments extends Coords {
 export type ClientRectObject = Rect & SideObject;
 export type Padding = number | Partial<SideObject>;
 export type Boundary = any;
-export type RootBoundary = 'viewport' | 'document';
+export type RootBoundary = 'viewport' | 'document' | Rect;
 export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';

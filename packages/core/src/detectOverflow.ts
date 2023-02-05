@@ -14,12 +14,12 @@ const DEBUG_RECTS = false;
 
 export interface Options {
   /**
-   * The clipping element(s) in which overflow will be checked.
+   * The clipping element(s) or area in which overflow will be checked.
    * @default 'clippingAncestors'
    */
   boundary: Boundary;
   /**
-   * The root clipping element in which overflow will be checked.
+   * The root clipping area in which overflow will be checked.
    * @default 'viewport'
    */
   rootBoundary: RootBoundary;
