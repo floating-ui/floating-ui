@@ -1,6 +1,6 @@
 import type {Placement} from '@floating-ui/core';
 import type {FlipOptions} from '@floating-ui/core';
-import {flip, useFloating} from '@floating-ui/react-dom';
+import {flip, shift, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
@@ -21,16 +21,18 @@ export function Flip() {
   const [fallbackStrategy, setFallbackStrategy] =
     useState<FlipOptions['fallbackStrategy']>('bestFit');
   const [flipAlignment, setFlipAlignment] = useState(true);
+  const [addShift, setAddShift] = useState(false);
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,
     middleware: [
       flip({
         mainAxis,
         crossAxis,
-        fallbackPlacements,
+        fallbackPlacements: addShift ? ['bottom'] : fallbackPlacements,
         fallbackStrategy,
         flipAlignment,
       }),
+      addShift && shift(),
     ],
   });
 
@@ -64,8 +66,11 @@ export function Flip() {
             className="floating"
             style={{
               position: strategy,
-              top: y ?? '',
-              left: x ?? '',
+              top: y ?? 0,
+              left: x ?? 0,
+              ...(addShift && {
+                width: 400,
+              }),
             }}
           >
             Floating
@@ -183,6 +188,22 @@ export function Flip() {
             onClick={() => setFlipAlignment(bool)}
             style={{
               backgroundColor: bool === flipAlignment ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Add shift</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`shift-${bool}`}
+            onClick={() => setAddShift(bool)}
+            style={{
+              backgroundColor: bool === addShift ? 'black' : '',
             }}
           >
             {String(bool)}

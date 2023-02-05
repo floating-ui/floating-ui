@@ -6,7 +6,7 @@ import type {Middleware, MiddlewareArguments} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
-import {max} from '../utils/math';
+import {max, min} from '../utils/math';
 
 export interface Options {
   /**
@@ -44,6 +44,7 @@ export const size = (
     const side = getSide(placement);
     const alignment = getAlignment(placement);
     const axis = getMainAxisFromPlacement(placement);
+    const {width, height} = rects.floating;
 
     let heightSide: 'top' | 'bottom';
     let widthSide: 'left' | 'right';
@@ -60,25 +61,33 @@ export const size = (
       heightSide = alignment === 'end' ? 'top' : 'bottom';
     }
 
-    const xMin = max(overflow.left, 0);
-    const xMax = max(overflow.right, 0);
-    const yMin = max(overflow.top, 0);
-    const yMax = max(overflow.bottom, 0);
-
-    let availableHeight = rects.floating.height - overflow[heightSide];
-    let availableWidth = rects.floating.width - overflow[widthSide];
+    let availableHeight = min(
+      // Maximum clipping viewport height
+      height - overflow.bottom - overflow.top,
+      height - overflow[heightSide]
+    );
+    let availableWidth = min(
+      // Maximum clipping viewport width
+      width - overflow.right - overflow.left,
+      width - overflow[widthSide]
+    );
 
     if (!middlewareArguments.middlewareData.shift && !alignment) {
+      const xMin = max(overflow.left, 0);
+      const xMax = max(overflow.right, 0);
+      const yMin = max(overflow.top, 0);
+      const yMax = max(overflow.bottom, 0);
+
       if (axis === 'x') {
         availableWidth =
-          rects.floating.width -
+          width -
           2 *
             (xMin !== 0 || xMax !== 0
               ? xMin + xMax
               : max(overflow.left, overflow.right));
       } else {
         availableHeight =
-          rects.floating.height -
+          height -
           2 *
             (yMin !== 0 || yMax !== 0
               ? yMin + yMax
@@ -90,10 +99,7 @@ export const size = (
 
     const nextDimensions = await platform.getDimensions(elements.floating);
 
-    if (
-      rects.floating.width !== nextDimensions.width ||
-      rects.floating.height !== nextDimensions.height
-    ) {
+    if (width !== nextDimensions.width || height !== nextDimensions.height) {
       return {
         reset: {
           rects: true,

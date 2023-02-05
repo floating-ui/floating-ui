@@ -13,7 +13,7 @@ type Polyfill = (element: HTMLElement) => Element | null;
 
 function getTrueOffsetParent(
   element: Element,
-  polyfill?: Polyfill
+  polyfill: Polyfill | undefined
 ): Element | null {
   if (
     !isHTMLElement(element) ||
@@ -58,7 +58,7 @@ export function getOffsetParent(
     isTableElement(offsetParent) &&
     getComputedStyle(offsetParent).position === 'static'
   ) {
-    offsetParent = getTrueOffsetParent(offsetParent);
+    offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
 
   if (

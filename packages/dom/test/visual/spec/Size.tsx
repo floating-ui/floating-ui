@@ -1,5 +1,5 @@
 import type {Placement} from '@floating-ui/core';
-import {size, useFloating} from '@floating-ui/react-dom';
+import {flip, shift, size, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
@@ -9,9 +9,15 @@ import {useScroll} from '../utils/useScroll';
 export function Size() {
   const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<Placement>('bottom');
+  const [addFlipShift, setAddFlipShift] = useState(false);
+
+  const hasEdgeAlignment = placement.includes('-');
+
   const {x, y, reference, floating, strategy, update, refs} = useFloating({
     placement,
     middleware: [
+      addFlipShift && flip({padding: 10}),
+      addFlipShift && !hasEdgeAlignment && shift({padding: 10}),
       size({
         apply({availableHeight, availableWidth, elements}) {
           Object.assign(elements.floating.style, {
@@ -21,6 +27,7 @@ export function Size() {
         },
         padding: 10,
       }),
+      addFlipShift && hasEdgeAlignment && shift({padding: 10}),
     ],
   });
 
@@ -50,8 +57,12 @@ export function Size() {
               position: strategy,
               top: y ?? '',
               left: x ?? '',
-              width: 400,
-              height: 300,
+              width: 800,
+              height: 800,
+              ...(addFlipShift && {
+                width: 600,
+                height: 600,
+              }),
             }}
           >
             Floating
@@ -84,6 +95,22 @@ export function Size() {
             onClick={() => setRtl(bool)}
             style={{
               backgroundColor: rtl === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Add flip and shift</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`flipshift-${bool}`}
+            onClick={() => setAddFlipShift(bool)}
+            style={{
+              backgroundColor: addFlipShift === bool ? 'black' : '',
             }}
           >
             {String(bool)}
