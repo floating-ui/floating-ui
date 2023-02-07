@@ -105,7 +105,7 @@ function getClippingElementAncestors(
     const computedStyle = getComputedStyle(currentNode);
     const containingBlock = isContainingBlock(currentNode);
 
-    const shouldIgnoreCurrentNode = ['fixed'].includes(computedStyle.position);
+    const shouldIgnoreCurrentNode = computedStyle.position === 'fixed';
     if (shouldIgnoreCurrentNode) {
       currentContainingBlockComputedStyle = null;
     } else {
