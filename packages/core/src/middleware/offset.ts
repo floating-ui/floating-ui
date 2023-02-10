@@ -1,4 +1,4 @@
-import type {Coords, Middleware, MiddlewareArguments} from '../types';
+import type {Coords, Middleware, MiddlewareState} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
@@ -33,15 +33,15 @@ type OffsetValue =
        */
       alignmentAxis?: number | null;
     };
-type OffsetFunction = (args: MiddlewareArguments) => OffsetValue;
+type OffsetFunction = (state: MiddlewareState) => OffsetValue;
 
 export type Options = OffsetValue | OffsetFunction;
 
 export async function convertValueToCoords(
-  middlewareArguments: MiddlewareArguments,
+  state: MiddlewareState,
   value: Options
 ): Promise<Coords> {
-  const {placement, platform, elements} = middlewareArguments;
+  const {placement, platform, elements} = state;
   const rtl = await platform.isRTL?.(elements.floating);
 
   const side = getSide(placement);
@@ -50,8 +50,7 @@ export async function convertValueToCoords(
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
 
-  const rawValue =
-    typeof value === 'function' ? value(middlewareArguments) : value;
+  const rawValue = typeof value === 'function' ? value(state) : value;
 
   // eslint-disable-next-line prefer-const
   let {mainAxis, crossAxis, alignmentAxis} =
@@ -69,8 +68,8 @@ export async function convertValueToCoords(
 }
 
 /**
- * A placement modifier that translates the floating element along the specified
- * axes.
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
  * A number (shorthand for `mainAxis` or distance), or an axes configuration
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
@@ -78,9 +77,9 @@ export async function convertValueToCoords(
 export const offset = (value: Options = 0): Middleware => ({
   name: 'offset',
   options: value,
-  async fn(middlewareArguments) {
-    const {x, y} = middlewareArguments;
-    const diffCoords = await convertValueToCoords(middlewareArguments, value);
+  async fn(state) {
+    const {x, y} = state;
+    const diffCoords = await convertValueToCoords(state, value);
 
     return {
       x: x + diffCoords.x,

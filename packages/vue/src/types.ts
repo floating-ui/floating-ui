@@ -9,7 +9,64 @@ import type {
 } from '@floating-ui/dom';
 import type {ComponentPublicInstance, Ref} from 'vue-demi';
 
-export * from '.';
+export {arrow} from './arrow';
+export {useFloating} from './useFloating';
+export type {
+  AlignedPlacement,
+  Alignment,
+  AutoPlacementOptions,
+  AutoUpdateOptions,
+  Axis,
+  Boundary,
+  ClientRectObject,
+  ComputePositionConfig,
+  ComputePositionReturn,
+  Coords,
+  DetectOverflowOptions,
+  Dimensions,
+  ElementContext,
+  ElementRects,
+  Elements,
+  FlipOptions,
+  FloatingElement,
+  HideOptions,
+  InlineOptions,
+  Length,
+  Middleware,
+  MiddlewareArguments,
+  MiddlewareData,
+  MiddlewareReturn,
+  MiddlewareState,
+  NodeScroll,
+  OffsetOptions,
+  Padding,
+  Placement,
+  Platform,
+  Rect,
+  ReferenceElement,
+  RootBoundary,
+  ShiftOptions,
+  Side,
+  SideObject,
+  SizeOptions,
+  Strategy,
+  VirtualElement,
+} from '@floating-ui/dom';
+export {
+  autoPlacement,
+  autoUpdate,
+  computePosition,
+  detectOverflow,
+  flip,
+  getOverflowAncestors,
+  hide,
+  inline,
+  limitShift,
+  offset,
+  platform,
+  shift,
+  size,
+} from '@floating-ui/dom';
 
 export type MaybeReadonlyRef<T> = T | Readonly<Ref<T>>;
 

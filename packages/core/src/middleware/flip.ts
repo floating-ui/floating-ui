@@ -52,12 +52,9 @@ export interface Options {
 }
 
 /**
- * A visibility optimizer that changes the placement of the floating element in
- * order to keep it in view. By default, only the opposite placement is tried.
- *
- * It has the ability to flip to any placement, not just the opposite one. You
- * can use a series of “fallback” placements, where each placement is
- * progressively tried until the one that fits can be used.
+ * Optimizes the visibility of the floating element by flipping the `placement`
+ * in order to keep it in view when the preferred placement(s) will overflow the
+ * clipping boundary. Alternative to `autoPlacement`.
  * @see https://floating-ui.com/docs/flip
  */
 export const flip = (
@@ -65,7 +62,7 @@ export const flip = (
 ): Middleware => ({
   name: 'flip',
   options,
-  async fn(middlewareArguments) {
+  async fn(state) {
     const {
       placement,
       middlewareData,
@@ -73,7 +70,7 @@ export const flip = (
       initialPlacement,
       platform,
       elements,
-    } = middlewareArguments;
+    } = state;
 
     const {
       mainAxis: checkMainAxis = true,
@@ -108,10 +105,7 @@ export const flip = (
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
-    const overflow = await detectOverflow(
-      middlewareArguments,
-      detectOverflowOptions
-    );
+    const overflow = await detectOverflow(state, detectOverflowOptions);
 
     const overflows = [];
     let overflowsData = middlewareData.flip?.overflows || [];

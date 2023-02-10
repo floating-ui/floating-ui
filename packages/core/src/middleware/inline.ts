@@ -33,9 +33,8 @@ export interface Options {
 export const inline = (options: Partial<Options> = {}): Middleware => ({
   name: 'inline',
   options,
-  async fn(middlewareArguments) {
-    const {placement, elements, rects, platform, strategy} =
-      middlewareArguments;
+  async fn(state) {
+    const {placement, elements, rects, platform, strategy} = state;
     // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
     // ClientRect's bounds, despite the event listener being triggered. A
     // padding of 2 seems to handle this issue.

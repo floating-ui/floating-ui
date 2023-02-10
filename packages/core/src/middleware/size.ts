@@ -2,7 +2,7 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Middleware, MiddlewareArguments} from '../types';
+import type {Middleware, MiddlewareState} from '../types';
 import {getAlignment} from '../utils/getAlignment';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
@@ -15,7 +15,7 @@ export interface Options {
    * @default undefined
    */
   apply(
-    args: MiddlewareArguments & {
+    args: MiddlewareState & {
       availableWidth: number;
       availableHeight: number;
     }
@@ -23,9 +23,9 @@ export interface Options {
 }
 
 /**
- * Provides data to change the size of the floating element. For instance,
- * prevent it from overflowing its clipping boundary or match the width of the
- * reference element.
+ * Provides data that allows you to change the size of the floating element —
+ * for instance, prevent it from overflowing the clipping boundary or match the
+ * width of the reference element.
  * @see https://floating-ui.com/docs/size
  */
 export const size = (
@@ -33,14 +33,11 @@ export const size = (
 ): Middleware => ({
   name: 'size',
   options,
-  async fn(middlewareArguments) {
-    const {placement, rects, platform, elements} = middlewareArguments;
+  async fn(state) {
+    const {placement, rects, platform, elements} = state;
     const {apply = () => {}, ...detectOverflowOptions} = options;
 
-    const overflow = await detectOverflow(
-      middlewareArguments,
-      detectOverflowOptions
-    );
+    const overflow = await detectOverflow(state, detectOverflowOptions);
     const side = getSide(placement);
     const alignment = getAlignment(placement);
     const axis = getMainAxisFromPlacement(placement);
@@ -82,7 +79,7 @@ export const size = (
       );
     }
 
-    if (!middlewareArguments.middlewareData.shift && !alignment) {
+    if (!state.middlewareData.shift && !alignment) {
       const xMin = max(overflow.left, 0);
       const xMax = max(overflow.right, 0);
       const yMin = max(overflow.top, 0);
@@ -105,7 +102,7 @@ export const size = (
       }
     }
 
-    await apply({...middlewareArguments, availableWidth, availableHeight});
+    await apply({...state, availableWidth, availableHeight});
 
     const nextDimensions = await platform.getDimensions(elements.floating);
 

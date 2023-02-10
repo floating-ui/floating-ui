@@ -26,6 +26,8 @@ export {InnerProps, UseInnerOffsetProps} from './inner';
 export type {
   AlignedPlacement,
   Alignment,
+  ArrowOptions,
+  AutoPlacementOptions,
   AutoUpdateOptions,
   Axis,
   Boundary,
@@ -38,19 +40,25 @@ export type {
   ElementContext,
   ElementRects,
   Elements,
+  FlipOptions,
   FloatingElement,
+  HideOptions,
+  InlineOptions,
   Length,
   Middleware,
   MiddlewareArguments,
   MiddlewareData,
   MiddlewareReturn,
+  MiddlewareState,
   NodeScroll,
+  OffsetOptions,
   Padding,
   Placement,
   Platform,
   Rect,
   ReferenceElement,
   RootBoundary,
+  ShiftOptions,
   Side,
   SideObject,
   SizeOptions,
@@ -73,6 +81,11 @@ export {
   shift,
   size,
 } from '@floating-ui/react-dom';
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 
@@ -106,16 +119,18 @@ export interface ContextData {
   [key: string]: any;
 }
 
-export interface FloatingContext<RT extends ReferenceType = ReferenceType>
-  extends Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  events: FloatingEvents;
-  dataRef: React.MutableRefObject<ContextData>;
-  nodeId: string | undefined;
-  refs: ExtendedRefs<RT>;
-  elements: ExtendedElements<RT>;
-}
+export type FloatingContext<RT extends ReferenceType = ReferenceType> =
+  Prettify<
+    Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> & {
+      open: boolean;
+      onOpenChange: (open: boolean) => void;
+      events: FloatingEvents;
+      dataRef: React.MutableRefObject<ContextData>;
+      nodeId: string | undefined;
+      refs: ExtendedRefs<RT>;
+      elements: ExtendedElements<RT>;
+    }
+  >;
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
   id: string;
@@ -138,22 +153,35 @@ export interface ElementProps {
 
 export type ReferenceType = Element | VirtualElement;
 
-export type UseFloatingData = Omit<ComputePositionReturn, 'x' | 'y'> & {
-  x: number | null;
-  y: number | null;
-};
+export type UseFloatingData = Prettify<
+  Omit<ComputePositionReturn, 'x' | 'y'> & {
+    x: number | null;
+    y: number | null;
+  }
+>;
 
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
-  UseFloatingData & {
-    update: () => void;
-    reference: (node: RT | null) => void;
-    floating: (node: HTMLElement | null) => void;
-    positionReference: (node: ReferenceType | null) => void;
-    context: FloatingContext<RT>;
-    refs: ExtendedRefs<RT>;
-    elements: ExtendedElements<RT>;
-    isPositioned: boolean;
-  };
+  Prettify<
+    UseFloatingData & {
+      update: () => void;
+      /**
+       * @deprecated use `refs.setReference` instead.
+       */
+      reference: (node: RT | null) => void;
+      /**
+       * @deprecated use `refs.setFloating` instead.
+       */
+      floating: (node: HTMLElement | null) => void;
+      /**
+       * @deprecated use `refs.setPositionReference` instead.
+       */
+      positionReference: (node: ReferenceType | null) => void;
+      context: FloatingContext<RT>;
+      refs: ExtendedRefs<RT>;
+      elements: ExtendedElements<RT>;
+      isPositioned: boolean;
+    }
+  >;
 
 export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
   open: boolean;

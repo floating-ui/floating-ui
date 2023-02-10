@@ -15,6 +15,7 @@ export type {
   MiddlewareArguments,
   MiddlewareData,
   MiddlewareReturn,
+  MiddlewareState,
   Padding,
   Placement,
   Platform,
