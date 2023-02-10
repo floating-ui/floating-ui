@@ -8,8 +8,8 @@ import type {
   FlipOptions,
   HideOptions,
   Middleware as CoreMiddleware,
-  MiddlewareArguments as CoreMiddlewareArguments,
   MiddlewareReturn,
+  MiddlewareState as CoreMiddlewareState,
   Padding,
   Rect,
   RootBoundary,
@@ -18,6 +18,11 @@ import type {
   SizeOptions as CoreSizeOptions,
   Strategy,
 } from '@floating-ui/core';
+
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+  // eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 type Promisable<T> = T | Promise<T>;
 
@@ -58,36 +63,39 @@ export interface NodeScroll {
   scrollTop: number;
 }
 
+/**
+ * The clipping boundary area of the floating element.
+ */
 export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
 
-export type DetectOverflowOptions = Omit<
-  CoreDetectOverflowOptions,
-  'boundary'
-> & {
-  boundary: Boundary;
-};
+export type DetectOverflowOptions = Prettify<
+  Omit<CoreDetectOverflowOptions, 'boundary'> & {
+    boundary: Boundary;
+  }
+>;
 
-export type SizeOptions = Omit<CoreSizeOptions, 'apply'> & {
-  /**
-   * Function that is called to perform style mutations to the floating element
-   * to change its size.
-   * @default undefined
-   */
-  apply(
-    args: MiddlewareArguments & {
-      availableWidth: number;
-      availableHeight: number;
-    }
-  ): Promisable<void>;
-};
+export type SizeOptions = Prettify<
+  Omit<CoreSizeOptions, 'apply'> & {
+    /**
+     * Function that is called to perform style mutations to the floating element
+     * to change its size.
+     * @default undefined
+     */
+    apply(
+      args: MiddlewareState & {
+        availableWidth: number;
+        availableHeight: number;
+      }
+    ): Promisable<void>;
+  }
+>;
 
-export type ComputePositionConfig = Omit<
-  CoreComputePositionConfig,
-  'middleware' | 'platform'
-> & {
-  middleware?: Array<Middleware | null | undefined | false>;
-  platform?: Platform;
-};
+export type ComputePositionConfig = Prettify<
+  Omit<CoreComputePositionConfig, 'middleware' | 'platform'> & {
+    middleware?: Array<Middleware | null | undefined | false>;
+    platform?: Platform;
+  }
+>;
 
 /**
  * Custom positioning reference element.
@@ -106,16 +114,26 @@ export interface Elements {
   floating: FloatingElement;
 }
 
-export type MiddlewareArguments = Omit<CoreMiddlewareArguments, 'elements'> & {
-  elements: Elements;
-};
+export type MiddlewareState = Prettify<
+  Omit<CoreMiddlewareState, 'elements'> & {
+    elements: Elements;
+  }
+>;
+/**
+ * @deprecated use `MiddlewareState` instead.
+ */
+export type MiddlewareArguments = MiddlewareState;
 
-export type Middleware = Omit<CoreMiddleware, 'fn'> & {
-  fn(args: MiddlewareArguments): Promisable<MiddlewareReturn>;
-};
+export type Middleware = Prettify<
+  Omit<CoreMiddleware, 'fn'> & {
+    fn(state: MiddlewareState): Promisable<MiddlewareReturn>;
+  }
+>;
 
 /**
- * Automatically chooses the `placement` which has the most space available.
+ * Optimizes the visibility of the floating element by choosing the placement
+ * that has the most space available automatically, without needing to specify a
+ * preferred placement. Alternative to `flip`.
  * @see https://floating-ui.com/docs/autoPlacement
  */
 declare const autoPlacement: (
@@ -123,8 +141,8 @@ declare const autoPlacement: (
 ) => Middleware;
 
 /**
- * Shifts the floating element in order to keep it in view when it will overflow
- * a clipping boundary.
+ * Optimizes the visibility of the floating element by shifting it in order to
+ * keep it in view when it will overflow the clipping boundary.
  * @see https://floating-ui.com/docs/shift
  */
 declare const shift: (
@@ -132,8 +150,9 @@ declare const shift: (
 ) => Middleware;
 
 /**
- * Changes the placement of the floating element to one that will fit if the
- * initially specified `placement` does not.
+ * Optimizes the visibility of the floating element by flipping the `placement`
+ * in order to keep it in view when the preferred placement(s) will overflow the
+ * clipping boundary. Alternative to `autoPlacement`.
  * @see https://floating-ui.com/docs/flip
  */
 declare const flip: (
@@ -141,9 +160,9 @@ declare const flip: (
 ) => Middleware;
 
 /**
- * Provides data to change the size of the floating element. For instance,
- * prevent it from overflowing its clipping boundary or match the width of the
- * reference element.
+ * Provides data that allows you to change the size of the floating element —
+ * for instance, prevent it from overflowing the clipping boundary or match the
+ * width of the reference element.
  * @see https://floating-ui.com/docs/size
  */
 declare const size: (
@@ -151,8 +170,8 @@ declare const size: (
 ) => Middleware;
 
 /**
- * Positions an inner element of the floating element such that it is centered
- * to the reference element.
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
  * @see https://floating-ui.com/docs/arrow
  */
 declare const arrow: (options: {
@@ -171,14 +190,14 @@ declare const hide: (
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the
- * element is overflowing a given clipping boundary.
+ * element is overflowing a given clipping boundary on each side.
  * - positive = overflowing the boundary by that number of pixels
  * - negative = how many pixels left before it will overflow
  * - 0 = lies flush with the boundary
  * @see https://floating-ui.com/docs/detectOverflow
  */
 declare const detectOverflow: (
-  middlewareArguments: MiddlewareArguments,
+  state: MiddlewareState,
   options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
@@ -190,6 +209,8 @@ export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export type {
   AlignedPlacement,
   Alignment,
+  ArrowOptions,
+  AutoPlacementOptions,
   Axis,
   ClientRectObject,
   ComputePositionReturn,
@@ -197,13 +218,18 @@ export type {
   Dimensions,
   ElementContext,
   ElementRects,
+  FlipOptions,
+  HideOptions,
+  InlineOptions,
   Length,
   MiddlewareData,
   MiddlewareReturn,
+  OffsetOptions,
   Padding,
   Placement,
   Rect,
   RootBoundary,
+  ShiftOptions,
   Side,
   SideObject,
   Strategy,

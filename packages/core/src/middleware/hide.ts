@@ -26,9 +26,8 @@ export interface Options {
 }
 
 /**
- * A data provider that allows you to hide the floating element in applicable
- * situations, usually when it’s not within the same clipping context as the
- * reference element.
+ * Provides data to hide the floating element in applicable situations, such as
+ * when it is not in the same clipping context as the reference element.
  * @see https://floating-ui.com/docs/hide
  */
 export const hide = (
@@ -36,13 +35,13 @@ export const hide = (
 ): Middleware => ({
   name: 'hide',
   options,
-  async fn(middlewareArguments) {
+  async fn(state) {
     const {strategy = 'referenceHidden', ...detectOverflowOptions} = options;
-    const {rects} = middlewareArguments;
+    const {rects} = state;
 
     switch (strategy) {
       case 'referenceHidden': {
-        const overflow = await detectOverflow(middlewareArguments, {
+        const overflow = await detectOverflow(state, {
           ...detectOverflowOptions,
           elementContext: 'reference',
         });
@@ -55,7 +54,7 @@ export const hide = (
         };
       }
       case 'escaped': {
-        const overflow = await detectOverflow(middlewareArguments, {
+        const overflow = await detectOverflow(state, {
           ...detectOverflowOptions,
           altBoundary: true,
         });

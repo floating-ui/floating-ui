@@ -8,21 +8,21 @@ import type {
   ElementProps,
   FloatingContext,
   Middleware,
-  MiddlewareArguments,
+  MiddlewareState,
   SideObject,
 } from './types';
 import {getUserAgent} from './utils/getPlatform';
 
 function getArgsWithCustomFloatingHeight(
-  args: MiddlewareArguments,
+  state: MiddlewareState,
   height: number
 ) {
   return {
-    ...args,
+    ...state,
     rects: {
-      ...args.rects,
+      ...state.rects,
       floating: {
-        ...args.rects.floating,
+        ...state.rects.floating,
         height,
       },
     },
@@ -50,7 +50,7 @@ export const inner = (
 ): Middleware => ({
   name: 'inner',
   options: props,
-  async fn(middlewareArguments) {
+  async fn(state) {
     const {
       listRef,
       overflowRef,
@@ -66,12 +66,12 @@ export const inner = (
     const {
       rects,
       elements: {floating},
-    } = middlewareArguments;
+    } = state;
 
     const item = listRef.current[index];
 
     if (__DEV__) {
-      if (!middlewareArguments.placement.startsWith('bottom')) {
+      if (!state.placement.startsWith('bottom')) {
         console.warn(
           [
             'Floating UI: `placement` side must be "bottom" when using the',
@@ -86,13 +86,13 @@ export const inner = (
     }
 
     const nextArgs = {
-      ...middlewareArguments,
+      ...state,
       ...(await offset(
         -item.offsetTop -
           rects.reference.height / 2 -
           item.offsetHeight / 2 -
           innerOffset
-      ).fn(middlewareArguments)),
+      ).fn(state)),
     };
 
     const el = scrollRef?.current || floating;

@@ -21,18 +21,17 @@ export interface Options {
 }
 
 /**
- * A data provider that provides data to position an inner element of the
- * floating element (usually a triangle or caret) so that it is centered to the
- * reference element.
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (options: Options): Middleware => ({
   name: 'arrow',
   options,
-  async fn(middlewareArguments) {
+  async fn(state) {
     // Since `element` is required, we don't Partial<> the type.
     const {element, padding = 0} = options || {};
-    const {x, y, placement, rects, platform} = middlewareArguments;
+    const {x, y, placement, rects, platform} = state;
 
     if (element == null) {
       if (__DEV__) {

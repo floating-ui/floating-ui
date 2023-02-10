@@ -69,7 +69,9 @@ export interface Options {
 }
 
 /**
- * Automatically chooses the `placement` which has the most space available.
+ * Optimizes the visibility of the floating element by choosing the placement
+ * that has the most space available automatically, without needing to specify a
+ * preferred placement. Alternative to `flip`.
  * @see https://floating-ui.com/docs/autoPlacement
  */
 export const autoPlacement = (
@@ -77,9 +79,8 @@ export const autoPlacement = (
 ): Middleware => ({
   name: 'autoPlacement',
   options,
-  async fn(middlewareArguments) {
-    const {rects, middlewareData, placement, platform, elements} =
-      middlewareArguments;
+  async fn(state) {
+    const {rects, middlewareData, placement, platform, elements} = state;
 
     const {
       crossAxis = false,
@@ -94,10 +95,7 @@ export const autoPlacement = (
         ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
         : allowedPlacements;
 
-    const overflow = await detectOverflow(
-      middlewareArguments,
-      detectOverflowOptions
-    );
+    const overflow = await detectOverflow(state, detectOverflowOptions);
 
     const currentIndex = middlewareData.autoPlacement?.index || 0;
     const currentPlacement = placements[currentIndex];
