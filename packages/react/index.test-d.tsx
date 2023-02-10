@@ -2,6 +2,7 @@ import {useRef} from 'react';
 
 import {
   arrow,
+  platform,
   safePolygon,
   shift,
   useClick,
@@ -30,6 +31,9 @@ function App() {
       undefined,
     ],
     strategy: 'fixed',
+    platform: {
+      ...platform,
+    },
   });
   reference(null);
   reference({
