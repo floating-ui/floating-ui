@@ -32,7 +32,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
-  {open, dataRef}: FloatingContext<RT>,
+  {open, dataRef, refs}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
@@ -87,10 +87,12 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       if (
         isElement(target) &&
         (activeElement(getDocument(target)) !== event.currentTarget
-          ? target.closest(
-              '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
-            ) !== event.currentTarget
-          : false)
+          ? refs.floating.current?.contains(target)
+            ? target.closest(
+                '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
+              ) !== event.currentTarget
+            : false
+          : !event.currentTarget.contains(target))
       ) {
         return;
       }
@@ -180,5 +182,6 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     ignoreKeysRef,
     findMatchRef,
     onMatch,
+    refs,
   ]);
 };
