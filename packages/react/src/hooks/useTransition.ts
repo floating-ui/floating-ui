@@ -151,7 +151,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
         return acc;
       }, {});
 
-    if (status === 'initial') {
+    if (status === 'initial' || status === 'unmounted') {
       setStyles((styles) => ({
         transitionProperty: styles.transitionProperty,
         ...commonStyles,
