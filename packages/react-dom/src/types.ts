@@ -110,7 +110,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export type UseFloatingProps<RT extends ReferenceType = ReferenceType> =
   Prettify<
-    Omit<Partial<ComputePositionConfig>, 'platform'> & {
+    Partial<ComputePositionConfig> & {
       whileElementsMounted?: (
         reference: RT,
         floating: HTMLElement,
