@@ -14,6 +14,7 @@ import type {DismissPayload} from './hooks/useDismiss';
 export * from '.';
 export {Props as FloatingArrowProps} from './components/FloatingArrow';
 export {Props as UseClickProps} from './hooks/useClick';
+export {Props as UseClientPointProps} from './hooks/useClientPoint';
 export {Props as UseDismissProps} from './hooks/useDismiss';
 export {Props as UseFocusProps} from './hooks/useFocus';
 export {Props as UseHoverProps} from './hooks/useHover';

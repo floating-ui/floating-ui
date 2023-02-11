@@ -1,7 +1,7 @@
 import {getDocument} from './getDocument';
 import {getPlatform, getUserAgent} from './getPlatform';
 
-function getWindow(value: any) {
+export function getWindow(value: any) {
   return getDocument(value).defaultView || window;
 }
 

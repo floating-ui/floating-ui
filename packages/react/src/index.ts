@@ -18,6 +18,7 @@ export {
   useFloatingTree,
 } from './components/FloatingTree';
 export {useClick} from './hooks/useClick';
+export {useClientPoint} from './hooks/useClientPoint';
 export {useDismiss} from './hooks/useDismiss';
 export {useFocus} from './hooks/useFocus';
 export {useHover} from './hooks/useHover';
