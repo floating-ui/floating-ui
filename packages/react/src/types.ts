@@ -2,6 +2,7 @@ import type {
   ComputePositionReturn,
   Middleware,
   Placement,
+  Platform,
   Strategy,
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
@@ -189,6 +190,7 @@ export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
   placement: Placement;
   middleware: Array<Middleware | null | undefined | false>;
   strategy: Strategy;
+  platform: Platform;
   nodeId: string;
   whileElementsMounted?: (
     reference: RT,

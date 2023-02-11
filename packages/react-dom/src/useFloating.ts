@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {
+  ComputePositionConfig,
   ReferenceType,
   UseFloatingData,
   UseFloatingProps,
@@ -19,6 +20,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     placement = 'bottom',
     strategy = 'absolute',
     middleware = [],
+    platform,
     whileElementsMounted,
     open,
   } = options;
@@ -43,6 +45,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const dataRef = React.useRef(data);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
+  const platformRef = useLatestRef(platform);
 
   const [reference, _setReference] = React.useState<RT | null>(null);
   const [floating, _setFloating] = React.useState<HTMLElement | null>(null);
@@ -66,20 +69,28 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, {
-      middleware: latestMiddleware,
+    const config: ComputePositionConfig = {
       placement,
       strategy,
-    }).then((data) => {
-      const fullData = {...data, isPositioned: true};
-      if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-        dataRef.current = fullData;
-        ReactDOM.flushSync(() => {
-          setData(fullData);
-        });
+      middleware: latestMiddleware,
+    };
+
+    if (platformRef.current) {
+      config.platform = platformRef.current;
+    }
+
+    computePosition(referenceRef.current, floatingRef.current, config).then(
+      (data) => {
+        const fullData = {...data, isPositioned: true};
+        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+          dataRef.current = fullData;
+          ReactDOM.flushSync(() => {
+            setData(fullData);
+          });
+        }
       }
-    });
-  }, [latestMiddleware, placement, strategy]);
+    );
+  }, [latestMiddleware, placement, strategy, platformRef]);
 
   useLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {

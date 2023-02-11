@@ -1,6 +1,6 @@
 import {useRef} from 'react';
 
-import {arrow, shift, useFloating} from '.';
+import {arrow, platform, shift, useFloating} from '.';
 
 App;
 function App() {
@@ -25,6 +25,9 @@ function App() {
       undefined,
     ],
     strategy: 'fixed',
+    platform: {
+      ...platform,
+    },
   });
   reference(null);
   reference({
