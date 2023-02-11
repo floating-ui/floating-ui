@@ -722,6 +722,8 @@ describe('Navigation', () => {
     await userEvent.hover(screen.getByText('Product'));
     await userEvent.click(screen.getByTestId('subnavigation'));
     await userEvent.unhover(screen.getByTestId('subnavigation'));
+    await userEvent.hover(screen.getByText('Product'));
+    await userEvent.unhover(screen.getByText('Product'));
     expect(screen.queryByTestId('subnavigation')).not.toBeInTheDocument();
   });
 });
