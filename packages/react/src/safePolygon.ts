@@ -90,6 +90,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       if (isOverFloatingEl) {
         hasLanded = true;
+        return;
       }
 
       if (isOverReferenceEl) {
