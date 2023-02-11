@@ -227,7 +227,10 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       clearTimeout(restTimeoutRef.current);
 
       if (handleCloseRef.current) {
-        clearTimeout(timeoutRef.current);
+        // Prevent clearing `onScrollMouseLeave` timeout.
+        if (!open) {
+          clearTimeout(timeoutRef.current);
+        }
 
         handlerRef.current = handleCloseRef.current({
           ...context,
@@ -268,6 +271,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         x: event.clientX,
         y: event.clientY,
         onClose() {
+          clearPointerEvents();
           cleanupMouseMoveHandler();
           closeWithDelay();
         },
