@@ -57,9 +57,7 @@ interface AxesOffsets {
 type Options =
   | number
   | AxesOffsets
-  | ((
-      middlewareArguments: MiddlewareArguments
-    ) => number | AxesOffsets);
+  | ((state: MiddlewareState) => number | AxesOffsets);
 ```
 
 A number represents the distance (gutter or margin) between the

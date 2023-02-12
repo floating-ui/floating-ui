@@ -34,7 +34,7 @@ interface Options extends DetectOverflowOptions {
   mainAxis?: boolean;
   crossAxis?: boolean;
   limiter?: {
-    fn: (middlewareArguments: MiddlewareArguments) => Coords;
+    fn: (state: MiddlewareState) => Coords;
     options?: any;
   };
 }

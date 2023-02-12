@@ -57,7 +57,7 @@ These are the options you can pass to `size(){:js}`.
 ```ts
 interface Options extends DetectOverflowOptions {
   apply?: (
-    args: MiddlewareArguments & {
+    state: MiddlewareState & {
       availableWidth: number;
       availableHeight: number;
     }
@@ -76,11 +76,7 @@ lifecycle:
 
 ```js
 size({
-  apply({
-    availableWidth,
-    availableHeight,
-    ...middlewareArguments
-  }) {
+  apply({availableWidth, availableHeight, ...state}) {
     // Style mutations here
   },
 });
@@ -98,9 +94,9 @@ Represents how tall the floating element can be before it will
 overflow its clipping context. You'll generally set this as the
 `maxHeight{:.objectKey}` CSS property.
 
-#### ...middlewareArguments
+#### ...middlewareState
 
-See [MiddlewareArguments](/docs/middleware#middlewarearguments).
+See [MiddlewareState](/docs/middleware#middlewarestate).
 
 Many useful properties are also accessible via this callback,
 such as `rects{:.objectKey}` and `elements{:.objectKey}`, the

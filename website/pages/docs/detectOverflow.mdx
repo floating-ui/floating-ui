@@ -10,22 +10,22 @@ function, making it useful for your own custom middleware.
 The function takes two arguments and returns a promise:
 
 ```js
-await detectOverflow(middlewareArguments, options);
+await detectOverflow(state, options);
 ```
 
 ## Usage
 
 Inside your custom middleware, make your `fn{:.function}`
-`async{:.keyword}` and `await{:js}` it, passing in the
-`middlewareArguments{:.param}`:
+`async{:.keyword}` and `await{:js}` it, passing in the middleware
+`state{:.param}`:
 
 ```js
 import {detectOverflow} from '@floating-ui/dom';
 
 const middleware = {
   name: 'middleware',
-  async fn(middlewareArguments) {
-    const overflow = await detectOverflow(middlewareArguments);
+  async fn(state) {
+    const overflow = await detectOverflow(state);
     return {};
   },
 };
@@ -46,7 +46,7 @@ representing offsets.
 `detectOverflow(){:js}` takes options as a second argument.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   // options
 });
 ```
@@ -67,7 +67,7 @@ be checked relative to. The default is
 which will cause the element to be clipped.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   boundary: document.querySelector('#container'),
 });
 ```
@@ -90,7 +90,7 @@ The other string option is `'document'{:js}`, which is the entire
 page outside the viewport.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   rootBoundary: 'document', // 'viewport' by default
 });
 ```
@@ -99,7 +99,7 @@ You may also pass a `Rect{:.class}` object to define a custom
 boundary area (relative to the viewport).
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   // Layout viewport, instead of the visual viewport
   rootBoundary: {
     x: 0,
@@ -127,7 +127,7 @@ This describes the virtual padding around the boundary to check
 for overflow.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   // 5px on all sides
   padding: 5,
   // Unspecified sides are 0
@@ -151,7 +151,7 @@ But you can also change the context to `'reference'{:js}` to
 instead check its overflow relative to its clipping boundary.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   elementContext: 'reference', // 'floating' by default
 });
 ```
@@ -168,7 +168,7 @@ boundary. This only applies if you are using the default
 `'clippingAncestors'{:js}` string as the `boundary{:.objectKey}`.
 
 ```js
-await detectOverflow(middlewareArguments, {
+await detectOverflow(state, {
   altBoundary: true, // false by default
 });
 ```

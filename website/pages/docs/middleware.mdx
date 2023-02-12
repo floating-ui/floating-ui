@@ -120,7 +120,7 @@ need to contain properties, but to remind you that it should be
 pure, you must return an object. Never mutate any values that get
 passed in from `fn{:.function}`.
 
-## MiddlewareArguments
+## MiddlewareState
 
 An object is passed to `fn{:.function}` containing useful data
 about the middleware lifecycle being executed.
@@ -133,7 +133,9 @@ there are many more.
 The properties passed are below:
 
 ```ts
-type MiddlewareArguments = Coords & {
+type MiddlewareState = {
+  x: number;
+  y: number;
   initialPlacement: Placement;
   placement: Placement;
   strategy: Strategy;
