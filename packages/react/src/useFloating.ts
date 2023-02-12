@@ -15,6 +15,10 @@ import type {
 import {createPubSub} from './utils/createPubSub';
 import {isElement} from './utils/is';
 
+/**
+ * Provides data to position a floating element and context to add interactions.
+ * @see https://floating-ui.com/docs/react
+ */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: Partial<UseFloatingProps> = {}
 ): UseFloatingReturn<RT> {

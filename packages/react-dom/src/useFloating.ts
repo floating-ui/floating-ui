@@ -13,6 +13,10 @@ import type {
 import {deepEqual} from './utils/deepEqual';
 import {useLatestRef} from './utils/useLatestRef';
 
+/**
+ * Provides data to position a floating element.
+ * @see https://floating-ui.com/docs/react
+ */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingProps = {}
 ): UseFloatingReturn<RT> {
