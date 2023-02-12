@@ -8,6 +8,7 @@ export {FloatingFocusManager} from './components/FloatingFocusManager';
 export {FloatingOverlay} from './components/FloatingOverlay';
 export {
   FloatingPortal,
+  FloatingPortalRoot,
   useFloatingPortalNode,
 } from './components/FloatingPortal';
 export {

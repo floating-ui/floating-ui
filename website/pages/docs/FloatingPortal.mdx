@@ -24,40 +24,8 @@ function Tooltip() {
 
 ```ts
 interface Props {
-  id?: string;
-  root?: HTMLElement | null;
   preserveTabOrder?: boolean;
 }
-```
-
-### id
-
-default: `undefined{:js}`
-
-If this node does not exist on the document, it will be created
-for you and will be appended to the end of the `<body>{:html}`. A
-unique React id is assigned to it. Context is provided so that
-portals nested in one another are appended to their respective
-parent.
-
-By specifying a string, it assumes the container is being
-controlled externally or is static.
-
-```js
-<FloatingPortal id="custom-root-id">
-  {isOpen && <div>Tooltip</div>}
-</FloatingPortal>
-```
-
-### root
-
-Alternatively, you may pass the root element itself, which
-supports shadow roots.
-
-```js
-<FloatingPortal root={shadowRootNode}>
-  {isOpen && <div>Tooltip</div>}
-</FloatingPortal>
 ```
 
 ### preserveTabOrder
@@ -73,6 +41,37 @@ context based on the React tree instead of the DOM tree.
   {isOpen && <div>Tooltip</div>}
 </FloatingPortal>
 ```
+
+## FloatingPortalRoot
+
+Using FloatingPortalRoot default portal container (body) can be
+overridden by root prop.
+
+```js
+import {FloatingPortalRoot} from '@floating-ui/react';
+
+function App() {
+  return (
+    <FloatingPortalRoot root="root">
+      <Tooltip />
+    </FloatingPortalRoot>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  root: HTMLElement | null | string;
+}
+```
+
+### root
+
+You may pass the element or id as a string, By specifying a
+string, if node does not exist on the document, it will be
+created and appended to body.
 
 ## useFloatingPortalNode
 

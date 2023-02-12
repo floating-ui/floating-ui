@@ -13,6 +13,41 @@ import {
 } from '../utils/tabbable';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
+const FloatingPortalRootNodeContext = React.createContext<
+  HTMLElement | null | string
+>(null);
+
+const useFloatingPortalRootNodeContext = () =>
+  React.useContext(FloatingPortalRootNodeContext);
+
+export const FloatingPortalRoot = ({
+  root,
+  children,
+}: {
+  root: HTMLElement | null | string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <FloatingPortalRootNodeContext.Provider value={root}>
+      {children}
+    </FloatingPortalRootNodeContext.Provider>
+  );
+};
+
+const resolveRootContainer = (id: HTMLElement | null | string) => {
+  if (typeof id === 'string') {
+    const node = document.getElementById(id);
+    if (node) {
+      return node;
+    }
+    const newNode = document.createElement('div');
+    newNode.id = id;
+    document.body.appendChild(newNode);
+    return newNode;
+  }
+  return id || document.body;
+};
+
 type FocusManagerState =
   | (FloatingContext & {modal: boolean; closeOnFocusOut: boolean})
   | null;
@@ -37,6 +72,7 @@ export const useFloatingPortalNode = ({
   const [portalEl, setPortalEl] = React.useState<HTMLElement | null>(null);
   const uniqueId = useId();
   const portalContext = usePortalContext();
+  const floatingPortalRootNodeContext = useFloatingPortalRootNodeContext();
 
   useLayoutEffect(() => {
     if (!enabled) {
@@ -55,13 +91,17 @@ export const useFloatingPortalNode = ({
       }
       newPortalEl.setAttribute('data-floating-ui-portal', '');
       setPortalEl(newPortalEl);
-      const container = portalContext?.portalNode || document.body;
+
+      const container =
+        portalContext?.portalNode ||
+        resolveRootContainer(floatingPortalRootNodeContext);
+
       container.appendChild(newPortalEl);
       return () => {
         container.removeChild(newPortalEl);
       };
     }
-  }, [id, portalContext, uniqueId, enabled]);
+  }, [id, portalContext, floatingPortalRootNodeContext, uniqueId, enabled]);
 
   return portalEl;
 };
@@ -78,7 +118,13 @@ export const FloatingPortal = ({
   preserveTabOrder = true,
 }: {
   children?: React.ReactNode;
+  /**
+   * @deprecated use `FloatingPortalRoot` instead.
+   */
   id?: string;
+  /**
+   * @deprecated use `FloatingPortalRoot` instead.
+   */
   root?: HTMLElement | null;
   preserveTabOrder?: boolean;
 }) => {

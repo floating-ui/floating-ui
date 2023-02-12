@@ -1,7 +1,7 @@
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
-import {FloatingPortal, useFloating} from '../../src';
+import {FloatingPortal, FloatingPortalRoot, useFloating} from '../../src';
 
 function App(props: {root?: HTMLElement | null; id?: string}) {
   const [open, setOpen] = useState(false);
@@ -24,24 +24,44 @@ function App(props: {root?: HTMLElement | null; id?: string}) {
   );
 }
 
-test('creates a custom id node', () => {
-  render(<App id="custom-id" />);
-  expect(document.querySelector('#custom-id')).toBeInTheDocument();
-  cleanup();
-});
-
-test('allows direct roots', () => {
-  render(<App root={document.body} />);
+test('use document.body as default portal container', () => {
+  render(<App />);
   fireEvent.click(screen.getByTestId('reference'));
-  expect(screen.getByTestId('floating').parentNode).toBe(document.body);
-  cleanup();
-});
-
-test('empty id string does not add id attribute', () => {
-  render(<App id="" />);
-  fireEvent.click(screen.getByTestId('reference'));
-  expect(screen.getByTestId('floating').parentElement?.hasAttribute('id')).toBe(
-    false
+  expect(screen.getByTestId('floating').parentElement?.parentElement).toBe(
+    document.body
   );
+  cleanup();
+});
+
+test('allow to override portal container', () => {
+  const id = 'portalContainer';
+  const portalRoot = document.createElement('div');
+  portalRoot.setAttribute('id', id);
+  document.body.appendChild(portalRoot);
+
+  render(
+    <FloatingPortalRoot root={document.getElementById(id)}>
+      <App />
+    </FloatingPortalRoot>
+  );
+  fireEvent.click(screen.getByTestId('reference'));
+  expect(screen.getByTestId('floating').parentElement?.parentElement).toBe(
+    portalRoot
+  );
+  cleanup();
+});
+
+test('allow to override portal container with string', () => {
+  render(
+    <FloatingPortalRoot root={'portalContainer'}>
+      <App />
+    </FloatingPortalRoot>
+  );
+  fireEvent.click(screen.getByTestId('reference'));
+  expect(
+    screen
+      .getByTestId('floating')
+      .parentElement?.parentElement?.getAttribute('id')
+  ).toBe('portalContainer');
   cleanup();
 });
