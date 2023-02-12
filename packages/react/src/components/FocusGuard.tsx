@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useEvent} from '../hooks/utils/useEvent';
 import {isMac, isSafari} from '../utils/is';
@@ -45,7 +45,7 @@ export const FocusGuard = React.forwardRef<
   const onFocus = useEvent(props.onFocus);
   const [role, setRole] = React.useState<'button' | undefined>();
 
-  useIsomorphicLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (isSafari()) {
       // Unlike other screen readers such as NVDA and JAWS, the virtual cursor
       // on VoiceOver does trigger the onFocus event, so we can use the focus

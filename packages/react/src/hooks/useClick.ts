@@ -21,7 +21,7 @@ export interface Props {
 }
 
 /**
- * Adds click event listeners that change the open state.
+ * Opens or closes the floating element when clicking the reference element.
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(

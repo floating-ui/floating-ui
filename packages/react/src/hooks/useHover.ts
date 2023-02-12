@@ -56,7 +56,8 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
 }
 
 /**
- * Adds hover event listeners that change the open state, like CSS :hover.
+ * Opens the floating element while hovering over the reference element, like
+ * CSS `:hover`.
  * @see https://floating-ui.com/docs/useHover
  */
 export const useHover = <RT extends ReferenceType = ReferenceType>(

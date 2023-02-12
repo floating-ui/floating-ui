@@ -14,7 +14,8 @@ export interface Props {
 }
 
 /**
- * Adds focus event listeners that change the open state, like CSS :focus.
+ * Opens the floating element while the reference element has focus, like CSS
+ * `:focus`.
  * @see https://floating-ui.com/docs/useFocus
  */
 export const useFocus = <RT extends ReferenceType = ReferenceType>(

@@ -60,7 +60,8 @@ export interface Props {
 }
 
 /**
- * Adds listeners that dismiss (close) the floating element.
+ * Closes the floating element when a dismissal is requested — by default, when
+ * the user presses the `escape` key or outside of the floating element.
  * @see https://floating-ui.com/docs/useDismiss
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(

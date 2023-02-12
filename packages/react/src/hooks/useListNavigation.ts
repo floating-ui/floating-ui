@@ -167,8 +167,8 @@ export interface Props {
 }
 
 /**
- * Adds focus-managed indexed navigation via arrow keys to a list of items
- * within the floating element.
+ * Adds arrow key-based navigation of a list of items, either using real DOM
+ * focus or virtual focus.
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(

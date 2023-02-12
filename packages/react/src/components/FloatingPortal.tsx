@@ -67,7 +67,8 @@ export const useFloatingPortalNode = ({
 };
 
 /**
- * Portals your floating element outside of the main app node.
+ * Portals the floating element into a given container element — by default,
+ * outside of the app root and into the body.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
 export const FloatingPortal = ({

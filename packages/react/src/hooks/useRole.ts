@@ -16,7 +16,8 @@ export interface Props {
 }
 
 /**
- * Adds relevant screen reader props for a given element `role`.
+ * Adds base screen reader props to the reference and floating elements for a
+ * given floating element `role`.
  * @see https://floating-ui.com/docs/useRole
  */
 export const useRole = <RT extends ReferenceType = ReferenceType>(
