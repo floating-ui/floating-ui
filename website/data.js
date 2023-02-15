@@ -76,4 +76,9 @@ export const MINI_SPONSORS = [
     label: 'PyJobs - Jobs for Python Developers',
     url: 'https://www.pyjobs.com/',
   },
+  {
+    logo: '/sponsors/sup.svg',
+    label: 'Sup Standup Bot',
+    url: 'https://sup.today/',
+  },
 ];
