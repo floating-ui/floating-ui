@@ -12,6 +12,7 @@ import * as React from 'react';
 import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '.';
+export {Props as ArrowProps} from './components/Arrow';
 export {Props as UseClickProps} from './hooks/useClick';
 export {Props as UseDismissProps} from './hooks/useDismiss';
 export {Props as UseFocusProps} from './hooks/useFocus';

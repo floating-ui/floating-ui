@@ -31,7 +31,7 @@ export const arrow = (options: Options): Middleware => ({
   async fn(state) {
     // Since `element` is required, we don't Partial<> the type.
     const {element, padding = 0} = options || {};
-    const {x, y, placement, rects, platform} = state;
+    const {x, y, placement, rects, platform, elements} = state;
 
     if (element == null) {
       if (__DEV__) {
@@ -47,8 +47,10 @@ export const arrow = (options: Options): Middleware => ({
     const axis = getMainAxisFromPlacement(placement);
     const length = getLengthFromAxis(axis);
     const arrowDimensions = await platform.getDimensions(element);
-    const minProp = axis === 'y' ? 'top' : 'left';
-    const maxProp = axis === 'y' ? 'bottom' : 'right';
+    const isYAxis = axis === 'y';
+    const minProp = isYAxis ? 'top' : 'left';
+    const maxProp = isYAxis ? 'bottom' : 'right';
+    const clientProp = isYAxis ? 'clientHeight' : 'clientWidth';
 
     const endDiff =
       rects.reference[length] +
@@ -58,14 +60,11 @@ export const arrow = (options: Options): Middleware => ({
     const startDiff = coords[axis] - rects.reference[axis];
 
     const arrowOffsetParent = await platform.getOffsetParent?.(element);
-    let clientSize = arrowOffsetParent
-      ? axis === 'y'
-        ? arrowOffsetParent.clientHeight || 0
-        : arrowOffsetParent.clientWidth || 0
-      : 0;
+    let clientSize = arrowOffsetParent ? arrowOffsetParent[clientProp] : 0;
 
-    if (clientSize === 0) {
-      clientSize = rects.floating[length];
+    // DOM platform can return `window` as the `offsetParent`.
+    if (!clientSize || !(await platform.isElement?.(arrowOffsetParent))) {
+      clientSize = elements.floating[clientProp] || rects.floating[length];
     }
 
     const centerToReference = endDiff / 2 - startDiff / 2;

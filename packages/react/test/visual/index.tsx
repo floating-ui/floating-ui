@@ -11,6 +11,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import {Main as Arrow} from './components/Arrow';
 import {Main as Autocomplete} from './components/Autocomplete';
 import {Main as Drawer} from './components/Drawer';
 import {Main as EmojiPicker} from './components/EmojiPicker';
@@ -34,6 +35,7 @@ const ROUTES = [
   {path: 'autocomplete', component: Autocomplete},
   {path: 'navigation', component: Navigation},
   {path: 'drawer', component: Drawer},
+  {path: 'arrow', component: Arrow},
 ];
 
 function App() {
