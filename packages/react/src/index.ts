@@ -1,7 +1,4 @@
-export {
-  FloatingArrow,
-  Props as FloatingArrowProps,
-} from './components/FloatingArrow';
+export {FloatingArrow} from './components/FloatingArrow';
 export {
   FloatingDelayGroup,
   useDelayGroup,
