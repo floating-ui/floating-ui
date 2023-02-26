@@ -1,8 +1,8 @@
 import {useRef} from 'react';
 
 import {
-  Arrow,
   arrow,
+  FloatingArrow,
   platform,
   safePolygon,
   shift,
@@ -79,8 +79,8 @@ function App() {
 
   return (
     <div ref={ref}>
-      <Arrow context={context} />
-      <Arrow
+      <FloatingArrow context={context} />
+      <FloatingArrow
         context={context}
         stroke="black"
         strokeWidth={2}

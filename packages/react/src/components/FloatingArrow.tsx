@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {platform} from '../';
+import {platform} from '..';
 import type {Alignment, FloatingContext, Side} from '../types';
 
 export interface Props extends React.SVGAttributes<SVGSVGElement> {
@@ -47,9 +47,9 @@ export interface Props extends React.SVGAttributes<SVGSVGElement> {
 
 /**
  * Renders a pointing arrow triangle.
- * @see https://floating-ui.com/docs/ArrowComponent
+ * @see https://floating-ui.com/docs/FloatingArrow
  */
-export const Arrow = React.forwardRef(function Arrow(
+export const FloatingArrow = React.forwardRef(function FloatingArrow(
   {
     context: {
       placement,
