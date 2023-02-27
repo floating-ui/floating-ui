@@ -87,7 +87,7 @@ function App() {
         fill="black"
         width={14}
         height={14}
-        roundness={50}
+        tipRadius={50}
       />
     </div>
   );
