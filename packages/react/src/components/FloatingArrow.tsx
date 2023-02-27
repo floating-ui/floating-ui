@@ -132,8 +132,18 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
         }`,
       }}
     >
-      <path fill="none" stroke={stroke} strokeWidth={strokeWidth} d={dValue} />
-      <path stroke="none" d={dValue} />
+      {strokeWidth > 0 && (
+        <path
+          fill="none"
+          stroke={stroke}
+          // Account for the stroke on the fill path rendered below.
+          strokeWidth={strokeWidth + (d ? 0 : 1)}
+          d={dValue}
+        />
+      )}
+      {/* In Firefox, for left/right placements there's a ~0.5px gap where the
+      border can show through. Adding a stroke on the fill removes it. */}
+      <path stroke={strokeWidth && !d ? rest.fill : 'none'} d={dValue} />
     </svg>
   );
 });
