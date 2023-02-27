@@ -96,7 +96,7 @@ export const Main = () => {
           <Demo
             key={placement}
             placement={placement}
-            arrowProps={{roundness: 50}}
+            arrowProps={{tipRadius: 2}}
           />
         ))}
       </div>
@@ -105,7 +105,7 @@ export const Main = () => {
           <Demo
             key={placement}
             placement={placement}
-            arrowProps={{roundness: 100}}
+            arrowProps={{tipRadius: 5}}
           />
         ))}
       </div>
@@ -118,7 +118,7 @@ export const Main = () => {
               fill: 'white',
               stroke: 'black',
               strokeWidth: 2,
-              roundness: 25,
+              tipRadius: 1,
             }}
             floatingStyle={{
               border: '1px solid black',

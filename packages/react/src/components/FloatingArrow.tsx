@@ -19,10 +19,10 @@ export interface Props extends React.SVGAttributes<SVGSVGElement> {
   height?: number;
 
   /**
-   * The roundness of the arrow (0 - 100+)
+   * The corner radius (rounding) of the arrow tip.
    * @default 0 (sharp)
    */
-  roundness?: number;
+  tipRadius?: number;
 
   /**
    * Forces a static offset over dynamic positioning under a certain condition.
@@ -58,7 +58,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     },
     width = 14,
     height = 7,
-    roundness = 0,
+    tipRadius = 0,
     strokeWidth = 0,
     staticOffset,
     stroke,
@@ -76,8 +76,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     }
   }
 
-  const svgX = (width / 2) * (-0.54 * (roundness / 100 - 0.02) + 1);
-  const svgY = (height / 2) * (roundness / 100 - 0.02);
+  const svgX = (width / 2) * (tipRadius / -8 + 1);
+  const svgY = ((height / 2) * tipRadius) / 4;
 
   const [side, alignment] = placement.split('-') as [Side, Alignment];
   const isRTL = floating ? platform.isRTL(floating) : false;
