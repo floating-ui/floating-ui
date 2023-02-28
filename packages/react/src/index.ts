@@ -1,3 +1,4 @@
+export {FloatingArrow} from './components/FloatingArrow';
 export {
   FloatingDelayGroup,
   useDelayGroup,

@@ -2,6 +2,7 @@ import {useRef} from 'react';
 
 import {
   arrow,
+  FloatingArrow,
   platform,
   safePolygon,
   shift,
@@ -21,20 +22,22 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, positionReference, update} = useFloating({
-    placement: 'right',
-    middleware: [
-      shift(),
-      arrow({element: arrowRef}),
-      false && shift(),
-      null,
-      undefined,
-    ],
-    strategy: 'fixed',
-    platform: {
-      ...platform,
-    },
-  });
+  const {reference, floating, positionReference, update, context} = useFloating(
+    {
+      placement: 'right',
+      middleware: [
+        shift(),
+        arrow({element: arrowRef}),
+        false && shift(),
+        null,
+        undefined,
+      ],
+      strategy: 'fixed',
+      platform: {
+        ...platform,
+      },
+    }
+  );
   reference(null);
   reference({
     getBoundingClientRect() {
@@ -74,7 +77,20 @@ function App() {
   const ref2 = useRef<HTMLDivElement>(null);
   const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
 
-  return <div ref={ref} />;
+  return (
+    <div ref={ref}>
+      <FloatingArrow context={context} />
+      <FloatingArrow
+        context={context}
+        stroke="black"
+        strokeWidth={2}
+        fill="black"
+        width={14}
+        height={14}
+        tipRadius={50}
+      />
+    </div>
+  );
 }
 
 NarrowRefType;
