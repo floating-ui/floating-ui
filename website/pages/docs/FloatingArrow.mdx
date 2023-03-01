@@ -1,0 +1,198 @@
+# FloatingArrow
+
+Renders a customizable `<svg>{:html}` pointing arrow triangle
+inside the floating element.
+
+## Usage
+
+- Create an <WordHighlight id="b">arrowRef</WordHighlight> and
+  pass it to the `arrow` middleware's `element{:.objectKey}`
+  option and the `<FloatingArrow />{:js}` component. This lets
+  the arrow be measured for positioning.
+- Pass the <WordHighlight id="a">context</WordHighlight> to the
+  `<FloatingArrow />{:js}` component. This lets the component
+  read the positioning data.
+
+```js /context/1,3#a /arrowRef/#b
+import {FloatingArrow, arrow} from '@floating-ui/react';
+
+function App() {
+  const arrowRef = useRef(null);
+  const {x, y, strategy, refs, context} = useFloating({
+    middleware: [
+      arrow({
+        element: arrowRef,
+      }),
+    ],
+  });
+
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div
+        ref={refs.setFloating}
+        style={{
+          position: strategy,
+          top: y ?? 0,
+          left: x ?? 0,
+        }}
+      >
+        <FloatingArrow ref={arrowRef} context={context} />
+      </div>
+    </>
+  );
+}
+```
+
+The arrow will by default overlap the reference element. The
+`height{:.keyword}` of the arrow (7 by default) will offset it by
+the desired amount.
+
+```js
+import {offset} from '@floating-ui/react';
+
+const ARROW_HEIGHT = 7;
+const GAP = 2;
+
+useFloating({
+  middleware: [offset(ARROW_HEIGHT + GAP)],
+});
+```
+
+This does not take into account tip rounding.
+
+## Props
+
+The arrow accepts all the props of the `<svg>{:js}` element, plus
+some additional props:
+
+```ts
+interface Props extends React.SVGAttributes<SVGSVGElement> {
+  context: FloatingContext;
+  width?: number;
+  height?: number;
+  tipRadius?: number;
+  staticOffset?: number;
+  d?: string;
+
+  // Inherited SVG props that are intercepted and passed
+  // to the <path>s
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+}
+```
+
+### ref
+
+**Required**
+
+```js
+<FloatingArrow ref={arrowRef} />
+```
+
+### context
+
+**Required**
+
+The `context{:.const}` object returned from `useFloating(){:js}`.
+
+```js
+const {context} = useFloating();
+<FloatingArrow context={context} />;
+```
+
+### width
+
+default: `14{:js}`
+
+The width of the arrow.
+
+```js
+<FloatingArrow ref={arrowRef} context={context} width={10} />
+```
+
+### height
+
+default: `7{:js}`
+
+The height of the arrow.
+
+```js
+<FloatingArrow ref={arrowRef} context={context} height={10} />
+```
+
+### tipRadius
+
+default: `0{:js}` (sharp)
+
+The radius (rounding) of the arrow tip.
+
+```js
+<FloatingArrow ref={arrowRef} context={context} tipRadius={2} />
+```
+
+### staticOffset
+
+default: `undefined{:js}` (use dynamic position)
+
+A static offset override of the arrow from the floating element
+edge. Often desirable if the floating element is smaller than the
+reference element along the relevant axis and has an edge
+alignment (`'start'{:js}`/`'end'{:js}`).
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  staticOffset={isEdgeAlignedAndSmaller ? '15%' : null}
+/>
+```
+
+### d
+
+default: `undefined{:js}` (use dynamic path)
+
+A custom path for the arrow. Useful if you want fancy rounding.
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  d="M0 20C0 20 2.06906 19.9829 5.91817 15.4092C7.49986 13.5236 8.97939 12.3809 10.0002 12.3809C11.0202 12.3809 12.481 13.6451 14.0814 15.5472C17.952 20.1437 20 20 20 20H0Z"
+/>
+```
+
+### fill
+
+default: `"black"{:js}` (browser default)
+
+The color of the arrow.
+
+```js
+<FloatingArrow ref={arrowRef} context={context} fill="red" />
+```
+
+### stroke
+
+default: `"none"{:js}`
+
+The stroke (border) color of the arrow.
+
+```js
+<FloatingArrow ref={arrowRef} context={context} stroke="red" />
+```
+
+### strokeWidth
+
+default: `1{:js}` (browser default)
+
+The stroke (border) width of the arrow.
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  strokeWidth={2}
+/>
+```
