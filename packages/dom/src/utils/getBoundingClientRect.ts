@@ -1,13 +1,10 @@
-import {
-  ClientRectObject,
-  rectToClientRect,
-  VirtualElement,
-} from '@floating-ui/core';
+import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+import {rectToClientRect} from '@floating-ui/core';
 
 import {FALLBACK_SCALE, getScale} from './getScale';
+import {getWindow} from './getWindow';
 import {isClientRectVisualViewportBased, isElement} from './is';
 import {unwrapElement} from './unwrapElement';
-import {getWindow} from './window';
 
 export function getBoundingClientRect(
   element: Element | VirtualElement,

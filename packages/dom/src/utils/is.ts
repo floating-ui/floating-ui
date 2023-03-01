@@ -1,7 +1,7 @@
 import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
+import {getWindow} from './getWindow';
 import {getUAString} from './userAgent';
-import {getWindow} from './window';
 
 declare global {
   interface Window {

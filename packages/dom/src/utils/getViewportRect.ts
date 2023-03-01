@@ -1,8 +1,8 @@
 import type {Rect, Strategy} from '@floating-ui/core';
 
 import {getDocumentElement} from './getDocumentElement';
+import {getWindow} from './getWindow';
 import {isClientRectVisualViewportBased} from './is';
-import {getWindow} from './window';
 
 export function getViewportRect(element: Element, strategy: Strategy): Rect {
   const win = getWindow(element);
@@ -26,5 +26,10 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     }
   }
 
-  return {width, height, x, y};
+  return {
+    width,
+    height,
+    x,
+    y,
+  };
 }

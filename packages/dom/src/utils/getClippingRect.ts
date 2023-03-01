@@ -17,6 +17,7 @@ import {getOverflowAncestors} from './getOverflowAncestors';
 import {getParentNode} from './getParentNode';
 import {getScale} from './getScale';
 import {getViewportRect} from './getViewportRect';
+import {getWindow} from './getWindow';
 import {
   isClientRectVisualViewportBased,
   isContainingBlock,
@@ -25,7 +26,6 @@ import {
   isLastTraversableNode,
 } from './is';
 import {max, min} from './math';
-import {getWindow} from './window';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;

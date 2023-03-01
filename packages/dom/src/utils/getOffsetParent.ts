@@ -1,13 +1,13 @@
 import {getComputedStyle} from './getComputedStyle';
 import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
+import {getWindow} from './getWindow';
 import {
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
   isTableElement,
 } from './is';
-import {getWindow} from './window';
 
 type Polyfill = (element: HTMLElement) => Element | null;
 
