@@ -1,4 +1,8 @@
-import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+import {
+  ClientRectObject,
+  rectToClientRect,
+  VirtualElement,
+} from '@floating-ui/core';
 
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {isClientRectVisualViewportBased, isElement} from './is';
@@ -70,14 +74,5 @@ export function getBoundingClientRect(
     }
   }
 
-  return {
-    width,
-    height,
-    top: y,
-    right: x + width,
-    bottom: y + height,
-    left: x,
-    x,
-    y,
-  };
+  return rectToClientRect({width, height, x, y});
 }
