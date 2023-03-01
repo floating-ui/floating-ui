@@ -63,7 +63,7 @@ This does not take into account tip rounding.
 
 ## Props
 
-The arrow accepts all the props of the `<svg>{:js}` element, plus
+The arrow accepts all the props of an `<svg>{:js}` element, plus
 some additional props:
 
 ```ts
@@ -72,11 +72,11 @@ interface Props extends React.SVGAttributes<SVGSVGElement> {
   width?: number;
   height?: number;
   tipRadius?: number;
-  staticOffset?: number;
-  d?: string;
+  staticOffset?: number | string | null;
 
   // Inherited SVG props that are intercepted and passed
   // to the <path>s
+  d?: string;
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
@@ -154,11 +154,15 @@ alignment (`'start'{:js}`/`'end'{:js}`).
 default: `undefined{:js}` (use dynamic path)
 
 A custom path for the arrow. Useful if you want fancy rounding.
+The path should be inside a square SVG and placed at the bottom
+of it.
 
 ```js
 <FloatingArrow
   ref={arrowRef}
   context={context}
+  width={20}
+  height={20}
   d="M0 20C0 20 2.06906 19.9829 5.91817 15.4092C7.49986 13.5236 8.97939 12.3809 10.0002 12.3809C11.0202 12.3809 12.481 13.6451 14.0814 15.5472C17.952 20.1437 20 20 20 20H0Z"
 />
 ```
