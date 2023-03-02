@@ -14,11 +14,12 @@ const Example = forwardRef(function Example(
 ) {
   const arrowRef = useRef(null);
 
-  const {x, y, strategy, refs, context} = useFloating({
-    placement,
-    middleware: [offset(7), arrow({element: arrowRef})],
-    whileElementsMounted: autoUpdate,
-  });
+  const {x, y, strategy, refs, context, isPositioned} =
+    useFloating({
+      placement,
+      middleware: [offset(7), arrow({element: arrowRef})],
+      whileElementsMounted: autoUpdate,
+    });
 
   const referenceRef = useMergeRefs([ref, refs.setReference]);
 
@@ -32,6 +33,7 @@ const Example = forwardRef(function Example(
           position: strategy,
           left: x ?? 0,
           top: y ?? 0,
+          visibility: isPositioned ? 'visible' : 'hidden',
         }}
       >
         Floating
