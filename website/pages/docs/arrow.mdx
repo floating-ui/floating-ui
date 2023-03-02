@@ -1,8 +1,8 @@
 # arrow
 
-A data provider that provides data to position an inner element
-of the floating element (usually a triangle or caret) so that it
-is centered to the reference element.
+Provides data to position an inner element of the floating
+element (usually a triangle or caret) so that it appears centered
+to the reference element.
 
 <div className="flex flex-col gap-4">
   <Chrome center className="h-96">
@@ -15,6 +15,10 @@ is centered to the reference element.
 The layout box of the arrow element should be a square with equal
 width and height. Inner or pseudo-elements may have a different
 aspect ratio.
+
+If you're using React, the [`FloatingArrow`](/docs/FloatingArrow)
+component renders out a customizable arrow element and applies
+the positioning styles for you.
 
 ## Usage
 
@@ -113,12 +117,6 @@ const {placement} = useFloating({
   middleware: [flip(), arrow({element: arrowEl})],
 });
 ```
-
-<Notice>
-  The [`FloatingArrow`](/docs/FloatingArrow) component renders
-  out a customizable arrow element and applies the dynamic styles
-  for you.
-</Notice>
 
 ## Options
 

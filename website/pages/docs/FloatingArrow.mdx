@@ -1,7 +1,13 @@
+import {Demo} from '../../lib/components/FloatingArrow';
+
 # FloatingArrow
 
 Renders a customizable `<svg>{:html}` pointing arrow triangle
-inside the floating element.
+inside the floating element that gets automatically positioned.
+
+<Chrome center>
+  <Demo />
+</Chrome>
 
 ## Usage
 
@@ -44,9 +50,9 @@ function App() {
 }
 ```
 
-The arrow will by default overlap the reference element. The
-`height{:.keyword}` of the arrow (7 by default) will offset it by
-the desired amount.
+The arrow will, by default, overlap the reference element. The
+`height{:.keyword}` of the arrow will offset it by the desired
+amount.
 
 ```js
 import {offset} from '@floating-ui/react';
@@ -59,14 +65,14 @@ useFloating({
 });
 ```
 
-This does not take into account tip rounding.
+This does not take into account tip rounding or strokes.
 
 <Notice type="warning" title="Browser notice">
   In WebKit browsers, the arrow may have a gap if the floating
   element's `x` and `y` coordinates are fractional. You can work
   around this by [rounding the
   coordinates](/docs/misc#subpixel-and-accelerated-positioning)
-  to the nearest integer.
+  to the nearest device pixel.
 </Notice>
 
 ## Props
@@ -163,7 +169,8 @@ default: `undefined{:js}` (use dynamic path)
 
 A custom path for the arrow. Useful if you want fancy rounding.
 The path should be inside a square SVG and placed at the bottom
-of it.
+of it. The path is designed for the `'bottom'{:js}` placement,
+which will be rotated for other placements.
 
 ```js
 <FloatingArrow
@@ -197,7 +204,7 @@ The stroke (border) color of the arrow.
 
 ### strokeWidth
 
-default: `1{:js}` (browser default)
+default: `0{:js}`
 
 The stroke (border) width of the arrow.
 

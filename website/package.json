@@ -30,7 +30,7 @@
   "dependencies": {
     "@docsearch/css": "^3.1.0",
     "@docsearch/react": "^3.1.0",
-    "@floating-ui/react": "^0.18.1",
+    "@floating-ui/react": "^0.20.1",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
     "@next/mdx": "^12.1.5",
