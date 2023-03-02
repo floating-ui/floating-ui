@@ -85,3 +85,14 @@ allPlacements.forEach((placement) => {
     });
   });
 });
+
+test('svg arrow should be positioned correctly within containing block', async ({
+  page,
+}) => {
+  await page.goto('http://localhost:1234/arrow');
+  await click(page, `[data-testid="svg-true"]`);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `svg-arrow.png`
+  );
+});

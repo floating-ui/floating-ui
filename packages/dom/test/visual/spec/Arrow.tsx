@@ -8,10 +8,11 @@ import {useScroll} from '../utils/useScroll';
 
 export function Arrow() {
   const [placement, setPlacement] = useState<Placement>('bottom');
-  const arrowRef = useRef<HTMLDivElement | null>(null);
+  const arrowRef = useRef(null);
   const [padding, setPadding] = useState(0);
   const [floatingSize, setFloatingSize] = useState(75);
   const [referenceSize, setReferenceSize] = useState(125);
+  const [svg, setSvg] = useState(false);
 
   const {
     x,
@@ -42,11 +43,16 @@ export function Arrow() {
 
   const {scrollRef} = useScroll({refs, update});
 
+  const ArrowTag = svg ? 'svg' : 'div';
+
   return (
     <>
       <h1>Arrow</h1>
       <p></p>
-      <div className="container">
+      <div
+        className="container"
+        style={{willChange: svg ? 'transform' : undefined}}
+      >
         <div
           className="scroll"
           ref={scrollRef}
@@ -75,7 +81,7 @@ export function Arrow() {
             }}
           >
             Floating
-            <div
+            <ArrowTag
               ref={arrowRef}
               className="arrow"
               style={{
@@ -150,6 +156,22 @@ export function Arrow() {
             }}
           >
             {localPlacement}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>SVG</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`svg-${bool}`}
+            onClick={() => setSvg(bool)}
+            style={{
+              backgroundColor: bool === svg ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>

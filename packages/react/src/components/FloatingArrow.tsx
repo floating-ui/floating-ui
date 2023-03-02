@@ -111,6 +111,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   return (
     <svg
       {...rest}
+      // @ts-ignore
+      suppressHydrationWarning
       aria-hidden
       ref={ref}
       width={isCustomShape ? width : width + (isVerticalSide ? strokeWidth : 0)}
