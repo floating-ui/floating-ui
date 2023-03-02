@@ -51,6 +51,10 @@ export function getOffsetParent(
 ): Element | Window {
   const window = getWindow(element);
 
+  if (!isHTMLElement(element)) {
+    return window;
+  }
+
   let offsetParent = getTrueOffsetParent(element, polyfill);
 
   while (
