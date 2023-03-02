@@ -111,7 +111,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   return (
     <svg
       {...rest}
-      // @ts-expect-error
+      // @ts-ignore
       suppressHydrationWarning
       aria-hidden
       ref={ref}
