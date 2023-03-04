@@ -1,8 +1,8 @@
 import {
   autoUpdate,
   flip,
+  FloatingBackdrop,
   FloatingFocusManager,
-  FloatingOverlay,
   inner,
   offset,
   shift,
@@ -347,8 +347,12 @@ export function Main() {
         </Button>
         <FloatingPortal>
           {open && (
-            <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
-              <FloatingFocusManager context={context} modal={false}>
+            <FloatingBackdrop lockScroll={!touch} style={{zIndex: 1}}>
+              <FloatingFocusManager
+                context={context}
+                initialFocus={-1}
+                modal={false}
+              >
                 <div
                   ref={refs.setFloating}
                   style={{
@@ -452,7 +456,7 @@ export function Main() {
                     ))}
                 </div>
               </FloatingFocusManager>
-            </FloatingOverlay>
+            </FloatingBackdrop>
           )}
         </FloatingPortal>
       </div>
