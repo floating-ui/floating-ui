@@ -19,7 +19,7 @@ interface GroupContext extends GroupState {
   setState: React.Dispatch<Partial<GroupState>>;
 }
 
-const FloatingDelayGroupContext = React.createContext<
+const FloatingGroupContext = React.createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
     setState: React.Dispatch<Partial<GroupState>>;
@@ -34,23 +34,24 @@ const FloatingDelayGroupContext = React.createContext<
   isInstantPhase: false,
 });
 
-export const useDelayGroupContext = (): GroupContext =>
-  React.useContext(FloatingDelayGroupContext);
+export const useGroupContext = (): GroupContext =>
+  React.useContext(FloatingGroupContext);
+
+interface FloatingGroupProps {
+  children?: React.ReactNode;
+  delay?: Delay;
+  timeoutMs?: number;
+}
 
 /**
- * Provides context for a group of floating elements that should share a
- * `delay`.
- * @see https://floating-ui.com/docs/FloatingDelayGroup
+ * Provides context for a group of floating elements.
+ * @see https://floating-ui.com/docs/FloatingGroup
  */
-export const FloatingDelayGroup = ({
+export const FloatingGroup = ({
   children,
-  delay,
+  delay = 0,
   timeoutMs = 0,
-}: {
-  children?: React.ReactNode;
-  delay: Delay;
-  timeoutMs?: number;
-}): JSX.Element => {
+}: FloatingGroupProps): JSX.Element => {
   const [state, setState] = React.useReducer(
     (prev: GroupState, next: Partial<GroupState>): GroupState => ({
       ...prev,
@@ -85,14 +86,14 @@ export const FloatingDelayGroup = ({
   }, [state.currentId]);
 
   return (
-    <FloatingDelayGroupContext.Provider
+    <FloatingGroupContext.Provider
       value={React.useMemo(
         () => ({...state, setState, setCurrentId}),
         [state, setState, setCurrentId]
       )}
     >
       {children}
-    </FloatingDelayGroupContext.Provider>
+    </FloatingGroupContext.Provider>
   );
 };
 
@@ -100,12 +101,12 @@ interface UseGroupOptions {
   id: any;
 }
 
-export const useDelayGroup = (
+export const useGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions
 ) => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
-    useDelayGroupContext();
+    useGroupContext();
 
   React.useEffect(() => {
     if (currentId) {

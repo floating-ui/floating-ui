@@ -6,15 +6,15 @@ import {getPlatform} from '../utils/getPlatform';
 const identifier = 'data-floating-ui-scroll-lock';
 
 /**
- * Provides base styling for a fixed overlay element to dim content or block
+ * Provides base styling for a fixed backdrop element to dim content or block
  * pointer events behind a floating element.
  * It's a regular `<div>`, so it can be styled via any CSS solution you prefer.
- * @see https://floating-ui.com/docs/FloatingOverlay
+ * @see https://floating-ui.com/docs/FloatingBackdrop
  */
-export const FloatingOverlay = React.forwardRef<
+export const FloatingBackdrop = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & {lockScroll?: boolean}
->(function FloatingOverlay({lockScroll = false, ...rest}, ref) {
+>(function FloatingBackdrop({lockScroll = false, ...rest}, ref) {
   useLayoutEffect(() => {
     if (!lockScroll) {
       return;

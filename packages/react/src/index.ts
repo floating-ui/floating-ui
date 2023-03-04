@@ -1,11 +1,11 @@
 export {FloatingArrow} from './components/FloatingArrow';
-export {
-  FloatingDelayGroup,
-  useDelayGroup,
-  useDelayGroupContext,
-} from './components/FloatingDelayGroup';
+export {FloatingBackdrop} from './components/FloatingBackdrop';
 export {FloatingFocusManager} from './components/FloatingFocusManager';
-export {FloatingOverlay} from './components/FloatingOverlay';
+export {
+  FloatingGroup,
+  useGroup,
+  useGroupContext,
+} from './components/FloatingGroup';
 export {
   FloatingPortal,
   useFloatingPortalNode,
