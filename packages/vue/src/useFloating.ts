@@ -42,14 +42,14 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const strategyOption = computed(() => unref(options.strategy) ?? 'absolute');
   const referenceElement = computed(() => unwrapElement(reference.value));
   const floatingElement = computed(() => unwrapElement(floating.value));
-  const x = ref<number | null>(null);
-  const y = ref<number | null>(null);
+  const x = ref(0);
+  const y = ref(0);
   const strategy = ref(strategyOption.value);
   const placement = ref(placementOption.value);
   const middlewareData = shallowRef<MiddlewareData>({});
   const isPositioned = ref(false);
 
-  let whileElementsMountedCleanup: void | (() => void);
+  let whileElementsMountedCleanup: (() => void) | undefined;
 
   function update() {
     if (referenceElement.value == null || floatingElement.value == null) {

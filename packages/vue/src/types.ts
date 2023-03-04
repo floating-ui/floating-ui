@@ -102,7 +102,7 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
       reference: T,
       floating: FloatingElement,
       update: () => void
-    ) => void | (() => void);
+    ) => () => void;
   };
 
 export type UseFloatingReturn = {

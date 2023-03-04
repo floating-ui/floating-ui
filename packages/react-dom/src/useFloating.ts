@@ -30,8 +30,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   } = options;
 
   const [data, setData] = React.useState<UseFloatingData>({
-    x: null,
-    y: null,
+    x: 0,
+    y: 0,
     strategy,
     placement,
     middlewareData: {},

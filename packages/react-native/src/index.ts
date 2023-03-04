@@ -31,7 +31,7 @@ export {
 
 const ORIGIN = {x: 0, y: 0};
 
-type UseFloatingReturn = Data & {
+type UseFloatingReturn = ComputePositionReturn & {
   update: () => void;
   offsetParent: (node: any) => void;
   floating: (node: any) => void;
@@ -59,11 +59,6 @@ type UseFloatingReturn = Data & {
   };
 };
 
-type Data = Omit<ComputePositionReturn, 'x' | 'y'> & {
-  x: number | null;
-  y: number | null;
-};
-
 export const useFloating = ({
   placement = 'bottom',
   middleware = [],
@@ -81,9 +76,9 @@ export const useFloating = ({
   const floatingRef = useRef<any>(null);
   const offsetParentRef = useRef<any>(null);
 
-  const [data, setData] = useState<Data>({
-    x: null,
-    y: null,
+  const [data, setData] = useState<ComputePositionReturn>({
+    x: 0,
+    y: 0,
     placement,
     strategy: 'absolute',
     middlewareData: {},

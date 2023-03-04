@@ -70,9 +70,7 @@ type Prettify<T> = {
 } & {};
 
 export type UseFloatingData = Prettify<
-  Omit<ComputePositionReturn, 'x' | 'y'> & {
-    x: number | null;
-    y: number | null;
+  ComputePositionReturn & {
     isPositioned: boolean;
   }
 >;
@@ -115,7 +113,7 @@ export type UseFloatingProps<RT extends ReferenceType = ReferenceType> =
         reference: RT,
         floating: HTMLElement,
         update: () => void
-      ) => void | (() => void);
+      ) => () => void;
       open?: boolean;
     }
   >;
