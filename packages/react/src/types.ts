@@ -198,5 +198,5 @@ export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | (() => void);
+  ) => () => void;
 }
