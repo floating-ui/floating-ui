@@ -57,15 +57,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         setDomReference(node as NarrowedElement<RT> | null);
       }
 
-      // Backwards-compatibility for passing a virtual element to `reference`
-      // after it has set the DOM reference.
       if (
         isElement(position.refs.reference.current) ||
-        position.refs.reference.current === null ||
-        // Don't allow setting virtual elements using the old technique back to
-        // `null` to support `positionReference` + an unstable `reference`
-        // callback ref.
-        (node !== null && !isElement(node))
+        position.refs.reference.current === null
       ) {
         position.refs.setReference(node);
       }

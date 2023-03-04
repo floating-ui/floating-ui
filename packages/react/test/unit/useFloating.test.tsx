@@ -11,21 +11,23 @@ import {
 } from '../../src';
 import {isElement} from '../../src/utils/is';
 
-describe('positionReference', () => {
+describe('setPositionReference', () => {
   test('sets separate refs', () => {
     function App() {
-      const {reference, positionReference, refs} =
-        useFloating<HTMLDivElement>();
+      const {refs, elements} = useFloating<HTMLDivElement>();
 
       return (
         <>
-          <div ref={reference} data-testid="reference" />
-          <div ref={positionReference} data-testid="position-reference" />
+          <div ref={refs.setReference} data-testid="reference" />
+          <div
+            ref={refs.setPositionReference}
+            data-testid="position-reference"
+          />
           <div data-testid="reference-text">
-            {String(refs.domReference.current?.getAttribute('data-testid'))}
+            {String(elements.domReference?.getAttribute('data-testid'))}
           </div>
           <div data-testid="position-reference-text">
-            {String(isElement(refs.reference.current))}
+            {String(isElement(elements.reference))}
           </div>
         </>
       );
@@ -44,18 +46,23 @@ describe('positionReference', () => {
 
   test('handles unstable reference prop', () => {
     function App() {
-      const {reference, positionReference, refs} =
-        useFloating<HTMLDivElement>();
+      const {refs, elements} = useFloating();
 
       return (
         <>
-          <div ref={(node) => reference(node)} data-testid="reference" />
-          <div ref={positionReference} data-testid="position-reference" />
+          <div
+            ref={(node) => refs.setReference(node)}
+            data-testid="reference"
+          />
+          <div
+            ref={refs.setPositionReference}
+            data-testid="position-reference"
+          />
           <div data-testid="reference-text">
-            {String(refs.domReference.current?.getAttribute('data-testid'))}
+            {String(elements.domReference?.getAttribute('data-testid'))}
           </div>
           <div data-testid="position-reference-text">
-            {String(isElement(refs.reference.current))}
+            {String(isElement(elements.reference))}
           </div>
         </>
       );
@@ -74,10 +81,10 @@ describe('positionReference', () => {
 
   test('handles real virtual element', () => {
     function App() {
-      const {reference, positionReference, refs} = useFloating();
+      const {refs, elements} = useFloating();
 
       useLayoutEffect(() => {
-        positionReference({
+        refs.setPositionReference({
           getBoundingClientRect: () => ({
             x: 218,
             y: 0,
@@ -89,16 +96,16 @@ describe('positionReference', () => {
             bottom: 0,
           }),
         });
-      }, [positionReference]);
+      }, [refs]);
 
       return (
         <>
-          <div ref={(node) => reference(node)} data-testid="reference" />
+          <div ref={refs.setReference} data-testid="reference" />
           <div data-testid="reference-text">
-            {String(refs.domReference.current?.getAttribute('data-testid'))}
+            {String(elements.domReference?.getAttribute('data-testid'))}
           </div>
           <div data-testid="position-reference-text">
-            {refs.reference.current?.getBoundingClientRect().x}
+            {elements.reference?.getBoundingClientRect().x}
           </div>
         </>
       );

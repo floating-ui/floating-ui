@@ -156,12 +156,7 @@ export interface ElementProps {
 
 export type ReferenceType = Element | VirtualElement;
 
-export type UseFloatingData = Prettify<
-  Omit<ComputePositionReturn, 'x' | 'y'> & {
-    x: number | null;
-    y: number | null;
-  }
->;
+export type UseFloatingData = Prettify<ComputePositionReturn>;
 
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
