@@ -43,7 +43,7 @@ function mergeProps(
   };
 }
 
-export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
+export function useInteractions(...propsList: Array<ElementProps | void>) {
   // The dependencies are a dynamic array, so we can't use the linter's
   // suggestion to add it to the deps array.
   const deps = propsList;
@@ -77,4 +77,4 @@ export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
     () => ({getReferenceProps, getFloatingProps, getItemProps}),
     [getReferenceProps, getFloatingProps, getItemProps]
   );
-};
+}

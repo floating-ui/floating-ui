@@ -5,7 +5,7 @@ import * as React from 'react';
  * @see https://floating-ui.com/docs/useMergeRefs
  */
 export function useMergeRefs<Instance>(
-  refs: Array<React.Ref<Instance>>
+  ...refs: Array<React.Ref<Instance>>
 ): React.RefCallback<Instance> | null {
   return React.useMemo(() => {
     if (refs.every((ref) => ref == null)) {
