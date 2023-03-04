@@ -1,16 +1,16 @@
 import {
   autoUpdate,
   flip,
-  FloatingDelayGroup,
+  FloatingGroup,
   FloatingPortal,
   offset,
   Placement,
   shift,
-  useDelayGroup,
-  useDelayGroupContext,
   useDismiss,
   useFloating,
   useFocus,
+  useGroup,
+  useGroupContext,
   useHover,
   useInteractions,
   useRole,
@@ -50,7 +50,7 @@ export const Main = () => {
             <Tooltip label="My tooltip 3">
               <Button>My button</Button>
             </Tooltip>
-          </FloatingDelayGroup>
+          </FloatingGroup>
         </div>
       </div>
     </>
@@ -63,7 +63,7 @@ export function Tooltip({
   placement = 'top',
   delay = 0,
 }: Props) {
-  const {delay: groupDelay, currentId, isInstantPhase} = useDelayGroupContext();
+  const {delay: groupDelay, currentId, isInstantPhase} = useGroupContext();
   const [open, setOpen] = useState(false);
   const id = useId();
 
@@ -75,17 +75,17 @@ export function Tooltip({
     whileElementsMounted: autoUpdate,
   });
 
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useHover(context, {
       delay: groupDelay === 0 ? delay : groupDelay,
       move: false,
     }),
     useFocus(context),
     useRole(context, {role: 'tooltip'}),
-    useDismiss(context),
-  ]);
+    useDismiss(context)
+  );
 
-  useDelayGroup(context, {id});
+  useGroup(context, {id});
 
   const instantDuration = 0;
   const openDuration = 750;

@@ -15,9 +15,9 @@ function App({
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useClick(context, props),
-  ]);
+  const {getReferenceProps, getFloatingProps} = useInteractions(
+    useClick(context, props)
+  );
 
   const Tag = typeable ? 'input' : button ? 'button' : 'div';
 

@@ -122,12 +122,12 @@ describe('#2129: interactions.getFloatingProps as a dep does not cause setState 
       open: true,
     });
 
-    const interactions = useInteractions([
+    const interactions = useInteractions(
       useHover(context),
       useClick(context),
       useFocus(context),
-      useDismiss(context),
-    ]);
+      useDismiss(context)
+    );
 
     const Tooltip = useCallback(() => {
       return (

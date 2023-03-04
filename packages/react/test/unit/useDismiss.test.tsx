@@ -22,9 +22,9 @@ function App(props: Props) {
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useDismiss(context, props),
-  ]);
+  const {getReferenceProps, getFloatingProps} = useInteractions(
+    useDismiss(context, props)
+  );
 
   return (
     <>
@@ -108,9 +108,9 @@ describe('false', () => {
         onOpenChange: setOpen,
       });
 
-      const {getReferenceProps, getFloatingProps} = useInteractions([
-        useDismiss(context),
-      ]);
+      const {getReferenceProps, getFloatingProps} = useInteractions(
+        useDismiss(context)
+      );
 
       return (
         <>
@@ -160,9 +160,9 @@ describe('bubbles', () => {
       nodeId,
     });
 
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-      useDismiss(context, props),
-    ]);
+    const {getReferenceProps, getFloatingProps} = useInteractions(
+      useDismiss(context, props)
+    );
 
     return (
       <FloatingNode id={nodeId}>

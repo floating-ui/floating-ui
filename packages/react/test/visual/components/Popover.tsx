@@ -141,13 +141,13 @@ function PopoverComponent({
   const labelId = `${id}-label`;
   const descriptionId = `${id}-description`;
 
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useClick(context),
     useRole(context),
     useDismiss(context, {
       bubbles,
-    }),
-  ]);
+    })
+  );
 
   return (
     <FloatingNode id={nodeId}>

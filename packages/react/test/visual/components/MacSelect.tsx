@@ -259,7 +259,7 @@ export function Main() {
         ],
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     useClick(context, {event: 'mousedown'}),
     useDismiss(context),
     useRole(context, {role: 'listbox'}),
@@ -279,8 +279,8 @@ export function Main() {
       listRef: listContentRef,
       activeIndex,
       onMatch: open ? setActiveIndex : setSelectedIndex,
-    }),
-  ]);
+    })
+  );
 
   useLayoutEffect(() => {
     if (open) {

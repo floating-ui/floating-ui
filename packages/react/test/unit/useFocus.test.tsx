@@ -21,11 +21,11 @@ function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useFocus(context, props),
     useDismiss(context, {enabled: !!props.dismiss, referencePress: true}),
-    useHover(context, {enabled: !!props.hover}),
-  ]);
+    useHover(context, {enabled: !!props.hover})
+  );
 
   return (
     <>
@@ -79,9 +79,9 @@ test('blurs when hitting an "inside" focus guard', async () => {
       onOpenChange: setOpen,
     });
 
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-      useFocus(context),
-    ]);
+    const {getReferenceProps, getFloatingProps} = useInteractions(
+      useFocus(context)
+    );
 
     return (
       <>
@@ -103,9 +103,9 @@ test('blurs when hitting an "inside" focus guard', async () => {
       onOpenChange: setOpen,
     });
 
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-      useClick(context),
-    ]);
+    const {getReferenceProps, getFloatingProps} = useInteractions(
+      useClick(context)
+    );
 
     return (
       <>

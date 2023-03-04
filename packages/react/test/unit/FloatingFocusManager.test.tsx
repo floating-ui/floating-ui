@@ -136,10 +136,10 @@ describe('returnFocus', () => {
         nodeId,
       });
 
-      const {getReferenceProps, getFloatingProps} = useInteractions([
+      const {getReferenceProps, getFloatingProps} = useInteractions(
         useClick(context),
-        useDismiss(context, {bubbles: false}),
-      ]);
+        useDismiss(context, {bubbles: false})
+      );
 
       return (
         <FloatingNode id={nodeId}>

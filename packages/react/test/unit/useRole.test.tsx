@@ -13,9 +13,9 @@ function App({
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useRole(context, props),
-  ]);
+  const {getReferenceProps, getFloatingProps} = useInteractions(
+    useRole(context, props)
+  );
 
   return (
     <>

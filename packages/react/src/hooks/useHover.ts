@@ -51,7 +51,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
   handleClose?: HandleCloseFn<RT> | null;
   restMs?: number;
   delay?: number | Partial<{open: number; close: number}>;
-  mouseOnly?: boolean;
+  ignoreTouch?: boolean;
   move?: boolean;
 }
 
@@ -66,7 +66,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     enabled = true,
     delay = 0,
     handleClose = null,
-    mouseOnly = false,
+    ignoreTouch = false,
     restMs = 0,
     move = true,
   }: Props<RT> = {}
@@ -194,7 +194,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       blockMouseMoveRef.current = false;
 
       if (
-        (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) ||
+        (ignoreTouch && !isMouseLikePointerType(pointerTypeRef.current)) ||
         (restMs > 0 && getDelay(delayRef.current, 'open') === 0)
       ) {
         return;
@@ -299,7 +299,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     floating,
     enabled,
     context,
-    mouseOnly,
+    ignoreTouch,
     restMs,
     move,
     closeWithDelay,

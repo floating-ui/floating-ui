@@ -203,7 +203,7 @@ export function Main() {
     ],
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     useRole(context, {role: 'listbox'}),
     useDismiss(context),
     useListNavigation(context, {
@@ -213,8 +213,8 @@ export function Main() {
       virtual: true,
       loop: true,
       allowEscape: true,
-    }),
-  ]);
+    })
+  );
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;

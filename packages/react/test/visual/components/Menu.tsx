@@ -126,14 +126,14 @@ export const MenuComponent = React.forwardRef<
     activeIndex,
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     hover,
     click,
     role,
     dismiss,
     listNavigation,
-    typeahead,
-  ]);
+    typeahead
+  );
 
   // Event emitter allows you to communicate across tree components.
   // This effect closes all menus when an item gets clicked anywhere
@@ -197,7 +197,7 @@ export const MenuComponent = React.forwardRef<
     duration: 100,
   });
 
-  const referenceRef = useMergeRefs([refs.setReference, forwardedRef]);
+  const referenceRef = useMergeRefs(refs.setReference, forwardedRef);
   const referenceProps = getReferenceProps({
     ref: referenceRef,
     ...props,

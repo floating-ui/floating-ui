@@ -10,7 +10,7 @@ test('merges refs and cleans up', () => {
   function App({show}: {show: boolean}) {
     const ref1 = React.useRef<HTMLDivElement>(null);
     const ref2 = React.useCallback(callbackSpy, []);
-    const ref = useMergeRefs([ref1, ref2]);
+    const ref = useMergeRefs(ref1, ref2);
 
     React.useLayoutEffect(() => {
       refSpy = ref1.current;
@@ -41,7 +41,7 @@ test('conditional refs', () => {
     const ref1 = React.useCallback(callbackSpy, []);
     const ref2 = React.useCallback(callbackSpy2, []);
     const ref3 = React.useCallback(callbackSpy3, []);
-    const ref = useMergeRefs([ref1, change ? ref3 : ref2]);
+    const ref = useMergeRefs(ref1, change ? ref3 : ref2);
 
     return <div id="test" ref={ref} />;
   }

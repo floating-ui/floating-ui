@@ -15,9 +15,9 @@ function App({
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context, props),
-  ]);
+  const {getReferenceProps, getFloatingProps} = useInteractions(
+    useHover(context, props)
+  );
 
   return (
     <>

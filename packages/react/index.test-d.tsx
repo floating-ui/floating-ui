@@ -75,7 +75,7 @@ function App() {
 
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
-  const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
+  const ref = useMergeRefs(ref1, ref2, arrowRef, null);
 
   return (
     <div ref={ref}>
@@ -98,7 +98,7 @@ function NarrowRefType() {
   const floating1 = useFloating();
   const floating2 = useFloating<HTMLButtonElement>();
   const floating3 = useFloating<HTMLAnchorElement>();
-  useInteractions([
+  useInteractions(
     useClick(floating2.context),
     useDismiss(floating2.context),
     useFocus(floating2.context),
@@ -107,8 +107,8 @@ function NarrowRefType() {
     }),
     useListNavigation(floating2.context),
     useRole(floating2.context),
-    useTypeahead(floating2.context),
-  ]);
+    useTypeahead(floating2.context)
+  );
 
   // @ts-expect-error
   floating1.refs.reference.current?.contains(document.body);

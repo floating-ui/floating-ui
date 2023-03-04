@@ -1,6 +1,5 @@
 import {
   FloatingFocusManager,
-  FloatingOverlay,
   FloatingPortal,
   useClick,
   useDismiss,
@@ -61,14 +60,14 @@ export function Drawer({children, render}: Props) {
 
   const modal = !isLargeScreen;
 
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useClick(context),
     useRole(context),
     useDismiss(context, {
       outsidePress: modal,
       outsidePressEvent: 'mousedown',
-    }),
-  ]);
+    })
+  );
 
   const content = (
     <FloatingFocusManager
@@ -99,12 +98,12 @@ export function Drawer({children, render}: Props) {
       <FloatingPortal id="drawer-root">
         {open &&
           (modal ? (
-            <FloatingOverlay
+            <FloatingBackdrop
               lockScroll
               style={{background: 'rgba(0, 0, 0, 0.8)', zIndex: 1}}
             >
               {content}
-            </FloatingOverlay>
+            </FloatingBackdrop>
           ) : (
             content
           ))}

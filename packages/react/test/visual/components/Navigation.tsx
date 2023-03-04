@@ -56,7 +56,7 @@ export const NavigationItem = React.forwardRef<
     placement: 'right-start',
   });
 
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useHover(context, {
       handleClose: safePolygon(),
       enabled: hasChildren,
@@ -66,8 +66,8 @@ export const NavigationItem = React.forwardRef<
     }),
     useDismiss(context, {
       enabled: hasChildren,
-    }),
-  ]);
+    })
+  );
 
   const mergedReferenceRef = React.useMemo(
     () => mergeRefs([ref, refs.setReference]),

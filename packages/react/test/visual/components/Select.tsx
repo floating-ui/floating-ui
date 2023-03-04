@@ -89,13 +89,13 @@ export function Main() {
     onMatch: open ? setActiveIndex : setSelectedIndex,
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     click,
     dismiss,
     role,
     listNav,
-    typeahead,
-  ]);
+    typeahead
+  );
 
   const handleSelect = (index: number) => {
     setSelectedIndex(index);

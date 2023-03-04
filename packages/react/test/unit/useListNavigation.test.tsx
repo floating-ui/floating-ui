@@ -20,7 +20,7 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
     open,
     onOpenChange: setOpen,
   });
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     useClick(context),
     useListNavigation(context, {
       ...props,
@@ -30,8 +30,8 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
         setActiveIndex(index);
         props.onNavigate?.(index);
       },
-    }),
-  ]);
+    })
+  );
 
   return (
     <>
@@ -136,16 +136,14 @@ test('resets indexRef to -1 upon close', async () => {
       });
 
     const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
-      [
-        useDismiss(context),
-        useListNavigation(context, {
-          listRef,
-          activeIndex,
-          onNavigate: setActiveIndex,
-          virtual: true,
-          loop: true,
-        }),
-      ]
+      useDismiss(context),
+      useListNavigation(context, {
+        listRef,
+        activeIndex,
+        onNavigate: setActiveIndex,
+        virtual: true,
+        loop: true,
+      })
     );
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {

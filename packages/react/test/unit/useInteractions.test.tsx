@@ -21,15 +21,15 @@ test('correctly merges functions', () => {
   const userOnClick = jest.fn();
 
   function App() {
-    const {getReferenceProps} = useInteractions([
+    const {getReferenceProps} = useInteractions(
       {reference: {onClick: firstInteractionOnClick}},
       {
         reference: {
           onClick: secondInteractionOnClick,
           onKeyDown: secondInteractionOnKeyDown,
         },
-      },
-    ]);
+      }
+    );
 
     const {onClick, onKeyDown} = getReferenceProps({onClick: userOnClick});
 
@@ -51,7 +51,7 @@ test('correctly merges functions', () => {
 
 test('does not error with undefined user supplied functions', () => {
   function App() {
-    const {getReferenceProps} = useInteractions([{reference: {onClick() {}}}]);
+    const {getReferenceProps} = useInteractions({reference: {onClick() {}}});
     return null;
 
     expect(() =>
@@ -65,7 +65,7 @@ test('does not error with undefined user supplied functions', () => {
 
 test('does not break props that start with `on`', () => {
   function App() {
-    const {getReferenceProps} = useInteractions([]);
+    const {getReferenceProps} = useInteractions();
 
     const props = getReferenceProps({
       // @ts-expect-error
@@ -99,30 +99,28 @@ test('prop getters are memoized', () => {
     // an infinite loop as they must be memoized externally (as done by React).
     // Other non-primitives like functions and arrays get memoized by the hooks.
     const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
-      [
-        useHover(context, {handleClose}),
-        useFocus(context),
-        useClick(context),
-        useRole(context),
-        useDismiss(context),
-        useListNavigation(context, {
-          listRef,
-          activeIndex: 0,
-          onNavigate: () => {},
-          disabledIndices: [],
-        }),
-        useTypeahead(context, {
-          listRef,
-          activeIndex: 0,
-          ignoreKeys: [],
-          onMatch: () => {},
-          findMatch: () => '',
-        }),
-        useInnerOffset(context, {
-          onChange: () => {},
-          overflowRef,
-        }),
-      ]
+      useHover(context, {handleClose}),
+      useFocus(context),
+      useClick(context),
+      useRole(context),
+      useDismiss(context),
+      useListNavigation(context, {
+        listRef,
+        activeIndex: 0,
+        onNavigate: () => {},
+        disabledIndices: [],
+      }),
+      useTypeahead(context, {
+        listRef,
+        activeIndex: 0,
+        ignoreKeys: [],
+        onMatch: () => {},
+        findMatch: () => '',
+      }),
+      useInnerOffset(context, {
+        onChange: () => {},
+        overflowRef,
+      })
     );
 
     useEffect(() => {

@@ -27,7 +27,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
 
   const disabledIndices = [0, 1, 2, 3, 4, 5, 6, 7, 10, 15, 45, 48];
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
     useClick(context),
     useListNavigation(context, {
       listRef,
@@ -39,8 +39,8 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
       openOnArrowKeyDown: false,
       disabledIndices,
     }),
-    useDismiss(context),
-  ]);
+    useDismiss(context)
+  );
 
   return (
     <>

@@ -131,11 +131,11 @@ export const Main = () => {
   });
 
   // Handles opening the floating element via the Choose Emoji button.
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useClick(context),
     useDismiss(context),
-    useRole(context, {role: 'menu'}),
-  ]);
+    useRole(context, {role: 'menu'})
+  );
 
   // Handles the list navigation where the reference is the inner input, not
   // the button that opens the floating element.
@@ -143,7 +143,7 @@ export const Main = () => {
     getReferenceProps: getInputProps,
     getFloatingProps: getListFloatingProps,
     getItemProps,
-  } = useInteractions([
+  } = useInteractions(
     useListNavigation(context, {
       listRef,
       onNavigate: open ? setActiveIndex : undefined,
@@ -154,8 +154,8 @@ export const Main = () => {
       focusItemOnOpen: false,
       virtual: true,
       allowEscape: true,
-    }),
-  ]);
+    })
+  );
 
   useEffect(() => {
     if (open) {

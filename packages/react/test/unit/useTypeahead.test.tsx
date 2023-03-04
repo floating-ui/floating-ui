@@ -16,7 +16,7 @@ const useImpl = (props: Pick<Props, 'onMatch'> & {list?: Array<string>}) => {
     onOpenChange: setOpen,
   });
   const listRef = useRef(props.list ?? ['one', 'two', 'three']);
-  const {getReferenceProps, getFloatingProps} = useInteractions([
+  const {getReferenceProps, getFloatingProps} = useInteractions(
     useTypeahead(context, {
       listRef,
       activeIndex,
@@ -24,8 +24,8 @@ const useImpl = (props: Pick<Props, 'onMatch'> & {list?: Array<string>}) => {
         setActiveIndex(index);
         props.onMatch?.(index);
       },
-    }),
-  ]);
+    })
+  );
   return {
     activeIndex,
     open,
