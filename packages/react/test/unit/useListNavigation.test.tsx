@@ -219,7 +219,7 @@ test('resets indexRef to -1 upon close', async () => {
 
   render(<Autocomplete />);
 
-  screen.getByTestId('reference').focus();
+  act(() => screen.getByTestId('reference').focus());
   await userEvent.keyboard('a');
 
   expect(screen.getByTestId('floating')).toBeInTheDocument();

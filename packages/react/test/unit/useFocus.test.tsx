@@ -135,7 +135,9 @@ test('blurs when hitting an "inside" focus guard', async () => {
   await userEvent.tab();
 
   // Wait for the timeout in `onBlur()`.
-  await new Promise((resolve) => setTimeout(resolve));
+  await act(() => new Promise((resolve) => setTimeout(resolve)));
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+  cleanup();
 });
