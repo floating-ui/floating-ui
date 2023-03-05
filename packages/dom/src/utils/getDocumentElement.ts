@@ -1,4 +1,4 @@
-import {isNode} from './is';
+import {isNode} from './node';
 
 export function getDocumentElement(node: Node | Window): HTMLElement {
   return (

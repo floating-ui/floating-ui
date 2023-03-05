@@ -12,7 +12,6 @@ import {getBoundingClientRect} from './getBoundingClientRect';
 import {getComputedStyle} from './getComputedStyle';
 import {getDocumentElement} from './getDocumentElement';
 import {getDocumentRect} from './getDocumentRect';
-import {getNodeName} from './getNodeName';
 import {getOverflowAncestors} from './getOverflowAncestors';
 import {getParentNode} from './getParentNode';
 import {getScale} from './getScale';
@@ -26,6 +25,7 @@ import {
   isLastTraversableNode,
 } from './is';
 import {max, min} from './math';
+import {getNodeName} from './node';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;

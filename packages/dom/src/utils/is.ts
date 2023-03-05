@@ -1,6 +1,6 @@
 import {getComputedStyle} from './getComputedStyle';
-import {getNodeName} from './getNodeName';
 import {getWindow} from './getWindow';
+import {getNodeName} from './node';
 import {getUAString} from './userAgent';
 
 declare global {
@@ -18,10 +18,6 @@ export function isHTMLElement(value: any): value is HTMLElement {
 
 export function isElement(value: any): value is Element {
   return value instanceof getWindow(value).Element;
-}
-
-export function isNode(value: any): value is Node {
-  return value instanceof getWindow(value).Node;
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {

@@ -1,5 +1,4 @@
 import {getComputedStyle} from './getComputedStyle';
-import {getNodeName} from './getNodeName';
 import {getParentNode} from './getParentNode';
 import {getWindow} from './getWindow';
 import {
@@ -8,6 +7,7 @@ import {
   isLastTraversableNode,
   isTableElement,
 } from './is';
+import {getNodeName} from './node';
 
 type Polyfill = (element: HTMLElement) => Element | null;
 
