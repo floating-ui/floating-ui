@@ -81,7 +81,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     referencePress = false,
     referencePressEvent = 'pointerdown',
     ancestorScroll = false,
-    bubbles = true,
+    bubbles,
   }: Props = {}
 ): ElementProps => {
   const tree = useFloatingTree();

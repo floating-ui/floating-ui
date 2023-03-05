@@ -308,10 +308,12 @@ describe('bubbles', () => {
   describe('escapeKey', () => {
     test('without FloatingTree', async () => {
       function App() {
+        const [popoverOpen, setPopoverOpen] = useState(true);
         const [tooltipOpen, setTooltipOpen] = useState(false);
 
         const popover = useFloating({
-          open: true,
+          open: popoverOpen,
+          onOpenChange: setPopoverOpen,
         });
         const tooltip = useFloating({
           open: tooltipOpen,
@@ -332,17 +334,19 @@ describe('bubbles', () => {
               ref={popover.refs.setReference}
               {...popoverInteractions.getReferenceProps()}
             />
-            <div
-              role="dialog"
-              ref={popover.refs.setFloating}
-              {...popoverInteractions.getFloatingProps()}
-            >
-              <button
-                data-testid="focus-button"
-                ref={tooltip.refs.setReference}
-                {...tooltipInteractions.getReferenceProps()}
-              />
-            </div>
+            {popoverOpen && (
+              <div
+                role="dialog"
+                ref={popover.refs.setFloating}
+                {...popoverInteractions.getFloatingProps()}
+              >
+                <button
+                  data-testid="focus-button"
+                  ref={tooltip.refs.setReference}
+                  {...tooltipInteractions.getReferenceProps()}
+                />
+              </div>
+            )}
             {tooltipOpen && (
               <div
                 role="tooltip"
@@ -370,8 +374,8 @@ describe('bubbles', () => {
 
     test('true', async () => {
       render(
-        <NestedDialog testId="outer">
-          <NestedDialog testId="inner">
+        <NestedDialog testId="outer" bubbles>
+          <NestedDialog testId="inner" bubbles>
             <button>test button</button>
           </NestedDialog>
         </NestedDialog>
