@@ -1,8 +1,9 @@
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ReactNode, useState} from 'react';
 
 import {
+  FloatingFocusManager,
   FloatingNode,
   FloatingPortal,
   FloatingTree,
@@ -10,6 +11,7 @@ import {
   useFloating,
   useFloatingNodeId,
   useFloatingParentNodeId,
+  useFocus,
   useInteractions,
 } from '../../src';
 import {normalizeBubblesProp, Props} from '../../src/hooks/useDismiss';
@@ -166,9 +168,11 @@ describe('bubbles', () => {
       <FloatingNode id={nodeId}>
         <button {...getReferenceProps({ref: reference})} />
         {open && (
-          <div {...getFloatingProps({ref: floating})} data-testid={testId}>
-            {children}
-          </div>
+          <FloatingFocusManager context={context}>
+            <div {...getFloatingProps({ref: floating})} data-testid={testId}>
+              {children}
+            </div>
+          </FloatingFocusManager>
         )}
       </FloatingNode>
     );
@@ -194,7 +198,7 @@ describe('bubbles', () => {
     test('undefined', () => {
       const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp();
 
-      expect(escapeKeyBubbles).toBe(true);
+      expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
@@ -209,7 +213,7 @@ describe('bubbles', () => {
     test('{}', () => {
       const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({});
 
-      expect(escapeKeyBubbles).toBe(true);
+      expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
@@ -227,7 +231,7 @@ describe('bubbles', () => {
         outsidePress: false,
       });
 
-      expect(escapeKeyBubbles).toBe(true);
+      expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(false);
     });
   });
@@ -302,6 +306,68 @@ describe('bubbles', () => {
   });
 
   describe('escapeKey', () => {
+    test('without FloatingTree', async () => {
+      function App() {
+        const [tooltipOpen, setTooltipOpen] = useState(false);
+
+        const popover = useFloating({
+          open: true,
+        });
+        const tooltip = useFloating({
+          open: tooltipOpen,
+          onOpenChange: setTooltipOpen,
+        });
+
+        const popoverInteractions = useInteractions([
+          useDismiss(popover.context),
+        ]);
+        const tooltipInteractions = useInteractions([
+          useFocus(tooltip.context),
+          useDismiss(tooltip.context),
+        ]);
+
+        return (
+          <>
+            <button
+              ref={popover.refs.setReference}
+              {...popoverInteractions.getReferenceProps()}
+            />
+            <div
+              role="dialog"
+              ref={popover.refs.setFloating}
+              {...popoverInteractions.getFloatingProps()}
+            >
+              <button
+                data-testid="focus-button"
+                ref={tooltip.refs.setReference}
+                {...tooltipInteractions.getReferenceProps()}
+              />
+            </div>
+            {tooltipOpen && (
+              <div
+                role="tooltip"
+                ref={tooltip.refs.setFloating}
+                {...tooltipInteractions.getFloatingProps()}
+              />
+            )}
+          </>
+        );
+      }
+
+      render(<App />);
+
+      act(() => screen.getByTestId('focus-button').focus());
+
+      expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog')).toBeInTheDocument();
+
+      cleanup();
+    });
+
     test('true', async () => {
       render(
         <NestedDialog testId="outer">

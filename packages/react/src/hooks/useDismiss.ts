@@ -31,13 +31,13 @@ const captureHandlerKeys = {
 };
 
 export const normalizeBubblesProp = (
-  bubbles: boolean | {escapeKey?: boolean; outsidePress?: boolean} = true
+  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean}
 ) => {
   return {
     escapeKeyBubbles:
-      typeof bubbles === 'boolean' ? bubbles : bubbles.escapeKey ?? true,
+      typeof bubbles === 'boolean' ? bubbles : bubbles?.escapeKey ?? false,
     outsidePressBubbles:
-      typeof bubbles === 'boolean' ? bubbles : bubbles.outsidePress ?? true,
+      typeof bubbles === 'boolean' ? bubbles : bubbles?.outsidePress ?? true,
   };
 };
 
@@ -98,17 +98,17 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
   const insideReactTreeRef = React.useRef(false);
   const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp(bubbles);
 
-  React.useEffect(() => {
-    if (!open || !enabled) {
-      return;
-    }
+  const closeOnEscapeKeyDown = useEvent(
+    (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
+      if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
+        return;
+      }
 
-    dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
-    dataRef.current.__outsidePressBubbles = outsidePressBubbles;
+      const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
 
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+      if (!escapeKeyBubbles) {
+        event.stopPropagation();
+
         if (children.length > 0) {
           let shouldDismiss = true;
 
@@ -126,112 +126,122 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
             return;
           }
         }
-
-        events.emit('dismiss', {
-          type: 'escapeKey',
-          data: {
-            returnFocus: {preventScroll: false},
-          },
-        });
-
-        onOpenChange(false);
-      }
-    }
-
-    function onOutsidePress(event: MouseEvent) {
-      // Given developers can stop the propagation of the synthetic event,
-      // we can only be confident with a positive value.
-      const insideReactTree = insideReactTreeRef.current;
-      insideReactTreeRef.current = false;
-
-      if (insideReactTree) {
-        return;
-      }
-
-      if (typeof outsidePress === 'function' && !outsidePress(event)) {
-        return;
-      }
-
-      const target = getTarget(event);
-
-      // Check if the click occurred on the scrollbar
-      if (isHTMLElement(target) && floating) {
-        const win = floating.ownerDocument.defaultView || window;
-        const canScrollX = target.scrollWidth > target.clientWidth;
-        const canScrollY = target.scrollHeight > target.clientHeight;
-
-        let xCond = canScrollY && event.offsetX > target.clientWidth;
-
-        // In some browsers it is possible to change the <body> (or window)
-        // scrollbar to the left side, but is very rare and is difficult to
-        // check for. Plus, for modal dialogs with backdrops, it is more
-        // important that the backdrop is checked but not so much the window.
-        if (canScrollY) {
-          const isRTL = win.getComputedStyle(target).direction === 'rtl';
-
-          if (isRTL) {
-            xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
-          }
-        }
-
-        if (xCond || (canScrollX && event.offsetY > target.clientHeight)) {
-          return;
-        }
-      }
-
-      const targetIsInsideChildren =
-        tree &&
-        getChildren(tree.nodesRef.current, nodeId).some((node) =>
-          isEventTargetWithin(event, node.context?.elements.floating)
-        );
-
-      if (
-        isEventTargetWithin(event, floating) ||
-        isEventTargetWithin(event, domReference) ||
-        targetIsInsideChildren
-      ) {
-        return;
-      }
-
-      const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
-      if (children.length > 0) {
-        let shouldDismiss = true;
-
-        children.forEach((child) => {
-          if (
-            child.context?.open &&
-            !child.context.dataRef.current.__outsidePressBubbles
-          ) {
-            shouldDismiss = false;
-            return;
-          }
-        });
-
-        if (!shouldDismiss) {
-          return;
-        }
       }
 
       events.emit('dismiss', {
-        type: 'outsidePress',
+        type: 'escapeKey',
         data: {
-          returnFocus: nested
-            ? {preventScroll: true}
-            : isVirtualClick(event) ||
-              isVirtualPointerEvent(event as PointerEvent),
+          returnFocus: {preventScroll: false},
         },
       });
 
       onOpenChange(false);
     }
+  );
+
+  const closeOnPressOutside = useEvent((event: MouseEvent) => {
+    // Given developers can stop the propagation of the synthetic event,
+    // we can only be confident with a positive value.
+    const insideReactTree = insideReactTreeRef.current;
+    insideReactTreeRef.current = false;
+
+    if (insideReactTree) {
+      return;
+    }
+
+    if (typeof outsidePress === 'function' && !outsidePress(event)) {
+      return;
+    }
+
+    const target = getTarget(event);
+
+    // Check if the click occurred on the scrollbar
+    if (isHTMLElement(target) && floating) {
+      const win = floating.ownerDocument.defaultView || window;
+      const canScrollX = target.scrollWidth > target.clientWidth;
+      const canScrollY = target.scrollHeight > target.clientHeight;
+
+      let xCond = canScrollY && event.offsetX > target.clientWidth;
+
+      // In some browsers it is possible to change the <body> (or window)
+      // scrollbar to the left side, but is very rare and is difficult to
+      // check for. Plus, for modal dialogs with backdrops, it is more
+      // important that the backdrop is checked but not so much the window.
+      if (canScrollY) {
+        const isRTL = win.getComputedStyle(target).direction === 'rtl';
+
+        if (isRTL) {
+          xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
+        }
+      }
+
+      if (xCond || (canScrollX && event.offsetY > target.clientHeight)) {
+        return;
+      }
+    }
+
+    const targetIsInsideChildren =
+      tree &&
+      getChildren(tree.nodesRef.current, nodeId).some((node) =>
+        isEventTargetWithin(event, node.context?.elements.floating)
+      );
+
+    if (
+      isEventTargetWithin(event, floating) ||
+      isEventTargetWithin(event, domReference) ||
+      targetIsInsideChildren
+    ) {
+      return;
+    }
+
+    const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+    if (children.length > 0) {
+      let shouldDismiss = true;
+
+      children.forEach((child) => {
+        if (
+          child.context?.open &&
+          !child.context.dataRef.current.__outsidePressBubbles
+        ) {
+          shouldDismiss = false;
+          return;
+        }
+      });
+
+      if (!shouldDismiss) {
+        return;
+      }
+    }
+
+    events.emit('dismiss', {
+      type: 'outsidePress',
+      data: {
+        returnFocus: nested
+          ? {preventScroll: true}
+          : isVirtualClick(event) ||
+            isVirtualPointerEvent(event as PointerEvent),
+      },
+    });
+
+    onOpenChange(false);
+  });
+
+  React.useEffect(() => {
+    if (!open || !enabled) {
+      return;
+    }
+
+    dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
+    dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
     function onScroll() {
       onOpenChange(false);
     }
 
     const doc = getDocument(floating);
-    escapeKey && doc.addEventListener('keydown', onKeyDown);
-    outsidePress && doc.addEventListener(outsidePressEvent, onOutsidePress);
+    escapeKey && doc.addEventListener('keydown', closeOnEscapeKeyDown);
+    outsidePress &&
+      doc.addEventListener(outsidePressEvent, closeOnPressOutside);
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
 
@@ -261,9 +271,9 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     });
 
     return () => {
-      escapeKey && doc.removeEventListener('keydown', onKeyDown);
+      escapeKey && doc.removeEventListener('keydown', closeOnEscapeKeyDown);
       outsidePress &&
-        doc.removeEventListener(outsidePressEvent, onOutsidePress);
+        doc.removeEventListener(outsidePressEvent, closeOnPressOutside);
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
       });
@@ -276,16 +286,14 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     escapeKey,
     outsidePress,
     outsidePressEvent,
-    events,
-    tree,
-    nodeId,
     open,
     onOpenChange,
     ancestorScroll,
     enabled,
     escapeKeyBubbles,
     outsidePressBubbles,
-    nested,
+    closeOnEscapeKeyDown,
+    closeOnPressOutside,
   ]);
 
   React.useEffect(() => {
@@ -299,6 +307,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     return {
       reference: {
+        onKeyDown: closeOnEscapeKeyDown,
         [bubbleHandlerKeys[referencePressEvent]]: () => {
           if (referencePress) {
             events.emit('dismiss', {
@@ -310,6 +319,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         },
       },
       floating: {
+        onKeyDown: closeOnEscapeKeyDown,
         [captureHandlerKeys[outsidePressEvent]]: () => {
           insideReactTreeRef.current = true;
         },
@@ -322,5 +332,6 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     outsidePressEvent,
     referencePressEvent,
     onOpenChange,
+    closeOnEscapeKeyDown,
   ]);
 };
