@@ -73,7 +73,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     nodeId,
     onOpenChange,
     events,
-    dataRef,
+    data,
     elements: {domReference, floating},
   } = context;
 
@@ -212,12 +212,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         contains(portalContext?.portalNode, relatedTarget) ||
         relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
         (tree &&
-          (getChildren(tree.nodesRef.current, nodeId).find(
+          (getChildren(tree.nodes, nodeId).find(
             (node) =>
               contains(node.context?.elements.floating, relatedTarget) ||
               contains(node.context?.elements.domReference, relatedTarget)
           ) ||
-            getAncestors(tree.nodesRef.current, nodeId).find(
+            getAncestors(tree.nodes, nodeId).find(
               (node) =>
                 node.context?.elements.floating === relatedTarget ||
                 node.context?.elements.domReference === relatedTarget
@@ -336,7 +336,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     let preventReturnFocusScroll = false;
     const previouslyFocusedElement = activeElement(doc);
-    const contextData = dataRef.current;
     const initialFocusValue = initialFocusRef.current;
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
@@ -405,7 +404,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           // re-open it, unless they call `event.preventDefault()` in the
           // `keydown` listener. This helps keep backwards compatibility with
           // older examples.
-          contextData.__syncReturnFocus = true;
+          data.__syncReturnFocus = true;
 
           // In Safari, `useListNavigation` moves focus sync, so making this
           // sync ensures the initial item remains focused despite this being
@@ -420,7 +419,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
           setTimeout(() => {
             // This isn't an actual property the user should access, make sure
             // it doesn't persist.
-            delete contextData.__syncReturnFocus;
+            delete data.__syncReturnFocus;
           });
         }
       }
@@ -430,7 +429,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     getTabbableElements,
     returnFocusRef,
     initialFocusRef,
-    dataRef,
+    data,
     refs,
     events,
     ignoreInitialFocus,

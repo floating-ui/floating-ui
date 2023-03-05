@@ -400,9 +400,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     }
 
     if (previousMountedRef.current && !floating) {
-      const parentFloating = tree?.nodesRef.current.find(
-        (node) => node.id === parentId
-      )?.context?.elements.floating;
+      const parentFloating = tree?.nodes.find((node) => node.id === parentId)
+        ?.context?.elements.floating;
 
       if (
         parentFloating &&

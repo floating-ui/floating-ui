@@ -320,13 +320,13 @@ describe('bubbles', () => {
           onOpenChange: setTooltipOpen,
         });
 
-        const popoverInteractions = useInteractions([
-          useDismiss(popover.context),
-        ]);
-        const tooltipInteractions = useInteractions([
+        const popoverInteractions = useInteractions(
+          useDismiss(popover.context)
+        );
+        const tooltipInteractions = useInteractions(
           useFocus(tooltip.context),
-          useDismiss(tooltip.context),
-        ]);
+          useDismiss(tooltip.context)
+        );
 
         return (
           <>

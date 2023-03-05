@@ -5,6 +5,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingTree} from './components/FloatingTree';
 import {useId} from './hooks/useId';
 import {useEvent} from './hooks/utils/useEvent';
+import {useInstance} from './hooks/utils/useInstance';
 import type {
   ContextData,
   FloatingContext,
@@ -28,8 +29,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
-  const dataRef = React.useRef<ContextData>({});
-  const events = React.useState(() => createPubSub())[0];
+  const data = useInstance<ContextData>({});
+  const events = useInstance(() => createPubSub());
 
   const floatingId = useId();
 
@@ -92,18 +93,28 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...position,
       refs,
       elements,
-      dataRef,
+      data,
       nodeId,
       floatingId,
       events,
       open,
       onOpenChange,
     }),
-    [position, nodeId, floatingId, events, open, onOpenChange, refs, elements]
+    [
+      position,
+      nodeId,
+      floatingId,
+      data,
+      events,
+      open,
+      onOpenChange,
+      refs,
+      elements,
+    ]
   );
 
   useLayoutEffect(() => {
-    const node = tree?.nodesRef.current.find((node) => node.id === nodeId);
+    const node = tree?.nodes.find((node) => node.id === nodeId);
     if (node) {
       node.context = context;
     }

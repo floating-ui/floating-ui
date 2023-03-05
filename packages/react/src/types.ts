@@ -127,7 +127,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> =
       open: boolean;
       onOpenChange: (open: boolean) => void;
       events: FloatingEvents;
-      dataRef: React.MutableRefObject<ContextData>;
+      data: ContextData;
       nodeId: string | undefined;
       floatingId: string;
       refs: ExtendedRefs<RT>;
@@ -142,7 +142,7 @@ export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
 }
 
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
-  nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
+  nodes: Array<FloatingNodeType<RT>>;
   events: FloatingEvents;
   addNode: (node: FloatingNodeType) => void;
   removeNode: (node: FloatingNodeType) => void;

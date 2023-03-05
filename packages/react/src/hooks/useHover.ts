@@ -74,7 +74,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const {
     open,
     onOpenChange,
-    dataRef,
+    data,
     events,
     elements: {domReference, floating},
     refs,
@@ -94,9 +94,9 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
   const unbindMouseMoveRef = React.useRef(() => {});
 
   const isHoverOpen = React.useCallback(() => {
-    const type = dataRef.current.openEvent?.type;
+    const type = data.openEvent?.type;
     return type?.includes('mouse') && type !== 'mousedown';
-  }, [dataRef]);
+  }, [data]);
 
   // When dismissing before opening, clear the delay timeouts to cancel it
   // from showing.
@@ -139,7 +139,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     enabled,
     handleCloseRef,
-    dataRef,
+    data,
     isHoverOpen,
   ]);
 
@@ -184,8 +184,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     }
 
     function isClickLikeOpenEvent() {
-      return dataRef.current.openEvent
-        ? ['click', 'mousedown'].includes(dataRef.current.openEvent.type)
+      return data.openEvent
+        ? ['click', 'mousedown'].includes(data.openEvent.type)
         : false;
     }
 
@@ -200,7 +200,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      dataRef.current.openEvent = event;
+      data.openEvent = event;
 
       const openDelay = getDelay(
         delayRef.current,
@@ -310,7 +310,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     tree,
     delayRef,
     handleCloseRef,
-    dataRef,
+    data,
   ]);
 
   // Block pointer-events of every element other than the reference and floating
@@ -335,9 +335,8 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       if (isElement(domReference) && floating) {
         const ref = domReference as unknown as HTMLElement | SVGSVGElement;
 
-        const parentFloating = tree?.nodesRef.current.find(
-          (node) => node.id === parentId
-        )?.context?.elements.floating;
+        const parentFloating = tree?.nodes.find((node) => node.id === parentId)
+          ?.context?.elements.floating;
 
         if (parentFloating) {
           parentFloating.style.pointerEvents = '';
@@ -360,7 +359,7 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     domReference,
     tree,
     handleCloseRef,
-    dataRef,
+    data,
     isHoverOpen,
   ]);
 

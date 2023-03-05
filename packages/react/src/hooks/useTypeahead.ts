@@ -32,7 +32,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
-  {open, dataRef, refs}: FloatingContext<RT>,
+  {open, data, refs}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
@@ -98,7 +98,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       }
 
       if (stringRef.current.length > 0 && stringRef.current[0] !== ' ') {
-        dataRef.current.typing = true;
+        data.typing = true;
 
         if (event.key === ' ') {
           stopEvent(event);
@@ -143,7 +143,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       timeoutIdRef.current = setTimeout(() => {
         stringRef.current = '';
         prevIndexRef.current = matchIndexRef.current;
-        dataRef.current.typing = false;
+        data.typing = false;
       }, resetMs);
 
       const prevIndex = prevIndexRef.current;
@@ -176,7 +176,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
-    dataRef,
+    data,
     listRef,
     resetMs,
     ignoreKeysRef,

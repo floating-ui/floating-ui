@@ -2,6 +2,7 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
+import {useInstance} from '../hooks/utils/useInstance';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 
@@ -68,30 +69,19 @@ export const FloatingTree = ({
 }: {
   children?: React.ReactNode;
 }): JSX.Element => {
-  const nodesRef = React.useRef<Array<FloatingNodeType>>([]);
-
-  const addNode = React.useCallback((node: FloatingNodeType) => {
-    nodesRef.current = [...nodesRef.current, node];
-  }, []);
-
-  const removeNode = React.useCallback((node: FloatingNodeType) => {
-    nodesRef.current = nodesRef.current.filter((n) => n !== node);
-  }, []);
-
-  const events = React.useState(() => createPubSub())[0];
+  const tree = useInstance(() => ({
+    nodes: [] as Array<FloatingNodeType>,
+    addNode(node: FloatingNodeType) {
+      tree.nodes.push(node);
+    },
+    removeNode(node: FloatingNodeType) {
+      tree.nodes = tree.nodes.filter((n) => n !== node);
+    },
+    events: createPubSub(),
+  }));
 
   return (
-    <FloatingTreeContext.Provider
-      value={React.useMemo(
-        () => ({
-          nodesRef,
-          addNode,
-          removeNode,
-          events,
-        }),
-        [nodesRef, addNode, removeNode, events]
-      )}
-    >
+    <FloatingTreeContext.Provider value={tree}>
       {children}
     </FloatingTreeContext.Provider>
   );

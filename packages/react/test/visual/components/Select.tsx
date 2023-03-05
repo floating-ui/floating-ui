@@ -173,10 +173,7 @@ export function Main() {
                         }
 
                         // Only if not using typeahead.
-                        if (
-                          event.key === ' ' &&
-                          !context.dataRef.current.typing
-                        ) {
+                        if (event.key === ' ' && !context.data.typing) {
                           event.preventDefault();
                           handleSelect(i);
                         }

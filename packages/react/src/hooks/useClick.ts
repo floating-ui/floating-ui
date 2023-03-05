@@ -25,7 +25,7 @@ export interface Props {
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, dataRef, elements: {domReference}}: FloatingContext<RT>,
+  {open, onOpenChange, data, elements: {domReference}}: FloatingContext<RT>,
   {
     enabled = true,
     event: eventOption = 'click',
@@ -67,9 +67,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           if (open) {
             if (
               toggle &&
-              (dataRef.current.openEvent
-                ? dataRef.current.openEvent.type === 'mousedown'
-                : true)
+              (data.openEvent ? data.openEvent.type === 'mousedown' : true)
             ) {
               onOpenChange(false);
             }
@@ -79,10 +77,10 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             onOpenChange(true);
           }
 
-          dataRef.current.openEvent = event.nativeEvent;
+          data.openEvent = event.nativeEvent;
         },
         onClick(event) {
-          if (dataRef.current.__syncReturnFocus) {
+          if (data.__syncReturnFocus) {
             return;
           }
 
@@ -101,9 +99,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           if (open) {
             if (
               toggle &&
-              (dataRef.current.openEvent
-                ? dataRef.current.openEvent.type === 'click'
-                : true)
+              (data.openEvent ? data.openEvent.type === 'click' : true)
             ) {
               onOpenChange(false);
             }
@@ -111,7 +107,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             onOpenChange(true);
           }
 
-          dataRef.current.openEvent = event.nativeEvent;
+          data.openEvent = event.nativeEvent;
         },
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
@@ -162,7 +158,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
-    dataRef,
+    data,
     eventOption,
     ignoreMouse,
     keyboardHandlers,

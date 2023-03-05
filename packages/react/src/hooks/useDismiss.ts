@@ -71,7 +71,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     events,
     nodeId,
     elements: {reference, domReference, floating},
-    dataRef,
+    data,
   }: FloatingContext<RT>,
   {
     enabled = true,
@@ -104,7 +104,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+      const children = tree ? getChildren(tree.nodes, nodeId) : [];
 
       if (!escapeKeyBubbles) {
         event.stopPropagation();
@@ -113,10 +113,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
           let shouldDismiss = true;
 
           children.forEach((child) => {
-            if (
-              child.context?.open &&
-              !child.context.dataRef.current.__escapeKeyBubbles
-            ) {
+            if (child.context?.open && !child.context.data.__escapeKeyBubbles) {
               shouldDismiss = false;
               return;
             }
@@ -182,7 +179,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     const targetIsInsideChildren =
       tree &&
-      getChildren(tree.nodesRef.current, nodeId).some((node) =>
+      getChildren(tree.nodes, nodeId).some((node) =>
         isEventTargetWithin(event, node.context?.elements.floating)
       );
 
@@ -194,15 +191,12 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    const children = tree ? getChildren(tree.nodesRef.current, nodeId) : [];
+    const children = tree ? getChildren(tree.nodes, nodeId) : [];
     if (children.length > 0) {
       let shouldDismiss = true;
 
       children.forEach((child) => {
-        if (
-          child.context?.open &&
-          !child.context.dataRef.current.__outsidePressBubbles
-        ) {
+        if (child.context?.open && !child.context.data.__outsidePressBubbles) {
           shouldDismiss = false;
           return;
         }
@@ -231,8 +225,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
-    dataRef.current.__outsidePressBubbles = outsidePressBubbles;
+    data.__escapeKeyBubbles = escapeKeyBubbles;
+    data.__outsidePressBubbles = outsidePressBubbles;
 
     function onScroll() {
       onOpenChange(false);
@@ -279,7 +273,7 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       });
     };
   }, [
-    dataRef,
+    data,
     floating,
     domReference,
     reference,

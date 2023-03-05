@@ -22,7 +22,7 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
   {
     open,
     onOpenChange,
-    dataRef,
+    data,
     events,
     refs,
     elements: {floating, domReference},
@@ -106,14 +106,14 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
           // but only if the click originated inside the reference element.
           if (
             event.type === 'focus' &&
-            dataRef.current.openEvent?.type === 'mousedown' &&
-            dataRef.current.openEvent &&
-            isEventTargetWithin(dataRef.current.openEvent, domReference)
+            data.openEvent?.type === 'mousedown' &&
+            data.openEvent &&
+            isEventTargetWithin(data.openEvent, domReference)
           ) {
             return;
           }
 
-          dataRef.current.openEvent = event.nativeEvent;
+          data.openEvent = event.nativeEvent;
           onOpenChange(true);
         },
         onBlur(event) {
@@ -145,5 +145,5 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
         },
       },
     };
-  }, [enabled, keyboardOnly, domReference, refs, dataRef, onOpenChange]);
+  }, [enabled, keyboardOnly, domReference, refs, data, onOpenChange]);
 };
