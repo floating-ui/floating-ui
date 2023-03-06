@@ -31,7 +31,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
 
-  const rootId = useId();
+  const floatingId = useId();
 
   const [domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
@@ -100,12 +100,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       elements,
       dataRef,
       nodeId,
-      rootId,
+      floatingId,
       events,
       open,
       onOpenChange,
     }),
-    [position, nodeId, rootId, events, open, onOpenChange, refs, elements]
+    [position, nodeId, floatingId, events, open, onOpenChange, refs, elements]
   );
 
   useLayoutEffect(() => {
