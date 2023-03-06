@@ -5,7 +5,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useFloatingTree} from './components/FloatingTree';
 import {useId} from './hooks/useId';
 import {useEvent} from './hooks/utils/useEvent';
-import {
+import type {
   ContextData,
   FloatingContext,
   NarrowedElement,

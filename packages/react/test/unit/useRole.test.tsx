@@ -117,7 +117,7 @@ describe('dialog', () => {
     cleanup();
   });
 
-  test('sets correct aria attributs with external ref, multiple useRole calls', () => {
+  test('sets correct aria attributes with external ref, multiple useRole calls', () => {
     render(<AppWithExternalRef role="dialog" />);
 
     const button = screen.getByRole('button');
