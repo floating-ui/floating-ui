@@ -3,8 +3,9 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useFloatingTree} from './components/FloatingTree';
+import {useId} from './hooks/useId';
 import {useEvent} from './hooks/utils/useEvent';
-import type {
+import {
   ContextData,
   FloatingContext,
   NarrowedElement,
@@ -29,6 +30,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
+
+  const rootId = useId();
 
   const [domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
@@ -97,11 +100,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       elements,
       dataRef,
       nodeId,
+      rootId,
       events,
       open,
       onOpenChange,
     }),
-    [position, nodeId, events, open, onOpenChange, refs, elements]
+    [position, nodeId, rootId, events, open, onOpenChange, refs, elements]
   );
 
   useLayoutEffect(() => {

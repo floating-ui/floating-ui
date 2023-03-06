@@ -21,10 +21,9 @@ export interface Props {
  * @see https://floating-ui.com/docs/useRole
  */
 export const useRole = <RT extends ReferenceType = ReferenceType>(
-  {open}: FloatingContext<RT>,
+  {open, rootId}: FloatingContext<RT>,
   {enabled = true, role = 'dialog'}: Partial<Props> = {}
 ): ElementProps => {
-  const rootId = useId();
   const referenceId = useId();
 
   return React.useMemo(() => {
