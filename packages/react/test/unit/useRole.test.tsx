@@ -1,11 +1,14 @@
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
-import {useFloating, useInteractions, useRole} from '../../src';
+import {useFloating, useId, useInteractions, useRole} from '../../src';
 import type {Props} from '../../src/hooks/useRole';
 
-function App(props: Props & {initiallyOpen?: boolean}) {
-  const [open, setOpen] = useState(props.initiallyOpen ?? false);
+function App({
+  initiallyOpen = false,
+  ...props
+}: Props & {initiallyOpen?: boolean}) {
+  const [open, setOpen] = useState(initiallyOpen);
   const {reference, floating, context} = useFloating({
     open,
     onOpenChange: setOpen,
@@ -13,6 +16,39 @@ function App(props: Props & {initiallyOpen?: boolean}) {
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useRole(context, props),
   ]);
+
+  return (
+    <>
+      <button
+        {...getReferenceProps({
+          ref: reference,
+          onClick() {
+            setOpen(!open);
+          },
+        })}
+      />
+      {open && (
+        <div
+          {...getFloatingProps({
+            ref: floating,
+          })}
+        />
+      )}
+    </>
+  );
+}
+
+function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
+  const [open, setOpen] = useState(props.initiallyOpen ?? false);
+  const nodeId = useId();
+  const {reference, floating, context} = useFloating({
+    nodeId,
+    open,
+    onOpenChange: setOpen,
+  });
+  // External ref can use it's own set of interactions hooks, but share context
+  const {getFloatingProps} = useInteractions([useRole(context, props)]);
+  const {getReferenceProps} = useInteractions([useRole(context, props)]);
 
   return (
     <>
@@ -56,6 +92,33 @@ describe('tooltip', () => {
 describe('dialog', () => {
   test('sets correct aria attributes based on the open state', () => {
     render(<App role="dialog" />);
+
+    const button = screen.getByRole('button');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('dialog')).toBeInTheDocument();
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('dialog').getAttribute('id')
+    );
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    cleanup();
+  });
+
+  test('sets correct aria attributes with external ref, multiple useRole calls', () => {
+    render(<AppWithExternalRef role="dialog" />);
 
     const button = screen.getByRole('button');
 

@@ -129,6 +129,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> =
       events: FloatingEvents;
       dataRef: React.MutableRefObject<ContextData>;
       nodeId: string | undefined;
+      floatingId: string;
       refs: ExtendedRefs<RT>;
       elements: ExtendedElements<RT>;
     }

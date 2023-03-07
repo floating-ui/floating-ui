@@ -21,14 +21,13 @@ export interface Props {
  * @see https://floating-ui.com/docs/useRole
  */
 export const useRole = <RT extends ReferenceType = ReferenceType>(
-  {open}: FloatingContext<RT>,
+  {open, floatingId}: FloatingContext<RT>,
   {enabled = true, role = 'dialog'}: Partial<Props> = {}
 ): ElementProps => {
-  const rootId = useId();
   const referenceId = useId();
 
   return React.useMemo(() => {
-    const floatingProps = {id: rootId, role};
+    const floatingProps = {id: floatingId, role};
 
     if (!enabled) {
       return {};
@@ -37,7 +36,7 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
     if (role === 'tooltip') {
       return {
         reference: {
-          'aria-describedby': open ? rootId : undefined,
+          'aria-describedby': open ? floatingId : undefined,
         },
         floating: floatingProps,
       };
@@ -47,7 +46,7 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
       reference: {
         'aria-expanded': open ? 'true' : 'false',
         'aria-haspopup': role === 'alertdialog' ? 'dialog' : role,
-        'aria-controls': open ? rootId : undefined,
+        'aria-controls': open ? floatingId : undefined,
         ...(role === 'listbox' && {
           role: 'combobox',
         }),
@@ -62,5 +61,5 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
         }),
       },
     };
-  }, [enabled, role, open, rootId, referenceId]);
+  }, [enabled, role, open, floatingId, referenceId]);
 };
