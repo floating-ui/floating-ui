@@ -1,4 +1,5 @@
 import {
+  FloatingBackdrop,
   FloatingFocusManager,
   FloatingPortal,
   useClick,

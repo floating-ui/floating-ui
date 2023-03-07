@@ -47,8 +47,8 @@ function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
     onOpenChange: setOpen,
   });
   // External ref can use it's own set of interactions hooks, but share context
-  const {getFloatingProps} = useInteractions([useRole(context, props)]);
-  const {getReferenceProps} = useInteractions([useRole(context, props)]);
+  const {getFloatingProps} = useInteractions(useRole(context, props));
+  const {getReferenceProps} = useInteractions(useRole(context, props));
 
   return (
     <>

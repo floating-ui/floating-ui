@@ -40,7 +40,7 @@ export const Main = () => {
       </div>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <div className="flex gap-1">
-          <FloatingDelayGroup delay={{open: 500, close: 200}} timeoutMs={200}>
+          <FloatingGroup delay={{open: 500, close: 200}} timeoutMs={200}>
             <Tooltip label="My tooltip">
               <Button>My button</Button>
             </Tooltip>
