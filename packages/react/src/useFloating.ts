@@ -116,9 +116,10 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...position,
       context,
       refs,
+      elements,
       reference: setReference,
       positionReference: setPositionReference,
     }),
-    [position, refs, context, setReference, setPositionReference]
+    [position, refs, elements, context, setReference, setPositionReference]
   ) as UseFloatingReturn<RT>;
 }
