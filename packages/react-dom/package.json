@@ -65,7 +65,7 @@
     "@babel/preset-react": "^7.16.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@testing-library/react": "^13.2.0",
-    "@types/react": "^18.0.1",
+    "@types/react": "^18.0.28",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "use-isomorphic-layout-effect": "^1.1.1"

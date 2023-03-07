@@ -15,14 +15,13 @@ import {Main as Arrow} from './components/Arrow';
 import {Main as Autocomplete} from './components/Autocomplete';
 import {Main as Drawer} from './components/Drawer';
 import {Main as EmojiPicker} from './components/EmojiPicker';
-import {Main as Grid} from './components/Grid';
 import {Main as MacSelect} from './components/MacSelect';
 import {Main as Menu} from './components/Menu';
 import {Main as Navigation} from './components/Navigation';
+import {New} from './components/New';
 import {Main as Popover} from './components/Popover';
 import {Main as Select} from './components/Select';
 import {Main as Tooltip} from './components/Tooltip';
-import {New} from './utils/New';
 
 const ROUTES = [
   {path: 'tooltip', component: Tooltip},
@@ -30,7 +29,6 @@ const ROUTES = [
   {path: 'menu', component: Menu},
   {path: 'select', component: Select},
   {path: 'mac-select', component: MacSelect},
-  {path: 'grid', component: Grid},
   {path: 'emoji-picker', component: EmojiPicker},
   {path: 'autocomplete', component: Autocomplete},
   {path: 'navigation', component: Navigation},
@@ -43,7 +41,7 @@ function App() {
 
   return (
     <div>
-      <main>
+      <main className="ml-64 p-12">
         {pathname === '/' && (
           <>
             <h1>Floating UI Testing Grounds</h1>
@@ -55,21 +53,24 @@ function App() {
         )}
         <Outlet />
       </main>
-      <nav>
-        <div className="nav-top">
-          <Link to="/" className="home-button">
+      <nav className="fixed overflow-y-auto left-0 top-0 h-full p-8 flex flex-col bg-slate-100 w-64">
+        <div className="">
+          <Link to="/" className="text-2xl font-bold mb-4 block">
             Tests
           </Link>
-          <Link to="/new" className="new-button">
+          <Link
+            to="/new"
+            className="bg-blue-500 inline-block rounded px-4 py-2 font-bold text-white mb-4"
+          >
             New
           </Link>
         </div>
-        <ul>
+        <ul className="flex flex-col capitalize text-lg">
           {ROUTES.map(({path}) => (
             <Link
               key={path}
               to={`/${path}`}
-              className="nav-link"
+              className="py-1"
               style={{
                 color: pathname === `/${path}` ? 'black' : '',
                 fontWeight: pathname === `/${path}` ? 'bold' : '',

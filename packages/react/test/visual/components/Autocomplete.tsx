@@ -1,7 +1,9 @@
 import {
   autoUpdate,
+  flip,
   FloatingFocusManager,
   FloatingPortal,
+  offset,
   size,
   useDismiss,
   useFloating,
@@ -10,6 +12,7 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
+import c from 'clsx';
 import {forwardRef, useRef, useState} from 'react';
 
 export const data = [
@@ -161,16 +164,13 @@ const Item = forwardRef<
   return (
     <div
       ref={ref}
+      className={c('p-2 cursor-default', {
+        'bg-blue-500 text-white': active,
+      })}
       role="option"
       id={id}
       aria-selected={active}
       {...rest}
-      style={{
-        background: active ? 'lightblue' : 'none',
-        padding: 4,
-        cursor: 'default',
-        ...rest.style,
-      }}
     >
       {children}
     </div>
@@ -184,23 +184,24 @@ export function Main() {
 
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
-  const {x, y, reference, floating, strategy, context, refs} =
-    useFloating<HTMLInputElement>({
-      whileElementsMounted: autoUpdate,
-      open,
-      onOpenChange: setOpen,
-      middleware: [
-        size({
-          apply({rects, availableHeight, elements}) {
-            Object.assign(elements.floating.style, {
-              width: `${rects.reference.width}px`,
-              maxHeight: `${availableHeight}px`,
-            });
-          },
-          padding: 10,
-        }),
-      ],
-    });
+  const {x, y, strategy, context, refs} = useFloating<HTMLInputElement>({
+    whileElementsMounted: autoUpdate,
+    open,
+    onOpenChange: setOpen,
+    middleware: [
+      offset(5),
+      flip({padding: 10}),
+      size({
+        apply({rects, availableHeight, elements}) {
+          Object.assign(elements.floating.style, {
+            width: `${rects.reference.width}px`,
+            maxHeight: `${availableHeight}px`,
+          });
+        },
+        padding: 10,
+      }),
+    ],
+  });
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
     useRole(context, {role: 'listbox'}),
@@ -211,6 +212,7 @@ export function Main() {
       onNavigate: setActiveIndex,
       virtual: true,
       loop: true,
+      allowEscape: true,
     }),
   ]);
 
@@ -220,7 +222,6 @@ export function Main() {
 
     if (value) {
       setOpen(true);
-      setActiveIndex(0);
     } else {
       setOpen(false);
     }
@@ -232,16 +233,16 @@ export function Main() {
 
   return (
     <>
-      <h1>Autocomplete</h1>
-      <p></p>
-      <div className="container">
+      <h1 className="text-5xl font-bold mb-8">Autocomplete</h1>
+      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         <input
+          ref={refs.setReference}
+          value={inputValue}
+          className="border-2 p-2 rounded border-slate-300 focus:border-blue-500 outline-none"
+          placeholder="Enter fruit"
+          aria-autocomplete="list"
           {...getReferenceProps({
-            ref: reference,
             onChange,
-            value: inputValue,
-            placeholder: 'Enter fruit',
-            'aria-autocomplete': 'list',
             onKeyDown(event) {
               if (
                 event.key === 'Enter' &&
@@ -263,15 +264,13 @@ export function Main() {
               visuallyHiddenDismiss
             >
               <div
+                ref={refs.setFloating}
+                className="bg-slate-100 rounded overflow-y-auto"
                 {...getFloatingProps({
-                  ref: floating,
                   style: {
                     position: strategy,
                     left: x ?? 0,
                     top: y ?? 0,
-                    background: '#eee',
-                    color: 'black',
-                    overflowY: 'auto',
                   },
                 })}
               >

@@ -13,6 +13,7 @@ import {
   useHover,
   useInteractions,
 } from '@floating-ui/react';
+import {ChevronRightIcon} from '@radix-ui/react-icons';
 import * as React from 'react';
 import mergeRefs from 'react-merge-refs';
 
@@ -47,14 +48,13 @@ export const NavigationItem = React.forwardRef<
 
   const nodeId = useFloatingNodeId();
 
-  const {x, y, reference, floating, strategy, context} =
-    useFloating<HTMLAnchorElement>({
-      open,
-      nodeId,
-      onOpenChange: setOpen,
-      middleware: [offset({mainAxis: 4, alignmentAxis: -5}), flip(), shift()],
-      placement: 'right-start',
-    });
+  const {x, y, strategy, refs, context} = useFloating<HTMLAnchorElement>({
+    open,
+    nodeId,
+    onOpenChange: setOpen,
+    middleware: [offset(8), flip(), shift()],
+    placement: 'right-start',
+  });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useHover(context, {
@@ -70,8 +70,8 @@ export const NavigationItem = React.forwardRef<
   ]);
 
   const mergedReferenceRef = React.useMemo(
-    () => mergeRefs([ref, reference]),
-    [reference, ref]
+    () => mergeRefs([ref, refs.setReference]),
+    [refs.setReference, ref]
   );
 
   return (
@@ -80,12 +80,11 @@ export const NavigationItem = React.forwardRef<
         <a
           href={href}
           ref={mergedReferenceRef}
-          {...getReferenceProps({
-            ...props,
-            className: `NavigationItem`,
-          })}
+          className="w-48 bg-slate-100 p-2 rounded my-1 flex justify-between items-center"
+          {...getReferenceProps(props)}
         >
           {label}
+          {hasChildren && <ChevronRightIcon />}
         </a>
       </li>
       <FloatingPortal>
@@ -93,13 +92,12 @@ export const NavigationItem = React.forwardRef<
           <FloatingFocusManager
             context={context}
             modal={false}
-            returnFocus={true}
             initialFocus={-1}
           >
             <div
               data-testid="subnavigation"
-              ref={floating}
-              className="SubNavigation"
+              ref={refs.setFloating}
+              className="flex flex-col bg-slate-100 overflow-y-auto rounded outline-none px-4 py-2 backdrop-blur-sm"
               style={{
                 position: strategy,
                 top: y ?? 0,
@@ -111,7 +109,7 @@ export const NavigationItem = React.forwardRef<
               <button type="button" onClick={() => setOpen(false)}>
                 Close
               </button>
-              <ul className="NavigationList">{children}</ul>
+              <ul className="flex flex-col">{children}</ul>
             </div>
           </FloatingFocusManager>
         )}
@@ -134,14 +132,19 @@ export const Navigation = (props: NavigationProps) => {
 
 export const Main = () => {
   return (
-    <Navigation>
-      <NavigationItem label="Home" href="#" />
-      <NavigationItem label="Product" href="#">
-        <NavigationSubItem label="Link 1" href="#" />
-        <NavigationSubItem label="Link 2" href="#" />
-        <NavigationSubItem label="Link 3" href="#" />
-      </NavigationItem>
-      <NavigationItem label="About" href="#" />
-    </Navigation>
+    <>
+      <h1 className="text-5xl font-bold mb-8">Navigation</h1>
+      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+        <Navigation>
+          <NavigationItem label="Home" href="#" />
+          <NavigationItem label="Product" href="#">
+            <NavigationSubItem label="Link 1" href="#" />
+            <NavigationSubItem label="Link 2" href="#" />
+            <NavigationSubItem label="Link 3" href="#" />
+          </NavigationItem>
+          <NavigationItem label="About" href="#" />
+        </Navigation>
+      </div>
+    </>
   );
 };

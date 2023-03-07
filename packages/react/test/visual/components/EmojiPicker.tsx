@@ -1,8 +1,8 @@
-import './EmojiPicker.css';
-
 import {
+  arrow,
   autoUpdate,
   flip,
+  FloatingArrow,
   FloatingFocusManager,
   FloatingPortal,
   offset,
@@ -15,7 +15,10 @@ import {
   useListNavigation,
   useRole,
 } from '@floating-ui/react';
+import c from 'clsx';
 import {forwardRef, useEffect, useRef, useState} from 'react';
+
+import {Button} from '../lib/Button';
 
 const emojis = [
   {
@@ -74,25 +77,16 @@ const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
       ref={ref}
       id={id}
       role="option"
+      className={c(
+        'rounded text-3xl text-center cursor-default select-none aspect-square',
+        {
+          'bg-cyan-100': selected && !active,
+          'bg-cyan-200': active,
+        }
+      )}
       aria-selected={selected}
       aria-label={name}
       tabIndex={-1}
-      style={{
-        background: active
-          ? 'rgba(0, 255, 255, 0.5)'
-          : selected
-          ? 'rgba(0, 10, 20, 0.1)'
-          : 'none',
-        border: active
-          ? '1px solid rgba(0, 225, 255, 1)'
-          : '1px solid transparent',
-        borderRadius: 4,
-        fontSize: 30,
-        textAlign: 'center',
-        cursor: 'default',
-        userSelect: 'none',
-        padding: 0,
-      }}
     >
       {children}
     </button>
@@ -106,6 +100,8 @@ export const Main = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [placement, setPlacement] = useState<Placement | null>(null);
 
+  const arrowRef = useRef(null);
+
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
   const noResultsId = useId();
@@ -113,18 +109,24 @@ export const Main = () => {
   const {
     x,
     y,
-    reference,
-    floating,
     strategy,
+    refs,
     context,
     placement: resultantPlacement,
   } = useFloating({
-    placement: placement ?? 'bottom',
+    placement: placement ?? 'bottom-start',
     open,
     onOpenChange: setOpen,
     // We don't want flipping to occur while searching, as the floating element
     // will resize and cause disorientation.
-    middleware: [offset(4), ...(placement ? [] : [flip()])],
+    middleware: [
+      offset(8),
+      ...(placement ? [] : [flip()]),
+      arrow({
+        element: arrowRef,
+        padding: 20,
+      }),
+    ],
     whileElementsMounted: autoUpdate,
   });
 
@@ -189,21 +191,19 @@ export const Main = () => {
 
   return (
     <>
-      <h1>Emoji Picker</h1>
-      <div className="container">
-        <div style={{textAlign: 'center'}}>
-          <button
-            ref={reference}
-            className="EmojiPicker-button"
+      <h1 className="text-5xl font-bold mb-8">Emoji Picker</h1>
+      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+        <div className="text-center">
+          <Button
+            ref={refs.setReference}
+            className="text-2xl"
             aria-label="Choose emoji"
             aria-describedby="emoji-label"
-            style={{
-              background: open ? 'rgba(0, 10, 20, 0.1)' : '',
-            }}
+            data-open={open ? '' : undefined}
             {...getReferenceProps()}
           >
             ☻
-          </button>
+          </Button>
           <br />
           {selectedEmoji && (
             <span id="emoji-label">
@@ -220,10 +220,10 @@ export const Main = () => {
           )}
           <FloatingPortal>
             {open && (
-              <FloatingFocusManager context={context}>
+              <FloatingFocusManager context={context} modal={false}>
                 <div
-                  ref={floating}
-                  className="EmojiPicker"
+                  ref={refs.setFloating}
+                  className="bg-white/70 backdrop-blur-sm border border-slate-900/10 shadow-md rounded-lg p-4 bg-clip-padding"
                   style={{
                     position: strategy,
                     left: x ?? 0,
@@ -231,37 +231,34 @@ export const Main = () => {
                   }}
                   {...getFloatingProps(getListFloatingProps())}
                 >
-                  <span
-                    style={{
-                      opacity: 0.4,
-                      fontSize: 12,
-                      textTransform: 'uppercase',
-                    }}
-                  >
+                  <FloatingArrow
+                    ref={arrowRef}
+                    context={context}
+                    fill="white"
+                    stroke="rgba(0,0,0,0.1)"
+                    strokeWidth={2}
+                    height={8}
+                    tipRadius={1}
+                  />
+                  <span className="opacity-40 text-sm uppercase">
                     Emoji Picker
                   </span>
                   <input
-                    className="EmojiPicker-search"
+                    className="block w-36 my-2 p-1 border border-slate-300 outline-none focus:border-blue-600 rounded"
                     placeholder="Search emoji"
                     value={search}
-                    aria-controls={noResultsId ?? undefined}
+                    aria-controls={
+                      filteredEmojis.length === 0 ? noResultsId : undefined
+                    }
                     {...getInputProps({
                       onChange: handleInputChange,
                       onKeyDown: handleKeyDown,
                     })}
                   />
-                  <button
-                    className="EmojiPicker-close"
-                    aria-label="Close picker"
-                    onClick={() => setOpen(false)}
-                  >
-                    ×
-                  </button>
                   {filteredEmojis.length === 0 && (
                     <p
                       key={search}
                       id={noResultsId}
-                      className="EmojiPicker-no-results"
                       role="region"
                       aria-atomic="true"
                       aria-live="assertive"
@@ -270,13 +267,7 @@ export const Main = () => {
                     </p>
                   )}
                   {filteredEmojis.length > 0 && (
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: '40px 40px 40px',
-                      }}
-                      role="listbox"
-                    >
+                    <div className="grid grid-cols-3" role="listbox">
                       {filteredEmojis.map(({name, emoji}, index) => (
                         <Option
                           key={name}

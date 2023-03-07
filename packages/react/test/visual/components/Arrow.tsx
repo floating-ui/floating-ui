@@ -84,14 +84,13 @@ const allPlacements = ['top', 'bottom', 'right', 'left']
 export const Main = () => {
   return (
     <>
-      <h1>Arrow</h1>
-      <p></p>
-      <div className="container" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+      <h1 className="text-5xl font-bold mb-8">Arrow</h1>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo key={placement} placement={placement} arrowProps={{}} />
         ))}
       </div>
-      <div className="container" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -100,7 +99,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="container" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -109,7 +108,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="container" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -128,7 +127,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="container" style={{gridTemplateColumns: '1fr 1fr 1fr'}}>
+      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}

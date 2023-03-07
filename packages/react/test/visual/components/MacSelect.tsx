@@ -1,5 +1,3 @@
-import './MacSelect.css';
-
 import {
   autoUpdate,
   flip,
@@ -19,10 +17,13 @@ import {
   useRole,
   useTypeahead,
 } from '@floating-ui/react';
+import {CheckIcon, ChevronDownIcon, ChevronUpIcon} from '@radix-ui/react-icons';
+import c from 'clsx';
 import {useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
 
 import {FloatingPortal} from '../../../src';
+import {Button} from '../lib/Button';
 
 const fruits = [
   '🍒 Cherry',
@@ -175,16 +176,23 @@ export function ScrollArrow({
 
   return (
     <div
-      className="MacSelect-ScrollArrow"
+      className={c(
+        'absolute text-center flex justify-center items-center py-1 cursor-default bg-white',
+        {
+          'top-0': dir === 'up',
+          'bottom-0': dir === 'down',
+        }
+      )}
       data-dir={dir}
       ref={ref}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       style={{
         visibility: show ? 'visible' : 'hidden',
+        width: 'calc(100% - 4px)',
       }}
     >
-      {dir === 'up' ? '▲' : '▼'}
+      {dir === 'up' ? <ChevronUpIcon /> : <ChevronDownIcon />}
     </div>
   );
 }
@@ -207,7 +215,7 @@ export function Main() {
   const [scrollTop, setScrollTop] = useState(0);
   const [blockSelection, setBlockSelection] = useState(false);
 
-  const {x, y, reference, floating, strategy, context} = useFloating({
+  const {x, y, strategy, refs, context} = useFloating({
     placement: 'bottom-start',
     open,
     onOpenChange: (open) => {
@@ -219,21 +227,29 @@ export function Main() {
           offset(5),
           touch ? shift({crossAxis: true, padding: 10}) : flip({padding: 10}),
           size({
-            apply({availableHeight}) {
+            apply({availableHeight, rects}) {
               Object.assign(scrollRef.current?.style ?? {}, {
                 maxHeight: `${availableHeight}px`,
+                minWidth: `${rects.reference.width}px`,
               });
             },
             padding: 10,
           }),
         ]
       : [
+          size({
+            apply({elements, rects}) {
+              Object.assign(elements.floating.style, {
+                minWidth: `${rects.reference.width + 8}px`,
+              });
+            },
+          }),
           inner({
             listRef,
             overflowRef,
             scrollRef,
             index: selectedIndex,
-            offset: innerOffset,
+            offset: innerOffset + 1,
             onFallbackChange: setFallback,
             padding: 10,
             minItemsVisible: touch ? 10 : 4,
@@ -309,12 +325,11 @@ export function Main() {
 
   return (
     <>
-      <h1>MacSelect</h1>
-      <p></p>
-      <div className="container">
-        <button
-          ref={reference}
-          className="MacSelect-button"
+      <h1 className="text-5xl font-bold mb-8">macOS Select</h1>
+      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+        <Button
+          ref={refs.setReference}
+          className="flex gap-2 items-center"
           {...getReferenceProps({
             onTouchStart() {
               setTouch(true);
@@ -326,28 +341,25 @@ export function Main() {
             },
           })}
         >
-          <span aria-hidden="true">{emoji}</span>
+          <span aria-hidden>{emoji}</span>
           <span>{text}</span>
-        </button>
+          <ChevronDownIcon />
+        </Button>
         <FloatingPortal>
           {open && (
             <FloatingOverlay lockScroll={!touch} style={{zIndex: 1}}>
-              <FloatingFocusManager
-                context={context}
-                initialFocus={-1}
-                modal={false}
-              >
+              <FloatingFocusManager context={context} modal={false}>
                 <div
-                  ref={floating}
+                  ref={refs.setFloating}
                   style={{
                     position: strategy,
                     top: y ?? 0,
                     left: x ?? 0,
                   }}
+                  className="bg-white shadow-lg border border-slate-900/15 bg-clip-padding rounded-lg outline-none"
                 >
                   <div
-                    className="MacSelect"
-                    style={{overflowY: 'auto'}}
+                    className="overflow-y-auto p-1 scrollbar-none"
                     ref={scrollRef}
                     {...getFloatingProps({
                       onScroll({currentTarget}) {
@@ -361,14 +373,15 @@ export function Main() {
                     {fruits.map((fruit, i) => {
                       const {emoji, text} = getParts(fruit);
                       return (
-                        <button
+                        <Button
                           key={fruit}
+                          className="flex justify-between items-center gap-2 w-full outline-none text-left scroll-my-6 transition-none"
                           // Prevent immediate selection on touch devices when
                           // pressing the ScrollArrows
                           disabled={blockSelection}
                           aria-selected={selectedIndex === i}
                           role="option"
-                          tabIndex={-1}
+                          tabIndex={activeIndex === i ? 0 : -1}
                           style={{
                             background:
                               activeIndex === i
@@ -415,24 +428,28 @@ export function Main() {
                             },
                           })}
                         >
-                          <span aria-hidden="true">{emoji}</span>
-                          <span>{text}</span>
-                        </button>
+                          <div className="flex gap-2">
+                            <span aria-hidden>{emoji}</span>
+                            <span>{text}</span>
+                          </div>
+                          {selectedIndex === i && <CheckIcon />}
+                        </Button>
                       );
                     })}
                   </div>
-                  {(['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
-                    <ScrollArrow
-                      key={dir}
-                      dir={dir}
-                      scrollTop={scrollTop}
-                      scrollRef={scrollRef}
-                      innerOffset={innerOffset}
-                      open={open}
-                      onScroll={handleArrowScroll}
-                      onHide={handleArrowHide}
-                    />
-                  ))}
+                  {!fallback &&
+                    (['up', 'down'] as Array<'up' | 'down'>).map((dir) => (
+                      <ScrollArrow
+                        key={dir}
+                        dir={dir}
+                        scrollTop={scrollTop}
+                        scrollRef={scrollRef}
+                        innerOffset={innerOffset}
+                        open={open}
+                        onScroll={handleArrowScroll}
+                        onHide={handleArrowHide}
+                      />
+                    ))}
                 </div>
               </FloatingFocusManager>
             </FloatingOverlay>

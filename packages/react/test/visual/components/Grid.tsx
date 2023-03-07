@@ -19,7 +19,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
 
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
-  const {x, y, reference, floating, strategy, context} = useFloating({
+  const {x, y, strategy, refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
     placement: 'bottom-start',
@@ -46,13 +46,13 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
     <>
       <h1>Grid</h1>
       <div className="container">
-        <button ref={reference} {...getReferenceProps()}>
+        <button ref={refs.setReference} {...getReferenceProps()}>
           Reference
         </button>
         {open && (
           <FloatingFocusManager context={context}>
             <div
-              ref={floating}
+              ref={refs.setFloating}
               data-testid="floating"
               style={{
                 display: 'grid',
@@ -68,7 +68,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
                 <button
                   role="option"
                   key={index}
-                  tabIndex={-1}
+                  tabIndex={activeIndex === index ? 0 : -1}
                   disabled={disabledIndices.includes(index)}
                   ref={(node) => {
                     listRef.current[index] = node;
