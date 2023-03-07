@@ -81,4 +81,9 @@ export const MINI_SPONSORS = [
     label: 'Sup Standup Bot',
     url: 'https://sup.today/',
   },
+  {
+    logo: '/sponsors/save-code.svg',
+    label: 'Save With the UK\'s Best Vouchers & Discount Codes',
+    url: 'https://www.savecode.co.uk/',
+  },
 ];
