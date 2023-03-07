@@ -29,7 +29,7 @@ export const Main = () => {
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Popover</h1>
-      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Popover
           modal={modal}
           bubbles={true}

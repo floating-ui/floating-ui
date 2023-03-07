@@ -65,12 +65,12 @@ export const MenuComponent = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
 >(({children, label, ...props}, forwardedRef) => {
-  const [open, setOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
   const [landed, setLanded] = React.useState(false);
 
-  if (!open && landed) {
+  if (!isOpen && landed) {
     setLanded(false);
   }
 
@@ -87,9 +87,9 @@ export const MenuComponent = React.forwardRef<
   const nested = parentId != null;
 
   const {x, y, strategy, refs, context} = useFloating<HTMLButtonElement>({
-    open,
     nodeId,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
     placement: nested ? 'right-start' : 'bottom-start',
     middleware: [
       offset({mainAxis: nested ? -1 : 5, alignmentAxis: nested ? -5 : 0}),
@@ -99,48 +99,72 @@ export const MenuComponent = React.forwardRef<
     whileElementsMounted: autoUpdate,
   });
 
+  const hover = useHover(context, {
+    handleClose: safePolygon({
+      restMs: 25,
+      blockPointerEvents: true,
+    }),
+    enabled: nested && allowHover,
+    delay: {open: 75},
+  });
+  const click = useClick(context, {
+    toggle: !nested || !allowHover,
+    event: 'mousedown',
+    ignoreMouse: nested,
+  });
+  const role = useRole(context, {role: 'menu'});
+  const dismiss = useDismiss(context);
+  const listNavigation = useListNavigation(context, {
+    listRef: listItemsRef,
+    activeIndex,
+    nested,
+    onNavigate: setActiveIndex,
+  });
+  const typeahead = useTypeahead(context, {
+    listRef: listContentRef,
+    onMatch: isOpen ? setActiveIndex : undefined,
+    activeIndex,
+  });
+
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
-    useHover(context, {
-      handleClose: safePolygon({
-        restMs: 25,
-        blockPointerEvents: true,
-      }),
-      enabled: nested && allowHover,
-      delay: {open: 75},
-    }),
-    useClick(context, {
-      toggle: !nested || !allowHover,
-      event: 'mousedown',
-      ignoreMouse: nested,
-    }),
-    useRole(context, {role: 'menu'}),
-    useDismiss(context),
-    useListNavigation(context, {
-      listRef: listItemsRef,
-      activeIndex,
-      nested,
-      onNavigate: setActiveIndex,
-    }),
-    useTypeahead(context, {
-      listRef: listContentRef,
-      onMatch: open ? setActiveIndex : undefined,
-      activeIndex,
-    }),
+    hover,
+    click,
+    role,
+    dismiss,
+    listNavigation,
+    typeahead,
   ]);
 
   // Event emitter allows you to communicate across tree components.
   // This effect closes all menus when an item gets clicked anywhere
   // in the tree.
   React.useEffect(() => {
+    if (!tree) return;
+
     function handleTreeClick() {
-      setOpen(false);
+      setIsOpen(false);
     }
 
-    tree?.events.on('click', handleTreeClick);
+    function onSubMenuOpen(event: {nodeId: string; parentId: string}) {
+      if (event.nodeId !== nodeId && event.parentId === parentId) {
+        setIsOpen(false);
+      }
+    }
+
+    tree.events.on('click', handleTreeClick);
+    tree.events.on('menuopen', onSubMenuOpen);
+
     return () => {
-      tree?.events.off('click', handleTreeClick);
+      tree.events.off('click', handleTreeClick);
+      tree.events.off('menuopen', onSubMenuOpen);
     };
-  }, [tree]);
+  }, [tree, nodeId, parentId]);
+
+  React.useEffect(() => {
+    if (isOpen && tree) {
+      tree.events.emit('menuopen', {parentId, nodeId});
+    }
+  }, [tree, isOpen, nodeId, parentId]);
 
   // Determine if "hover" logic can run based on the modality of input. This
   // prevents unwanted focus synchronization as menus open and close with
@@ -199,18 +223,18 @@ export const MenuComponent = React.forwardRef<
             'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
             {
               'focus:bg-blue-500 focus:text-white outline-none': nested,
-              'bg-blue-500 text-white': open && !landed && nested,
-              'bg-slate-200': open && landed,
+              'bg-blue-500 text-white': isOpen && !landed && nested,
+              'bg-slate-200': isOpen && landed,
               'border border-slate-300': !nested,
               'bg-slate-200 rounded py-1 px-2': !nested && open,
             }
           )}
-          data-open={open ? '' : undefined}
+          data-open={isOpen ? '' : undefined}
         >
           {label} {nested && <ChevronRightIcon aria-hidden />}
         </button>
       ) : (
-        <Button {...referenceProps} data-open={open ? '' : undefined}>
+        <Button {...referenceProps} data-open={isOpen ? '' : undefined}>
           Edit
         </Button>
       )}
@@ -289,7 +313,7 @@ export const Main = () => {
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Menu</h1>
-      <div className="grid place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Menu label="Edit">
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />
           <MenuItem label="Redo" />

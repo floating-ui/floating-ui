@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div>
-      <main className="ml-64 p-12">
+      <main className="lg:ml-64 p-12">
         {pathname === '/' && (
           <>
             <h1>Floating UI Testing Grounds</h1>
@@ -53,7 +53,7 @@ function App() {
         )}
         <Outlet />
       </main>
-      <nav className="fixed overflow-y-auto left-0 top-0 h-full p-8 flex flex-col bg-slate-100 w-64">
+      <nav className="fixed hidden overflow-y-auto left-0 top-0 h-full p-8 flex-col bg-slate-100 lg:w-64 lg:flex">
         <div className="">
           <Link to="/" className="text-2xl font-bold mb-4 block">
             Tests

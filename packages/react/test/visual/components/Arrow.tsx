@@ -85,12 +85,12 @@ export const Main = () => {
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Arrow</h1>
-      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo key={placement} placement={placement} arrowProps={{}} />
         ))}
       </div>
-      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -99,7 +99,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -108,7 +108,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
@@ -127,7 +127,7 @@ export const Main = () => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-3 place-items-center border border-slate-400 rounded w-[40rem] h-[20rem] mb-4">
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         {allPlacements.map((placement) => (
           <Demo
             key={placement}
