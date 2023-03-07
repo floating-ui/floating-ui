@@ -68,10 +68,10 @@ describe('initialFocus', () => {
     expect(screen.getByTestId('one')).toHaveFocus();
 
     rerender(<App initialFocus={1} />);
-    expect(screen.getByTestId('two')).toHaveFocus();
+    expect(screen.getByTestId('two')).not.toHaveFocus();
 
     rerender(<App initialFocus={2} />);
-    expect(screen.getByTestId('three')).toHaveFocus();
+    expect(screen.getByTestId('three')).not.toHaveFocus();
 
     cleanup();
   });
@@ -87,14 +87,21 @@ describe('initialFocus', () => {
 
 describe('returnFocus', () => {
   test('true', () => {
-    render(<App />);
+    const {rerender} = render(<App />);
 
     screen.getByTestId('reference').focus();
     fireEvent.click(screen.getByTestId('reference'));
+
     expect(screen.getByTestId('one')).toHaveFocus();
 
+    act(() => screen.getByTestId('two').focus());
+
+    rerender(<App returnFocus={false} />);
+
+    expect(screen.getByTestId('two')).toHaveFocus();
+
     fireEvent.click(screen.getByTestId('three'));
-    expect(screen.getByTestId('reference')).toHaveFocus();
+    expect(screen.getByTestId('reference')).not.toHaveFocus();
 
     cleanup();
   });

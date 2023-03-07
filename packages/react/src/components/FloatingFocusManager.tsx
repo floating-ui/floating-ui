@@ -78,6 +78,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   } = context;
 
   const orderRef = useLatestRef(order);
+  const initialFocusRef = useLatestRef(initialFocus);
+  const returnFocusRef = useLatestRef(returnFocus);
+
   const tree = useFloatingTree();
   const portalContext = usePortalContext();
   const [tabbableContentLength, setTabbableContentLength] = React.useState<
@@ -331,18 +334,18 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
 
     const doc = getDocument(floating);
 
-    let returnFocusValue = returnFocus;
     let preventReturnFocusScroll = false;
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
+    const initialFocusValue = initialFocusRef.current;
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
     const focusableElements = getTabbableElements(floating);
     const elToFocus =
-      (typeof initialFocus === 'number'
-        ? focusableElements[initialFocus]
-        : initialFocus.current) || floating;
+      (typeof initialFocusValue === 'number'
+        ? focusableElements[initialFocusValue]
+        : initialFocusValue.current) || floating;
 
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
@@ -363,10 +366,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       const returnFocus = payload.data.returnFocus;
 
       if (typeof returnFocus === 'object') {
-        returnFocusValue = true;
+        returnFocusRef.current = true;
         preventReturnFocusScroll = returnFocus.preventScroll;
       } else {
-        returnFocusValue = returnFocus;
+        returnFocusRef.current = returnFocus;
       }
     }
 
@@ -380,7 +383,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       if (
-        returnFocusValue &&
+        returnFocusRef.current &&
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
@@ -425,8 +428,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [
     floating,
     getTabbableElements,
-    initialFocus,
-    returnFocus,
+    returnFocusRef,
+    initialFocusRef,
     dataRef,
     refs,
     events,
