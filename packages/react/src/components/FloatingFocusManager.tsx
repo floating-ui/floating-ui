@@ -338,7 +338,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
     const initialFocusValue = initialFocusRef.current;
-    const returnFocusValue = returnFocusRef.current;
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
@@ -384,7 +383,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       if (
-        returnFocusValue &&
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        returnFocusRef.current &&
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
