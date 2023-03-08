@@ -16,6 +16,7 @@ import {
   useId,
   useInteractions,
   useRole,
+  useTransitionStatus,
 } from '@floating-ui/react';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import {CheckIcon} from '@radix-ui/react-icons';
@@ -29,10 +30,11 @@ export const Main = () => {
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Popover</h1>
-      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+      <div className="flex place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Popover
           modal={modal}
           bubbles={true}
+          transitionDuration={1000}
           render={({labelId, descriptionId, close}) => (
             <>
               <h2 id={labelId} className="text-2xl font-bold mb-2">
@@ -44,6 +46,7 @@ export const Main = () => {
               <Popover
                 modal={modal}
                 bubbles={true}
+                transitionDuration={1000}
                 render={({labelId, descriptionId, close}) => (
                   <>
                     <h2 id={labelId} className="text-2xl font-bold mb-2">
@@ -55,6 +58,7 @@ export const Main = () => {
                     <Popover
                       modal={modal}
                       bubbles={false}
+                      transitionDuration={1000}
                       render={({labelId, descriptionId, close}) => (
                         <>
                           <h2 id={labelId} className="text-2xl font-bold mb-2">
@@ -69,7 +73,7 @@ export const Main = () => {
                         </>
                       )}
                     >
-                      <Button>My button</Button>
+                      <Button>First third button</Button>
                     </Popover>
                     <button onClick={close} className="font-bold">
                       Close
@@ -77,7 +81,7 @@ export const Main = () => {
                   </>
                 )}
               >
-                <Button>My button</Button>
+                <Button>First second button</Button>
               </Popover>
               <button onClick={close} className="font-bold">
                 Close
@@ -85,7 +89,67 @@ export const Main = () => {
             </>
           )}
         >
-          <Button>My button</Button>
+          <Button>First button</Button>
+        </Popover>
+        <Popover
+          modal={modal}
+          bubbles={true}
+          transitionDuration={1000}
+          render={({labelId, descriptionId, close}) => (
+            <>
+              <h2 id={labelId} className="text-2xl font-bold mb-2">
+                Title
+              </h2>
+              <p id={descriptionId} className="mb-2">
+                Description
+              </p>
+              <Popover
+                modal={modal}
+                bubbles={true}
+                transitionDuration={1000}
+                render={({labelId, descriptionId, close}) => (
+                  <>
+                    <h2 id={labelId} className="text-2xl font-bold mb-2">
+                      Title
+                    </h2>
+                    <p id={descriptionId} className="mb-2">
+                      Description
+                    </p>
+                    <Popover
+                      modal={modal}
+                      bubbles={false}
+                      transitionDuration={1000}
+                      render={({labelId, descriptionId, close}) => (
+                        <>
+                          <h2 id={labelId} className="text-2xl font-bold mb-2">
+                            Title
+                          </h2>
+                          <p id={descriptionId} className="mb-2">
+                            Description
+                          </p>
+                          <button onClick={close} className="font-bold">
+                            Close
+                          </button>
+                        </>
+                      )}
+                    >
+                      <Button>Second third button</Button>
+                    </Popover>
+                    <button onClick={close} className="font-bold">
+                      Close
+                    </button>
+                  </>
+                )}
+              >
+                <Button>Second second button</Button>
+              </Popover>
+              <button onClick={close} className="font-bold">
+                Close
+              </button>
+            </>
+          )}
+        >
+          <Button>Second button</Button>
         </Popover>
       </div>
 
@@ -116,6 +180,7 @@ interface Props {
   modal?: boolean;
   children?: React.ReactElement<HTMLElement>;
   bubbles?: boolean;
+  transitionDuration?: number;
 }
 
 function PopoverComponent({
@@ -124,6 +189,7 @@ function PopoverComponent({
   placement,
   modal = true,
   bubbles = true,
+  transitionDuration = 0,
 }: Props) {
   const [open, setOpen] = useState(false);
 
@@ -149,6 +215,10 @@ function PopoverComponent({
     }),
   ]);
 
+  const {isMounted} = useTransitionStatus(context, {
+    duration: transitionDuration,
+  });
+
   return (
     <FloatingNode id={nodeId}>
       {isValidElement(children) &&
@@ -160,7 +230,7 @@ function PopoverComponent({
           } as React.HTMLProps<Element>)
         )}
       <FloatingPortal>
-        {open && (
+        {isMounted && (
           <FloatingFocusManager context={context} modal={modal}>
             <div
               className="bg-white border border-slate-900/10 shadow-md rounded px-4 py-6 bg-clip-padding"

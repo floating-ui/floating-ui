@@ -366,10 +366,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       const returnFocus = payload.data.returnFocus;
 
       if (typeof returnFocus === 'object') {
-        preventReturnFocusRef.current = false;
+        returnFocusRef.current = true;
         preventReturnFocusScroll = returnFocus.preventScroll;
       } else {
-        preventReturnFocusRef.current = !returnFocus;
+        returnFocusRef.current = returnFocus;
       }
     }
 
