@@ -70,6 +70,7 @@ export function Main() {
 
   const listRef = React.useRef<Array<HTMLElement | null>>([]);
   const listContentRef = React.useRef(options);
+  const isTypingRef = React.useRef(false);
 
   const click = useClick(context, {event: 'mousedown'});
   const dismiss = useDismiss(context);
@@ -87,6 +88,9 @@ export function Main() {
     activeIndex,
     selectedIndex,
     onMatch: open ? setActiveIndex : setSelectedIndex,
+    onTypingChange(isTyping) {
+      isTypingRef.current = isTyping;
+    },
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
@@ -155,7 +159,7 @@ export function Main() {
                     tabIndex={i === activeIndex ? 0 : -1}
                     aria-selected={i === selectedIndex && i === activeIndex}
                     className={c(
-                      'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-2',
+                      'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
                       {
                         'bg-cyan-200': i === activeIndex,
                       }
@@ -173,10 +177,7 @@ export function Main() {
                         }
 
                         // Only if not using typeahead.
-                        if (
-                          event.key === ' ' &&
-                          !context.dataRef.current.typing
-                        ) {
+                        if (event.key === ' ' && !isTypingRef.current) {
                           event.preventDefault();
                           handleSelect(i);
                         }

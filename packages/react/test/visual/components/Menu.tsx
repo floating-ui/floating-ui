@@ -26,8 +26,6 @@ import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
 
-import {Button} from '../lib/Button';
-
 interface MenuItemProps {
   label: string;
   disabled?: boolean;
@@ -61,6 +59,7 @@ interface MenuProps {
   nested?: boolean;
   children?: React.ReactNode;
 }
+
 export const MenuComponent = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
@@ -68,31 +67,35 @@ export const MenuComponent = React.forwardRef<
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
-  const [landed, setLanded] = React.useState(false);
-
-  if (!isOpen && landed) {
-    setLanded(false);
-  }
+  const [hasFocusInside, setHasFocusInside] = React.useState(false);
 
   const listItemsRef = React.useRef<Array<HTMLButtonElement | null>>([]);
-  const listContentRef = React.useRef(
-    React.Children.map(children, (child) =>
-      React.isValidElement(child) ? child.props.label : null
-    ) as Array<string | null>
-  );
+  const listContentRef = React.useRef<Array<string | null>>([]);
+
+  React.useEffect(() => {
+    const strings: Array<string | null> = [];
+    React.Children.forEach(children, (child) => {
+      if (React.isValidElement(child)) {
+        strings.push(
+          child.props.label && !child.props.disabled ? child.props.label : null
+        );
+      }
+    });
+    listContentRef.current = strings;
+  });
 
   const tree = useFloatingTree();
   const nodeId = useFloatingNodeId();
   const parentId = useFloatingParentNodeId();
-  const nested = parentId != null;
+  const isNested = parentId != null;
 
   const {x, y, strategy, refs, context} = useFloating<HTMLButtonElement>({
     nodeId,
     open: isOpen,
     onOpenChange: setIsOpen,
-    placement: nested ? 'right-start' : 'bottom-start',
+    placement: isNested ? 'right-start' : 'bottom-start',
     middleware: [
-      offset({mainAxis: nested ? -1 : 5, alignmentAxis: nested ? -5 : 0}),
+      offset({mainAxis: isNested ? 0 : 4, alignmentAxis: isNested ? -4 : 0}),
       flip(),
       shift(),
     ],
@@ -100,24 +103,24 @@ export const MenuComponent = React.forwardRef<
   });
 
   const hover = useHover(context, {
+    enabled: isNested && allowHover,
+    delay: {open: 75},
     handleClose: safePolygon({
       restMs: 25,
       blockPointerEvents: true,
     }),
-    enabled: nested && allowHover,
-    delay: {open: 75},
   });
   const click = useClick(context, {
-    toggle: !nested || !allowHover,
     event: 'mousedown',
-    ignoreMouse: nested,
+    toggle: !isNested || !allowHover,
+    ignoreMouse: isNested,
   });
   const role = useRole(context, {role: 'menu'});
   const dismiss = useDismiss(context);
   const listNavigation = useListNavigation(context, {
     listRef: listItemsRef,
     activeIndex,
-    nested,
+    nested: isNested,
     onNavigate: setActiveIndex,
   });
   const typeahead = useTypeahead(context, {
@@ -199,16 +202,15 @@ export const MenuComponent = React.forwardRef<
 
   const referenceRef = useMergeRefs([refs.setReference, forwardedRef]);
   const referenceProps = getReferenceProps({
-    ref: referenceRef,
     ...props,
     onFocus(event: React.FocusEvent<HTMLButtonElement>) {
       props.onFocus?.(event);
-      setLanded(false);
+      setHasFocusInside(false);
     },
     onClick(event) {
       event.stopPropagation();
     },
-    ...(nested && {
+    ...(isNested && {
       // Indicates this is a nested <Menu /> acting as a <MenuItem />.
       role: 'menuitem',
     }),
@@ -216,34 +218,38 @@ export const MenuComponent = React.forwardRef<
 
   return (
     <FloatingNode id={nodeId}>
-      {nested ? (
-        <button
-          {...referenceProps}
-          className={c(
-            'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
-            {
-              'focus:bg-blue-500 focus:text-white outline-none': nested,
-              'bg-blue-500 text-white': isOpen && !landed && nested,
-              'bg-slate-200': isOpen && landed,
-              'border border-slate-300': !nested,
-              'bg-slate-200 rounded py-1 px-2': !nested && open,
-            }
-          )}
-          data-open={isOpen ? '' : undefined}
-        >
-          {label} {nested && <ChevronRightIcon aria-hidden />}
-        </button>
-      ) : (
-        <Button {...referenceProps} data-open={isOpen ? '' : undefined}>
-          Edit
-        </Button>
-      )}
+      <button
+        ref={referenceRef}
+        data-open={isOpen ? '' : undefined}
+        {...referenceProps}
+        className={c(
+          'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
+          {
+            'focus:bg-blue-500 focus:text-white outline-none': isNested,
+            'bg-blue-500 text-white': isOpen && isNested && !hasFocusInside,
+            'bg-slate-200 rounded py-1 px-2':
+              isNested && isOpen && hasFocusInside,
+            'bg-slate-200': !isNested && isOpen,
+          }
+        )}
+      >
+        {label}{' '}
+        {isNested && (
+          <span aria-hidden className="ml-4">
+            <ChevronRightIcon />
+          </span>
+        )}
+      </button>
       <FloatingPortal>
         {isMounted && (
           <FloatingFocusManager
             context={context}
+            // Prevent outside content interference.
             modal={false}
-            returnFocus={nested ? !allowHover : true}
+            // Only initially focus the root floating menu.
+            initialFocus={isNested ? -1 : 0}
+            // Only return focus to the root menu's reference when menus close.
+            returnFocus={!isNested}
           >
             <div
               ref={refs.setFloating}
@@ -265,19 +271,21 @@ export const MenuComponent = React.forwardRef<
                     child,
                     getItemProps({
                       tabIndex: activeIndex === index ? 0 : -1,
+                      className: 'MenuItem',
                       ref(node: HTMLButtonElement) {
                         listItemsRef.current[index] = node;
-                      },
-                      onFocus() {
-                        setLanded(true);
                       },
                       onClick(event) {
                         child.props.onClick?.(event);
                         tree?.events.emit('click');
                       },
+                      onFocus(event) {
+                        child.props.onFocus?.(event);
+                        setHasFocusInside(true);
+                      },
                       // Allow focus synchronization if the cursor did not move.
-                      onPointerEnter() {
-                        if (allowHover) {
+                      onMouseEnter() {
+                        if (allowHover && isOpen) {
                           setActiveIndex(index);
                         }
                       },
@@ -298,7 +306,7 @@ export const Menu = React.forwardRef<
 >((props, ref) => {
   const parentId = useFloatingParentNodeId();
 
-  if (parentId == null) {
+  if (parentId === null) {
     return (
       <FloatingTree>
         <MenuComponent {...props} ref={ref} />
