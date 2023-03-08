@@ -2,10 +2,6 @@ import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
-import {getDocument} from '../utils/getDocument';
-import {getTarget} from '../utils/getTarget';
-import {isElement} from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
 import {useEvent} from './utils/useEvent';
 import {useLatestRef} from './utils/useLatestRef';
@@ -14,6 +10,7 @@ export interface Props {
   listRef: React.MutableRefObject<Array<string | null>>;
   activeIndex: number | null;
   onMatch?: (index: number) => void;
+  onTypingChange?: (isTyping: boolean) => void;
   enabled?: boolean;
   findMatch?:
     | null
@@ -32,14 +29,15 @@ export interface Props {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
-  {open, dataRef, refs}: FloatingContext<RT>,
+  {open, dataRef}: FloatingContext<RT>,
   {
     listRef,
     activeIndex,
-    onMatch: unstable_onMatch = () => {},
+    onMatch: unstable_onMatch,
+    onTypingChange: unstable_onTypingChange,
     enabled = true,
     findMatch = null,
-    resetMs = 1000,
+    resetMs = 750,
     ignoreKeys = [],
     selectedIndex = null,
   }: Props = {
@@ -55,6 +53,8 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
   const matchIndexRef = React.useRef<number | null>(null);
 
   const onMatch = useEvent(unstable_onMatch);
+  const onTypingChange = useEvent(unstable_onTypingChange);
+
   const findMatchRef = useLatestRef(findMatch);
   const ignoreKeysRef = useLatestRef(ignoreKeys);
 
@@ -78,34 +78,48 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       return {};
     }
 
-    function onKeyDown(event: React.KeyboardEvent) {
-      // Correctly scope nested non-portalled floating elements. Since the nested
-      // floating element is inside of the another, we find the closest role
-      // that indicates the floating element scope.
-      const target = getTarget(event.nativeEvent);
-
-      if (
-        isElement(target) &&
-        (activeElement(getDocument(target)) !== event.currentTarget
-          ? refs.floating.current?.contains(target)
-            ? target.closest(
-                '[role="dialog"],[role="menu"],[role="listbox"],[role="tree"],[role="grid"]'
-              ) !== event.currentTarget
-            : false
-          : !event.currentTarget.contains(target))
-      ) {
-        return;
+    function setTypingChange(value: boolean) {
+      if (value) {
+        if (!dataRef.current.typing) {
+          dataRef.current.typing = value;
+          onTypingChange(value);
+        }
+      } else {
+        if (dataRef.current.typing) {
+          dataRef.current.typing = value;
+          onTypingChange(value);
+        }
       }
+    }
+
+    function getMatchingIndex(
+      list: Array<string | null>,
+      orderedList: Array<string | null>,
+      string: string
+    ) {
+      const str = findMatchRef.current
+        ? findMatchRef.current(orderedList, string)
+        : orderedList.find(
+            (text) =>
+              text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) ===
+              0
+          );
+
+      return str ? list.indexOf(str) : -1;
+    }
+
+    function onKeyDown(event: React.KeyboardEvent) {
+      const listContent = listRef.current;
 
       if (stringRef.current.length > 0 && stringRef.current[0] !== ' ') {
-        dataRef.current.typing = true;
-
-        if (event.key === ' ') {
+        if (
+          getMatchingIndex(listContent, listContent, stringRef.current) === -1
+        ) {
+          setTypingChange(false);
+        } else if (event.key === ' ') {
           stopEvent(event);
         }
       }
-
-      const listContent = listRef.current;
 
       if (
         listContent == null ||
@@ -118,6 +132,11 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
         event.altKey
       ) {
         return;
+      }
+
+      if (open && event.key !== ' ') {
+        stopEvent(event);
+        setTypingChange(true);
       }
 
       // Bail out if the list contains a word like "llama" or "aaron". TODO:
@@ -143,30 +162,26 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       timeoutIdRef.current = setTimeout(() => {
         stringRef.current = '';
         prevIndexRef.current = matchIndexRef.current;
-        dataRef.current.typing = false;
+        setTypingChange(false);
       }, resetMs);
 
       const prevIndex = prevIndexRef.current;
 
-      const orderedList = [
-        ...listContent.slice((prevIndex || 0) + 1),
-        ...listContent.slice(0, (prevIndex || 0) + 1),
-      ];
-
-      const str = findMatchRef.current
-        ? findMatchRef.current(orderedList, stringRef.current)
-        : orderedList.find(
-            (text) =>
-              text
-                ?.toLocaleLowerCase()
-                .indexOf(stringRef.current.toLocaleLowerCase()) === 0
-          );
-
-      const index = str ? listContent.indexOf(str) : -1;
+      const index = getMatchingIndex(
+        listContent,
+        [
+          ...listContent.slice((prevIndex || 0) + 1),
+          ...listContent.slice(0, (prevIndex || 0) + 1),
+        ],
+        stringRef.current
+      );
 
       if (index !== -1) {
         onMatch(index);
         matchIndexRef.current = index;
+      } else {
+        stringRef.current = '';
+        setTypingChange(false);
       }
     }
 
@@ -176,12 +191,13 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
+    open,
     dataRef,
     listRef,
     resetMs,
     ignoreKeysRef,
     findMatchRef,
     onMatch,
-    refs,
+    onTypingChange,
   ]);
 };
