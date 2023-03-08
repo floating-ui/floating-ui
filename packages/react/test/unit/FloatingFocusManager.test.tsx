@@ -762,4 +762,20 @@ describe('Drawer', () => {
     expect(document.activeElement).toBe(screen.getByText('Next button'));
     expect(screen.queryByText('Close')).toBeInTheDocument();
   });
+
+  test('returns focus when tabbing out then back to close button', async () => {
+    render(
+      <ResponsiveContext.Provider value={{width: 1600}}>
+        <Drawer />
+      </ResponsiveContext.Provider>
+    );
+    await userEvent.click(screen.getByText('My button'));
+    expect(screen.queryByText('Close')).toBeInTheDocument();
+    await userEvent.keyboard('{Tab}');
+    expect(document.activeElement).toBe(screen.getByText('Next button'));
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}');
+    expect(document.activeElement).toBe(screen.getByText('Close'));
+    await userEvent.click(screen.getByText('Close'));
+    expect(document.activeElement).toBe(screen.getByText('My button'));
+  });
 });
