@@ -535,7 +535,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
               portalContext?.preserveTabOrder &&
               portalContext.portalNode
             ) {
-              preventReturnFocusRef.current = true;
+              if (closeOnFocusOut) {
+                preventReturnFocusRef.current = true;
+              }
+
               if (isOutsideEvent(event, portalContext.portalNode)) {
                 const prevTabbable = getPreviousTabbable() || domReference;
                 prevTabbable?.focus();
