@@ -40,7 +40,6 @@ function isMouseBasedEvent(event: Event | undefined): event is MouseEvent {
 export interface Props {
   enabled: boolean;
   axis: 'x' | 'y' | 'both';
-  follow: boolean;
   x: number | null;
   y: number | null;
 }
@@ -52,7 +51,7 @@ export interface Props {
  */
 export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
   {open, refs, dataRef, elements: {floating}}: FloatingContext<RT>,
-  {enabled = true, axis = 'both', follow = true, x, y}: Partial<Props> = {}
+  {enabled = true, axis = 'both', x, y}: Partial<Props> = {}
 ): ElementProps => {
   const initialRef = React.useRef(false);
   const pointerTypeRef = React.useRef<string | undefined>();
@@ -185,10 +184,10 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, floating]);
 
   React.useEffect(() => {
-    if (enabled && open && !follow) {
+    if (!enabled && open) {
       initialRef.current = true;
     }
-  }, [enabled, open, follow]);
+  }, [enabled, open]);
 
   useLayoutEffect(() => {
     if (enabled) {
