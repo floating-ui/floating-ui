@@ -35,11 +35,11 @@ export const MINI_SPONSORS = [
       'Cell Tracking Apps - Parental Control Software Review Website',
     url: 'http://celltrackingapps.com/',
   },
-  {
-    logo: '/sponsors/techbuy.svg',
-    label: 'wazirx referral code',
-    url: 'https://techbuy.in/wazirx-referral-code/',
-  },
+  // {
+  //   logo: '/sponsors/techbuy.svg',
+  //   label: 'wazirx referral code',
+  //   url: 'https://techbuy.in/wazirx-referral-code/',
+  // },
   {
     logo: '/sponsors/ggc.svg',
     label:
@@ -51,11 +51,11 @@ export const MINI_SPONSORS = [
     label: 'Living Feeds',
     url: 'https://livingfeeds.com/',
   },
-  {
-    logo: '/sponsors/titanam.svg',
-    label: 'Titan Asset Management',
-    url: 'https://titanam.co.uk/',
-  },
+  // {
+  //   logo: '/sponsors/titanam.svg',
+  //   label: 'Titan Asset Management',
+  //   url: 'https://titanam.co.uk/',
+  // },
   {
     logo: '/sponsors/dailycontributors.svg',
     label: 'Dailycontributors Blog',
