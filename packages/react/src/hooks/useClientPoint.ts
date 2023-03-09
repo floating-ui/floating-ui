@@ -1,33 +1,78 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {
-  Coords,
-  Dimensions,
-  ElementProps,
-  FloatingContext,
-  ReferenceType,
-} from '../types';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {contains} from '../utils/contains';
 import {getTarget} from '../utils/getTarget';
 import {getWindow, isMouseLikePointerType} from '../utils/is';
 import {useEvent} from './utils/useEvent';
-import {useLatestRef} from './utils/useLatestRef';
 
-function createVirtualElement(rect: Coords & Partial<Dimensions>) {
+function createVirtualElement(
+  domRef: React.MutableRefObject<Element | null>,
+  data: {
+    axis: 'x' | 'y' | 'both';
+    pointerType: string | undefined;
+    x: number | null;
+    y: number | null;
+  }
+) {
+  let offsetX: number | null = null;
+  let offsetY: number | null = null;
+  let isAutoUpdateEvent = false;
+
   return {
     getBoundingClientRect() {
-      const width = rect.width || 0;
-      const height = rect.height || 0;
+      const domRect = domRef.current?.getBoundingClientRect() || {
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+      };
+
+      const isXAxis = data.axis === 'x' || data.axis === 'both';
+      const isYAxis = data.axis === 'y' || data.axis === 'both';
+
+      let width = domRect.width;
+      let height = domRect.height;
+      let x = domRect.x;
+      let y = domRect.y;
+
+      if (offsetX == null && data.x && isXAxis) {
+        offsetX = domRect.x - data.x;
+      }
+
+      if (offsetY == null && data.y && isYAxis) {
+        offsetY = domRect.y - data.y;
+      }
+
+      x -= offsetX || 0;
+      y -= offsetY || 0;
+      width = 0;
+      height = 0;
+
+      if (!isAutoUpdateEvent || data.pointerType !== 'touch') {
+        width = data.axis === 'y' ? domRect.width : 0;
+        height = data.axis === 'x' ? domRect.height : 0;
+        x = isXAxis && data.x ? data.x : x;
+        y = isYAxis && data.y ? data.y : y;
+      }
+
+      if (isAutoUpdateEvent && data.pointerType === 'touch') {
+        height = data.axis === 'x' ? domRect.height : height;
+        width = data.axis === 'y' ? domRect.width : width;
+      }
+
+      isAutoUpdateEvent = true;
+
       return {
         width,
         height,
-        x: rect.x,
-        y: rect.y,
-        top: rect.y,
-        right: rect.x + width,
-        bottom: rect.y + height,
-        left: rect.x,
+        x,
+        y,
+        top: y,
+        right: x + width,
+        bottom: y + height,
+        left: x,
       };
     },
   };
@@ -51,76 +96,68 @@ export interface Props {
  */
 export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
   {open, refs, dataRef, elements: {floating}}: FloatingContext<RT>,
-  {enabled = true, axis = 'both', x, y}: Partial<Props> = {}
+  {enabled = true, axis = 'both', x = null, y = null}: Partial<Props> = {}
 ): ElementProps => {
   const initialRef = React.useRef(false);
-  const pointerTypeRef = React.useRef<string | undefined>();
-  const initialOpenEventRef = React.useRef<Event | undefined>();
   const cleanupListenerRef = React.useRef<null | (() => void)>(null);
 
-  const openRef = useLatestRef(open);
+  const [pointerType, setPointerType] = React.useState<string | undefined>();
+  const [reactive, setReactive] = React.useState([]);
 
-  const setReference = useEvent((x: number, y: number) => {
+  const setReference = useEvent((x: number | null, y: number | null) => {
     if (initialRef.current) return;
 
     // Prevent setting if the open event was not a mouse-like one
     // (e.g. focus to open, then hover over the reference element).
     // Only apply if the event exists.
     if (
-      initialOpenEventRef.current &&
-      !isMouseBasedEvent(initialOpenEventRef.current)
+      dataRef.current.openEvent &&
+      !isMouseBasedEvent(dataRef.current.openEvent)
     ) {
       return;
     }
 
-    const domRect = refs.domReference.current?.getBoundingClientRect() || {
-      top: 0,
-      left: 0,
-      width: 0,
-      height: 0,
-    };
-
-    const getVirtualElement = {
-      both: () => createVirtualElement({x, y}),
-      x: () =>
-        createVirtualElement({
-          x,
-          y: domRect.top,
-          width: 0,
-          height: domRect.height,
-        }),
-      y: () =>
-        createVirtualElement({
-          x: domRect.left,
-          y,
-          width: domRect.width,
-          height: 0,
-        }),
-    }[axis];
-
-    if (getVirtualElement) {
-      refs.setPositionReference(getVirtualElement());
-    }
+    refs.setPositionReference(
+      createVirtualElement(refs.domReference, {
+        x,
+        y,
+        axis,
+        pointerType,
+      })
+    );
   });
 
-  const addListener = useEvent(() => {
-    // If the pointer is a mouse-like pointer, we want to continue following the
-    // mouse even if the floating element is transitioning out. On touch
-    // devices, this is undesirable because the floating element will move to
-    // the dismissal touch point.
-    const check = isMouseLikePointerType(pointerTypeRef.current)
-      ? floating
-      : openRef.current;
+  const handleReferenceEnterOrMove = useEvent(
+    (event: React.MouseEvent<Element>) => {
+      if (x != null || y != null) return;
 
+      if (!open) {
+        setReference(event.clientX, event.clientY);
+      } else if (!cleanupListenerRef.current) {
+        // If there's no cleanup, there's no listener, but we want to ensure
+        // we add the listener if the cursor landed on the floating element and
+        // then back on the reference (i.e. it's interactive).
+        setReactive([]);
+      }
+    }
+  );
+
+  // If the pointer is a mouse-like pointer, we want to continue following the
+  // mouse even if the floating element is transitioning out. On touch
+  // devices, this is undesirable because the floating element will move to
+  // the dismissal touch point.
+  const openCheck = isMouseLikePointerType(pointerType) ? floating : open;
+
+  const addListener = React.useCallback(() => {
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
-    if (!check || !enabled || x != null || y != null) return;
+    if (!openCheck || !enabled || x != null || y != null) return;
 
-    const win = getWindow(floating);
+    const win = getWindow(refs.floating.current);
 
     function handleMouseMove(event: MouseEvent) {
       const target = getTarget(event) as Element | null;
 
-      if (!contains(floating, target)) {
+      if (!contains(refs.floating.current, target)) {
         setReference(event.clientX, event.clientY);
       } else {
         win.removeEventListener('mousemove', handleMouseMove);
@@ -142,40 +179,11 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
     }
 
     refs.setPositionReference(refs.domReference.current);
-  });
+  }, [dataRef, enabled, openCheck, refs, setReference, x, y]);
 
-  const handleReferenceEnterOrMove = useEvent(
-    (event: React.MouseEvent<Element>) => {
-      if (x != null || y != null) return;
-
-      if (!open) {
-        setReference(event.clientX, event.clientY);
-      } else if (!cleanupListenerRef.current) {
-        // If there's no cleanup, there's no listener, but we want to ensure
-        // we add the listener if the cursor landed on the floating element and
-        // then back on the reference (i.e. it's interactive).
-        addListener();
-      }
-    }
-  );
-
-  React.useEffect(
-    () => {
-      const cleanup = addListener();
-      return () => {
-        cleanup?.();
-        // It's possible that this is different since the last render because of
-        // the `setBeforeOpenReference` function.
-        cleanupListenerRef.current?.();
-      };
-    },
-    // This should be reactive with respect to all of these values as though
-    // `React.useCallback` were being used, but we're using `useEvent` instead
-    // to make sure it's not reactive with respect to the event handlers in the
-    // interaction props, so we can avoid specifying `floating` in the deps
-    // array.
-    [enabled, floating, x, y, addListener]
-  );
+  React.useEffect(() => {
+    return addListener();
+  }, [addListener, reactive]);
 
   React.useEffect(() => {
     if (enabled && !floating) {
@@ -190,15 +198,7 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, open]);
 
   useLayoutEffect(() => {
-    if (enabled) {
-      initialOpenEventRef.current = open
-        ? dataRef.current.openEvent
-        : undefined;
-    }
-  }, [enabled, open, dataRef]);
-
-  useLayoutEffect(() => {
-    if (enabled && x != null && y != null) {
+    if (enabled && (x != null || y != null)) {
       initialRef.current = false;
       setReference(x, y);
     }
@@ -208,7 +208,7 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
     if (!enabled) return {};
 
     function setPointerTypeRef({pointerType}: React.PointerEvent) {
-      pointerTypeRef.current = pointerType;
+      setPointerType(pointerType);
     }
 
     return {
