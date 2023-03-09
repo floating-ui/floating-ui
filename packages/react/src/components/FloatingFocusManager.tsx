@@ -366,10 +366,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       const returnFocus = payload.data.returnFocus;
 
       if (typeof returnFocus === 'object') {
-        returnFocusRef.current = true;
+        preventReturnFocusRef.current = false;
         preventReturnFocusScroll = returnFocus.preventScroll;
       } else {
-        returnFocusRef.current = returnFocus;
+        preventReturnFocusRef.current = !returnFocus;
       }
     }
 
@@ -383,6 +383,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
 
       if (
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current &&
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
