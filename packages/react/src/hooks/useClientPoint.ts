@@ -53,8 +53,8 @@ function createVirtualElement(
       if (!isAutoUpdateEvent || data.pointerType !== 'touch') {
         width = data.axis === 'y' ? domRect.width : 0;
         height = data.axis === 'x' ? domRect.height : 0;
-        x = isXAxis && data.x ? data.x : x;
-        y = isYAxis && data.y ? data.y : y;
+        x = isXAxis && data.x != null ? data.x : x;
+        y = isYAxis && data.y != null ? data.y : y;
       }
 
       if (isAutoUpdateEvent && data.pointerType === 'touch') {
