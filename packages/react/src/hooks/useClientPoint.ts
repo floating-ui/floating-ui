@@ -21,6 +21,7 @@ function createVirtualElement(
   let isAutoUpdateEvent = false;
 
   return {
+    contextElement: domRef.current || undefined,
     getBoundingClientRect() {
       const domRect = domRef.current?.getBoundingClientRect() || {
         width: 0,
