@@ -65,15 +65,18 @@ export interface Props {
  * @see https://floating-ui.com/docs/useDismiss
  */
 export const useDismiss = <RT extends ReferenceType = ReferenceType>(
-  {
+  context: FloatingContext<RT>,
+  props: Props = {}
+): ElementProps => {
+  const {
     open,
     onOpenChange,
     events,
     nodeId,
     elements: {reference, domReference, floating},
     dataRef,
-  }: FloatingContext<RT>,
-  {
+  } = context;
+  const {
     enabled = true,
     escapeKey = true,
     outsidePress: unstable_outsidePress = true,
@@ -82,8 +85,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles,
-  }: Props = {}
-): ElementProps => {
+  } = props;
+
   const tree = useFloatingTree();
   const nested = useFloatingParentNodeId() != null;
   const outsidePressFn = useEvent(

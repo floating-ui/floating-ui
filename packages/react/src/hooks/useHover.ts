@@ -62,14 +62,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  */
 export const useHover = <RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  {
-    enabled = true,
-    delay = 0,
-    handleClose = null,
-    mouseOnly = false,
-    restMs = 0,
-    move = true,
-  }: Props<RT> = {}
+  props: Props<RT> = {}
 ): ElementProps => {
   const {
     open,
@@ -79,6 +72,14 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
     elements: {domReference, floating},
     refs,
   } = context;
+  const {
+    enabled = true,
+    delay = 0,
+    handleClose = null,
+    mouseOnly = false,
+    restMs = 0,
+    move = true,
+  } = props;
 
   const tree = useFloatingTree<RT>();
   const parentId = useFloatingParentNodeId();

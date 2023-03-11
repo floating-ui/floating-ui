@@ -19,16 +19,19 @@ export interface Props {
  * @see https://floating-ui.com/docs/useFocus
  */
 export const useFocus = <RT extends ReferenceType = ReferenceType>(
-  {
+  context: FloatingContext<RT>,
+  props: Props = {}
+): ElementProps => {
+  const {
     open,
     onOpenChange,
     dataRef,
     events,
     refs,
     elements: {floating, domReference},
-  }: FloatingContext<RT>,
-  {enabled = true, keyboardOnly = true}: Props = {}
-): ElementProps => {
+  } = context;
+  const {enabled = true, keyboardOnly = true} = props;
+
   const pointerTypeRef = React.useRef('');
   const blockFocusRef = React.useRef(false);
   const timeoutRef = React.useRef<any>();

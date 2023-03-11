@@ -41,12 +41,18 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
-  {open, elements: {floating}}: FloatingContext<RT>,
-  {duration = 250}: Props = {}
+  context: FloatingContext<RT>,
+  props: Props = {}
 ): {
   isMounted: boolean;
   status: Status;
 } {
+  const {
+    open,
+    elements: {floating},
+  } = context;
+  const {duration = 250} = props;
+
   const isNumberDuration = typeof duration === 'number';
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
@@ -107,17 +113,19 @@ export interface UseTransitionStylesProps extends Props {
  */
 export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  {
+  props: UseTransitionStylesProps = {}
+): {
+  isMounted: boolean;
+  styles: React.CSSProperties;
+} {
+  const {
     initial: unstable_initial = {opacity: 0},
     open: unstable_open,
     close: unstable_close,
     common: unstable_common,
     duration = 250,
-  }: UseTransitionStylesProps = {}
-): {
-  isMounted: boolean;
-  styles: React.CSSProperties;
-} {
+  } = props;
+
   const placement = context.placement;
   const side = placement.split('-')[0] as Side;
   const [styles, setStyles] = React.useState<React.CSSProperties>({});

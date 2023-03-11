@@ -29,8 +29,11 @@ export interface Props {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
-  {open, dataRef}: FloatingContext<RT>,
-  {
+  context: FloatingContext<RT>,
+  props: Props
+): ElementProps => {
+  const {open, dataRef} = context;
+  const {
     listRef,
     activeIndex,
     onMatch: unstable_onMatch,
@@ -40,11 +43,8 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     resetMs = 750,
     ignoreKeys = [],
     selectedIndex = null,
-  }: Props = {
-    listRef: {current: []},
-    activeIndex: null,
-  }
-): ElementProps => {
+  } = props;
+
   const timeoutIdRef = React.useRef<any>();
   const stringRef = React.useRef('');
   const prevIndexRef = React.useRef<number | null>(

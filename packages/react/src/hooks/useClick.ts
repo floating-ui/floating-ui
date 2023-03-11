@@ -25,15 +25,23 @@ export interface Props {
  * @see https://floating-ui.com/docs/useClick
  */
 export const useClick = <RT extends ReferenceType = ReferenceType>(
-  {open, onOpenChange, dataRef, elements: {domReference}}: FloatingContext<RT>,
-  {
+  context: FloatingContext<RT>,
+  props: Props = {}
+): ElementProps => {
+  const {
+    open,
+    onOpenChange,
+    dataRef,
+    elements: {domReference},
+  } = context;
+  const {
     enabled = true,
     event: eventOption = 'click',
     toggle = true,
     ignoreMouse = false,
     keyboardHandlers = true,
-  }: Props = {}
-): ElementProps => {
+  } = props;
+
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
 
   return React.useMemo(() => {

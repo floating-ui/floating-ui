@@ -172,13 +172,16 @@ export interface Props {
  * @see https://floating-ui.com/docs/useListNavigation
  */
 export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
-  {
+  context: FloatingContext<RT>,
+  props: Props
+): ElementProps => {
+  const {
     open,
     onOpenChange,
     refs,
     elements: {domReference, floating},
-  }: FloatingContext<RT>,
-  {
+  } = context;
+  const {
     listRef,
     activeIndex,
     onNavigate: unstable_onNavigate = () => {},
@@ -196,12 +199,8 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     orientation = 'vertical',
     cols = 1,
     scrollItemIntoView = true,
-  }: Props = {
-    listRef: {current: []},
-    activeIndex: null,
-    onNavigate: () => {},
-  }
-): ElementProps => {
+  } = props;
+
   if (__DEV__) {
     if (allowEscape) {
       if (!loop) {

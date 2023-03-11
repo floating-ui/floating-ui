@@ -105,9 +105,15 @@ function NarrowRefType() {
     useHover(floating2.context, {
       handleClose: safePolygon(),
     }),
-    useListNavigation(floating2.context),
+    useListNavigation(floating2.context, {
+      listRef: {current: []},
+      activeIndex: null,
+    }),
     useRole(floating2.context),
-    useTypeahead(floating2.context),
+    useTypeahead(floating2.context, {
+      listRef: {current: []},
+      activeIndex: null,
+    }),
   ]);
 
   // @ts-expect-error
