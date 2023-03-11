@@ -1,6 +1,12 @@
 import {Coords, Placement} from '@floating-ui/core';
-import {flip, inline, size, useFloating} from '@floating-ui/react-dom';
-import React, {useLayoutEffect, useRef, useState} from 'react';
+import {
+  autoUpdate,
+  flip,
+  inline,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom';
+import {useEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -17,19 +23,20 @@ export function Inline() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState<ConnectedStatus>('2-disjoined');
-  const mouseCoordsRef = useRef<undefined | Coords>();
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const [mouseCoords, setMouseCoords] = useState<Coords | undefined>();
+  const {x, y, strategy, refs} = useFloating({
     placement,
-    middleware: [inline(mouseCoordsRef.current), flip(), size()],
+    middleware: [inline(mouseCoords), flip(), size()],
+    whileElementsMounted: autoUpdate,
   });
 
   const handleMouseEnter = (event: React.MouseEvent<HTMLElement>) => {
-    mouseCoordsRef.current = {x: event.clientX, y: event.clientY};
+    setMouseCoords({x: event.clientX, y: event.clientY});
     setOpen(true);
   };
 
   const handleMouseLeave = () => {
-    mouseCoordsRef.current = undefined;
+    setMouseCoords(undefined);
     setOpen(false);
   };
 
@@ -52,7 +59,52 @@ export function Inline() {
     default:
   }
 
-  useLayoutEffect(update, [update, status]);
+  useEffect(() => {
+    function handleMouseUp(event: MouseEvent) {
+      if (refs.floating.current?.contains(event.target as Element | null)) {
+        return;
+      }
+
+      setTimeout(() => {
+        const selection = window.getSelection();
+        const range =
+          typeof selection?.rangeCount === 'number' && selection.rangeCount > 0
+            ? selection.getRangeAt(0)
+            : null;
+
+        if (selection?.isCollapsed) {
+          setOpen(false);
+          return;
+        }
+
+        if (range) {
+          refs.setReference({
+            getBoundingClientRect: () => range.getBoundingClientRect(),
+            getClientRects: () => range.getClientRects(),
+          });
+          setOpen(true);
+        }
+      });
+    }
+
+    function handleMouseDown(event: MouseEvent) {
+      if (refs.floating.current?.contains(event.target as Element | null)) {
+        return;
+      }
+
+      if (window.getSelection()?.isCollapsed) {
+        setOpen(false);
+      }
+    }
+
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousedown', handleMouseDown);
+    };
+  }, [refs]);
 
   return (
     <>
@@ -62,7 +114,7 @@ export function Inline() {
         <p className="prose" style={{padding: 10}}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.{' '}
           <strong
-            ref={reference}
+            ref={refs.setReference}
             style={{color: 'royalblue'}}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -72,17 +124,18 @@ export function Inline() {
           . Ut eu magna eu augue efficitur bibendum id commodo tellus. Nullam
           gravida, mi nec sodales tincidunt, lorem orci aliquam ex, id commodo
           erat libero ut risus. Nam molestie non lectus sit amet tempus. Vivamus
-          accumsan nunc quis faucibus egestas. Duis cursus nisi massa, non
-          dictum turpis interdum at.
+          accumsan{' '}
+          <strong style={{color: 'red'}}>nunc quis faucibus egestas</strong>.
+          Duis cursus nisi massa, non dictum turpis interdum at.
         </p>
         {open && (
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,
-              top: y ?? '',
-              left: x ?? '',
+              top: y ?? 0,
+              left: x ?? 0,
               pointerEvents: 'none',
             }}
           >
@@ -114,7 +167,7 @@ export function Inline() {
             key={String(bool)}
             data-testid={`open-${bool}`}
             onClick={() => {
-              mouseCoordsRef.current = undefined;
+              setMouseCoords(undefined);
               setOpen(bool);
             }}
             style={{
