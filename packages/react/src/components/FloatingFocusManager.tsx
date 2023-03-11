@@ -69,6 +69,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   closeOnFocusOut = true,
 }: Props<RT>): JSX.Element {
   const {
+    open,
     refs,
     nodeId,
     onOpenChange,
@@ -350,6 +351,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     // If the `useListNavigation` hook is active, always ignore `initialFocus`
     // because it has its own handling of the initial focus.
     !ignoreInitialFocus &&
+      open &&
       enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
 
     // Dismissing via outside press should always ignore `returnFocus` to
@@ -378,7 +380,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
-      if (contains(floating, activeElement(doc)) && refs.domReference.current) {
+      const shouldFocusReference =
+        contains(floating, activeElement(doc)) ||
+        (contextData.openEvent &&
+          ['click', 'mousedown'].includes(contextData.openEvent.type));
+
+      if (shouldFocusReference && refs.domReference.current) {
         previouslyFocusedElementRef.current = refs.domReference.current;
       }
 
@@ -427,6 +434,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       }
     };
   }, [
+    open,
     floating,
     getTabbableElements,
     returnFocusRef,
