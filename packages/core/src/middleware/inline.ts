@@ -1,9 +1,35 @@
-import type {Middleware, Padding} from '../types';
+import type {ClientRectObject, Middleware, Padding, Rect} from '../types';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {getSide} from '../utils/getSide';
 import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
+
+// Merge client rects on the same line (`y` coordinate) into one rect.
+export function mergeRects(rects: Array<ClientRectObject>) {
+  const mergedRects: Array<Rect> = [];
+  const widths = new Map<number, number>();
+
+  rects.forEach((rect) => {
+    const {x, y, width, height} = rect;
+    const mapWidth = widths.get(y);
+
+    if (mapWidth != null) {
+      widths.set(y, mapWidth + width);
+    } else {
+      widths.set(y, width);
+      mergedRects.push({x, y, width, height});
+    }
+  });
+
+  return mergedRects.map((rect) => {
+    const width = widths.get(rect.y);
+    if (width != null) {
+      rect.width = width;
+    }
+    return rectToClientRect(rect);
+  });
+}
 
 export interface Options {
   /**
@@ -49,8 +75,9 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
           })
         : rects.reference
     );
-    const clientRects =
-      (await platform.getClientRects?.(elements.reference)) || [];
+    const clientRects = mergeRects(
+      (await platform.getClientRects?.(elements.reference)) || []
+    );
     const paddingObject = getSideObjectFromPadding(padding);
 
     function getBoundingClientRect() {
