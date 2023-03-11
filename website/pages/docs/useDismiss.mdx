@@ -217,7 +217,7 @@ useDismiss(context, {
 
 ### bubbles
 
-default: `true{:js}`
+default: `undefined{:js}`
 
 When dealing with nested floating elements, this determines
 whether the dismissal bubbles through the entire
@@ -244,9 +244,8 @@ Any omitted events will use the default value.
 ```js
 useDismiss(context, {
   bubbles: {
-    escapeKey: false,
-    // can be omitted, same as default
-    outsidePress: true,
+    escapeKey: true, // false by default
+    outsidePress: false, // true by default
   },
 });
 ```

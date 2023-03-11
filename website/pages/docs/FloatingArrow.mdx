@@ -196,7 +196,8 @@ The color of the arrow.
 
 default: `"none"{:js}`
 
-The stroke (border) color of the arrow.
+The stroke (border) color of the arrow. This must match (or be
+less than) the floating element's border width.
 
 ```js
 <FloatingArrow ref={arrowRef} context={context} stroke="red" />

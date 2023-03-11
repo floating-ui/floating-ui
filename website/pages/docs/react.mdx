@@ -8,24 +8,17 @@ This allows you to create components such as tooltips, popovers,
 dropdown menus, hover cards, modal dialogs, select menus,
 comboboxes, and more.
 
-## Library goals
+## Goals
 
-The goal of this library is to provide **building blocks** to
-create your own floating UI components, handling difficult parts
-like accessibility and positioning for you, but not offering
-pre-built components. In theory, this allows you to build any
-type of component you desire, since you can add your own custom
-logic on top.
-
-If you're looking for flexibility and are comfortable building
-your own components, this library is hopefully what you're
-looking for. If instead, you're looking for something simpler and
-ready-made, you will likely find other libraries better suited
-for your use case. React component libraries that use Floating UI
-behind the scenes for positioning include
-[Radix UI](https://www.radix-ui.com/),
-[Mantine](https://mantine.dev/), [Ariakit](https://ariakit.org/),
-among others.
+- **Provide building blocks to create your own floating UI
+  components**: pre-built components aren't exported, rather the
+  primitives necessary to create them.
+- **Accessibility-first mindset**: the building blocks ensure
+  accessible user experiences and work with assistive technology.
+- **Low-level, extremely configurable and flexible**: At the cost
+  of more code to setup, you get high control and flexibility, so
+  you can create "bespoke" and complex floating elements you
+  won't find in most component libraries.
 
 ## Install
 
@@ -42,13 +35,6 @@ and uses this one as a dependency.
 ```bash
 npm install @floating-ui/react-dom
 ```
-
-This documentation refers to the latest version of the library.
-If you find a feature is missing locally, make sure you have
-upgraded to the latest version:
-
-- [Latest `@floating-ui/react` versions](https://www.npmjs.com/package/@floating-ui/react?activeTab=versions)
-- [Latest `@floating-ui/react-dom` versions](https://www.npmjs.com/package/@floating-ui/react-dom?activeTab=versions)
 
 ## Usage
 

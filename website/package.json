@@ -30,7 +30,7 @@
   "dependencies": {
     "@docsearch/css": "^3.1.0",
     "@docsearch/react": "^3.1.0",
-    "@floating-ui/react": "^0.20.1",
+    "@floating-ui/react": "^0.21.0",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
     "@next/mdx": "^12.1.5",
@@ -45,6 +45,7 @@
     "rehype-pretty-code": "^0.9.4",
     "remark-smartypants": "^2.0.0",
     "shiki": "^0.12.1",
+    "tailwind-merge": "^1.10.0",
     "unist-util-visit": "^2.0.3",
     "use-isomorphic-layout-effect": "^1.1.1"
   }

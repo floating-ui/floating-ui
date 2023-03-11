@@ -8,14 +8,14 @@ import {
 
 export function Logos({items}) {
   return (
-    <div className="gap-8 flex flex-wrap justify-center my-10 invert dark:invert-0">
+    <div className="flex flex-wrap justify-center my-10 invert dark:invert-0">
       <FloatingDelayGroup delay={{open: 1000, close: 200}}>
         {items.map((item) => (
           <Tooltip key={item.label} content={item.label}>
             <TooltipTrigger asChild>
               <a
                 href={item.url}
-                className="opacity-70 dark:opacity-30 hover:opacity-100 transition-opacity"
+                className="opacity-70 dark:opacity-30 hover:opacity-100 transition-opacity px-4"
                 rel="noopener noreferrer"
               >
                 <img

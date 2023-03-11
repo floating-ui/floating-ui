@@ -1,6 +1,8 @@
 import {
+  arrow,
   autoUpdate,
   flip,
+  FloatingArrow,
   FloatingPortal,
   inline,
   offset,
@@ -16,6 +18,7 @@ import {
   useRole,
   useTransitionStyles,
 } from '@floating-ui/react';
+import classNames from 'classnames';
 import * as React from 'react';
 import {useId} from 'react';
 
@@ -28,6 +31,8 @@ export function useTooltip({
   const {delay, isInstantPhase} = useDelayGroupContext();
   const [uncontrolledOpen, setUncontrolledOpen] =
     React.useState(initialOpen);
+
+  const arrowRef = React.useRef(null);
 
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = setControlledOpen ?? setUncontrolledOpen;
@@ -45,6 +50,10 @@ export function useTooltip({
         crossAxis: placement.includes('-'),
       }),
       shift({padding: 5}),
+      arrow({
+        element: arrowRef,
+        padding: 4,
+      }),
     ],
   });
 
@@ -53,7 +62,7 @@ export function useTooltip({
   const hover = useHover(context, {
     move: false,
     enabled: controlledOpen == null,
-    restMs: isInstantPhase ? 0 : 50,
+    restMs: isInstantPhase ? 0 : 150,
     delay,
   });
   const focus = useFocus(context, {
@@ -75,6 +84,7 @@ export function useTooltip({
       setOpen,
       ...interactions,
       ...data,
+      arrowRef,
     }),
     [open, setOpen, interactions, data]
   );
@@ -165,8 +175,8 @@ export const TooltipContent = React.forwardRef(
       floatingContext,
       {
         duration: isInstantPhase
-          ? {open: 100, close: id === currentId ? 500 : 100}
-          : {open: 500, close: 150},
+          ? {open: 100, close: id === currentId ? 150 : 50}
+          : {open: 300, close: 150},
         initial: {
           opacity: 0,
           transform: 'scale(0.95)',
@@ -179,21 +189,29 @@ export const TooltipContent = React.forwardRef(
         {isMounted && (
           <div
             ref={ref}
-            className="
-              bg-gray-50 shadow-lg dark:bg-gray-600 text-gray-1000 
-              dark:text-gray-50 rounded p-2 text-sm pointer-events-none
-            "
+            className={classNames(
+              'bg-gray-600 shadow-lg text-white',
+              'rounded p-2 text-sm pointer-events-none cursor-default',
+              props.className
+            )}
             style={{
               position: context.strategy,
-              top: context.y ?? 0,
-              left: context.x ?? 0,
+              top: Math.round(context.y ?? 0),
+              left: Math.round(context.x ?? 0),
               width: 'max-content',
               maxWidth: 'min(calc(100vw - 10px), 25rem)',
               ...props.style,
               ...styles,
             }}
             {...context.getFloatingProps(props)}
-          />
+          >
+            {props.children}
+            <FloatingArrow
+              ref={context.arrowRef}
+              context={floatingContext}
+              className="fill-gray-600"
+            />
+          </div>
         )}
       </FloatingPortal>
     );

@@ -1,11 +1,40 @@
 import {
+  autoUpdate,
+  flip,
+  FloatingDelayGroup,
+  FloatingFocusManager,
+  FloatingNode,
+  FloatingPortal,
+  FloatingTree,
   getOverflowAncestors,
+  offset,
+  safePolygon,
   shift,
+  size,
+  useClick,
+  useDismiss,
   useFloating,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useFloatingTree,
+  useHover,
+  useInteractions,
+  useListNavigation,
+  useMergeRefs,
+  useRole,
+  useTransitionStyles,
+  useTypeahead,
 } from '@floating-ui/react';
+import classNames from 'classnames';
 import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useId,
+} from 'react';
 import {
   forwardRef,
   useCallback,
@@ -13,16 +42,40 @@ import {
   useRef,
   useState,
 } from 'react';
-import {ArrowRight, GitHub} from 'react-feather';
+import {
+  ArrowRight,
+  BarChart,
+  Check,
+  ChevronRight,
+  Edit,
+  GitHub,
+  Heart,
+  Share,
+} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../assets/logo.svg';
 import Text from '../assets/text.svg';
 import {MINI_SPONSORS, SPONSORS} from '../data';
+import {Button} from '../lib/components/Button';
 import {Cards} from '../lib/components/Cards';
 import {Chrome} from '../lib/components/Chrome';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeading,
+  DialogTrigger,
+} from '../lib/components/Dialog';
 import {Floating} from '../lib/components/Floating';
 import {Logos} from '../lib/components/Logos';
+import {
+  Popover,
+  PopoverClose,
+  PopoverContent,
+  PopoverTrigger,
+} from '../lib/components/Popover';
 import {
   Tooltip,
   TooltipContent,
@@ -509,6 +562,831 @@ function Virtual() {
   );
 }
 
+function PopoverDemo() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [name, setName] = useState('Balloon name');
+  const [editName, setEditName] = useState(name);
+
+  return (
+    <div className="flex items-center gap-2 h-14">
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            className="bg-transparent dark:bg-transparent data-[state=open]:bg-gray-100/50 dark:data-[state=open]:bg-gray-600 flex gap-2 items-center"
+            onClick={() => setIsOpen((v) => !v)}
+            aria-label={`${name} - Edit`}
+          >
+            <span className="text-lg font-bold">{name}</span>
+            <Edit size={20} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="rounded-lg bg-white dark:text-black bg-clip-padding border border-gray-900/10 shadow-lg shadow-blue-900/10 p-4">
+          <h2 className="text-lg font-bold mb-2">Edit name</h2>
+          <div className="flex items-center gap-2">
+            <input
+              className="py-1 px-2 border border-gray-600 dark:bg-white focus:border-blue-500 outline-none rounded"
+              value={editName}
+              onChange={(event) =>
+                setEditName(event.target.value)
+              }
+              maxLength={20}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setName(editName);
+                  setIsOpen(false);
+                }
+              }}
+            />
+            <PopoverClose
+              aria-label="Confirm"
+              className="py-1 text-sm"
+              onClick={() => {
+                setName(editName);
+              }}
+            >
+              <Check />
+            </PopoverClose>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
+const options = [
+  'Red',
+  'Orange',
+  'Yellow',
+  'Green',
+  'Cyan',
+  'Blue',
+  'Purple',
+  'Pink',
+  'Maroon',
+  'Black',
+  'White',
+];
+
+function ColorSwatch({color}) {
+  return (
+    <div
+      aria-hidden
+      className="rounded-full w-4 h-4 border border-black/50 bg-clip-padding"
+      style={{background: color}}
+    />
+  );
+}
+
+function SelectDemo() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  const {x, y, strategy, refs, context} = useFloating({
+    placement: 'bottom-start',
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(5),
+      size({
+        apply({rects, elements, availableHeight}) {
+          Object.assign(elements.floating.style, {
+            maxHeight: `${Math.max(200, availableHeight)}px`,
+            width: `${rects.reference.width}px`,
+          });
+        },
+        padding: 50,
+      }),
+      flip({
+        padding: 50,
+        fallbackStrategy: 'initialPlacement',
+      }),
+    ],
+  });
+
+  const listRef = useRef([]);
+  const listContentRef = useRef(options);
+
+  const click = useClick(context, {event: 'mousedown'});
+  const dismiss = useDismiss(context);
+  const role = useRole(context, {role: 'listbox'});
+  const listNav = useListNavigation(context, {
+    listRef,
+    activeIndex,
+    selectedIndex,
+    onNavigate: setActiveIndex,
+    // This is a large list, allow looping.
+    loop: true,
+  });
+  const typeahead = useTypeahead(context, {
+    listRef: listContentRef,
+    activeIndex,
+    selectedIndex,
+    onMatch: isOpen ? setActiveIndex : setSelectedIndex,
+  });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([click, dismiss, role, listNav, typeahead]);
+
+  const handleSelect = (index) => {
+    setSelectedIndex(index);
+    setIsOpen(false);
+  };
+
+  const selectedItemLabel =
+    selectedIndex !== null ? options[selectedIndex] : undefined;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <label
+        className="flex flex-col items-center font-bold text-md"
+        id="select-label"
+      >
+        Select balloon color
+      </label>
+      <Button
+        ref={refs.setReference}
+        aria-labelledby={
+          selectedItemLabel ? undefined : 'select-label'
+        }
+        aria-label={`${selectedItemLabel} selected`}
+        aria-autocomplete="none"
+        data-open={isOpen ? '' : undefined}
+        className="flex items-center gap-2 bg-gray-100/75 rounded w-[10rem]"
+        {...getReferenceProps()}
+        // The default role for the reference using a "listbox"
+        // is a "combobox", but Safari has a bug with VoiceOver
+        // where it cuts off letters when announcing the button's
+        // content when it has that role.
+        // This overrides the one from the props above.
+        role={undefined}
+      >
+        <ColorSwatch
+          color={selectedItemLabel?.toLocaleLowerCase()}
+        />
+        {selectedItemLabel || 'Select...'}
+      </Button>
+      {isOpen && (
+        <FloatingFocusManager context={context} modal={false}>
+          <div
+            ref={refs.setFloating}
+            className="bg-white/80 dark:bg-gray-600/80 shadow-lg max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-clip-padding outline-none p-1 backdrop-blur-lg"
+            style={{
+              position: strategy,
+              top: y ?? 0,
+              left: x ?? 0,
+            }}
+            {...getFloatingProps()}
+          >
+            {options.map((value, i) => (
+              <div
+                key={value}
+                ref={(node) => {
+                  listRef.current[i] = node;
+                }}
+                role="option"
+                tabIndex={i === activeIndex ? 0 : -1}
+                aria-selected={
+                  i === selectedIndex && i === activeIndex
+                }
+                className={classNames(
+                  'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
+                  {
+                    'bg-cyan-200 dark:bg-blue-500 dark:text-white':
+                      i === activeIndex,
+                  }
+                )}
+                {...getItemProps({
+                  // Handle pointer select.
+                  onClick() {
+                    handleSelect(i);
+                  },
+                  // Handle keyboard select.
+                  onKeyDown(event) {
+                    if (event.key === 'Enter') {
+                      event.preventDefault();
+                      handleSelect(i);
+                    }
+
+                    // Only if not using typeahead.
+                    if (
+                      event.key === ' ' &&
+                      !context.dataRef.current.typing
+                    ) {
+                      event.preventDefault();
+                      handleSelect(i);
+                    }
+                  },
+                })}
+              >
+                <ColorSwatch color={options[i]?.toLowerCase()} />
+                {value}
+                <span aria-hidden className="absolute right-4">
+                  {i === selectedIndex ? (
+                    <Check width={20} height={20} />
+                  ) : (
+                    ''
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+        </FloatingFocusManager>
+      )}
+    </div>
+  );
+}
+
+const fruits = [
+  'Alfalfa Sprouts',
+  'Apple',
+  'Apricot',
+  'Artichoke',
+  'Asian Pear',
+  'Asparagus',
+  'Atemoya',
+  'Avocado',
+  'Bamboo Shoots',
+  'Banana',
+  'Bean Sprouts',
+  'Beans',
+  'Beets',
+  'Belgian Endive',
+  'Bell Peppers',
+  'Bitter Melon',
+  'Blackberries',
+  'Blueberries',
+  'Bok Choy',
+  'Boniato',
+  'Boysenberries',
+  'Broccoflower',
+  'Broccoli',
+  'Brussels Sprouts',
+  'Cabbage',
+  'Cactus Pear',
+  'Cantaloupe',
+  'Carambola',
+  'Carrots',
+  'Casaba Melon',
+  'Cauliflower',
+  'Celery',
+  'Chayote',
+  'Cherimoya',
+  'Cherries',
+  'Coconuts',
+  'Collard Greens',
+  'Corn',
+  'Cranberries',
+  'Cucumber',
+  'Dates',
+  'Dried Plums',
+  'Eggplant',
+  'Endive',
+  'Escarole',
+  'Feijoa',
+  'Fennel',
+  'Figs',
+  'Garlic',
+  'Gooseberries',
+  'Grapefruit',
+  'Grapes',
+  'Green Beans',
+  'Green Onions',
+  'Greens',
+  'Guava',
+  'Hominy',
+  'Honeydew Melon',
+  'Horned Melon',
+  'Iceberg Lettuce',
+  'Jerusalem Artichoke',
+  'Jicama',
+  'Kale',
+  'Kiwifruit',
+  'Kohlrabi',
+  'Kumquat',
+  'Leeks',
+  'Lemons',
+  'Lettuce',
+  'Lima Beans',
+  'Limes',
+  'Longan',
+  'Loquat',
+  'Lychee',
+  'Madarins',
+  'Malanga',
+  'Mandarin Oranges',
+  'Mangos',
+  'Mulberries',
+  'Mushrooms',
+  'Napa',
+  'Nectarines',
+  'Okra',
+  'Onion',
+  'Oranges',
+  'Papayas',
+  'Parsnip',
+  'Passion Fruit',
+  'Peaches',
+  'Pears',
+  'Peas',
+  'Peppers',
+  'Persimmons',
+  'Pineapple',
+  'Plantains',
+  'Plums',
+  'Pomegranate',
+  'Potatoes',
+  'Prickly Pear',
+  'Prunes',
+  'Pummelo',
+  'Pumpkin',
+  'Quince',
+  'Radicchio',
+  'Radishes',
+  'Raisins',
+  'Raspberries',
+  'Red Cabbage',
+  'Rhubarb',
+  'Romaine Lettuce',
+  'Rutabaga',
+  'Shallots',
+  'Snow Peas',
+  'Spinach',
+  'Sprouts',
+  'Squash',
+  'Strawberries',
+  'String Beans',
+  'Sweet Potato',
+  'Tangelo',
+  'Tangerines',
+  'Tomatillo',
+  'Tomato',
+  'Turnip',
+  'Ugli Fruit',
+  'Water Chestnuts',
+  'Watercress',
+  'Watermelon',
+  'Waxed Beans',
+  'Yams',
+  'Yellow Squash',
+  'Yuca/Cassava',
+  'Zucchini Squash',
+];
+
+const Item = forwardRef(({children, active, ...rest}, ref) => {
+  const id = useId();
+  return (
+    <div
+      ref={ref}
+      className={classNames(
+        'p-2 cursor-default rounded-md scroll-my-1',
+        {
+          'bg-blue-500 text-white': active,
+        }
+      )}
+      role="option"
+      id={id}
+      aria-selected={active}
+      {...rest}
+    >
+      {children}
+    </div>
+  );
+});
+
+function ComboboxDemo() {
+  const [open, setOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const listRef = useRef([]);
+
+  const {x, y, strategy, context, refs} = useFloating({
+    whileElementsMounted: autoUpdate,
+    open,
+    onOpenChange: setOpen,
+    middleware: [
+      offset(5),
+      size({
+        apply({rects, elements, availableHeight}) {
+          Object.assign(elements.floating.style, {
+            maxHeight: `${Math.max(200, availableHeight)}px`,
+            width: `${rects.reference.width}px`,
+          });
+        },
+        padding: 50,
+      }),
+      flip({
+        padding: 50,
+        fallbackStrategy: 'initialPlacement',
+      }),
+    ],
+  });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([
+      useRole(context, {role: 'listbox'}),
+      useDismiss(context),
+      useListNavigation(context, {
+        listRef,
+        activeIndex,
+        onNavigate: setActiveIndex,
+        virtual: true,
+        loop: true,
+        allowEscape: true,
+      }),
+    ]);
+
+  function onChange(event) {
+    const value = event.target.value;
+    setInputValue(value);
+
+    if (value) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }
+
+  const items = fruits.filter((item) =>
+    item.toLowerCase().startsWith(inputValue.toLowerCase())
+  );
+
+  return (
+    <>
+      <input
+        ref={refs.setReference}
+        value={inputValue}
+        className="border-2 p-2 rounded border-gray-300 dark:border-gray-500 focus:border-blue-500 outline-none dark:bg-gray-600"
+        placeholder="Enter balloon fruit"
+        aria-autocomplete="list"
+        aria-labelledby={
+          open && items.length === 0
+            ? 'combobox-no-results'
+            : undefined
+        }
+        {...getReferenceProps({
+          onChange,
+          onKeyDown(event) {
+            if (
+              event.key === 'Enter' &&
+              activeIndex != null &&
+              items[activeIndex]
+            ) {
+              setInputValue(items[activeIndex]);
+              setActiveIndex(null);
+              setOpen(false);
+            }
+          },
+        })}
+      />
+      {open && (
+        <FloatingFocusManager
+          context={context}
+          initialFocus={-1}
+          visuallyHiddenDismiss
+        >
+          <div
+            ref={refs.setFloating}
+            className="bg-white/80 dark:bg-gray-600/80 text-left shadow-lg max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-clip-padding outline-none p-1 backdrop-blur-lg z-10"
+            {...getFloatingProps({
+              style: {
+                position: strategy,
+                left: x ?? 0,
+                top: y ?? 0,
+              },
+            })}
+          >
+            {items.length === 0 && (
+              <p
+                className="m-2"
+                id="combobox-no-results"
+                role="region"
+                aria-atomic="true"
+                aria-live="assertive"
+              >
+                No fruits found.
+              </p>
+            )}
+            {items.map((item, index) => (
+              <Item
+                {...getItemProps({
+                  key: item,
+                  ref(node) {
+                    listRef.current[index] = node;
+                  },
+                  onClick() {
+                    setInputValue(item);
+                    setOpen(false);
+                    refs.domReference.current?.focus();
+                  },
+                })}
+                active={activeIndex === index}
+              >
+                {item}
+              </Item>
+            ))}
+          </div>
+        </FloatingFocusManager>
+      )}
+    </>
+  );
+}
+
+export const MenuItem = forwardRef(
+  ({label, disabled, ...props}, ref) => {
+    return (
+      <button
+        type="button"
+        {...props}
+        className={classNames(
+          'cursor-default text-left flex py-2 px-3 focus:bg-blue-500 focus:text-white outline-none rounded',
+          {
+            'opacity-40': disabled,
+          }
+        )}
+        ref={ref}
+        role="menuitem"
+        disabled={disabled}
+      >
+        {label}
+      </button>
+    );
+  }
+);
+
+export const MenuComponent = forwardRef(
+  ({children, label, ...props}, forwardedRef) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(null);
+    const [allowHover, setAllowHover] = useState(false);
+    const [hasFocusInside, setHasFocusInside] = useState(false);
+
+    const listItemsRef = useRef([]);
+    const listContentRef = useRef([]);
+
+    useEffect(() => {
+      const strings = [];
+      Children.forEach(children, (child) => {
+        if (isValidElement(child)) {
+          strings.push(
+            child.props.label && !child.props.disabled
+              ? child.props.label
+              : null
+          );
+        }
+      });
+      listContentRef.current = strings;
+    });
+
+    const tree = useFloatingTree();
+    const nodeId = useFloatingNodeId();
+    const parentId = useFloatingParentNodeId();
+    const isNested = parentId != null;
+
+    const {x, y, strategy, refs, context} = useFloating({
+      nodeId,
+      open: isOpen,
+      onOpenChange: setIsOpen,
+      placement: isNested ? 'right-start' : 'bottom-start',
+      middleware: [
+        offset({
+          mainAxis: isNested ? 0 : 4,
+          alignmentAxis: isNested ? -4 : 0,
+        }),
+        flip(),
+        shift(),
+      ],
+      whileElementsMounted: autoUpdate,
+    });
+
+    const hover = useHover(context, {
+      enabled: isNested && allowHover,
+      delay: {open: 75},
+      handleClose: safePolygon({
+        restMs: 25,
+        blockPointerEvents: true,
+      }),
+    });
+    const click = useClick(context, {
+      event: 'mousedown',
+      toggle: !isNested || !allowHover,
+      ignoreMouse: isNested,
+    });
+    const role = useRole(context, {role: 'menu'});
+    const dismiss = useDismiss(context, {bubbles: true});
+    const listNavigation = useListNavigation(context, {
+      listRef: listItemsRef,
+      activeIndex,
+      nested: isNested,
+      onNavigate: setActiveIndex,
+    });
+    const typeahead = useTypeahead(context, {
+      listRef: listContentRef,
+      onMatch: isOpen ? setActiveIndex : undefined,
+      activeIndex,
+    });
+
+    const {getReferenceProps, getFloatingProps, getItemProps} =
+      useInteractions([
+        hover,
+        click,
+        role,
+        dismiss,
+        listNavigation,
+        typeahead,
+      ]);
+
+    // Event emitter allows you to communicate across tree components.
+    // This effect closes all menus when an item gets clicked anywhere
+    // in the tree.
+    useEffect(() => {
+      if (!tree) return;
+
+      function handleTreeClick() {
+        setIsOpen(false);
+      }
+
+      function onSubMenuOpen(event) {
+        if (
+          event.nodeId !== nodeId &&
+          event.parentId === parentId
+        ) {
+          setIsOpen(false);
+        }
+      }
+
+      tree.events.on('click', handleTreeClick);
+      tree.events.on('menuopen', onSubMenuOpen);
+
+      return () => {
+        tree.events.off('click', handleTreeClick);
+        tree.events.off('menuopen', onSubMenuOpen);
+      };
+    }, [tree, nodeId, parentId]);
+
+    useEffect(() => {
+      if (isOpen && tree) {
+        tree.events.emit('menuopen', {parentId, nodeId});
+      }
+    }, [tree, isOpen, nodeId, parentId]);
+
+    // Determine if "hover" logic can run based on the modality of input. This
+    // prevents unwanted focus synchronization as menus open and close with
+    // keyboard navigation and the cursor is resting on the menu.
+    useEffect(() => {
+      function onPointerMove({pointerType}) {
+        if (pointerType !== 'touch') {
+          setAllowHover(true);
+        }
+      }
+
+      function onKeyDown() {
+        setAllowHover(false);
+      }
+
+      window.addEventListener('pointermove', onPointerMove, {
+        once: true,
+        capture: true,
+      });
+      window.addEventListener('keydown', onKeyDown, true);
+      return () => {
+        window.removeEventListener(
+          'pointermove',
+          onPointerMove,
+          {
+            capture: true,
+          }
+        );
+        window.removeEventListener('keydown', onKeyDown, true);
+      };
+    }, [allowHover]);
+
+    const {isMounted, styles} = useTransitionStyles(context, {
+      duration: 100,
+    });
+
+    const referenceRef = useMergeRefs([
+      refs.setReference,
+      forwardedRef,
+    ]);
+    const referenceProps = getReferenceProps({
+      ...props,
+      onFocus(event) {
+        props.onFocus?.(event);
+        setHasFocusInside(false);
+      },
+      onClick(event) {
+        event.stopPropagation();
+      },
+      ...(isNested && {
+        // Indicates this is a nested <Menu /> acting as a <MenuItem />.
+        role: 'menuitem',
+      }),
+    });
+
+    return (
+      <FloatingNode id={nodeId}>
+        <button
+          ref={referenceRef}
+          data-open={isOpen ? '' : undefined}
+          {...referenceProps}
+          className={classNames(
+            'cursor-default text-left flex gap-4 justify-between items-center rounded py-2 px-3',
+            {
+              'transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-600 data-[open]:bg-gray-100/50 dark:data-[open]:bg-gray-600':
+                !isNested,
+              'focus:bg-blue-500 focus:text-white outline-none':
+                isNested,
+              'bg-blue-500 text-white':
+                isOpen && isNested && !hasFocusInside,
+              'bg-gray-500/20 dark:bg-gray-700 rounded py-1 px-2':
+                isNested && isOpen && hasFocusInside,
+            }
+          )}
+        >
+          {label}{' '}
+          {isNested && (
+            <span aria-hidden className="ml-4">
+              <ChevronRight size={16} />
+            </span>
+          )}
+        </button>
+        <FloatingPortal>
+          {isMounted && (
+            <FloatingFocusManager
+              context={context}
+              // Prevent outside content interference.
+              modal={false}
+              // Only initially focus the root floating menu.
+              initialFocus={isNested ? -1 : 0}
+              // Only return focus to the root menu's reference when menus close.
+              returnFocus={!isNested}
+            >
+              <div
+                ref={refs.setFloating}
+                className="flex flex-col rounded bg-white/80 dark:bg-gray-600/80 backdrop-blur-lg shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding"
+                style={{
+                  position: strategy,
+                  top: y ?? 0,
+                  left: x ?? 0,
+                  width: 'max-content',
+                  ...styles,
+                }}
+                {...getFloatingProps()}
+              >
+                {Children.map(
+                  children,
+                  (child, index) =>
+                    isValidElement(child) &&
+                    cloneElement(
+                      child,
+                      getItemProps({
+                        tabIndex: activeIndex === index ? 0 : -1,
+                        ref(node) {
+                          listItemsRef.current[index] = node;
+                        },
+                        onClick(event) {
+                          child.props.onClick?.(event);
+                          tree?.events.emit('click');
+                        },
+                        onFocus(event) {
+                          child.props.onFocus?.(event);
+                          setHasFocusInside(true);
+                        },
+                        // Allow focus synchronization if the cursor did not move.
+                        onMouseEnter() {
+                          if (allowHover && isOpen) {
+                            setActiveIndex(index);
+                          }
+                        },
+                      })
+                    )
+                )}
+              </div>
+            </FloatingFocusManager>
+          )}
+        </FloatingPortal>
+      </FloatingNode>
+    );
+  }
+);
+
+export const Menu = forwardRef((props, ref) => {
+  const parentId = useFloatingParentNodeId();
+
+  if (parentId === null) {
+    return (
+      <FloatingTree>
+        <MenuComponent {...props} ref={ref} />
+      </FloatingTree>
+    );
+  }
+
+  return <MenuComponent {...props} ref={ref} />;
+});
+
 function HomePage() {
   const bannerRef = useRef();
   const [hideBanner, setHideBanner] = useState(true);
@@ -582,20 +1460,19 @@ function HomePage() {
               <GitHub /> GitHub
             </a>
           </div>
-        </div>
-      </header>
-      <main className="relative">
-        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
-          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left lg:leading-relaxed dark:-mt-4">
-            A JavaScript library for{' '}
-            <strong>anchor positioning</strong> — anchor a{' '}
+          <p className="relative z-1 mx-auto text-center mt-16 text-gray-100 prose dark:prose-invert text-xl lg:text-2xl lg:leading-relaxed px-4">
+            A JavaScript library to{' '}
+            <strong className="text-white">position</strong> and
+            create{' '}
+            <strong className="text-white">interactions</strong>{' '}
+            for{' '}
             <Tooltip>
               <TooltipTrigger asChild>
                 <span
                   tabIndex={0}
                   // VoiceOver
                   role="button"
-                  className="relative text-gray-1000 decoration-gray-1000 dark:text-gray-150 dark:decoration-gray-150"
+                  className="relative decoration-gray-150 text-gray-100"
                   style={{
                     textDecorationLine: 'underline',
                     textDecorationStyle: 'wavy',
@@ -603,7 +1480,7 @@ function HomePage() {
                     textDecorationThickness: 1,
                   }}
                 >
-                  floating element
+                  floating elements
                 </span>
               </TooltipTrigger>
               <TooltipContent>
@@ -613,14 +1490,22 @@ function HomePage() {
                   flow of content, like this one!
                 </div>
               </TooltipContent>
-            </Tooltip>{' '}
-            next to another element while making sure it stays in
-            view optimally. This lets you position tooltips,
-            popovers, or dropdowns to efficiently float on top of
-            the UI!
+            </Tooltip>
           </p>
         </div>
-
+      </header>
+      <main className="relative">
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-rose-500 dark:from-rose-400 to-pink-500 dark:to-pink-400 text-3xl lg:text-4xl font-bold my-4 dark:-mt-4">
+            Advanced anchor positioning.
+          </h2>
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left lg:leading-relaxed">
+            Anchor a floating element next to another element
+            while making sure it stays in view by{' '}
+            <strong>avoiding collisions</strong>. This lets you
+            position tooltips, popovers, or dropdowns optimally.
+          </p>
+        </div>
         <div className="grid lg:grid-cols-2 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl">
           <Placement />
           <Shift />
@@ -630,9 +1515,209 @@ function HomePage() {
           <Virtual />
         </div>
 
+        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl">
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-cyan-500 dark:from-cyan-400 to-pink-400 dark:to-pink-400 text-3xl lg:text-4xl font-bold mt-16 mb-4">
+            Interactions for React.
+          </h2>
+          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left lg:leading-relaxed">
+            Build your own floating UI components with React.
+            From simple tooltips to select menus, you have full
+            control while ensuring{' '}
+            <strong>fully accessible</strong> UI experiences.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 container md:px-4 py-8 mx-auto max-w-screen-xl mb-12 dark:text-black">
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup
+              delay={{open: 1000, close: 150}}
+              timeoutMs={200}
+            >
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Tooltips
+                </h3>
+                <p>
+                  Floating elements that display information
+                  related to an anchor element on hover or focus.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button className="p-3 hover:text-red-500 dark:hover:text-red-300 rounded-full">
+                      <Heart size={26} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Like</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button className="p-3 hover:text-blue-500 dark:hover:text-blue-300 rounded-full">
+                      <Share size={26} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button className="p-3 hover:text-orange-500 dark:hover:text-orange-300 rounded-full">
+                      <BarChart size={26} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Stats</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button className="p-3 hover:text-green-500 dark:hover:text-green-300 rounded-full">
+                      <Edit size={26} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Edit</TooltipContent>
+                </Tooltip>
+              </div>
+            </FloatingDelayGroup>
+          </div>
+
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup delay={{open: 1000, close: 100}}>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Popovers
+                </h3>
+                <p>
+                  Floating elements that display an anchored
+                  interactive dialog on click.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <PopoverDemo />
+              </div>
+            </FloatingDelayGroup>
+          </div>
+
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup delay={{open: 1000, close: 100}}>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Select Menus
+                </h3>
+                <p>
+                  Floating elements that display a list of
+                  options to choose from on click.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <SelectDemo />
+              </div>
+            </FloatingDelayGroup>
+          </div>
+
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup delay={{open: 1000, close: 100}}>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Comboboxes
+                </h3>
+                <p>
+                  Floating elements that combine an input and a
+                  list of searchable options to choose from.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <ComboboxDemo />
+              </div>
+            </FloatingDelayGroup>
+          </div>
+
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup delay={{open: 1000, close: 100}}>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Dropdown Menus
+                </h3>
+                <p>
+                  Floating elements that display a list of
+                  buttons that perform an action.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <Menu label="Edit balloon">
+                  <MenuItem label="Undo" />
+                  <MenuItem label="Redo" />
+                  <MenuItem label="Copy" disabled />
+                  <Menu label="Text transform">
+                    <MenuItem label="UPPERCASE" />
+                    <MenuItem label="lowercase" />
+                    <MenuItem label="camelCase" />
+                    <MenuItem label="PascalCase" />
+                    <MenuItem label="snake_case" />
+                    <MenuItem label="kebab-case" />
+                  </Menu>
+                  <Menu label="Find">
+                    <MenuItem label="Find" />
+                    <MenuItem label="Find Next" />
+                    <MenuItem label="Find Previous" />
+                  </Menu>
+                </Menu>
+              </div>
+            </FloatingDelayGroup>
+          </div>
+
+          <div className="bg-white dark:bg-gray-700 dark:text-gray-100 p-10 sm:rounded-lg shadow text-center flex flex-col justify-between h-[18rem]">
+            <FloatingDelayGroup delay={{open: 1000, close: 100}}>
+              <div>
+                <h3 className="text-3xl font-bold mb-6">
+                  Dialogs
+                </h3>
+                <p>
+                  A floating modal window overlaid on the UI,
+                  rendering the content underneath inert.
+                </p>
+              </div>
+              <div className="flex justify-center gap-1">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Delete balloon</Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-white p-6 rounded-lg">
+                    <DialogHeading className="text-2xl font-bold mb-2">
+                      Delete balloon
+                    </DialogHeading>
+                    <DialogDescription>
+                      Are you sure you want to delete?
+                    </DialogDescription>
+                    <div className="flex gap-2 mt-4">
+                      <DialogClose className="cursor-default transition-colors w-full rounded-lg bg-red-500 hover:bg-red-600 text-white p-2">
+                        Confirm
+                      </DialogClose>
+                      <DialogClose className="cursor-default transition-colors w-full rounded-lg bg-gray-300 hover:bg-slate-200 p-2">
+                        Cancel
+                      </DialogClose>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </FloatingDelayGroup>
+          </div>
+        </div>
+
+        <div className="container text-center mx-auto px-4 md:px-8 max-w-screen-xl mb-24">
+          <Link
+            href="/docs/react"
+            className="inline-block transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-6 rounded-md font-bold sm:text-xl"
+          >
+            Use Floating UI with React{' '}
+            <ArrowRight
+              className="inline-block relative top-[-1px]"
+              size={20}
+            />
+          </Link>
+        </div>
+
         <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 to-teal-400 text-3xl lg:text-4xl font-bold mt-8 mb-4">
-            Light as a feather.
+          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-blue-500 to-teal-500 dark:from-blue-500 dark:to-teal-400 text-3xl lg:text-4xl font-bold mt-16 mb-4">
+            Modern, tree-shakeable modules.
           </h2>
           <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-8 lg:leading-relaxed">
             This positioning toolkit has a platform-agnostic 0.6
@@ -702,31 +1787,6 @@ function HomePage() {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="container mx-auto px-4 md:px-8 max-w-screen-xl relative mb-24">
-          <h2 className="inline-block text-transparent leading-gradient-heading bg-clip-text bg-gradient-to-r from-rose-500 dark:from-rose-400 to-pink-500 dark:to-pink-400 text-3xl lg:text-4xl font-bold mt-8 mb-4">
-            Interactions for React.
-          </h2>
-          <p className="prose dark:prose-invert text-xl lg:text-2xl text-left mb-12 lg:leading-relaxed">
-            In addition to positioning, there are also
-            interaction primitives to build floating UI
-            components with React. This includes event hooks for
-            hover, focus or click, modal and non-modal focus
-            management, keyboard list navigation, typeahead,
-            portals, backdrop overlays, screen reader support,
-            and more.
-          </p>
-          <Link
-            href="/docs/react"
-            className="transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-4 rounded-md font-bold text-md"
-          >
-            Use Floating UI with React{' '}
-            <ArrowRight
-              className="inline-block relative top-[-1px]"
-              size={20}
-            />
-          </Link>
         </div>
 
         <div className="container px-4 md:px-8 mx-auto max-w-screen-xl">
