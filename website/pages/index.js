@@ -1462,10 +1462,7 @@ function HomePage() {
           </div>
           <p className="relative z-1 mx-auto text-center mt-16 text-gray-100 prose dark:prose-invert text-xl lg:text-2xl lg:leading-relaxed px-4">
             A JavaScript library to{' '}
-            <strong className="text-white">position</strong> and
-            create{' '}
-            <strong className="text-white">interactions</strong>{' '}
-            for{' '}
+            <strong className="text-white">position</strong>{' '}
             <Tooltip>
               <TooltipTrigger asChild>
                 <span
@@ -1490,7 +1487,10 @@ function HomePage() {
                   flow of content, like this one!
                 </div>
               </TooltipContent>
-            </Tooltip>
+            </Tooltip>{' '}
+            and create{' '}
+            <strong className="text-white">interactions</strong>{' '}
+            for them.
           </p>
         </div>
       </header>
