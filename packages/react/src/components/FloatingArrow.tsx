@@ -1,6 +1,7 @@
 import {platform} from '@floating-ui/react-dom';
 import * as React from 'react';
 
+import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 
 export interface Props extends React.SVGAttributes<SVGSVGElement> {
@@ -76,6 +77,11 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     }
   }
 
+  // Strokes must be double the border width, this ensures the stroke's width
+  // works as you'd expect.
+  strokeWidth *= 2;
+  const halfStrokeWidth = strokeWidth / 2;
+
   const svgX = (width / 2) * (tipRadius / -8 + 1);
   const svgY = ((height / 2) * tipRadius) / 4;
 
@@ -90,8 +96,9 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     xOffsetProp = alignment === 'end' ? 'left' : 'right';
   }
 
+  const arrowOffsetY = isCustomShape ? 0 : halfStrokeWidth;
   const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
-  const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
+  const arrowY = arrow?.y != null ? staticOffset || arrow.y + arrowOffsetY : '';
 
   const dValue =
     d ||
@@ -108,6 +115,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     right: isCustomShape ? 'rotate(-90deg)' : 'rotate(90deg)',
   }[side];
 
+  const clipPathId = useId();
+
   return (
     <svg
       {...rest}
@@ -115,20 +124,19 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
       suppressHydrationWarning
       aria-hidden
       ref={ref}
-      width={isCustomShape ? width : width + (isVerticalSide ? strokeWidth : 0)}
+      width={isCustomShape ? width : width + strokeWidth}
       height={width}
-      viewBox={
-        isCustomShape
-          ? `0 0 ${width} ${width}`
-          : `0 0 ${width} ${width + (!isVerticalSide ? strokeWidth : 0)}`
-      }
+      viewBox={`0 0 ${width} ${height > width ? height : width}`}
       style={{
         ...rest.style,
         position: 'absolute',
         pointerEvents: 'none',
-        [xOffsetProp]: arrowX ?? '',
-        [yOffsetProp]: arrowY ?? '',
-        [side]: '100%',
+        [xOffsetProp]: arrowX,
+        [yOffsetProp]: arrowY,
+        [side]:
+          isVerticalSide || isCustomShape
+            ? '100%'
+            : `calc(100% - ${strokeWidth / 2}px)`,
         transform: `${rotation}${
           rest.style?.transform ? ` ${rest.style.transform}` : ''
         }`,
@@ -136,6 +144,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     >
       {strokeWidth > 0 && (
         <path
+          clipPath={`url(#${clipPathId})`}
           fill="none"
           stroke={stroke}
           // Account for the stroke on the fill path rendered below.
@@ -146,6 +155,16 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
       {/* In Firefox, for left/right placements there's a ~0.5px gap where the
       border can show through. Adding a stroke on the fill removes it. */}
       <path stroke={strokeWidth && !d ? rest.fill : 'none'} d={dValue} />
+      {/* Assumes the border-width of the floating element matches the 
+      stroke. */}
+      <clipPath id={clipPathId}>
+        <rect
+          x={-halfStrokeWidth}
+          y={halfStrokeWidth * (isCustomShape ? -1 : 1)}
+          width={width + strokeWidth}
+          height={width}
+        />
+      </clipPath>
     </svg>
   );
 });

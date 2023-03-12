@@ -236,7 +236,7 @@ export const Main = () => {
                     context={context}
                     fill="white"
                     stroke="rgba(0,0,0,0.1)"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     height={8}
                     tipRadius={1}
                   />
