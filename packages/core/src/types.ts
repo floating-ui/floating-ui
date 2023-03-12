@@ -124,10 +124,11 @@ export interface ElementRects {
  * Custom positioning reference element.
  * @see https://floating-ui.com/docs/virtual-elements
  */
-export type VirtualElement = {
+export interface VirtualElement {
   getBoundingClientRect(): ClientRectObject;
+  getClientRects?(): Array<ClientRectObject>;
   contextElement?: any;
-};
+}
 export type ReferenceElement = any;
 export type FloatingElement = any;
 
