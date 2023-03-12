@@ -1702,7 +1702,7 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container text-center mx-auto px-4 md:px-8 max-w-screen-xl mb-24">
+        <div className="container text-center mx-auto px-4 md:px-8 max-w-screen-xl mb-16">
           <Link
             href="/docs/react"
             className="inline-block transition-colors bg-rose-500 dark:bg-rose-600 hover:bg-pink-500 text-gray-50 p-6 rounded-md font-bold sm:text-xl"

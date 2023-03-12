@@ -15,7 +15,7 @@ export function Logos({items}) {
             <TooltipTrigger asChild>
               <a
                 href={item.url}
-                className="opacity-70 dark:opacity-30 hover:opacity-100 transition-opacity px-4"
+                className="inline-block mb-6 opacity-70 dark:opacity-30 hover:opacity-100 transition-opacity px-4"
                 rel="noopener noreferrer"
               >
                 <img
