@@ -179,7 +179,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     open,
     onOpenChange,
     refs,
-    elements: {domReference},
+    elements: {domReference, floating},
   } = context;
   const {
     listRef,
@@ -243,6 +243,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const isPointerModalityRef = React.useRef(true);
   const previousOnNavigateRef = React.useRef(onNavigate);
   const previousOpenRef = React.useRef(open);
+  const previousMountedRef = React.useRef(!!floating);
   const forceSyncFocus = React.useRef(false);
   const forceScrollIntoViewRef = React.useRef(false);
 
@@ -397,24 +398,27 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (previousOpenRef.current && !open) {
-      const parentFloating = tree?.nodesRef.current.find(
-        (node) => node.id === parentId
-      )?.context?.elements.floating;
+    if (previousMountedRef.current && !floating && tree) {
+      const nodes = tree.nodesRef.current;
+      const parent = nodes.find((node) => node.id === parentId)?.context
+        ?.elements.floating;
+      const activeEl = activeElement(getDocument(floating));
+      const treeContainsActiveEl = nodes.some(
+        (node) =>
+          node.context && contains(node.context.elements.floating, activeEl)
+      );
 
-      if (
-        parentFloating &&
-        !contains(parentFloating, activeElement(getDocument(parentFloating)))
-      ) {
-        parentFloating.focus({preventScroll: true});
+      if (parent && !treeContainsActiveEl) {
+        parent.focus({preventScroll: true});
       }
     }
-  }, [enabled, open, tree, parentId]);
+  }, [enabled, floating, tree, parentId]);
 
   useLayoutEffect(() => {
     keyRef.current = null;
     previousOnNavigateRef.current = onNavigate;
     previousOpenRef.current = open;
+    previousMountedRef.current = !!floating;
   });
 
   const hasActiveIndex = activeIndex != null;

@@ -116,7 +116,7 @@ export const MenuComponent = React.forwardRef<
     ignoreMouse: isNested,
   });
   const role = useRole(context, {role: 'menu'});
-  const dismiss = useDismiss(context);
+  const dismiss = useDismiss(context, {bubbles: true});
   const listNavigation = useListNavigation(context, {
     listRef: listItemsRef,
     activeIndex,
