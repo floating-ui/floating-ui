@@ -1,5 +1,6 @@
-import type {Rect, Strategy, VirtualElement} from '@floating-ui/core';
+import type {Rect, Strategy} from '@floating-ui/core';
 
+import type {VirtualElement} from '../types';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';

@@ -1,4 +1,4 @@
-import {VirtualElement} from '@floating-ui/core';
+import type {VirtualElement} from '@floating-ui/dom';
 import {getOverflowAncestors, shift, useFloating} from '@floating-ui/react-dom';
 import {
   MutableRefObject,

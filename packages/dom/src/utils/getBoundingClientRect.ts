@@ -1,6 +1,7 @@
-import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
+import type {ClientRectObject} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 
+import type {VirtualElement} from '../types';
 import {FALLBACK_SCALE, getScale} from './getScale';
 import {getWindow} from './getWindow';
 import {isClientRectVisualViewportBased, isElement} from './is';
