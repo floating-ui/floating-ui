@@ -1,34 +1,37 @@
-import type {ClientRectObject, Middleware, Padding, Rect} from '../types';
+import type {ClientRectObject, Middleware, Padding} from '../types';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {getSide} from '../utils/getSide';
 import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
 
-// Merge client rects on the same line (`y` coordinate) into one rect.
-export function mergeRects(rects: Array<ClientRectObject>) {
-  const mergedRects: Array<Rect> = [];
-  const widths = new Map<number, number>();
+function getBoundingRect(rects: Array<ClientRectObject>) {
+  const minX = Math.min(...rects.map((rect) => rect.left));
+  const minY = Math.min(...rects.map((rect) => rect.top));
+  const maxX = Math.max(...rects.map((rect) => rect.right));
+  const maxY = Math.max(...rects.map((rect) => rect.bottom));
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  };
+}
 
-  rects.forEach((rect) => {
-    const {x, y, width, height} = rect;
-    const mapWidth = widths.get(y);
-
-    if (mapWidth != null) {
-      widths.set(y, mapWidth + width);
+export function getRectsByLine(rects: Array<ClientRectObject>) {
+  const sortedRects = rects.slice().sort((a, b) => a.y - b.y);
+  const groups = [];
+  let prevRect: ClientRectObject | null = null;
+  for (let i = 0; i < sortedRects.length; i++) {
+    const rect = sortedRects[i];
+    if (!prevRect || rect.y - prevRect.y > prevRect.height / 2) {
+      groups.push([rect]);
     } else {
-      widths.set(y, width);
-      mergedRects.push({x, y, width, height});
+      groups[groups.length - 1].push(rect);
     }
-  });
-
-  return mergedRects.map((rect) => {
-    const width = widths.get(rect.y);
-    if (width != null) {
-      rect.width = width;
-    }
-    return rectToClientRect(rect);
-  });
+    prevRect = rect;
+  }
+  return groups.map((rect) => rectToClientRect(getBoundingRect(rect)));
 }
 
 export interface Options {
@@ -66,18 +69,12 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
     // padding of 2 seems to handle this issue.
     const {padding = 2, x, y} = options;
 
-    const fallback = rectToClientRect(
-      platform.convertOffsetParentRelativeRectToViewportRelativeRect
-        ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
-            rect: rects.reference,
-            offsetParent: await platform.getOffsetParent?.(elements.floating),
-            strategy,
-          })
-        : rects.reference
-    );
-    const clientRects = mergeRects(
+    const nativeClientRects = Array.from(
       (await platform.getClientRects?.(elements.reference)) || []
     );
+
+    const clientRects = getRectsByLine(nativeClientRects);
+    const fallback = rectToClientRect(getBoundingRect(nativeClientRects));
     const paddingObject = getSideObjectFromPadding(padding);
 
     function getBoundingClientRect() {
