@@ -6,10 +6,10 @@ import {max, min} from '../utils/math';
 import {rectToClientRect} from '../utils/rectToClientRect';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {
-  const minX = Math.min(...rects.map((rect) => rect.left));
-  const minY = Math.min(...rects.map((rect) => rect.top));
-  const maxX = Math.max(...rects.map((rect) => rect.right));
-  const maxY = Math.max(...rects.map((rect) => rect.bottom));
+  const minX = min(...rects.map((rect) => rect.left));
+  const minY = min(...rects.map((rect) => rect.top));
+  const maxX = max(...rects.map((rect) => rect.right));
+  const maxY = max(...rects.map((rect) => rect.bottom));
   return {
     x: minX,
     y: minY,
