@@ -1,8 +1,7 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useEvent} from '../hooks/utils/useEvent';
-import {isMac, isSafari} from '../utils/is';
+import {isSafari} from '../utils/is';
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
 // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/FocusTrap.tsx
@@ -31,18 +30,10 @@ function setActiveElementOnTab(event: KeyboardEvent) {
   }
 }
 
-function isTabFocus(event: React.FocusEvent<HTMLElement>) {
-  const result = activeElement === event.relatedTarget;
-  activeElement = event.relatedTarget as typeof activeElement;
-  clearTimeout(timeoutId);
-  return result;
-}
-
 export const FocusGuard = React.forwardRef<
   HTMLSpanElement,
   React.HTMLProps<HTMLSpanElement>
 >(function FocusGuard(props, ref) {
-  const onFocus = useEvent(props.onFocus);
   const [role, setRole] = React.useState<'button' | undefined>();
 
   useLayoutEffect(() => {
@@ -71,18 +62,6 @@ export const FocusGuard = React.forwardRef<
       aria-hidden={role ? undefined : true}
       data-floating-ui-focus-guard=""
       style={HIDDEN_STYLES}
-      onFocus={(event) => {
-        if (isSafari() && isMac() && !isTabFocus(event)) {
-          // On macOS we need to wait a little bit before moving
-          // focus again.
-          event.persist();
-          timeoutId = window.setTimeout(() => {
-            onFocus(event);
-          }, 50);
-        } else {
-          onFocus(event);
-        }
-      }}
     />
   );
 });
