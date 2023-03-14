@@ -751,7 +751,7 @@ function SelectDemo() {
                   i === selectedIndex && i === activeIndex
                 }
                 className={classNames(
-                  'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
+                  'flex select-none gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
                   {
                     'bg-cyan-200 dark:bg-blue-500 dark:text-white':
                       i === activeIndex,
@@ -1183,6 +1183,7 @@ export const MenuComponent = forwardRef(
       onNavigate: setActiveIndex,
     });
     const typeahead = useTypeahead(context, {
+      enabled: isOpen,
       listRef: listContentRef,
       onMatch: isOpen ? setActiveIndex : undefined,
       activeIndex,
@@ -1264,7 +1265,7 @@ export const MenuComponent = forwardRef(
     }, [allowHover]);
 
     const {isMounted, styles} = useTransitionStyles(context, {
-      duration: 100,
+      duration: {open: 100},
     });
 
     const referenceRef = useMergeRefs([

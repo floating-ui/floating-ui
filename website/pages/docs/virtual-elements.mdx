@@ -59,7 +59,10 @@ document.addEventListener('click', onClick);
 
 ## contextElement
 
-An extra property can be specified on a virtual element:
+This property is useful if your
+`getBoundingClientRect{:.function}` method is derived from a real
+element, to ensure clipping and position update detection works
+as expected.
 
 ```js
 const virtualEl = {
@@ -72,7 +75,14 @@ const virtualEl = {
 };
 ```
 
-This property is useful if your
-`getBoundingClientRect{:.function}` method is derived from a real
-element, to ensure clipping and position update detection works
-as expected.
+## getClientRects
+
+This property is useful when using range selections and the
+`inline(){:js}` middleware.
+
+```js
+const virtualEl = {
+  getBoundingClientRect: () => range.getBoundingClientRect(),
+  getClientRects: () => range.getClientRects(),
+};
+```

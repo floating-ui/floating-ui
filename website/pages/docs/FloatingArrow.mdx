@@ -216,3 +216,25 @@ The stroke (border) width of the arrow.
   strokeWidth={2}
 />
 ```
+
+## Tailwind and utility CSS styling
+
+- `fill-*{:.string}` sets the arrow's fill color.
+- `[&>path:first-of-type]{:.string}` targets the "stroke" path.
+- `[&>path:last-of-type]{:.string}` targets the "fill" path's
+  extra stroke, to reduce gaps.
+
+`strokeWidth{:.keyword}` should still be manually specified as a
+prop.
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  className="
+    fill-white 
+    [&>path:first-of-type]:stroke-pink-500
+    [&>path:last-of-type]:stroke-white
+  "
+/>
+```
