@@ -1019,7 +1019,7 @@ function ComboboxDemo() {
         ref={refs.setReference}
         value={inputValue}
         className="border-2 p-2 rounded border-gray-300 dark:border-gray-500 focus:border-blue-500 outline-none dark:bg-gray-600"
-        placeholder="Enter balloon fruit"
+        placeholder="Enter balloon flavor"
         aria-autocomplete="list"
         aria-labelledby={
           open && items.length === 0
@@ -1066,7 +1066,7 @@ function ComboboxDemo() {
                 aria-atomic="true"
                 aria-live="assertive"
               >
-                No fruits found.
+                No flavors found.
               </p>
             )}
             {items.map((item, index) => (
@@ -1461,8 +1461,7 @@ function HomePage() {
             </a>
           </div>
           <p className="relative z-1 mx-auto text-center mt-16 text-gray-100 prose dark:prose-invert text-xl lg:text-2xl lg:leading-relaxed px-4">
-            A JavaScript library to{' '}
-            <strong className="text-white">position</strong>{' '}
+            A JavaScript library to position{' '}
             <Tooltip>
               <TooltipTrigger asChild>
                 <span
@@ -1488,9 +1487,7 @@ function HomePage() {
                 </div>
               </TooltipContent>
             </Tooltip>{' '}
-            and create{' '}
-            <strong className="text-white">interactions</strong>{' '}
-            for them.
+            and create interactions for them.
           </p>
         </div>
       </header>
@@ -1643,21 +1640,24 @@ function HomePage() {
               </div>
               <div className="flex justify-center gap-1">
                 <Menu label="Edit balloon">
-                  <MenuItem label="Undo" />
-                  <MenuItem label="Redo" />
-                  <MenuItem label="Copy" disabled />
-                  <Menu label="Text transform">
-                    <MenuItem label="UPPERCASE" />
-                    <MenuItem label="lowercase" />
-                    <MenuItem label="camelCase" />
-                    <MenuItem label="PascalCase" />
-                    <MenuItem label="snake_case" />
-                    <MenuItem label="kebab-case" />
+                  <MenuItem label="Inflate" />
+                  <MenuItem label="Deflate" />
+                  <MenuItem label="Tie" disabled />
+                  <Menu label="Pop with">
+                    <MenuItem label="Knife" />
+                    <MenuItem label="Pin" />
+                    <MenuItem label="Fork" />
+                    <MenuItem label="Sword" />
                   </Menu>
-                  <Menu label="Find">
-                    <MenuItem label="Find" />
-                    <MenuItem label="Find Next" />
-                    <MenuItem label="Find Previous" />
+                  <Menu label="Change color to">
+                    <MenuItem label="Blue" />
+                    <MenuItem label="Red" />
+                    <MenuItem label="Green" />
+                  </Menu>
+                  <Menu label="Transform">
+                    <MenuItem label="Move" />
+                    <MenuItem label="Rotate" />
+                    <MenuItem label="Resize" />
                   </Menu>
                 </Menu>
               </div>
@@ -1671,8 +1671,8 @@ function HomePage() {
                   Dialogs
                 </h3>
                 <p>
-                  A floating modal window overlaid on the UI,
-                  rendering the content underneath inert.
+                  Floating windows overlaid on the UI, rendering
+                  content underneath them inert.
                 </p>
               </div>
               <div className="flex justify-center gap-1">
