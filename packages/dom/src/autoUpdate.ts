@@ -75,13 +75,8 @@ export function autoUpdate(
 
   let observer: ResizeObserver | null = null;
   if (elementResize) {
-    let initialUpdate = true;
     observer = new ResizeObserver(() => {
-      if (!initialUpdate) {
-        update();
-      }
-
-      initialUpdate = false;
+      update();
     });
     isElement(reference) && !animationFrame && observer.observe(reference);
     if (!isElement(reference) && reference.contextElement && !animationFrame) {
