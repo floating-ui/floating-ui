@@ -3,7 +3,7 @@ import {useState} from 'react';
 
 import {FloatingPortal, FloatingPortalRoot, useFloating} from '../../src';
 
-function App(props: {root?: HTMLElement | null; id?: string}) {
+function App(props: {root?: HTMLElement | null | string; id?: string}) {
   const [open, setOpen] = useState(false);
   const {reference, floating} = useFloating({
     open,
@@ -63,5 +63,20 @@ test('allow to override portal container with string', () => {
       .getByTestId('floating')
       .parentElement?.parentElement?.getAttribute('id')
   ).toBe('portalContainer');
+  cleanup();
+});
+
+test('allow to override portal container with FloatingPortal', () => {
+  render(
+    <FloatingPortalRoot root={'rootContainer1'}>
+      <App root={'portalContainer2'} />
+    </FloatingPortalRoot>
+  );
+  fireEvent.click(screen.getByTestId('reference'));
+  expect(
+    screen
+      .getByTestId('floating')
+      .parentElement?.parentElement?.getAttribute('id')
+  ).toBe('portalContainer2');
   cleanup();
 });

@@ -2,7 +2,6 @@ import {
   FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
-  FloatingPortalRoot,
   useClick,
   useDismiss,
   useFloating,
@@ -97,21 +96,19 @@ export function Drawer({children, render}: Props) {
     <>
       {isValidElement(children) &&
         cloneElement(children, getReferenceProps({ref: refs.setReference}))}
-      <FloatingPortalRoot root="drawer-root">
-        <FloatingPortal>
-          {open &&
-            (modal ? (
-              <FloatingOverlay
-                lockScroll
-                style={{background: 'rgba(0, 0, 0, 0.8)', zIndex: 1}}
-              >
-                {content}
-              </FloatingOverlay>
-            ) : (
-              content
-            ))}
-        </FloatingPortal>
-      </FloatingPortalRoot>
+      <FloatingPortal root="drawer-root">
+        {open &&
+          (modal ? (
+            <FloatingOverlay
+              lockScroll
+              style={{background: 'rgba(0, 0, 0, 0.8)', zIndex: 1}}
+            >
+              {content}
+            </FloatingOverlay>
+          ) : (
+            content
+          ))}
+      </FloatingPortal>
     </>
   );
 }
