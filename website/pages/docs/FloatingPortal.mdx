@@ -24,9 +24,15 @@ function Tooltip() {
 
 ```ts
 interface Props {
+  root?: HTMLElement | null | string;
   preserveTabOrder?: boolean;
+  direct?: boolean;
 }
 ```
+
+### root
+
+Same as `FloatingPortalRoot` root
 
 ### preserveTabOrder
 
@@ -35,6 +41,12 @@ default: `true{:js}`
 When using non-modal focus management using
 `<FloatingFocusManager />{:js}`, this will preserve the tab order
 context based on the React tree instead of the DOM tree.
+
+### direct
+
+default: `false{:js}`
+
+Allow to directly append, floating cotent
 
 ```js
 <FloatingPortal preserveTabOrder={false}>

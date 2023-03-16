@@ -66,10 +66,12 @@ export const useFloatingPortalNode = ({
   id,
   root,
   enabled = true,
+  direct = false,
 }: {
   id?: string;
   root?: HTMLElement | null | string;
   enabled?: boolean;
+  direct?: boolean;
 } = {}) => {
   const [portalEl, setPortalEl] = React.useState<HTMLElement | null>(null);
   const uniqueId = useId();
@@ -81,12 +83,16 @@ export const useFloatingPortalNode = ({
     if (!enabled) {
       return;
     }
+    const getContainer = () =>
+      portalContext?.portalNode || resolveRootContainer(portalRootNode);
 
     const rootNode = id ? document.getElementById(id) : null;
 
     if (rootNode) {
       rootNode.setAttribute('data-floating-ui-portal', '');
       setPortalEl(rootNode);
+    } else if (direct) {
+      setPortalEl(getContainer());
     } else {
       const newPortalEl = document.createElement('div');
       if (id !== '') {
@@ -95,15 +101,14 @@ export const useFloatingPortalNode = ({
       newPortalEl.setAttribute('data-floating-ui-portal', '');
       setPortalEl(newPortalEl);
 
-      const container =
-        portalContext?.portalNode || resolveRootContainer(portalRootNode);
+      const container = getContainer();
 
       container.appendChild(newPortalEl);
       return () => {
         container.removeChild(newPortalEl);
       };
     }
-  }, [id, portalContext, portalRootNode, uniqueId, enabled]);
+  }, [id, portalContext, portalRootNode, uniqueId, enabled, direct]);
 
   return portalEl;
 };
@@ -118,6 +123,7 @@ export const FloatingPortal = ({
   id,
   root = null,
   preserveTabOrder = true,
+  direct,
 }: {
   children?: React.ReactNode;
   /**
@@ -126,8 +132,9 @@ export const FloatingPortal = ({
   id?: string;
   root?: HTMLElement | null | string;
   preserveTabOrder?: boolean;
+  direct?: boolean;
 }) => {
-  const portalNode = useFloatingPortalNode({id, root});
+  const portalNode = useFloatingPortalNode({id, root, direct});
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);
 
