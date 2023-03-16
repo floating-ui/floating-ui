@@ -9,20 +9,31 @@ import {useCallback, useEffect, useRef, useState} from 'react';
 const reference = {width: 150, height: 100, x: 5, y: 5};
 const floating = {width: 275, height: 50, x: 0, y: 0};
 
+function getCanvasData(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const ctx = canvas.getContext('2d');
+  return {
+    rect,
+    ctx,
+    clear: () =>
+      ctx.clearRect(0, 0, canvas.width, canvas.height),
+  };
+}
+
 export function Canvas() {
   const canvasRef = useRef(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
 
   const position = useCallback(() => {
-    const platform = {
-      getElementRects: (data) => data,
-      getDimensions: (element) => element,
-      getClippingRect: () => ({x: 0, y: 0, width, height}),
-    };
+    if (width === null || height === null) return;
 
     computePosition(reference, floating, {
-      platform,
+      platform: {
+        getElementRects: (data) => data,
+        getDimensions: (element) => element,
+        getClippingRect: () => ({x: 0, y: 0, width, height}),
+      },
       placement: 'top-start',
       middleware: [
         offset(5),
@@ -30,7 +41,7 @@ export function Canvas() {
         shift({padding: 5}),
       ],
     }).then(({x, y}) => {
-      const ctx = canvasRef.current.getContext('2d');
+      const {ctx} = getCanvasData(canvasRef.current);
 
       ctx.beginPath();
       ctx.rect(
@@ -63,12 +74,25 @@ export function Canvas() {
         y + floating.height / 2 + 5
       );
     });
-  }, [height, width]);
+  }, [width, height]);
+
+  useEffect(() => {
+    const dpr = window.devicePixelRatio || 1;
+    const {ctx, rect, clear} = getCanvasData(canvasRef.current);
+    const canvasEl = canvasRef.current;
+    canvasEl.width = rect.width * dpr;
+    canvasEl.height = rect.height * dpr;
+    clear();
+    ctx.scale(dpr, dpr);
+    reference.x = rect.width / 2 - reference.width / 2;
+    reference.y = rect.height / 2 - reference.height / 2;
+    position();
+  }, [position]);
 
   useEffect(() => {
     function handleResize() {
-      const canvasEl = canvasRef.current;
-      const rect = canvasEl.getBoundingClientRect();
+      const {rect, clear} = getCanvasData(canvasRef.current);
+      clear();
       setWidth(rect.width);
       setHeight(rect.height);
       position();
@@ -83,24 +107,11 @@ export function Canvas() {
   }, [position]);
 
   useEffect(() => {
-    const dpr = window.devicePixelRatio || 1;
-    const canvasEl = canvasRef.current;
-    const rect = canvasEl.getBoundingClientRect();
-    canvasEl.width = rect.width * dpr;
-    canvasEl.height = rect.height * dpr;
-    const ctx = canvasEl.getContext('2d');
-    ctx.scale(dpr, dpr);
-    reference.x = rect.width / 2 - reference.width / 2;
-    reference.y = rect.height / 2 - reference.height / 2;
-  });
-
-  useEffect(() => {
     let isDragging = false;
     let clickOffset = {x: 0, y: 0};
 
     function handlePointerDown({clientX, clientY}) {
-      const canvasEl = canvasRef.current;
-      const rect = canvasEl.getBoundingClientRect();
+      const {rect} = getCanvasData(canvasRef.current);
 
       const referenceX = reference.x + rect.x;
       const referenceY = reference.y + rect.y;
@@ -122,9 +133,7 @@ export function Canvas() {
     }
 
     function handlePointerUp() {
-      const canvasEl = canvasRef.current;
-      const ctx = canvasEl.getContext('2d');
-      const rect = canvasEl.getBoundingClientRect();
+      const {rect, clear} = getCanvasData(canvasRef.current);
 
       if (
         isDragging &&
@@ -133,7 +142,7 @@ export function Canvas() {
           event.clientX > rect.x + rect.width ||
           event.clientY > rect.y + rect.height)
       ) {
-        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+        clear();
         reference.x = rect.width / 2 - reference.width / 2;
         reference.y = rect.height / 2 - reference.height / 2;
         position();
@@ -145,21 +154,17 @@ export function Canvas() {
     function handlePointerMove() {
       if (!isDragging) return;
 
-      const canvasEl = canvasRef.current;
-      const ctx = canvasEl.getContext('2d');
-      const rect = canvasEl.getBoundingClientRect();
+      const {rect, clear} = getCanvasData(canvasRef.current);
 
       event.preventDefault();
 
-      ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      clear();
 
       reference.x = event.clientX - rect.x - clickOffset.x;
       reference.y = event.clientY - rect.y - clickOffset.y;
 
       position();
     }
-
-    position();
 
     window.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointerup', handlePointerUp);
