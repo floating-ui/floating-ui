@@ -362,14 +362,30 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           (keyRef.current != null ||
             (focusItemOnOpenRef.current === true && keyRef.current == null))
         ) {
-          indexRef.current =
-            keyRef.current == null ||
-            isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
-            nested
-              ? getMinIndex(listRef, disabledIndicesRef.current)
-              : getMaxIndex(listRef, disabledIndicesRef.current);
+          let runs = 0;
+          const waitForListPopulated = () => {
+            if (listRef.current[0] == null) {
+              // Avoid letting the browser paint if possible on the first try,
+              // otherwise use rAF. Don't try more than twice, since something
+              // is wrong otherwise.
+              if (runs < 2) {
+                const scheduler = runs ? requestAnimationFrame : queueMicrotask;
+                scheduler(waitForListPopulated);
+              }
+              runs++;
+            } else {
+              indexRef.current =
+                keyRef.current == null ||
+                isMainOrientationToEndKey(keyRef.current, orientation, rtl) ||
+                nested
+                  ? getMinIndex(listRef, disabledIndicesRef.current)
+                  : getMaxIndex(listRef, disabledIndicesRef.current);
+              keyRef.current = null;
+              onNavigate(indexRef.current);
+            }
+          };
 
-          onNavigate(indexRef.current);
+          waitForListPopulated();
         }
       } else if (!isIndexOutOfBounds(listRef, activeIndex)) {
         indexRef.current = activeIndex;
@@ -415,7 +431,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }, [enabled, floating, tree, parentId]);
 
   useLayoutEffect(() => {
-    keyRef.current = null;
     previousOnNavigateRef.current = onNavigate;
     previousOpenRef.current = open;
     previousMountedRef.current = !!floating;

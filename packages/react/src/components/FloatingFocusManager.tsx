@@ -464,7 +464,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     if (ignoreInitialFocus || !floating) return;
 
     function setState() {
-      setTabbableContentLength(getTabbableContent().length);
+      if (activeElement(getDocument(floating)) !== refs.domReference.current) {
+        setTabbableContentLength(getTabbableContent().length);
+      }
     }
 
     setState();
