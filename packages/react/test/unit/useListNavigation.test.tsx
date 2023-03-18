@@ -1,6 +1,6 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {useRef, useState} from 'react';
+import {useLayoutEffect, useRef, useState} from 'react';
 
 import {
   useClick,
@@ -632,4 +632,102 @@ describe('grid navigation', () => {
 
     cleanup();
   });
+});
+
+test('scheduled list population', async () => {
+  function Option({
+    listRef,
+    getItemProps,
+    active,
+    index: propIndex,
+  }: {
+    listRef: React.MutableRefObject<Array<HTMLElement | null>>;
+    getItemProps: () => Record<string, unknown>;
+    active: boolean;
+    index: number;
+  }) {
+    const [index, setIndex] = useState(-1);
+
+    useLayoutEffect(() => {
+      setIndex(propIndex);
+    }, [propIndex]);
+
+    return (
+      <div
+        role="option"
+        tabIndex={active ? 0 : -1}
+        ref={(node) => {
+          if (index !== -1) {
+            listRef.current[index] = node;
+          }
+        }}
+        {...getItemProps()}
+      />
+    );
+  }
+
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const listRef = useRef<Array<HTMLElement | null>>([]);
+
+    const listNavigation = useListNavigation(context, {
+      listRef,
+      activeIndex,
+      onNavigate: setActiveIndex,
+    });
+
+    const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
+      [listNavigation]
+    );
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          {...getReferenceProps({
+            onClick() {
+              setIsOpen((v) => !v);
+            },
+          })}
+        >
+          Open
+        </button>
+        {isOpen && (
+          <div ref={refs.setFloating} {...getFloatingProps()}>
+            {['one', 'two', 'three'].map((option, index) => (
+              <Option
+                key={option}
+                listRef={listRef}
+                getItemProps={getItemProps}
+                index={index}
+                active={activeIndex === index}
+              />
+            ))}
+          </div>
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
+
+  await act(async () => {});
+
+  expect(screen.getAllByRole('option')[2]).toHaveFocus();
+
+  fireEvent.click(screen.getByRole('button'));
+  fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
+
+  await act(async () => {});
+
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
 });
