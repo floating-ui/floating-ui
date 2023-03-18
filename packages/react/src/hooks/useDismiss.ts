@@ -10,6 +10,7 @@ import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
 import {
+  getWindow,
   isElement,
   isHTMLElement,
   isVirtualClick,
@@ -160,9 +161,12 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
 
     // Check if the click occurred on the scrollbar
     if (isHTMLElement(target) && floating) {
-      const win = floating.ownerDocument.defaultView || window;
-      const canScrollX = target.scrollWidth > target.clientWidth;
-      const canScrollY = target.scrollHeight > target.clientHeight;
+      // In Firefox, `target.scrollWidth > target.clientWidth` for inline
+      // elements.
+      const canScrollX =
+        target.clientWidth > 0 && target.scrollWidth > target.clientWidth;
+      const canScrollY =
+        target.clientHeight > 0 && target.scrollHeight > target.clientHeight;
 
       let xCond = canScrollY && event.offsetX > target.clientWidth;
 
@@ -171,7 +175,8 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
       if (canScrollY) {
-        const isRTL = win.getComputedStyle(target).direction === 'rtl';
+        const isRTL =
+          getWindow(floating).getComputedStyle(target).direction === 'rtl';
 
         if (isRTL) {
           xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
