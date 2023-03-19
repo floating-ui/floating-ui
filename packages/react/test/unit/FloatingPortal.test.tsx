@@ -30,6 +30,28 @@ test('creates a custom id node', () => {
   cleanup();
 });
 
+test('uses a custom id node as the root', async () => {
+  const customRoot = document.createElement('div');
+  customRoot.id = 'custom-root';
+  document.body.appendChild(customRoot);
+  render(<App id="custom-root" />);
+  fireEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('floating').parentElement?.parentElement).toBe(
+    customRoot
+  );
+  customRoot.remove();
+});
+
+test('creates a custom id node as the root', async () => {
+  render(<App id="custom-id" />);
+  fireEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('floating').parentElement?.parentElement?.id).toBe(
+    'custom-id'
+  );
+});
+
 test('allows custom roots', async () => {
   const customRoot = document.createElement('div');
   customRoot.id = 'custom-root';
@@ -43,13 +65,4 @@ test('allows custom roots', async () => {
   expect(parent?.hasAttribute('data-floating-ui-portal')).toBe(true);
   expect(parent?.parentElement).toBe(customRoot);
   customRoot.remove();
-});
-
-test('empty id string does not add id attribute', () => {
-  render(<App id="" />);
-  fireEvent.click(screen.getByTestId('reference'));
-  expect(screen.getByTestId('floating').parentElement?.hasAttribute('id')).toBe(
-    false
-  );
-  cleanup();
 });

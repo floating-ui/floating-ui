@@ -39,22 +39,41 @@ export const useFloatingPortalNode = ({
   const portalContext = usePortalContext();
 
   useLayoutEffect(() => {
-    const customRoot = id ? document.getElementById(id) : null;
+    const existingIdRoot = id ? document.getElementById(id) : null;
+    const attr = 'data-floating-ui-portal';
 
-    if (customRoot) {
-      customRoot.setAttribute('data-floating-ui-portal', '');
-      setPortalNode(customRoot);
-    } else {
+    if (existingIdRoot) {
       const subRoot = document.createElement('div');
-      if (id !== '') {
-        subRoot.id = id || uniqueId;
-      }
-      subRoot.setAttribute('data-floating-ui-portal', '');
-      const container = portalContext?.portalNode || root || document.body;
+      subRoot.id = uniqueId;
+      subRoot.setAttribute(attr, '');
+      existingIdRoot.appendChild(subRoot);
       setPortalNode(subRoot);
-      container.appendChild(subRoot);
       return () => {
-        container.removeChild(subRoot);
+        subRoot.remove();
+      };
+    } else {
+      let container = portalContext?.portalNode || root || document.body;
+
+      let idWrapper: HTMLDivElement | null = null;
+      if (id) {
+        idWrapper = document.createElement('div');
+        idWrapper.id = id;
+        container.appendChild(idWrapper);
+      }
+
+      const subRoot = document.createElement('div');
+
+      subRoot.id = uniqueId;
+      subRoot.setAttribute(attr, '');
+
+      setPortalNode(subRoot);
+
+      container = idWrapper || container;
+      container.appendChild(subRoot);
+
+      return () => {
+        subRoot.remove();
+        idWrapper?.remove();
       };
     }
   }, [id, root, portalContext, uniqueId]);
