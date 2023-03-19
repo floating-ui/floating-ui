@@ -90,10 +90,6 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           dataRef.current.openEvent = event.nativeEvent;
         },
         onClick(event) {
-          if (dataRef.current.__syncReturnFocus) {
-            return;
-          }
-
           if (eventOption === 'mousedown' && pointerTypeRef.current) {
             pointerTypeRef.current = undefined;
             return;

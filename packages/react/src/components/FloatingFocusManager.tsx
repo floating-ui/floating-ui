@@ -235,10 +235,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         relatedTarget !== previouslyFocusedElementRef.current
       ) {
         preventReturnFocusRef.current = true;
-        // On iOS VoiceOver, dismissing the nested submenu will cause the
-        // first item of the list to receive focus. Delaying it appears to fix
-        // the issue.
-        setTimeout(() => onOpenChange(false));
+        onOpenChange(false);
       }
     }
 
@@ -380,8 +377,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     return () => {
       events.off('dismiss', onDismiss);
 
+      const activeEl = activeElement(doc);
       const shouldFocusReference =
-        contains(floating, activeElement(doc)) ||
+        contains(floating, activeEl) ||
+        (tree &&
+          getChildren(tree.nodesRef.current, nodeId).some((node) =>
+            contains(node.context?.elements.floating, activeEl)
+          )) ||
         (contextData.openEvent &&
           ['click', 'mousedown'].includes(contextData.openEvent.type));
 
@@ -397,40 +399,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ) {
         // `isPointerDownRef.current` to avoid the focus ring from appearing on
         // the reference element when click-toggling it.
-        if (!refs.domReference.current || isPointerDownRef.current) {
-          enqueueFocus(previouslyFocusedElementRef.current, {
-            // When dismissing nested floating elements, by the time the rAF has
-            // executed, the menus will all have been unmounted. When they try
-            // to get focused, the calls get ignored — leaving the root
-            // reference focused as desired.
-            cancelPrevious: false,
-            preventScroll: preventReturnFocusScroll,
-          });
-        } else {
-          // If the user has specified a `keydown` listener that calls
-          // setOpen(false) (e.g. selecting an item and closing the floating
-          // element), then sync return focus causes `useClick` to immediately
-          // re-open it, unless they call `event.preventDefault()` in the
-          // `keydown` listener. This helps keep backwards compatibility with
-          // older examples.
-          contextData.__syncReturnFocus = true;
-
-          // In Safari, `useListNavigation` moves focus sync, so making this
-          // sync ensures the initial item remains focused despite this being
-          // invoked in Strict Mode due to double-invoked useEffects. This also
-          // has the positive side effect of closing a modally focus-managed
-          // <Menu> on `Tab` keydown to move naturally to the next focusable
-          // element.
-          previouslyFocusedElementRef.current?.focus({
-            preventScroll: preventReturnFocusScroll,
-          });
-
-          setTimeout(() => {
-            // This isn't an actual property the user should access, make sure
-            // it doesn't persist.
-            delete contextData.__syncReturnFocus;
-          });
-        }
+        enqueueFocus(previouslyFocusedElementRef.current, {
+          // When dismissing nested floating elements, by the time the rAF has
+          // executed, the menus will all have been unmounted. When they try
+          // to get focused, the calls get ignored — leaving the root
+          // reference focused as desired.
+          cancelPrevious: false,
+          preventScroll: preventReturnFocusScroll,
+        });
       }
     };
   }, [
@@ -443,6 +419,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     refs,
     events,
     ignoreInitialFocus,
+    tree,
+    nodeId,
   ]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
