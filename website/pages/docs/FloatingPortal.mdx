@@ -8,56 +8,45 @@ import {FloatingPortal} from '@floating-ui/react';
 
 function Tooltip() {
   return (
-    <FloatingPortal>
-      {isOpen && <div>My portalled element</div>}
-    </FloatingPortal>
+    isOpen && (
+      <FloatingPortal>
+        <div>Floating element</div>
+      </FloatingPortal>
+    )
   );
 }
 ```
 
-<Notice type="error" title="Important">
-  Don't conditionally render the FloatingPortal, only its
-  children as seen above.
-</Notice>
+Context is provided so that portals nested in one another are
+appended to their respective parent.
 
 ## Props
 
 ```ts
 interface Props {
-  id?: string;
   root?: HTMLElement | null;
+  id?: string;
   preserveTabOrder?: boolean;
 }
 ```
 
-### id
-
-default: `undefined{:js}`
-
-If this node does not exist on the document, it will be created
-for you and will be appended to the end of the `<body>{:html}`. A
-unique React id is assigned to it. Context is provided so that
-portals nested in one another are appended to their respective
-parent.
-
-By specifying a string, it assumes the container is being
-controlled externally or is static.
-
-```js
-<FloatingPortal id="custom-root-id">
-  {isOpen && <div>Tooltip</div>}
-</FloatingPortal>
-```
-
 ### root
 
-Alternatively, you may pass the root element itself, which
-supports shadow roots.
+Optionally specifies the root node the portal container will be
+appended to.
 
 ```js
-<FloatingPortal root={shadowRootNode}>
-  {isOpen && <div>Tooltip</div>}
-</FloatingPortal>
+<FloatingPortal root={rootNode} />
+```
+
+### id
+
+Optionally selects the node with the id if it exists, or create
+it and append it to the specified root (by default
+`document.body{:js}`).
+
+```js
+<FloatingPortal id="custom-root-id" />
 ```
 
 ### preserveTabOrder
@@ -69,9 +58,7 @@ When using non-modal focus management using
 context based on the React tree instead of the DOM tree.
 
 ```js
-<FloatingPortal preserveTabOrder={false}>
-  {isOpen && <div>Tooltip</div>}
-</FloatingPortal>
+<FloatingPortal preserveTabOrder={false} />
 ```
 
 ## useFloatingPortalNode
@@ -84,7 +71,6 @@ in the DOM.
 function App() {
   const portalNode = useFloatingPortalNode({
     id: 'custom-root-id',
-    enabled: false, // true by default
   });
 
   if (portalNode) {

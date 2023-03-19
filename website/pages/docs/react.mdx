@@ -571,16 +571,12 @@ useEffect(() => {
 }, [context]);
 ```
 
-Currently, only two built-in values are set:
+Currently, only one built-in value is set:
 
 ```js
 interface ContextData {
   // Which event caused the floating element to open.
   openEvent?: MouseEvent | PointerEvent | FocusEvent;
-
-  // Whether the user is typing currently when `useTypeahead`
-  // is in use.
-  typing?: boolean;
 
   // Add support for custom data to pass around.
   [key: string]: any;
