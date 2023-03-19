@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {flushSync} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {
@@ -242,7 +241,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   const keyRef = React.useRef<null | string>(null);
   const isPointerModalityRef = React.useRef(true);
   const previousOnNavigateRef = React.useRef(onNavigate);
-  const previousOpenRef = React.useRef(open);
   const previousMountedRef = React.useRef(!!floating);
   const forceSyncFocus = React.useRef(false);
   const forceScrollIntoViewRef = React.useRef(false);
@@ -253,13 +251,15 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
-  const focusItem = React.useCallback(
+  const focusItem = useEvent(
     (
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>,
       forceScrollIntoView = false
     ) => {
       const item = listRef.current[indexRef.current];
+
+      if (!item) return;
 
       if (virtual) {
         setActiveId(item?.id);
@@ -298,8 +298,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           );
         }
       });
-    },
-    [virtual, scrollItemIntoViewRef]
+    }
   );
 
   useLayoutEffect(() => {
@@ -318,21 +317,21 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open) {
+    if (open && floating) {
       if (focusItemOnOpenRef.current && selectedIndex != null) {
         // Regardless of the pointer modality, we want to ensure the selected
         // item comes into view when the floating element is opened.
         forceScrollIntoViewRef.current = true;
         onNavigate(selectedIndex);
       }
-    } else if (previousOpenRef.current) {
+    } else if (previousMountedRef.current) {
       // Since the user can specify `onNavigate` conditionally
       // (onNavigate: open ? setActiveIndex : setSelectedIndex),
       // we store and call the previous function.
       indexRef.current = -1;
       previousOnNavigateRef.current(null);
     }
-  }, [enabled, open, selectedIndex, onNavigate]);
+  }, [enabled, open, floating, selectedIndex, onNavigate]);
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
@@ -341,7 +340,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (open) {
+    if (open && floating) {
       if (activeIndex == null) {
         forceSyncFocus.current = false;
 
@@ -350,14 +349,14 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         }
 
         // Reset while the floating element was open (e.g. the list changed).
-        if (previousOpenRef.current) {
+        if (previousMountedRef.current) {
           indexRef.current = -1;
           focusItem(listRef, indexRef);
         }
 
         // Initial sync.
         if (
-          !previousOpenRef.current &&
+          !previousMountedRef.current &&
           focusItemOnOpenRef.current &&
           (keyRef.current != null ||
             (focusItemOnOpenRef.current === true && keyRef.current == null))
@@ -396,6 +395,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
   }, [
     enabled,
     open,
+    floating,
     activeIndex,
     selectedIndex,
     nested,
@@ -432,7 +432,6 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
 
   useLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
-    previousOpenRef.current = open;
     previousMountedRef.current = !!floating;
   });
 
@@ -456,24 +455,17 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
         onMouseMove({currentTarget}) {
           syncCurrentTarget(currentTarget);
         },
-        onPointerLeave() {
-          if (!isPointerModalityRef.current) {
+        onPointerLeave({pointerType}) {
+          if (!isPointerModalityRef.current || pointerType === 'touch') {
             return;
           }
 
           indexRef.current = -1;
           focusItem(listRef, indexRef);
-
-          // Virtual cursor with VoiceOver on iOS needs this to be flushed
-          // synchronously or there is a glitch that prevents nested
-          // submenus from being accessible.
-          flushSync(() => onNavigate(null));
+          onNavigate(null);
 
           if (!virtual) {
-            // This also needs to be sync to prevent fast mouse movements
-            // from leaving behind a stale active item when landing on a
-            // disabled button item.
-            refs.floating.current?.focus({preventScroll: true});
+            enqueueFocus(refs.floating.current, {preventScroll: true});
           }
         },
       }),
