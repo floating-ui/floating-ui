@@ -435,6 +435,12 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     previousMountedRef.current = !!floating;
   });
 
+  useLayoutEffect(() => {
+    if (!open) {
+      keyRef.current = null;
+    }
+  }, [open]);
+
   const hasActiveIndex = activeIndex != null;
 
   const item = React.useMemo(() => {
@@ -781,17 +787,20 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
           }
 
           const isNavigationKey =
-            isArrowKey ||
-            event.key === 'Enter' ||
-            event.key === ' ' ||
-            event.key === '';
+            isArrowKey || event.key === 'Enter' || event.key.trim() === '';
+          const isMainKey = isMainOrientationKey(event.key, orientation);
+          const isCrossKey = isCrossOrientationOpenKey(
+            event.key,
+            orientation,
+            rtl
+          );
 
           if (isNavigationKey) {
-            keyRef.current = event.key;
+            keyRef.current = nested && isMainKey ? null : event.key;
           }
 
           if (nested) {
-            if (isCrossOrientationOpenKey(event.key, orientation, rtl)) {
+            if (isCrossKey) {
               stopEvent(event);
 
               if (open) {
@@ -805,7 +814,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (isMainOrientationKey(event.key, orientation)) {
+          if (isMainKey) {
             if (selectedIndex != null) {
               indexRef.current = selectedIndex;
             }
