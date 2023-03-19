@@ -29,41 +29,37 @@ const PortalContext = React.createContext<null | {
 
 export const useFloatingPortalNode = ({
   id,
-  enabled = true,
+  root,
 }: {
   id?: string;
-  enabled?: boolean;
+  root?: HTMLElement | null;
 } = {}) => {
-  const [portalEl, setPortalEl] = React.useState<HTMLElement | null>(null);
+  const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
   const uniqueId = useId();
   const portalContext = usePortalContext();
 
   useLayoutEffect(() => {
-    if (!enabled) {
-      return;
-    }
+    const customRoot = id ? document.getElementById(id) : null;
 
-    const rootNode = id ? document.getElementById(id) : null;
-
-    if (rootNode) {
-      rootNode.setAttribute('data-floating-ui-portal', '');
-      setPortalEl(rootNode);
+    if (customRoot) {
+      customRoot.setAttribute('data-floating-ui-portal', '');
+      setPortalNode(customRoot);
     } else {
-      const newPortalEl = document.createElement('div');
+      const subRoot = document.createElement('div');
       if (id !== '') {
-        newPortalEl.id = id || uniqueId;
+        subRoot.id = id || uniqueId;
       }
-      newPortalEl.setAttribute('data-floating-ui-portal', '');
-      setPortalEl(newPortalEl);
-      const container = portalContext?.portalNode || document.body;
-      container.appendChild(newPortalEl);
+      subRoot.setAttribute('data-floating-ui-portal', '');
+      const container = portalContext?.portalNode || root || document.body;
+      setPortalNode(subRoot);
+      container.appendChild(subRoot);
       return () => {
-        container.removeChild(newPortalEl);
+        container.removeChild(subRoot);
       };
     }
-  }, [id, portalContext, uniqueId, enabled]);
+  }, [id, root, portalContext, uniqueId]);
 
-  return portalEl;
+  return portalNode;
 };
 
 /**
@@ -82,7 +78,7 @@ export const FloatingPortal = ({
   root?: HTMLElement | null;
   preserveTabOrder?: boolean;
 }) => {
-  const portalNode = useFloatingPortalNode({id, enabled: !root});
+  const portalNode = useFloatingPortalNode({id, root});
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);
 
@@ -160,11 +156,7 @@ export const FloatingPortal = ({
       {shouldRenderGuards && portalNode && (
         <span aria-owns={portalNode.id} style={HIDDEN_STYLES} />
       )}
-      {root
-        ? createPortal(children, root)
-        : portalNode
-        ? createPortal(children, portalNode)
-        : null}
+      {portalNode && createPortal(children, portalNode)}
       {shouldRenderGuards && portalNode && (
         <FocusGuard
           data-type="outside"

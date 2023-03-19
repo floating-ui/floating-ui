@@ -1,4 +1,4 @@
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {FloatingPortal, useFloating} from '../../src';
@@ -30,11 +30,19 @@ test('creates a custom id node', () => {
   cleanup();
 });
 
-test('allows direct roots', () => {
-  render(<App root={document.body} />);
+test('allows custom roots', async () => {
+  const customRoot = document.createElement('div');
+  customRoot.id = 'custom-root';
+  document.body.appendChild(customRoot);
+  render(<App root={customRoot} />);
   fireEvent.click(screen.getByTestId('reference'));
-  expect(screen.getByTestId('floating').parentNode).toBe(document.body);
-  cleanup();
+
+  await act(async () => {});
+
+  const parent = screen.getByTestId('floating').parentElement;
+  expect(parent?.hasAttribute('data-floating-ui-portal')).toBe(true);
+  expect(parent?.parentElement).toBe(customRoot);
+  customRoot.remove();
 });
 
 test('empty id string does not add id attribute', () => {
