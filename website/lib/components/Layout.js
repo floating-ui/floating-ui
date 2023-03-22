@@ -415,7 +415,7 @@ const components = {
       >
         <span>{props.children}</span>
         <ExternalLink
-          className="w-5 h-5 text-gray-800 dark:text-gray-400 ml-1"
+          className="ml-1 h-5 w-5 text-gray-800 dark:text-gray-400"
           aria-label="Opens in new tab"
         />
       </a>
@@ -509,20 +509,20 @@ export default function Layout({children}) {
         <title>{title}</title>
       </Head>
       <SkipNavLink />
-      <div className="md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
+      <div className="md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72">
         <div className="container pl-4">
           <button
             aria-label="Open menu"
             aria-expanded={navOpen}
             onClick={() => setNavOpen(!navOpen)}
-            className="block fixed z-10 top-1 -mb-8 mt-4 md:mt-0 bg-gray-50 text-gray-900 rounded p-3 md:hidden shadow"
+            className="fixed top-1 z-10 -mb-8 mt-4 block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
           >
             <Menu />
           </button>
         </div>
         <nav
           className={cn(
-            'fixed h-full w-72 md:w-64 lg:w-72 xl:w-[22rem] top-0 left-0 overflow-y-auto overflow-x-hidden md:block bg-gray-50 dark:bg-gray-900 z-50 shadow dark:shadow-none dark:border-r dark:border-gray-800 dark:text-gray-100',
+            'fixed top-0 left-0 z-50 h-full w-72 overflow-y-auto overflow-x-hidden bg-gray-50 shadow dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
             {
               hidden: !navOpen,
             }
@@ -530,7 +530,7 @@ export default function Layout({children}) {
           ref={navRef}
         >
           <div
-            className="w-full h-[25rem] absolute -z-1 hidden dark:block"
+            className="absolute -z-1 hidden h-[25rem] w-full dark:block"
             style={{
               background: `linear-gradient(
                 195deg,
@@ -549,25 +549,25 @@ export default function Layout({children}) {
           />
           <div className="container mx-auto mb-8">
             <Link href="/">
-              <Logo className="h-28 mx-auto mt-2 mb-1" />
+              <Logo className="mx-auto mt-2 mb-1 h-28" />
             </Link>
             {navOpen && (
               <button
                 onClick={() => setNavOpen(false)}
-                className="absolute top-2 right-2 bg-gray-50 text-gray-900 w-10 h-10 rounded-full text-3xl flex items-center justify-center"
+                className="absolute top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900"
                 aria-label="Close"
               >
                 <span className="relative top-[-1px]">×</span>
               </button>
             )}
-            <div className="flex flex-col items-stretch my-4 mr-4 xl:m-0 xl:p-4 xl:pr-8">
+            <div className="my-4 mr-4 flex flex-col items-stretch xl:m-0 xl:p-4 xl:pr-8">
               <DocSearch
                 appId="0E85PIAI2P"
                 indexName="floating-ui"
                 apiKey="51e39a76760916075e22d9b217f4434f"
               />
             </div>
-            <ul className="text-lg px-6 xl:px-12">
+            <ul className="px-6 text-lg xl:px-12">
               {nav.map(
                 ({url, title, icon, depth, mono, hide}) =>
                   !hide && (
@@ -587,9 +587,9 @@ export default function Layout({children}) {
                       <Link
                         href={url}
                         className={cn(
-                          'block dark:hover:bg-purple-200/20 dark:hover:text-gray-50 mx-[-1rem] px-3 py-1 rounded-lg transition duration-200 hover:duration-75 break-words',
+                          'mx-[-1rem] block break-words rounded-lg px-3 py-1 transition duration-200 hover:duration-75 dark:hover:bg-purple-200/20 dark:hover:text-gray-50',
                           {
-                            'bg-gray-800 hover:bg-gray-700 text-gray-50 dark:bg-purple-200/10 dark:text-gray-100/90':
+                            'bg-gray-800 text-gray-50 hover:bg-gray-700 dark:bg-purple-200/10 dark:text-gray-100/90':
                               pathname === url,
                             'hover:bg-gray-100':
                               pathname !== url,
@@ -598,11 +598,11 @@ export default function Layout({children}) {
                           }
                         )}
                       >
-                        <span className="flex items-center gap-4 w-full py-1">
+                        <span className="flex w-full items-center gap-4 py-1">
                           {icon && (
                             <span
                               className={cn(
-                                'w-6 h-6 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] bg-gray-800 dark:bg-gray-100',
+                                'h-6 w-6 bg-gray-800 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] dark:bg-gray-100',
                                 {
                                   'bg-gray-100 dark:bg-gradient-to-r dark:from-red-400 dark:to-pink-200':
                                     pathname === url,
@@ -632,12 +632,12 @@ export default function Layout({children}) {
             </ul>
           </div>
         </nav>
-        <aside className="fixed right-0 top-0 pt-8 hidden xl:block w-72 [max-height:100vh] overflow-y-auto">
+        <aside className="fixed right-0 top-0 hidden w-72 overflow-y-auto pt-8 [max-height:100vh] xl:block">
           <nav>
             <h4 className="text-md ml-6 text-gray-500">
               On this page
             </h4>
-            <ul className="p-4 pl-2 overflow-hidden">
+            <ul className="overflow-hidden p-4 pl-2">
               {anchorsComputed
                 .filter(({depth}) => depth === 2)
                 .map(({url, title}) => (
@@ -645,11 +645,11 @@ export default function Layout({children}) {
                     <Link
                       href={url}
                       className={cn(
-                        'block truncate w-full text-lg py-1 px-4 rounded-lg',
+                        'block w-full truncate rounded-lg py-1 px-4 text-lg',
                         {
-                          'bg-gray-800 dark:bg-purple-300/10 text-gray-50 font-bold':
+                          'bg-gray-800 font-bold text-gray-50 dark:bg-purple-300/10':
                             hash === url,
-                          'dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
+                          'hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                             hash !== url,
                         }
                       )}
@@ -667,11 +667,11 @@ export default function Layout({children}) {
                             <Link
                               href={url}
                               className={cn(
-                                'block text-md truncate py-1 px-4 ml-4 border-l border-gray-700 w-[calc(100% - 1rem)] rounded-tr-md rounded-br-md',
+                                'text-md w-[calc(100% - 1rem)] ml-4 block truncate rounded-tr-md rounded-br-md border-l border-gray-700 py-1 px-4',
                                 {
-                                  'bg-gray-800 text-gray-50 dark:bg-purple-300/10 dark:text-gray-100 font-bold':
+                                  'bg-gray-800 font-bold text-gray-50 dark:bg-purple-300/10 dark:text-gray-100':
                                     hash === url,
-                                  'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
+                                  'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                                     hash !== url,
                                 }
                               )}
@@ -688,14 +688,14 @@ export default function Layout({children}) {
         </aside>
         <div
           ref={articleRef}
-          className="container px-4 lg:px-8 my-16 mt-24 md:py-8 lg:py-16 md:my-0 mx-auto [max-width:70ch] xl:[max-width:75ch] [outline:0]"
+          className="container my-16 mx-auto mt-24 px-4 [max-width:70ch] [outline:0] md:my-0 md:py-8 lg:px-8 lg:py-16 xl:[max-width:75ch]"
         >
           <SkipNavContent />
           <article
             className="
-              prose prose-floating prose-pre:bg-gray-50 prose-pre:shadow 
-              prose-code:shadow dark:prose-pre:bg-gray-800 prose-code:bg-gray-50
-              dark:prose-code:bg-gray-700/70 dark:prose-invert md:prose-md
+              prose-floating prose prose-code:bg-gray-50 prose-code:shadow 
+              prose-pre:bg-gray-50 prose-pre:shadow dark:prose-invert
+              dark:prose-code:bg-gray-700/70 dark:prose-pre:bg-gray-800 md:prose-md
               lg:prose-lg 
             "
           >
@@ -709,9 +709,9 @@ export default function Layout({children}) {
           )}
         </div>
       </div>
-      <footer className="text-center text-gray-500 py-8 px-4 md:pl-64 xl:px-[22rem] lg:pr-0 lg:px-72 xl:pr-72">
+      <footer className="py-8 px-4 text-center text-gray-500 md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72">
         <p>© {new Date().getFullYear()} • MIT License</p>
-        <p className="text-sm mt-4">
+        <p className="mt-4 text-sm">
           Icons made by Freepik and authors from{' '}
           <a
             className="text-blue-400"
