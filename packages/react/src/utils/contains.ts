@@ -11,16 +11,17 @@ export function contains(parent?: Element | null, child?: Element | null) {
   if (parent.contains(child)) {
     return true;
   }
+
   // then fallback to custom implementation with Shadow DOM support
-  else if (rootNode && isShadowRoot(rootNode)) {
+  if (rootNode && isShadowRoot(rootNode)) {
     let next = child;
-    do {
-      if (next && parent === next) {
+    while (next) {
+      if (parent === next) {
         return true;
       }
       // @ts-ignore
       next = next.parentNode || next.host;
-    } while (next);
+    }
   }
 
   // Give up, the result is false
