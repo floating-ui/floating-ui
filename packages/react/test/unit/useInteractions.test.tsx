@@ -82,6 +82,24 @@ test('does not break props that start with `on`', () => {
   render(<App />);
 });
 
+test('does not break props that return values', () => {
+  function App() {
+    const {getReferenceProps} = useInteractions([]);
+
+    const props = getReferenceProps({
+      // @ts-expect-error
+      onyx: () => 'returned value',
+    });
+
+    // @ts-expect-error
+    expect(props.onyx()).toBe('returned value');
+
+    return null;
+  }
+
+  render(<App />);
+});
+
 test('prop getters are memoized', () => {
   function App() {
     const [open, setOpen] = useState(false);
