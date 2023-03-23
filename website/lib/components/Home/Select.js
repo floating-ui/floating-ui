@@ -72,6 +72,7 @@ export function SelectDemo() {
 
   const listRef = useRef([]);
   const listContentRef = useRef(options);
+  const isTypingRef = useRef(false);
 
   const click = useClick(context, {event: 'mousedown'});
   const dismiss = useDismiss(context);
@@ -89,6 +90,9 @@ export function SelectDemo() {
     activeIndex,
     selectedIndex,
     onMatch: isOpen ? setActiveIndex : setSelectedIndex,
+    onTypingChange(isTyping) {
+      isTypingRef.current = isTyping;
+    },
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} =
@@ -111,18 +115,15 @@ export function SelectDemo() {
         Select balloon color
       </label>
       <Button
+        // Safari VoiceOver cuts off the last letter of the textContent when a
+        // native button has role="combobox" :|
+        div
         ref={refs.setReference}
         aria-labelledby="select-label"
         aria-autocomplete="none"
         data-open={isOpen ? '' : undefined}
         className="flex w-[10rem] items-center gap-2 rounded bg-gray-100/75"
         {...getReferenceProps()}
-        // The default role for the reference using a "listbox"
-        // is a "combobox", but Safari has a bug with VoiceOver
-        // where it cuts off letters when announcing the button's
-        // content when it has that role.
-        // This overrides the one from the props above.
-        role={undefined}
       >
         <ColorSwatch
           color={selectedItemLabel?.toLocaleLowerCase()}
@@ -174,9 +175,16 @@ export function SelectDemo() {
                     // Only if not using typeahead.
                     if (
                       event.key === ' ' &&
-                      !context.dataRef.current.typing
+                      !isTypingRef.current
                     ) {
                       event.preventDefault();
+                    }
+                  },
+                  onKeyUp(event) {
+                    if (
+                      event.key === ' ' &&
+                      !isTypingRef.current
+                    ) {
                       handleSelect(i);
                     }
                   },

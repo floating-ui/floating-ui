@@ -5,16 +5,23 @@ export const Button = React.forwardRef(function Button(
   props,
   ref
 ) {
-  return (
-    <button
-      {...props}
-      ref={ref}
-      className={twMerge(
-        'cursor-default bg-gray-100/75 dark:bg-gray-800/95 rounded p-2 px-3',
-        'transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-600',
-        'data-[open]:bg-gray-200/50 dark:data-[open]:bg-gray-600',
-        props.className
-      )}
-    />
+  const className = twMerge(
+    'cursor-default rounded bg-gray-100/75 p-2 px-3 dark:bg-gray-800/95',
+    'transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-600',
+    'data-[open]:bg-gray-200/50 dark:data-[open]:bg-gray-600 select-none',
+    props.className
   );
+
+  if (props.div) {
+    return (
+      <div
+        {...props}
+        ref={ref}
+        className={className}
+        tabIndex={0}
+      />
+    );
+  }
+
+  return <button {...props} ref={ref} className={className} />;
 });
