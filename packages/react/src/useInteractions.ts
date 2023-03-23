@@ -30,7 +30,10 @@ function mergeProps(
               map.get(key)?.push(value);
 
               acc[key] = (...args: unknown[]) => {
-                map.get(key)?.forEach((fn) => fn(...args));
+                return map
+                  .get(key)
+                  ?.map((fn) => fn(...args))
+                  .find((val) => val !== undefined);
               };
             }
           } else {
