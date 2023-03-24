@@ -1,7 +1,12 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {
+  ContextData,
+  ElementProps,
+  FloatingContext,
+  ReferenceType,
+} from '../types';
 import {contains} from '../utils/contains';
 import {getTarget} from '../utils/getTarget';
 import {getWindow, isMouseLikePointerType} from '../utils/is';
@@ -11,6 +16,7 @@ function createVirtualElement(
   domRef: React.MutableRefObject<Element | null>,
   data: {
     axis: 'x' | 'y' | 'both';
+    dataRef: React.MutableRefObject<ContextData>;
     pointerType: string | undefined;
     x: number | null;
     y: number | null;
@@ -32,6 +38,10 @@ function createVirtualElement(
 
       const isXAxis = data.axis === 'x' || data.axis === 'both';
       const isYAxis = data.axis === 'y' || data.axis === 'both';
+      const canTrackCursorOnAutoUpdate =
+        ['mouseenter', 'mousemove'].includes(
+          data.dataRef.current.openEvent?.type || ''
+        ) && data.pointerType !== 'touch';
 
       let width = domRect.width;
       let height = domRect.height;
@@ -51,14 +61,12 @@ function createVirtualElement(
       width = 0;
       height = 0;
 
-      if (!isAutoUpdateEvent || data.pointerType !== 'touch') {
+      if (!isAutoUpdateEvent || canTrackCursorOnAutoUpdate) {
         width = data.axis === 'y' ? domRect.width : 0;
         height = data.axis === 'x' ? domRect.height : 0;
         x = isXAxis && data.x != null ? data.x : x;
         y = isYAxis && data.y != null ? data.y : y;
-      }
-
-      if (isAutoUpdateEvent && data.pointerType === 'touch') {
+      } else if (isAutoUpdateEvent && !canTrackCursorOnAutoUpdate) {
         height = data.axis === 'x' ? domRect.height : height;
         width = data.axis === 'y' ? domRect.width : width;
       }
@@ -123,6 +131,7 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
         x,
         y,
         axis,
+        dataRef,
         pointerType,
       })
     );
