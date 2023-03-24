@@ -46,8 +46,7 @@ const unsetSides = {
 // Round the offsets to the nearest suitable subpixel based on the DPR.
 // Zooming can change the DPR, but it seems to report a value that will
 // cleanly divide the values into the appropriate subpixels.
-function roundOffsetsByDPR({ x, y }): Offsets {
-  const win: Window = window;
+function roundOffsetsByDPR({ x, y }, win: Window): Offsets {
   const dpr = win.devicePixelRatio || 1;
 
   return {
@@ -150,7 +149,7 @@ export function mapToStyles({
 
   ({ x, y } =
     roundOffsets === true
-      ? roundOffsetsByDPR({ x, y })
+      ? roundOffsetsByDPR({ x, y }, getWindow(popper))
       : { x, y });
 
   if (gpuAcceleration) {
