@@ -2,7 +2,7 @@ import * as React from 'react';
 import {twMerge} from 'tailwind-merge';
 
 export const Button = React.forwardRef(function Button(
-  props,
+  {div, ...props},
   ref
 ) {
   const className = twMerge(
@@ -12,7 +12,7 @@ export const Button = React.forwardRef(function Button(
     props.className
   );
 
-  if (props.div) {
+  if (div) {
     return (
       <div
         {...props}

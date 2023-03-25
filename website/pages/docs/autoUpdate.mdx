@@ -1,14 +1,13 @@
 # autoUpdate
 
-Depending on the DOM layout, the floating element may detach from
-the reference element if the user scrolls or resizes the screen,
-so its position may need to be updated again to ensure it stays
-anchored.
+The floating element can detach from the reference element if the
+user scrolls or resizes the screen, so its position needs to be
+updated again to ensure it stays anchored.
 
 To solve this, `autoUpdate(){:js}` adds listeners that will
 automatically call an update function which invokes
 `computePosition(){:js}` when necessary. Updates typically take
-only 1ms, well within the 120 fps frame budget.
+only ~1ms.
 
 ```js
 autoUpdate(referenceEl, floatingEl, update, options);

@@ -7,20 +7,26 @@ to the reference element.
 <div className="flex flex-col gap-4">
   <Chrome center className="h-96">
     <Floating arrow>
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
 
+This is useful to add an additional visual cue to the floating
+element about which element it is referring to.
+
+<Notice>
+  If you're using React, the
+  [`FloatingArrow`](/docs/FloatingArrow) component renders out a
+  customizable arrow element and applies the positioning styles
+  for you.
+</Notice>
+
+## Usage
+
 The layout box of the arrow element should be a square with equal
 width and height. Inner or pseudo-elements may have a different
 aspect ratio.
-
-If you're using React, the [`FloatingArrow`](/docs/FloatingArrow)
-component renders out a customizable arrow element and applies
-the positioning styles for you.
-
-## Usage
 
 Given an arrow element inside your floating element:
 

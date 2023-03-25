@@ -6,20 +6,6 @@
     'Helvetica Neue', sans-serif;
 }
 
-html[data-theme='dark'] {
-  --docsearch-modal-background: #424457;
-  --docsearch-footer-background: #424457;
-  --docsearch-searchbox-focus-background: #22252c;
-  --docsearch-hit-background: #22252c;
-  --docsearch-modal-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  --docsearch-highlight-color: #a7d0ff;
-  --docsearch-logo-color: #9aa0b1;
-  --docsearch-key-gradient: none;
-  --docsearch-key-shadow: none;
-  --docsearch-searchbox-shadow: inset 0 0 0 1px #a7d0ff;
-  --docsearch-hit-active-color: black;
-}
-
 code {
   -webkit-font-smoothing: auto;
   -moz-osx-font-smoothing: auto;
@@ -30,51 +16,34 @@ code {
 }
 
 [data-reach-skip-nav-link]:focus {
-  color: black;
-  z-index: 60;
-  position: fixed;
-  margin: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
+  @apply fixed z-50 m-3 bg-white/90 text-black backdrop-blur;
 }
 
 .shiki {
-  position: relative;
+  @apply relative;
 }
 
 ::selection {
-  background-color: #60a5fa;
-  color: black;
+  @apply bg-blue-500 text-white;
 }
 
 code ::selection {
-  background-color: rgba(200, 200, 255, 0.25);
-  color: inherit;
+  @apply bg-blue-500/20 text-inherit;
 }
 
 .not-prose pre {
-  background: white;
-  padding: 1em;
-  border-radius: 0.25rem;
-  overflow-x: auto;
-  line-height: 2;
-  font-size: 0.9rem;
+  @apply overflow-x-auto rounded bg-white p-4 text-[0.9rem] leading-loose;
 }
 
 .not-prose :not(pre) > code {
-  background: white;
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.9rem;
-  overflow-x: auto;
+  @apply overflow-x-auto rounded bg-white py-[0.35rem] px-[0.5rem] text-[0.9rem];
 }
 
 .DocSearch-Button,
 .DocSearch-Button:hover,
 .DocSearch-Button:focus {
-  background: none;
+  @apply bg-white bg-none text-black;
   box-shadow: 0 0 0 1px black;
-  color: black;
 }
 
 .DocSearch-Button:hover,
@@ -83,11 +52,11 @@ code ::selection {
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
-  color: black;
+  @apply text-black;
 }
 
 .DocSearch-Button:hover .DocSearch-Search-Icon {
-  color: black;
+  @apply text-black;
 }
 
 .DocSearch-Container {
@@ -95,45 +64,58 @@ code ::selection {
   backdrop-filter: blur(5px) saturate(120%);
 }
 
-.DocSearch-Hit-source {
-  color: white;
-}
-
-.DocSearch-Hit-title {
-  color: white;
-}
-
 .DocSearch-Button-Keys {
-  visibility: hidden;
+  @apply hidden;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
+    --docsearch-modal-background: #424457;
+    --docsearch-footer-background: #424457;
+    --docsearch-text-color: var(--tw-prose-invert-body);
+    --docsearch-searchbox-focus-background: #22252c;
+    --docsearch-hit-background: #22252c;
+    --docsearch-modal-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    --docsearch-highlight-color: #a7d0ff;
+    --docsearch-logo-color: #9aa0b1;
+    --docsearch-key-gradient: none;
+    --docsearch-key-shadow: none;
+    --docsearch-searchbox-shadow: inset 0 0 0 1px #a7d0ff;
+    --docsearch-hit-active-color: black;
+    --docsearch-hit-shadow: none;
+    --docsearch-hit-color: var(--tw-prose-invert-body);
+    --docsearch-footer-shadow: none;
+  }
+
+  ::selection {
+    @apply bg-blue-500/30 text-inherit;
+  }
+
+  code ::selection {
+    @apply bg-blue-500/30;
   }
 
   :not(pre) > code {
-    filter: none;
+    @apply filter-none;
   }
 
-  .DocSearch-Button {
-    box-shadow: 0 0 0 1px rgba(225, 200, 255, 0.4);
-    color: rgba(225, 200, 255, 0.6);
-  }
-
+  .DocSearch-Button,
   .DocSearch-Button:hover,
   .DocSearch-Button:focus {
-    background: none;
-    box-shadow: 0 0 0 2px rgba(225, 200, 255, 0.8);
-    color: rgba(225, 200, 255, 0.8);
+    @apply bg-gray-1000/95 text-purple-200/50 shadow outline outline-purple-200/10 backdrop-blur-lg;
+  }
+
+  .DocSearch-Button:hover {
+    @apply text-purple-200/80 outline-purple-300/30;
   }
 
   .DocSearch-Button .DocSearch-Search-Icon {
-    color: rgba(225, 200, 255, 0.4);
+    @apply text-inherit;
   }
 
   .DocSearch-Button:hover .DocSearch-Search-Icon {
-    color: rgba(225, 200, 255, 0.8);
+    @apply text-inherit;
   }
 
   .DocSearch-Button:focus .DocSearch-Search-Icon {
@@ -142,7 +124,7 @@ code ::selection {
 
   .not-prose :not(pre) > code,
   .not-prose pre {
-    background: #30303e;
+    @apply bg-gray-700;
   }
 }
 

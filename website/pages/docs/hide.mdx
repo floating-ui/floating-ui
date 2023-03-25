@@ -1,8 +1,7 @@
 # hide
 
 A data provider that allows you to hide the floating element in
-applicable situations, usually when it's not within the same
-clipping context as the reference element.
+applicable situations.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -16,14 +15,20 @@ clipping context as the reference element.
       portaled
       middleware={[{name: 'offset', options: 5}, {name: 'hide'}]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
 
-In the above example, the floating element turns red once it has
-`escaped{:.objectKey}` the reference element's clipping context.
-Once the reference element is hidden, it hides itself.
+This is useful for situations where you want to hide the floating
+element because it appears detached from the reference element
+(or attached to nothing).
+
+<Notice>
+  In the above example, the floating element turns red once it has
+  `escaped{:.objectKey}` the reference element's clipping context.
+  Once the reference element is hidden, it hides itself.
+</Notice>
 
 ## Usage
 

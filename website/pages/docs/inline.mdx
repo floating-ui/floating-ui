@@ -4,10 +4,6 @@ A placement modifier that improves positioning for inline
 reference elements that span over multiple lines, such as
 hyperlinks or range selections.
 
-This is useful as the default positioning using
-`getBoundingClientRect(){:js}` may appear "detached" when
-measuring over the bounding box.
-
 In the following examples, the `placement{:.objectKey}` is
 `'top'{:js}`.
 
@@ -32,6 +28,10 @@ With `inline(){:js}`:
   className="rounded-lg shadow"
   draggable={false}
 />
+
+This is useful as the default positioning using
+`getBoundingClientRect(){:js}` may appear "detached" when
+measuring over the bounding box.
 
 ## Usage
 

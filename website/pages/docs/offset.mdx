@@ -6,22 +6,21 @@ the specified axes.
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
     <Floating middleware={[{name: 'offset', options: 0}]}>
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         0px
       </div>
     </Floating>
     <Floating middleware={[{name: 'offset', options: 10}]}>
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         10px
       </div>
     </Floating>
   </div>
 </Chrome>
 
-This enables you to not only add distance between the reference
-and floating elements, but also
-[create a wide range of custom placements](/docs/offset#creating-custom-placements)
-not provided by the library.
+This is useful for adding distance between the reference and
+floating element, or for creating
+[custom placements](/docs/offset#creating-custom-placements).
 
 ## Usage
 
@@ -88,7 +87,7 @@ offset({
 Here's how it looks on the four sides:
 
 <Chrome center className="pt-16 pb-24" tall>
-  <div className="flex flex-col md:flex-row gap-4 mt-4">
+  <div className="mt-4 flex flex-col gap-4 md:flex-row">
     <Floating
       placement="top"
       middleware={[
@@ -98,7 +97,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         top
       </div>
     </Floating>
@@ -111,12 +110,12 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         bottom
       </div>
     </Floating>
   </div>
-  <div className="flex flex-col md:flex-row gap-4">
+  <div className="flex flex-col gap-4 md:flex-row">
     <Floating
       placement="left"
       middleware={[
@@ -126,7 +125,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         left
       </div>
     </Floating>
@@ -139,7 +138,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         right
       </div>
     </Floating>
@@ -163,7 +162,7 @@ offset({
 Here's how it looks on the four sides:
 
 <Chrome center className="pt-16 pb-24" tall>
-  <div className="flex flex-col md:flex-row gap-4 mt-4">
+  <div className="mt-4 flex flex-col gap-4 md:flex-row">
     <Floating
       placement="top"
       middleware={[
@@ -173,7 +172,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         top
       </div>
     </Floating>
@@ -186,12 +185,12 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         bottom
       </div>
     </Floating>
   </div>
-  <div className="flex flex-col md:flex-row gap-4">
+  <div className="flex flex-col gap-4 md:flex-row">
     <Floating
       placement="left"
       middleware={[
@@ -201,7 +200,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         left
       </div>
     </Floating>
@@ -214,7 +213,7 @@ Here's how it looks on the four sides:
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         right
       </div>
     </Floating>
@@ -243,7 +242,7 @@ offset({
 Here's how it differentiates from `crossAxis{:.objectKey}`:
 
 <Chrome center className="pt-16 pb-24" tall>
-  <div className="flex gap-4 flex-col md:flex-row mt-4">
+  <div className="mt-4 flex flex-col gap-4 md:flex-row">
     <Floating
       placement="top-start"
       middleware={[
@@ -253,7 +252,7 @@ Here's how it differentiates from `crossAxis{:.objectKey}`:
         },
       ]}
     >
-      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-start <br />{' '}
         <strong className="text-inherit">(crossAxis)</strong>
       </div>
@@ -267,13 +266,13 @@ Here's how it differentiates from `crossAxis{:.objectKey}`:
         },
       ]}
     >
-      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-end <br />{' '}
         <strong className="text-inherit">(crossAxis)</strong>
       </div>
     </Floating>
   </div>
-  <div className="flex gap-4 flex-col md:flex-row gap-4">
+  <div className="flex flex-col gap-4 md:flex-row">
     <Floating
       placement="top-start"
       middleware={[
@@ -283,7 +282,7 @@ Here's how it differentiates from `crossAxis{:.objectKey}`:
         },
       ]}
     >
-      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-start <br />{' '}
         <strong className="text-inherit">(alignmentAxis)</strong>
       </div>
@@ -297,7 +296,7 @@ Here's how it differentiates from `crossAxis{:.objectKey}`:
         },
       ]}
     >
-      <div className="grid text-center place-items-center w-48 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-48 place-items-center border-2 border-dashed border-gray-1000 text-center">
         top-end <br />{' '}
         <strong className="text-inherit">(alignmentAxis)</strong>
       </div>
@@ -340,7 +339,7 @@ computePosition(referenceEl, floatingEl, {
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed">
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         10px
       </div>
     </Floating>
@@ -377,7 +376,7 @@ computePosition(referenceEl, floatingEl, {
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 mx-auto border-2 border-gray-1000 border-dashed" />
+      <div className="mx-auto grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </div>
 </Chrome>

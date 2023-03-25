@@ -1,14 +1,16 @@
 # computePosition
 
-This is an async function that computes and returns x and y
-coordinates to position a floating element next to a reference
-element. [`autoUpdate`](/docs/autoUpdate) is used with it to
-ensure the floating element remains "anchored" to its reference
+An async function that computes and returns `x` and `y`
+coordinates to position a floating element next to another
 element.
+
+It runs only once — [`autoUpdate`](/docs/autoUpdate) is used with
+it to ensure the floating element remains anchored by continually
+re-running the calculation as necessary.
 
 ## Usage
 
-The function works with two elements:
+At its most basic, the function accepts two elements:
 
 - **Reference element** — also known as the anchor element, this
   is the element that is being _referred_ to for positioning.
@@ -101,6 +103,25 @@ cause incorrect measurements.
 This lets you place the floating element anywhere in the DOM tree
 and have it be positioned correctly, regardless of the CSS styles
 of any ancestor containers.
+
+## Anchoring
+
+Since `computePosition(){:js}` is only a single function call, it
+only positions the floating element once.
+
+To ensure it remains anchored to the reference element in a
+variety of scenarios, such as when resizing or scrolling, wrap
+the calculation in [`autoUpdate`](/docs/autoUpdate):
+
+```js
+import {computePosition, autoUpdate} from '@floating-ui/dom';
+
+autoUpdate(referenceEl, floatingEl, () => {
+  computePosition(referenceEl, floatingEl).then(({x, y}) => {
+    // ...
+  });
+});
+```
 
 ## Options
 
@@ -313,10 +334,3 @@ The CSS position property to use.
 ### middlewareData
 
 The data returned by any middleware used.
-
-## Updating
-
-Since `computePosition(){:js}` is only a single function call, it
-only positions your element once. To ensure the floating element
-remains anchored to the reference element in a variety of
-scenarios, use the [`autoUpdate`](/docs/autoUpdate) utility.

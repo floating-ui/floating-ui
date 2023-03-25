@@ -140,7 +140,7 @@ library.
 ## Updating
 
 The position is only calculated **once** on render, or when the
-`reference{:.const}` or `floating{:.const}` elements change.
+`reference` or `floating` elements change.
 
 To ensure the floating element remains anchored to its reference
 element in a variety of scenarios without detaching — such as
@@ -338,7 +338,7 @@ test('something', async () => {
 
 ## Narrow reference type
 
-Because the `reference{:.const}` callback ref accepts a
+Because the `refs.setReference{:js}` callback ref accepts a
 [virtual element](/docs/virtual-elements), you may need to narrow
 the type when performing DOM operations on the ref:
 
@@ -392,9 +392,9 @@ understand the basics.
 
 ## Interactions
 
-<div className="flex justify-center md:justify-between items-center flex-wrap gap-2 mx-auto">
+<div className="mx-auto flex flex-wrap items-center justify-center gap-2 md:justify-between">
   <img
-    className="relative sm:left-[5rem] top-[1rem] md:top-0 md:left-0 inline-block card"
+    className="card relative top-[1rem] inline-block sm:left-[5rem] md:top-0 md:left-0"
     src="/all-inputs.png"
     alt="Designed for all inputs"
     width={335}
@@ -402,7 +402,7 @@ understand the basics.
     loading="lazy"
   />
   <img
-    className="relative sm:left-[-5rem] top-[-1rem] md:left-0 md:top-0 inline-block card"
+    className="card relative top-[-1rem] inline-block sm:left-[-5rem] md:left-0 md:top-0"
     src="/safe-cursor-polygon.png"
     alt="Safe cursor polygon"
     width={335}
@@ -519,11 +519,11 @@ called, they return an object of props like `onFocus{:.keyword}`.
 All custom event listener props, such as `onClick{:.keyword}`,
 `onKeyDown{:.keyword}` and more you pass to the element should be
 specified inside the prop getter. They perform merging of their
-own internal event listeners and your own without overriding
+own internal event listeners and your own without overwriting
 them.
 
 ```js
-// ❌ Your `onClick` can be overridden:
+// ❌ Your `onClick` can be overwritten:
 <div
   onClick={() => {
     // Potentially overwritten by the props below.

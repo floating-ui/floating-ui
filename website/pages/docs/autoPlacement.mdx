@@ -1,8 +1,7 @@
 # autoPlacement
 
 A visibility optimizer that chooses the placement that has the
-most space available automatically, without needing to specify a
-preferred placement.
+most space available automatically.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -19,10 +18,14 @@ preferred placement.
         },
       ]}
     >
-      <div className="grid place-items-center w-8 h-8 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-8 w-8 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
+
+This is useful when you don't know which placement will be best
+for the floating element, or don't want to have to explicitly
+specify it.
 
 ## Usage
 

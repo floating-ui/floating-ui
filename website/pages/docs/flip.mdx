@@ -1,8 +1,8 @@
 # flip
 
 A visibility optimizer that changes the placement of the floating
-element in order to keep it in view. By default, only the
-opposite placement is tried.
+element in order to keep it in view, with the ability to flip to
+any placement.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -12,17 +12,15 @@ opposite placement is tried.
     className="h-96"
   >
     <Floating middleware={[{name: 'flip'}]}>
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed">
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
         Default
       </div>
     </Floating>
   </Chrome>
 </div>
 
-It has the ability to flip to any placement, not just the
-opposite one. You can use a series of "fallback" placements,
-where each placement is progressively tried until the one that
-fits can be used.
+This is useful to prevent the floating element from overflowing
+on the main axis of its placement.
 
 ## Usage
 
@@ -88,7 +86,7 @@ flip({
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
@@ -258,7 +256,7 @@ In each of the following demos, the `placement{:.objectKey}` is
       },
     ]}
   >
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed mt-12" />
+    <div className="mt-12 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
   <p>Notice that it prefers `top` if it doesn't fit.</p>
 </Chrome>
@@ -366,7 +364,7 @@ In the above example, if `placement{:.objectKey}` is set to
         },
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>

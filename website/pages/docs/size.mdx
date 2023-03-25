@@ -1,8 +1,7 @@
 # size
 
 A visibility optimizer and data provider that allows you to
-change the size of the floating element. For instance, you can
-resize it so it doesn't overflow the available space:
+change the size of the floating element.
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -19,16 +18,21 @@ resize it so it doesn't overflow the available space:
       }}
       middleware={[{name: 'size', options: {padding: 5}}]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
 
-If your floating element's content cannot be resized such as in
-the example, you can make the floating element scrollable with
-`overflow: scroll{:sass}` (or `auto{:.param}`).
+This is useful for long dropdowns that become scrollable without
+specifying a fixed height, or matching the floating element's
+width with its reference element.
 
 ## Usage
+
+If your floating element's content cannot be resized such as in
+the example, you can make the floating element scrollable with
+`overflow: scroll{:sass}` (or `auto{:.param}`). Ensure your CSS
+is using `box-sizing: border-box{:sass}`!
 
 ```js
 import {computePosition, size} from '@floating-ui/dom';
@@ -47,8 +51,6 @@ computePosition(referenceEl, floatingEl, {
   ],
 });
 ```
-
-Ensure your CSS is using `box-sizing: border-box{:sass}`!
 
 ## Options
 
@@ -158,7 +160,7 @@ const middleware = [
         {name: 'size', options: {padding: 5}},
       ]}
     >
-      <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed" />
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>

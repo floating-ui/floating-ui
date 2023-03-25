@@ -27,6 +27,7 @@ export function useTooltip({
   placement = 'top',
   open: controlledOpen,
   onOpenChange: setControlledOpen,
+  noRest,
 } = {}) {
   const {delay, isInstantPhase} = useDelayGroupContext();
   const [uncontrolledOpen, setUncontrolledOpen] =
@@ -62,7 +63,7 @@ export function useTooltip({
   const hover = useHover(context, {
     move: false,
     enabled: controlledOpen == null,
-    restMs: isInstantPhase ? 0 : 150,
+    restMs: isInstantPhase || noRest ? 0 : 150,
     delay,
   });
   const focus = useFocus(context, {
@@ -190,8 +191,8 @@ export const TooltipContent = React.forwardRef(
           <div
             ref={ref}
             className={classNames(
-              'bg-gray-600 shadow-lg text-white',
-              'rounded p-2 text-sm pointer-events-none cursor-default',
+              'bg-gray-600 text-white shadow-lg',
+              'pointer-events-none cursor-default rounded p-2 text-sm',
               props.className
             )}
             style={{

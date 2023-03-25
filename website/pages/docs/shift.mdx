@@ -8,12 +8,12 @@ specified axes in order to keep it in view.
     content="I am wider than my reference element"
     middleware={[{name: 'shift'}]}
   >
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
+    <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
 </Chrome>
 
-In the above example, the placement is set to `'bottom'{:js}`,
-but is allowed to be shifted to prevent overflow.
+This is useful for preventing overflow while maintaining the
+desired placement as best as possible.
 
 ## Usage
 
@@ -60,7 +60,7 @@ shift({
     content="I am wider than my reference element"
     middleware={[{name: 'shift', options: {mainAxis: false}}]}
   >
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
+    <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
 </Chrome>
 
@@ -95,7 +95,7 @@ shift({
       },
     ]}
   >
-    <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed m-4" />
+    <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
 </Chrome>
 

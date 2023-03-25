@@ -529,45 +529,30 @@ export default function Layout({children}) {
           )}
           ref={navRef}
         >
-          <div
-            className="absolute -z-1 hidden h-[25rem] w-full dark:block"
-            style={{
-              background: `linear-gradient(
-                195deg,
-                hsl(348deg 10% 90%) 0%,
-                hsl(351deg 31% 80%) 2%,
-                hsl(354deg 36% 69%) 6%,
-                hsl(343deg 28% 57%) 12%,
-                hsl(326deg 24% 44%) 19%,
-                hsl(295deg 20% 31%) 27%,
-                hsl(256deg 16% 22%) 38%,
-                hsl(232deg 12% 14%) 50%,
-                hsl(232deg 13% 14%) 68%,
-                hsl(233deg 15% 14%) 100%
-              )`,
-            }}
-          />
+          <div className="fixed -z-1 h-[25rem] w-72 bg-light-nav-gradient dark:bg-dark-nav-gradient md:w-64 lg:w-72 xl:w-[22rem]" />
           <div className="container mx-auto mb-8">
-            <Link href="/">
-              <Logo className="mx-auto mt-2 mb-1 h-28" />
-            </Link>
+            <div className="sticky top-0 z-10 bg-white/30 pt-2 backdrop-blur-sm dark:bg-transparent">
+              <Link href="/">
+                <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
+              </Link>
+              <div className="relative mr-4 flex flex-col items-stretch py-4 !pb-0 xl:m-0 xl:px-4 xl:pr-8">
+                <DocSearch
+                  appId="0E85PIAI2P"
+                  indexName="floating-ui"
+                  apiKey="51e39a76760916075e22d9b217f4434f"
+                />
+              </div>
+            </div>
             {navOpen && (
               <button
                 onClick={() => setNavOpen(false)}
-                className="absolute top-2 right-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900"
+                className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow"
                 aria-label="Close"
               >
                 <span className="relative top-[-1px]">×</span>
               </button>
             )}
-            <div className="my-4 mr-4 flex flex-col items-stretch xl:m-0 xl:p-4 xl:pr-8">
-              <DocSearch
-                appId="0E85PIAI2P"
-                indexName="floating-ui"
-                apiKey="51e39a76760916075e22d9b217f4434f"
-              />
-            </div>
-            <ul className="px-6 text-lg xl:px-12">
+            <ul className="mt-4 px-6 text-lg xl:px-12">
               {nav.map(
                 ({url, title, icon, depth, mono, hide}) =>
                   !hide && (
@@ -602,9 +587,9 @@ export default function Layout({children}) {
                           {icon && (
                             <span
                               className={cn(
-                                'h-6 w-6 bg-gray-800 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] dark:bg-gray-100',
+                                'h-6 w-6 bg-gray-700 [min-width:1.5rem] [mask-size:1.5rem] [mask-position:center] dark:bg-gray-100',
                                 {
-                                  'bg-gray-100 dark:bg-gradient-to-r dark:from-red-400 dark:to-pink-200':
+                                  'bg-gradient-to-r from-red-400 to-pink-200':
                                     pathname === url,
                                 }
                               )}
@@ -632,7 +617,7 @@ export default function Layout({children}) {
             </ul>
           </div>
         </nav>
-        <aside className="fixed right-0 top-0 hidden w-72 overflow-y-auto pt-8 [max-height:100vh] xl:block">
+        <aside className="fixed right-0 top-0 hidden w-72 pt-8 [max-height:100vh] xl:block">
           <nav>
             <h4 className="text-md ml-6 text-gray-500">
               On this page
