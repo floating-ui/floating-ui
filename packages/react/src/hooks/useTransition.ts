@@ -12,7 +12,7 @@ const camelCaseToKebabCase = (str: string): string =>
     ($, ofs) => (ofs ? '-' : '') + $.toLowerCase()
   );
 
-function execWithArgs<Value extends object | undefined, SidePlacement>(
+function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
   valueOrFn: Value | ((args: SidePlacement) => Value),
   args: SidePlacement
 ): Value {
@@ -140,10 +140,10 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const openDuration = (isNumberDuration ? duration : duration.open) || 0;
   const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
 
-  const [styles, setStyles] = React.useState<React.CSSProperties>({
-    ...execWithArgs(unstable_common, fnArgs),
-    ...execWithArgs(unstable_initial, fnArgs),
-  });
+  const [styles, setStyles] = React.useState<React.CSSProperties>(() => ({
+    ...execWithArgsOrReturn(unstable_common, fnArgs),
+    ...execWithArgsOrReturn(unstable_initial, fnArgs),
+  }));
 
   const {isMounted, status} = useTransitionStatus(context, {duration});
   const initialRef = useLatestRef(unstable_initial);
@@ -152,11 +152,11 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const commonRef = useLatestRef(unstable_common);
 
   useLayoutEffect(() => {
-    const initialStyles = execWithArgs(initialRef.current, fnArgs);
-    const closeStyles = execWithArgs(closeRef.current, fnArgs);
-    const commonStyles = execWithArgs(commonRef.current, fnArgs);
+    const initialStyles = execWithArgsOrReturn(initialRef.current, fnArgs);
+    const closeStyles = execWithArgsOrReturn(closeRef.current, fnArgs);
+    const commonStyles = execWithArgsOrReturn(commonRef.current, fnArgs);
     const openStyles =
-      execWithArgs(openRef.current, fnArgs) ||
+      execWithArgsOrReturn(openRef.current, fnArgs) ||
       Object.keys(initialStyles).reduce((acc: Record<string, ''>, key) => {
         acc[key] = '';
         return acc;
