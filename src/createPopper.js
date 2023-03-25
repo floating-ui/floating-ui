@@ -159,6 +159,11 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
 
         let __debug_loops__ = 0;
         for (let index = 0; index < state.orderedModifiers.length; index++) {
+          __debug_loops__ += 1;
+          if (__debug_loops__ > 100) {
+            break;
+          }
+
           if (state.reset === true) {
             state.reset = false;
             index = -1;
