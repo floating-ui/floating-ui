@@ -34,11 +34,6 @@ export const arrow = (options: Options): Middleware => ({
     const {x, y, placement, rects, platform, elements} = state;
 
     if (element == null) {
-      if (__DEV__) {
-        console.warn(
-          'Floating UI: No `element` was passed to the `arrow` middleware.'
-        );
-      }
       return {};
     }
 
