@@ -1,4 +1,5 @@
 import {FloatingDelayGroup} from '@floating-ui/react';
+import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useEffect, useRef, useState} from 'react';
@@ -50,10 +51,22 @@ const b64banner =
 
 function HomePage() {
   const bannerRef = useRef();
+  const logoRef = useRef();
+
+  const [animate, setAnimate] = useState(true);
   const [hideBanner, setHideBanner] = useState(true);
 
   useEffect(() => {
     bannerRef.current.src = '/floating-ui.jpg';
+  }, []);
+
+  useEffect(() => {
+    const logo = logoRef.current;
+    const io = new IntersectionObserver(([entry]) => {
+      setAnimate(entry.isIntersecting);
+    });
+    io.observe(logo);
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -68,12 +81,15 @@ function HomePage() {
       <header className="relative mb-12 overflow-hidden bg-gray-900 from-gray-700 to-gray-800 pb-16">
         <div className="container mx-auto max-w-screen-xl pt-16 text-center">
           <svg
+            ref={logoRef}
             width="140"
             height="230"
             viewBox="0 0 300 467"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="relative z-10 mx-auto animate-float"
+            className={cn('relative z-10 mx-auto', {
+              'animate-float': animate,
+            })}
             aria-label="Floating UI logo (a cute smiling red balloon)"
           >
             <path
@@ -81,7 +97,9 @@ function HomePage() {
               stroke="black"
               strokeWidth="5"
               strokeLinecap="round"
-              className="animate-string"
+              className={cn({
+                'animate-string': animate,
+              })}
               style={{transformOrigin: '40% 92%'}}
             />
             <path
