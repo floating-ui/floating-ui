@@ -6,11 +6,8 @@ import type {
   RootBoundary,
   SideObject,
 } from './types';
-import {paintDebugRects} from './utils/debugRects';
 import {getSideObjectFromPadding} from './utils/getPaddingObject';
 import {rectToClientRect} from './utils/rectToClientRect';
-
-const DEBUG_RECTS = false;
 
 export interface Options {
   /**
@@ -101,12 +98,6 @@ export async function detectOverflow(
         })
       : rect
   );
-
-  if (__DEV__) {
-    if (DEBUG_RECTS) {
-      paintDebugRects(elementClientRect, clippingClientRect);
-    }
-  }
 
   return {
     top:
