@@ -96,45 +96,6 @@ things like Canvas/WebGL, or other platforms that can run JavaScript.
 npm install @floating-ui/core
 ```
 
-## Package entry points
-
-> Using webpack, Vite, or Parcel? Skip this section as modern bundlers handle
-> this for you.
-
-Floating UI uses `process.env.NODE_ENV` to determine whether your build is in
-development or production mode. This allows us to add console warnings and
-errors during development to help you but ensure they get stripped out in
-production to keep the bundle size small.
-
-This causes an error in Rollup and low/no-build setups. To solve this, Floating
-UI exports browser-ready ES modules. Leverage the "browser" package export
-condition to use these modules.
-
-<details>
-  <summary>Rollup example</summary>
-
-The `browser` option in the `nodeResolve()` plugin will select browser versions
-of packages if available.
-
-```js
-import {nodeResolve} from '@rollup/plugin-node-resolve';
-
-export default {
-  // ...
-  plugins: [
-    nodeResolve({
-      browser: true,
-
-      // Add this line for development config, omit for
-      // production config
-      exportConditions: ['development'],
-    }),
-  ],
-};
-```
-
-</details>
-
 ## Contributing
 
 This project is a monorepo written in TypeScript using npm workspaces. The
