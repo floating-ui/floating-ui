@@ -10,21 +10,11 @@ import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getOffsetParent from './dom-utils/getOffsetParent';
-import getComputedStyle from './dom-utils/getComputedStyle';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
-import validateModifiers from './utils/validateModifiers';
-import uniqueBy from './utils/uniqueBy';
-import getBasePlacement from './utils/getBasePlacement';
 import mergeByName from './utils/mergeByName';
 import detectOverflow from './utils/detectOverflow';
 import { isElement } from './dom-utils/instanceOf';
-import { auto } from './enums';
-
-const INVALID_ELEMENT_ERROR =
-  'Popper: Invalid reference or popper argument provided. They must be either a DOM element or virtual element.';
-const INFINITE_LOOP_ERROR =
-  'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
 const DEFAULT_OPTIONS: OptionsGeneric<any> = {
   placement: 'bottom',

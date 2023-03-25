@@ -10,7 +10,6 @@ import { within } from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
-import { isHTMLElement } from '../dom-utils/instanceOf';
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
