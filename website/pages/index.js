@@ -53,7 +53,7 @@ function HomePage() {
   const [hideBanner, setHideBanner] = useState(true);
 
   useEffect(() => {
-    bannerRef.current.src = '/floating-ui.webp';
+    bannerRef.current.src = '/floating-ui.jpg';
   }, []);
 
   return (
