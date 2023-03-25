@@ -11,6 +11,7 @@ import type {
   FloatingTreeType,
   ReferenceType,
 } from '../types';
+import {contains} from '../utils/contains';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isMouseLikePointerType} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
@@ -256,7 +257,12 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      closeWithDelay();
+      // Allow interactivity without `safePolygon` on touch devices. With a
+      // pointer, a short close delay is an alternative, so it should work
+      // consistently.
+      if (!contains(floating, event.relatedTarget as Element | null)) {
+        closeWithDelay();
+      }
     }
 
     // Ensure the floating element closes after scrolling even if the pointer

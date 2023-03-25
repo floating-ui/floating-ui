@@ -167,3 +167,19 @@ test('continues working after reference is conditionally rendered', () => {
 
   cleanup();
 });
+
+test('mouseleave on the floating element does not close it', async () => {
+  render(<App />);
+
+  fireEvent.mouseEnter(screen.getByRole('button'));
+  await act(async () => {});
+
+  fireEvent(
+    screen.getByRole('button'),
+    new MouseEvent('mouseleave', {
+      relatedTarget: screen.getByRole('tooltip'),
+    })
+  );
+
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+});
