@@ -1,3 +1,4 @@
+import {detectIntersections} from '../detectIntersections';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -106,6 +107,11 @@ export const flip = (
     const placements = [initialPlacement, ...fallbackPlacements];
 
     const overflow = await detectOverflow(state, detectOverflowOptions);
+    const intersections = await detectIntersections(state, {
+      collidables: Array.from(
+        document.querySelectorAll('[data-floating-ui-collidable]')
+      ).map((el) => el.getBoundingClientRect()),
+    });
 
     const overflows = [];
     let overflowsData = middlewareData.flip?.overflows || [];
@@ -122,7 +128,7 @@ export const flip = (
     overflowsData = [...overflowsData, {placement, overflows}];
 
     // One or more sides is overflowing.
-    if (!overflows.every((side) => side <= 0)) {
+    if (!overflows.every((side) => side <= 0) || intersections.length) {
       const nextIndex = (middlewareData.flip?.index || 0) + 1;
       const nextPlacement = placements[nextIndex];
 
