@@ -673,7 +673,7 @@ export default function Layout({children}) {
         </aside>
         <div
           ref={articleRef}
-          className="container my-16 mx-auto mt-24 px-4 [max-width:70ch] [outline:0] md:my-0 md:py-8 lg:px-8 lg:py-16 xl:[max-width:75ch]"
+          className="container my-16 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] md:my-0 md:py-8 lg:px-8 lg:py-16"
         >
           <SkipNavContent />
           <article
