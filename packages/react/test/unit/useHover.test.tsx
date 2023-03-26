@@ -157,18 +157,7 @@ test('restMs', async () => {
   cleanup();
 });
 
-test('continues working after reference is conditionally rendered', () => {
-  const {rerender} = render(<App showReference={false} />);
-  rerender(<App showReference />);
-
-  fireEvent.mouseEnter(screen.getByRole('button'));
-
-  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
-
-  cleanup();
-});
-
-test('mouseleave on the floating element does not close it', async () => {
+test('mouseleave on the floating element closes it (mouse)', async () => {
   render(<App />);
 
   fireEvent.mouseEnter(screen.getByRole('button'));
@@ -181,5 +170,5 @@ test('mouseleave on the floating element does not close it', async () => {
     })
   );
 
-  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 });

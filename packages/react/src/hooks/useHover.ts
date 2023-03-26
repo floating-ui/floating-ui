@@ -260,7 +260,11 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       // Allow interactivity without `safePolygon` on touch devices. With a
       // pointer, a short close delay is an alternative, so it should work
       // consistently.
-      if (!contains(floating, event.relatedTarget as Element | null)) {
+      const shouldClose =
+        pointerTypeRef.current === 'touch'
+          ? !contains(floating, event.relatedTarget as Element | null)
+          : true;
+      if (shouldClose) {
         closeWithDelay();
       }
     }
