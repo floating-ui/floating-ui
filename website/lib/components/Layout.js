@@ -522,14 +522,14 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed top-0 left-0 z-50 h-full w-72 overflow-y-auto overflow-x-hidden bg-gray-50 shadow dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
+            'fixed top-0 left-0 z-50 h-full w-72 overflow-y-auto overflow-x-hidden bg-gray-50 shadow will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
             {
               hidden: !navOpen,
             }
           )}
           ref={navRef}
         >
-          <div className="fixed -z-1 h-[25rem] w-72 bg-light-nav-gradient dark:bg-dark-nav-gradient md:w-64 lg:w-72 xl:w-[22rem]" />
+          <div className="fixed -z-1 h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
           <div className="container mx-auto mb-8">
             <div className="sticky top-0 z-10 bg-white/30 pt-2 backdrop-blur-sm dark:bg-transparent">
               <Link href="/">
@@ -542,16 +542,16 @@ export default function Layout({children}) {
                   apiKey="51e39a76760916075e22d9b217f4434f"
                 />
               </div>
+              {navOpen && (
+                <button
+                  onClick={() => setNavOpen(false)}
+                  className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow"
+                  aria-label="Close"
+                >
+                  <span className="relative top-[-1px]">×</span>
+                </button>
+              )}
             </div>
-            {navOpen && (
-              <button
-                onClick={() => setNavOpen(false)}
-                className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow"
-                aria-label="Close"
-              >
-                <span className="relative top-[-1px]">×</span>
-              </button>
-            )}
             <ul className="mt-4 px-6 text-lg xl:px-12">
               {nav.map(
                 ({url, title, icon, depth, mono, hide}) =>
