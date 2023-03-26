@@ -19,6 +19,8 @@ import {
 } from '@floating-ui/react';
 import * as React from 'react';
 
+import {remToPx} from '../utils/remToPx';
+
 export function usePopover({
   initialOpen = false,
   placement = 'bottom',
@@ -42,13 +44,13 @@ export function usePopover({
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
     middleware: [
-      offset(10),
+      offset(remToPx(10 / 16)),
       flip({
         fallbackAxisSideDirection: 'end',
         crossAxis: false,
       }),
       shift({
-        limiter: limitShift({offset: 15}),
+        limiter: limitShift({offset: remToPx(15 / 16)}),
       }),
       arrow({
         element: arrowRef,

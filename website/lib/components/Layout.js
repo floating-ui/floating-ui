@@ -529,7 +529,7 @@ export default function Layout({children}) {
           )}
           ref={navRef}
         >
-          <div className="fixed -z-1 h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
+          <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
           <div className="container mx-auto mb-8">
             <div className="sticky top-0 z-10 bg-white/30 pt-2 backdrop-blur-sm dark:bg-transparent">
               <Link href="/">

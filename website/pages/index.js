@@ -617,7 +617,7 @@ function HomePage() {
         </div>
       </main>
 
-      <footer className="mt-16 bg-gray-50 py-8 text-center dark:border-t dark:border-gray-800 dark:bg-transparent dark:text-gray-500">
+      <footer className="mt-16 bg-gray-50 py-8 text-center shadow dark:border-t dark:border-gray-800 dark:bg-transparent dark:text-gray-500">
         <div className="container mx-auto flex max-w-screen-xl flex-col gap-3 px-4">
           <p>
             <strong>

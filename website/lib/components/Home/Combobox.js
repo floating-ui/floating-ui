@@ -156,7 +156,7 @@ const Item = forwardRef(({children, active, ...rest}, ref) => {
     <div
       ref={ref}
       className={classNames(
-        'p-2 cursor-default rounded-md scroll-my-1',
+        'cursor-default scroll-my-1 rounded-md p-2',
         {
           'bg-blue-500 text-white': active,
         }
@@ -234,7 +234,7 @@ export function ComboboxDemo() {
       <input
         ref={refs.setReference}
         value={inputValue}
-        className="border-2 p-2 rounded border-gray-300 dark:border-gray-500 focus:border-blue-500 outline-none dark:bg-gray-600"
+        className="rounded border-2 border-gray-300 p-2 outline-none focus:border-blue-500 dark:border-gray-500 dark:bg-gray-600/50"
         placeholder="Enter balloon flavor"
         aria-autocomplete="list"
         aria-labelledby={
@@ -265,7 +265,7 @@ export function ComboboxDemo() {
         >
           <div
             ref={refs.setFloating}
-            className="bg-white/80 dark:bg-gray-600/80 text-left shadow-lg max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-clip-padding outline-none p-1 backdrop-blur-lg z-10"
+            className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
             {...getFloatingProps({
               style: {
                 position: strategy,

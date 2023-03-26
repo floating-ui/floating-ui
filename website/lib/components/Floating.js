@@ -119,7 +119,7 @@ export function Floating({
 
   const tooltipJsx = (
     <div
-      className="grid place-items-center bg-gray-800 text-gray-50 z-10 rounded"
+      className="z-10 grid place-items-center rounded bg-gray-800 text-gray-50"
       ref={refs.setFloating}
       style={{
         ...tooltipStyle,
@@ -140,7 +140,7 @@ export function Floating({
       {arrow && (
         <div
           ref={arrowRef}
-          className="w-4 h-4 bg-gray-800 [left:-0.5rem]"
+          className="h-4 w-4 bg-gray-800 [left:-0.5rem]"
           style={{
             position: 'absolute',
             left:
@@ -153,7 +153,7 @@ export function Floating({
                 : undefined,
             right: undefined,
             bottom: undefined,
-            [staticSide]: lockedFromArrow ? -7 : '-1rem',
+            [staticSide]: lockedFromArrow ? '-0.5rem' : '-1rem',
             background: lockedFromArrow ? 'inherit' : 'red',
             transition: lockedFromArrow
               ? 'transform 0.2s ease'

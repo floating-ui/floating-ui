@@ -13,6 +13,7 @@ import {
 } from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
+import {remToPx} from '../../utils/remToPx';
 import {Chrome} from '../Chrome';
 import {Floating} from '../Floating';
 
@@ -244,7 +245,10 @@ export function Shift() {
                   options: {
                     boundary,
                     rootBoundary: 'document',
-                    padding: {top: 54, bottom: 5},
+                    padding: {
+                      top: remToPx(54 / 16),
+                      bottom: remToPx(5 / 16),
+                    },
                   },
                 },
               ]}
@@ -385,8 +389,8 @@ export function Arrow() {
                   options: {
                     boundary,
                     padding: {
-                      top: 54,
-                      bottom: 5,
+                      top: remToPx(54 / 16),
+                      bottom: remToPx(5 / 16),
                     },
                     rootBoundary: 'document',
                   },
@@ -440,15 +444,25 @@ export function Virtual() {
 
   useEffect(() => {
     const boundary = boundaryRef.current;
-    boundary.addEventListener('mousemove', handleMouseMove);
+    boundary.addEventListener('pointermove', handleMouseMove);
 
     const parents = getOverflowAncestors(refs.floating.current);
     parents.forEach((parent) => {
       parent.addEventListener('scroll', update);
     });
 
+    function handleWindowScroll() {
+      setOpen(false);
+    }
+
+    window.addEventListener('scroll', handleWindowScroll);
+
     return () => {
-      boundary.removeEventListener('mousemove', handleMouseMove);
+      boundary.removeEventListener(
+        'pointermove',
+        handleMouseMove
+      );
+      window.removeEventListener('scroll', handleWindowScroll);
       parents.forEach((parent) => {
         parent.removeEventListener('scroll', update);
       });
@@ -466,11 +480,13 @@ export function Virtual() {
           <div
             ref={boundaryRef}
             className="h-full"
-            onMouseEnter={(event) => {
+            onPointerEnter={(event) => {
               handleMouseMove(event);
               setOpen(true);
             }}
-            onMouseLeave={() => setOpen(false)}
+            onPointerLeave={() => {
+              setOpen(false);
+            }}
           >
             <div
               ref={floating}

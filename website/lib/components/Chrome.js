@@ -31,7 +31,7 @@ export const Chrome = ({
   return (
     <div
       className={cn(
-        'rounded-lg overflow-hidden text-gray-900 [color-scheme:light] dark:border-none border-gray-1000',
+        'overflow-hidden rounded-lg border-gray-1000 text-gray-900 [color-scheme:light] dark:border-none',
         {
           shadow,
           'border border-gray-100': shadow,
@@ -40,24 +40,24 @@ export const Chrome = ({
     >
       <div className="bg-gray-75">
         <div
-          className={`absolute flex items-center gap-2 mx-4 h-12 ${
+          className={`absolute mx-4 flex h-12 items-center gap-2 ${
             label ? 'sm:flex' : ''
           }`}
         >
           <div
-            className="rounded-full w-3 h-3"
+            className="h-3 w-3 rounded-full"
             style={{background: '#ec695e'}}
           />
           <div
-            className="rounded-full w-3 h-3"
+            className="h-3 w-3 rounded-full"
             style={{background: '#f4bf4f'}}
           />
           <div
-            className="rounded-full w-3 h-3"
+            className="h-3 w-3 rounded-full"
             style={{background: '#61c653'}}
           />
         </div>
-        <div className="flex font-bold justify-center items-center h-12">
+        <div className="flex h-12 items-center justify-center font-bold">
           {label}
         </div>
       </div>
@@ -65,7 +65,7 @@ export const Chrome = ({
         <div
           ref={scrollableRef}
           className={cn(
-            'bg-gray-50 overflow-hidden p-2 h-[20rem]',
+            'h-[20rem] overflow-hidden bg-gray-50 p-2',
             {
               'grid place-items-center': center,
               'overflow-y-auto': scrollableY,
@@ -79,7 +79,7 @@ export const Chrome = ({
             <div
               style={{
                 height: scrollableY ? scrollHeight : 1,
-                width: scrollableX ? '76rem' : 1,
+                width: scrollableX ? '82rem' : 1,
               }}
             />
           )}
@@ -88,7 +88,7 @@ export const Chrome = ({
             <div
               style={{
                 height: scrollableY ? scrollHeight : 1,
-                width: scrollableX ? '76rem' : 1,
+                width: scrollableX ? '82rem' : 1,
               }}
             />
           )}
