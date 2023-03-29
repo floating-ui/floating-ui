@@ -1,3 +1,4 @@
+// https://opencollective.com/floating-ui/tiers/website-sponsor/all.json
 export const SPONSORS = [
   {
     title: 'Usetiful',
@@ -23,6 +24,7 @@ export const SPONSORS = [
   // },
 ];
 
+// https://opencollective.com/floating-ui/tiers/mini-sponsor/all.json
 export const MINI_SPONSORS = [
   {
     logo: '/sponsors/coupontoaster.svg',
@@ -83,7 +85,12 @@ export const MINI_SPONSORS = [
   },
   {
     logo: '/sponsors/save-code.svg',
-    label: 'Save With the UK\'s Best Vouchers & Discount Codes',
+    label: "Save With the UK's Best Vouchers & Discount Codes",
     url: 'https://www.savecode.co.uk/',
+  },
+  {
+    logo: '/sponsors/fitlivingtips.svg',
+    label: 'FitLivingTips - Health and Fitness Blog',
+    url: 'https://www.fitlivingtips.com/',
   },
 ];
