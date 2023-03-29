@@ -2,6 +2,7 @@ import {
   autoUpdate,
   flip,
   FloatingFocusManager,
+  FloatingList,
   FloatingPortal,
   offset,
   size,
@@ -9,6 +10,7 @@ import {
   useDismiss,
   useFloating,
   useInteractions,
+  useListItem,
   useListNavigation,
   useRole,
   useTypeahead,
@@ -19,34 +21,34 @@ import * as React from 'react';
 
 import {Button} from '../lib/Button';
 
-const options = [
-  'Red',
-  'Orange',
-  'Yellow',
-  'Green',
-  'Cyan',
-  'Blue',
-  'Purple',
-  'Pink',
-  'Maroon',
-  'Black',
-  'White',
-];
-
 function ColorSwatch({color}: {color?: string}) {
   return (
     <div
       aria-hidden
       className="rounded-full w-4 h-4 border border-slate-900/20 bg-clip-padding"
-      style={{background: color}}
+      style={{background: color?.toLowerCase()}}
     />
   );
 }
 
-export function Main() {
+const SelectContext = React.createContext<{
+  getItemProps: (
+    userProps?: React.HTMLProps<HTMLElement>
+  ) => Record<string, unknown>;
+  activeIndex: number | null;
+  selectedIndex: number | null;
+  setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isTypingRef: React.MutableRefObject<boolean>;
+  setValue: React.Dispatch<React.SetStateAction<string | null>>;
+}>({} as any);
+
+function Select({children}: {children: React.ReactNode}) {
   const [open, setOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
+  const [value, setValue] = React.useState<string | null>(null);
 
   const {x, y, strategy, refs, context} = useFloating({
     placement: 'bottom-start',
@@ -68,15 +70,15 @@ export function Main() {
     ],
   });
 
-  const listRef = React.useRef<Array<HTMLElement | null>>([]);
-  const listContentRef = React.useRef(options);
+  const listElementsRef = React.useRef<Array<HTMLElement | null>>([]);
+  const listStringsRef = React.useRef<Array<string | null>>([]);
   const isTypingRef = React.useRef(false);
 
   const click = useClick(context, {event: 'mousedown'});
   const dismiss = useDismiss(context);
   const role = useRole(context, {role: 'listbox'});
   const listNav = useListNavigation(context, {
-    listRef,
+    listRef: listElementsRef,
     activeIndex,
     selectedIndex,
     onNavigate: setActiveIndex,
@@ -84,7 +86,7 @@ export function Main() {
     loop: true,
   });
   const typeahead = useTypeahead(context, {
-    listRef: listContentRef,
+    listRef: listStringsRef,
     activeIndex,
     selectedIndex,
     onMatch: open ? setActiveIndex : setSelectedIndex,
@@ -101,14 +103,6 @@ export function Main() {
     typeahead,
   ]);
 
-  const handleSelect = (index: number) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
-
-  const selectedItemLabel =
-    selectedIndex !== null ? options[selectedIndex] : undefined;
-
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Select</h1>
@@ -119,87 +113,160 @@ export function Main() {
           </label>
           <Button
             ref={refs.setReference}
-            aria-labelledby={selectedItemLabel ? undefined : 'select-label'}
-            aria-label={`${selectedItemLabel} - selected balloon color`}
+            aria-labelledby="select-label"
             aria-autocomplete="none"
             data-open={open ? '' : undefined}
             className="flex items-center gap-2 bg-slate-200 rounded w-[10rem]"
             {...getReferenceProps()}
-            // The default role for the reference using a "listbox"
-            // is a "combobox", but Safari has a bug with VoiceOver
-            // where it cuts off letters when announcing the button's
-            // content when it has that role.
-            // This overrides the one from the props above.
-            role={undefined}
           >
-            <ColorSwatch color={selectedItemLabel?.toLocaleLowerCase()} />
-            {selectedItemLabel || 'Select...'}
+            {value && <ColorSwatch color={value} />}
+            {value || 'Select...'}
           </Button>
         </div>
-        <FloatingPortal>
-          {open && (
-            <FloatingFocusManager context={context} modal={false}>
-              <div
-                ref={refs.setFloating}
-                className="bg-slate-200/50 max-h-[20rem] overflow-y-auto rounded outline-none p-1 backdrop-blur-sm"
-                style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
-                }}
-                {...getFloatingProps()}
-              >
-                {options.map((value, i) => (
+        <FloatingList elementsRef={listElementsRef} stringsRef={listStringsRef}>
+          <SelectContext.Provider
+            value={{
+              getItemProps,
+              activeIndex,
+              selectedIndex,
+              setActiveIndex,
+              setSelectedIndex,
+              setOpen,
+              isTypingRef,
+              setValue,
+            }}
+          >
+            {open && (
+              <FloatingPortal>
+                <FloatingFocusManager context={context} modal={false}>
                   <div
-                    key={value}
-                    ref={(node) => {
-                      listRef.current[i] = node;
+                    ref={refs.setFloating}
+                    className="bg-slate-200/50 max-h-[20rem] overflow-y-auto rounded outline-none p-1 backdrop-blur-sm"
+                    style={{
+                      position: strategy,
+                      top: y ?? 0,
+                      left: x ?? 0,
                     }}
-                    role="option"
-                    tabIndex={i === activeIndex ? 0 : -1}
-                    aria-selected={i === selectedIndex && i === activeIndex}
-                    className={c(
-                      'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
-                      {
-                        'bg-cyan-200': i === activeIndex,
-                      }
-                    )}
-                    {...getItemProps({
-                      // Handle pointer select.
-                      onClick() {
-                        handleSelect(i);
-                      },
-                      // Handle keyboard select.
-                      onKeyDown(event) {
-                        if (event.key === 'Enter') {
-                          event.preventDefault();
-                          handleSelect(i);
-                        }
-
-                        // Only if not using typeahead.
-                        if (event.key === ' ' && !isTypingRef.current) {
-                          event.preventDefault();
-                          handleSelect(i);
-                        }
-                      },
-                    })}
+                    {...getFloatingProps()}
                   >
-                    <ColorSwatch color={options[i]?.toLowerCase()} />
-                    {value}
-                    <span aria-hidden className="absolute right-4">
-                      {i === selectedIndex ? (
-                        <CheckIcon width={20} height={20} />
-                      ) : (
-                        ''
-                      )}
-                    </span>
+                    {children}
                   </div>
-                ))}
-              </div>
-            </FloatingFocusManager>
-          )}
-        </FloatingPortal>
+                </FloatingFocusManager>
+              </FloatingPortal>
+            )}
+          </SelectContext.Provider>
+        </FloatingList>
       </div>
     </>
+  );
+}
+
+const MemoOption = React.memo(
+  React.forwardRef(function MemoOption(
+    {
+      children,
+      active,
+      selected,
+      getItemProps,
+      onSelect,
+      isTypingRef,
+    }: {
+      children: React.ReactNode;
+      active: boolean;
+      selected: boolean;
+      getItemProps: (
+        userProps?: React.HTMLProps<HTMLElement>
+      ) => Record<string, unknown>;
+      onSelect: () => void;
+      isTypingRef: React.MutableRefObject<boolean>;
+    },
+    ref: React.Ref<HTMLDivElement>
+  ) {
+    return (
+      <div
+        ref={ref}
+        role="option"
+        tabIndex={active ? 0 : -1}
+        aria-selected={active && selected}
+        className={c(
+          'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
+          {
+            'bg-cyan-200': active,
+          }
+        )}
+        {...getItemProps({
+          // Handle pointer select.
+          onClick() {
+            onSelect();
+          },
+          // Handle keyboard select.
+          onKeyDown(event) {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              onSelect();
+            }
+
+            // Only if not using typeahead.
+            if (event.key === ' ' && !isTypingRef.current) {
+              event.preventDefault();
+              onSelect();
+            }
+          },
+        })}
+      >
+        <ColorSwatch color={String(children)?.toLowerCase()} />
+        {children}
+        <span aria-hidden className="absolute right-4">
+          {selected ? <CheckIcon width={20} height={20} /> : ''}
+        </span>
+      </div>
+    );
+  })
+);
+
+function Option({children, value}: {children: React.ReactNode; value: string}) {
+  const {
+    activeIndex,
+    selectedIndex,
+    setSelectedIndex,
+    setOpen,
+    getItemProps,
+    isTypingRef,
+    setValue,
+  } = React.useContext(SelectContext);
+
+  const {ref, index} = useListItem({label: value});
+  const isActive = index === activeIndex;
+  const isSelected = index === selectedIndex;
+
+  const handleSelect = React.useCallback(() => {
+    setSelectedIndex(index);
+    setValue(value);
+    setOpen(false);
+  }, [index, value, setValue, setOpen, setSelectedIndex]);
+
+  return (
+    <MemoOption
+      ref={ref}
+      active={isActive}
+      selected={isSelected}
+      getItemProps={getItemProps}
+      onSelect={handleSelect}
+      isTypingRef={isTypingRef}
+    >
+      {children}
+    </MemoOption>
+  );
+}
+
+export function Main() {
+  return (
+    <Select>
+      <Option value="Red">Red</Option>
+      <Option value="Orange">Orange</Option>
+      <Option value="Yellow">Yellow</Option>
+      <Option value="Green">Green</Option>
+      <Option value="Blue">Blue</Option>
+    </Select>
   );
 }
