@@ -206,7 +206,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as Element | null;
 
-      setTimeout(() => {
+      queueMicrotask(() => {
         const movedToUnrelatedNode = !(
           contains(domReference, relatedTarget) ||
           contains(floating, relatedTarget) ||
