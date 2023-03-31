@@ -423,6 +423,112 @@ describe('modal', () => {
 
     cleanup();
   });
+
+  test('mixed modality and nesting', async () => {
+    interface Props {
+      open?: boolean;
+      modal?: boolean;
+      render: (props: {close: () => void}) => React.ReactNode;
+      children?: JSX.Element;
+      sideChildren?: JSX.Element;
+    }
+
+    const Dialog = ({
+      render,
+      open: controlledOpen,
+      modal = true,
+      children,
+      sideChildren,
+    }: Props) => {
+      const [internalOpen, setOpen] = useState(false);
+      const nodeId = useFloatingNodeId();
+      const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+
+      const {reference, floating, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+        nodeId,
+      });
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([
+        useClick(context),
+        useDismiss(context, {bubbles: false}),
+      ]);
+
+      return (
+        <FloatingNode id={nodeId}>
+          {children &&
+            cloneElement(
+              children,
+              getReferenceProps({ref: reference, ...children.props})
+            )}
+          <FloatingPortal>
+            {open && (
+              <FloatingFocusManager context={context} modal={modal}>
+                <div {...getFloatingProps({ref: floating})}>
+                  {render({
+                    close: () => setOpen(false),
+                  })}
+                </div>
+              </FloatingFocusManager>
+            )}
+          </FloatingPortal>
+          {sideChildren}
+        </FloatingNode>
+      );
+    };
+
+    const NestedDialog: React.FC<Props> = (props) => {
+      const parentId = useFloatingParentNodeId();
+
+      if (parentId == null) {
+        return (
+          <FloatingTree>
+            <Dialog {...props} />
+          </FloatingTree>
+        );
+      }
+
+      return <Dialog {...props} />;
+    };
+
+    const App = () => {
+      const [sideDialogOpen, setSideDialogOpen] = useState(false);
+      return (
+        <NestedDialog
+          modal={false}
+          render={({close}) => (
+            <>
+              <button onClick={close} data-testid="close-dialog" />
+              <button
+                onClick={() => setSideDialogOpen(true)}
+                data-testid="open-nested-dialog"
+              />
+            </>
+          )}
+          sideChildren={
+            <NestedDialog
+              modal={true}
+              open={sideDialogOpen}
+              render={({close}) => (
+                <button onClick={close} data-testid="close-nested-dialog" />
+              )}
+            />
+          }
+        >
+          <button data-testid="open-dialog" />
+        </NestedDialog>
+      );
+    };
+
+    render(<App />);
+
+    await userEvent.click(screen.getByTestId('open-dialog'));
+    await userEvent.click(screen.getByTestId('open-nested-dialog'));
+
+    expect(screen.queryByTestId('close-dialog')).toBeInTheDocument();
+    expect(screen.queryByTestId('close-nested-dialog')).toBeInTheDocument();
+  });
 });
 
 describe('order', () => {
