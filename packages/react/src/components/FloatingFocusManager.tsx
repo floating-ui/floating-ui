@@ -206,37 +206,39 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
     function handleFocusOutside(event: FocusEvent) {
       const relatedTarget = event.relatedTarget as Element | null;
 
-      const movedToUnrelatedNode = !(
-        contains(domReference, relatedTarget) ||
-        contains(floating, relatedTarget) ||
-        contains(relatedTarget, floating) ||
-        contains(portalContext?.portalNode, relatedTarget) ||
-        relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
-        (tree &&
-          (getChildren(tree.nodesRef.current, nodeId).find(
-            (node) =>
-              contains(node.context?.elements.floating, relatedTarget) ||
-              contains(node.context?.elements.domReference, relatedTarget)
-          ) ||
-            getAncestors(tree.nodesRef.current, nodeId).find(
+      queueMicrotask(() => {
+        const movedToUnrelatedNode = !(
+          contains(domReference, relatedTarget) ||
+          contains(floating, relatedTarget) ||
+          contains(relatedTarget, floating) ||
+          contains(portalContext?.portalNode, relatedTarget) ||
+          relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
+          (tree &&
+            (getChildren(tree.nodesRef.current, nodeId).find(
               (node) =>
-                node.context?.elements.floating === relatedTarget ||
-                node.context?.elements.domReference === relatedTarget
-            )))
-      );
+                contains(node.context?.elements.floating, relatedTarget) ||
+                contains(node.context?.elements.domReference, relatedTarget)
+            ) ||
+              getAncestors(tree.nodesRef.current, nodeId).find(
+                (node) =>
+                  node.context?.elements.floating === relatedTarget ||
+                  node.context?.elements.domReference === relatedTarget
+              )))
+        );
 
-      // Focus did not move inside the floating tree, and there are no tabbable
-      // portal guards to handle closing.
-      if (
-        relatedTarget &&
-        movedToUnrelatedNode &&
-        !isPointerDownRef.current &&
-        // Fix React 18 Strict Mode returnFocus due to double rendering.
-        relatedTarget !== previouslyFocusedElementRef.current
-      ) {
-        preventReturnFocusRef.current = true;
-        onOpenChange(false);
-      }
+        // Focus did not move inside the floating tree, and there are no tabbable
+        // portal guards to handle closing.
+        if (
+          relatedTarget &&
+          movedToUnrelatedNode &&
+          !isPointerDownRef.current &&
+          // Fix React 18 Strict Mode returnFocus due to double rendering.
+          relatedTarget !== previouslyFocusedElementRef.current
+        ) {
+          preventReturnFocusRef.current = true;
+          onOpenChange(false);
+        }
+      });
     }
 
     if (floating && isHTMLElement(domReference)) {
