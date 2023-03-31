@@ -350,12 +350,15 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       previouslyFocusedElement
     );
 
-    // If the `useListNavigation` hook is active, always ignore `initialFocus`
-    // because it has its own handling of the initial focus.
-    !ignoreInitialFocus &&
+    if (
+      // If the `useListNavigation` hook is active, always ignore `initialFocus`
+      // because it has its own handling of the initial focus.
+      !ignoreInitialFocus &&
       !focusAlreadyInsideFloatingEl &&
-      open &&
+      open
+    ) {
       enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
+    }
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
