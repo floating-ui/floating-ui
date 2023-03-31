@@ -50,6 +50,7 @@ function App(
             <button data-testid="three" onClick={() => setOpen(false)}>
               x
             </button>
+            {props.children}
           </div>
         </FloatingFocusManager>
       )}
@@ -80,6 +81,18 @@ describe('initialFocus', () => {
     render(<App initialFocus="two" />);
     fireEvent.click(screen.getByTestId('reference'));
     expect(screen.getByTestId('two')).toHaveFocus();
+
+    cleanup();
+  });
+
+  test('respects autoFocus', () => {
+    render(
+      <App>
+        <input autoFocus data-testid="input" />
+      </App>
+    );
+    fireEvent.click(screen.getByTestId('reference'));
+    expect(screen.getByTestId('input')).toHaveFocus();
 
     cleanup();
   });
