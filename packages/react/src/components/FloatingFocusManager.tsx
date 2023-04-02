@@ -332,35 +332,31 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   useLayoutEffect(() => {
     if (!floating) return;
 
-    const doc = getDocument(floating);
-
     let preventReturnFocusScroll = false;
+
+    const doc = getDocument(floating);
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
-    const initialFocusValue = initialFocusRef.current;
 
     previouslyFocusedElementRef.current = previouslyFocusedElement;
 
-    const focusableElements = getTabbableElements(floating);
-    const elToFocus =
-      (typeof initialFocusValue === 'number'
-        ? focusableElements[initialFocusValue]
-        : initialFocusValue.current) || floating;
+    // Wait for any layout effect state setters to execute to set `tabIndex`.
+    queueMicrotask(() => {
+      const focusableElements = getTabbableElements(floating);
+      const initialFocusValue = initialFocusRef.current;
+      const elToFocus =
+        (typeof initialFocusValue === 'number'
+          ? focusableElements[initialFocusValue]
+          : initialFocusValue.current) || floating;
+      const focusAlreadyInsideFloatingEl = contains(
+        floating,
+        previouslyFocusedElement
+      );
 
-    const focusAlreadyInsideFloatingEl = contains(
-      floating,
-      previouslyFocusedElement
-    );
-
-    if (
-      // If the `useListNavigation` hook is active, always ignore `initialFocus`
-      // because it has its own handling of the initial focus.
-      !ignoreInitialFocus &&
-      !focusAlreadyInsideFloatingEl &&
-      open
-    ) {
-      enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
-    }
+      if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open) {
+        enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
+      }
+    });
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.

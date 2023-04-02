@@ -1,4 +1,4 @@
-import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useRef, useState} from 'react';
 import {Context as ResponsiveContext} from 'react-responsive';
@@ -62,10 +62,12 @@ function App(
 }
 
 describe('initialFocus', () => {
-  test('number', () => {
+  test('number', async () => {
     const {rerender} = render(<App />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('one')).toHaveFocus();
 
     rerender(<App initialFocus={1} />);
@@ -73,37 +75,35 @@ describe('initialFocus', () => {
 
     rerender(<App initialFocus={2} />);
     expect(screen.getByTestId('three')).not.toHaveFocus();
-
-    cleanup();
   });
 
-  test('ref', () => {
+  test('ref', async () => {
     render(<App initialFocus="two" />);
     fireEvent.click(screen.getByTestId('reference'));
-    expect(screen.getByTestId('two')).toHaveFocus();
+    await act(async () => {});
 
-    cleanup();
+    expect(screen.getByTestId('two')).toHaveFocus();
   });
 
-  test('respects autoFocus', () => {
+  test('respects autoFocus', async () => {
     render(
       <App>
         <input autoFocus data-testid="input" />
       </App>
     );
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
     expect(screen.getByTestId('input')).toHaveFocus();
-
-    cleanup();
   });
 });
 
 describe('returnFocus', () => {
-  test('true', () => {
+  test('true', async () => {
     const {rerender} = render(<App />);
 
     screen.getByTestId('reference').focus();
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     expect(screen.getByTestId('one')).toHaveFocus();
 
@@ -115,21 +115,19 @@ describe('returnFocus', () => {
 
     fireEvent.click(screen.getByTestId('three'));
     expect(screen.getByTestId('reference')).not.toHaveFocus();
-
-    cleanup();
   });
 
-  test('false', () => {
+  test('false', async () => {
     render(<App returnFocus={false} />);
 
     screen.getByTestId('reference').focus();
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('one')).toHaveFocus();
 
     fireEvent.click(screen.getByTestId('three'));
     expect(screen.getByTestId('reference')).not.toHaveFocus();
-
-    cleanup();
   });
 
   test('always returns to the reference for nested elements', async () => {
@@ -228,6 +226,7 @@ describe('guards', () => {
     render(<App guards={true} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
     await userEvent.tab();
@@ -240,6 +239,7 @@ describe('guards', () => {
     render(<App guards={false} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
     await userEvent.tab();
@@ -254,6 +254,7 @@ describe('modal', () => {
     render(<App modal={true} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
     expect(screen.getByTestId('two')).toHaveFocus();
@@ -278,14 +279,13 @@ describe('modal', () => {
 
     await userEvent.tab();
     expect(screen.getByTestId('one')).toHaveFocus();
-
-    cleanup();
   });
 
   test('false', async () => {
     render(<App modal={false} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
     expect(screen.getByTestId('two')).toHaveFocus();
@@ -302,22 +302,19 @@ describe('modal', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
 
     expect(screen.getByTestId('last')).toHaveFocus();
-
-    cleanup();
   });
 
   test('false — shift tabbing does not trap focus when reference is in order', async () => {
     render(<App modal={false} order={['reference', 'content']} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
     await userEvent.tab({shift: true});
     await userEvent.tab({shift: true});
 
     expect(screen.queryByRole('dialog')).toBeInTheDocument();
-
-    cleanup();
   });
 
   test('true - comboboxes hide all other nodes', async () => {
@@ -354,12 +351,12 @@ describe('modal', () => {
     render(<App />);
 
     fireEvent.focus(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden');
-
-    cleanup();
   });
 
   test('false - comboboxes do not hide all other nodes', async () => {
@@ -392,12 +389,12 @@ describe('modal', () => {
     render(<App />);
 
     fireEvent.focus(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
-
-    cleanup();
   });
 
   test('fallback to floating element when it has no tabbable content', async () => {
@@ -414,14 +411,13 @@ describe('modal', () => {
     }
 
     render(<App />);
+    await act(async () => {});
 
     expect(screen.getByTestId('floating')).toHaveFocus();
     await userEvent.tab();
     expect(screen.getByTestId('floating')).toHaveFocus();
     await userEvent.tab({shift: true});
     expect(screen.getByTestId('floating')).toHaveFocus();
-
-    cleanup();
   });
 
   test('mixed modality and nesting', async () => {
@@ -536,6 +532,8 @@ describe('order', () => {
     render(<App order={['reference', 'content']} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('reference')).toHaveFocus();
 
     await userEvent.tab();
@@ -543,14 +541,14 @@ describe('order', () => {
 
     await userEvent.tab();
     expect(screen.getByTestId('two')).toHaveFocus();
-
-    cleanup();
   });
 
   test('[floating, content]', async () => {
     render(<App order={['floating', 'content']} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
     expect(screen.getByTestId('floating')).toHaveFocus();
 
     await userEvent.tab();
@@ -576,14 +574,13 @@ describe('order', () => {
 
     await userEvent.tab({shift: true});
     expect(screen.getByTestId('floating')).toHaveFocus();
-
-    cleanup();
   });
 
   test('[reference, floating, content]', async () => {
     render(<App order={['reference', 'floating', 'content']} />);
 
     fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     expect(screen.getByTestId('reference')).toHaveFocus();
 
@@ -611,8 +608,6 @@ describe('order', () => {
     await userEvent.tab({shift: true});
 
     expect(screen.getByTestId('reference')).toHaveFocus();
-
-    cleanup();
   });
 });
 
@@ -650,6 +645,7 @@ describe('non-modal + FloatingPortal', () => {
     render(<App />);
 
     await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     expect(screen.getByTestId('inside')).toHaveFocus();
 
@@ -657,8 +653,6 @@ describe('non-modal + FloatingPortal', () => {
 
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
     expect(screen.getByTestId('last')).toHaveFocus();
-
-    cleanup();
   });
 
   test('order: [reference, content] focuses reference, then inside, then, last document element', async () => {
@@ -698,6 +692,7 @@ describe('non-modal + FloatingPortal', () => {
     render(<App />);
 
     await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
 
@@ -707,8 +702,6 @@ describe('non-modal + FloatingPortal', () => {
 
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
     expect(screen.getByTestId('last')).toHaveFocus();
-
-    cleanup();
   });
 
   test('order: [reference, floating, content] focuses reference, then inside, then, last document element', async () => {
@@ -748,6 +741,7 @@ describe('non-modal + FloatingPortal', () => {
     render(<App />);
 
     await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
 
     await userEvent.tab();
 
@@ -761,8 +755,6 @@ describe('non-modal + FloatingPortal', () => {
 
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
     expect(screen.getByTestId('last')).toHaveFocus();
-
-    cleanup();
   });
 
   test('shift+tab', async () => {
@@ -798,6 +790,8 @@ describe('non-modal + FloatingPortal', () => {
     render(<App />);
 
     await userEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
     await userEvent.tab({shift: true});
 
     expect(screen.queryByTestId('floating')).toBeInTheDocument();
@@ -805,8 +799,6 @@ describe('non-modal + FloatingPortal', () => {
     await userEvent.tab({shift: true});
 
     expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
-
-    cleanup();
   });
 });
 
