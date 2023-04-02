@@ -517,11 +517,13 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       const maxIndex = getMaxIndex(listRef, disabledIndices);
 
       if (event.key === 'Home') {
+        stopEvent(event);
         indexRef.current = minIndex;
         onNavigate(indexRef.current);
       }
 
       if (event.key === 'End') {
+        stopEvent(event);
         indexRef.current = maxIndex;
         onNavigate(indexRef.current);
       }
