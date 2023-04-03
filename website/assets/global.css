@@ -89,6 +89,11 @@ code ::selection {
     --docsearch-footer-shadow: none;
   }
 
+  .cls-1,
+  .cls-2 {
+    fill: #9aa0b1 !important;
+  }
+
   ::selection {
     @apply bg-blue-500/30 text-inherit;
   }
@@ -104,11 +109,11 @@ code ::selection {
   .DocSearch-Button,
   .DocSearch-Button:hover,
   .DocSearch-Button:focus {
-    @apply bg-gray-1000/95 text-purple-200/50 shadow outline-none outline outline-purple-200/10 backdrop-blur-lg;
+    @apply bg-gray-1000/95 text-purple-200/50 outline-none backdrop-blur-lg;
   }
 
   .DocSearch-Button:hover {
-    @apply text-purple-200/80 outline-purple-300/30;
+    @apply text-purple-200/80 shadow-purple-300/30;
   }
 
   .DocSearch-Button .DocSearch-Search-Icon {
