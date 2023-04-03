@@ -11,7 +11,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {remToPx} from '../../utils/remToPx';
 import {Chrome} from '../Chrome';
@@ -213,9 +212,9 @@ export function Placement() {
 export function Shift() {
   const [boundary, setBoundary] = useState();
 
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
     if (boundary) {
-      boundary.firstElementChild.scrollTop = 200;
+      boundary.firstElementChild.scrollTop = remToPx(200 / 16);
     }
   }, [boundary]);
 
@@ -275,9 +274,9 @@ export function Shift() {
 export function Flip() {
   const [boundary, setBoundary] = useState();
 
-  useIsomorphicLayoutEffect(() => {
+  useEffect(() => {
     if (boundary) {
-      boundary.firstElementChild.scrollTop = 275;
+      boundary.firstElementChild.scrollTop = remToPx(275 / 16);
     }
   }, [boundary]);
 
@@ -411,8 +410,10 @@ export function Arrow() {
 export function Virtual() {
   const [open, setOpen] = useState(false);
   const boundaryRef = useRef();
+  const pointerTypeRef = useRef();
   const {x, y, reference, floating, refs, update} = useFloating({
     placement: 'top',
+    strategy: 'fixed',
     middleware: [
       shift({
         crossAxis: true,
@@ -452,7 +453,9 @@ export function Virtual() {
     });
 
     function handleWindowScroll() {
-      setOpen(false);
+      if (pointerTypeRef.current === 'touch') {
+        setOpen(false);
+      }
     }
 
     window.addEventListener('scroll', handleWindowScroll);
@@ -480,11 +483,14 @@ export function Virtual() {
           <div
             ref={boundaryRef}
             className="h-full"
+            onPointerDown={({pointerType}) => {
+              pointerTypeRef.current = pointerType;
+            }}
             onPointerEnter={(event) => {
               handleMouseMove(event);
               setOpen(true);
             }}
-            onPointerLeave={() => {
+            onMouseLeave={() => {
               setOpen(false);
             }}
           >

@@ -186,8 +186,19 @@ export function ComboboxDemo() {
       offset(5),
       size({
         apply({rects, elements, availableHeight}) {
+          const viewportHeight =
+            window.visualViewport.height ??
+            document.documentElement.clientHeight;
+
           Object.assign(elements.floating.style, {
-            maxHeight: `${Math.max(200, availableHeight)}px`,
+            maxHeight: `${
+              viewportHeight < availableHeight
+                ? viewportHeight
+                : Math.max(
+                    availableHeight,
+                    Math.min(200, viewportHeight)
+                  )
+            }px`,
             width: `${rects.reference.width}px`,
           });
         },

@@ -550,7 +550,7 @@ export default function Layout({children}) {
         </div>
         <nav
           className={cn(
-            'fixed top-0 left-0 z-50 h-full w-72 overflow-y-auto overflow-x-hidden bg-gray-50 shadow will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
+            'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 shadow will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
             {
               hidden: !navOpen,
             }

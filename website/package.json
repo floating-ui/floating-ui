@@ -30,8 +30,8 @@
     "tailwindcss": "^3.2.4"
   },
   "dependencies": {
-    "@docsearch/css": "^3.1.0",
-    "@docsearch/react": "^3.1.0",
+    "@docsearch/css": "^3.3.3",
+    "@docsearch/react": "^3.3.3",
     "@floating-ui/react": "^0.22.0",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
