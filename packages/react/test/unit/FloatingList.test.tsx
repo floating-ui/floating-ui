@@ -176,3 +176,51 @@ test('registers strings correctly (label)', async () => {
 
   expect(screen.getAllByRole('option')[4]).toHaveFocus();
 });
+
+test('handles re-ordering', async () => {
+  const {rerender} = render(
+    <Select>
+      <Option>One</Option>
+      <div>
+        <Option>Two</Option>
+        <Option>Three</Option>
+        <Option>Four</Option>
+      </div>
+      <>
+        <Option>Five</Option>
+        <Option>Six</Option>
+      </>
+    </Select>
+  );
+
+  fireEvent.click(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
+
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+
+  expect(screen.getAllByRole('option')[1]).toHaveFocus();
+
+  rerender(
+    <Select>
+      <Option>One</Option>
+      <div>
+        <Option>Two</Option>
+        <Option>Three</Option>
+        <Option>Four</Option>
+      </div>
+      <>
+        <Option>Six</Option>
+        <Option>Five</Option>
+      </>
+    </Select>
+  );
+
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+
+  expect(screen.getAllByRole('option')[5]).toHaveFocus();
+});
