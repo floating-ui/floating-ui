@@ -70,15 +70,15 @@ function Select({children}: {children: React.ReactNode}) {
     ],
   });
 
-  const listElementsRef = React.useRef<Array<HTMLElement | null>>([]);
-  const listStringsRef = React.useRef<Array<string | null>>([]);
+  const elementsRef = React.useRef<Array<HTMLElement | null>>([]);
+  const labelsRef = React.useRef<Array<string | null>>([]);
   const isTypingRef = React.useRef(false);
 
   const click = useClick(context, {event: 'mousedown'});
   const dismiss = useDismiss(context);
   const role = useRole(context, {role: 'listbox'});
   const listNav = useListNavigation(context, {
-    listRef: listElementsRef,
+    listRef: elementsRef,
     activeIndex,
     selectedIndex,
     onNavigate: setActiveIndex,
@@ -86,7 +86,7 @@ function Select({children}: {children: React.ReactNode}) {
     loop: true,
   });
   const typeahead = useTypeahead(context, {
-    listRef: listStringsRef,
+    listRef: labelsRef,
     activeIndex,
     selectedIndex,
     onMatch: open ? setActiveIndex : setSelectedIndex,
@@ -123,7 +123,7 @@ function Select({children}: {children: React.ReactNode}) {
             {value || 'Select...'}
           </Button>
         </div>
-        <FloatingList elementsRef={listElementsRef} stringsRef={listStringsRef}>
+        <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
           <SelectContext.Provider
             value={{
               getItemProps,
