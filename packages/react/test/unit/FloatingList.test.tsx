@@ -23,7 +23,7 @@ function Select({children}: {children: React.ReactNode}) {
   });
 
   const elementsRef = React.useRef<Array<HTMLElement | null>>([]);
-  const stringsRef = React.useRef<Array<string | null>>([]);
+  const labelsRef = React.useRef<Array<string | null>>([]);
 
   const click = useClick(context);
   const listNavigation = useListNavigation(context, {
@@ -32,7 +32,7 @@ function Select({children}: {children: React.ReactNode}) {
     onNavigate: setActiveIndex,
   });
   const typeahead = useTypeahead(context, {
-    listRef: stringsRef,
+    listRef: labelsRef,
     activeIndex,
     onMatch: setActiveIndex,
   });
@@ -48,7 +48,7 @@ function Select({children}: {children: React.ReactNode}) {
       <button ref={refs.setReference} {...getReferenceProps()}>
         Open select menu
       </button>
-      <FloatingList elementsRef={elementsRef} stringsRef={stringsRef}>
+      <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
         {isOpen && (
           <div ref={refs.setFloating} role="listbox" {...getFloatingProps()}>
             {children}
