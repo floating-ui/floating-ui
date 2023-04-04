@@ -43,6 +43,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   } = props;
 
   const pointerTypeRef = React.useRef<'mouse' | 'pen' | 'touch'>();
+  const didKeyDownRef = React.useRef(false);
 
   return React.useMemo(() => {
     if (!enabled) {
@@ -119,6 +120,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         },
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
+          didKeyDownRef.current = false;
 
           if (!keyboardHandlers) {
             return;
@@ -131,6 +133,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           if (event.key === ' ' && !isSpaceIgnored(domReference)) {
             // Prevent scrolling
             event.preventDefault();
+            didKeyDownRef.current = true;
           }
 
           if (event.key === 'Enter') {
@@ -152,7 +155,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (event.key === ' ') {
+          if (event.key === ' ' && didKeyDownRef.current) {
             if (open) {
               if (toggle) {
                 onOpenChange(false);
@@ -161,6 +164,8 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
               onOpenChange(true);
             }
           }
+
+          didKeyDownRef.current = false;
         },
       },
     };

@@ -1,4 +1,4 @@
-import {cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {useClick, useFloating, useInteractions} from '../../src';
@@ -152,6 +152,7 @@ describe('non-buttons', () => {
     render(<App button={false} />);
 
     const button = screen.getByTestId('reference');
+    fireEvent.keyDown(button, {key: ' '});
     fireEvent.keyUp(button, {key: ' '});
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
@@ -178,4 +179,15 @@ describe('non-buttons', () => {
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
+});
+
+test('ignores Space keydown on another element then keyup on the button', async () => {
+  render(<App />);
+  await act(async () => {});
+
+  const button = screen.getByRole('button');
+  fireEvent.keyDown(document.body, {key: ' '});
+  fireEvent.keyUp(button, {key: ' '});
+
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 });
