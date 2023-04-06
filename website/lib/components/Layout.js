@@ -563,7 +563,7 @@ export default function Layout({children}) {
               <Link href="/">
                 <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
               </Link>
-              <div className="relative mr-4 flex flex-col items-stretch py-4 !pb-0 xl:m-0 xl:px-4 xl:pr-8">
+              <div className="relative mr-4 flex flex-col items-stretch py-4 !pb-0 xl:m-0 xl:px-2 xl:pr-6">
                 <DocSearch
                   appId="0E85PIAI2P"
                   indexName="floating-ui"
@@ -580,7 +580,7 @@ export default function Layout({children}) {
                 </button>
               )}
             </div>
-            <ul className="mt-4 px-6 text-lg xl:px-12">
+            <ul className="mt-4 px-6 text-lg xl:px-10">
               {nav.map(
                 ({url, title, icon: Icon, depth, hide}) =>
                   !hide && (
@@ -604,7 +604,7 @@ export default function Layout({children}) {
                           {
                             'bg-gray-800 text-gray-50 hover:bg-gray-700 dark:bg-purple-200/10 dark:text-gray-100/90':
                               pathname === url,
-                            'hover:bg-gray-100':
+                            'hover:bg-gray-100/50':
                               pathname !== url,
                             'rounded-tl-none rounded-bl-none':
                               depth > 0,
@@ -641,7 +641,7 @@ export default function Layout({children}) {
             </ul>
           </div>
         </nav>
-        <aside className="fixed right-0 top-0 hidden w-72 pt-8 [max-height:100vh] xl:block">
+        <aside className="fixed right-0 top-0 hidden w-72 overflow-y-auto pt-8 [max-height:100vh] xl:block">
           <nav>
             <h4 className="text-md ml-6 text-gray-500">
               On this page
