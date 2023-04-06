@@ -39,21 +39,40 @@ const SelectContext = React.createContext<{
   selectedIndex: number | null;
   setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isTypingRef: React.MutableRefObject<boolean>;
-  setValue: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedValue: (value: string, index: number) => void;
+  selectedValue: string;
 }>({} as any);
 
-function Select({children}: {children: React.ReactNode}) {
-  const [open, setOpen] = React.useState(false);
+function Select({
+  children,
+  value: controlledValue,
+  onChange,
+}: {
+  children: React.ReactNode;
+  value?: string;
+  onChange?: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
-  const [value, setValue] = React.useState<string | null>(null);
+  const [uncontrolledValue, setUncontrolledValue] = React.useState('');
+
+  const selectedValue = controlledValue ?? uncontrolledValue;
+  const setSelectedValue = React.useCallback(
+    (value: string, index: number) => {
+      setSelectedIndex(index);
+      setUncontrolledValue(value);
+      onChange?.(value);
+      setIsOpen(false);
+    },
+    [onChange]
+  );
 
   const {x, y, strategy, refs, context} = useFloating({
     placement: 'bottom-start',
-    open,
-    onOpenChange: setOpen,
+    open: isOpen,
+    onOpenChange: setIsOpen,
     whileElementsMounted: autoUpdate,
     middleware: [
       offset(5),
@@ -89,7 +108,11 @@ function Select({children}: {children: React.ReactNode}) {
     listRef: labelsRef,
     activeIndex,
     selectedIndex,
-    onMatch: open ? setActiveIndex : setSelectedIndex,
+    onMatch: isOpen
+      ? setActiveIndex
+      : (index) => {
+          setSelectedValue(labelsRef.current[index] || '', index);
+        },
     onTypingChange(isTyping) {
       isTypingRef.current = isTyping;
     },
@@ -115,12 +138,12 @@ function Select({children}: {children: React.ReactNode}) {
             ref={refs.setReference}
             aria-labelledby="select-label"
             aria-autocomplete="none"
-            data-open={open ? '' : undefined}
+            data-open={isOpen ? '' : undefined}
             className="flex items-center gap-2 bg-slate-200 rounded w-[10rem]"
             {...getReferenceProps()}
           >
-            {value && <ColorSwatch color={value} />}
-            {value || 'Select...'}
+            {selectedValue && <ColorSwatch color={selectedValue} />}
+            {selectedValue || 'Select...'}
           </Button>
         </div>
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -131,28 +154,26 @@ function Select({children}: {children: React.ReactNode}) {
               selectedIndex,
               setActiveIndex,
               setSelectedIndex,
-              setOpen,
               isTypingRef,
-              setValue,
+              selectedValue,
+              setSelectedValue,
             }}
           >
-            {open && (
+            {isOpen ? (
               <FloatingPortal>
                 <FloatingFocusManager context={context} modal={false}>
                   <div
                     ref={refs.setFloating}
                     className="bg-slate-200/50 max-h-[20rem] overflow-y-auto rounded outline-none p-1 backdrop-blur-sm"
-                    style={{
-                      position: strategy,
-                      top: y ?? 0,
-                      left: x ?? 0,
-                    }}
+                    style={{position: strategy, top: y ?? 0, left: x ?? 0}}
                     {...getFloatingProps()}
                   >
                     {children}
                   </div>
                 </FloatingFocusManager>
               </FloatingPortal>
+            ) : (
+              <div hidden>{children}</div>
             )}
           </SelectContext.Provider>
         </FloatingList>
@@ -196,9 +217,7 @@ const MemoOption = React.memo(
         )}
         {...getItemProps({
           // Handle pointer select.
-          onClick() {
-            onSelect();
-          },
+          onClick: onSelect,
           // Handle keyboard select.
           onKeyDown(event) {
             if (event.key === 'Enter') {
@@ -229,21 +248,25 @@ function Option({children, value}: {children: React.ReactNode; value: string}) {
     activeIndex,
     selectedIndex,
     setSelectedIndex,
-    setOpen,
     getItemProps,
     isTypingRef,
-    setValue,
+    selectedValue,
+    setSelectedValue,
   } = React.useContext(SelectContext);
 
   const {ref, index} = useListItem({label: value});
   const isActive = index === activeIndex;
   const isSelected = index === selectedIndex;
 
-  const handleSelect = React.useCallback(() => {
-    setSelectedIndex(index);
-    setValue(value);
-    setOpen(false);
-  }, [index, value, setValue, setOpen, setSelectedIndex]);
+  React.useLayoutEffect(() => {
+    if (index !== selectedIndex && value === selectedValue) {
+      setSelectedIndex(index);
+    }
+  }, [value, selectedValue, index, selectedIndex, setSelectedIndex]);
+
+  const onSelect = React.useCallback(() => {
+    setSelectedValue(value, index);
+  }, [value, index, setSelectedValue]);
 
   return (
     <MemoOption
@@ -251,7 +274,7 @@ function Option({children, value}: {children: React.ReactNode; value: string}) {
       active={isActive}
       selected={isSelected}
       getItemProps={getItemProps}
-      onSelect={handleSelect}
+      onSelect={onSelect}
       isTypingRef={isTypingRef}
     >
       {children}
