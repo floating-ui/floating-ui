@@ -105,26 +105,25 @@ function getClippingElementAncestors(
     const computedStyle = getComputedStyle(currentNode);
     const containingBlock = isContainingBlock(currentNode);
 
-    const shouldIgnoreCurrentNode = computedStyle.position === 'fixed';
-    if (shouldIgnoreCurrentNode) {
+    if (computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
-    } else {
-      const shouldDropCurrentNode = elementIsFixed
-        ? !containingBlock && !currentContainingBlockComputedStyle
-        : !containingBlock &&
-          computedStyle.position === 'static' &&
-          !!currentContainingBlockComputedStyle &&
-          ['absolute', 'fixed'].includes(
-            currentContainingBlockComputedStyle.position
-          );
+    }
 
-      if (shouldDropCurrentNode) {
-        // Drop non-containing blocks.
-        result = result.filter((ancestor) => ancestor !== currentNode);
-      } else {
-        // Record last containing block for next iteration.
-        currentContainingBlockComputedStyle = computedStyle;
-      }
+    const shouldDropCurrentNode = elementIsFixed
+      ? !containingBlock && !currentContainingBlockComputedStyle
+      : !containingBlock &&
+        computedStyle.position === 'static' &&
+        !!currentContainingBlockComputedStyle &&
+        ['absolute', 'fixed'].includes(
+          currentContainingBlockComputedStyle.position
+        );
+
+    if (shouldDropCurrentNode) {
+      // Drop non-containing blocks.
+      result = result.filter((ancestor) => ancestor !== currentNode);
+    } else {
+      // Record last containing block for next iteration.
+      currentContainingBlockComputedStyle = computedStyle;
     }
 
     currentNode = getParentNode(currentNode);
