@@ -1,5 +1,5 @@
 import type {Placement} from '@floating-ui/core';
-import {hide, size, useFloating} from '@floating-ui/react-dom';
+import {hide, shift, size, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
@@ -9,7 +9,7 @@ import {useScroll} from '../utils/useScroll';
 export function Hide() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [hierarchy, setHierarchy] = useState('a');
-  const isSizeHierarchy = ['j', 'k', 'l', 'm'].includes(hierarchy);
+  const isFixedStrategy = ['j', 'k', 'l', 'm', 'o'].includes(hierarchy);
 
   const {
     x,
@@ -21,13 +21,14 @@ export function Hide() {
     refs,
     middlewareData: {hide: {referenceHidden, escaped} = {}},
   } = useFloating({
-    strategy: isSizeHierarchy ? 'fixed' : 'absolute',
+    strategy: isFixedStrategy ? 'fixed' : 'absolute',
     placement,
     middleware: [
       hide({strategy: 'referenceHidden'}),
       hide({strategy: 'escaped'}),
+      hierarchy === 'o' && shift(),
       size({
-        apply: isSizeHierarchy
+        apply: isFixedStrategy
           ? ({elements, availableHeight}) => {
               Object.assign(elements.floating.style, {
                 maxHeight: `${availableHeight}px`,
@@ -268,6 +269,47 @@ export function Hide() {
         </div>
       </div>
     );
+  } else if (hierarchy === 'n') {
+    // https://github.com/floating-ui/floating-ui/issues/2278
+    referenceJsx = (
+      <div style={{position: 'fixed', top: 150, left: 225, overflow: 'hidden'}}>
+        <div ref={reference} className="reference">
+          Reference
+        </div>
+      </div>
+    );
+  } else if (hierarchy === 'o') {
+    // https://github.com/floating-ui/floating-ui/issues/2167
+    floatingJsx = (
+      <div
+        style={{
+          width: 50,
+          height: 50,
+          overflow: 'auto',
+          position: 'absolute',
+          top: 50,
+          left: 50,
+          background: 'blue',
+          display: 'inline-block',
+        }}
+      >
+        <div style={{position: 'fixed'}}>
+          <div style={{transform: 'translateZ(0)'}}>
+            <div
+              ref={floating}
+              className="floating"
+              style={{
+                position: strategy,
+                top: y ?? 0,
+                left: x ?? 0,
+              }}
+            >
+              Floating
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -299,20 +341,34 @@ export function Hide() {
 
       <h2>Hierarchy</h2>
       <Controls>
-        {['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'].map(
-          (localHierarchy) => (
-            <button
-              key={localHierarchy}
-              data-testid={`hierarchy-${localHierarchy}`}
-              onClick={() => setHierarchy(localHierarchy)}
-              style={{
-                backgroundColor: localHierarchy === hierarchy ? 'black' : '',
-              }}
-            >
-              {localHierarchy}
-            </button>
-          )
-        )}
+        {[
+          'a',
+          'b',
+          'c',
+          'd',
+          'e',
+          'f',
+          'g',
+          'h',
+          'i',
+          'j',
+          'k',
+          'l',
+          'm',
+          'n',
+          'o',
+        ].map((localHierarchy) => (
+          <button
+            key={localHierarchy}
+            data-testid={`hierarchy-${localHierarchy}`}
+            onClick={() => setHierarchy(localHierarchy)}
+            style={{
+              backgroundColor: localHierarchy === hierarchy ? 'black' : '',
+            }}
+          >
+            {localHierarchy}
+          </button>
+        ))}
       </Controls>
     </>
   );

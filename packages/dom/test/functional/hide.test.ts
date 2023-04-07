@@ -101,3 +101,29 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     );
   });
 });
+
+['n'].forEach((hierarchy) => {
+  test(`floating element should be yellow, not black ${hierarchy}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/hide');
+    await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `yellow-not-black-${hierarchy}.png`
+    );
+  });
+});
+
+['o'].forEach((hierarchy) => {
+  test(`floating element should be placed at bottom center ${hierarchy}`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/hide');
+    await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
+
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `bottom-center-${hierarchy}.png`
+    );
+  });
+});
