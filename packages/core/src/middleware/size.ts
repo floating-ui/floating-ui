@@ -62,24 +62,26 @@ export const size = (
     const overflowAvailableHeight = height - overflow[heightSide];
     const overflowAvailableWidth = width - overflow[widthSide];
 
+    const noShift = !state.middlewareData.shift;
+
     let availableHeight = overflowAvailableHeight;
     let availableWidth = overflowAvailableWidth;
 
     if (isXAxis) {
-      availableWidth = min(
-        // Maximum clipping viewport width
-        width - overflow.right - overflow.left,
-        overflowAvailableWidth
-      );
+      const maximumClippingWidth = width - overflow.left - overflow.right;
+      availableWidth =
+        alignment || noShift
+          ? min(overflowAvailableWidth, maximumClippingWidth)
+          : maximumClippingWidth;
     } else {
-      availableHeight = min(
-        // Maximum clipping viewport height
-        height - overflow.bottom - overflow.top,
-        overflowAvailableHeight
-      );
+      const maximumClippingHeight = height - overflow.top - overflow.bottom;
+      availableHeight =
+        alignment || noShift
+          ? min(overflowAvailableHeight, maximumClippingHeight)
+          : maximumClippingHeight;
     }
 
-    if (!state.middlewareData.shift && !alignment) {
+    if (noShift && !alignment) {
       const xMin = max(overflow.left, 0);
       const xMax = max(overflow.right, 0);
       const yMin = max(overflow.top, 0);
