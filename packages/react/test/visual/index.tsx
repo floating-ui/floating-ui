@@ -21,6 +21,7 @@ import {Main as Navigation} from './components/Navigation';
 import {New} from './components/New';
 import {Main as Popover} from './components/Popover';
 import {Main as Select} from './components/Select';
+import {Main as Toast} from './components/Toast';
 import {Main as Tooltip} from './components/Tooltip';
 
 const ROUTES = [
@@ -34,6 +35,7 @@ const ROUTES = [
   {path: 'navigation', component: Navigation},
   {path: 'drawer', component: Drawer},
   {path: 'arrow', component: Arrow},
+  {path: 'toast', component: Toast},
 ];
 
 function App() {
