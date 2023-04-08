@@ -183,6 +183,34 @@ export function ToastProvider({
   );
 }
 
+// Pauses closing the toast when the mouse is over the toast
+export const useTimeout = (fn: (...args: any) => void, duration: number) => {
+  const [isRunning, setIsRunning] = useState(true);
+
+  const start = useCallback(() => {
+    setIsRunning(true);
+  }, []);
+
+  const stop = useCallback(() => {
+    setIsRunning(false);
+  }, []);
+
+  useEffect(() => {
+    if (isRunning) {
+      const timerId = setTimeout(() => {
+        fn();
+      }, duration);
+
+      return () => clearTimeout(timerId);
+    }
+  }, [isRunning, duration, fn]);
+
+  return {
+    start,
+    stop,
+  };
+};
+
 type ToastContentProps = {
   toastId: Id;
   isClosable?: boolean;
@@ -191,12 +219,7 @@ type ToastContentProps = {
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
   ({toastId, children}, propRef) => {
-    const [timerId, setTimerId] = useState();
-    const [isRunning, setIsRunning] = useState(false);
     const {context, close, dismiss} = useToastsContext();
-    // auto dismiss timer
-    const [remainingTime, setRemainingTime] = useState(5000);
-    const [startTime, setStartTime] = useState<number>(0);
     const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
       duration: 300,
@@ -214,36 +237,11 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
       }),
     });
 
-    const startTimer = () => {
-      setIsRunning(true);
-      setStartTime(Date.now());
-    };
+    const closeToast = useCallback(() => {
+      close(toastId);
+    }, [close, toastId]);
 
-    const stopTimer = () => {
-      setIsRunning(false);
-      setRemainingTime(
-        (remainingTime) => remainingTime - (Date.now() - startTime)
-      );
-      clearTimeout(timerId);
-    };
-
-    useEffect(() => {
-      startTimer();
-      // fire only once
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-      if (isRunning) {
-        const id = setTimeout(() => {
-          close(toastId);
-          clearTimeout(timerId);
-        }, remainingTime);
-        // @ts-ignore
-        setTimerId(id);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isRunning]);
+    const {start, stop} = useTimeout(closeToast, 3000);
 
     return (
       <li
@@ -262,16 +260,16 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
             }
           },
           onFocus: () => {
-            stopTimer();
+            stop();
           },
           onBlur: () => {
-            startTimer();
+            start();
           },
           onMouseOver: () => {
-            stopTimer();
+            stop();
           },
           onMouseLeave: () => {
-            startTimer();
+            start();
           },
         })}
       >
