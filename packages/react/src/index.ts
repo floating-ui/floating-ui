@@ -5,6 +5,7 @@ export {
   useDelayGroupContext,
 } from './components/FloatingDelayGroup';
 export {FloatingFocusManager} from './components/FloatingFocusManager';
+export {FloatingList, useListItem} from './components/FloatingList';
 export {FloatingOverlay} from './components/FloatingOverlay';
 export {
   FloatingPortal,
