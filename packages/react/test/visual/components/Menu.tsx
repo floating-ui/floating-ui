@@ -106,7 +106,6 @@ export const MenuComponent = React.forwardRef<
     enabled: isNested && allowHover,
     delay: {open: 75},
     handleClose: safePolygon({
-      restMs: 25,
       blockPointerEvents: true,
     }),
   });
