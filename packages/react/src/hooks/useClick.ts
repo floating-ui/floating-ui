@@ -46,9 +46,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
   const didKeyDownRef = React.useRef(false);
 
   return React.useMemo(() => {
-    if (!enabled) {
-      return {};
-    }
+    if (!enabled) return {};
 
     return {
       reference: {
@@ -120,13 +118,8 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         },
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
-          didKeyDownRef.current = false;
 
-          if (!keyboardHandlers) {
-            return;
-          }
-
-          if (isButtonTarget(event)) {
+          if (!keyboardHandlers || isButtonTarget(event)) {
             return;
           }
 
@@ -147,15 +140,16 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
           }
         },
         onKeyUp(event) {
-          if (!keyboardHandlers) {
-            return;
-          }
-
-          if (isButtonTarget(event) || isSpaceIgnored(domReference)) {
+          if (
+            !keyboardHandlers ||
+            isButtonTarget(event) ||
+            isSpaceIgnored(domReference)
+          ) {
             return;
           }
 
           if (event.key === ' ' && didKeyDownRef.current) {
+            didKeyDownRef.current = false;
             if (open) {
               if (toggle) {
                 onOpenChange(false);
@@ -164,8 +158,6 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
               onOpenChange(true);
             }
           }
-
-          didKeyDownRef.current = false;
         },
       },
     };
