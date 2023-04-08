@@ -36,17 +36,42 @@ function isInside(point: Point, rect: Rect) {
 }
 
 export function safePolygon<RT extends ReferenceType = ReferenceType>({
-  restMs = 0,
   buffer = 0.5,
   blockPointerEvents = false,
+  requireIntent = true,
 }: Partial<{
-  restMs: number;
   buffer: number;
   blockPointerEvents: boolean;
+  requireIntent: boolean;
 }> = {}) {
-  let timeoutId: NodeJS.Timeout;
   let isInsideRect = false;
   let hasLanded = false;
+  let lastX: number | null = null;
+  let lastY: number | null = null;
+  let lastCursorTime = performance.now();
+
+  function getCursorSpeed(x: number, y: number): number | null {
+    const currentTime = performance.now();
+    const elapsedTime = currentTime - lastCursorTime;
+
+    if (lastX === null || lastY === null || elapsedTime === 0) {
+      lastX = x;
+      lastY = y;
+      lastCursorTime = currentTime;
+      return null;
+    }
+
+    const deltaX = x - lastX;
+    const deltaY = y - lastY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const speed = distance / elapsedTime; // px / ms
+
+    lastX = x;
+    lastY = y;
+    lastCursorTime = currentTime;
+
+    return speed;
+  }
 
   const fn: HandleCloseFn<RT> = ({
     x,
@@ -58,13 +83,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     tree,
   }) => {
     return function onMouseMove(event: MouseEvent) {
-      function close() {
-        clearTimeout(timeoutId);
-        onClose();
-      }
-
-      clearTimeout(timeoutId);
-
       if (
         !elements.domReference ||
         !elements.floating ||
@@ -135,7 +153,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         (side === 'left' && x >= refRect.right - 1) ||
         (side === 'right' && x <= refRect.left + 1)
       ) {
-        return close();
+        return onClose();
       }
 
       // Ignore when the cursor is within the rectangular trough between the
@@ -365,13 +383,19 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       if (isInsideRect) {
         return;
       } else if (hasLanded && !isOverReferenceRect) {
-        return close();
+        return onClose();
+      }
+
+      if (!isLeave && requireIntent) {
+        const cursorSpeed = getCursorSpeed(event.clientX, event.clientY);
+        const cursorSpeedThreshold = 0.15;
+        if (cursorSpeed !== null && cursorSpeed < cursorSpeedThreshold) {
+          return onClose();
+        }
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
-        close();
-      } else if (restMs && !hasLanded) {
-        timeoutId = setTimeout(close, restMs);
+        onClose();
       }
     };
   };
