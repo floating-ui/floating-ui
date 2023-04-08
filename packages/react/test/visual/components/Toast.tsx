@@ -1,14 +1,12 @@
 import {
   ElementProps,
   ExtendedRefs,
-  inner,
   Placement,
   ReferenceType,
   useDismiss,
   useFloating,
   UseFloatingReturn,
   useInteractions,
-  useListNavigation,
   useTransitionStyles,
 } from '@floating-ui/react';
 import {
@@ -29,38 +27,21 @@ import {Button} from '../lib/Button';
 
 export type AppearanceTypes = 'error' | 'info' | 'success' | 'warning';
 export type Id = string;
-type Options = {
-  appearance?: AppearanceTypes;
-  autoDismiss?: boolean;
-  id?: Id;
-  onDismiss?: (id: Id) => void;
-  [key: string]: any;
-};
 
-type AddToast = (
-  content: ReactNode,
-  options?: Options,
-  callback?: (id: string) => void
-) => void;
-
-type ToastType = Options & {
-  appearance: AppearanceTypes;
-  content: ReactNode;
+type ToastType = {
   id: Id;
+  placement: Placement;
+  render: () => ReactNode;
 };
 type ToastsType = Array<ToastType>;
 
 type ContextType = {
   listRef: MutableRefObject<Array<HTMLElement | null>>;
-  index: number | null;
   toasts: ToastsType;
   dismiss: ElementProps;
-  setIndex: (index: number) => void;
-  listNavigation: ElementProps;
-  addToast: AddToast;
-  removeToast: (toastId: string) => void;
+  toast: (toast: Omit<ToastType, 'id'>) => void;
+  close: (toastId: string) => void;
   refs: ExtendedRefs<ReferenceType>;
-  autoDismissTimeout: number;
 } & UseFloatingReturn;
 
 export const Main = () => (
@@ -70,35 +51,26 @@ export const Main = () => (
 );
 
 const Component = () => {
-  const {addToast} = useToastsContext();
-
-  const handleClick = (text: string, options: Options) => () => {
-    addToast(text, options);
-  };
+  const {toast} = useToast();
 
   return (
     <ToastProvider>
       <>
         <h1 className="text-5xl font-bold mb-8">Toast</h1>
         <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-          <Button onClick={handleClick('info', {appearance: 'info'})}>
+          <Button
+            onClick={() =>
+              toast({
+                placement: 'top',
+                render: () => (
+                  <div className="w-[300px] bg-white p-4 mb-4 rounded-lg shadow-lg flex">
+                    Hello
+                  </div>
+                ),
+              })
+            }
+          >
             Add Toast
-          </Button>
-          <Button
-            onClick={handleClick('info', {
-              appearance: 'info',
-              autoDismiss: true,
-            })}
-          >
-            Add Toast autoDismiss
-          </Button>
-          <Button
-            onClick={handleClick('error', {
-              appearance: 'error',
-              autoDismiss: true,
-            })}
-          >
-            Add Error Toast autoDismiss
           </Button>
         </div>
       </>
@@ -112,93 +84,42 @@ export function generateUEID() {
   return `${first}${second}`;
 }
 
-const getColor = (appearance?: AppearanceTypes) => {
-  switch (appearance) {
-    case 'info':
-      return '#CDF0FE';
-    case 'success':
-      return '#ECFCD3';
-    case 'error':
-      return '#FFE2E5';
-    case 'warning':
-      return '#FEFACF';
-    default:
-      return '#ffffff';
-  }
-};
-
-const getCountDownColor = (appearance?: AppearanceTypes) => {
-  switch (appearance) {
-    case 'info':
-      return '#00B4D8';
-    case 'success':
-      return '#5CB85C';
-    case 'error':
-      return '#D9534F';
-    case 'warning':
-      return '#F0AD4E';
-    default:
-      return '#ffffff';
-  }
-};
-
-export function useToasts({placement = 'bottom'}: {placement?: Placement}) {
-  const [index, setIndex] = useState<number | null>(0);
+export function useToasts({placement = 'top'}: {placement?: Placement}) {
   const [toasts, setToasts] = useState<ToastsType>([]);
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
   const data = useFloating({
     placement,
     open: true,
-    middleware: [
-      inner({
-        listRef,
-        index: index ?? 0,
-      }),
-    ],
   });
 
-  const addToast: AddToast = useCallback((content, options) => {
-    const id = options?.id ?? generateUEID();
-    const newToast = {id, content, ...options} as ToastType;
-    setToasts((prev) => [...prev, newToast]);
+  const toast = useCallback(({placement, render}: Omit<ToastType, 'id'>) => {
+    setToasts((prev) => [
+      ...prev,
+      {
+        id: generateUEID(),
+        placement,
+        render,
+      },
+    ]);
   }, []);
 
-  const removeToast = useCallback((toastId: string) => {
+  const close = useCallback((toastId: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   }, []);
 
   const dismiss = useDismiss(data.context);
-  const listNavigation = useListNavigation(data.context, {
-    listRef,
-    activeIndex: index,
-    onNavigate: setIndex,
-    enabled: false,
-  });
 
   return useMemo(
     () => ({
       listRef,
-      index,
       toasts,
       dismiss,
-      listNavigation,
-      setIndex,
-      addToast,
-      removeToast,
+      toast,
+      close,
       ...data,
     }),
-    [
-      listRef,
-      index,
-      toasts,
-      dismiss,
-      listNavigation,
-      setIndex,
-      addToast,
-      removeToast,
-      data,
-    ]
+    [listRef, toasts, dismiss, toast, close, data]
   );
 }
 
@@ -214,33 +135,30 @@ export const useToastsContext = () => {
   return context;
 };
 
+const useToast = () => {
+  return useToastsContext();
+};
+
 export function ToastProvider({
   placement,
-  autoDismissTimeout = 3000,
   children,
 }: {
   placement?: Placement;
-  autoDismissTimeout?: number;
   children: ReactNode;
 }) {
   const context = useToasts({placement});
-  const {getFloatingProps} = useInteractions([
-    context.dismiss,
-    context.listNavigation,
-  ]);
+  const {getFloatingProps} = useInteractions([context.dismiss]);
 
   return (
-    <ToastContext.Provider value={{...context, autoDismissTimeout}}>
+    <ToastContext.Provider value={context}>
       <ul
         ref={context.refs.setFloating}
-        // role="region"
         aria-live="polite"
         style={{
           position: context.strategy,
           // TODO: dynamic style from placement prop
           left: '50%',
           transform: 'translateX(-50%)',
-          // remove default ul padding, margin
           padding: 0,
           margin: 0,
         }}
@@ -248,18 +166,16 @@ export function ToastProvider({
           role: 'region',
         })}
       >
-        {context.toasts.map(({id, content, appearance, autoDismiss}, index) => (
-          <ToastElement
+        {context.toasts.map(({id, render}, index) => (
+          <ToastContent
             key={id}
             toastId={id}
-            appearance={appearance}
-            autoDismiss={autoDismiss}
             ref={(node) => {
               context.listRef.current[index] = node;
             }}
           >
-            {content}
-          </ToastElement>
+            {render()}
+          </ToastContent>
         ))}
       </ul>
       {children}
@@ -268,21 +184,20 @@ export function ToastProvider({
 }
 
 type ToastContentProps = {
-  toastId: string;
-  appearance?: AppearanceTypes;
-  autoDismiss?: boolean;
+  toastId: Id;
+  isClosable?: boolean;
   children: ReactNode;
 } & HTMLAttributes<HTMLDivElement>;
 
-export const ToastElement = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({toastId, appearance, autoDismiss, children}, propRef) => {
+export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
+  ({toastId, children}, propRef) => {
     const [timerId, setTimerId] = useState();
     const [isRunning, setIsRunning] = useState(false);
-    const {context, removeToast, autoDismissTimeout, dismiss, listNavigation} =
-      useToastsContext();
-    const [remainingTime, setRemainingTime] = useState(autoDismissTimeout);
+    const {context, close, dismiss} = useToastsContext();
+    // auto dismiss timer
+    const [remainingTime, setRemainingTime] = useState(5000);
     const [startTime, setStartTime] = useState<number>(0);
-    const {getItemProps} = useInteractions([dismiss, listNavigation]);
+    const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
       duration: 300,
       initial: () => ({
@@ -313,9 +228,7 @@ export const ToastElement = forwardRef<HTMLLIElement, ToastContentProps>(
     };
 
     useEffect(() => {
-      if (autoDismiss) {
-        startTimer();
-      }
+      startTimer();
       // fire only once
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -323,7 +236,7 @@ export const ToastElement = forwardRef<HTMLLIElement, ToastContentProps>(
     useEffect(() => {
       if (isRunning) {
         const id = setTimeout(() => {
-          removeToast(toastId);
+          close(toastId);
           clearTimeout(timerId);
         }, remainingTime);
         // @ts-ignore
@@ -331,25 +244,6 @@ export const ToastElement = forwardRef<HTMLLIElement, ToastContentProps>(
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isRunning]);
-
-    // style for auto dismiss progress bar animation
-    useEffect(() => {
-      if (autoDismiss && !document.getElementById('autoDismissStyle')) {
-        const style = document.createElement('style');
-        Object.assign(style, {
-          id: 'autoDismissStyle',
-          innerHTML: `@keyframes autoDismiss {
-            from {
-              width: 100%;
-            }
-            to {
-              width: 0%;
-            }
-          }`,
-        });
-        document.head.appendChild(style);
-      }
-    });
 
     return (
       <li
@@ -359,67 +253,29 @@ export const ToastElement = forwardRef<HTMLLIElement, ToastContentProps>(
         aria-atomic="true"
         aria-hidden="false"
         tabIndex={0}
-        style={{
-          width: '300px',
-          backgroundColor: getColor(appearance),
-          padding: '1rem',
-          marginBottom: '1rem',
-          borderRadius: 8,
-          boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-          display: 'flex',
-          ...styles,
-        }}
+        style={styles}
         {...getItemProps({
           onKeyDown: (e) => {
             // Should useDismiss be used to handle closing with esc?
             if (e.key === 'Enter' || e.key === 'Escape') {
-              removeToast(toastId);
+              close(toastId);
             }
           },
           onFocus: () => {
-            if (autoDismiss) {
-              stopTimer();
-            }
+            stopTimer();
           },
           onBlur: () => {
-            if (autoDismiss) {
-              startTimer();
-            }
+            startTimer();
           },
           onMouseOver: () => {
-            if (autoDismiss) {
-              stopTimer();
-            }
+            stopTimer();
           },
           onMouseLeave: () => {
-            if (autoDismiss) {
-              startTimer();
-            }
+            startTimer();
           },
         })}
       >
         {children}
-        <div
-          style={{position: 'absolute', right: '10px', cursor: 'pointer'}}
-          onClick={() => {
-            removeToast(toastId);
-          }}
-        >
-          {/* TODO: svg icon */}×
-        </div>
-        <div
-          style={{
-            animation: `autoDismiss ${autoDismissTimeout}ms linear`,
-            backgroundColor: getCountDownColor(appearance),
-            position: 'absolute',
-            height: '3px',
-            width: 0,
-            top: 0,
-            left: 0,
-            opacity: autoDismiss ? 1 : 0,
-            animationPlayState: isRunning ? 'running' : 'paused',
-          }}
-        />
       </li>
     );
   }
