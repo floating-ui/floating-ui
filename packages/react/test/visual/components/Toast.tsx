@@ -25,9 +25,7 @@ import {
 
 import {Button} from '../lib/Button';
 
-export type AppearanceTypes = 'error' | 'info' | 'success' | 'warning';
-export type Id = string;
-
+type Id = string;
 type ToastType = {
   id: Id;
   placement: Placement;
@@ -40,7 +38,7 @@ type ContextType = {
   toasts: ToastsType;
   dismiss: ElementProps;
   toast: (toast: Omit<ToastType, 'id'>) => void;
-  close: (toastId: string) => void;
+  close: (toastId: Id) => void;
   refs: ExtendedRefs<ReferenceType>;
 } & UseFloatingReturn;
 
@@ -104,7 +102,7 @@ export function useToasts({placement = 'top'}: {placement?: Placement}) {
     ]);
   }, []);
 
-  const close = useCallback((toastId: string) => {
+  const close = useCallback((toastId: Id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   }, []);
 
@@ -215,7 +213,7 @@ type ToastContentProps = {
   toastId: Id;
   isClosable?: boolean;
   children: ReactNode;
-} & HTMLAttributes<HTMLDivElement>;
+} & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
   ({toastId, children}, propRef) => {
