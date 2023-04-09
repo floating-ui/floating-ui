@@ -35,10 +35,33 @@ export const useFloatingPortalNode = ({
   root?: HTMLElement | null;
 } = {}) => {
   const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
+  const idWrapperRef = React.useRef<HTMLDivElement | null>(null);
+
   const uniqueId = useId();
   const portalContext = usePortalContext();
 
+  const data = React.useMemo(
+    () => ({id, root, portalContext, uniqueId}),
+    [id, root, portalContext, uniqueId]
+  );
+
+  const dataRef = React.useRef<typeof data>();
+
   useLayoutEffect(() => {
+    const idWrapper = idWrapperRef.current;
+    return () => {
+      portalNode?.remove();
+      idWrapper?.remove();
+    };
+  }, [portalNode, data]);
+
+  useLayoutEffect(() => {
+    if (dataRef.current === data) return;
+
+    dataRef.current = data;
+
+    const {id, root, portalContext, uniqueId} = data;
+
     const existingIdRoot = id ? document.getElementById(id) : null;
     const attr = 'data-floating-ui-portal';
 
@@ -48,9 +71,6 @@ export const useFloatingPortalNode = ({
       subRoot.setAttribute(attr, '');
       existingIdRoot.appendChild(subRoot);
       setPortalNode(subRoot);
-      return () => {
-        subRoot.remove();
-      };
     } else {
       let container = portalContext?.portalNode || root || document.body;
 
@@ -66,17 +86,12 @@ export const useFloatingPortalNode = ({
       subRoot.id = uniqueId;
       subRoot.setAttribute(attr, '');
 
-      setPortalNode(subRoot);
-
       container = idWrapper || container;
       container.appendChild(subRoot);
 
-      return () => {
-        subRoot.remove();
-        idWrapper?.remove();
-      };
+      setPortalNode(subRoot);
     }
-  }, [id, root, portalContext, uniqueId]);
+  }, [data]);
 
   return portalNode;
 };
