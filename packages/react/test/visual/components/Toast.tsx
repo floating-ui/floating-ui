@@ -36,6 +36,7 @@ type ToastsType = Array<ToastType>;
 type ContextType = {
   listRef: MutableRefObject<Array<HTMLElement | null>>;
   toasts: ToastsType;
+  placements: Set<Placement>;
   dismiss: ElementProps;
   toast: (toast: Omit<ToastType, 'id'>) => void;
   close: (toastId: Id) => void;
@@ -68,7 +69,7 @@ const Component = () => {
               })
             }
           >
-            Add Toast
+            Add Top
           </Button>
         </div>
       </>
@@ -85,6 +86,7 @@ export function generateUEID() {
 export function useToasts({placement = 'top'}: {placement?: Placement}) {
   const [toasts, setToasts] = useState<ToastsType>([]);
   const listRef = useRef<Array<HTMLElement | null>>([]);
+  const [placements, setPlacements] = useState(new Set<Placement>([]));
 
   const data = useFloating({
     placement,
@@ -92,6 +94,11 @@ export function useToasts({placement = 'top'}: {placement?: Placement}) {
   });
 
   const toast = useCallback(({placement, render}: Omit<ToastType, 'id'>) => {
+    setPlacements((prev) => {
+      const placements = new Set(prev);
+      placements.add(placement);
+      return placements;
+    });
     setToasts((prev) => [
       ...prev,
       {
@@ -112,12 +119,13 @@ export function useToasts({placement = 'top'}: {placement?: Placement}) {
     () => ({
       listRef,
       toasts,
+      placements,
       dismiss,
       toast,
       close,
       ...data,
     }),
-    [listRef, toasts, dismiss, toast, close, data]
+    [listRef, toasts, placements, dismiss, toast, close, data]
   );
 }
 
@@ -137,6 +145,52 @@ const useToast = () => {
   return useToastsContext();
 };
 
+const getToastPosition = (placement?: Placement) => {
+  if (placement == null) return {};
+
+  const placements = placement.split('-');
+  if (placements[0] === 'top' || placements[0] === 'bottom') {
+    return {
+      margin: '0 auto',
+      top: placements[0] === 'top' ? '20px' : undefined,
+      bottom: placements[0] === 'bottom' ? '20px' : undefined,
+      left:
+        placements[1] === undefined
+          ? 0
+          : placements[1] === 'start'
+          ? '20px'
+          : 'auto',
+      right:
+        placements[1] === undefined
+          ? 0
+          : placements[1] === 'end'
+          ? '20px'
+          : 'auto',
+    };
+  }
+
+  if (placements[0] === 'left' || placements[0] === 'right') {
+    return {
+      left: placements[0] === 'left' ? '20px' : undefined,
+      right: placements[0] === 'right' ? '20px' : undefined,
+      top:
+        placements[1] === undefined
+          ? '50%'
+          : placements[1] === 'start'
+          ? '20px'
+          : 'auto',
+      bottom:
+        placements[1] === undefined
+          ? 0
+          : placements[1] === 'end'
+          ? '20px'
+          : 'auto',
+    };
+  }
+
+  return {};
+};
+
 export function ToastProvider({
   placement,
   children,
@@ -149,33 +203,44 @@ export function ToastProvider({
 
   return (
     <ToastContext.Provider value={context}>
-      <ul
-        ref={context.refs.setFloating}
-        aria-live="polite"
-        style={{
-          position: context.strategy,
-          // TODO: dynamic style from placement prop
-          left: '50%',
-          transform: 'translateX(-50%)',
-          padding: 0,
-          margin: 0,
-        }}
-        {...getFloatingProps({
-          role: 'region',
-        })}
-      >
-        {context.toasts.map(({id, render}, index) => (
-          <ToastContent
-            key={id}
-            toastId={id}
-            ref={(node) => {
-              context.listRef.current[index] = node;
+      {Array.from(context.placements).map((placement) => {
+        const toasts = context.toasts.filter(
+          (toast) => toast.placement === placement
+        );
+
+        return (
+          <ul
+            key={placement}
+            ref={context.refs.setFloating}
+            aria-live="polite"
+            style={{
+              position: context.strategy,
+              padding: 0,
+              pointerEvents: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              zIndex: 9999,
+              ...getToastPosition(placement),
             }}
+            {...getFloatingProps({
+              role: 'region',
+            })}
           >
-            {render()}
-          </ToastContent>
-        ))}
-      </ul>
+            {toasts.map(({id, placement, render}, index) => (
+              <ToastContent
+                key={id}
+                toastId={id}
+                placement={placement}
+                ref={(node) => {
+                  context.listRef.current[index] = node;
+                }}
+              >
+                {render()}
+              </ToastContent>
+            ))}
+          </ul>
+        );
+      })}
       {children}
     </ToastContext.Provider>
   );
@@ -211,12 +276,13 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 
 type ToastContentProps = {
   toastId: Id;
+  placement: Placement;
   isClosable?: boolean;
   children: ReactNode;
 } & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({toastId, children}, propRef) => {
+  ({toastId, placement, children}, propRef) => {
     const {context, close, dismiss} = useToastsContext();
     const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
@@ -249,7 +315,16 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
         aria-atomic="true"
         aria-hidden="false"
         tabIndex={0}
-        style={styles}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: placement.includes('left')
+            ? 'flex-start'
+            : placement.includes('right')
+            ? 'flex-end'
+            : 'center',
+          ...styles,
+        }}
         {...getItemProps({
           onKeyDown: (e) => {
             // Should useDismiss be used to handle closing with esc?
