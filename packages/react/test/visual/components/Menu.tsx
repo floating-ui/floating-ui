@@ -257,7 +257,7 @@ export const MenuItem = React.forwardRef<
 >(({label, disabled, ...props}, forwardedRef) => {
   const {activeIndex, setHasFocusInside, getItemProps} =
     React.useContext(MenuContext);
-  const item = useListItem({label});
+  const item = useListItem({label: disabled ? null : label});
   const tree = useFloatingTree();
   const isActive = item.index === activeIndex;
 

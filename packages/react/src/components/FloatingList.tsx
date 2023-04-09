@@ -116,7 +116,10 @@ export function useListItem({label}: UseListItemProps = {}): {
       if (index !== null) {
         elementsRef.current[index] = node;
         if (labelsRef) {
-          labelsRef.current[index] = label ?? node?.textContent ?? null;
+          const isLabelDefined = label !== undefined;
+          labelsRef.current[index] = isLabelDefined
+            ? label
+            : node?.textContent ?? null;
         }
       }
     },
