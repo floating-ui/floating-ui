@@ -69,7 +69,7 @@ const Component = () => {
               })
             }
           >
-            Add Top
+            Add Toast
           </Button>
         </div>
       </>
@@ -283,10 +283,12 @@ type ToastContentProps = {
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
   ({toastId, placement, children}, propRef) => {
+    const duration = 300;
+    const [closeStyle, setCloseStyle] = useState<React.CSSProperties>({});
     const {context, close, dismiss} = useToastsContext();
     const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
-      duration: 300,
+      duration,
       initial: () => ({
         opacity: 0,
       }),
@@ -302,8 +304,15 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
     });
 
     const closeToast = useCallback(() => {
-      close(toastId);
-    }, [close, toastId]);
+      setCloseStyle({
+        opacity: 0,
+        maxHeight: 0,
+        transition: `max-height ${duration}ms, opacity ${duration}ms`,
+      });
+      setTimeout(() => {
+        close(toastId);
+      }, duration);
+    }, [close, toastId, duration, setCloseStyle]);
 
     const {start, stop} = useTimeout(closeToast, 3000);
 
@@ -317,6 +326,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
         tabIndex={0}
         style={{
           display: 'flex',
+          maxHeight: '100vh',
           flexDirection: 'column',
           alignItems: placement.includes('left')
             ? 'flex-start'
@@ -324,6 +334,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
             ? 'flex-end'
             : 'center',
           ...styles,
+          ...closeStyle,
         }}
         {...getItemProps({
           onKeyDown: (e) => {
