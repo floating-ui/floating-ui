@@ -107,7 +107,7 @@ export const useDelayGroup = (
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
 
-  React.useEffect(() => {
+  useLayoutEffect(() => {
     if (currentId) {
       setState({
         delay: {
@@ -122,7 +122,7 @@ export const useDelayGroup = (
     }
   }, [id, onOpenChange, setState, currentId, initialDelay]);
 
-  React.useEffect(() => {
+  useLayoutEffect(() => {
     function unset() {
       onOpenChange(false);
       setState({delay: initialDelay, currentId: null});
@@ -140,7 +140,7 @@ export const useDelayGroup = (
     }
   }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
 
-  React.useEffect(() => {
+  useLayoutEffect(() => {
     if (open) {
       setCurrentId(id);
     }
