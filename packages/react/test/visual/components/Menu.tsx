@@ -194,6 +194,7 @@ export const MenuComponent = React.forwardRef<
             onFocus(event: React.FocusEvent<HTMLButtonElement>) {
               props.onFocus?.(event);
               setHasFocusInside(false);
+              menuCtx.setHasFocusInside(true);
             },
             onClick(event) {
               event.stopPropagation();
@@ -216,8 +217,8 @@ export const MenuComponent = React.forwardRef<
         }}
       >
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
-          <FloatingPortal>
-            {isOpen && (
+          {isOpen && (
+            <FloatingPortal>
               <FloatingFocusManager
                 context={context}
                 modal={false}
@@ -238,8 +239,8 @@ export const MenuComponent = React.forwardRef<
                   {children}
                 </div>
               </FloatingFocusManager>
-            )}
-          </FloatingPortal>
+            </FloatingPortal>
+          )}
         </FloatingList>
       </MenuContext.Provider>
     </FloatingNode>
