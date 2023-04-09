@@ -36,13 +36,18 @@ function areMapsEqual(
   return true;
 }
 
-export const FloatingListContext = React.createContext<null | {
+export const FloatingListContext = React.createContext<{
   register: (node: Node) => void;
   unregister: (node: Node) => void;
   map: Map<Node, number | null>;
   elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
   labelsRef?: React.MutableRefObject<Array<string | null>>;
-}>(null);
+}>({
+  register: () => {},
+  unregister: () => {},
+  map: new Map(),
+  elementsRef: {current: []},
+});
 
 export function FloatingList({
   children,
@@ -92,7 +97,7 @@ export function FloatingList({
 }
 
 export interface UseListItemProps {
-  label?: string;
+  label?: string | null;
 }
 
 export function useListItem({label}: UseListItemProps = {}): {
@@ -101,13 +106,8 @@ export function useListItem({label}: UseListItemProps = {}): {
 } {
   const [index, setIndex] = React.useState<number | null>(null);
   const componentRef = React.useRef<Node | null>(null);
-  const ctx = React.useContext(FloatingListContext);
-
-  if (!ctx) {
-    throw new Error('useListItem must be used within a FloatingList');
-  }
-
-  const {register, unregister, map, elementsRef, labelsRef} = ctx;
+  const {register, unregister, map, elementsRef, labelsRef} =
+    React.useContext(FloatingListContext);
 
   const ref = React.useCallback(
     (node: HTMLElement | null) => {
@@ -116,7 +116,7 @@ export function useListItem({label}: UseListItemProps = {}): {
       if (index !== null) {
         elementsRef.current[index] = node;
         if (labelsRef) {
-          labelsRef.current[index] = label || node?.textContent || null;
+          labelsRef.current[index] = label ?? node?.textContent ?? null;
         }
       }
     },
