@@ -262,7 +262,7 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
       if (!item) return;
 
       if (virtual) {
-        setActiveId(item?.id);
+        setActiveId(item.id);
       } else {
         enqueueFocus(item, {
           preventScroll: true,
