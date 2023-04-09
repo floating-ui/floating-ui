@@ -44,6 +44,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
   blockPointerEvents: boolean;
   requireIntent: boolean;
 }> = {}) {
+  let timeoutId: number;
   let isInsideRect = false;
   let hasLanded = false;
   let lastX: number | null = null;
@@ -83,6 +84,13 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
     tree,
   }) => {
     return function onMouseMove(event: MouseEvent) {
+      function close() {
+        clearTimeout(timeoutId);
+        onClose();
+      }
+
+      clearTimeout(timeoutId);
+
       if (
         !elements.domReference ||
         !elements.floating ||
@@ -153,7 +161,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
         (side === 'left' && x >= refRect.right - 1) ||
         (side === 'right' && x <= refRect.left + 1)
       ) {
-        return onClose();
+        return close();
       }
 
       // Ignore when the cursor is within the rectangular trough between the
@@ -383,19 +391,21 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
       if (isInsideRect) {
         return;
       } else if (hasLanded && !isOverReferenceRect) {
-        return onClose();
+        return close();
       }
 
       if (!isLeave && requireIntent) {
         const cursorSpeed = getCursorSpeed(event.clientX, event.clientY);
-        const cursorSpeedThreshold = 0.15;
+        const cursorSpeedThreshold = 0.1;
         if (cursorSpeed !== null && cursorSpeed < cursorSpeedThreshold) {
-          return onClose();
+          return close();
         }
       }
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
-        onClose();
+        close();
+      } else if (!hasLanded) {
+        timeoutId = window.setTimeout(close, 40);
       }
     };
   };

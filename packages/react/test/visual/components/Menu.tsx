@@ -32,11 +32,17 @@ const MenuContext = React.createContext<{
     userProps?: React.HTMLProps<HTMLElement>
   ) => Record<string, unknown>;
   activeIndex: number | null;
+  setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;
+  allowHover: boolean;
+  isOpen: boolean;
 }>({
   getItemProps: () => ({}),
   activeIndex: null,
+  setActiveIndex: () => {},
   setHasFocusInside: () => {},
+  allowHover: true,
+  isOpen: false,
 });
 
 interface MenuProps {
@@ -61,6 +67,9 @@ export const MenuComponent = React.forwardRef<
   const nodeId = useFloatingNodeId();
   const parentId = useFloatingParentNodeId();
   const isNested = parentId != null;
+
+  const parent = React.useContext(MenuContext);
+  const item = useListItem();
 
   const {x, y, strategy, refs, context} = useFloating<HTMLButtonElement>({
     nodeId,
@@ -166,16 +175,13 @@ export const MenuComponent = React.forwardRef<
     };
   }, [allowHover]);
 
-  const menuCtx = React.useContext(MenuContext);
-  const item = useListItem();
-
   return (
     <FloatingNode id={nodeId}>
       <button
         ref={useMergeRefs([refs.setReference, item.ref, forwardedRef])}
         data-open={isOpen ? '' : undefined}
         tabIndex={
-          !isNested ? undefined : menuCtx.activeIndex === item.index ? 0 : -1
+          !isNested ? undefined : parent.activeIndex === item.index ? 0 : -1
         }
         role={isNested ? 'menuitem' : undefined}
         className={c(
@@ -189,15 +195,18 @@ export const MenuComponent = React.forwardRef<
           }
         )}
         {...getReferenceProps(
-          menuCtx.getItemProps({
+          parent.getItemProps({
             ...props,
             onFocus(event: React.FocusEvent<HTMLButtonElement>) {
               props.onFocus?.(event);
               setHasFocusInside(false);
-              menuCtx.setHasFocusInside(true);
+              parent.setHasFocusInside(true);
             },
-            onClick(event) {
-              event.stopPropagation();
+            onMouseEnter(event: React.MouseEvent<HTMLButtonElement>) {
+              props.onMouseEnter?.(event);
+              if (parent.allowHover && parent.isOpen) {
+                parent.setActiveIndex(item.index);
+              }
             },
           })
         )}
@@ -212,8 +221,11 @@ export const MenuComponent = React.forwardRef<
       <MenuContext.Provider
         value={{
           activeIndex,
+          setActiveIndex,
           getItemProps,
           setHasFocusInside,
+          allowHover,
+          isOpen,
         }}
       >
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -256,11 +268,10 @@ export const MenuItem = React.forwardRef<
   HTMLButtonElement,
   MenuItemProps & React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({label, disabled, ...props}, forwardedRef) => {
-  const {activeIndex, setHasFocusInside, getItemProps} =
-    React.useContext(MenuContext);
+  const menu = React.useContext(MenuContext);
   const item = useListItem({label: disabled ? null : label});
   const tree = useFloatingTree();
-  const isActive = item.index === activeIndex;
+  const isActive = item.index === menu.activeIndex;
 
   return (
     <button
@@ -274,14 +285,20 @@ export const MenuItem = React.forwardRef<
         'text-left flex py-1 px-2 focus:bg-blue-500 focus:text-white outline-none rounded',
         {'opacity-40': disabled}
       )}
-      {...getItemProps({
+      {...menu.getItemProps({
         onClick(event: React.MouseEvent<HTMLButtonElement>) {
           props.onClick?.(event);
           tree?.events.emit('click');
         },
         onFocus(event: React.FocusEvent<HTMLButtonElement>) {
           props.onFocus?.(event);
-          setHasFocusInside(true);
+          menu.setHasFocusInside(true);
+        },
+        onMouseEnter(event: React.MouseEvent<HTMLButtonElement>) {
+          props.onMouseEnter?.(event);
+          if (menu.allowHover && menu.isOpen) {
+            menu.setActiveIndex(item.index);
+          }
         },
       })}
     >
