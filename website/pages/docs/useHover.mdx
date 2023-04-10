@@ -209,27 +209,27 @@ looks like this:
 
 This function takes options.
 
-### restMs
+### requireIntent
 
-default: `0{:js}` (off)
+default: `true{:js}`
 
-Determines whether to close the floating once the cursor is at
-rest for the specified number of milliseconds mid-traversal. The
-default value (0) will never close it unless the pointer is
-outside the area.
-
-<Notice>
-This applies only if the cursor is not close enough to the floating element
-to be within the `offset(){:js}` region, so it does not apply too eagerly.
-</Notice>
+Determines whether intent is required for the triangle polygon to
+be generated (that is, the cursor is moving quickly enough toward
+the floating element). `false{:js}` will keep the triangle active
+no matter the intent.
 
 ```js
 useHover(context, {
   handleClose: safePolygon({
-    restMs: 50,
+    requireIntent: false,
   }),
 });
 ```
+
+When reference elements are placed near each other and they each
+have a hoverable floating element attached, `true{:js}` ensures
+that hover events for the other nearby references aren't too
+aggressively blocked.
 
 ### buffer
 

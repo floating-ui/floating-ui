@@ -1,0 +1,93 @@
+# FloatingList
+
+Provides the ability to create composable children APIs for list
+components, without needing to keep track of a list item index
+for [`useListNavigation`](/docs/useListNavigation) or
+[`useTypeahead`](/docs/useTypeahead).
+
+Manually specifying an index poses problems when wrapper tags
+surround list items, such as with grouping.
+
+An example of a composable children API looks like the following,
+where `<Select>{:jsx}` does not receive an array prop but rather
+children:
+
+```js
+<Select>
+  <OptionGroup label="Fruits">
+    <Option>Apple</Option>
+    <Option>Strawberry</Option>
+    <Option>Banana</Option>
+  </OptionGroup>
+  <OptionGroup label="Vegetables">
+    <Option>Carrot</Option>
+    <Option>Green Peas</Option>
+    <Option>Cauliflower</Option>
+  </OptionGroup>
+</Select>
+```
+
+## Usage
+
+```jsx
+import {FloatingList, useListItem} from '@floating-ui/react';
+```
+
+### FloatingList
+
+This component is a context provider that receives two props:
+
+- <WordHighlight id="a">elementsRef</WordHighlight> — `useListNavigation(){:js}`'s `listRef{:.objectKey}` prop (array of elements).
+- <WordHighlight id="b">labelsRef</WordHighlight> — `useTypeahead(){:js}`'s `listRef{:.objectKey}` prop (array of strings; **optional**).
+
+```js /elementsRef/1,2,4#a /labelsRef/1,2,4#b
+const elementsRef = useRef([]);
+const labelsRef = useRef([]);
+
+const listNav = useListNavigation(context, {
+  listRef: elementsRef,
+});
+const typeahead = useTypeahead(context, {
+  listRef: labelsRef,
+});
+
+return (
+  <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+    {/* floating element with list item children */}
+  </FloatingList>
+);
+```
+
+### useListItem
+
+This hook is used to register a list item and its index (DOM
+position) in the `FloatingList`. It returns two properties:
+`ref{:.const}` and `index{:.const}`.
+
+```js {3} /ref/1,3 /index/
+function Option() {
+  const {activeIndex} = useSelectContext();
+  const {ref, index} = useListItem();
+
+  const isActive = activeIndex === index;
+
+  return <div ref={ref} tabIndex={isActive ? 0 : -1} />;
+}
+```
+
+The hook optionally accepts a `label` prop, which is used to
+determine the string that can be matched with typeahead:
+
+```js /label/
+function Option({label}) {
+  const {activeIndex} = useSelectContext();
+  const {ref, index} = useListItem({
+    label,
+  });
+
+  // ...
+}
+```
+
+The `label` can be `null{:js}` for disabled items, which will be
+ignored for typeahead.

@@ -8,6 +8,9 @@ the user types, often used in tandem with
 import {useTypeahead} from '@floating-ui/react';
 ```
 
+See [`FloatingList`](/docs/FloatingList) for creating composable
+children API components.
+
 ## Usage
 
 This hook is an interaction hook that returns event handler
@@ -128,6 +131,9 @@ const listContentRef = useRef([]);
   }}
 />
 ```
+
+Disabled items can be represented by `null{:js}` values in the
+array at the relevant index, and will be skipped.
 
 ### activeIndex
 

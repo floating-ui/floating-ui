@@ -17,6 +17,7 @@ import DetectOverflow from '../../public/icons/detectOverflow.svg';
 import Flip from '../../public/icons/flip.svg';
 import FloatingDelayGroup from '../../public/icons/FloatingDelayGroup.svg';
 import FloatingFocusManager from '../../public/icons/FloatingFocusManager.svg';
+import FloatingList from '../../public/icons/FloatingList.svg';
 import FloatingOverlay from '../../public/icons/FloatingOverlay.svg';
 import FloatingPortal from '../../public/icons/FloatingPortal.svg';
 import FloatingTree from '../../public/icons/FloatingTree.svg';
@@ -221,6 +222,13 @@ const interactions = [
     url: '/docs/FloatingOverlay',
     title: 'FloatingOverlay',
     icon: FloatingOverlay,
+    depth: 1,
+    mono: true,
+  },
+  {
+    url: '/docs/FloatingList',
+    title: 'FloatingList',
+    icon: FloatingList,
     depth: 1,
     mono: true,
   },

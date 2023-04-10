@@ -11,7 +11,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import {useId} from 'react';
+import {useEffect, useId} from 'react';
 import {forwardRef, useRef, useState} from 'react';
 
 const fruits = [
@@ -175,6 +175,23 @@ export function ComboboxDemo() {
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [activeIndex, setActiveIndex] = useState(null);
+  const [padding, setPadding] = useState(25);
+
+  useEffect(() => {
+    function onResize() {
+      setPadding(window.visualViewport?.height < 400 ? 5 : 25);
+    }
+
+    window.addEventListener('resize', onResize);
+    window.visualViewport?.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.visualViewport?.removeEventListener(
+        'resize',
+        onResize
+      );
+    };
+  }, []);
 
   const listRef = useRef([]);
 
@@ -185,29 +202,21 @@ export function ComboboxDemo() {
     middleware: [
       offset(5),
       size({
-        apply({rects, elements, availableHeight}) {
-          const viewportHeight =
-            window.visualViewport.height ??
-            document.documentElement.clientHeight;
-
+        apply({rects, elements, availableHeight, placement}) {
           Object.assign(elements.floating.style, {
-            maxHeight: `${
-              viewportHeight < availableHeight
-                ? viewportHeight
-                : Math.max(
-                    availableHeight,
-                    Math.min(200, viewportHeight)
-                  )
-            }px`,
+            maxHeight:
+              placement === 'bottom'
+                ? `${Math.max(
+                    padding === 25 ? 150 : 75,
+                    availableHeight
+                  )}px`
+                : `${Math.max(50, availableHeight)}px`,
             width: `${rects.reference.width}px`,
           });
         },
-        padding: 25,
+        padding,
       }),
-      flip({
-        padding: 25,
-        fallbackStrategy: 'initialPlacement',
-      }),
+      flip({padding, fallbackStrategy: 'initialPlacement'}),
     ],
   });
 
