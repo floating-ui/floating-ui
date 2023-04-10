@@ -212,14 +212,10 @@ export function ToastProvider({
           <ul
             key={placement}
             ref={context.refs.setFloating}
+            className="pointer-events-none p-0 flex flex-col z-9999"
             aria-live="polite"
             style={{
               position: context.strategy,
-              padding: 0,
-              pointerEvents: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              zIndex: 9999,
               ...getToastPosition(placement),
             }}
             {...getFloatingProps({
@@ -318,21 +314,19 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
 
     return (
       <li
-        className={toastId}
         ref={propRef}
+        className={`flex flex-col max-h-screen ${
+          placement.includes('left')
+            ? 'items-start'
+            : placement.includes('right')
+            ? 'items-end'
+            : 'items-center'
+        }`}
         role="status"
         aria-atomic="true"
         aria-hidden="false"
         tabIndex={0}
         style={{
-          display: 'flex',
-          maxHeight: '100vh',
-          flexDirection: 'column',
-          alignItems: placement.includes('left')
-            ? 'flex-start'
-            : placement.includes('right')
-            ? 'flex-end'
-            : 'center',
           ...styles,
           ...closeStyle,
         }}
@@ -357,7 +351,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
           },
         })}
       >
-        {children}
+        <div className="pointer-events-auto w-fit-content">{children}</div>
       </li>
     );
   }
