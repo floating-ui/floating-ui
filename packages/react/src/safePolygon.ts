@@ -404,7 +404,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>({
 
       if (!isPointInPolygon([clientX, clientY], poly)) {
         close();
-      } else if (!hasLanded) {
+      } else if (!hasLanded && requireIntent) {
         timeoutId = window.setTimeout(close, 40);
       }
     };
