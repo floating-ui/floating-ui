@@ -40,12 +40,13 @@ type ContextType = {
   listRef: MutableRefObject<Array<HTMLElement | null>>;
   toasts: ToastsType;
   placements: Set<ToastPlacement>;
-  // dismiss: ElementProps;
   toast: (toast: Omit<ToastType, 'id'>) => void;
   close: (toastId: Id) => void;
-  // refs: ExtendedRefs<ReferenceType>;
 };
-//  & UseFloatingReturn;
+
+type ProviderType = Partial<ToastType> & {
+  children: ReactNode;
+};
 
 export const Main = () => (
   <ToastProvider>
@@ -57,27 +58,25 @@ const Component = () => {
   const {toast} = useToast();
 
   return (
-    <ToastProvider>
-      <>
-        <h1 className="text-5xl font-bold mb-8">Toast</h1>
-        <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-          <Button
-            onClick={() =>
-              toast({
-                placement: 'top',
-                render: () => (
-                  <div className="w-[300px] bg-white p-4 mb-4 rounded-lg shadow-lg flex">
-                    Hello
-                  </div>
-                ),
-              })
-            }
-          >
-            Add Toast
-          </Button>
-        </div>
-      </>
-    </ToastProvider>
+    <>
+      <h1 className="text-5xl font-bold mb-8">Toast</h1>
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        <Button
+          onClick={() =>
+            toast({
+              placement: 'top',
+              render: () => (
+                <div className="w-[300px] bg-white p-4 mb-4 rounded-lg shadow-lg flex">
+                  Hello
+                </div>
+              ),
+            })
+          }
+        >
+          Add Toast
+        </Button>
+      </div>
+    </>
   );
 };
 
@@ -87,15 +86,10 @@ export function generateUEID() {
   return `${first}${second}`;
 }
 
-export function useToasts({placement}: {placement?: ToastPlacement}) {
+export function useToasts() {
   const [toasts, setToasts] = useState<ToastsType>([]);
   const listRef = useRef<Array<HTMLElement | null>>([]);
   const [placements, setPlacements] = useState(new Set<ToastPlacement>([]));
-
-  // const data = useFloating({
-  //   placement,
-  //   open: true,
-  // });
 
   const toast = useCallback(({placement, render}: Omit<ToastType, 'id'>) => {
     setPlacements((prev) => {
@@ -117,17 +111,13 @@ export function useToasts({placement}: {placement?: ToastPlacement}) {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   }, []);
 
-  // const dismiss = useDismiss(data.context);
-
   return useMemo(
     () => ({
       listRef,
       toasts,
       placements,
-      // dismiss,
       toast,
       close,
-      // ...data,
     }),
     [listRef, toasts, placements, toast, close]
   );
@@ -176,14 +166,8 @@ const getToastPosition = (placement?: ToastPlacement) => {
   return {};
 };
 
-export function ToastProvider({
-  placement,
-  children,
-}: {
-  placement?: ToastPlacement;
-  children: ReactNode;
-}) {
-  const context = useToasts({placement});
+export function ToastProvider({children}: ProviderType) {
+  const context = useToasts();
   const {getFloatingProps} = useInteractions();
 
   return (
@@ -210,11 +194,10 @@ export function ToastProvider({
               role: 'region',
             })}
           >
-            {toasts.map(({id, placement, render}, index) => (
+            {toasts.map(({id, render}, index) => (
               <ToastContent
                 key={id}
                 toastId={id}
-                placement={placement}
                 ref={(node) => {
                   context.listRef.current[index] = node;
                 }}
@@ -261,7 +244,6 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 
 type ToastContentProps = {
   toastId: Id;
-  placement?: ToastPlacement;
   isClosable?: boolean;
   children: ReactNode;
 } & HTMLAttributes<HTMLLIElement>;
@@ -330,9 +312,8 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
         }}
         {...getItemProps({
           onKeyDown: (e) => {
-            // Should useDismiss be used to handle closing with esc?
             if (e.key === 'Enter' || e.key === 'Escape') {
-              close(toastId);
+              closeToast();
             }
           },
           onFocus: () => {
