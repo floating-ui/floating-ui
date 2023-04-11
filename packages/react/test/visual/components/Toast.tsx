@@ -1,12 +1,9 @@
 import {
-  ElementProps,
-  ExtendedRefs,
-  Placement,
-  ReferenceType,
+  Alignment,
   useDismiss,
   useFloating,
-  UseFloatingReturn,
   useInteractions,
+  useMergeRefs,
   useTransitionStyles,
 } from '@floating-ui/react';
 import {
@@ -25,10 +22,16 @@ import {
 
 import {Button} from '../lib/Button';
 
+type ToastPlacement =
+  | 'top'
+  | 'bottom'
+  | `top-${Alignment}`
+  | `bottom-${Alignment}`;
+
 type Id = string;
 type ToastType = {
   id: Id;
-  placement: Placement;
+  placement: ToastPlacement;
   render: () => ReactNode;
 };
 type ToastsType = Array<ToastType>;
@@ -36,12 +39,13 @@ type ToastsType = Array<ToastType>;
 type ContextType = {
   listRef: MutableRefObject<Array<HTMLElement | null>>;
   toasts: ToastsType;
-  placements: Set<Placement>;
-  dismiss: ElementProps;
+  placements: Set<ToastPlacement>;
+  // dismiss: ElementProps;
   toast: (toast: Omit<ToastType, 'id'>) => void;
   close: (toastId: Id) => void;
-  refs: ExtendedRefs<ReferenceType>;
-} & UseFloatingReturn;
+  // refs: ExtendedRefs<ReferenceType>;
+};
+//  & UseFloatingReturn;
 
 export const Main = () => (
   <ToastProvider>
@@ -83,15 +87,15 @@ export function generateUEID() {
   return `${first}${second}`;
 }
 
-export function useToasts({placement = 'top'}: {placement?: Placement}) {
+export function useToasts({placement}: {placement?: ToastPlacement}) {
   const [toasts, setToasts] = useState<ToastsType>([]);
   const listRef = useRef<Array<HTMLElement | null>>([]);
-  const [placements, setPlacements] = useState(new Set<Placement>([]));
+  const [placements, setPlacements] = useState(new Set<ToastPlacement>([]));
 
-  const data = useFloating({
-    placement,
-    open: true,
-  });
+  // const data = useFloating({
+  //   placement,
+  //   open: true,
+  // });
 
   const toast = useCallback(({placement, render}: Omit<ToastType, 'id'>) => {
     setPlacements((prev) => {
@@ -113,19 +117,19 @@ export function useToasts({placement = 'top'}: {placement?: Placement}) {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
   }, []);
 
-  const dismiss = useDismiss(data.context);
+  // const dismiss = useDismiss(data.context);
 
   return useMemo(
     () => ({
       listRef,
       toasts,
       placements,
-      dismiss,
+      // dismiss,
       toast,
       close,
-      ...data,
+      // ...data,
     }),
-    [listRef, toasts, placements, dismiss, toast, close, data]
+    [listRef, toasts, placements, toast, close]
   );
 }
 
@@ -145,7 +149,7 @@ const useToast = () => {
   return useToastsContext();
 };
 
-const getToastPosition = (placement?: Placement) => {
+const getToastPosition = (placement?: ToastPlacement) => {
   if (placement == null) return {};
 
   const placements = placement.split('-');
@@ -169,25 +173,6 @@ const getToastPosition = (placement?: Placement) => {
     };
   }
 
-  if (placements[0] === 'left' || placements[0] === 'right') {
-    return {
-      left: placements[0] === 'left' ? '20px' : undefined,
-      right: placements[0] === 'right' ? '20px' : undefined,
-      top:
-        placements[1] === undefined
-          ? '50%'
-          : placements[1] === 'start'
-          ? '20px'
-          : 'auto',
-      bottom:
-        placements[1] === undefined
-          ? 0
-          : placements[1] === 'end'
-          ? '20px'
-          : 'auto',
-    };
-  }
-
   return {};
 };
 
@@ -195,11 +180,11 @@ export function ToastProvider({
   placement,
   children,
 }: {
-  placement?: Placement;
+  placement?: ToastPlacement;
   children: ReactNode;
 }) {
   const context = useToasts({placement});
-  const {getFloatingProps} = useInteractions([context.dismiss]);
+  const {getFloatingProps} = useInteractions();
 
   return (
     <ToastContext.Provider value={context}>
@@ -211,11 +196,14 @@ export function ToastProvider({
         return (
           <ul
             key={placement}
-            ref={context.refs.setFloating}
-            className="pointer-events-none p-0 flex flex-col z-9999"
             aria-live="polite"
             style={{
-              position: context.strategy,
+              position: 'absolute',
+              pointerEvents: 'none',
+              padding: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              zIndex: 9999,
               ...getToastPosition(placement),
             }}
             {...getFloatingProps({
@@ -262,7 +250,8 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 
       return () => clearTimeout(timerId);
     }
-  }, [isRunning, duration, fn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning]);
 
   return {
     start,
@@ -272,21 +261,28 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 
 type ToastContentProps = {
   toastId: Id;
-  placement: Placement;
+  placement?: ToastPlacement;
   isClosable?: boolean;
   children: ReactNode;
 } & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({toastId, placement, children}, propRef) => {
-    const duration = 300;
-    const [closeStyle, setCloseStyle] = useState<React.CSSProperties>({});
-    const {context, close, dismiss} = useToastsContext();
+  ({toastId, children}, propRef) => {
+    const [open, setOpen] = useState(true);
+    const {context, refs} = useFloating({
+      open,
+      nodeId: toastId,
+    });
+    const ref = useMergeRefs([propRef, refs.setFloating]);
+    const dismiss = useDismiss(context);
+    const duration = 300; // TODO get from props with transform settings
+    const {close} = useToastsContext();
     const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
       duration,
       initial: () => ({
         opacity: 0,
+        maxHeight: 0,
       }),
       open: ({side}) => ({
         opacity: 1,
@@ -297,38 +293,40 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
           left: 'translateX(-0.5rem)',
         }[side],
       }),
-    });
-
-    const closeToast = useCallback(() => {
-      setCloseStyle({
+      close: ({side}) => ({
         opacity: 0,
         maxHeight: 0,
-        transition: `max-height ${duration}ms, opacity ${duration}ms`,
-      });
+        transform: {
+          top: 'translateY(0.5rem)',
+          right: 'translateX(-0.5rem)',
+          bottom: 'translateY(-0.5rem)',
+          left: 'translateX(0.5rem)',
+        }[side],
+      }),
+    });
+
+    const closeToast = () => {
+      setOpen(false);
       setTimeout(() => {
         close(toastId);
       }, duration);
-    }, [close, toastId, duration, setCloseStyle]);
+    };
 
     const {start, stop} = useTimeout(closeToast, 3000);
 
     return (
       <li
-        ref={propRef}
-        className={`flex flex-col max-h-screen ${
-          placement.includes('left')
-            ? 'items-start'
-            : placement.includes('right')
-            ? 'items-end'
-            : 'items-center'
-        }`}
+        ref={ref}
         role="status"
         aria-atomic="true"
         aria-hidden="false"
         tabIndex={0}
         style={{
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: '100vh',
+          alignItems: 'center',
           ...styles,
-          ...closeStyle,
         }}
         {...getItemProps({
           onKeyDown: (e) => {
@@ -351,7 +349,9 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
           },
         })}
       >
-        <div className="pointer-events-auto w-fit-content">{children}</div>
+        <div style={{pointerEvents: 'auto', width: 'fit-content'}}>
+          {children}
+        </div>
       </li>
     );
   }
