@@ -95,12 +95,7 @@ export function useToasts() {
   const [placements, setPlacements] = useState(new Set<ToastPlacement>([]));
 
   const toast = useCallback(
-    ({
-      placement = 'bottom',
-      delay,
-      transition,
-      render,
-    }: Omit<ToastType, 'id'>) => {
+    ({placement, delay, transition, render}: Omit<ToastType, 'id'>) => {
       setPlacements((prev) => {
         if (!placement) {
           return new Set(prev);
@@ -183,16 +178,59 @@ const getToastPosition = (placement?: ToastPlacement) => {
   return {};
 };
 
-export function ToastProvider({children}: ProviderType) {
+// memo: Default value is kept by provider.
+// This is useful when maintaining global values in the provider,
+// and is also useful when applying default values to individual toasts.
+export function ToastProvider({
+  placement: defaultPlacement = 'bottom',
+  delay = 5000,
+  transition = {
+    duration: 300,
+    initial: () => ({
+      opacity: 0,
+      maxHeight: 0,
+    }),
+    open: ({side}) => ({
+      opacity: 1,
+      transform: {
+        top: 'translateY(-0.5rem)',
+        right: 'translateX(0.5rem)',
+        bottom: 'translateY(0.5rem)',
+        left: 'translateX(-0.5rem)',
+      }[side],
+    }),
+    close: ({side}) => ({
+      opacity: 0,
+      maxHeight: 0,
+      transform: {
+        top: 'translateY(0.5rem)',
+        right: 'translateX(-0.5rem)',
+        bottom: 'translateY(-0.5rem)',
+        left: 'translateX(0.5rem)',
+      }[side],
+    }),
+  },
+  render = () => null,
+  children,
+}: ProviderType) {
   const context = useToasts();
   const {getFloatingProps} = useInteractions();
 
+  // add default toast placement to placements Set
+  const placements = context.placements.add(defaultPlacement);
+
   return (
     <ToastContext.Provider value={context}>
-      {Array.from(context.placements).map((placement) => {
-        const toasts = context.toasts.filter(
-          (toast) => toast.placement === placement
-        );
+      {Array.from(placements).map((placement) => {
+        const toasts = context.toasts
+          .map((toast) => {
+            if (!toast.placement) {
+              // if placement undefined, set default placement
+              return {...toast, placement: defaultPlacement};
+            }
+            return toast;
+          })
+          .filter((toast) => toast.placement === placement);
 
         return (
           <ul
@@ -211,16 +249,21 @@ export function ToastProvider({children}: ProviderType) {
               role: 'region',
             })}
           >
-            {toasts.map(({id, delay, transition, render}, index) => (
+            {toasts.map((toast, index) => (
               <ToastContent
-                key={id}
-                id={id}
-                delay={delay}
-                transition={transition}
+                key={toast.id}
+                id={toast.id}
+                placement={toast.placement ?? placement}
+                delay={toast.delay ?? delay}
+                transition={
+                  toast.transition
+                    ? {...transition, ...toast.transition}
+                    : transition
+                }
                 ref={(node) => {
                   context.listRef.current[index] = node;
                 }}
-                render={render}
+                render={toast.render ?? render}
               ></ToastContent>
             ))}
           </ul>
@@ -260,10 +303,10 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
   };
 };
 
-type ToastContentProps = ToastType & HTMLAttributes<HTMLLIElement>;
+type ToastContentProps = Required<ToastType> & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({id, delay = 5000, transition, render}, propRef) => {
+  ({id, delay, transition, render}, propRef) => {
     const [open, setOpen] = useState(true);
     const {context, refs} = useFloating({
       open,
@@ -273,33 +316,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
     const dismiss = useDismiss(context);
     const {close} = useToastsContext();
     const {getItemProps} = useInteractions([dismiss]);
-    const {styles} = useTransitionStyles(context, {
-      duration: 300,
-      initial: () => ({
-        opacity: 0,
-        maxHeight: 0,
-      }),
-      open: ({side}) => ({
-        opacity: 1,
-        transform: {
-          top: 'translateY(-0.5rem)',
-          right: 'translateX(0.5rem)',
-          bottom: 'translateY(0.5rem)',
-          left: 'translateX(-0.5rem)',
-        }[side],
-      }),
-      close: ({side}) => ({
-        opacity: 0,
-        maxHeight: 0,
-        transform: {
-          top: 'translateY(0.5rem)',
-          right: 'translateX(-0.5rem)',
-          bottom: 'translateY(-0.5rem)',
-          left: 'translateX(0.5rem)',
-        }[side],
-      }),
-      ...transition,
-    });
+    const {styles} = useTransitionStyles(context, transition);
 
     const closeToastTime = useMemo(() => {
       if (transition?.duration == null) {
