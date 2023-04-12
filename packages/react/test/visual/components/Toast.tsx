@@ -5,6 +5,7 @@ import {
   useInteractions,
   useMergeRefs,
   useTransitionStyles,
+  UseTransitionStylesProps,
 } from '@floating-ui/react';
 import {
   createContext,
@@ -31,8 +32,10 @@ type ToastPlacement =
 type Id = string;
 type ToastType = {
   id: Id;
-  placement: ToastPlacement;
-  render: () => ReactNode;
+  delay?: number;
+  transition?: UseTransitionStylesProps;
+  placement?: ToastPlacement;
+  render?: (onClose?: () => void) => ReactNode;
 };
 type ToastsType = Array<ToastType>;
 
@@ -91,21 +94,35 @@ export function useToasts() {
   const listRef = useRef<Array<HTMLElement | null>>([]);
   const [placements, setPlacements] = useState(new Set<ToastPlacement>([]));
 
-  const toast = useCallback(({placement, render}: Omit<ToastType, 'id'>) => {
-    setPlacements((prev) => {
-      const placements = new Set(prev);
-      placements.add(placement);
-      return placements;
-    });
-    setToasts((prev) => [
-      ...prev,
-      {
-        id: generateUEID(),
-        placement,
-        render,
-      },
-    ]);
-  }, []);
+  const toast = useCallback(
+    ({
+      placement = 'bottom',
+      delay,
+      transition,
+      render,
+    }: Omit<ToastType, 'id'>) => {
+      setPlacements((prev) => {
+        if (!placement) {
+          return new Set(prev);
+        }
+
+        const placements = new Set(prev);
+        placements.add(placement);
+        return placements;
+      });
+      setToasts((prev) => [
+        ...prev,
+        {
+          id: generateUEID(),
+          placement,
+          delay,
+          transition,
+          render,
+        },
+      ]);
+    },
+    []
+  );
 
   const close = useCallback((toastId: Id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
@@ -194,16 +211,17 @@ export function ToastProvider({children}: ProviderType) {
               role: 'region',
             })}
           >
-            {toasts.map(({id, render}, index) => (
+            {toasts.map(({id, delay, transition, render}, index) => (
               <ToastContent
                 key={id}
-                toastId={id}
+                id={id}
+                delay={delay}
+                transition={transition}
                 ref={(node) => {
                   context.listRef.current[index] = node;
                 }}
-              >
-                {render()}
-              </ToastContent>
+                render={render}
+              ></ToastContent>
             ))}
           </ul>
         );
@@ -242,26 +260,21 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
   };
 };
 
-type ToastContentProps = {
-  toastId: Id;
-  isClosable?: boolean;
-  children: ReactNode;
-} & HTMLAttributes<HTMLLIElement>;
+type ToastContentProps = ToastType & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({toastId, children}, propRef) => {
+  ({id, delay = 5000, transition, render}, propRef) => {
     const [open, setOpen] = useState(true);
     const {context, refs} = useFloating({
       open,
-      nodeId: toastId,
+      nodeId: id,
     });
     const ref = useMergeRefs([propRef, refs.setFloating]);
     const dismiss = useDismiss(context);
-    const duration = 300; // TODO get from props with transform settings
     const {close} = useToastsContext();
     const {getItemProps} = useInteractions([dismiss]);
     const {styles} = useTransitionStyles(context, {
-      duration,
+      duration: 300,
       initial: () => ({
         opacity: 0,
         maxHeight: 0,
@@ -285,16 +298,28 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
           left: 'translateX(0.5rem)',
         }[side],
       }),
+      ...transition,
     });
+
+    const closeToastTime = useMemo(() => {
+      if (transition?.duration == null) {
+        // default duration
+        return 300;
+      }
+      if (typeof transition.duration === 'number') {
+        return transition.duration;
+      }
+      return transition.duration.close ?? 300;
+    }, [transition?.duration]);
 
     const closeToast = () => {
       setOpen(false);
       setTimeout(() => {
-        close(toastId);
-      }, duration);
+        close(id);
+      }, closeToastTime);
     };
 
-    const {start, stop} = useTimeout(closeToast, 3000);
+    const {start, stop} = useTimeout(closeToast, delay);
 
     return (
       <li
@@ -331,7 +356,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
         })}
       >
         <div style={{pointerEvents: 'auto', width: 'fit-content'}}>
-          {children}
+          {render && render(() => closeToast())}
         </div>
       </li>
     );
