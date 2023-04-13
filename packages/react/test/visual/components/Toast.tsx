@@ -1,5 +1,6 @@
 import {
   Alignment,
+  FloatingFocusManager,
   useDismiss,
   useFloating,
   useInteractions,
@@ -308,15 +309,20 @@ type ToastContentProps = Required<ToastType> & HTMLAttributes<HTMLLIElement>;
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
   ({id, delay, transition, render}, propRef) => {
     const [open, setOpen] = useState(true);
+    const [focus, setFocus] = useState(false);
     const {context, refs} = useFloating({
       open,
+      onOpenChange: setOpen,
       nodeId: id,
     });
     const ref = useMergeRefs([propRef, refs.setFloating]);
-    const dismiss = useDismiss(context);
+    const dismiss = useDismiss(context, {
+      enabled: focus,
+      outsidePress: false,
+    });
     const {close} = useToastsContext();
-    const {getItemProps} = useInteractions([dismiss]);
-    const {styles} = useTransitionStyles(context, transition);
+    const {getFloatingProps, getItemProps} = useInteractions([dismiss]);
+    const {isMounted, styles} = useTransitionStyles(context, transition);
 
     const closeToastTime = useMemo(() => {
       if (transition?.duration == null) {
@@ -338,44 +344,49 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
 
     const {start, stop} = useTimeout(closeToast, delay);
 
-    return (
-      <li
-        ref={ref}
-        role="status"
-        aria-atomic="true"
-        aria-hidden="false"
-        tabIndex={0}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '100vh',
-          alignItems: 'center',
-          ...styles,
-        }}
-        {...getItemProps({
-          onKeyDown: (e) => {
-            if (e.key === 'Enter' || e.key === 'Escape') {
-              closeToast();
-            }
-          },
-          onFocus: () => {
-            stop();
-          },
-          onBlur: () => {
-            start();
-          },
-          onMouseOver: () => {
-            stop();
-          },
-          onMouseLeave: () => {
-            start();
-          },
-        })}
+    return isMounted ? (
+      <FloatingFocusManager
+        context={context}
+        modal={false}
+        order={['floating']}
+        initialFocus={-1}
       >
-        <div style={{pointerEvents: 'auto', width: 'fit-content'}}>
-          {render && render(() => closeToast())}
-        </div>
-      </li>
-    );
+        <li
+          ref={ref}
+          role="status"
+          aria-atomic="true"
+          aria-hidden="false"
+          tabIndex={0}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            maxHeight: '100vh',
+            alignItems: 'center',
+            ...styles,
+          }}
+          {...getFloatingProps()}
+          {...getItemProps({
+            onFocus: () => {
+              setFocus(true);
+              stop();
+            },
+            onBlur: () => {
+              setFocus(false);
+              start();
+            },
+            onMouseOver: () => {
+              stop();
+            },
+            onMouseLeave: () => {
+              start();
+            },
+          })}
+        >
+          <div style={{pointerEvents: 'auto', width: 'fit-content'}}>
+            {render && render(() => closeToast())}
+          </div>
+        </li>
+      </FloatingFocusManager>
+    ) : null;
   }
 );
