@@ -34,6 +34,7 @@ type Id = string;
 type ToastType = {
   id: Id;
   delay?: number;
+  requestClose?: boolean;
   transition?: UseTransitionStylesProps;
   placement?: ToastPlacement;
   render?: (onClose?: () => void) => ReactNode;
@@ -46,6 +47,7 @@ type ContextType = {
   placements: Set<ToastPlacement>;
   toast: (toast: Omit<ToastType, 'id'>) => void;
   close: (toastId: Id) => void;
+  closeAll: () => void;
 };
 
 type ProviderType = Partial<ToastType> & {
@@ -121,8 +123,27 @@ export function useToasts() {
   );
 
   const close = useCallback((toastId: Id) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== toastId));
+    setToasts((prev) => {
+      const t = prev.map((toast) => {
+        if (toast.id === toastId) {
+          return {
+            ...toast,
+            requestClose: true,
+          };
+        }
+        return toast;
+      });
+      return t;
+    });
   }, []);
+
+  const closeAll = useCallback(() => {
+    const t = toasts.map((toast) => ({
+      ...toast,
+      requestClose: true,
+    }));
+    setToasts(t);
+  }, [toasts]);
 
   return useMemo(
     () => ({
@@ -131,8 +152,9 @@ export function useToasts() {
       placements,
       toast,
       close,
+      closeAll,
     }),
-    [listRef, toasts, placements, toast, close]
+    [listRef, toasts, placements, toast, close, closeAll]
   );
 }
 
@@ -185,6 +207,7 @@ const getToastPosition = (placement?: ToastPlacement) => {
 export function ToastProvider({
   placement: defaultPlacement = 'bottom',
   delay = 5000,
+  requestClose = false,
   transition = {
     duration: 300,
     initial: () => ({
@@ -264,6 +287,7 @@ export function ToastProvider({
                 ref={(node) => {
                   context.listRef.current[index] = node;
                 }}
+                requestClose={toast.requestClose ?? requestClose}
                 render={toast.render ?? render}
               ></ToastContent>
             ))}
@@ -307,7 +331,7 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 type ToastContentProps = Required<ToastType> & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({id, delay, transition, render}, propRef) => {
+  ({id, delay, transition, requestClose, render}, propRef) => {
     const [open, setOpen] = useState(true);
     const [focus, setFocus] = useState(false);
     const {context, refs} = useFloating({
@@ -335,14 +359,20 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
       return transition.duration.close ?? 300;
     }, [transition?.duration]);
 
-    const closeToast = () => {
+    const closeToast = useCallback(() => {
       setOpen(false);
       setTimeout(() => {
         close(id);
       }, closeToastTime);
-    };
+    }, [close, closeToastTime, id]);
 
     const {start, stop} = useTimeout(closeToast, delay);
+
+    useEffect(() => {
+      if (requestClose) {
+        closeToast();
+      }
+    }, [requestClose, closeToast]);
 
     return isMounted ? (
       <FloatingFocusManager
