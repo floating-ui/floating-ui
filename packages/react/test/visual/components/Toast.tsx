@@ -37,7 +37,7 @@ type ToastType = {
   requestClose?: boolean;
   transition?: UseTransitionStylesProps;
   placement?: ToastPlacement;
-  render?: (onClose?: () => void) => ReactNode;
+  render?: (id: Id, onClose?: () => void) => ReactNode;
 };
 type ToastsType = Array<ToastType>;
 
@@ -72,7 +72,7 @@ const Component = () => {
             toast({
               placement: 'top',
               render: () => (
-                <div className="w-[300px] bg-white p-4 mb-4 rounded-lg shadow-lg flex">
+                <div className="w-[300px] bg-white p-4 mb-4 rounded-lg shadow-lg">
                   Hello
                 </div>
               ),
@@ -413,7 +413,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
           })}
         >
           <div style={{pointerEvents: 'auto', width: 'fit-content'}}>
-            {render && render(() => closeToast())}
+            {render && render(id, () => closeToast())}
           </div>
         </li>
       </FloatingFocusManager>
