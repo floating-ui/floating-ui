@@ -34,6 +34,7 @@ type Id = string;
 type ToastType = {
   id: Id;
   delay?: number;
+  autoClose?: boolean;
   requestClose?: boolean;
   transition?: UseTransitionStylesProps;
   placement?: ToastPlacement;
@@ -98,7 +99,13 @@ export function useToasts() {
   const [placements, setPlacements] = useState(new Set<ToastPlacement>([]));
 
   const toast = useCallback(
-    ({placement, delay, transition, render}: Omit<ToastType, 'id'>) => {
+    ({
+      placement,
+      delay,
+      transition,
+      autoClose,
+      render,
+    }: Omit<ToastType, 'id'>) => {
       setPlacements((prev) => {
         if (!placement) {
           return new Set(prev);
@@ -115,6 +122,7 @@ export function useToasts() {
           placement,
           delay,
           transition,
+          autoClose,
           render,
         },
       ]);
@@ -207,6 +215,7 @@ const getToastPosition = (placement?: ToastPlacement) => {
 export function ToastProvider({
   placement: defaultPlacement = 'bottom',
   delay = 5000,
+  autoClose = true,
   requestClose = false,
   transition = {
     duration: 300,
@@ -278,6 +287,7 @@ export function ToastProvider({
                 key={toast.id}
                 id={toast.id}
                 placement={toast.placement ?? placement}
+                autoClose={toast.autoClose ?? autoClose}
                 delay={toast.delay ?? delay}
                 transition={
                   toast.transition
@@ -331,7 +341,7 @@ export const useTimeout = (fn: (...args: any) => void, duration: number) => {
 type ToastContentProps = Required<ToastType> & HTMLAttributes<HTMLLIElement>;
 
 export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
-  ({id, delay, transition, requestClose, render}, propRef) => {
+  ({id, delay, transition, autoClose, requestClose, render}, propRef) => {
     const [open, setOpen] = useState(true);
     const [focus, setFocus] = useState(false);
     const {context, refs} = useFloating({
@@ -366,7 +376,7 @@ export const ToastContent = forwardRef<HTMLLIElement, ToastContentProps>(
       }, closeToastTime);
     }, [close, closeToastTime, id]);
 
-    const {start, stop} = useTimeout(closeToast, delay);
+    const {start, stop} = useTimeout(autoClose ? closeToast : () => {}, delay);
 
     useEffect(() => {
       if (requestClose) {
