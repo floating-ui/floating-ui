@@ -127,9 +127,10 @@ export const FloatingPortal = ({
     !!focusManagerState &&
     // Guards are only for non-modal focus management.
     !focusManagerState.modal &&
-    !!(root || portalNode) &&
+    // Don't render if unmount is transitioning.
     focusManagerState.open &&
-    preserveTabOrder;
+    preserveTabOrder &&
+    !!(root || portalNode);
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   React.useEffect(() => {
