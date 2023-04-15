@@ -103,15 +103,15 @@ function getClippingElementAncestors(
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
-    const containingBlock = isContainingBlock(currentNode);
+    const currentNodeIsContaining = isContainingBlock(currentNode);
 
-    if (computedStyle.position === 'fixed') {
+    if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
     }
 
     const shouldDropCurrentNode = elementIsFixed
-      ? !containingBlock && !currentContainingBlockComputedStyle
-      : !containingBlock &&
+      ? !currentNodeIsContaining && !currentContainingBlockComputedStyle
+      : !currentNodeIsContaining &&
         computedStyle.position === 'static' &&
         !!currentContainingBlockComputedStyle &&
         ['absolute', 'fixed'].includes(
@@ -121,7 +121,7 @@ function getClippingElementAncestors(
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter((ancestor) => ancestor !== currentNode);
-    } else {
+    } else if (!currentContainingBlockComputedStyle) {
       // Record last containing block for next iteration.
       currentContainingBlockComputedStyle = computedStyle;
     }
