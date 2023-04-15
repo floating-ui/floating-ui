@@ -128,6 +128,7 @@ export const FloatingPortal = ({
     // Guards are only for non-modal focus management.
     !focusManagerState.modal &&
     !!(root || portalNode) &&
+    focusManagerState.open &&
     preserveTabOrder;
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx

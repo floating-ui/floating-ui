@@ -332,13 +332,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   useLayoutEffect(() => {
     if (!floating) return;
 
-    let preventReturnFocusScroll = false;
-
     const doc = getDocument(floating);
     const previouslyFocusedElement = activeElement(doc);
-    const contextData = dataRef.current;
-
-    previouslyFocusedElementRef.current = previouslyFocusedElement;
 
     // Wait for any layout effect state setters to execute to set `tabIndex`.
     queueMicrotask(() => {
@@ -357,6 +352,22 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
       }
     });
+  }, [
+    open,
+    floating,
+    ignoreInitialFocus,
+    getTabbableElements,
+    initialFocusRef,
+  ]);
+
+  useLayoutEffect(() => {
+    let preventReturnFocusScroll = false;
+
+    const doc = getDocument(floating);
+    const previouslyFocusedElement = activeElement(doc);
+    const contextData = dataRef.current;
+
+    previouslyFocusedElementRef.current = previouslyFocusedElement;
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
@@ -416,19 +427,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
         });
       }
     };
-  }, [
-    open,
-    floating,
-    getTabbableElements,
-    returnFocusRef,
-    initialFocusRef,
-    dataRef,
-    refs,
-    events,
-    ignoreInitialFocus,
-    tree,
-    nodeId,
-  ]);
+  }, [floating, returnFocusRef, dataRef, refs, events, tree, nodeId]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
@@ -466,7 +465,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [floating, getTabbableContent, ignoreInitialFocus, refs]);
 
   const shouldRenderGuards =
-    guards && (isInsidePortal || modal) && !isTypeableCombobox;
+    guards && open && !isTypeableCombobox && (isInsidePortal || modal);
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
