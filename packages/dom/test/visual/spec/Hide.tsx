@@ -15,7 +15,9 @@ import {useScroll} from '../utils/useScroll';
 export function Hide() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [hierarchy, setHierarchy] = useState('a');
-  const isFixedStrategy = ['j', 'k', 'l', 'm', 'o', 'p'].includes(hierarchy);
+  const isFixedStrategy = ['j', 'k', 'l', 'm', 'o', 'p', 'q'].includes(
+    hierarchy
+  );
 
   const {
     x,
@@ -270,6 +272,15 @@ export function Hide() {
         </div>
       </div>
     );
+  } else if (hierarchy === 'q') {
+    // https://github.com/floating-ui/floating-ui/issues/2288
+    referenceJsx = (
+      <div style={{position: 'fixed', overflow: 'hidden', height: 0}}>
+        <div style={{position: 'fixed', top: 100, left: 300}}>
+          {referenceJsx}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -318,6 +329,7 @@ export function Hide() {
           'n',
           'o',
           'p',
+          'q',
         ].map((localHierarchy) => (
           <button
             key={localHierarchy}

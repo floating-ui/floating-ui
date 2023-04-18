@@ -23,6 +23,7 @@ import {
   isElement,
   isHTMLElement,
   isLastTraversableNode,
+  isOverflowElement,
 } from './is';
 import {max, min} from './math';
 import {getNodeName} from './node';
@@ -79,6 +80,22 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(rect);
 }
 
+function hasFixedPositionAncestor(element: Element, stopNode: Node): boolean {
+  const parentNode = getParentNode(element);
+  if (
+    parentNode === stopNode ||
+    !isElement(parentNode) ||
+    isLastTraversableNode(parentNode)
+  ) {
+    return false;
+  }
+
+  return (
+    getComputedStyle(parentNode).position === 'fixed' ||
+    hasFixedPositionAncestor(parentNode, stopNode)
+  );
+}
+
 // A "clipping ancestor" is an `overflow` element with the characteristic of
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
@@ -111,17 +128,19 @@ function getClippingElementAncestors(
 
     const shouldDropCurrentNode = elementIsFixed
       ? !currentNodeIsContaining && !currentContainingBlockComputedStyle
-      : !currentNodeIsContaining &&
-        computedStyle.position === 'static' &&
-        !!currentContainingBlockComputedStyle &&
-        ['absolute', 'fixed'].includes(
-          currentContainingBlockComputedStyle.position
-        );
+      : (!currentNodeIsContaining &&
+          computedStyle.position === 'static' &&
+          !!currentContainingBlockComputedStyle &&
+          ['absolute', 'fixed'].includes(
+            currentContainingBlockComputedStyle.position
+          )) ||
+        (isOverflowElement(currentNode) &&
+          hasFixedPositionAncestor(element, currentNode));
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter((ancestor) => ancestor !== currentNode);
-    } else if (!currentContainingBlockComputedStyle) {
+    } else {
       // Record last containing block for next iteration.
       currentContainingBlockComputedStyle = computedStyle;
     }
