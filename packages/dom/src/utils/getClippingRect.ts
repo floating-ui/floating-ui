@@ -135,6 +135,7 @@ function getClippingElementAncestors(
             currentContainingBlockComputedStyle.position
           )) ||
         (isOverflowElement(currentNode) &&
+          !currentNodeIsContaining &&
           hasFixedPositionAncestor(element, currentNode));
 
     if (shouldDropCurrentNode) {
