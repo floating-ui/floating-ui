@@ -35,7 +35,6 @@ export const useFloatingPortalNode = ({
   root?: HTMLElement | null;
 } = {}) => {
   const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
-  const idWrapperRef = React.useRef<HTMLDivElement | null>(null);
 
   const uniqueId = useId();
   const portalContext = usePortalContext();
@@ -48,10 +47,8 @@ export const useFloatingPortalNode = ({
   const dataRef = React.useRef<typeof data>();
 
   useLayoutEffect(() => {
-    const idWrapper = idWrapperRef.current;
     return () => {
       portalNode?.remove();
-      idWrapper?.remove();
     };
   }, [portalNode, data]);
 
