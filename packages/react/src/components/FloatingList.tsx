@@ -73,8 +73,6 @@ export function FloatingList({
   }, []);
 
   useLayoutEffect(() => {
-    if (map.size < 2) return;
-
     const newMap = new Map(map);
     const nodes = Array.from(newMap.keys()).sort(sortByDocumentPosition);
 
