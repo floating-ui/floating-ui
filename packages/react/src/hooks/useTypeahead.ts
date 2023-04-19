@@ -179,15 +179,21 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
       if (index !== -1) {
         onMatch(index);
         matchIndexRef.current = index;
-      } else {
+      } else if (event.key !== ' ') {
         stringRef.current = '';
-        setTypingChange(false);
       }
     }
 
     return {
       reference: {onKeyDown},
-      floating: {onKeyDown},
+      floating: {
+        onKeyDown,
+        onKeyUp(event) {
+          if (event.key === ' ') {
+            setTypingChange(false);
+          }
+        },
+      },
     };
   }, [
     enabled,
