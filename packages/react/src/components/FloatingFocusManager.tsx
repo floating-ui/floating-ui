@@ -361,6 +361,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   ]);
 
   useLayoutEffect(() => {
+    if (!floating) return;
+
     let preventReturnFocusScroll = false;
 
     const doc = getDocument(floating);
