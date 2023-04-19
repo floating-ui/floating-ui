@@ -117,6 +117,19 @@ test('registers element ref and indexes correctly', async () => {
   expect(screen.getAllByRole('option')[4].getAttribute('tabindex')).toBe('0');
 });
 
+test('registers an element ref and index correctly', async () => {
+  render(
+    <Select>
+      <Option>One</Option>
+    </Select>
+  );
+
+  fireEvent.click(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
+});
+
 test('registers strings correctly (no value)', async () => {
   render(
     <Select>
