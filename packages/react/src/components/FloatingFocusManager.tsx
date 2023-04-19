@@ -437,12 +437,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
       ...context,
       modal,
       closeOnFocusOut,
-      // Not concerned about the <RT> generic type.
+      open,
     } as any);
     return () => {
       portalContext.setFocusManagerState(null);
     };
-  }, [portalContext, modal, closeOnFocusOut, context]);
+  }, [portalContext, modal, open, closeOnFocusOut, context]);
 
   useLayoutEffect(() => {
     if (ignoreInitialFocus || !floating) return;
@@ -465,7 +465,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
   }, [floating, getTabbableContent, ignoreInitialFocus, refs]);
 
   const shouldRenderGuards =
-    guards && open && !isTypeableCombobox && (isInsidePortal || modal);
+    guards && !isTypeableCombobox && (isInsidePortal || modal);
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
