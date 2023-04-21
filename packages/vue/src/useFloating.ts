@@ -102,9 +102,13 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   }
 
   watch([middlewareOption, placementOption, strategyOption], update, {
+    deep: true,
     flush: 'sync',
   });
-  watch([referenceElement, floatingElement], attach, {flush: 'sync'});
+  watch([referenceElement, floatingElement], attach, {
+    deep: true,
+    flush: 'sync',
+  });
   watch(openOption, reset, {flush: 'sync'});
 
   if (getCurrentScope()) {
