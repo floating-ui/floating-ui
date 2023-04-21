@@ -59,7 +59,6 @@ export const FocusGuard = React.forwardRef<
       tabIndex={0}
       // Role is only for VoiceOver
       role={role}
-      aria-hidden={role ? undefined : true}
       data-floating-ui-focus-guard=""
       style={HIDDEN_STYLES}
     />
