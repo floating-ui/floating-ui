@@ -403,7 +403,7 @@ export function Virtual() {
   const [open, setOpen] = useState(false);
   const boundaryRef = useRef();
   const pointerTypeRef = useRef();
-  const {x, y, reference, floating, refs, update} = useFloating({
+  const {x, y, refs, update} = useFloating({
     placement: 'top',
     strategy: 'fixed',
     middleware: [
@@ -417,7 +417,7 @@ export function Virtual() {
 
   const handleMouseMove = useCallback(
     ({clientX, clientY}) => {
-      reference({
+      refs.setReference({
         getBoundingClientRect() {
           return {
             width: 0,
@@ -432,7 +432,7 @@ export function Virtual() {
         },
       });
     },
-    [reference]
+    [refs]
   );
 
   useEffect(() => {
@@ -462,7 +462,7 @@ export function Virtual() {
         parent.removeEventListener('scroll', update);
       });
     };
-  }, [reference, refs.floating, update, handleMouseMove]);
+  }, [refs, update, handleMouseMove]);
 
   return (
     <GridItem
@@ -487,7 +487,7 @@ export function Virtual() {
             }}
           >
             <div
-              ref={floating}
+              ref={refs.setFloating}
               className="rounded bg-gray-800 p-4 font-bold text-gray-50"
               style={{
                 position: 'absolute',

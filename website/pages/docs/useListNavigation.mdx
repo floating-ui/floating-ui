@@ -33,7 +33,7 @@ based on the role of the floating element.
 function App() {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {refs, floatingStyles, context} = useFloating({
     open: true,
   });
 
@@ -57,11 +57,7 @@ function App() {
       </div>
       <div
         ref={refs.setFloating}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-        }}
+        style={floatingStyles}
         {...getFloatingProps()}
       >
         {items.map((item, index) => (

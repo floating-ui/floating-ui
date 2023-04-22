@@ -8,11 +8,6 @@ import {
 } from 'react';
 import {flushSync} from 'react-dom';
 
-function roundByDPR(value) {
-  const dpr = window.devicePixelRatio || 1;
-  return Math.round(value * dpr) / dpr;
-}
-
 export function Floating({
   children,
   content,
@@ -28,12 +23,10 @@ export function Floating({
 }) {
   const arrowRef = useRef();
   const {
-    x,
-    y,
     middlewareData,
     refs,
+    floatingStyles,
     placement,
-    strategy,
     isPositioned,
   } = FloatingUI.useFloating({
     whileElementsMounted: FloatingUI.autoUpdate,
@@ -113,19 +106,13 @@ export function Floating({
     bottom: 'top',
   }[placement.split('-')[0]];
 
-  const roundedX = x != null ? roundByDPR(x) : 0;
-  const roundedY = y != null ? roundByDPR(y) : 0;
-
   const tooltipJsx = (
     <div
       className="z-10 grid place-items-center rounded bg-gray-800 text-gray-50"
       ref={refs.setFloating}
       style={{
         ...tooltipStyle,
-        position: strategy,
-        left: 0,
-        top: 0,
-        transform: `translate3d(${roundedX}px,${roundedY}px,0)`,
+        ...floatingStyles,
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
           : undefined,

@@ -501,11 +501,17 @@ test('external elements sync update', async () => {
   expect(getByTestId('value').textContent).toBe('0,0');
 });
 
+<<<<<<< HEAD
 test('floatingStyles no transform', async () => {
   function App() {
     const {refs, floatingStyles} = useFloating({
       transform: false,
     });
+=======
+test('getPositionStyles default', async () => {
+  function App() {
+    const {refs, getPositionStyles} = useFloating();
+>>>>>>> 5f837762 (feat: React v2)
 
     return (
       <>
@@ -513,7 +519,11 @@ test('floatingStyles no transform', async () => {
         <div
           data-testid="floating"
           ref={refs.setFloating}
+<<<<<<< HEAD
           style={floatingStyles}
+=======
+          style={getPositionStyles()}
+>>>>>>> 5f837762 (feat: React v2)
         />
       </>
     );
@@ -546,9 +556,15 @@ test('floatingStyles no transform', async () => {
   expect(getByTestId('floating').style.left).toBe('25px');
 });
 
+<<<<<<< HEAD
 test('floatingStyles default', async () => {
   function App() {
     const {refs, floatingStyles} = useFloating();
+=======
+test('getPositionStyles transform', async () => {
+  function App() {
+    const {refs, getPositionStyles} = useFloating();
+>>>>>>> 5f837762 (feat: React v2)
 
     return (
       <>
@@ -556,7 +572,13 @@ test('floatingStyles default', async () => {
         <div
           data-testid="floating"
           ref={refs.setFloating}
+<<<<<<< HEAD
           style={floatingStyles}
+=======
+          style={getPositionStyles({
+            transform: true,
+          })}
+>>>>>>> 5f837762 (feat: React v2)
         />
       </>
     );

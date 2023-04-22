@@ -21,8 +21,13 @@ const useImpl = ({
   const [open, setOpen] = useState(true);
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const {refs, context} = useFloating({
+<<<<<<< HEAD
     open: props.open ?? open,
     onOpenChange: props.onOpenChange ?? setOpen,
+=======
+    open,
+    onOpenChange: setOpen,
+>>>>>>> 5f837762 (feat: React v2)
   });
   const listRef = useRef(props.list ?? ['one', 'two', 'three']);
   const typeahead = useTypeahead(context, {

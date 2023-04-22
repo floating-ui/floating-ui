@@ -57,20 +57,12 @@ API docs for the hooks and components in the left navigation bar
 import {useFloating} from '@floating-ui/react';
 
 function App() {
-  const {x, y, strategy, refs} = useFloating();
+  const {refs, floatingStyles} = useFloating();
 
   return (
     <>
       <button ref={refs.setReference}>Button</button>
-      <div
-        ref={refs.setFloating}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-          width: 'max-content',
-        }}
-      >
+      <div ref={refs.setFloating} style={floatingStyles}>
         Tooltip
       </div>
     </>
@@ -81,19 +73,100 @@ function App() {
 This will position the floating `Tooltip` element at the **bottom
 center** of the `Button` element by default.
 
-- `x{:.const}` and `y{:.const}` are the positioning coordinates.
-  These values are `null{:js}` initially, before the layout
-  effect has fired (such as during SSR).
-- `strategy{:.const}` is the positioning strategy,
-  `'absolute'{:js}` (default) or `'fixed'{:js}`.
-- `refs.setReference{:js}` and `refs.setFloating{:js}` are
-  function refs that get called with the elements and update the
-  position when they change (such as with conditional rendering),
-  unlike with plain refs.
+- `refs.setReference{:js}` is the reference (or anchor) element
+  that is being referred to for positioning.
+- `refs.setFloating{:js}` is the floating element that is being
+  positioned relative to the reference element.
+- `floatingStyles{:js}` is an object of positioning styles to
+  apply to the floating element's `style{:.keyword}` prop.
 
-<Notice gap="above">
-To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
+The refs are functions to make them **reactive** — this ensures
+changes to the reference or floating elements, such as with
+conditional rendering, are handled correctly by updating the
+position.
+
+Depending on your component tree, you may instead want to
+synchronize with an external element instead of using refs.
+
+```js /anchor/1,3-5#a {13-15}
+function App() {
+  const [anchor, setAnchor] = useState(null);
+  return (
+    <>
+      <button ref={setAnchor}>Button</button>
+      <Tooltip anchor={anchor} />
+    </>
+  );
+}
+
+function Tooltip({anchor}) {
+  const {refs, floatingStyles} = useFloating({
+    elements: {
+      reference: anchor,
+    },
+  });
+
+  return (
+    <div ref={refs.setFloating} style={floatingStyles}>
+      Tooltip
+    </div>
+  );
+}
+```
+
+Either element can be synchronized externally or via
+`refs.set{Element}{:js}`.
+
+<Notice title="Important!" type="error">
+  Make sure the elements are **stored in state**, not in a ref.
+  This makes them reactive to changes, and avoids reading refs in
+  render (forbidden by React).
+
+<br />
+```js
+useFloating({
+  elements: {
+    reference: anchorRef.current, // ❌
+    reference: anchorEl, // ✅
+  },
+});
+```
+
 </Notice>
+
+### Disabling transform
+
+By default, the floating element is positioned using
+`transform{:.objectKey}` in the `floatingStyles` object. This is
+the most performant way to position elements, but can be
+disabled:
+
+```js
+useFloating({transform: false});
+```
+
+If you'd like to retain transform styles while allowing transform
+animations, create a wrapper, where the outermost node is the
+positioned one, and the inner is the actual styled element:
+
+```js
+<div ref={refs.setFloating} style={floatingStyles}>
+  <div className="styled">
+   Floating
+  <div>
+</div>
+```
+
+### Custom position styles
+
+The hook returns the coordinates and positioning strategy
+directly if `floatingStyles` is not suitable for full
+customization.
+
+```js
+const {x, y, strategy} = useFloating();
+return <div style={{position: strategy, left: x, top: y}} />;
+```
 
 ## Return value
 
@@ -102,6 +175,66 @@ The hook
 plus some extras to work with React. This includes data about the
 final placement and middleware data which are useful when
 rendering.
+
+## Anchoring
+
+The position is only calculated **once** on render, or when the
+`reference` or `floating` elements change.
+
+To ensure the floating element remains anchored to its reference
+element in a variety of scenarios without detaching — such as
+when scrolling or resizing the page — you can pass the
+[`autoUpdate`](/docs/autoUpdate) utility to the
+`whileElementsMounted{:.objectKey}` prop:
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/react';
+
+// Inside your component
+useFloating({
+  whileElementsMounted: autoUpdate,
+});
+```
+
+Ensure you are using conditional rendering for the floating
+element, not an opacity/visibility/display style. If you are
+using CSS to hide it, instead of conditional rendering, use an
+effect to register and clean up `autoUpdate` instead of the
+`whileElementsMounted{:.objectKey}` prop.
+
+To pass options to `autoUpdate`:
+
+```js
+useFloating({
+  whileElementsMounted(...args) {
+    const cleanup = autoUpdate(...args, {animationFrame: true});
+    // Important! Always return the cleanup function.
+    return cleanup;
+  },
+});
+```
+
+<Notice title="Performance note" type="warning">
+  Try to avoid invoking `useFloating(){:js}` in a big, complex component that 
+  renders out a list. This is because it re-renders the host component on
+  every single scroll or resize event when required. Instead, create a new 
+  child component that only renders out the reference and floating elements.
+</Notice>
+
+### Manual updating
+
+While `autoUpdate` covers most cases where the position of the
+floating element must be updated, it does not cover every single
+one possible due to performance/platform limitations.
+
+The hook returns an `update(){:js}` function to update the
+position at will:
+
+```js
+const {update} = useFloating();
+
+<Panel onResize={update} />;
+```
 
 ## Options
 
@@ -137,71 +270,6 @@ The docs for the middleware that were passed are available here:
 All of these are re-exported from the base `@floating-ui/dom`
 library.
 
-## Updating
-
-The position is only calculated **once** on render, or when the
-`reference` or `floating` elements change.
-
-To ensure the floating element remains anchored to its reference
-element in a variety of scenarios without detaching — such as
-when scrolling or resizing the page — you can pass the
-[`autoUpdate`](/docs/autoUpdate) utility to the
-`whileElementsMounted{:.objectKey}` prop:
-
-```js
-import {useFloating, autoUpdate} from '@floating-ui/react';
-
-// Inside your component
-useFloating({
-  whileElementsMounted: autoUpdate,
-});
-```
-
-To pass options to `autoUpdate`:
-
-```js
-useFloating({
-  whileElementsMounted(...args) {
-    const cleanup = autoUpdate(...args, {animationFrame: true});
-    // Important! Always return the cleanup function.
-    return cleanup;
-  },
-});
-```
-
-### autoUpdate performance
-
-`autoUpdate` is expensive because it re-renders the host
-component the `useFloating(){:js}` hook lives in on every single
-scroll or resize event. Therefore you should be mindful of the
-following:
-
-- Try not to call `useFloating(){:js}` in a big complex parent
-  component, especially if it renders a list. Instead, create a
-  new child component that only renders out the reference and
-  floating elements. This will keep the high frequency re-renders
-  scoped to the cheap child component.
-- Ensure you are using conditional rendering for the floating
-  element, not an opacity/visibility/display style. If you are
-  using CSS to hide it, instead of conditional rendering, use an
-  effect to register and clean up `autoUpdate` instead of the
-  `whileElementsMounted{:.objectKey}` prop.
-
-### Manual updating
-
-While `autoUpdate` covers most cases where the position of the
-floating element must be updated, it does not cover every single
-one possible due to performance/platform limitations.
-
-The hook returns an `update(){:js}` function to update the
-position at will:
-
-```js
-const {update} = useFloating();
-
-<Panel onResize={update} />;
-```
-
 ## Refs
 
 To access the DOM elements, you can either access the refs:
@@ -224,26 +292,20 @@ elements.reference;
 elements.floating;
 ```
 
-External elements can be synchronized like so, if they live
-outside the component:
+External elements can be synchronized using the
+`elements{:.objectKey}` option like so, if they live outside the
+component:
 
 ```js
 function MyComponent({referenceEl, floatingEl}) {
-  const {refs} = useFloating();
-
-  useLayoutEffect(() => {
-    refs.setReference(referenceEl);
-    refs.setFloating(floatingEl);
-  }, [refs, referenceEl, floatingEl]);
+  const {refs} = useFloating({
+    elements: {
+      reference: referenceEl,
+      floating: floatingEl,
+    },
+  });
 }
 ```
-
-<Notice>
-  Make sure the external elements are stored in state, not in a
-  ref. React does not permit reading or writing refs during
-  render, and they are not reactive to updates, so the position
-  won't update if the element changes.
-</Notice>
 
 ## Effects
 
@@ -427,7 +489,7 @@ import {useFloating} from '@floating-ui/react';
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const {x, y, strategy, refs} = useFloating({
+  const {refs, floatingStyles} = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
   });
@@ -436,15 +498,7 @@ function App() {
     <>
       <button ref={refs.setReference}>Button</button>
       {isOpen && (
-        <div
-          ref={refs.setFloating}
-          style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
-            width: 'max-content',
-          }}
-        >
+        <div ref={refs.setFloating} style={floatingStyles}>
           Tooltip
         </div>
       )}
@@ -454,10 +508,7 @@ function App() {
 ```
 
 Note that floating components do not always require "anchor
-positioning" — for instance a modal dialog centered in the
-viewport. So the `x{:.const}`, `y{:.const}` and
-`strategy{:.const}` values returned from the hook can be safely
-ignored.
+positioning", so `floatingStyles` can be ignored.
 
 ## Interaction hooks
 
@@ -503,12 +554,7 @@ called, they return an object of props like `onFocus{:.keyword}`.
   </button>
   <div
     ref={refs.setFloating}
-    style={{
-      position: strategy,
-      left: x ?? 0,
-      top: y ?? 0,
-      width: 'max-content',
-    }}
+    style={floatingStyles}
     {...getFloatingProps()}
   >
     My tooltip

@@ -24,7 +24,7 @@ import {FloatingArrow, arrow} from '@floating-ui/react';
 
 function App() {
   const arrowRef = useRef(null);
-  const {x, y, strategy, refs, context} = useFloating({
+  const {refs, floatingStyles, context} = useFloating({
     middleware: [
       arrow({
         element: arrowRef,
@@ -35,14 +35,7 @@ function App() {
   return (
     <>
       <div ref={refs.setReference} />
-      <div
-        ref={refs.setFloating}
-        style={{
-          position: strategy,
-          top: y ?? 0,
-          left: x ?? 0,
-        }}
-      >
+      <div ref={refs.setFloating} style={floatingStyles}>
         <FloatingArrow ref={arrowRef} context={context} />
       </div>
     </>

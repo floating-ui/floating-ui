@@ -22,7 +22,7 @@ import {View, Text} from 'react-native';
 import {useFloating, shift} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, refs} = useFloating({
+  const {refs, floatingStyles} = useFloating({
     middleware: [shift()],
   });
 
@@ -34,11 +34,7 @@ function App() {
       <View
         ref={refs.setFloating}
         collapsable={false}
-        style={{
-          position: 'absolute',
-          top: y ?? 0,
-          left: x ?? 0,
-        }}
+        style={floatingStyles}
       >
         <Text>Floating</Text>
       </View>
@@ -125,7 +121,7 @@ import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, refs, scrollProps} = useFloating({
+  const {refs, floatingStyles, scrollProps} = useFloating({
     sameScrollView: false,
   });
 
@@ -140,11 +136,7 @@ function App() {
       <View
         ref={refs.setFloating}
         collapsable={false}
-        style={{
-          position: 'absolute',
-          top: y ?? 0,
-          left: x ?? 0,
-        }}
+        style={floatingStyles}
       >
         <Text>Floating</Text>
       </View>
@@ -162,7 +154,7 @@ import {View, Text, ScrollView} from 'react-native';
 import {useFloating} from '@floating-ui/react-native';
 
 function App() {
-  const {x, y, refs} = useFloating({
+  const {refs, floatingStyles} = useFloating({
     sameScrollView: false,
   });
 
@@ -178,11 +170,7 @@ function App() {
         <View
           ref={refs.setFloating}
           collapsable={false}
-          style={{
-            position: 'absolute',
-            top: y ?? 0,
-            left: x ?? 0,
-          }}
+          style={floatingStyles}
         >
           <Text>Floating</Text>
         </View>

@@ -815,7 +815,7 @@ export default function Layout({children, className}) {
                     <Link
                       href={url}
                       className={cn(
-                        'block w-full truncate rounded-lg py-1 px-4 text-lg',
+                        'block w-full truncate rounded-lg py-1 px-4',
                         {
                           'bg-gray-800 font-bold text-gray-50 dark:bg-purple-300/10':
                             hash === url,
