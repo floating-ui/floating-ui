@@ -23,6 +23,7 @@ import {
   isElement,
   isHTMLElement,
   isLastTraversableNode,
+  isOverflowElement,
 } from './is';
 import {max, min} from './math';
 import {getNodeName} from './node';
@@ -79,6 +80,22 @@ function getClientRectFromClippingAncestor(
   return rectToClientRect(rect);
 }
 
+function hasFixedPositionAncestor(element: Element, stopNode: Node): boolean {
+  const parentNode = getParentNode(element);
+  if (
+    parentNode === stopNode ||
+    !isElement(parentNode) ||
+    isLastTraversableNode(parentNode)
+  ) {
+    return false;
+  }
+
+  return (
+    getComputedStyle(parentNode).position === 'fixed' ||
+    hasFixedPositionAncestor(parentNode, stopNode)
+  );
+}
+
 // A "clipping ancestor" is an `overflow` element with the characteristic of
 // clipping (or hiding) child elements. This returns all clipping ancestors
 // of the given element up the tree.
@@ -103,20 +120,23 @@ function getClippingElementAncestors(
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
   while (isElement(currentNode) && !isLastTraversableNode(currentNode)) {
     const computedStyle = getComputedStyle(currentNode);
-    const containingBlock = isContainingBlock(currentNode);
+    const currentNodeIsContaining = isContainingBlock(currentNode);
 
-    if (computedStyle.position === 'fixed') {
+    if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
     }
 
     const shouldDropCurrentNode = elementIsFixed
-      ? !containingBlock && !currentContainingBlockComputedStyle
-      : !containingBlock &&
-        computedStyle.position === 'static' &&
-        !!currentContainingBlockComputedStyle &&
-        ['absolute', 'fixed'].includes(
-          currentContainingBlockComputedStyle.position
-        );
+      ? !currentNodeIsContaining && !currentContainingBlockComputedStyle
+      : (!currentNodeIsContaining &&
+          computedStyle.position === 'static' &&
+          !!currentContainingBlockComputedStyle &&
+          ['absolute', 'fixed'].includes(
+            currentContainingBlockComputedStyle.position
+          )) ||
+        (isOverflowElement(currentNode) &&
+          !currentNodeIsContaining &&
+          hasFixedPositionAncestor(element, currentNode));
 
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
