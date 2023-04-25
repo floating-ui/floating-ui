@@ -62,6 +62,10 @@
   "eslintConfig": {
     "extends": "./.config/eslint.config"
   },
+  "resolutions": {
+    "chokidar": "^3.3.1",
+    "jest-haste-map": "^25.1.0"
+  },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.20.0",
     "@atomico/rollup-plugin-sizes": "^1.1.0",
