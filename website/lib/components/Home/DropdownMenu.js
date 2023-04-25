@@ -83,7 +83,6 @@ export const MenuComponent = forwardRef(
       enabled: isNested && allowHover,
       delay: {open: 75},
       handleClose: safePolygon({
-        restMs: 25,
         blockPointerEvents: true,
       }),
     });
@@ -212,15 +211,15 @@ export const MenuComponent = forwardRef(
           data-open={isOpen ? '' : undefined}
           {...referenceProps}
           className={classNames(
-            'cursor-default text-left flex gap-4 justify-between items-center rounded py-2 px-3',
+            'flex cursor-default items-center justify-between gap-4 rounded py-2 px-3 text-left',
             {
-              'transition-colors hover:bg-gray-100/50 dark:hover:bg-gray-600 data-[open]:bg-gray-100/50 dark:data-[open]:bg-gray-600':
+              'transition-colors hover:bg-gray-100/50 data-[open]:bg-gray-100/50 dark:hover:bg-gray-600 dark:data-[open]:bg-gray-600':
                 !isNested,
-              'focus:bg-blue-500 focus:text-white outline-none':
+              'outline-none focus:bg-blue-500 focus:text-white':
                 isNested,
               'bg-blue-500 text-white':
                 isOpen && isNested && !hasFocusInside,
-              'bg-gray-500/20 dark:bg-gray-700 rounded':
+              'rounded bg-gray-500/20 dark:bg-gray-700':
                 isNested && isOpen && hasFocusInside,
             }
           )}
@@ -245,7 +244,7 @@ export const MenuComponent = forwardRef(
             >
               <div
                 ref={refs.setFloating}
-                className="flex flex-col rounded bg-white/80 dark:bg-gray-600/80 backdrop-blur-lg shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding"
+                className="flex flex-col rounded border border-slate-900/10 bg-white/80 bg-clip-padding p-1 shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
                 style={{
                   position: strategy,
                   top: y ?? 0,
@@ -313,7 +312,7 @@ export const MenuItem = forwardRef(
         type="button"
         {...props}
         className={classNames(
-          'cursor-default text-left flex py-2 px-3 focus:bg-blue-500 focus:text-white outline-none rounded',
+          'flex cursor-default rounded py-2 px-3 text-left outline-none focus:bg-blue-500 focus:text-white',
           {
             'opacity-40': disabled,
           }
