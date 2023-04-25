@@ -655,13 +655,13 @@ export default function Layout({children}) {
   } else if (isReactDOMPage) {
     firstVersionIndex = 3;
     secondVersionIndex = 2;
+  } else if (isReactNativePage) {
+    firstVersionIndex = 4;
   } else if (isReactPage) {
     firstVersionIndex = 2;
   } else if (isVanillaPage) {
     firstVersionIndex = 0;
     secondVersionIndex = 1;
-  } else if (isReactNativePage) {
-    firstVersionIndex = 4;
   } else if (isVuePage) {
     firstVersionIndex = 5;
   }
