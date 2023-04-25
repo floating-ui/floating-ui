@@ -4,7 +4,14 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {Fragment, memo, useMemo, useRef, useState} from 'react';
+import {
+  Fragment,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -45,6 +52,11 @@ import UseRole from '../../public/icons/useRole.svg';
 import UseTransition from '../../public/icons/useTransition.svg';
 import UseTypeahead from '../../public/icons/useTypeahead.svg';
 import VirtualElements from '../../public/icons/virtual-elements.svg';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../components/Tooltip';
 import {Chrome} from './Chrome';
 import Collapsible from './Collapsible';
 import {Floating} from './Floating';
@@ -52,6 +64,37 @@ import Navigation from './Navigation';
 import Notice from './Notice';
 import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
 import {WordHighlight} from './WordHighlight';
+
+function PackageVersion({package: {name, version}}) {
+  return (
+    <Tooltip
+      noRest
+      label
+      placement="bottom-end"
+      strategy="fixed"
+    >
+      <TooltipTrigger asChild>
+        <a
+          href={`https://npmjs.com/package/@floating-ui/${name}`}
+          className="w-fit rounded-lg bg-blue-500 px-2 py-1 text-sm font-bold text-white transition-colors hover:bg-blue-400 dark:border dark:border-blue-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {name}@{version}
+        </a>
+      </TooltipTrigger>
+      <TooltipContent>
+        The docs on this page reference the latest version of
+        <br />
+        <strong>
+          @floating-ui/
+          {name}
+        </strong>
+        . Click to view it on npm.
+      </TooltipContent>
+    </Tooltip>
+  );
+}
 
 const middleware = [
   {
@@ -468,6 +511,47 @@ export default function Layout({children}) {
   const [hash, setHash] = useState(
     asPath.slice(asPath.indexOf('#'))
   );
+  const [packages, setPackages] = useState([
+    {name: 'core', version: 'latest'},
+    {name: 'dom', version: '^latest'},
+    {name: 'react', version: 'latest'},
+    {name: 'react-dom', version: 'latest'},
+    {name: 'react-native', version: 'latest'},
+    {name: 'vue', version: 'latest'},
+  ]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchData() {
+      try {
+        const packageResults = await Promise.all(
+          packages.map(({name}) =>
+            fetch(
+              `https://registry.npmjs.org/@floating-ui/${name}/latest`
+            ).then((res) => res.json())
+          )
+        );
+
+        if (!ignore) {
+          setPackages((packages) =>
+            packageResults.map((pkg, index) => ({
+              name: packages[index].name,
+              version: pkg.version,
+            }))
+          );
+        }
+      } catch (e) {
+        //
+      }
+    }
+
+    fetchData();
+
+    return () => {
+      ignore = true;
+    };
+  }, [packages]);
 
   const displayNavigation = nav[index] != null;
 
@@ -538,6 +622,47 @@ export default function Layout({children}) {
       h6: linkify('h6', headings, pathname),
     };
   }, [pathname]);
+
+  const activePage = nav.find(({url}) => url === pathname);
+
+  const isReactDOMPage = activePage.title === 'React';
+  const isDOMOnlyPage = activePage.title === 'autoUpdate';
+  const isNoPage = activePage.title === 'Getting Started';
+  const isReactPage =
+    activePage.title.includes('React') ||
+    activePage.title.startsWith('use') ||
+    activePage.title.startsWith('Floating') ||
+    activePage.title === 'Inner' ||
+    activePage.title === 'Custom Hooks';
+  const isReactNativePage =
+    activePage.title.includes('React Native');
+  const isVuePage = activePage.title.includes('Vue');
+  const isVanillaPage =
+    !isReactPage &&
+    !isReactNativePage &&
+    !isVuePage &&
+    !isDOMOnlyPage &&
+    !isNoPage;
+
+  let firstVersionIndex = null;
+  let secondVersionIndex = null;
+
+  if (isDOMOnlyPage) {
+    firstVersionIndex = 1;
+    secondVersionIndex = null;
+  } else if (isReactDOMPage) {
+    firstVersionIndex = 3;
+    secondVersionIndex = 2;
+  } else if (isReactPage) {
+    firstVersionIndex = 2;
+  } else if (isVanillaPage) {
+    firstVersionIndex = 0;
+    secondVersionIndex = 1;
+  } else if (isReactNativePage) {
+    firstVersionIndex = 4;
+  } else if (isVuePage) {
+    firstVersionIndex = 5;
+  }
 
   return (
     <MDXProvider components={computedComponents}>
@@ -649,12 +774,33 @@ export default function Layout({children}) {
             </ul>
           </div>
         </nav>
-        <aside className="fixed right-0 top-0 hidden w-72 overflow-y-auto pt-8 [max-height:100vh] xl:block">
+        <aside className="fixed right-0 top-0 hidden min-w-[18rem] max-w-[20rem] overflow-y-auto pt-8 [max-height:100vh] xl:block">
           <nav>
-            <h4 className="text-md ml-6 text-gray-500">
+            {firstVersionIndex != null && (
+              <>
+                <h4 className="text-md ml-6 mb-2 text-gray-500">
+                  Package{secondVersionIndex !== null ? 's' : ''}
+                </h4>
+
+                <div className="mb-4 flex flex-wrap gap-1 px-4">
+                  {firstVersionIndex !== null && (
+                    <PackageVersion
+                      package={packages[firstVersionIndex]}
+                    />
+                  )}
+                  {secondVersionIndex !== null && (
+                    <PackageVersion
+                      package={packages[secondVersionIndex]}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+
+            <h4 className="text-md ml-6 mb-1 text-gray-500">
               On this page
             </h4>
-            <ul className="overflow-hidden p-4 pl-2">
+            <ul className="overflow-hidden py-1 px-2">
               {anchorsComputed
                 .filter(({depth}) => depth === 2)
                 .map(({url, title}) => (

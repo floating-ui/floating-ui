@@ -17,7 +17,8 @@ code {
 }
 
 [data-reach-skip-nav-link]:focus {
-  @apply fixed z-50 m-3 bg-white/90 text-black backdrop-blur;
+  @apply fixed m-3 bg-white/90 text-black backdrop-blur;
+  z-index: 2147483647;
 }
 
 .shiki {

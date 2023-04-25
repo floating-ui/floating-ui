@@ -25,6 +25,7 @@ import {useId} from 'react';
 export function useTooltip({
   initialOpen = false,
   placement = 'top',
+  strategy,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
   noRest,
@@ -40,6 +41,7 @@ export function useTooltip({
 
   const data = useFloating({
     placement,
+    strategy,
     open,
     onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
@@ -182,6 +184,22 @@ export const TooltipContent = React.forwardRef(
           opacity: 0,
           transform: 'scale(0.95)',
         },
+        common: ({side}) => ({
+          transformOrigin: {
+            top: `${
+              floatingContext.middlewareData.arrow?.x ?? 0
+            }px bottom`,
+            bottom: `${
+              floatingContext.middlewareData.arrow?.x ?? 0
+            }px top`,
+            left: `right ${
+              floatingContext.middlewareData.arrow?.y ?? 0
+            }px bottom`,
+            right: `left ${
+              floatingContext.middlewareData.arrow?.y ?? 0
+            }px`,
+          }[side],
+        }),
       }
     );
 
@@ -189,6 +207,7 @@ export const TooltipContent = React.forwardRef(
       <FloatingPortal id="tooltip-portal">
         {isMounted && (
           <div
+            {...context.getFloatingProps(props)}
             ref={ref}
             className={classNames(
               'bg-gray-600 text-white shadow-lg',
@@ -204,7 +223,6 @@ export const TooltipContent = React.forwardRef(
               ...props.style,
               ...styles,
             }}
-            {...context.getFloatingProps(props)}
           >
             {props.children}
             <FloatingArrow

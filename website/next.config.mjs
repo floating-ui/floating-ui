@@ -1,25 +1,29 @@
 import {readFileSync} from 'fs';
-import NpmApi from 'npm-api';
 import rehypePrettyCode from 'rehype-pretty-code';
 import remarkSmartypants from 'remark-smartypants';
 import visit from 'unist-util-visit';
 
 const replaceVariables = () => async (tree) => {
-  let pkgs = [];
+  let packageVersions = ['^1.0.0', '^1.0.0'];
+
   try {
-    const npm = new NpmApi();
-    pkgs = await Promise.all([
-      npm.repo('@floating-ui/core').package(),
-      npm.repo('@floating-ui/dom').package(),
-    ]);
+    packageVersions = await Promise.all(
+      ['core', 'dom'].map((name) =>
+        fetch(
+          `https://registry.npmjs.org/@floating-ui/${name}/latest`
+        )
+          .then((res) => res.json())
+          .then((res) => res.version)
+      )
+    );
   } catch (e) {
-    pkgs = [{version: 'latest'}, {version: 'latest'}];
+    //
   }
 
   visit(tree, 'code', (node) => {
     node.value = node.value
-      .replaceAll('__CORE_VERSION__', pkgs[0].version)
-      .replaceAll('__DOM_VERSION__', pkgs[1].version);
+      .replaceAll('__CORE_VERSION__', packageVersions[0])
+      .replaceAll('__DOM_VERSION__', packageVersions[1]);
   });
 };
 
