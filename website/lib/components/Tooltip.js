@@ -210,7 +210,7 @@ export const TooltipContent = React.forwardRef(
             {...context.getFloatingProps(props)}
             ref={ref}
             className={classNames(
-              'bg-gray-600 text-white shadow-lg',
+              'z-50 bg-gray-600 text-white shadow-lg',
               'pointer-events-none cursor-default rounded p-2 text-sm',
               props.className
             )}

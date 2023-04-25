@@ -802,7 +802,7 @@ export default function Layout({children}) {
             <h4 className="text-md ml-6 mb-1 text-gray-500">
               On this page
             </h4>
-            <ul className="overflow-hidden py-1 px-2">
+            <ul className="overflow-hidden px-2 pt-1 pb-8">
               {anchorsComputed
                 .filter(({depth}) => depth === 2)
                 .map(({url, title}) => (
