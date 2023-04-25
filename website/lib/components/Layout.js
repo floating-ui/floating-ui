@@ -623,7 +623,9 @@ export default function Layout({children}) {
     };
   }, [pathname]);
 
-  const activePage = nav.find(({url}) => url === pathname);
+  const activePage = nav.find(({url}) => url === pathname) || {
+    title: '',
+  };
 
   const isReactDOMPage = activePage.title === 'React';
   const isDOMOnlyPage = activePage.title === 'autoUpdate';
