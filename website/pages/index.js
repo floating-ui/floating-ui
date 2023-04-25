@@ -78,7 +78,7 @@ function HomePage() {
           more
         </title>
       </Head>
-      <header className="relative mb-12 overflow-hidden bg-gray-900 from-gray-700 to-gray-800 pb-16">
+      <header className="relative overflow-hidden bg-gray-900 from-gray-700 to-gray-800 pb-16">
         <div className="container mx-auto max-w-screen-xl pt-16 text-center">
           <svg
             ref={logoRef}
@@ -258,8 +258,8 @@ function HomePage() {
       </header>
       <main className="relative">
         <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading my-4 inline-block bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-3xl font-bold text-transparent dark:-mt-4 dark:from-rose-400 dark:to-pink-400 lg:text-4xl">
-            Advanced anchor positioning.
+          <h2 className="leading-gradient-heading mb-4 mt-12 inline-block bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:to-pink-400 lg:mt-16 lg:text-4xl dark:lg:mt-4">
+            Smart anchor positioning.
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Anchor a floating element next to another element
@@ -278,7 +278,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mt-16 mb-4 inline-block bg-gradient-to-r from-cyan-500 to-pink-400 bg-clip-text text-3xl font-bold text-transparent dark:from-cyan-400 dark:to-pink-400 lg:text-4xl">
+          <h2 className="leading-gradient-heading mt-12 mb-4 inline-block bg-gradient-to-r from-cyan-500 to-pink-400 bg-clip-text text-3xl font-bold text-transparent dark:from-cyan-400 dark:to-pink-400 lg:mt-16 lg:text-4xl">
             Interactions for React.
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -469,7 +469,7 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container mx-auto mb-16 max-w-screen-xl px-4 text-center md:px-8">
+        <div className="container mx-auto mb-12 max-w-screen-xl px-4 text-center md:px-8 lg:mb-16">
           <Link
             href="/docs/react"
             className="inline-block rounded-md bg-rose-500 p-6 font-bold text-gray-50 transition-colors hover:bg-pink-500 dark:bg-rose-600 sm:text-xl"
@@ -483,7 +483,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mt-16 mb-4 inline-block bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-500 dark:to-teal-400 lg:text-4xl">
+          <h2 className="leading-gradient-heading mt-12 mb-4 inline-block bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-500 dark:to-teal-400 lg:mt-16 lg:text-4xl">
             Modern, tree-shakeable modules.
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -557,7 +557,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mt-8 mb-4 inline-block text-3xl font-bold dark:text-gray-50 lg:text-4xl">
+          <h2 className="mt-4 mb-4 inline-block text-3xl font-bold dark:text-gray-50 lg:mt-8 lg:text-4xl">
             Support Floating UI!
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -579,7 +579,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mb-4 mt-16 inline-block text-3xl font-bold dark:text-gray-50 lg:text-4xl">
+          <h2 className="leading-gradient-heading mb-4 mt-12 inline-block text-3xl font-bold dark:text-gray-50 lg:mt-16 lg:text-4xl">
             Ready to install?
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -620,7 +620,7 @@ function HomePage() {
       <footer className="mt-16 bg-gray-50 py-8 text-center shadow dark:border-t dark:border-gray-800 dark:bg-transparent dark:text-gray-500">
         <div className="container mx-auto flex max-w-screen-xl flex-col gap-3 px-4">
           <p>
-            <strong>
+            <strong className="font-semibold">
               © {new Date().getFullYear()} • MIT License
             </strong>
           </p>
@@ -632,14 +632,14 @@ function HomePage() {
             Floating shapes in the header are licensed under CC
             BY from{' '}
             <a
-              className="font-bold text-rose-600 dark:text-rose-300"
+              className="font-semibold text-rose-600 dark:text-rose-300"
               href="https://www.figma.com/@killnicole"
             >
               Vic
             </a>{' '}
             and{' '}
             <a
-              className="font-bold text-rose-600 dark:text-rose-300"
+              className="font-semibold text-rose-600 dark:text-rose-300"
               href="https://www.figma.com/@Artstar3d"
             >
               Lisa Star
@@ -651,7 +651,7 @@ function HomePage() {
               href="https://www.netlify.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-bold text-rose-600 dark:text-rose-300"
+              className="font-semibold text-rose-600 dark:text-rose-300"
             >
               This site is powered by Netlify
             </a>
