@@ -502,6 +502,15 @@ const components = {
   },
 };
 
+const initialPackages = [
+  {name: 'core', version: 'latest'},
+  {name: 'dom', version: 'latest'},
+  {name: 'react', version: 'latest'},
+  {name: 'react-dom', version: 'latest'},
+  {name: 'react-native', version: 'latest'},
+  {name: 'vue', version: 'latest'},
+];
+
 export default function Layout({children}) {
   const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
@@ -511,14 +520,7 @@ export default function Layout({children}) {
   const [hash, setHash] = useState(
     asPath.slice(asPath.indexOf('#'))
   );
-  const [packages, setPackages] = useState([
-    {name: 'core', version: 'latest'},
-    {name: 'dom', version: '^latest'},
-    {name: 'react', version: 'latest'},
-    {name: 'react-dom', version: 'latest'},
-    {name: 'react-native', version: 'latest'},
-    {name: 'vue', version: 'latest'},
-  ]);
+  const [packages, setPackages] = useState(initialPackages);
 
   useEffect(() => {
     let ignore = false;
@@ -526,7 +528,7 @@ export default function Layout({children}) {
     async function fetchData() {
       try {
         const packageResults = await Promise.all(
-          packages.map(({name}) =>
+          initialPackages.map(({name}) =>
             fetch(
               `https://registry.npmjs.org/@floating-ui/${name}/latest`
             ).then((res) => res.json())
@@ -534,9 +536,9 @@ export default function Layout({children}) {
         );
 
         if (!ignore) {
-          setPackages((packages) =>
+          setPackages(
             packageResults.map((pkg, index) => ({
-              name: packages[index].name,
+              name: initialPackages[index].name,
               version: pkg.version,
             }))
           );
@@ -551,7 +553,7 @@ export default function Layout({children}) {
     return () => {
       ignore = true;
     };
-  }, [packages]);
+  }, []);
 
   const displayNavigation = nav[index] != null;
 
