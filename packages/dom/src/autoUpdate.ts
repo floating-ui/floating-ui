@@ -47,13 +47,11 @@ export function autoUpdate(
   options: Partial<Options> = {}
 ) {
   const {
-    ancestorScroll: _ancestorScroll = true,
+    ancestorScroll = true,
     ancestorResize = true,
     elementResize = true,
     animationFrame = false,
   } = options;
-
-  const ancestorScroll = _ancestorScroll && !animationFrame;
 
   const ancestors =
     ancestorScroll || ancestorResize
@@ -68,8 +66,12 @@ export function autoUpdate(
       : [];
 
   ancestors.forEach((ancestor) => {
-    ancestorScroll &&
+    // ignores Window, checks for [object VisualViewport]
+    const isVisualViewport =
+      !isElement(ancestor) && ancestor.toString().includes('V');
+    if (ancestorScroll && (animationFrame ? isVisualViewport : true)) {
       ancestor.addEventListener('scroll', update, {passive: true});
+    }
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 
