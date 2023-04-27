@@ -58,21 +58,21 @@ export const MINI_SPONSORS = [
   //   label: 'Titan Asset Management',
   //   url: 'https://titanam.co.uk/',
   // },
-  {
-    logo: '/sponsors/dailycontributors.svg',
-    label: 'Dailycontributors Blog',
-    url: 'https://dailycontributors.com',
-  },
+  // {
+  //   logo: '/sponsors/dailycontributors.svg',
+  //   label: 'Dailycontributors Blog',
+  //   url: 'https://dailycontributors.com',
+  // },
   {
     logo: '/sponsors/ariakit.svg',
     label: 'Ariakit - Toolkit for building accessible UIs',
     url: 'https://ariakit.org/',
   },
-  {
-    logo: '/sponsors/pacmanblog.svg',
-    label: 'Pacman 30th Anniversary Doodle',
-    url: 'https://pacmanblog.com/',
-  },
+  // {
+  //   logo: '/sponsors/pacmanblog.svg',
+  //   label: 'Pacman 30th Anniversary Doodle',
+  //   url: 'https://pacmanblog.com/',
+  // },
   {
     logo: '/sponsors/pyjobs.svg',
     label: 'PyJobs - Jobs for Python Developers',
@@ -83,14 +83,19 @@ export const MINI_SPONSORS = [
     label: 'Sup Standup Bot',
     url: 'https://sup.today/',
   },
-  {
-    logo: '/sponsors/save-code.svg',
-    label: "Save With the UK's Best Vouchers & Discount Codes",
-    url: 'https://www.savecode.co.uk/',
-  },
+  // {
+  //   logo: '/sponsors/save-code.svg',
+  //   label: "Save With the UK's Best Vouchers & Discount Codes",
+  //   url: 'https://www.savecode.co.uk/',
+  // },
   {
     logo: '/sponsors/fitlivingtips.svg',
     label: 'FitLivingTips - Health and Fitness Blog',
     url: 'https://www.fitlivingtips.com/',
+  },
+  {
+    logo: '/sponsors/mobipast.svg',
+    label: 'Mobipast',
+    url: 'https://www.mobipast.net/',
   },
 ];
