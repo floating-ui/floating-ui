@@ -11,7 +11,7 @@ function App({
   ...props
 }: Props & {showReference?: boolean}) {
   const [open, setOpen] = useState(false);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -21,8 +21,12 @@ function App({
 
   return (
     <>
-      {showReference && <button {...getReferenceProps({ref: reference})} />}
-      {open && <div role="tooltip" {...getFloatingProps({ref: floating})} />}
+      {showReference && (
+        <button {...getReferenceProps({ref: refs.setReference})} />
+      )}
+      {open && (
+        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+      )}
     </>
   );
 }

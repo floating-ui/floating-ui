@@ -6,8 +6,9 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, update} = useFloating({
+  const {refs, floatingStyles, update} = useFloating({
     open: true,
+    transform: false,
     placement: 'right',
     middleware: [
       shift(),
@@ -28,9 +29,13 @@ function App() {
     platform: {
       ...platform,
     },
+    elements: {
+      floating: null,
+      reference: null,
+    },
   });
-  reference(null);
-  reference({
+  refs.setReference(null);
+  refs.setReference({
     getBoundingClientRect() {
       return {
         x: 0,
@@ -44,15 +49,19 @@ function App() {
       };
     },
   });
-  reference(null);
-  floating(null);
+  refs.setFloating(null);
   update();
-  return <div ref={arrowRef} />;
+  return <div ref={arrowRef} style={floatingStyles} />;
 }
 
 Setters;
 function Setters() {
-  const {refs} = useFloating();
+  const {refs} = useFloating({
+    elements: {
+      floating: document.body,
+      reference: document.body,
+    },
+  });
 
   return (
     <>
@@ -74,8 +83,8 @@ function NarrowRefType() {
   floating3.refs.reference.current?.contains(document.body);
   return (
     <>
-      <button ref={floating1.reference} />
-      <button ref={floating2.reference} />
+      <button ref={floating1.refs.setReference} />
+      <button ref={floating2.refs.setFloating} />
       {/* @ts-expect-error */}
       <button ref={floating3.reference} />
     </>

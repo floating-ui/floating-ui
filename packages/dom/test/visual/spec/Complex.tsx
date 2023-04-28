@@ -23,8 +23,7 @@ export function Complex() {
   const {
     x,
     y,
-    reference,
-    floating,
+    refs,
     strategy,
     update,
     placement: resultantPlacement,
@@ -59,14 +58,14 @@ export function Complex() {
       </p>
       <Container update={update}>
         <div
-          ref={reference}
+          ref={refs.setReference}
           className="reference"
           style={{width: referenceSizeValue, height: referenceSizeValue}}
         >
           Reference
         </div>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,

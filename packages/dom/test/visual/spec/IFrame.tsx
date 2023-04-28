@@ -18,7 +18,7 @@ const SCROLL = [
 
 function Outside({scroll}: {scroll: number[]}) {
   const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
@@ -52,7 +52,7 @@ function Outside({scroll}: {scroll: number[]}) {
             createPortal(
               <div style={{width: 2000, height: 2000, position: 'relative'}}>
                 <button
-                  ref={reference}
+                  ref={refs.setReference}
                   className="reference"
                   style={{position: 'absolute', left: 1000, top: 1000}}
                 >
@@ -63,7 +63,7 @@ function Outside({scroll}: {scroll: number[]}) {
             )}
         </iframe>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,
@@ -80,7 +80,7 @@ function Outside({scroll}: {scroll: number[]}) {
 
 function Inside({scroll}: {scroll: number[]}) {
   const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
@@ -113,14 +113,14 @@ function Inside({scroll}: {scroll: number[]}) {
             createPortal(
               <div style={{width: 2000, height: 2000, position: 'relative'}}>
                 <button
-                  ref={reference}
+                  ref={refs.setReference}
                   className="reference"
                   style={{position: 'absolute', left: 1000, top: 1000}}
                 >
                   Reference
                 </button>
                 <div
-                  ref={floating}
+                  ref={refs.setFloating}
                   style={{
                     position: strategy,
                     top: y ?? 0,
@@ -147,7 +147,7 @@ function Nested({scroll}: {scroll: number[]}) {
     null
   );
 
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
@@ -197,7 +197,7 @@ function Nested({scroll}: {scroll: number[]}) {
                         }}
                       >
                         <button
-                          ref={reference}
+                          ref={refs.setReference}
                           className="reference"
                           style={{position: 'absolute', left: 1000, top: 1000}}
                         >
@@ -212,7 +212,7 @@ function Nested({scroll}: {scroll: number[]}) {
             )}
         </iframe>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,
@@ -231,7 +231,7 @@ function Virtual({scroll}: {scroll: number[]}) {
   const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
   const referenceRef = useRef<HTMLButtonElement>(null);
 
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [
       shift({
@@ -247,12 +247,12 @@ function Virtual({scroll}: {scroll: number[]}) {
   useLayoutEffect(() => {
     const el = referenceRef.current;
     if (mountNode && el) {
-      reference({
+      refs.setReference({
         getBoundingClientRect: () => el.getBoundingClientRect(),
         contextElement: el,
       });
     }
-  }, [mountNode, reference]);
+  }, [mountNode, refs]);
 
   useLayoutEffect(() => {
     if (mountNode && scroll) {
@@ -290,7 +290,7 @@ function Virtual({scroll}: {scroll: number[]}) {
             )}
         </iframe>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,

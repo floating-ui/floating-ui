@@ -22,24 +22,24 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, positionReference, update, context} = useFloating(
-    {
-      placement: 'right',
-      middleware: [
-        shift(),
-        arrow({element: arrowRef}),
-        false && shift(),
-        null,
-        undefined,
-      ],
-      strategy: 'fixed',
-      platform: {
-        ...platform,
-      },
-    }
-  );
-  reference(null);
-  reference({
+  const {refs, floatingStyles, update, context} = useFloating({
+    placement: 'right',
+    middleware: [
+      shift(),
+      arrow({element: arrowRef}),
+      false && shift(),
+      null,
+      undefined,
+    ],
+    strategy: 'fixed',
+    platform: {
+      ...platform,
+    },
+    open: true,
+    transform: false,
+  });
+  refs.setReference(null);
+  refs.setReference({
     getBoundingClientRect() {
       return {
         x: 0,
@@ -53,10 +53,9 @@ function App() {
       };
     },
   });
-  reference(null);
-  floating(null);
+  refs.setFloating(null);
   update();
-  positionReference({
+  refs.setPositionReference({
     contextElement: document.body,
     getBoundingClientRect() {
       return {
@@ -71,16 +70,16 @@ function App() {
       };
     },
   });
-  positionReference(document.body);
 
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
   const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
 
   return (
-    <div ref={ref}>
+    <div ref={ref} style={floatingStyles}>
       <FloatingArrow context={context} />
       <FloatingArrow
+        ref={arrowRef}
         context={context}
         stroke="black"
         strokeWidth={2}
@@ -156,8 +155,6 @@ function NarrowRefType() {
 
   return (
     <>
-      <button ref={floating1.reference} />
-      <button ref={floating2.reference} />
       {/* @ts-expect-error */}
       <button ref={floating3.reference} />
       <button ref={floating1.refs.setReference} />

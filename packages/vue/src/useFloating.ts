@@ -21,6 +21,8 @@ import type {
   UseFloatingOptions,
   UseFloatingReturn,
 } from './types';
+import {getDPR} from './utils/getDPR';
+import {roundByDPR} from './utils/roundByDPR';
 import {unwrapElement} from './utils/unwrapElement';
 
 /**
@@ -40,16 +42,45 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
   const middlewareOption = computed(() => unref(options.middleware));
   const placementOption = computed(() => unref(options.placement) ?? 'bottom');
   const strategyOption = computed(() => unref(options.strategy) ?? 'absolute');
+  const transformOption = computed(() => unref(options.transform) ?? true);
   const referenceElement = computed(() => unwrapElement(reference.value));
   const floatingElement = computed(() => unwrapElement(floating.value));
-  const x = ref<number | null>(null);
-  const y = ref<number | null>(null);
+  const x = ref(0);
+  const y = ref(0);
   const strategy = ref(strategyOption.value);
   const placement = ref(placementOption.value);
   const middlewareData = shallowRef<MiddlewareData>({});
   const isPositioned = ref(false);
+  const floatingStyles = computed(() => {
+    const initialStyles = {
+      position: strategy.value,
+      left: '0',
+      top: '0',
+    };
 
-  let whileElementsMountedCleanup: void | (() => void);
+    if (!floatingElement.value) {
+      return initialStyles;
+    }
+
+    const xVal = roundByDPR(floatingElement.value, x.value);
+    const yVal = roundByDPR(floatingElement.value, y.value);
+
+    if (transformOption.value) {
+      return {
+        ...initialStyles,
+        transform: `translate(${xVal}px, ${yVal}px)`,
+        ...(getDPR(floatingElement.value) >= 1.5 && {willChange: 'transform'}),
+      };
+    }
+
+    return {
+      position: strategy.value,
+      left: `${xVal}px`,
+      top: `${yVal}px`,
+    };
+  });
+
+  let whileElementsMountedCleanup: (() => void) | undefined;
 
   function update() {
     if (referenceElement.value == null || floatingElement.value == null) {
@@ -118,6 +149,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
     placement: shallowReadonly(placement),
     middlewareData: shallowReadonly(middlewareData),
     isPositioned: shallowReadonly(isPositioned),
+    floatingStyles,
     update,
   };
 }

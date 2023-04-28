@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react';
 import {Controls} from '../utils/Controls';
 
 export function AutoUpdate() {
-  const {x, y, reference, floating, strategy, refs, update} = useFloating({
+  const {x, y, strategy, refs, update} = useFloating({
     strategy: 'fixed',
   });
   const [options, setOptions] = useState({
@@ -47,7 +47,7 @@ export function AutoUpdate() {
       <p>The floating element should update when required.</p>
       <div className="container" data-flexible>
         <div
-          ref={reference}
+          ref={refs.setReference}
           className="reference"
           style={{
             width: referenceSize,
@@ -60,7 +60,7 @@ export function AutoUpdate() {
           Reference
         </div>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,

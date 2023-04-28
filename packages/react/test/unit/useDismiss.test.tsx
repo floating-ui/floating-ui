@@ -18,7 +18,7 @@ import {normalizeBubblesProp, Props} from '../../src/hooks/useDismiss';
 
 function App(props: Props) {
   const [open, setOpen] = useState(true);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -28,8 +28,10 @@ function App(props: Props) {
 
   return (
     <>
-      <button {...getReferenceProps({ref: reference})} />
-      {open && <div role="tooltip" {...getFloatingProps({ref: floating})} />}
+      <button {...getReferenceProps({ref: refs.setReference})} />
+      {open && (
+        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+      )}
     </>
   );
 }
@@ -103,7 +105,7 @@ describe('false', () => {
   test('does not dismiss when clicking portaled children', async () => {
     function App() {
       const [open, setOpen] = useState(true);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -114,9 +116,9 @@ describe('false', () => {
 
       return (
         <>
-          <button ref={reference} {...getReferenceProps()} />
+          <button ref={refs.setReference} {...getReferenceProps()} />
           {open && (
-            <div ref={floating} {...getFloatingProps()}>
+            <div ref={refs.setFloating} {...getFloatingProps()}>
               <FloatingPortal>
                 <button data-testid="portaled-button" />
               </FloatingPortal>
@@ -154,7 +156,7 @@ describe('bubbles', () => {
     const [open, setOpen] = useState(true);
     const nodeId = useFloatingNodeId();
 
-    const {reference, floating, context} = useFloating({
+    const {refs, context} = useFloating({
       open,
       onOpenChange: setOpen,
       nodeId,
@@ -166,10 +168,13 @@ describe('bubbles', () => {
 
     return (
       <FloatingNode id={nodeId}>
-        <button {...getReferenceProps({ref: reference})} />
+        <button {...getReferenceProps({ref: refs.setReference})} />
         {open && (
           <FloatingFocusManager context={context}>
-            <div {...getFloatingProps({ref: floating})} data-testid={testId}>
+            <div
+              {...getFloatingProps({ref: refs.setFloating})}
+              data-testid={testId}
+            >
               {children}
             </div>
           </FloatingFocusManager>

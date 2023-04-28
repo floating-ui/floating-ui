@@ -18,7 +18,7 @@ import {
 test('middleware is always fresh and does not cause an infinite loop', async () => {
   function InlineMiddleware() {
     const arrowRef = useRef(null);
-    const {reference, floating} = useFloating({
+    const {refs} = useFloating({
       placement: 'right',
       middleware: [
         offset(),
@@ -55,8 +55,8 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
 
     return (
       <>
-        <div ref={reference} />
-        <div ref={floating} />
+        <div ref={refs.setReference} />
+        <div ref={refs.setFloating} />
       </>
     );
   }
@@ -97,15 +97,15 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
         },
       }),
     ]);
-    const {x, y, reference, floating} = useFloating({
+    const {x, y, refs} = useFloating({
       placement: 'right',
       middleware,
     });
 
     return (
       <>
-        <div ref={reference} />
-        <div ref={floating} />
+        <div ref={refs.setReference} />
+        <div ref={refs.setFloating} />
         <button
           data-testid="step1"
           onClick={() => setMiddleware([offset(10)])}
@@ -149,11 +149,11 @@ describe('whileElementsMounted', () => {
     const spy = jest.fn();
 
     function App() {
-      const {reference, floating} = useFloating({whileElementsMounted: spy});
+      const {refs} = useFloating({whileElementsMounted: spy});
       return (
         <>
-          <button ref={reference} />
-          <div ref={floating} />
+          <button ref={refs.setReference} />
+          <div ref={refs.setFloating} />
         </>
       );
     }
@@ -168,11 +168,11 @@ describe('whileElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({whileElementsMounted: spy});
+      const {refs} = useFloating({whileElementsMounted: spy});
       return (
         <>
-          <button ref={reference} onClick={() => setOpen(true)} />
-          {open && <div ref={floating} />}
+          <button ref={refs.setReference} onClick={() => setOpen(true)} />
+          {open && <div ref={refs.setFloating} />}
         </>
       );
     }
@@ -190,11 +190,15 @@ describe('whileElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({whileElementsMounted: spy});
+      const {refs} = useFloating({whileElementsMounted: spy});
       return (
         <>
-          {open && <button ref={reference} />}
-          <div role="tooltip" ref={floating} onClick={() => setOpen(true)} />
+          {open && <button ref={refs.setReference} />}
+          <div
+            role="tooltip"
+            ref={refs.setFloating}
+            onClick={() => setOpen(true)}
+          />
         </>
       );
     }
@@ -212,7 +216,7 @@ describe('whileElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating} = useFloating({whileElementsMounted: spy});
+      const {refs} = useFloating({whileElementsMounted: spy});
 
       useEffect(() => {
         setOpen(true);
@@ -220,8 +224,8 @@ describe('whileElementsMounted', () => {
 
       return (
         <>
-          {open && <button ref={reference} />}
-          {open && <div role="tooltip" ref={floating} />}
+          {open && <button ref={refs.setReference} />}
+          {open && <div role="tooltip" ref={refs.setFloating} />}
         </>
       );
     }
@@ -238,7 +242,7 @@ describe('whileElementsMounted', () => {
 
     function App() {
       const [open, setOpen] = useState(true);
-      const {reference, floating} = useFloating({whileElementsMounted: spy});
+      const {refs} = useFloating({whileElementsMounted: spy});
 
       useEffect(() => {
         setOpen(false);
@@ -246,8 +250,8 @@ describe('whileElementsMounted', () => {
 
       return (
         <>
-          {open && <button ref={reference} />}
-          {open && <div role="tooltip" ref={floating} />}
+          {open && <button ref={refs.setReference} />}
+          {open && <div role="tooltip" ref={refs.setFloating} />}
         </>
       );
     }
@@ -264,37 +268,12 @@ describe('whileElementsMounted', () => {
 
 test('unstable callback refs', async () => {
   function App() {
-    const {reference, floating} = useFloating();
+    const {refs} = useFloating();
 
     return (
       <>
-        <div ref={(node) => reference(node)} />
-        <div ref={(node) => floating(node)} />
-      </>
-    );
-  }
-
-  render(<App />);
-
-  await act(async () => {});
-
-  cleanup();
-});
-
-test('callback refs invoked during render', async () => {
-  function App() {
-    const [r, setR] = useState<HTMLDivElement | null>(null);
-    const [f, setF] = useState<HTMLDivElement | null>(null);
-
-    const {reference, floating} = useFloating();
-
-    reference(r);
-    floating(f);
-
-    return (
-      <>
-        <div ref={setR} />
-        <div ref={setF} />
+        <div ref={(node) => refs.setReference(node)} />
+        <div ref={(node) => refs.setFloating(node)} />
       </>
     );
   }
@@ -311,7 +290,7 @@ test('isPositioned', async () => {
 
   function App() {
     const [open, setOpen] = useState(false);
-    const {reference, floating, isPositioned} = useFloating({
+    const {refs, isPositioned} = useFloating({
       open,
     });
 
@@ -321,8 +300,8 @@ test('isPositioned', async () => {
 
     return (
       <>
-        <button ref={reference} onClick={() => setOpen((v) => !v)} />
-        {open && <div ref={floating} />}
+        <button ref={refs.setReference} onClick={() => setOpen((v) => !v)} />
+        {open && <div ref={refs.setFloating} />}
       </>
     );
   }
@@ -378,4 +357,236 @@ test('external elements sync', async () => {
   await act(async () => {});
 
   expect(getByTestId('value').textContent).toBe('0,0');
+});
+
+test('external reference element sync', async () => {
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
+    const {x, y, refs} = useFloating({
+      elements: {
+        reference: referenceEl,
+      },
+    });
+
+    return (
+      <>
+        <div data-testid="reference" ref={setReferenceEl} />
+        <div ref={refs.setFloating} />
+        <div data-testid="value">{`${x},${y}`}</div>
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+  const mockBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+  const reference = getByTestId('reference');
+  reference.getBoundingClientRect = mockBoundingClientRect;
+
+  await act(async () => {});
+
+  expect(getByTestId('value').textContent).toBe('25,50');
+});
+
+test('external floating element sync', async () => {
+  function App() {
+    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const {x, y, refs} = useFloating({
+      elements: {
+        floating: floatingEl,
+      },
+    });
+
+    return (
+      <>
+        <div data-testid="reference" ref={refs.setReference} />
+        <div ref={setFloatingEl} />
+        <div data-testid="value">{`${x},${y}`}</div>
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+  const mockBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+  const reference = getByTestId('reference');
+  reference.getBoundingClientRect = mockBoundingClientRect;
+
+  await act(async () => {});
+
+  expect(getByTestId('value').textContent).toBe('25,50');
+});
+
+test('external elements sync', async () => {
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
+    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const {x, y} = useFloating({
+      elements: {
+        reference: referenceEl,
+        floating: floatingEl,
+      },
+    });
+
+    return (
+      <>
+        <div data-testid="reference" ref={setReferenceEl} />
+        <div ref={setFloatingEl} />
+        <div data-testid="value">{`${x},${y}`}</div>
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+  const mockBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+  const reference = getByTestId('reference');
+  reference.getBoundingClientRect = mockBoundingClientRect;
+
+  await act(async () => {});
+
+  expect(getByTestId('value').textContent).toBe('25,50');
+});
+
+test('external elements sync update', async () => {
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
+    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const {x, y} = useFloating({
+      elements: {
+        reference: referenceEl,
+        floating: floatingEl,
+      },
+    });
+
+    return (
+      <>
+        <div data-testid="reference" ref={setReferenceEl} />
+        <div ref={setFloatingEl} />
+        <div data-testid="value">{`${x},${y}`}</div>
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+  await act(async () => {});
+
+  expect(getByTestId('value').textContent).toBe('0,0');
+});
+
+test('floatingStyles no transform', async () => {
+  function App() {
+    const {refs, floatingStyles} = useFloating({
+      transform: false,
+    });
+
+    return (
+      <>
+        <div data-testid="reference" ref={refs.setReference} />
+        <div
+          data-testid="floating"
+          ref={refs.setFloating}
+          style={floatingStyles}
+        />
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+
+  const mockBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+  const reference = getByTestId('reference');
+  reference.getBoundingClientRect = mockBoundingClientRect;
+
+  expect(getByTestId('floating').style.position).toBe('absolute');
+  expect(getByTestId('floating').style.top).toBe('0px');
+  expect(getByTestId('floating').style.left).toBe('0px');
+
+  await act(async () => {});
+
+  expect(getByTestId('floating').style.position).toBe('absolute');
+  expect(getByTestId('floating').style.top).toBe('50px');
+  expect(getByTestId('floating').style.left).toBe('25px');
+});
+
+test('floatingStyles default', async () => {
+  function App() {
+    const {refs, floatingStyles} = useFloating();
+
+    return (
+      <>
+        <div data-testid="reference" ref={refs.setReference} />
+        <div
+          data-testid="floating"
+          ref={refs.setFloating}
+          style={floatingStyles}
+        />
+      </>
+    );
+  }
+
+  const {getByTestId} = render(<App />);
+
+  const mockBoundingClientRect = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    width: 50,
+    height: 50,
+    top: 0,
+    right: 50,
+    bottom: 50,
+    left: 0,
+    toJSON: () => {},
+  }));
+  const reference = getByTestId('reference');
+  reference.getBoundingClientRect = mockBoundingClientRect;
+
+  expect(getByTestId('floating').style.position).toBe('absolute');
+  expect(getByTestId('floating').style.top).toBe('0px');
+  expect(getByTestId('floating').style.left).toBe('0px');
+  expect(getByTestId('floating').style.transform).toBe('translate(0px, 0px)');
+
+  await act(async () => {});
+
+  expect(getByTestId('floating').style.position).toBe('absolute');
+  expect(getByTestId('floating').style.top).toBe('0px');
+  expect(getByTestId('floating').style.left).toBe('0px');
+  expect(getByTestId('floating').style.transform).toBe('translate(25px, 50px)');
 });

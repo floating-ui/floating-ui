@@ -15,7 +15,7 @@ import {useSize} from '../utils/useSize';
 const arrowEl = document.createElement('div');
 
 export function Perf() {
-  const {x, y, reference, floating, strategy} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     placement: 'top',
     whileElementsMounted: autoUpdate,
     middleware: [
@@ -31,11 +31,11 @@ export function Perf() {
 
   let jsx = (
     <>
-      <div ref={reference} className="reference">
+      <div ref={refs.setReference} className="reference">
         Reference
       </div>
       <div
-        ref={floating}
+        ref={refs.setFloating}
         className="floating"
         style={{
           position: strategy,

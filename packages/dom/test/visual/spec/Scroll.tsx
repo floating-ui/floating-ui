@@ -21,7 +21,7 @@ const STRATEGIES: Strategy[] = ['absolute', 'fixed'];
 export function Scroll() {
   const [strategyState, setStrategyState] = useState<Strategy>('absolute');
   const [node, setNode] = useState<Node>('referenceScrollParent');
-  const {x, y, reference, floating, update, refs} = useFloating({
+  const {x, y, refs, update} = useFloating({
     strategy: strategyState,
   });
   const {scrollRef, indicator} = useScroll({refs, update});
@@ -30,7 +30,7 @@ export function Scroll() {
 
   const referenceJsx = (
     <div
-      ref={reference}
+      ref={refs.setReference}
       className="reference"
       style={
         node === 'floatingScrollParent'
@@ -46,7 +46,7 @@ export function Scroll() {
   );
   const floatingJsx = (
     <div
-      ref={floating}
+      ref={refs.setFloating}
       className="floating"
       style={{
         position: strategyState,

@@ -1,5 +1,5 @@
 import type {Placement as PlacementType} from '@floating-ui/core';
-import {useFloating} from '@floating-ui/react-dom';
+import {autoUpdate, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
@@ -9,12 +9,13 @@ import {useSize} from '../utils/useSize';
 export function Placement() {
   const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<PlacementType>('bottom');
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const {refs, floatingStyles, update} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
   });
   const [size, handleSizeChange] = useSize();
 
-  useLayoutEffect(update, [size, update, rtl]);
+  useLayoutEffect(update, [rtl, update]);
 
   return (
     <>
@@ -24,16 +25,14 @@ export function Placement() {
         the 12 placements.
       </p>
       <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
-        <div ref={reference} className="reference">
+        <div ref={refs.setReference} className="reference">
           Reference
         </div>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
-            position: strategy,
-            top: y ?? '',
-            left: x ?? '',
+            ...floatingStyles,
             width: size,
             height: size,
           }}

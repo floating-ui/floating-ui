@@ -20,7 +20,7 @@ const useImpl = ({
 }) => {
   const [open, setOpen] = useState(true);
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open: props.open ?? open,
     onOpenChange: props.onOpenChange ?? setOpen,
   });
@@ -50,12 +50,12 @@ const useImpl = ({
       getReferenceProps({
         role: 'combobox',
         ...userProps,
-        ref: reference,
+        ref: refs.setReference,
       }),
     getFloatingProps: () =>
       getFloatingProps({
         role: 'listbox',
-        ref: floating,
+        ref: refs.setFloating,
       }),
   };
 };

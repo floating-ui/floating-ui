@@ -48,7 +48,7 @@ export const NavigationItem = React.forwardRef<
 
   const nodeId = useFloatingNodeId();
 
-  const {x, y, strategy, refs, context} = useFloating<HTMLAnchorElement>({
+  const {floatingStyles, refs, context} = useFloating<HTMLAnchorElement>({
     open,
     nodeId,
     onOpenChange: setOpen,
@@ -98,12 +98,7 @@ export const NavigationItem = React.forwardRef<
               data-testid="subnavigation"
               ref={refs.setFloating}
               className="flex flex-col bg-slate-100 overflow-y-auto rounded outline-none px-4 py-2 backdrop-blur-sm"
-              style={{
-                position: strategy,
-                top: y ?? 0,
-                left: x ?? 0,
-                width: 'max-content',
-              }}
+              style={floatingStyles}
               {...getFloatingProps()}
             >
               <button type="button" onClick={() => setOpen(false)}>

@@ -71,7 +71,7 @@ export const MenuComponent = React.forwardRef<
   const parent = React.useContext(MenuContext);
   const item = useListItem();
 
-  const {x, y, strategy, refs, context} = useFloating<HTMLButtonElement>({
+  const {floatingStyles, refs, context} = useFloating<HTMLButtonElement>({
     nodeId,
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -240,12 +240,7 @@ export const MenuComponent = React.forwardRef<
                 <div
                   ref={refs.setFloating}
                   className="flex flex-col rounded bg-white shadow-lg outline-none p-1 border border-slate-900/10 bg-clip-padding"
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                    width: 'max-content',
-                  }}
+                  style={floatingStyles}
                   {...getFloatingProps()}
                 >
                   {children}

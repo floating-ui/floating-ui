@@ -16,7 +16,7 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
   const [open, setOpen] = useState(false);
   const listRef = useRef<Array<HTMLLIElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -35,9 +35,9 @@ function App(props: Omit<Partial<Props>, 'listRef'>) {
 
   return (
     <>
-      <button {...getReferenceProps({ref: reference})} />
+      <button {...getReferenceProps({ref: refs.setReference})} />
       {open && (
-        <div role="menu" {...getFloatingProps({ref: floating})}>
+        <div role="menu" {...getFloatingProps({ref: refs.setFloating})}>
           <ul>
             {['one', 'two', 'three'].map((string, index) => (
               <li
@@ -129,11 +129,10 @@ test('resets indexRef to -1 upon close', async () => {
 
     const listRef = useRef<Array<HTMLElement | null>>([]);
 
-    const {x, y, reference, floating, strategy, context, refs} =
-      useFloating<HTMLInputElement>({
-        open,
-        onOpenChange: setOpen,
-      });
+    const {x, y, strategy, context, refs} = useFloating<HTMLInputElement>({
+      open,
+      onOpenChange: setOpen,
+    });
 
     const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
       [
@@ -168,7 +167,7 @@ test('resets indexRef to -1 upon close', async () => {
       <>
         <input
           {...getReferenceProps({
-            ref: reference,
+            ref: refs.setReference,
             onChange,
             value: inputValue,
             placeholder: 'Enter fruit',
@@ -179,7 +178,7 @@ test('resets indexRef to -1 upon close', async () => {
         {open && (
           <div
             {...getFloatingProps({
-              ref: floating,
+              ref: refs.setFloating,
               style: {
                 position: strategy,
                 left: x ?? '',

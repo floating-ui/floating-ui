@@ -7,7 +7,7 @@ export function ContainingBlock() {
   const [willChange, setWillChange] =
     useState<CSSStyleDeclaration['willChange']>('transform');
   const [contain, setContain] = useState('paint');
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const {x, y, refs, strategy, update} = useFloating({
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
   });
@@ -19,11 +19,11 @@ export function ContainingBlock() {
       <h1>Containing Block</h1>
       <p>The floating element should be correctly positioned.</p>
       <div className="container" style={{willChange, contain}}>
-        <div ref={reference} className="reference">
+        <div ref={refs.setReference} className="reference">
           Reference
         </div>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,

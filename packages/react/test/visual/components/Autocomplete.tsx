@@ -184,7 +184,7 @@ export function Main() {
 
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
-  const {x, y, strategy, context, refs} = useFloating<HTMLInputElement>({
+  const {floatingStyles, context, refs} = useFloating<HTMLInputElement>({
     whileElementsMounted: autoUpdate,
     open,
     onOpenChange: setOpen,
@@ -266,13 +266,8 @@ export function Main() {
               <div
                 ref={refs.setFloating}
                 className="bg-slate-100 rounded overflow-y-auto"
-                {...getFloatingProps({
-                  style: {
-                    position: strategy,
-                    left: x ?? 0,
-                    top: y ?? 0,
-                  },
-                })}
+                style={floatingStyles}
+                {...getFloatingProps()}
               >
                 {items.map((item, index) => (
                   <Item

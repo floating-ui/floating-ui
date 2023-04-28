@@ -28,7 +28,7 @@ function Demo({
 
   const arrowRef = useRef<SVGSVGElement>(null);
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {floatingStyles, refs, context} = useFloating({
     placement,
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -56,9 +56,7 @@ function Demo({
           className="bg-black text-white p-2 bg-clip-padding"
           {...floatingProps}
           style={{
-            position: strategy,
-            top: y ?? 0,
-            left: x ?? 0,
+            ...floatingStyles,
             ...floatingStyle,
           }}
         >

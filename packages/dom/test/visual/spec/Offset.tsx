@@ -25,7 +25,7 @@ export function Offset() {
   const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [offsetValue, setOffsetValue] = useState<OffsetOptions>(0);
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const {refs, floatingStyles, update} = useFloating({
     placement,
     middleware: [offset(offsetValue)],
   });
@@ -37,18 +37,10 @@ export function Offset() {
       <h1>Offset</h1>
       <p></p>
       <div className="container" style={{direction: rtl ? 'rtl' : 'ltr'}}>
-        <div ref={reference} className="reference">
+        <div ref={refs.setReference} className="reference">
           Reference
         </div>
-        <div
-          ref={floating}
-          className="floating"
-          style={{
-            position: strategy,
-            top: y ?? '',
-            left: x ?? '',
-          }}
-        >
+        <div ref={refs.setFloating} className="floating" style={floatingStyles}>
           Floating
         </div>
       </div>

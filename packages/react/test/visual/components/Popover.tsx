@@ -128,7 +128,7 @@ function PopoverComponent({
   const [open, setOpen] = useState(false);
 
   const nodeId = useFloatingNodeId();
-  const {x, y, strategy, refs, context} = useFloating({
+  const {floatingStyles, refs, context} = useFloating({
     nodeId,
     open,
     placement,
@@ -165,11 +165,7 @@ function PopoverComponent({
             <div
               className="bg-white border border-slate-900/10 shadow-md rounded px-4 py-6 bg-clip-padding"
               ref={refs.setFloating}
-              style={{
-                position: strategy,
-                top: y ?? 0,
-                left: x ?? 0,
-              }}
+              style={floatingStyles}
               aria-labelledby={labelId}
               aria-describedby={descriptionId}
               {...getFloatingProps()}

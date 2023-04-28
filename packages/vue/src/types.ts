@@ -95,6 +95,12 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      */
     middleware?: MaybeReadonlyRef<Middleware[] | undefined>;
     /**
+     * Whether to use `transform` instead of `top` and `left` styles to
+     * position the floating element (`floatingStyles`).
+     * @default true
+     */
+    transform?: MaybeReadonlyRef<boolean | undefined>;
+    /**
      * Callback to handle mounting/unmounting of the elements.
      * @default undefined
      */
@@ -102,18 +108,18 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
       reference: T,
       floating: FloatingElement,
       update: () => void
-    ) => void | (() => void);
+    ) => () => void;
   };
 
 export type UseFloatingReturn = {
   /**
    * The x-coord of the floating element.
    */
-  x: Readonly<Ref<number | null>>;
+  x: Readonly<Ref<number>>;
   /**
    * The y-coord of the floating element.
    */
-  y: Readonly<Ref<number | null>>;
+  y: Readonly<Ref<number>>;
   /**
    * The stateful placement, which can be different from the initial `placement` passed as options.
    */
@@ -130,6 +136,18 @@ export type UseFloatingReturn = {
    * The boolean that let you know if the floating element has been positioned.
    */
   isPositioned: Readonly<Ref<boolean>>;
+  /**
+   * CSS styles to apply to the floating element to position it.
+   */
+  floatingStyles: Readonly<
+    Ref<{
+      position: Strategy;
+      top: string;
+      left: string;
+      transform?: string;
+      willChange?: string;
+    }>
+  >;
   /**
    * The function to update floating position manually.
    */

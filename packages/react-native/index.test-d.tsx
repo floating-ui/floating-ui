@@ -7,14 +7,14 @@ App;
 function App() {
   const arrowRef = useRef(null);
   useFloating();
-  const {reference, floating, update, refs, elements} = useFloating({
+  const {update, refs, elements} = useFloating({
     placement: 'right',
     middleware: [shift(), arrow({element: arrowRef})],
     // @ts-expect-error
     strategy: 'fixed',
   });
-  reference(null);
-  reference({
+  refs.setReference(null);
+  refs.setReference({
     getBoundingClientRect() {
       return {
         x: 0,
@@ -28,8 +28,6 @@ function App() {
       };
     },
   });
-  reference(null);
-  floating(null);
   update();
   refs.setReference(null);
   refs.setFloating(null);

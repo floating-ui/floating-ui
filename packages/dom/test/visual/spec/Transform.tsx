@@ -55,7 +55,7 @@ const NODES: Node[] = [
 
 export function Transform() {
   const [node, setNode] = useState<Node>(null);
-  const {x, y, reference, floating, strategy, update} = useFloating({
+  const {x, y, refs, strategy, update} = useFloating({
     middleware: [shift({crossAxis: true})],
     whileElementsMounted: autoUpdate,
   });
@@ -100,7 +100,7 @@ export function Transform() {
       const virtualContext = document.querySelector(
         '#virtual-context'
       ) as HTMLElement;
-      reference({
+      refs.setReference({
         getBoundingClientRect: () => virtualContext.getBoundingClientRect(),
         contextElement: virtualContext,
       });
@@ -113,7 +113,7 @@ export function Transform() {
         element.style.transform = '';
       }
     };
-  }, [node, update, reference]);
+  }, [node, update, refs]);
 
   return (
     <>
@@ -139,7 +139,7 @@ export function Transform() {
             />
           )}
           <div
-            ref={reference}
+            ref={refs.setReference}
             className="reference"
             style={{
               transform: node?.includes('reference')
@@ -150,7 +150,7 @@ export function Transform() {
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,

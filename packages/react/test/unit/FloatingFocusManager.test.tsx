@@ -24,7 +24,7 @@ function App(
 ) {
   const ref = useRef<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -33,7 +33,7 @@ function App(
     <>
       <button
         data-testid="reference"
-        ref={reference}
+        ref={refs.setReference}
         onClick={() => setOpen(!open)}
       />
       {open && (
@@ -42,7 +42,7 @@ function App(
           initialFocus={props.initialFocus === 'two' ? ref : props.initialFocus}
           context={context}
         >
-          <div role="dialog" ref={floating} data-testid="floating">
+          <div role="dialog" ref={refs.setFloating} data-testid="floating">
             <button data-testid="one">close</button>
             <button data-testid="two" ref={ref}>
               confirm
@@ -141,7 +141,7 @@ describe('returnFocus', () => {
       const [open, setOpen] = useState(passedOpen);
       const nodeId = useFloatingNodeId();
 
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
         nodeId,
@@ -156,12 +156,12 @@ describe('returnFocus', () => {
         <FloatingNode id={nodeId}>
           {cloneElement(
             children,
-            getReferenceProps({ref: reference, ...children.props})
+            getReferenceProps({ref: refs.setReference, ...children.props})
           )}
           <FloatingPortal>
             {open && (
               <FloatingFocusManager context={context}>
-                <div {...getFloatingProps({ref: floating})}>
+                <div {...getFloatingProps({ref: refs.setFloating})}>
                   {render({
                     close: () => setOpen(false),
                   })}
@@ -320,7 +320,7 @@ describe('modal', () => {
   test('true - comboboxes hide all other nodes', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -330,7 +330,7 @@ describe('modal', () => {
           <input
             role="combobox"
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onFocus={() => setOpen(true)}
           />
           <button data-testid="btn-1" />
@@ -341,7 +341,11 @@ describe('modal', () => {
               modal={true}
               order={['reference']}
             >
-              <div role="listbox" ref={floating} data-testid="floating" />
+              <div
+                role="listbox"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
             </FloatingFocusManager>
           )}
         </>
@@ -362,7 +366,7 @@ describe('modal', () => {
   test('false - comboboxes do not hide all other nodes', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -372,14 +376,18 @@ describe('modal', () => {
           <input
             role="combobox"
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onFocus={() => setOpen(true)}
           />
           <button data-testid="btn-1" />
           <button data-testid="btn-2" />
           {open && (
             <FloatingFocusManager context={context} modal={false}>
-              <div role="listbox" ref={floating} data-testid="floating" />
+              <div
+                role="listbox"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
             </FloatingFocusManager>
           )}
         </>
@@ -399,12 +407,12 @@ describe('modal', () => {
 
   test('fallback to floating element when it has no tabbable content', async () => {
     function App() {
-      const {reference, floating, context} = useFloating({open: true});
+      const {refs, context} = useFloating({open: true});
       return (
         <>
-          <button data-testid="reference" ref={reference} />
+          <button data-testid="reference" ref={refs.setReference} />
           <FloatingFocusManager context={context} modal={true}>
-            <div ref={floating} data-testid="floating" tabIndex={-1} />
+            <div ref={refs.setFloating} data-testid="floating" tabIndex={-1} />
           </FloatingFocusManager>
         </>
       );
@@ -440,7 +448,7 @@ describe('modal', () => {
       const nodeId = useFloatingNodeId();
       const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
 
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
         nodeId,
@@ -456,12 +464,12 @@ describe('modal', () => {
           {children &&
             cloneElement(
               children,
-              getReferenceProps({ref: reference, ...children.props})
+              getReferenceProps({ref: refs.setReference, ...children.props})
             )}
           <FloatingPortal>
             {open && (
               <FloatingFocusManager context={context} modal={modal}>
-                <div {...getFloatingProps({ref: floating})}>
+                <div {...getFloatingProps({ref: refs.setFloating})}>
                   {render({
                     close: () => setOpen(false),
                   })}
@@ -615,7 +623,7 @@ describe('non-modal + FloatingPortal', () => {
   test('focuses inside element, tabbing out focuses last document element', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -625,13 +633,13 @@ describe('non-modal + FloatingPortal', () => {
           <span tabIndex={0} data-testid="first" />
           <button
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onClick={() => setOpen(true)}
           />
           <FloatingPortal>
             {open && (
               <FloatingFocusManager context={context} modal={false}>
-                <div data-testid="floating" ref={floating}>
+                <div data-testid="floating" ref={refs.setFloating}>
                   <span tabIndex={0} data-testid="inside" />
                 </div>
               </FloatingFocusManager>
@@ -658,7 +666,7 @@ describe('non-modal + FloatingPortal', () => {
   test('order: [reference, content] focuses reference, then inside, then, last document element', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -668,7 +676,7 @@ describe('non-modal + FloatingPortal', () => {
           <span tabIndex={0} data-testid="first" />
           <button
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onClick={() => setOpen(true)}
           />
           <FloatingPortal>
@@ -678,7 +686,7 @@ describe('non-modal + FloatingPortal', () => {
                 modal={false}
                 order={['reference', 'content']}
               >
-                <div data-testid="floating" ref={floating}>
+                <div data-testid="floating" ref={refs.setFloating}>
                   <span tabIndex={0} data-testid="inside" />
                 </div>
               </FloatingFocusManager>
@@ -707,7 +715,7 @@ describe('non-modal + FloatingPortal', () => {
   test('order: [reference, floating, content] focuses reference, then inside, then, last document element', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -717,7 +725,7 @@ describe('non-modal + FloatingPortal', () => {
           <span tabIndex={0} data-testid="first" />
           <button
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onClick={() => setOpen(true)}
           />
           <FloatingPortal>
@@ -727,7 +735,7 @@ describe('non-modal + FloatingPortal', () => {
                 modal={false}
                 order={['reference', 'floating', 'content']}
               >
-                <div data-testid="floating" ref={floating}>
+                <div data-testid="floating" ref={refs.setFloating}>
                   <span tabIndex={0} data-testid="inside" />
                 </div>
               </FloatingFocusManager>
@@ -760,7 +768,7 @@ describe('non-modal + FloatingPortal', () => {
   test('shift+tab', async () => {
     function App() {
       const [open, setOpen] = useState(false);
-      const {reference, floating, context} = useFloating({
+      const {refs, context} = useFloating({
         open,
         onOpenChange: setOpen,
       });
@@ -770,13 +778,13 @@ describe('non-modal + FloatingPortal', () => {
           <span tabIndex={0} data-testid="first" />
           <button
             data-testid="reference"
-            ref={reference}
+            ref={refs.setReference}
             onClick={() => setOpen(true)}
           />
           <FloatingPortal>
             {open && (
               <FloatingFocusManager context={context} modal={false}>
-                <div data-testid="floating" ref={floating}>
+                <div data-testid="floating" ref={refs.setFloating}>
                   <span tabIndex={0} data-testid="inside" />
                 </div>
               </FloatingFocusManager>
