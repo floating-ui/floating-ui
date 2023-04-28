@@ -87,9 +87,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
   const tree = useFloatingTree();
   const portalContext = usePortalContext();
-  const [tabbableContentLength, setTabbableContentLength] = React.useState<
-    number | null
-  >(null);
 
   // Controlled by `useListNavigation`.
   const ignoreInitialFocus =
@@ -150,7 +147,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
         // The focus guards have nothing to focus, so we need to stop the event.
-        if (getTabbableContent().length === 0 && !isTypeableCombobox) {
+        if (
+          contains(floating, activeElement(getDocument(floating))) &&
+          getTabbableContent().length === 0 &&
+          !isTypeableCombobox
+        ) {
           stopEvent(event);
         }
 
@@ -420,8 +421,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         isHTMLElement(previouslyFocusedElementRef.current) &&
         !preventReturnFocusRef.current
       ) {
-        // `isPointerDownRef.current` to avoid the focus ring from appearing on
-        // the reference element when click-toggling it.
         enqueueFocus(previouslyFocusedElementRef.current, {
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try
@@ -450,27 +449,32 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   }, [portalContext, modal, open, closeOnFocusOut, context]);
 
   useLayoutEffect(() => {
-    if (ignoreInitialFocus || !floating) return;
+    if (floating && typeof MutationObserver === 'function') {
+      const handleMutation = () => {
+        const tabIndex = floating.getAttribute('tabindex');
+        if (orderRef.current.includes('floating')) {
+          if (tabIndex !== '0') {
+            floating.setAttribute('tabindex', '0');
+          }
+        } else if (tabIndex !== '-1') {
+          floating.setAttribute('tabindex', '-1');
+        }
+      };
 
-    function setState() {
-      if (activeElement(getDocument(floating)) !== refs.domReference.current) {
-        setTabbableContentLength(getTabbableContent().length);
-      }
-    }
+      handleMutation();
+      const observer = new MutationObserver(handleMutation);
 
-    setState();
+      observer.observe(floating, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
 
-    if (typeof MutationObserver === 'function') {
-      const observer = new MutationObserver(setState);
-      observer.observe(floating, {childList: true, subtree: true});
       return () => {
         observer.disconnect();
       };
     }
-  }, [floating, getTabbableContent, ignoreInitialFocus, refs]);
-
-  const shouldRenderGuards =
-    guards && !isTypeableCombobox && (isInsidePortal || modal);
+  }, [floating, orderRef]);
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
@@ -484,6 +488,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       </VisuallyHiddenDismiss>
     ) : null;
   }
+
+  const shouldRenderGuards =
+    guards && !isTypeableCombobox && (isInsidePortal || modal);
 
   return (
     <>
@@ -516,13 +523,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         Ensure the first swipe is the list item. The end of the listbox popup
         will have a dismiss button.
       */}
-      {isTypeableCombobox ? null : renderDismissButton('start')}
-      {React.cloneElement(
-        children,
-        tabbableContentLength === 0 || order.includes('floating')
-          ? {tabIndex: 0}
-          : {}
-      )}
+      {!isTypeableCombobox && renderDismissButton('start')}
+      {children}
       {renderDismissButton('end')}
       {shouldRenderGuards && (
         <FocusGuard
