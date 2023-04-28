@@ -2,34 +2,47 @@ import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 
-import {useFloating, useInteractions, useTypeahead} from '../../src';
+import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
 import type {Props} from '../../src/hooks/useTypeahead';
 import {Main} from '../visual/components/Menu';
 
 jest.useFakeTimers();
 const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 
-const useImpl = (
-  props: Pick<Props, 'onMatch' | 'onTypingChange'> & {list?: Array<string>}
-) => {
+const useImpl = ({
+  addUseClick = false,
+  ...props
+}: Pick<Props, 'onMatch' | 'onTypingChange'> & {
+  list?: Array<string>;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  addUseClick?: boolean;
+}) => {
   const [open, setOpen] = useState(true);
   const [activeIndex, setActiveIndex] = useState<null | number>(null);
   const {reference, floating, context} = useFloating({
-    open,
-    onOpenChange: setOpen,
+    open: props.open ?? open,
+    onOpenChange: props.onOpenChange ?? setOpen,
   });
   const listRef = useRef(props.list ?? ['one', 'two', 'three']);
+  const typeahead = useTypeahead(context, {
+    listRef,
+    activeIndex,
+    onMatch(index) {
+      setActiveIndex(index);
+      props.onMatch?.(index);
+    },
+    onTypingChange: props.onTypingChange,
+  });
+  const click = useClick(context, {
+    enabled: addUseClick,
+  });
+
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useTypeahead(context, {
-      listRef,
-      activeIndex,
-      onMatch(index) {
-        setActiveIndex(index);
-        props.onMatch?.(index);
-      },
-      onTypingChange: props.onTypingChange,
-    }),
+    typeahead,
+    click,
   ]);
+
   return {
     activeIndex,
     open,
@@ -47,7 +60,7 @@ const useImpl = (
   };
 };
 
-function App(
+function Combobox(
   props: Pick<Props, 'onMatch' | 'onTypingChange'> & {list?: Array<string>}
 ) {
   const {getReferenceProps, getFloatingProps} = useImpl(props);
@@ -59,9 +72,27 @@ function App(
   );
 }
 
+function Select(
+  props: Pick<Props, 'onMatch' | 'onTypingChange'> & {list?: Array<string>}
+) {
+  const [isOpen, setIsOpen] = useState(false);
+  const {getReferenceProps, getFloatingProps} = useImpl({
+    ...props,
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    addUseClick: true,
+  });
+  return (
+    <>
+      <div tabIndex={0} {...getReferenceProps()} />
+      {isOpen && <div {...getFloatingProps()} />}
+    </>
+  );
+}
+
 test('rapidly focuses list items when they start with the same letter', async () => {
   const spy = jest.fn();
-  render(<App onMatch={spy} />);
+  render(<Combobox onMatch={spy} />);
 
   await user.click(screen.getByRole('combobox'));
 
@@ -79,7 +110,7 @@ test('rapidly focuses list items when they start with the same letter', async ()
 
 test('bails out of rapid focus of first letter if the list contains a string that starts with two of the same letter', async () => {
   const spy = jest.fn();
-  render(<App onMatch={spy} list={['apple', 'aaron', 'apricot']} />);
+  render(<Combobox onMatch={spy} list={['apple', 'aaron', 'apricot']} />);
 
   await user.click(screen.getByRole('combobox'));
 
@@ -95,7 +126,10 @@ test('bails out of rapid focus of first letter if the list contains a string tha
 test('starts from the current activeIndex and correctly loops', async () => {
   const spy = jest.fn();
   render(
-    <App onMatch={spy} list={['Toy Story 2', 'Toy Story 3', 'Toy Story 4']} />
+    <Combobox
+      onMatch={spy}
+      list={['Toy Story 2', 'Toy Story 3', 'Toy Story 4']}
+    />
   );
 
   await user.click(screen.getByRole('combobox'));
@@ -138,7 +172,7 @@ test('starts from the current activeIndex and correctly loops', async () => {
 
 test('capslock characters continue to match', async () => {
   const spy = jest.fn();
-  render(<App onMatch={spy} />);
+  render(<Combobox onMatch={spy} />);
 
   user.click(screen.getByRole('combobox'));
 
@@ -214,7 +248,7 @@ test('matches when focus is withing floating', async () => {
 
 test('onTypingChange is called when typing starts or stops', async () => {
   const spy = jest.fn();
-  render(<App onTypingChange={spy} list={['one', 'two', 'three']} />);
+  render(<Combobox onTypingChange={spy} list={['one', 'two', 'three']} />);
 
   act(() => screen.getByRole('combobox').focus());
 
@@ -273,4 +307,25 @@ test('Menu - resets once a match is no longer found', async () => {
   await userEvent.keyboard('r');
 
   expect(screen.getByText('Redo')).toHaveFocus();
+});
+
+test('typing spaces on <div> references does not open the menu', async () => {
+  const spy = jest.fn();
+  render(<Select onMatch={spy} />);
+
+  jest.useFakeTimers({advanceTimers: true});
+
+  await userEvent.click(screen.getByRole('combobox'));
+
+  await userEvent.keyboard('h');
+  await userEvent.keyboard(' ');
+
+  expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+
+  jest.advanceTimersByTime(750);
+
+  await userEvent.keyboard(' ');
+  await act(async () => {});
+
+  expect(screen.queryByRole('listbox')).toBeInTheDocument();
 });

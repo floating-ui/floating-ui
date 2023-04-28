@@ -181,6 +181,7 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
         matchIndexRef.current = index;
       } else if (event.key !== ' ') {
         stringRef.current = '';
+        setTypingChange(false);
       }
     }
 
