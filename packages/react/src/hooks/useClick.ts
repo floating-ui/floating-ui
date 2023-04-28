@@ -119,7 +119,11 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
 
-          if (!keyboardHandlers || isButtonTarget(event)) {
+          if (
+            event.defaultPrevented ||
+            !keyboardHandlers ||
+            isButtonTarget(event)
+          ) {
             return;
           }
 
@@ -141,6 +145,7 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
         },
         onKeyUp(event) {
           if (
+            event.defaultPrevented ||
             !keyboardHandlers ||
             isButtonTarget(event) ||
             isSpaceIgnored(domReference)
