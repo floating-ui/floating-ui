@@ -20,10 +20,10 @@ export interface Props {
  * given floating element `role`.
  * @see https://floating-ui.com/docs/useRole
  */
-export const useRole = <RT extends ReferenceType = ReferenceType>(
+export function useRole<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Partial<Props> = {}
-): ElementProps => {
+): ElementProps {
   const {open, floatingId} = context;
   const {enabled = true, role = 'dialog'} = props;
 
@@ -65,4 +65,4 @@ export const useRole = <RT extends ReferenceType = ReferenceType>(
       },
     };
   }, [enabled, role, open, floatingId, referenceId]);
-};
+}

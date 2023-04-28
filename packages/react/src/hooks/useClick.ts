@@ -24,10 +24,10 @@ export interface Props {
  * Opens or closes the floating element when clicking the reference element.
  * @see https://floating-ui.com/docs/useClick
  */
-export const useClick = <RT extends ReferenceType = ReferenceType>(
+export function useClick<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props = {}
-): ElementProps => {
+): ElementProps {
   const {
     open,
     onOpenChange,
@@ -177,4 +177,4 @@ export const useClick = <RT extends ReferenceType = ReferenceType>(
     open,
     onOpenChange,
   ]);
-};
+}

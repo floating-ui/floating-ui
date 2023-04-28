@@ -46,7 +46,13 @@ function mergeProps(
   };
 }
 
-export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
+/**
+ * Merges an array of interaction hooks' props into prop getters, allowing
+ * event handler functions to be composed together without overwriting one
+ * another.
+ * @see https://floating-ui.com/docs/react#interaction-hooks
+ */
+export function useInteractions(propsList: Array<ElementProps | void> = []) {
   // The dependencies are a dynamic array, so we can't use the linter's
   // suggestion to add it to the deps array.
   const deps = propsList;
@@ -80,4 +86,4 @@ export const useInteractions = (propsList: Array<ElementProps | void> = []) => {
     () => ({getReferenceProps, getFloatingProps, getItemProps}),
     [getReferenceProps, getFloatingProps, getItemProps]
   );
-};
+}

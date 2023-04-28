@@ -61,10 +61,10 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  * CSS `:hover`.
  * @see https://floating-ui.com/docs/useHover
  */
-export const useHover = <RT extends ReferenceType = ReferenceType>(
+export function useHover<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props<RT> = {}
-): ElementProps => {
+): ElementProps {
   const {
     open,
     onOpenChange,
@@ -434,4 +434,4 @@ export const useHover = <RT extends ReferenceType = ReferenceType>(
       },
     };
   }, [events, enabled, restMs, open, onOpenChange, closeWithDelay]);
-};
+}

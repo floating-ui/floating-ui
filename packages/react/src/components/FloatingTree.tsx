@@ -18,7 +18,7 @@ export const useFloatingTree = <
 /**
  * Registers a node into the floating tree, returning its id.
  */
-export const useFloatingNodeId = (customParentId?: string): string => {
+export function useFloatingNodeId(customParentId?: string): string {
   const id = useId();
   const tree = useFloatingTree();
   const reactParentId = useFloatingParentNodeId();
@@ -33,19 +33,19 @@ export const useFloatingNodeId = (customParentId?: string): string => {
   }, [tree, id, parentId]);
 
   return id;
-};
+}
 
 /**
  * Provides parent node context for nested floating elements.
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export const FloatingNode = ({
+export function FloatingNode({
   children,
   id,
 }: {
   children?: React.ReactNode;
   id: string;
-}): JSX.Element => {
+}): JSX.Element {
   const parentId = useFloatingParentNodeId();
 
   return (
@@ -55,7 +55,7 @@ export const FloatingNode = ({
       {children}
     </FloatingNodeContext.Provider>
   );
-};
+}
 
 /**
  * Provides context for nested floating elements when they are not children of
@@ -63,11 +63,11 @@ export const FloatingNode = ({
  * respective parent).
  * @see https://floating-ui.com/docs/FloatingTree
  */
-export const FloatingTree = ({
+export function FloatingTree({
   children,
 }: {
   children?: React.ReactNode;
-}): JSX.Element => {
+}): JSX.Element {
   const nodesRef = React.useRef<Array<FloatingNodeType>>([]);
 
   const addNode = React.useCallback((node: FloatingNodeType) => {
@@ -95,4 +95,4 @@ export const FloatingTree = ({
       {children}
     </FloatingTreeContext.Provider>
   );
-};
+}

@@ -49,15 +49,21 @@ export const FloatingListContext = React.createContext<{
   elementsRef: {current: []},
 });
 
+interface FloatingListProps {
+  children: React.ReactNode;
+  elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
+  labelsRef?: React.MutableRefObject<Array<string | null>>;
+}
+
+/**
+ * Provides context for a list of items within the floating element.
+ * @see https://floating-ui.com/docs/FloatingList
+ */
 export function FloatingList({
   children,
   elementsRef,
   labelsRef,
-}: {
-  children: React.ReactNode;
-  elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
-  labelsRef?: React.MutableRefObject<Array<string | null>>;
-}): JSX.Element {
+}: FloatingListProps): JSX.Element {
   const [map, setMap] = React.useState(() => new Map<Node, number | null>());
 
   const register = React.useCallback((node: Node) => {

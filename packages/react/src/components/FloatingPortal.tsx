@@ -27,13 +27,13 @@ const PortalContext = React.createContext<null | {
   afterOutsideRef: React.RefObject<HTMLSpanElement>;
 }>(null);
 
-export const useFloatingPortalNode = ({
+export function useFloatingPortalNode({
   id,
   root,
 }: {
   id?: string;
   root?: HTMLElement | null;
-} = {}) => {
+} = {}) {
   const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
 
   const uniqueId = useId();
@@ -91,24 +91,26 @@ export const useFloatingPortalNode = ({
   }, [data]);
 
   return portalNode;
-};
+}
+
+interface FloatingPortalProps {
+  children?: React.ReactNode;
+  id?: string;
+  root?: HTMLElement | null;
+  preserveTabOrder?: boolean;
+}
 
 /**
  * Portals the floating element into a given container element — by default,
  * outside of the app root and into the body.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
-export const FloatingPortal = ({
+export function FloatingPortal({
   children,
   id,
   root = null,
   preserveTabOrder = true,
-}: {
-  children?: React.ReactNode;
-  id?: string;
-  root?: HTMLElement | null;
-  preserveTabOrder?: boolean;
-}) => {
+}: FloatingPortalProps) {
   const portalNode = useFloatingPortalNode({id, root});
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);
@@ -210,6 +212,6 @@ export const FloatingPortal = ({
       )}
     </PortalContext.Provider>
   );
-};
+}
 
 export const usePortalContext = () => React.useContext(PortalContext);

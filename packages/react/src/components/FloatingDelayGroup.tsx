@@ -37,6 +37,12 @@ const FloatingDelayGroupContext = React.createContext<
 export const useDelayGroupContext = (): GroupContext =>
   React.useContext(FloatingDelayGroupContext);
 
+interface FloatingDelayGroupProps {
+  children?: React.ReactNode;
+  delay: Delay;
+  timeoutMs?: number;
+}
+
 /**
  * Provides context for a group of floating elements that should share a
  * `delay`.
@@ -46,11 +52,7 @@ export const FloatingDelayGroup = ({
   children,
   delay,
   timeoutMs = 0,
-}: {
-  children?: React.ReactNode;
-  delay: Delay;
-  timeoutMs?: number;
-}): JSX.Element => {
+}: FloatingDelayGroupProps): JSX.Element => {
   const [state, setState] = React.useReducer(
     (prev: GroupState, next: Partial<GroupState>): GroupState => ({
       ...prev,

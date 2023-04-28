@@ -57,17 +57,20 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  * Provides focus management for the floating element.
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
-export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>({
-  context,
-  children,
-  order = ['content'],
-  guards = true,
-  initialFocus = 0,
-  returnFocus = true,
-  modal = true,
-  visuallyHiddenDismiss = false,
-  closeOnFocusOut = true,
-}: Props<RT>): JSX.Element {
+export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
+  props: Props<RT>
+): JSX.Element {
+  const {
+    context,
+    children,
+    order = ['content'],
+    guards = true,
+    initialFocus = 0,
+    returnFocus = true,
+    modal = true,
+    visuallyHiddenDismiss = false,
+    closeOnFocusOut = true,
+  } = props;
   const {
     open,
     refs,

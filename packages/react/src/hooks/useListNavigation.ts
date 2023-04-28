@@ -170,10 +170,10 @@ export interface Props {
  * focus or virtual focus.
  * @see https://floating-ui.com/docs/useListNavigation
  */
-export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
+export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props
-): ElementProps => {
+): ElementProps {
   const {
     open,
     onOpenChange,
@@ -877,4 +877,4 @@ export const useListNavigation = <RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     item,
   ]);
-};
+}

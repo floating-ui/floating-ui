@@ -161,15 +161,18 @@ export interface UseInnerOffsetProps {
  * expand the floating element's height, revealing more list items.
  * @see https://floating-ui.com/docs/inner
  */
-export const useInnerOffset = (
-  {open, elements}: FloatingContext,
-  {
+export function useInnerOffset(
+  context: FloatingContext,
+  props: UseInnerOffsetProps
+): ElementProps {
+  const {open, elements} = context;
+  const {
     enabled = true,
     overflowRef,
     scrollRef,
     onChange: unstable_onChange,
-  }: UseInnerOffsetProps
-): ElementProps => {
+  } = props;
+
   const onChange = useEvent(unstable_onChange);
   const controlledScrollingRef = React.useRef(false);
   const prevScrollTopRef = React.useRef<number | null>(null);
@@ -272,4 +275,4 @@ export const useInnerOffset = (
       },
     };
   }, [enabled, overflowRef, elements.floating, scrollRef, onChange]);
-};
+}

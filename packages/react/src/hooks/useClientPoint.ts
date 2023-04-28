@@ -103,10 +103,18 @@ export interface Props {
  * such as the mouse position. By default, it follows the mouse cursor.
  * @see https://floating-ui.com/docs/useClientPoint
  */
-export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
-  {open, refs, dataRef, elements: {floating}}: FloatingContext<RT>,
-  {enabled = true, axis = 'both', x = null, y = null}: Partial<Props> = {}
-): ElementProps => {
+export function useClientPoint<RT extends ReferenceType = ReferenceType>(
+  context: FloatingContext<RT>,
+  props: Partial<Props> = {}
+): ElementProps {
+  const {
+    open,
+    refs,
+    dataRef,
+    elements: {floating},
+  } = context;
+  const {enabled = true, axis = 'both', x = null, y = null} = props;
+
   const initialRef = React.useRef(false);
   const cleanupListenerRef = React.useRef<null | (() => void)>(null);
 
@@ -230,4 +238,4 @@ export const useClientPoint = <RT extends ReferenceType = ReferenceType>(
       },
     };
   }, [enabled, handleReferenceEnterOrMove]);
-};
+}

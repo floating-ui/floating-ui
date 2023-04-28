@@ -65,10 +65,10 @@ export interface Props {
  * the user presses the `escape` key or outside of the floating element.
  * @see https://floating-ui.com/docs/useDismiss
  */
-export const useDismiss = <RT extends ReferenceType = ReferenceType>(
+export function useDismiss<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props = {}
-): ElementProps => {
+): ElementProps {
   const {
     open,
     onOpenChange,
@@ -342,4 +342,4 @@ export const useDismiss = <RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     closeOnEscapeKeyDown,
   ]);
-};
+}

@@ -18,10 +18,10 @@ export interface Props {
  * `:focus`.
  * @see https://floating-ui.com/docs/useFocus
  */
-export const useFocus = <RT extends ReferenceType = ReferenceType>(
+export function useFocus<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props = {}
-): ElementProps => {
+): ElementProps {
   const {
     open,
     onOpenChange,
@@ -149,4 +149,4 @@ export const useFocus = <RT extends ReferenceType = ReferenceType>(
       },
     };
   }, [enabled, keyboardOnly, domReference, refs, dataRef, onOpenChange]);
-};
+}

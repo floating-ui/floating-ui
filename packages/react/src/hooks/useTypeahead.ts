@@ -28,10 +28,10 @@ export interface Props {
  * types, often used in tandem with `useListNavigation()`.
  * @see https://floating-ui.com/docs/useTypeahead
  */
-export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
+export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: Props
-): ElementProps => {
+): ElementProps {
   const {open, dataRef} = context;
   const {
     listRef,
@@ -207,4 +207,4 @@ export const useTypeahead = <RT extends ReferenceType = ReferenceType>(
     onMatch,
     onTypingChange,
   ]);
-};
+}
