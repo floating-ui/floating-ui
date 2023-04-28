@@ -7,10 +7,12 @@ import type {
   ComputePositionConfig,
   ReferenceType,
   UseFloatingData,
-  UseFloatingProps,
+  UseFloatingOptions,
   UseFloatingReturn,
 } from './types';
 import {deepEqual} from './utils/deepEqual';
+import {getDPR} from './utils/getDPR';
+import {roundByDPR} from './utils/roundByDPR';
 import {useLatestRef} from './utils/useLatestRef';
 
 /**
@@ -18,20 +20,22 @@ import {useLatestRef} from './utils/useLatestRef';
  * @see https://floating-ui.com/docs/react
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: UseFloatingProps = {}
+  options: UseFloatingOptions = {}
 ): UseFloatingReturn<RT> {
   const {
     placement = 'bottom',
     strategy = 'absolute',
     middleware = [],
     platform,
+    elements: {reference: externalReference, floating: externalFloating} = {},
+    transform = true,
     whileElementsMounted,
     open,
   } = options;
 
   const [data, setData] = React.useState<UseFloatingData>({
-    x: null,
-    y: null,
+    x: 0,
+    y: 0,
     strategy,
     placement,
     middlewareData: {},
@@ -44,29 +48,38 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     setLatestMiddleware(middleware);
   }
 
+  const [_reference, _setReference] = React.useState<RT | null>(null);
+  const [_floating, _setFloating] = React.useState<HTMLElement | null>(null);
+
+  const setReference = React.useCallback(
+    (node: RT | null) => {
+      if (node != referenceRef.current) {
+        referenceRef.current = node;
+        _setReference(node);
+      }
+    },
+    [_setReference]
+  );
+
+  const setFloating = React.useCallback(
+    (node: HTMLElement | null) => {
+      if (node !== floatingRef.current) {
+        floatingRef.current = node;
+        _setFloating(node);
+      }
+    },
+    [_setFloating]
+  );
+
+  const referenceEl = (externalReference || _reference) as RT | null;
+  const floatingEl = externalFloating || _floating;
+
   const referenceRef = React.useRef<RT | null>(null);
   const floatingRef = React.useRef<HTMLElement | null>(null);
   const dataRef = React.useRef(data);
 
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
-
-  const [reference, _setReference] = React.useState<RT | null>(null);
-  const [floating, _setFloating] = React.useState<HTMLElement | null>(null);
-
-  const setReference = React.useCallback((node: RT | null) => {
-    if (referenceRef.current !== node) {
-      referenceRef.current = node;
-      _setReference(node);
-    }
-  }, []);
-
-  const setFloating = React.useCallback((node: HTMLElement | null) => {
-    if (floatingRef.current !== node) {
-      floatingRef.current = node;
-      _setFloating(node);
-    }
-  }, []);
 
   const update = React.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
@@ -112,14 +125,17 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, []);
 
   useLayoutEffect(() => {
-    if (reference && floating) {
+    if (referenceEl) referenceRef.current = referenceEl;
+    if (floatingEl) floatingRef.current = floatingEl;
+
+    if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
-        return whileElementsMountedRef.current(reference, floating, update);
+        return whileElementsMountedRef.current(referenceEl, floatingEl, update);
       } else {
         update();
       }
     }
-  }, [reference, floating, update, whileElementsMountedRef]);
+  }, [referenceEl, floatingEl, update, whileElementsMountedRef]);
 
   const refs = React.useMemo(
     () => ({
@@ -132,9 +148,38 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   );
 
   const elements = React.useMemo(
-    () => ({reference, floating}),
-    [reference, floating]
+    () => ({reference: referenceEl, floating: floatingEl}),
+    [referenceEl, floatingEl]
   );
+
+  const floatingStyles = React.useMemo(() => {
+    const initialStyles = {
+      position: strategy,
+      left: 0,
+      top: 0,
+    };
+
+    if (!elements.floating) {
+      return initialStyles;
+    }
+
+    const x = roundByDPR(elements.floating, data.x);
+    const y = roundByDPR(elements.floating, data.y);
+
+    if (transform) {
+      return {
+        ...initialStyles,
+        transform: `translate(${x}px, ${y}px)`,
+        ...(getDPR(elements.floating) >= 1.5 && {willChange: 'transform'}),
+      };
+    }
+
+    return {
+      position: strategy,
+      left: x,
+      top: y,
+    };
+  }, [strategy, transform, elements.floating, data.x, data.y]);
 
   return React.useMemo(
     () => ({
@@ -142,9 +187,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       update,
       refs,
       elements,
-      reference: setReference,
-      floating: setFloating,
+      floatingStyles,
     }),
-    [data, update, refs, elements, setReference, setFloating]
+    [data, update, refs, elements, floatingStyles]
   );
 }

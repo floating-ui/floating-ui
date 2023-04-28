@@ -8,7 +8,7 @@ export const NODES: Node[] = [null, 'html', 'body', 'offsetParent'];
 
 export function Relative() {
   const [node, setNode] = useState<Node>(null);
-  const {x, y, reference, floating, strategy, update} = useFloating();
+  const {x, y, refs, strategy, update} = useFloating();
 
   useLayoutEffect(() => {
     let element: HTMLElement | null = null;
@@ -47,11 +47,11 @@ export function Relative() {
         className="container"
         style={{position: node === 'offsetParent' ? 'relative' : undefined}}
       >
-        <div ref={reference} className="reference">
+        <div ref={refs.setReference} className="reference">
           Reference
         </div>
         <div
-          ref={floating}
+          ref={refs.setFloating}
           className="floating"
           style={{
             position: strategy,

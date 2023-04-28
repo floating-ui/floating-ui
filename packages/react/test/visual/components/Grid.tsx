@@ -19,7 +19,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
 
   const listRef = useRef<Array<HTMLElement | null>>([]);
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {floatingStyles, refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
     placement: 'bottom-start',
@@ -55,11 +55,9 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
               ref={refs.setFloating}
               data-testid="floating"
               style={{
+                ...floatingStyles,
                 display: 'grid',
                 gridTemplateColumns: '100px 100px 100px 100px 100px',
-                position: strategy,
-                left: x ?? 0,
-                top: y ?? 0,
                 zIndex: 999,
               }}
               {...getFloatingProps()}

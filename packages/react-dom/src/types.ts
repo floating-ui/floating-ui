@@ -70,11 +70,7 @@ type Prettify<T> = {
 } & {};
 
 export type UseFloatingData = Prettify<
-  Omit<ComputePositionReturn, 'x' | 'y'> & {
-    x: number | null;
-    y: number | null;
-    isPositioned: boolean;
-  }
+  ComputePositionReturn & {isPositioned: boolean}
 >;
 
 export type ReferenceType = Element | VirtualElement;
@@ -87,14 +83,7 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
        * if required.
        */
       update: () => void;
-      /**
-       * @deprecated use `refs.setReference` instead.
-       */
-      reference: (node: RT | null) => void;
-      /**
-       * @deprecated use `refs.setFloating` instead.
-       */
-      floating: (node: HTMLElement | null) => void;
+      floatingStyles: React.CSSProperties;
       refs: {
         reference: React.MutableRefObject<RT | null>;
         floating: React.MutableRefObject<HTMLElement | null>;
@@ -108,14 +97,19 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     }
   >;
 
-export type UseFloatingProps<RT extends ReferenceType = ReferenceType> =
+export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
   Prettify<
     Partial<ComputePositionConfig> & {
       whileElementsMounted?: (
         reference: RT,
         floating: HTMLElement,
         update: () => void
-      ) => void | (() => void);
+      ) => () => void;
+      elements?: {
+        reference?: RT | null;
+        floating?: HTMLElement | null;
+      };
       open?: boolean;
+      transform?: boolean;
     }
   >;

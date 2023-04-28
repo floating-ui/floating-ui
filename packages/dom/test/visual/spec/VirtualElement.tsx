@@ -5,7 +5,7 @@ import {useScroll} from '../utils/useScroll';
 
 export function VirtualElement() {
   const referenceToDeriveRef = useRef<HTMLDivElement>(null);
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
+  const {x, y, strategy, update, refs} = useFloating({
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
   });
@@ -15,14 +15,14 @@ export function VirtualElement() {
   useEffect(() => {
     const contextElement = referenceToDeriveRef.current;
     if (contextElement) {
-      reference({
+      refs.setReference({
         contextElement,
         getBoundingClientRect() {
           return contextElement.getBoundingClientRect();
         },
       });
     }
-  }, [reference]);
+  }, [refs]);
 
   return (
     <>
@@ -42,7 +42,7 @@ export function VirtualElement() {
       </div>
 
       <div
-        ref={floating}
+        ref={refs.setFloating}
         className="floating"
         style={{
           position: strategy,

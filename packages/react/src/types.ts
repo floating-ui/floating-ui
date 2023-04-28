@@ -158,37 +158,21 @@ export interface ElementProps {
 
 export type ReferenceType = Element | VirtualElement;
 
-export type UseFloatingData = Prettify<
-  Omit<ComputePositionReturn, 'x' | 'y'> & {
-    x: number | null;
-    y: number | null;
-  }
->;
+export type UseFloatingData = Prettify<ComputePositionReturn>;
 
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
     UseFloatingData & {
       update: () => void;
-      /**
-       * @deprecated use `refs.setReference` instead.
-       */
-      reference: (node: RT | null) => void;
-      /**
-       * @deprecated use `refs.setFloating` instead.
-       */
-      floating: (node: HTMLElement | null) => void;
-      /**
-       * @deprecated use `refs.setPositionReference` instead.
-       */
-      positionReference: (node: ReferenceType | null) => void;
       context: FloatingContext<RT>;
       refs: ExtendedRefs<RT>;
       elements: ExtendedElements<RT>;
       isPositioned: boolean;
+      floatingStyles: React.CSSProperties;
     }
   >;
 
-export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
+export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   placement: Placement;
@@ -196,9 +180,10 @@ export interface UseFloatingProps<RT extends ReferenceType = ReferenceType> {
   strategy: Strategy;
   platform: Platform;
   nodeId: string;
-  whileElementsMounted?: (
+  transform: boolean;
+  whileElementsMounted: (
     reference: RT,
     floating: HTMLElement,
     update: () => void
-  ) => void | (() => void);
+  ) => () => void;
 }

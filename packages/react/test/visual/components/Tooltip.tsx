@@ -67,7 +67,7 @@ export function Tooltip({
   const [open, setOpen] = useState(false);
   const id = useId();
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {refs, floatingStyles, context} = useFloating({
     placement,
     open,
     onOpenChange: setOpen,
@@ -123,17 +123,17 @@ export function Tooltip({
       <FloatingPortal>
         {isMounted && (
           <div
+            role="presentation"
             ref={refs.setFloating}
-            className="bg-black text-white p-1 px-2 rounded"
-            style={{
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-              ...styles,
-            }}
-            {...getFloatingProps()}
+            style={floatingStyles}
           >
-            {label}
+            <div
+              className="bg-black text-white p-1 px-2 rounded"
+              style={styles}
+              {...getFloatingProps()}
+            >
+              {label}
+            </div>
           </div>
         )}
       </FloatingPortal>

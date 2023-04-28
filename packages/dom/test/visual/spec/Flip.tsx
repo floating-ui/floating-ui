@@ -22,7 +22,7 @@ export function Flip() {
     useState<FlipOptions['fallbackStrategy']>('bestFit');
   const [flipAlignment, setFlipAlignment] = useState(true);
   const [addShift, setAddShift] = useState(false);
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
+  const {x, y, strategy, update, refs} = useFloating({
     placement,
     middleware: [
       flip({
@@ -58,11 +58,11 @@ export function Flip() {
           ref={scrollRef}
         >
           {indicator}
-          <div ref={reference} className="reference">
+          <div ref={refs.setReference} className="reference">
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,

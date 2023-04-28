@@ -9,7 +9,7 @@ function App({
   ...props
 }: Props & {initiallyOpen?: boolean}) {
   const [open, setOpen] = useState(initiallyOpen);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -21,7 +21,7 @@ function App({
     <>
       <button
         {...getReferenceProps({
-          ref: reference,
+          ref: refs.setReference,
           onClick() {
             setOpen(!open);
           },
@@ -30,7 +30,7 @@ function App({
       {open && (
         <div
           {...getFloatingProps({
-            ref: floating,
+            ref: refs.setFloating,
           })}
         />
       )}
@@ -41,7 +41,7 @@ function App({
 function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
   const [open, setOpen] = useState(props.initiallyOpen ?? false);
   const nodeId = useId();
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     nodeId,
     open,
     onOpenChange: setOpen,
@@ -54,7 +54,7 @@ function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
     <>
       <button
         {...getReferenceProps({
-          ref: reference,
+          ref: refs.setReference,
           onClick() {
             setOpen(!open);
           },
@@ -63,7 +63,7 @@ function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
       {open && (
         <div
           {...getFloatingProps({
-            ref: floating,
+            ref: refs.setFloating,
           })}
         />
       )}

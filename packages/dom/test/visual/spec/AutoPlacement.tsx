@@ -28,7 +28,7 @@ export function AutoPlacement() {
   const [crossAxis, setCrossAxis] = useState(false);
   const [addShift, setAddShift] = useState(false);
 
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
+  const {x, y, strategy, update, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     middleware: [
       autoPlacement({
@@ -56,7 +56,7 @@ export function AutoPlacement() {
         >
           {indicator}
           <div
-            ref={reference}
+            ref={refs.setReference}
             className="reference"
             style={
               addShift
@@ -70,7 +70,7 @@ export function AutoPlacement() {
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,

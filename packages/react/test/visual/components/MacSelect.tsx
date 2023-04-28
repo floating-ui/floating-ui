@@ -215,12 +215,10 @@ export function Main() {
   const [scrollTop, setScrollTop] = useState(0);
   const [blockSelection, setBlockSelection] = useState(false);
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {floatingStyles, refs, context} = useFloating({
     placement: 'bottom-start',
     open,
-    onOpenChange: (open) => {
-      setOpen(open);
-    },
+    onOpenChange: setOpen,
     whileElementsMounted: autoUpdate,
     middleware: fallback
       ? [
@@ -351,11 +349,7 @@ export function Main() {
               <FloatingFocusManager context={context} modal={false}>
                 <div
                   ref={refs.setFloating}
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                  }}
+                  style={floatingStyles}
                   className="bg-white shadow-lg border border-slate-900/15 bg-clip-padding rounded-lg outline-none"
                 >
                   <div

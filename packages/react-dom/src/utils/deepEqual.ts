@@ -35,7 +35,7 @@ export function deepEqual(a: any, b: any) {
     }
 
     for (i = length; i-- !== 0; ) {
-      if (!Object.prototype.hasOwnProperty.call(b, keys[i])) {
+      if (!{}.hasOwnProperty.call(b, keys[i])) {
         return false;
       }
     }

@@ -5,7 +5,7 @@ import {FloatingPortal, useFloating} from '../../src';
 
 function App(props: {root?: HTMLElement | null; id?: string}) {
   const [open, setOpen] = useState(false);
-  const {reference, floating} = useFloating({
+  const {refs} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -14,11 +14,11 @@ function App(props: {root?: HTMLElement | null; id?: string}) {
     <>
       <button
         data-testid="reference"
-        ref={reference}
+        ref={refs.setReference}
         onClick={() => setOpen(!open)}
       />
       <FloatingPortal {...props}>
-        {open && <div ref={floating} data-testid="floating" />}
+        {open && <div ref={refs.setFloating} data-testid="floating" />}
       </FloatingPortal>
     </>
   );

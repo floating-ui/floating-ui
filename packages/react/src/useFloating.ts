@@ -10,7 +10,7 @@ import type {
   FloatingContext,
   NarrowedElement,
   ReferenceType,
-  UseFloatingProps,
+  UseFloatingOptions,
   UseFloatingReturn,
 } from './types';
 import {createPubSub} from './utils/createPubSub';
@@ -21,7 +21,7 @@ import {isElement} from './utils/is';
  * @see https://floating-ui.com/docs/react
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: Partial<UseFloatingProps> = {}
+  options: Partial<UseFloatingOptions> = {}
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
@@ -121,9 +121,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       context,
       refs,
       elements,
-      reference: setReference,
-      positionReference: setPositionReference,
     }),
-    [position, refs, elements, context, setReference, setPositionReference]
+    [position, refs, elements, context]
   ) as UseFloatingReturn<RT>;
 }

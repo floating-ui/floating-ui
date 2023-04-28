@@ -22,7 +22,7 @@ export const Tooltip = ({children, label}: Props) => {
   const {delay} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
 
-  const {x, y, reference, floating, strategy, context} = useFloating({
+  const {x, y, refs, strategy, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -37,14 +37,14 @@ export const Tooltip = ({children, label}: Props) => {
       {cloneElement(
         children,
         getReferenceProps({
-          ref: reference,
+          ref: refs.setReference,
           ...children.props,
         })
       )}
       {open && (
         <div
           data-testid={`floating-${label}`}
-          ref={floating}
+          ref={refs.setFloating}
           style={{
             position: strategy,
             top: y ?? '',

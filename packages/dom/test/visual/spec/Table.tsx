@@ -10,13 +10,13 @@ const BOOLS = [true, false];
 export function Table() {
   const [sameParent, setSameParent] = useState(false);
   const [node, setNode] = useState<Node>('td');
-  const {x, y, reference, floating, strategy, update} = useFloating();
+  const {x, y, refs, strategy, update} = useFloating();
 
   useLayoutEffect(update, [update, node, sameParent]);
 
   const floatingJsx = (
     <div
-      ref={floating}
+      ref={refs.setFloating}
       className="floating"
       style={{
         position: strategy,
@@ -36,15 +36,15 @@ export function Table() {
         or ancestor is a table element.
       </p>
       <div className="container">
-        <table ref={node === 'table' ? reference : undefined}>
+        <table ref={node === 'table' ? refs.setReference : undefined}>
           <thead>
-            <tr ref={node === 'th' ? reference : undefined}>
+            <tr ref={node === 'th' ? refs.setReference : undefined}>
               <th>Reference th</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td ref={node === 'td' ? reference : undefined}>
+              <td ref={node === 'td' ? refs.setReference : undefined}>
                 Reference td
                 {sameParent ? floatingJsx : null}
               </td>

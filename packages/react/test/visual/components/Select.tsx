@@ -69,7 +69,7 @@ function Select({
     [onChange]
   );
 
-  const {x, y, strategy, refs, context} = useFloating({
+  const {refs, floatingStyles, context} = useFloating({
     placement: 'bottom-start',
     open: isOpen,
     onOpenChange: setIsOpen,
@@ -164,8 +164,8 @@ function Select({
                 <FloatingFocusManager context={context} modal={false}>
                   <div
                     ref={refs.setFloating}
+                    style={floatingStyles}
                     className="bg-slate-200/50 max-h-[20rem] overflow-y-auto rounded outline-none p-1 backdrop-blur-sm"
-                    style={{position: strategy, top: y ?? 0, left: x ?? 0}}
                     {...getFloatingProps()}
                   >
                     {children}

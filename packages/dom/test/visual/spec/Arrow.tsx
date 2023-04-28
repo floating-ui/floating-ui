@@ -17,8 +17,6 @@ export function Arrow() {
   const {
     x,
     y,
-    reference,
-    floating,
     strategy,
     update,
     placement: resultantPlacement,
@@ -60,7 +58,7 @@ export function Arrow() {
           style={{position: 'relative'}}
         >
           <div
-            ref={reference}
+            ref={refs.setReference}
             className="reference"
             style={{
               width: referenceSize,
@@ -70,7 +68,7 @@ export function Arrow() {
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,

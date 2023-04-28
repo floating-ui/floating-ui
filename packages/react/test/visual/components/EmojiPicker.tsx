@@ -107,9 +107,7 @@ export const Main = () => {
   const noResultsId = useId();
 
   const {
-    x,
-    y,
-    strategy,
+    floatingStyles,
     refs,
     context,
     placement: resultantPlacement,
@@ -224,11 +222,7 @@ export const Main = () => {
                 <div
                   ref={refs.setFloating}
                   className="bg-white/70 backdrop-blur-sm border border-slate-900/10 shadow-md rounded-lg p-4 bg-clip-padding"
-                  style={{
-                    position: strategy,
-                    left: x ?? 0,
-                    top: y ?? 0,
-                  }}
+                  style={floatingStyles}
                   {...getFloatingProps(getListFloatingProps())}
                 >
                   <FloatingArrow

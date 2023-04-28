@@ -17,7 +17,7 @@ jest.useFakeTimers();
 
 function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
   const [open, setOpen] = useState(false);
-  const {reference, floating, context} = useFloating({
+  const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
   });
@@ -29,8 +29,10 @@ function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
 
   return (
     <>
-      <button {...getReferenceProps({ref: reference})} />
-      {open && <div role="tooltip" {...getFloatingProps({ref: floating})} />}
+      <button {...getReferenceProps({ref: refs.setReference})} />
+      {open && (
+        <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+      )}
     </>
   );
 }

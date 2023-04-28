@@ -26,8 +26,7 @@ export const useScroll = ({
   const {
     x,
     y,
-    reference,
-    floating,
+    refs: floatingRefs,
     strategy,
     update: indicatorUpdate,
   } = useFloating({
@@ -93,13 +92,13 @@ export const useScroll = ({
   }, [refs.floating, refs.reference, update, indicatorUpdate, rtl]);
 
   useLayoutEffect(() => {
-    reference(refs.reference.current);
-  }, [reference, refs.reference]);
+    floatingRefs.setReference(refs.reference.current);
+  }, [floatingRefs, refs.reference]);
 
   const indicator = (
     <div
       className="scroll-indicator"
-      ref={floating}
+      ref={floatingRefs.setFloating}
       style={{
         position: strategy,
         top: y ?? '',

@@ -41,7 +41,7 @@ export function Shift() {
   const [limitShiftOffset, setLimitShiftOffset] =
     useState<LimitShiftOptions['offset']>(0);
   const [offsetValue, setOffsetValue] = useState(0);
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
+  const {x, y, strategy, update, refs} = useFloating({
     placement,
     middleware: [
       offset(offsetValue),
@@ -83,11 +83,11 @@ export function Shift() {
           ref={scrollRef}
         >
           {indicator}
-          <div ref={reference} className="reference">
+          <div ref={refs.setReference} className="reference">
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,

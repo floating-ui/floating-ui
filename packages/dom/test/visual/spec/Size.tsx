@@ -13,7 +13,7 @@ export function Size() {
 
   const hasEdgeAlignment = placement.includes('-');
 
-  const {x, y, reference, floating, strategy, update, refs} = useFloating({
+  const {x, y, strategy, update, refs} = useFloating({
     placement,
     middleware: [
       addFlipShift && flip({padding: 10}),
@@ -47,11 +47,11 @@ export function Size() {
           ref={scrollRef}
         >
           {indicator}
-          <div ref={reference} className="reference">
+          <div ref={refs.setReference} className="reference">
             Reference
           </div>
           <div
-            ref={floating}
+            ref={refs.setFloating}
             className="floating"
             style={{
               position: strategy,
