@@ -454,7 +454,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         const tabIndex = floating.getAttribute('tabindex');
         if (
           orderRef.current.includes('floating') ||
-          getTabbableContent().length === 0
+          (activeElement(getDocument(floating)) !== refs.domReference.current &&
+            getTabbableContent().length === 0)
         ) {
           if (tabIndex !== '0') {
             floating.setAttribute('tabindex', '0');
@@ -477,7 +478,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         observer.disconnect();
       };
     }
-  }, [floating, orderRef, getTabbableContent]);
+  }, [floating, refs, orderRef, getTabbableContent]);
 
   function renderDismissButton(location: 'start' | 'end') {
     return visuallyHiddenDismiss && modal ? (
