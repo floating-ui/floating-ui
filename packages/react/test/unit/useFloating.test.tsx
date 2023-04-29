@@ -1,5 +1,6 @@
-import {render, screen} from '@testing-library/react';
-import {useCallback, useLayoutEffect} from 'react';
+import {act, render, screen} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {useCallback, useLayoutEffect, useState} from 'react';
 
 import {
   useClick,
@@ -160,4 +161,36 @@ describe('#2129: interactions.getFloatingProps as a dep does not cause setState 
   render(<App />);
 
   expect(screen.queryByTestId('floating')).toBeInTheDocument();
+});
+
+test('domReference refers to externally synchronized `reference`', async () => {
+  function App() {
+    const [referenceEl, setReferenceEl] = useState<Element | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+      elements: {reference: referenceEl},
+    });
+
+    const hover = useHover(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover]);
+
+    return (
+      <>
+        <button ref={setReferenceEl} {...getReferenceProps()} />
+        {isOpen && (
+          <div role="dialog" ref={refs.setFloating} {...getFloatingProps()} />
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.hover(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
 });

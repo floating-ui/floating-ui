@@ -25,16 +25,21 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
+  const [_domReference, setDomReference] =
+    React.useState<NarrowedElement<RT> | null>(null);
+
+  const domReference = (options.elements?.reference ||
+    _domReference) as NarrowedElement<RT>;
+
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
+  const onOpenChange = useEvent(unstable_onOpenChange);
+
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});
   const events = React.useState(() => createPubSub())[0];
 
   const floatingId = useId();
-
-  const [domReference, setDomReference] =
-    React.useState<NarrowedElement<RT> | null>(null);
 
   const setPositionReference = React.useCallback(
     (node: ReferenceType | null) => {
@@ -90,8 +95,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     }),
     [position.elements, domReference]
   );
-
-  const onOpenChange = useEvent(unstable_onOpenChange);
 
   const context = React.useMemo<FloatingContext<RT>>(
     () => ({
