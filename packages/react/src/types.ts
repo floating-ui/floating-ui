@@ -1,9 +1,6 @@
 import type {
   ComputePositionReturn,
-  Middleware,
-  Placement,
-  Platform,
-  Strategy,
+  UseFloatingOptions as UsePositionOptions,
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
 } from '@floating-ui/react-dom';
@@ -172,18 +169,9 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
     }
   >;
 
-export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType> {
+export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
+  extends UsePositionOptions<RT> {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  placement: Placement;
-  middleware: Array<Middleware | null | undefined | false>;
-  strategy: Strategy;
-  platform: Platform;
   nodeId: string;
-  transform: boolean;
-  whileElementsMounted: (
-    reference: RT,
-    floating: HTMLElement,
-    update: () => void
-  ) => () => void;
 }

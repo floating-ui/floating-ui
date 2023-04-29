@@ -37,6 +37,16 @@ function App() {
     },
     open: true,
     transform: false,
+    elements: {
+      floating: null,
+      reference: null,
+    },
+  });
+  useFloating({
+    elements: {
+      floating: document.body,
+      reference: document.body,
+    },
   });
   refs.setReference(null);
   refs.setReference({
