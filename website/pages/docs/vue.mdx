@@ -48,7 +48,9 @@ the most performant way to position elements, but can be
 disabled:
 
 ```js
-useFloating({transform: false});
+useFloating(reference, floating, {
+  transform: false,
+});
 ```
 
 If you'd like to retain transform styles while allowing transform
@@ -62,7 +64,7 @@ directly if `floatingStyles` is not suitable for full
 customization.
 
 ```js
-const {x, y, strategy} = useFloating();
+const {x, y, strategy} = useFloating(reference, floating);
 ```
 
 ## Return value
