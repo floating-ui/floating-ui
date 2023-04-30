@@ -22,7 +22,7 @@ export const arrow = (options: {
     name: 'arrow',
     options,
     fn(args) {
-      if (isRef(element)) {
+      if (element && isRef(element)) {
         if (element.current != null) {
           return arrowCore({element: element.current, padding}).fn(args);
         }
