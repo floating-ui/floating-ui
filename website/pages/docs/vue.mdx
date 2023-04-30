@@ -21,36 +21,49 @@ import {useFloating} from '@floating-ui/vue';
 
 const reference = ref(null);
 const floating = ref(null);
-const {x, y, strategy} = useFloating(reference, floating);
+const {floatingStyles} = useFloating(reference, floating);
 </script>
 
 <template>
   <button ref="reference">Button</button>
-  <div
-    :style="{
-      position: strategy,
-      top: `${y ?? 0}px`,
-      left: `${x ?? 0}px`,
-      width: 'max-content',
-    }"
-    ref="floating"
-  >
-    Tooltip
-  </div>
+  <div :style="floatingStyles" ref="floating">Tooltip</div>
 </template>
 ```
 
 This will position the floating `Tooltip` element at the **bottom
 center** of the `Button` element by default.
 
-- `x{:.const}` and `y{:.const}` are refs with the positioning
-  coordinates. These ref values are `null{:js}` initially.
-- `strategy{:.const}` is a ref with a string value,
-  `'absolute'{:js}` (default) or `'fixed'{:js}`.
+- `reference{:.const}` is the reference (or anchor) element that
+  is being referred to for positioning.
+- `floating{:.const}` is the floating element that is being
+  positioned relative to the reference element.
+- `floatingStyles{:js}` is an object of positioning styles to
+  apply to the floating element's `style{:.keyword}` prop.
 
-<Notice gap="above">
-To understand the fallback `?? 0{:js}` values, and the `'max-content'{:js}` width, visit [Initial layout](/docs/computePosition#initial-layout).
-</Notice>
+### Disabling transform
+
+By default, the floating element is positioned using
+`transform{:.objectKey}` in the `floatingStyles` object. This is
+the most performant way to position elements, but can be
+disabled:
+
+```js
+useFloating({transform: false});
+```
+
+If you'd like to retain transform styles while allowing transform
+animations, create a wrapper, where the outermost node is the
+positioned one, and the inner is the actual styled element.
+
+### Custom position styles
+
+The hook returns the coordinates and positioning strategy
+directly if `floatingStyles` is not suitable for full
+customization.
+
+```js
+const {x, y, strategy} = useFloating();
+```
 
 ## Return value
 
