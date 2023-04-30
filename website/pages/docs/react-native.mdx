@@ -46,13 +46,17 @@ function App() {
 This will position the floating element at the **bottom center**
 of the reference element by default.
 
-- `x{:.const}` and `y{:.const}` are the positioning coordinates.
-  These values are `null{:js}` initially, before the layout
-  effect has fired.
-- `refs.setReference{:js}` and `refs.setFloating{:js}` are
-  function refs that get called with the elements and update the
-  position when they change (such as with conditional rendering),
-  unlike with plain refs.
+- `refs.setReference{:js}` is the reference (or anchor) element
+  that is being referred to for positioning.
+- `refs.setFloating{:js}` is the floating element that is being
+  positioned relative to the reference element.
+- `floatingStyles{:js}` is an object of positioning styles to
+  apply to the floating element's `style{:.keyword}` prop.
+
+The refs are functions to make them **reactive** — this ensures
+changes to the reference or floating elements, such as with
+conditional rendering, are handled correctly by updating the
+position.
 
 <Notice gap="above">
   `<View collapsable={false} />{:js}` allows measurements to work
@@ -100,12 +104,12 @@ outside the component:
 
 ```js
 function MyComponent({referenceEl, floatingEl}) {
-  const {refs} = useFloating();
-
-  useLayoutEffect(() => {
-    refs.setReference(referenceEl);
-    refs.setFloating(floatingEl);
-  }, [refs, referenceEl, floatingEl]);
+  const {refs} = useFloating({
+    elements: {
+      reference: referenceEl,
+      floating: floatingEl,
+    },
+  });
 }
 ```
 
@@ -191,8 +195,8 @@ import {useFloating, arrow} from '@floating-ui/react-native';
 function App() {
   const arrowRef = useRef();
   const {
-    x,
-    y,
+    refs,
+    floatingStyles,
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
     middleware: [arrow({element: arrowRef})],
