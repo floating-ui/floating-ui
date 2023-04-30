@@ -64,7 +64,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     staticOffset,
     stroke,
     d,
-    style: { transform, ...restStyle},
+    style: { transform, ...restStyle} = {},
     ...rest
   }: Props,
   ref: React.Ref<SVGSVGElement>
