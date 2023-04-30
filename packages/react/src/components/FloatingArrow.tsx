@@ -64,6 +64,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     staticOffset,
     stroke,
     d,
+    style: { transform, ...restStyle} = {},
     ...rest
   }: Props,
   ref: React.Ref<SVGSVGElement>
@@ -128,7 +129,6 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
       height={width}
       viewBox={`0 0 ${width} ${height > width ? height : width}`}
       style={{
-        ...rest.style,
         position: 'absolute',
         pointerEvents: 'none',
         [xOffsetProp]: arrowX,
@@ -137,9 +137,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
           isVerticalSide || isCustomShape
             ? '100%'
             : `calc(100% - ${strokeWidth / 2}px)`,
-        transform: `${rotation}${
-          rest.style?.transform ? ` ${rest.style.transform}` : ''
-        }`,
+        transform: `${rotation}${transform ?? ''}`,
+       ...restStyle,
       }}
     >
       {strokeWidth > 0 && (
