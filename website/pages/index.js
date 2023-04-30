@@ -78,8 +78,8 @@ function HomePage() {
           more
         </title>
       </Head>
-      <header className="relative overflow-hidden bg-gray-900 from-gray-700 to-gray-800 pb-16">
-        <div className="container mx-auto max-w-screen-xl pt-16 text-center">
+      <header className="relative overflow-hidden bg-gray-900 pb-16 font-satoshi">
+        <div className="container mx-auto max-w-screen-xl bg-[#202028] pt-16 text-center">
           <svg
             ref={logoRef}
             width="140"
@@ -225,24 +225,23 @@ function HomePage() {
               <GitHub /> GitHub
             </a>
           </div>
-          <p className="z-1 prose relative mx-auto mt-16 px-4 text-center text-xl leading-relaxed text-gray-100 dark:prose-invert lg:text-2xl">
+          <p className="z-1 relative mx-auto mt-16 px-4 text-center text-xl leading-relaxed text-purple-200 dark:prose-invert lg:text-2xl">
             A JavaScript library to position{' '}
             <Tooltip noRest>
               <TooltipTrigger asChild>
-                <span
+                <strong
                   tabIndex={0}
                   // VoiceOver
                   role="button"
-                  className="relative cursor-default text-gray-100 decoration-gray-150"
+                  className="darkLfrom-blue-500 relative cursor-default font-semibold decoration-purple-300/70"
                   style={{
                     textDecorationLine: 'underline',
-                    textDecorationStyle: 'wavy',
-                    textUnderlineOffset: 6,
+                    textUnderlineOffset: 8,
                     textDecorationThickness: 1,
                   }}
                 >
                   floating elements
-                </span>
+                </strong>
               </TooltipTrigger>
               <TooltipContent>
                 <div className="p-2 text-lg">
@@ -257,9 +256,9 @@ function HomePage() {
         </div>
       </header>
       <main className="relative">
-        <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mb-4 mt-12 inline-block bg-gradient-to-r from-rose-500 to-pink-500 bg-clip-text text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:to-pink-400 lg:mt-16 lg:text-4xl dark:lg:mt-4">
-            Smart anchor positioning.
+        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+            Smart Anchor Positioning
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Anchor a floating element next to another element
@@ -268,7 +267,7 @@ function HomePage() {
             position tooltips, popovers, or dropdowns optimally.
           </p>
         </div>
-        <div className="container mx-auto grid max-w-screen-xl gap-4 py-8 md:px-4 lg:grid-cols-2">
+        <div className="container mx-auto grid max-w-screen-xl gap-4 py-10 md:px-4 lg:grid-cols-2">
           <Placement />
           <Shift />
           <Flip />
@@ -277,9 +276,9 @@ function HomePage() {
           <Virtual />
         </div>
 
-        <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mt-12 mb-4 inline-block bg-gradient-to-r from-cyan-500 to-pink-400 bg-clip-text text-3xl font-bold text-transparent dark:from-cyan-400 dark:to-pink-400 lg:mt-16 lg:text-4xl">
-            Interactions for React.
+        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+          <h2 className="mt-12 mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+            Interactions For React
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Build your own floating UI components with React.
@@ -289,7 +288,7 @@ function HomePage() {
           </p>
         </div>
 
-        <div className="container mx-auto mb-12 grid max-w-screen-xl gap-4 py-8 dark:text-black sm:grid-cols-2 md:px-4 lg:grid-cols-3">
+        <div className="container mx-auto mb-12 grid max-w-screen-xl gap-4 py-10 dark:text-black sm:grid-cols-2 md:px-4 lg:grid-cols-3">
           <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
             <FloatingDelayGroup
               delay={{open: 1000, close: 150}}
@@ -483,17 +482,24 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mt-12 mb-4 inline-block bg-gradient-to-r from-blue-500 to-teal-500 bg-clip-text text-3xl font-bold text-transparent dark:from-blue-500 dark:to-teal-400 lg:mt-16 lg:text-4xl">
-            Modern, tree-shakeable modules.
+          <h2 className="mt-12 mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+            Tree-shakeable & Platform-agnostic
           </h2>
-          <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
-            This positioning toolkit has a platform-agnostic 0.6
-            kB core (minified + Brotli compressed), with official
-            bindings for the web, React DOM, React Native, and
-            Vue.
-          </p>
-          <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl">
-            Each module is{' '}
+          <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
+            In addition to official bindings for the web, React
+            DOM, React Native, and Vue, Floating UI also supports{' '}
+            <code className="p-0">
+              <span className="text-cyan-600 dark:text-cyan-300">
+                &lt;
+              </span>
+              <span className="text-red-600 dark:text-red-400">
+                canvas
+              </span>
+              <span className="text-cyan-600 dark:text-cyan-300">
+                &gt;
+              </span>
+            </code>
+            , and each module is{' '}
             <a
               href="https://bundlejs.com/?q=%40floating-ui%2Fdom&treeshake=%5B%7B%0A++computePosition%2Cshift%2ClimitShift%2Cflip%2Chide%2Coffset%2Carrow%2CautoPlacement%2Csize%2Cinline%2CautoUpdate%0A%7D%5D&config=%7B%22compression%22%3A%22brotli%22%7D"
               className="font-bold text-rose-600 underline decoration-rose-500/80 decoration-2 underline-offset-4 transition-colors hover:text-gray-1000 hover:decoration-gray-1000 dark:text-rose-300 dark:decoration-rose-300/80 dark:hover:text-gray-50 dark:hover:decoration-gray-50"
@@ -504,7 +510,7 @@ function HomePage() {
             </a>{' '}
             by your bundler:
           </p>
-          <div className="grid items-center py-8 pb-16">
+          <div className="font-code grid items-center py-8 pb-16">
             <div className="text-md mx-auto flex flex-col pr-4 text-center sm:pr-20 sm:text-lg md:pr-40 md:text-xl">
               <div className="mb-2 flex items-center justify-center gap-2">
                 <code className="flex-1 text-right text-blue-600 dark:text-blue-400">
@@ -556,9 +562,9 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mt-4 mb-4 inline-block text-3xl font-bold dark:text-gray-50 lg:mt-8 lg:text-4xl">
-            Support Floating UI!
+        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+          <h2 className="mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+            Support Floating UI
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Floating UI is free and open source, proudly
@@ -579,15 +585,15 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="leading-gradient-heading mb-4 mt-12 inline-block text-3xl font-bold dark:text-gray-50 lg:mt-16 lg:text-4xl">
-            Ready to install?
+          <h2 className="mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+            Install
           </h2>
-          <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
+          <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Start playing via your package manager or CDN.
           </p>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg bg-white py-8 px-12 shadow dark:bg-gray-700 dark:text-gray-100">
+            <div className="rounded-lg bg-white p-8 shadow dark:bg-gray-700 dark:text-gray-100">
               <h3 className="mb-4 text-2xl font-bold">
                 Package Manager
               </h3>
@@ -601,7 +607,7 @@ function HomePage() {
                 Get started <ArrowRight />
               </Link>
             </div>
-            <div className="rounded-lg bg-white py-8 px-12 shadow dark:bg-gray-700 dark:text-gray-100">
+            <div className="rounded-lg bg-white p-8 shadow dark:bg-gray-700 dark:text-gray-100">
               <h3 className="mb-4 text-2xl font-bold">CDN</h3>
               <p className="text-lg">
                 Install with the jsDelivr CDN.

@@ -19,7 +19,7 @@ class MyDocument extends Document {
           /> */}
           <meta
             name="description"
-            content="A JavaScript library for positioning floating elements and creating interactions for them."
+            content="A JavaScript library to position floating elements and create interactions for them."
           />
         </Head>
         <body

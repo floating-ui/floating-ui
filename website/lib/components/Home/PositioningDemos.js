@@ -31,19 +31,11 @@ const Reference = forwardRef(({className, children}, ref) => {
   );
 });
 
-function GridItem({
-  title,
-  description,
-  chrome,
-  titleClass,
-  demoLink,
-}) {
+function GridItem({title, description, chrome, demoLink}) {
   return (
     <div className="relative flex flex-col justify-between overflow-x-hidden bg-gray-50 px-4 py-8 shadow dark:bg-gray-700 sm:p-8 md:rounded-lg">
       <div className="overflow-hidden">
-        <h3 className={`mb-2 text-3xl font-bold ${titleClass}`}>
-          {title}
-        </h3>
+        <h3 className="mb-2 text-3xl font-bold">{title}</h3>
         <p className="mb-6 text-xl">{description}</p>
       </div>
       <div className="relative items-center rounded-lg bg-gray-800 shadow-md lg:h-auto">

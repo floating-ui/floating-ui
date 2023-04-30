@@ -1,4 +1,5 @@
 const colors = require('tailwindcss/colors');
+const {fontFamily} = require('tailwindcss/defaultTheme');
 
 const GRAY = {
   1000: '#18191f',
@@ -10,7 +11,7 @@ const GRAY = {
   200: '#BFC3D9',
   150: '#B0B2C3',
   100: '#dcdfec',
-  75: '#f1f3f7',
+  75: '#f3f3f7',
   50: '#fff',
 };
 
@@ -22,6 +23,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        satoshi: ['var(--font-satoshi)', ...fontFamily.sans],
+      },
       keyframes: {
         float: {
           '0%, 100%': {
@@ -243,6 +247,7 @@ module.exports = {
             ':not(pre) > code': {
               borderRadius: '0.25rem',
               padding: '0.3rem 0.4rem',
+              color: GRAY[100],
             },
             'blockquote p:first-of-type::before': {
               display: 'none',

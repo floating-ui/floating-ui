@@ -511,7 +511,7 @@ const initialPackages = [
   {name: 'vue', version: 'latest'},
 ];
 
-export default function Layout({children}) {
+export default function Layout({children, className}) {
   const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
@@ -674,7 +674,9 @@ export default function Layout({children}) {
         <title>{title}</title>
       </Head>
       <SkipNavLink />
-      <div className="md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72">
+      <div
+        className={`md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72 ${className}`}
+      >
         <div className="container pl-4">
           <button
             aria-label="Open menu"
@@ -688,6 +690,7 @@ export default function Layout({children}) {
         <nav
           className={cn(
             'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 shadow will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
+            'font-satoshi',
             {
               hidden: !navOpen,
             }
