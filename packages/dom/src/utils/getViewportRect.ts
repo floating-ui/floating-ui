@@ -1,5 +1,6 @@
 import type {Rect, Strategy} from '@floating-ui/core';
 
+import {getBoundingClientRect} from './getBoundingClientRect';
 import {getDocumentElement} from './getDocumentElement';
 import {getWindow} from './getWindow';
 import {isClientRectVisualViewportBased} from './is';
@@ -24,6 +25,11 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
       x = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
+  }
+  if (win.frameElement) {
+    const boundingRect = getBoundingClientRect(win.frameElement);
+    x += boundingRect.left;
+    y += boundingRect.top;
   }
 
   return {
