@@ -10,7 +10,7 @@ export function getBoundingClientRect(
   element: Element | VirtualElement,
   includeScale = false,
   isFixedStrategy = false,
-  offsetParent: Element | Window = window
+  offsetParent?: Element | Window
 ): ClientRectObject {
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
