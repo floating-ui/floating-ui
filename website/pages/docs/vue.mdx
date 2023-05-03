@@ -26,7 +26,7 @@ const {floatingStyles} = useFloating(reference, floating);
 
 <template>
   <button ref="reference">Button</button>
-  <div :style="floatingStyles" ref="floating">Tooltip</div>
+  <div ref="floating" :style="floatingStyles">Tooltip</div>
 </template>
 ```
 
@@ -125,7 +125,7 @@ The docs for the middleware that were passed are available here:
 - [`flip`](/docs/flip)
 - [`shift`](/docs/shift)
 
-## Updating
+## Anchoring
 
 The position is only calculated **once** on render, or when the
 `reference{:.const}` or `floating{:.const}` elements changed —
@@ -158,6 +158,11 @@ useFloating(reference, floating, {
   },
 });
 ```
+
+Ensure you are using conditional rendering (`v-if{:.keyword}`)
+for the floating element, not an opacity/visibility/display
+style. If you are using `v-show{:.keyword}` instead, avoid the
+`whileElementsMounted{:.objectKey}` prop.
 
 ### Manual updating
 
@@ -250,6 +255,9 @@ useFloating({
   middleware: [arrow({element: floatingArrow})],
 });
 ```
+
+For details on creating an arrow element, see the
+[`arrow` middleware](/docs/arrow) page.
 
 ## Virtual Element
 

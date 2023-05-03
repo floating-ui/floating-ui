@@ -248,9 +248,6 @@ module.exports = {
               borderRadius: '0.25rem',
               padding: '0.3rem 0.4rem',
             },
-            ':not(pre) > code[data-theme="dark"]': {
-              color: GRAY[100],
-            },
             'blockquote p:first-of-type::before': {
               display: 'none',
             },

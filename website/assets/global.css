@@ -111,10 +111,6 @@ code ::selection {
     @apply bg-blue-500/30;
   }
 
-  :not(pre) > code {
-    @apply filter-none;
-  }
-
   .DocSearch-Button,
   .DocSearch-Button:hover,
   .DocSearch-Button:focus {

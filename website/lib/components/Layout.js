@@ -388,8 +388,8 @@ const nav = [
     title: 'Vue',
   },
   {
-    url: '/docs/motivation',
-    title: 'Motivation',
+    url: '/docs/migration',
+    title: 'Migration',
   },
 ];
 
@@ -625,22 +625,25 @@ export default function Layout({children, className}) {
     };
   }, [pathname]);
 
-  const activePage = nav.find(({url}) => url === pathname) || {
-    title: '',
-  };
+  const activeTitle =
+    nav.find(({url}) => url === pathname)?.title ?? '';
 
-  const isReactDOMPage = activePage.title === 'React';
-  const isDOMOnlyPage = activePage.title === 'autoUpdate';
-  const isNoPage = activePage.title === 'Getting Started';
+  const isReactDOMPage = activeTitle === 'React';
+  const isDOMOnlyPage = activeTitle === 'autoUpdate';
+  const isNoPage = activeTitle === 'Getting Started';
   const isReactPage =
-    activePage.title.includes('React') ||
-    activePage.title.startsWith('use') ||
-    activePage.title.startsWith('Floating') ||
-    activePage.title === 'Inner' ||
-    activePage.title === 'Custom Hooks';
-  const isReactNativePage =
-    activePage.title.includes('React Native');
-  const isVuePage = activePage.title.includes('Vue');
+    activeTitle.includes('React') ||
+    activeTitle.startsWith('use') ||
+    activeTitle.startsWith('Floating') ||
+    [
+      'Inner',
+      'Custom Hooks',
+      'Tooltip',
+      'Popover',
+      'Dialog',
+    ].includes(activeTitle);
+  const isReactNativePage = activeTitle.includes('React Native');
+  const isVuePage = activeTitle.includes('Vue');
   const isVanillaPage =
     !isReactPage &&
     !isReactNativePage &&
@@ -865,8 +868,8 @@ export default function Layout({children, className}) {
             className="
               prose-floating prose prose-code:bg-gray-50 prose-code:shadow 
               prose-pre:bg-gray-50 prose-pre:shadow dark:prose-invert
-              dark:prose-code:bg-gray-700/70 dark:prose-pre:bg-gray-800 md:prose-md
-              lg:prose-lg 
+              dark:prose-code:bg-gray-700 dark:prose-code:text-[#c8d3f5]
+              dark:prose-pre:bg-gray-800 md:prose-md lg:prose-lg 
             "
           >
             {children}
