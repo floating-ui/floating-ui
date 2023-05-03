@@ -27,7 +27,12 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     }
   }
   if (win.frameElement) {
-    const boundingRect = getBoundingClientRect(win.frameElement);
+    const boundingRect = getBoundingClientRect(
+      win.frameElement,
+      true,
+      strategy === 'fixed',
+      window
+    );
     x += boundingRect.left;
     y += boundingRect.top;
   }
