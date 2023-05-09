@@ -4,37 +4,40 @@ This package provides React bindings for `@floating-ui/dom`, a
 library that provides anchor positioning, and also interaction
 primitives to build floating UI components.
 
-This allows you to create components such as tooltips, popovers,
-dropdown menus, hover cards, modal dialogs, select menus,
-comboboxes, and more.
+With this package, you can create components such as tooltips,
+popovers, dropdown menus, hover cards, modal dialogs, select
+menus, comboboxes, and more.
 
 ## Goals
 
-- **Provide building blocks to create your own floating UI
-  components**: pre-built components aren't exported, rather the
-  primitives necessary to create them.
-- **Accessibility-first mindset**: the building blocks ensure
-  accessible user experiences and work with assistive technology.
-- **Low-level, extremely configurable and flexible**: At the cost
-  of more code to setup, you get high control and flexibility, so
-  you can create "bespoke" and complex floating elements you
-  won't find in most component libraries.
+- **Provide building blocks**: pre-built floating components
+  aren't exported, rather the primitives necessary to create
+  different types of them.
+- **Flexible and low-level**: at the cost of more code to setup,
+  you get high control and flexibility.
+- **Accessibility is prioritized**: first-class support is
+  provided for creating accessible floating elements that work
+  with assistive technology (keyboard usage and screen readers).
 
 ## Install
-
-The following package provides all modules:
 
 ```bash
 npm install @floating-ui/react
 ```
 
-If you only want positioning, without any interactions necessary,
-the following package is smaller in size. The above is a superset
-and uses this one as a dependency.
+<Notice>
+
+If you only need positioning, the following package is smaller in
+size (the above one uses it as a dependency). This is useful if
+you are controlling interactions yourself (e.g. a library).
+
+<br />
 
 ```bash
 npm install @floating-ui/react-dom
 ```
+
+</Notice>
 
 ## Usage
 
@@ -44,10 +47,6 @@ There are two main parts to creating floating elements:
   packages
 - [Interactions](/docs/react#interactions) — available for
   `@floating-ui/react`
-
-Both of these sections should be read in order before reading the
-API docs for the hooks and components in the left navigation bar
-(`useHover`, `useFocus`, etc.)
 
 ## Positioning
 
@@ -88,7 +87,7 @@ position.
 Depending on your component tree, you may instead want to
 synchronize with an external element instead of using refs.
 
-```js /anchor/1,3-5#a {13-15}
+```js /anchor/1,3-5#a /setAnchor/#b {13-15}
 function App() {
   const [anchor, setAnchor] = useState(null);
   return (
@@ -124,6 +123,7 @@ Either element can be synchronized externally or via
 
 <br />
 ```js
+const [anchor, setAnchor] = useState(null);
 useFloating({
   elements: {
     reference: anchorRef.current, // ❌
@@ -152,10 +152,16 @@ positioned one, and the inner is the actual styled element:
 ```js
 <div ref={refs.setFloating} style={floatingStyles}>
   <div className="styled">
-   Floating
+    Floating
   <div>
 </div>
 ```
+
+<Notice>
+  When disabling transforms, add `width: max-content{:sass}` (or a fixed width) 
+  to the floating element to prevent positioning issues due to layout affecting
+  the floating element.
+</Notice>
 
 ### Custom position styles
 
@@ -165,16 +171,17 @@ customization.
 
 ```js
 const {x, y, strategy} = useFloating();
-return <div style={{position: strategy, left: x, top: y}} />;
+return (
+  <div
+    style={{
+      position: strategy,
+      left: x,
+      top: y,
+      width: 'max-content',
+    }}
+  />
+);
 ```
-
-## Return value
-
-The hook
-[returns all the values from `computePosition`](/docs/computePosition#return-value),
-plus some extras to work with React. This includes data about the
-final placement and middleware data which are useful when
-rendering.
 
 ## Anchoring
 
@@ -235,6 +242,14 @@ const {update} = useFloating();
 
 <Panel onResize={update} />;
 ```
+
+## Return value
+
+The hook
+[returns all the values from `computePosition`](/docs/computePosition#return-value),
+plus some extras to work with React. This includes data about the
+final placement and middleware data which are useful when
+rendering.
 
 ## Options
 

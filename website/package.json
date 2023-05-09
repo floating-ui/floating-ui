@@ -44,6 +44,7 @@
     "react-dom": "^18.1.0",
     "react-feather": "^2.0.10",
     "rehype-pretty-code": "^0.9.4",
+    "rehype-slug": "^4.0.1",
     "remark-smartypants": "^2.0.0",
     "shiki": "^0.12.1",
     "tailwind-merge": "^1.10.0",

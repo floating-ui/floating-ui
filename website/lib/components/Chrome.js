@@ -38,7 +38,7 @@ export const Chrome = ({
         }
       )}
     >
-      <div className="bg-gray-75">
+      <div className="bg-gray-75 dark:bg-gray-600/60 dark:text-white">
         <div
           className={`absolute mx-4 flex h-12 items-center gap-2 ${
             label ? 'sm:flex' : ''

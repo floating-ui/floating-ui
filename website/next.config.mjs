@@ -1,5 +1,6 @@
 import {readFileSync} from 'fs';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
 import remarkSmartypants from 'remark-smartypants';
 import visit from 'unist-util-visit';
 
@@ -106,6 +107,7 @@ export default {
             remarkPlugins: [replaceVariables, remarkSmartypants],
             rehypePlugins: [
               [rehypePrettyCode, rehypePrettyCodeOptions],
+              rehypeSlug,
             ],
           },
         },

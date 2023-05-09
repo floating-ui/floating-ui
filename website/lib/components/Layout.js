@@ -1,17 +1,17 @@
 import {DocSearch} from '@docsearch/react';
+import {
+  autoUpdate,
+  FloatingPortal as FloatingPortalComponent,
+  offset,
+  useFloating,
+  useTransitionStyles,
+} from '@floating-ui/react';
 import {MDXProvider} from '@mdx-js/react';
 import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {
-  Fragment,
-  memo,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {ExternalLink, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -393,58 +393,14 @@ const nav = [
   },
 ];
 
-const slugify = (str) =>
-  str
-    .toLowerCase()
-    .replace(/[\s.]/g, '-')
-    .replace(/[.:'"<>!@#$%^&*()[\]]/g, '');
-
-const getStringChildren = (children) => {
-  if (Array.isArray(children)) {
-    return children
-      .map((value) =>
-        typeof value === 'string'
-          ? value
-          : value.props?.children ?? ''
-      )
-      .join('');
-  } else if (typeof children !== 'string') {
-    return children.props?.children;
-  }
-
-  return children;
-};
-
-const linkify = (Tag, headings, pathname) =>
-  memo(({children, ...props}) => {
-    let stringChildren = getStringChildren(children);
-
-    const url = slugify(
-      typeof stringChildren === 'string' ? stringChildren : ''
-    );
-
-    if (
-      headings.some((heading) => heading.pathname !== pathname)
-    ) {
-      // Reset the headings store.
-      headings.length = 0;
-    }
-
-    let id = url;
-
-    const dupeCount = headings.filter(
-      ({url: u}) => u === url
-    ).length;
-    id = dupeCount === 0 ? url : `${url}-${dupeCount}`;
-
-    headings.push({url, pathname});
-
-    return (
-      <Tag {...props} id={id}>
-        <a href={`#${id}`}>{children}</a>
-      </Tag>
-    );
-  });
+function Heading({level, children, ...props}) {
+  const Tag = `h${level}`;
+  return (
+    <Tag {...props}>
+      <a href={`#${props.id}`}>{children}</a>
+    </Tag>
+  );
+}
 
 const components = {
   Collapsible,
@@ -452,24 +408,11 @@ const components = {
   Chrome,
   Notice,
   WordHighlight,
-  h1(props) {
-    // Split a camel/PascalCased string into parts. A word break oppportunity
-    // element gets inserted after each part.
-    const parts = props.children?.split(/(?=[A-Z])/g) ?? '';
-
-    return (
-      <h1 {...props}>
-        {parts.every((part) => part.length > 1)
-          ? parts.map((part) => (
-              <Fragment key={part}>
-                {part}
-                <wbr />
-              </Fragment>
-            ))
-          : props.children}
-      </h1>
-    );
-  },
+  h2: (props) => <Heading level={2} {...props} />,
+  h3: (props) => <Heading level={3} {...props} />,
+  h4: (props) => <Heading level={4} {...props} />,
+  h5: (props) => <Heading level={5} {...props} />,
+  h6: (props) => <Heading level={6} {...props} />,
   a(props) {
     const className =
       'transition-colors inline-flex items-center border-none underline ' +
@@ -501,6 +444,99 @@ const components = {
     );
   },
 };
+
+function SideNavList({anchors, hash}) {
+  const isTopLevelAnchor = anchors
+    .filter(({depth}) => depth === 2)
+    .find(({url}) => hash === url);
+  const isSecondLevelAnchor = anchors
+    .filter(({depth}) => depth === 3)
+    .find(({url}) => hash === url);
+  const renderCircle = isTopLevelAnchor || isSecondLevelAnchor;
+
+  const {floatingStyles, refs, context} = useFloating({
+    open: renderCircle,
+    placement: 'left',
+    strategy: 'fixed',
+    whileElementsMounted: autoUpdate,
+    transform: false,
+    middleware: [
+      offset({
+        mainAxis: isTopLevelAnchor ? -2 : 13,
+        crossAxis: 1,
+      }),
+    ],
+  });
+
+  const {isMounted, styles} = useTransitionStyles(context, {
+    initial: {
+      transform: 'scale(0) translateX(50px)',
+    },
+  });
+
+  return (
+    <ul className="overflow-hidden px-2 pt-1 pb-8">
+      {isMounted && (
+        <FloatingPortalComponent>
+          <div
+            className="h-2 w-2 rounded-full bg-gradient-to-br from-red-500 to-pink-500 shadow"
+            ref={refs.setFloating}
+            style={{...floatingStyles, ...styles}}
+          />
+        </FloatingPortalComponent>
+      )}
+      {anchors
+        .filter(({depth}) => depth === 2)
+        .map(({url, title}) => (
+          <li key={url}>
+            <Link
+              ref={hash === url ? refs.setReference : null}
+              href={url}
+              className={cn(
+                'block w-full truncate rounded-lg py-1 px-4',
+                {
+                  'font-bold hover:bg-gray-100 dark:hover:bg-purple-300/10':
+                    hash === url,
+                  'hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
+                    hash !== url,
+                }
+              )}
+            >
+              {title}
+            </Link>
+            <ul>
+              {anchors
+                .filter(
+                  ({depth, parentTitle}) =>
+                    depth === 3 && parentTitle === title
+                )
+                .map(({url, title}) => (
+                  <li key={url}>
+                    <Link
+                      ref={
+                        hash === url ? refs.setReference : null
+                      }
+                      href={url}
+                      className={cn(
+                        'text-md w-[calc(100% - 1rem)] ml-4 block truncate rounded-tr-md rounded-br-md border-l border-gray-700 py-1 px-4',
+                        {
+                          'font-bold hover:bg-gray-100 dark:hover:bg-purple-300/10':
+                            hash === url,
+                          'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
+                            hash !== url,
+                        }
+                      )}
+                    >
+                      {title}
+                    </Link>
+                  </li>
+                ))}
+            </ul>
+          </li>
+        ))}
+    </ul>
+  );
+}
 
 const initialPackages = [
   {name: 'core', version: 'latest'},
@@ -566,10 +602,16 @@ export default function Layout({children, className}) {
       document.querySelector('#focus-root').focus();
     }
 
+    function onHashChange() {
+      setHash(window.location.hash);
+    }
+
     events.on('routeChangeComplete', onRouteChangeComplete);
+    window.addEventListener('hashchange', onHashChange);
 
     return () => {
       events.off('routeChangeComplete', onRouteChangeComplete);
+      window.removeEventListener('hashchange', onHashChange);
     };
   }, [events, pathname]);
 
@@ -612,18 +654,6 @@ export default function Layout({children, className}) {
   const title = `${
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
-
-  const computedComponents = useMemo(() => {
-    const headings = [];
-    return {
-      ...components,
-      h2: linkify('h2', headings, pathname),
-      h3: linkify('h3', headings, pathname),
-      h4: linkify('h4', headings, pathname),
-      h5: linkify('h5', headings, pathname),
-      h6: linkify('h6', headings, pathname),
-    };
-  }, [pathname]);
 
   const activeTitle =
     nav.find(({url}) => url === pathname)?.title ?? '';
@@ -672,7 +702,7 @@ export default function Layout({children, className}) {
   }
 
   return (
-    <MDXProvider components={computedComponents}>
+    <MDXProvider components={components}>
       <Head>
         <title>{title}</title>
       </Head>
@@ -810,53 +840,8 @@ export default function Layout({children, className}) {
             <h4 className="text-md ml-6 mb-1 text-gray-500">
               On this page
             </h4>
-            <ul className="overflow-hidden px-2 pt-1 pb-8">
-              {anchorsComputed
-                .filter(({depth}) => depth === 2)
-                .map(({url, title}) => (
-                  <li key={url}>
-                    <Link
-                      href={url}
-                      className={cn(
-                        'block w-full truncate rounded-lg py-1 px-4',
-                        {
-                          'bg-gray-800 font-bold text-gray-50 dark:bg-purple-300/10':
-                            hash === url,
-                          'hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
-                            hash !== url,
-                        }
-                      )}
-                    >
-                      {title}
-                    </Link>
-                    <ul>
-                      {anchorsComputed
-                        .filter(
-                          ({depth, parentTitle}) =>
-                            depth === 3 && parentTitle === title
-                        )
-                        .map(({url, title}) => (
-                          <li key={url}>
-                            <Link
-                              href={url}
-                              className={cn(
-                                'text-md w-[calc(100% - 1rem)] ml-4 block truncate rounded-tr-md rounded-br-md border-l border-gray-700 py-1 px-4',
-                                {
-                                  'bg-gray-800 font-bold text-gray-50 dark:bg-purple-300/10 dark:text-gray-100':
-                                    hash === url,
-                                  'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
-                                    hash !== url,
-                                }
-                              )}
-                            >
-                              {title}
-                            </Link>
-                          </li>
-                        ))}
-                    </ul>
-                  </li>
-                ))}
-            </ul>
+
+            <SideNavList anchors={anchorsComputed} hash={hash} />
           </nav>
         </aside>
         <div

@@ -257,7 +257,7 @@ function HomePage() {
       </header>
       <main className="relative">
         <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Smart Anchor Positioning
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -277,7 +277,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
-          <h2 className="mt-12 mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Interactions For React
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -289,7 +289,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto mb-12 grid max-w-screen-xl gap-4 py-10 dark:text-black sm:grid-cols-2 md:px-4 lg:grid-cols-3">
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <FloatingDelayGroup
               delay={{open: 1000, close: 150}}
               timeoutMs={200}
@@ -352,7 +352,7 @@ function HomePage() {
             </FloatingDelayGroup>
           </div>
 
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <div>
               <h3 className="mb-6 text-3xl font-bold">
                 Popovers
@@ -367,7 +367,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <div>
               <h3 className="mb-6 text-3xl font-bold">
                 Select Menus
@@ -382,7 +382,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <div>
               <h3 className="mb-6 text-3xl font-bold">
                 Comboboxes
@@ -397,7 +397,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <div>
               <h3 className="mb-6 text-3xl font-bold">
                 Dropdown Menus
@@ -432,7 +432,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:rounded-lg">
+          <div className="flex h-[18rem] flex-col justify-between bg-white p-10 text-center shadow dark:bg-gray-700 dark:text-gray-100 sm:h-[19rem] sm:rounded-lg md:h-[18rem]">
             <div>
               <h3 className="mb-6 text-3xl font-bold">
                 Dialogs
@@ -482,7 +482,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mt-12 mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Tree-shakeable & Platform-agnostic
           </h2>
           <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -563,7 +563,7 @@ function HomePage() {
         </div>
 
         <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
-          <h2 className="mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Support Floating UI
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -585,7 +585,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text text-3xl font-bold text-transparent [line-height:3.5rem] dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem]">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Install
           </h2>
           <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
