@@ -68,7 +68,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     ...rest
   }: Props,
   ref: React.Ref<SVGSVGElement>
-): JSX.Element {
+): JSX.Element | null {
   if (__DEV__) {
     if (!ref) {
       console.warn(
@@ -76,6 +76,12 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
         'component.'
       );
     }
+  }
+
+  const clipPathId = useId();
+
+  if (!floating) {
+    return null;
   }
 
   // Strokes must be double the border width, this ensures the stroke's width
@@ -116,13 +122,9 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     right: isCustomShape ? 'rotate(-90deg)' : 'rotate(90deg)',
   }[side];
 
-  const clipPathId = useId();
-
   return (
     <svg
       {...rest}
-      // @ts-ignore
-      suppressHydrationWarning
       aria-hidden
       ref={ref}
       width={isCustomShape ? width : width + strokeWidth}
