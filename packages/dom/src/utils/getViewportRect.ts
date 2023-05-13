@@ -2,7 +2,7 @@ import type {Rect, Strategy} from '@floating-ui/core';
 
 import {getDocumentElement} from './getDocumentElement';
 import {getWindow} from './getWindow';
-import {isClientRectVisualViewportBased} from './is';
+import {isSafari} from './is';
 
 export function getViewportRect(element: Element, strategy: Strategy): Rect {
   const win = getWindow(element);
@@ -18,7 +18,7 @@ export function getViewportRect(element: Element, strategy: Strategy): Rect {
     width = visualViewport.width;
     height = visualViewport.height;
 
-    const visualViewportBased = isClientRectVisualViewportBased();
+    const visualViewportBased = isSafari();
 
     if (!visualViewportBased || (visualViewportBased && strategy === 'fixed')) {
       x = visualViewport.offsetLeft;
