@@ -56,7 +56,6 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
   } = options;
 
   let timeoutId: number;
-  let isInsideRect = false;
   let hasLanded = false;
   let lastX: number | null = null;
   let lastY: number | null = null;
@@ -124,6 +123,12 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
       const cursorLeaveFromRight = x > rect.right - rect.width / 2;
       const cursorLeaveFromBottom = y > rect.bottom - rect.height / 2;
       const isOverReferenceRect = isInside(clientPoint, refRect);
+      const isFloatingWider = rect.width > refRect.width;
+      const isFloatingTaller = rect.height > refRect.height;
+      const left = (isFloatingWider ? refRect : rect).left;
+      const right = (isFloatingWider ? refRect : rect).right;
+      const top = (isFloatingTaller ? refRect : rect).top;
+      const bottom = (isFloatingTaller ? refRect : rect).bottom;
 
       if (isOverFloatingEl) {
         hasLanded = true;
@@ -185,62 +190,39 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
       switch (side) {
         case 'top':
           rectPoly = [
-            [rect.left, refRect.top + 1],
-            [rect.left, rect.bottom - 1],
-            [rect.right, rect.bottom - 1],
-            [rect.right, refRect.top + 1],
+            [left, refRect.top + 1],
+            [left, rect.bottom - 1],
+            [right, rect.bottom - 1],
+            [right, refRect.top + 1],
           ];
-          isInsideRect =
-            clientX >= rect.left &&
-            clientX <= rect.right &&
-            clientY >= rect.top &&
-            clientY <= refRect.top + 1;
           break;
         case 'bottom':
           rectPoly = [
-            [rect.left, rect.top + 1],
-            [rect.left, refRect.bottom - 1],
-            [rect.right, refRect.bottom - 1],
-            [rect.right, rect.top + 1],
+            [left, rect.top + 1],
+            [left, refRect.bottom - 1],
+            [right, refRect.bottom - 1],
+            [right, rect.top + 1],
           ];
-          isInsideRect =
-            clientX >= rect.left &&
-            clientX <= rect.right &&
-            clientY >= refRect.bottom - 1 &&
-            clientY <= rect.bottom;
           break;
         case 'left':
           rectPoly = [
-            [rect.right - 1, rect.bottom],
-            [rect.right - 1, rect.top],
-            [refRect.left + 1, rect.top],
-            [refRect.left + 1, rect.bottom],
+            [rect.right - 1, bottom],
+            [rect.right - 1, top],
+            [refRect.left + 1, top],
+            [refRect.left + 1, bottom],
           ];
-          isInsideRect =
-            clientX >= rect.left &&
-            clientX <= refRect.left + 1 &&
-            clientY >= rect.top &&
-            clientY <= rect.bottom;
           break;
         case 'right':
           rectPoly = [
-            [refRect.right - 1, rect.bottom],
-            [refRect.right - 1, rect.top],
-            [rect.left + 1, rect.top],
-            [rect.left + 1, rect.bottom],
+            [refRect.right - 1, bottom],
+            [refRect.right - 1, top],
+            [rect.left + 1, top],
+            [rect.left + 1, bottom],
           ];
-          isInsideRect =
-            clientX >= refRect.right - 1 &&
-            clientX <= rect.right &&
-            clientY >= rect.top &&
-            clientY <= rect.bottom;
           break;
       }
 
       function getPolygon([x, y]: Point): Array<Point> {
-        const isFloatingWider = rect.width > refRect.width;
-        const isFloatingTaller = rect.height > refRect.height;
-
         switch (side) {
           case 'top': {
             const cursorPointOne: Point = [
@@ -397,9 +379,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      const poly = isInsideRect ? rectPoly : getPolygon([x, y]);
-
-      if (isInsideRect) {
+      if (isPointInPolygon([clientX, clientY], rectPoly)) {
         return;
       } else if (hasLanded && !isOverReferenceRect) {
         return close();
@@ -413,7 +393,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      if (!isPointInPolygon([clientX, clientY], poly)) {
+      if (!isPointInPolygon([clientX, clientY], getPolygon([x, y]))) {
         close();
       } else if (!hasLanded && requireIntent) {
         timeoutId = window.setTimeout(close, 40);
