@@ -54,15 +54,12 @@ export function isContainingBlock(element: Element): boolean {
     css.transform !== 'none' ||
     css.perspective !== 'none' ||
     (backdropFilter ? backdropFilter !== 'none' : false) ||
-    (!safari && css.willChange === 'filter') ||
     (!safari && (css.filter ? css.filter !== 'none' : false)) ||
-    ['transform', 'perspective'].some((value) =>
-      css.willChange.includes(value)
-    ) ||
+    ['transform', 'perspective']
+      .concat(!safari ? 'filter' : [])
+      .some((value) => (css.willChange || '').includes(value)) ||
     ['paint', 'layout', 'strict', 'content'].some((value) => {
-      // Add type check for old browsers.
-      const contain = css.contain as string | undefined;
-      return contain != null ? contain.includes(value) : false;
+      return (css.contain || '').includes(value);
     })
   );
 }
