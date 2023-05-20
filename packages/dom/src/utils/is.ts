@@ -1,7 +1,6 @@
 import {getComputedStyle} from './getComputedStyle';
 import {getWindow} from './getWindow';
 import {getNodeName} from './node';
-import {getUAString} from './userAgent';
 
 declare global {
   interface Window {
@@ -43,8 +42,7 @@ export function isTableElement(element: Element): boolean {
 }
 
 export function isContainingBlock(element: Element): boolean {
-  // TODO: Try to use feature detection here instead.
-  const isFirefox = /firefox/i.test(getUAString());
+  const safari = isSafari();
   const css = getComputedStyle(element);
   const backdropFilter =
     css.backdropFilter || (css as any).WebkitBackdropFilter;
@@ -56,34 +54,19 @@ export function isContainingBlock(element: Element): boolean {
     css.transform !== 'none' ||
     css.perspective !== 'none' ||
     (backdropFilter ? backdropFilter !== 'none' : false) ||
-    (isFirefox && css.willChange === 'filter') ||
-    (isFirefox && (css.filter ? css.filter !== 'none' : false)) ||
-    ['transform', 'perspective'].some((value) =>
-      css.willChange.includes(value)
-    ) ||
+    (!safari && (css.filter ? css.filter !== 'none' : false)) ||
+    ['transform', 'perspective']
+      .concat(!safari ? 'filter' : [])
+      .some((value) => (css.willChange || '').includes(value)) ||
     ['paint', 'layout', 'strict', 'content'].some((value) => {
-      // Add type check for old browsers.
-      const contain = css.contain as string | undefined;
-      return contain != null ? contain.includes(value) : false;
+      return (css.contain || '').includes(value);
     })
   );
 }
 
-/**
- * Determines whether or not `.getBoundingClientRect()` is affected by visual
- * viewport offsets. In Safari, the `x`/`y` offsets are values relative to the
- * visual viewport, while in other engines, they are values relative to the
- * layout viewport.
- */
-export function isClientRectVisualViewportBased(): boolean {
-  // TODO: Try to use feature detection here instead. Feature detection for
-  // this can fail in various ways, making the userAgent check the most
-  // reliable:
-  // • Always-visible scrollbar or not
-  // • Width of <html>
-
-  // Is Safari.
-  return /^((?!chrome|android).)*safari/i.test(getUAString());
+export function isSafari(): boolean {
+  if (typeof CSS === 'undefined' || !CSS.supports) return false;
+  return CSS.supports('-webkit-backdrop-filter', 'none');
 }
 
 export function isLastTraversableNode(node: Node) {
