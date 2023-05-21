@@ -155,14 +155,17 @@ const {isMounted, styles} = useTransitionStyles(context, {
 });
 ```
 
+<Notice>
+  You don't need to specify this unless you want an asymmetric
+  transition.
+</Notice>
+
 ### open
 
 default: `undefined{:js}`
 
-Usually a transition should open at the default property, for
-example `opacity: 1{:sass}` or no transform. If you want the open
-state to transition to a non-default style, `open` styles can be
-specified:
+If you want the open state to transition to a non-default style,
+`open` styles can be specified:
 
 ```js
 const {isMounted, styles} = useTransitionStyles(context, {
@@ -202,6 +205,15 @@ const {isMounted, styles} = useTransitionStyles(context, {
   }),
 });
 ```
+
+### Scale transforms
+
+When animating the floating element's scale, it looks best if the
+floating element's `transformOrigin{:.objectKey}` is at the tip
+of the arrow. The `arrow` middleware provides data to achieve
+this.
+
+[View on CodeSandbox](https://codesandbox.io/s/floating-ui-react-scale-transform-origin-qv0t1c?file=/src/App.tsx)
 
 ## useTransitionStatus
 
