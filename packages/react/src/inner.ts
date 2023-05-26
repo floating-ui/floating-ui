@@ -2,7 +2,7 @@ import {detectOverflow, offset} from '@floating-ui/react-dom';
 import * as React from 'react';
 import {flushSync} from 'react-dom';
 
-import {useEvent} from './hooks/utils/useEvent';
+import {useEffectEvent} from './hooks/utils/useEffectEvent';
 import type {
   DetectOverflowOptions,
   ElementProps,
@@ -173,7 +173,7 @@ export function useInnerOffset(
     onChange: unstable_onChange,
   } = props;
 
-  const onChange = useEvent(unstable_onChange);
+  const onChange = useEffectEvent(unstable_onChange);
   const controlledScrollingRef = React.useRef(false);
   const prevScrollTopRef = React.useRef<number | null>(null);
   const initialOverflowRef = React.useRef<SideObject | null>(null);

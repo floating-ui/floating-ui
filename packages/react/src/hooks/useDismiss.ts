@@ -17,7 +17,7 @@ import {
   isVirtualPointerEvent,
 } from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {useEvent} from './utils/useEvent';
+import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {
   pointerdown: 'onPointerDown',
@@ -90,7 +90,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
   const tree = useFloatingTree();
   const nested = useFloatingParentNodeId() != null;
-  const outsidePressFn = useEvent(
+  const outsidePressFn = useEffectEvent(
     typeof unstable_outsidePress === 'function'
       ? unstable_outsidePress
       : () => false
@@ -102,7 +102,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   const insideReactTreeRef = React.useRef(false);
   const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp(bubbles);
 
-  const closeOnEscapeKeyDown = useEvent(
+  const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
       if (!open || !enabled || !escapeKey || event.key !== 'Escape') {
         return;
@@ -143,7 +143,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
   );
 
-  const closeOnPressOutside = useEvent((event: MouseEvent) => {
+  const closeOnPressOutside = useEffectEvent((event: MouseEvent) => {
     // Given developers can stop the propagation of the synthetic event,
     // we can only be confident with a positive value.
     const insideReactTree = insideReactTreeRef.current;

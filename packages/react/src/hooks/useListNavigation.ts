@@ -18,7 +18,7 @@ import {
   isVirtualPointerEvent,
 } from '../utils/is';
 import {stopEvent} from '../utils/stopEvent';
-import {useEvent} from './utils/useEvent';
+import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 let isPreventScrollSupported = false;
@@ -234,7 +234,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree();
 
-  const onNavigate = useEvent(unstable_onNavigate);
+  const onNavigate = useEffectEvent(unstable_onNavigate);
 
   const focusItemOnOpenRef = React.useRef(focusItemOnOpen);
   const indexRef = React.useRef(selectedIndex ?? -1);
@@ -251,7 +251,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
 
-  const focusItem = useEvent(
+  const focusItem = useEffectEvent(
     (
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>,

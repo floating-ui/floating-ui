@@ -3,7 +3,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {stopEvent} from '../utils/stopEvent';
-import {useEvent} from './utils/useEvent';
+import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 export interface Props {
@@ -52,8 +52,8 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   );
   const matchIndexRef = React.useRef<number | null>(null);
 
-  const onMatch = useEvent(unstable_onMatch);
-  const onTypingChange = useEvent(unstable_onTypingChange);
+  const onMatch = useEffectEvent(unstable_onMatch);
+  const onTypingChange = useEffectEvent(unstable_onTypingChange);
 
   const findMatchRef = useLatestRef(findMatch);
   const ignoreKeysRef = useLatestRef(ignoreKeys);

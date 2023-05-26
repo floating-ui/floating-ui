@@ -4,7 +4,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useFloatingTree} from './components/FloatingTree';
 import {useId} from './hooks/useId';
-import {useEvent} from './hooks/utils/useEvent';
+import {useEffectEvent} from './hooks/utils/useEffectEvent';
 import type {
   ContextData,
   FloatingContext,
@@ -33,7 +33,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
-  const onOpenChange = useEvent(unstable_onOpenChange);
+  const onOpenChange = useEffectEvent(unstable_onOpenChange);
 
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});

@@ -10,7 +10,7 @@ import type {
 import {contains} from '../utils/contains';
 import {getTarget} from '../utils/getTarget';
 import {getWindow, isMouseLikePointerType} from '../utils/is';
-import {useEvent} from './utils/useEvent';
+import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(
   domRef: React.MutableRefObject<Element | null>,
@@ -121,7 +121,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   const [pointerType, setPointerType] = React.useState<string | undefined>();
   const [reactive, setReactive] = React.useState([]);
 
-  const setReference = useEvent((x: number | null, y: number | null) => {
+  const setReference = useEffectEvent((x: number | null, y: number | null) => {
     if (initialRef.current) return;
 
     // Prevent setting if the open event was not a mouse-like one
@@ -145,7 +145,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     );
   });
 
-  const handleReferenceEnterOrMove = useEvent(
+  const handleReferenceEnterOrMove = useEffectEvent(
     (event: React.MouseEvent<Element>) => {
       if (x != null || y != null) return;
 

@@ -9,7 +9,7 @@ const useInsertionEffect = (React as any)['useInsertionEffect'.toString()] as
 
 const useSafeInsertionEffect = useInsertionEffect || ((fn) => fn());
 
-export function useEvent<T extends AnyFunction>(callback?: T) {
+export function useEffectEvent<T extends AnyFunction>(callback?: T) {
   const ref = React.useRef<AnyFunction | undefined>(() => {
     if (__DEV__) {
       throw new Error('Cannot call an event handler while rendering.');
