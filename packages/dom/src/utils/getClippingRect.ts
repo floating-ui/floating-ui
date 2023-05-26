@@ -16,14 +16,13 @@ import {getOverflowAncestors} from './getOverflowAncestors';
 import {getParentNode} from './getParentNode';
 import {getScale} from './getScale';
 import {getViewportRect} from './getViewportRect';
-import {getWindow} from './getWindow';
+import {getVisualOffsets} from './getVisualOffsets';
 import {
   isContainingBlock,
   isElement,
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-  isSafari,
 } from './is';
 import {max, min} from './math';
 import {getNodeName} from './node';
@@ -68,13 +67,12 @@ function getClientRectFromClippingAncestor(
   } else if (isElement(clippingAncestor)) {
     rect = getInnerBoundingClientRect(clippingAncestor, strategy);
   } else {
-    const mutableRect = {...clippingAncestor};
-    if (isSafari()) {
-      const win = getWindow(element);
-      mutableRect.x -= win.visualViewport?.offsetLeft || 0;
-      mutableRect.y -= win.visualViewport?.offsetTop || 0;
-    }
-    rect = mutableRect;
+    const visualOffsets = getVisualOffsets(element);
+    rect = {
+      ...clippingAncestor,
+      x: clippingAncestor.x - visualOffsets.x,
+      y: clippingAncestor.y - visualOffsets.y,
+    };
   }
 
   return rectToClientRect(rect);

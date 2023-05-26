@@ -14,20 +14,13 @@ export function getRectRelativeToOffsetParent(
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
-  const rect = getBoundingClientRect(
-    element,
-    true,
-    strategy === 'fixed',
-    offsetParent
-  );
+  const isFixed = strategy === 'fixed';
+  const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   const offsets = {x: 0, y: 0};
 
-  if (
-    isOffsetParentAnElement ||
-    (!isOffsetParentAnElement && strategy !== 'fixed')
-  ) {
+  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -36,7 +29,12 @@ export function getRectRelativeToOffsetParent(
     }
 
     if (isHTMLElement(offsetParent)) {
-      const offsetRect = getBoundingClientRect(offsetParent, true);
+      const offsetRect = getBoundingClientRect(
+        offsetParent,
+        true,
+        isFixed,
+        offsetParent
+      );
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {

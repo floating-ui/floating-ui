@@ -2,8 +2,9 @@ import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 
 import {FALLBACK_SCALE, getScale} from './getScale';
+import {getVisualOffsets} from './getVisualOffsets';
 import {getWindow} from './getWindow';
-import {isElement, isSafari} from './is';
+import {isElement} from './is';
 import {unwrapElement} from './unwrapElement';
 
 export function getBoundingClientRect(
@@ -26,17 +27,14 @@ export function getBoundingClientRect(
     }
   }
 
-  const win = domElement ? getWindow(domElement) : window;
-  const addVisualOffsets = isSafari() && isFixedStrategy;
+  const visualOffsets = getVisualOffsets(
+    domElement,
+    isFixedStrategy,
+    offsetParent
+  );
 
-  let x =
-    (clientRect.left +
-      (addVisualOffsets ? win.visualViewport?.offsetLeft || 0 : 0)) /
-    scale.x;
-  let y =
-    (clientRect.top +
-      (addVisualOffsets ? win.visualViewport?.offsetTop || 0 : 0)) /
-    scale.y;
+  let x = (clientRect.left + visualOffsets.x) / scale.x;
+  let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
 
