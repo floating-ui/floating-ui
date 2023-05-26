@@ -93,7 +93,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const svgY = ((height / 2) * tipRadius) / 4;
 
   const [side, alignment] = placement.split('-') as [Side, Alignment];
-  const isRTL = floating ? platform.isRTL(floating) : false;
+  const isRTL = platform.isRTL(floating);
   const isCustomShape = !!d;
   const isVerticalSide = side === 'top' || side === 'bottom';
 
@@ -103,9 +103,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     xOffsetProp = alignment === 'end' ? 'left' : 'right';
   }
 
-  const arrowOffsetY = isCustomShape ? 0 : halfStrokeWidth;
   const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
-  const arrowY = arrow?.y != null ? staticOffset || arrow.y + arrowOffsetY : '';
+  const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
 
   const dValue =
     d ||
