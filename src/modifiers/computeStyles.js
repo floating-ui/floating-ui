@@ -81,9 +81,7 @@ export function mapToStyles({
   let { x = 0, y = 0 } = offsets;
 
   ({ x, y } =
-    typeof roundOffsets === 'function'
-      ? roundOffsets({ x, y })
-      : { x, y });
+    typeof roundOffsets === 'function' ? roundOffsets({ x, y }) : { x, y });
 
   const hasX = offsets.hasOwnProperty('x');
   const hasY = offsets.hasOwnProperty('y');
@@ -182,33 +180,6 @@ function computeStyles({ state, options }: ModifierArguments<Options>) {
     // defaults to use builtin `roundOffsetsByDPR`
     roundOffsets = true,
   } = options;
-
-  if (__DEV__) {
-    const transitionProperty =
-      getComputedStyle(state.elements.popper).transitionProperty || '';
-
-    if (
-      adaptive &&
-      ['transform', 'top', 'right', 'bottom', 'left'].some(
-        (property) => transitionProperty.indexOf(property) >= 0
-      )
-    ) {
-      console.warn(
-        [
-          'Popper: Detected CSS transitions on at least one of the following',
-          'CSS properties: "transform", "top", "right", "bottom", "left".',
-          '\n\n',
-          'Disable the "computeStyles" modifier\'s `adaptive` option to allow',
-          'for smooth transitions, or remove these properties from the CSS',
-          'transition declaration on the popper element if only transitioning',
-          'opacity or background-color for example.',
-          '\n\n',
-          'We recommend using the popper element as a wrapper around an inner',
-          'element that can have any CSS property transitioned for animations.',
-        ].join(' ')
-      );
-    }
-  }
 
   const commonStyles = {
     placement: getBasePlacement(state.placement),

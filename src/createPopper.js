@@ -10,21 +10,11 @@ import getCompositeRect from './dom-utils/getCompositeRect';
 import getLayoutRect from './dom-utils/getLayoutRect';
 import listScrollParents from './dom-utils/listScrollParents';
 import getOffsetParent from './dom-utils/getOffsetParent';
-import getComputedStyle from './dom-utils/getComputedStyle';
 import orderModifiers from './utils/orderModifiers';
 import debounce from './utils/debounce';
-import validateModifiers from './utils/validateModifiers';
-import uniqueBy from './utils/uniqueBy';
-import getBasePlacement from './utils/getBasePlacement';
 import mergeByName from './utils/mergeByName';
 import detectOverflow from './utils/detectOverflow';
 import { isElement } from './dom-utils/instanceOf';
-import { auto } from './enums';
-
-const INVALID_ELEMENT_ERROR =
-  'Popper: Invalid reference or popper argument provided. They must be either a DOM element or virtual element.';
-const INFINITE_LOOP_ERROR =
-  'Popper: An infinite loop in the modifiers cycle has been detected! The cycle has been interrupted to prevent a browser crash.';
 
 const DEFAULT_OPTIONS: OptionsGeneric<any> = {
   placement: 'bottom',
@@ -45,10 +35,8 @@ function areValidElements(...args: Array<any>): boolean {
 }
 
 export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
-  const {
-    defaultModifiers = [],
-    defaultOptions = DEFAULT_OPTIONS,
-  } = generatorOptions;
+  const { defaultModifiers = [], defaultOptions = DEFAULT_OPTIONS } =
+    generatorOptions;
 
   return function createPopper<TModifier: $Shape<Modifier<any, any>>>(
     reference: Element | VirtualElement,
@@ -106,57 +94,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Strip out disabled modifiers
         state.orderedModifiers = orderedModifiers.filter((m) => m.enabled);
 
-        // Validate the provided modifiers so that the consumer will get warned
-        // if one of the modifiers is invalid for any reason
-        if (__DEV__) {
-          const modifiers = uniqueBy(
-            [...orderedModifiers, ...state.options.modifiers],
-            ({ name }) => name
-          );
-
-          validateModifiers(modifiers);
-
-          if (getBasePlacement(state.options.placement) === auto) {
-            const flipModifier = state.orderedModifiers.find(
-              ({ name }) => name === 'flip'
-            );
-
-            if (!flipModifier) {
-              console.error(
-                [
-                  'Popper: "auto" placements require the "flip" modifier be',
-                  'present and enabled to work.',
-                ].join(' ')
-              );
-            }
-          }
-
-          const {
-            marginTop,
-            marginRight,
-            marginBottom,
-            marginLeft,
-          } = getComputedStyle(popper);
-
-          // We no longer take into account `margins` on the popper, and it can
-          // cause bugs with positioning, so we'll warn the consumer
-          if (
-            [marginTop, marginRight, marginBottom, marginLeft].some((margin) =>
-              parseFloat(margin)
-            )
-          ) {
-            console.warn(
-              [
-                'Popper: CSS "margin" styles cannot be used to apply padding',
-                'between the popper and its reference element or boundary.',
-                'To replicate margin, use the `offset` modifier, as well as',
-                'the `padding` option in the `preventOverflow` and `flip`',
-                'modifiers.',
-              ].join(' ')
-            );
-          }
-        }
-
         runModifierEffects();
 
         return instance.update();
@@ -177,9 +114,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
         // Don't proceed if `reference` or `popper` are not valid elements
         // anymore
         if (!areValidElements(reference, popper)) {
-          if (__DEV__) {
-            console.error(INVALID_ELEMENT_ERROR);
-          }
           return;
         }
 
@@ -213,16 +147,7 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
             })
         );
 
-        let __debug_loops__ = 0;
         for (let index = 0; index < state.orderedModifiers.length; index++) {
-          if (__DEV__) {
-            __debug_loops__ += 1;
-            if (__debug_loops__ > 100) {
-              console.error(INFINITE_LOOP_ERROR);
-              break;
-            }
-          }
-
           if (state.reset === true) {
             state.reset = false;
             index = -1;
@@ -254,9 +179,6 @@ export function popperGenerator(generatorOptions: PopperGeneratorArgs = {}) {
     };
 
     if (!areValidElements(reference, popper)) {
-      if (__DEV__) {
-        console.error(INVALID_ELEMENT_ERROR);
-      }
       return instance;
     }
 

@@ -10,7 +10,6 @@ import { within } from '../utils/within';
 import mergePaddingObject from '../utils/mergePaddingObject';
 import expandToHashMap from '../utils/expandToHashMap';
 import { left, right, basePlacements, top, bottom } from '../enums';
-import { isHTMLElement } from '../dom-utils/instanceOf';
 
 // eslint-disable-next-line import/no-unused-modules
 export type Options = {
@@ -101,28 +100,7 @@ function effect({ state, options }: ModifierArguments<Options>) {
     }
   }
 
-  if (__DEV__) {
-    if (!isHTMLElement(arrowElement)) {
-      console.error(
-        [
-          'Popper: "arrow" element must be an HTMLElement (not an SVGElement).',
-          'To use an SVG arrow, wrap it in an HTMLElement that will be used as',
-          'the arrow.',
-        ].join(' ')
-      );
-    }
-  }
-
   if (!contains(state.elements.popper, arrowElement)) {
-    if (__DEV__) {
-      console.error(
-        [
-          'Popper: "arrow" modifier\'s `element` must be a child of the popper',
-          'element.',
-        ].join(' ')
-      );
-    }
-
     return;
   }
 
