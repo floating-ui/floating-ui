@@ -54,15 +54,6 @@
     "positioning",
     "vue"
   ],
-  "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-rc.1",
-    "vue": "^2.0.0 || >=3.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@vue/composition-api": {
-      "optional": true
-    }
-  },
   "dependencies": {
     "@floating-ui/dom": "^0.1.0",
     "vue-demi": "^0.13.11"
