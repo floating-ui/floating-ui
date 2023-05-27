@@ -108,8 +108,8 @@ export const flip = (
 
     const overflow = await detectOverflow(state, detectOverflowOptions);
     const intersections = await detectIntersections(state, {
-      collidables: Array.from(
-        document.querySelectorAll('[data-floating-ui-collidable]')
+      obstacles: Array.from(
+        document.querySelectorAll('[data-floating-ui-obstacle]')
       ).map((el) => el.getBoundingClientRect()),
     });
 

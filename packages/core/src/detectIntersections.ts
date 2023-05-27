@@ -11,10 +11,10 @@ import {rectToClientRect} from './utils/rectToClientRect';
 
 export interface Options {
   /**
-   * The collidable rects or area in which intersection will be checked.
+   * The obstacle rects or area in which intersection will be checked.
    * @default []
    */
-  collidables: Array<ClientRectObject>;
+  obstacles: Array<ClientRectObject>;
 
   /**
    * Virtual padding for the resolved intersection detection offsets.
@@ -25,19 +25,17 @@ export interface Options {
 
 /**
  * Resolves with an array of intersection values for each intersecting
- * collidable.
+ * obstacle.
  * @see https://floating-ui.com/docs/detectIntersections
  */
 export async function detectIntersections(
   state: MiddlewareState,
   options: Partial<Options> = {}
-): Promise<Array<Coords & {xDirection: Side; yDirection: Side}>> {
+): Promise<Array<Coords & {xSide: Side; ySide: Side}>> {
   const {x, y, platform, rects, elements, strategy} = state;
-  const {collidables = [], padding = 0} = options;
+  const {obstacles = [], padding = 0} = options;
 
   const paddingObject = getSideObjectFromPadding(padding);
-  const element = elements.floating;
-
   const rect = {...rects.floating, x, y};
   const offsetParent = await platform.getOffsetParent?.(elements.floating);
 
@@ -61,57 +59,62 @@ export async function detectIntersections(
     );
   }
 
-  const collidablesExclusive = collidables.filter((el) => el !== element);
-  const intersectingCollidables =
-    collidablesExclusive.filter(getIsIntersecting);
+  return obstacles
+    .filter(
+      (rect) =>
+        rect.x !== elementClientRect.x &&
+        rect.y !== elementClientRect.y &&
+        rect.width !== elementClientRect.width &&
+        rect.height !== elementClientRect.height &&
+        getIsIntersecting(rect)
+    )
+    .map((obstacleClientRect) => {
+      const xSide: Side =
+        elementClientRect.left + elementClientRect.width / 2 <
+        obstacleClientRect.left + obstacleClientRect.width / 2
+          ? 'left'
+          : 'right';
+      const ySide: Side =
+        elementClientRect.top + elementClientRect.height / 2 <
+        obstacleClientRect.top + obstacleClientRect.height / 2
+          ? 'top'
+          : 'bottom';
 
-  return intersectingCollidables.map((collidableClientRect) => {
-    const xDirection: Side =
-      elementClientRect.left + elementClientRect.width / 2 <
-      collidableClientRect.left + collidableClientRect.width / 2
-        ? 'left'
-        : 'right';
-    const yDirection: Side =
-      elementClientRect.top + elementClientRect.height / 2 <
-      collidableClientRect.top + collidableClientRect.height / 2
-        ? 'top'
-        : 'bottom';
+      const leftOp =
+        xSide === 'right'
+          ? elementClientRect.left < obstacleClientRect.left
+          : elementClientRect.left > obstacleClientRect.left;
+      const rightOp =
+        xSide === 'right'
+          ? elementClientRect.right > obstacleClientRect.right
+          : elementClientRect.right < obstacleClientRect.right;
+      const topOp =
+        ySide === 'bottom'
+          ? elementClientRect.top < obstacleClientRect.top
+          : elementClientRect.top > obstacleClientRect.top;
+      const bottomOp =
+        ySide === 'bottom'
+          ? elementClientRect.bottom > obstacleClientRect.bottom
+          : elementClientRect.bottom < obstacleClientRect.bottom;
 
-    const leftOp =
-      xDirection === 'right'
-        ? elementClientRect.left < collidableClientRect.left
-        : elementClientRect.left > collidableClientRect.left;
-    const rightOp =
-      xDirection === 'right'
-        ? elementClientRect.right > collidableClientRect.right
-        : elementClientRect.right < collidableClientRect.right;
-    const topOp =
-      yDirection === 'bottom'
-        ? elementClientRect.top < collidableClientRect.top
-        : elementClientRect.top > collidableClientRect.top;
-    const bottomOp =
-      yDirection === 'bottom'
-        ? elementClientRect.bottom > collidableClientRect.bottom
-        : elementClientRect.bottom < collidableClientRect.bottom;
+      const left = leftOp
+        ? min(elementClientRect.left, obstacleClientRect.left)
+        : max(elementClientRect.left, obstacleClientRect.left);
+      const right = rightOp
+        ? min(elementClientRect.right, obstacleClientRect.right)
+        : max(elementClientRect.right, obstacleClientRect.right);
+      const top = topOp
+        ? min(elementClientRect.top, obstacleClientRect.top)
+        : max(elementClientRect.top, obstacleClientRect.top);
+      const bottom = bottomOp
+        ? min(elementClientRect.bottom, obstacleClientRect.bottom)
+        : max(elementClientRect.bottom, obstacleClientRect.bottom);
 
-    const left = leftOp
-      ? min(elementClientRect.left, collidableClientRect.left)
-      : max(elementClientRect.left, collidableClientRect.left);
-    const right = rightOp
-      ? min(elementClientRect.right, collidableClientRect.right)
-      : max(elementClientRect.right, collidableClientRect.right);
-    const top = topOp
-      ? min(elementClientRect.top, collidableClientRect.top)
-      : max(elementClientRect.top, collidableClientRect.top);
-    const bottom = bottomOp
-      ? min(elementClientRect.bottom, collidableClientRect.bottom)
-      : max(elementClientRect.bottom, collidableClientRect.bottom);
-
-    return {
-      x: right - left,
-      y: bottom - top,
-      xDirection,
-      yDirection,
-    };
-  });
+      return {
+        x: right - left,
+        y: bottom - top,
+        xSide,
+        ySide,
+      };
+    });
 }

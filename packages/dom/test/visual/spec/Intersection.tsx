@@ -6,7 +6,7 @@ import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 import {useSize} from '../utils/useSize';
 
-function Collidable({x, y}: {x: number; y: number}) {
+function Obstacle({x, y}: {x: number; y: number}) {
   return (
     <div
       style={{
@@ -16,9 +16,9 @@ function Collidable({x, y}: {x: number; y: number}) {
         background: 'orange',
         padding: 15,
       }}
-      data-floating-ui-collidable
+      data-floating-ui-obstacle
     >
-      Collidable
+      Obstacle
     </div>
   );
 }
@@ -45,12 +45,12 @@ export function Intersection() {
           textAlign: 'center',
           padding: 20,
         }}
-        data-floating-ui-collidable
+        data-floating-ui-obstacle
       >
-        Collidable
+        Obstacle
       </div>
       <h1>Intersection</h1>
-      <p>The floating element should avoid the collidable elements.</p>
+      <p>The floating element should avoid the obstacle elements.</p>
       <div className="container">
         <div style={{display: 'flex', gap: 10}}>
           <div
@@ -66,9 +66,9 @@ export function Intersection() {
         >
           Floating
         </div>
-        <Collidable x={500} y={500} />
-        <Collidable x={550} y={300} />
-        <Collidable x={600} y={600} />
+        <Obstacle x={500} y={500} />
+        <Obstacle x={550} y={300} />
+        <Obstacle x={600} y={600} />
       </div>
 
       <Controls>

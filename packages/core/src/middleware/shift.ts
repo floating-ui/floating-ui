@@ -56,8 +56,8 @@ export const shift = (
     const coords = {x, y};
     const overflow = await detectOverflow(state, detectOverflowOptions);
     const intersections = await detectIntersections(state, {
-      collidables: Array.from(
-        document.querySelectorAll('[data-floating-ui-collidable]')
+      obstacles: Array.from(
+        document.querySelectorAll('[data-floating-ui-obstacle]')
       ).map((el) => el.getBoundingClientRect()),
     });
     const mainAxis = getMainAxisFromPlacement(getSide(placement));
@@ -75,12 +75,10 @@ export const shift = (
       if (intersections.length) {
         if (mainAxis === 'x') {
           mainAxisCoord +=
-            intersections[0].x *
-            (intersections[0].xDirection === 'right' ? 1 : -1);
+            intersections[0].x * (intersections[0].xSide === 'right' ? 1 : -1);
         } else {
           mainAxisCoord +=
-            intersections[0].y *
-            (intersections[0].yDirection === 'bottom' ? 1 : -1);
+            intersections[0].y * (intersections[0].ySide === 'bottom' ? 1 : -1);
         }
       }
 
