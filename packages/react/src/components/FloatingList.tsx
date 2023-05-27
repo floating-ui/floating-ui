@@ -93,7 +93,10 @@ export function FloatingList({
 
   return (
     <FloatingListContext.Provider
-      value={{register, unregister, map, elementsRef, labelsRef}}
+      value={React.useMemo(
+        () => ({register, unregister, map, elementsRef, labelsRef}),
+        [register, unregister, map, elementsRef, labelsRef]
+      )}
     >
       {children}
     </FloatingListContext.Provider>
@@ -132,12 +135,12 @@ export function useListItem({label}: UseListItemProps = {}): {
 
   useLayoutEffect(() => {
     const node = componentRef.current;
-    if (!node) return;
-
-    register(node);
-    return () => {
-      unregister(node);
-    };
+    if (node) {
+      register(node);
+      return () => {
+        unregister(node);
+      };
+    }
   }, [register, unregister]);
 
   useLayoutEffect(() => {
