@@ -2,9 +2,7 @@ import {useFloating as usePosition} from '@floating-ui/react-dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useFloatingTree} from './components/FloatingTree';
-import {useId} from './hooks/useId';
-import {useEffectEvent} from './hooks/utils/useEffectEvent';
+import {useFloatingTree} from '../components/FloatingTree';
 import type {
   ContextData,
   FloatingContext,
@@ -12,9 +10,11 @@ import type {
   ReferenceType,
   UseFloatingOptions,
   UseFloatingReturn,
-} from './types';
-import {createPubSub} from './utils/createPubSub';
-import {isElement} from './utils/is';
+} from '../types';
+import {createPubSub} from '../utils/createPubSub';
+import {isElement} from '../utils/is';
+import {useId} from './useId';
+import {useEffectEvent} from './utils/useEffectEvent';
 
 /**
  * Provides data to position a floating element and context to add interactions.

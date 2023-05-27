@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type {ElementProps} from './types';
+import type {ElementProps} from '../types';
 
 function mergeProps(
   userProps: React.HTMLProps<Element> | undefined,
