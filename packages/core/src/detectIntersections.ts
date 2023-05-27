@@ -49,66 +49,79 @@ export async function detectIntersections(
       : rect
   );
 
+  const elementTop = elementClientRect.top - paddingObject.top;
+  const elementLeft = elementClientRect.left - paddingObject.left;
+  const elementBottom = elementClientRect.bottom + paddingObject.bottom;
+  const elementRight = elementClientRect.right + paddingObject.right;
+  const elementWidth = elementClientRect.width;
+  const elementHeight = elementClientRect.height;
+
   function getIsIntersecting(clientRect: ClientRectObject) {
     const {top, left, bottom, right} = clientRect;
     return (
-      elementClientRect.top - paddingObject.top < bottom &&
-      elementClientRect.bottom + paddingObject.bottom > top &&
-      elementClientRect.left - paddingObject.left < right &&
-      elementClientRect.right + paddingObject.right > left
+      elementTop < bottom &&
+      elementBottom > top &&
+      elementLeft < right &&
+      elementRight > left
     );
   }
 
   return obstacles
     .filter(
       (rect) =>
-        rect.x !== elementClientRect.x &&
-        rect.y !== elementClientRect.y &&
-        rect.width !== elementClientRect.width &&
-        rect.height !== elementClientRect.height &&
-        getIsIntersecting(rect)
+        !(
+          rect.x === elementClientRect.x &&
+          rect.y === elementClientRect.y &&
+          rect.width === elementClientRect.width &&
+          rect.height === elementClientRect.height
+        ) && getIsIntersecting(rect)
     )
     .map((obstacleClientRect) => {
+      const obstacleTop = obstacleClientRect.top;
+      const obstacleLeft = obstacleClientRect.left;
+      const obstacleBottom = obstacleClientRect.bottom;
+      const obstacleRight = obstacleClientRect.right;
+      const obstacleWidth = obstacleClientRect.width;
+      const obstacleHeight = obstacleClientRect.height;
+
       const xSide: Side =
-        elementClientRect.left + elementClientRect.width / 2 <
-        obstacleClientRect.left + obstacleClientRect.width / 2
+        elementLeft + elementWidth / 2 < obstacleLeft + obstacleWidth / 2
           ? 'left'
           : 'right';
       const ySide: Side =
-        elementClientRect.top + elementClientRect.height / 2 <
-        obstacleClientRect.top + obstacleClientRect.height / 2
+        elementTop + elementHeight / 2 < obstacleTop + obstacleHeight / 2
           ? 'top'
           : 'bottom';
 
       const leftOp =
         xSide === 'right'
-          ? elementClientRect.left < obstacleClientRect.left
-          : elementClientRect.left > obstacleClientRect.left;
+          ? elementLeft < obstacleLeft
+          : elementLeft > obstacleLeft;
       const rightOp =
         xSide === 'right'
-          ? elementClientRect.right > obstacleClientRect.right
-          : elementClientRect.right < obstacleClientRect.right;
+          ? elementRight > obstacleRight
+          : elementRight < obstacleRight;
       const topOp =
         ySide === 'bottom'
-          ? elementClientRect.top < obstacleClientRect.top
-          : elementClientRect.top > obstacleClientRect.top;
+          ? elementTop < obstacleTop
+          : elementTop > obstacleTop;
       const bottomOp =
         ySide === 'bottom'
-          ? elementClientRect.bottom > obstacleClientRect.bottom
-          : elementClientRect.bottom < obstacleClientRect.bottom;
+          ? elementBottom > obstacleBottom
+          : elementBottom < obstacleBottom;
 
       const left = leftOp
-        ? min(elementClientRect.left, obstacleClientRect.left)
-        : max(elementClientRect.left, obstacleClientRect.left);
+        ? min(elementLeft, obstacleLeft)
+        : max(elementLeft, obstacleLeft);
       const right = rightOp
-        ? min(elementClientRect.right, obstacleClientRect.right)
-        : max(elementClientRect.right, obstacleClientRect.right);
+        ? min(elementRight, obstacleRight)
+        : max(elementRight, obstacleRight);
       const top = topOp
-        ? min(elementClientRect.top, obstacleClientRect.top)
-        : max(elementClientRect.top, obstacleClientRect.top);
+        ? min(elementTop, obstacleTop)
+        : max(elementTop, obstacleTop);
       const bottom = bottomOp
-        ? min(elementClientRect.bottom, obstacleClientRect.bottom)
-        : max(elementClientRect.bottom, obstacleClientRect.bottom);
+        ? min(elementBottom, obstacleBottom)
+        : max(elementBottom, obstacleBottom);
 
       return {
         x: right - left,
