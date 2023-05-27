@@ -56,7 +56,7 @@
   ],
   "dependencies": {
     "@floating-ui/dom": "^0.1.0",
-    "vue-demi": "^0.13.11"
+    "vue-demi": ">=0.13.0"
   },
   "devDependencies": {
     "@parcel/transformer-vue": "^2.6.0",
