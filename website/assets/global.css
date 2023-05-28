@@ -4,6 +4,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html {
+  @apply scroll-pt-20;
+}
+
 h1,
 h2,
 h3,
@@ -52,13 +56,13 @@ code ::selection {
 .DocSearch-Button,
 .DocSearch-Button:hover,
 .DocSearch-Button:focus {
-  @apply bg-white bg-none text-black outline-none;
-  box-shadow: 0 0 0 1px black;
+  @apply h-8 w-48 bg-white bg-none text-sm font-normal text-black outline-none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .DocSearch-Button:hover,
 .DocSearch-Button:focus {
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 1px black;
 }
 
 .DocSearch-Button .DocSearch-Search-Icon {
@@ -70,7 +74,7 @@ code ::selection {
 }
 
 .DocSearch-Container {
-  background: rgba(10, 10, 20, 0.2);
+  background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(5px) saturate(120%);
 }
 
@@ -115,10 +119,16 @@ code ::selection {
   .DocSearch-Button:hover,
   .DocSearch-Button:focus {
     @apply bg-gray-1000/95 text-purple-200/50 outline-none backdrop-blur-lg;
+    box-shadow: 0 0 0 1px rgba(200, 200, 255, 0.15);
+  }
+
+  .DocSearch-Container {
+    background: rgba(10, 10, 20, 0.2);
   }
 
   .DocSearch-Button:hover {
     @apply text-purple-200/80 shadow-purple-300/30;
+    box-shadow: 0 0 0 1px rgba(200, 200, 255, 0.5);
   }
 
   .DocSearch-Button .DocSearch-Search-Icon {

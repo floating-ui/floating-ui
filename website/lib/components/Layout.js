@@ -12,7 +12,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {useEffect, useRef, useState} from 'react';
-import {ExternalLink, Menu} from 'react-feather';
+import {ExternalLink, GitHub, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../../assets/logo.svg';
@@ -67,16 +67,11 @@ import {WordHighlight} from './WordHighlight';
 
 function PackageVersion({package: {name, version}}) {
   return (
-    <Tooltip
-      noRest
-      label
-      placement="bottom-end"
-      strategy="fixed"
-    >
+    <Tooltip noRest label strategy="fixed">
       <TooltipTrigger asChild>
         <a
           href={`https://npmjs.com/package/@floating-ui/${name}`}
-          className="w-fit rounded-lg bg-blue-500 px-2 py-1 text-sm font-bold text-white transition-colors hover:bg-blue-400 dark:border dark:border-blue-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
+          className="w-fit rounded-md bg-blue-500 px-2 py-1 text-xs font-bold text-white transition-colors hover:bg-blue-400 dark:border dark:border-blue-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -715,7 +710,7 @@ export default function Layout({children, className}) {
             aria-label="Open menu"
             aria-expanded={navOpen}
             onClick={() => setNavOpen(!navOpen)}
-            className="fixed top-1 z-10 -mb-8 mt-4 block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
+            className="fixed top-0 z-50 -mb-8 mt-4 block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
           >
             <Menu />
           </button>
@@ -732,17 +727,16 @@ export default function Layout({children, className}) {
         >
           <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
           <div className="container mx-auto mb-8">
-            <div className="sticky top-0 z-10 bg-white/30 pt-2 backdrop-blur-sm dark:bg-transparent">
+            <div
+              className="sticky top-0 z-10 p-2 backdrop-blur-sm dark:bg-transparent"
+              style={{
+                WebkitMaskImage:
+                  'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 1rem)',
+              }}
+            >
               <Link href="/">
                 <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
               </Link>
-              <div className="relative mr-4 flex flex-col items-stretch py-4 !pb-0 xl:m-0 xl:px-2 xl:pr-6">
-                <DocSearch
-                  appId="0E85PIAI2P"
-                  indexName="floating-ui"
-                  apiKey="51e39a76760916075e22d9b217f4434f"
-                />
-              </div>
               {navOpen && (
                 <button
                   onClick={() => setNavOpen(false)}
@@ -814,15 +808,35 @@ export default function Layout({children, className}) {
             </ul>
           </div>
         </nav>
-        <aside className="fixed right-0 top-0 hidden min-w-[18rem] max-w-[20rem] overflow-y-auto pt-8 [max-height:100vh] xl:block">
+        <aside className="fixed right-0 top-0 hidden min-w-[18rem] max-w-[20rem] overflow-y-auto pt-12 [max-height:100vh] xl:block">
           <nav>
+            <h4 className="text-md ml-6 mb-1 text-gray-500">
+              On this page
+            </h4>
+            <SideNavList anchors={anchorsComputed} hash={hash} />
+          </nav>
+        </aside>
+        <nav className="fixed top-0 z-10 w-full bg-gray-75/70 py-6 pl-16 pr-2 backdrop-blur-sm backdrop-saturate-150 dark:bg-gray-900/70 md:w-[calc(100%_-_16rem)] md:py-4 md:px-8 lg:w-[calc(100%_-_22rem)] lg:py-2">
+          <div className="flex flex-row-reverse items-center justify-end gap-4 pl-4 md:flex-row md:justify-start md:pl-0">
+            <DocSearch
+              appId="0E85PIAI2P"
+              indexName="floating-ui"
+              apiKey="51e39a76760916075e22d9b217f4434f"
+            />
+            <a
+              className="flex items-center gap-1"
+              href="https://github.com/floating-ui/floating-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="grid h-6 w-6 place-items-center rounded-full text-black dark:text-gray-200">
+                <GitHub size={16} />
+              </div>
+              GitHub
+            </a>
             {firstVersionIndex != null && (
               <>
-                <h4 className="text-md ml-6 mb-2 text-gray-500">
-                  Package{secondVersionIndex !== null ? 's' : ''}
-                </h4>
-
-                <div className="mb-4 flex flex-wrap gap-1 px-4">
+                <div className="hidden flex-wrap gap-2 pl-1 lg:flex">
                   {firstVersionIndex !== null && (
                     <PackageVersion
                       package={packages[firstVersionIndex]}
@@ -836,17 +850,11 @@ export default function Layout({children, className}) {
                 </div>
               </>
             )}
-
-            <h4 className="text-md ml-6 mb-1 text-gray-500">
-              On this page
-            </h4>
-
-            <SideNavList anchors={anchorsComputed} hash={hash} />
-          </nav>
-        </aside>
+          </div>
+        </nav>
         <div
           ref={articleRef}
-          className="container my-16 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] md:my-0 md:py-8 lg:px-8 lg:py-16"
+          className="container my-24 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] md:my-0 md:py-20 lg:px-8 lg:py-24"
         >
           <SkipNavContent />
           <article
