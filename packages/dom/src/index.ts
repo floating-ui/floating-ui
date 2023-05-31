@@ -30,6 +30,7 @@ export const computePosition = (
 };
 
 export {autoUpdate} from './autoUpdate';
+export {topLayerOverTransforms} from './middleware/topLayerOverTransforms';
 export {platform} from './platform';
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export {

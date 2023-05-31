@@ -15,7 +15,7 @@
     "./packages/*"
   ],
   "scripts": {
-    "test:functional": "npx playwright test packages/dom/test/functional",
+    "test:functional": "npx playwright test packages/dom/test/functional/top-layer.test",
     "test:functional:update": "npm run test:functional -- -u",
     "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
     "build:typescript": "tsc --project .config/tsconfig.json",

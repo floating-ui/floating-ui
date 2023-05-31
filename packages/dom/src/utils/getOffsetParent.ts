@@ -1,12 +1,7 @@
 import {getComputedStyle} from './getComputedStyle';
-import {getParentNode} from './getParentNode';
+import {getContainingBlock} from './getContainingBlock';
 import {getWindow} from './getWindow';
-import {
-  isContainingBlock,
-  isHTMLElement,
-  isLastTraversableNode,
-  isTableElement,
-} from './is';
+import {isContainingBlock, isHTMLElement, isTableElement} from './is';
 import {getNodeName} from './node';
 
 type Polyfill = (element: HTMLElement) => Element | null;
@@ -27,20 +22,6 @@ function getTrueOffsetParent(
   }
 
   return element.offsetParent;
-}
-
-function getContainingBlock(element: Element) {
-  let currentNode: Node | null = getParentNode(element);
-
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    if (isContainingBlock(currentNode)) {
-      return currentNode;
-    } else {
-      currentNode = getParentNode(currentNode);
-    }
-  }
-
-  return null;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,

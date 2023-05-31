@@ -169,6 +169,8 @@ declare const size: (
   options?: Partial<SizeOptions & DetectOverflowOptions>
 ) => Middleware;
 
+declare const topLayerOverTransforms: (options?: MiddlewareState) => Middleware;
+
 /**
  * Provides data to position an inner element of the floating element so that it
  * appears centered to the reference element.
@@ -201,7 +203,16 @@ declare const detectOverflow: (
   options?: Partial<DetectOverflowOptions>
 ) => Promise<SideObject>;
 
-export {arrow, autoPlacement, detectOverflow, flip, hide, shift, size};
+export {
+  arrow,
+  autoPlacement,
+  detectOverflow,
+  flip,
+  hide,
+  shift,
+  size,
+  topLayerOverTransforms,
+};
 export {computePosition} from './';
 export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
 export {platform} from './platform';

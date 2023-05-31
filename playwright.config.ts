@@ -6,6 +6,7 @@ const config: PlaywrightTestConfig = {
   use: {
     launchOptions: {
       ignoreDefaultArgs: ['--hide-scrollbars'],
+      args: ['--enable-experimental-web-platform-features'],
     },
   },
   webServer: {

@@ -31,6 +31,7 @@ import {ShadowDOM} from './spec/ShadowDOM';
 import {Shift} from './spec/Shift';
 import {Size} from './spec/Size';
 import {Table} from './spec/Table';
+import {TopLayer} from './spec/TopLayer';
 import {Transform} from './spec/Transform';
 import {VirtualElement} from './spec/VirtualElement';
 import {New} from './utils/New';
@@ -51,6 +52,7 @@ const ROUTES = [
   {path: 'offset', component: Offset},
   {path: 'hide', component: Hide},
   {path: 'autoPlacement', component: AutoPlacement},
+  {path: 'topLayer', component: TopLayer},
   {path: 'inline', component: Inline},
   {path: 'AutoUpdate', component: AutoUpdate},
   {path: 'shadow-DOM', component: ShadowDOM},
