@@ -32,6 +32,7 @@ export const computePosition = (
 export {autoUpdate} from './autoUpdate';
 export {platform} from './platform';
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
+export {getRectRelativeToOffsetParent} from './utils/getRectRelativeToOffsetParent';
 export {
   arrow,
   autoPlacement,
