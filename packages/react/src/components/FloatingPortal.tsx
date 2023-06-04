@@ -4,6 +4,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 import {FloatingContext} from '../types';
+import {isElement} from '../utils/is';
 import {
   disableFocusInside,
   enableFocusInside,
@@ -32,7 +33,7 @@ export function useFloatingPortalNode({
   root,
 }: {
   id?: string;
-  root?: HTMLElement | null;
+  root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
 } = {}) {
   const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
 
@@ -69,7 +70,9 @@ export function useFloatingPortalNode({
       existingIdRoot.appendChild(subRoot);
       setPortalNode(subRoot);
     } else {
-      let container = portalContext?.portalNode || root || document.body;
+      let container = root || portalContext?.portalNode;
+      if (container && !isElement(container)) container = container.current;
+      container = container || document.body;
 
       let idWrapper: HTMLDivElement | null = null;
       if (id) {
@@ -96,7 +99,7 @@ export function useFloatingPortalNode({
 interface FloatingPortalProps {
   children?: React.ReactNode;
   id?: string;
-  root?: HTMLElement | null;
+  root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
   preserveTabOrder?: boolean;
 }
 
