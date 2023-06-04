@@ -79,3 +79,7 @@ export function isMouseLikePointerType(
   }
   return values.includes(pointerType);
 }
+
+export function isReactEvent(event: any): event is React.SyntheticEvent {
+  return 'nativeEvent' in event;
+}

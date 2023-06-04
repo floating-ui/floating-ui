@@ -194,3 +194,44 @@ test('domReference refers to externally synchronized `reference`', async () => {
 
   expect(screen.getByRole('dialog')).toBeInTheDocument();
 });
+
+test('onOpenChange is passed an event as second param', async () => {
+  const onOpenChange = jest.fn();
+
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange(open, event) {
+        onOpenChange(open, event);
+        setIsOpen(open);
+      },
+    });
+
+    const hover = useHover(context, {
+      move: false,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()} />
+        {isOpen && <div ref={refs.setFloating} {...getFloatingProps()} />}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  await userEvent.hover(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(onOpenChange.mock.calls[0][0]).toBe(true);
+  expect(onOpenChange.mock.calls[0][1]).toBeInstanceOf(MouseEvent);
+
+  await userEvent.unhover(screen.getByRole('button'));
+
+  expect(onOpenChange.mock.calls[1][0]).toBe(false);
+  expect(onOpenChange.mock.calls[1][1]).toBeInstanceOf(MouseEvent);
+});

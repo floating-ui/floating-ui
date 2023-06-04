@@ -110,14 +110,12 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           if (
             event.type === 'focus' &&
             dataRef.current.openEvent?.type === 'mousedown' &&
-            dataRef.current.openEvent &&
             isEventTargetWithin(dataRef.current.openEvent, domReference)
           ) {
             return;
           }
 
-          dataRef.current.openEvent = event.nativeEvent;
-          onOpenChange(true);
+          onOpenChange(true, event.nativeEvent);
         },
         onBlur(event) {
           blockFocusRef.current = false;
@@ -143,7 +141,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
               return;
             }
 
-            onOpenChange(false);
+            onOpenChange(false, event.nativeEvent);
           });
         },
       },

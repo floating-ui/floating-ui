@@ -13,6 +13,7 @@ import {
   getWindow,
   isElement,
   isHTMLElement,
+  isReactEvent,
   isVirtualClick,
   isVirtualPointerEvent,
 } from '../utils/is';
@@ -139,7 +140,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         },
       });
 
-      onOpenChange(false);
+      onOpenChange(false, isReactEvent(event) ? event.nativeEvent : event);
     }
   );
 
@@ -231,7 +232,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
     });
 
-    onOpenChange(false);
+    onOpenChange(false, event);
   });
 
   React.useEffect(() => {
@@ -242,8 +243,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     dataRef.current.__escapeKeyBubbles = escapeKeyBubbles;
     dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
-    function onScroll() {
-      onOpenChange(false);
+    function onScroll(event: Event) {
+      onOpenChange(false, event);
     }
 
     const doc = getDocument(floating);
@@ -316,13 +317,15 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     return {
       reference: {
         onKeyDown: closeOnEscapeKeyDown,
-        [bubbleHandlerKeys[referencePressEvent]]: () => {
+        [bubbleHandlerKeys[referencePressEvent]]: (
+          event: React.SyntheticEvent
+        ) => {
           if (referencePress) {
             events.emit('dismiss', {
               type: 'referencePress',
               data: {returnFocus: false},
             });
-            onOpenChange(false);
+            onOpenChange(false, event.nativeEvent);
           }
         },
       },
