@@ -1,12 +1,16 @@
 # Virtual Elements
 
-You can position a floating element relative to a virtual element
-instead of a real one. This enables things like positioning
-context menus or following the cursor.
+A floating element can be positioned relative to a **virtual**
+element instead of a real one.
+
+<CircleImage src="/virtual-elements.jpg" />
+
+This enables features such as positioning context menus,
+following the cursor, range selections, etc.
 
 ## Usage
 
-A virtual element is a plain object that has a
+Them most basic virtual element is a plain object that has a
 `getBoundingClientRect{:.function}` method, which mimics a real
 element's one:
 

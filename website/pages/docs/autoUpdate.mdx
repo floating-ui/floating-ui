@@ -1,17 +1,19 @@
 # autoUpdate
 
-The floating element can detach from the reference element if the
-user scrolls or resizes the screen, so its position needs to be
-updated again to ensure it stays anchored.
+The floating element can detach from its reference element after
+the initial positioning, as `computePosition(){:js}` is discrete
+and runs only once.
+
+<CircleImage src="/autoUpdate.jpg" />
+
+To ensure the floating element remains anchored to its reference
+element, such as when scrolling and resizing the screen, its
+position needs to be continually updated when necessary.
 
 To solve this, `autoUpdate(){:js}` adds listeners that will
 automatically call an update function which invokes
 `computePosition(){:js}` when necessary. Updates typically take
 only ~1ms.
-
-```js
-autoUpdate(referenceEl, floatingEl, update, options);
-```
 
 Only call this function when the floating element is open on the
 screen.

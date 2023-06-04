@@ -58,6 +58,7 @@ import {
   TooltipTrigger,
 } from '../components/Tooltip';
 import {Chrome} from './Chrome';
+import {CircleImage} from './CircleImage';
 import Collapsible from './Collapsible';
 import {Floating} from './Floating';
 import Navigation from './Navigation';
@@ -403,6 +404,7 @@ const components = {
   Chrome,
   Notice,
   WordHighlight,
+  CircleImage,
   h2: (props) => <Heading level={2} {...props} />,
   h3: (props) => <Heading level={3} {...props} />,
   h4: (props) => <Heading level={4} {...props} />,

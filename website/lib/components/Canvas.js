@@ -186,7 +186,7 @@ export function Canvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="bg-white border border-red-500 touch-none w-full h-[20rem]"
+      className="h-[20rem] w-full touch-none rounded bg-white shadow"
     />
   );
 }

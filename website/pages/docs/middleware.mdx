@@ -1,11 +1,21 @@
 # Middleware
 
 Middleware are plain objects that modify the positioning
-coordinates in some fashion, or provide useful data for the
-consumer to use.
+coordinates in some fashion, or provide useful data for
+rendering, as calculated by the positioning cycle.
 
-`computePosition(){:js}` starts with basic positioning via
-`placement{:.objectKey}`:
+<CircleImage src="/middleware.jpg" />
+
+This allows you to customize the behavior of the positioning and
+be as granular as you want, adding your own custom logic.
+
+`computePosition(){:js}` starts with initial positioning via
+`placement{:.objectKey}` — then middleware are executed as an
+in-between "middle" step of the initial placement computation and
+eventual return of data for rendering once the promise has
+resolved.
+
+Each middleware is executed in order, like a stack:
 
 ```js
 computePosition(referenceEl, floatingEl, {
@@ -13,10 +23,6 @@ computePosition(referenceEl, floatingEl, {
   middleware: [],
 });
 ```
-
-Middleware are executed as an in-between "middle" step of the
-basic placement computation and eventual return of data to the
-caller.
 
 ## Example
 

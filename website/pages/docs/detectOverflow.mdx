@@ -1,17 +1,17 @@
 # detectOverflow
 
-This function computes the overflow offsets of either the
-reference or floating element relative to any clipping
+A utility function that computes the overflow offsets of either
+the reference or floating element relative to any clipping
 boundaries.
 
-Almost every middleware provided by the library uses this
-function, making it useful for your own custom middleware.
+<CircleImage src="/detectOverflow.jpg" />
 
-The function takes two arguments and returns a promise:
+A clipping boundary is one that causes child elements inside it
+to be clipped if they overflow it.
 
-```js
-await detectOverflow(state, options);
-```
+Visibility optimizer middleware use this function for **collision
+detection**, making it useful for your own custom middleware that
+perform visibility optimization.
 
 ## Usage
 

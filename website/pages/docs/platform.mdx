@@ -2,10 +2,20 @@ import {Canvas} from '../../lib/components/Canvas';
 
 # Platform
 
-Floating UI works on any platform that can run JavaScript, as
-long as it has adequate measurement APIs for elements. Possible
-platforms other than the DOM include React Native, Canvas/WebGL,
-etc.
+Floating UI's core is essentially a bunch of mathematical
+calculations.
+
+<CircleImage src="/platform.jpg" />
+
+These calculations are pure and agnostic, allowing Floating UI to
+work on any platform that can execute JavaScript.
+
+To make it work with a given platform, methods are used to allow
+it to hook into measurement APIs, for instance, to measure the
+bounding box of a given element.
+
+Possible platforms other than the DOM include React Native,
+Canvas/WebGL, etc.
 
 This is Floating UI running in a pure `<canvas />{:js}` element!
 
