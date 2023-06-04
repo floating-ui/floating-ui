@@ -1,9 +1,13 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+import * as React from 'react';
 
 import {FloatingPortal, useFloating} from '../../src';
 
-function App(props: {root?: HTMLElement | null; id?: string}) {
+function App(props: {
+  root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
+  id?: string;
+}) {
   const [open, setOpen] = useState(false);
   const {refs} = useFloating({
     open,
@@ -65,4 +69,17 @@ test('allows custom roots', async () => {
   expect(parent?.hasAttribute('data-floating-ui-portal')).toBe(true);
   expect(parent?.parentElement).toBe(customRoot);
   customRoot.remove();
+});
+
+test('allows refs as roots', async () => {
+  const el = document.createElement('div');
+  document.body.appendChild(el);
+  const ref = {current: el};
+  render(<App root={ref} />);
+  fireEvent.click(screen.getByTestId('reference'));
+  await act(async () => {});
+  const parent = screen.getByTestId('floating').parentElement;
+  expect(parent?.hasAttribute('data-floating-ui-portal')).toBe(true);
+  expect(parent?.parentElement).toBe(el);
+  document.body.removeChild(el);
 });
