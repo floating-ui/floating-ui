@@ -124,9 +124,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    function onLeave() {
+    function onLeave(event: MouseEvent) {
       if (isHoverOpen()) {
-        onOpenChange(false);
+        onOpenChange(false, event);
       }
     }
 
@@ -146,7 +146,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   ]);
 
   const closeWithDelay = React.useCallback(
-    (runElseBranch = true) => {
+    (event: Event, runElseBranch = true) => {
       const closeDelay = getDelay(
         delayRef.current,
         'close',
@@ -154,10 +154,13 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => onOpenChange(false), closeDelay);
+        timeoutRef.current = setTimeout(
+          () => onOpenChange(false, event),
+          closeDelay
+        );
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
-        onOpenChange(false);
+        onOpenChange(false, event);
       }
     },
     [delayRef, onOpenChange]
@@ -202,8 +205,6 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         return;
       }
 
-      dataRef.current.openEvent = event;
-
       const openDelay = getDelay(
         delayRef.current,
         'open',
@@ -212,10 +213,10 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
       if (openDelay) {
         timeoutRef.current = setTimeout(() => {
-          onOpenChange(true);
+          onOpenChange(true, event);
         }, openDelay);
       } else {
-        onOpenChange(true);
+        onOpenChange(true, event);
       }
     }
 
@@ -243,7 +244,8 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           onClose() {
             clearPointerEvents();
             cleanupMouseMoveHandler();
-            closeWithDelay();
+            // Should the event expose that it was closed by `safePolygon`?
+            closeWithDelay(event);
           },
         });
 
@@ -265,7 +267,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           ? !contains(floating, event.relatedTarget as Element | null)
           : true;
       if (shouldClose) {
-        closeWithDelay();
+        closeWithDelay(event);
       }
     }
 
@@ -285,7 +287,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         onClose() {
           clearPointerEvents();
           cleanupMouseMoveHandler();
-          closeWithDelay();
+          closeWithDelay(event);
         },
       })(event);
     }
@@ -405,7 +407,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       reference: {
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
-        onMouseMove() {
+        onMouseMove(event) {
           if (open || restMs === 0) {
             return;
           }
@@ -413,7 +415,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           clearTimeout(restTimeoutRef.current);
           restTimeoutRef.current = setTimeout(() => {
             if (!blockMouseMoveRef.current) {
-              onOpenChange(true);
+              onOpenChange(true, event.nativeEvent);
             }
           }, restMs);
         },
@@ -422,14 +424,14 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         onMouseEnter() {
           clearTimeout(timeoutRef.current);
         },
-        onMouseLeave() {
+        onMouseLeave(event) {
           events.emit('dismiss', {
             type: 'mouseLeave',
             data: {
               returnFocus: false,
             },
           });
-          closeWithDelay(false);
+          closeWithDelay(event.nativeEvent, false);
         },
       },
     };

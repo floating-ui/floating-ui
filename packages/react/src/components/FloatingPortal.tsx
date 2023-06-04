@@ -208,7 +208,7 @@ export function FloatingPortal({
                 focusManagerState?.refs.domReference.current;
               nextTabbable?.focus();
               focusManagerState?.closeOnFocusOut &&
-                focusManagerState?.onOpenChange(false);
+                focusManagerState?.onOpenChange(false, event.nativeEvent);
             }
           }}
         />

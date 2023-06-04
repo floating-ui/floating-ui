@@ -240,7 +240,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           relatedTarget !== previouslyFocusedElementRef.current
         ) {
           preventReturnFocusRef.current = true;
-          onOpenChange(false);
+          onOpenChange(false, event);
         }
       });
     }
@@ -484,7 +484,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     return visuallyHiddenDismiss && modal ? (
       <VisuallyHiddenDismiss
         ref={location === 'start' ? startDismissButtonRef : endDismissButtonRef}
-        onClick={() => onOpenChange(false)}
+        onClick={(event) => onOpenChange(false, event.nativeEvent)}
       >
         {typeof visuallyHiddenDismiss === 'string'
           ? visuallyHiddenDismiss

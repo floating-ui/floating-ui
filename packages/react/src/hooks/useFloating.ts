@@ -33,7 +33,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
-  const onOpenChange = useEffectEvent(unstable_onOpenChange);
+  const onOpenChange = useEffectEvent((open: boolean, event?: Event) => {
+    if (open) {
+      dataRef.current.openEvent = event;
+    }
+    unstable_onOpenChange?.(open, event);
+  });
 
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});

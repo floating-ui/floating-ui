@@ -114,7 +114,7 @@ export interface FloatingEvents {
 }
 
 export interface ContextData {
-  openEvent?: MouseEvent | PointerEvent | FocusEvent;
+  openEvent?: Event;
   /** @deprecated use `onTypingChange` prop in `useTypeahead` */
   typing?: boolean;
   [key: string]: any;
@@ -124,7 +124,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> =
   Prettify<
     Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> & {
       open: boolean;
-      onOpenChange: (open: boolean) => void;
+      onOpenChange: (open: boolean, event?: Event) => void;
       events: FloatingEvents;
       dataRef: React.MutableRefObject<ContextData>;
       nodeId: string | undefined;
@@ -172,6 +172,6 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends UsePositionOptions<RT> {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChange: (open: boolean, event?: Event) => void;
   nodeId: string;
 }

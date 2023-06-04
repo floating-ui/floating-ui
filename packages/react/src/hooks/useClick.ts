@@ -78,15 +78,13 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
                 ? dataRef.current.openEvent.type === 'mousedown'
                 : true)
             ) {
-              onOpenChange(false);
+              onOpenChange(false, event.nativeEvent);
             }
           } else {
             // Prevent stealing focus from the floating element
             event.preventDefault();
-            onOpenChange(true);
+            onOpenChange(true, event.nativeEvent);
           }
-
-          dataRef.current.openEvent = event.nativeEvent;
         },
         onClick(event) {
           if (eventOption === 'mousedown' && pointerTypeRef.current) {
@@ -108,13 +106,11 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
                 ? dataRef.current.openEvent.type === 'click'
                 : true)
             ) {
-              onOpenChange(false);
+              onOpenChange(false, event.nativeEvent);
             }
           } else {
-            onOpenChange(true);
+            onOpenChange(true, event.nativeEvent);
           }
-
-          dataRef.current.openEvent = event.nativeEvent;
         },
         onKeyDown(event) {
           pointerTypeRef.current = undefined;
@@ -136,10 +132,10 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
           if (event.key === 'Enter') {
             if (open) {
               if (toggle) {
-                onOpenChange(false);
+                onOpenChange(false, event.nativeEvent);
               }
             } else {
-              onOpenChange(true);
+              onOpenChange(true, event.nativeEvent);
             }
           }
         },
@@ -157,10 +153,10 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
             didKeyDownRef.current = false;
             if (open) {
               if (toggle) {
-                onOpenChange(false);
+                onOpenChange(false, event.nativeEvent);
               }
             } else {
-              onOpenChange(true);
+              onOpenChange(true, event.nativeEvent);
             }
           }
         },
