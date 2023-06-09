@@ -83,7 +83,7 @@ function HomePage() {
           more
         </title>
       </Head>
-      <header className="relative overflow-hidden bg-gray-900 pb-16 font-satoshi">
+      <header className="font-satoshi relative overflow-hidden bg-gray-900 pb-16">
         <div className="container mx-auto max-w-screen-xl bg-[#202028] pt-16 text-center">
           <svg
             ref={logoRef}
@@ -261,7 +261,7 @@ function HomePage() {
         </div>
       </header>
       <main className="relative">
-        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+        <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
           <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Smart Anchor Positioning
           </h2>
@@ -281,7 +281,7 @@ function HomePage() {
           <Virtual />
         </div>
 
-        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+        <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
           <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Interactions For React
           </h2>
@@ -490,7 +490,7 @@ function HomePage() {
           <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Tree-shakeable & Platform-agnostic
           </h2>
-          <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
+          <p className="font-satoshi prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             In addition to official bindings for the web, React
             DOM, React Native, and Vue, Floating UI also supports{' '}
             <code className="p-0">
@@ -567,7 +567,7 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="container mx-auto max-w-screen-xl px-4 font-satoshi md:px-8">
+        <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
           <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Support Floating UI
           </h2>
@@ -593,7 +593,7 @@ function HomePage() {
           <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Install
           </h2>
-          <p className="prose mb-8 text-left font-satoshi text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
+          <p className="font-satoshi prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Start playing via your package manager or CDN.
           </p>
 

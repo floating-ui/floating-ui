@@ -9,9 +9,9 @@ import {useEffect} from 'react';
 
 import Layout from '../lib/components/Layout';
 
-const Satoshi = localFont({
-  src: '../assets/Satoshi-Variable.woff2',
-  variable: '--font-satoshi',
+const VariableFont = localFont({
+  src: '../assets/Satoshi-Variable.ttf',
+  variable: '--font-variable',
 });
 
 function MyApp({Component, pageProps}) {
@@ -23,7 +23,7 @@ function MyApp({Component, pageProps}) {
   }, []);
 
   return (
-    <Wrapper className={Satoshi.variable}>
+    <Wrapper className={VariableFont.variable}>
       <Component {...pageProps} />
     </Wrapper>
   );

@@ -31,9 +31,22 @@ const Reference = forwardRef(({className, children}, ref) => {
   );
 });
 
-function GridItem({title, description, chrome, demoLink}) {
+function GridItem({
+  title,
+  description,
+  chrome,
+  demoLink,
+  hidden,
+}) {
   return (
-    <div className="relative flex flex-col justify-between overflow-x-hidden bg-gray-50 px-4 py-8 shadow dark:bg-gray-700 sm:p-8 md:rounded-lg">
+    <div
+      className={classNames(
+        'relative flex-col justify-between overflow-x-hidden bg-gray-50 px-4 py-8 shadow dark:bg-gray-700 sm:p-8 md:rounded-lg lg:flex',
+        {
+          hidden: hidden,
+        }
+      )}
+    >
       <div className="overflow-hidden">
         <h3 className="mb-2 text-3xl font-bold">{title}</h3>
         <p className="mb-6 text-xl">{description}</p>
@@ -470,6 +483,7 @@ export function Virtual() {
       titleClass="text-cyan-600 dark:text-cyan-300"
       description="Anchor relative to any coordinates, such as your mouse cursor."
       demoLink="https://codesandbox.io/s/fancy-worker-xkr8xl?file=/src/index.js"
+      hidden
       chrome={
         <Chrome label="Move your mouse" shadow={false}>
           <div

@@ -57,7 +57,7 @@ export const Chrome = ({
             style={{background: '#61c653'}}
           />
         </div>
-        <div className="flex h-12 items-center justify-center font-bold">
+        <div className="flex h-12 items-center justify-center font-semibold">
           {label}
         </div>
       </div>

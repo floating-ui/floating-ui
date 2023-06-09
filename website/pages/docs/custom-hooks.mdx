@@ -16,27 +16,38 @@ thing.
   repo](https://github.com/floating-ui/floating-ui)!
 </Notice>
 
-```js
+```ts
 const useCustomLogic = (
   context: FloatingContext
 ): ElementProps => {
-  // Note: all 3 of these properties are optional.
-  return useMemo(
+  const referenceProps = useMemo(
     () => ({
-      reference: {
-        // React.HTMLProps
-        onClick() {
-          console.log('clicked!');
-        },
-      },
-      floating: {
-        // React.HTMLProps
-      },
-      item: {
-        // React.HTMLProps
-      },
+      // React.HTMLProps
+      onClick: () => console.log('clicked'),
     }),
     []
+  );
+  const floatingProps = useMemo(
+    () => ({
+      // React.HTMLProps
+    }),
+    []
+  );
+  const itemProps = useMemo(
+    () => ({
+      // React.HTMLProps
+    }),
+    []
+  );
+
+  // All 3 of these properties are optional.
+  return useMemo(
+    () => ({
+      reference: referenceProps,
+      floating: floatingProps,
+      item: itemProps,
+    }),
+    [referenceProps, floatingProps, itemProps]
   );
 };
 ```

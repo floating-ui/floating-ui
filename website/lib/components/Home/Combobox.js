@@ -6,6 +6,7 @@ import {
   size,
   useDismiss,
   useFloating,
+  useFocus,
   useInteractions,
   useListNavigation,
   useRole,
@@ -195,7 +196,7 @@ export function ComboboxDemo() {
 
   const listRef = useRef([]);
 
-  const {x, y, strategy, context, refs} = useFloating({
+  const {refs, floatingStyles, context} = useFloating({
     open,
     whileElementsMounted: autoUpdate,
     onOpenChange: setOpen,
@@ -221,6 +222,10 @@ export function ComboboxDemo() {
   });
 
   const role = useRole(context, {role: 'listbox'});
+  const focus = useFocus(context, {
+    enabled: inputValue.length > 0,
+    keyboardOnly: false,
+  });
   const dismiss = useDismiss(context);
   const navigation = useListNavigation(context, {
     listRef,
@@ -232,7 +237,7 @@ export function ComboboxDemo() {
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} =
-    useInteractions([role, dismiss, navigation]);
+    useInteractions([role, dismiss, navigation, focus]);
 
   function onChange(event) {
     const value = event.target.value;
@@ -282,17 +287,13 @@ export function ComboboxDemo() {
           context={context}
           initialFocus={-1}
           visuallyHiddenDismiss
+          returnFocus={false}
         >
           <div
             ref={refs.setFloating}
             className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
-            {...getFloatingProps({
-              style: {
-                position: strategy,
-                left: x ?? 0,
-                top: y ?? 0,
-              },
-            })}
+            style={floatingStyles}
+            {...getFloatingProps()}
           >
             {items.length === 0 && (
               <p
@@ -315,7 +316,6 @@ export function ComboboxDemo() {
                   onClick() {
                     setInputValue(item);
                     setOpen(false);
-                    refs.domReference.current?.focus();
                   },
                 })}
                 active={activeIndex === index}

@@ -121,7 +121,7 @@ export function Floating({
             ? 'hidden'
             : undefined,
         transition: moveTransition
-          ? 'transform 0.65s cubic-bezier(0.22, 1, 0.36, 1)'
+          ? 'transform 0.65s cubic-bezier(0.43, 0.33, 0.14, 1.01)'
           : undefined,
       }}
     >

@@ -3,7 +3,10 @@ import {
   autoUpdate,
   FloatingPortal as FloatingPortalComponent,
   offset,
+  useClick,
+  useDismiss,
   useFloating,
+  useInteractions,
   useTransitionStyles,
 } from '@floating-ui/react';
 import {MDXProvider} from '@mdx-js/react';
@@ -548,7 +551,6 @@ export default function Layout({children, className}) {
   const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
-  const navRef = useRef();
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(
     asPath.slice(asPath.indexOf('#'))
@@ -698,6 +700,29 @@ export default function Layout({children, className}) {
     firstVersionIndex = 5;
   }
 
+  const {refs, context} = useFloating({
+    open: navOpen,
+    onOpenChange: setNavOpen,
+  });
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    click,
+    dismiss,
+  ]);
+
+  const {isMounted, styles} = useTransitionStyles(context, {
+    duration: {open: 400, close: 100},
+    initial: {
+      transform: 'translateX(-100%)',
+    },
+    common: {
+      transitionTimingFunction: navOpen
+        ? 'cubic-bezier(0.22, 1, 0.36, 1)'
+        : 'ease-in',
+    },
+  });
+
   return (
     <MDXProvider components={components}>
       <Head>
@@ -719,23 +744,23 @@ export default function Layout({children, className}) {
       >
         <div className="container pl-4">
           <button
+            ref={refs.setReference}
             aria-label="Open menu"
             aria-expanded={navOpen}
-            onClick={() => setNavOpen(!navOpen)}
             className="fixed top-0 z-50 -mb-8 mt-4 block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
+            {...getReferenceProps()}
           >
             <Menu />
           </button>
         </div>
         <nav
+          ref={refs.setFloating}
           className={cn(
-            'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 shadow will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 lg:w-72 xl:w-[22rem]',
-            'font-satoshi',
-            {
-              hidden: !navOpen,
-            }
+            'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
+            {hidden: !isMounted}
           )}
-          ref={navRef}
+          style={styles}
+          {...getFloatingProps()}
         >
           <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
           <div className="container mx-auto mb-8">
@@ -752,7 +777,7 @@ export default function Layout({children, className}) {
               {navOpen && (
                 <button
                   onClick={() => setNavOpen(false)}
-                  className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow"
+                  className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow md:hidden"
                   aria-label="Close"
                 >
                   <span className="relative top-[-1px]">×</span>
@@ -829,7 +854,7 @@ export default function Layout({children, className}) {
           </nav>
         </aside>
         <nav className="fixed top-0 z-10 w-full bg-gray-75/70 py-6 pl-16 pr-2 backdrop-blur-sm backdrop-saturate-150 dark:bg-gray-900/70 md:w-[calc(100%_-_16rem)] md:py-4 md:px-8 lg:w-[calc(100%_-_22rem)] lg:py-2">
-          <div className="flex flex-row-reverse items-center justify-end gap-4 pl-4 md:flex-row md:justify-start md:pl-0">
+          <div className="mr-2 flex flex-row-reverse items-center justify-end gap-4 pl-4 md:mr-0 md:flex-row md:justify-start md:pl-0">
             <DocSearch
               appId="0E85PIAI2P"
               indexName="floating-ui"

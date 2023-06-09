@@ -3,14 +3,14 @@ import {ArrowLeft, ArrowRight} from 'react-feather';
 
 export default function Navigation({back, next}) {
   return (
-    <div className="flex text-xl lg:text-xl mt-16 font-bold">
+    <div className="mt-16 flex text-xl font-bold lg:text-xl">
       {back ? (
         <Link
           href={back.url}
-          className="break-words basis-auto lg:basis-0 flex-1 gap-2 items-center py-12 px-2 lg:px-4 lg:hover:bg-gray-100 dark:lg:hover:bg-purple-300/10 rounded overflow-ellipsis overflow-hidden"
+          className="flex-1 basis-auto items-center gap-2 overflow-hidden overflow-ellipsis break-words rounded py-12 px-2 lg:basis-0 lg:px-4 lg:hover:bg-gray-100 dark:lg:hover:bg-purple-300/10"
           aria-label="Back"
         >
-          <div className="flex lg:hidden text-sm items-center text-right mb-2 text-gray-500">
+          <div className="mb-2 flex items-center text-right text-sm text-gray-500 lg:hidden">
             <ArrowLeft className="inline text-gray-500" />
             Back
           </div>
@@ -18,7 +18,7 @@ export default function Navigation({back, next}) {
             <span className="hidden lg:block">
               <ArrowLeft className="min-width-[24] text-rose-600 dark:text-rose-300" />
             </span>
-            <span className="dark:text-gray-50 truncate">
+            <span className="truncate dark:text-gray-50">
               {back.title}
             </span>
           </div>
@@ -29,15 +29,15 @@ export default function Navigation({back, next}) {
       {next ? (
         <Link
           href={next.url}
-          className="break-words basis-auto lg:basis-0 flex-1 gap-2 justify-end items-center py-12 px-2 lg:px-4 lg:hover:bg-gray-100 dark:lg:hover:bg-purple-300/10 rounded overflow-ellipsis overflow-hidden"
+          className="flex-1 basis-auto items-center justify-end gap-2 overflow-hidden overflow-ellipsis break-words rounded py-12 px-2 lg:basis-0 lg:px-4 lg:hover:bg-gray-100 dark:lg:hover:bg-purple-300/10"
           aria-label="Next"
         >
-          <div className="flex justify-end lg:hidden text-sm items-center text-right mb-2 text-gray-500">
+          <div className="mb-2 flex items-center justify-end text-right text-sm text-gray-500 lg:hidden">
             Next
             <ArrowRight className="min-width-[24] inline text-gray-500" />
           </div>
-          <div className="flex items-center gap-4 justify-end">
-            <span className="dark:text-gray-50 truncate">
+          <div className="flex items-center justify-end gap-4">
+            <span className="truncate dark:text-gray-50">
               {next.title}
             </span>{' '}
             <span className="hidden lg:block">

@@ -24,9 +24,23 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        satoshi: ['var(--font-satoshi)', ...fontFamily.sans],
+        variable: ['var(--font-variable)', ...fontFamily.sans],
       },
       keyframes: {
+        'blur-in': {
+          '0%': {
+            filter: 'brightness(1) blur(10px)',
+            transform: 'scale(0.94)',
+          },
+          '10%': {
+            filter: 'brightness(1.15) blur(5px)',
+            transform: 'scale(0.98)',
+          },
+          '100%': {
+            filter: 'brightness(1) blur(0)',
+            transform: 'scale(1)',
+          },
+        },
         float: {
           '0%, 100%': {
             transform: 'rotate(-1deg) translate(-0.1rem, 1rem)',
@@ -55,6 +69,7 @@ module.exports = {
         },
       },
       animation: {
+        'blur-in': 'blur-in 1s cubic-bezier(0, 0.55, 0.45, 1)',
         float: 'float 8s ease infinite',
         string: 'string 0.25s ease-in-out infinite',
       },

@@ -2,6 +2,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+  font-synthesis: none;
 }
 
 html {
@@ -14,7 +15,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply font-satoshi;
+  @apply font-variable;
 }
 
 .font-code,

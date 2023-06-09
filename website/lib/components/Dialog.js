@@ -129,32 +129,49 @@ export const DialogContent = React.forwardRef(
       propRef,
     ]);
 
-    const {isMounted, styles} = useTransitionStyles(
+    const backdropTransition = useTransitionStyles(
+      floatingContext,
+      {duration: {open: 200, close: 100}}
+    );
+
+    const floatingTransition = useTransitionStyles(
       floatingContext,
       {
-        duration: {open: 400},
+        duration: {open: 400, close: 100},
+        initial: {
+          opacity: 0,
+          transform: 'translateY(0.25rem)',
+        },
+        close: {
+          opacity: 0,
+          transform: 'scale(0.95)',
+        },
       }
     );
 
     return (
       <FloatingPortal>
-        {isMounted && (
-          <FloatingOverlay
-            className="bg-gray-1000/60 backdrop-blur-sm grid place-items-center text-black"
-            lockScroll
-          >
-            <FloatingFocusManager context={floatingContext}>
-              <div
-                ref={ref}
-                aria-labelledby={context.labelId}
-                aria-describedby={context.descriptionId}
-                style={styles}
-                {...context.getFloatingProps(props)}
-              >
-                {props.children}
-              </div>
-            </FloatingFocusManager>
-          </FloatingOverlay>
+        {backdropTransition.isMounted && (
+          <>
+            <FloatingOverlay
+              className="grid place-items-center bg-gray-1000/60 text-black backdrop-blur-sm"
+              lockScroll
+              style={backdropTransition.styles}
+            />
+            <div className="fixed top-0 right-0 left-0 bottom-0 grid place-items-center">
+              <FloatingFocusManager context={floatingContext}>
+                <div
+                  ref={ref}
+                  aria-labelledby={context.labelId}
+                  aria-describedby={context.descriptionId}
+                  style={floatingTransition.styles}
+                  {...context.getFloatingProps(props)}
+                >
+                  {props.children}
+                </div>
+              </FloatingFocusManager>
+            </div>
+          </>
         )}
       </FloatingPortal>
     );

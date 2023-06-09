@@ -71,7 +71,7 @@ export function usePopover({
 
   const transition = useTransitionStyles(context, {
     duration: {
-      open: 300,
+      open: 400,
       close: 75,
     },
     initial: ({side}) => ({

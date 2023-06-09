@@ -90,8 +90,20 @@ export default {
       issuer: {
         and: [/\.(js|ts)x?$/],
       },
-
       use: ['@svgr/webpack'],
+    });
+
+    const imageLoaderRule = config.module.rules.find(
+      (rule) => rule.loader === 'next-image-loader'
+    );
+    imageLoaderRule.exclude = /\.inline\.(png|jpg|svg)$/i;
+    config.module.rules.push({
+      test: /\.inline\.(png|jpg|gif)$/i,
+      use: [
+        {
+          loader: 'url-loader',
+        },
+      ],
     });
 
     config.module.rules.push({
