@@ -1,26 +1,19 @@
 import classNames from 'classnames';
-import {useEffect, useRef, useState} from 'react';
-
-const loadedImages = new Set();
+import {useRef, useState} from 'react';
+import {useIsomorphicLayoutEffect} from 'usehooks-ts';
 
 export function CircleImage({name, inline}) {
-  const loadedOnMount = loadedImages.has(name);
-  const [loaded, setLoaded] = useState(loadedOnMount);
-  const [addTransition, setAddTransition] = useState(true);
-
-  // Safari breaks trying to render the blur filter. Just disable it for
-  // WebKit.
   const [isSafari, setIsSafari] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const ref = useRef(null);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setIsSafari(CSS.supports('-webkit-backdrop-filter', 'none'));
     if (ref.current.complete) {
-      loadedImages.add(name);
       setLoaded(true);
     }
-  }, [name]);
+  }, []);
 
   const src = `/${name}.jpg`;
   const styles = {clipPath: 'url(#squircle)'};
@@ -33,8 +26,8 @@ export function CircleImage({name, inline}) {
           className={classNames(
             'relative block h-[200px] w-[200px] select-none sm:float-right sm:!mb-4 sm:!ml-6 sm:block lg:h-[250px] lg:w-[250px]',
             {
-              'animate-blur-in':
-                loaded && addTransition && !loadedOnMount,
+              'animate-blur-in': loaded && !isSafari,
+              'opacity-0': isSafari ? false : !loaded,
             }
           )}
           src={src}
@@ -42,14 +35,12 @@ export function CircleImage({name, inline}) {
           draggable={false}
           style={styles}
           onLoad={() => {
-            setAddTransition(true);
             setLoaded(true);
-            loadedImages.add(name);
           }}
         />
         {!loaded && (
           <img
-            className="absolute right-0 top-0 !mb-4 block h-[200px] w-[200px] scale-95 select-none blur-md sm:!ml-6 sm:block lg:h-[250px] lg:w-[250px]"
+            className="absolute right-0 top-0 !mb-4 block h-[200px] w-[200px] scale-95 select-none blur-md supports-[-webkit-backdrop-filter:none]:transform-none sm:!ml-6 sm:block lg:h-[250px] lg:w-[250px]"
             src={inline}
             aria-hidden
             draggable={false}
@@ -57,14 +48,12 @@ export function CircleImage({name, inline}) {
           />
         )}
       </div>
-      {!isSafari && (
-        <img
-          className="pointer-events-none absolute left-4 top-8 -z-1 h-[200px] w-[200px] select-none rounded-full opacity-50 blur-2xl filter dark:opacity-50 sm:right-0 sm:left-auto sm:block lg:h-[250px] lg:w-[250px]"
-          src={inline}
-          aria-hidden
-          draggable={false}
-        />
-      )}
+      <img
+        className="pointer-events-none absolute left-4 top-8 -z-1 h-[200px] w-[200px] select-none rounded-full opacity-50 blur-2xl filter supports-[-webkit-backdrop-filter:none]:hidden dark:opacity-50 sm:right-0 sm:left-auto sm:block lg:h-[250px] lg:w-[250px]"
+        src={inline}
+        aria-hidden
+        draggable={false}
+      />
     </div>
   );
 }
