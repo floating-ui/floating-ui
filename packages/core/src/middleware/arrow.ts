@@ -3,6 +3,7 @@ import {getAlignment} from '../utils/getAlignment';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
+import {min as mathMin} from '../utils/math';
 import {within} from '../utils/within';
 
 export interface Options {
@@ -64,10 +65,17 @@ export const arrow = (options: Options): Middleware => ({
 
     const centerToReference = endDiff / 2 - startDiff / 2;
 
+    // If the padding is large enough that it causes the arrow to no longer be
+    // centered, modify the padding so that it is centered.
+    const largestPossiblePadding =
+      clientSize / 2 - arrowDimensions[length] / 2 - 1;
+    const minPadding = mathMin(paddingObject[minProp], largestPossiblePadding);
+    const maxPadding = mathMin(paddingObject[maxProp], largestPossiblePadding);
+
     // Make sure the arrow doesn't overflow the floating element if the center
     // point is outside the floating element's bounds.
-    const min = paddingObject[minProp];
-    const max = clientSize - arrowDimensions[length] - paddingObject[maxProp];
+    const min = minPadding;
+    const max = clientSize - arrowDimensions[length] - maxPadding;
     const center =
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
@@ -80,7 +88,7 @@ export const arrow = (options: Options): Middleware => ({
       getAlignment(placement) != null &&
       center != offset &&
       rects.reference[length] / 2 -
-        (center < min ? paddingObject[minProp] : paddingObject[maxProp]) -
+        (center < min ? minPadding : maxPadding) -
         arrowDimensions[length] / 2 <
         0;
     const alignmentOffset = shouldAddOffset
