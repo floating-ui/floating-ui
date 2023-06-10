@@ -1,55 +1,60 @@
-import {
-  detectOverflow,
-  Options as DetectOverflowOptions,
-} from '../detectOverflow';
-import type {Middleware, Placement} from '../types';
+import {detectOverflow} from '../detectOverflow';
+import type {
+  Derivable,
+  DetectOverflowOptions,
+  Middleware,
+  Placement,
+} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getExpandedPlacements} from '../utils/getExpandedPlacements';
 import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
 import {getOppositePlacement} from '../utils/getOppositePlacement';
 import {getSide} from '../utils/getSide';
 
-export interface Options {
-  /**
-   * The axis that runs along the side of the floating element. Determines
-   * whether overflow along this axis is checked to perform a flip.
-   * @default true
-   */
-  mainAxis: boolean;
+export type FlipOptions = Partial<
+  DetectOverflowOptions & {
+    /**
+     * The axis that runs along the side of the floating element. Determines
+     * whether overflow along this axis is checked to perform a flip.
+     * @default true
+     */
+    mainAxis: boolean;
 
-  /**
-   * The axis that runs along the alignment of the floating element. Determines
-   * whether overflow along this axis is checked to perform a flip.
-   * @default true
-   */
-  crossAxis: boolean;
+    /**
+     * The axis that runs along the alignment of the floating element. Determines
+     * whether overflow along this axis is checked to perform a flip.
+     * @default true
+     */
+    crossAxis: boolean;
 
-  /**
-   * Placements to try sequentially if the preferred `placement` does not fit.
-   * @default [oppositePlacement] (computed)
-   */
-  fallbackPlacements: Array<Placement>;
+    /**
+     * Placements to try sequentially if the preferred `placement` does not fit.
+     * @default [oppositePlacement] (computed)
+     */
+    fallbackPlacements: Array<Placement>;
 
-  /**
-   * What strategy to use when no placements fit.
-   * @default 'bestFit'
-   */
-  fallbackStrategy: 'bestFit' | 'initialPlacement';
+    /**
+     * What strategy to use when no placements fit.
+     * @default 'bestFit'
+     */
+    fallbackStrategy: 'bestFit' | 'initialPlacement';
 
-  /**
-   * Whether to allow fallback to the perpendicular axis of the preferred
-   * placement, and if so, which side direction along the axis to prefer.
-   * @default 'none' (disallow fallback)
-   */
-  fallbackAxisSideDirection: 'none' | 'start' | 'end';
+    /**
+     * Whether to allow fallback to the perpendicular axis of the preferred
+     * placement, and if so, which side direction along the axis to prefer.
+     * @default 'none' (disallow fallback)
+     */
+    fallbackAxisSideDirection: 'none' | 'start' | 'end';
 
-  /**
-   * Whether to flip to placements with the opposite alignment if they fit
-   * better.
-   * @default true
-   */
-  flipAlignment: boolean;
-}
+    /**
+     * Whether to flip to placements with the opposite alignment if they fit
+     * better.
+     * @default true
+     */
+    flipAlignment: boolean;
+  }
+>;
 
 /**
  * Optimizes the visibility of the floating element by flipping the `placement`
@@ -58,7 +63,7 @@ export interface Options {
  * @see https://floating-ui.com/docs/flip
  */
 export const flip = (
-  options: Partial<Options & DetectOverflowOptions> = {}
+  options: FlipOptions | Derivable<FlipOptions> = {}
 ): Middleware => ({
   name: 'flip',
   options,
@@ -80,7 +85,7 @@ export const flip = (
       fallbackAxisSideDirection = 'none',
       flipAlignment = true,
       ...detectOverflowOptions
-    } = options;
+    } = evaluate(options, state);
 
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;

@@ -1,15 +1,17 @@
 import type {
   Boundary,
+  Derivable,
   ElementContext,
   MiddlewareState,
   Padding,
   RootBoundary,
   SideObject,
 } from './types';
+import {evaluate} from './utils/evaluate';
 import {getSideObjectFromPadding} from './utils/getPaddingObject';
 import {rectToClientRect} from './utils/rectToClientRect';
 
-export interface Options {
+export type Options = Partial<{
   /**
    * The clipping element(s) or area in which overflow will be checked.
    * @default 'clippingAncestors'
@@ -40,7 +42,7 @@ export interface Options {
    * @default 0
    */
   padding: Padding;
-}
+}>;
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the
@@ -52,7 +54,7 @@ export interface Options {
  */
 export async function detectOverflow(
   state: MiddlewareState,
-  options: Partial<Options> = {}
+  options: Options | Derivable<Options> = {}
 ): Promise<SideObject> {
   const {x, y, platform, rects, elements, strategy} = state;
 
@@ -62,7 +64,7 @@ export async function detectOverflow(
     elementContext = 'floating',
     altBoundary = false,
     padding = 0,
-  } = options;
+  } = evaluate(options, state);
 
   const paddingObject = getSideObjectFromPadding(padding);
   const altContext = elementContext === 'floating' ? 'reference' : 'floating';

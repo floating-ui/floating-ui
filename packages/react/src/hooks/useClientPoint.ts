@@ -91,11 +91,11 @@ function isMouseBasedEvent(event: Event | undefined): event is MouseEvent {
   return event != null && (event as MouseEvent).clientX != null;
 }
 
-export interface Props {
-  enabled: boolean;
-  axis: 'x' | 'y' | 'both';
-  x: number | null;
-  y: number | null;
+export interface UseClientPointProps {
+  enabled?: boolean;
+  axis?: 'x' | 'y' | 'both';
+  x?: number | null;
+  y?: number | null;
 }
 
 /**
@@ -105,7 +105,7 @@ export interface Props {
  */
 export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Partial<Props> = {}
+  props: UseClientPointProps = {}
 ): ElementProps {
   const {
     open,

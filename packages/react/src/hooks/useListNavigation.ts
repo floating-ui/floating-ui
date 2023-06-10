@@ -72,7 +72,7 @@ function findNonDisabledIndex(
 }
 
 function doSwitch(
-  orientation: Props['orientation'],
+  orientation: UseListNavigationProps['orientation'],
   vertical: boolean,
   horizontal: boolean
 ) {
@@ -86,7 +86,10 @@ function doSwitch(
   }
 }
 
-function isMainOrientationKey(key: string, orientation: Props['orientation']) {
+function isMainOrientationKey(
+  key: string,
+  orientation: UseListNavigationProps['orientation']
+) {
   const vertical = key === ARROW_UP || key === ARROW_DOWN;
   const horizontal = key === ARROW_LEFT || key === ARROW_RIGHT;
   return doSwitch(orientation, vertical, horizontal);
@@ -94,7 +97,7 @@ function isMainOrientationKey(key: string, orientation: Props['orientation']) {
 
 function isMainOrientationToEndKey(
   key: string,
-  orientation: Props['orientation'],
+  orientation: UseListNavigationProps['orientation'],
   rtl: boolean
 ) {
   const vertical = key === ARROW_DOWN;
@@ -109,7 +112,7 @@ function isMainOrientationToEndKey(
 
 function isCrossOrientationOpenKey(
   key: string,
-  orientation: Props['orientation'],
+  orientation: UseListNavigationProps['orientation'],
   rtl: boolean
 ) {
   const vertical = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
@@ -119,7 +122,7 @@ function isCrossOrientationOpenKey(
 
 function isCrossOrientationCloseKey(
   key: string,
-  orientation: Props['orientation'],
+  orientation: UseListNavigationProps['orientation'],
   rtl: boolean
 ) {
   const vertical = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
@@ -128,14 +131,14 @@ function isCrossOrientationCloseKey(
 }
 
 function getMinIndex(
-  listRef: Props['listRef'],
+  listRef: UseListNavigationProps['listRef'],
   disabledIndices: Array<number> | undefined
 ) {
   return findNonDisabledIndex(listRef, {disabledIndices});
 }
 
 function getMaxIndex(
-  listRef: Props['listRef'],
+  listRef: UseListNavigationProps['listRef'],
   disabledIndices: Array<number> | undefined
 ) {
   return findNonDisabledIndex(listRef, {
@@ -145,7 +148,7 @@ function getMaxIndex(
   });
 }
 
-export interface Props {
+export interface UseListNavigationProps {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
   onNavigate?: (index: number | null) => void;
@@ -172,7 +175,7 @@ export interface Props {
  */
 export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props
+  props: UseListNavigationProps
 ): ElementProps {
   const {
     open,

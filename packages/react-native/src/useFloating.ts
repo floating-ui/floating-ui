@@ -8,16 +8,20 @@ import {deepEqual} from './utils/deepEqual';
 
 const ORIGIN = {x: 0, y: 0};
 
-export function useFloating({
-  placement = 'bottom',
-  middleware = [],
-  sameScrollView = true,
-  elements: {
-    reference: externalReference,
-    floating: externalFloating,
-    offsetParent: externalOffsetParent,
-  } = {},
-}: UseFloatingOptions = {}): UseFloatingReturn {
+export function useFloating(
+  options: UseFloatingOptions = {}
+): UseFloatingReturn {
+  const {
+    placement = 'bottom',
+    middleware = [],
+    sameScrollView = true,
+    elements: {
+      reference: externalReference,
+      floating: externalFloating,
+      offsetParent: externalOffsetParent,
+    } = {},
+  } = options;
+
   const [_reference, _setReference] = React.useState(null);
   const [_floating, _setFloating] = React.useState(null);
   const [_offsetParent, _setOffsetParent] = React.useState(null);

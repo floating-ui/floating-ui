@@ -4,7 +4,7 @@ import * as React from 'react';
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 
-export interface Props extends React.SVGAttributes<SVGSVGElement> {
+export interface FloatingArrowProps extends React.SVGAttributes<SVGSVGElement> {
   context: FloatingContext;
 
   /**
@@ -66,7 +66,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     d,
     style: {transform, ...restStyle} = {},
     ...rest
-  }: Props,
+  }: FloatingArrowProps,
   ref: React.Ref<SVGSVGElement>
 ): JSX.Element | null {
   if (__DEV__) {

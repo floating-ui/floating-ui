@@ -1,26 +1,25 @@
-import type {Coords, Middleware, MiddlewareState} from '../types';
+import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignment} from '../utils/getAlignment';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
 
 type OffsetValue =
   | number
-  | {
+  | Partial<{
       /**
        * The axis that runs along the side of the floating element. Represents
        * the distance (gutter or margin) between the reference and floating
        * element.
        * @default 0
        */
-      mainAxis?: number;
-
+      mainAxis: number;
       /**
        * The axis that runs along the alignment of the floating element.
        * Represents the skidding between the reference and floating element.
        * @default 0
        */
-      crossAxis?: number;
-
+      crossAxis: number;
       /**
        * The same axis as `crossAxis` but applies only to aligned placements
        * and inverts the `end` alignment. When set to a number, it overrides the
@@ -31,15 +30,16 @@ type OffsetValue =
        * the reverse.
        * @default null
        */
-      alignmentAxis?: number | null;
-    };
-type OffsetFunction = (state: MiddlewareState) => OffsetValue;
+      alignmentAxis: number | null;
+    }>;
 
-export type Options = OffsetValue | OffsetFunction;
+// For type backwards-compatibility, the `OffsetOptions` type was also
+// Derivable.
+export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
 export async function convertValueToCoords(
   state: MiddlewareState,
-  value: Options
+  options: OffsetOptions
 ): Promise<Coords> {
   const {placement, platform, elements} = state;
   const rtl = await platform.isRTL?.(elements.floating);
@@ -49,8 +49,7 @@ export async function convertValueToCoords(
   const isVertical = getMainAxisFromPlacement(placement) === 'x';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
-
-  const rawValue = typeof value === 'function' ? value(state) : value;
+  const rawValue = evaluate(options, state);
 
   // eslint-disable-next-line prefer-const
   let {mainAxis, crossAxis, alignmentAxis} =
@@ -74,12 +73,12 @@ export async function convertValueToCoords(
  * object may be passed.
  * @see https://floating-ui.com/docs/offset
  */
-export const offset = (value: Options = 0): Middleware => ({
+export const offset = (options: OffsetOptions = 0): Middleware => ({
   name: 'offset',
-  options: value,
+  options,
   async fn(state) {
     const {x, y} = state;
-    const diffCoords = await convertValueToCoords(state, value);
+    const diffCoords = await convertValueToCoords(state, options);
 
     return {
       x: x + diffCoords.x,

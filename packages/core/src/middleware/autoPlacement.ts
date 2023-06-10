@@ -3,7 +3,8 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import {allPlacements} from '../enums';
-import type {Alignment, Middleware, Placement} from '../types';
+import type {Alignment, Derivable, Middleware, Placement} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignment} from '../utils/getAlignment';
 import {getAlignmentSides} from '../utils/getAlignmentSides';
 import {getOppositeAlignmentPlacement} from '../utils/getOppositeAlignmentPlacement';
@@ -39,34 +40,36 @@ export function getPlacementList(
   });
 }
 
-export interface Options {
-  /**
-   * The axis that runs along the alignment of the floating element. Determines
-   * whether to check for most space along this axis.
-   * @default false
-   */
-  crossAxis: boolean;
+export type AutoPlacementOptions = Partial<
+  DetectOverflowOptions & {
+    /**
+     * The axis that runs along the alignment of the floating element. Determines
+     * whether to check for most space along this axis.
+     * @default false
+     */
+    crossAxis: boolean;
 
-  /**
-   * Choose placements with a particular alignment.
-   * @default undefined
-   */
-  alignment: Alignment | null;
+    /**
+     * Choose placements with a particular alignment.
+     * @default undefined
+     */
+    alignment: Alignment | null;
 
-  /**
-   * Whether to choose placements with the opposite alignment if the preferred
-   * alignment does not fit.
-   * @default true
-   */
-  autoAlignment: boolean;
+    /**
+     * Whether to choose placements with the opposite alignment if the preferred
+     * alignment does not fit.
+     * @default true
+     */
+    autoAlignment: boolean;
 
-  /**
-   * Which placements are allowed to be chosen. Placements must be within the
-   * `alignment` option if explicitly set.
-   * @default allPlacements (variable)
-   */
-  allowedPlacements: Array<Placement>;
-}
+    /**
+     * Which placements are allowed to be chosen. Placements must be within the
+     * `alignment` option if explicitly set.
+     * @default allPlacements (variable)
+     */
+    allowedPlacements: Array<Placement>;
+  }
+>;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -75,7 +78,7 @@ export interface Options {
  * @see https://floating-ui.com/docs/autoPlacement
  */
 export const autoPlacement = (
-  options: Partial<Options & DetectOverflowOptions> = {}
+  options: AutoPlacementOptions | Derivable<AutoPlacementOptions> = {}
 ): Middleware => ({
   name: 'autoPlacement',
   options,
@@ -88,7 +91,7 @@ export const autoPlacement = (
       allowedPlacements = allPlacements,
       autoAlignment = true,
       ...detectOverflowOptions
-    } = options;
+    } = evaluate(options, state);
 
     const placements =
       alignment !== undefined || allowedPlacements === allPlacements

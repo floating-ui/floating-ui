@@ -1,6 +1,6 @@
 import {useRef} from 'react';
 
-import {arrow, platform, shift, useFloating} from '.';
+import {arrow, offset, platform, shift, useFloating} from '.';
 
 App;
 function App() {
@@ -11,6 +11,7 @@ function App() {
     transform: false,
     placement: 'right',
     middleware: [
+      offset(() => ({mainAxis: 0})),
       shift(),
       arrow({element: arrowRef}),
       {

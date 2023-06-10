@@ -9,10 +9,10 @@ import {
   useInteractions,
   useListNavigation,
 } from '../../src';
-import type {Props} from '../../src/hooks/useListNavigation';
+import type {UseListNavigationProps} from '../../src/hooks/useListNavigation';
 import {Main as Grid} from '../visual/components/Grid';
 
-function App(props: Omit<Partial<Props>, 'listRef'>) {
+function App(props: Omit<Partial<UseListNavigationProps>, 'listRef'>) {
   const [open, setOpen] = useState(false);
   const listRef = useRef<Array<HTMLLIElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState<null | number>(null);

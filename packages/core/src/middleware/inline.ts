@@ -1,4 +1,5 @@
-import type {ClientRectObject, Middleware, Padding} from '../types';
+import type {ClientRectObject, Derivable, Middleware, Padding} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {getSide} from '../utils/getSide';
@@ -34,7 +35,7 @@ export function getRectsByLine(rects: Array<ClientRectObject>) {
   return groups.map((rect) => rectToClientRect(getBoundingRect(rect)));
 }
 
-export interface Options {
+export type InlineOptions = Partial<{
   /**
    * Viewport-relative `x` coordinate to choose a `ClientRect`.
    * @default undefined
@@ -52,14 +53,16 @@ export interface Options {
    * @default 2
    */
   padding: Padding;
-}
+}>;
 
 /**
  * Provides improved positioning for inline reference elements that can span
  * over multiple lines, such as hyperlinks or range selections.
  * @see https://floating-ui.com/docs/inline
  */
-export const inline = (options: Partial<Options> = {}): Middleware => ({
+export const inline = (
+  options: InlineOptions | Derivable<InlineOptions> = {}
+): Middleware => ({
   name: 'inline',
   options,
   async fn(state) {
@@ -67,7 +70,7 @@ export const inline = (options: Partial<Options> = {}): Middleware => ({
     // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
     // ClientRect's bounds, despite the event listener being triggered. A
     // padding of 2 seems to handle this issue.
-    const {padding = 2, x, y} = options;
+    const {padding = 2, x, y} = evaluate(options, state);
 
     const nativeClientRects = Array.from(
       (await platform.getClientRects?.(elements.reference)) || []

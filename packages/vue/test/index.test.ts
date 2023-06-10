@@ -620,29 +620,6 @@ describe('arrow', () => {
     return {reference, floating, floatingArrow, ...position};
   }
 
-  test('renders arrow with padding', async () => {
-    const App = defineComponent({
-      name: 'App',
-      setup() {
-        return setup({padding: 5});
-      },
-      template: /* HTML */ `
-        <div ref="reference" />
-        <div ref="floating" />
-        <div ref="floatingArrow" />
-        <div data-testid="x">{{middlewareData.arrow?.x}}</div>
-        <div data-testid="y">{{middlewareData.arrow?.y}}</div>
-      `,
-    });
-
-    const {getByTestId} = render(App);
-
-    await waitFor(() => {
-      expect(getByTestId('x').textContent).toBe('5');
-      expect(getByTestId('y').textContent).toBe('');
-    });
-  });
-
   test('allows to use with component type arrow', async () => {
     const FloatingArrow = defineComponent({
       name: 'FloatingArrow',

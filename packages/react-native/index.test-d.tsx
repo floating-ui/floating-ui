@@ -1,7 +1,7 @@
 import {useRef} from 'react';
 import {View} from 'react-native';
 
-import {arrow, shift, useFloating} from '.';
+import {arrow, offset, shift, useFloating} from '.';
 
 App;
 function App() {
@@ -9,7 +9,7 @@ function App() {
   useFloating();
   const {update, refs, elements} = useFloating({
     placement: 'right',
-    middleware: [shift(), arrow({element: arrowRef})],
+    middleware: [offset(() => 5), shift(), arrow({element: arrowRef})],
     // @ts-expect-error
     strategy: 'fixed',
   });

@@ -1,19 +1,22 @@
 import type {
-  AutoPlacementOptions,
+  ArrowOptions as CoreArrowOptions,
+  AutoPlacementOptions as CoreAutoPlacementOptions,
   ClientRectObject,
   ComputePositionConfig as CoreComputePositionConfig,
+  Coords,
   DetectOverflowOptions as CoreDetectOverflowOptions,
   Dimensions,
   ElementRects,
-  FlipOptions,
-  HideOptions,
+  FlipOptions as CoreFlipOptions,
+  HideOptions as CoreHideOptions,
+  InlineOptions,
+  LimitShiftOptions,
   Middleware as CoreMiddleware,
   MiddlewareReturn,
   MiddlewareState as CoreMiddlewareState,
-  Padding,
   Rect,
   RootBoundary,
-  ShiftOptions,
+  ShiftOptions as CoreShiftOptions,
   SideObject,
   SizeOptions as CoreSizeOptions,
   Strategy,
@@ -25,6 +28,8 @@ type Prettify<T> = {
 } & {};
 
 type Promisable<T> = T | Promise<T>;
+
+export type Derivable<T> = (state: MiddlewareState) => T;
 
 export interface Platform {
   // Required
@@ -70,29 +75,20 @@ export type Boundary = 'clippingAncestors' | Element | Array<Element> | Rect;
 
 export type DetectOverflowOptions = Prettify<
   Omit<CoreDetectOverflowOptions, 'boundary'> & {
-    boundary: Boundary;
-  }
->;
-
-export type SizeOptions = Prettify<
-  Omit<CoreSizeOptions, 'apply'> & {
-    /**
-     * Function that is called to perform style mutations to the floating element
-     * to change its size.
-     * @default undefined
-     */
-    apply(
-      args: MiddlewareState & {
-        availableWidth: number;
-        availableHeight: number;
-      }
-    ): Promisable<void>;
+    boundary?: Boundary;
   }
 >;
 
 export type ComputePositionConfig = Prettify<
   Omit<CoreComputePositionConfig, 'middleware' | 'platform'> & {
+    /**
+     * Array of middleware objects to modify the positioning or provide data for
+     * rendering.
+     */
     middleware?: Array<Middleware | null | undefined | false>;
+    /**
+     * Custom or extended platform object.
+     */
     platform?: Platform;
   }
 >;
@@ -130,6 +126,40 @@ export type Middleware = Prettify<
   }
 >;
 
+export type SizeOptions = Prettify<
+  Omit<CoreSizeOptions, 'apply' | 'boundary'> &
+    DetectOverflowOptions & {
+      /**
+       * Function that is called to perform style mutations to the floating element
+       * to change its size.
+       * @default undefined
+       */
+      apply?(
+        args: MiddlewareState & {
+          availableWidth: number;
+          availableHeight: number;
+        }
+      ): Promisable<void>;
+    }
+>;
+export type ArrowOptions = Prettify<
+  Omit<CoreArrowOptions, 'element'> & {
+    element: Element;
+  }
+>;
+export type AutoPlacementOptions = Prettify<
+  Omit<CoreAutoPlacementOptions, 'boundary'> & DetectOverflowOptions
+>;
+export type ShiftOptions = Prettify<
+  Omit<CoreShiftOptions, 'boundary'> & DetectOverflowOptions
+>;
+export type FlipOptions = Prettify<
+  Omit<CoreFlipOptions, 'boundary'> & DetectOverflowOptions
+>;
+export type HideOptions = Prettify<
+  Omit<CoreHideOptions, 'boundary'> & DetectOverflowOptions
+>;
+
 /**
  * Optimizes the visibility of the floating element by choosing the placement
  * that has the most space available automatically, without needing to specify a
@@ -137,7 +167,7 @@ export type Middleware = Prettify<
  * @see https://floating-ui.com/docs/autoPlacement
  */
 declare const autoPlacement: (
-  options?: Partial<AutoPlacementOptions & DetectOverflowOptions>
+  options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>
 ) => Middleware;
 
 /**
@@ -146,7 +176,7 @@ declare const autoPlacement: (
  * @see https://floating-ui.com/docs/shift
  */
 declare const shift: (
-  options?: Partial<ShiftOptions & DetectOverflowOptions>
+  options?: ShiftOptions | Derivable<ShiftOptions>
 ) => Middleware;
 
 /**
@@ -156,7 +186,7 @@ declare const shift: (
  * @see https://floating-ui.com/docs/flip
  */
 declare const flip: (
-  options?: Partial<FlipOptions & DetectOverflowOptions>
+  options?: FlipOptions | Derivable<FlipOptions>
 ) => Middleware;
 
 /**
@@ -166,18 +196,8 @@ declare const flip: (
  * @see https://floating-ui.com/docs/size
  */
 declare const size: (
-  options?: Partial<SizeOptions & DetectOverflowOptions>
+  options?: SizeOptions | Derivable<SizeOptions>
 ) => Middleware;
-
-/**
- * Provides data to position an inner element of the floating element so that it
- * appears centered to the reference element.
- * @see https://floating-ui.com/docs/arrow
- */
-declare const arrow: (options: {
-  element: Element;
-  padding?: Padding;
-}) => Middleware;
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
@@ -185,8 +205,36 @@ declare const arrow: (options: {
  * @see https://floating-ui.com/docs/hide
  */
 declare const hide: (
-  options?: Partial<HideOptions & DetectOverflowOptions>
+  options?: HideOptions | Derivable<HideOptions>
 ) => Middleware;
+
+/**
+ * Provides data to position an inner element of the floating element so that it
+ * appears centered to the reference element.
+ * @see https://floating-ui.com/docs/arrow
+ */
+declare const arrow: (
+  options: ArrowOptions | Derivable<ArrowOptions>
+) => Middleware;
+
+/**
+ * Provides improved positioning for inline reference elements that can span
+ * over multiple lines, such as hyperlinks or range selections.
+ * @see https://floating-ui.com/docs/inline
+ */
+declare const inline: (
+  options?: InlineOptions | Derivable<InlineOptions>
+) => Middleware;
+
+/**
+ * Built-in `limiter` that will stop `shift()` at a certain point.
+ */
+declare const limitShift: (
+  options?: LimitShiftOptions | Derivable<LimitShiftOptions>
+) => {
+  options: any;
+  fn: (state: MiddlewareState) => Coords;
+};
 
 /**
  * Resolves with an object of overflow side offsets that determine how much the
@@ -198,10 +246,20 @@ declare const hide: (
  */
 declare const detectOverflow: (
   state: MiddlewareState,
-  options?: Partial<DetectOverflowOptions>
+  options?: DetectOverflowOptions
 ) => Promise<SideObject>;
 
-export {arrow, autoPlacement, detectOverflow, flip, hide, shift, size};
+export {
+  arrow,
+  autoPlacement,
+  detectOverflow,
+  flip,
+  hide,
+  inline,
+  limitShift,
+  shift,
+  size,
+};
 export {computePosition} from './';
 export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
 export {platform} from './platform';
@@ -209,8 +267,6 @@ export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export type {
   AlignedPlacement,
   Alignment,
-  ArrowOptions,
-  AutoPlacementOptions,
   Axis,
   ClientRectObject,
   ComputePositionReturn,
@@ -218,8 +274,6 @@ export type {
   Dimensions,
   ElementContext,
   ElementRects,
-  FlipOptions,
-  HideOptions,
   InlineOptions,
   Length,
   MiddlewareData,
@@ -229,9 +283,8 @@ export type {
   Placement,
   Rect,
   RootBoundary,
-  ShiftOptions,
   Side,
   SideObject,
   Strategy,
 } from '@floating-ui/core';
-export {inline, limitShift, offset} from '@floating-ui/core';
+export {offset} from '@floating-ui/core';

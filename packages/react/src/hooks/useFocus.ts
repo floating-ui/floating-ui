@@ -8,7 +8,7 @@ import {isElement, isHTMLElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {DismissPayload} from './useDismiss';
 
-export interface Props {
+export interface UseFocusProps {
   enabled?: boolean;
   keyboardOnly?: boolean;
 }
@@ -20,7 +20,7 @@ export interface Props {
  */
 export function useFocus<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props = {}
+  props: UseFocusProps = {}
 ): ElementProps {
   const {
     open,

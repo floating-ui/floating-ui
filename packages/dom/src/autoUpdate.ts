@@ -3,7 +3,7 @@ import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {isElement} from './utils/is';
 
-export interface Options {
+export type Options = Partial<{
   /**
    * Whether to update the position when an overflow ancestor is scrolled.
    * @default true
@@ -30,7 +30,7 @@ export interface Options {
    * @default false
    */
   animationFrame: boolean;
-}
+}>;
 
 /**
  * Automatically updates the position of the floating element when necessary.
@@ -44,7 +44,7 @@ export function autoUpdate(
   reference: ReferenceElement,
   floating: FloatingElement,
   update: () => void,
-  options: Partial<Options> = {}
+  options: Options = {}
 ) {
   const {
     ancestorScroll = true,

@@ -12,7 +12,7 @@ function isSpaceIgnored(element: Element | null) {
   return isTypeableElement(element);
 }
 
-export interface Props {
+export interface UseClickProps {
   enabled?: boolean;
   event?: 'click' | 'mousedown';
   toggle?: boolean;
@@ -26,7 +26,7 @@ export interface Props {
  */
 export function useClick<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props = {}
+  props: UseClickProps = {}
 ): ElementProps {
   const {
     open,

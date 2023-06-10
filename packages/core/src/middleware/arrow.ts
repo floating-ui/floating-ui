@@ -1,11 +1,13 @@
-import type {Middleware, Padding} from '../types';
+import type {Derivable, Middleware, Padding} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignment} from '../utils/getAlignment';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSideObjectFromPadding} from '../utils/getPaddingObject';
+import {min as mathMin} from '../utils/math';
 import {within} from '../utils/within';
 
-export interface Options {
+export interface ArrowOptions {
   /**
    * The arrow element to be positioned.
    * @default undefined
@@ -25,13 +27,15 @@ export interface Options {
  * appears centered to the reference element.
  * @see https://floating-ui.com/docs/arrow
  */
-export const arrow = (options: Options): Middleware => ({
+export const arrow = (
+  options: ArrowOptions | Derivable<ArrowOptions>
+): Middleware => ({
   name: 'arrow',
   options,
   async fn(state) {
-    // Since `element` is required, we don't Partial<> the type.
-    const {element, padding = 0} = options || {};
     const {x, y, placement, rects, platform, elements} = state;
+    // Since `element` is required, we don't Partial<> the type.
+    const {element, padding = 0} = evaluate(options, state) || {};
 
     if (element == null) {
       return {};
@@ -64,10 +68,17 @@ export const arrow = (options: Options): Middleware => ({
 
     const centerToReference = endDiff / 2 - startDiff / 2;
 
+    // If the padding is large enough that it causes the arrow to no longer be
+    // centered, modify the padding so that it is centered.
+    const largestPossiblePadding =
+      clientSize / 2 - arrowDimensions[length] / 2 - 1;
+    const minPadding = mathMin(paddingObject[minProp], largestPossiblePadding);
+    const maxPadding = mathMin(paddingObject[maxProp], largestPossiblePadding);
+
     // Make sure the arrow doesn't overflow the floating element if the center
     // point is outside the floating element's bounds.
-    const min = paddingObject[minProp];
-    const max = clientSize - arrowDimensions[length] - paddingObject[maxProp];
+    const min = minPadding;
+    const max = clientSize - arrowDimensions[length] - maxPadding;
     const center =
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
     const offset = within(min, center, max);
@@ -80,7 +91,7 @@ export const arrow = (options: Options): Middleware => ({
       getAlignment(placement) != null &&
       center != offset &&
       rects.reference[length] / 2 -
-        (center < min ? paddingObject[minProp] : paddingObject[maxProp]) -
+        (center < min ? minPadding : maxPadding) -
         arrowDimensions[length] / 2 <
         0;
     const alignmentOffset = shouldAddOffset
