@@ -1,6 +1,7 @@
 import {DocSearch} from '@docsearch/react';
 import {
   autoUpdate,
+  FloatingFocusManager as FloatingFocusManagerComponent,
   FloatingPortal as FloatingPortalComponent,
   offset,
   useClick,
@@ -518,7 +519,7 @@ function SideNavList({anchors, hash}) {
                       }
                       href={url}
                       className={cn(
-                        'text-md w-[calc(100% - 1rem)] ml-4 block truncate rounded-tr-md rounded-br-md border-l border-gray-700 py-1 px-4',
+                        'text-md ml-4 block truncate rounded-tr-md rounded-br-md border-l border-gray-700 py-1 px-4',
                         {
                           'font-bold hover:bg-gray-100 dark:hover:bg-purple-300/10':
                             hash === url,
@@ -740,112 +741,109 @@ export default function Layout({children, className}) {
         </defs>
       </svg>
       <div
-        className={`md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72 ${className}`}
+        className={`md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-[15rem] 2xl:pr-72 ${className}`}
       >
-        <div className="container pl-4">
-          <button
-            ref={refs.setReference}
-            aria-label="Open menu"
-            aria-expanded={navOpen}
-            className="fixed top-0 z-50 -mb-8 mt-4 block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
-            {...getReferenceProps()}
-          >
-            <Menu />
-          </button>
-        </div>
-        <nav
-          ref={refs.setFloating}
-          className={cn(
-            'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg will-change-transform dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
-            {hidden: !isMounted}
-          )}
-          style={styles}
-          {...getFloatingProps()}
+        <FloatingFocusManagerComponent
+          context={context}
+          modal={false}
+          initialFocus={-1}
         >
-          <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
-          <div className="container mx-auto mb-8">
-            <div
-              className="sticky top-0 z-10 p-2 backdrop-blur-sm dark:bg-transparent"
-              style={{
-                WebkitMaskImage:
-                  'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 1rem)',
-              }}
-            >
-              <Link href="/">
-                <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
-              </Link>
-              {navOpen && (
-                <button
-                  onClick={() => setNavOpen(false)}
-                  className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow md:hidden"
-                  aria-label="Close"
-                >
-                  <span className="relative top-[-1px]">×</span>
-                </button>
-              )}
-            </div>
-            <ul className="mt-4 px-6 text-lg xl:px-10">
-              {nav.map(
-                ({url, title, icon: Icon, depth, hide}) =>
-                  !hide && (
-                    <li
-                      key={url}
-                      ref={
-                        pathname === url
-                          ? activeLinkRef
-                          : undefined
-                      }
-                      className={cn('inline-block w-full', {
-                        'pl-4': depth === 1,
-                        'border-l border-solid border-gray-700':
-                          depth === 1,
-                      })}
-                    >
-                      <Link
-                        href={url}
-                        className={cn(
-                          'mx-[-1rem] block break-words rounded-lg px-3 py-1 transition duration-200 hover:duration-75 dark:hover:bg-purple-200/20 dark:hover:text-gray-50',
-                          {
-                            'bg-gray-800 text-gray-50 hover:bg-gray-700 dark:bg-purple-200/10 dark:text-gray-100/90':
-                              pathname === url,
-                            'hover:bg-gray-100/50':
-                              pathname !== url,
-                            'rounded-tl-none rounded-bl-none':
-                              depth > 0,
-                          }
-                        )}
+          <nav
+            ref={refs.setFloating}
+            className={cn(
+              'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
+              {hidden: !isMounted}
+            )}
+            style={styles}
+            {...getFloatingProps()}
+          >
+            <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
+            <div className="container mx-auto mb-8">
+              <div
+                className="sticky top-0 z-10 p-2 backdrop-blur-sm dark:bg-transparent"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 1rem)',
+                }}
+              >
+                <Link href="/">
+                  <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
+                </Link>
+                {navOpen && (
+                  <button
+                    onClick={() => setNavOpen(false)}
+                    className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow md:hidden"
+                    aria-label="Close"
+                  >
+                    <span className="relative top-[-1px]">
+                      ×
+                    </span>
+                  </button>
+                )}
+              </div>
+              <ul className="mt-4 px-6 text-lg xl:px-10">
+                {nav.map(
+                  ({url, title, icon: Icon, depth, hide}) =>
+                    !hide && (
+                      <li
+                        key={url}
+                        ref={
+                          pathname === url
+                            ? activeLinkRef
+                            : undefined
+                        }
+                        className={cn('inline-block w-full', {
+                          'pl-4': depth === 1,
+                          'border-l border-solid border-gray-700':
+                            depth === 1,
+                        })}
                       >
-                        <span className="flex w-full items-center gap-4 py-1">
-                          {typeof Icon === 'string' ? (
-                            <img
-                              src={Icon}
-                              className="h-8 w-8"
-                              aria-hidden
-                            />
-                          ) : typeof Icon === 'function' ? (
-                            <Icon
-                              aria-hidden
-                              width={32}
-                              height={32}
-                            />
-                          ) : null}
-                          <span
-                            className={cn('block truncate', {
-                              'font-bold text-white':
+                        <Link
+                          href={url}
+                          className={cn(
+                            'mx-[-1rem] block break-words rounded-lg px-3 py-1 transition duration-200 hover:duration-75 dark:hover:bg-purple-200/20 dark:hover:text-gray-50',
+                            {
+                              'bg-gray-800 text-gray-50 hover:bg-gray-700 dark:bg-purple-200/10 dark:text-gray-100/90':
                                 pathname === url,
-                            })}
-                          >
-                            {title}
+                              'hover:bg-gray-100/50':
+                                pathname !== url,
+                              'rounded-tl-none rounded-bl-none':
+                                depth > 0,
+                            }
+                          )}
+                        >
+                          <span className="flex w-full items-center gap-4 py-1">
+                            {typeof Icon === 'string' ? (
+                              <img
+                                src={Icon}
+                                className="h-8 w-8"
+                                aria-hidden
+                              />
+                            ) : typeof Icon === 'function' ? (
+                              <Icon
+                                aria-hidden
+                                width={32}
+                                height={32}
+                              />
+                            ) : null}
+                            <span
+                              className={cn('block truncate', {
+                                'font-bold text-white':
+                                  pathname === url,
+                              })}
+                            >
+                              {title}
+                            </span>
                           </span>
-                        </span>
-                      </Link>
-                    </li>
-                  )
-              )}
-            </ul>
-          </div>
-        </nav>
-        <aside className="fixed right-0 top-0 hidden min-w-[18rem] max-w-[20rem] overflow-y-auto pt-12 [max-height:100vh] xl:block">
+                        </Link>
+                      </li>
+                    )
+                )}
+              </ul>
+            </div>
+          </nav>
+        </FloatingFocusManagerComponent>
+        <aside className="fixed right-0 top-0 hidden min-w-[15rem] max-w-[15rem] overflow-y-auto pt-12 [max-height:100vh] xl:block 2xl:min-w-[18rem] 2xl:max-w-[20rem]">
           <nav>
             <h4 className="text-md ml-6 mb-1 text-gray-500">
               On this page
@@ -853,45 +851,56 @@ export default function Layout({children, className}) {
             <SideNavList anchors={anchorsComputed} hash={hash} />
           </nav>
         </aside>
-        <nav className="fixed top-0 z-10 w-full bg-gray-75/70 py-6 pl-16 pr-2 backdrop-blur-sm backdrop-saturate-150 dark:bg-gray-900/70 md:w-[calc(100%_-_16rem)] md:py-4 md:px-8 lg:w-[calc(100%_-_22rem)] lg:py-2">
-          <div className="mr-2 flex flex-row-reverse items-center justify-end gap-4 pl-4 md:mr-0 md:flex-row md:justify-start md:pl-0">
-            <DocSearch
-              appId="0E85PIAI2P"
-              indexName="floating-ui"
-              apiKey="51e39a76760916075e22d9b217f4434f"
-            />
-            <a
-              className="flex items-center gap-1"
-              href="https://github.com/floating-ui/floating-ui"
-              target="_blank"
-              rel="noopener noreferrer"
+        <nav className="fixed top-0 z-10 w-full bg-gray-75/70 px-4 py-3 backdrop-blur-sm backdrop-saturate-150 dark:bg-gray-900/70 sm:px-6 md:py-4 lg:px-8 lg:py-2">
+          <div className="flex items-center justify-between">
+            <button
+              ref={refs.setReference}
+              aria-label="Open menu"
+              aria-expanded={navOpen}
+              className="block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
+              {...getReferenceProps()}
             >
-              <div className="grid h-6 w-6 place-items-center rounded-full text-black dark:text-gray-200">
-                <GitHub size={16} />
-              </div>
-              GitHub
-            </a>
-            {firstVersionIndex != null && (
-              <>
-                <div className="hidden flex-wrap gap-2 pl-1 lg:flex">
-                  {firstVersionIndex !== null && (
-                    <PackageVersion
-                      package={packages[firstVersionIndex]}
-                    />
-                  )}
-                  {secondVersionIndex !== null && (
-                    <PackageVersion
-                      package={packages[secondVersionIndex]}
-                    />
-                  )}
+              <Menu />
+            </button>
+            <div className="ml-4 flex min-w-0 items-center justify-end gap-4 md:ml-0 md:mr-0 md:flex-row md:justify-start md:pl-0">
+              <DocSearch
+                appId="0E85PIAI2P"
+                indexName="floating-ui"
+                apiKey="51e39a76760916075e22d9b217f4434f"
+              />
+              <a
+                className="flex items-center gap-1"
+                href="https://github.com/floating-ui/floating-ui"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="grid h-6 w-6 place-items-center rounded-full text-black dark:text-gray-200">
+                  <GitHub size={16} />
                 </div>
-              </>
-            )}
+                GitHub
+              </a>
+              {firstVersionIndex != null && (
+                <>
+                  <div className="hidden flex-wrap gap-2 pl-1 lg:flex">
+                    {firstVersionIndex !== null && (
+                      <PackageVersion
+                        package={packages[firstVersionIndex]}
+                      />
+                    )}
+                    {secondVersionIndex !== null && (
+                      <PackageVersion
+                        package={packages[secondVersionIndex]}
+                      />
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </nav>
         <div
           ref={articleRef}
-          className="container my-24 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] md:my-0 md:py-20 lg:px-8 lg:py-24"
+          className="container my-24 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] sm:px-6 md:my-0 md:py-20 lg:px-8 lg:py-24"
         >
           <SkipNavContent />
           <article

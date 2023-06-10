@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import {useRef, useState} from 'react';
-import {useIsomorphicLayoutEffect} from 'usehooks-ts';
+import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 export function CircleImage({name, inline}) {
   const [isSafari, setIsSafari] = useState(false);
@@ -20,11 +20,11 @@ export function CircleImage({name, inline}) {
 
   return (
     <div className="z-1 relative">
-      <div className="relative inline-block sm:block">
+      <div className="relative inline-block lg:block">
         <img
           ref={ref}
           className={classNames(
-            'relative block h-[200px] w-[200px] select-none sm:float-right sm:!mb-4 sm:!ml-6 sm:block lg:h-[250px] lg:w-[250px]',
+            'relative block h-[200px] w-[200px] select-none sm:float-right sm:block md:h-[250px] md:w-[250px] lg:!mb-4 lg:!ml-6',
             {
               'animate-blur-in': loaded && !isSafari,
               'opacity-0': isSafari ? false : !loaded,
@@ -40,7 +40,7 @@ export function CircleImage({name, inline}) {
         />
         {!loaded && (
           <img
-            className="absolute right-0 top-0 !mb-4 block h-[200px] w-[200px] scale-95 select-none blur-md supports-[-webkit-backdrop-filter:none]:transform-none sm:!ml-6 sm:block lg:h-[250px] lg:w-[250px]"
+            className="absolute right-0 top-0 !mb-4 block h-[200px] w-[200px] scale-95 select-none blur-md supports-[-webkit-backdrop-filter:none]:transform-none sm:!ml-6 sm:block md:h-[250px] md:w-[250px]"
             src={inline}
             aria-hidden
             draggable={false}
@@ -49,7 +49,7 @@ export function CircleImage({name, inline}) {
         )}
       </div>
       <img
-        className="pointer-events-none absolute left-4 top-8 -z-1 h-[200px] w-[200px] select-none rounded-full opacity-50 blur-2xl filter supports-[-webkit-backdrop-filter:none]:hidden dark:opacity-50 sm:right-0 sm:left-auto sm:block lg:h-[250px] lg:w-[250px]"
+        className="pointer-events-none absolute top-8 -z-1 h-[200px] w-[200px] select-none rounded-full opacity-50 blur-2xl filter dark:opacity-50 md:h-[250px] md:w-[250px] lg:left-auto lg:right-0 lg:block lg:opacity-75"
         src={inline}
         aria-hidden
         draggable={false}

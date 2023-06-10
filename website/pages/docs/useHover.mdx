@@ -285,8 +285,6 @@ This has some side-effects:
 - While hovering over the reference element, if it's inside a
   scrolling container, it cannot be scrolled (the main window is
   unaffected).
-- macOS' auto-hiding scrollbars appear on scrolling containers
-  (except the main window) in Chrome.
 - Container elements that listen for `mouseleave` events may fire
   unexpectedly.
 
@@ -313,6 +311,3 @@ available as a parent, so scrolling containers can negate the
   </div>
 </div>
 ```
-
-Leaving the option disabled for testing environments will also
-help prevent problems.
