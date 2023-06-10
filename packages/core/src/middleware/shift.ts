@@ -1,3 +1,4 @@
+import {detectIntersections} from '../detectIntersections';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
@@ -54,6 +55,11 @@ export const shift = (
 
     const coords = {x, y};
     const overflow = await detectOverflow(state, detectOverflowOptions);
+    const intersections = await detectIntersections(state, {
+      obstacles: Array.from(
+        document.querySelectorAll('[data-floating-ui-obstacle]')
+      ).map((el) => el.getBoundingClientRect()),
+    });
     const mainAxis = getMainAxisFromPlacement(getSide(placement));
     const crossAxis = getCrossAxis(mainAxis);
 
@@ -65,6 +71,16 @@ export const shift = (
       const maxSide = mainAxis === 'y' ? 'bottom' : 'right';
       const min = mainAxisCoord + overflow[minSide];
       const max = mainAxisCoord - overflow[maxSide];
+
+      if (intersections.length) {
+        if (mainAxis === 'x') {
+          mainAxisCoord +=
+            intersections[0].x * (intersections[0].xSide === 'right' ? 1 : -1);
+        } else {
+          mainAxisCoord +=
+            intersections[0].y * (intersections[0].ySide === 'bottom' ? 1 : -1);
+        }
+      }
 
       mainAxisCoord = within(min, mainAxisCoord, max);
     }

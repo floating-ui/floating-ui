@@ -21,6 +21,7 @@ import {Flip} from './spec/Flip';
 import {Hide} from './spec/Hide';
 import {IFrame} from './spec/IFrame';
 import {Inline} from './spec/Inline';
+import {Intersection} from './spec/Intersection';
 import {Offset} from './spec/Offset';
 import {Perf} from './spec/Perf';
 import {Placement} from './spec/Placement';
@@ -58,6 +59,7 @@ const ROUTES = [
   {path: 'virtual-element', component: VirtualElement},
   {path: 'perf', component: Perf},
   {path: 'iframe', component: IFrame},
+  {path: 'intersection', component: Intersection},
 ];
 
 function App() {
