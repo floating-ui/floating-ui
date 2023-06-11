@@ -1,6 +1,9 @@
 import cn from 'classnames';
-import {useRef} from 'react';
+import {createContext, useContext, useRef} from 'react';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
+
+const ChromeContext = createContext();
+export const useChromeContext = () => useContext(ChromeContext);
 
 export const Chrome = ({
   children,
@@ -77,18 +80,28 @@ export const Chrome = ({
         >
           {isScrollable && (
             <div
+              className={
+                scrollableX
+                  ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]'
+                  : undefined
+              }
               style={{
                 height: scrollableY ? scrollHeight : 1,
-                width: scrollableX ? '82rem' : 1,
               }}
             />
           )}
-          {children}
+          <ChromeContext.Provider value={scrollableRef}>
+            {children}
+          </ChromeContext.Provider>
           {isScrollable && (
             <div
+              className={
+                scrollableX
+                  ? 'w-[180vw] md:w-[75rem] lg:w-[90rem]'
+                  : undefined
+              }
               style={{
                 height: scrollableY ? scrollHeight : 1,
-                width: scrollableX ? '82rem' : 1,
               }}
             />
           )}
