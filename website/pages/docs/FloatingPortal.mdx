@@ -24,7 +24,10 @@ appended to their respective parent.
 
 ```ts
 interface Props {
-  root?: HTMLElement | null;
+  root?:
+    | HTMLElement
+    | null
+    | React.MutableRefObject<HTMLElement | null>;
   id?: string;
   preserveTabOrder?: boolean;
 }
@@ -36,7 +39,10 @@ Optionally specifies the root node the portal container will be
 appended to.
 
 ```js
+// Element
 <FloatingPortal root={rootNode} />
+// MutableRefObject
+<FloatingPortal root={rootNodeRef} />
 ```
 
 ### id

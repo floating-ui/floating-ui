@@ -625,6 +625,27 @@ This is an _optional_ prop getter that is only used when dealing
 with a list inside your floating element (see
 [`useListNavigation`](/docs/useListNavigation)).
 
+## Open event
+
+The `onOpenChange{:.function}` state setter is called with an
+(optional) event as a second parameter:
+
+```js /event/1-2
+useFloating({
+  onOpenChange(isOpen, event) {
+    setIsOpen(isOpen);
+    if (event) {
+      // The event can be determined. This callback may be invoked
+      // in an effect, so the event is not available.
+    }
+  },
+});
+```
+
+Note that `onOpenChange{:.function}` is _not_ called if you
+manually changed the open state via the `setIsOpen(){:js}`
+setter. You can derive the event yourself in this case anyway.
+
 ## Data
 
 The context object contains a data ref with some information
@@ -643,7 +664,7 @@ Currently, only one built-in value is set:
 ```js
 interface ContextData {
   // Which event caused the floating element to open.
-  openEvent?: MouseEvent | PointerEvent | FocusEvent;
+  openEvent?: Event;
 
   // Add support for custom data to pass around.
   [key: string]: any;
