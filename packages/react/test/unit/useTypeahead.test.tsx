@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
 
 import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
-import type {Props} from '../../src/hooks/useTypeahead';
+import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';
 import {Main} from '../visual/components/Menu';
 
 jest.useFakeTimers();
@@ -12,7 +12,7 @@ const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
 const useImpl = ({
   addUseClick = false,
   ...props
-}: Pick<Props, 'onMatch' | 'onTypingChange'> & {
+}: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
   list?: Array<string>;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -61,7 +61,9 @@ const useImpl = ({
 };
 
 function Combobox(
-  props: Pick<Props, 'onMatch' | 'onTypingChange'> & {list?: Array<string>}
+  props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
+    list?: Array<string>;
+  }
 ) {
   const {getReferenceProps, getFloatingProps} = useImpl(props);
   return (
@@ -73,7 +75,9 @@ function Combobox(
 }
 
 function Select(
-  props: Pick<Props, 'onMatch' | 'onTypingChange'> & {list?: Array<string>}
+  props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
+    list?: Array<string>;
+  }
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const {getReferenceProps, getFloatingProps} = useImpl({
@@ -182,7 +186,9 @@ test('capslock characters continue to match', async () => {
   cleanup();
 });
 
-function App1(props: Pick<Props, 'onMatch'> & {list: Array<string>}) {
+function App1(
+  props: Pick<UseTypeaheadProps, 'onMatch'> & {list: Array<string>}
+) {
   const {getReferenceProps, getFloatingProps, activeIndex, open} =
     useImpl(props);
   const inputRef = useRef<HTMLInputElement | null>(null);

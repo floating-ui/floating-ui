@@ -36,7 +36,7 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
   return isMounted;
 }
 
-export interface Props {
+export interface UseTransitionStatusProps {
   duration?: number | Partial<{open: number; close: number}>;
 }
 
@@ -49,7 +49,7 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  */
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props = {}
+  props: UseTransitionStatusProps = {}
 ): {
   isMounted: boolean;
   status: Status;
@@ -106,7 +106,7 @@ type CSSStylesProperty =
   | React.CSSProperties
   | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
 
-export interface UseTransitionStylesProps extends Props {
+export interface UseTransitionStylesProps extends UseTransitionStatusProps {
   initial?: CSSStylesProperty;
   open?: CSSStylesProperty;
   close?: CSSStylesProperty;

@@ -3,7 +3,7 @@ import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 
-export interface Props {
+export interface UseRoleProps {
   enabled?: boolean;
   role?:
     | 'tooltip'
@@ -22,7 +22,7 @@ export interface Props {
  */
 export function useRole<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Partial<Props> = {}
+  props: UseRoleProps = {}
 ): ElementProps {
   const {open, floatingId} = context;
   const {enabled = true, role = 'dialog'} = props;

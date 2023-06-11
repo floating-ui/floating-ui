@@ -2,12 +2,12 @@ import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {useFloating, useId, useInteractions, useRole} from '../../src';
-import type {Props} from '../../src/hooks/useRole';
+import type {UseRoleProps} from '../../src/hooks/useRole';
 
 function App({
   initiallyOpen = false,
   ...props
-}: Props & {initiallyOpen?: boolean}) {
+}: UseRoleProps & {initiallyOpen?: boolean}) {
   const [open, setOpen] = useState(initiallyOpen);
   const {refs, context} = useFloating({
     open,
@@ -38,7 +38,7 @@ function App({
   );
 }
 
-function AppWithExternalRef(props: Props & {initiallyOpen?: boolean}) {
+function AppWithExternalRef(props: UseRoleProps & {initiallyOpen?: boolean}) {
   const [open, setOpen] = useState(props.initiallyOpen ?? false);
   const nodeId = useId();
   const {refs, context} = useFloating({

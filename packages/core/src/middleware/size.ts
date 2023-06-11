@@ -2,25 +2,28 @@ import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import type {Middleware, MiddlewareState} from '../types';
+import type {Derivable, Middleware, MiddlewareState} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignment} from '../utils/getAlignment';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
 import {getSide} from '../utils/getSide';
 import {max, min} from '../utils/math';
 
-export interface Options {
-  /**
-   * Function that is called to perform style mutations to the floating element
-   * to change its size.
-   * @default undefined
-   */
-  apply(
-    args: MiddlewareState & {
-      availableWidth: number;
-      availableHeight: number;
-    }
-  ): void | Promise<void>;
-}
+export type SizeOptions = Partial<
+  DetectOverflowOptions & {
+    /**
+     * Function that is called to perform style mutations to the floating element
+     * to change its size.
+     * @default undefined
+     */
+    apply(
+      args: MiddlewareState & {
+        availableWidth: number;
+        availableHeight: number;
+      }
+    ): void | Promise<void>;
+  }
+>;
 
 /**
  * Provides data that allows you to change the size of the floating element —
@@ -29,13 +32,17 @@ export interface Options {
  * @see https://floating-ui.com/docs/size
  */
 export const size = (
-  options: Partial<Options & DetectOverflowOptions> = {}
+  options: SizeOptions | Derivable<SizeOptions> = {}
 ): Middleware => ({
   name: 'size',
   options,
   async fn(state) {
     const {placement, rects, platform, elements} = state;
-    const {apply = () => {}, ...detectOverflowOptions} = options;
+
+    const {apply = () => {}, ...detectOverflowOptions} = evaluate(
+      options,
+      state
+    );
 
     const overflow = await detectOverflow(state, detectOverflowOptions);
     const side = getSide(placement);

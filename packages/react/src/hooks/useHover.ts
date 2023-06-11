@@ -32,7 +32,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
 }
 
 export function getDelay(
-  value: Props['delay'],
+  value: UseHoverProps['delay'],
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
@@ -47,7 +47,7 @@ export function getDelay(
   return value?.[prop];
 }
 
-export interface Props<RT extends ReferenceType = ReferenceType> {
+export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
   enabled?: boolean;
   handleClose?: HandleCloseFn<RT> | null;
   restMs?: number;
@@ -63,7 +63,7 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  */
 export function useHover<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props<RT> = {}
+  props: UseHoverProps<RT> = {}
 ): ElementProps {
   const {
     open,

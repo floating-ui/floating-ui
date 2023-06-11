@@ -1,4 +1,5 @@
 import {computePosition} from '../src';
+import type {Platform} from '../src/types';
 
 const reference = {};
 const floating = {};
@@ -10,7 +11,8 @@ const platform = {
       reference: referenceRect,
       floating: floatingRect,
     }),
-};
+  getDimensions: () => Promise.resolve({width: 10, height: 10}),
+} as unknown as Platform;
 
 test('returned data', async () => {
   const {x, y, placement, strategy, middlewareData} = await computePosition(
@@ -19,7 +21,6 @@ test('returned data', async () => {
     {
       placement: 'top',
       middleware: [{name: 'custom', fn: () => ({data: {property: true}})}],
-      // @ts-ignore - computePosition() only uses this property
       platform,
     }
   );
@@ -37,12 +38,10 @@ test('returned data', async () => {
 
 test('middleware', async () => {
   const {x, y} = await computePosition(reference, floating, {
-    // @ts-ignore - computePosition() only uses this property
     platform,
   });
 
   const {x: x2, y: y2} = await computePosition(reference, floating, {
-    // @ts-ignore - computePosition() only uses this property
     platform,
     middleware: [
       {

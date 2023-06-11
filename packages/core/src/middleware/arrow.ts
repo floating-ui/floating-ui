@@ -1,4 +1,5 @@
-import type {Middleware, Padding} from '../types';
+import type {Derivable, Middleware, Padding} from '../types';
+import {evaluate} from '../utils/evaluate';
 import {getAlignment} from '../utils/getAlignment';
 import {getLengthFromAxis} from '../utils/getLengthFromAxis';
 import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
@@ -6,7 +7,7 @@ import {getSideObjectFromPadding} from '../utils/getPaddingObject';
 import {min as mathMin} from '../utils/math';
 import {within} from '../utils/within';
 
-export interface Options {
+export interface ArrowOptions {
   /**
    * The arrow element to be positioned.
    * @default undefined
@@ -26,13 +27,15 @@ export interface Options {
  * appears centered to the reference element.
  * @see https://floating-ui.com/docs/arrow
  */
-export const arrow = (options: Options): Middleware => ({
+export const arrow = (
+  options: ArrowOptions | Derivable<ArrowOptions>
+): Middleware => ({
   name: 'arrow',
   options,
   async fn(state) {
-    // Since `element` is required, we don't Partial<> the type.
-    const {element, padding = 0} = options || {};
     const {x, y, placement, rects, platform, elements} = state;
+    // Since `element` is required, we don't Partial<> the type.
+    const {element, padding = 0} = evaluate(options, state) || {};
 
     if (element == null) {
       return {};

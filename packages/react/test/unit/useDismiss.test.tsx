@@ -14,9 +14,12 @@ import {
   useFocus,
   useInteractions,
 } from '../../src';
-import {normalizeBubblesProp, Props} from '../../src/hooks/useDismiss';
+import {
+  normalizeBubblesProp,
+  UseDismissProps,
+} from '../../src/hooks/useDismiss';
 
-function App(props: Props) {
+function App(props: UseDismissProps) {
   const [open, setOpen] = useState(true);
   const {refs, context} = useFloating({
     open,
@@ -152,7 +155,7 @@ describe('bubbles', () => {
     testId,
     children,
     ...props
-  }: Props & {testId: string; children: ReactNode}) => {
+  }: UseDismissProps & {testId: string; children: ReactNode}) => {
     const [open, setOpen] = useState(true);
     const nodeId = useFloatingNodeId();
 
@@ -184,7 +187,7 @@ describe('bubbles', () => {
   };
 
   const NestedDialog = (
-    props: Props & {testId: string; children: ReactNode}
+    props: UseDismissProps & {testId: string; children: ReactNode}
   ) => {
     const parentId = useFloatingParentNodeId();
 

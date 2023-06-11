@@ -8,7 +8,7 @@ import {
 } from '@floating-ui/react';
 import {useRef, useState} from 'react';
 
-import type {Props} from '../../../src/components/FloatingArrow';
+import type {FloatingArrowProps} from '../../../src/components/FloatingArrow';
 
 const ROUND_D =
   'M0 20C0 20 2.06906 19.9829 5.91817 15.4092C7.49986 13.5236 8.97939 12.3809 10.0002 12.3809C11.0202 12.3809 12.481 13.6451 14.0814 15.5472C17.952 20.1437 20 20 20 20H0Z';
@@ -20,7 +20,7 @@ function Demo({
   floatingProps,
 }: {
   placement: Placement;
-  arrowProps: Partial<React.SVGAttributes<SVGSVGElement> & Props>;
+  arrowProps: Partial<React.SVGAttributes<SVGSVGElement> & FloatingArrowProps>;
   floatingStyle?: React.CSSProperties;
   floatingProps?: React.HTMLAttributes<HTMLDivElement>;
 }) {

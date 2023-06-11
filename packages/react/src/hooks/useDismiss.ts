@@ -50,7 +50,7 @@ export interface DismissPayload {
   };
 }
 
-export interface Props {
+export interface UseDismissProps {
   enabled?: boolean;
   escapeKey?: boolean;
   referencePress?: boolean;
@@ -68,7 +68,7 @@ export interface Props {
  */
 export function useDismiss<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props = {}
+  props: UseDismissProps = {}
 ): ElementProps {
   const {
     open,

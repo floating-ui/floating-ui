@@ -6,7 +6,7 @@ import {stopEvent} from '../utils/stopEvent';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
-export interface Props {
+export interface UseTypeaheadProps {
   listRef: React.MutableRefObject<Array<string | null>>;
   activeIndex: number | null;
   onMatch?: (index: number) => void;
@@ -30,7 +30,7 @@ export interface Props {
  */
 export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: Props
+  props: UseTypeaheadProps
 ): ElementProps {
   const {open, dataRef} = context;
   const {

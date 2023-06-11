@@ -96,3 +96,12 @@ test('svg arrow should be positioned correctly within containing block', async (
     `svg-arrow.png`
   );
 });
+
+test('large padding value should not uncenter the arrow', async ({page}) => {
+  await page.goto('http://localhost:1234/arrow');
+  await click(page, `[data-testid="arrow-padding-200"]`);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `arrow-padding-200-center.png`
+  );
+});

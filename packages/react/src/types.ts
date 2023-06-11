@@ -1,5 +1,4 @@
 import type {
-  ComputePositionReturn,
   UseFloatingOptions as UsePositionOptions,
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
@@ -9,19 +8,19 @@ import * as React from 'react';
 import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '.';
-export {Props as FloatingArrowProps} from './components/FloatingArrow';
-export {Props as UseClickProps} from './hooks/useClick';
-export {Props as UseClientPointProps} from './hooks/useClientPoint';
-export {Props as UseDismissProps} from './hooks/useDismiss';
-export {Props as UseFocusProps} from './hooks/useFocus';
-export {Props as UseHoverProps} from './hooks/useHover';
-export {Props as UseListNavigationProps} from './hooks/useListNavigation';
-export {Props as UseRoleProps} from './hooks/useRole';
+export {FloatingArrowProps} from './components/FloatingArrow';
+export {UseClickProps} from './hooks/useClick';
+export {UseClientPointProps} from './hooks/useClientPoint';
+export {UseDismissProps} from './hooks/useDismiss';
+export {UseFocusProps} from './hooks/useFocus';
+export {UseHoverProps} from './hooks/useHover';
+export {UseListNavigationProps} from './hooks/useListNavigation';
+export {UseRoleProps} from './hooks/useRole';
 export {
-  Props as UseTransitionStatusProps,
+  UseTransitionStatusProps,
   UseTransitionStylesProps,
 } from './hooks/useTransition';
-export {Props as UseTypeaheadProps} from './hooks/useTypeahead';
+export {UseTypeaheadProps} from './hooks/useTypeahead';
 export {InnerProps, UseInnerOffsetProps} from './inner';
 export type {
   AlignedPlacement,
@@ -155,23 +154,19 @@ export interface ElementProps {
 
 export type ReferenceType = Element | VirtualElement;
 
-export type UseFloatingData = Prettify<ComputePositionReturn>;
+export type UseFloatingData = Prettify<UseFloatingReturn>;
 
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
-    UseFloatingData & {
-      update: () => void;
+    UsePositionFloatingReturn & {
       context: FloatingContext<RT>;
       refs: ExtendedRefs<RT>;
       elements: ExtendedElements<RT>;
-      isPositioned: boolean;
-      floatingStyles: React.CSSProperties;
     }
   >;
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends UsePositionOptions<RT> {
-  open: boolean;
-  onOpenChange: (open: boolean, event?: Event) => void;
-  nodeId: string;
+  onOpenChange?: (open: boolean, event?: Event) => void;
+  nodeId?: string;
 }

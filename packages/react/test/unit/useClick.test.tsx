@@ -2,14 +2,18 @@ import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {useClick, useFloating, useInteractions} from '../../src';
-import type {Props} from '../../src/hooks/useClick';
+import type {UseClickProps} from '../../src/hooks/useClick';
 
 function App({
   button = true,
   typeable = false,
   initialOpen = false,
   ...props
-}: Props & {button?: boolean; typeable?: boolean; initialOpen?: boolean}) {
+}: UseClickProps & {
+  button?: boolean;
+  typeable?: boolean;
+  initialOpen?: boolean;
+}) {
   const [open, setOpen] = useState(initialOpen);
   const {refs, context} = useFloating({
     open,

@@ -1,12 +1,14 @@
-import type {Placement} from '@floating-ui/core';
-import type {OffsetOptions} from '@floating-ui/core';
+import type {OffsetOptions, Placement} from '@floating-ui/core';
 import {offset, useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
 
-const VALUES: Array<{offset: OffsetOptions; name: string}> = [
+const VALUES: Array<{
+  offset: OffsetOptions;
+  name: string;
+}> = [
   {offset: 0, name: '0'},
   {offset: 10, name: '10'},
   {offset: -10, name: '-10'},

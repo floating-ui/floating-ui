@@ -9,6 +9,11 @@ export type Length = 'width' | 'height';
 type Promisable<T> = T | Promise<T>;
 
 /**
+ * Function option to derive middleware options from state.
+ */
+export type Derivable<T> = (state: MiddlewareState) => T;
+
+/**
  * Platform interface methods to work with the current platform.
  * @see https://floating-ui.com/docs/platform
  */
@@ -75,15 +80,37 @@ export interface MiddlewareData {
 }
 
 export interface ComputePositionConfig {
+  /**
+   * Object to interface with the current platform.
+   */
   platform: Platform;
+  /**
+   * Where to place the floating element relative to the reference element.
+   */
   placement?: Placement;
+  /**
+   * The strategy to use when positioning the floating element.
+   */
   strategy?: Strategy;
+  /**
+   * Array of middleware objects to modify the positioning or provide data for
+   * rendering.
+   */
   middleware?: Array<Middleware | null | undefined | false>;
 }
 
 export interface ComputePositionReturn extends Coords {
+  /**
+   * The final chosen placement of the floating element.
+   */
   placement: Placement;
+  /**
+   * The strategy used to position the floating element.
+   */
   strategy: Strategy;
+  /**
+   * Object containing data returned from all middleware, keyed by their name.
+   */
   middlewareData: MiddlewareData;
 }
 
@@ -161,20 +188,17 @@ export {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from './detectOverflow';
-export {arrow, Options as ArrowOptions} from './middleware/arrow';
-export {
-  autoPlacement,
-  Options as AutoPlacementOptions,
-} from './middleware/autoPlacement';
-export {flip, Options as FlipOptions} from './middleware/flip';
-export {hide, Options as HideOptions} from './middleware/hide';
-export {inline, Options as InlineOptions} from './middleware/inline';
-export {offset, Options as OffsetOptions} from './middleware/offset';
+export {arrow, ArrowOptions} from './middleware/arrow';
+export {autoPlacement, AutoPlacementOptions} from './middleware/autoPlacement';
+export {flip, FlipOptions} from './middleware/flip';
+export {hide, HideOptions} from './middleware/hide';
+export {inline, InlineOptions} from './middleware/inline';
+export {offset, OffsetOptions} from './middleware/offset';
 export {
   limitShift,
   LimitShiftOptions,
   shift,
-  Options as ShiftOptions,
+  ShiftOptions,
 } from './middleware/shift';
-export {size, Options as SizeOptions} from './middleware/size';
+export {size, SizeOptions} from './middleware/size';
 export {rectToClientRect} from './utils/rectToClientRect';

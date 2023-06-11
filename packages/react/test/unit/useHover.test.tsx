@@ -2,14 +2,14 @@ import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
 import {useFloating, useHover, useInteractions} from '../../src';
-import type {Props} from '../../src/hooks/useHover';
+import type {UseHoverProps} from '../../src/hooks/useHover';
 
 jest.useFakeTimers();
 
 function App({
   showReference = true,
   ...props
-}: Props & {showReference?: boolean}) {
+}: UseHoverProps & {showReference?: boolean}) {
   const [open, setOpen] = useState(false);
   const {refs, context} = useFloating({
     open,

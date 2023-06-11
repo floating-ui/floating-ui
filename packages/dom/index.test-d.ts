@@ -5,6 +5,7 @@ import {
   detectOverflow,
   flip,
   hide,
+  inline,
   limitShift,
   Middleware,
   offset,
@@ -88,6 +89,7 @@ computePosition(document.body, document.body, {
     hide(),
     size(),
     arrow({element: document.body}),
+    inline(),
   ],
 }).then();
 
@@ -95,6 +97,7 @@ computePosition(document.body, document.body, {
 arrow();
 
 arrow({element: document.body, padding: 5});
+arrow(() => ({element: document.body, padding: 5}));
 
 // @ts-expect-error
 arrow({element: 'test'});
@@ -116,6 +119,7 @@ shift({limiter: limitShift({offset: () => ({crossAxis: 5})})});
 shift({limiter: limitShift({offset: () => ({mainAxis: 5, crossAxis: 5})})});
 // @ts-expect-error
 shift({limiter: 'test'});
+shift(() => ({boundary: document.body}));
 
 flip({
   // @ts-expect-error
@@ -127,6 +131,7 @@ flip({
 });
 flip({boundary: [document.body]});
 flip({boundary: 'clippingAncestors'});
+flip(() => ({boundary: document.body}));
 size({
   // @ts-expect-error
   boundary: '',
@@ -134,10 +139,12 @@ size({
 size({boundary: document.body});
 size({boundary: [document.body]});
 size({boundary: 'clippingAncestors'});
+size(() => ({boundary: document.body}));
 autoPlacement({
   // @ts-expect-error
   boundary: '',
 });
+autoPlacement(() => ({boundary: document.body}));
 size({boundary: document.body});
 size({boundary: [document.body]});
 size({boundary: 'clippingAncestors'});
@@ -169,6 +176,8 @@ offset('test');
 offset({mainAxis: 'test'});
 // @ts-expect-error
 offset({crossAxis: 'test'});
+
+inline(() => ({padding: 5}));
 
 // @ts-expect-error
 detectOverflow();

@@ -129,7 +129,7 @@ export function Arrow() {
 
       <h2>Arrow padding</h2>
       <Controls>
-        {[0, 20].map((size) => (
+        {[0, 20, 200].map((size) => (
           <button
             key={size}
             data-testid={`arrow-padding-${size}`}

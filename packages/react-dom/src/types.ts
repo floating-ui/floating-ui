@@ -83,11 +83,29 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
        * if required.
        */
       update: () => void;
+      /**
+       * Pre-configured positioning styles to apply to the floating element.
+       */
       floatingStyles: React.CSSProperties;
+      /**
+       * Object containing the reference and floating refs and reactive setters.
+       */
       refs: {
+        /**
+         * A React ref to the reference element.
+         */
         reference: React.MutableRefObject<RT | null>;
+        /**
+         * A React ref to the floating element.
+         */
         floating: React.MutableRefObject<HTMLElement | null>;
+        /**
+         * A callback to set the reference element (reactive).
+         */
         setReference: (node: RT | null) => void;
+        /**
+         * A callback to set the floating element (reactive).
+         */
         setFloating: (node: HTMLElement | null) => void;
       };
       elements: {
@@ -100,6 +118,11 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
   Prettify<
     Partial<ComputePositionConfig> & {
+      /**
+       * A callback invoked when both the reference and floating elements are
+       * mounted, and cleaned up when either is unmounted. This is useful for
+       * setting up event listeners (e.g. pass `autoUpdate`).
+       */
       whileElementsMounted?: (
         reference: RT,
         floating: HTMLElement,
@@ -109,7 +132,15 @@ export type UseFloatingOptions<RT extends ReferenceType = ReferenceType> =
         reference?: RT | null;
         floating?: HTMLElement | null;
       };
+      /**
+       * The `open` state of the floating element to synchronize with the
+       * `isPositioned` value.
+       */
       open?: boolean;
+      /**
+       * Whether to use `transform` for positioning instead of `top` and `left`
+       * (layout) in the `floatingStyles` object.
+       */
       transform?: boolean;
     }
   >;

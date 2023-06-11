@@ -11,11 +11,11 @@ import {
   useHover,
   useInteractions,
 } from '../../src';
-import type {Props} from '../../src/hooks/useFocus';
+import type {UseFocusProps} from '../../src/hooks/useFocus';
 
 jest.useFakeTimers();
 
-function App(props: Props & {dismiss?: boolean; hover?: boolean}) {
+function App(props: UseFocusProps & {dismiss?: boolean; hover?: boolean}) {
   const [open, setOpen] = useState(false);
   const {refs, context} = useFloating({
     open,

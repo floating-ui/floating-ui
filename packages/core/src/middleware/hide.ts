@@ -3,7 +3,8 @@ import {
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import {sides} from '../enums';
-import type {Middleware, Rect, SideObject} from '../types';
+import type {Derivable, Middleware, Rect, SideObject} from '../types';
+import {evaluate} from '../utils/evaluate';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {
   return {
@@ -18,12 +19,14 @@ function isAnySideFullyClipped(overflow: SideObject) {
   return sides.some((side) => overflow[side] >= 0);
 }
 
-export interface Options {
-  /**
-   * The strategy used to determine when to hide the floating element.
-   */
-  strategy: 'referenceHidden' | 'escaped';
-}
+export type HideOptions = Partial<
+  DetectOverflowOptions & {
+    /**
+     * The strategy used to determine when to hide the floating element.
+     */
+    strategy: 'referenceHidden' | 'escaped';
+  }
+>;
 
 /**
  * Provides data to hide the floating element in applicable situations, such as
@@ -31,13 +34,17 @@ export interface Options {
  * @see https://floating-ui.com/docs/hide
  */
 export const hide = (
-  options: Partial<Options & DetectOverflowOptions> = {}
+  options: HideOptions | Derivable<HideOptions> = {}
 ): Middleware => ({
   name: 'hide',
   options,
   async fn(state) {
-    const {strategy = 'referenceHidden', ...detectOverflowOptions} = options;
     const {rects} = state;
+
+    const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
+      options,
+      state
+    );
 
     switch (strategy) {
       case 'referenceHidden': {
