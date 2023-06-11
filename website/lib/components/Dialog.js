@@ -154,11 +154,11 @@ export const DialogContent = React.forwardRef(
         {backdropTransition.isMounted && (
           <>
             <FloatingOverlay
-              className="grid place-items-center bg-gray-1000/60 text-black backdrop-blur-sm"
+              className="grid place-items-center bg-gray-1000/60 backdrop-blur-sm"
               lockScroll
               style={backdropTransition.styles}
             />
-            <div className="fixed top-0 right-0 left-0 bottom-0 grid place-items-center">
+            <div className="fixed top-0 right-0 left-0 bottom-0 grid place-items-center text-black">
               <FloatingFocusManager context={floatingContext}>
                 <div
                   ref={ref}
