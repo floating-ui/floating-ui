@@ -87,6 +87,17 @@ hide({
 });
 ```
 
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+hide((state) => ({
+  padding: state.rects.reference.width,
+}));
+```
+
 ## Data
 
 ```ts
@@ -121,14 +132,3 @@ reference's clipping context and appears fully detached from it.
 ### escapedOffsets
 
 A side object containing overflow offsets.
-
-### Deriving options from state
-
-You can derive the options from the
-[middleware lifecycle state](/docs/middleware#middlewarestate):
-
-```js
-hide((state) => ({
-  padding: state.rects.reference.width,
-}));
-```

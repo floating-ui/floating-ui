@@ -5,10 +5,12 @@ specified axes in order to keep it in view.
 
 <Chrome label="Scroll horizontally" center scrollable="x">
   <Floating
-    content="I am wider than my reference element"
+    content="A floating element that shifts along the x-axis"
     middleware={[{name: 'shift'}]}
+    portaled
+    bounded
   >
-    <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
+    <div className="m-4 grid h-10 w-10 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
 </Chrome>
 
@@ -57,10 +59,10 @@ shift({
 
 <Chrome label="Scroll horizontally" center scrollable="x">
   <Floating
-    content="I am wider than my reference element"
+    content="A floating element that does not shift along the x-axis"
     middleware={[{name: 'shift', options: {mainAxis: false}}]}
   >
-    <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
+    <div className="m-4 grid h-10 w-10 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>
 </Chrome>
 
@@ -94,6 +96,8 @@ shift({
         },
       },
     ]}
+    portaled
+    bounded
   >
     <div className="m-4 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
   </Floating>

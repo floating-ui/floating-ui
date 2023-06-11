@@ -729,7 +729,9 @@ export default function Layout({children, className}) {
   const NavWrapper = isDrawer
     ? FloatingFocusManagerComponent
     : Fragment;
-  const wrapperProps = isDrawer ? {context, modal: false} : {};
+  const wrapperProps = isDrawer
+    ? {context, modal: false, initialFocus: refs.floating}
+    : {};
 
   return (
     <MDXProvider components={components}>
@@ -754,7 +756,7 @@ export default function Layout({children, className}) {
           <nav
             ref={refs.setFloating}
             className={cn(
-              'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
+              'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg outline-none will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
               {hidden: !isMounted}
             )}
             style={styles}
@@ -908,10 +910,10 @@ export default function Layout({children, className}) {
           <SkipNavContent />
           <article
             className="
-              prose-floating prose prose-code:bg-gray-50 prose-code:shadow 
-              prose-pre:bg-gray-50 prose-pre:shadow dark:prose-invert
-              dark:prose-code:bg-gray-700 dark:prose-code:text-[#c8d3f5]
-              dark:prose-pre:bg-gray-800 md:prose-md lg:prose-lg 
+              prose-floating prose max-w-full prose-code:bg-gray-50 
+              prose-code:shadow prose-pre:bg-gray-50 prose-pre:shadow
+              dark:prose-invert dark:prose-code:bg-gray-700
+              dark:prose-code:text-[#c8d3f5] dark:prose-pre:bg-gray-800 md:prose-md lg:prose-lg
             "
           >
             {children}

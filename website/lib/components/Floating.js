@@ -8,6 +8,8 @@ import {
 } from 'react';
 import {flushSync} from 'react-dom';
 
+import {useChromeContext} from './Chrome';
+
 export function Floating({
   children,
   content,
@@ -15,12 +17,15 @@ export function Floating({
   tooltipStyle = {},
   middleware = [],
   portaled,
+  bounded,
   minHeight,
   transition,
   arrow,
   lockedFromArrow,
   ...options
 }) {
+  const boundaryRef = useChromeContext();
+
   const arrowRef = useRef();
   const {
     middlewareData,
@@ -41,7 +46,7 @@ export function Floating({
           ? [
               FloatingUI.shift(
                 middleware.find((m) => m.name === 'shift')
-                  .options
+                  ?.options
               ),
             ]
           : []),
@@ -73,7 +78,16 @@ export function Floating({
             ];
           }
 
-          return FloatingUI[name]?.(options);
+          return FloatingUI[name]?.(
+            name === 'shift'
+              ? {
+                  ...options,
+                  boundary: bounded
+                    ? boundaryRef.current || undefined
+                    : undefined,
+                }
+              : options
+          );
         })
         .flat()
         .filter((v) => v) ?? [],
@@ -113,6 +127,7 @@ export function Floating({
       style={{
         ...tooltipStyle,
         ...floatingStyles,
+        maxWidth: bounded ? '60vw' : undefined,
         backgroundColor: middlewareData.hide?.escaped
           ? 'red'
           : undefined,
