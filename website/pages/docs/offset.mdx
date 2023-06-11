@@ -47,16 +47,13 @@ your middleware array.
 These are the options you can pass to `offset(){:js}`.
 
 ```ts
-interface AxesOffsets {
-  mainAxis?: number;
-  crossAxis?: number;
-  alignmentAxis?: number | null;
-}
-
 type Options =
   | number
-  | AxesOffsets
-  | ((state: MiddlewareState) => number | AxesOffsets);
+  | {
+      mainAxis?: number;
+      crossAxis?: number;
+      alignmentAxis?: number | null;
+    };
 ```
 
 A number represents the distance (gutter or margin) between the

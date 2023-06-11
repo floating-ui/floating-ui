@@ -437,30 +437,32 @@ In the full package, it is narrowed on `refs.domReference{:js}`,
 as the
 [position can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events).
 
-## Variable freshness
+## Option reactivity
 
-When using React state and middleware, variables inside _function
-options_ aren't fresh. This means that if you use a variable
-inside a function option, it will always be the same value, even
-if the variable changes.
+When using React state and middleware, stateful values inside
+_function options_ aren't fresh, nor reactive.
 
 ```js
 const [value, setValue] = useState(0);
 // Fresh:
 offset(value);
-// Not fresh:
+// Not reactive or fresh!
 offset(() => value);
 ```
 
-You should instead use a ref:
+To ensure they are reactive, specify the dependencies in the
+`options{:.objectKey}` key:
 
 ```js
-// Fresh:
-offset(() => valueRef.current);
-```
+const [value, setValue] = useState(0);
 
-To update the position when the ref changes, you can call
-`update(){:js}` manually.
+const offsetResult = offset(() => value);
+const reactiveOffset = {...offsetResult, options: [value]};
+
+useFloating({
+  middleware: [reactiveOffset],
+});
+```
 
 ---
 

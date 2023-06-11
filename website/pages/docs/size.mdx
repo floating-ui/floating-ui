@@ -114,6 +114,17 @@ can be passed. For instance:
 size({padding: 5}); // 0 by default
 ```
 
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+size((state) => ({
+  padding: state.rects.reference.width,
+}));
+```
+
 ## Using with flip
 
 Using `size(){:js}` together with `flip(){:js}` enables some

@@ -163,6 +163,17 @@ arrow({
 });
 ```
 
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+arrow((state) => ({
+  padding: state.rects.reference.width,
+}));
+```
+
 ## Data
 
 The following data is available in `middlewareData.arrow{:js}`:

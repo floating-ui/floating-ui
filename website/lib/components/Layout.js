@@ -15,7 +15,7 @@ import cn from 'classnames';
 import Head from 'next/head';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {useEffect, useRef, useState} from 'react';
+import {Fragment, useEffect, useRef, useState} from 'react';
 import {ExternalLink, GitHub, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -724,6 +724,13 @@ export default function Layout({children, className}) {
     },
   });
 
+  const isDrawer =
+    navOpen && window.matchMedia('(max-width: 768px)').matches;
+  const NavWrapper = isDrawer
+    ? FloatingFocusManagerComponent
+    : Fragment;
+  const wrapperProps = isDrawer ? {context, modal: false} : {};
+
   return (
     <MDXProvider components={components}>
       <Head>
@@ -743,11 +750,7 @@ export default function Layout({children, className}) {
       <div
         className={`md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-[15rem] 2xl:pr-72 ${className}`}
       >
-        <FloatingFocusManagerComponent
-          context={context}
-          modal={false}
-          initialFocus={-1}
-        >
+        <NavWrapper {...wrapperProps}>
           <nav
             ref={refs.setFloating}
             className={cn(
@@ -842,7 +845,7 @@ export default function Layout({children, className}) {
               </ul>
             </div>
           </nav>
-        </FloatingFocusManagerComponent>
+        </NavWrapper>
         <aside className="fixed right-0 top-0 hidden min-w-[15rem] max-w-[15rem] overflow-y-auto pt-12 [max-height:100vh] xl:block 2xl:min-w-[18rem] 2xl:max-w-[20rem]">
           <nav>
             <h4 className="text-md ml-6 mb-1 text-gray-500">

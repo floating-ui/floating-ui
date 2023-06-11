@@ -135,6 +135,17 @@ autoPlacement({
 });
 ```
 
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+autoPlacement((state) => ({
+  padding: state.rects.reference.width,
+}));
+```
+
 ## Final placement
 
 The placement returned from the function will let you know which

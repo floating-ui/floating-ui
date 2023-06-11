@@ -302,7 +302,8 @@ const middleware = [
 ];
 ```
 
-This will depend on the desired positioning you want to achieve.
+If your placement is not edge aligned, disabling it is usually a
+good choice.
 
 ### flipAlignment
 
@@ -399,6 +400,17 @@ can be passed. For instance:
 flip({
   padding: 5, // 0 by default
 });
+```
+
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+flip((state) => ({
+  padding: state.rects.reference.width,
+}));
 ```
 
 ## Final placement

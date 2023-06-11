@@ -108,3 +108,14 @@ default: `2{:js}`
 
 This describes the padding around a disjoined rect when choosing
 it.
+
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+inline((state) => ({
+  padding: state.rects.reference.width,
+}));
+```

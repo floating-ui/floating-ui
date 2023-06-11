@@ -207,6 +207,17 @@ shift({
 If you find the padding does not get applied on the right side,
 see [Handling large content](/docs/misc#handling-large-content).
 
+### Deriving options from state
+
+You can derive the options from the
+[middleware lifecycle state](/docs/middleware#middlewarestate):
+
+```js
+shift((state) => ({
+  padding: state.rects.reference.width,
+}));
+```
+
 ## Data
 
 The following data is available in `middlewareData.shift{:js}`:
