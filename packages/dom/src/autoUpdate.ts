@@ -1,7 +1,12 @@
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
+import {getDocumentElement} from './utils/getDocumentElement';
+import {getNodeScroll} from './utils/getNodeScroll';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
+import {getWindow} from './utils/getWindow';
 import {isElement} from './utils/is';
+import {floor} from './utils/math';
+import {unwrapElement} from './utils/unwrapElement';
 
 export type Options = Partial<{
   /**
@@ -25,12 +30,82 @@ export type Options = Partial<{
   elementResize: boolean;
 
   /**
-   * Whether to update on every animation frame if necessary. Optimized for
-   * performance so updates are only called when necessary, but use sparingly.
+   * Whether to update the position when the reference relocated on the screen
+   * due to layout shift.
+   * @default true
+   */
+  layoutShift: boolean;
+
+  /**
+   * Whether to update on every animation frame if necessary. Only use if you
+   * need to update the position in response to an animation using transforms.
    * @default false
    */
   animationFrame: boolean;
 }>;
+
+function observeMove(element: Element, onMove: () => void) {
+  let io: IntersectionObserver | null = null;
+
+  function cleanup() {
+    io?.disconnect();
+    io = null;
+  }
+
+  function refresh({threshold = 1, skip = true} = {}) {
+    cleanup();
+
+    const rect = element.getBoundingClientRect();
+    const root = getDocumentElement(element);
+    const doc = root.ownerDocument;
+    const scroll = getNodeScroll(doc.scrollingElement || getWindow(element));
+    const top = rect.top + scroll.scrollTop;
+    const left = rect.left + scroll.scrollLeft;
+
+    if (!skip) {
+      onMove();
+    }
+
+    if (!rect.width || !rect.height) {
+      return;
+    }
+
+    const insetTop = floor(top);
+    const insetLeft = floor(left);
+    const insetRight = floor(root.offsetWidth - (left + rect.width));
+    const insetBottom = floor(root.offsetHeight - (top + rect.height));
+    const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
+
+    let isFirstUpdate = true;
+
+    io = new IntersectionObserver(
+      (entries) => {
+        const only = entries[0];
+
+        if (only.intersectionRatio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh({skip: false});
+          }
+
+          // Needs to be non-zero.
+          refresh({
+            threshold:
+              only.intersectionRatio === 0 ? 1e-7 : only.intersectionRatio,
+          });
+        }
+
+        isFirstUpdate = false;
+      },
+      {root, rootMargin, threshold}
+    );
+
+    io.observe(element);
+  }
+
+  refresh();
+
+  return cleanup;
+}
 
 /**
  * Automatically updates the position of the floating element when necessary.
@@ -50,17 +125,16 @@ export function autoUpdate(
     ancestorScroll = true,
     ancestorResize = true,
     elementResize = true,
+    layoutShift = typeof IntersectionObserver === 'function',
     animationFrame = false,
   } = options;
+
+  const referenceEl = unwrapElement(reference);
 
   const ancestors =
     ancestorScroll || ancestorResize
       ? [
-          ...(isElement(reference)
-            ? getOverflowAncestors(reference)
-            : reference.contextElement
-            ? getOverflowAncestors(reference.contextElement)
-            : []),
+          ...(referenceEl ? getOverflowAncestors(referenceEl) : []),
           ...getOverflowAncestors(floating),
         ]
       : [];
@@ -75,16 +149,16 @@ export function autoUpdate(
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 
-  let observer: ResizeObserver | null = null;
+  const cleanupIo =
+    referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+
+  let resizeObserver: ResizeObserver | null = null;
   if (elementResize) {
-    observer = new ResizeObserver(() => {
-      update();
-    });
-    isElement(reference) && !animationFrame && observer.observe(reference);
-    if (!isElement(reference) && reference.contextElement && !animationFrame) {
-      observer.observe(reference.contextElement);
+    resizeObserver = new ResizeObserver(update);
+    if (referenceEl && !animationFrame) {
+      resizeObserver.observe(referenceEl);
     }
-    observer.observe(floating);
+    resizeObserver.observe(floating);
   }
 
   let frameId: number;
@@ -119,8 +193,9 @@ export function autoUpdate(
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
 
-    observer?.disconnect();
-    observer = null;
+    cleanupIo?.();
+    resizeObserver?.disconnect();
+    resizeObserver = null;
 
     if (animationFrame) {
       cancelAnimationFrame(frameId);
