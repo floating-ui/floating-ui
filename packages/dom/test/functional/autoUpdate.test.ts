@@ -9,7 +9,9 @@ import {click} from './utils/click';
         await page.goto('http://localhost:1234/autoUpdate');
         await click(page, `[data-testid="${option}-${bool}"]`);
 
-        await page.evaluate(() => window.scrollTo(0, 50));
+        if (option === 'ancestorScroll') {
+          await page.evaluate(() => window.scrollTo(0, 50));
+        }
 
         expect(await page.locator('.container').screenshot()).toMatchSnapshot(
           `${option}-${bool}.png`
