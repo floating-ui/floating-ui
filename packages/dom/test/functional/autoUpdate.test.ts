@@ -13,6 +13,10 @@ import {click} from './utils/click';
           await page.evaluate(() => window.scrollTo(0, 50));
         }
 
+        if (option === 'ancestorResize') {
+          await page.setViewportSize({width: 500, height: 500});
+        }
+
         expect(await page.locator('.container').screenshot()).toMatchSnapshot(
           `${option}-${bool}.png`
         );
