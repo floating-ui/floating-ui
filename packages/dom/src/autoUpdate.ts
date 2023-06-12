@@ -44,6 +44,7 @@ export type Options = Partial<{
   animationFrame: boolean;
 }>;
 
+// https://samthor.au/2021/observing-dom/
 function observeMove(element: Element, onMove: () => void) {
   let io: IntersectionObserver | null = null;
 
