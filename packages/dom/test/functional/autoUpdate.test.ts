@@ -14,7 +14,7 @@ import {click} from './utils/click';
         }
 
         if (option === 'ancestorResize') {
-          await page.setViewportSize({width: 500, height: 500});
+          await page.setViewportSize({width: 700, height: 720});
         }
 
         expect(await page.locator('.container').screenshot()).toMatchSnapshot(
