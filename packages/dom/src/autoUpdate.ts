@@ -1,9 +1,7 @@
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getDocumentElement} from './utils/getDocumentElement';
-import {getNodeScroll} from './utils/getNodeScroll';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
-import {getWindow} from './utils/getWindow';
 import {isElement} from './utils/is';
 import {floor} from './utils/math';
 import {unwrapElement} from './utils/unwrapElement';
@@ -47,21 +45,19 @@ export type Options = Partial<{
 // https://samthor.au/2021/observing-dom/
 function observeMove(element: Element, onMove: () => void) {
   let io: IntersectionObserver | null = null;
+  const root = getDocumentElement(element);
 
   function cleanup() {
     io?.disconnect();
     io = null;
   }
 
-  function refresh({threshold = 1, skip = true} = {}) {
+  function refresh({threshold = 1, skip = false} = {}) {
     cleanup();
 
     const rect = element.getBoundingClientRect();
-    const root = getDocumentElement(element);
-    const doc = root.ownerDocument;
-    const scroll = getNodeScroll(doc.scrollingElement || getWindow(element));
-    const top = rect.top + scroll.scrollTop;
-    const left = rect.left + scroll.scrollLeft;
+    const top = rect.top;
+    const left = rect.left;
 
     if (!skip) {
       onMove();
@@ -73,8 +69,8 @@ function observeMove(element: Element, onMove: () => void) {
 
     const insetTop = floor(top);
     const insetLeft = floor(left);
-    const insetRight = floor(root.offsetWidth - (left + rect.width));
-    const insetBottom = floor(root.offsetHeight - (top + rect.height));
+    const insetRight = floor(root.clientWidth - (left + rect.width));
+    const insetBottom = floor(root.clientHeight - (top + rect.height));
     const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
 
     let isFirstUpdate = true;
@@ -85,19 +81,20 @@ function observeMove(element: Element, onMove: () => void) {
 
         if (only.intersectionRatio !== threshold) {
           if (!isFirstUpdate) {
-            return refresh({skip: false});
+            return refresh();
           }
 
           // Needs to be non-zero.
           refresh({
             threshold:
               only.intersectionRatio === 0 ? 1e-7 : only.intersectionRatio,
+            skip: true,
           });
         }
 
         isFirstUpdate = false;
       },
-      {root, rootMargin, threshold}
+      {rootMargin, threshold}
     );
 
     io.observe(element);
