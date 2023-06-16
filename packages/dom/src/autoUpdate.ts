@@ -47,29 +47,27 @@ function observeMove(element: Element, onMove: () => void) {
   const root = getDocumentElement(element);
 
   function cleanup() {
-    io?.disconnect();
+    io && io.disconnect();
     io = null;
   }
 
-  function refresh({threshold = 1, skip = false} = {}) {
+  function refresh(skip = false, threshold = 1) {
     cleanup();
 
-    const rect = element.getBoundingClientRect();
-    const top = rect.top;
-    const left = rect.left;
+    const {left, top, width, height} = element.getBoundingClientRect();
 
     if (!skip) {
       onMove();
     }
 
-    if (!rect.width || !rect.height) {
+    if (!width || !height) {
       return;
     }
 
     const insetTop = floor(top);
+    const insetRight = floor(root.clientWidth - (left + width));
+    const insetBottom = floor(root.clientHeight - (top + height));
     const insetLeft = floor(left);
-    const insetRight = floor(root.clientWidth - (left + rect.width));
-    const insetBottom = floor(root.clientHeight - (top + rect.height));
     const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
 
     let isFirstUpdate = true;
@@ -83,11 +81,11 @@ function observeMove(element: Element, onMove: () => void) {
             return refresh();
           }
 
-          refresh({
+          refresh(
+            false,
             // Needs to be non-zero.
-            threshold: ratio === 0 ? 1e-7 : ratio,
-            skip: true,
-          });
+            ratio === 0 ? 1e-7 : ratio
+          );
         }
 
         isFirstUpdate = false;
@@ -98,7 +96,7 @@ function observeMove(element: Element, onMove: () => void) {
     io.observe(element);
   }
 
-  refresh();
+  refresh(true);
 
   return cleanup;
 }
@@ -185,8 +183,8 @@ export function autoUpdate(
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
 
-    cleanupIo?.();
-    resizeObserver?.disconnect();
+    cleanupIo && cleanupIo();
+    resizeObserver && resizeObserver.disconnect();
     resizeObserver = null;
 
     if (animationFrame) {
