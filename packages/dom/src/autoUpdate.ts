@@ -2,7 +2,6 @@ import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getDocumentElement} from './utils/getDocumentElement';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
-import {isElement} from './utils/is';
 import {floor} from './utils/math';
 import {unwrapElement} from './utils/unwrapElement';
 
@@ -77,17 +76,16 @@ function observeMove(element: Element, onMove: () => void) {
 
     io = new IntersectionObserver(
       (entries) => {
-        const only = entries[0];
+        const ratio = entries[0].intersectionRatio;
 
-        if (only.intersectionRatio !== threshold) {
+        if (ratio !== threshold) {
           if (!isFirstUpdate) {
             return refresh();
           }
 
-          // Needs to be non-zero.
           refresh({
-            threshold:
-              only.intersectionRatio === 0 ? 1e-7 : only.intersectionRatio,
+            // Needs to be non-zero.
+            threshold: ratio === 0 ? 1e-7 : ratio,
             skip: true,
           });
         }
@@ -138,12 +136,8 @@ export function autoUpdate(
       : [];
 
   ancestors.forEach((ancestor) => {
-    // ignores Window, checks for [object VisualViewport]
-    const isVisualViewport =
-      !isElement(ancestor) && ancestor.toString().includes('V');
-    if (ancestorScroll && (animationFrame ? isVisualViewport : true)) {
+    ancestorScroll &&
       ancestor.addEventListener('scroll', update, {passive: true});
-    }
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 

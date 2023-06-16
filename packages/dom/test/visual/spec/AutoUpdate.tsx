@@ -4,10 +4,21 @@ import {useEffect, useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
+type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none';
+
+const layoutShiftStrings: LayoutShiftString[] = [
+  'move',
+  'insert',
+  'delete',
+  'none',
+];
+
 export function AutoUpdate() {
   const {x, y, strategy, refs, update} = useFloating({
     strategy: 'fixed',
   });
+
+  const [layoutShift, setLayoutShift] = useState<LayoutShiftString>('none');
   const [options, setOptions] = useState({
     ancestorScroll: false,
     ancestorResize: false,
@@ -45,17 +56,21 @@ export function AutoUpdate() {
   return (
     <>
       <h1>AutoUpdate</h1>
-      <p>The floating element should update when required.</p>
+      {layoutShift !== 'delete' && (
+        <p>The floating element should update when required.</p>
+      )}
+      {layoutShift === 'insert' && <p>inserted content</p>}
       <div className="container" data-flexible>
         <div
           ref={refs.setReference}
           className="reference"
           style={{
             position: 'relative',
-            top: options.layoutShift ? -50 : undefined,
-            left: options.layoutShift ? 50 : undefined,
-            width: options.layoutShift ? referenceSize * 0.9 : referenceSize,
-            height: options.layoutShift ? referenceSize * 0.9 : referenceSize,
+            top: layoutShift === 'move' ? -50 : undefined,
+            left: layoutShift === 'move' ? 50 : undefined,
+            width: layoutShift === 'move' ? referenceSize * 0.9 : referenceSize,
+            height:
+              layoutShift === 'move' ? referenceSize * 0.9 : referenceSize,
             animation: options.animationFrame
               ? 'scale 0.5s ease infinite alternate'
               : '',
@@ -134,18 +149,19 @@ export function AutoUpdate() {
 
       <h2>layoutShift</h2>
       <Controls>
-        {[true, false].map((bool) => (
+        {layoutShiftStrings.map((str) => (
           <button
-            key={String(bool)}
+            key={str}
             onClick={() => {
-              setOptions((o) => ({...o, layoutShift: bool}));
+              setLayoutShift(str);
+              setOptions((o) => ({...o, layoutShift: str !== 'none'}));
             }}
-            data-testid={`layoutShift-${bool}`}
+            data-testid={`layoutShift-${str}`}
             style={{
-              backgroundColor: options.layoutShift === bool ? 'black' : '',
+              backgroundColor: layoutShift === str ? 'black' : '',
             }}
           >
-            {String(bool)}
+            {str}
           </button>
         ))}
       </Controls>
