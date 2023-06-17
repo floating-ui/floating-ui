@@ -51,7 +51,7 @@ function observeMove(element: Element, onMove: () => void) {
     io = null;
   }
 
-  function refresh(skip = false, threshold = 1) {
+  function refresh(skip = false) {
     cleanup();
 
     const {left, top, width, height} = element.getBoundingClientRect();
@@ -74,23 +74,13 @@ function observeMove(element: Element, onMove: () => void) {
 
     io = new IntersectionObserver(
       (entries) => {
-        const ratio = entries[0].intersectionRatio;
-
-        if (ratio !== threshold) {
-          if (!isFirstUpdate) {
-            return refresh();
-          }
-
-          refresh(
-            false,
-            // Needs to be non-zero.
-            ratio === 0 ? 1e-7 : ratio
-          );
+        if (entries[0].intersectionRatio !== 1 && !isFirstUpdate) {
+          refresh();
         }
 
         isFirstUpdate = false;
       },
-      {rootMargin, threshold}
+      {rootMargin, threshold: 1}
     );
 
     io.observe(element);
