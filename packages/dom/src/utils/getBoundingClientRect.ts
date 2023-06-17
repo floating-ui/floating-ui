@@ -54,13 +54,13 @@ export function getBoundingClientRect(
       const left =
         iframeRect.left +
         (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) *
-          iframeRect.left;
+          iframeScale.x;
       const top =
         iframeRect.top +
-        (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeRect.top;
+        (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
 
-      x *= left;
-      y *= top;
+      x *= iframeScale.x;
+      y *= iframeScale.y;
       width *= iframeScale.x;
       height *= iframeScale.y;
 
