@@ -104,7 +104,7 @@ export const arrow = (
       [axis]: coords[axis] - alignmentOffset,
       data: {
         [axis]: offset,
-        centerOffset: center - offset,
+        centerOffset: center - offset + alignmentOffset,
       },
     };
   },

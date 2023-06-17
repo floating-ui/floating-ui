@@ -13,6 +13,7 @@ export function Arrow() {
   const [floatingSize, setFloatingSize] = useState(75);
   const [referenceSize, setReferenceSize] = useState(125);
   const [svg, setSvg] = useState(false);
+  const [centerOffset, setCenterOffset] = useState(false);
 
   const {
     x,
@@ -20,7 +21,9 @@ export function Arrow() {
     strategy,
     update,
     placement: resultantPlacement,
-    middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
+    middlewareData: {
+      arrow: {x: arrowX, y: arrowY, centerOffset: centerOffsetValue} = {},
+    },
     refs,
   } = useFloating({
     placement,
@@ -78,7 +81,7 @@ export function Arrow() {
               height: floatingSize,
             }}
           >
-            Floating
+            {centerOffset ? centerOffsetValue : 'Floating'}
             <ArrowTag
               ref={arrowRef}
               className="arrow"
@@ -167,6 +170,35 @@ export function Arrow() {
             onClick={() => setSvg(bool)}
             style={{
               backgroundColor: bool === svg ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Center offset</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`centerOffset-${bool}`}
+            onClick={() => {
+              setCenterOffset(bool);
+              if (bool) {
+                setReferenceSize(25);
+                setFloatingSize(125);
+                setPlacement('left-end');
+                setPadding(25);
+              } else {
+                setReferenceSize(125);
+                setFloatingSize(75);
+                setPlacement('bottom');
+                setPadding(0);
+              }
+            }}
+            style={{
+              backgroundColor: bool === centerOffset ? 'black' : '',
             }}
           >
             {String(bool)}
