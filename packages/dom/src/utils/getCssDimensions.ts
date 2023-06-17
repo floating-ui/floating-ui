@@ -4,9 +4,7 @@ import {getComputedStyle} from './getComputedStyle';
 import {isHTMLElement} from './is';
 import {round} from './math';
 
-export function getCssDimensions(
-  element: Element
-): Dimensions & {fallback: boolean} {
+export function getCssDimensions(element: Element): Dimensions & {$: boolean} {
   const css = getComputedStyle(element);
   // In testing environments, the `width` and `height` properties are empty
   // strings for SVG elements, returning NaN. Fallback to `0` in this case.
@@ -26,6 +24,6 @@ export function getCssDimensions(
   return {
     width,
     height,
-    fallback: shouldFallback,
+    $: shouldFallback,
   };
 }

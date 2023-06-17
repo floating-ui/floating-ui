@@ -5,6 +5,7 @@ import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 import {isHTMLElement, isOverflowElement} from './is';
+import {createEmptyCoords} from './math';
 import {getNodeName} from './node';
 
 export function getRectRelativeToOffsetParent(
@@ -18,7 +19,7 @@ export function getRectRelativeToOffsetParent(
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  const offsets = {x: 0, y: 0};
+  const offsets = createEmptyCoords(0);
 
   if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (

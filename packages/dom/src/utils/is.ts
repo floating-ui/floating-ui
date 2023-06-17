@@ -25,8 +25,9 @@ export function isShadowRoot(node: Node): node is ShadowRoot {
     return false;
   }
 
-  const OwnElement = getWindow(node).ShadowRoot;
-  return node instanceof OwnElement || node instanceof ShadowRoot;
+  return (
+    node instanceof getWindow(node).ShadowRoot || node instanceof ShadowRoot
+  );
 }
 
 export function isOverflowElement(element: Element): boolean {

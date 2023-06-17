@@ -24,7 +24,7 @@ import {
   isLastTraversableNode,
   isOverflowElement,
 } from './is';
-import {max, min} from './math';
+import {createEmptyCoords, max, min} from './math';
 import {getNodeName} from './node';
 
 type PlatformWithCache = Platform & {
@@ -39,7 +39,9 @@ function getInnerBoundingClientRect(
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : {x: 1, y: 1};
+  const scale = isHTMLElement(element)
+    ? getScale(element)
+    : createEmptyCoords(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
