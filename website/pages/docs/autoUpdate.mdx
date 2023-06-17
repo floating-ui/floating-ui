@@ -61,6 +61,7 @@ interface Options {
   ancestorScroll?: boolean;
   ancestorResize?: boolean;
   elementResize?: boolean;
+  layoutShift?: boolean;
   animationFrame?: boolean;
 }
 ```
@@ -121,19 +122,32 @@ autoUpdate(referenceEl, floatingEl, update, {
 
 </Notice>
 
+### layoutShift
+
+default: `true{:js}`
+
+Whether to update the position of the floating element if the
+reference element moved on the screen as the result of layout
+shift.
+
+```js
+const cleanup = autoUpdate(referenceEl, floatingEl, update, {
+  layoutShift: false,
+});
+```
+
 ### animationFrame
 
 default: `false{:js}`
 
 Whether to update the position of the floating element on every
-animation frame if required.
+animation frame if required. While optimized for performance, it
+should be used sparingly in the following cases:
 
-While this option is optimized for performance, it should be used
-sparingly.
-
-Aside from ensuring anchoring during an animation, it can also
-automatically handle layout changes where the reference element
-moves on the screen not as the result of scrolling or resizing.
+- The reference element is animating on the screen with
+  `transform`s.
+- Ensure a nested floating element is anchored when it's outside
+  of ancestor floating elements' scrolling contexts.
 
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
