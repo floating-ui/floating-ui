@@ -2,13 +2,19 @@ import {expect, test} from '@playwright/test';
 
 import {click} from './utils/click';
 
-['ancestorScroll' /*'elementResize'*/].forEach((option) => {
+['ancestorScroll', 'elementResize', 'ancestorResize'].forEach((option) => {
   [true, false].forEach((bool) => {
     test(`${option}: ${bool}`, async ({page}) => {
       await page.goto('http://localhost:1234/autoUpdate');
       await click(page, `[data-testid="${option}-${bool}"]`);
 
-      await page.evaluate(() => window.scrollTo(0, 50));
+      if (option === 'ancestorScroll') {
+        await page.evaluate(() => window.scrollTo(0, 50));
+      }
+
+      if (option === 'ancestorResize') {
+        await page.setViewportSize({width: 700, height: 720});
+      }
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
         `${option}-${bool}.png`
@@ -17,24 +23,13 @@ import {click} from './utils/click';
   });
 });
 
-test('ancestorResize: false', async ({page}) => {
-  await page.goto('http://localhost:1234/autoUpdate');
-  await click(page, `[data-testid="ancestorResize-false"]`);
+['none', 'move', 'insert', 'delete'].forEach((option) => {
+  test(`layoutShift: ${option}`, async ({page}) => {
+    await page.goto('http://localhost:1234/autoUpdate');
+    await click(page, `[data-testid="layoutShift-${option}"]`);
 
-  await page.setViewportSize({width: 700, height: 720});
-
-  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `ancestorResize-false.png`
-  );
-});
-
-test('ancestorResize: true', async ({page}) => {
-  await page.goto('http://localhost:1234/autoUpdate');
-  await click(page, `[data-testid="ancestorResize-true"]`);
-
-  await page.setViewportSize({width: 700, height: 720});
-
-  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `ancestorResize-true.png`
-  );
+    expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+      `layoutShift-${option}.png`
+    );
+  });
 });

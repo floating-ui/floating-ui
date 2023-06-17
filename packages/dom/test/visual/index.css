@@ -132,7 +132,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  width: 700px;
+  width: 100%;
   background: #edeff7;
   padding: 16px;
 }

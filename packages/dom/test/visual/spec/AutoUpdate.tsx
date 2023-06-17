@@ -1,18 +1,30 @@
 import {autoUpdate} from '@floating-ui/react-dom';
 import {useFloating} from '@floating-ui/react-dom';
-import {useEffect, useState} from 'react';
+import {useEffect, useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
+
+type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none';
+
+const layoutShiftStrings: LayoutShiftString[] = [
+  'move',
+  'insert',
+  'delete',
+  'none',
+];
 
 export function AutoUpdate() {
   const {x, y, strategy, refs, update} = useFloating({
     strategy: 'fixed',
   });
+
+  const [layoutShift, setLayoutShift] = useState<LayoutShiftString>('none');
   const [options, setOptions] = useState({
     ancestorScroll: false,
     ancestorResize: false,
     elementResize: false,
     animationFrame: false,
+    layoutShift: false,
   });
 
   const [referenceSize, setReferenceSize] = useState(200);
@@ -31,7 +43,7 @@ export function AutoUpdate() {
     );
   }, [refs.floating, refs.reference, options, update]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (options.elementResize) {
       setReferenceSize(100);
       setFloatingSize(50);
@@ -44,14 +56,21 @@ export function AutoUpdate() {
   return (
     <>
       <h1>AutoUpdate</h1>
-      <p>The floating element should update when required.</p>
+      {layoutShift !== 'delete' && (
+        <p>The floating element should update when required.</p>
+      )}
+      {layoutShift === 'insert' && <p>inserted content</p>}
       <div className="container" data-flexible>
         <div
           ref={refs.setReference}
           className="reference"
           style={{
-            width: referenceSize,
-            height: referenceSize,
+            position: 'relative',
+            top: layoutShift === 'move' ? -50 : undefined,
+            left: layoutShift === 'move' ? 50 : undefined,
+            width: layoutShift === 'move' ? referenceSize * 0.9 : referenceSize,
+            height:
+              layoutShift === 'move' ? referenceSize * 0.9 : referenceSize,
             animation: options.animationFrame
               ? 'scale 0.5s ease infinite alternate'
               : '',
@@ -124,6 +143,25 @@ export function AutoUpdate() {
             }}
           >
             {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>layoutShift</h2>
+      <Controls>
+        {layoutShiftStrings.map((str) => (
+          <button
+            key={str}
+            onClick={() => {
+              setLayoutShift(str);
+              setOptions((o) => ({...o, layoutShift: str !== 'none'}));
+            }}
+            data-testid={`layoutShift-${str}`}
+            style={{
+              backgroundColor: layoutShift === str ? 'black' : '',
+            }}
+          >
+            {str}
           </button>
         ))}
       </Controls>

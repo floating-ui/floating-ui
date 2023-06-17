@@ -1,7 +1,9 @@
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
+import {getDocumentElement} from './utils/getDocumentElement';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
-import {isElement} from './utils/is';
+import {floor} from './utils/math';
+import {unwrapElement} from './utils/unwrapElement';
 
 export type Options = Partial<{
   /**
@@ -25,12 +27,69 @@ export type Options = Partial<{
   elementResize: boolean;
 
   /**
-   * Whether to update on every animation frame if necessary. Optimized for
-   * performance so updates are only called when necessary, but use sparingly.
+   * Whether to update the position when the reference relocated on the screen
+   * due to layout shift.
+   * @default true
+   */
+  layoutShift: boolean;
+
+  /**
+   * Whether to update on every animation frame if necessary. Only use if you
+   * need to update the position in response to an animation using transforms.
    * @default false
    */
   animationFrame: boolean;
 }>;
+
+// https://samthor.au/2021/observing-dom/
+function observeMove(element: Element, onMove: () => void) {
+  let io: IntersectionObserver | null = null;
+  const root = getDocumentElement(element);
+
+  function cleanup() {
+    io && io.disconnect();
+    io = null;
+  }
+
+  function refresh(skip = false) {
+    cleanup();
+
+    const {left, top, width, height} = element.getBoundingClientRect();
+
+    if (!skip) {
+      onMove();
+    }
+
+    if (!width || !height) {
+      return;
+    }
+
+    const insetTop = floor(top);
+    const insetRight = floor(root.clientWidth - (left + width));
+    const insetBottom = floor(root.clientHeight - (top + height));
+    const insetLeft = floor(left);
+    const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
+
+    let isFirstUpdate = true;
+
+    io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].intersectionRatio !== 1 && !isFirstUpdate) {
+          refresh();
+        }
+
+        isFirstUpdate = false;
+      },
+      {rootMargin, threshold: 1}
+    );
+
+    io.observe(element);
+  }
+
+  refresh(true);
+
+  return cleanup;
+}
 
 /**
  * Automatically updates the position of the floating element when necessary.
@@ -50,41 +109,36 @@ export function autoUpdate(
     ancestorScroll = true,
     ancestorResize = true,
     elementResize = true,
+    layoutShift = typeof IntersectionObserver === 'function',
     animationFrame = false,
   } = options;
+
+  const referenceEl = unwrapElement(reference);
 
   const ancestors =
     ancestorScroll || ancestorResize
       ? [
-          ...(isElement(reference)
-            ? getOverflowAncestors(reference)
-            : reference.contextElement
-            ? getOverflowAncestors(reference.contextElement)
-            : []),
+          ...(referenceEl ? getOverflowAncestors(referenceEl) : []),
           ...getOverflowAncestors(floating),
         ]
       : [];
 
   ancestors.forEach((ancestor) => {
-    // ignores Window, checks for [object VisualViewport]
-    const isVisualViewport =
-      !isElement(ancestor) && ancestor.toString().includes('V');
-    if (ancestorScroll && (animationFrame ? isVisualViewport : true)) {
+    ancestorScroll &&
       ancestor.addEventListener('scroll', update, {passive: true});
-    }
     ancestorResize && ancestor.addEventListener('resize', update);
   });
 
-  let observer: ResizeObserver | null = null;
+  const cleanupIo =
+    referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
+
+  let resizeObserver: ResizeObserver | null = null;
   if (elementResize) {
-    observer = new ResizeObserver(() => {
-      update();
-    });
-    isElement(reference) && !animationFrame && observer.observe(reference);
-    if (!isElement(reference) && reference.contextElement && !animationFrame) {
-      observer.observe(reference.contextElement);
+    resizeObserver = new ResizeObserver(update);
+    if (referenceEl && !animationFrame) {
+      resizeObserver.observe(referenceEl);
     }
-    observer.observe(floating);
+    resizeObserver.observe(floating);
   }
 
   let frameId: number;
@@ -119,8 +173,9 @@ export function autoUpdate(
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
 
-    observer?.disconnect();
-    observer = null;
+    cleanupIo && cleanupIo();
+    resizeObserver && resizeObserver.disconnect();
+    resizeObserver = null;
 
     if (animationFrame) {
       cancelAnimationFrame(frameId);
