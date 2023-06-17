@@ -5,9 +5,9 @@ export function getNearestOverflowAncestor(node: Node): HTMLElement {
   const parentNode = getParentNode(node);
 
   if (isLastTraversableNode(parentNode)) {
-    // `getParentNode` will never return a `Document` due to the fallback
-    // check, so it's either the <html> or <body> element.
-    return (parentNode as HTMLElement).ownerDocument.body;
+    return node.ownerDocument
+      ? node.ownerDocument.body
+      : (node as Document).body;
   }
 
   if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
