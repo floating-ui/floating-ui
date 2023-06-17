@@ -1,7 +1,8 @@
 import {getWindow} from './getWindow';
 import {isSafari} from './is';
+import {createEmptyCoords} from './math';
 
-const noOffsets = {x: 0, y: 0};
+const noOffsets = createEmptyCoords(0);
 
 export function getVisualOffsets(
   element: Element | undefined,

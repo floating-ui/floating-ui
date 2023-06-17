@@ -5,6 +5,7 @@ import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';
 import {getScale} from './getScale';
 import {isHTMLElement, isOverflowElement} from './is';
+import {createEmptyCoords} from './math';
 import {getNodeName} from './node';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
@@ -24,8 +25,8 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  let scale = {x: 1, y: 1};
-  const offsets = {x: 0, y: 0};
+  let scale = createEmptyCoords(1);
+  const offsets = createEmptyCoords(0);
 
   if (
     isOffsetParentAnElement ||

@@ -1,10 +1,11 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 
-import {FALLBACK_SCALE, getScale} from './getScale';
+import {getScale} from './getScale';
 import {getVisualOffsets} from './getVisualOffsets';
 import {getWindow} from './getWindow';
 import {isElement} from './is';
+import {createEmptyCoords} from './math';
 import {unwrapElement} from './unwrapElement';
 
 export function getBoundingClientRect(
@@ -16,7 +17,7 @@ export function getBoundingClientRect(
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
 
-  let scale = FALLBACK_SCALE;
+  let scale = createEmptyCoords(1);
   if (includeScale) {
     if (offsetParent) {
       if (isElement(offsetParent)) {
@@ -50,11 +51,12 @@ export function getBoundingClientRect(
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
       const css = getComputedStyle(currentIFrame);
-
-      iframeRect.x +=
+      const left =
+        iframeRect.left +
         (currentIFrame.clientLeft + parseFloat(css.paddingLeft)) *
-        iframeScale.x;
-      iframeRect.y +=
+          iframeScale.x;
+      const top =
+        iframeRect.top +
         (currentIFrame.clientTop + parseFloat(css.paddingTop)) * iframeScale.y;
 
       x *= iframeScale.x;
@@ -62,8 +64,8 @@ export function getBoundingClientRect(
       width *= iframeScale.x;
       height *= iframeScale.y;
 
-      x += iframeRect.x;
-      y += iframeRect.y;
+      x += left;
+      y += top;
 
       currentIFrame = getWindow(currentIFrame).frameElement;
     }
