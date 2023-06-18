@@ -1,16 +1,17 @@
 import {autoUpdate} from '@floating-ui/react-dom';
 import {useFloating} from '@floating-ui/react-dom';
-import {useEffect, useLayoutEffect, useState} from 'react';
+import {useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
-type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none';
+type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none' | 'init';
 
 const layoutShiftStrings: LayoutShiftString[] = [
   'move',
   'insert',
   'delete',
   'none',
+  'init',
 ];
 
 export function AutoUpdate() {
@@ -21,14 +22,12 @@ export function AutoUpdate() {
     elementResize: false,
     animationFrame: false,
   });
-  const layoutShiftOption = !options.ancestorScroll;
+  const layoutShiftOption = layoutShift !== 'none';
 
   const [referenceSize, setReferenceSize] = useState(200);
   const [floatingSize, setFloatingSize] = useState(100);
 
-  const {x, y, strategy, refs, update} = useFloating({
-    strategy: 'fixed',
-  });
+  const {x, y, strategy, refs, update} = useFloating();
 
   useLayoutEffect(() => {
     if (!refs.reference.current || !refs.floating.current) {
