@@ -44,9 +44,12 @@ export type Options = Partial<{
 // https://samthor.au/2021/observing-dom/
 function observeMove(element: Element, onMove: () => void) {
   let io: IntersectionObserver | null = null;
+  let timeoutId: NodeJS.Timeout;
+
   const root = getDocumentElement(element);
 
   function cleanup() {
+    clearTimeout(timeoutId);
     io && io.disconnect();
     io = null;
   }
@@ -71,11 +74,9 @@ function observeMove(element: Element, onMove: () => void) {
     const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
 
     let isFirstUpdate = true;
-    let timeoutId: NodeJS.Timeout;
 
     io = new IntersectionObserver(
       (entries) => {
-        clearTimeout(timeoutId);
         const ratio = entries[0].intersectionRatio;
 
         if (ratio !== threshold) {
