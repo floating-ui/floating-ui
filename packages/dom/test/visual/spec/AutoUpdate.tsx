@@ -1,47 +1,46 @@
 import {autoUpdate} from '@floating-ui/react-dom';
 import {useFloating} from '@floating-ui/react-dom';
-import {useEffect, useLayoutEffect, useState} from 'react';
+import {useLayoutEffect, useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
-type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none';
+type LayoutShiftString = 'move' | 'insert' | 'delete' | 'none' | 'init';
 
 const layoutShiftStrings: LayoutShiftString[] = [
   'move',
   'insert',
   'delete',
   'none',
+  'init',
 ];
 
 export function AutoUpdate() {
-  const {x, y, strategy, refs, update} = useFloating({
-    strategy: 'fixed',
-  });
-
   const [layoutShift, setLayoutShift] = useState<LayoutShiftString>('none');
   const [options, setOptions] = useState({
     ancestorScroll: false,
     ancestorResize: false,
     elementResize: false,
     animationFrame: false,
-    layoutShift: false,
   });
+  const layoutShiftOption = layoutShift !== 'none';
 
   const [referenceSize, setReferenceSize] = useState(200);
   const [floatingSize, setFloatingSize] = useState(100);
 
-  useEffect(() => {
+  const {x, y, strategy, refs, update} = useFloating({
+    strategy: 'fixed',
+  });
+
+  useLayoutEffect(() => {
     if (!refs.reference.current || !refs.floating.current) {
       return;
     }
 
-    return autoUpdate(
-      refs.reference.current,
-      refs.floating.current,
-      update,
-      options
-    );
-  }, [refs.floating, refs.reference, options, update]);
+    return autoUpdate(refs.reference.current, refs.floating.current, update, {
+      ...options,
+      layoutShift: layoutShiftOption,
+    });
+  }, [refs.floating, refs.reference, options, layoutShiftOption, update]);
 
   useLayoutEffect(() => {
     if (options.elementResize) {
@@ -154,7 +153,6 @@ export function AutoUpdate() {
             key={str}
             onClick={() => {
               setLayoutShift(str);
-              setOptions((o) => ({...o, layoutShift: str !== 'none'}));
             }}
             data-testid={`layoutShift-${str}`}
             style={{

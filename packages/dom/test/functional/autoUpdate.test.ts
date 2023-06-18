@@ -26,6 +26,7 @@ import {click} from './utils/click';
 ['none', 'move', 'insert', 'delete'].forEach((option) => {
   test(`layoutShift: ${option}`, async ({page}) => {
     await page.goto('http://localhost:1234/autoUpdate');
+    await click(page, `[data-testid="layoutShift-init"]`);
     await click(page, `[data-testid="layoutShift-${option}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(

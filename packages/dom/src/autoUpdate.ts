@@ -44,14 +44,17 @@ export type Options = Partial<{
 // https://samthor.au/2021/observing-dom/
 function observeMove(element: Element, onMove: () => void) {
   let io: IntersectionObserver | null = null;
+  let timeoutId: NodeJS.Timeout;
+
   const root = getDocumentElement(element);
 
   function cleanup() {
+    clearTimeout(timeoutId);
     io && io.disconnect();
     io = null;
   }
 
-  function refresh(skip = false) {
+  function refresh(skip = false, threshold = 1) {
     cleanup();
 
     const {left, top, width, height} = element.getBoundingClientRect();
@@ -74,13 +77,25 @@ function observeMove(element: Element, onMove: () => void) {
 
     io = new IntersectionObserver(
       (entries) => {
-        if (entries[0].intersectionRatio !== 1 && !isFirstUpdate) {
-          refresh();
+        const ratio = entries[0].intersectionRatio;
+
+        if (ratio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh();
+          }
+
+          if (ratio === 0) {
+            timeoutId = setTimeout(() => {
+              refresh(false, 1e-7);
+            }, 100);
+          } else {
+            refresh(false, ratio);
+          }
         }
 
         isFirstUpdate = false;
       },
-      {rootMargin, threshold: 1}
+      {rootMargin, threshold}
     );
 
     io.observe(element);
