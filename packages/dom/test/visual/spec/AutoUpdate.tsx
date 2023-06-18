@@ -27,7 +27,9 @@ export function AutoUpdate() {
   const [referenceSize, setReferenceSize] = useState(200);
   const [floatingSize, setFloatingSize] = useState(100);
 
-  const {x, y, strategy, refs, update} = useFloating();
+  const {x, y, strategy, refs, update} = useFloating({
+    strategy: 'fixed',
+  });
 
   useLayoutEffect(() => {
     if (!refs.reference.current || !refs.floating.current) {
