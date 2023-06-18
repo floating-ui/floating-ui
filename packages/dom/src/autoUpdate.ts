@@ -51,7 +51,7 @@ function observeMove(element: Element, onMove: () => void) {
     io = null;
   }
 
-  function refresh(skip = false) {
+  function refresh(skip = false, threshold = 1) {
     cleanup();
 
     const {left, top, width, height} = element.getBoundingClientRect();
@@ -71,16 +71,30 @@ function observeMove(element: Element, onMove: () => void) {
     const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
 
     let isFirstUpdate = true;
+    let timeoutId: NodeJS.Timeout;
 
     io = new IntersectionObserver(
       (entries) => {
-        if (entries[0].intersectionRatio !== 1 && !isFirstUpdate) {
-          refresh();
+        clearTimeout(timeoutId);
+        const ratio = entries[0].intersectionRatio;
+
+        if (ratio !== threshold) {
+          if (!isFirstUpdate) {
+            return refresh();
+          }
+
+          if (ratio === 0) {
+            timeoutId = setTimeout(() => {
+              refresh(false, 1e-7);
+            }, 100);
+          } else {
+            refresh(false, ratio);
+          }
         }
 
         isFirstUpdate = false;
       },
-      {rootMargin, threshold: 1}
+      {rootMargin, threshold}
     );
 
     io.observe(element);
