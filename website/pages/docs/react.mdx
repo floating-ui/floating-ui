@@ -127,7 +127,7 @@ Either element can be synchronized externally or via
 
 <br />
 ```js
-const [anchor, setAnchor] = useState(null);
+const [anchorEl, setAnchorEl] = useState(null);
 useFloating({
   elements: {
     reference: anchorRef.current, // ❌
@@ -189,13 +189,12 @@ return (
 
 ## Anchoring
 
-The position is only calculated **once** on render, or when the
+The position is only calculated once on render, or when the
 `reference` or `floating` elements change.
 
 To ensure the floating element remains anchored to its reference
-element in a variety of scenarios without detaching — such as
-when scrolling or resizing the page — you can pass the
-[`autoUpdate`](/docs/autoUpdate) utility to the
+element in a variety of scenarios without detachin, you can pass
+the [`autoUpdate`](/docs/autoUpdate) utility to the
 `whileElementsMounted{:.objectKey}` prop:
 
 ```js
@@ -207,11 +206,17 @@ useFloating({
 });
 ```
 
+This prop is called whenever the reference or floating elements
+are both mounted, and cleans up if they change. This allows
+listeners to be registered.
+
+<Notice title="Warning" type="warning">
 Ensure you are using conditional rendering for the floating
 element, not an opacity/visibility/display style. If you are
 using CSS to hide it, instead of conditional rendering, use an
 effect to register and clean up `autoUpdate` instead of the
 `whileElementsMounted{:.objectKey}` prop.
+</Notice>
 
 To pass options to `autoUpdate`:
 
@@ -225,25 +230,13 @@ useFloating({
 });
 ```
 
-<Notice title="Performance note" type="warning">
-  Try to avoid invoking `useFloating(){:js}` in a big, complex component that 
-  renders out a list. This is because it re-renders the host component on
-  every single scroll or resize event when required. Instead, create a new 
-  child component that only renders out the reference and floating elements.
-</Notice>
-
 ### Manual updating
 
-While `autoUpdate` covers most cases where the position of the
-floating element must be updated, it does not cover every single
-one possible due to performance/platform limitations.
-
 The hook returns an `update(){:js}` function to update the
-position at will:
+position at will, manually:
 
 ```js
 const {update} = useFloating();
-
 <Panel onResize={update} />;
 ```
 

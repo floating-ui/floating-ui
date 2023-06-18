@@ -6,10 +6,6 @@ element. The most common use case for this is a macOS-style
 select menu, where the selected item pops up directly over the
 target button.
 
-Despite being related to positioning, the intricate UX details
-involved requires the modules to be available only for the
-interactions package.
-
 ## Usage
 
 There are two modules: `inner(){:js}` and
@@ -25,15 +21,18 @@ There are two modules: `inner(){:js}` and
   This is not strictly required but is necessary to match the UX
   of the macOS-style select menu.
 
-```js /inner/ /useInnerOffset/
+```js /inner/1-2 /useInnerOffset/1-2
 import {inner, useInnerOffset} from '@floating-ui/react';
 
 // ...
 const {context} = useFloating({
   middleware: [inner()],
 });
+
+const innerOffset = useInnerOffset(context);
+
 const {getReferenceProps, getFloatingProps} = useInteractions([
-  useInnerOffset(context),
+  innerOffset,
 ]);
 ```
 

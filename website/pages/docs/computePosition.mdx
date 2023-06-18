@@ -8,21 +8,17 @@ element.
 
 <CircleImage name="computePosition" inline={inline} />
 
-It runs only once — [`autoUpdate`](/docs/autoUpdate) is used with
-it to ensure the floating element remains anchored by continually
-re-running the calculation as necessary.
-
 ## Usage
 
 At its most basic, the function accepts two elements:
 
 - **Reference element** — also known as the anchor element, this
   is the element that is being _referred_ to for positioning.
-  Often this is a button that triggers a popup like a tooltip or
-  menu.
+  Often this is a button that triggers a floating popover like a
+  tooltip or menu.
 - **Floating element** — this is the element that floats next to
   the reference element, remaining anchored to it. This is the
-  popup or tooltip itself.
+  popover or tooltip itself.
 
 ```html
 <button id="button">My reference element</button>
