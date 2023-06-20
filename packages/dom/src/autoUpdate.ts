@@ -95,7 +95,7 @@ function observeMove(element: Element, onMove: () => void) {
 
         isFirstUpdate = false;
       },
-      {rootMargin, threshold: max(0, min(1, threshold || 1))}
+      {rootMargin, threshold: max(0, min(1, threshold)) || 1}
     );
 
     io.observe(element);
