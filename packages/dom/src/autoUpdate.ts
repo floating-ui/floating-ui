@@ -2,7 +2,7 @@ import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
 import {getDocumentElement} from './utils/getDocumentElement';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
-import {floor} from './utils/math';
+import {floor, max, min} from './utils/math';
 import {unwrapElement} from './utils/unwrapElement';
 
 export type Options = Partial<{
@@ -84,7 +84,7 @@ function observeMove(element: Element, onMove: () => void) {
             return refresh();
           }
 
-          if (ratio === 0) {
+          if (!ratio) {
             timeoutId = setTimeout(() => {
               refresh(false, 1e-7);
             }, 100);
@@ -95,7 +95,7 @@ function observeMove(element: Element, onMove: () => void) {
 
         isFirstUpdate = false;
       },
-      {rootMargin, threshold}
+      {rootMargin, threshold: max(0, min(1, threshold || 1))}
     );
 
     io.observe(element);
