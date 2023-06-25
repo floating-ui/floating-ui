@@ -67,20 +67,19 @@ context based on the React tree instead of the DOM tree.
 <FloatingPortal preserveTabOrder={false} />
 ```
 
-## useFloatingPortalNode
+## `useFloatingPortalNode`
 
 Exposes the portal container node for custom use in other
-components. The hook injects the node, if it does not yet exist
-in the DOM.
+components.
 
 ```js
 function App() {
   const portalNode = useFloatingPortalNode({
-    id: 'custom-root-id',
+    // Accepts `id` and `root` props
   });
 
   if (portalNode) {
-    return ReactDOM.createPortal(<div></div>, portalNode);
+    return createPortal(<div />, portalNode);
   }
 
   return null;

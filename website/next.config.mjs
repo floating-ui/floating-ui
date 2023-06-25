@@ -28,6 +28,7 @@ const replaceVariables = () => async (tree) => {
   });
 };
 
+/** @type {import('rehype-pretty-code').Options} */
 const rehypePrettyCodeOptions = {
   theme: {
     dark: JSON.parse(
@@ -47,37 +48,13 @@ const rehypePrettyCodeOptions = {
       )
     ),
   },
+  keepBackground: false,
   tokensMap: {
     objectKey: 'meta.object-literal.key',
     function: 'entity.name.function',
     param: 'variable.parameter',
     const: 'variable.other.constant',
     class: 'support.class',
-  },
-  onVisitLine(node) {
-    if (node.children.length === 0) {
-      node.children = [{type: 'text', value: ' '}];
-    }
-    node.properties.className = ['line'];
-  },
-  onVisitHighlightedLine(node) {
-    node.properties.className = ['line', 'line--highlighted'];
-  },
-  onVisitHighlightedWord(node, id) {
-    node.properties.className = ['word'];
-
-    if (id) {
-      // If the word spans across syntax boundaries (e.g. punctuation), remove
-      // colors from the child nodes.
-      if (node.properties['data-rehype-pretty-code-wrapper']) {
-        node.children.forEach((childNode) => {
-          childNode.properties.style = '';
-        });
-      }
-
-      node.properties.style = '';
-      node.properties['data-word-id'] = id;
-    }
   },
 };
 

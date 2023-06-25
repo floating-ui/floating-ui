@@ -18,13 +18,6 @@ h6 {
   @apply font-variable;
 }
 
-.font-code,
-code,
-pre {
-  font-family: Consolas, ui-monospace, SFMono-Regular, Menlo,
-    Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-}
-
 [data-remove-transitions] * {
   transition: none !important;
 }
@@ -32,10 +25,6 @@ pre {
 [data-reach-skip-nav-link]:focus {
   @apply fixed m-3 bg-white/90 text-black backdrop-blur;
   z-index: 2147483647;
-}
-
-.shiki {
-  @apply relative;
 }
 
 ::selection {

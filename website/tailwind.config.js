@@ -155,64 +155,84 @@ module.exports = {
                 fontSize: 'inherit',
                 boxShadow: 'none',
               },
-              '.line': {
+              '[data-line]': {
                 margin: '0 -1.5rem',
                 padding: '0 1.5rem',
               },
-              '.word': {
+              '[data-highlighted-chars]': {
                 padding: '0.2rem 0',
                 borderRadius: '0.25rem',
                 zIndex: '0',
               },
               '&::before': {
                 position: 'absolute',
-                fontSize: '80%',
-                right: '0.6rem',
-                top: '0.2rem',
+                fontSize: '0.8rem',
+                right: '0',
+                top: '0',
                 content: 'attr(data-language)',
-                textTansform: 'uppercase',
+                padding: '0.25rem 0.5rem',
+                display: 'grid',
+                placeItems: 'center',
+                fontWeight: 'bold',
+                borderRadius: '0.25rem 0.25rem 0 0',
+                lineHeight: '1.5',
               },
               '&[data-theme="light"]::before': {
-                color: GRAY[1000],
+                background: GRAY[50],
+                color: GRAY[700],
               },
               '&[data-theme="dark"]::before': {
-                color: GRAY[50],
+                background: GRAY[800],
+                color: GRAY[200],
               },
-              'code[data-theme="light"] .line--highlighted': {
-                borderLeftColor: colors.rose[400],
-                backgroundColor: colors.orange[50],
+              'code[data-theme="light"] [data-highlighted-line]':
+                {
+                  borderLeftColor: colors.rose[400],
+                  backgroundColor: colors.orange[50],
+                },
+              'code[data-theme="dark"] [data-highlighted-line]':
+                {
+                  borderLeftColor: colors.rose[400],
+                  backgroundColor: `rgb(221 214 254 / 0.1)`,
+                },
+              'code[data-theme="light"] [data-highlighted-chars]':
+                {
+                  backgroundColor: colors.orange[100],
+                  boxShadow: `0 0 0 1px ${colors.orange[100]}`,
+                },
+              'code[data-theme="dark"] [data-highlighted-chars]':
+                {
+                  backgroundColor: 'rgba(200,200,255,0.2)',
+                  boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
+                },
+              '[data-chars-id]': {
+                borderBottom: '1px solid transparent',
+                boxShadow: 'none',
+                padding: '0.25rem',
               },
-              'code[data-theme="dark"] .line--highlighted': {
-                borderLeftColor: colors.rose[400],
-                backgroundColor: `rgb(221 214 254 / 0.1)`,
-              },
-              'code[data-theme="light"] .word': {
-                backgroundColor: colors.orange[100],
-                boxShadow: `0 0 0 1px ${colors.orange[100]}`,
-              },
-              'code[data-theme="dark"] .word': {
-                backgroundColor: 'rgba(200,200,255,0.2)',
-                boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
-              },
-              'code[data-theme="dark"] [data-word-id="a"]': {
+              'code[data-theme="dark"] [data-chars-id="a"]': {
                 backgroundColor: theme.colors.rose[800],
-                color: theme.colors.rose[200],
-                boxShadow: `0 0 0 1px ${theme.colors.rose[800]}`,
+                color: `${theme.colors.rose[200]} !important`,
+                borderBottomColor: theme.colors.rose[500],
+                boxShadow: 'none',
               },
-              'code[data-theme="dark"] [data-word-id="b"]': {
+              'code[data-theme="dark"] [data-chars-id="b"]': {
                 backgroundColor: theme.colors.cyan[800],
-                color: theme.colors.cyan[200],
-                boxShadow: `0 0 0 1px ${theme.colors.cyan[800]}`,
+                color: `${theme.colors.cyan[200]} !important`,
+                borderBottomColor: theme.colors.cyan[500],
+                boxShadow: 'none',
               },
-              'code[data-theme="light"] [data-word-id="a"]': {
+              'code[data-theme="light"] [data-chars-id="a"]': {
                 backgroundColor: theme.colors.rose[100],
-                color: theme.colors.rose[900],
-                boxShadow: `0 0 0 1px ${theme.colors.rose[100]}`,
+                color: `${theme.colors.rose[900]} !important`,
+                borderBottomColor: theme.colors.rose[300],
+                boxShadow: 'none',
               },
-              'code[data-theme="light"] [data-word-id="b"]': {
+              'code[data-theme="light"] [data-chars-id="b"]': {
                 backgroundColor: theme.colors.cyan[100],
-                color: theme.colors.cyan[900],
-                boxShadow: `0 0 0 1px ${theme.colors.cyan[100]}`,
+                color: `${theme.colors.cyan[900]} !important`,
+                borderBottomColor: theme.colors.cyan[300],
+                boxShadow: 'none',
               },
               span: {
                 position: 'relative',

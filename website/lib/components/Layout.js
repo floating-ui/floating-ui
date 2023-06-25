@@ -920,7 +920,7 @@ export default function Layout({children, className}) {
           </article>
           {displayNavigation && (
             <Navigation
-              back={nav[index - 1]}
+              prev={nav[index - 1]}
               next={nav[index + 1]}
             />
           )}

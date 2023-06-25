@@ -12,16 +12,16 @@ export default function Notice({
   return (
     <aside
       className={cn(
-        'py-3 px-4 rounded bg-opacity-25 mb-4 text-base not-prose',
+        'mb-4 rounded bg-opacity-40 px-6 pt-6 pb-0.5 dark:bg-opacity-40',
         className,
         {
-          'bg-blue-300 dark:bg-blue-500/20 text-blue-900 dark:text-blue-200':
+          'bg-blue-300 text-blue-900 dark:bg-blue-500 dark:text-blue-200':
             type === 'note',
-          'bg-orange-300 dark:bg-orange-500/20 text-orange-900 dark:text-orange-200':
+          'bg-orange-300 text-orange-900 dark:bg-orange-500 dark:text-orange-200':
             type === 'warning',
-          'bg-rose-400 dark:bg-rose-600/20 text-rose-900 dark:text-rose-200':
+          'bg-rose-400/30 text-rose-900 dark:bg-rose-600 dark:text-rose-200':
             type === 'error',
-          'bg-green-300 dark:bg-green-500/20 text-green-900 dark:text-green-200':
+          'bg-green-300 text-green-900 dark:bg-green-500 dark:text-green-200':
             type === 'version',
           'mt-8': gap === 'above',
           'mb-8': gap === 'below',
@@ -29,9 +29,9 @@ export default function Notice({
       )}
     >
       {type !== 'version' && (
-        <strong className="block mt-1 mb-2 text-gray-900 dark:text-gray-100">
+        <h5 className="-mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">
           {title[0].toUpperCase() + title.slice(1)}
-        </strong>
+        </h5>
       )}
       <ChildrenTag>{children}</ChildrenTag>
     </aside>

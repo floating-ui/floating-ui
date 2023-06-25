@@ -35,8 +35,6 @@ If you only need positioning, the following package is smaller in
 size (the above one uses it as a dependency). This is useful if
 you are controlling interactions yourself (e.g. a library).
 
-<br />
-
 ```bash
 npm install @floating-ui/react-dom
 ```
@@ -50,7 +48,7 @@ There are two main parts to creating floating elements:
 - [Positioning](/docs/react#positioning) — available for both
   packages
 - [Interactions](/docs/react#interactions) — available for
-  `@floating-ui/react`
+  `@floating-ui/react{:.string}`
 
 ## Positioning
 
@@ -88,6 +86,8 @@ changes to the reference or floating elements, such as with
 conditional rendering, are handled correctly by updating the
 position.
 
+### External elements
+
 Depending on your component tree, you may instead want to
 synchronize with an external element instead of using refs.
 
@@ -120,25 +120,24 @@ function Tooltip({anchor}) {
 Either element can be synchronized externally or via
 `refs.set{Element}{:js}`.
 
-<Notice title="Important!" type="error">
-  Make sure the elements are **stored in state**, not in a ref.
-  This makes them reactive to changes, and avoids reading refs in
-  render (forbidden by React).
+<Notice title="Element reactivity" type="error">
+  Make sure the elements are stored in <WordHighlight id="b">state</WordHighlight>. This makes them reactive to 
+  changes, and avoids reading refs in render (forbidden by React).
 
-<br />
-```js
-const [anchorEl, setAnchorEl] = useState(null);
+```ts /useState/#b
+const [anchor, setAnchor] = useState<Element | null>(null);
+
 useFloating({
   elements: {
     reference: anchorRef.current, // ❌
-    reference: anchorEl, // ✅
+    reference: anchor, // ✅
   },
 });
 ```
 
 </Notice>
 
-### Disabling transform
+## Positioning styles customization
 
 By default, the floating element is positioned using
 `transform{:.objectKey}` in the `floatingStyles` object. This is
@@ -151,15 +150,7 @@ useFloating({transform: false});
 
 If you'd like to retain transform styles while allowing transform
 animations, create a wrapper, where the outermost node is the
-positioned one, and the inner is the actual styled element:
-
-```js
-<div ref={refs.setFloating} style={floatingStyles}>
-  <div className="styled">
-    Floating
-  <div>
-</div>
-```
+positioned one, and the inner is the actual styled element.
 
 <Notice>
   When disabling transforms, add `width: max-content{:sass}` (or a fixed width) 
@@ -167,11 +158,8 @@ positioned one, and the inner is the actual styled element:
   the floating element.
 </Notice>
 
-### Custom position styles
-
-The hook returns the coordinates and positioning strategy
-directly if `floatingStyles` is not suitable for full
-customization.
+The hook also returns the coordinates and positioning strategy
+directly if `floatingStyles` is not suitable:
 
 ```js
 const {x, y, strategy} = useFloating();
@@ -189,15 +177,12 @@ return (
 
 ## Anchoring
 
-The position is only calculated once on render, or when the
-`reference` or `floating` elements change.
-
-To ensure the floating element remains anchored to its reference
-element in a variety of scenarios without detaching, you can pass
-the [`autoUpdate`](/docs/autoUpdate) utility to the
+To ensure the floating element remains **anchored** to its
+reference element in a variety of scenarios without detaching,
+you can pass the [`autoUpdate`](/docs/autoUpdate) utility to the
 `whileElementsMounted{:.objectKey}` prop:
 
-```js
+```js /autoUpdate/
 import {useFloating, autoUpdate} from '@floating-ui/react';
 
 // Inside your component
@@ -206,9 +191,10 @@ useFloating({
 });
 ```
 
-This prop is called whenever the reference or floating elements
-are both mounted, and cleans up if they change. This allows
-listeners to be registered.
+This prop is called whenever both the reference and floating
+elements are mounted, and cleans up if they change. This allows
+listeners that automatically update the position to be
+registered.
 
 <Notice title="Warning" type="warning">
 Ensure you are using conditional rendering for the floating
@@ -433,27 +419,30 @@ as the
 ## Option reactivity
 
 When using React state and middleware, stateful values inside
-_function options_ aren't fresh, nor reactive.
+_function options_ (useful when deriving from middleware state)
+aren't fresh or reactive.
 
 ```js
 const [value, setValue] = useState(0);
-// Fresh:
+// Reactive and fresh:
 offset(value);
-// Not reactive or fresh!
+// Not reactive or fresh:
 offset(() => value);
 ```
 
 To ensure they are reactive, specify the dependencies in the
 `options{:.objectKey}` key:
 
-```js
+```js {7}
 const [value, setValue] = useState(0);
 
-const offsetResult = offset(() => value);
-const reactiveOffset = {...offsetResult, options: [value]};
-
 useFloating({
-  middleware: [reactiveOffset],
+  middleware: [
+    {
+      ...offset(() => value),
+      options: [value],
+    },
+  ],
 });
 ```
 
@@ -494,8 +483,9 @@ first accept the following two options:
 - `open{:.objectKey}` — a
   <WordHighlight id="a">boolean</WordHighlight> that represents whether
   the floating element is currently rendered.
-- `onOpenChange{:.objectKey}` — a <WordHighlight id="b">state
-  setter</WordHighlight> called when the open state changes.
+- `onOpenChange{:.objectKey}` — an <WordHighlight id="b">event
+  callback</WordHighlight> invoked when the open boolean state
+  should change.
 
 ```js /isOpen/#a /setIsOpen/#b
 import {useFloating} from '@floating-ui/react';
@@ -526,11 +516,10 @@ positioning", so `floatingStyles` can be ignored.
 
 ## Interaction hooks
 
-`useInteractions(){:js}` is a separate hook that accepts an array
-of interaction hooks and returns prop getters.
-
-Each interaction hook accepts the `context{:.const}` object which
-gets returned from `useFloating(){:js}` as its first argument:
+Interaction hooks allow the open state to change, among other
+functionality. Each interaction hook accepts the
+`context{:.const}` object which gets returned from
+`useFloating(){:js}` as their first argument:
 
 ```js /context/
 import {
@@ -541,7 +530,10 @@ import {
 } from '@floating-ui/react';
 
 // Inside your component
-const {refs, context} = useFloating();
+const {refs, context} = useFloating({
+  open: isOpen,
+  onOpenChange: setIsOpen,
+});
 
 const hover = useHover(context);
 const focus = useFocus(context);
@@ -552,14 +544,20 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ]);
 ```
 
+The `useHover(){:js}` and `useFocus(){:js}` hooks set up effects
+and return event handler props to change the open state, the
+latter of which get merged by `useInteractions(){:js}` for
+rendering.
+
 This API enables each of the hooks to be fully tree-shakeable and
 opt-in. The navigation bar on the left explains them in detail.
 
 ### Prop getters
 
-The prop getters are used to add event listeners, among other
-functionality, to the reference and floating elements. When
-called, they return an object of props like `onFocus{:.keyword}`.
+The prop getters are used to add event handlers returned from the
+interaction hooks, among other functionality, to the reference
+and floating elements. When called, they return an object of
+props like `onFocus{:.keyword}`.
 
 ```js
 <>
@@ -620,7 +618,7 @@ with a list inside your floating element (see
 
 ## Open event
 
-The `onOpenChange{:.function}` state setter is called with an
+The `onOpenChange{:.function}` event callback is invoked with an
 (optional) event as a second parameter:
 
 ```js /event/1-2
@@ -666,13 +664,12 @@ interface ContextData {
 
 ## Changing the positioning reference while retaining events
 
-By default, the `refs.setReference{:js}` element is **both** the
-events and position reference. The
-`refs.setPositionReference{:js}` callback ref allows you to
-separate the position to another element (either real or
-virtual):
+- `refs.setReference{:js}` element is **both** the events and
+  position reference by default.
+- `refs.setPositionReference{:js}` allows you to separate the
+  position to another element (either real or virtual).
 
-```js
+```js /refs.setPositionReference/
 const {refs} = useFloating();
 
 return (
