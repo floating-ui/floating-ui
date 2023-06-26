@@ -54,6 +54,7 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
   delay?: number | Partial<{open: number; close: number}>;
   mouseOnly?: boolean;
   move?: boolean;
+  eventType?: "mouse" | "pointer"
 }
 
 /**
@@ -80,6 +81,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     mouseOnly = false,
     restMs = 0,
     move = true,
+    eventType = "mouse"
   } = props;
 
   const tree = useFloatingTree<RT>();
@@ -95,10 +97,22 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   const performedPointerEventsMutationRef = React.useRef(false);
   const unbindMouseMoveRef = React.useRef(() => {});
 
+  const EVENT = React.useMemo(()=> (
+    eventType === "mouse" ? {
+      ENTER: 'mouseenter',
+      LEAVE: 'mouseleave',
+      MOVE: 'mousemove'
+    } : {
+      ENTER: 'pointerenter',
+      LEAVE: 'pointerleave',
+      MOVE: 'pointermove'
+    }
+  ), [eventType]);
+
   const isHoverOpen = React.useCallback(() => {
     const type = dataRef.current.openEvent?.type;
-    return type?.includes('mouse') && type !== 'mousedown';
-  }, [dataRef]);
+    return type?.includes(eventType) && (type !== EVENT.DOWN);
+  }, [dataRef, eventType]);
 
   // When dismissing before opening, clear the delay timeouts to cancel it
   // from showing.
@@ -131,9 +145,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
 
     const html = getDocument(floating).documentElement;
-    html.addEventListener('mouseleave', onLeave);
+    html.addEventListener(EVENT.LEAVE, onLeave);
     return () => {
-      html.removeEventListener('mouseleave', onLeave);
+      html.removeEventListener(EVENT.LEAVE, onLeave);
     };
   }, [
     floating,
@@ -143,6 +157,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     handleCloseRef,
     dataRef,
     isHoverOpen,
+    EVENT
   ]);
 
   const closeWithDelay = React.useCallback(
@@ -190,11 +205,11 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     function isClickLikeOpenEvent() {
       return dataRef.current.openEvent
-        ? ['click', 'mousedown'].includes(dataRef.current.openEvent.type)
+        ? ['click', 'mousedown', 'pointerdown'].includes(dataRef.current.openEvent.type)
         : false;
     }
 
-    function onMouseEnter(event: MouseEvent) {
+    function onEnter(event: MouseEvent|PointerEvent) {
       clearTimeout(timeoutRef.current);
       blockMouseMoveRef.current = false;
 
@@ -220,7 +235,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    function onMouseLeave(event: MouseEvent) {
+    function onLeave(event: MouseEvent|PointerEvent) {
       if (isClickLikeOpenEvent()) {
         return;
       }
@@ -251,9 +266,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
         const handler = handlerRef.current;
 
-        doc.addEventListener('mousemove', handler);
+        doc.addEventListener(EVENT.MOVE, handler);
         unbindMouseMoveRef.current = () => {
-          doc.removeEventListener('mousemove', handler);
+          doc.removeEventListener(EVENT.MOVE, handler);
         };
 
         return;
@@ -294,17 +309,17 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     if (isElement(domReference)) {
       const ref = domReference as unknown as HTMLElement;
-      open && ref.addEventListener('mouseleave', onScrollMouseLeave);
-      floating?.addEventListener('mouseleave', onScrollMouseLeave);
-      move && ref.addEventListener('mousemove', onMouseEnter, {once: true});
-      ref.addEventListener('mouseenter', onMouseEnter);
-      ref.addEventListener('mouseleave', onMouseLeave);
+      open && ref.addEventListener(EVENT.LEAVE, onScrollMouseLeave);
+      floating?.addEventListener(EVENT.LEAVE, onScrollMouseLeave);
+      move && ref.addEventListener(EVENT.MOVE, onEnter, {once: true});
+      ref.addEventListener(EVENT.ENTER, onEnter);
+      ref.addEventListener(EVENT.LEAVE, onLeave);
       return () => {
-        open && ref.removeEventListener('mouseleave', onScrollMouseLeave);
-        floating?.removeEventListener('mouseleave', onScrollMouseLeave);
-        move && ref.removeEventListener('mousemove', onMouseEnter);
-        ref.removeEventListener('mouseenter', onMouseEnter);
-        ref.removeEventListener('mouseleave', onMouseLeave);
+        open && ref.removeEventListener(EVENT.LEAVE, onScrollMouseLeave);
+        floating?.removeEventListener(EVENT.LEAVE, onScrollMouseLeave);
+        move && ref.removeEventListener(EVENT.MOVE, onEnter);
+        ref.removeEventListener(EVENT.ENTER, onEnter);
+        ref.removeEventListener(EVENT.LEAVE, onLeave);
       };
     }
   }, [
@@ -324,6 +339,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     delayRef,
     handleCloseRef,
     dataRef,
+    EVENT
   ]);
 
   // Block pointer-events of every element other than the reference and floating
@@ -349,7 +365,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         const ref = domReference as unknown as HTMLElement | SVGSVGElement;
 
         const parentFloating = tree?.nodesRef.current.find(
-          (node) => node.id === parentId
+          (node:any) => node.id === parentId
         )?.context?.elements.floating;
 
         if (parentFloating) {
@@ -407,7 +423,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       reference: {
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
-        onMouseMove(event) {
+        onPointerMove(event:React.MouseEvent|React.PointerEvent) {
           if (open || restMs === 0) {
             return;
           }
@@ -421,10 +437,10 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         },
       },
       floating: {
-        onMouseEnter() {
+        onPointerEnter() {
           clearTimeout(timeoutRef.current);
         },
-        onMouseLeave(event) {
+        onPointerLeave(event:React.MouseEvent|React.PointerEvent) {
           events.emit('dismiss', {
             type: 'mouseLeave',
             data: {
