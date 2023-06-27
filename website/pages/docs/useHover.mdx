@@ -280,16 +280,12 @@ useHover(context, {
 });
 ```
 
-This has some side-effects:
+This can cause container elements that listen for `mouseleave`
+events to fire. In older versions of Chrome (&lt;114), scrolling
+containers can't be scrolled while the pointer is over the
+floating element (the main window remains unaffected).
 
-- While hovering over the reference element, if it's inside a
-  scrolling container, it cannot be scrolled (the main window is
-  unaffected).
-- Container elements that listen for `mouseleave` events may fire
-  unexpectedly.
-
-For the first two points, a
-`[data-floating-ui-safe-polygon]{:.keyword}` selector is
+A `[data-floating-ui-safe-polygon]{:.keyword}` selector is
 available as a parent, so scrolling containers can negate the
 `pointer-events{:.function}` style:
 
