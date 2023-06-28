@@ -66,8 +66,8 @@ function findNonDisabledIndex(
       ? disabledIndices.includes(index)
       : list[index] == null ||
         list[index]?.hasAttribute('disabled') ||
-        list[index]?.getAttribute('aria-disabled') === 'true') ||
-        isHidden(list[index])
+        list[index]?.getAttribute('aria-disabled') === 'true' ||
+        isHidden(list[index]))
   );
 
   return index;

@@ -17,28 +17,37 @@ function isNullOrUndefined(a: any) {
 
 // From https://github.com/jsdom/jsdom/issues/1261#issuecomment-512217225
 Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
-    get() {
-        // eslint-disable-next-line
-        let element = this;
-        while (!isNullOrUndefined(element) &&
-                    (isNullOrUndefined(element.style) ||
-                    isNullOrUndefined(element.style.display) ||
-                    element.style.display.toLowerCase() !== 'none')) {
-            element = element.parentNode;
-        }
+  get() {
+    // eslint-disable-next-line
+    let element = this;
+    while (
+      !isNullOrUndefined(element) &&
+      (isNullOrUndefined(element.style) ||
+        isNullOrUndefined(element.style.display) ||
+        element.style.display.toLowerCase() !== 'none')
+    ) {
+      element = element.parentNode;
+    }
 
-        if (!isNullOrUndefined(element)) {
-            return null;
-        }
+    if (!isNullOrUndefined(element)) {
+      return null;
+    }
 
-        if (!isNullOrUndefined(this.style) && !isNullOrUndefined(this.style.position) && this.style.position.toLowerCase() === 'fixed') {
-            return null;
-        }
+    if (
+      !isNullOrUndefined(this.style) &&
+      !isNullOrUndefined(this.style.position) &&
+      this.style.position.toLowerCase() === 'fixed'
+    ) {
+      return null;
+    }
 
-        if (this.tagName.toLowerCase() === 'html' || this.tagName.toLowerCase() === 'body') {
-            return null;
-        }
+    if (
+      this.tagName.toLowerCase() === 'html' ||
+      this.tagName.toLowerCase() === 'body'
+    ) {
+      return null;
+    }
 
-        return this.parentNode;
-    },
+    return this.parentNode;
+  },
 });
