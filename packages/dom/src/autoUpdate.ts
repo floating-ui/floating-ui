@@ -205,7 +205,6 @@ export function autoUpdate(
     cleanupIo && cleanupIo();
     resizeObserver && resizeObserver.disconnect();
     resizeObserver = null;
-    cancelAnimationFrame(reobserveFrame);
 
     if (animationFrame) {
       cancelAnimationFrame(frameId);
