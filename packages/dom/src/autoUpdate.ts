@@ -156,6 +156,7 @@ export function autoUpdate(
         // Prevent update loops when using the `size` middleware.
         // https://github.com/floating-ui/floating-ui/issues/1740
         resizeObserver.unobserve(floating);
+        cancelAnimationFrame(reobserveFrame);
         reobserveFrame = requestAnimationFrame(() => {
           resizeObserver && resizeObserver.observe(floating);
         });
