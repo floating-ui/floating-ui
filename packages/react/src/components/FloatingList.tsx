@@ -41,7 +41,7 @@ export const FloatingListContext = React.createContext<{
   unregister: (node: Node) => void;
   map: Map<Node, number | null>;
   elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
-  labelsRef?: React.MutableRefObject<Array<string | null>>;
+  labelsRef?: React.MutableRefObject<Array<React.ReactNode>>;
 }>({
   register: () => {},
   unregister: () => {},
@@ -52,7 +52,7 @@ export const FloatingListContext = React.createContext<{
 interface FloatingListProps {
   children: React.ReactNode;
   elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
-  labelsRef?: React.MutableRefObject<Array<string | null>>;
+  labelsRef?: React.MutableRefObject<Array<React.ReactNode>>;
 }
 
 /**
@@ -104,7 +104,7 @@ export function FloatingList({
 }
 
 export interface UseListItemProps {
-  label?: string | null;
+  label?: React.ReactNode;
 }
 
 export function useListItem({label}: UseListItemProps = {}): {
