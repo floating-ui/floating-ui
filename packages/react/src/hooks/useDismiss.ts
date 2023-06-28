@@ -163,7 +163,12 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
     // Prevent closing when clicking third party extensions injected *after*
     // the floating element opens.
-    if (isElement(target) && !target.closest(`[${createAttribute('inert')}]`)) {
+    const inertSelector = `[${createAttribute('inert')}]`;
+    if (
+      isElement(target) &&
+      getDocument(target).querySelector(inertSelector) &&
+      !target.closest(inertSelector)
+    ) {
       return;
     }
 

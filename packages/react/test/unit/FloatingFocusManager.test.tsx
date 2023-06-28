@@ -245,7 +245,7 @@ describe('guards', () => {
     await userEvent.tab();
     await userEvent.tab();
 
-    expect(document.body).toHaveFocus();
+    expect(document.activeElement).toHaveAttribute('data-floating-ui-inert');
   });
 });
 

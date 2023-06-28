@@ -290,7 +290,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           ? insideNodes.concat(domReference || [])
           : insideNodes,
         undefined,
-        createAttribute('inert')
+        guards ? undefined : createAttribute('inert')
       );
 
       return () => {
