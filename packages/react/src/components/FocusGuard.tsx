@@ -1,6 +1,7 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
+import {createAttribute} from '../utils/createAttribute';
 import {isSafari} from '../utils/is';
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:
@@ -52,16 +53,15 @@ export const FocusGuard = React.forwardRef<
     };
   }, []);
 
-  return (
-    <span
-      {...props}
-      ref={ref}
-      tabIndex={0}
-      // Role is only for VoiceOver
-      role={role}
-      aria-hidden={role ? undefined : true}
-      data-floating-ui-focus-guard=""
-      style={HIDDEN_STYLES}
-    />
-  );
+  const restProps = {
+    ref,
+    tabIndex: 0,
+    // Role is only for VoiceOver
+    role,
+    'aria-hidden': role ? undefined : true,
+    [createAttribute('focus-guard')]: '',
+    style: HIDDEN_STYLES,
+  };
+
+  return <span {...props} {...restProps} />;
 });

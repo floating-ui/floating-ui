@@ -1,9 +1,10 @@
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
+import {createAttribute} from '../utils/createAttribute';
 import {getPlatform} from '../utils/getPlatform';
 
-const identifier = 'data-floating-ui-scroll-lock';
+const identifier = createAttribute('scroll-lock');
 
 /**
  * Provides base styling for a fixed overlay element to dim content or block
