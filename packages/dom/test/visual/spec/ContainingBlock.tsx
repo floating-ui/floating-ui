@@ -7,30 +7,36 @@ export function ContainingBlock() {
   const [willChange, setWillChange] =
     useState<CSSStyleDeclaration['willChange']>('transform');
   const [contain, setContain] = useState('paint');
-  const {x, y, refs, strategy, update} = useFloating({
+  const [containerType, setContainerType] = useState<string | undefined>(
+    undefined
+  );
+
+  const {refs, floatingStyles, update} = useFloating({
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
   });
 
-  useLayoutEffect(update, [update, willChange, contain]);
+  useLayoutEffect(update, [update, willChange, contain, containerType]);
 
   return (
     <>
       <h1>Containing Block</h1>
       <p>The floating element should be correctly positioned.</p>
-      <div className="container" style={{willChange, contain}}>
+      <div
+        className="container"
+        style={
+          containerType
+            ? {
+                // @ts-ignore
+                containerType,
+              }
+            : {willChange, contain}
+        }
+      >
         <div ref={refs.setReference} className="reference">
           Reference
         </div>
-        <div
-          ref={refs.setFloating}
-          className="floating"
-          style={{
-            position: strategy,
-            top: y ?? '',
-            left: x ?? '',
-          }}
-        >
+        <div ref={refs.setFloating} className="floating" style={floatingStyles}>
           Floating
         </div>
       </div>
@@ -69,6 +75,23 @@ export function ContainingBlock() {
             </button>
           )
         )}
+      </Controls>
+
+      <h2>containerType</h2>
+      <Controls>
+        {[undefined, 'inline-size', 'size'].map((localContainerType) => (
+          <button
+            key={localContainerType ?? 'normal'}
+            data-testid={`container-type-${localContainerType ?? 'normal'}`}
+            onClick={() => setContainerType(localContainerType)}
+            style={{
+              backgroundColor:
+                localContainerType === containerType ? 'black' : '',
+            }}
+          >
+            {localContainerType ?? 'normal'}
+          </button>
+        ))}
       </Controls>
     </>
   );

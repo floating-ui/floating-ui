@@ -50,6 +50,7 @@ export function isContainingBlock(element: Element): boolean {
   return (
     css.transform !== 'none' ||
     css.perspective !== 'none' ||
+    (css.containerType ? css.containerType !== 'normal' : false) ||
     (!safari && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!safari && (css.filter ? css.filter !== 'none' : false)) ||
     ['transform', 'perspective', 'filter'].some((value) =>
