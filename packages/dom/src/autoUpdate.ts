@@ -73,30 +73,44 @@ function observeMove(element: Element, onMove: () => void) {
     const insetLeft = floor(left);
     const rootMargin = `${-insetTop}px ${-insetRight}px ${-insetBottom}px ${-insetLeft}px`;
 
+    const options = {
+      rootMargin,
+      threshold: max(0, min(1, threshold)) || 1,
+    };
+
     let isFirstUpdate = true;
 
-    io = new IntersectionObserver(
-      (entries) => {
-        const ratio = entries[0].intersectionRatio;
+    function handleObserve(entries: IntersectionObserverEntry[]) {
+      const ratio = entries[0].intersectionRatio;
 
-        if (ratio !== threshold) {
-          if (!isFirstUpdate) {
-            return refresh();
-          }
-
-          if (!ratio) {
-            timeoutId = setTimeout(() => {
-              refresh(false, 1e-7);
-            }, 100);
-          } else {
-            refresh(false, ratio);
-          }
+      if (ratio !== threshold) {
+        if (!isFirstUpdate) {
+          return refresh();
         }
 
-        isFirstUpdate = false;
-      },
-      {rootMargin, threshold: max(0, min(1, threshold)) || 1}
-    );
+        if (!ratio) {
+          timeoutId = setTimeout(() => {
+            refresh(false, 1e-7);
+          }, 100);
+        } else {
+          refresh(false, ratio);
+        }
+      }
+
+      isFirstUpdate = false;
+    }
+
+    // Older browsers don't support a `document` as the root and will throw an
+    // error.
+    try {
+      io = new IntersectionObserver(handleObserve, {
+        ...options,
+        // Handle <iframe>s
+        root: root.ownerDocument,
+      });
+    } catch (e) {
+      io = new IntersectionObserver(handleObserve, options);
+    }
 
     io.observe(element);
   }
