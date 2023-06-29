@@ -35,7 +35,9 @@ import {click} from './utils/click';
 );
 
 ['normal', 'inline-size', 'size'].forEach((containerType) => {
-  test(`should be positioned on bottom ${containerType}`, async ({page}) => {
+  test(`should be positioned on bottom with container-type ${containerType}`, async ({
+    page,
+  }) => {
     await page.goto('http://localhost:1234/containing-block');
 
     await click(page, `[data-testid="container-type-${containerType}"]`);
