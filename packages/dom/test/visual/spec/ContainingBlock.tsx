@@ -25,7 +25,7 @@ export function ContainingBlock() {
       <div
         className="container"
         style={
-          containerType !== 'normal'
+          containerType
             ? {
                 // @ts-ignore
                 containerType,
