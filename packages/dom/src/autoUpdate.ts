@@ -137,7 +137,7 @@ export function autoUpdate(
   const {
     ancestorScroll = true,
     ancestorResize = true,
-    elementResize = true,
+    elementResize = typeof ResizeObserver === 'function',
     layoutShift = typeof IntersectionObserver === 'function',
     animationFrame = false,
   } = options;
