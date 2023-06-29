@@ -5,7 +5,7 @@ import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {floor, max, min} from './utils/math';
 import {unwrapElement} from './utils/unwrapElement';
 
-export type Options = Partial<{
+export type AutoUpdateOptions = Partial<{
   /**
    * Whether to update the position when an overflow ancestor is scrolled.
    * @default true
@@ -132,7 +132,7 @@ export function autoUpdate(
   reference: ReferenceElement,
   floating: FloatingElement,
   update: () => void,
-  options: Options = {}
+  options: AutoUpdateOptions = {}
 ) {
   const {
     ancestorScroll = true,

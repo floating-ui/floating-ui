@@ -261,7 +261,7 @@ export {
   size,
 };
 export {computePosition} from './';
-export {autoUpdate, Options as AutoUpdateOptions} from './autoUpdate';
+export {autoUpdate, AutoUpdateOptions} from './autoUpdate';
 export {platform} from './platform';
 export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export type {
