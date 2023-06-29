@@ -7,14 +7,16 @@ export function ContainingBlock() {
   const [willChange, setWillChange] =
     useState<CSSStyleDeclaration['willChange']>('transform');
   const [contain, setContain] = useState('paint');
-  const [containerType, setContainerType] = useState<string>();
+  const [containerType, setContainerType] = useState<string | undefined>(
+    undefined
+  );
 
   const {refs, floatingStyles, update} = useFloating({
     strategy: 'fixed',
     whileElementsMounted: autoUpdate,
   });
 
-  useLayoutEffect(update, [update, willChange, contain]);
+  useLayoutEffect(update, [update, willChange, contain, containerType]);
 
   return (
     <>
@@ -77,17 +79,17 @@ export function ContainingBlock() {
 
       <h2>containerType</h2>
       <Controls>
-        {['normal', 'inline-size', 'size'].map((localContainerType) => (
+        {[undefined, 'inline-size', 'size'].map((localContainerType) => (
           <button
-            key={localContainerType}
-            data-testid={`container-type-${localContainerType}`}
+            key={localContainerType ?? 'normal'}
+            data-testid={`container-type-${localContainerType ?? 'normal'}`}
             onClick={() => setContainerType(localContainerType)}
             style={{
               backgroundColor:
                 localContainerType === containerType ? 'black' : '',
             }}
           >
-            {localContainerType}
+            {localContainerType ?? 'normal'}
           </button>
         ))}
       </Controls>
