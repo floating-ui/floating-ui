@@ -147,9 +147,23 @@ export function autoUpdate(
   const cleanupIo =
     referenceEl && layoutShift ? observeMove(referenceEl, update) : null;
 
+  let reobserveFrame = -1;
   let resizeObserver: ResizeObserver | null = null;
+
   if (elementResize) {
-    resizeObserver = new ResizeObserver(update);
+    resizeObserver = new ResizeObserver(([firstEntry]) => {
+      if (firstEntry && firstEntry.target === referenceEl && resizeObserver) {
+        // Prevent update loops when using the `size` middleware.
+        // https://github.com/floating-ui/floating-ui/issues/1740
+        resizeObserver.unobserve(floating);
+        cancelAnimationFrame(reobserveFrame);
+        reobserveFrame = requestAnimationFrame(() => {
+          resizeObserver && resizeObserver.observe(floating);
+        });
+      }
+      update();
+    });
+
     if (referenceEl && !animationFrame) {
       resizeObserver.observe(referenceEl);
     }
