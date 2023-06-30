@@ -1,7 +1,7 @@
 import type {Rect} from '@floating-ui/core';
 
+import {getDocumentElement} from '../platform/getDocumentElement';
 import {getComputedStyle} from './getComputedStyle';
-import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
 import {max} from './math';

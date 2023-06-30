@@ -1,11 +1,11 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 
-import {getScale} from './getScale';
+import {getScale} from '../platform/getScale';
+import {isElement} from '../platform/isElement';
 import {getVisualOffsets} from './getVisualOffsets';
 import {getWindow} from './getWindow';
-import {isElement} from './is';
-import {createEmptyCoords} from './math';
+import {createCoords} from './math';
 import {unwrapElement} from './unwrapElement';
 
 export function getBoundingClientRect(
@@ -17,7 +17,7 @@ export function getBoundingClientRect(
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
 
-  let scale = createEmptyCoords(1);
+  let scale = createCoords(1);
   if (includeScale) {
     if (offsetParent) {
       if (isElement(offsetParent)) {

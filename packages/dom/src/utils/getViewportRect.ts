@@ -1,6 +1,6 @@
 import type {Rect, Strategy} from '@floating-ui/core';
 
-import {getDocumentElement} from './getDocumentElement';
+import {getDocumentElement} from '../platform/getDocumentElement';
 import {getWindow} from './getWindow';
 import {isSafari} from './is';
 

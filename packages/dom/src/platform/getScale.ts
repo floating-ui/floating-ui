@@ -1,16 +1,16 @@
 import type {Coords} from '@floating-ui/core';
 
 import type {VirtualElement} from '../types';
-import {getCssDimensions} from './getCssDimensions';
-import {isHTMLElement} from './is';
-import {createEmptyCoords, round} from './math';
-import {unwrapElement} from './unwrapElement';
+import {getCssDimensions} from '../utils/getCssDimensions';
+import {isHTMLElement} from '../utils/is';
+import {createCoords, round} from '../utils/math';
+import {unwrapElement} from '../utils/unwrapElement';
 
 export function getScale(element: Element | VirtualElement): Coords {
   const domElement = unwrapElement(element);
 
   if (!isHTMLElement(domElement)) {
-    return createEmptyCoords(1);
+    return createCoords(1);
   }
 
   const rect = domElement.getBoundingClientRect();
