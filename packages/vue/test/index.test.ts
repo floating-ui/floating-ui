@@ -619,7 +619,7 @@ describe('arrow', () => {
     return {reference, floating, floatingArrow, ...position};
   }
 
-  test('allows to use with component type floating', async () => {
+  test('allows to use with component type arrow', async () => {
     const FloatingArrow = defineComponent({
       name: 'FloatingArrow',
       template: /* HTML */ `<div />`,
