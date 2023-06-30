@@ -5,5 +5,5 @@ runs:
   steps:
     - run: npm run lint
       shell: sh
-    - run: npm run test:types
+    - run: npm run typecheck
       shell: sh

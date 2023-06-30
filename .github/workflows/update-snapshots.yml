@@ -13,7 +13,7 @@ jobs:
       - uses: ./.github/actions/setup
       - run: npx playwright install --with-deps chromium
       - run: npm run build
-      - run: npm run test:functional:update
+      - run: npm run playwright:update
       - uses: EndBug/add-and-commit@v7
         with:
           add: '.'
