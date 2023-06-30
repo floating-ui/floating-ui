@@ -1,6 +1,7 @@
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useCallback, useLayoutEffect, useState} from 'react';
+import {expect, test, vi} from 'vitest';
 
 import {
   useClick,
@@ -127,7 +128,7 @@ describe('positionReference', () => {
   });
 });
 
-describe('#2129: interactions.getFloatingProps as a dep does not cause setState loop', () => {
+test('#2129: interactions.getFloatingProps as a dep does not cause setState loop', () => {
   function App() {
     const {refs, context} = useFloating({
       open: true,
@@ -196,7 +197,7 @@ test('domReference refers to externally synchronized `reference`', async () => {
 });
 
 test('onOpenChange is passed an event as second param', async () => {
-  const onOpenChange = jest.fn();
+  const onOpenChange = vi.fn();
 
   function App() {
     const [isOpen, setIsOpen] = useState(false);

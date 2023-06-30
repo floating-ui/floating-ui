@@ -1,3 +1,5 @@
+import {expect, test} from 'vitest';
+
 import {computePosition} from '../src';
 import type {Platform} from '../src/types';
 

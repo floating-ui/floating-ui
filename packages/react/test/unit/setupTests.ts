@@ -1,13 +1,18 @@
 import '@testing-library/jest-dom';
 
+import matchers from '@testing-library/jest-dom/matchers';
+import {expect, vi} from 'vitest';
+
+expect.extend(matchers);
+
 import ResizeObserverPolyfill from 'resize-observer-polyfill';
 
-jest
-  .spyOn(window, 'requestAnimationFrame')
-  .mockImplementation((callback: FrameRequestCallback): number => {
+vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
+  (callback: FrameRequestCallback): number => {
     callback(0);
     return 0;
-  });
+  }
+);
 
 global.ResizeObserver = ResizeObserverPolyfill;
 

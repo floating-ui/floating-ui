@@ -1,17 +1,16 @@
-import {babel} from '@rollup/plugin-babel';
+import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
-import {nodeResolve} from '@rollup/plugin-node-resolve';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import path from 'path';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
-const input = path.join(__dirname, 'src/index.ts');
+const input = './src/index.ts';
 
 const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.react-native.esm.js'),
+      file: './dist/floating-ui.react-native.esm.js',
       format: 'esm',
     },
   },
@@ -19,7 +18,7 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIReactNative',
-      file: path.join(__dirname, 'dist/floating-ui.react-native.js'),
+      file: './dist/floating-ui.react-native.js',
       format: 'cjs',
       globals: {
         react: 'React',

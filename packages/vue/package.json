@@ -32,9 +32,9 @@
     "src/**/*.d.ts"
   ],
   "scripts": {
-    "test": "jest test",
+    "test": "vitest",
     "build": "NODE_ENV=build rollup -c",
-    "dev": "parcel test/visual/index.html"
+    "dev": "vite"
   },
   "author": "lozinsky",
   "license": "MIT",
@@ -60,8 +60,8 @@
   },
   "devDependencies": {
     "@parcel/transformer-vue": "^2.6.0",
-    "@rollup/plugin-commonjs": "^21.0.1",
     "@testing-library/vue": "^6.6.1",
+    "@vitejs/plugin-vue": "^4.2.3",
     "vue": "^3.2.45"
   }
 }

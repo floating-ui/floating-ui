@@ -1,10 +1,11 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
+import {describe, expect, test, vi} from 'vitest';
 
 import {useFloating, useHover, useInteractions} from '../../src';
 import type {UseHoverProps} from '../../src/hooks/useHover';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 function App({
   showReference = true,
@@ -57,13 +58,13 @@ describe('delay', () => {
     fireEvent.mouseEnter(screen.getByRole('button'));
 
     await act(async () => {
-      jest.advanceTimersByTime(999);
+      vi.advanceTimersByTime(999);
     });
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
     await act(async () => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
@@ -77,13 +78,13 @@ describe('delay', () => {
     fireEvent.mouseEnter(screen.getByRole('button'));
 
     await act(async () => {
-      jest.advanceTimersByTime(499);
+      vi.advanceTimersByTime(499);
     });
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 
     await act(async () => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
@@ -98,13 +99,13 @@ describe('delay', () => {
     fireEvent.mouseLeave(screen.getByRole('button'));
 
     await act(async () => {
-      jest.advanceTimersByTime(499);
+      vi.advanceTimersByTime(499);
     });
 
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
 
     await act(async () => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -118,13 +119,13 @@ describe('delay', () => {
     fireEvent.mouseEnter(screen.getByRole('button'));
 
     await act(async () => {
-      jest.advanceTimersByTime(499);
+      vi.advanceTimersByTime(499);
     });
 
     fireEvent.mouseLeave(screen.getByRole('button'));
 
     await act(async () => {
-      jest.advanceTimersByTime(1);
+      vi.advanceTimersByTime(1);
     });
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -139,13 +140,13 @@ test('restMs', async () => {
   fireEvent.mouseMove(screen.getByRole('button'));
 
   await act(async () => {
-    jest.advanceTimersByTime(99);
+    vi.advanceTimersByTime(99);
   });
 
   fireEvent.mouseMove(screen.getByRole('button'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
@@ -153,7 +154,7 @@ test('restMs', async () => {
   fireEvent.mouseMove(screen.getByRole('button'));
 
   await act(async () => {
-    jest.advanceTimersByTime(100);
+    vi.advanceTimersByTime(100);
   });
 
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();

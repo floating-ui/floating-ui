@@ -142,10 +142,6 @@ describe('`toggle` prop', () => {
   });
 });
 
-describe('`ignoreMouse` prop', () => {
-  // TODO — not sure how to test this in JSDOM
-});
-
 describe('non-buttons', () => {
   test('adds Enter keydown', () => {
     render(<App button={false} />);

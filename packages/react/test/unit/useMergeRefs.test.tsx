@@ -1,10 +1,11 @@
 import {render} from '@testing-library/react';
 import * as React from 'react';
+import {expect, test, vi} from 'vitest';
 
 import {useMergeRefs} from '../../src/hooks/useMergeRefs';
 
 test('merges refs and cleans up', () => {
-  const callbackSpy = jest.fn();
+  const callbackSpy = vi.fn();
   let refSpy: HTMLElement | null = null;
 
   function App({show}: {show: boolean}) {
@@ -33,9 +34,9 @@ test('merges refs and cleans up', () => {
 });
 
 test('conditional refs', () => {
-  const callbackSpy = jest.fn();
-  const callbackSpy2 = jest.fn();
-  const callbackSpy3 = jest.fn();
+  const callbackSpy = vi.fn();
+  const callbackSpy2 = vi.fn();
+  const callbackSpy3 = vi.fn();
 
   function App({change}: {change: boolean}) {
     const ref1 = React.useCallback(callbackSpy, []);

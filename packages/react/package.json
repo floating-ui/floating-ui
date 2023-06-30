@@ -32,9 +32,9 @@
     "src/**/*.d.ts"
   ],
   "scripts": {
-    "test": "jest test",
+    "test": "vitest",
     "build": "NODE_ENV=build rollup -c",
-    "dev": "parcel test/visual/index.html"
+    "dev": "vite"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -68,12 +68,12 @@
     "@babel/preset-react": "^7.16.0",
     "@radix-ui/react-checkbox": "^1.0.2",
     "@radix-ui/react-icons": "^1.2.0",
-    "@rollup/plugin-commonjs": "^21.0.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.28",
+    "@vitejs/plugin-react": "^4.0.1",
     "clsx": "^1.2.1",
     "framer-motion": "^6.2.8",
     "react": "^18.0.0",

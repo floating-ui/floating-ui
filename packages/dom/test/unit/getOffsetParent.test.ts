@@ -1,3 +1,5 @@
+import {expect, test} from 'vitest';
+
 import {platform} from '../../src';
 
 test('polyfill', () => {

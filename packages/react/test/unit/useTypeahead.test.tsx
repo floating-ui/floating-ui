@@ -1,13 +1,14 @@
 import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
+import {expect, test, vi} from 'vitest';
 
 import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
 import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';
 import {Main} from '../visual/components/Menu';
 
-jest.useFakeTimers();
-const user = userEvent.setup({advanceTimers: jest.advanceTimersByTime});
+vi.useFakeTimers();
+const user = userEvent.setup({advanceTimers: vi.advanceTimersByTime});
 
 const useImpl = ({
   addUseClick = false,
@@ -95,7 +96,7 @@ function Select(
 }
 
 test('rapidly focuses list items when they start with the same letter', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<Combobox onMatch={spy} />);
 
   await user.click(screen.getByRole('combobox'));
@@ -113,7 +114,7 @@ test('rapidly focuses list items when they start with the same letter', async ()
 });
 
 test('bails out of rapid focus of first letter if the list contains a string that starts with two of the same letter', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<Combobox onMatch={spy} list={['apple', 'aaron', 'apricot']} />);
 
   await user.click(screen.getByRole('combobox'));
@@ -128,7 +129,7 @@ test('bails out of rapid focus of first letter if the list contains a string tha
 });
 
 test('starts from the current activeIndex and correctly loops', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(
     <Combobox
       onMatch={spy}
@@ -150,21 +151,21 @@ test('starts from the current activeIndex and correctly loops', async () => {
   await user.keyboard('y');
   expect(spy).not.toHaveBeenCalled();
 
-  jest.advanceTimersByTime(750);
+  vi.advanceTimersByTime(750);
 
   await user.keyboard('t');
   await user.keyboard('o');
   await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(1);
 
-  jest.advanceTimersByTime(750);
+  vi.advanceTimersByTime(750);
 
   await user.keyboard('t');
   await user.keyboard('o');
   await user.keyboard('y');
   expect(spy).toHaveBeenCalledWith(2);
 
-  jest.advanceTimersByTime(750);
+  vi.advanceTimersByTime(750);
 
   await user.keyboard('t');
   await user.keyboard('o');
@@ -175,7 +176,7 @@ test('starts from the current activeIndex and correctly loops', async () => {
 });
 
 test('capslock characters continue to match', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<Combobox onMatch={spy} />);
 
   user.click(screen.getByRole('combobox'));
@@ -221,7 +222,7 @@ function App1(
 }
 
 test('matches when focus is withing reference', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 
   await user.click(screen.getByRole('combobox'));
@@ -233,7 +234,7 @@ test('matches when focus is withing reference', async () => {
 });
 
 test('matches when focus is withing floating', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 
   await user.click(screen.getByRole('combobox'));
@@ -253,7 +254,7 @@ test('matches when focus is withing floating', async () => {
 });
 
 test('onTypingChange is called when typing starts or stops', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<Combobox onTypingChange={spy} list={['one', 'two', 'three']} />);
 
   act(() => screen.getByRole('combobox').focus());
@@ -262,7 +263,7 @@ test('onTypingChange is called when typing starts or stops', async () => {
   expect(spy).toHaveBeenCalledTimes(1);
   expect(spy).toHaveBeenCalledWith(true);
 
-  jest.advanceTimersByTime(750);
+  vi.advanceTimersByTime(750);
   expect(spy).toHaveBeenCalledTimes(2);
   expect(spy).toHaveBeenCalledWith(false);
 
@@ -270,7 +271,7 @@ test('onTypingChange is called when typing starts or stops', async () => {
 });
 
 test('Menu - skips disabled items and opens submenu on space if no match', async () => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 
   render(<Main />);
 
@@ -296,8 +297,8 @@ test('Menu - skips disabled items and opens submenu on space if no match', async
   );
 });
 
-test('Menu - resets once a match is no longer found', async () => {
-  jest.useRealTimers();
+test.only('Menu - resets once a match is no longer found', async () => {
+  vi.useRealTimers();
 
   render(<Main />);
 
@@ -316,10 +317,10 @@ test('Menu - resets once a match is no longer found', async () => {
 });
 
 test('typing spaces on <div> references does not open the menu', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
   render(<Select onMatch={spy} />);
 
-  jest.useFakeTimers({advanceTimers: true});
+  vi.useFakeTimers();
 
   await userEvent.click(screen.getByRole('combobox'));
 
@@ -328,7 +329,7 @@ test('typing spaces on <div> references does not open the menu', async () => {
 
   expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
 
-  jest.advanceTimersByTime(750);
+  vi.advanceTimersByTime(750);
 
   await userEvent.keyboard(' ');
   await act(async () => {});
