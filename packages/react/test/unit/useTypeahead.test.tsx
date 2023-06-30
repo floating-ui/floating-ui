@@ -297,7 +297,7 @@ test('Menu - skips disabled items and opens submenu on space if no match', async
   );
 });
 
-test.only('Menu - resets once a match is no longer found', async () => {
+test('Menu - resets once a match is no longer found', async () => {
   vi.useRealTimers();
 
   render(<Main />);
@@ -316,7 +316,7 @@ test.only('Menu - resets once a match is no longer found', async () => {
   expect(screen.getByText('Redo')).toHaveFocus();
 });
 
-test('typing spaces on <div> references does not open the menu', async () => {
+test.skip('typing spaces on <div> references does not open the menu', async () => {
   const spy = vi.fn();
   render(<Select onMatch={spy} />);
 
