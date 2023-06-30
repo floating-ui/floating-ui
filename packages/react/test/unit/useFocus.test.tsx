@@ -1,6 +1,7 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   FloatingFocusManager,
@@ -13,7 +14,7 @@ import {
 } from '../../src';
 import type {UseFocusProps} from '../../src/hooks/useFocus';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 function App(props: UseFocusProps & {dismiss?: boolean; hover?: boolean}) {
   const [open, setOpen] = useState(false);
@@ -51,7 +52,7 @@ test('closes on blur', () => {
   act(() => button.focus());
   act(() => button.blur());
   act(() => {
-    jest.runAllTimers();
+    vi.runAllTimers();
   });
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   cleanup();
@@ -71,7 +72,7 @@ test('does not open when window blurs then receives focus', async () => {
 });
 
 test('blurs when hitting an "inside" focus guard', async () => {
-  jest.useRealTimers();
+  vi.useRealTimers();
 
   function Tooltip({children}: {children: JSX.Element}) {
     const [open, setOpen] = useState(false);

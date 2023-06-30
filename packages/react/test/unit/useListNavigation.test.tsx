@@ -1,6 +1,7 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useLayoutEffect, useRef, useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   useClick,
@@ -391,7 +392,7 @@ describe('allowEscape + virtual', () => {
   });
 
   test('true - onNavigate is called with `null` when escaped', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     render(<App allowEscape virtual loop onNavigate={spy} />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
@@ -444,7 +445,7 @@ describe('disabledIndices', () => {
 
 describe('focusOnHover', () => {
   test('true - focuses item on hover and syncs the active index', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     render(<App onNavigate={spy} />);
     fireEvent.click(screen.getByRole('button'));
     fireEvent.mouseMove(screen.getByTestId('item-1'));
@@ -456,7 +457,7 @@ describe('focusOnHover', () => {
   });
 
   test('false - does not focus item on hover and does not sync the active index', async () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
     render(
       <App onNavigate={spy} focusItemOnOpen={false} focusItemOnHover={false} />
     );

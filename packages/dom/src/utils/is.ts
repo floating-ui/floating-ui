@@ -15,10 +15,6 @@ export function isHTMLElement(value: any): value is HTMLElement {
   return value instanceof getWindow(value).HTMLElement;
 }
 
-export function isElement(value: any): value is Element {
-  return value instanceof getWindow(value).Element;
-}
-
 export function isShadowRoot(node: Node): node is ShadowRoot {
   // Browsers without `ShadowRoot` support.
   if (typeof ShadowRoot === 'undefined') {

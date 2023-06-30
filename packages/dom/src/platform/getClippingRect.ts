@@ -8,24 +8,24 @@ import type {
 import {rectToClientRect} from '@floating-ui/core';
 
 import {Platform, ReferenceElement} from '../types';
-import {getBoundingClientRect} from './getBoundingClientRect';
-import {getComputedStyle} from './getComputedStyle';
-import {getDocumentElement} from './getDocumentElement';
-import {getDocumentRect} from './getDocumentRect';
-import {getOverflowAncestors} from './getOverflowAncestors';
-import {getParentNode} from './getParentNode';
-import {getScale} from './getScale';
-import {getViewportRect} from './getViewportRect';
-import {getVisualOffsets} from './getVisualOffsets';
+import {getBoundingClientRect} from '../utils/getBoundingClientRect';
+import {getComputedStyle} from '../utils/getComputedStyle';
+import {getDocumentRect} from '../utils/getDocumentRect';
+import {getOverflowAncestors} from '../utils/getOverflowAncestors';
+import {getParentNode} from '../utils/getParentNode';
+import {getViewportRect} from '../utils/getViewportRect';
+import {getVisualOffsets} from '../utils/getVisualOffsets';
 import {
   isContainingBlock,
-  isElement,
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-} from './is';
-import {createEmptyCoords, max, min} from './math';
-import {getNodeName} from './node';
+} from '../utils/is';
+import {createCoords, max, min} from '../utils/math';
+import {getNodeName} from '../utils/node';
+import {getDocumentElement} from './getDocumentElement';
+import {getScale} from './getScale';
+import {isElement} from './isElement';
 
 type PlatformWithCache = Platform & {
   _c: Map<ReferenceElement, Element[]>;
@@ -39,9 +39,7 @@ function getInnerBoundingClientRect(
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element)
-    ? getScale(element)
-    : createEmptyCoords(1);
+  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;

@@ -1,6 +1,6 @@
+import {getDocumentElement} from './platform/getDocumentElement';
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
-import {getDocumentElement} from './utils/getDocumentElement';
 import {getOverflowAncestors} from './utils/getOverflowAncestors';
 import {floor, max, min} from './utils/math';
 import {unwrapElement} from './utils/unwrapElement';

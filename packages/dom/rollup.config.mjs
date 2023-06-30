@@ -1,37 +1,36 @@
-import {babel} from '@rollup/plugin-babel';
-import {nodeResolve} from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import path from 'path';
-import {terser} from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 
-const input = path.join(__dirname, 'src/index.ts');
+const input = './src/index.ts';
 
 const bundles = [
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.dom.esm.js'),
+      file: './dist/floating-ui.dom.esm.js',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.dom.mjs'),
+      file: './dist/floating-ui.dom.mjs',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.dom.browser.mjs'),
+      file: './dist/floating-ui.dom.browser.mjs',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: path.join(__dirname, 'dist/floating-ui.dom.browser.min.mjs'),
+      file: './dist/floating-ui.dom.browser.min.mjs',
       format: 'esm',
     },
   },
@@ -39,7 +38,7 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIDOM',
-      file: path.join(__dirname, 'dist/floating-ui.dom.umd.js'),
+      file: './dist/floating-ui.dom.umd.js',
       format: 'umd',
       globals: {
         '@floating-ui/core': 'FloatingUICore',
@@ -50,7 +49,7 @@ const bundles = [
     input,
     output: {
       name: 'FloatingUIDOM',
-      file: path.join(__dirname, 'dist/floating-ui.dom.umd.min.js'),
+      file: './dist/floating-ui.dom.umd.min.js',
       format: 'umd',
       globals: {
         '@floating-ui/core': 'FloatingUICore',

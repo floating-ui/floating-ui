@@ -38,9 +38,9 @@
     "src/**/*.d.ts"
   ],
   "scripts": {
-    "dev": "parcel test/visual/index.html",
+    "dev": "vite",
     "build": "NODE_ENV=build rollup -c",
-    "test": "jest test/unit"
+    "test": "vitest"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -63,9 +63,9 @@
     "@floating-ui/core": "^0.1.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-router-dom": "^6.1.1"
+    "@types/react": "^18.2.14",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.0"
   }
 }

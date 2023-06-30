@@ -9,7 +9,7 @@ import {
 } from 'react';
 import {flushSync} from 'react-dom';
 
-import {isElement} from '../../../src/utils/is';
+import {isElement} from '../../../src/platform/isElement';
 
 export const useScroll = ({
   refs,

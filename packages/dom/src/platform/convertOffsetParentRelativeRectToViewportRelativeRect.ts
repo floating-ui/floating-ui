@@ -1,12 +1,12 @@
 import type {Rect, Strategy} from '@floating-ui/core';
 
-import {getBoundingClientRect} from './getBoundingClientRect';
+import {getBoundingClientRect} from '../utils/getBoundingClientRect';
+import {getNodeScroll} from '../utils/getNodeScroll';
+import {isHTMLElement, isOverflowElement} from '../utils/is';
+import {createCoords} from '../utils/math';
+import {getNodeName} from '../utils/node';
 import {getDocumentElement} from './getDocumentElement';
-import {getNodeScroll} from './getNodeScroll';
 import {getScale} from './getScale';
-import {isHTMLElement, isOverflowElement} from './is';
-import {createEmptyCoords} from './math';
-import {getNodeName} from './node';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   rect,
@@ -25,8 +25,8 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
-  let scale = createEmptyCoords(1);
-  const offsets = createEmptyCoords(0);
+  let scale = createCoords(1);
+  const offsets = createCoords(0);
 
   if (
     isOffsetParentAnElement ||

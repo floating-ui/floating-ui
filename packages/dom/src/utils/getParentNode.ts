@@ -1,4 +1,4 @@
-import {getDocumentElement} from './getDocumentElement';
+import {getDocumentElement} from '../platform/getDocumentElement';
 import {isShadowRoot} from './is';
 import {getNodeName} from './node';
 

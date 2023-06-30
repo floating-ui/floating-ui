@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {cleanup, fireEvent, render, waitFor} from '@testing-library/vue';
+import {vi} from 'vitest';
 import {defineComponent, effectScope, ref, toRef} from 'vue';
 
-import {
-  arrow,
+import {arrow, offset, useFloating} from '../src';
+import type {
   FloatingElement,
   Middleware,
-  offset,
   Placement,
   ReferenceElement,
   Strategy,
-  useFloating,
-} from '../src';
+} from '../src/types';
 import {ArrowOptions, UseFloatingOptions} from '../src/types';
 
 describe('useFloating', () => {
@@ -232,7 +231,7 @@ describe('useFloating', () => {
   });
 
   test('calls `whileElementsMounted` callback when reference and floating are mounted', async () => {
-    const whileElementsMounted = jest.fn();
+    const whileElementsMounted = vi.fn();
     const App = defineComponent({
       name: 'App',
       setup() {
@@ -256,7 +255,7 @@ describe('useFloating', () => {
   });
 
   test('does not call `whileElementsMounted` callback on reference change', async () => {
-    const whileElementsMounted = jest.fn();
+    const whileElementsMounted = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['content'],
@@ -277,7 +276,7 @@ describe('useFloating', () => {
   });
 
   test('does not call `whileElementsMounted` callback on floating change', async () => {
-    const whileElementsMounted = jest.fn();
+    const whileElementsMounted = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['content'],
@@ -298,7 +297,7 @@ describe('useFloating', () => {
   });
 
   test('calls `whileElementsMounted` cleanup callback on reference visibility change', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['visible'],
@@ -323,7 +322,7 @@ describe('useFloating', () => {
   });
 
   test('calls `whileElementsMounted` cleanup callback on floating visibility change', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['visible'],
@@ -348,7 +347,7 @@ describe('useFloating', () => {
   });
 
   test('calls `whileElementsMounted` cleanup callback on unmount', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const App = defineComponent({
       name: 'App',
       setup() {
@@ -371,7 +370,7 @@ describe('useFloating', () => {
   });
 
   test('calls `whileElementsMounted` cleanup callback on scope dispose', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const scope = effectScope();
     const App = defineComponent({
       name: 'App',
@@ -397,7 +396,7 @@ describe('useFloating', () => {
   });
 
   test('does not call `whileElementsMounted` cleanup callback on reference change', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['content'],
@@ -422,7 +421,7 @@ describe('useFloating', () => {
   });
 
   test('does not call `whileElementsMounted` cleanup callback on floating change', async () => {
-    const whileElementsMountedCleanup = jest.fn();
+    const whileElementsMountedCleanup = vi.fn();
     const App = defineComponent({
       name: 'App',
       props: ['content'],

@@ -1,8 +1,6 @@
-/**
- * @jest-environment jsdom
- */
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   arrow,
@@ -146,7 +144,7 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
 
 describe('whileElementsMounted', () => {
   test('is called a single time when both elements mount', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
 
     function App() {
       const {refs} = useFloating({whileElementsMounted: spy});
@@ -164,7 +162,7 @@ describe('whileElementsMounted', () => {
   });
 
   test('is called a single time after floating mounts conditionally', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
 
     function App() {
       const [open, setOpen] = useState(false);
@@ -186,7 +184,7 @@ describe('whileElementsMounted', () => {
   });
 
   test('is called a single time after reference mounts conditionally', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
 
     function App() {
       const [open, setOpen] = useState(false);
@@ -212,7 +210,7 @@ describe('whileElementsMounted', () => {
   });
 
   test('is called a single time both elements mount conditionally', () => {
-    const spy = jest.fn();
+    const spy = vi.fn();
 
     function App() {
       const [open, setOpen] = useState(false);
@@ -237,8 +235,8 @@ describe('whileElementsMounted', () => {
   });
 
   test('calls the cleanup function', () => {
-    const cleanupSpy = jest.fn();
-    const spy = jest.fn(() => cleanupSpy);
+    const cleanupSpy = vi.fn();
+    const spy = vi.fn(() => cleanupSpy);
 
     function App() {
       const [open, setOpen] = useState(true);
@@ -272,8 +270,8 @@ test('unstable callback refs', async () => {
 
     return (
       <>
-        <div ref={(node) => refs.setReference(node)} />
-        <div ref={(node) => refs.setFloating(node)} />
+        <div ref={(node: HTMLDivElement | null) => refs.setReference(node)} />
+        <div ref={(node: HTMLDivElement | null) => refs.setFloating(node)} />
       </>
     );
   }
@@ -286,7 +284,7 @@ test('unstable callback refs', async () => {
 });
 
 test('isPositioned', async () => {
-  const spy = jest.fn();
+  const spy = vi.fn();
 
   function App() {
     const [open, setOpen] = useState(false);
@@ -378,7 +376,7 @@ test('external reference element sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
-  const mockBoundingClientRect = jest.fn(() => ({
+  const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
     width: 50,
@@ -416,7 +414,7 @@ test('external floating element sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
-  const mockBoundingClientRect = jest.fn(() => ({
+  const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
     width: 50,
@@ -456,7 +454,7 @@ test('external elements sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
-  const mockBoundingClientRect = jest.fn(() => ({
+  const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
     width: 50,
@@ -521,7 +519,7 @@ test('floatingStyles no transform', async () => {
 
   const {getByTestId} = render(<App />);
 
-  const mockBoundingClientRect = jest.fn(() => ({
+  const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
     width: 50,
@@ -564,7 +562,7 @@ test('floatingStyles default', async () => {
 
   const {getByTestId} = render(<App />);
 
-  const mockBoundingClientRect = jest.fn(() => ({
+  const mockBoundingClientRect = vi.fn(() => ({
     x: 0,
     y: 0,
     width: 50,

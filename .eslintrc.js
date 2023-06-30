@@ -4,6 +4,7 @@ module.exports = {
     browser: true,
     node: true,
   },
+  ignorePatterns: ['node_modules', 'dist'],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'react-hooks', 'simple-import-sort'],
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],

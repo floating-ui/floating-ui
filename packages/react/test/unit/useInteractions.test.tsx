@@ -1,5 +1,6 @@
 import {render} from '@testing-library/react';
 import {useEffect, useRef, useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   useClick,
@@ -15,10 +16,10 @@ import {
 } from '../../src';
 
 test('correctly merges functions', () => {
-  const firstInteractionOnClick = jest.fn();
-  const secondInteractionOnClick = jest.fn();
-  const secondInteractionOnKeyDown = jest.fn();
-  const userOnClick = jest.fn();
+  const firstInteractionOnClick = vi.fn();
+  const secondInteractionOnClick = vi.fn();
+  const secondInteractionOnKeyDown = vi.fn();
+  const userOnClick = vi.fn();
 
   function App() {
     const {getReferenceProps} = useInteractions([

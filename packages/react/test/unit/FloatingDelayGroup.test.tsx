@@ -1,6 +1,7 @@
 import {fireEvent, render, screen} from '@testing-library/react';
 import {act} from '@testing-library/react-hooks';
 import {cloneElement, useState} from 'react';
+import {vi} from 'vitest';
 
 import {
   FloatingDelayGroup,
@@ -11,7 +12,7 @@ import {
   useInteractions,
 } from '../../src';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 interface Props {
   label: string;
@@ -80,13 +81,13 @@ test('groups delays correctly', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
 
   await act(async () => {
-    jest.advanceTimersByTime(999);
+    vi.advanceTimersByTime(999);
   });
 
   expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
@@ -94,7 +95,7 @@ test('groups delays correctly', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
@@ -103,7 +104,7 @@ test('groups delays correctly', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-three'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-two')).not.toBeInTheDocument();
@@ -112,13 +113,13 @@ test('groups delays correctly', async () => {
   fireEvent.mouseLeave(screen.getByTestId('reference-three'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-three')).toBeInTheDocument();
 
   await act(async () => {
-    jest.advanceTimersByTime(199);
+    vi.advanceTimersByTime(199);
   });
 
   expect(screen.queryByTestId('floating-three')).not.toBeInTheDocument();
@@ -146,7 +147,7 @@ test('timeoutMs', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-one'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(1000);
   });
 
   fireEvent.mouseLeave(screen.getByTestId('reference-one'));
@@ -154,7 +155,7 @@ test('timeoutMs', async () => {
   expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
 
   await act(async () => {
-    jest.advanceTimersByTime(499);
+    vi.advanceTimersByTime(499);
   });
 
   expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
@@ -162,7 +163,7 @@ test('timeoutMs', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-two'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-two')).toBeInTheDocument();
@@ -170,7 +171,7 @@ test('timeoutMs', async () => {
   fireEvent.mouseEnter(screen.getByTestId('reference-three'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-two')).not.toBeInTheDocument();
@@ -179,13 +180,13 @@ test('timeoutMs', async () => {
   fireEvent.mouseLeave(screen.getByTestId('reference-three'));
 
   await act(async () => {
-    jest.advanceTimersByTime(1);
+    vi.advanceTimersByTime(1);
   });
 
   expect(screen.queryByTestId('floating-three')).toBeInTheDocument();
 
   await act(async () => {
-    jest.advanceTimersByTime(99);
+    vi.advanceTimersByTime(99);
   });
 
   expect(screen.queryByTestId('floating-three')).not.toBeInTheDocument();

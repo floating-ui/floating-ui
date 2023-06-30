@@ -1,5 +1,5 @@
+import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
-import {getDocumentElement} from './getDocumentElement';
 import {getNodeScroll} from './getNodeScroll';
 
 export function getWindowScrollBarX(element: Element): number {
