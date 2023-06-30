@@ -23,5 +23,6 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     root: './test/unit',
+    globals: true,
   },
 });

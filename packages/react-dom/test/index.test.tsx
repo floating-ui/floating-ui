@@ -1,6 +1,6 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
-import {describe, expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {
   arrow,

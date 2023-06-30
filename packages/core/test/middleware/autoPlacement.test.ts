@@ -1,5 +1,3 @@
-import {expect, test} from 'vitest';
-
 import {getPlacementList} from '../../src/middleware/autoPlacement';
 
 test('base placement', () => {

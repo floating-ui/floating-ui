@@ -1,5 +1,3 @@
-import {expect, test} from 'vitest';
-
 import {getOverflowAncestors} from '../../src/utils/getOverflowAncestors';
 
 test('returns all overflow ancestors', () => {

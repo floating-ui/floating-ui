@@ -1,7 +1,7 @@
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useCallback, useLayoutEffect, useState} from 'react';
-import {expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {
   useClick,

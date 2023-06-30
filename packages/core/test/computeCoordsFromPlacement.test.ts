@@ -1,5 +1,3 @@
-import {expect, test} from 'vitest';
-
 import {computeCoordsFromPlacement} from '../src/computeCoordsFromPlacement';
 
 const reference = {x: 0, y: 0, width: 100, height: 100};

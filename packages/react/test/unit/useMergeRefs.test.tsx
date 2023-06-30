@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import * as React from 'react';
-import {expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {useMergeRefs} from '../../src/hooks/useMergeRefs';
 

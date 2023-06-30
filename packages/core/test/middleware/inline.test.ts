@@ -1,5 +1,3 @@
-import {describe, expect, test} from 'vitest';
-
 import {rectToClientRect} from '../../src';
 import {getRectsByLine} from '../../src/middleware/inline';
 

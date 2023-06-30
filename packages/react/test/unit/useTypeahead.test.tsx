@@ -1,7 +1,7 @@
 import {act, cleanup, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useRef, useState} from 'react';
-import {expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
 import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';

@@ -1,6 +1,6 @@
 import {render} from '@testing-library/react';
 import {useEffect, useRef, useState} from 'react';
-import {expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {
   useClick,

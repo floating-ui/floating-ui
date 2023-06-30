@@ -1,7 +1,7 @@
 import {fireEvent, render, screen} from '@testing-library/react';
 import {act} from '@testing-library/react-hooks';
 import {cloneElement, useState} from 'react';
-import {expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 
 import {
   FloatingDelayGroup,

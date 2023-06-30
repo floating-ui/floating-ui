@@ -1,5 +1,3 @@
-import {describe, expect, test} from 'vitest';
-
 import {getOppositeAxisPlacements} from '../../src/utils/getOppositeAxisPlacements';
 
 describe('side', () => {

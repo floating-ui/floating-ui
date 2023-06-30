@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {cleanup, fireEvent, render, waitFor} from '@testing-library/vue';
-import {describe, expect, test, vi} from 'vitest';
+import {vi} from 'vitest';
 import {defineComponent, effectScope, ref, toRef} from 'vue';
 
 import {

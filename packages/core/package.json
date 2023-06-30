@@ -38,7 +38,7 @@
     "src/**/*.d.ts"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --globals",
     "dev": "rollup -c -w",
     "build": "NODE_ENV=build rollup -c"
   },
