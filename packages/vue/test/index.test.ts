@@ -4,16 +4,14 @@ import {cleanup, fireEvent, render, waitFor} from '@testing-library/vue';
 import {vi} from 'vitest';
 import {defineComponent, effectScope, ref, toRef} from 'vue';
 
-import {
-  arrow,
+import {arrow, offset, useFloating} from '../src';
+import type {
   FloatingElement,
   Middleware,
-  offset,
   Placement,
   ReferenceElement,
   Strategy,
-  useFloating,
-} from '../src';
+} from '../src/types';
 import {ArrowOptions, UseFloatingOptions} from '../src/types';
 
 describe('useFloating', () => {
@@ -609,7 +607,7 @@ describe('useFloating', () => {
   });
 });
 
-describe.skip('arrow', () => {
+describe('arrow', () => {
   function setup(options?: Omit<ArrowOptions, 'element'>) {
     const reference = ref<ReferenceElement | null>(null);
     const floating = ref<FloatingElement | null>(null);
@@ -621,7 +619,7 @@ describe.skip('arrow', () => {
     return {reference, floating, floatingArrow, ...position};
   }
 
-  test('allows to use with component type arrow', async () => {
+  test('allows to use with component type floating', async () => {
     const FloatingArrow = defineComponent({
       name: 'FloatingArrow',
       template: /* HTML */ `<div />`,

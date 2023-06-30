@@ -316,22 +316,22 @@ test('Menu - resets once a match is no longer found', async () => {
   expect(screen.getByText('Redo')).toHaveFocus();
 });
 
-test.skip('typing spaces on <div> references does not open the menu', async () => {
+test('typing spaces on <div> references does not open the menu', async () => {
   const spy = vi.fn();
   render(<Select onMatch={spy} />);
 
   vi.useFakeTimers();
 
-  await userEvent.click(screen.getByRole('combobox'));
+  await user.click(screen.getByRole('combobox'));
 
-  await userEvent.keyboard('h');
-  await userEvent.keyboard(' ');
+  await user.keyboard('h');
+  await user.keyboard(' ');
 
   expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
 
   vi.advanceTimersByTime(750);
 
-  await userEvent.keyboard(' ');
+  await user.keyboard(' ');
   await act(async () => {});
 
   expect(screen.queryByRole('listbox')).toBeInTheDocument();
