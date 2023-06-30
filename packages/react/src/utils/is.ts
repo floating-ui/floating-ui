@@ -83,3 +83,9 @@ export function isMouseLikePointerType(
 export function isReactEvent(event: any): event is React.SyntheticEvent {
   return 'nativeEvent' in event;
 }
+
+export function isHidden(el: HTMLElement | null) {
+  if (!el) return false;
+
+  return el.offsetParent === null;
+}

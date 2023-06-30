@@ -11,6 +11,7 @@ import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getDocument} from '../utils/getDocument';
 import {
+  isHidden,
   isHTMLElement,
   isMac,
   isSafari,
@@ -65,7 +66,8 @@ function findNonDisabledIndex(
       ? disabledIndices.includes(index)
       : list[index] == null ||
         list[index]?.hasAttribute('disabled') ||
-        list[index]?.getAttribute('aria-disabled') === 'true')
+        list[index]?.getAttribute('aria-disabled') === 'true' ||
+        isHidden(list[index]))
   );
 
   return index;
