@@ -167,7 +167,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     if (
       isElement(target) &&
       getDocument(target).querySelector(inertSelector) &&
-      !target.closest(inertSelector)
+      !target.closest(inertSelector) &&
+      !['BODY', 'HTML'].includes(target.nodeName)
     ) {
       return;
     }
