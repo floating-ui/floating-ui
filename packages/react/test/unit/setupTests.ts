@@ -14,6 +14,7 @@ vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   }
 );
 
+HTMLElement.prototype.inert = true;
 global.ResizeObserver = ResizeObserverPolyfill;
 
 function isNullOrUndefined(a: any) {

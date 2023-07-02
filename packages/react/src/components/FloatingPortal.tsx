@@ -4,6 +4,7 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 import {FloatingContext} from '../types';
+import {createAttribute} from '../utils/createAttribute';
 import {isElement} from '../utils/is';
 import {
   disableFocusInside,
@@ -61,7 +62,7 @@ export function useFloatingPortalNode({
     const {id, root, portalContext, uniqueId} = data;
 
     const existingIdRoot = id ? document.getElementById(id) : null;
-    const attr = 'data-floating-ui-portal';
+    const attr = createAttribute('portal');
 
     if (existingIdRoot) {
       const subRoot = document.createElement('div');

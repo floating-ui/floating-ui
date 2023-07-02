@@ -1,4 +1,4 @@
-import {hideOthers} from 'aria-hidden';
+import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
@@ -8,6 +8,7 @@ import {useLatestRef} from '../hooks/utils/useLatestRef';
 import type {FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {contains} from '../utils/contains';
+import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';
@@ -64,7 +65,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     context,
     children,
     order = ['content'],
-    guards = true,
+    guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
     modal = true,
@@ -80,6 +81,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     dataRef,
     elements: {domReference, floating},
   } = context;
+
+  // Force the guards to be rendered if the `inert` attribute is not supported.
+  const guards = supportsInert() ? _guards : true;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
@@ -216,7 +220,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           contains(floating, relatedTarget) ||
           contains(relatedTarget, floating) ||
           contains(portalContext?.portalNode, relatedTarget) ||
-          relatedTarget?.hasAttribute('data-floating-ui-focus-guard') ||
+          relatedTarget?.hasAttribute(createAttribute('focus-guard')) ||
           (tree &&
             (getChildren(tree.nodesRef.current, nodeId).find(
               (node) =>
@@ -271,23 +275,25 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
       portalContext?.portalNode?.querySelectorAll(
-        '[data-floating-ui-portal]'
+        `[${createAttribute('portal')}]`
       ) || []
     );
 
-    function getDismissButtons() {
-      return [
+    if (floating && modal) {
+      const insideNodes = [
+        floating,
+        ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
-      ].filter(Boolean) as Array<Element>;
-    }
+      ].filter((x): x is Element => x != null);
 
-    if (floating && modal) {
-      const insideNodes = [floating, ...portalNodes, ...getDismissButtons()];
-      const cleanup = hideOthers(
+      const suppressorFn = guards ? hideOthers : suppressOthers;
+      const cleanup = suppressorFn(
         orderRef.current.includes('reference') || isTypeableCombobox
           ? insideNodes.concat(domReference || [])
-          : insideNodes
+          : insideNodes,
+        undefined,
+        createAttribute('inert')
       );
 
       return () => {
@@ -301,37 +307,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     orderRef,
     portalContext,
     isTypeableCombobox,
+    guards,
   ]);
-
-  React.useEffect(() => {
-    if (modal && !guards && floating) {
-      const tabIndexValues: Array<string | null> = [];
-      const options = getTabbableOptions();
-      const allTabbable = tabbable(getDocument(floating).body, options);
-      const floatingTabbable = getTabbableElements();
-
-      // Exclude all tabbable elements that are part of the order
-      const elements = allTabbable.filter(
-        (el) => !floatingTabbable.includes(el)
-      );
-
-      elements.forEach((el, i) => {
-        tabIndexValues[i] = el.getAttribute('tabindex');
-        el.setAttribute('tabindex', '-1');
-      });
-
-      return () => {
-        elements.forEach((el, i) => {
-          const value = tabIndexValues[i];
-          if (value == null) {
-            el.removeAttribute('tabindex');
-          } else {
-            el.setAttribute('tabindex', value);
-          }
-        });
-      };
-    }
-  }, [floating, modal, guards, getTabbableElements]);
 
   useLayoutEffect(() => {
     if (!floating) return;

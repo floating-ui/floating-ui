@@ -6,6 +6,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
@@ -159,6 +160,18 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
 
     const target = getTarget(event);
+
+    // Prevent closing when clicking third party extensions injected *after*
+    // the floating element opens.
+    const inertSelector = `[${createAttribute('inert')}]`;
+    if (
+      isElement(target) &&
+      getDocument(target).querySelector(inertSelector) &&
+      !target.closest(inertSelector) &&
+      !['BODY', 'HTML'].includes(target.nodeName)
+    ) {
+      return;
+    }
 
     // Check if the click occurred on the scrollbar
     if (isHTMLElement(target) && floating) {
