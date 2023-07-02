@@ -1,4 +1,4 @@
-import {hideOthers, suppressOthers} from 'aria-hidden';
+import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
@@ -65,7 +65,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     context,
     children,
     order = ['content'],
-    guards = true,
+    guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
     modal = true,
@@ -81,6 +81,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     dataRef,
     elements: {domReference, floating},
   } = context;
+
+  // Force the guards to be rendered if the `inert` attribute is not supported.
+  const guards = supportsInert() ? _guards : true;
 
   const orderRef = useLatestRef(order);
   const initialFocusRef = useLatestRef(initialFocus);
