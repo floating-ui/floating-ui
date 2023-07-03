@@ -20,6 +20,7 @@ import {
   isVirtualPointerEvent,
 } from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
+import {isRootElement} from '../utils/isRootElement';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {
@@ -169,7 +170,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       isElement(target) &&
       getDocument(target).querySelector(inertSelector) &&
       !closest(target, inertSelector) &&
-      !target.matches('html,body')
+      !isRootElement(target)
     ) {
       return;
     }

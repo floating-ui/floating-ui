@@ -1,7 +1,8 @@
 import {isElement, isShadowRoot} from './is';
+import {isRootElement} from './isRootElement';
 
 export function closest(node: Node | null, selector: string): Node | null {
-  if (!node || (isElement(node) && node.matches('html,body'))) {
+  if (!node || (isElement(node) && isRootElement(node))) {
     return null;
   }
 
