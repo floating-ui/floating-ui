@@ -13,4 +13,5 @@ updates:
           - '*'
         exclude-patterns:
           - '@vue/runtime-dom'
+          - 'vue'
           - 'typescript'
