@@ -11,3 +11,6 @@ updates:
       dev-dependencies:
         patterns:
           - '*'
+        exclude-patterns:
+          - '@vue/runtime-dom'
+          - 'typescript'
