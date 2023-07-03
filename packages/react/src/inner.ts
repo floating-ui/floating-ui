@@ -89,6 +89,7 @@ export const inner = (
       ...state,
       ...(await offset(
         -item.offsetTop -
+          floating.clientTop -
           rects.reference.height / 2 -
           item.offsetHeight / 2 -
           innerOffset
