@@ -87,18 +87,22 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       return;
     }
 
-    computePosition(referenceElement.value, floatingElement.value, {
-      middleware: middlewareOption.value,
-      placement: placementOption.value,
-      strategy: strategyOption.value,
-    }).then((position) => {
-      x.value = position.x;
-      y.value = position.y;
-      strategy.value = position.strategy;
-      placement.value = position.placement;
-      middlewareData.value = position.middlewareData;
-      isPositioned.value = true;
-    });
+    const position = computePosition(
+      referenceElement.value,
+      floatingElement.value,
+      {
+        middleware: middlewareOption.value,
+        placement: placementOption.value,
+        strategy: strategyOption.value,
+      }
+    );
+
+    x.value = position.x;
+    y.value = position.y;
+    strategy.value = position.strategy;
+    placement.value = position.placement;
+    middlewareData.value = position.middlewareData;
+    isPositioned.value = true;
   }
 
   function cleanup() {

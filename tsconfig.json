@@ -8,7 +8,7 @@
     "resolveJsonModule": true,
     "strict": true,
     "noUnusedLocals": true,
-    "types": ["node", "jest", "resize-observer-browser"],
+    "types": ["node", "vitest/globals", "resize-observer-browser"],
     "allowJs": true,
     "esModuleInterop": true,
     "jsx": "react-jsx"

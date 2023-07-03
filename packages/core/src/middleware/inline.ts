@@ -65,7 +65,7 @@ export const inline = (
 ): Middleware => ({
   name: 'inline',
   options,
-  async fn(state) {
+  fn(state) {
     const {placement, elements, rects, platform, strategy} = state;
     // A MouseEvent's client{X,Y} coords can be up to 2 pixels off a
     // ClientRect's bounds, despite the event listener being triggered. A
@@ -73,7 +73,7 @@ export const inline = (
     const {padding = 2, x, y} = evaluate(options, state);
 
     const nativeClientRects = Array.from(
-      (await platform.getClientRects?.(elements.reference)) || []
+      platform.getClientRects?.(elements.reference) || []
     );
 
     const clientRects = getRectsByLine(nativeClientRects);
@@ -155,7 +155,7 @@ export const inline = (
       return fallback;
     }
 
-    const resetRects = await platform.getElementRects({
+    const resetRects = platform.getElementRects({
       reference: {getBoundingClientRect},
       floating: elements.floating,
       strategy,

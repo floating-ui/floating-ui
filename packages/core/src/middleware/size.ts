@@ -36,7 +36,7 @@ export const size = (
 ): Middleware => ({
   name: 'size',
   options,
-  async fn(state) {
+  fn(state) {
     const {placement, rects, platform, elements} = state;
 
     const {apply = () => {}, ...detectOverflowOptions} = evaluate(
@@ -44,7 +44,7 @@ export const size = (
       state
     );
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = detectOverflow(state, detectOverflowOptions);
     const side = getSide(placement);
     const alignment = getAlignment(placement);
     const axis = getMainAxisFromPlacement(placement);
@@ -57,8 +57,7 @@ export const size = (
     if (side === 'top' || side === 'bottom') {
       heightSide = side;
       widthSide =
-        alignment ===
-        ((await platform.isRTL?.(elements.floating)) ? 'start' : 'end')
+        alignment === (platform.isRTL?.(elements.floating) ? 'start' : 'end')
           ? 'left'
           : 'right';
     } else {
@@ -111,9 +110,9 @@ export const size = (
       }
     }
 
-    await apply({...state, availableWidth, availableHeight});
+    apply({...state, availableWidth, availableHeight});
 
-    const nextDimensions = await platform.getDimensions(elements.floating);
+    const nextDimensions = platform.getDimensions(elements.floating);
 
     if (width !== nextDimensions.width || height !== nextDimensions.height) {
       return {

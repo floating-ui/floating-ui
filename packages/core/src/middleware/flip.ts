@@ -67,7 +67,7 @@ export const flip = (
 ): Middleware => ({
   name: 'flip',
   options,
-  async fn(state) {
+  fn(state) {
     const {
       placement,
       middlewareData,
@@ -89,7 +89,7 @@ export const flip = (
 
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
-    const rtl = await platform.isRTL?.(elements.floating);
+    const rtl = platform.isRTL?.(elements.floating);
 
     const fallbackPlacements =
       specifiedFallbackPlacements ||
@@ -110,7 +110,7 @@ export const flip = (
 
     const placements = [initialPlacement, ...fallbackPlacements];
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = detectOverflow(state, detectOverflowOptions);
 
     const overflows = [];
     let overflowsData = middlewareData.flip?.overflows || [];

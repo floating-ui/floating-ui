@@ -19,7 +19,7 @@ computePosition();
 // @ts-expect-error
 computePosition(document.body);
 
-computePosition(document.body, document.body).then();
+computePosition(document.body, document.body);
 
 computePosition(
   {
@@ -35,7 +35,7 @@ computePosition(
     }),
   },
   document.body
-).then();
+);
 
 computePosition(
   {
@@ -52,7 +52,7 @@ computePosition(
     contextElement: document.body,
   },
   document.body
-).then();
+);
 
 computePosition(
   {
@@ -64,20 +64,20 @@ computePosition(
     contextElement: '',
   },
   document.body
-).then();
+);
 
 computePosition(document.body, document.body, {
   placement: 'right',
-}).then();
+});
 
 computePosition(document.body, document.body, {
   strategy: 'fixed',
-}).then();
+});
 
 computePosition(document.body, document.body, {
   // @ts-expect-error
   strategy: 'random',
-}).then();
+});
 
 computePosition(document.body, document.body, {
   placement: 'right',
@@ -91,7 +91,7 @@ computePosition(document.body, document.body, {
     arrow({element: document.body}),
     inline(),
   ],
-}).then();
+});
 
 // @ts-expect-error
 arrow();
@@ -203,7 +203,7 @@ const middleware: Middleware = {
 
 const middlewareWDetectOverflow: Middleware = {
   name: 'test',
-  async fn(args) {
+  fn(args) {
     // @ts-expect-error
     detectOverflow();
     detectOverflow(args);
@@ -238,6 +238,6 @@ computePosition(document.body, document.body, {
   platform: {
     ...platform,
     getOffsetParent: (element) =>
-      Promise.resolve((element as HTMLElement).offsetParent || window),
+      (element as HTMLElement).offsetParent || window,
   },
 });

@@ -82,7 +82,7 @@ export const autoPlacement = (
 ): Middleware => ({
   name: 'autoPlacement',
   options,
-  async fn(state) {
+  fn(state) {
     const {rects, middlewareData, placement, platform, elements} = state;
 
     const {
@@ -98,7 +98,7 @@ export const autoPlacement = (
         ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
         : allowedPlacements;
 
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = detectOverflow(state, detectOverflowOptions);
 
     const currentIndex = middlewareData.autoPlacement?.index || 0;
     const currentPlacement = placements[currentIndex];
@@ -110,7 +110,7 @@ export const autoPlacement = (
     const {main, cross} = getAlignmentSides(
       currentPlacement,
       rects,
-      await platform.isRTL?.(elements.floating)
+      platform.isRTL?.(elements.floating)
     );
 
     // Make `computeCoords` start from the right place.

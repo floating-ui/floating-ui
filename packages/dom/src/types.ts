@@ -27,8 +27,6 @@ type Prettify<T> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
-type Promisable<T> = T | Promise<T>;
-
 export type Derivable<T> = (state: MiddlewareState) => T;
 
 export interface Platform {
@@ -37,30 +35,30 @@ export interface Platform {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
-  }) => Promisable<ElementRects>;
+  }) => ElementRects;
   getClippingRect: (args: {
     element: Element;
     boundary: Boundary;
     rootBoundary: RootBoundary;
     strategy: Strategy;
-  }) => Promisable<Rect>;
-  getDimensions: (element: Element) => Promisable<Dimensions>;
+  }) => Rect;
+  getDimensions: (element: Element) => Dimensions;
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
     rect: Rect;
     offsetParent: Element;
     strategy: Strategy;
-  }) => Promisable<Rect>;
+  }) => Rect;
   getOffsetParent?: (
     element: Element,
     polyfill?: (element: HTMLElement) => Element | null
-  ) => Promisable<Element | Window>;
-  isElement?: (value: unknown) => Promisable<boolean>;
-  getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
-  getClientRects?: (element: Element) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (element: Element) => Promisable<boolean>;
-  getScale?: (element: HTMLElement) => Promisable<{x: number; y: number}>;
+  ) => Element | Window;
+  isElement?: (value: unknown) => boolean;
+  getDocumentElement?: (element: Element) => HTMLElement;
+  getClientRects?: (element: Element) => Array<ClientRectObject>;
+  isRTL?: (element: Element) => boolean;
+  getScale?: (element: HTMLElement) => {x: number; y: number};
 }
 
 export interface NodeScroll {
@@ -122,7 +120,7 @@ export type MiddlewareArguments = MiddlewareState;
 
 export type Middleware = Prettify<
   Omit<CoreMiddleware, 'fn'> & {
-    fn(state: MiddlewareState): Promisable<MiddlewareReturn>;
+    fn(state: MiddlewareState): MiddlewareReturn;
   }
 >;
 
@@ -139,7 +137,7 @@ export type SizeOptions = Prettify<
           availableWidth: number;
           availableHeight: number;
         }
-      ): Promisable<void>;
+      ): void;
     }
 >;
 export type ArrowOptions = Prettify<
@@ -247,7 +245,7 @@ declare const limitShift: (
 declare const detectOverflow: (
   state: MiddlewareState,
   options?: DetectOverflowOptions
-) => Promise<SideObject>;
+) => SideObject;
 
 export {
   arrow,

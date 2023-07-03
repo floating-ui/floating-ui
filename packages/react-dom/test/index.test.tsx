@@ -1,4 +1,4 @@
-import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
+import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {vi} from 'vitest';
 
@@ -125,21 +125,15 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
   const {getByTestId} = render(<StateMiddleware />);
   fireEvent.click(getByTestId('step1'));
 
-  await act(async () => {});
-
   expect(getByTestId('x').textContent).toBe('10');
 
   fireEvent.click(getByTestId('step2'));
-
-  await act(async () => {});
 
   expect(getByTestId('x').textContent).toBe('5');
 
   // No `expect` as this test will fail if a render loop occurs
   fireEvent.click(getByTestId('step3'));
   fireEvent.click(getByTestId('step4'));
-
-  await act(async () => {});
 });
 
 describe('whileElementsMounted', () => {
@@ -278,8 +272,6 @@ test('unstable callback refs', async () => {
 
   render(<App />);
 
-  await act(async () => {});
-
   cleanup();
 });
 
@@ -310,8 +302,6 @@ test('isPositioned', async () => {
 
   expect(spy.mock.calls[0][0]).toBe(false);
 
-  await act(async () => {});
-
   expect(spy.mock.calls[1][0]).toBe(true);
 
   fireEvent.click(getByRole('button'));
@@ -319,7 +309,6 @@ test('isPositioned', async () => {
   expect(spy.mock.calls[2][0]).toBe(false);
 
   fireEvent.click(getByRole('button'));
-  await act(async () => {});
 
   expect(spy.mock.calls[3][0]).toBe(true);
 
@@ -351,8 +340,6 @@ test('external elements sync', async () => {
   }
 
   const {getByTestId} = render(<App />);
-
-  await act(async () => {});
 
   expect(getByTestId('value').textContent).toBe('0,0');
 });
@@ -390,8 +377,6 @@ test('external reference element sync', async () => {
   const reference = getByTestId('reference');
   reference.getBoundingClientRect = mockBoundingClientRect;
 
-  await act(async () => {});
-
   expect(getByTestId('value').textContent).toBe('25,50');
 });
 
@@ -427,8 +412,6 @@ test('external floating element sync', async () => {
   }));
   const reference = getByTestId('reference');
   reference.getBoundingClientRect = mockBoundingClientRect;
-
-  await act(async () => {});
 
   expect(getByTestId('value').textContent).toBe('25,50');
 });
@@ -468,8 +451,6 @@ test('external elements sync', async () => {
   const reference = getByTestId('reference');
   reference.getBoundingClientRect = mockBoundingClientRect;
 
-  await act(async () => {});
-
   expect(getByTestId('value').textContent).toBe('25,50');
 });
 
@@ -494,7 +475,6 @@ test('external elements sync update', async () => {
   }
 
   const {getByTestId} = render(<App />);
-  await act(async () => {});
 
   expect(getByTestId('value').textContent).toBe('0,0');
 });
@@ -537,8 +517,6 @@ test('floatingStyles no transform', async () => {
   expect(getByTestId('floating').style.top).toBe('0px');
   expect(getByTestId('floating').style.left).toBe('0px');
 
-  await act(async () => {});
-
   expect(getByTestId('floating').style.position).toBe('absolute');
   expect(getByTestId('floating').style.top).toBe('50px');
   expect(getByTestId('floating').style.left).toBe('25px');
@@ -580,8 +558,6 @@ test('floatingStyles default', async () => {
   expect(getByTestId('floating').style.top).toBe('0px');
   expect(getByTestId('floating').style.left).toBe('0px');
   expect(getByTestId('floating').style.transform).toBe('translate(0px, 0px)');
-
-  await act(async () => {});
 
   expect(getByTestId('floating').style.position).toBe('absolute');
   expect(getByTestId('floating').style.top).toBe('0px');

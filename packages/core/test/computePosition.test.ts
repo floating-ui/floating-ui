@@ -6,16 +6,15 @@ const floating = {};
 const referenceRect = {x: 0, y: 0, width: 100, height: 100};
 const floatingRect = {x: 0, y: 0, width: 50, height: 50};
 const platform = {
-  getElementRects: () =>
-    Promise.resolve({
-      reference: referenceRect,
-      floating: floatingRect,
-    }),
-  getDimensions: () => Promise.resolve({width: 10, height: 10}),
+  getElementRects: () => ({
+    reference: referenceRect,
+    floating: floatingRect,
+  }),
+  getDimensions: () => ({width: 10, height: 10}),
 } as unknown as Platform;
 
-test('returned data', async () => {
-  const {x, y, placement, strategy, middlewareData} = await computePosition(
+test('returned data', () => {
+  const {x, y, placement, strategy, middlewareData} = computePosition(
     reference,
     floating,
     {
@@ -36,12 +35,12 @@ test('returned data', async () => {
   });
 });
 
-test('middleware', async () => {
-  const {x, y} = await computePosition(reference, floating, {
+test('middleware', () => {
+  const {x, y} = computePosition(reference, floating, {
     platform,
   });
 
-  const {x: x2, y: y2} = await computePosition(reference, floating, {
+  const {x: x2, y: y2} = computePosition(reference, floating, {
     platform,
     middleware: [
       {
@@ -54,9 +53,8 @@ test('middleware', async () => {
   expect([x2, y2]).toEqual([x + 1, y + 1]);
 });
 
-test('middlewareData', async () => {
-  const {middlewareData} = await computePosition(reference, floating, {
-    // @ts-ignore - computePosition() only uses this property
+test('middlewareData', () => {
+  const {middlewareData} = computePosition(reference, floating, {
     platform,
     middleware: [
       {

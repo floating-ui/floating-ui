@@ -8,7 +8,9 @@ export const useSize = (
   const [size, setSize] = useState(initialSize);
 
   const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    flushSync(() => setSize(Number(event.target.value)));
+    queueMicrotask(() => {
+      flushSync(() => setSize(Number(event.target.value)));
+    });
   };
 
   (window as any)[`__handleSizeChange_${key}`] = handleSizeChange;

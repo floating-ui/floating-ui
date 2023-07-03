@@ -262,7 +262,7 @@ async function position({
     return;
   }
 
-  return computePosition(reference, floating, {
+  const {x, y} = computePosition(reference, floating, {
     placement,
     strategy,
     platform: {
@@ -272,12 +272,12 @@ async function position({
           ? (element) => platform.getOffsetParent(element, composedOffsetParent)
           : platform.getOffsetParent,
     },
-  }).then(({x, y}) => {
-    Object.assign(floating.style, {
-      position: strategy,
-      left: `${x ?? 0}px`,
-      top: `${y ?? 0}px`,
-    });
+  });
+
+  Object.assign(floating.style, {
+    position: strategy,
+    left: `${x ?? 0}px`,
+    top: `${y ?? 0}px`,
   });
 }
 

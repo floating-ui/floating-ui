@@ -96,17 +96,21 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       config.platform = platformRef.current;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, config).then(
-      (data) => {
-        const fullData = {...data, isPositioned: true};
-        if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
-          dataRef.current = fullData;
-          ReactDOM.flushSync(() => {
-            setData(fullData);
-          });
-        }
-      }
+    const data = computePosition(
+      referenceRef.current,
+      floatingRef.current,
+      config
     );
+
+    const fullData = {...data, isPositioned: true};
+    if (isMountedRef.current && !deepEqual(dataRef.current, fullData)) {
+      dataRef.current = fullData;
+      queueMicrotask(() => {
+        ReactDOM.flushSync(() => {
+          setData(fullData);
+        });
+      });
+    }
   }, [latestMiddleware, placement, strategy, platformRef]);
 
   useLayoutEffect(() => {

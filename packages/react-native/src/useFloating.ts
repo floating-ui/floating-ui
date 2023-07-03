@@ -94,15 +94,15 @@ export function useFloating(
       return;
     }
 
-    computePosition(referenceRef.current, floatingRef.current, {
+    const data = computePosition(referenceRef.current, floatingRef.current, {
       middleware: latestMiddleware,
       platform,
       placement,
-    }).then((data) => {
-      if (isMountedRef.current) {
-        setData(data);
-      }
     });
+
+    if (isMountedRef.current) {
+      setData(data);
+    }
   }, [latestMiddleware, platform, placement]);
 
   React.useLayoutEffect(() => {

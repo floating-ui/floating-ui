@@ -15,6 +15,7 @@ export const createPlatform = ({
     y: number;
   };
 }): Platform => ({
+  // @ts-expect-error TODO
   getElementRects({reference, floating}) {
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
@@ -48,12 +49,13 @@ export const createPlatform = ({
   },
   getClippingRect() {
     const {width, height} = Dimensions.get('window');
-    return Promise.resolve({
+    return {
       width,
       height,
       ...(sameScrollView ? scrollOffsets : ORIGIN),
-    });
+    };
   },
+  // @ts-expect-error TODO
   convertOffsetParentRelativeRectToViewportRelativeRect({rect}) {
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
@@ -68,6 +70,7 @@ export const createPlatform = ({
     });
   },
   getDimensions: (element) =>
+    // @ts-expect-error TODO
     new Promise((resolve) =>
       element.measure((x: number, y: number, width: number, height: number) =>
         resolve({width, height})

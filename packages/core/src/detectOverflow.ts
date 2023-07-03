@@ -52,10 +52,10 @@ export type Options = Partial<{
  * - 0 = lies flush with the boundary
  * @see https://floating-ui.com/docs/detectOverflow
  */
-export async function detectOverflow(
+export function detectOverflow(
   state: MiddlewareState,
   options: Options | Derivable<Options> = {}
-): Promise<SideObject> {
+): SideObject {
   const {x, y, platform, rects, elements, strategy} = state;
 
   const {
@@ -71,12 +71,12 @@ export async function detectOverflow(
   const element = elements[altBoundary ? altContext : elementContext];
 
   const clippingClientRect = rectToClientRect(
-    await platform.getClippingRect({
+    platform.getClippingRect({
       element:
-        (await platform.isElement?.(element)) ?? true
+        platform.isElement?.(element) ?? true
           ? element
           : element.contextElement ||
-            (await platform.getDocumentElement?.(elements.floating)),
+            platform.getDocumentElement?.(elements.floating),
       boundary,
       rootBoundary,
       strategy,
@@ -86,14 +86,14 @@ export async function detectOverflow(
   const rect =
     elementContext === 'floating' ? {...rects.floating, x, y} : rects.reference;
 
-  const offsetParent = await platform.getOffsetParent?.(elements.floating);
-  const offsetScale = (await platform.isElement?.(offsetParent))
-    ? (await platform.getScale?.(offsetParent)) || {x: 1, y: 1}
+  const offsetParent = platform.getOffsetParent?.(elements.floating);
+  const offsetScale = platform.isElement?.(offsetParent)
+    ? platform.getScale?.(offsetParent) || {x: 1, y: 1}
     : {x: 1, y: 1};
 
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
-      ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+      ? platform.convertOffsetParentRelativeRectToViewportRelativeRect({
           rect,
           offsetParent,
           strategy,

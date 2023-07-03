@@ -16,7 +16,7 @@ function App() {
       arrow({element: arrowRef}),
       {
         name: 'test',
-        async fn({elements}) {
+        fn({elements}) {
           // @ts-expect-error
           elements.floating.style = '';
           return {};

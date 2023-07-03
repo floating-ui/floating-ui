@@ -37,12 +37,12 @@ type OffsetValue =
 // Derivable.
 export type OffsetOptions = OffsetValue | Derivable<OffsetValue>;
 
-export async function convertValueToCoords(
+export function convertValueToCoords(
   state: MiddlewareState,
   options: OffsetOptions
-): Promise<Coords> {
+): Coords {
   const {placement, platform, elements} = state;
-  const rtl = await platform.isRTL?.(elements.floating);
+  const rtl = platform.isRTL?.(elements.floating);
 
   const side = getSide(placement);
   const alignment = getAlignment(placement);
@@ -76,9 +76,9 @@ export async function convertValueToCoords(
 export const offset = (options: OffsetOptions = 0): Middleware => ({
   name: 'offset',
   options,
-  async fn(state) {
+  fn(state) {
     const {x, y} = state;
-    const diffCoords = await convertValueToCoords(state, options);
+    const diffCoords = convertValueToCoords(state, options);
 
     return {
       x: x + diffCoords.x,

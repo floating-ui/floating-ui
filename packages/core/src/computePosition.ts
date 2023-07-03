@@ -13,11 +13,11 @@ import type {
  * This export does not have any `platform` interface logic. You will need to
  * write one for the platform you are using Floating UI with.
  */
-export const computePosition: ComputePosition = async (
+export const computePosition: ComputePosition = (
   reference,
   floating,
   config
-): Promise<ComputePositionReturn> => {
+): ComputePositionReturn => {
   const {
     placement = 'bottom',
     strategy = 'absolute',
@@ -26,9 +26,9 @@ export const computePosition: ComputePosition = async (
   } = config;
 
   const validMiddleware = middleware.filter(Boolean) as Middleware[];
-  const rtl = await platform.isRTL?.(floating);
+  const rtl = platform.isRTL?.(floating);
 
-  let rects = await platform.getElementRects({reference, floating, strategy});
+  let rects = platform.getElementRects({reference, floating, strategy});
   let {x, y} = computeCoordsFromPlacement(rects, placement, rtl);
   let statefulPlacement = placement;
   let middlewareData: MiddlewareData = {};
@@ -42,7 +42,7 @@ export const computePosition: ComputePosition = async (
       y: nextY,
       data,
       reset,
-    } = await fn({
+    } = fn({
       x,
       y,
       initialPlacement: placement,
@@ -76,7 +76,7 @@ export const computePosition: ComputePosition = async (
         if (reset.rects) {
           rects =
             reset.rects === true
-              ? await platform.getElementRects({reference, floating, strategy})
+              ? platform.getElementRects({reference, floating, strategy})
               : reset.rects;
         }
 

@@ -46,7 +46,7 @@ export const shift = (
 ): Middleware => ({
   name: 'shift',
   options,
-  async fn(state) {
+  fn(state) {
     const {x, y, placement} = state;
 
     const {
@@ -57,7 +57,7 @@ export const shift = (
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const overflow = await detectOverflow(state, detectOverflowOptions);
+    const overflow = detectOverflow(state, detectOverflowOptions);
     const mainAxis = getMainAxisFromPlacement(getSide(placement));
     const crossAxis = getCrossAxis(mainAxis);
 

@@ -61,9 +61,11 @@ export const useScroll = ({
       const scroll = scrollRef.current;
 
       if (scroll) {
-        flushSync(() => {
-          setScroll({scrollX: scroll.scrollLeft, scrollY: scroll.scrollTop});
-        });
+        queueMicrotask(() =>
+          flushSync(() => {
+            setScroll({scrollX: scroll.scrollLeft, scrollY: scroll.scrollTop});
+          })
+        );
       }
 
       update();

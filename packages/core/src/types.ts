@@ -6,8 +6,6 @@ export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
 export type Length = 'width' | 'height';
 
-type Promisable<T> = T | Promise<T>;
-
 /**
  * Function option to derive middleware options from state.
  */
@@ -23,27 +21,27 @@ export interface Platform {
     reference: ReferenceElement;
     floating: FloatingElement;
     strategy: Strategy;
-  }) => Promisable<ElementRects>;
+  }) => ElementRects;
   getClippingRect: (args: {
     element: any;
     boundary: Boundary;
     rootBoundary: RootBoundary;
     strategy: Strategy;
-  }) => Promisable<Rect>;
-  getDimensions: (element: any) => Promisable<Dimensions>;
+  }) => Rect;
+  getDimensions: (element: any) => Dimensions;
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
     rect: Rect;
     offsetParent: any;
     strategy: Strategy;
-  }) => Promisable<Rect>;
-  getOffsetParent?: (element: any) => Promisable<any>;
-  isElement?: (value: any) => Promisable<boolean>;
-  getDocumentElement?: (element: any) => Promisable<any>;
-  getClientRects?: (element: any) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (element: any) => Promisable<boolean>;
-  getScale?: (element: any) => Promisable<{x: number; y: number}>;
+  }) => Rect;
+  getOffsetParent?: (element: any) => any;
+  isElement?: (value: any) => boolean;
+  getDocumentElement?: (element: any) => any;
+  getClientRects?: (element: any) => Array<ClientRectObject>;
+  isRTL?: (element: any) => boolean;
+  getScale?: (element: any) => {x: number; y: number};
 }
 
 export type Coords = {[key in Axis]: number};
@@ -118,7 +116,7 @@ export type ComputePosition = (
   reference: unknown,
   floating: unknown,
   config: ComputePositionConfig
-) => Promise<ComputePositionReturn>;
+) => ComputePositionReturn;
 
 export interface MiddlewareReturn extends Partial<Coords> {
   data?: {
@@ -135,7 +133,7 @@ export interface MiddlewareReturn extends Partial<Coords> {
 export type Middleware = {
   name: string;
   options?: any;
-  fn: (state: MiddlewareState) => Promisable<MiddlewareReturn>;
+  fn: (state: MiddlewareState) => MiddlewareReturn;
 };
 
 export type Dimensions = {[key in Length]: number};
