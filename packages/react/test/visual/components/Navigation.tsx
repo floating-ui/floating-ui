@@ -12,10 +12,10 @@ import {
   useFocus,
   useHover,
   useInteractions,
+  useMergeRefs,
 } from '@floating-ui/react';
 import {ChevronRightIcon} from '@radix-ui/react-icons';
 import * as React from 'react';
-import mergeRefs from 'react-merge-refs';
 
 interface SubItemProps {
   label: string;
@@ -69,10 +69,7 @@ export const NavigationItem = React.forwardRef<
     }),
   ]);
 
-  const mergedReferenceRef = React.useMemo(
-    () => mergeRefs([ref, refs.setReference]),
-    [refs.setReference, ref]
-  );
+  const mergedReferenceRef = useMergeRefs([ref, refs.setReference]);
 
   return (
     <FloatingNode id={nodeId}>
