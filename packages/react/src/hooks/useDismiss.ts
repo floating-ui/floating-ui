@@ -6,6 +6,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {closest} from '../utils/closest';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
@@ -167,8 +168,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     if (
       isElement(target) &&
       getDocument(target).querySelector(inertSelector) &&
-      !target.closest(inertSelector) &&
-      !['BODY', 'HTML'].includes(target.nodeName)
+      !closest(target, inertSelector) &&
+      !target.matches('html,body')
     ) {
       return;
     }
