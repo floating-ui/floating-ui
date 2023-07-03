@@ -247,13 +247,13 @@ export function Main() {
             overflowRef,
             scrollRef,
             index: selectedIndex,
-            offset: innerOffset + 1,
+            offset: innerOffset,
             onFallbackChange: setFallback,
             padding: 10,
             minItemsVisible: touch ? 10 : 4,
             referenceOverflowThreshold: 20,
           }),
-          offset({crossAxis: -4}),
+          offset({crossAxis: -5}),
         ],
   });
 
