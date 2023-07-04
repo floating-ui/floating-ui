@@ -162,16 +162,25 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
 
     const target = getTarget(event);
+    const targetIsElement = isElement(target);
+    const targetParent = targetIsElement && target.parentNode;
+    const inertSelector = `[${createAttribute('inert')}]`;
+    const isThirdPartyElement =
+      targetIsElement &&
+      !isRootElement(target) &&
+      getDocument(target).querySelector(inertSelector) &&
+      !(
+        closest(target, inertSelector) ||
+        // For comboboxes where the reference element avoids the inert trap,
+        // check if any siblings have the inert marker.
+        (isElement(targetParent) &&
+          !isRootElement(targetParent) &&
+          targetParent.querySelector(inertSelector))
+      );
 
     // Prevent closing when clicking third party extensions injected *after*
     // the floating element opens.
-    const inertSelector = `[${createAttribute('inert')}]`;
-    if (
-      isElement(target) &&
-      getDocument(target).querySelector(inertSelector) &&
-      !closest(target, inertSelector) &&
-      !isRootElement(target)
-    ) {
+    if (isThirdPartyElement) {
       return;
     }
 
