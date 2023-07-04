@@ -3,6 +3,7 @@ import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {activeElement} from '../utils/activeElement';
 import {contains} from '../utils/contains';
+import {createAttribute} from '../utils/createAttribute';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isHTMLElement} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
@@ -125,7 +126,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           // moved into the floating element immediately after.
           const movedToFocusGuard =
             isElement(relatedTarget) &&
-            relatedTarget.hasAttribute('data-floating-ui-focus-guard') &&
+            relatedTarget.hasAttribute(createAttribute('focus-guard')) &&
             relatedTarget.getAttribute('data-type') === 'outside';
 
           // Wait for the window blur listener to fire.

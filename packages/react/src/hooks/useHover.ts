@@ -12,11 +12,12 @@ import type {
   ReferenceType,
 } from '../types';
 import {contains} from '../utils/contains';
+import {createAttribute} from '../utils/createAttribute';
 import {getDocument} from '../utils/getDocument';
 import {isElement, isMouseLikePointerType} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
-const safePolygonIdentifier = 'data-floating-ui-safe-polygon';
+const safePolygonIdentifier = createAttribute('safe-polygon');
 
 export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
   (
