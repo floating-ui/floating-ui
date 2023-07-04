@@ -119,19 +119,19 @@ export interface ContextData {
   [key: string]: any;
 }
 
-export type FloatingContext<RT extends ReferenceType = ReferenceType> =
-  Prettify<
-    Omit<UsePositionFloatingReturn<RT>, 'refs' | 'elements'> & {
-      open: boolean;
-      onOpenChange: (open: boolean, event?: Event) => void;
-      events: FloatingEvents;
-      dataRef: React.MutableRefObject<ContextData>;
-      nodeId: string | undefined;
-      floatingId: string;
-      refs: ExtendedRefs<RT>;
-      elements: ExtendedElements<RT>;
-    }
-  >;
+export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
+  UsePositionFloatingReturn<RT>,
+  'refs' | 'elements'
+> & {
+  open: boolean;
+  onOpenChange: (open: boolean, event?: Event) => void;
+  events: FloatingEvents;
+  dataRef: React.MutableRefObject<ContextData>;
+  nodeId: string | undefined;
+  floatingId: string;
+  refs: ExtendedRefs<RT>;
+  elements: ExtendedElements<RT>;
+};
 
 export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
   id: string;
@@ -159,7 +159,7 @@ export type UseFloatingData = Prettify<UseFloatingReturn>;
 export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   Prettify<
     UsePositionFloatingReturn & {
-      context: FloatingContext<RT>;
+      context: Prettify<FloatingContext<RT>>;
       refs: ExtendedRefs<RT>;
       elements: ExtendedElements<RT>;
     }
