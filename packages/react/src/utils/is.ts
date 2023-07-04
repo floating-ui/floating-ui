@@ -89,3 +89,7 @@ export function isHidden(el: HTMLElement | null) {
 
   return el.offsetParent === null;
 }
+
+export function isRootElement(element: Element): boolean {
+  return element.matches('html,body');
+}
