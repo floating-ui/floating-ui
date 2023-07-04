@@ -16,11 +16,11 @@ import {
   isElement,
   isHTMLElement,
   isReactEvent,
+  isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
 } from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {isRootElement} from '../utils/isRootElement';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {

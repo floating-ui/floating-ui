@@ -1,5 +1,4 @@
-import {isElement, isShadowRoot} from './is';
-import {isRootElement} from './isRootElement';
+import {isElement, isRootElement, isShadowRoot} from './is';
 
 export function closest(node: Node | null, selector: string): Node | null {
   if (!node || (isElement(node) && isRootElement(node))) {
