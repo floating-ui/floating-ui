@@ -94,6 +94,7 @@ export const Main = () => {
             placement={placement}
             arrowProps={{
               fill: 'rgba(0,0,0,0.75)',
+              skewToCenter: true,
             }}
             floatingProps={{
               className: 'bg-black/75 text-white p-2',
@@ -176,8 +177,7 @@ export const Main = () => {
             key={placement}
             placement={placement}
             arrowProps={{
-              className:
-                'fill-white [&>path:first-of-type]:stroke-pink-500 [&>path:last-of-type]:stroke-white',
+              className: 'fill-white [&>path:first-of-type]:stroke-pink-500',
               strokeWidth: 1,
             }}
             floatingProps={{
