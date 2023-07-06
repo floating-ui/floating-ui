@@ -108,18 +108,6 @@ const cleanup = autoUpdate(referenceEl, floatingEl, update, {
 });
 ```
 
-<Notice type="note" title="Testing environments">
-JSDOM does not support `ResizeObserver{:.class}`. A polyfill or check like the 
-following will work:
-
-```js
-autoUpdate(referenceEl, floatingEl, update, {
-  elementResize: typeof ResizeObserver === 'function',
-});
-```
-
-</Notice>
-
 ### layoutShift
 
 default: `true{:js}`
