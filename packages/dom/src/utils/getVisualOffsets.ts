@@ -22,9 +22,10 @@ export function shouldAddVisualOffsets(
   isFixed = false,
   floatingOffsetParent?: Element | Window | undefined
 ) {
-  const win = getWindow(element);
-
-  if (!floatingOffsetParent || (isFixed && floatingOffsetParent !== win)) {
+  if (
+    !floatingOffsetParent ||
+    (isFixed && floatingOffsetParent !== getWindow(element))
+  ) {
     return false;
   }
 
