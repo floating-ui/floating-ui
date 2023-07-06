@@ -13,10 +13,14 @@ export function getVisualOffsets(element: Element | undefined): Coords {
 
   const win = getWindow(element);
 
-  return {
-    x: win.visualViewport?.offsetLeft || 0,
-    y: win.visualViewport?.offsetTop || 0,
-  };
+  if (win.visualViewport) {
+    return {
+      x: win.visualViewport.offsetLeft,
+      y: win.visualViewport.offsetTop,
+    };
+  }
+
+  return noOffsets;
 }
 
 export function shouldAddVisualOffsets(
