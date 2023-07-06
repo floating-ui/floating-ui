@@ -7,20 +7,16 @@ import {createCoords} from './math';
 const noOffsets = createCoords(0);
 
 export function getVisualOffsets(element: Element | undefined): Coords {
-  if (!isSafari()) {
+  const win = getWindow(element);
+
+  if (!isSafari() || !win.visualViewport) {
     return noOffsets;
   }
 
-  const win = getWindow(element);
-
-  if (win.visualViewport) {
-    return {
-      x: win.visualViewport.offsetLeft,
-      y: win.visualViewport.offsetTop,
-    };
-  }
-
-  return noOffsets;
+  return {
+    x: win.visualViewport.offsetLeft,
+    y: win.visualViewport.offsetTop,
+  };
 }
 
 export function shouldAddVisualOffsets(
