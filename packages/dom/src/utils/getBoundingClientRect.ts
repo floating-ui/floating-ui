@@ -3,7 +3,7 @@ import {rectToClientRect} from '@floating-ui/core';
 
 import {getScale} from '../platform/getScale';
 import {isElement} from '../platform/isElement';
-import {getVisualOffsets} from './getVisualOffsets';
+import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
 import {getWindow} from './getWindow';
 import {createCoords} from './math';
 import {unwrapElement} from './unwrapElement';
@@ -28,11 +28,13 @@ export function getBoundingClientRect(
     }
   }
 
-  const visualOffsets = getVisualOffsets(
+  const visualOffsets = shouldAddVisualOffsets(
     domElement,
     isFixedStrategy,
     offsetParent
-  );
+  )
+    ? getVisualOffsets(domElement)
+    : createCoords(0);
 
   let x = (clientRect.left + visualOffsets.x) / scale.x;
   let y = (clientRect.top + visualOffsets.y) / scale.y;
