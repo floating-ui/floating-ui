@@ -98,4 +98,9 @@ export const MINI_SPONSORS = [
     label: 'Mobipast',
     url: 'https://www.mobipast.net/',
   },
+  {
+    logo: '/sponsors/refermate.svg',
+    label: 'Refermate - Best Coupon Codes',
+    url: 'https://refermate.com/',
+  },
 ];
