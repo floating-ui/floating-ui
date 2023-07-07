@@ -6,8 +6,6 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {closest} from '../utils/closest';
-import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
@@ -16,7 +14,6 @@ import {
   isElement,
   isHTMLElement,
   isReactEvent,
-  isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
 } from '../utils/is';
@@ -162,27 +159,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
 
     const target = getTarget(event);
-    const targetIsElement = isElement(target);
-    const targetParent = targetIsElement && target.parentNode;
-    const inertSelector = `[${createAttribute('inert')}]`;
-    const isThirdPartyElement =
-      targetIsElement &&
-      !isRootElement(target) &&
-      getDocument(target).querySelector(inertSelector) &&
-      !(
-        closest(target, inertSelector) ||
-        // For comboboxes where the reference element avoids the inert trap,
-        // check if any siblings have the inert marker.
-        (isElement(targetParent) &&
-          !isRootElement(targetParent) &&
-          targetParent.querySelector(inertSelector))
-      );
-
-    // Prevent closing when clicking third party extensions injected *after*
-    // the floating element opens.
-    if (isThirdPartyElement) {
-      return;
-    }
 
     // Check if the click occurred on the scrollbar
     if (isHTMLElement(target) && floating) {
