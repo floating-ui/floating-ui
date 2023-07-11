@@ -84,12 +84,6 @@ export function isReactEvent(event: any): event is React.SyntheticEvent {
   return 'nativeEvent' in event;
 }
 
-export function isHidden(el: HTMLElement | null) {
-  if (!el) return false;
-
-  return el.offsetParent === null;
-}
-
 export function isRootElement(element: Element): boolean {
   return element.matches('html,body');
 }
