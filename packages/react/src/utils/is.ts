@@ -6,11 +6,16 @@ export function getWindow(value: any) {
 }
 
 export function isElement(value: any): value is Element {
-  return value ? value instanceof getWindow(value).Element : false;
+  return value
+    ? value instanceof Element || value instanceof getWindow(value).Element
+    : false;
 }
 
 export function isHTMLElement(value: any): value is HTMLElement {
-  return value ? value instanceof getWindow(value).HTMLElement : false;
+  return value
+    ? value instanceof HTMLElement ||
+        value instanceof getWindow(value).HTMLElement
+    : false;
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {

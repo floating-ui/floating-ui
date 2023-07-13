@@ -12,7 +12,10 @@ declare global {
 }
 
 export function isHTMLElement(value: any): value is HTMLElement {
-  return value instanceof getWindow(value).HTMLElement;
+  return (
+    value instanceof HTMLElement ||
+    value instanceof getWindow(value).HTMLElement
+  );
 }
 
 export function isShadowRoot(node: Node): node is ShadowRoot {
