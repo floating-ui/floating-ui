@@ -128,10 +128,8 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
           }
 
           if (event.key === 'Enter') {
-            if (open) {
-              if (toggle) {
-                onOpenChange(false, event.nativeEvent);
-              }
+            if (open && toggle) {
+              onOpenChange(false, event.nativeEvent);
             } else {
               onOpenChange(true, event.nativeEvent);
             }
@@ -149,10 +147,8 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
 
           if (event.key === ' ' && didKeyDownRef.current) {
             didKeyDownRef.current = false;
-            if (open) {
-              if (toggle) {
-                onOpenChange(false, event.nativeEvent);
-              }
+            if (open && toggle) {
+              onOpenChange(false, event.nativeEvent);
             } else {
               onOpenChange(true, event.nativeEvent);
             }
