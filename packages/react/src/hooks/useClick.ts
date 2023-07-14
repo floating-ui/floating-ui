@@ -71,15 +71,14 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (open) {
-            if (
-              toggle &&
-              (dataRef.current.openEvent
-                ? dataRef.current.openEvent.type === 'mousedown'
-                : true)
-            ) {
-              onOpenChange(false, event.nativeEvent);
-            }
+          if (
+            open &&
+            toggle &&
+            (dataRef.current.openEvent
+              ? dataRef.current.openEvent.type === 'mousedown'
+              : true)
+          ) {
+            onOpenChange(false, event.nativeEvent);
           } else {
             // Prevent stealing focus from the floating element
             event.preventDefault();
@@ -99,15 +98,14 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          if (open) {
-            if (
-              toggle &&
-              (dataRef.current.openEvent
-                ? dataRef.current.openEvent.type === 'click'
-                : true)
-            ) {
-              onOpenChange(false, event.nativeEvent);
-            }
+          if (
+            open &&
+            toggle &&
+            (dataRef.current.openEvent
+              ? dataRef.current.openEvent.type === 'click'
+              : true)
+          ) {
+            onOpenChange(false, event.nativeEvent);
           } else {
             onOpenChange(true, event.nativeEvent);
           }
