@@ -31,6 +31,7 @@ function App() {
 ```ts
 interface Props {
   context: FloatingContext;
+  disabled?: boolean;
   order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?:
     | number
@@ -45,12 +46,26 @@ interface Props {
 
 ### context
 
-**Required**
+<Required />
 
 The `context{:.const}` object returned from `useFloating(){:js}`.
 
 ```js
 <FloatingFocusManager context={context}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### disabled
+
+default: `false{:js}`
+
+Disables all focus management entirely. Useful to delay focus
+management until after a transition completes or some other
+conditional state.
+
+```js
+<FloatingFocusManager context={context} disabled>
   {/* floating element */}
 </FloatingFocusManager>
 ```

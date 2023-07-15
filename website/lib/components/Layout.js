@@ -68,6 +68,7 @@ import {Floating} from './Floating';
 import Navigation from './Navigation';
 import Notice from './Notice';
 import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
+import {Required} from './Required';
 import {WordHighlight} from './WordHighlight';
 
 function PackageVersion({package: {name, version}}) {
@@ -409,6 +410,7 @@ const components = {
   Notice,
   WordHighlight,
   CircleImage,
+  Required,
   h2: (props) => <Heading level={2} {...props} />,
   h3: (props) => <Heading level={3} {...props} />,
   h4: (props) => <Heading level={4} {...props} />,
