@@ -1,7 +1,7 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
-import {useClick, useFloating, useInteractions} from '../../src';
+import {useClick, useFloating, useHover, useInteractions} from '../../src';
 import type {UseClickProps} from '../../src/hooks/useClick';
 
 function App({
@@ -195,4 +195,40 @@ test('ignores Space keydown on another element then keyup on the button', async 
   fireEvent.keyUp(button, {key: ' '});
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+});
+
+test('with useHover does not close on mouseleave after click', async () => {
+  function App() {
+    const [open, setOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+    });
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useHover(context),
+      useClick(context),
+    ]);
+
+    return (
+      <>
+        <button
+          {...getReferenceProps({ref: refs.setReference})}
+          data-testid="reference"
+        />
+        {open && (
+          <div role="tooltip" {...getFloatingProps({ref: refs.setFloating})} />
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+
+  const button = screen.getByTestId('reference');
+  fireEvent.mouseEnter(button);
+  fireEvent.click(button);
+  fireEvent.mouseLeave(button);
+
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+  cleanup();
 });
