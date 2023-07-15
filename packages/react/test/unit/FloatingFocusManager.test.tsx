@@ -15,12 +15,16 @@ import {
   useFloatingParentNodeId,
   useInteractions,
 } from '../../src';
-import {Props} from '../../src/components/FloatingFocusManager';
+import {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
 
 function App(
-  props: Partial<Omit<Props, 'initialFocus'> & {initialFocus?: 'two' | number}>
+  props: Partial<
+    Omit<FloatingFocusManagerProps, 'initialFocus'> & {
+      initialFocus?: 'two' | number;
+    }
+  >
 ) {
   const ref = useRef<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -532,6 +536,87 @@ describe('modal', () => {
 
     expect(screen.queryByTestId('close-dialog')).toBeInTheDocument();
     expect(screen.queryByTestId('close-nested-dialog')).toBeInTheDocument();
+  });
+});
+
+describe('disabled', () => {
+  test('true -> false', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [disabled, setDisabled] = useState(true);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setIsOpen((v) => !v)}
+          />
+          <button data-testid="toggle" onClick={() => setDisabled((v) => !v)} />
+          {isOpen && (
+            <FloatingFocusManager context={context} disabled={disabled}>
+              <div ref={refs.setFloating} data-testid="floating" />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+    expect(screen.getByTestId('floating')).not.toHaveFocus();
+    fireEvent.click(screen.getByTestId('toggle'));
+    await act(async () => {});
+    expect(screen.getByTestId('floating')).toHaveFocus();
+  });
+
+  test('false', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(false);
+      const [disabled, setDisabled] = useState(false);
+
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const click = useClick(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([click]);
+
+      return (
+        <>
+          <button
+            data-testid="reference"
+            ref={refs.setReference}
+            {...getReferenceProps()}
+          />
+          <button data-testid="toggle" onClick={() => setDisabled((v) => !v)} />
+          {isOpen && (
+            <FloatingFocusManager context={context} disabled={disabled}>
+              <div
+                ref={refs.setFloating}
+                data-testid="floating"
+                {...getFloatingProps()}
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+    expect(screen.getByTestId('floating')).toHaveFocus();
   });
 });
 

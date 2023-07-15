@@ -42,9 +42,12 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   );
 });
 
-export interface Props<RT extends ReferenceType = ReferenceType> {
+export interface FloatingFocusManagerProps<
+  RT extends ReferenceType = ReferenceType
+> {
   context: FloatingContext<RT>;
   children: JSX.Element;
+  disabled?: boolean;
   order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?: number | React.MutableRefObject<HTMLElement | null>;
   guards?: boolean;
@@ -59,11 +62,12 @@ export interface Props<RT extends ReferenceType = ReferenceType> {
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
-  props: Props<RT>
+  props: FloatingFocusManagerProps<RT>
 ): JSX.Element {
   const {
     context,
     children,
+    disabled = false,
     order = ['content'],
     guards: _guards = true,
     initialFocus = 0,
@@ -144,9 +148,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   );
 
   React.useEffect(() => {
-    if (!modal) {
-      return;
-    }
+    if (disabled || !modal) return;
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === 'Tab') {
@@ -188,6 +190,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       doc.removeEventListener('keydown', onKeyDown);
     };
   }, [
+    disabled,
     domReference,
     floating,
     modal,
@@ -199,9 +202,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   ]);
 
   React.useEffect(() => {
-    if (!closeOnFocusOut) {
-      return;
-    }
+    if (disabled || !closeOnFocusOut) return;
 
     // In Safari, buttons lose focus when pressing them.
     function handlePointerDown() {
@@ -261,6 +262,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       };
     }
   }, [
+    disabled,
     domReference,
     floating,
     modal,
@@ -272,6 +274,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   ]);
 
   React.useEffect(() => {
+    if (disabled) return;
+
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
       portalContext?.portalNode?.querySelectorAll(
@@ -301,6 +305,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       };
     }
   }, [
+    disabled,
     domReference,
     floating,
     modal,
@@ -311,7 +316,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   ]);
 
   useLayoutEffect(() => {
-    if (!floating) return;
+    if (disabled || !floating) return;
 
     const doc = getDocument(floating);
     const previouslyFocusedElement = activeElement(doc);
@@ -334,6 +339,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       }
     });
   }, [
+    disabled,
     open,
     floating,
     ignoreInitialFocus,
@@ -342,7 +348,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   ]);
 
   useLayoutEffect(() => {
-    if (!floating) return;
+    if (disabled || !floating) return;
 
     let preventReturnFocusScroll = false;
 
@@ -408,12 +414,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         });
       }
     };
-  }, [floating, returnFocusRef, dataRef, refs, events, tree, nodeId]);
+  }, [disabled, floating, returnFocusRef, dataRef, refs, events, tree, nodeId]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
   useLayoutEffect(() => {
-    if (!portalContext) return;
+    if (disabled || !portalContext) return;
     portalContext.setFocusManagerState({
       ...context,
       modal,
@@ -423,9 +429,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     return () => {
       portalContext.setFocusManagerState(null);
     };
-  }, [portalContext, modal, open, closeOnFocusOut, context]);
+  }, [disabled, portalContext, modal, open, closeOnFocusOut, context]);
 
   useLayoutEffect(() => {
+    if (disabled) return;
+
     if (floating && typeof MutationObserver === 'function') {
       const handleMutation = () => {
         const tabIndex = floating.getAttribute('tabindex');
@@ -455,10 +463,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         observer.disconnect();
       };
     }
-  }, [floating, refs, orderRef, getTabbableContent]);
+  }, [disabled, floating, refs, orderRef, getTabbableContent]);
 
   function renderDismissButton(location: 'start' | 'end') {
-    return visuallyHiddenDismiss && modal ? (
+    if (disabled || !visuallyHiddenDismiss || !modal) {
+      return null;
+    }
+
+    return (
       <VisuallyHiddenDismiss
         ref={location === 'start' ? startDismissButtonRef : endDismissButtonRef}
         onClick={(event) => onOpenChange(false, event.nativeEvent)}
@@ -467,11 +479,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           ? visuallyHiddenDismiss
           : 'Dismiss'}
       </VisuallyHiddenDismiss>
-    ) : null;
+    );
   }
 
   const shouldRenderGuards =
-    guards && !isTypeableCombobox && (isInsidePortal || modal);
+    !disabled && guards && !isTypeableCombobox && (isInsidePortal || modal);
 
   return (
     <>
