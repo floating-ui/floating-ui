@@ -9,6 +9,7 @@ import type {DismissPayload} from './hooks/useDismiss';
 
 export * from '.';
 export {FloatingArrowProps} from './components/FloatingArrow';
+export {FloatingFocusManagerProps} from './components/FloatingFocusManager';
 export {UseClickProps} from './hooks/useClick';
 export {UseClientPointProps} from './hooks/useClientPoint';
 export {UseDismissProps} from './hooks/useDismiss';
