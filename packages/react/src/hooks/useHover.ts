@@ -1,4 +1,4 @@
-import {contains, isElement} from '@floating-ui/utils';
+import {contains, isElement, isMouseLikePointerType} from '@floating-ui/utils';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -14,7 +14,6 @@ import type {
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getDocument} from '../utils/getDocument';
-import {isMouseLikePointerType} from '../utils/is';
 import {useLatestRef} from './utils/useLatestRef';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');

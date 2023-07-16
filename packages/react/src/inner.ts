@@ -1,4 +1,5 @@
 import {detectOverflow, offset} from '@floating-ui/react-dom';
+import {getUserAgent} from '@floating-ui/utils';
 import * as React from 'react';
 import {flushSync} from 'react-dom';
 
@@ -11,7 +12,6 @@ import type {
   MiddlewareState,
   SideObject,
 } from './types';
-import {getUserAgent} from './utils/getPlatform';
 
 function getArgsWithCustomFloatingHeight(
   state: MiddlewareState,
