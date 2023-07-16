@@ -1,5 +1,8 @@
 import {isShadowRoot} from './is';
 
+/**
+ * Check if a parent contains a child. Traverses into shadowRoots.
+ */
 export function contains(parent?: Element | null, child?: Element | null) {
   if (!parent || !child) {
     return false;

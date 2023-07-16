@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
       '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),
       '@floating-ui/dom': path.resolve(__dirname, '../dom/src/index.ts'),
       '@floating-ui/react-dom': path.resolve(

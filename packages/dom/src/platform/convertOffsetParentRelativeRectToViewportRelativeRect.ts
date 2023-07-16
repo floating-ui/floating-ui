@@ -1,10 +1,13 @@
 import type {Rect, Strategy} from '@floating-ui/core';
+import {
+  getNodeName,
+  isHTMLElement,
+  isOverflowElement,
+} from '@floating-ui/utils';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getNodeScroll} from '../utils/getNodeScroll';
-import {isHTMLElement, isOverflowElement} from '../utils/is';
 import {createCoords} from '../utils/math';
-import {getNodeName} from '../utils/node';
 import {getDocumentElement} from './getDocumentElement';
 import {getScale} from './getScale';
 

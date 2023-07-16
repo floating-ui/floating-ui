@@ -1,8 +1,7 @@
 import type {Rect, Strategy} from '@floating-ui/core';
+import {getWindow, isSafari} from '@floating-ui/utils';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
-import {getWindow} from './getWindow';
-import {isSafari} from './is';
 
 export function getViewportRect(element: Element, strategy: Strategy): Rect {
   const win = getWindow(element);

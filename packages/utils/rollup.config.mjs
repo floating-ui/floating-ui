@@ -9,51 +9,45 @@ const bundles = [
   {
     input,
     output: {
-      file: './dist/floating-ui.core.esm.js',
+      file: './dist/floating-ui.utils.esm.js',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: './dist/floating-ui.core.mjs',
+      file: './dist/floating-ui.utils.mjs',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: './dist/floating-ui.core.browser.mjs',
+      file: './dist/floating-ui.utils.browser.mjs',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      file: './dist/floating-ui.core.browser.min.mjs',
+      file: './dist/floating-ui.utils.browser.min.mjs',
       format: 'esm',
     },
   },
   {
     input,
     output: {
-      name: 'FloatingUICore',
-      file: './dist/floating-ui.core.umd.js',
+      name: 'FloatingUIUtils',
+      file: './dist/floating-ui.utils.umd.js',
       format: 'umd',
-      globals: {
-        '@floating-ui/utils': 'FloatingUIUtils',
-      },
     },
   },
   {
     input,
     output: {
-      name: 'FloatingUICore',
-      file: './dist/floating-ui.core.umd.min.js',
+      name: 'FloatingUIUtils',
+      file: './dist/floating-ui.utils.umd.min.js',
       format: 'umd',
-      globals: {
-        '@floating-ui/utils': 'FloatingUIUtils',
-      },
     },
   },
 ];
@@ -61,7 +55,6 @@ const bundles = [
 export default bundles.map(({input, output}) => ({
   input,
   output,
-  external: output.format === 'umd' ? [] : ['@floating-ui/utils'],
   plugins: [
     nodeResolve({extensions: ['.ts']}),
     replace({

@@ -19,7 +19,7 @@
     "lint": "eslint . --ext .js,.ts,.tsx",
     "playwright": "npx playwright test packages/dom/test/functional",
     "playwright:update": "npm run playwright -- -u",
-    "build": "npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
+    "build": "npm -w packages/utils run build && npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
     "clean": "rm -rf packages/**/src/[^_]*.d.ts packages/**/src/**/[^_]*.d.ts packages/**/dist",
     "postinstall": "patch-package"

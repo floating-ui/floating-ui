@@ -1,6 +1,6 @@
+import {getWindow, isOverflowElement} from '@floating-ui/utils';
+
 import {getNearestOverflowAncestor} from './getNearestOverflowAncestor';
-import {getWindow} from './getWindow';
-import {isOverflowElement} from './is';
 
 type OverflowAncestors = Array<Element | Window | VisualViewport>;
 

@@ -1,6 +1,6 @@
+import {getNodeName, isShadowRoot} from '@floating-ui/utils';
+
 import {getDocumentElement} from '../platform/getDocumentElement';
-import {isShadowRoot} from './is';
-import {getNodeName} from './node';
 
 export function getParentNode(node: Node): Node {
   if (getNodeName(node) === 'html') {

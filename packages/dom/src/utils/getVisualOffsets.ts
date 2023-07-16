@@ -1,7 +1,6 @@
 import type {Coords} from '@floating-ui/core';
+import {getWindow, isSafari} from '@floating-ui/utils';
 
-import {getWindow} from './getWindow';
-import {isSafari} from './is';
 import {createCoords} from './math';
 
 const noOffsets = createCoords(0);

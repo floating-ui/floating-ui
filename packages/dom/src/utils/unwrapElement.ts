@@ -1,4 +1,5 @@
-import {isElement} from '../platform/isElement';
+import {isElement} from '@floating-ui/utils';
+
 import type {VirtualElement} from '../types';
 
 export function unwrapElement(element: Element | VirtualElement) {

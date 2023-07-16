@@ -1,7 +1,7 @@
 import {getWindow} from './getWindow';
 
 export function isNode(value: any): value is Node {
-  return value instanceof getWindow(value).Node;
+  return value instanceof Node || value instanceof getWindow(value).Node;
 }
 
 export function getNodeName(node: Node | Window): string {

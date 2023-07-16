@@ -1,14 +1,8 @@
-import {getComputedStyle} from './getComputedStyle';
 import {getWindow} from './getWindow';
 import {getNodeName} from './node';
 
-declare global {
-  interface Window {
-    HTMLElement: any;
-    Element: any;
-    Node: any;
-    ShadowRoot: any;
-  }
+export function isElement(value: any): value is Element {
+  return value instanceof Element || value instanceof getWindow(value).Element;
 }
 
 export function isHTMLElement(value: any): value is HTMLElement {
@@ -18,14 +12,14 @@ export function isHTMLElement(value: any): value is HTMLElement {
   );
 }
 
-export function isShadowRoot(node: Node): node is ShadowRoot {
+export function isShadowRoot(value: any): value is ShadowRoot {
   // Browsers without `ShadowRoot` support.
   if (typeof ShadowRoot === 'undefined') {
     return false;
   }
 
   return (
-    node instanceof getWindow(node).ShadowRoot || node instanceof ShadowRoot
+    value instanceof ShadowRoot || value instanceof getWindow(value).ShadowRoot
   );
 }
 
@@ -66,6 +60,6 @@ export function isSafari(): boolean {
   return CSS.supports('-webkit-backdrop-filter', 'none');
 }
 
-export function isLastTraversableNode(node: Node) {
+export function isLastTraversableNode(node: Node): boolean {
   return ['html', 'body', '#document'].includes(getNodeName(node));
 }

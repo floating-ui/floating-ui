@@ -1,13 +1,14 @@
-import {getComputedStyle} from '../utils/getComputedStyle';
-import {getParentNode} from '../utils/getParentNode';
-import {getWindow} from '../utils/getWindow';
 import {
+  getNodeName,
+  getWindow,
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
   isTableElement,
-} from '../utils/is';
-import {getNodeName} from '../utils/node';
+} from '@floating-ui/utils';
+
+import {getComputedStyle} from '../utils/getComputedStyle';
+import {getParentNode} from '../utils/getParentNode';
 
 type Polyfill = (element: HTMLElement) => Element | null;
 

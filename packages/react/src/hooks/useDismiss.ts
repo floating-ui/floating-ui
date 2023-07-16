@@ -1,4 +1,5 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils';
 import * as React from 'react';
 
 import {
@@ -9,14 +10,7 @@ import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
 import {getDocument} from '../utils/getDocument';
 import {getTarget} from '../utils/getTarget';
-import {
-  getWindow,
-  isElement,
-  isHTMLElement,
-  isReactEvent,
-  isVirtualClick,
-  isVirtualPointerEvent,
-} from '../utils/is';
+import {isReactEvent, isVirtualClick, isVirtualPointerEvent} from '../utils/is';
 import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {useEffectEvent} from './utils/useEffectEvent';
 

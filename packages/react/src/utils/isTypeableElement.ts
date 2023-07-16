@@ -1,4 +1,4 @@
-import {isHTMLElement} from './is';
+import {isHTMLElement} from '@floating-ui/utils';
 
 export const TYPEABLE_SELECTOR =
   "input:not([type='hidden']):not([disabled])," +

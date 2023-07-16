@@ -1,3 +1,4 @@
+import {isElement} from '@floating-ui/utils';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useCallback, useLayoutEffect, useState} from 'react';
@@ -11,7 +12,6 @@ import {
   useHover,
   useInteractions,
 } from '../../src';
-import {isElement} from '../../src/utils/is';
 
 describe('positionReference', () => {
   test('sets separate refs', () => {

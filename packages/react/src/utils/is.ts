@@ -1,32 +1,4 @@
-import {getDocument} from './getDocument';
 import {getPlatform, getUserAgent} from './getPlatform';
-
-export function getWindow(value: any) {
-  return getDocument(value).defaultView || window;
-}
-
-export function isElement(value: any): value is Element {
-  return value
-    ? value instanceof Element || value instanceof getWindow(value).Element
-    : false;
-}
-
-export function isHTMLElement(value: any): value is HTMLElement {
-  return value
-    ? value instanceof HTMLElement ||
-        value instanceof getWindow(value).HTMLElement
-    : false;
-}
-
-export function isShadowRoot(node: Node): node is ShadowRoot {
-  // Browsers without `ShadowRoot` support
-  if (typeof ShadowRoot === 'undefined') {
-    return false;
-  }
-
-  const OwnElement = getWindow(node).ShadowRoot;
-  return node instanceof OwnElement || node instanceof ShadowRoot;
-}
 
 // License: https://github.com/adobe/react-spectrum/blob/b35d5c02fe900badccd0cf1a8f23bb593419f238/packages/@react-aria/utils/src/isVirtualEvent.ts
 export function isVirtualClick(event: MouseEvent | PointerEvent): boolean {

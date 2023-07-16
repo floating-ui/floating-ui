@@ -1,7 +1,6 @@
+import {activeElement, contains} from '@floating-ui/utils';
 import {tabbable} from 'tabbable';
 
-import {activeElement} from './activeElement';
-import {contains} from './contains';
 import {getDocument} from './getDocument';
 
 export const getTabbableOptions = () =>
