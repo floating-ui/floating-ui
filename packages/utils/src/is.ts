@@ -37,7 +37,7 @@ export function isTableElement(element: Element): boolean {
 }
 
 export function isContainingBlock(element: Element): boolean {
-  const safari = isSafari();
+  const safari = isWebKit();
   const css = getComputedStyle(element);
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block

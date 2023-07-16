@@ -1,8 +1,8 @@
+import {getPlatform} from '@floating-ui/utils';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {createAttribute} from '../utils/createAttribute';
-import {getPlatform} from '../utils/getPlatform';
 
 const identifier = createAttribute('scroll-lock');
 

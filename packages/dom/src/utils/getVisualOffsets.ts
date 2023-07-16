@@ -1,5 +1,5 @@
 import type {Coords} from '@floating-ui/core';
-import {getWindow, isSafari} from '@floating-ui/utils';
+import {getWindow, isWebKit} from '@floating-ui/utils';
 
 import {createCoords} from './math';
 
@@ -8,7 +8,7 @@ const noOffsets = createCoords(0);
 export function getVisualOffsets(element: Element | undefined): Coords {
   const win = getWindow(element);
 
-  if (!isSafari() || !win.visualViewport) {
+  if (!isWebKit() || !win.visualViewport) {
     return noOffsets;
   }
 
