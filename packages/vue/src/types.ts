@@ -159,7 +159,7 @@ export type ArrowOptions = {
    * The arrow element or template ref to be positioned.
    * @required
    */
-  element: MaybeReadonlyRef<MaybeElement<HTMLElement>>;
+  element: MaybeReadonlyRef<MaybeElement<Element>>;
   /**
    * The padding between the arrow element and the floating element edges. Useful when the floating element has rounded corners.
    * @default 0
