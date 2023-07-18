@@ -29,7 +29,7 @@ export function getRectRelativeToOffsetParent(
       scroll = getNodeScroll(offsetParent);
     }
 
-    if (isHTMLElement(offsetParent)) {
+    if (isOffsetParentAnElement) {
       const offsetRect = getBoundingClientRect(
         offsetParent,
         true,
