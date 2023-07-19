@@ -12,7 +12,7 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/dom';
 
 import {Platform, ReferenceElement} from '../types';
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';

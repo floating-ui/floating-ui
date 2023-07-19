@@ -1,5 +1,6 @@
 import type {Rect, Side} from '@floating-ui/core';
-import {contains, isElement} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
+import {contains} from '@floating-ui/utils/interactions';
 
 import type {HandleCloseFn} from './hooks/useHover';
 import type {ReferenceType} from './types';

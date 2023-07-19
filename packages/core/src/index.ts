@@ -8,4 +8,4 @@ export {inline} from './middleware/inline';
 export {offset} from './middleware/offset';
 export {limitShift, shift} from './middleware/shift';
 export {size} from './middleware/size';
-export {rectToClientRect} from './utils/rectToClientRect';
+export {rectToClientRect} from '@floating-ui/utils';

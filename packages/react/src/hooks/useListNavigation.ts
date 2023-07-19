@@ -1,12 +1,12 @@
+import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
-  isHTMLElement,
   isMac,
   isSafari,
   isVirtualClick,
   isVirtualPointerEvent,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

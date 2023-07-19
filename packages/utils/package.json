@@ -12,31 +12,18 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.utils.umd.js",
+  "main": "./dist/floating-ui.utils.js",
   "module": "./dist/floating-ui.utils.esm.js",
-  "unpkg": "./dist/floating-ui.utils.umd.min.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": {
-        "browser": {
-          "development": "./dist/floating-ui.utils.browser.mjs",
-          "default": "./dist/floating-ui.utils.browser.min.mjs"
-        },
-        "default": "./dist/floating-ui.utils.mjs"
-      },
       "module": "./dist/floating-ui.utils.esm.js",
+      "import": "./dist/floating-ui.utils.mjs",
       "default": "./dist/floating-ui.utils.umd.js"
     },
     "./package.json": "./package.json"
   },
-  "sideEffects": false,
-  "files": [
-    "dist/",
-    "index.d.ts",
-    "src/**/*.d.ts"
-  ],
   "scripts": {
     "test": "vitest --globals",
     "dev": "rollup -c -w",

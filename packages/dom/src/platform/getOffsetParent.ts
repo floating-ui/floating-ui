@@ -5,7 +5,7 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isTableElement,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/dom';
 
 import {getComputedStyle} from '../utils/getComputedStyle';
 import {getParentNode} from '../utils/getParentNode';

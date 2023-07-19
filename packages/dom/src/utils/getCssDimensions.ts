@@ -1,5 +1,5 @@
 import type {Dimensions} from '@floating-ui/core';
-import {isHTMLElement} from '@floating-ui/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
 
 import {getComputedStyle} from './getComputedStyle';
 import {round} from './math';

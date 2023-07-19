@@ -1,4 +1,4 @@
-import {activeElement, contains} from '@floating-ui/utils';
+import {activeElement, contains} from '@floating-ui/utils/interactions';
 import {tabbable} from 'tabbable';
 
 import {getDocument} from './getDocument';

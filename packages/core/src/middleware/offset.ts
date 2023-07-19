@@ -1,8 +1,6 @@
+import {evaluate, getAlignment, getSide, getSideAxis} from '@floating-ui/utils';
+
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getAlignment} from '../utils/getAlignment';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSide} from '../utils/getSide';
 
 type OffsetValue =
   | number
@@ -46,7 +44,7 @@ export async function convertValueToCoords(
 
   const side = getSide(placement);
   const alignment = getAlignment(placement);
-  const isVertical = getMainAxisFromPlacement(placement) === 'x';
+  const isVertical = getSideAxis(placement) === 'y';
   const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);

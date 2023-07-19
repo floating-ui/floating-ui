@@ -1,4 +1,4 @@
-import {isElement} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';

@@ -1,13 +1,16 @@
 import {
+  evaluate,
+  getOppositeAxis,
+  getSide,
+  getSideAxis,
+  within,
+} from '@floating-ui/utils';
+
+import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getCrossAxis} from '../utils/getCrossAxis';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSide} from '../utils/getSide';
-import {within} from '../utils/within';
 
 export type ShiftOptions = Partial<
   DetectOverflowOptions & {
@@ -58,8 +61,8 @@ export const shift = (
 
     const coords = {x, y};
     const overflow = await detectOverflow(state, detectOverflowOptions);
-    const mainAxis = getMainAxisFromPlacement(getSide(placement));
-    const crossAxis = getCrossAxis(mainAxis);
+    const crossAxis = getSideAxis(getSide(placement));
+    const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
     let crossAxisCoord = coords[crossAxis];
@@ -152,8 +155,8 @@ export const limitShift = (
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const mainAxis = getMainAxisFromPlacement(placement);
-    const crossAxis = getCrossAxis(mainAxis);
+    const crossAxis = getSideAxis(placement);
+    const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
     let crossAxisCoord = coords[crossAxis];

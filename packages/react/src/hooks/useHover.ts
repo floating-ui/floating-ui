@@ -1,4 +1,8 @@
-import {contains, isElement, isMouseLikePointerType} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
+import {
+  contains,
+  isMouseLikePointerType,
+} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

@@ -1,4 +1,4 @@
-import {isNode} from '@floating-ui/utils';
+import {isNode} from '@floating-ui/utils/dom';
 
 export function getDocumentElement(node: Node | Window): HTMLElement {
   return (

@@ -1,5 +1,5 @@
 import {useFloating as usePosition} from '@floating-ui/react-dom';
-import {isElement} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

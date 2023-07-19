@@ -201,4 +201,4 @@ export {
   ShiftOptions,
 } from './middleware/shift';
 export {size, SizeOptions} from './middleware/size';
-export {rectToClientRect} from './utils/rectToClientRect';
+export {rectToClientRect} from '@floating-ui/utils';

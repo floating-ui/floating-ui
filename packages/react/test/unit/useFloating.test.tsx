@@ -1,4 +1,4 @@
-import {isElement} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {useCallback, useLayoutEffect, useState} from 'react';

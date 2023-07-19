@@ -2,7 +2,7 @@ import {
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/dom';
 
 import {getParentNode} from './getParentNode';
 

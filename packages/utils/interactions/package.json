@@ -1,0 +1,15 @@
+{
+  "sideEffects": false,
+  "main": "./dist/floating-ui.utils.interactions.umd.js",
+  "module": "./dist/floating-ui.utils.interactions.esm.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "module": "./dist/floating-ui.utils.interactions.esm.js",
+      "import": "./dist/floating-ui.utils.interactions.mjs",
+      "default": "./dist/floating-ui.utils.interactions.umd.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

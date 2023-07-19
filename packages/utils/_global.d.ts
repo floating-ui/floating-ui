@@ -1,6 +1,6 @@
 declare interface Window {
-  Node: typeof Node;
-  HTMLElement: typeof HTMLElement;
   Element: typeof Element;
+  HTMLElement: typeof HTMLElement;
   ShadowRoot: typeof ShadowRoot;
+  Node: typeof Node;
 }

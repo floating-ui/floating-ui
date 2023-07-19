@@ -1,5 +1,5 @@
 import type {Rect, Strategy} from '@floating-ui/core';
-import {getWindow, isWebKit} from '@floating-ui/utils';
+import {getWindow, isWebKit} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
 

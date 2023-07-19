@@ -1,12 +1,10 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import {
-  getWindow,
-  isElement,
-  isHTMLElement,
   isReactEvent,
   isVirtualClick,
   isVirtualPointerEvent,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 
 import {

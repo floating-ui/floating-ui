@@ -1,14 +1,17 @@
 import {
+  evaluate,
+  getAlignment,
+  getAlignmentSides,
+  getOppositeAlignmentPlacement,
+  getSide,
+  placements as ALL_PLACEMENTS,
+} from '@floating-ui/utils';
+
+import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
-import {allPlacements} from '../enums';
 import type {Alignment, Derivable, Middleware, Placement} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getAlignment} from '../utils/getAlignment';
-import {getAlignmentSides} from '../utils/getAlignmentSides';
-import {getOppositeAlignmentPlacement} from '../utils/getOppositeAlignmentPlacement';
-import {getSide} from '../utils/getSide';
 
 export function getPlacementList(
   alignment: Alignment | null,
@@ -88,13 +91,13 @@ export const autoPlacement = (
     const {
       crossAxis = false,
       alignment,
-      allowedPlacements = allPlacements,
+      allowedPlacements = ALL_PLACEMENTS,
       autoAlignment = true,
       ...detectOverflowOptions
     } = evaluate(options, state);
 
     const placements =
-      alignment !== undefined || allowedPlacements === allPlacements
+      alignment !== undefined || allowedPlacements === ALL_PLACEMENTS
         ? getPlacementList(alignment || null, autoAlignment, allowedPlacements)
         : allowedPlacements;
 
@@ -107,7 +110,7 @@ export const autoPlacement = (
       return {};
     }
 
-    const {main, cross} = getAlignmentSides(
+    const alignmentSides = getAlignmentSides(
       currentPlacement,
       rects,
       await platform.isRTL?.(elements.floating)
@@ -124,8 +127,8 @@ export const autoPlacement = (
 
     const currentOverflows = [
       overflow[getSide(currentPlacement)],
-      overflow[main],
-      overflow[cross],
+      overflow[alignmentSides[0]],
+      overflow[alignmentSides[1]],
     ];
 
     const allOverflows = [

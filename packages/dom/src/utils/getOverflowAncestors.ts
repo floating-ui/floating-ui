@@ -1,4 +1,4 @@
-import {getWindow, isOverflowElement} from '@floating-ui/utils';
+import {getWindow, isOverflowElement} from '@floating-ui/utils/dom';
 
 import {getNearestOverflowAncestor} from './getNearestOverflowAncestor';
 

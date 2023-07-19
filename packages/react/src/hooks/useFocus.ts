@@ -1,9 +1,5 @@
-import {
-  activeElement,
-  contains,
-  isElement,
-  isHTMLElement,
-} from '@floating-ui/utils';
+import {isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {activeElement, contains} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';

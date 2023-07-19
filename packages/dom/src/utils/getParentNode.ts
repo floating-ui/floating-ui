@@ -1,4 +1,4 @@
-import {getNodeName, isShadowRoot} from '@floating-ui/utils';
+import {getNodeName, isShadowRoot} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
 

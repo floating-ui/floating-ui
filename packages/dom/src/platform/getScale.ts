@@ -1,5 +1,5 @@
 import type {Coords} from '@floating-ui/core';
-import {isHTMLElement} from '@floating-ui/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
 
 import type {VirtualElement} from '../types';
 import {getCssDimensions} from '../utils/getCssDimensions';

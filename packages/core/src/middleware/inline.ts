@@ -1,10 +1,14 @@
+import {
+  evaluate,
+  getSide,
+  getSideAxis,
+  getSideObjectFromPadding,
+  max,
+  min,
+  rectToClientRect,
+} from '@floating-ui/utils';
+
 import type {ClientRectObject, Derivable, Middleware, Padding} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSideObjectFromPadding} from '../utils/getPaddingObject';
-import {getSide} from '../utils/getSide';
-import {max, min} from '../utils/math';
-import {rectToClientRect} from '../utils/rectToClientRect';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {
   const minX = min(...rects.map((rect) => rect.left));
@@ -102,7 +106,7 @@ export const inline = (
 
       // There are 2 or more connected rects.
       if (clientRects.length >= 2) {
-        if (getMainAxisFromPlacement(placement) === 'x') {
+        if (getSideAxis(placement) === 'y') {
           const firstRect = clientRects[0];
           const lastRect = clientRects[clientRects.length - 1];
           const isTop = getSide(placement) === 'top';

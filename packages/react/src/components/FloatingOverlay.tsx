@@ -1,4 +1,4 @@
-import {getPlatform} from '@floating-ui/utils';
+import {getPlatform} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

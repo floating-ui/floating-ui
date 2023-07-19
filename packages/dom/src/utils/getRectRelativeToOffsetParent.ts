@@ -3,7 +3,7 @@ import {
   getNodeName,
   isHTMLElement,
   isOverflowElement,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';

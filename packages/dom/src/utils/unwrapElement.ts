@@ -1,4 +1,4 @@
-import {isElement} from '@floating-ui/utils';
+import {isElement} from '@floating-ui/utils/dom';
 
 import type {VirtualElement} from '../types';
 

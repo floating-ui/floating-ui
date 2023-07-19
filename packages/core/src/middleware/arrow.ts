@@ -1,11 +1,14 @@
+import {
+  evaluate,
+  getAlignment,
+  getAlignmentAxis,
+  getAxisLength,
+  getSideObjectFromPadding,
+  min as mathMin,
+  within,
+} from '@floating-ui/utils';
+
 import type {Derivable, Middleware, Padding} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getAlignment} from '../utils/getAlignment';
-import {getLengthFromAxis} from '../utils/getLengthFromAxis';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSideObjectFromPadding} from '../utils/getPaddingObject';
-import {min as mathMin} from '../utils/math';
-import {within} from '../utils/within';
 
 export interface ArrowOptions {
   /**
@@ -43,8 +46,8 @@ export const arrow = (
 
     const paddingObject = getSideObjectFromPadding(padding);
     const coords = {x, y};
-    const axis = getMainAxisFromPlacement(placement);
-    const length = getLengthFromAxis(axis);
+    const axis = getAlignmentAxis(placement);
+    const length = getAxisLength(axis);
     const arrowDimensions = await platform.getDimensions(element);
     const isYAxis = axis === 'y';
     const minProp = isYAxis ? 'top' : 'left';

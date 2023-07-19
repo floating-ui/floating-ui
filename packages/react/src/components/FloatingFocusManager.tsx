@@ -1,4 +1,5 @@
-import {activeElement, contains, isHTMLElement} from '@floating-ui/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
+import {activeElement, contains} from '@floating-ui/utils/interactions';
 import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';

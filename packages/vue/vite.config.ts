@@ -10,7 +10,14 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
+      '@floating-ui/utils/dom': path.resolve(
+        __dirname,
+        '../utils/dom/src/index.ts'
+      ),
+      '@floating-ui/utils/interactions': path.resolve(
+        __dirname,
+        '../utils/interactions/src/index.ts'
+      ),
       '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),
       '@floating-ui/dom': path.resolve(__dirname, '../dom/src/index.ts'),
       '@floating-ui/react-dom': path.resolve(

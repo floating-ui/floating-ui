@@ -3,7 +3,7 @@ import {
   getNodeName,
   isHTMLElement,
   isOverflowElement,
-} from '@floating-ui/utils';
+} from '@floating-ui/utils/dom';
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getNodeScroll} from '../utils/getNodeScroll';

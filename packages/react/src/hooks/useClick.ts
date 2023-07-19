@@ -1,4 +1,5 @@
-import {isHTMLElement, isMouseLikePointerType} from '@floating-ui/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
+import {isMouseLikePointerType} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';

@@ -1,3 +1,12 @@
+import {
+  evaluate,
+  getAlignmentSides,
+  getExpandedPlacements,
+  getOppositeAxisPlacements,
+  getOppositePlacement,
+  getSide,
+} from '@floating-ui/utils';
+
 import {detectOverflow} from '../detectOverflow';
 import type {
   Derivable,
@@ -5,12 +14,6 @@ import type {
   Middleware,
   Placement,
 } from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getAlignmentSides} from '../utils/getAlignmentSides';
-import {getExpandedPlacements} from '../utils/getExpandedPlacements';
-import {getOppositeAxisPlacements} from '../utils/getOppositeAxisPlacements';
-import {getOppositePlacement} from '../utils/getOppositePlacement';
-import {getSide} from '../utils/getSide';
 
 export type FlipOptions = Partial<
   DetectOverflowOptions & {
@@ -120,8 +123,8 @@ export const flip = (
     }
 
     if (checkCrossAxis) {
-      const {main, cross} = getAlignmentSides(placement, rects, rtl);
-      overflows.push(overflow[main], overflow[cross]);
+      const sides = getAlignmentSides(placement, rects, rtl);
+      overflows.push(overflow[sides[0]], overflow[sides[1]]);
     }
 
     overflowsData = [...overflowsData, {placement, overflows}];
