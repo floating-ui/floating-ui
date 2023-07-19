@@ -22,7 +22,19 @@
       "import": "./dist/floating-ui.utils.mjs",
       "default": "./dist/floating-ui.utils.umd.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./dom": {
+      "types": "./dom/index.d.ts",
+      "module": "./dom/dist/floating-ui.utils.dom.esm.js",
+      "import": "./dom/dist/floating-ui.utils.dom.mjs",
+      "default": "./dom/dist/floating-ui.utils.dom.umd.js"
+    },
+    "./interactions": {
+      "types": "./interactions/index.d.ts",
+      "module": "./interactions/dist/floating-ui.utils.interactions.esm.js",
+      "import": "./interactions/dist/floating-ui.utils.interactions.mjs",
+      "default": "./interactions/dist/floating-ui.utils.interactions.umd.js"
+    }
   },
   "scripts": {
     "test": "vitest --globals",
