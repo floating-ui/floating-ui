@@ -1,7 +1,7 @@
 import {
   getAlignment,
+  getAlignmentAxis,
   getAxisLength,
-  getOppositeAxis,
   getSide,
   getSideAxis,
 } from '@floating-ui/utils';
@@ -16,7 +16,7 @@ export function computeCoordsFromPlacement(
   const commonX = reference.x + reference.width / 2 - floating.width / 2;
   const commonY = reference.y + reference.height / 2 - floating.height / 2;
   const sideAxis = getSideAxis(placement);
-  const alignmentAxis = getOppositeAxis(sideAxis);
+  const alignmentAxis = getAlignmentAxis(placement);
   const length = getAxisLength(sideAxis);
   const side = getSide(placement);
   const commonAlign = reference[length] / 2 - floating[length] / 2;

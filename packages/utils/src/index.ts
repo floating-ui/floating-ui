@@ -58,7 +58,7 @@ export function getAxisLength(axis: Axis): Length {
 }
 
 export function getSideAxis(placement: Placement): Axis {
-  return ['top', 'bottom'].includes(getSide(placement)) ? 'x' : 'y';
+  return ['top', 'bottom'].includes(getSide(placement)) ? 'y' : 'x';
 }
 
 export function getAlignmentAxis(placement: Placement): Axis {
