@@ -1,7 +1,3 @@
-export function isNode(value: any): value is Node {
-  return value instanceof Node || value instanceof getWindow(value).Node;
-}
-
 export function getNodeName(node: Node | Window): string {
   if (isNode(node)) {
     return (node.nodeName || '').toLowerCase();
@@ -20,18 +16,22 @@ export function getWindow(node: any): Window {
   return win;
 }
 
-export function isElement(value: any): value is Element {
+export function isNode(value: unknown): value is Node {
+  return value instanceof Node || value instanceof getWindow(value).Node;
+}
+
+export function isElement(value: unknown): value is Element {
   return value instanceof Element || value instanceof getWindow(value).Element;
 }
 
-export function isHTMLElement(value: any): value is HTMLElement {
+export function isHTMLElement(value: unknown): value is HTMLElement {
   return (
     value instanceof HTMLElement ||
     value instanceof getWindow(value).HTMLElement
   );
 }
 
-export function isShadowRoot(value: any): value is ShadowRoot {
+export function isShadowRoot(value: unknown): value is ShadowRoot {
   // Browsers without `ShadowRoot` support.
   if (typeof ShadowRoot === 'undefined') {
     return false;
@@ -55,7 +55,7 @@ export function isTableElement(element: Element): boolean {
 }
 
 export function isContainingBlock(element: Element): boolean {
-  const safari = isWebKit();
+  const webkit = isWebKit();
   const css = getComputedStyle(element);
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
@@ -63,8 +63,8 @@ export function isContainingBlock(element: Element): boolean {
     css.transform !== 'none' ||
     css.perspective !== 'none' ||
     (css.containerType ? css.containerType !== 'normal' : false) ||
-    (!safari && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
-    (!safari && (css.filter ? css.filter !== 'none' : false)) ||
+    (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
+    (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
     ['transform', 'perspective', 'filter'].some((value) =>
       (css.willChange || '').includes(value)
     ) ||
