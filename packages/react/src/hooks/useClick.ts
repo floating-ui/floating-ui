@@ -1,9 +1,11 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
-import {isMouseLikePointerType} from '@floating-ui/utils/interactions';
+import {
+  isMouseLikePointerType,
+  isTypeableElement,
+} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {isTypeableElement} from '../utils/isTypeableElement';
 
 function isButtonTarget(event: React.KeyboardEvent<Element>) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';

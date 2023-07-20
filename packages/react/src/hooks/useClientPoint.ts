@@ -1,6 +1,7 @@
 import {getWindow} from '@floating-ui/utils/dom';
 import {
   contains,
+  getTarget,
   isMouseLikePointerType,
 } from '@floating-ui/utils/interactions';
 import * as React from 'react';
@@ -12,7 +13,6 @@ import type {
   FloatingContext,
   ReferenceType,
 } from '../types';
-import {getTarget} from '../utils/getTarget';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(

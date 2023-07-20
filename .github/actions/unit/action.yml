@@ -15,3 +15,5 @@ runs:
       shell: sh
     - run: npm -w packages/vue test
       shell: sh
+    - run: npm -w packages/utils test
+      shell: sh

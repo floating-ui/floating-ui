@@ -1,6 +1,9 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import {
+  getDocument,
+  getTarget,
+  isEventTargetWithin,
   isReactEvent,
   isVirtualClick,
   isVirtualPointerEvent,
@@ -13,9 +16,6 @@ import {
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
-import {getDocument} from '../utils/getDocument';
-import {getTarget} from '../utils/getTarget';
-import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {

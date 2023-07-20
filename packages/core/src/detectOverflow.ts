@@ -1,8 +1,4 @@
-import {
-  evaluate,
-  getSideObjectFromPadding,
-  rectToClientRect,
-} from '@floating-ui/utils';
+import {evaluate, getPaddingObject, rectToClientRect} from '@floating-ui/utils';
 
 import type {
   Boundary,
@@ -69,7 +65,7 @@ export async function detectOverflow(
     padding = 0,
   } = evaluate(options, state);
 
-  const paddingObject = getSideObjectFromPadding(padding);
+  const paddingObject = getPaddingObject(padding);
   const altContext = elementContext === 'floating' ? 'reference' : 'floating';
   const element = elements[altBoundary ? altContext : elementContext];
 

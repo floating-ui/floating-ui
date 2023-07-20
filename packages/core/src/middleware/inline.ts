@@ -1,8 +1,8 @@
 import {
   evaluate,
+  getPaddingObject,
   getSide,
   getSideAxis,
-  getSideObjectFromPadding,
   max,
   min,
   rectToClientRect,
@@ -82,7 +82,7 @@ export const inline = (
 
     const clientRects = getRectsByLine(nativeClientRects);
     const fallback = rectToClientRect(getBoundingRect(nativeClientRects));
-    const paddingObject = getSideObjectFromPadding(padding);
+    const paddingObject = getPaddingObject(padding);
 
     function getBoundingClientRect() {
       // There are two rects and they are disjoined.

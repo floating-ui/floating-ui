@@ -1,9 +1,9 @@
 import {
+  clamp,
   evaluate,
   getOppositeAxis,
   getSide,
   getSideAxis,
-  within,
 } from '@floating-ui/utils';
 
 import {
@@ -73,7 +73,7 @@ export const shift = (
       const min = mainAxisCoord + overflow[minSide];
       const max = mainAxisCoord - overflow[maxSide];
 
-      mainAxisCoord = within(min, mainAxisCoord, max);
+      mainAxisCoord = clamp(min, mainAxisCoord, max);
     }
 
     if (checkCrossAxis) {
@@ -82,7 +82,7 @@ export const shift = (
       const min = crossAxisCoord + overflow[minSide];
       const max = crossAxisCoord - overflow[maxSide];
 
-      crossAxisCoord = within(min, crossAxisCoord, max);
+      crossAxisCoord = clamp(min, crossAxisCoord, max);
     }
 
     const limitedCoords = limiter.fn({

@@ -1,8 +1,8 @@
+import {stopEvent} from '@floating-ui/utils/interactions';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {stopEvent} from '../utils/stopEvent';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 

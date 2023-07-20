@@ -1,11 +1,11 @@
 import {
+  clamp,
   evaluate,
   getAlignment,
   getAlignmentAxis,
   getAxisLength,
-  getSideObjectFromPadding,
+  getPaddingObject,
   min as mathMin,
-  within,
 } from '@floating-ui/utils';
 
 import type {Derivable, Middleware, Padding} from '../types';
@@ -44,7 +44,7 @@ export const arrow = (
       return {};
     }
 
-    const paddingObject = getSideObjectFromPadding(padding);
+    const paddingObject = getPaddingObject(padding);
     const coords = {x, y};
     const axis = getAlignmentAxis(placement);
     const length = getAxisLength(axis);
@@ -84,7 +84,7 @@ export const arrow = (
     const max = clientSize - arrowDimensions[length] - maxPadding;
     const center =
       clientSize / 2 - arrowDimensions[length] / 2 + centerToReference;
-    const offset = within(min, center, max);
+    const offset = clamp(min, center, max);
 
     // If the reference is small enough that the arrow's padding causes it to
     // to point to nothing for an aligned placement, adjust the offset of the

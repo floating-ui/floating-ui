@@ -16,13 +16,13 @@
   "module": "./dist/floating-ui.utils.esm.js",
   "types": "./index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
       "module": "./dist/floating-ui.utils.esm.js",
       "import": "./dist/floating-ui.utils.mjs",
       "default": "./dist/floating-ui.utils.umd.js"
     },
-    "./package.json": "./package.json",
     "./dom": {
       "types": "./dom/index.d.ts",
       "module": "./dom/dist/floating-ui.utils.dom.esm.js",

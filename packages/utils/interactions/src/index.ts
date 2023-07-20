@@ -1,4 +1,4 @@
-import {isShadowRoot} from '@floating-ui/utils/dom';
+import {isHTMLElement, isShadowRoot} from '@floating-ui/utils/dom';
 
 export function activeElement(doc: Document) {
   let activeElement = doc.activeElement;
@@ -134,4 +134,48 @@ export function isReactEvent(event: any): event is React.SyntheticEvent {
 
 export function isRootElement(element: Element): boolean {
   return element.matches('html,body');
+}
+
+export function getDocument(node: Element | null) {
+  return node?.ownerDocument || document;
+}
+
+export function isEventTargetWithin(
+  event: Event,
+  node: Node | null | undefined
+) {
+  if (node == null) {
+    return false;
+  }
+
+  if ('composedPath' in event) {
+    return event.composedPath().includes(node);
+  }
+
+  // TS thinks `event` is of type never as it assumes all browsers support composedPath, but browsers without shadow dom don't
+  const e = event as Event;
+  return e.target != null && node.contains(e.target as Node);
+}
+
+export function getTarget(event: Event) {
+  if ('composedPath' in event) {
+    return event.composedPath()[0];
+  }
+
+  // TS thinks `event` is of type never as it assumes all browsers support
+  // `composedPath()`, but browsers without shadow DOM don't.
+  return (event as Event).target;
+}
+
+export const TYPEABLE_SELECTOR =
+  "input:not([type='hidden']):not([disabled])," +
+  "[contenteditable]:not([contenteditable='false']),textarea:not([disabled])";
+
+export function isTypeableElement(element: unknown): boolean {
+  return isHTMLElement(element) && element.matches(TYPEABLE_SELECTOR);
+}
+
+export function stopEvent(event: Event | React.SyntheticEvent) {
+  event.preventDefault();
+  event.stopPropagation();
 }
