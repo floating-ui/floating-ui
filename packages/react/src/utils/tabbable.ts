@@ -1,8 +1,4 @@
-import {
-  activeElement,
-  contains,
-  getDocument,
-} from '@floating-ui/utils/interactions';
+import {activeElement, contains, getDocument} from '@floating-ui/utils/react';
 import {tabbable} from 'tabbable';
 
 export const getTabbableOptions = () =>

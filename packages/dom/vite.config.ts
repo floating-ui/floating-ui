@@ -14,9 +14,9 @@ export default defineConfig({
         __dirname,
         '../utils/dom/src/index.ts'
       ),
-      '@floating-ui/utils/interactions': path.resolve(
+      '@floating-ui/utils/react': path.resolve(
         __dirname,
-        '../utils/interactions/src/index.ts'
+        '../utils/react/src/index.ts'
       ),
       '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
       '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),

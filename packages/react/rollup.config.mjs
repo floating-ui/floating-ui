@@ -37,7 +37,7 @@ const bundles = [
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
         '@floating-ui/utils': 'FloatingUIUtils',
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
-        '@floating-ui/utils/interactions': 'FloatingUIUtilsInteractions',
+        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
       },
     },
   },
@@ -57,7 +57,7 @@ const bundles = [
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
         '@floating-ui/utils': 'FloatingUIUtils',
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
-        '@floating-ui/utils/interactions': 'FloatingUIUtilsInteractions',
+        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
       },
     },
   },
@@ -86,7 +86,7 @@ export default bundles.map(({input, output}) => ({
           'tabbable',
           '@floating-ui/utils',
           '@floating-ui/utils/dom',
-          '@floating-ui/utils/interactions',
+          '@floating-ui/utils/react',
         ]
       : []
   ),

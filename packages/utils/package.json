@@ -16,6 +16,17 @@
   "module": "./dist/floating-ui.utils.esm.js",
   "types": "./index.d.ts",
   "sideEffects": false,
+  "files": [
+    "dist/",
+    "index.d.ts",
+    "src/**/*.d.ts",
+    "dom/dist/",
+    "dom/index.d.ts",
+    "dom/src/**/*.d.ts",
+    "react/dist/",
+    "react/index.d.ts",
+    "react/src/**/*.d.ts"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -30,11 +41,11 @@
       "import": "./dom/dist/floating-ui.utils.dom.mjs",
       "default": "./dom/dist/floating-ui.utils.dom.umd.js"
     },
-    "./interactions": {
-      "types": "./interactions/index.d.ts",
-      "module": "./interactions/dist/floating-ui.utils.interactions.esm.js",
-      "import": "./interactions/dist/floating-ui.utils.interactions.mjs",
-      "default": "./interactions/dist/floating-ui.utils.interactions.umd.js"
+    "./react": {
+      "types": "./react/index.d.ts",
+      "module": "./react/dist/floating-ui.utils.react.esm.js",
+      "import": "./react/dist/floating-ui.utils.react.mjs",
+      "default": "./react/dist/floating-ui.utils.react.umd.js"
     }
   },
   "scripts": {

@@ -8,7 +8,7 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
-} from '@floating-ui/utils/interactions';
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

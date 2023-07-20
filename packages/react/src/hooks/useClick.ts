@@ -2,7 +2,7 @@ import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
   isMouseLikePointerType,
   isTypeableElement,
-} from '@floating-ui/utils/interactions';
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';

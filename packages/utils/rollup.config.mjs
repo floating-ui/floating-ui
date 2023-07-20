@@ -53,27 +53,27 @@ const bundles = [
       format: 'umd',
     },
   },
-  // Interactions
+  // react
   {
-    input: './interactions/src/index.ts',
+    input: './react/src/index.ts',
     output: {
-      file: './interactions/dist/floating-ui.utils.interactions.esm.js',
+      file: './react/dist/floating-ui.utils.react.esm.js',
       format: 'esm',
     },
   },
   {
-    input: './interactions/src/index.ts',
+    input: './react/src/index.ts',
     output: {
-      file: './interactions/dist/floating-ui.utils.interactions.mjs',
-      name: 'FloatingUIUtilsInteractions',
+      file: './react/dist/floating-ui.utils.react.mjs',
+      name: 'FloatingUIUtilsreact',
       format: 'esm',
     },
   },
   {
-    input: './interactions/src/index.ts',
+    input: './react/src/index.ts',
     output: {
-      file: './interactions/dist/floating-ui.utils.interactions.umd.js',
-      name: 'FloatingUIUtilsInteractions',
+      file: './react/dist/floating-ui.utils.react.umd.js',
+      name: 'FloatingUIUtilsreact',
       format: 'umd',
       globals: {
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
@@ -89,7 +89,7 @@ export default bundles.map(({input, output}) => ({
     '@floating-ui/core',
     '@floating-ui/utils',
     '@floating-ui/utils/dom',
-    '@floating-ui/utils/interactions',
+    '@floating-ui/utils/react',
   ],
   plugins: [
     nodeResolve({extensions: ['.ts']}),

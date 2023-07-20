@@ -1,0 +1,15 @@
+{
+  "sideEffects": false,
+  "main": "./dist/floating-ui.utils.react.umd.js",
+  "module": "./dist/floating-ui.utils.react.esm.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "module": "./dist/floating-ui.utils.react.esm.js",
+      "import": "./dist/floating-ui.utils.react.mjs",
+      "default": "./dist/floating-ui.utils.react.umd.js"
+    },
+    "./package.json": "./package.json"
+  }
+}

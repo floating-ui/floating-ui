@@ -6,7 +6,7 @@ import {
   getTarget,
   isTypeableElement,
   stopEvent,
-} from '@floating-ui/utils/interactions';
+} from '@floating-ui/utils/react';
 import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
