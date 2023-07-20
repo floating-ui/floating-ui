@@ -46,13 +46,14 @@ export function getSide(placement: Placement): Side {
   return placement.split('-')[0] as Side;
 }
 
-export function getAlignment(placement: Placement): Alignment {
-  return placement.split('-')[1] as Alignment;
+export function getAlignment(placement: Placement): Alignment | undefined {
+  return placement.split('-')[1] as Alignment | undefined;
 }
 
 export function getOppositeAxis(axis: Axis): Axis {
   return axis === 'x' ? 'y' : 'x';
 }
+
 export function getAxisLength(axis: Axis): Length {
   return axis === 'y' ? 'height' : 'width';
 }
@@ -71,11 +72,11 @@ export function getAlignmentSides(
   rtl = false
 ): [Side, Side] {
   const alignment = getAlignment(placement);
-  const sideAxis = getSideAxis(placement);
-  const length = getAxisLength(sideAxis);
+  const alignmentAxis = getAlignmentAxis(placement);
+  const length = getAxisLength(alignmentAxis);
 
   let mainAlignmentSide: Side =
-    sideAxis === 'y'
+    alignmentAxis === 'x'
       ? alignment === (rtl ? 'end' : 'start')
         ? 'right'
         : 'left'

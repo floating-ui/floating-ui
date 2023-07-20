@@ -13,14 +13,15 @@ export function computeCoordsFromPlacement(
   placement: Placement,
   rtl?: boolean
 ): Coords {
-  const commonX = reference.x + reference.width / 2 - floating.width / 2;
-  const commonY = reference.y + reference.height / 2 - floating.height / 2;
   const sideAxis = getSideAxis(placement);
   const alignmentAxis = getAlignmentAxis(placement);
-  const length = getAxisLength(sideAxis);
+  const alignLength = getAxisLength(alignmentAxis);
   const side = getSide(placement);
-  const commonAlign = reference[length] / 2 - floating[length] / 2;
   const isVertical = sideAxis === 'y';
+
+  const commonX = reference.x + reference.width / 2 - floating.width / 2;
+  const commonY = reference.y + reference.height / 2 - floating.height / 2;
+  const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
 
   let coords;
   switch (side) {

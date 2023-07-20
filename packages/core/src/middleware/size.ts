@@ -51,8 +51,7 @@ export const size = (
     const overflow = await detectOverflow(state, detectOverflowOptions);
     const side = getSide(placement);
     const alignment = getAlignment(placement);
-    const axis = getSideAxis(placement);
-    const isYAxis = axis === 'y';
+    const isYAxis = getSideAxis(placement) === 'y';
     const {width, height} = rects.floating;
 
     let heightSide: 'top' | 'bottom';
