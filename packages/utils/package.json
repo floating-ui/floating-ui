@@ -15,6 +15,7 @@
   "main": "./dist/floating-ui.utils.js",
   "module": "./dist/floating-ui.utils.esm.js",
   "types": "./index.d.ts",
+  "sideEffects": false,
   "exports": {
     "./package.json": "./package.json",
     ".": {
