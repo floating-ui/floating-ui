@@ -69,5 +69,8 @@
     "menu",
     "popup",
     "positioning"
-  ]
+  ],
+  "dependencies": {
+    "@floating-ui/core": "^0.1.0"
+  }
 }
