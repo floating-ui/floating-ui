@@ -1,3 +1,7 @@
+import type {VirtualElement} from '@floating-ui/core';
+
+type OverflowAncestors = Array<Element | Window | VisualViewport>;
+
 export function getNodeName(node: Node | Window): string {
   if (isNode(node)) {
     return (node.nodeName || '').toLowerCase();
@@ -9,11 +13,13 @@ export function getNodeName(node: Node | Window): string {
 }
 
 export function getWindow(node: any): Window {
-  const win = window;
-  if (node && 'ownerDocument' in node) {
-    return node.ownerDocument?.defaultView || win;
-  }
-  return win;
+  return node?.ownerDocument?.defaultView || window;
+}
+
+export function getDocumentElement(node: Node | Window): HTMLElement {
+  return (
+    (isNode(node) ? node.ownerDocument : node.document) || window.document
+  )?.documentElement;
 }
 
 export function isNode(value: unknown): value is Node {
@@ -81,4 +87,85 @@ export function isWebKit(): boolean {
 
 export function isLastTraversableNode(node: Node): boolean {
   return ['html', 'body', '#document'].includes(getNodeName(node));
+}
+
+export function getComputedStyle(element: Element): CSSStyleDeclaration {
+  return getWindow(element).getComputedStyle(element);
+}
+
+export function getNodeScroll(element: Element | Window): {
+  scrollLeft: number;
+  scrollTop: number;
+} {
+  if (isElement(element)) {
+    return {
+      scrollLeft: element.scrollLeft,
+      scrollTop: element.scrollTop,
+    };
+  }
+
+  return {
+    scrollLeft: element.pageXOffset,
+    scrollTop: element.pageYOffset,
+  };
+}
+
+export function unwrapElement(element: Element | VirtualElement) {
+  return !isElement(element) ? element.contextElement : element;
+}
+
+export function getParentNode(node: Node): Node {
+  if (getNodeName(node) === 'html') {
+    return node;
+  }
+
+  const result =
+    // Step into the shadow DOM of the parent of a slotted node.
+    (node as any).assignedSlot ||
+    // DOM Element detected.
+    node.parentNode ||
+    // ShadowRoot detected.
+    (isShadowRoot(node) && node.host) ||
+    // Fallback.
+    getDocumentElement(node);
+
+  return isShadowRoot(result) ? result.host : result;
+}
+
+export function getNearestOverflowAncestor(node: Node): HTMLElement {
+  const parentNode = getParentNode(node);
+
+  if (isLastTraversableNode(parentNode)) {
+    return node.ownerDocument
+      ? node.ownerDocument.body
+      : (node as Document).body;
+  }
+
+  if (isHTMLElement(parentNode) && isOverflowElement(parentNode)) {
+    return parentNode;
+  }
+
+  return getNearestOverflowAncestor(parentNode);
+}
+
+export function getOverflowAncestors(
+  node: Node,
+  list: OverflowAncestors = []
+): OverflowAncestors {
+  const scrollableAncestor = getNearestOverflowAncestor(node);
+  const isBody = scrollableAncestor === node.ownerDocument?.body;
+  const win = getWindow(scrollableAncestor);
+
+  if (isBody) {
+    return list.concat(
+      win,
+      win.visualViewport || [],
+      isOverflowElement(scrollableAncestor) ? scrollableAncestor : []
+    );
+  }
+
+  return list.concat(
+    scrollableAncestor,
+    getOverflowAncestors(scrollableAncestor)
+  );
 }

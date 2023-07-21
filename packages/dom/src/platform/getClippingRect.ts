@@ -6,8 +6,13 @@ import type {
   Strategy,
 } from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
+import {createCoords, max, min} from '@floating-ui/utils';
 import {
+  getComputedStyle,
+  getDocumentElement,
   getNodeName,
+  getOverflowAncestors,
+  getParentNode,
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
@@ -16,14 +21,9 @@ import {
 
 import {Platform, ReferenceElement} from '../types';
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
-import {getComputedStyle} from '../utils/getComputedStyle';
 import {getDocumentRect} from '../utils/getDocumentRect';
-import {getOverflowAncestors} from '../utils/getOverflowAncestors';
-import {getParentNode} from '../utils/getParentNode';
 import {getViewportRect} from '../utils/getViewportRect';
 import {getVisualOffsets} from '../utils/getVisualOffsets';
-import {createCoords, max, min} from '../utils/math';
-import {getDocumentElement} from './getDocumentElement';
 import {getScale} from './getScale';
 import {isElement} from './isElement';
 

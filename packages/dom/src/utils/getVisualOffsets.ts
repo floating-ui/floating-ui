@@ -1,7 +1,6 @@
 import type {Coords} from '@floating-ui/core';
+import {createCoords} from '@floating-ui/utils';
 import {getWindow, isWebKit} from '@floating-ui/utils/dom';
-
-import {createCoords} from './math';
 
 const noOffsets = createCoords(0);
 

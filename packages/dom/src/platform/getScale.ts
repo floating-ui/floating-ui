@@ -1,10 +1,9 @@
 import type {Coords} from '@floating-ui/core';
-import {isHTMLElement} from '@floating-ui/utils/dom';
+import {createCoords, round} from '@floating-ui/utils';
+import {isHTMLElement, unwrapElement} from '@floating-ui/utils/dom';
 
 import type {VirtualElement} from '../types';
 import {getCssDimensions} from '../utils/getCssDimensions';
-import {createCoords, round} from '../utils/math';
-import {unwrapElement} from '../utils/unwrapElement';
 
 export function getScale(element: Element | VirtualElement): Coords {
   const domElement = unwrapElement(element);

@@ -19,6 +19,12 @@ export const placements: Placement[] = sides.reduce(
   []
 );
 
+export const min = Math.min;
+export const max = Math.max;
+export const round = Math.round;
+export const floor = Math.floor;
+export const createCoords = (v: number) => ({x: v, y: v});
+
 const oppositeSideMap = {
   left: 'right',
   right: 'left',
@@ -30,9 +36,6 @@ const oppositeAlignmentMap = {
   start: 'end',
   end: 'start',
 };
-
-export const min = Math.min;
-export const max = Math.max;
 
 export function clamp(start: number, value: number, end: number): number {
   return max(start, min(value, end));

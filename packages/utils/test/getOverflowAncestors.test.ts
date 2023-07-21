@@ -1,4 +1,4 @@
-import {getOverflowAncestors} from '../../src/utils/getOverflowAncestors';
+import {getOverflowAncestors} from '../dom/src';
 
 test('returns all overflow ancestors', () => {
   const overflowScroll = document.createElement('div');

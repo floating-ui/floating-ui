@@ -31,7 +31,6 @@ export const computePosition = (
 
 export {autoUpdate} from './autoUpdate';
 export {platform} from './platform';
-export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export {
   arrow,
   autoPlacement,
@@ -44,3 +43,4 @@ export {
   shift,
   size,
 } from '@floating-ui/core';
+export {getOverflowAncestors} from '@floating-ui/utils/dom';

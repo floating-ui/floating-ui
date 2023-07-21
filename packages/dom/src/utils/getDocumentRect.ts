@@ -1,10 +1,9 @@
 import type {Rect} from '@floating-ui/core';
+import {max} from '@floating-ui/utils';
+import {getComputedStyle, getNodeScroll} from '@floating-ui/utils/dom';
 
 import {getDocumentElement} from '../platform/getDocumentElement';
-import {getComputedStyle} from './getComputedStyle';
-import {getNodeScroll} from './getNodeScroll';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
-import {max} from './math';
 
 // Gets the entire size of the scrollable document area, even extending outside
 // of the `<html>` and `<body>` rect bounds if horizontally scrollable.
