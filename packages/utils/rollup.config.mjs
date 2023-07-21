@@ -53,7 +53,7 @@ const bundles = [
       format: 'umd',
     },
   },
-  // react
+  // React
   {
     input: './react/src/index.ts',
     output: {
@@ -65,7 +65,7 @@ const bundles = [
     input: './react/src/index.ts',
     output: {
       file: './react/dist/floating-ui.utils.react.mjs',
-      name: 'FloatingUIUtilsreact',
+      name: 'FloatingUIUtilsReact',
       format: 'esm',
     },
   },
@@ -73,7 +73,7 @@ const bundles = [
     input: './react/src/index.ts',
     output: {
       file: './react/dist/floating-ui.utils.react.umd.js',
-      name: 'FloatingUIUtilsreact',
+      name: 'FloatingUIUtilsReact',
       format: 'umd',
       globals: {
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
