@@ -103,4 +103,10 @@ export const MINI_SPONSORS = [
     label: 'Refermate - Best Coupon Codes',
     url: 'https://refermate.com/',
   },
+  {
+    logo: '/sponsors/electricui.svg',
+    label:
+      'Electric UI - Tools for building user interfaces for hardware devices.',
+    url: 'https://electricui.com/',
+  },
 ];
