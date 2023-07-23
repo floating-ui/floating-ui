@@ -1,4 +1,3 @@
-import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import {defineConfig} from 'vite';
 
@@ -7,7 +6,6 @@ export default defineConfig({
     port: 1234,
   },
   root: './test',
-  plugins: [vue()],
   resolve: {
     alias: {
       '@floating-ui/utils/dom': path.resolve(
