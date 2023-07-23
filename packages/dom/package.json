@@ -60,7 +60,8 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "^0.1.0"
+    "@floating-ui/core": "^0.1.0",
+    "@floating-ui/utils": "^0.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",

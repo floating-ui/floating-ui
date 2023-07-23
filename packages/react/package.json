@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@floating-ui/react-dom": "^0.1.0",
+    "@floating-ui/utils": "^0.1.0",
     "aria-hidden": "^1.2.3",
     "tabbable": "^6.0.1"
   },
