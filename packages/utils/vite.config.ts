@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     port: 1234,
   },
-  root: './test/visual',
+  root: './test',
   plugins: [vue()],
   resolve: {
     alias: {
