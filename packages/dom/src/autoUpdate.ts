@@ -1,12 +1,9 @@
 import {floor, max, min} from '@floating-ui/utils';
-import {
-  getDocumentElement,
-  getOverflowAncestors,
-  unwrapElement,
-} from '@floating-ui/utils/dom';
+import {getDocumentElement, getOverflowAncestors} from '@floating-ui/utils/dom';
 
 import type {FloatingElement, ReferenceElement} from './types';
 import {getBoundingClientRect} from './utils/getBoundingClientRect';
+import {unwrapElement} from './utils/unwrapElement';
 
 export type AutoUpdateOptions = Partial<{
   /**
