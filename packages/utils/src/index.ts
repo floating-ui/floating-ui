@@ -9,7 +9,7 @@ import type {
   Rect,
   Side,
   SideObject,
-} from '@floating-ui/core';
+} from './types';
 
 export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
 export const alignments: Alignment[] = ['start', 'end'];

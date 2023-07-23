@@ -1,5 +1,3 @@
-import type {VirtualElement} from '@floating-ui/core';
-
 type OverflowAncestors = Array<Element | Window | VisualViewport>;
 
 export function getNodeName(node: Node | Window): string {
@@ -108,10 +106,6 @@ export function getNodeScroll(element: Element | Window): {
     scrollLeft: element.pageXOffset,
     scrollTop: element.pageYOffset,
   };
-}
-
-export function unwrapElement(element: Element | VirtualElement) {
-  return !isElement(element) ? element.contextElement : element;
 }
 
 export function getParentNode(node: Node): Node {
