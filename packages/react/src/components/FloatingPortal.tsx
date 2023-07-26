@@ -114,7 +114,7 @@ export function FloatingPortal({
   id,
   root = null,
   preserveTabOrder = true,
-}: FloatingPortalProps) {
+}: FloatingPortalProps): JSX.Element {
   const portalNode = useFloatingPortalNode({id, root});
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);
