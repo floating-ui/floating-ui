@@ -20,11 +20,15 @@
     "dist/",
     "dom/dist/",
     "react/dist/",
+    "dom/package.json",
+    "react/package.json",
     "**/*.d.ts",
     "**/*.d.mts"
   ],
   "exports": {
     "./package.json": "./package.json",
+    "./dom/package.json": "./dom/package.json",
+    "./react/package.json": "./react/package.json",
     ".": {
       "types": "./src/types.d.ts",
       "import": {
