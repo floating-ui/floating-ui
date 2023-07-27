@@ -21,7 +21,8 @@
     "playwright:update": "npm run playwright -- -u",
     "build": "npm -w packages/utils run build && npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
     "build:typescript": "tsc --project .config/tsconfig.json",
-    "clean": "rm -rf packages/**/src/[^_]*.d.ts packages/**/src/**/[^_]*.d.ts packages/**/dist",
+    "rename-typescript": "./.config/rename.sh",
+    "clean": "find packages -type f \\( -name '*.d.ts' -o -name '*.d.mts' \\) ! -name 'index.d.ts' ! -path 'packages/*/index.d.ts' ! -path 'packages/utils/*/index.d.ts' ! -path '*/_*.d.ts' -exec rm -f {} + && rm -rf packages/**/dist",
     "postinstall": "patch-package"
   },
   "author": "",

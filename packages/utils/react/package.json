@@ -2,14 +2,17 @@
   "sideEffects": false,
   "main": "./dist/floating-ui.utils.react.umd.js",
   "module": "./dist/floating-ui.utils.react.esm.js",
-  "types": "./index.d.ts",
+  "types": "./src/index.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "types": "./index.d.ts",
+      "types": "./src/index.d.ts",
+      "import": {
+        "types": "./src/index.d.mts",
+        "default": "./dist/floating-ui.utils.react.mjs"
+      },
       "module": "./dist/floating-ui.utils.react.esm.js",
-      "import": "./dist/floating-ui.utils.react.mjs",
       "default": "./dist/floating-ui.utils.react.umd.js"
-    },
-    "./package.json": "./package.json"
+    }
   }
 }
