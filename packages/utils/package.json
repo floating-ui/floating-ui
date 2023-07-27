@@ -39,18 +39,18 @@
       "default": "./dist/floating-ui.utils.umd.js"
     },
     "./dom": {
-      "types": "./src/index.d.ts",
+      "types": "./dom/src/index.d.ts",
       "import": {
-        "types": "./src/index.d.mts",
+        "types": "./dom/src/index.d.mts",
         "default": "./dom/dist/floating-ui.utils.dom.mjs"
       },
       "module": "./dom/dist/floating-ui.utils.dom.esm.js",
       "default": "./dom/dist/floating-ui.utils.dom.umd.js"
     },
     "./react": {
-      "types": "./src/index.d.ts",
+      "types": "./react/src/index.d.ts",
       "import": {
-        "types": "./src/index.d.mts",
+        "types": "./react/src/index.d.mts",
         "default": "./react/dist/floating-ui.utils.react.mjs"
       },
       "module": "./react/dist/floating-ui.utils.react.esm.js",
