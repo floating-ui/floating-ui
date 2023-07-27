@@ -16,9 +16,9 @@
   "module": "dist/floating-ui.react-native.esm.js",
   "sideEffects": false,
   "files": [
-    "dist/",
-    "index.d.ts",
-    "src/**/*.d.ts"
+    "./dist",
+    "*.d.ts",
+    "*.d.mts"
   ],
   "scripts": {
     "test": "jest test",
