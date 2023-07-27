@@ -17,11 +17,11 @@
   "types": "./src/types.d.ts",
   "sideEffects": false,
   "files": [
-    "./dist",
-    "./dom/dist",
-    "./react/dist",
-    "*.d.ts",
-    "*.d.mts"
+    "dist/",
+    "dom/dist/",
+    "react/dist/",
+    "**/*.d.ts",
+    "**/*.d.mts"
   ],
   "exports": {
     "./package.json": "./package.json",

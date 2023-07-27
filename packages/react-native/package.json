@@ -17,9 +17,9 @@
   "types": "./src/types.d.ts",
   "sideEffects": false,
   "files": [
-    "./dist",
-    "*.d.ts",
-    "*.d.mts"
+    "dist/",
+    "**/*.d.ts",
+    "**/*.d.mts"
   ],
   "scripts": {
     "test": "jest test",
