@@ -19,11 +19,11 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./src/types.d.ts",
       "import": {
         "types": "./src/types.d.mts",
         "default": "./dist/floating-ui.core.mjs"
       },
+      "types": "./src/types.d.ts",
       "module": "./dist/floating-ui.core.esm.js",
       "default": "./dist/floating-ui.core.umd.js"
     }
