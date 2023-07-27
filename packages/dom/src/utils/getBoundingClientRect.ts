@@ -1,7 +1,7 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
 import {createCoords} from '@floating-ui/utils';
-import {getWindow} from '@floating-ui/utils/dom';
+import {getComputedStyle, getWindow} from '@floating-ui/utils/dom';
 
 import {getScale} from '../platform/getScale';
 import {isElement} from '../platform/isElement';

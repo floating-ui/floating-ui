@@ -1,5 +1,9 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
-import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {
+  getComputedStyle,
+  isElement,
+  isHTMLElement,
+} from '@floating-ui/utils/dom';
 import {
   getDocument,
   getTarget,
@@ -174,8 +178,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
       if (canScrollY) {
-        const isRTL =
-          getWindow(floating).getComputedStyle(target).direction === 'rtl';
+        const isRTL = getComputedStyle(target).direction === 'rtl';
 
         if (isRTL) {
           xCond = event.offsetX <= target.offsetWidth - target.clientWidth;
