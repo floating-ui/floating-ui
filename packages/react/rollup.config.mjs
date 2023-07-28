@@ -35,6 +35,9 @@ const bundles = [
         '@floating-ui/core': 'FloatingUICore',
         '@floating-ui/dom': 'FloatingUIDOM',
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
+        '@floating-ui/utils': 'FloatingUIUtils',
+        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
+        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
       },
     },
   },
@@ -52,6 +55,9 @@ const bundles = [
         '@floating-ui/core': 'FloatingUICore',
         '@floating-ui/dom': 'FloatingUIDOM',
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
+        '@floating-ui/utils': 'FloatingUIUtils',
+        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
+        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
       },
     },
   },
@@ -73,7 +79,17 @@ export default bundles.map(({input, output}) => ({
     '@floating-ui/core',
     '@floating-ui/dom',
     '@floating-ui/react-dom',
-  ].concat(output.format !== 'umd' ? ['aria-hidden', 'tabbable'] : []),
+  ].concat(
+    output.format !== 'umd'
+      ? [
+          'aria-hidden',
+          'tabbable',
+          '@floating-ui/utils',
+          '@floating-ui/utils/dom',
+          '@floating-ui/utils/react',
+        ]
+      : []
+  ),
   plugins: [
     commonjs(),
     nodeResolve({extensions: ['.ts', '.tsx']}),

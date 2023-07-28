@@ -1,3 +1,4 @@
+import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
@@ -5,7 +6,6 @@ import useLayoutEffect from 'use-isomorphic-layout-effect';
 import {useId} from '../hooks/useId';
 import {FloatingContext} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import {isElement} from '../utils/is';
 import {
   disableFocusInside,
   enableFocusInside,

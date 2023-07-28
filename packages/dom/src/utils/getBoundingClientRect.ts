@@ -1,11 +1,11 @@
 import type {ClientRectObject, VirtualElement} from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
+import {createCoords} from '@floating-ui/utils';
+import {getComputedStyle, getWindow} from '@floating-ui/utils/dom';
 
 import {getScale} from '../platform/getScale';
 import {isElement} from '../platform/isElement';
 import {getVisualOffsets, shouldAddVisualOffsets} from './getVisualOffsets';
-import {getWindow} from './getWindow';
-import {createCoords} from './math';
 import {unwrapElement} from './unwrapElement';
 
 export function getBoundingClientRect(

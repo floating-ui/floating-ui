@@ -1,0 +1,82 @@
+{
+  "name": "@floating-ui/utils",
+  "version": "0.1.0",
+  "@rollingversions": {
+    "baseVersion": [
+      0,
+      1,
+      0
+    ]
+  },
+  "description": "Utilities for Floating UI",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/floating-ui.utils.umd.js",
+  "module": "./dist/floating-ui.utils.esm.js",
+  "types": "./src/types.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist/",
+    "dom/dist/",
+    "react/dist/",
+    "dom/package.json",
+    "react/package.json",
+    "**/*.d.ts",
+    "**/*.d.mts"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./dom/package.json": "./dom/package.json",
+    "./react/package.json": "./react/package.json",
+    ".": {
+      "import": {
+        "types": "./src/types.d.mts",
+        "default": "./dist/floating-ui.utils.mjs"
+      },
+      "types": "./src/types.d.ts",
+      "module": "./dist/floating-ui.utils.esm.js",
+      "default": "./dist/floating-ui.utils.umd.js"
+    },
+    "./dom": {
+      "import": {
+        "types": "./dom/src/index.d.mts",
+        "default": "./dom/dist/floating-ui.utils.dom.mjs"
+      },
+      "types": "./dom/src/index.d.ts",
+      "module": "./dom/dist/floating-ui.utils.dom.esm.js",
+      "default": "./dom/dist/floating-ui.utils.dom.umd.js"
+    },
+    "./react": {
+      "import": {
+        "types": "./react/src/index.d.mts",
+        "default": "./react/dist/floating-ui.utils.react.mjs"
+      },
+      "types": "./react/src/index.d.ts",
+      "module": "./react/dist/floating-ui.utils.react.esm.js",
+      "default": "./react/dist/floating-ui.utils.react.umd.js"
+    }
+  },
+  "scripts": {
+    "test": "vitest --globals",
+    "dev": "rollup -c -w",
+    "build": "NODE_ENV=build rollup -c"
+  },
+  "author": "atomiks",
+  "license": "MIT",
+  "bugs": "https://github.com/floating-ui/floating-ui",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/floating-ui/floating-ui.git",
+    "directory": "packages/utils"
+  },
+  "homepage": "https://floating-ui.com",
+  "keywords": [
+    "tooltip",
+    "popover",
+    "dropdown",
+    "menu",
+    "popup",
+    "positioning"
+  ]
+}

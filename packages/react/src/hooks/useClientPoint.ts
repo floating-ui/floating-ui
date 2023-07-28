@@ -1,3 +1,9 @@
+import {getWindow} from '@floating-ui/utils/dom';
+import {
+  contains,
+  getTarget,
+  isMouseLikePointerType,
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -7,9 +13,6 @@ import type {
   FloatingContext,
   ReferenceType,
 } from '../types';
-import {contains} from '../utils/contains';
-import {getTarget} from '../utils/getTarget';
-import {getWindow, isMouseLikePointerType} from '../utils/is';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 function createVirtualElement(

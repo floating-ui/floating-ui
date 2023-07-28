@@ -1,8 +1,5 @@
+import {activeElement, contains, getDocument} from '@floating-ui/utils/react';
 import {tabbable} from 'tabbable';
-
-import {activeElement} from './activeElement';
-import {contains} from './contains';
-import {getDocument} from './getDocument';
 
 export const getTabbableOptions = () =>
   ({

@@ -1,5 +1,5 @@
 {
-  "include": ["../packages/**/src/**/*.ts"],
+  "include": ["../packages/**/src/**/*.ts", "./_global.d.ts"],
   "exclude": ["../**/*.test.ts"],
   "compilerOptions": {
     "target": "es2020",

@@ -1,13 +1,15 @@
+import {isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {
+  activeElement,
+  contains,
+  getDocument,
+  isEventTargetWithin,
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
-import {contains} from '../utils/contains';
 import {createAttribute} from '../utils/createAttribute';
-import {getDocument} from '../utils/getDocument';
-import {isElement, isHTMLElement} from '../utils/is';
-import {isEventTargetWithin} from '../utils/isEventTargetWithin';
-import {DismissPayload} from './useDismiss';
+import type {DismissPayload} from './useDismiss';
 
 export interface UseFocusProps {
   enabled?: boolean;

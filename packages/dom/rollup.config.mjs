@@ -42,6 +42,8 @@ const bundles = [
       format: 'umd',
       globals: {
         '@floating-ui/core': 'FloatingUICore',
+        '@floating-ui/utils': 'FloatingUIUtils',
+        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
       },
     },
   },
@@ -53,6 +55,8 @@ const bundles = [
       format: 'umd',
       globals: {
         '@floating-ui/core': 'FloatingUICore',
+        '@floating-ui/utils': 'FloatingUIUtils',
+        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
       },
     },
   },
@@ -61,7 +65,10 @@ const bundles = [
 export default bundles.map(({input, output}) => ({
   input,
   output,
-  external: ['@floating-ui/core'],
+  external:
+    output.format === 'umd'
+      ? ['@floating-ui/core']
+      : ['@floating-ui/core', '@floating-ui/utils', '@floating-ui/utils/dom'],
   plugins: [
     nodeResolve({extensions: ['.ts']}),
     replace({

@@ -1,13 +1,16 @@
 import {
+  clamp,
+  evaluate,
+  getOppositeAxis,
+  getSide,
+  getSideAxis,
+} from '@floating-ui/utils';
+
+import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getCrossAxis} from '../utils/getCrossAxis';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSide} from '../utils/getSide';
-import {within} from '../utils/within';
 
 export type ShiftOptions = Partial<
   DetectOverflowOptions & {
@@ -58,8 +61,8 @@ export const shift = (
 
     const coords = {x, y};
     const overflow = await detectOverflow(state, detectOverflowOptions);
-    const mainAxis = getMainAxisFromPlacement(getSide(placement));
-    const crossAxis = getCrossAxis(mainAxis);
+    const crossAxis = getSideAxis(getSide(placement));
+    const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
     let crossAxisCoord = coords[crossAxis];
@@ -70,7 +73,7 @@ export const shift = (
       const min = mainAxisCoord + overflow[minSide];
       const max = mainAxisCoord - overflow[maxSide];
 
-      mainAxisCoord = within(min, mainAxisCoord, max);
+      mainAxisCoord = clamp(min, mainAxisCoord, max);
     }
 
     if (checkCrossAxis) {
@@ -79,7 +82,7 @@ export const shift = (
       const min = crossAxisCoord + overflow[minSide];
       const max = crossAxisCoord - overflow[maxSide];
 
-      crossAxisCoord = within(min, crossAxisCoord, max);
+      crossAxisCoord = clamp(min, crossAxisCoord, max);
     }
 
     const limitedCoords = limiter.fn({
@@ -152,8 +155,8 @@ export const limitShift = (
     } = evaluate(options, state);
 
     const coords = {x, y};
-    const mainAxis = getMainAxisFromPlacement(placement);
-    const crossAxis = getCrossAxis(mainAxis);
+    const crossAxis = getSideAxis(placement);
+    const mainAxis = getOppositeAxis(crossAxis);
 
     let mainAxisCoord = coords[mainAxis];
     let crossAxisCoord = coords[crossAxis];

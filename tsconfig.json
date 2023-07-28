@@ -13,6 +13,6 @@
     "esModuleInterop": true,
     "jsx": "react-jsx"
   },
-  "include": ["packages/**/*", "playwright.config.ts"],
+  "include": ["packages/**/*", "playwright.config.ts", ".config/_global.d.ts"],
   "exclude": ["node_modules"]
 }

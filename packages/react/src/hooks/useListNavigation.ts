@@ -1,3 +1,14 @@
+import {isHTMLElement} from '@floating-ui/utils/dom';
+import {
+  activeElement,
+  contains,
+  getDocument,
+  isMac,
+  isSafari,
+  isVirtualClick,
+  isVirtualPointerEvent,
+  stopEvent,
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -6,18 +17,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
-import {contains} from '../utils/contains';
 import {enqueueFocus} from '../utils/enqueueFocus';
-import {getDocument} from '../utils/getDocument';
-import {
-  isHTMLElement,
-  isMac,
-  isSafari,
-  isVirtualClick,
-  isVirtualPointerEvent,
-} from '../utils/is';
-import {stopEvent} from '../utils/stopEvent';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 

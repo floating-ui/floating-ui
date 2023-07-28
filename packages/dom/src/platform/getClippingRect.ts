@@ -6,24 +6,24 @@ import type {
   Strategy,
 } from '@floating-ui/core';
 import {rectToClientRect} from '@floating-ui/core';
-
-import {Platform, ReferenceElement} from '../types';
-import {getBoundingClientRect} from '../utils/getBoundingClientRect';
-import {getComputedStyle} from '../utils/getComputedStyle';
-import {getDocumentRect} from '../utils/getDocumentRect';
-import {getOverflowAncestors} from '../utils/getOverflowAncestors';
-import {getParentNode} from '../utils/getParentNode';
-import {getViewportRect} from '../utils/getViewportRect';
-import {getVisualOffsets} from '../utils/getVisualOffsets';
+import {createCoords, max, min} from '@floating-ui/utils';
 import {
+  getComputedStyle,
+  getDocumentElement,
+  getNodeName,
+  getOverflowAncestors,
+  getParentNode,
   isContainingBlock,
   isHTMLElement,
   isLastTraversableNode,
   isOverflowElement,
-} from '../utils/is';
-import {createCoords, max, min} from '../utils/math';
-import {getNodeName} from '../utils/node';
-import {getDocumentElement} from './getDocumentElement';
+} from '@floating-ui/utils/dom';
+
+import {Platform, ReferenceElement} from '../types';
+import {getBoundingClientRect} from '../utils/getBoundingClientRect';
+import {getDocumentRect} from '../utils/getDocumentRect';
+import {getViewportRect} from '../utils/getViewportRect';
+import {getVisualOffsets} from '../utils/getVisualOffsets';
 import {getScale} from './getScale';
 import {isElement} from './isElement';
 

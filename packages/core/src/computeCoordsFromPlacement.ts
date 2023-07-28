@@ -1,21 +1,27 @@
+import {
+  getAlignment,
+  getAlignmentAxis,
+  getAxisLength,
+  getSide,
+  getSideAxis,
+} from '@floating-ui/utils';
+
 import type {Coords, ElementRects, Placement} from './types';
-import {getAlignment} from './utils/getAlignment';
-import {getLengthFromAxis} from './utils/getLengthFromAxis';
-import {getMainAxisFromPlacement} from './utils/getMainAxisFromPlacement';
-import {getSide} from './utils/getSide';
 
 export function computeCoordsFromPlacement(
   {reference, floating}: ElementRects,
   placement: Placement,
   rtl?: boolean
 ): Coords {
+  const sideAxis = getSideAxis(placement);
+  const alignmentAxis = getAlignmentAxis(placement);
+  const alignLength = getAxisLength(alignmentAxis);
+  const side = getSide(placement);
+  const isVertical = sideAxis === 'y';
+
   const commonX = reference.x + reference.width / 2 - floating.width / 2;
   const commonY = reference.y + reference.height / 2 - floating.height / 2;
-  const mainAxis = getMainAxisFromPlacement(placement);
-  const length = getLengthFromAxis(mainAxis);
-  const commonAlign = reference[length] / 2 - floating[length] / 2;
-  const side = getSide(placement);
-  const isVertical = mainAxis === 'x';
+  const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
 
   let coords;
   switch (side) {
@@ -37,10 +43,10 @@ export function computeCoordsFromPlacement(
 
   switch (getAlignment(placement)) {
     case 'start':
-      coords[mainAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
+      coords[alignmentAxis] -= commonAlign * (rtl && isVertical ? -1 : 1);
       break;
     case 'end':
-      coords[mainAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
+      coords[alignmentAxis] += commonAlign * (rtl && isVertical ? -1 : 1);
       break;
     default:
   }

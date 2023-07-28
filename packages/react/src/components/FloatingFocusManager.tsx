@@ -1,22 +1,24 @@
+import {isHTMLElement} from '@floating-ui/utils/dom';
+import {
+  activeElement,
+  contains,
+  getDocument,
+  getTarget,
+  isTypeableElement,
+  stopEvent,
+} from '@floating-ui/utils/react';
 import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {DismissPayload} from '../hooks/useDismiss';
+import type {DismissPayload} from '../hooks/useDismiss';
 import {useLatestRef} from '../hooks/utils/useLatestRef';
 import type {FloatingContext, ReferenceType} from '../types';
-import {activeElement} from '../utils/activeElement';
-import {contains} from '../utils/contains';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';
-import {getDocument} from '../utils/getDocument';
-import {getTarget} from '../utils/getTarget';
-import {isHTMLElement} from '../utils/is';
-import {isTypeableElement} from '../utils/isTypeableElement';
-import {stopEvent} from '../utils/stopEvent';
 import {
   getNextTabbable,
   getPreviousTabbable,

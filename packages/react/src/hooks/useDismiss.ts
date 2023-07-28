@@ -1,4 +1,17 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
+import {
+  getComputedStyle,
+  isElement,
+  isHTMLElement,
+} from '@floating-ui/utils/dom';
+import {
+  getDocument,
+  getTarget,
+  isEventTargetWithin,
+  isReactEvent,
+  isVirtualClick,
+  isVirtualPointerEvent,
+} from '@floating-ui/utils/react';
 import * as React from 'react';
 
 import {
@@ -7,17 +20,6 @@ import {
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {getChildren} from '../utils/getChildren';
-import {getDocument} from '../utils/getDocument';
-import {getTarget} from '../utils/getTarget';
-import {
-  getWindow,
-  isElement,
-  isHTMLElement,
-  isReactEvent,
-  isVirtualClick,
-  isVirtualPointerEvent,
-} from '../utils/is';
-import {isEventTargetWithin} from '../utils/isEventTargetWithin';
 import {useEffectEvent} from './utils/useEffectEvent';
 
 const bubbleHandlerKeys = {
@@ -176,8 +178,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       // check for. Plus, for modal dialogs with backdrops, it is more
       // important that the backdrop is checked but not so much the window.
       if (canScrollY) {
-        const isRTL =
-          getWindow(floating).getComputedStyle(target).direction === 'rtl';
+        const isRTL = getComputedStyle(target).direction === 'rtl';
 
         if (isRTL) {
           xCond = event.offsetX <= target.offsetWidth - target.clientWidth;

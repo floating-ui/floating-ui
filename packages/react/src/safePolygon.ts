@@ -1,11 +1,10 @@
 import type {Rect, Side} from '@floating-ui/core';
+import {isElement} from '@floating-ui/utils/dom';
+import {contains, getTarget} from '@floating-ui/utils/react';
 
 import type {HandleCloseFn} from './hooks/useHover';
 import type {ReferenceType} from './types';
-import {contains} from './utils/contains';
 import {getChildren} from './utils/getChildren';
-import {getTarget} from './utils/getTarget';
-import {isElement} from './utils/is';
 
 type Point = [number, number];
 type Polygon = Point[];

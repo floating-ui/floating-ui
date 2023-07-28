@@ -263,7 +263,6 @@ export {
 export {computePosition} from './';
 export {autoUpdate, AutoUpdateOptions} from './autoUpdate';
 export {platform} from './platform';
-export {getOverflowAncestors} from './utils/getOverflowAncestors';
 export type {
   AlignedPlacement,
   Alignment,
@@ -288,3 +287,4 @@ export type {
   Strategy,
 } from '@floating-ui/core';
 export {offset} from '@floating-ui/core';
+export {getOverflowAncestors} from '@floating-ui/utils/dom';

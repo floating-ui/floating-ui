@@ -1,13 +1,17 @@
 import {
+  evaluate,
+  getAlignment,
+  getSide,
+  getSideAxis,
+  max,
+  min,
+} from '@floating-ui/utils';
+
+import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
-import {evaluate} from '../utils/evaluate';
-import {getAlignment} from '../utils/getAlignment';
-import {getMainAxisFromPlacement} from '../utils/getMainAxisFromPlacement';
-import {getSide} from '../utils/getSide';
-import {max, min} from '../utils/math';
 
 export type SizeOptions = Partial<
   DetectOverflowOptions & {
@@ -47,8 +51,7 @@ export const size = (
     const overflow = await detectOverflow(state, detectOverflowOptions);
     const side = getSide(placement);
     const alignment = getAlignment(placement);
-    const axis = getMainAxisFromPlacement(placement);
-    const isXAxis = axis === 'x';
+    const isYAxis = getSideAxis(placement) === 'y';
     const {width, height} = rects.floating;
 
     let heightSide: 'top' | 'bottom';
@@ -74,7 +77,7 @@ export const size = (
     let availableHeight = overflowAvailableHeight;
     let availableWidth = overflowAvailableWidth;
 
-    if (isXAxis) {
+    if (isYAxis) {
       const maximumClippingWidth = width - overflow.left - overflow.right;
       availableWidth =
         alignment || noShift
@@ -94,7 +97,7 @@ export const size = (
       const yMin = max(overflow.top, 0);
       const yMax = max(overflow.bottom, 0);
 
-      if (isXAxis) {
+      if (isYAxis) {
         availableWidth =
           width -
           2 *
