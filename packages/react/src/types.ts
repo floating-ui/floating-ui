@@ -167,7 +167,11 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
   >;
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
-  extends UsePositionOptions<RT> {
+  extends Omit<UsePositionOptions<RT>, 'elements'> {
+  elements?: {
+    reference?: Element | null;
+    floating?: HTMLElement | null;
+  };
   onOpenChange?: (open: boolean, event?: Event) => void;
   nodeId?: string;
 }
