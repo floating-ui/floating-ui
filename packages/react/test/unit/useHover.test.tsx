@@ -177,3 +177,23 @@ test('mouseleave on the floating element closes it (mouse)', async () => {
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 });
+
+test('does not show after delay if domReference changes', async () => {
+  const {rerender} = render(<App delay={1000} />);
+
+  fireEvent.mouseEnter(screen.getByRole('button'));
+
+  await act(async () => {
+    vi.advanceTimersByTime(1);
+  });
+
+  rerender(<App showReference={false} />);
+
+  await act(async () => {
+    vi.advanceTimersByTime(999);
+  });
+
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+
+  cleanup();
+});
