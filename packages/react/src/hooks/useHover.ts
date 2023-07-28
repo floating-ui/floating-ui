@@ -396,7 +396,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       clearTimeout(restTimeoutRef.current);
       clearPointerEvents();
     };
-  }, [enabled, cleanupMouseMoveHandler, clearPointerEvents]);
+  }, [enabled, domReference, cleanupMouseMoveHandler, clearPointerEvents]);
 
   return React.useMemo(() => {
     if (!enabled) {
