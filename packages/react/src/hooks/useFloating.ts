@@ -16,6 +16,11 @@ import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
 import {useEffectEvent} from './utils/useEffectEvent';
 
+let devMessageSet: Set<string> | undefined;
+if (__DEV__) {
+  devMessageSet = new Set();
+}
+
 /**
  * Provides data to position a floating element and context to add interactions.
  * @see https://floating-ui.com/docs/react
@@ -24,6 +29,23 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: Partial<UseFloatingOptions> = {}
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
+
+  if (__DEV__) {
+    const err =
+      'Floating UI: Cannot pass a virtual element to the ' +
+      '`elements.reference` option, as it must be a real DOM element. ' +
+      'Use `refs.setPositionReference` instead.';
+
+    if (!devMessageSet?.has(err)) {
+      devMessageSet?.add(err);
+      if (
+        options.elements?.reference &&
+        !isElement(options.elements.reference)
+      ) {
+        console.error(err);
+      }
+    }
+  }
 
   const [_domReference, setDomReference] =
     React.useState<NarrowedElement<RT> | null>(null);
