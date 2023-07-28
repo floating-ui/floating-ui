@@ -61,7 +61,10 @@ const bundles = [
 export default bundles.map(({input, output}) => ({
   input,
   output,
-  external: output.format === 'umd' ? [] : ['@floating-ui/utils'],
+  external:
+    output.format === 'umd' || output.file.includes('.browser.')
+      ? []
+      : ['@floating-ui/utils'],
   plugins: [
     nodeResolve({extensions: ['.ts']}),
     replace({

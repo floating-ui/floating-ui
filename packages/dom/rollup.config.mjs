@@ -66,7 +66,7 @@ export default bundles.map(({input, output}) => ({
   input,
   output,
   external:
-    output.format === 'umd'
+    output.format === 'umd' || output.file.includes('.browser.')
       ? ['@floating-ui/core']
       : ['@floating-ui/core', '@floating-ui/utils', '@floating-ui/utils/dom'],
   plugins: [
