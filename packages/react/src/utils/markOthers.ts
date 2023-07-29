@@ -17,17 +17,28 @@ export function markOthers(
   traverseAndAddAttribute(getDocument(avoidElements[0]).body);
 
   function traverseAndAddAttribute(element: Element) {
+    const ariaLiveElements = Array.from(
+      element.querySelectorAll('[aria-live]')
+    );
+
     if (
-      avoidElements.every(
-        (avoidElement) =>
-          !contains(avoidElement, element) && !contains(element, avoidElement)
-      )
+      avoidElements
+        .concat(ariaLiveElements)
+        .every(
+          (avoidElement) =>
+            !contains(avoidElement, element) && !contains(element, avoidElement)
+        )
     ) {
+      if (element.matches('[aria-live]')) {
+        return;
+      }
+
       map.set(element, [
         element.getAttribute('aria-hidden'),
         element.hasAttribute('inert'),
         element.hasAttribute(marker),
       ]);
+
       element.setAttribute(marker, '');
       ariaHidden && element.setAttribute('aria-hidden', 'true');
       inert && supportsInert() && element.setAttribute('inert', '');
@@ -41,8 +52,8 @@ export function markOthers(
       if (ariaHidden) {
         if (originalAriaHidden === null) {
           element.removeAttribute('aria-hidden');
-        } else if (originalAriaHidden === 'false') {
-          element.setAttribute('aria-hidden', 'false');
+        } else if (originalAriaHidden) {
+          element.setAttribute('aria-hidden', originalAriaHidden);
         }
       }
 

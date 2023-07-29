@@ -74,6 +74,156 @@ describe('true', () => {
     expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
+
+  test('outsidePress ignored for third party elements', async () => {
+    function App() {
+      const [isOpen, setIsOpen] = useState(true);
+
+      const {context, refs} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const dismiss = useDismiss(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([dismiss]);
+
+      return (
+        <>
+          <button {...getReferenceProps({ref: refs.setReference})} />
+          {isOpen && (
+            <FloatingFocusManager context={context}>
+              <div
+                role="dialog"
+                {...getFloatingProps({ref: refs.setFloating})}
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+    await act(async () => {});
+
+    const thirdParty = document.createElement('div');
+    thirdParty.setAttribute('data-testid', 'third-party');
+    document.body.append(thirdParty);
+    await userEvent.click(thirdParty);
+    expect(screen.queryByRole('dialog')).toBeInTheDocument();
+    thirdParty.remove();
+  });
+
+  test('outsidePress not ignored for nested floating elements', async () => {
+    function Popover({
+      children,
+      id,
+      modal,
+    }: {
+      children?: ReactNode;
+      id: string;
+      modal?: boolean | null;
+    }) {
+      const [isOpen, setIsOpen] = useState(true);
+
+      const {context, refs} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+
+      const dismiss = useDismiss(context);
+
+      const {getReferenceProps, getFloatingProps} = useInteractions([dismiss]);
+
+      const dialogJsx = (
+        <div
+          role="dialog"
+          data-testid={id}
+          {...getFloatingProps({ref: refs.setFloating})}
+        >
+          {children}
+        </div>
+      );
+
+      return (
+        <>
+          <button {...getReferenceProps({ref: refs.setReference})} />
+          {isOpen && (
+            <>
+              {modal == null ? (
+                dialogJsx
+              ) : (
+                <FloatingFocusManager context={context} modal={modal}>
+                  {dialogJsx}
+                </FloatingFocusManager>
+              )}
+            </>
+          )}
+        </>
+      );
+    }
+
+    function App({modal}: {modal: [boolean, boolean] | null}) {
+      return (
+        <Popover id="popover-1" modal={modal ? modal[0] : true}>
+          <Popover id="popover-2" modal={modal ? modal[1] : null} />
+        </Popover>
+      );
+    }
+
+    const {unmount} = render(<App modal={[true, true]} />);
+    await act(async () => {});
+
+    let popover1 = screen.getByTestId('popover-1');
+    let popover2 = screen.getByTestId('popover-2');
+    await userEvent.click(popover2);
+    expect(popover1).toBeInTheDocument();
+    expect(popover2).toBeInTheDocument();
+    await userEvent.click(popover1);
+    expect(popover2).not.toBeInTheDocument();
+
+    unmount();
+
+    const {unmount: unmount2} = render(<App modal={[true, false]} />);
+    await act(async () => {});
+
+    popover1 = screen.getByTestId('popover-1');
+    popover2 = screen.getByTestId('popover-2');
+
+    await userEvent.click(popover2);
+    expect(popover1).toBeInTheDocument();
+    expect(popover2).toBeInTheDocument();
+    await userEvent.click(popover1);
+    expect(popover2).not.toBeInTheDocument();
+
+    unmount2();
+
+    const {unmount: unmount3} = render(<App modal={[false, true]} />);
+    await act(async () => {});
+
+    popover1 = screen.getByTestId('popover-1');
+    popover2 = screen.getByTestId('popover-2');
+
+    await userEvent.click(popover2);
+    expect(popover1).toBeInTheDocument();
+    expect(popover2).toBeInTheDocument();
+    await userEvent.click(popover1);
+    expect(popover2).not.toBeInTheDocument();
+
+    unmount3();
+
+    render(<App modal={null} />);
+    await act(async () => {});
+
+    popover1 = screen.getByTestId('popover-1');
+    popover2 = screen.getByTestId('popover-2');
+
+    await userEvent.click(popover2);
+    expect(popover1).toBeInTheDocument();
+    expect(popover2).toBeInTheDocument();
+    await userEvent.click(popover1);
+    expect(popover2).not.toBeInTheDocument();
+  });
 });
 
 describe('false', () => {

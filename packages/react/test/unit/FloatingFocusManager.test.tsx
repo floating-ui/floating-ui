@@ -537,6 +537,141 @@ describe('modal', () => {
     expect(screen.queryByTestId('close-dialog')).toBeInTheDocument();
     expect(screen.queryByTestId('close-nested-dialog')).toBeInTheDocument();
   });
+
+  test('true - applies aria-hidden to outside nodes', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <input
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setOpen((v) => !v)}
+          />
+          <div>
+            <div data-testid="aria-live" aria-live="polite" />
+            <button data-testid="btn-1" />
+            <button data-testid="btn-2" />
+          </div>
+          {open && (
+            <FloatingFocusManager context={context}>
+              <div
+                role="listbox"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('reference')).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    );
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('btn-2')).toHaveAttribute('aria-hidden', 'true');
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('reference')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
+  });
+
+  test('false - does not apply aria-hidden to outside nodes', async () => {
+    function App() {
+      const [open, setOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open,
+        onOpenChange: setOpen,
+      });
+
+      return (
+        <>
+          <input
+            data-testid="reference"
+            ref={refs.setReference}
+            onClick={() => setOpen((v) => !v)}
+          />
+          <div>
+            <div data-testid="aria-live" aria-live="polite" />
+            <div data-testid="original" aria-hidden="false" />
+            <button data-testid="btn-1" />
+            <button data-testid="btn-2" />
+          </div>
+          {open && (
+            <FloatingFocusManager context={context} modal={false}>
+              <div
+                role="listbox"
+                ref={refs.setFloating}
+                data-testid="floating"
+              />
+            </FloatingFocusManager>
+          )}
+        </>
+      );
+    }
+
+    render(<App />);
+
+    fireEvent.click(screen.getByTestId('reference'));
+    await act(async () => {});
+
+    expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByTestId('reference')).toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('btn-1')).toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('btn-2')).toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('original')).toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('original')).toHaveAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+    fireEvent.click(screen.getByTestId('reference'));
+
+    expect(screen.getByTestId('reference')).not.toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('btn-1')).not.toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('btn-2')).not.toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('original')).not.toHaveAttribute(
+      'data-floating-ui-inert'
+    );
+    expect(screen.getByTestId('original')).toHaveAttribute(
+      'aria-hidden',
+      'false'
+    );
+  });
 });
 
 describe('disabled', () => {
