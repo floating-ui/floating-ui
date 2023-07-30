@@ -31,7 +31,7 @@
     "./react/package.json": "./react/package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.mts",
+        "types": "./src/types.d.ts",
         "default": "./dist/floating-ui.utils.mjs"
       },
       "types": "./src/types.d.ts",
@@ -40,7 +40,7 @@
     },
     "./dom": {
       "import": {
-        "types": "./dom/src/index.d.mts",
+        "types": "./dom/src/index.d.ts",
         "default": "./dom/dist/floating-ui.utils.dom.mjs"
       },
       "types": "./dom/src/index.d.ts",
@@ -49,7 +49,7 @@
     },
     "./react": {
       "import": {
-        "types": "./react/src/index.d.mts",
+        "types": "./react/src/index.d.ts",
         "default": "./react/dist/floating-ui.utils.react.mjs"
       },
       "types": "./react/src/index.d.ts",

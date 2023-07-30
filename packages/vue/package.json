@@ -20,7 +20,7 @@
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.mts",
+        "types": "./src/types.d.ts",
         "default": "./dist/floating-ui.vue.mjs"
       },
       "types": "./src/types.d.ts",
