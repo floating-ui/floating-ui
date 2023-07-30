@@ -422,16 +422,27 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   // It will decide whether or not it needs to render its own guards.
   useLayoutEffect(() => {
     if (disabled || !portalContext) return;
+
     portalContext.setFocusManagerState({
-      ...context,
       modal,
       closeOnFocusOut,
       open,
-    } as any);
+      onOpenChange,
+      refs,
+    });
+
     return () => {
       portalContext.setFocusManagerState(null);
     };
-  }, [disabled, portalContext, modal, open, closeOnFocusOut, context]);
+  }, [
+    disabled,
+    portalContext,
+    modal,
+    open,
+    onOpenChange,
+    refs,
+    closeOnFocusOut,
+  ]);
 
   useLayoutEffect(() => {
     if (disabled) return;

@@ -4,7 +4,7 @@ import {createPortal} from 'react-dom';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
-import {FloatingContext} from '../types';
+import type {ExtendedRefs} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {
   disableFocusInside,
@@ -15,9 +15,13 @@ import {
 } from '../utils/tabbable';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
-type FocusManagerState =
-  | (FloatingContext & {modal: boolean; closeOnFocusOut: boolean})
-  | null;
+type FocusManagerState = {
+  modal: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean, event: Event) => void;
+  refs: ExtendedRefs<any>;
+  closeOnFocusOut: boolean;
+} | null;
 
 const PortalContext = React.createContext<null | {
   preserveTabOrder: boolean;
