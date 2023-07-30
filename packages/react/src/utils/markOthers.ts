@@ -6,13 +6,12 @@ export const supportsInert = () =>
   typeof HTMLElement !== 'undefined' && 'inert' in HTMLElement.prototype;
 
 export function markOthers(
-  avoidElementOrElements: Element | Element[],
+  avoidElements: Element[],
   ariaHidden = false,
   inert = false
 ) {
   const marker = createAttribute('inert');
   const map = new Map<Element, [string | null, boolean, boolean]>();
-  const avoidElements: Element[] = [].concat.call(avoidElementOrElements);
 
   traverseAndAddAttribute(getDocument(avoidElements[0]).body);
 
