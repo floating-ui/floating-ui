@@ -78,6 +78,20 @@ export function isContainingBlock(element: Element): boolean {
   );
 }
 
+export function getContainingBlock(element: Element): HTMLElement | null {
+  let currentNode: Node | null = getParentNode(element);
+
+  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
+    if (isContainingBlock(currentNode)) {
+      return currentNode;
+    } else {
+      currentNode = getParentNode(currentNode);
+    }
+  }
+
+  return null;
+}
+
 export function isWebKit(): boolean {
   if (typeof CSS === 'undefined' || !CSS.supports) return false;
   return CSS.supports('-webkit-backdrop-filter', 'none');

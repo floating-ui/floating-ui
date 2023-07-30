@@ -1,11 +1,10 @@
 import {
   getComputedStyle,
+  getContainingBlock,
   getNodeName,
-  getParentNode,
   getWindow,
   isContainingBlock,
   isHTMLElement,
-  isLastTraversableNode,
   isTableElement,
 } from '@floating-ui/utils/dom';
 
@@ -27,20 +26,6 @@ function getTrueOffsetParent(
   }
 
   return element.offsetParent;
-}
-
-function getContainingBlock(element: Element) {
-  let currentNode: Node | null = getParentNode(element);
-
-  while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
-    if (isContainingBlock(currentNode)) {
-      return currentNode;
-    } else {
-      currentNode = getParentNode(currentNode);
-    }
-  }
-
-  return null;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
