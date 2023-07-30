@@ -36,12 +36,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       '`elements.reference` option, as it must be a real DOM element. ' +
       'Use `refs.setPositionReference` instead.';
 
-    if (!devMessageSet?.has(err)) {
-      devMessageSet?.add(err);
-      if (
-        options.elements?.reference &&
-        !isElement(options.elements.reference)
-      ) {
+    if (options.elements?.reference && !isElement(options.elements.reference)) {
+      if (!devMessageSet?.has(err)) {
+        devMessageSet?.add(err);
         console.error(err);
       }
     }
