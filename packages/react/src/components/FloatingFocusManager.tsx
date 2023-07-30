@@ -286,21 +286,19 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     );
 
     if (floating) {
-      const insideNodes = [
+      const insideElements = [
         floating,
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
+        orderRef.current.includes('reference') || isTypeableCombobox
+          ? domReference
+          : null,
       ].filter((x): x is Element => x != null);
 
-      const avoidElements =
-        orderRef.current.includes('reference') || isTypeableCombobox
-          ? insideNodes.concat(domReference || [])
-          : insideNodes;
-
       const cleanup = modal
-        ? markOthers(avoidElements, guards, !guards)
-        : markOthers(avoidElements);
+        ? markOthers(insideElements, guards, !guards)
+        : markOthers(insideElements);
 
       return () => {
         cleanup();
