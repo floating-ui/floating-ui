@@ -7,7 +7,6 @@ import {
   isTypeableElement,
   stopEvent,
 } from '@floating-ui/utils/react';
-import {hideOthers, supportsInert, suppressOthers} from 'aria-hidden';
 import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
@@ -19,6 +18,7 @@ import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';
+import {markOthers, supportsInert} from '../utils/markOthers';
 import {
   getNextTabbable,
   getPreviousTabbable,
@@ -285,22 +285,20 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       ) || []
     );
 
-    if (floating && modal) {
-      const insideNodes = [
+    if (floating) {
+      const insideElements = [
         floating,
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
+        orderRef.current.includes('reference') || isTypeableCombobox
+          ? domReference
+          : null,
       ].filter((x): x is Element => x != null);
 
-      const suppressorFn = guards ? hideOthers : suppressOthers;
-      const cleanup = suppressorFn(
-        orderRef.current.includes('reference') || isTypeableCombobox
-          ? insideNodes.concat(domReference || [])
-          : insideNodes,
-        undefined,
-        createAttribute('inert')
-      );
+      const cleanup = modal
+        ? markOthers(insideElements, guards, !guards)
+        : markOthers(insideElements);
 
       return () => {
         cleanup();

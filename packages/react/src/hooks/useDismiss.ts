@@ -1,14 +1,18 @@
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
   getComputedStyle,
+  getParentNode,
   isElement,
   isHTMLElement,
+  isLastTraversableNode,
 } from '@floating-ui/utils/dom';
 import {
+  contains,
   getDocument,
   getTarget,
   isEventTargetWithin,
   isReactEvent,
+  isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
 } from '@floating-ui/utils/react';
@@ -19,6 +23,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 
@@ -161,6 +166,35 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
 
     const target = getTarget(event);
+    const inertSelector = `[${createAttribute('inert')}]`;
+    const markers = getDocument(floating).querySelectorAll(inertSelector);
+
+    let targetRootAncestor = isElement(target) ? target : null;
+    while (targetRootAncestor && !isLastTraversableNode(targetRootAncestor)) {
+      const nextParent = getParentNode(targetRootAncestor);
+      if (nextParent === getDocument(floating).body || !isElement(nextParent)) {
+        break;
+      } else {
+        targetRootAncestor = nextParent;
+      }
+    }
+
+    // Check if the click occurred on a third-party element injected after the
+    // floating element rendered.
+    if (
+      markers.length &&
+      isElement(target) &&
+      !isRootElement(target) &&
+      // Clicked on a direct ancestor (e.g. FloatingOverlay).
+      !contains(target, floating) &&
+      // If the target root element contains none of the markers, then the
+      // element was injected after the floating element rendered.
+      Array.from(markers).every(
+        (marker) => !contains(targetRootAncestor, marker)
+      )
+    ) {
+      return;
+    }
 
     // Check if the click occurred on the scrollbar
     if (isHTMLElement(target) && floating) {
