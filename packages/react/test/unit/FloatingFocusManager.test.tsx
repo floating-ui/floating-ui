@@ -540,10 +540,10 @@ describe('modal', () => {
 
   test('true - applies aria-hidden to outside nodes', async () => {
     function App() {
-      const [open, setOpen] = useState(false);
+      const [isOpen, setIsOpen] = useState(false);
       const {refs, context} = useFloating({
-        open,
-        onOpenChange: setOpen,
+        open: isOpen,
+        onOpenChange: setIsOpen,
       });
 
       return (
@@ -551,20 +551,16 @@ describe('modal', () => {
           <input
             data-testid="reference"
             ref={refs.setReference}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setIsOpen((v) => !v)}
           />
           <div>
             <div data-testid="aria-live" aria-live="polite" />
             <button data-testid="btn-1" />
             <button data-testid="btn-2" />
           </div>
-          {open && (
+          {isOpen && (
             <FloatingFocusManager context={context}>
-              <div
-                role="listbox"
-                ref={refs.setFloating}
-                data-testid="floating"
-              />
+              <div ref={refs.setFloating} data-testid="floating" />
             </FloatingFocusManager>
           )}
         </>
@@ -595,10 +591,10 @@ describe('modal', () => {
 
   test('false - does not apply aria-hidden to outside nodes', async () => {
     function App() {
-      const [open, setOpen] = useState(false);
+      const [isOpen, setIsOpen] = useState(false);
       const {refs, context} = useFloating({
-        open,
-        onOpenChange: setOpen,
+        open: isOpen,
+        onOpenChange: setIsOpen,
       });
 
       return (
@@ -606,7 +602,7 @@ describe('modal', () => {
           <input
             data-testid="reference"
             ref={refs.setReference}
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setIsOpen((v) => !v)}
           />
           <div>
             <div data-testid="aria-live" aria-live="polite" />
@@ -614,7 +610,7 @@ describe('modal', () => {
             <button data-testid="btn-1" />
             <button data-testid="btn-2" />
           </div>
-          {open && (
+          {isOpen && (
             <FloatingFocusManager context={context} modal={false}>
               <div
                 role="listbox"
