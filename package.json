@@ -20,7 +20,7 @@
     "playwright": "npx playwright test packages/dom/test/functional",
     "playwright:update": "npm run playwright -- -u",
     "build": "npm -w packages/utils run build && npm -w packages/core run build && npm -w packages/dom run build && npm -w packages/react-dom run build && npm -w packages/react-native run build && npm -w packages/react run build && npm -w packages/vue run build",
-    "build:typescript": "tsc --project .config/tsconfig.json && bash ./.config/rename.sh",
+    "build:typescript": "tsc --project .config/tsconfig.json",
     "clean": "find packages -type f \\( -name '*.d.ts' -o -name '*.d.mts' \\) ! -path '*/_*.d.ts' -exec rm -f {} + && rm -rf packages/**/dist",
     "lint-packages": "publint packages/core && publint packages/dom && publint packages/react && publint packages/react-dom && publint packages/utils && publint packages/vue",
     "postinstall": "patch-package"
