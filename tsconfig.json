@@ -14,14 +14,14 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "paths": {
-      "@floating-ui/utils/dom/*": ["./packages/utils/dom/src/*"],
-      "@floating-ui/utils/react/*": ["./packages/utils/react/src/*"],
-      "@floating-ui/utils/*": ["./packages/utils/src/*"],
-      "@floating-ui/core/*": ["./packages/core/src/*"],
-      "@floating-ui/dom/*": ["./packages/dom/src/*"],
-      "@floating-ui/react-dom/*": ["./packages/react-dom/src/*"],
-      "@floating-ui/react/*": ["./packages/react/src/*"],
-      "@floating-ui/vue/*": ["./packages/vue/src/*"]
+      "@floating-ui/utils/dom": ["./packages/utils/dom/src/types.ts"],
+      "@floating-ui/utils/react": ["./packages/utils/react/src/types.ts"],
+      "@floating-ui/utils": ["./packages/utils/src/types.ts"],
+      "@floating-ui/core": ["./packages/core/src/types.ts"],
+      "@floating-ui/dom": ["./packages/dom/src/types.ts"],
+      "@floating-ui/react-dom": ["./packages/react-dom/src/types.ts"],
+      "@floating-ui/react": ["./packages/react/src/types.ts"],
+      "@floating-ui/vue": ["./packages/vue/src/types.ts"]
     }
   }
 }
