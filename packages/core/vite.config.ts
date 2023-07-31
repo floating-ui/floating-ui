@@ -14,13 +14,13 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: '@floating-ui/dom',
-      fileName: (format) => `floating-ui.dom.${format === 'es' ? 'esm' : format}.js`,
+      name: '@floating-ui/core',
+      fileName: (format) => `floating-ui.core.${format === 'es' ? 'esm' : format}.js`,
     },
   },
   plugins: [
     dts({
       entryRoot: resolve(__dirname, 'src'),
     }),
-  ]
+  ],
 });

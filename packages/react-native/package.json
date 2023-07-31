@@ -12,18 +12,16 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.react-native.js",
+  "main": "./dist/floating-ui.react-native.umd.js",
   "module": "./dist/floating-ui.react-native.esm.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/types.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist/"
   ],
   "scripts": {
     "test": "jest test",
-    "build": "NODE_ENV=build rollup -c"
+    "build": "vite build"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -55,6 +53,7 @@
     "@types/react": "^18.0.28",
     "@types/react-native": "^0.72.2",
     "react": "^18.0.0",
-    "react-native": "0.72.1"
+    "react-native": "0.72.1",
+    "react-native-web": "^0.19.7"
   }
 }

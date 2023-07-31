@@ -1,36 +1,36 @@
-import path from 'path';
-import {defineConfig} from 'vite';
+import { resolve } from 'node:path';
+
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 export default defineConfig({
-  server: {
-    port: 1234,
-  },
-  root: './test',
-  resolve: {
-    alias: {
-      '@floating-ui/utils/dom': path.resolve(
-        __dirname,
-        '../utils/dom/src/index.ts'
-      ),
-      '@floating-ui/utils/react': path.resolve(
-        __dirname,
-        '../utils/react/src/index.ts'
-      ),
-      '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
-      '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),
-      '@floating-ui/dom': path.resolve(__dirname, '../dom/src/index.ts'),
-      '@floating-ui/react-dom': path.resolve(
-        __dirname,
-        '../react-dom/src/index.ts'
-      ),
-      '@floating-ui/react': path.resolve(__dirname, '../react/src/index.ts'),
-      '@floating-ui/vue': path.resolve(__dirname, '../vue/src/index.ts'),
+  build: {
+    terserOptions: {
+      ecma: 2020,
+    },
+    sourcemap: true,
+    lib: {
+      entry: {
+        "utils": resolve(__dirname, 'src/index.ts'),
+        "utils.dom": resolve(__dirname, 'dom/src/index.ts'),
+        "utils.react": resolve(__dirname, 'react/src/index.ts'),
+      },
+      name: '@floating-ui/utils',
+      fileName: (format, entryName) => `floating-ui.${entryName}.${format === 'es' ? 'esm' : format}.js`,
     },
   },
-  test: {
-    environment: 'jsdom',
-    root: './test',
-    globals: true,
-    setupFiles: ['./setupTests.ts'],
-  },
+  plugins: [
+    dts({
+      entryRoot: resolve(__dirname, 'src'),
+      outDir: resolve(__dirname, 'dist/'),
+    }),
+    dts({
+      entryRoot: resolve(__dirname, 'dom/src'),
+      outDir: resolve(__dirname, 'dist/dom/'),
+    }),
+    dts({
+      entryRoot: resolve(__dirname, 'react/src'),
+      outDir: resolve(__dirname, 'dist/react/'),
+    }),
+  ]
 });

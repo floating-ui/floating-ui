@@ -1,18 +1,27 @@
 {
+  "include": ["./packages/**/src/**/*.ts", ".config/_global.d.ts"],
+  "exclude": ["./packages/**/dist/**/*.ts"],
   "compilerOptions": {
-    "lib": ["dom", "es2020"],
     "target": "es2020",
-    "skipLibCheck": true,
+    "lib": ["dom", "es2020"],
     "moduleResolution": "node",
-    "noEmit": true,
-    "resolveJsonModule": true,
+    "module": "ES2020",
+    "removeComments": false,
+    "skipLibCheck": true,
+    "declaration": true,
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "types": ["node", "jest", "resize-observer-browser"],
-    "allowJs": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx"
-  },
-  "include": ["packages/**/*", "playwright.config.ts", ".config/_global.d.ts"],
-  "exclude": ["node_modules"]
+    "paths": {
+      "@floating-ui/utils/dom/*": ["./packages/utils/dom/src/*"],
+      "@floating-ui/utils/react/*": ["./packages/utils/react/src/*"],
+      "@floating-ui/utils/*": ["./packages/utils/src/*"],
+      "@floating-ui/core/*": ["./packages/core/src/*"],
+      "@floating-ui/dom/*": ["./packages/dom/src/*"],
+      "@floating-ui/react-dom/*": ["./packages/react-dom/src/*"],
+      "@floating-ui/react/*": ["./packages/react/src/*"],
+      "@floating-ui/vue/*": ["./packages/vue/src/*"]
+    }
+  }
 }

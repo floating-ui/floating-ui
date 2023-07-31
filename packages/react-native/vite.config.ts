@@ -1,5 +1,6 @@
 import {resolve} from 'node:path';
 
+import react from '@vitejs/plugin-react';
 import {fileURLToPath} from 'url';
 import {defineConfig} from 'vite';
 import dts from 'vite-plugin-dts';
@@ -14,13 +15,19 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: '@floating-ui/dom',
-      fileName: (format) => `floating-ui.dom.${format === 'es' ? 'esm' : format}.js`,
+      name: '@floating-ui/react-native',
+      fileName: (format) => `floating-ui.react-native.${format === 'es' ? 'esm' : format}.js`,
     },
   },
   plugins: [
+    react(),
     dts({
       entryRoot: resolve(__dirname, 'src'),
     }),
-  ]
+  ],
+  resolve: {
+    alias: {
+      'react-native': 'react-native-web',
+    },
+  },
 });

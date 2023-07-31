@@ -1,38 +1,28 @@
+import {resolve} from 'node:path';
+
 import vue from '@vitejs/plugin-vue';
-import path from 'path';
+import {fileURLToPath} from 'url';
 import {defineConfig} from 'vite';
+import dts from 'vite-plugin-dts';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
-  server: {
-    port: 1234,
-  },
-  root: './test/visual',
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@floating-ui/utils/dom': path.resolve(
-        __dirname,
-        '../utils/dom/src/index.ts'
-      ),
-      '@floating-ui/utils/react': path.resolve(
-        __dirname,
-        '../utils/react/src/index.ts'
-      ),
-      '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
-      '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),
-      '@floating-ui/dom': path.resolve(__dirname, '../dom/src/index.ts'),
-      '@floating-ui/react-dom': path.resolve(
-        __dirname,
-        '../react-dom/src/index.ts'
-      ),
-      '@floating-ui/react': path.resolve(__dirname, '../react/src/index.ts'),
-      '@floating-ui/vue': path.resolve(__dirname, '../vue/src/index.ts'),
+  build: {
+    terserOptions: {
+      ecma: 2020,
+    },
+    sourcemap: true,
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: '@floating-ui/vue',
+      fileName: (format) => `floating-ui.vue.${format === 'es' ? 'esm' : format}.js`,
     },
   },
-  test: {
-    environment: 'jsdom',
-    root: './test',
-    globals: true,
-    setupFiles: ['./setupTests.ts'],
-  },
+  plugins: [
+    vue(),
+    dts({
+      entryRoot: resolve(__dirname, 'src'),
+    }),
+  ]
 });

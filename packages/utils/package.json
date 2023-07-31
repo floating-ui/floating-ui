@@ -12,55 +12,37 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.utils.umd.js",
+  "main": "./dist/floating-ui.utils.cjs.js",
   "module": "./dist/floating-ui.utils.esm.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/types.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/",
-    "dom/dist/",
-    "react/dist/",
-    "dom/package.json",
-    "react/package.json",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist/"
   ],
   "exports": {
     "./package.json": "./package.json",
     "./dom/package.json": "./dom/package.json",
     "./react/package.json": "./react/package.json",
     ".": {
-      "import": {
-        "types": "./src/types.d.ts",
-        "default": "./dist/floating-ui.utils.mjs"
-      },
-      "types": "./src/types.d.ts",
+      "types": "./dist/types.d.ts",
       "module": "./dist/floating-ui.utils.esm.js",
-      "default": "./dist/floating-ui.utils.umd.js"
+      "require": "./dist/floating-ui.utils.cjs.js"
     },
     "./dom": {
-      "import": {
-        "types": "./dom/src/index.d.ts",
-        "default": "./dom/dist/floating-ui.utils.dom.mjs"
-      },
-      "types": "./dom/src/index.d.ts",
-      "module": "./dom/dist/floating-ui.utils.dom.esm.js",
-      "default": "./dom/dist/floating-ui.utils.dom.umd.js"
+      "types": "./dist/dom/index.d.ts",
+      "module": "./dist/floating-ui.utils.dom.esm.js",
+      "require": "./dist/floating-ui.utils.dom.cjs.js"
     },
     "./react": {
-      "import": {
-        "types": "./react/src/index.d.ts",
-        "default": "./react/dist/floating-ui.utils.react.mjs"
-      },
-      "types": "./react/src/index.d.ts",
-      "module": "./react/dist/floating-ui.utils.react.esm.js",
-      "default": "./react/dist/floating-ui.utils.react.umd.js"
+      "types": "./dist/react/index.d.ts",
+      "module": "./dist/floating-ui.utils.react.esm.js",
+      "require": "./dist/floating-ui.utils.react.cjs.js"
     }
   },
   "scripts": {
     "test": "vitest --globals",
     "dev": "rollup -c -w",
-    "build": "NODE_ENV=build rollup -c"
+    "build": "vite build"
   },
   "author": "atomiks",
   "license": "MIT",
