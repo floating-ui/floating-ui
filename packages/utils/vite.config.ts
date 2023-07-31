@@ -1,6 +1,6 @@
-import { resolve } from 'node:path';
+import {resolve} from 'node:path';
 
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import dts from 'vite-plugin-dts';
 
 export default defineConfig({
@@ -11,12 +11,21 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: {
-        "utils": resolve(__dirname, 'src/index.ts'),
-        "utils.dom": resolve(__dirname, 'dom/src/index.ts'),
-        "utils.react": resolve(__dirname, 'react/src/index.ts'),
+        utils: resolve(__dirname, 'src/index.ts'),
+        'utils.dom': resolve(__dirname, 'dom/src/index.ts'),
+        'utils.react': resolve(__dirname, 'react/src/index.ts'),
       },
       name: '@floating-ui/utils',
-      fileName: (format, entryName) => `floating-ui.${entryName}.${format === 'es' ? 'esm' : format}.js`,
+      fileName: (format, entryName) =>
+        `floating-ui.${entryName}.${format === 'es' ? 'esm' : format}.js`,
+    },
+    rollupOptions: {
+      external: [
+        '@floating-ui/core',
+        '@floating-ui/utils',
+        '@floating-ui/utils/dom',
+        '@floating-ui/utils/react',
+      ],
     },
   },
   plugins: [
@@ -32,5 +41,5 @@ export default defineConfig({
       entryRoot: resolve(__dirname, 'react/src'),
       outDir: resolve(__dirname, 'dist/react/'),
     }),
-  ]
+  ],
 });

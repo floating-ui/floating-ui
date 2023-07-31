@@ -16,7 +16,22 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: '@floating-ui/react',
-      fileName: (format) => `floating-ui.react.${format === 'es' ? 'esm' : format}.js`,
+      fileName: (format) =>
+        `floating-ui.react.${format === 'es' ? 'esm' : format}.js`,
+    },
+    rollupOptions: {
+      external: [
+        'react',
+        'react-dom',
+        '@floating-ui/core',
+        '@floating-ui/dom',
+        '@floating-ui/react-dom',
+        'aria-hidden',
+        'tabbable',
+        '@floating-ui/utils',
+        '@floating-ui/utils/dom',
+        '@floating-ui/utils/react',
+      ],
     },
   },
   plugins: [

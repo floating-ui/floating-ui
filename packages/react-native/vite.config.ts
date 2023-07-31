@@ -18,6 +18,9 @@ export default defineConfig({
       name: '@floating-ui/react-native',
       fileName: (format) => `floating-ui.react-native.${format === 'es' ? 'esm' : format}.js`,
     },
+    rollupOptions: {
+      external: ['react', 'react-native', '@floating-ui/core'],
+    }
   },
   plugins: [
     react(),

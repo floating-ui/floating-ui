@@ -17,6 +17,9 @@ export default defineConfig({
       name: '@floating-ui/core',
       fileName: (format) => `floating-ui.core.${format === 'es' ? 'esm' : format}.js`,
     },
+    rollupOptions: {
+      external: ['@floating-ui/utils']
+    }
   },
   plugins: [
     dts({

@@ -18,6 +18,9 @@ export default defineConfig({
       name: '@floating-ui/vue',
       fileName: (format) => `floating-ui.vue.${format === 'es' ? 'esm' : format}.js`,
     },
+    rollupOptions: {
+      external: ['vue-demi', '@floating-ui/dom']
+    }
   },
   plugins: [
     vue(),
