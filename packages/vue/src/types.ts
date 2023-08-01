@@ -7,7 +7,7 @@ import type {
   ReferenceElement,
   Strategy,
 } from '@floating-ui/dom';
-import type {ComponentPublicInstance, Ref} from 'vue-demi';
+import type {ComponentPublicInstance, MaybeRefOrGetter, Ref} from 'vue-demi';
 
 export {arrow} from './arrow';
 export {useFloating} from './useFloating';
@@ -78,28 +78,28 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      * Represents the open/close state of the floating element.
      * @default true
      */
-    open?: MaybeReadonlyRef<boolean | undefined>;
+    open?: MaybeRefOrGetter<boolean | undefined>;
     /**
      * Where to place the floating element relative to its reference element.
      * @default 'bottom'
      */
-    placement?: MaybeReadonlyRef<Placement | undefined>;
+    placement?: MaybeRefOrGetter<Placement | undefined>;
     /**
      * The type of CSS position property to use.
      * @default 'absolute'
      */
-    strategy?: MaybeReadonlyRef<Strategy | undefined>;
+    strategy?: MaybeRefOrGetter<Strategy | undefined>;
     /**
      * These are plain objects that modify the positioning coordinates in some fashion, or provide useful data for the consumer to use.
      * @default undefined
      */
-    middleware?: MaybeReadonlyRef<Middleware[] | undefined>;
+    middleware?: MaybeRefOrGetter<Middleware[] | undefined>;
     /**
      * Whether to use `transform` instead of `top` and `left` styles to
      * position the floating element (`floatingStyles`).
      * @default true
      */
-    transform?: MaybeReadonlyRef<boolean | undefined>;
+    transform?: MaybeRefOrGetter<boolean | undefined>;
     /**
      * Callback to handle mounting/unmounting of the elements.
      * @default undefined
