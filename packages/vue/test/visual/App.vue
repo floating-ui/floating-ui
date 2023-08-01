@@ -1,14 +1,21 @@
 <script setup>
-import {Teleport, ref, computed} from 'vue';
+import {Teleport, ref, computed, reactive, toRef} from 'vue';
 import {useFloating, flip, offset} from '@floating-ui/vue';
 
 const reference = ref(null);
 const floating = ref(null);
 const middleware = ref([]);
+const opts = reactive({
+  strategy: 'absolute'
+})
 const {floatingStyles} = useFloating(reference, floating, {
   placement: 'right',
   middleware,
+  strategy: () => opts.strategy
 });
+const changeStrategy = () => {
+  opts.strategy = opts.strategy === 'absolute' ? 'fixed' : 'absolute'
+}
 </script>
 
 <template>
@@ -20,6 +27,7 @@ const {floatingStyles} = useFloating(reference, floating, {
   <button type="button" @click="middleware = [offset(10)]">offset(10)</button>
   <button type="button" @click="middleware = [offset()]">offset()</button>
   <button type="button" @click="middleware = [flip()]">flip()</button>
+  <button type="button" @click="changeStrategy">Change strategy</button>
 </template>
 
 <style scoped>
