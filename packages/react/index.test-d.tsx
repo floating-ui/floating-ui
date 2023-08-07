@@ -85,9 +85,12 @@ function App() {
   const ref2 = useRef<HTMLDivElement>(null);
   const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
 
+  const {context: contextGeneric} = useFloating<HTMLDivElement>();
+
   return (
     <div ref={ref} style={floatingStyles}>
       <FloatingArrow context={context} />
+      <FloatingArrow context={contextGeneric} />
       <FloatingArrow
         ref={arrowRef}
         context={context}

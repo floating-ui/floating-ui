@@ -5,7 +5,7 @@ import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 
 export interface FloatingArrowProps extends React.SVGAttributes<SVGSVGElement> {
-  context: FloatingContext;
+  context: Omit<FloatingContext, 'refs'>;
 
   /**
    * Width of the arrow.
