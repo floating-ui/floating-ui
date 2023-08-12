@@ -1,15 +1,16 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 import path from 'path';
+import solid from 'solid-start/vite';
 import {defineConfig} from 'vite';
-import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
   server: {
     port: 1234,
   },
   root: './test/visual',
-  plugins: [solidPlugin()],
+  plugins: [solid()],
+  // ssr: {noExternal: true},
   resolve: {
     alias: {
       '@floating-ui/utils/dom': path.resolve(

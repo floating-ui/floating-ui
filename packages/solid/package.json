@@ -12,28 +12,23 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.solid.umd.js",
-  "module": "./dist/floating-ui.solid.esm.js",
-  "unpkg": "./dist/floating-ui.solid.umd.min.js",
-  "types": "./src/types.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
-      "import": {
-        "types": "./src/types.d.ts",
-        "default": "./dist/floating-ui.solid.mjs"
-      },
-      "types": "./src/types.d.ts",
-      "module": "./dist/floating-ui.solid.esm.js",
-      "default": "./dist/floating-ui.solid.umd.js"
+      "solid": "./dist/source/index.js",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
     }
   },
-  "sideEffects": false,
-  "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
-  ],
   "scripts": {
     "test": "vitest",
     "build": "NODE_ENV=build rollup -c"
@@ -60,15 +55,19 @@
     "solid-js": "^1.6.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.1"
+    "@floating-ui/dom": "^1.5.1",
+    "solid-start": "^0.3.2",
+    "style-to-object": "^0.4.2"
   },
   "devDependencies": {
     "@solidjs/testing-library": "^0.8.4",
     "@testing-library/jest-dom": "^5.17.0",
     "babel-preset-solid": "^1.6.10",
     "jsdom": "^22.1.0",
+    "rollup-plugin-summary": "^2.0.0",
     "rollup-preset-solid": "^2.0.1",
     "solid-js": "^1.7.4",
+    "solid-start-node": "^0.3.2",
     "vite": "^4.4.9",
     "vite-plugin-solid": "^2.7.0",
     "vitest": "^0.34.1"

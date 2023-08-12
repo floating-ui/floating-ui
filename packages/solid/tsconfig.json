@@ -12,6 +12,7 @@
     "moduleResolution": "node",
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
-    "declaration": true
+    "declaration": true,
+    "types": ["solid-start/env"]
   }
 }
