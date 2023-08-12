@@ -1,0 +1,17 @@
+{
+  "include": ["src"],
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "jsxImportSource": "solid-js",
+    "jsx": "preserve",
+    "declaration": true
+  }
+}
