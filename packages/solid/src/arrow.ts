@@ -8,7 +8,6 @@ import {ArrowOptions} from './types';
  * @see https://floating-ui.com/docs/arrow
  */
 export function arrow(options: ArrowOptions): Middleware {
-  console.log(options);
   return {
     name: 'arrow',
     options,

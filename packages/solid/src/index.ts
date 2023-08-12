@@ -1,4 +1,5 @@
 export {arrow} from './arrow';
+export {FloatingArrow} from './components/FloatingArrow';
 export {useFloating} from './useFloating';
 export {
   autoPlacement,

@@ -6,6 +6,7 @@ import type {
 } from '@floating-ui/dom';
 import type {Accessor, JSX} from 'solid-js';
 
+export * from '.';
 export {arrow} from './arrow';
 export {useFloating} from './useFloating';
 export type {
