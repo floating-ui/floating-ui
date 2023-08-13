@@ -108,6 +108,8 @@ export const FloatingArrow: Component<
   const calculated = createMemo(() => {
     //initial values and default values
     const {context, staticOffset} = local;
+    const placement = context.placement;
+
     const strokeWidth = (local.strokeWidth ?? 0) * 2;
     const width = local.width ?? 14;
     const height = local.height ?? 7;
@@ -123,14 +125,18 @@ export const FloatingArrow: Component<
     const svgX = (width / 2) * (tipRadius / -8 + 1);
     const svgY = ((height / 2) * tipRadius) / 4;
 
-    const [side, alignment] = context.placement.split('-') as [Side, Alignment];
+    const [side, alignment] = placement.split('-') as [Side, Alignment];
     const isRTL = platform.isRTL(context.elements.floating as HTMLElement); //we already return early
     const isCustomShape = !!local.d;
     const isVerticalSide = side === 'top' || side === 'bottom';
 
-    const yOffsetProp =
-      local.staticOffset && alignment === 'end' ? 'bottom' : 'top';
-    let xOffsetProp = staticOffset && alignment === 'end' ? 'right' : 'left';
+    const yOffsetProp = staticOffset && alignment === 'end' ? 'bottom' : 'top';
+
+    let xOffsetProp = !isVerticalSide
+      ? side //otherwise wont work when flip middleware changes the side from left to right
+      : staticOffset && alignment === 'end'
+      ? 'right'
+      : 'left';
     if (staticOffset && isRTL) {
       xOffsetProp = alignment === 'end' ? 'left' : 'right';
     }
@@ -193,8 +199,8 @@ export const FloatingArrow: Component<
       style={{
         position: 'absolute',
         'pointer-events': 'none',
-        [calculated().xOffsetProp]: calculated().arrowX,
-        [calculated().yOffsetProp]: calculated().arrowY,
+        [calculated().xOffsetProp]: `${calculated().arrowX}px`,
+        [calculated().yOffsetProp]: `${calculated().arrowY}px`,
         [calculated().side]:
           calculated().isVerticalSide || calculated().isCustomShape
             ? '100%'
