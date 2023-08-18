@@ -187,7 +187,7 @@ export const limitShift = (
 
     if (checkCrossAxis) {
       const len = mainAxis === 'y' ? 'width' : 'height';
-      const isOriginSide = ['top', 'left'].includes(getSide(placement));
+      const isOriginSide = ['top', 'left'].indexOf(getSide(placement)) !== -1;
       const limitMin =
         rects.reference[crossAxis] -
         rects.floating[len] +

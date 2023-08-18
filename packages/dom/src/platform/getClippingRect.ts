@@ -129,9 +129,9 @@ function getClippingElementAncestors(
       : (!currentNodeIsContaining &&
           computedStyle.position === 'static' &&
           !!currentContainingBlockComputedStyle &&
-          ['absolute', 'fixed'].includes(
+          ['absolute', 'fixed'].indexOf(
             currentContainingBlockComputedStyle.position
-          )) ||
+          )) !== -1 ||
         (isOverflowElement(currentNode) &&
           !currentNodeIsContaining &&
           hasFixedPositionAncestor(element, currentNode));

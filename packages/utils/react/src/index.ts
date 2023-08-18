@@ -125,7 +125,7 @@ export function isMouseLikePointerType(
   if (!strict) {
     values.push('', undefined);
   }
-  return values.includes(pointerType);
+  return values.indexOf(pointerType) !== -1;
 }
 
 export function isReactEvent(event: any): event is React.SyntheticEvent {
@@ -149,7 +149,7 @@ export function isEventTargetWithin(
   }
 
   if ('composedPath' in event) {
-    return event.composedPath().includes(node);
+    return event.composedPath().indexOf(node) !== -1;
   }
 
   // TS thinks `event` is of type never as it assumes all browsers support composedPath, but browsers without shadow dom don't

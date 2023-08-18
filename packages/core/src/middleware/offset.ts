@@ -45,7 +45,7 @@ export async function convertValueToCoords(
   const side = getSide(placement);
   const alignment = getAlignment(placement);
   const isVertical = getSideAxis(placement) === 'y';
-  const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+  const mainAxisMulti = ['left', 'top'].indexOf(side) !== -1 ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 

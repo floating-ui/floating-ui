@@ -50,12 +50,12 @@ export function isOverflowElement(element: Element): boolean {
   const {overflow, overflowX, overflowY, display} = getComputedStyle(element);
   return (
     /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) &&
-    !['inline', 'contents'].includes(display)
+    !(['inline', 'contents'].indexOf(display) !== -1)
   );
 }
 
 export function isTableElement(element: Element): boolean {
-  return ['table', 'td', 'th'].includes(getNodeName(element));
+  return ['table', 'td', 'th'].indexOf(getNodeName(element)) !== -1;
 }
 
 export function isContainingBlock(element: Element): boolean {
@@ -70,10 +70,10 @@ export function isContainingBlock(element: Element): boolean {
     (!webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false)) ||
     (!webkit && (css.filter ? css.filter !== 'none' : false)) ||
     ['transform', 'perspective', 'filter'].some((value) =>
-      (css.willChange || '').includes(value)
+      (css.willChange || '').indexOf(value) !== -1
     ) ||
     ['paint', 'layout', 'strict', 'content'].some((value) =>
-      (css.contain || '').includes(value)
+      (css.contain || '').indexOf(value) !== -1
     )
   );
 }
@@ -98,7 +98,7 @@ export function isWebKit(): boolean {
 }
 
 export function isLastTraversableNode(node: Node): boolean {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
+  return ['html', 'body', '#document'].indexOf(getNodeName(node)) !== -1;
 }
 
 export function getComputedStyle(element: Element): CSSStyleDeclaration {
