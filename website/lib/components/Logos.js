@@ -1,4 +1,6 @@
 import {FloatingDelayGroup} from '@floating-ui/react';
+import {useState, useEffect} from 'react';
+import {getTierSponsors} from '../utils/openCollective';
 
 import {
   Tooltip,
@@ -6,11 +8,27 @@ import {
   TooltipTrigger,
 } from './Tooltip';
 
-export function Logos({items}) {
+export function Logos({items, tier}) {
+  const [activeMembers, setActiveMembers] = useState([]);
+
+  useEffect(() => {
+    getTierSponsors('floating-ui', tier).then(
+      (activeMembers) => {
+        setActiveMembers(activeMembers);
+      }
+    );
+  }, []);
+
+  const activeItems = items.filter((item) =>
+    activeMembers.some(
+      (member) => member.MemberId === item.MemberId
+    )
+  );
+
   return (
     <div className="my-10 flex flex-wrap justify-center invert dark:invert-0">
       <FloatingDelayGroup delay={{open: 1000, close: 200}}>
-        {items.map((item) => (
+        {activeItems.map((item) => (
           <Tooltip key={item.label} content={item.label}>
             <TooltipTrigger asChild>
               <a
