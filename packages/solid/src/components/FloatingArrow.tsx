@@ -77,8 +77,7 @@ export const FloatingArrow: Component<
   // }
   props
 ) => {
-  //@ts-expect-error
-  if (__DEV__) {
+  if (!import.meta.env.PROD) {
     if (!props.ref) {
       console.warn(
         'Floating UI: The `ref` prop is required for the `FloatingArrow`',
@@ -99,7 +98,7 @@ export const FloatingArrow: Component<
   ]);
   const clipPathId = createUniqueId();
 
-  if (!local.context.elements.floating) {
+  if (!local.context.refs.floating()) {
     return null;
   }
 
@@ -126,11 +125,15 @@ export const FloatingArrow: Component<
     const svgY = ((height / 2) * tipRadius) / 4;
 
     const [side, alignment] = placement.split('-') as [Side, Alignment];
-    const isRTL = platform.isRTL(context.elements.floating as HTMLElement); //we already return early
+    const isRTL = platform.isRTL(context.refs.floating() as HTMLElement); //we already return early
     const isCustomShape = !!local.d;
     const isVerticalSide = side === 'top' || side === 'bottom';
 
-    const yOffsetProp = staticOffset && alignment === 'end' ? 'bottom' : 'top';
+    const yOffsetProp = isVerticalSide
+      ? side
+      : staticOffset && alignment === 'end'
+      ? 'bottom'
+      : 'top';
 
     let xOffsetProp = !isVerticalSide
       ? side //otherwise wont work when flip middleware changes the side from left to right

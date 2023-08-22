@@ -2,13 +2,15 @@ import type {
   ComputePositionConfig,
   ComputePositionReturn,
   Padding,
+  ReferenceElement,
   VirtualElement,
 } from '@floating-ui/dom';
 import type {Accessor, JSX} from 'solid-js';
 
-export * from '.';
+import {DismissPayload} from './hooks/useDismiss';
+
 export {arrow} from './arrow';
-export {useFloating} from './useFloating';
+export {useFloating} from './hooks/useFloating';
 export type {
   AlignedPlacement,
   Alignment,
@@ -77,62 +79,79 @@ export type UseFloatingData = Prettify<
 
 export type ReferenceType = Element | VirtualElement;
 
-export type UseFloatingReturn<
-  RT extends ReferenceType = ReferenceType,
-  F = HTMLElement
-> = Prettify<
-  UseFloatingData & {
-    /**
-     * Update the position of the floating element, re-rendering the component
-     * if required.
-     */
-    update: () => void;
-    /**
-     * Pre-configured positioning styles to apply to the floating element.
-     */
-    floatingStyles: JSX.CSSProperties;
-    /**
-     * Object containing the reference and floating refs and reactive setters.
-     */
+export type UseFloatingReturn<R extends ReferenceType = ReferenceType> =
+  Prettify<
+    UseFloatingData & {
+      /**
+       * Update the position of the floating element, re-rendering the component
+       * if required.
+       */
+      update: () => void;
+      /**
+       * Pre-configured positioning styles to apply to the floating element.
+       */
+      floatingStyles: JSX.CSSProperties;
+      /**
+       * Object containing the reference and floating refs and reactive setters.
+       */
+      refs: ExtendedRefs<R>;
+      // {
+      //   /**
+      //    * A reactive reference element.
+      //    */
+      //   reference: Accessor<R | null>;
+      //   /**
+      //    * A reactive floating element.
+      //    */
+      //   floating: Accessor<F | null>;
+      //   /**
+      //    * A callback to set the reference element (reactive).
+      //    */
+      //   setReference: (node: R | null) => void;
+      //   /**
+      //    * A callback to set the floating element (reactive).
+      //    */
+      //   setFloating: (node: F | null) => void;
+      // };
+      context: Accessor<FloatingContext<R>>;
+      // elements: {
+      //   reference?: R | null;
+      //   floating?: F | null;
+      // };
+    }
+  >;
 
-    elements: {
-      reference?: RT | null;
-      floating?: F | null;
-    };
-  }
->;
-
-export type UseFloatingOptions<
-  RT extends ReferenceType = ReferenceType,
-  F = HTMLElement
-> = Prettify<
-  Partial<ComputePositionConfig> & {
-    /**
-     * A callback invoked when both the reference and floating elements are
-     * mounted, and cleaned up when either is unmounted. This is useful for
-     * setting up event listeners (e.g. pass `autoUpdate`).
-     */
-    whileElementsMounted?: (
-      reference: RT,
-      floating: F,
-      update: () => void
-    ) => () => void;
-    elements?: {
-      reference?: RT | null;
-      floating?: F | null;
-    };
-    /**
-     * The `open` state of the floating element to synchronize with the
-     * `isPositioned` value.
-     */
-    open?: boolean;
-    /**
-     * Whether to use `transform` for positioning instead of `top` and `left`
-     * (layout) in the `floatingStyles` object.
-     */
-    transform?: boolean;
-  }
->;
+export type UseFloatingOptions<R extends ReferenceType = ReferenceType> =
+  Prettify<
+    Partial<ComputePositionConfig> & {
+      /**
+       * A callback invoked when both the reference and floating elements are
+       * mounted, and cleaned up when either is unmounted. This is useful for
+       * setting up event listeners (e.g. pass `autoUpdate`).
+       */
+      whileElementsMounted?: (
+        reference: ReferenceElement | R | null,
+        floating: HTMLElement | null,
+        update: () => void
+      ) => () => void;
+      // elements?: {
+      //   reference?: R | null;
+      //   floating?: F | null;
+      // };
+      /**
+       * The `open` state of the floating element to synchronize with the
+       * `isPositioned` value.
+       */
+      open?: Accessor<boolean>;
+      /**
+       * Whether to use `transform` for positioning instead of `top` and `left`
+       * (layout) in the `floatingStyles` object.
+       */
+      transform?: boolean;
+      onOpenChange?: (open: boolean, event?: Event) => void;
+      nodeId?: string;
+    }
+  >;
 
 export type ArrowOptions = {
   /**
@@ -146,3 +165,67 @@ export type ArrowOptions = {
    */
   padding?: Padding;
 };
+
+export type NarrowedElement<T> = T extends Element ? T : Element;
+
+export type ExtendedRefs<R> = {
+  reference: Accessor<R | null>;
+  floating: Accessor<HTMLElement | null>;
+  // domReference: NarrowedElement<RT> | null;
+  setReference: (node: R | null) => void;
+  setFloating: (node: HTMLElement | null) => void;
+  // setPositionReference: (node: ReferenceType | null) => void;
+};
+
+export interface ExtendedElements<R extends ReferenceType = ReferenceType> {
+  reference: Accessor<R | null>;
+  floating: Accessor<HTMLElement | null>;
+  // domReference: NarrowedElement<RT> | null;
+}
+
+export interface FloatingEvents {
+  emit<T extends string>(
+    event: T,
+    data?: T extends 'dismiss' ? DismissPayload : any
+  ): void;
+  on(event: string, handler: (data: any) => void): void;
+  off(event: string, handler: (data: any) => void): void;
+}
+
+export interface ContextData {
+  openEvent?: Event;
+  [key: string]: any;
+}
+
+export type FloatingContext<R extends ReferenceType = ReferenceType> = Omit<
+  UseFloatingReturn<R>,
+  'elements' | 'context'
+> & {
+  open: Accessor<boolean>;
+  onOpenChange: (open: boolean, event?: Event) => void;
+  events: FloatingEvents;
+  dataRef: ContextData; //React.MutableRefObject<ContextData>;
+  nodeId: string | undefined;
+  floatingId: string;
+  // refs: ExtendedRefs<R, F>;
+  // elements: ExtendedElements<R>;
+};
+
+export interface FloatingNodeType<R extends ReferenceType = ReferenceType> {
+  id: string;
+  parentId: string | null;
+  context?: FloatingContext<R>;
+}
+
+export interface FloatingTreeType<R extends ReferenceType = ReferenceType> {
+  nodesRef: Array<FloatingNodeType<R>>;
+  events: FloatingEvents;
+  addNode: (node: FloatingNodeType) => void;
+  removeNode: (node: FloatingNodeType) => void;
+}
+
+export interface ElementProps {
+  reference?: JSX.HTMLAttributes<Element>;
+  floating?: JSX.HTMLAttributes<HTMLElement>;
+  item?: JSX.HTMLAttributes<HTMLElement>;
+}

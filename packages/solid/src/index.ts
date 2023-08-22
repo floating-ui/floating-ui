@@ -1,6 +1,26 @@
 export {arrow} from './arrow';
 export {FloatingArrow} from './components/FloatingArrow';
-export {useFloating} from './useFloating';
+export {FloatingFocusManager} from './components/FloatingFocusManager';
+export {
+  FloatingPortal,
+  useFloatingPortalNode,
+} from './components/FloatingPortal';
+export {
+  FloatingNode,
+  FloatingTree,
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from './components/FloatingTree';
+export {useClick} from './hooks/useClick';
+export {useDismiss} from './hooks/useDismiss';
+export {useFloating} from './hooks/useFloating';
+export {useFocus} from './hooks/useFocus';
+export {useHover} from './hooks/useHover';
+export {useInteractions} from './hooks/useInteractions';
+export {useListNavigation} from './hooks/useListNavigation';
+export {safePolygon} from './safePolygon';
+export * from './types';
 export {
   autoPlacement,
   autoUpdate,

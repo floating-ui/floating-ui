@@ -7,20 +7,20 @@ import {
 } from '@floating-ui/dom';
 import {createEffect, createMemo, createSignal, onCleanup} from 'solid-js';
 
-import {UseFloatingOptions, UseFloatingReturn} from './types';
-import {getDPR} from './utils/getDPR';
-import {roundByDPR} from './utils/roundByDPR';
+import {UseFloatingOptions, UseFloatingReturn} from '../types';
+import {getDPR} from '../utils/getDPR';
+import {roundByDPR} from '../utils/roundByDPR';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function ignore<T>(_value: T): void {
   // no-op
 }
 
-export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
-  reference: () => R | undefined | null,
-  floating: () => F | undefined | null,
-  options?: UseFloatingOptions<R, F>
-): UseFloatingReturn<R> {
+export function usePosition<R extends ReferenceElement = ReferenceElement>(
+  // reference: () => R | undefined | null,
+  // floating: () => F | undefined | null,
+  options: UseFloatingOptions<R>
+): Omit<UseFloatingReturn<R>, 'context'> {
   const placement = () => options?.placement ?? 'bottom';
   const strategy = () => options?.strategy ?? 'absolute';
 
@@ -37,25 +37,30 @@ export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
 
   const [error, setError] = createSignal<{value: any} | undefined>();
 
+  const [reference, setReference] = createSignal<R | null>(null);
+  const [floating, setFloating] = createSignal<HTMLElement | null>(null);
+
   createEffect(() => {
     const currentError = error();
     if (currentError) {
-      throw currentError.value;
+      // throw currentError.value;
     }
   });
 
+  createEffect(() => console.log({floating: floating()?.id, el: floating()}));
   const version = createMemo(() => {
     reference();
     floating();
     return {};
   });
 
-  function update() {
+  async function update() {
     const currentReference = reference();
     const currentFloating = floating();
 
     if (currentReference && currentFloating) {
       const capturedVersion = version();
+      console.log(currentReference, currentFloating);
       computePosition(currentReference, currentFloating, {
         middleware: options?.middleware,
         placement: placement(),
@@ -63,6 +68,8 @@ export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
       }).then(
         (currentData) => {
           // Check if it's still valid
+          console.log('then', currentFloating);
+
           const x = roundByDPR(currentFloating, currentData.x);
           const y = roundByDPR(currentFloating, currentData.y);
           if (capturedVersion === version()) {
@@ -70,6 +77,8 @@ export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
           }
         },
         (err) => {
+          console.error(err);
+          console.log(floating()?.id, currentFloating.id);
           setError(err);
         }
       );
@@ -131,6 +140,13 @@ export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
     };
   });
 
+  const refs = {
+    reference,
+    floating,
+    setReference,
+    setFloating,
+  };
+
   return {
     get x() {
       return data().x;
@@ -153,11 +169,14 @@ export function useFloating<R extends ReferenceElement, F extends HTMLElement>(
     get floatingStyles() {
       return floatingStyles();
     },
-    get elements() {
-      return {
-        reference: reference(),
-        floating: floating(),
-      };
+    // get elements() {
+    //   return {
+    //     reference: reference(),
+    //     floating: floating(),
+    //   };
+    // },
+    get refs() {
+      return refs;
     },
     update,
   };

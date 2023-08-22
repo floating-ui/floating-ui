@@ -31,9 +31,10 @@
   },
   "scripts": {
     "test": "vitest",
-    "build": "NODE_ENV=build rollup -c"
+    "build": "NODE_ENV=build rollup -c",
+    "build-watch": "rollup --watch -c ./rollup.config.js"
   },
-  "author": "atomiks",
+  "author": "madaxen86",
   "license": "MIT",
   "bugs": "https://github.com/floating-ui/floating-ui",
   "repository": {
@@ -56,10 +57,14 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.5.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@solid-primitives/destructure": "^0.1.14",
     "solid-start": "^0.3.2",
-    "style-to-object": "^0.4.2"
+    "style-to-object": "^0.4.2",
+    "tabbable": "^6.2.0"
   },
   "devDependencies": {
+    "@floating-ui/utils": "^0.1.1",
     "@solidjs/testing-library": "^0.8.4",
     "@testing-library/jest-dom": "^5.17.0",
     "babel-preset-solid": "^1.6.10",
