@@ -115,10 +115,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   // aria-hidden should be applied to all nodes still. Further, the visually
   // hidden dismiss button should only appear at the end of the list, not the
   // start.
-  const isTypeableCombobox =
+  const isUntrappedTypeableCombobox =
     domReference &&
     domReference.getAttribute('role') === 'combobox' &&
-    isTypeableElement(domReference);
+    isTypeableElement(domReference) &&
+    ignoreInitialFocus;
 
   const getTabbableContent = React.useCallback(
     (container: HTMLElement | null = floating) => {
@@ -158,7 +159,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         if (
           contains(floating, activeElement(getDocument(floating))) &&
           getTabbableContent().length === 0 &&
-          !isTypeableCombobox
+          !isUntrappedTypeableCombobox
         ) {
           stopEvent(event);
         }
@@ -198,7 +199,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     modal,
     orderRef,
     refs,
-    isTypeableCombobox,
+    isUntrappedTypeableCombobox,
     getTabbableContent,
     getTabbableElements,
   ]);
@@ -291,7 +292,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         ...portalNodes,
         startDismissButtonRef.current,
         endDismissButtonRef.current,
-        orderRef.current.includes('reference') || isTypeableCombobox
+        orderRef.current.includes('reference') || isUntrappedTypeableCombobox
           ? domReference
           : null,
       ].filter((x): x is Element => x != null);
@@ -311,7 +312,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     modal,
     orderRef,
     portalContext,
-    isTypeableCombobox,
+    isUntrappedTypeableCombobox,
     guards,
   ]);
 
@@ -494,7 +495,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   }
 
   const shouldRenderGuards =
-    !disabled && guards && !isTypeableCombobox && (isInsidePortal || modal);
+    !disabled &&
+    guards &&
+    !isUntrappedTypeableCombobox &&
+    (isInsidePortal || modal);
 
   return (
     <>
@@ -527,7 +531,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         Ensure the first swipe is the list item. The end of the listbox popup
         will have a dismiss button.
       */}
-      {!isTypeableCombobox && renderDismissButton('start')}
+      {!isUntrappedTypeableCombobox && renderDismissButton('start')}
       {children}
       {renderDismissButton('end')}
       {shouldRenderGuards && (
