@@ -21,32 +21,10 @@ export const FloatingOverlay = React.forwardRef<
   useLayoutEffect(() => {
     if (!lockScroll) return;
 
-    const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
-
-    function removeLock() {
-      activeLocks.delete(lockId);
-
-      if (activeLocks.size === 0) {
-        const bodyStyle = document.body.style;
-        Object.assign(bodyStyle, {
-          overflow: '',
-          [paddingProp]: '',
-        });
-
-        if (isIOS) {
-          Object.assign(bodyStyle, {
-            position: '',
-            top: '',
-            left: '',
-            right: '',
-          });
-          window.scrollTo(scrollX, scrollY);
-        }
-      }
-    }
-
     activeLocks.add(lockId);
 
+    const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
+    const bodyStyle = document.body.style;
     // RTL <body> scrollbar
     const scrollbarX =
       Math.round(document.documentElement.getBoundingClientRect().left) +
@@ -63,7 +41,7 @@ export const FloatingOverlay = React.forwardRef<
       const scrollX = window.pageXOffset;
       const scrollY = window.pageYOffset;
 
-      Object.assign(document.body.style, {
+      Object.assign(bodyStyle, {
         position: 'fixed',
         overflow: 'hidden',
         top: `${-(scrollY - Math.floor(offsetTop))}px`,
@@ -74,13 +52,32 @@ export const FloatingOverlay = React.forwardRef<
     } else {
       // Only iOS doesn't respect `overflow: hidden` on document.body, and this
       // technique has fewer side effects.
-      Object.assign(document.body.style, {
+      Object.assign(bodyStyle, {
         overflow: 'hidden',
         [paddingProp]: `${scrollbarWidth}px`,
       });
     }
 
-    return removeLock;
+    return () => {
+      activeLocks.delete(lockId);
+
+      if (activeLocks.size === 0) {
+        Object.assign(bodyStyle, {
+          overflow: '',
+          [paddingProp]: '',
+        });
+
+        if (isIOS) {
+          Object.assign(bodyStyle, {
+            position: '',
+            top: '',
+            left: '',
+            right: '',
+          });
+          window.scrollTo(scrollX, scrollY);
+        }
+      }
+    };
   }, [lockId, lockScroll]);
 
   return (
