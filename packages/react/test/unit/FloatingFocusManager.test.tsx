@@ -1116,7 +1116,7 @@ describe('Drawer', () => {
   });
 });
 
-test('untrapped combobox', async () => {
+test('trapped combobox prevents focus moving outside floating element', async () => {
   function App() {
     const [isOpen, setIsOpen] = useState(false);
 
