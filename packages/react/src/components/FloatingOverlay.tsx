@@ -2,9 +2,9 @@ import {getPlatform} from '@floating-ui/utils/react';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {createAttribute} from '../utils/createAttribute';
+import {useId} from '../hooks/useId';
 
-const identifier = createAttribute('scroll-lock');
+const activeLocks = new Set<string>();
 
 /**
  * Provides base styling for a fixed overlay element to dim content or block
@@ -16,17 +16,36 @@ export const FloatingOverlay = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & {lockScroll?: boolean}
 >(function FloatingOverlay({lockScroll = false, ...rest}, ref) {
+  const lockId = useId();
+
   useLayoutEffect(() => {
-    if (!lockScroll) {
-      return;
+    if (!lockScroll) return;
+
+    const isIOS = /iP(hone|ad|od)|iOS/.test(getPlatform());
+
+    function removeLock() {
+      activeLocks.delete(lockId);
+
+      if (activeLocks.size === 0) {
+        const bodyStyle = document.body.style;
+        Object.assign(bodyStyle, {
+          overflow: '',
+          [paddingProp]: '',
+        });
+
+        if (isIOS) {
+          Object.assign(bodyStyle, {
+            position: '',
+            top: '',
+            left: '',
+            right: '',
+          });
+          window.scrollTo(scrollX, scrollY);
+        }
+      }
     }
 
-    const alreadyLocked = document.body.hasAttribute(identifier);
-    if (alreadyLocked) {
-      return;
-    }
-
-    document.body.setAttribute(identifier, '');
+    activeLocks.add(lockId);
 
     // RTL <body> scrollbar
     const scrollbarX =
@@ -37,52 +56,32 @@ export const FloatingOverlay = React.forwardRef<
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
-    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
-    // technique has fewer side effects.
-    if (!/iP(hone|ad|od)|iOS/.test(getPlatform())) {
+    if (isIOS) {
+      // iOS 12 does not support `visualViewport`.
+      const offsetLeft = window.visualViewport?.offsetLeft || 0;
+      const offsetTop = window.visualViewport?.offsetTop || 0;
+      const scrollX = window.pageXOffset;
+      const scrollY = window.pageYOffset;
+
+      Object.assign(document.body.style, {
+        position: 'fixed',
+        overflow: 'hidden',
+        top: `${-(scrollY - Math.floor(offsetTop))}px`,
+        left: `${-(scrollX - Math.floor(offsetLeft))}px`,
+        right: '0',
+        [paddingProp]: `${scrollbarWidth}px`,
+      });
+    } else {
+      // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+      // technique has fewer side effects.
       Object.assign(document.body.style, {
         overflow: 'hidden',
         [paddingProp]: `${scrollbarWidth}px`,
       });
-
-      return () => {
-        document.body.removeAttribute(identifier);
-        Object.assign(document.body.style, {
-          overflow: '',
-          [paddingProp]: '',
-        });
-      };
     }
 
-    // iOS 12 does not support `visualViewport`.
-    const offsetLeft = window.visualViewport?.offsetLeft || 0;
-    const offsetTop = window.visualViewport?.offsetTop || 0;
-    const scrollX = window.pageXOffset;
-    const scrollY = window.pageYOffset;
-
-    Object.assign(document.body.style, {
-      position: 'fixed',
-      overflow: 'hidden',
-      top: `${-(scrollY - Math.floor(offsetTop))}px`,
-      left: `${-(scrollX - Math.floor(offsetLeft))}px`,
-      right: '0',
-      [paddingProp]: `${scrollbarWidth}px`,
-    });
-
-    return () => {
-      Object.assign(document.body.style, {
-        position: '',
-        overflow: '',
-        top: '',
-        left: '',
-        right: '',
-        [paddingProp]: '',
-      });
-
-      document.body.removeAttribute(identifier);
-      window.scrollTo(scrollX, scrollY);
-    };
-  }, [lockScroll]);
+    return removeLock;
+  }, [lockId, lockScroll]);
 
   return (
     <div
