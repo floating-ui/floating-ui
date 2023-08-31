@@ -78,7 +78,7 @@ export function getGridNavigatedIndex(
     minIndex,
     maxIndex,
     prevIndex,
-    stopEvent: stop,
+    stopEvent: stop = false,
   }: {
     event: React.KeyboardEvent;
     orientation: 'horizontal' | 'vertical' | 'both';
@@ -88,7 +88,7 @@ export function getGridNavigatedIndex(
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
-    stopEvent: boolean;
+    stopEvent?: boolean;
   }
 ) {
   let nextIndex = prevIndex;
