@@ -610,14 +610,16 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          const isNavigationKey =
-            isArrowKey || event.key === 'Enter' || event.key.trim() === '';
           const isMainKey = isMainOrientationKey(event.key, orientation);
           const isCrossKey = isCrossOrientationOpenKey(
             event.key,
             orientation,
             rtl
           );
+          const isNavigationKey =
+            (nested ? isCrossKey : isMainKey) ||
+            event.key === 'Enter' ||
+            event.key.trim() === '';
 
           if (isNavigationKey) {
             keyRef.current = nested && isMainKey ? null : event.key;
