@@ -1,4 +1,5 @@
 import {floor} from '@floating-ui/utils';
+import {stopEvent} from '@floating-ui/utils/react';
 
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';
@@ -77,6 +78,7 @@ export function getGridNavigatedIndex(
     minIndex,
     maxIndex,
     prevIndex,
+    stopEvent: stop,
   }: {
     event: React.KeyboardEvent;
     orientation: 'horizontal' | 'vertical' | 'both';
@@ -86,11 +88,14 @@ export function getGridNavigatedIndex(
     minIndex: number;
     maxIndex: number;
     prevIndex: number;
+    stopEvent: boolean;
   }
 ) {
   let nextIndex = prevIndex;
 
   if (event.key === ARROW_UP) {
+    stop && stopEvent(event);
+
     if (prevIndex === -1) {
       nextIndex = maxIndex;
     } else {
@@ -120,6 +125,8 @@ export function getGridNavigatedIndex(
   }
 
   if (event.key === ARROW_DOWN) {
+    stop && stopEvent(event);
+
     if (prevIndex === -1) {
       nextIndex = minIndex;
     } else {
@@ -148,6 +155,8 @@ export function getGridNavigatedIndex(
     const prevRow = floor(prevIndex / cols);
 
     if (event.key === ARROW_RIGHT) {
+      stop && stopEvent(event);
+
       if (prevIndex % cols !== cols - 1) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,
@@ -173,6 +182,8 @@ export function getGridNavigatedIndex(
     }
 
     if (event.key === ARROW_LEFT) {
+      stop && stopEvent(event);
+
       if (prevIndex % cols !== 0) {
         nextIndex = findNonDisabledIndex(elementsRef, {
           startingIndex: prevIndex,

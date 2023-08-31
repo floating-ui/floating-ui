@@ -487,6 +487,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           minIndex,
           maxIndex,
           prevIndex: indexRef.current,
+          stopEvent: true,
         });
 
         onNavigate(indexRef.current);
