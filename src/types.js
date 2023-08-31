@@ -134,11 +134,11 @@ export type ModifierArguments<Options: Obj> = {
 };
 export type Modifier<Name, Options: Obj> = {|
   name: Name,
-  enabled: boolean,
-  phase: ModifierPhases,
+  enabled?: boolean,
+  phase?: ModifierPhases,
   requires?: Array<string>,
   requiresIfExists?: Array<string>,
-  fn: (ModifierArguments<Options>) => State | void,
+  fn?: (ModifierArguments<Options>) => State | void,
   effect?: (ModifierArguments<Options>) => (() => void) | void,
   options?: $Shape<Options>,
   data?: Obj,
