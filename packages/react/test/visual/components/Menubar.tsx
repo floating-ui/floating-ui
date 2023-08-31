@@ -17,7 +17,10 @@ export function Main() {
                 <MenuItem label=".png" />
                 <MenuItem label=".gif" />
                 <Menu label="Submenu">
-                  <MenuItem label="new" />
+                  <MenuItem label="Second level" />
+                  <Menu label="Open third level">
+                    <MenuItem label="Third level" />
+                  </Menu>
                 </Menu>
               </Menu>
             }

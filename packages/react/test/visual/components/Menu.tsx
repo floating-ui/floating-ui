@@ -309,8 +309,15 @@ export const MenuItem = React.forwardRef<
           }
         },
         onKeyDown(event) {
+          function closeParents(parent: MenuContextType | null) {
+            parent?.setIsOpen(false);
+            if (parent?.parent) {
+              closeParents(parent.parent);
+            }
+          }
+
           if (event.key === 'ArrowRight') {
-            menu.parent?.setIsOpen(false);
+            closeParents(menu.parent);
           }
         },
       })}
