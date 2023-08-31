@@ -42,8 +42,17 @@ const allKeys = [...horizontalKeys, ...verticalKeys];
 export const Composite = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & CompositeProps
->(function Composite({render, ...props}, forwardedRef) {
-  const {orientation = 'both', loop = true, cols = 1, disabledIndices} = props;
+>(function Composite(
+  {
+    render,
+    orientation = 'both',
+    loop = true,
+    cols = 1,
+    disabledIndices,
+    ...props
+  },
+  forwardedRef
+) {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const elementsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const renderElementProps =
