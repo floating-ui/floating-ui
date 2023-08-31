@@ -15,7 +15,13 @@ import {
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {FloatingList, useListItem} from './FloatingList';
 
-const CompositeContext = React.createContext(0);
+const CompositeContext = React.createContext<{
+  activeIndex: number;
+  setActiveIndex: (index: number) => void;
+}>({
+  activeIndex: 0,
+  setActiveIndex: () => {},
+});
 
 type RenderProp =
   | JSX.Element
@@ -42,6 +48,10 @@ export const Composite = React.forwardRef<
   const elementsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};
+  const contextValue = React.useMemo(
+    () => ({activeIndex, setActiveIndex}),
+    [activeIndex]
+  );
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (!allKeys.includes(event.key)) return;
@@ -140,7 +150,7 @@ export const Composite = React.forwardRef<
   }
 
   return (
-    <CompositeContext.Provider value={activeIndex}>
+    <CompositeContext.Provider value={contextValue}>
       <FloatingList elementsRef={elementsRef}>{jsx}</FloatingList>
     </CompositeContext.Provider>
   );
@@ -153,7 +163,7 @@ export const CompositeItem = React.forwardRef<
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};
 
-  const activeIndex = React.useContext(CompositeContext);
+  const {activeIndex, setActiveIndex} = React.useContext(CompositeContext);
   const {ref, index} = useListItem();
   const mergedRef = useMergeRefs([ref, forwardedRef, renderElementProps.ref]);
 
@@ -163,6 +173,11 @@ export const CompositeItem = React.forwardRef<
     ref: mergedRef,
     tabIndex: activeIndex === index ? 0 : -1,
     'data-active': activeIndex === index ? '' : undefined,
+    onFocus(e: React.FocusEvent<any>) {
+      props.onFocus?.(e);
+      renderElementProps.onFocus?.(e);
+      setActiveIndex(index);
+    },
   };
 
   let jsx = null;
