@@ -176,13 +176,14 @@ export const CompositeItem = React.forwardRef<
   const {activeIndex, setActiveIndex} = React.useContext(CompositeContext);
   const {ref, index} = useListItem();
   const mergedRef = useMergeRefs([ref, forwardedRef, renderElementProps.ref]);
+  const isActive = activeIndex === index;
 
   const computedProps = {
     ...props,
     ...renderElementProps,
     ref: mergedRef,
-    tabIndex: activeIndex === index ? 0 : -1,
-    'data-active': activeIndex === index ? '' : undefined,
+    tabIndex: isActive ? 0 : -1,
+    'data-active': isActive ? '' : undefined,
     onFocus(e: React.FocusEvent<any>) {
       props.onFocus?.(e);
       renderElementProps.onFocus?.(e);
