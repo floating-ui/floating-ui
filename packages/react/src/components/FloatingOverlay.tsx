@@ -34,6 +34,14 @@ export const FloatingOverlay = React.forwardRef<
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
 
+    bodyStyle.overflow = 'hidden';
+
+    if (scrollbarWidth) {
+      bodyStyle[paddingProp] = `${scrollbarWidth}px`;
+    }
+
+    // Only iOS doesn't respect `overflow: hidden` on document.body, and this
+    // technique has fewer side effects.
     if (isIOS) {
       // iOS 12 does not support `visualViewport`.
       const offsetLeft = window.visualViewport?.offsetLeft || 0;
@@ -43,18 +51,9 @@ export const FloatingOverlay = React.forwardRef<
 
       Object.assign(bodyStyle, {
         position: 'fixed',
-        overflow: 'hidden',
         top: `${-(scrollY - Math.floor(offsetTop))}px`,
         left: `${-(scrollX - Math.floor(offsetLeft))}px`,
         right: '0',
-        [paddingProp]: `${scrollbarWidth}px`,
-      });
-    } else {
-      // Only iOS doesn't respect `overflow: hidden` on document.body, and this
-      // technique has fewer side effects.
-      Object.assign(bodyStyle, {
-        overflow: 'hidden',
-        [paddingProp]: `${scrollbarWidth}px`,
       });
     }
 
