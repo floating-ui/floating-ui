@@ -1,5 +1,7 @@
 name: Release Floating UI
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 on:
   workflow_dispatch:
 
@@ -14,10 +16,10 @@ jobs:
       - uses: ./.github/actions/functional
 
   release:
+    name: Release
     runs-on: ubuntu-latest
-    needs: test
     steps:
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
       - uses: ./.github/actions/setup
       - name: Publish to npm
         id: changesets
