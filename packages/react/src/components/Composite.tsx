@@ -47,8 +47,8 @@ interface CompositeProps {
   disabledIndices?: number[];
 }
 
-const horizontalKeys = ['ArrowLeft', 'ArrowRight'];
-const verticalKeys = ['ArrowUp', 'ArrowDown'];
+const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
+const verticalKeys = [ARROW_UP, ARROW_DOWN];
 const allKeys = [...horizontalKeys, ...verticalKeys];
 
 export const Composite = React.forwardRef<
