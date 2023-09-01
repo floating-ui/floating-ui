@@ -102,6 +102,12 @@ export const Composite = React.forwardRef<
       both: [ARROW_LEFT, ARROW_UP],
     }[orientation];
 
+    const preventedKeys = {
+      horizontal: horizontalKeys,
+      vertical: verticalKeys,
+      both: allKeys,
+    }[orientation];
+
     if (
       nextIndex === activeIndex &&
       [...toEndKeys, ...toStartKeys].includes(event.key)
@@ -125,7 +131,7 @@ export const Composite = React.forwardRef<
     ) {
       event.stopPropagation();
 
-      if (horizontalKeys.includes(event.key)) {
+      if (preventedKeys.includes(event.key)) {
         event.preventDefault();
       }
 
