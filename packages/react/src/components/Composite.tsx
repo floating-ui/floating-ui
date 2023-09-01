@@ -142,6 +142,7 @@ export const Composite = React.forwardRef<
     ...props,
     ...renderElementProps,
     ref: forwardedRef,
+    'aria-orientation': orientation === 'both' ? undefined : orientation,
     onKeyDown(e: React.KeyboardEvent<any>) {
       props.onKeyDown?.(e);
       renderElementProps.onKeyDown?.(e);
