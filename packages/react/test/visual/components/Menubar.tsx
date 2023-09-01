@@ -12,8 +12,11 @@ export function Main() {
       <h1 className="text-5xl font-bold mb-8">Menubar</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Composite ref={compositeRef} role="menubar" orientation="horizontal">
-          <CompositeItem className="focus:bg-gray-200 p-2">File</CompositeItem>
+          <CompositeItem role="menuitem" className="focus:bg-gray-200 p-2">
+            File
+          </CompositeItem>
           <CompositeItem
+            role="menuitem"
             ref={compositeItemRef}
             className="focus:bg-gray-200 p-2 inline-block"
             render={(props) => <div {...props} />}
@@ -21,6 +24,7 @@ export function Main() {
             View
           </CompositeItem>
           <CompositeItem
+            role="menuitem"
             className="focus:bg-gray-200 p-2"
             render={
               <Menu label="Edit">
@@ -37,6 +41,7 @@ export function Main() {
             }
           />
           <CompositeItem
+            role="menuitem"
             className="focus:bg-gray-200 p-2"
             render={
               <select>
