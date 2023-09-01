@@ -1,0 +1,113 @@
+# Composite
+
+Creates a single tab stop whose items are navigated by arrow
+keys, which provides list navigation outside of floating element
+contexts.
+
+A menubar is an example of a composite.
+
+## Usage
+
+```js
+import {Composite, CompositeItem} from '@floating-ui/react';
+```
+
+```js
+<Composite>
+  <CompositeItem>Item 1</CompositeItem>
+  <CompositeItem>Item 2</CompositeItem>
+  <CompositeItem>Item 3</CompositeItem>
+</Composite>
+```
+
+The `render{:.keyword}` prop can be used to customize the
+rendering of the composite components. Both `Composite` and
+`CompositeItem` accept the prop:
+
+```js
+<CompositeItem
+  render={
+    <select>
+      <option />
+      <option />
+    </select>
+  }
+/>
+```
+
+Or a function that returns one to customize how the HTML props
+are spread/passed:
+
+```js
+<CompositeItem
+  render={(htmlProps) => (
+    <select {...htmlProps}>
+      <option />
+      <option />
+    </select>
+  )}
+/>
+```
+
+## Props
+
+```js
+interface Props {
+  render?: RenderProp;
+  orientation?: 'horizontal' | 'vertical' | 'both';
+  loop?: boolean;
+  cols?: number;
+  disabledIndices?: number[];
+}
+```
+
+### render
+
+default: `<div />{:js}`
+
+Determines the element to render.
+
+```js
+<Composite render={<button />} />
+```
+
+### orientation
+
+default: `'both'{:js}`
+
+Determines the orientation of the composite.
+
+```js
+<Composite orientation="horizontal" />
+```
+
+### loop
+
+default: `true{:js}`
+
+Determines whether the composite should loop around when
+navigating past the first or last item.
+
+```js
+<Composite loop={false} />
+```
+
+### cols
+
+default: `1{:js}`
+
+Determines the number of columns there are in the composite (i.e.
+it's a grid).
+
+```js
+<Composite cols={3} />
+```
+
+### disabledIndices
+
+Determines which items are disabled. The `disabled{:.keyword}` or
+`aria-disabled{:.keyword}` attributes are used by default.
+
+```js
+<Composite disabledIndices={[1]} />
+```

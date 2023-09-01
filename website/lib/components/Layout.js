@@ -23,6 +23,7 @@ import Logo from '../../assets/logo.svg';
 import Arrow from '../../public/icons/arrow.svg';
 import AutoPlacement from '../../public/icons/autoPlacement.svg';
 import AutoUpdate from '../../public/icons/autoUpdate.svg';
+import Composite from '../../public/icons/Composite.svg';
 import ComputePosition from '../../public/icons/computePosition.svg';
 import DetectOverflow from '../../public/icons/detectOverflow.svg';
 import Flip from '../../public/icons/flip.svg';
@@ -282,6 +283,12 @@ const interactions = [
     icon: FloatingDelayGroup,
     depth: 1,
     mono: true,
+  },
+  {
+    url: '/docs/Composite',
+    title: 'Composite',
+    icon: Composite,
+    depth: 1,
   },
   {
     url: '/docs/inner',
