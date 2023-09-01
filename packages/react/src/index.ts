@@ -1,3 +1,4 @@
+export {Composite, CompositeItem} from './components/Composite';
 export {FloatingArrow} from './components/FloatingArrow';
 export {
   FloatingDelayGroup,
