@@ -30,9 +30,14 @@ export const FloatingOverlay = React.forwardRef<
       Math.round(document.documentElement.getBoundingClientRect().left) +
       document.documentElement.scrollLeft;
     const paddingProp = scrollbarX ? 'paddingLeft' : 'paddingRight';
-
     const scrollbarWidth =
       window.innerWidth - document.documentElement.clientWidth;
+    const scrollX = bodyStyle.left
+      ? parseFloat(bodyStyle.left)
+      : window.pageXOffset;
+    const scrollY = bodyStyle.top
+      ? parseFloat(bodyStyle.top)
+      : window.pageYOffset;
 
     bodyStyle.overflow = 'hidden';
 
@@ -46,8 +51,6 @@ export const FloatingOverlay = React.forwardRef<
       // iOS 12 does not support `visualViewport`.
       const offsetLeft = window.visualViewport?.offsetLeft || 0;
       const offsetTop = window.visualViewport?.offsetTop || 0;
-      const scrollX = window.pageXOffset;
-      const scrollY = window.pageYOffset;
 
       Object.assign(bodyStyle, {
         position: 'fixed',
