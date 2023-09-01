@@ -1,6 +1,5 @@
 {
   "name": "website",
-  "@rollingversions/ignore": true,
   "private": true,
   "version": "1.0.1",
   "description": "",
