@@ -1,15 +1,7 @@
 {
   "name": "@floating-ui/monorepo",
-  "@rollingversions/ignore": true,
   "private": true,
   "version": "0.0.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      0,
-      0
-    ]
-  },
   "description": "Floating UI monorepo",
   "workspaces": [
     "./packages/*"
@@ -43,6 +35,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-typescript": "^7.22.5",
+    "@changesets/cli": "^2.26.2",
     "@playwright/test": "^1.35.1",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.2",
