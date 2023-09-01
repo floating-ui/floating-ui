@@ -1,8 +1,7 @@
 name: Release Floating UI
 
 on:
-  repository_dispatch:
-    types: [rollingversions_publish_approved]
+  workflow_dispatch:
 
 jobs:
   test:
