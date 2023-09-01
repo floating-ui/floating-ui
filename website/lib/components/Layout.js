@@ -677,6 +677,7 @@ export default function Layout({children, className}) {
     [
       'Inner',
       'Custom Hooks',
+      'Composite',
       'Tooltip',
       'Popover',
       'Dialog',
