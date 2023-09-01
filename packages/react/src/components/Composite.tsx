@@ -15,6 +15,18 @@ import {
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {FloatingList, useListItem} from './FloatingList';
 
+function renderJsx(
+  render: RenderProp | undefined,
+  computedProps: React.HTMLAttributes<HTMLElement>
+) {
+  if (typeof render === 'function') {
+    return render(computedProps);
+  } else if (render) {
+    return React.cloneElement(render, computedProps);
+  }
+  return <div {...computedProps} />;
+}
+
 const CompositeContext = React.createContext<{
   activeIndex: number;
   setActiveIndex: (index: number) => void;
@@ -62,7 +74,7 @@ export const Composite = React.forwardRef<
     [activeIndex]
   );
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
     if (!allKeys.includes(event.key)) return;
 
     const minIndex = getMinIndex(elementsRef, disabledIndices);
@@ -144,30 +156,23 @@ export const Composite = React.forwardRef<
     }
   }
 
-  const computedProps = {
+  const computedProps: React.HTMLAttributes<HTMLElement> = {
     ...props,
     ...renderElementProps,
     ref: forwardedRef,
     'aria-orientation': orientation === 'both' ? undefined : orientation,
-    onKeyDown(e: React.KeyboardEvent<any>) {
+    onKeyDown(e) {
       props.onKeyDown?.(e);
       renderElementProps.onKeyDown?.(e);
       handleKeyDown(e);
     },
   };
 
-  let jsx = null;
-  if (typeof render === 'function') {
-    jsx = render(computedProps);
-  } else if (render) {
-    jsx = React.cloneElement(render, computedProps);
-  } else {
-    jsx = <span {...computedProps} />;
-  }
-
   return (
     <CompositeContext.Provider value={contextValue}>
-      <FloatingList elementsRef={elementsRef}>{jsx}</FloatingList>
+      <FloatingList elementsRef={elementsRef}>
+        {renderJsx(render, computedProps)}
+      </FloatingList>
     </CompositeContext.Provider>
   );
 });
@@ -184,27 +189,18 @@ export const CompositeItem = React.forwardRef<
   const mergedRef = useMergeRefs([ref, forwardedRef, renderElementProps.ref]);
   const isActive = activeIndex === index;
 
-  const computedProps = {
+  const computedProps: React.HTMLAttributes<HTMLElement> = {
     ...props,
     ...renderElementProps,
     ref: mergedRef,
     tabIndex: isActive ? 0 : -1,
     'data-active': isActive ? '' : undefined,
-    onFocus(e: React.FocusEvent<any>) {
+    onFocus(e) {
       props.onFocus?.(e);
       renderElementProps.onFocus?.(e);
       setActiveIndex(index);
     },
   };
 
-  let jsx = null;
-  if (typeof render === 'function') {
-    jsx = render(computedProps);
-  } else if (render) {
-    jsx = React.cloneElement(render, computedProps);
-  } else {
-    jsx = <span {...computedProps} />;
-  }
-
-  return jsx;
+  return renderJsx(render, computedProps);
 });
