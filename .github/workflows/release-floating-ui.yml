@@ -19,7 +19,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/setup
       - name: Publish to npm
         id: changesets
