@@ -73,6 +73,7 @@ export const Composite = React.forwardRef<
     () => ({activeIndex, setActiveIndex}),
     [activeIndex]
   );
+  const isGrid = cols > 1;
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
     if (!allKeys.includes(event.key)) return;
@@ -83,8 +84,7 @@ export const Composite = React.forwardRef<
 
     let nextIndex = activeIndex;
 
-    // Grid navigation.
-    if (cols > 1) {
+    if (isGrid) {
       nextIndex = getGridNavigatedIndex(elementsRef, {
         event,
         orientation,
@@ -95,11 +95,6 @@ export const Composite = React.forwardRef<
         maxIndex,
         prevIndex,
       });
-
-      if (orientation === 'both') {
-        setActiveIndex(nextIndex);
-        return;
-      }
     }
 
     const toEndKeys = {
@@ -114,11 +109,13 @@ export const Composite = React.forwardRef<
       both: [ARROW_LEFT, ARROW_UP],
     }[orientation];
 
-    const preventedKeys = {
-      horizontal: horizontalKeys,
-      vertical: verticalKeys,
-      both: allKeys,
-    }[orientation];
+    const preventedKeys = isGrid
+      ? allKeys
+      : {
+          horizontal: horizontalKeys,
+          vertical: verticalKeys,
+          both: allKeys,
+        }[orientation];
 
     if (
       nextIndex === activeIndex &&

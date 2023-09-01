@@ -11,7 +11,29 @@ export function Main() {
     <>
       <h1 className="text-5xl font-bold mb-8">Menubar</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Composite ref={compositeRef} role="menubar" orientation="horizontal">
+        <Composite
+          className="grid grid-cols-3"
+          cols={3}
+          orientation="horizontal"
+        >
+          {[...Array(9)].map((_, i) => (
+            <CompositeItem
+              key={i}
+              role="menuitem"
+              className="focus:bg-gray-200 p-2"
+            >
+              Item {i + 1}
+            </CompositeItem>
+          ))}
+        </Composite>
+      </div>
+      <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
+        <Composite
+          className="flex"
+          ref={compositeRef}
+          role="menubar"
+          orientation="horizontal"
+        >
           <CompositeItem role="menuitem" className="focus:bg-gray-200 p-2">
             File
           </CompositeItem>
