@@ -25,7 +25,7 @@ const CompositeContext = React.createContext<{
 
 type RenderProp =
   | JSX.Element
-  | ((props: React.HTMLProps<HTMLElement>) => JSX.Element);
+  | ((props: React.HTMLAttributes<HTMLElement>) => JSX.Element);
 
 interface CompositeProps {
   render?: RenderProp;
@@ -40,8 +40,8 @@ const verticalKeys = ['ArrowUp', 'ArrowDown'];
 const allKeys = [...horizontalKeys, ...verticalKeys];
 
 export const Composite = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLProps<HTMLDivElement> & CompositeProps
+  HTMLElement,
+  React.HTMLProps<HTMLElement> & CompositeProps
 >(function Composite(
   {
     render,
@@ -173,7 +173,7 @@ export const Composite = React.forwardRef<
 });
 
 export const CompositeItem = React.forwardRef<
-  HTMLDivElement,
+  HTMLElement,
   React.HTMLProps<HTMLElement> & {render?: RenderProp}
 >(function CompositeItem({render, ...props}, forwardedRef) {
   const renderElementProps =

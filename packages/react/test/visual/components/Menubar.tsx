@@ -1,14 +1,25 @@
 import {Composite, CompositeItem} from '@floating-ui/react';
+import {useRef} from 'react';
 
 import {Menu, MenuItem} from './Menu';
 
 export function Main() {
+  const compositeRef = useRef<HTMLDivElement>(null);
+  const compositeItemRef = useRef<HTMLDivElement>(null);
+
   return (
     <>
       <h1 className="text-5xl font-bold mb-8">Menubar</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
-        <Composite role="menubar" orientation="horizontal">
+        <Composite ref={compositeRef} role="menubar" orientation="horizontal">
           <CompositeItem className="focus:bg-gray-200 p-2">File</CompositeItem>
+          <CompositeItem
+            ref={compositeItemRef}
+            className="focus:bg-gray-200 p-2 inline-block"
+            render={(props) => <div {...props} />}
+          >
+            View
+          </CompositeItem>
           <CompositeItem
             className="focus:bg-gray-200 p-2"
             render={
