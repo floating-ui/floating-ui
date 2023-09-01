@@ -15,7 +15,8 @@
     "build:typescript": "tsc --project .config/tsconfig.json",
     "clean": "find packages -type f \\( -name '*.d.ts' -o -name '*.d.mts' \\) ! -path '*/_*.d.ts' -exec rm -f {} + && rm -rf packages/**/dist",
     "lint-packages": "publint packages/core && publint packages/dom && publint packages/react && publint packages/react-dom && publint packages/utils && publint packages/vue",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "release": "npm run build && npm run build:typescript && npm run lint-packages && npx changeset version && npx changeset publish"
   },
   "author": "",
   "license": "MIT",
