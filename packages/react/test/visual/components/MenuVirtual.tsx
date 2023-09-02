@@ -9,7 +9,6 @@ import {
   offset,
   safePolygon,
   shift,
-  useClick,
   useDismiss,
   useFloating,
   useFloatingNodeId,
@@ -361,7 +360,7 @@ export const Menu = React.forwardRef<
 export const Main = () => {
   return (
     <>
-      <h1 className="text-5xl font-bold mb-8">Menu</h1>
+      <h1 className="text-5xl font-bold mb-8">Menu Virtual</h1>
       <div className="grid place-items-center border border-slate-400 rounded lg:w-[40rem] h-[20rem] mb-4">
         <Menu label="Edit">
           <MenuItem label="Undo" onClick={() => console.log('Undo')} />

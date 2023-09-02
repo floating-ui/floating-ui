@@ -646,56 +646,57 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             (nested ? isCrossOpenKey : isMainKey) ||
             event.key === 'Enter' ||
             event.key.trim() === '';
-          const rootNode = tree?.nodesRef.current.find(
-            (node) => node.parentId == null
-          );
-
-          const deepestNode =
-            tree && rootNode
-              ? getDeepestNode(tree.nodesRef.current, rootNode.id)
-              : null;
-
-          if (virtual && isArrowKey) {
-            const eventObject = new KeyboardEvent('keydown', {
-              key: event.key,
-              bubbles: true,
-            });
-
-            if (isCrossOpenKey || isCrossCloseKey) {
-              const isCurrentTarget =
-                deepestNode?.context?.elements.domReference ===
-                event.currentTarget;
-              const dispatchItem =
-                isCrossCloseKey && !isCurrentTarget
-                  ? deepestNode?.context?.elements.domReference
-                  : isCrossOpenKey
-                  ? activeItem
-                  : null;
-
-              if (dispatchItem) {
-                stopEvent(event);
-                dispatchItem.dispatchEvent(eventObject);
-                setVirtualId(undefined);
-              }
-            }
-
-            if (isMainKey && deepestNode && deepestNode.context) {
-              if (
-                deepestNode.context.open &&
-                deepestNode.parentId &&
-                event.currentTarget !==
-                  deepestNode.context.elements.domReference
-              ) {
-                stopEvent(event);
-                deepestNode.context.elements.domReference?.dispatchEvent(
-                  eventObject
-                );
-                return;
-              }
-            }
-          }
 
           if (virtual && open) {
+            const rootNode = tree?.nodesRef.current.find(
+              (node) => node.parentId == null
+            );
+
+            const deepestNode =
+              tree && rootNode
+                ? getDeepestNode(tree.nodesRef.current, rootNode.id)
+                : null;
+
+            if (isArrowKey && deepestNode && virtualItemRef) {
+              const eventObject = new KeyboardEvent('keydown', {
+                key: event.key,
+                bubbles: true,
+              });
+
+              if (isCrossOpenKey || isCrossCloseKey) {
+                const isCurrentTarget =
+                  deepestNode.context?.elements.domReference ===
+                  event.currentTarget;
+                const dispatchItem =
+                  isCrossCloseKey && !isCurrentTarget
+                    ? deepestNode.context?.elements.domReference
+                    : isCrossOpenKey
+                    ? activeItem
+                    : null;
+
+                if (dispatchItem) {
+                  stopEvent(event);
+                  dispatchItem.dispatchEvent(eventObject);
+                  setVirtualId(undefined);
+                }
+              }
+
+              if (isMainKey && deepestNode.context) {
+                if (
+                  deepestNode.context.open &&
+                  deepestNode.parentId &&
+                  event.currentTarget !==
+                    deepestNode.context.elements.domReference
+                ) {
+                  stopEvent(event);
+                  deepestNode.context.elements.domReference?.dispatchEvent(
+                    eventObject
+                  );
+                  return;
+                }
+              }
+            }
+
             return onKeyDown(event);
           }
 
@@ -786,5 +787,6 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     item,
     tree,
+    virtualItemRef,
   ]);
 }
