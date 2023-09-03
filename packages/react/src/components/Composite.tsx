@@ -121,9 +121,13 @@ export const Composite = React.forwardRef<
       nextIndex === activeIndex &&
       [...toEndKeys, ...toStartKeys].includes(event.key)
     ) {
-      if (nextIndex === maxIndex && toEndKeys.includes(event.key)) {
+      if (loop && nextIndex === maxIndex && toEndKeys.includes(event.key)) {
         nextIndex = minIndex;
-      } else if (nextIndex === minIndex && toStartKeys.includes(event.key)) {
+      } else if (
+        loop &&
+        nextIndex === minIndex &&
+        toStartKeys.includes(event.key)
+      ) {
         nextIndex = maxIndex;
       } else {
         nextIndex = findNonDisabledIndex(elementsRef, {
