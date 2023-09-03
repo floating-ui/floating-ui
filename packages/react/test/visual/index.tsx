@@ -18,6 +18,7 @@ import {Main as EmojiPicker} from './components/EmojiPicker';
 import {Main as MacSelect} from './components/MacSelect';
 import {Main as Menu} from './components/Menu';
 import {Main as Menubar} from './components/Menubar';
+import {Main as MenuVirtual} from './components/MenuVirtual';
 import {Main as Navigation} from './components/Navigation';
 import {New} from './components/New';
 import {Main as Popover} from './components/Popover';
@@ -36,6 +37,7 @@ const ROUTES = [
   {path: 'drawer', component: Drawer},
   {path: 'arrow', component: Arrow},
   {path: 'menubar', component: Menubar},
+  {path: 'menu-virtual', component: MenuVirtual},
 ];
 
 function App() {

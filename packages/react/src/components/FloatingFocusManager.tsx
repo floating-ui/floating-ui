@@ -446,7 +446,11 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   useLayoutEffect(() => {
     if (disabled) return;
 
-    if (floating && typeof MutationObserver === 'function') {
+    if (
+      floating &&
+      typeof MutationObserver === 'function' &&
+      !ignoreInitialFocus
+    ) {
       const handleMutation = () => {
         const tabIndex = floating.getAttribute('tabindex');
         if (
@@ -475,7 +479,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         observer.disconnect();
       };
     }
-  }, [disabled, floating, refs, orderRef, getTabbableContent]);
+  }, [
+    disabled,
+    floating,
+    refs,
+    orderRef,
+    getTabbableContent,
+    ignoreInitialFocus,
+  ]);
 
   function renderDismissButton(location: 'start' | 'end') {
     if (disabled || !visuallyHiddenDismiss || !modal) {

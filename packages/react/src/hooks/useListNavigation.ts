@@ -29,6 +29,7 @@ import {
   isIndexOutOfBounds,
 } from '../utils/composite';
 import {enqueueFocus} from '../utils/enqueueFocus';
+import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
@@ -111,6 +112,7 @@ export interface UseListNavigationProps {
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
   scrollItemIntoView?: boolean | ScrollIntoViewOptions;
+  virtualItemRef?: React.MutableRefObject<HTMLElement | null>;
 }
 
 /**
@@ -146,6 +148,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     orientation = 'vertical',
     cols = 1,
     scrollItemIntoView = true,
+    virtualItemRef,
   } = props;
 
   if (__DEV__) {
@@ -198,6 +201,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
+  const [virtualId, setVirtualId] = React.useState<string | undefined>();
 
   const focusItem = useEffectEvent(
     (
@@ -211,6 +215,10 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       if (virtual) {
         setActiveId(item.id);
+        tree?.events.emit('virtualfocus', item);
+        if (virtualItemRef) {
+          virtualItemRef.current = item;
+        }
       } else {
         enqueueFocus(item, {
           preventScroll: true,
@@ -358,25 +366,46 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
   useLayoutEffect(() => {
-    if (!enabled) {
+    if (
+      !enabled ||
+      floating ||
+      !tree ||
+      virtual ||
+      !previousMountedRef.current
+    ) {
       return;
     }
 
-    if (previousMountedRef.current && !floating && tree) {
-      const nodes = tree.nodesRef.current;
-      const parent = nodes.find((node) => node.id === parentId)?.context
-        ?.elements.floating;
-      const activeEl = activeElement(getDocument(floating));
-      const treeContainsActiveEl = nodes.some(
-        (node) =>
-          node.context && contains(node.context.elements.floating, activeEl)
-      );
+    const nodes = tree.nodesRef.current;
+    const parent = nodes.find((node) => node.id === parentId)?.context?.elements
+      .floating;
+    const activeEl = activeElement(getDocument(floating));
+    const treeContainsActiveEl = nodes.some(
+      (node) =>
+        node.context && contains(node.context.elements.floating, activeEl)
+    );
 
-      if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
-        parent.focus({preventScroll: true});
+    if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
+      parent.focus({preventScroll: true});
+    }
+  }, [enabled, floating, tree, parentId, virtual]);
+
+  useLayoutEffect(() => {
+    if (!enabled || !tree || !virtual || parentId) return;
+
+    function handleVirtualFocus(item: HTMLElement) {
+      setVirtualId(item.id);
+
+      if (virtualItemRef) {
+        virtualItemRef.current = item;
       }
     }
-  }, [enabled, floating, tree, parentId]);
+
+    tree.events.on('virtualfocus', handleVirtualFocus);
+    return () => {
+      tree.events.off('virtualfocus', handleVirtualFocus);
+    };
+  }, [enabled, tree, virtual, parentId, virtualItemRef]);
 
   useLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
@@ -453,7 +482,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         stopEvent(event);
         onOpenChange(false, event.nativeEvent);
 
-        if (isHTMLElement(domReference)) {
+        if (isHTMLElement(domReference) && !virtual) {
           domReference.focus();
         }
 
@@ -590,17 +619,84 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     const ariaActiveDescendantProp = virtual &&
       open &&
       hasActiveIndex && {
-        'aria-activedescendant': activeId,
+        'aria-activedescendant': virtualId || activeId,
       };
+
+    const activeItem = listRef.current.find((item) => item?.id === activeId);
 
     return {
       reference: {
         ...ariaActiveDescendantProp,
         onKeyDown(event) {
           isPointerModalityRef.current = false;
+
           const isArrowKey = event.key.indexOf('Arrow') === 0;
+          const isCrossOpenKey = isCrossOrientationOpenKey(
+            event.key,
+            orientation,
+            rtl
+          );
+          const isCrossCloseKey = isCrossOrientationCloseKey(
+            event.key,
+            orientation,
+            rtl
+          );
+          const isMainKey = isMainOrientationKey(event.key, orientation);
+          const isNavigationKey =
+            (nested ? isCrossOpenKey : isMainKey) ||
+            event.key === 'Enter' ||
+            event.key.trim() === '';
 
           if (virtual && open) {
+            const rootNode = tree?.nodesRef.current.find(
+              (node) => node.parentId == null
+            );
+
+            const deepestNode =
+              tree && rootNode
+                ? getDeepestNode(tree.nodesRef.current, rootNode.id)
+                : null;
+
+            if (isArrowKey && deepestNode && virtualItemRef) {
+              const eventObject = new KeyboardEvent('keydown', {
+                key: event.key,
+                bubbles: true,
+              });
+
+              if (isCrossOpenKey || isCrossCloseKey) {
+                const isCurrentTarget =
+                  deepestNode.context?.elements.domReference ===
+                  event.currentTarget;
+                const dispatchItem =
+                  isCrossCloseKey && !isCurrentTarget
+                    ? deepestNode.context?.elements.domReference
+                    : isCrossOpenKey
+                    ? activeItem
+                    : null;
+
+                if (dispatchItem) {
+                  stopEvent(event);
+                  dispatchItem.dispatchEvent(eventObject);
+                  setVirtualId(undefined);
+                }
+              }
+
+              if (isMainKey && deepestNode.context) {
+                if (
+                  deepestNode.context.open &&
+                  deepestNode.parentId &&
+                  event.currentTarget !==
+                    deepestNode.context.elements.domReference
+                ) {
+                  stopEvent(event);
+                  deepestNode.context.elements.domReference?.dispatchEvent(
+                    eventObject
+                  );
+                  return;
+                }
+              }
+            }
+
             return onKeyDown(event);
           }
 
@@ -610,23 +706,12 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          const isMainKey = isMainOrientationKey(event.key, orientation);
-          const isCrossKey = isCrossOrientationOpenKey(
-            event.key,
-            orientation,
-            rtl
-          );
-          const isNavigationKey =
-            (nested ? isCrossKey : isMainKey) ||
-            event.key === 'Enter' ||
-            event.key.trim() === '';
-
           if (isNavigationKey) {
             keyRef.current = nested && isMainKey ? null : event.key;
           }
 
           if (nested) {
-            if (isCrossKey) {
+            if (isCrossOpenKey) {
               stopEvent(event);
 
               if (open) {
@@ -681,6 +766,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     domReference,
     refs,
     activeId,
+    virtualId,
     disabledIndicesRef,
     latestOpenRef,
     listRef,
@@ -700,5 +786,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     onNavigate,
     onOpenChange,
     item,
+    tree,
+    virtualItemRef,
   ]);
 }
