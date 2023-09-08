@@ -65,3 +65,20 @@ test('does treat display: inline-block elements as overflow ancestors', () => {
     window,
   ]);
 });
+
+test('returns overflow ancestors in iframe parents', () => {
+  const scroll = document.createElement('div');
+  scroll.style.overflow = 'scroll';
+  const iframe = document.createElement('iframe');
+  const test = document.createElement('div');
+
+  document.body.append(scroll);
+  scroll.append(iframe);
+  iframe.contentDocument!.body.append(test);
+
+  expect(getOverflowAncestors(test)).toEqual([
+    iframe.contentWindow,
+    scroll,
+    window,
+  ]);
+});
