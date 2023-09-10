@@ -74,7 +74,8 @@ test('returns overflow ancestors in iframe parents', () => {
 
   document.body.append(scroll);
   scroll.append(iframe);
-  iframe.contentDocument!.body.append(test);
+  expect(iframe.contentDocument).not.toBeNull();
+  iframe.contentDocument?.body.append(test);
 
   expect(getOverflowAncestors(test)).toEqual([
     iframe.contentWindow,
