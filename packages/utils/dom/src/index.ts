@@ -168,7 +168,8 @@ export function getOverflowAncestors(
     return list.concat(
       win,
       win.visualViewport || [],
-      isOverflowElement(scrollableAncestor) ? scrollableAncestor : []
+      isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
+      win.frameElement ? getOverflowAncestors(win.frameElement) : [],
     );
   }
 
