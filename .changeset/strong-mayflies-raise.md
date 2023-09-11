@@ -2,4 +2,4 @@
 '@floating-ui/utils': patch
 ---
 
-fix: traverse into iframe parents when finding overflow ancestors
+fix(dom): traverse into iframe parents when finding overflow ancestors
