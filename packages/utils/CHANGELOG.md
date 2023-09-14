@@ -1,5 +1,12 @@
 # @floating-ui/utils
 
+## 0.1.3
+
+### Patch Changes
+
+- a6c72f50: fix(getOverflowAncestors): avoid traversing into iframes for
+  clipping detection
+
 ## 0.1.2
 
 ### Patch Changes

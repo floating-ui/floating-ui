@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/dom",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Floating UI for the web",
   "publishConfig": {
     "access": "public"
@@ -50,8 +50,8 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "^1.4.1",
-    "@floating-ui/utils": "^0.1.1"
+    "@floating-ui/core": "^1.4.2",
+    "@floating-ui/utils": "^0.1.3"
   },
   "devDependencies": {
     "@types/react": "^18.2.14",
