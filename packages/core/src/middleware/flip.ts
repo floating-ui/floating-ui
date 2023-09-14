@@ -90,6 +90,13 @@ export const flip = (
       ...detectOverflowOptions
     } = evaluate(options, state);
 
+    // If the arrow data is available, it's caused a reset, so we should skip
+    // any logic now since `flip()` has already done its work.
+    // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
+    if (middlewareData.arrow) {
+      return {};
+    }
+
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
     const rtl = await platform.isRTL?.(elements.floating);
