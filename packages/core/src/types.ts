@@ -141,10 +141,10 @@ export interface MiddlewareReturn extends Partial<Coords> {
     [key: string]: any;
   };
   reset?:
-    | true
+    | boolean
     | {
         placement?: Placement;
-        rects?: true | ElementRects;
+        rects?: boolean | ElementRects;
       };
 }
 
