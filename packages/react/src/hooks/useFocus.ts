@@ -124,6 +124,8 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           blockFocusRef.current = false;
           const relatedTarget = event.relatedTarget;
 
+          if (!relatedTarget) return;
+
           // Hit the non-modal focus management portal guard. Focus will be
           // moved into the floating element immediately after.
           const movedToFocusGuard =
