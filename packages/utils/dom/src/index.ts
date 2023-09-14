@@ -158,7 +158,8 @@ export function getNearestOverflowAncestor(node: Node): HTMLElement {
 
 export function getOverflowAncestors(
   node: Node,
-  list: OverflowAncestors = []
+  list: OverflowAncestors = [],
+  traverseIframes = true
 ): OverflowAncestors {
   const scrollableAncestor = getNearestOverflowAncestor(node);
   const isBody = scrollableAncestor === node.ownerDocument?.body;
@@ -169,7 +170,9 @@ export function getOverflowAncestors(
       win,
       win.visualViewport || [],
       isOverflowElement(scrollableAncestor) ? scrollableAncestor : [],
-      win.frameElement ? getOverflowAncestors(win.frameElement) : [],
+      win.frameElement && traverseIframes
+        ? getOverflowAncestors(win.frameElement)
+        : []
     );
   }
 

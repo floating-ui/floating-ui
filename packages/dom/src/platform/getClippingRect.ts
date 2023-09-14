@@ -106,7 +106,7 @@ function getClippingElementAncestors(
     return cachedResult;
   }
 
-  let result = getOverflowAncestors(element).filter(
+  let result = getOverflowAncestors(element, [], false).filter(
     (el) => isElement(el) && getNodeName(el) !== 'body'
   ) as Array<Element>;
   let currentContainingBlockComputedStyle: CSSStyleDeclaration | null = null;

@@ -102,7 +102,12 @@ function Inside({scroll}: {scroll: number[]}) {
   return (
     <>
       <h2>Inside</h2>
-      <div className="container" id="inside-container">
+      <div
+        className="container"
+        id="inside-container"
+        // https://github.com/floating-ui/floating-ui/issues/2552
+        style={{overflow: 'hidden'}}
+      >
         <iframe
           ref={setIFrame}
           width={350}
