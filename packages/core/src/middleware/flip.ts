@@ -90,6 +90,12 @@ export const flip = (
       ...detectOverflowOptions
     } = evaluate(options, state);
 
+    // If the arrow data is available, it's caused a reset, so we should skip
+    // any logic now since `flip()` has already done its work.
+    if (middlewareData.arrow) {
+      return {};
+    }
+
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
     const rtl = await platform.isRTL?.(elements.floating);
