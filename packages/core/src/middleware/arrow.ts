@@ -100,15 +100,16 @@ export const arrow = (
         0;
     const alignmentOffset = shouldAddOffset
       ? center < min
-        ? min - center
-        : max - center
+        ? center - min
+        : center - max
       : 0;
 
     return {
-      [axis]: coords[axis] - alignmentOffset,
+      [axis]: coords[axis] + alignmentOffset,
       data: {
         [axis]: offset,
-        centerOffset: center - offset + alignmentOffset,
+        centerOffset: center - offset - alignmentOffset,
+        ...(shouldAddOffset && {alignmentOffset}),
       },
       reset: shouldAddOffset,
     };

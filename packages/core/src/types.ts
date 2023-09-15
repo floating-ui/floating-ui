@@ -70,6 +70,7 @@ export interface MiddlewareData {
   [key: string]: any;
   arrow?: Partial<Coords> & {
     centerOffset: number;
+    alignmentOffset?: number;
   };
   autoPlacement?: {
     index?: number;
