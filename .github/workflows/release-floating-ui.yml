@@ -3,7 +3,8 @@ name: Release Floating UI
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main, next]
 
 jobs:
   test:
