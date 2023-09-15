@@ -1,5 +1,15 @@
 # @floating-ui/core
 
+## 1.5.0
+
+### Minor Changes
+
+- d7e07fba: feat(arrow): add `alignmentOffset` data
+
+### Patch Changes
+
+- fd3c19ac: fix(flip): skip if arrow has performed internal shifting
+
 ## 1.4.2
 
 ### Patch Changes
