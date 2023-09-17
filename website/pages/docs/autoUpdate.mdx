@@ -20,7 +20,7 @@ only ~1ms.
 Only call this function when the floating element is open on the
 screen.
 
-```js /position/
+```js
 import {computePosition, autoUpdate} from '@floating-ui/dom';
 
 // This function will get called repeatedly.
@@ -44,12 +44,6 @@ floating element is removed from the screen.
 // Later, when the element is removed from the screen
 cleanup();
 ```
-
-<Notice title="Browser support">
-Requires a `ResizeObserver{:.class}` by default, which is supported widely by
-all modern browsers. However, depending on your browser  support requirements, you may 
-need to provide a polyfill for this. You can find the support table on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#browser_compatibility).
-</Notice>
 
 ## Options
 
@@ -99,14 +93,15 @@ default: `true{:js}`
 Whether to update the position when either the reference or
 floating elements resized. This uses a `ResizeObserver{:.class}`.
 
-To support old browsers, polyfill the constructor, or disable
-this option and update manually when the elements resize.
-
 ```js
 const cleanup = autoUpdate(referenceEl, floatingEl, update, {
   elementResize: false,
 });
 ```
+
+<Notice type="warning" title="Browser support">
+  To support old browsers, polyfill `ResizeObserver{:.class}`, or update manually when the elements resize.
+</Notice>
 
 ### layoutShift
 
@@ -121,6 +116,10 @@ const cleanup = autoUpdate(referenceEl, floatingEl, update, {
   layoutShift: false,
 });
 ```
+
+<Notice type="warning" title="Browser support">
+  To support old browsers, polyfill `IntersectionObserver{:.class}`, or update manually when the reference element moves.
+</Notice>
 
 ### animationFrame
 

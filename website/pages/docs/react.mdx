@@ -16,9 +16,10 @@ menus, comboboxes, and more.
 
 - **Provide building blocks**: pre-built floating components
   aren't exported, rather the primitives necessary to create
-  different types of them.
+  different types of them. Think of it like a LEGO toolkit.
 - **Flexible and low-level**: at the cost of more code to setup,
-  you get high control and flexibility.
+  you get high control and flexibility to create custom
+  components that can suite a wide range of product needs.
 - **Accessibility is prioritized**: first-class support is
   provided for creating accessible floating elements that work
   with assistive technology (keyboard usage and screen readers).
@@ -692,9 +693,9 @@ return (
 import {useMergeRefs} from '@floating-ui/react';
 ```
 
-Refs can be merged with the [`useMergeRefs`](/docs/useMergeRefs)
-hook, and props can be merged by calling one of the getters
-inside of the other:
+Refs can be merged with the
+[`useMergeRefs`](/docs/react-utils#usemergerefs) hook, and props
+can be merged by calling one of the getters inside of the other:
 
 ```js {9-12}
 const {refs: tooltipRefs} = useFloating();

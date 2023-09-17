@@ -50,9 +50,7 @@ import UseClientPoint from '../../public/icons/useClientPoint.svg';
 import UseDismiss from '../../public/icons/useDismiss.svg';
 import UseFocus from '../../public/icons/useFocus.svg';
 import UseHover from '../../public/icons/useHover.svg';
-import UseId from '../../public/icons/useId.svg';
 import UseListNavigation from '../../public/icons/useListNavigation.svg';
-import UseMergeRefs from '../../public/icons/useMergeRefs.svg';
 import UseRole from '../../public/icons/useRole.svg';
 import UseTransition from '../../public/icons/useTransition.svg';
 import UseTypeahead from '../../public/icons/useTypeahead.svg';
@@ -222,20 +220,6 @@ const interactions = [
     mono: true,
   },
   {
-    url: '/docs/useMergeRefs',
-    title: 'useMergeRefs',
-    icon: UseMergeRefs,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useId',
-    title: 'useId',
-    icon: UseId,
-    depth: 1,
-    mono: true,
-  },
-  {
     url: '/docs/FloatingArrow',
     title: 'FloatingArrow',
     icon: Arrow,
@@ -294,6 +278,12 @@ const interactions = [
     url: '/docs/inner',
     title: 'Inner',
     icon: Inner,
+    depth: 1,
+  },
+  {
+    url: '/docs/react-utils',
+    title: 'React Utils',
+    icon: MagicWand,
     depth: 1,
   },
 ];

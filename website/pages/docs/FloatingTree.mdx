@@ -27,10 +27,15 @@ function App() {
 ```
 
 <Notice>
-  If your floating elements are not portalled, this may not be
-  necessary, however the additional context can help. By always
-  portalling your floating element, you can avoid clipping
-  issues.
+  This is not necessary in all cases, except when there must be
+  explicit communication between parent and child floating elements. 
+  It is necessary for:
+
+- The `bubbles{:.objectKey}` option in the `useDismiss(){:js}`
+  hook
+- [Nested virtual list navigation](/docs/useListNavigation#virtualitemref)
+- Custom communication between parent and child floating elements
+
 </Notice>
 
 ## Usage

@@ -11,6 +11,12 @@ import {useTypeahead} from '@floating-ui/react';
 See [`FloatingList`](/docs/FloatingList) for creating composable
 children API components.
 
+<Notice>
+  This hook should not be used for typeable `<input />{:html}` elements. 
+  It is intended to be used on menu buttons for a dropdown menu or select menu, 
+  rather than a combobox that is searchable.
+</Notice>
+
 ## Usage
 
 This hook is an interaction hook that returns event handler

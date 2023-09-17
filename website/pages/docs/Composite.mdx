@@ -22,7 +22,7 @@ import {Composite, CompositeItem} from '@floating-ui/react';
 
 The `render{:.keyword}` prop can be used to customize the
 rendering of the composite components. Both `Composite` and
-`CompositeItem` accept the prop:
+`CompositeItem` accept JSX element:
 
 ```js
 <CompositeItem
@@ -35,8 +35,16 @@ rendering of the composite components. Both `Composite` and
 />
 ```
 
-Or a function that returns one to customize how the HTML props
-are spread/passed:
+<Notice type="error" title="Important">
+  When rendering custom components, they must be **open for
+  extension**. This means they must [forward the ref to the
+  underlying DOM
+  node](https://react.dev/reference/react/forwardRef), and they
+  must spread all props passed into the component onto the node.
+</Notice>
+
+Or a function that returns an element to customize how the HTML
+props are spread/passed:
 
 ```js
 <CompositeItem
