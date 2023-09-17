@@ -1,5 +1,12 @@
 # @floating-ui/utils
 
+## 0.1.4
+
+### Patch Changes
+
+- 3d8b9c65: fix(getOverflowAncestors): handle traverseIframes correctly when
+  there are clipping ancestors in the inner frame
+
 ## 0.1.3
 
 ### Patch Changes
