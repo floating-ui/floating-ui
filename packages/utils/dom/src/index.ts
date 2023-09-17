@@ -178,6 +178,6 @@ export function getOverflowAncestors(
 
   return list.concat(
     scrollableAncestor,
-    getOverflowAncestors(scrollableAncestor)
+    getOverflowAncestors(scrollableAncestor, [], traverseIframes)
   );
 }
