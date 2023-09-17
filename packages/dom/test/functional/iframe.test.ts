@@ -51,4 +51,15 @@ import {click} from './utils/click';
       await page.locator('#virtual-container').screenshot()
     ).toMatchSnapshot(`virtual-${scroll}.png`);
   });
+
+  test(`[inside-scrollable-parent] ${scroll} correctly positioned on bottom with clipping detection`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/iframe');
+    await click(page, `[data-testid="scroll-${scroll}"]`);
+
+    expect(
+      await page.locator('#inside-scrollable-container').screenshot()
+    ).toMatchSnapshot(`inside-scrollable-${scroll}.png`);
+  });
 });
