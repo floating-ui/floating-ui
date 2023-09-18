@@ -131,4 +131,22 @@ export const MINI_SPONSORS = [
     url: 'https://electricui.com/',
     MemberId: 457288,
   },
+  {
+    logo: '/sponsors/tubidy.svg',
+    label: 'Tubidy',
+    url: 'https://thetubidy.net/',
+    MemberId: 480283,
+  },
+  {
+    logo: '/sponsors/rs24.svg',
+    label: 'Rapelis24',
+    url: 'https://the-repelis24.com/',
+    MemberId: 480284,
+  },
+  {
+    logo: '/sponsors/mobilemall.svg',
+    label: 'Mobilemall',
+    url: 'https://mobilemall.co/',
+    MemberId: 480290,
+  },
 ];

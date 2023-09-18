@@ -9,7 +9,7 @@ import {
 import type {Coords, ElementRects, Placement} from './types';
 
 export function computeCoordsFromPlacement(
-  {reference, floating}: ElementRects,
+  {reference, floating}: ElementRects,
   placement: Placement,
   rtl?: boolean
 ): Coords {
