@@ -158,7 +158,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     const insideReactTree = insideReactTreeRef.current;
     insideReactTreeRef.current = false;
 
-    // When click outside is lazy (i.e. `click` event) to handle dragging.
+    // When click outside is lazy (`click` event), handle dragging.
     // Don't close if:
     // - The click started inside the floating element.
     // - The click ended inside the floating element.
