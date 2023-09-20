@@ -597,3 +597,35 @@ describe('bubbles', () => {
     });
   });
 });
+
+describe('outsidePressEvent click', () => {
+  test('dragging outside the floating element does not close', () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(floatingEl);
+    fireEvent.mouseUp(document.body);
+    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('dragging inside the floating element does not close', () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(document.body);
+    fireEvent.mouseUp(floatingEl);
+    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('dragging outside the floating element then clicking outside closes', async () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(floatingEl);
+    fireEvent.mouseUp(document.body);
+    // A click event will have fired before the proper outside click.
+    fireEvent.click(document.body);
+    fireEvent.click(document.body);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
+  });
+});
