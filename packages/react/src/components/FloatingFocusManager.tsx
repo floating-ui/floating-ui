@@ -74,7 +74,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
-    modal = true,
+    modal: originalModal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
   } = props;
@@ -88,6 +88,19 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     elements: {domReference, floating},
   } = context;
 
+  const ignoreInitialFocus =
+    typeof initialFocus === 'number' && initialFocus < 0;
+  // If the reference is a combobox and is typeable (e.g. input/textarea),
+  // there are different focus semantics. The guards should not be rendered, but
+  // aria-hidden should be applied to all nodes still. Further, the visually
+  // hidden dismiss button should only appear at the end of the list, not the
+  // start.
+  const isUntrappedTypeableCombobox =
+    domReference?.getAttribute('role') === 'combobox' &&
+    isTypeableElement(domReference) &&
+    ignoreInitialFocus;
+  const modal = isUntrappedTypeableCombobox ? false : originalModal;
+
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const guards = supportsInert() ? _guards : true;
 
@@ -98,10 +111,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   const tree = useFloatingTree();
   const portalContext = usePortalContext();
 
-  // Controlled by `useListNavigation`.
-  const ignoreInitialFocus =
-    typeof initialFocus === 'number' && initialFocus < 0;
-
   const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
@@ -109,17 +118,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   const isPointerDownRef = React.useRef(false);
 
   const isInsidePortal = portalContext != null;
-
-  // If the reference is a combobox and is typeable (e.g. input/textarea),
-  // there are different focus semantics. The guards should not be rendered, but
-  // aria-hidden should be applied to all nodes still. Further, the visually
-  // hidden dismiss button should only appear at the end of the list, not the
-  // start.
-  const isUntrappedTypeableCombobox =
-    domReference &&
-    domReference.getAttribute('role') === 'combobox' &&
-    isTypeableElement(domReference) &&
-    ignoreInitialFocus;
 
   const getTabbableContent = React.useCallback(
     (container: HTMLElement | null = floating) => {
@@ -297,9 +295,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           : null,
       ].filter((x): x is Element => x != null);
 
-      const cleanup = modal
-        ? markOthers(insideElements, guards, !guards)
-        : markOthers(insideElements);
+      const cleanup =
+        originalModal || isUntrappedTypeableCombobox
+          ? markOthers(insideElements, guards, !guards)
+          : markOthers(insideElements);
 
       return () => {
         cleanup();
@@ -309,7 +308,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     disabled,
     domReference,
     floating,
-    modal,
+    originalModal,
     orderRef,
     portalContext,
     isUntrappedTypeableCombobox,
@@ -444,41 +443,42 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   ]);
 
   useLayoutEffect(() => {
-    if (disabled) return;
-
     if (
-      floating &&
-      typeof MutationObserver === 'function' &&
-      !ignoreInitialFocus
+      disabled ||
+      !floating ||
+      typeof MutationObserver !== 'function' ||
+      ignoreInitialFocus
     ) {
-      const handleMutation = () => {
-        const tabIndex = floating.getAttribute('tabindex');
-        if (
-          orderRef.current.includes('floating') ||
-          (activeElement(getDocument(floating)) !== refs.domReference.current &&
-            getTabbableContent().length === 0)
-        ) {
-          if (tabIndex !== '0') {
-            floating.setAttribute('tabindex', '0');
-          }
-        } else if (tabIndex !== '-1') {
-          floating.setAttribute('tabindex', '-1');
-        }
-      };
-
-      handleMutation();
-      const observer = new MutationObserver(handleMutation);
-
-      observer.observe(floating, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-      });
-
-      return () => {
-        observer.disconnect();
-      };
+      return;
     }
+
+    const handleMutation = () => {
+      const tabIndex = floating.getAttribute('tabindex');
+      if (
+        orderRef.current.includes('floating') ||
+        (activeElement(getDocument(floating)) !== refs.domReference.current &&
+          getTabbableContent().length === 0)
+      ) {
+        if (tabIndex !== '0') {
+          floating.setAttribute('tabindex', '0');
+        }
+      } else if (tabIndex !== '-1') {
+        floating.setAttribute('tabindex', '-1');
+      }
+    };
+
+    handleMutation();
+    const observer = new MutationObserver(handleMutation);
+
+    observer.observe(floating, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
   }, [
     disabled,
     floating,
@@ -505,11 +505,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     );
   }
 
-  const shouldRenderGuards =
-    !disabled &&
-    guards &&
-    !isUntrappedTypeableCombobox &&
-    (isInsidePortal || modal);
+  const shouldRenderGuards = !disabled && guards && (isInsidePortal || modal);
 
   return (
     <>
