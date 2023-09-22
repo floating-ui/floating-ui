@@ -108,6 +108,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       ? outsidePressFn
       : unstable_outsidePress;
   const insideReactTreeRef = React.useRef(false);
+  const endedOrStartedInsideRef = React.useRef(false);
   const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp(bubbles);
 
   const closeOnEscapeKeyDown = useEffectEvent(
@@ -156,6 +157,17 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     // we can only be confident with a positive value.
     const insideReactTree = insideReactTreeRef.current;
     insideReactTreeRef.current = false;
+
+    // When click outside is lazy (`click` event), handle dragging.
+    // Don't close if:
+    // - The click started inside the floating element.
+    // - The click ended inside the floating element.
+    const endedOrStartedInside = endedOrStartedInsideRef.current;
+    endedOrStartedInsideRef.current = false;
+
+    if (outsidePressEvent === 'click' && endedOrStartedInside) {
+      return;
+    }
 
     if (insideReactTree) {
       return;
@@ -366,6 +378,12 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
       floating: {
         onKeyDown: closeOnEscapeKeyDown,
+        onMouseDown() {
+          endedOrStartedInsideRef.current = true;
+        },
+        onMouseUp() {
+          endedOrStartedInsideRef.current = true;
+        },
         [captureHandlerKeys[outsidePressEvent]]: () => {
           insideReactTreeRef.current = true;
         },
