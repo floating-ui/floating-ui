@@ -482,7 +482,7 @@ describe('bubbles', () => {
           useDismiss(popover.context),
         ]);
         const tooltipInteractions = useInteractions([
-          useFocus(tooltip.context),
+          useFocus(tooltip.context, {visibleOnly: false}),
           useDismiss(tooltip.context),
         ]);
 
