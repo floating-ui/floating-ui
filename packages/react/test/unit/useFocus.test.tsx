@@ -39,7 +39,7 @@ function App(props: UseFocusProps & {dismiss?: boolean; hover?: boolean}) {
 }
 
 test('opens on focus', () => {
-  render(<App />);
+  render(<App visibleOnly={false} />);
   const button = screen.getByRole('button');
   fireEvent.focus(button);
   expect(screen.queryByRole('tooltip')).toBeInTheDocument();

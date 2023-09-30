@@ -1,9 +1,9 @@
-import {isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
   getDocument,
-  isEventTargetWithin,
+  isTypeableElement,
 } from '@floating-ui/utils/react';
 import * as React from 'react';
 
@@ -13,7 +13,7 @@ import type {DismissPayload} from './useDismiss';
 
 export interface UseFocusProps {
   enabled?: boolean;
-  keyboardOnly?: boolean;
+  visibleOnly?: boolean;
 }
 
 /**
@@ -28,24 +28,22 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
   const {
     open,
     onOpenChange,
-    dataRef,
     events,
     refs,
     elements: {floating, domReference},
   } = context;
-  const {enabled = true, keyboardOnly = true} = props;
+  const {enabled = true, visibleOnly = true} = props;
 
-  const pointerTypeRef = React.useRef('');
   const blockFocusRef = React.useRef(false);
-  const timeoutRef = React.useRef<any>();
+  const timeoutRef = React.useRef<number>();
+  const keyboardModalityRef = React.useRef(false);
 
   React.useEffect(() => {
     if (!enabled) {
       return;
     }
 
-    const doc = getDocument(floating);
-    const win = doc.defaultView || window;
+    const win = getWindow(domReference);
 
     // If the reference was focused and the user left the tab/window, and the
     // floating element was not open, the focus should be blocked when they
@@ -60,9 +58,15 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
       }
     }
 
+    function onKeyDown() {
+      keyboardModalityRef.current = true;
+    }
+
     win.addEventListener('blur', onBlur);
+    win.addEventListener('keydown', onKeyDown, true);
     return () => {
       win.removeEventListener('blur', onBlur);
+      win.removeEventListener('keydown', onKeyDown, true);
     };
   }, [floating, domReference, open, enabled]);
 
@@ -96,26 +100,27 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
     return {
       reference: {
-        onPointerDown({pointerType}) {
-          pointerTypeRef.current = pointerType;
-          blockFocusRef.current = !!(pointerType && keyboardOnly);
+        onPointerDown() {
+          keyboardModalityRef.current = false;
         },
         onMouseLeave() {
           blockFocusRef.current = false;
         },
         onFocus(event) {
-          if (blockFocusRef.current) {
-            return;
-          }
+          if (blockFocusRef.current) return;
 
-          // Dismiss with click should ignore the subsequent `focus` trigger,
-          // but only if the click originated inside the reference element.
-          if (
-            event.type === 'focus' &&
-            dataRef.current.openEvent?.type === 'mousedown' &&
-            isEventTargetWithin(dataRef.current.openEvent, domReference)
-          ) {
-            return;
+          if (visibleOnly) {
+            try {
+              if (!event.target.matches(':focus-visible')) return;
+            } catch (e) {
+              // Old browsers will throw an error when using `:focus-visible`.
+              if (
+                !keyboardModalityRef.current &&
+                !isTypeableElement(event.target)
+              ) {
+                return;
+              }
+            }
           }
 
           onOpenChange(true, event.nativeEvent);
@@ -134,7 +139,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
             relatedTarget.getAttribute('data-type') === 'outside';
 
           // Wait for the window blur listener to fire.
-          timeoutRef.current = setTimeout(() => {
+          timeoutRef.current = window.setTimeout(() => {
             // When focusing the reference element (e.g. regular click), then
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
@@ -151,5 +156,5 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
         },
       },
     };
-  }, [enabled, keyboardOnly, domReference, refs, dataRef, onOpenChange]);
+  }, [enabled, visibleOnly, domReference, refs, onOpenChange]);
 }

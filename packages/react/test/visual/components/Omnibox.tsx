@@ -125,10 +125,7 @@ export function Main() {
 
   const hasOptions = options.length > 0;
 
-  const focus = useFocus(context, {
-    enabled: hasOptions && isFocusEnabled,
-    keyboardOnly: false,
-  });
+  const focus = useFocus(context, {enabled: hasOptions && isFocusEnabled});
   const dismiss = useDismiss(context);
   const role = useRole(context, {enabled: hasOptions, role: 'listbox'});
   const listNavigation = useListNavigation(context, {
