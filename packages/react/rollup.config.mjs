@@ -7,6 +7,35 @@ import terser from '@rollup/plugin-terser';
 const input = './src/index.ts';
 
 const bundles = [
+  // Utils sub-path
+  {
+    input: './utils/src/index.ts',
+    output: {
+      file: './utils/dist/floating-ui.react.utils.esm.js',
+      format: 'esm',
+    },
+  },
+  {
+    input: './utils/src/index.ts',
+    output: {
+      file: './utils/dist/floating-ui.react.utils.mjs',
+      name: 'FloatingUIReactUtils',
+      format: 'esm',
+    },
+  },
+  {
+    input: './utils/src/index.ts',
+    output: {
+      file: './utils/dist/floating-ui.react.utils.umd.js',
+      name: 'FloatingUIReactUtils',
+      format: 'umd',
+      globals: {
+        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
+      },
+    },
+  },
+
+  // Main
   {
     input,
     output: {
@@ -37,7 +66,7 @@ const bundles = [
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
         '@floating-ui/utils': 'FloatingUIUtils',
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
-        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
+        '@floating-ui/react/utils': 'FloatingUIReactUtils',
       },
     },
   },
@@ -57,7 +86,7 @@ const bundles = [
         '@floating-ui/react-dom': 'FloatingUIReactDOM',
         '@floating-ui/utils': 'FloatingUIUtils',
         '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
-        '@floating-ui/utils/react': 'FloatingUIUtilsInteractions',
+        '@floating-ui/react/utils': 'FloatingUIReactUtils',
       },
     },
   },
@@ -86,7 +115,7 @@ export default bundles.map(({input, output}) => ({
           'tabbable',
           '@floating-ui/utils',
           '@floating-ui/utils/dom',
-          '@floating-ui/utils/react',
+          '@floating-ui/react/utils',
         ]
       : []
   ),

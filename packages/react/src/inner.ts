@@ -1,5 +1,5 @@
+import {getUserAgent} from '@floating-ui/react/utils';
 import {detectOverflow, offset} from '@floating-ui/react-dom';
-import {getUserAgent} from '@floating-ui/utils/react';
 import * as React from 'react';
 import {flushSync} from 'react-dom';
 
