@@ -3,6 +3,7 @@ import {
   activeElement,
   contains,
   getDocument,
+  getTarget,
   isSafari,
   isTypeableElement,
 } from '@floating-ui/utils/react';
@@ -110,19 +111,18 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
         onFocus(event) {
           if (blockFocusRef.current) return;
 
-          if (visibleOnly) {
+          const target = getTarget(event.nativeEvent);
+
+          if (visibleOnly && isElement(target)) {
             try {
               // Safari unreliably matches `:focus-visible` on the reference
               // if focus was outside the page initially - use the fallback
               // instead.
               if (isSafari()) throw Error();
-              if (!event.target.matches(':focus-visible')) return;
+              if (!target.matches(':focus-visible')) return;
             } catch (e) {
               // Old browsers will throw an error when using `:focus-visible`.
-              if (
-                !keyboardModalityRef.current &&
-                !isTypeableElement(event.target)
-              ) {
+              if (!keyboardModalityRef.current && !isTypeableElement(target)) {
                 return;
               }
             }
