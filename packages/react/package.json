@@ -11,6 +11,7 @@
   "types": "./src/types.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./utils/package.json": "./utils/package.json",
     ".": {
       "import": {
         "types": "./src/types.d.ts",
@@ -19,6 +20,15 @@
       "types": "./src/types.d.ts",
       "module": "./dist/floating-ui.react.esm.js",
       "default": "./dist/floating-ui.react.umd.js"
+    },
+    "./utils": {
+      "import": {
+        "types": "./utils/src/index.d.ts",
+        "default": "./utils/dist/floating-ui.react.utils.mjs"
+      },
+      "types": "./utils/src/index.d.ts",
+      "module": "./utils/dist/floating-ui.react.utils.esm.js",
+      "default": "./utils/dist/floating-ui.react.utils.umd.js"
     }
   },
   "sideEffects": false,

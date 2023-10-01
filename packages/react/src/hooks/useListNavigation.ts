@@ -1,4 +1,3 @@
-import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
@@ -8,7 +7,8 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
-} from '@floating-ui/utils/react';
+} from '@floating-ui/react/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

@@ -1,9 +1,9 @@
-import {isElement} from '@floating-ui/utils/dom';
 import {
   contains,
   getDocument,
   isMouseLikePointerType,
-} from '@floating-ui/utils/react';
+} from '@floating-ui/react/utils';
+import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 

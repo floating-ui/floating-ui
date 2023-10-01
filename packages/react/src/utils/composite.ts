@@ -1,5 +1,5 @@
+import {stopEvent} from '@floating-ui/react/utils';
 import {floor} from '@floating-ui/utils';
-import {stopEvent} from '@floating-ui/utils/react';
 
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';

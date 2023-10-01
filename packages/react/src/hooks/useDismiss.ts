@@ -1,11 +1,3 @@
-import {getOverflowAncestors} from '@floating-ui/react-dom';
-import {
-  getComputedStyle,
-  getParentNode,
-  isElement,
-  isHTMLElement,
-  isLastTraversableNode,
-} from '@floating-ui/utils/dom';
 import {
   contains,
   getDocument,
@@ -15,7 +7,15 @@ import {
   isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
-} from '@floating-ui/utils/react';
+} from '@floating-ui/react/utils';
+import {getOverflowAncestors} from '@floating-ui/react-dom';
+import {
+  getComputedStyle,
+  getParentNode,
+  isElement,
+  isHTMLElement,
+  isLastTraversableNode,
+} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
 import {
