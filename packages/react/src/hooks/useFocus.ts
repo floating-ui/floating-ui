@@ -2,6 +2,8 @@ import {
   activeElement,
   contains,
   getDocument,
+  getTarget,
+  isSafari,
   isTypeableElement,
 } from '@floating-ui/react/utils';
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
@@ -109,15 +111,18 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
         onFocus(event) {
           if (blockFocusRef.current) return;
 
-          if (visibleOnly) {
+          const target = getTarget(event.nativeEvent);
+
+          if (visibleOnly && isElement(target)) {
             try {
-              if (!event.target.matches(':focus-visible')) return;
+              // Safari unreliably matches `:focus-visible` on the reference
+              // if focus was outside the page initially - use the fallback
+              // instead.
+              if (isSafari()) throw Error();
+              if (!target.matches(':focus-visible')) return;
             } catch (e) {
               // Old browsers will throw an error when using `:focus-visible`.
-              if (
-                !keyboardModalityRef.current &&
-                !isTypeableElement(event.target)
-              ) {
+              if (!keyboardModalityRef.current && !isTypeableElement(target)) {
                 return;
               }
             }
@@ -129,8 +134,6 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           blockFocusRef.current = false;
           const relatedTarget = event.relatedTarget;
 
-          if (!relatedTarget) return;
-
           // Hit the non-modal focus management portal guard. Focus will be
           // moved into the floating element immediately after.
           const movedToFocusGuard =
@@ -140,6 +143,13 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
           // Wait for the window blur listener to fire.
           timeoutRef.current = window.setTimeout(() => {
+            const activeEl = activeElement(
+              domReference ? domReference.ownerDocument : document
+            );
+
+            // Focus left the page, keep it open.
+            if (!relatedTarget && activeEl === domReference) return;
+
             // When focusing the reference element (e.g. regular click), then
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
