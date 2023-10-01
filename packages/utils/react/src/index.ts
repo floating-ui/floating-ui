@@ -16,8 +16,6 @@ export function activeElement(doc: Document): Element | null {
     }
   }
 
-  console.log({result});
-
   return result;
 }
 
