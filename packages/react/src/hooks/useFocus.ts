@@ -1,4 +1,9 @@
-import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {
+  getNodeName,
+  getWindow,
+  isElement,
+  isHTMLElement,
+} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
@@ -129,8 +134,6 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           blockFocusRef.current = false;
           const relatedTarget = event.relatedTarget;
 
-          if (!relatedTarget) return;
-
           // Hit the non-modal focus management portal guard. Focus will be
           // moved into the floating element immediately after.
           const movedToFocusGuard =
@@ -140,6 +143,13 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
           // Wait for the window blur listener to fire.
           timeoutRef.current = window.setTimeout(() => {
+            const activeEl = activeElement(
+              domReference ? domReference.ownerDocument : document
+            );
+
+            // Focus left the page, keep it open.
+            if (!activeEl || getNodeName(activeEl) === 'body') return;
+
             // When focusing the reference element (e.g. regular click), then
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
