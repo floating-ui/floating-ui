@@ -148,7 +148,12 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
             );
 
             // Focus left the page, keep it open.
-            if (!activeEl || getNodeName(activeEl) === 'body') return;
+            if (
+              (!relatedTarget && activeEl === domReference) ||
+              !activeEl ||
+              getNodeName(activeEl) === 'body'
+            )
+              return;
 
             // When focusing the reference element (e.g. regular click), then
             // clicking into the floating element, prevent it from hiding.
