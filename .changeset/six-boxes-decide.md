@@ -1,6 +1,5 @@
 ---
 '@floating-ui/react': patch
-'@floating-ui/utils': patch
 ---
 
-fix(activeElement): traverse iframes
+fix(useFocus): close on blur only if focus remains in document
