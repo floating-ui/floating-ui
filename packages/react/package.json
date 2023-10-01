@@ -34,6 +34,8 @@
   "sideEffects": false,
   "files": [
     "dist/",
+    "utils/dist/",
+    "utils/package.json",
     "**/*.d.ts",
     "**/*.d.mts"
   ],

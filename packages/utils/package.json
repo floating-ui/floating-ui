@@ -12,9 +12,7 @@
   "files": [
     "dist/",
     "dom/dist/",
-    "react/dist/",
     "dom/package.json",
-    "react/package.json",
     "**/*.d.ts",
     "**/*.d.mts"
   ],
