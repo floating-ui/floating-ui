@@ -1,13 +1,9 @@
-import {
-  getNodeName,
-  getWindow,
-  isElement,
-  isHTMLElement,
-} from '@floating-ui/utils/dom';
+import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
   getDocument,
+  isSafari,
   isTypeableElement,
 } from '@floating-ui/utils/react';
 import * as React from 'react';
@@ -116,6 +112,10 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
           if (visibleOnly) {
             try {
+              // Safari unreliably matches `:focus-visible` on the reference
+              // if focus was outside the page initially - use the fallback
+              // instead.
+              if (isSafari()) throw Error();
               if (!event.target.matches(':focus-visible')) return;
             } catch (e) {
               // Old browsers will throw an error when using `:focus-visible`.
