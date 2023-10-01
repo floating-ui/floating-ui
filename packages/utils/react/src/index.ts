@@ -1,26 +1,13 @@
-import {getNodeName, isHTMLElement, isShadowRoot} from '@floating-ui/utils/dom';
+import {isHTMLElement, isShadowRoot} from '@floating-ui/utils/dom';
 
-export function activeElement(doc: Document): Element | null {
-  // Traverse shadow roots.
-  let result = doc.activeElement;
-  while (result?.shadowRoot?.activeElement) {
-    result = result.shadowRoot.activeElement;
+export function activeElement(doc: Document) {
+  let activeElement = doc.activeElement;
+
+  while (activeElement?.shadowRoot?.activeElement != null) {
+    activeElement = activeElement.shadowRoot.activeElement;
   }
 
-  if (!result || getNodeName(result) === 'body') {
-    try {
-      // Check parent documents.
-      const parentDocument =
-        result?.ownerDocument.defaultView?.frameElement?.ownerDocument;
-      if (parentDocument) {
-        return activeElement(parentDocument);
-      }
-    } catch (e) {
-      return null;
-    }
-  }
-
-  return result;
+  return activeElement;
 }
 
 export function contains(parent?: Element | null, child?: Element | null) {
