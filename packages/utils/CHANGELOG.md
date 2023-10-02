@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.1.6
+
+### Patch Changes
+
+- 0debd691: fix: restore /react path
+
 ## 0.1.5
 
 ### Patch Changes
