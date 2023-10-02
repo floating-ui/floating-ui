@@ -17,8 +17,8 @@ There are two different React packages:
   containing only positioning features.
 
 If you only need positioning, install
-`@floating-ui/react-dom{:.string}`; if later on you decide you
-want to add interactions, you can uninstall
+`@floating-ui/react-dom{:.string}` as it's leaner; if later on
+you decide you want to add interactions, you can uninstall
 `@floating-ui/react-dom{:.string}` and install
 `@floating-ui/react{:.string}`, then replace all your imports.
 It's a compatible superset, so it will continue to work without
@@ -26,12 +26,17 @@ needing to change anything else.
 
 ## Usage
 
-Call the hook inside a component. See
-[Positioning](/docs/react#positioning) for the most basic usage.
+Call the hook inside a component.
 
 ```js
 function App() {
-  const data = useFloating();
+  const {refs, floatingStyles} = useFloating();
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles} />
+    </>
+  );
 }
 ```
 
@@ -56,11 +61,11 @@ interface UseFloatingOptions {
     reference?: ReferenceElement | null;
     floating?: FloatingElement | null;
   };
-  whileElementsMounted?: (
+  whileElementsMounted?(
     reference?: ReferenceElement,
     floating?: FloatingElement,
     update?: () => void
-  ) => () => void;
+  ): () => void;
   onOpenChange?(open: boolean, event?: Event): void;
   nodeId?: string;
 }
@@ -109,14 +114,14 @@ and will adapt to the writing direction (e.g. RTL) as expected.
 
 ### strategy
 
+default: `'absolute'{:js}`
+
 This is the type of CSS position property to use. Two strings are
 available:
 
 ```ts
 type Strategy = 'absolute' | 'fixed';
 ```
-
-The positioning strategy of the floating element.
 
 ```js
 useFloating({
@@ -142,7 +147,7 @@ These strategies are differentiated as follows:
 default: `true{:js}`
 
 Whether to use CSS transforms to position the floating element
-instead of layout (`top{:.string}` and `left{:.string}`).
+instead of layout (`top` and `left` CSS properties).
 
 ```js
 useFloating({
@@ -151,9 +156,8 @@ useFloating({
 ```
 
 CSS transforms are more performant, but can cause conflicts with
-transform animations. In that case, you can use the floating
-element as a wrapper allows you to retain CSS transforms for
-positioning:
+transform animations. In that case, you can make the positioned
+floating element a wrapper to avoid the conflict:
 
 ```js
 <div ref={refs.setFloating} style={floatingStyles}>
@@ -171,8 +175,8 @@ positioning:
 
 default: `[]{:js}`
 
-An array of middleware functions that change the positioning of
-the floating element.
+An array of middleware objects that change the positioning of the
+floating element.
 
 ```js
 useFloating({
@@ -253,8 +257,7 @@ Calling a middleware function returns an object with an
 of the options object, allowing deep comparison to enable
 reactivity.
 
-Here's an example enabling a middleware with a reactive function
-option:
+Here's an example:
 
 ```js /offset/
 import {offset} from '@floating-ui/react';
@@ -269,7 +272,7 @@ function App() {
 
   useFloating({
     middleware: [
-      // No need to use the reactiveOffset version:
+      // No need to use `reactiveOffset`:
       offset(value),
       // We do need to use it, since a function is passed:
       reactiveOffset(() => value, [value]),
@@ -283,11 +286,11 @@ function App() {
 default: `undefined{:js}`
 
 An object of elements passed to the hook, which is useful for
-externally passing the element(s), as an alternative to the
-`refs{:.const}` object.
+externally passing them, as an alternative to the `refs{:.const}`
+object setters.
 
-They should be held in state (not plain refs) to ensure that they
-are reactive.
+The elements must be held in state (not plain refs) to ensure
+that they are reactive.
 
 ```js
 const [reference, setReference] = useState(null);
@@ -298,7 +301,12 @@ const {refs} = useFloating({
   },
 });
 
-return <div ref={refs.setFloating} />;
+return (
+  <>
+    <div ref={setReference} />
+    <div ref={refs.setFloating} />;
+  </>
+);
 ```
 
 You can also do the inverse of the above, or pass both
@@ -336,7 +344,7 @@ useFloating({
 ```
 
 <Notice type="warning">
-  Only use this prop if your floating element is _conditionally
+  Only use this option if your floating element is _conditionally
   rendered_, not hidden with CSS. Use an effect to call and clean
   up `autoUpdate` in the latter scenario.
 </Notice>
@@ -355,7 +363,7 @@ const {isPositioned} = useFloating({
   open: isOpen,
 });
 
-// Once `isOpen` flips to `true`, `isPositioned` will switch to true
+// Once `isOpen` flips to `true`, `isPositioned` will switch to `true`
 // asynchronously. We can use an effect to determine when it has
 // been positioned.
 useEffect(() => {
@@ -445,8 +453,8 @@ interface UseFloatingReturn {
 
 ### context
 
-Available only for React, this object contains the context values
-provided to relevant hooks and components.
+This object contains the context data provided to relevant hooks
+and components.
 
 ```js
 const {context} = useFloating();
