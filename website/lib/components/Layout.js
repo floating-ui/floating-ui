@@ -48,8 +48,10 @@ import Tutorial from '../../public/icons/tutorial.svg';
 import UseClick from '../../public/icons/useClick.svg';
 import UseClientPoint from '../../public/icons/useClientPoint.svg';
 import UseDismiss from '../../public/icons/useDismiss.svg';
+import UseFloating from '../../public/icons/useFloating.svg';
 import UseFocus from '../../public/icons/useFocus.svg';
 import UseHover from '../../public/icons/useHover.svg';
+import UseInteractions from '../../public/icons/useInteractions.svg';
 import UseListNavigation from '../../public/icons/useListNavigation.svg';
 import UseRole from '../../public/icons/useRole.svg';
 import UseTransition from '../../public/icons/useTransition.svg';
@@ -370,6 +372,18 @@ const nav = [
     depth: 1,
     hide: true,
   },
+  {
+    url: '/docs/useFloating',
+    title: 'useFloating',
+    depth: 1,
+    icon: UseFloating,
+  },
+  {
+    url: '/docs/useInteractions',
+    title: 'useInteractions',
+    depth: 1,
+    icon: UseInteractions,
+  },
   ...interactions,
   {
     url: '/docs/custom-hooks',
@@ -657,7 +671,8 @@ export default function Layout({children, className}) {
   const activeTitle =
     nav.find(({url}) => url === pathname)?.title ?? '';
 
-  const isReactDOMPage = activeTitle === 'React';
+  const isReactDOMPage =
+    activeTitle === 'React' || activeTitle === 'useFloating';
   const isDOMOnlyPage = activeTitle === 'autoUpdate';
   const isNoPage = activeTitle === 'Getting Started';
   const isReactPage =

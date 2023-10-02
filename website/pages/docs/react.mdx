@@ -87,259 +87,36 @@ changes to the reference or floating elements, such as with
 conditional rendering, are handled correctly by updating the
 position.
 
-### External elements
-
-Depending on your component tree, you may instead want to
-synchronize with an external element instead of using refs.
-
-```js /anchor/1,3-5#a /setAnchor/#b {13-15}
-function App() {
-  const [anchor, setAnchor] = useState(null);
-  return (
-    <>
-      <button ref={setAnchor}>Button</button>
-      <Tooltip anchor={anchor} />
-    </>
-  );
-}
-
-function Tooltip({anchor}) {
-  const {refs, floatingStyles} = useFloating({
-    elements: {
-      reference: anchor,
-    },
-  });
-
-  return (
-    <div ref={refs.setFloating} style={floatingStyles}>
-      Tooltip
-    </div>
-  );
-}
-```
-
-Either element can be synchronized externally or via
-`refs.set{Element}{:js}`.
-
-<Notice title="Element reactivity" type="error">
-  Make sure the elements are stored in <WordHighlight id="b">state</WordHighlight>. This makes them reactive to 
-  changes, and avoids reading refs in render (forbidden by React).
-
-```ts /useState/#b
-const [anchor, setAnchor] = useState<Element | null>(null);
-
-useFloating({
-  elements: {
-    reference: anchorRef.current, // ❌
-    reference: anchor, // ✅
-  },
-});
-```
-
-</Notice>
-
-## Positioning styles customization
-
-By default, the floating element is positioned using
-`transform{:.objectKey}` in the `floatingStyles` object. This is
-the most performant way to position elements, but can be
-disabled:
-
-```js
-useFloating({transform: false});
-```
-
-If you'd like to retain transform styles while allowing transform
-animations, create a wrapper, where the outermost node is the
-positioned one, and the inner is the actual styled element.
-
-<Notice>
-  When disabling transforms, add `width: max-content{:sass}` (or a fixed width) 
-  to the floating element to prevent positioning issues due to layout affecting
-  the floating element.
-</Notice>
-
-The hook also returns the coordinates and positioning strategy
-directly if `floatingStyles` is not suitable:
-
-```js
-const {x, y, strategy} = useFloating();
-return (
-  <div
-    style={{
-      position: strategy,
-      left: x,
-      top: y,
-      width: 'max-content',
-    }}
-  />
-);
-```
-
 ## Anchoring
 
-To ensure the floating element remains **anchored** to its
-reference element in a variety of scenarios without detaching,
-you can pass the [`autoUpdate`](/docs/autoUpdate) utility to the
-`whileElementsMounted{:.objectKey}` prop:
+To ensure the floating element remains anchored to the reference
+element, such as when scrolling or resizing, pass
+[`autoUpdate`](/docs/autoUpdate) to the
+`whileElementsMounted{:.objectKey}` option:
 
-```js /autoUpdate/
+```js
 import {useFloating, autoUpdate} from '@floating-ui/react';
 
-// Inside your component
-useFloating({
+const {refs, floatingStyles} = useFloating({
   whileElementsMounted: autoUpdate,
 });
 ```
 
-This prop is called whenever both the reference and floating
-elements are mounted, and cleans up if they change. This allows
-listeners that automatically update the position to be
-registered.
-
-<Notice title="Warning" type="warning">
-Ensure you are using conditional rendering for the floating
-element, not an opacity/visibility/display style. If you are
-using CSS to hide it, instead of conditional rendering, use an
-effect to register and clean up `autoUpdate` instead of the
-`whileElementsMounted{:.objectKey}` prop.
+<Notice type="warning">
+  Only use this prop if your floating element is _conditionally
+  rendered_, not hidden with CSS. Use an effect to call and clean
+  up `autoUpdate` in the latter scenario.
 </Notice>
 
-To pass options to `autoUpdate`:
+## API docs
 
-```js
-useFloating({
-  whileElementsMounted(...args) {
-    const cleanup = autoUpdate(...args, {animationFrame: true});
-    // Important! Always return the cleanup function.
-    return cleanup;
-  },
-});
-```
+Visit the full [`useFloating` API docs](/docs/useFloating) for
+detailed information about customizing the positioning of
+floating elements.
 
-### Manual updating
-
-The hook returns an `update(){:js}` function to update the
-position at will, manually:
-
-```js
-const {update} = useFloating();
-<Panel onResize={update} />;
-```
-
-## Return value
-
-The hook
-[returns all the values from `computePosition`](/docs/computePosition#return-value),
-plus some extras to work with React. This includes data about the
-final placement and middleware data which are useful when
-rendering.
-
-## Options
-
-The hook accepts all the
-[options from `computePosition`](/docs/computePosition#options),
-which allows you to customize the position. Here's an example:
-
-```js
-import {
-  useFloating,
-  offset,
-  flip,
-  shift,
-} from '@floating-ui/react';
-
-// Inside your component
-useFloating({
-  placement: 'right',
-  middleware: [offset(10), flip(), shift()],
-});
-```
-
-[Middleware](/docs/computePosition#middleware) can alter the
-positioning from the basic `placement{:.objectKey}`, act as
-visibility optimizers, or provide data to use.
-
-The docs for the middleware that were passed are available here:
-
-- [`offset`](/docs/offset)
-- [`flip`](/docs/flip)
-- [`shift`](/docs/shift)
-
-All of these are re-exported from the base `@floating-ui/dom`
-library.
-
-## Refs
-
-To access the DOM elements, you can either access the refs:
-
-```js
-const {refs} = useFloating();
-
-// Inside an effect or event handler:
-refs.reference.current;
-refs.floating.current;
-```
-
-Or the elements directly:
-
-```js
-const {elements} = useFloating();
-
-// During render, unlike the refs:
-elements.reference;
-elements.floating;
-```
-
-External elements can be synchronized using the
-`elements{:.objectKey}` option like so, if they live outside the
-component:
-
-```js
-function MyComponent({referenceEl, floatingEl}) {
-  const {refs} = useFloating({
-    elements: {
-      reference: referenceEl,
-      floating: floatingEl,
-    },
-  });
-}
-```
-
-## Effects
-
-Positioning is done in an async function, which means the
-position is ready during a microtask, after layout effects are
-executed. This means initially, the floating element is situated
-at the top-left (0, 0) of its offset container — so calling DOM
-methods that cause side-effects like scrolling will result in
-unexpected behavior.
-
-The hook returns an `isPositioned{:.const}` boolean that lets you
-know if the floating element has been positioned:
-
-```js
-const [isOpen, setIsOpen] = useState(false);
-const {isPositioned} = useFloating({
-  // Synchronize `isPositioned` with an `open` state.
-  open: isOpen,
-});
-
-// Each time the floating element opens, we want to focus and
-// scroll some element into view.
-useLayoutEffect(() => {
-  if (isPositioned) {
-    someElement.focus();
-    someElement.scrollIntoView();
-  }
-}, [isPositioned]);
-```
-
-The `open{:.objectKey}` option accepts a boolean that represents
-the open/close state of the floating element. This ensures you
-can wait each time it opens when the host component does not
-unmount, which is necessary in cases where the reference element
-relocates on the page.
+- [Externally pass elements](/docs/useFloating#elements)
+- [Options](/docs/useFloating#options)
+- [Return value](/docs/useFloating#return-value)
 
 ## Arrow
 
@@ -417,65 +194,7 @@ In the full package, it is narrowed on `refs.domReference{:js}`,
 as the
 [position can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events).
 
-## Option reactivity
-
-When using React state and middleware, stateful values inside
-_function options_ (useful when deriving from middleware state)
-aren't fresh or reactive.
-
-```js
-const [value, setValue] = useState(0);
-// Reactive and fresh:
-offset(value);
-// Not reactive or fresh:
-offset(() => value);
-```
-
-To ensure they are reactive, specify the dependencies in the
-`options{:.objectKey}` key:
-
-```js {7}
-const [value, setValue] = useState(0);
-
-useFloating({
-  middleware: [
-    {
-      ...offset(() => value),
-      options: [value],
-    },
-  ],
-});
-```
-
----
-
-This is where the compatibility with the leaner
-`@floating-ui/react-dom` package ends. The following docs now
-only apply to `@floating-ui/react`.
-
-[View examples](/docs/react-examples), or read below to
-understand the basics.
-
 ## Interactions
-
-<div className="mx-auto flex flex-wrap items-center justify-center gap-2 md:justify-between">
-  <img
-    className="card relative top-[1rem] inline-block sm:left-[5rem] md:top-0 md:left-0"
-    src="/all-inputs.png"
-    alt="Designed for all inputs"
-    width={335}
-    height={225}
-    loading="lazy"
-  />
-  <img
-    className="card relative top-[-1rem] inline-block sm:left-[-5rem] md:left-0 md:top-0"
-    src="/safe-cursor-polygon.png"
-    alt="Safe cursor polygon"
-    width={335}
-    height={225}
-    loading="lazy"
-  />
-</div>
 
 To add interactions, such as the ability to only show a floating
 element while hovering over its reference element, the hook must
@@ -514,6 +233,11 @@ function App() {
 
 Note that floating components do not always require "anchor
 positioning", so `floatingStyles` can be ignored.
+
+<Notice>
+  Interactions are only supported by `@floating-ui/react`, not
+  `@floating-ui/react-dom`.
+</Notice>
 
 ## Interaction hooks
 
@@ -607,16 +331,6 @@ remember to prevent overriding event handlers, but is not
 currently required unless the value is a function event handler
 that starts with `on`.
 
-### `getItemProps`
-
-```js
-const {getItemProps} = useInteractions([]);
-```
-
-This is an _optional_ prop getter that is only used when dealing
-with a list inside your floating element (see
-[`useListNavigation`](/docs/useListNavigation)).
-
 ## Open event
 
 The `onOpenChange{:.function}` event callback is invoked with an
@@ -637,31 +351,6 @@ useFloating({
 Note that `onOpenChange{:.function}` is _not_ called if you
 manually changed the open state via the `setIsOpen(){:js}`
 setter. You can derive the event yourself in this case anyway.
-
-## Data
-
-The context object contains a data ref with some information
-available.
-
-```js
-const {context} = useFloating();
-
-useEffect(() => {
-  console.log(context.dataRef.current);
-}, [context]);
-```
-
-Currently, only one built-in value is set:
-
-```js
-interface ContextData {
-  // Which event caused the floating element to open.
-  openEvent?: Event;
-
-  // Add support for custom data to pass around.
-  [key: string]: any;
-}
-```
 
 ## Changing the positioning reference while retaining events
 
