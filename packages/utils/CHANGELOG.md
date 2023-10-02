@@ -1,5 +1,11 @@
 # @floating-ui/utils
 
+## 0.1.5
+
+### Patch Changes
+
+- 28659c4d: refactor: move react utils to @floating-ui/react/utils
+
 ## 0.1.4
 
 ### Patch Changes
