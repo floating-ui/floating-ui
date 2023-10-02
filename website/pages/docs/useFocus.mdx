@@ -56,7 +56,7 @@ function App() {
 ```ts
 interface Props {
   enabled?: boolean;
-  keyboardOnly?: boolean;
+  visibleOnly?: boolean;
 }
 ```
 
@@ -72,17 +72,15 @@ useFocus(context, {
 });
 ```
 
-### keyboardOnly
+### visibleOnly
 
 default: `true{:js}`
 
-Whether the state only changes if the `focus{:.string}` event was
-triggered via keyboard rather than any pointer inputs
-(mouse/touch/pen). Programmatic `.focus(){:js}` calls are
-considered as keyboard.
+Whether the open state only changes if the `focus{:.string}`
+event is considered visible (`:focus-visible` CSS selector).
 
 ```js
 useFocus(context, {
-  keyboardOnly: false,
+  visibleOnly: false,
 });
 ```
