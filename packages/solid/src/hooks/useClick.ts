@@ -3,6 +3,7 @@ import {
   isMouseLikePointerType,
   isTypeableElement,
 } from '@floating-ui/utils/react';
+import {Accessor, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 
@@ -15,11 +16,11 @@ function isSpaceIgnored(element: Element | null) {
 }
 
 export interface UseClickProps {
-  enabled?: boolean;
+  enabled?: Accessor<boolean>;
   event?: 'click' | 'mousedown';
-  toggle?: boolean;
-  ignoreMouse?: boolean;
-  keyboardHandlers?: boolean;
+  toggle?: Accessor<boolean>;
+  ignoreMouse?: Accessor<boolean>;
+  keyboardHandlers?: Accessor<boolean>;
 }
 type PointerType = 'mouse' | 'pen' | 'touch';
 /**
@@ -31,14 +32,18 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
   props: UseClickProps = {}
 ): ElementProps {
   const {open, onOpenChange, dataRef, refs} = context;
-  const {
-    enabled = true,
-    event: eventOption = 'click',
-    toggle = true,
-    ignoreMouse = false,
-    keyboardHandlers = true,
-  } = props;
-
+  const mergedProps = mergeProps(
+    {
+      enabled: () => true,
+      event: 'click',
+      toggle: () => true,
+      ignoreMouse: () => false,
+      keyboardHandlers: () => true,
+    },
+    props
+  );
+  const {enabled, toggle, ignoreMouse, keyboardHandlers} = mergedProps;
+  const eventOption = mergedProps.event;
   let pointerTypeRef: PointerType | undefined;
   let didKeyDownRef = false;
 
@@ -56,7 +61,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse) {
+        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse()) {
           return;
         }
 
@@ -66,7 +71,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
 
         if (
           open() &&
-          toggle &&
+          toggle() &&
           (dataRef.openEvent ? dataRef.openEvent.type === 'mousedown' : true)
         ) {
           onOpenChange(false, event);
@@ -82,13 +87,13 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
           return;
         }
 
-        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse) {
+        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse()) {
           return;
         }
 
         if (
           open() &&
-          toggle &&
+          toggle() &&
           (dataRef.openEvent ? dataRef.openEvent.type === 'click' : true)
         ) {
           onOpenChange(false, event);
@@ -114,7 +119,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
         }
 
         if (event.key === 'Enter') {
-          if (open() && toggle) {
+          if (open() && toggle()) {
             onOpenChange(false, event);
           } else {
             onOpenChange(true, event);
@@ -133,7 +138,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
 
         if (event.key === ' ' && didKeyDownRef) {
           didKeyDownRef = false;
-          if (open() && toggle) {
+          if (open() && toggle()) {
             onOpenChange(false, event);
           } else {
             onOpenChange(true, event);

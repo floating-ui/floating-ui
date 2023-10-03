@@ -2,7 +2,7 @@ import {JSX} from 'solid-js';
 
 import type {ElementProps} from '../types';
 
-function mergeProps(
+function extractAndMergeElementProps(
   userProps:
     | JSX.HTMLAttributes<HTMLElement>
     | JSX.HTMLAttributes<Element>
@@ -57,13 +57,14 @@ function mergeProps(
  */
 export function useInteractions(propsList: Array<ElementProps | void> = []) {
   const getReferenceProps = (userProps?: JSX.HTMLAttributes<Element>) =>
-    mergeProps(userProps, propsList, 'reference');
+    extractAndMergeElementProps(userProps, propsList, 'reference');
 
   const getFloatingProps = (userProps?: JSX.HTMLAttributes<HTMLElement>) =>
-    mergeProps(userProps, propsList, 'floating');
+    extractAndMergeElementProps(userProps, propsList, 'floating');
 
   const getItemProps = (userProps?: JSX.HTMLAttributes<HTMLElement>) =>
-    mergeProps(userProps, propsList, 'item');
+    extractAndMergeElementProps(userProps, propsList, 'item');
 
-  return () => ({getReferenceProps, getFloatingProps, getItemProps});
+  // return () => ({getReferenceProps, getFloatingProps, getItemProps});
+  return {getReferenceProps, getFloatingProps, getItemProps};
 }

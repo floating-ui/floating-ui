@@ -5,7 +5,7 @@ import {
   ComputePositionReturn,
   ReferenceElement,
 } from '@floating-ui/dom';
-import {createEffect, createMemo, createSignal, onCleanup} from 'solid-js';
+import {createEffect, createMemo, createSignal} from 'solid-js';
 
 import {UseFloatingOptions, UseFloatingReturn} from '../types';
 import {getDPR} from '../utils/getDPR';
@@ -47,7 +47,6 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     }
   });
 
-  createEffect(() => console.log({floating: floating()?.id, el: floating()}));
   const version = createMemo(() => {
     reference();
     floating();
@@ -60,7 +59,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
 
     if (currentReference && currentFloating) {
       const capturedVersion = version();
-      console.log(currentReference, currentFloating);
+
       computePosition(currentReference, currentFloating, {
         middleware: options?.middleware,
         placement: placement(),
@@ -68,8 +67,6 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
       }).then(
         (currentData) => {
           // Check if it's still valid
-          console.log('then', currentFloating);
-
           const x = roundByDPR(currentFloating, currentData.x);
           const y = roundByDPR(currentFloating, currentData.y);
           if (capturedVersion === version()) {
@@ -77,8 +74,10 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
           }
         },
         (err) => {
-          console.error(err);
-          console.log(floating()?.id, currentFloating.id);
+          console.log({
+            floating: floating()?.id,
+            currentFloating: currentFloating.id,
+          });
           setError(err);
         }
       );
@@ -95,20 +94,27 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     strategy();
 
     if (currentReference && currentFloating) {
-      if (options?.whileElementsMounted) {
-        const cleanup = options.whileElementsMounted(
-          currentReference,
-          currentFloating,
-          update
-        );
-
-        if (cleanup) {
-          onCleanup(cleanup);
-        }
-      } else {
-        update();
-      }
+      update();
     }
+
+    // onCleanup(() => {
+    //   if (
+    //     currentReference &&
+    //     currentFloating &&
+    //     options?.whileElementsMounted
+    //   ) {
+    //     console.log('#########', {currentFloating, currentReference});
+    //     // return;
+    //     const cleanup = options.whileElementsMounted?.(
+    //       currentReference,
+    //       currentFloating,
+    //       update
+    //     );
+    //     if (cleanup) {
+    //       onCleanup(cleanup);
+    //     }
+    //   }
+    // });
   });
 
   const floatingStyles = createMemo(() => {

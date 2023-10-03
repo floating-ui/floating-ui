@@ -10,6 +10,9 @@ dependencies:
   '@solid-primitives/destructure':
     specifier: ^0.1.14
     version: 0.1.14(solid-js@1.7.10)
+  '@solid-primitives/map':
+    specifier: ^0.4.8
+    version: 0.4.8(solid-js@1.7.10)
   solid-start:
     specifier: ^0.3.2
     version: 0.3.2(@solidjs/meta@0.28.6)(@solidjs/router@0.8.3)(solid-js@1.7.10)(solid-start-node@0.3.2)(vite@4.4.9)
@@ -1773,6 +1776,24 @@ packages:
 
   /@solid-primitives/destructure@0.1.14(solid-js@1.7.10):
     resolution: {integrity: sha512-zZh4ndBerokw+MKqjkp00PPnpZs9nfferQxkBlr3yvNTu4OoxmnRJciYNC1tYsGKRrFGJoHf31rgVedTLfXssA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.1(solid-js@1.7.10)
+      solid-js: 1.7.10
+    dev: false
+
+  /@solid-primitives/map@0.4.8(solid-js@1.7.10):
+    resolution: {integrity: sha512-p9zhIaIWOQVxLaUEjg6nzrBLZUOzozJFHatdKqISSIq7iJhVXX1M1MPzDHHqKyJw/nSENoKgvZehnG3HErnamw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/trigger': 1.0.8(solid-js@1.7.10)
+      solid-js: 1.7.10
+    dev: false
+
+  /@solid-primitives/trigger@1.0.8(solid-js@1.7.10):
+    resolution: {integrity: sha512-p9e3FGhCk8sRPxDiCT8vnTE+DOEtrAnJZP4zV0NAV6YGnpV50JATVXNiLjKgyiI/mTIRkWB0+9c5SUbRlqFx6A==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:

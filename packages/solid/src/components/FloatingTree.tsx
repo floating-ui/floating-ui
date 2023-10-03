@@ -94,7 +94,7 @@ export function FloatingTree(props: ParentProps): JSX.Element {
   };
 
   const removeNode = (node: FloatingNodeType) => {
-    nodesRef = nodesRef.filter((n) => n !== node);
+    nodesRef = [...nodesRef.filter((n) => n !== node)];
   };
 
   const events = createPubSub();

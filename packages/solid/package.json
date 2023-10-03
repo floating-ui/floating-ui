@@ -59,6 +59,7 @@
     "@floating-ui/dom": "^1.5.1",
     "@rollup/plugin-replace": "^5.0.2",
     "@solid-primitives/destructure": "^0.1.14",
+    "@solid-primitives/map": "^0.4.8",
     "solid-start": "^0.3.2",
     "style-to-object": "^0.4.2",
     "tabbable": "^6.2.0"

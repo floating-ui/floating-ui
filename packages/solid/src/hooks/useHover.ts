@@ -5,7 +5,7 @@ import {
   isMouseLikePointerType,
 } from '@floating-ui/utils/react';
 import {destructure} from '@solid-primitives/destructure';
-import {createEffect, onCleanup} from 'solid-js';
+import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
 
 import {
   useFloatingParentNodeId,
@@ -52,7 +52,7 @@ export function getDelay(
 }
 
 export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
-  enabled?: boolean;
+  enabled?: Accessor<boolean>;
   handleClose?: HandleCloseFn<RT>;
   restMs?: number;
   delay?: number | Partial<{open: number; close: number}>;
@@ -77,21 +77,23 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     // elements: {domReference, floating},
     refs,
   } = context;
-  const {enabled, delay, handleClose, mouseOnly, restMs, move} = destructure({
-    enabled: true,
-    delay: 0,
-    handleClose: null,
-    mouseOnly: false,
-    restMs: 0,
-    move: true,
-
-    ...props,
-  });
-
+  const mergedProps = mergeProps(
+    {
+      enabled: () => true,
+      delay: 0,
+      handleClose: null,
+      mouseOnly: false,
+      restMs: 0,
+      move: true,
+    },
+    props
+  );
+  const {delay, mouseOnly, restMs, move} = destructure(mergedProps);
+  const {enabled, handleClose} = mergedProps;
   const tree = useFloatingTree<RT>();
   // const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
-  const handleCloseRef = handleClose();
+  const handleCloseRef = handleClose;
   const delayRef = delay;
 
   let pointerTypeRef: string | undefined;
@@ -127,7 +129,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   });
 
   createEffect(() => {
-    if (!enabled() || !handleClose() || !open()) {
+    if (!enabled() || !handleClose || !open()) {
       return;
     }
 

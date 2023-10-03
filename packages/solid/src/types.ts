@@ -130,8 +130,8 @@ export type UseFloatingOptions<R extends ReferenceType = ReferenceType> =
        * setting up event listeners (e.g. pass `autoUpdate`).
        */
       whileElementsMounted?: (
-        reference: ReferenceElement | R | null,
-        floating: HTMLElement | null,
+        reference: ReferenceElement | R,
+        floating: HTMLElement,
         update: () => void
       ) => () => void;
       // elements?: {

@@ -1,4 +1,3 @@
-import {destructure} from '@solid-primitives/destructure';
 import {
   Accessor,
   createContext,
@@ -7,13 +6,14 @@ import {
   createSignal,
   createUniqueId,
   JSX,
+  mergeProps,
   onCleanup,
   Setter,
   Show,
   useContext,
 } from 'solid-js';
 import {createStore, SetStoreFunction} from 'solid-js/store';
-import {isServer, Portal} from 'solid-js/web';
+import {Portal} from 'solid-js/web';
 
 import type {ExtendedRefs} from '../types';
 import {createAttribute} from '../utils/createAttribute';
@@ -98,7 +98,7 @@ export function useFloatingPortalNode(props: {
       return;
     }
 
-    let container = root || portalContext?.portalNode;
+    let container = root || portalContext?.portalNode();
 
     container = container || document.body;
 
@@ -138,11 +138,12 @@ interface FloatingPortalProps {
 export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
   const [focusManagerState, setFocusManagerState] =
     createSignal<FocusManagerState>(null);
-  const {id, root, preserveTabOrder} = destructure({
-    ...props,
-    preserveTabOrder: true,
+  const mergedProps = mergeProps({preserveTabOrder: true}, props);
+  // const {id, root, preserveTabOrder} = mergedProps;
+  const portalNode = useFloatingPortalNode({
+    id: mergedProps.id,
+    root: mergedProps.root,
   });
-  const portalNode = useFloatingPortalNode({id: id?.(), root: root?.()});
 
   // let beforeOutsideRef:HTMLSpanElement|null=(null);
   // let afterOutsideRef:HTMLSpanElement|null=(null);
@@ -164,13 +165,17 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       !focusManagerState()?.modal &&
       // Don't render if unmount is transitioning.
       focusManagerState()?.open &&
-      preserveTabOrder() &&
-      !!(root?.() || portalNode())
+      mergedProps.preserveTabOrder &&
+      !!(mergedProps.root || portalNode())
   );
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   createEffect(() => {
-    if (!portalNode() || !preserveTabOrder() || focusManagerState()?.modal) {
+    if (
+      !portalNode() ||
+      !mergedProps.preserveTabOrder ||
+      focusManagerState()?.modal
+    ) {
       return;
     }
 
@@ -203,7 +208,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
         setRefs,
         portalNode,
         setFocusManagerState,
-        preserveTabOrder: preserveTabOrder(),
+        preserveTabOrder: mergedProps.preserveTabOrder,
       }}
     >
       <Show when={shouldRenderGuards() && portalNode()}>
@@ -223,7 +228,9 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
         <span aria-owns={portalNode()?.id} style={HIDDEN_STYLES} />
       </Show>
       <Show when={portalNode()}>
-        <Portal children={props.children} mount={portalNode() ?? undefined} />
+        <Portal mount={portalNode() ?? document.body}>
+          {mergedProps.children}
+        </Portal>
       </Show>
 
       <Show when={shouldRenderGuards() && portalNode()}>

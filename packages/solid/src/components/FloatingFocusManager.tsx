@@ -15,7 +15,9 @@ import {
   mergeProps,
   onCleanup,
   ParentComponent,
+  ParentProps,
   Show,
+  splitProps,
 } from 'solid-js';
 import {FocusableElement, tabbable} from 'tabbable';
 
@@ -48,7 +50,6 @@ export interface FloatingFocusManagerProps<
   RT extends ReferenceType = ReferenceType
 > {
   context: FloatingContext<RT>;
-  children: JSX.Element;
   disabled?: boolean;
   order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?: number | HTMLElement | null;
@@ -64,8 +65,9 @@ export interface FloatingFocusManagerProps<
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
-  props: FloatingFocusManagerProps<RT>
+  props: ParentProps<FloatingFocusManagerProps<RT>>
 ): JSX.Element {
+  const [local, rest] = splitProps(props, ['children']);
   const mergedProps = mergeProps(
     {
       disabled: false,
@@ -77,7 +79,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       visuallyHiddenDismiss: false,
       closeOnFocusOut: true,
     } as Required<FloatingFocusManagerProps>,
-    props
+    rest
   );
   const {
     context,
@@ -102,7 +104,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
   // Controlled by `useListNavigation`.
   const ignoreInitialFocus =
-    typeof initialFocus === 'number' && initialFocus < 0;
+    typeof initialFocus() === 'number' && (initialFocus() as number) < 0;
 
   let startDismissButtonRef: HTMLButtonElement | null = null;
   let endDismissButtonRef: HTMLButtonElement | null = null;
@@ -129,7 +131,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   const getTabbableContent = (
     container: HTMLElement | null = refs().floating()
   ) => {
-    return container ? tabbable(container, getTabbableOptions()) : [];
+    const elements = container ? tabbable(container, getTabbableOptions()) : [];
+    console.log('getTabbableContent', {elements, container, nodeId: nodeId()});
+
+    return elements;
   };
 
   const getTabbableElements = (container?: HTMLElement) => {
@@ -193,9 +198,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
     const doc = getDocument(floating);
     doc.addEventListener('keydown', onKeyDown);
-    return () => {
+    onCleanup(() => {
       doc.removeEventListener('keydown', onKeyDown);
-    };
+    });
   });
 
   createEffect(() => {
@@ -317,6 +322,16 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       );
 
       if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open()) {
+        console.log(
+          'FOCUSMANAGER - Wait for any layout effect state setters to execute to set `tabIndex`. - enqueueFocus - elToFocus',
+          {
+            elToFocus,
+            focusableElements,
+            initialFocusValue,
+            focusAlreadyInsideFloatingEl,
+          }
+        );
+
         enqueueFocus(elToFocus, {preventScroll: elToFocus === floating});
       }
     });
@@ -364,7 +379,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       const openEvent = contextData().openEvent;
       const shouldFocusReference =
         contains(floating, activeEl) ||
-        (tree &&
+        (tree() &&
           getChildren(tree().nodesRef, nodeId()).some((node) =>
             contains(node.context?.refs.floating(), activeEl)
           )) ||
@@ -379,6 +394,10 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         isHTMLElement(previouslyFocusedElementRef) &&
         !preventreturnFocus
       ) {
+        console.log(
+          'FOCUSMANAGER - enqueueFocus - previouslyFocusedElementRef',
+          previouslyFocusedElementRef
+        );
         enqueueFocus(previouslyFocusedElementRef, {
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try
@@ -469,7 +488,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     () =>
       !disabled() &&
       guards() &&
-      !isTypeableCombobox &&
+      !isTypeableCombobox() &&
       (isInsidePortal || modal())
   );
 
@@ -487,7 +506,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
               );
             } else if (
               portalContext?.preserveTabOrder &&
-              portalContext.portalNode
+              portalContext.portalNode()
             ) {
               preventreturnFocus = false;
               if (
@@ -513,14 +532,17 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         <RenderDismissButton location="start" />
       </Show>
 
-      {props.children}
-      {<RenderDismissButton location="end" />}
-      <Show when={shouldRenderGuards}>
+      {local.children}
+      <RenderDismissButton location="end" />
+      <Show when={shouldRenderGuards()}>
         <FocusGuard
           data-type="inside"
           ref={(el) => portalContext?.setRefs('afterInsideRef', el)}
           onFocus={(event) => {
             if (modal()) {
+              console.log(
+                'FOCUS_MANAGER -- FocusGuard enqueue getTabbableElements[0]'
+              );
               enqueueFocus(getTabbableElements()[0]);
             } else if (
               portalContext?.preserveTabOrder &&

@@ -260,8 +260,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
       children.forEach((child) => {
         if (
-          child.context?.open &&
-          !child.context.dataRef.current.__outsidePressBubbles
+          child.context?.open() &&
+          !child.context.dataRef.__outsidePressBubbles
         ) {
           shouldDismiss = false;
           return;

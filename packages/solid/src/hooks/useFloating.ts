@@ -1,8 +1,10 @@
 // credits to Alexis Munsayac
 // "https://github.com/lxsmnsyc/solid-floating-ui/tree/main/packages/solid-floating-ui",
 import {ReferenceElement} from '@floating-ui/dom';
+import {isElement} from '@floating-ui/utils/dom';
 import {createEffect, createMemo, createUniqueId, onCleanup} from 'solid-js';
 
+import {useFloatingTree} from '../components/FloatingTree';
 import {UseFloatingOptions, UseFloatingReturn} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 import {usePosition} from './usePosition';
@@ -17,8 +19,8 @@ export function useFloating<R extends ReferenceElement>(
   // floating: () => F | undefined | null,
   options: UseFloatingOptions<R>
 ): UseFloatingReturn<R> {
-  const placement = () => options?.placement ?? 'bottom';
-  const strategy = () => options?.strategy ?? 'absolute';
+  // const placement = () => options?.placement ?? 'bottom';
+  // const strategy = () => options?.strategy ?? 'absolute';
   const floatingId = createUniqueId();
   const events = createPubSub();
   const position = usePosition(options);
@@ -32,28 +34,30 @@ export function useFloating<R extends ReferenceElement>(
     options.onOpenChange?.(open, event);
   };
 
-  createEffect(() => {
-    const currentReference = position.refs.reference();
-    const currentFloating = position.refs.floating();
+  // createEffect(() => {
+  //   const currentReference = position.refs.reference();
+  //   const currentFloating = position.refs.floating();
 
-    // Subscribe to other reactive properties
-    ignore(options?.middleware);
-    placement();
-    strategy();
+  //   // Subscribe to other reactive properties
+  //   ignore(options?.middleware);
+  //   placement();
+  //   strategy();
 
-    if (currentReference && currentFloating) {
-      if (options?.whileElementsMounted) {
-        const cleanup = options.whileElementsMounted(
-          currentReference,
-          currentFloating,
-          position.update
-        );
-        onCleanup(cleanup);
-      } else {
-        position.update();
-      }
-    }
-  });
+  //   if (currentReference && currentFloating) {
+  //     if (options?.whileElementsMounted) {
+  //       console.log({currentFloating, currentReference});
+  //       return;
+  //       const cleanup = options.whileElementsMounted(
+  //         currentReference,
+  //         currentFloating,
+  //         position.update
+  //       );
+  //       onCleanup(cleanup);
+  //     } else {
+  //       position.update();
+  //     }
+  //   }
+  // });
 
   const context = createMemo(() => {
     const open = () => !!options.open?.();
@@ -66,6 +70,15 @@ export function useFloating<R extends ReferenceElement>(
       open,
       onOpenChange,
     };
+  });
+
+  //Add the context to the PortalNodes
+  const tree = useFloatingTree<R>();
+  createEffect(() => {
+    const node = tree()?.nodesRef.find((node) => node.id === options.nodeId);
+    if (node) {
+      node.context = context();
+    }
   });
 
   return {
