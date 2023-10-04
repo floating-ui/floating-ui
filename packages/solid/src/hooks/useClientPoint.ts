@@ -12,7 +12,6 @@ import {
   createSignal,
   mergeProps,
   onCleanup,
-  onMount,
 } from 'solid-js';
 
 import type {
