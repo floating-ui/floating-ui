@@ -19,7 +19,7 @@ function ignore<T>(_value: T): void {
 export function usePosition<R extends ReferenceElement = ReferenceElement>(
   // reference: () => R | undefined | null,
   // floating: () => F | undefined | null,
-  options: UseFloatingOptions<R>
+  options: UseFloatingOptions<R> = {transform: true}
 ): Omit<UseFloatingReturn<R>, 'context'> {
   const placement = () => options?.placement ?? 'bottom';
   const strategy = () => options?.strategy ?? 'absolute';
@@ -130,7 +130,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
 
     const x = roundByDPR(floatingElement, data().x);
     const y = roundByDPR(floatingElement, data().y);
-
+    console.log({transform: options.transform});
     if (options?.transform) {
       return {
         ...initialStyles,

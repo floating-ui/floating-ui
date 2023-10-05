@@ -23,7 +23,7 @@ export function useFloating<R extends ReferenceElement>(
   // const strategy = () => options?.strategy ?? 'absolute';
   const floatingId = createUniqueId();
   const events = createPubSub();
-  const position = usePosition(options);
+  const position = usePosition({transform: true, ...options});
   // eslint-disable-next-line prefer-const
   // let dataRef: ContextData = {};
 

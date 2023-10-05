@@ -22,6 +22,7 @@ export {useHover} from './hooks/useHover';
 export {useInteractions} from './hooks/useInteractions';
 export {useListNavigation} from './hooks/useListNavigation';
 export {useRole} from './hooks/useRole';
+export * from './hooks/useTransition';
 export {useTypeahead} from './hooks/useTypeahead';
 export {safePolygon} from './safePolygon';
 export * from './types';
