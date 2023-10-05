@@ -103,8 +103,9 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   const portalContext = usePortalContext();
 
   // Controlled by `useListNavigation`.
-  const ignoreInitialFocus =
-    typeof initialFocus() === 'number' && (initialFocus() as number) < 0;
+  const ignoreInitialFocus = createMemo(
+    () => typeof initialFocus() === 'number' && (initialFocus() as number) < 0
+  );
 
   let startDismissButtonRef: HTMLButtonElement | null = null;
   let endDismissButtonRef: HTMLButtonElement | null = null;
@@ -321,7 +322,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         previouslyFocusedElement
       );
 
-      if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open()) {
+      if (!ignoreInitialFocus() && !focusAlreadyInsideFloatingEl && open()) {
         console.log(
           'FOCUSMANAGER - Wait for any layout effect state setters to execute to set `tabIndex`. - enqueueFocus - elToFocus',
           {
@@ -329,6 +330,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
             focusableElements,
             initialFocusValue,
             focusAlreadyInsideFloatingEl,
+            ignoreInitialFocus: ignoreInitialFocus(),
           }
         );
 
