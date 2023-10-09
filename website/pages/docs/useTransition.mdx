@@ -19,6 +19,10 @@ There are two different hooks you can use:
 This hook provides computed inline styles that you can spread
 into the `style{:.keyword}` prop for a floating element.
 
+To ensure that the floating element is placed correctly, the
+styles returned by `useTransitionStyles` should be applied to
+an element inside the floating element.
+
 This hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
 
