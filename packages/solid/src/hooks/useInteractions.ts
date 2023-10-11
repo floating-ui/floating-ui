@@ -1,3 +1,4 @@
+import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {JSX} from 'solid-js';
 
 import type {ElementProps} from '../types';
@@ -7,7 +8,7 @@ function extractAndMergeElementProps(
     | JSX.HTMLAttributes<HTMLElement>
     | JSX.HTMLAttributes<Element>
     | undefined,
-  propsList: Array<ElementProps | void>,
+  propsList: Array<MaybeAccessor<ElementProps | void>>,
   elementKey: 'reference' | 'floating' | 'item'
 ): Record<string, unknown> {
   const map = new Map<string, Array<(...args: unknown[]) => void>>();
@@ -16,7 +17,10 @@ function extractAndMergeElementProps(
     ...(elementKey === 'floating' && {tabIndex: -1}),
     ...userProps,
     ...propsList
-      .map((value) => (value ? value[elementKey] : null))
+      .map((value) => {
+        const val = access(value);
+        return val ? val[elementKey] : null;
+      })
       .concat(userProps)
       .reduce((acc: Record<string, unknown>, props) => {
         if (!props) {
@@ -55,7 +59,9 @@ function extractAndMergeElementProps(
  * another.
  * @see https://floating-ui.com/docs/react#interaction-hooks
  */
-export function useInteractions(propsList: Array<ElementProps | void> = []) {
+export function useInteractions(
+  propsList: Array<MaybeAccessor<ElementProps | void>> = []
+) {
   const getReferenceProps = (userProps?: JSX.HTMLAttributes<Element>) =>
     extractAndMergeElementProps(userProps, propsList, 'reference');
 

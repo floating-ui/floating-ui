@@ -7,7 +7,6 @@ import {
   isTypeableElement,
   stopEvent,
 } from '@floating-ui/utils/react';
-import {destructure} from '@solid-primitives/destructure';
 import {
   createEffect,
   createMemo,
@@ -24,6 +23,7 @@ import {FocusableElement, tabbable} from 'tabbable';
 import type {DismissPayload} from '../hooks/useDismiss';
 import type {FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {destructure} from '../utils/destructure';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
 import {getChildren} from '../utils/getChildren';

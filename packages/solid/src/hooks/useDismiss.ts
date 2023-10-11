@@ -11,13 +11,12 @@ import {
   getDocument,
   getTarget,
   isEventTargetWithin,
-  // isReactEvent,
   isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
 } from '@floating-ui/utils/react';
-import {destructure} from '@solid-primitives/destructure';
-import {createEffect, onCleanup} from 'solid-js';
+import {MaybeAccessor} from '@solid-primitives/utils';
+import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
 
 import {
   useFloatingParentNodeId,
@@ -25,6 +24,7 @@ import {
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {destructure} from '../utils/destructure';
 import {getChildren} from '../utils/getChildren';
 
 const bubbleHandlerKeys = {
@@ -58,12 +58,12 @@ export interface DismissPayload {
 }
 
 type DefaultUseDismissProps = {
-  enabled: boolean;
-  escapeKey: boolean;
-  referencePress: boolean;
-  referencePressEvent: 'pointerdown' | 'mousedown' | 'click';
-  outsidePress: boolean | ((event: MouseEvent) => boolean);
-  outsidePressEvent: 'pointerdown' | 'mousedown' | 'click';
+  enabled: MaybeAccessor<boolean>;
+  escapeKey: MaybeAccessor<boolean>;
+  referencePress: MaybeAccessor<boolean>;
+  referencePressEvent: MaybeAccessor<'pointerdown' | 'mousedown' | 'click'>;
+  outsidePress: MaybeAccessor<boolean> | ((event: MouseEvent) => boolean);
+  outsidePressEvent: MaybeAccessor<'pointerdown' | 'mousedown' | 'click'>;
 };
 const defaultUseDismissProps: DefaultUseDismissProps = {
   enabled: true,
@@ -74,8 +74,10 @@ const defaultUseDismissProps: DefaultUseDismissProps = {
   referencePressEvent: 'pointerdown',
 };
 export interface UseDismissProps extends Partial<DefaultUseDismissProps> {
-  ancestorScroll?: boolean;
-  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
+  ancestorScroll?: MaybeAccessor<boolean>;
+  bubbles?: MaybeAccessor<
+    boolean | {escapeKey?: boolean; outsidePress?: boolean}
+  >;
 }
 
 /**
@@ -86,29 +88,27 @@ export interface UseDismissProps extends Partial<DefaultUseDismissProps> {
 export function useDismiss<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseDismissProps
-): ElementProps {
+): Accessor<ElementProps> {
   const {
     open,
-    onOpenChange,
     events,
     nodeId,
-    // elements, //: {reference, domReference, floating},
+
     dataRef,
-  } = destructure(context);
+  } = destructure(context, {normalize: true});
+  const {onOpenChange} = context;
+  const mergedProps = mergeProps(defaultUseDismissProps, props);
   const {
     enabled,
     escapeKey,
-    outsidePress: unstable_outsidePress,
     outsidePressEvent,
     referencePress,
     referencePressEvent,
     ancestorScroll,
     bubbles,
-  } = destructure({
-    ...props,
-    ...defaultUseDismissProps,
-  });
+  } = destructure(mergedProps, {normalize: true});
 
+  const {outsidePress: unstable_outsidePress} = mergedProps;
   const tree = useFloatingTree();
 
   const nested = useFloatingParentNodeId() != null;
@@ -119,9 +119,10 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
   const outsidePress =
     typeof unstable_outsidePress === 'function'
-      ? outsidePressFn()
+      ? outsidePressFn
       : unstable_outsidePress;
-  let insideReactTreeRef = false; //React.useRef(false);
+
+  let insideReactTreeRef = false;
 
   const {escapeKeyBubbles, outsidePressBubbles} = destructure(
     normalizeBubblesProp(bubbles && bubbles())
@@ -134,7 +135,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
     const children = tree() ? getChildren(tree().nodesRef, nodeId()) : [];
 
-    if (!escapeKeyBubbles) {
+    if (!escapeKeyBubbles()) {
       event.stopPropagation();
 
       if (children.length > 0) {
@@ -142,7 +143,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
         children.forEach((child) => {
           if (
-            child.context?.open &&
+            child.context?.open() &&
             !child.context.dataRef.current.__escapeKeyBubbles
           ) {
             shouldDismiss = false;
@@ -163,7 +164,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
     });
 
-    onOpenChange()(false, event);
+    onOpenChange(false, event);
   };
 
   const closeOnPressOutside = (event: MouseEvent) => {
@@ -283,7 +284,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
     });
 
-    onOpenChange()(false, event);
+    onOpenChange(false, event);
   };
 
   //onMount ??
@@ -298,7 +299,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     dataRef().__outsidePressBubbles = outsidePressBubbles();
 
     function onScroll(event: Event) {
-      onOpenChange()(false, event);
+      onOpenChange(false, event);
     }
 
     const doc = getDocument(floating());
@@ -347,26 +348,27 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   //   insideReactTreeRef.current = false;
   // }, [outsidePress, outsidePressEvent]);
 
-  if (!enabled()) return {};
-
-  return {
-    reference: {
-      onKeyDown: closeOnEscapeKeyDown,
-      [bubbleHandlerKeys[referencePressEvent()]]: (event: Event) => {
-        if (referencePress()) {
-          events().emit('dismiss', {
-            type: 'referencePress',
-            data: {returnFocus: false},
-          });
-          onOpenChange()(false, event);
-        }
-      },
-    },
-    floating: {
-      onKeyDown: closeOnEscapeKeyDown,
-      [captureHandlerKeys[outsidePressEvent()]]: () => {
-        insideReactTreeRef = true;
-      },
-    },
-  };
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {
+            onKeyDown: closeOnEscapeKeyDown,
+            [bubbleHandlerKeys[referencePressEvent()]]: (event: Event) => {
+              if (referencePress()) {
+                events().emit('dismiss', {
+                  type: 'referencePress',
+                  data: {returnFocus: false},
+                });
+                onOpenChange(false, event);
+              }
+            },
+          },
+          floating: {
+            onKeyDown: closeOnEscapeKeyDown,
+            [captureHandlerKeys[outsidePressEvent()]]: () => {
+              insideReactTreeRef = true;
+            },
+          },
+        };
 }

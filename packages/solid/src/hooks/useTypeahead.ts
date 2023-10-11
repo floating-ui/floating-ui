@@ -1,25 +1,26 @@
 import {stopEvent} from '@floating-ui/utils/react';
+import {MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, createEffect, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {destructure} from '../utils/destructure';
 
 type ListType = Accessor<Array<string | null>>;
-
 export interface UseTypeaheadProps {
   listRef: ListType;
-  activeIndex: Accessor<number | null>;
+  activeIndex: MaybeAccessor<number | null>;
   onMatch?: (index: number) => void;
   onTypingChange?: (isTyping: boolean) => void;
-  enabled?: Accessor<boolean>;
+  enabled?: MaybeAccessor<boolean>;
   findMatch?:
     | null
     | ((
         list: Array<string | null>,
         typedString: string
       ) => string | null | undefined);
-  resetMs?: number;
+  resetMs?: MaybeAccessor<number>;
   ignoreKeys?: Array<string>;
-  selectedIndex?: Accessor<number | null>;
+  selectedIndex?: MaybeAccessor<number | null>;
 }
 
 /**
@@ -30,14 +31,14 @@ export interface UseTypeaheadProps {
 export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseTypeaheadProps
-): ElementProps {
+): Accessor<ElementProps> {
   const mergedProps = mergeProps(
     {
-      enabled: () => true,
+      enabled: true,
       findMatch: null,
       resetMs: 750,
       ignoreKeys: [],
-      selectedIndex: () => null,
+      selectedIndex: null,
     } as Required<
       Pick<
         UseTypeaheadProps,
@@ -47,14 +48,13 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     props
   );
 
+  const {listRef, activeIndex, ignoreKeys, enabled, resetMs, selectedIndex} =
+    destructure(mergedProps, {normalize: true});
   const {
-    listRef,
-    activeIndex,
     onMatch,
     onTypingChange,
-    enabled,
+
     findMatch,
-    selectedIndex,
   } = mergedProps;
 
   let timeoutIdRef: number;
@@ -119,7 +119,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
 
     if (
       listContent() == null ||
-      mergedProps.ignoreKeys.includes(event.key) ||
+      ignoreKeys().includes(event.key) ||
       // Character key.
       event.key.length !== 1 ||
       // Modifier key.
@@ -156,7 +156,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
       stringRef = '';
       prevIndexRef = matchIndexRef;
       setTypingChange(false);
-    }, mergedProps.resetMs);
+    }, resetMs());
 
     const prevIndex = prevIndexRef;
 
@@ -178,17 +178,18 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     }
   }
 
-  return !enabled()
-    ? {}
-    : {
-        reference: {onKeyDown},
-        floating: {
-          onKeyDown,
-          onKeyUp(event) {
-            if (event.key === ' ') {
-              setTypingChange(false);
-            }
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {onKeyDown},
+          floating: {
+            onKeyDown,
+            onKeyUp(event) {
+              if (event.key === ' ') {
+                setTypingChange(false);
+              }
+            },
           },
-        },
-      };
+        };
 }

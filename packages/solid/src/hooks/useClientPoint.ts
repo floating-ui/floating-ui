@@ -4,11 +4,11 @@ import {
   getTarget,
   isMouseLikePointerType,
 } from '@floating-ui/utils/react';
+import {MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
   createEffect,
   createMemo,
-  createRenderEffect,
   createSignal,
   mergeProps,
   onCleanup,
@@ -20,12 +20,13 @@ import type {
   FloatingContext,
   ReferenceType,
 } from '../types';
+import {destructure} from '../utils/destructure';
 
 function createVirtualElement(
   domRef: Element | null,
   data: {
-    axis: 'x' | 'y' | 'both';
     dataRef: ContextData;
+    axis: 'x' | 'y' | 'both';
     pointerType: string | undefined;
     x: number | null;
     y: number | null;
@@ -101,10 +102,10 @@ function isMouseBasedEvent(event: Event | undefined): event is MouseEvent {
 }
 
 export interface UseClientPointProps {
-  enabled?: Accessor<boolean>;
-  axis?: 'x' | 'y' | 'both';
-  x?: number | null;
-  y?: number | null;
+  enabled?: MaybeAccessor<boolean>;
+  axis?: MaybeAccessor<'x' | 'y' | 'both'>;
+  x?: MaybeAccessor<number | null>;
+  y?: MaybeAccessor<number | null>;
 }
 
 /**
@@ -115,18 +116,18 @@ export interface UseClientPointProps {
 export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseClientPointProps = {}
-): ElementProps {
+): Accessor<ElementProps> {
   const {refs, dataRef} = context;
   const mergedProps = mergeProps(
     {
-      enabled: () => true,
+      enabled: true,
       axis: 'both',
       x: null,
       y: null,
     } as Required<UseClientPointProps>,
     props
   );
-  const {enabled} = mergedProps;
+  const {enabled, axis, x, y} = destructure(mergedProps, {normalize: true});
 
   let initialRef = false;
   let cleanupListenerRef: null | (() => void) = null;
@@ -143,10 +144,10 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     if (dataRef.openEvent && !isMouseBasedEvent(dataRef.openEvent)) {
       return;
     }
-    const node = createVirtualElement(refs.reference() as Element, {
+    const node = createVirtualElement(context.refs.reference() as Element, {
       x,
       y,
-      axis: mergedProps.axis,
+      axis: axis(),
       dataRef,
       pointerType: pointerType(),
     });
@@ -154,7 +155,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   };
 
   const handleReferenceEnterOrMove = (event: MouseEvent) => {
-    if (mergedProps.x != null || mergedProps.y != null) return;
+    if (x() != null || y() != null) return;
 
     if (!context.open()) {
       setReference(event.clientX, event.clientY);
@@ -175,10 +176,8 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   );
 
   const addListener = () => {
-    const {x, y} = mergedProps;
-
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
-    if (!openCheck() || !enabled() || x != null || y != null) return;
+    if (!openCheck() || !enabled() || x() != null || y() != null) return;
     const win = getWindow(refs.floating());
 
     function handleMouseMove(event: MouseEvent) {
@@ -224,11 +223,10 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     }
   });
 
-  createRenderEffect(() => {
-    const {x, y} = mergedProps;
-    if (enabled() && (x != null || y != null)) {
+  createEffect(() => {
+    if (enabled() && (x() != null || y() != null)) {
       initialRef = false;
-      setReference(x, y);
+      setReference(x(), y());
     }
   });
 
@@ -236,14 +234,15 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     setPointerType(pointerType);
   }
 
-  return !mergedProps.enabled()
-    ? {}
-    : {
-        reference: {
-          onPointerDown: setPointerTypeRef,
-          onPointerEnter: setPointerTypeRef,
-          onMouseMove: handleReferenceEnterOrMove,
-          onMouseEnter: handleReferenceEnterOrMove,
-        },
-      };
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {
+            onPointerDown: setPointerTypeRef,
+            onPointerEnter: setPointerTypeRef,
+            onMouseMove: handleReferenceEnterOrMove,
+            onMouseEnter: handleReferenceEnterOrMove,
+          },
+        };
 }

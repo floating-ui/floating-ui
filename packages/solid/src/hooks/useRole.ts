@@ -1,18 +1,21 @@
-import {Accessor, createUniqueId, mergeProps} from 'solid-js';
+import {MaybeAccessor} from '@solid-primitives/utils';
+import {Accessor, createMemo, createUniqueId, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {destructure} from '../utils/destructure';
 
+type Role =
+  | 'tooltip'
+  | 'dialog'
+  | 'alertdialog'
+  | 'menu'
+  | 'listbox'
+  | 'grid'
+  | 'tree';
 export interface UseRoleProps {
-  enabled?: Accessor<boolean>;
+  enabled?: MaybeAccessor<boolean>;
 
-  role?:
-    | 'tooltip'
-    | 'dialog'
-    | 'alertdialog'
-    | 'menu'
-    | 'listbox'
-    | 'grid'
-    | 'tree';
+  role?: MaybeAccessor<Role>;
 }
 
 /**
@@ -23,47 +26,49 @@ export interface UseRoleProps {
 export function useRole<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseRoleProps = {}
-): ElementProps {
+): Accessor<ElementProps> {
   const mergedProps = mergeProps(
     {
-      enabled: () => true,
+      enabled: true,
       role: 'dialog',
     } as Required<UseRoleProps>,
     props
   );
-
+  const {enabled, role} = destructure(mergedProps, {normalize: true});
   const referenceId = createUniqueId();
 
-  const floatingProps = {id: context.floatingId, role: mergedProps.role};
+  const floatingProps = {id: context.floatingId, role: role()};
 
-  if (mergedProps.role === 'tooltip') {
-    return {
-      reference: {
-        'aria-describedby': context.open() ? context.floatingId : undefined,
-      },
-      floating: floatingProps,
-    };
-  }
-  return !mergedProps.enabled()
-    ? {}
-    : {
-        reference: {
-          'aria-expanded': context.open() ? 'true' : 'false',
-          'aria-haspopup':
-            mergedProps.role === 'alertdialog' ? 'dialog' : mergedProps.role,
-          'aria-controls': context.open() ? context.floatingId : undefined,
-          ...(mergedProps.role === 'listbox' && {
-            role: 'combobox',
-          }),
-          ...(mergedProps.role === 'menu' && {
-            id: referenceId,
-          }),
-        },
-        floating: {
-          ...floatingProps,
-          ...(mergedProps.role === 'menu' && {
-            'aria-labelledby': referenceId,
-          }),
-        },
-      };
+  return () =>
+    !enabled()
+      ? {}
+      : role() === 'tooltip'
+      ? {
+          reference: {
+            'aria-describedby': context.open() ? context.floatingId : undefined,
+          },
+          floating: floatingProps,
+        }
+      : {
+          reference: {
+            'aria-expanded': context.open() ? 'true' : 'false',
+            'aria-haspopup':
+              role() === 'alertdialog'
+                ? 'dialog'
+                : (role() as 'dialog' | 'menu' | 'listbox' | 'grid' | 'tree'),
+            'aria-controls': context.open() ? context.floatingId : undefined,
+            ...(role() === 'listbox' && {
+              role: 'combobox',
+            }),
+            ...(role() === 'menu' && {
+              id: referenceId,
+            }),
+          },
+          floating: {
+            ...floatingProps,
+            ...(role() === 'menu' && {
+              'aria-labelledby': referenceId,
+            }),
+          },
+        };
 }

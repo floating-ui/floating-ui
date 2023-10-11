@@ -9,6 +9,7 @@ import {
   isVirtualPointerEvent,
   stopEvent,
 } from '@floating-ui/utils/react';
+import {MaybeAccessor, MaybeAccessorValue} from '@solid-primitives/utils';
 import {
   Accessor,
   createEffect,
@@ -24,6 +25,7 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {destructure} from '../utils/destructure';
 import {enqueueFocus} from '../utils/enqueueFocus';
 // import {useEffectEvent} from './utils/useEffectEvent';
 // import {useLatestRef} from './utils/useLatestRef';
@@ -76,11 +78,13 @@ function findNonDisabledIndex(
 }
 
 function doSwitch(
-  orientation: UseListNavigationProps['orientation'],
+  orientation: Accessor<
+    MaybeAccessorValue<UseListNavigationProps['orientation']>
+  >,
   vertical: boolean,
   horizontal: boolean
 ) {
-  switch (orientation?.()) {
+  switch (orientation()) {
     case 'vertical':
       return vertical;
     case 'horizontal':
@@ -92,7 +96,9 @@ function doSwitch(
 
 function isMainOrientationKey(
   key: string,
-  orientation: UseListNavigationProps['orientation']
+  orientation: Accessor<
+    MaybeAccessorValue<UseListNavigationProps['orientation']>
+  >
 ) {
   const vertical = key === ARROW_UP || key === ARROW_DOWN;
   const horizontal = key === ARROW_LEFT || key === ARROW_RIGHT;
@@ -101,11 +107,13 @@ function isMainOrientationKey(
 
 function isMainOrientationToEndKey(
   key: string,
-  orientation: UseListNavigationProps['orientation'],
-  rtl: UseListNavigationProps['rtl']
+  orientation: Accessor<
+    MaybeAccessorValue<UseListNavigationProps['orientation']>
+  >,
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
 ) {
   const vertical = key === ARROW_DOWN;
-  const horizontal = rtl?.() ? key === ARROW_LEFT : key === ARROW_RIGHT;
+  const horizontal = rtl() ? key === ARROW_LEFT : key === ARROW_RIGHT;
   return (
     doSwitch(orientation, vertical, horizontal) ||
     key === 'Enter' ||
@@ -116,10 +124,12 @@ function isMainOrientationToEndKey(
 
 function isCrossOrientationOpenKey(
   key: string,
-  orientation: UseListNavigationProps['orientation'],
-  rtl: UseListNavigationProps['rtl']
+  orientation: Accessor<
+    MaybeAccessorValue<UseListNavigationProps['orientation']>
+  >,
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
 ) {
-  const vertical = rtl?.() ? key === ARROW_LEFT : key === ARROW_RIGHT;
+  const vertical = rtl() ? key === ARROW_LEFT : key === ARROW_RIGHT;
   const horizontal = key === ARROW_DOWN;
   // return doSwitch(orientation, vertical, horizontal) ;
   return (
@@ -132,23 +142,25 @@ function isCrossOrientationOpenKey(
 
 function isCrossOrientationCloseKey(
   key: string,
-  orientation: UseListNavigationProps['orientation'],
-  rtl: UseListNavigationProps['rtl']
+  orientation: Accessor<
+    MaybeAccessorValue<UseListNavigationProps['orientation']>
+  >,
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
 ) {
-  const vertical = rtl?.() ? key === ARROW_RIGHT : key === ARROW_LEFT;
+  const vertical = rtl() ? key === ARROW_RIGHT : key === ARROW_LEFT;
   const horizontal = key === ARROW_UP;
   return doSwitch(orientation, vertical, horizontal);
 }
 
 function getMinIndex(
-  listRef: UseListNavigationProps['listRef'],
+  listRef: Accessor<MaybeAccessorValue<UseListNavigationProps['listRef']>>,
   disabledIndices: Array<number> | undefined
 ) {
   return findNonDisabledIndex(listRef(), {disabledIndices});
 }
 
 function getMaxIndex(
-  listRef: UseListNavigationProps['listRef'],
+  listRef: Accessor<MaybeAccessorValue<UseListNavigationProps['listRef']>>,
   disabledIndices: Array<number> | undefined
 ) {
   return findNonDisabledIndex(listRef(), {
@@ -159,23 +171,23 @@ function getMaxIndex(
 }
 
 export interface UseListNavigationProps {
-  listRef: Accessor<Array<HTMLElement | null>>;
-  activeIndex: Accessor<number | null>;
+  listRef: MaybeAccessor<Array<HTMLElement | null>>;
+  activeIndex: MaybeAccessor<number | null>;
   onNavigate?: (index: number | null) => void;
-  enabled?: Accessor<boolean>;
-  selectedIndex?: Accessor<number | null>;
-  focusItemOnOpen?: Accessor<boolean | 'auto'>;
-  focusItemOnHover?: Accessor<boolean>;
-  openOnArrowKeyDown?: Accessor<boolean>;
-  disabledIndices?: Accessor<Array<number> | undefined>;
-  allowEscape?: Accessor<boolean>;
-  loop?: Accessor<boolean>;
-  nested?: Accessor<boolean>;
-  rtl?: Accessor<boolean>;
-  virtual?: Accessor<boolean>;
-  orientation?: Accessor<'vertical' | 'horizontal' | 'both'>;
-  cols?: Accessor<number>;
-  scrollItemIntoView?: Accessor<boolean | ScrollIntoViewOptions>;
+  enabled?: MaybeAccessor<boolean>;
+  selectedIndex?: MaybeAccessor<number | null>;
+  focusItemOnOpen?: MaybeAccessor<boolean | 'auto'>;
+  focusItemOnHover?: MaybeAccessor<boolean>;
+  openOnArrowKeyDown?: MaybeAccessor<boolean>;
+  disabledIndices?: MaybeAccessor<Array<number>>;
+  allowEscape?: MaybeAccessor<boolean>;
+  loop?: MaybeAccessor<boolean>;
+  nested?: MaybeAccessor<boolean>;
+  rtl?: MaybeAccessor<boolean>;
+  virtual?: MaybeAccessor<boolean>;
+  orientation?: MaybeAccessor<'vertical' | 'horizontal' | 'both'>;
+  cols?: MaybeAccessor<number>;
+  scrollItemIntoView?: MaybeAccessor<boolean | ScrollIntoViewOptions>;
 }
 
 /**
@@ -186,8 +198,7 @@ export interface UseListNavigationProps {
 export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseListNavigationProps
-): // Accessor<ElementProps>
-ElementProps {
+): Accessor<ElementProps> {
   const {
     open,
     onOpenChange,
@@ -197,27 +208,26 @@ ElementProps {
   const mergedProps = mergeProps(
     {
       onNavigate: () => {},
-      enabled: () => true,
-      selectedIndex: () => null,
-      allowEscape: () => false,
-      loop: () => false,
-      nested: () => false,
-      rtl: () => false,
-      virtual: () => false,
-      focusItemOnOpen: () => 'auto',
-      focusItemOnHover: () => true,
-      openOnArrowKeyDown: () => true,
-      disabledIndices: () => undefined,
-      orientation: () => 'vertical',
-      cols: () => 1,
-      scrollItemIntoView: () => true,
+      enabled: true,
+      selectedIndex: null,
+      allowEscape: false,
+      loop: false,
+      nested: false,
+      rtl: false,
+      virtual: false,
+      focusItemOnOpen: 'auto',
+      focusItemOnHover: true,
+      openOnArrowKeyDown: true,
+      disabledIndices: [],
+      orientation: 'vertical',
+      cols: 1,
+      scrollItemIntoView: true,
     } as Required<Omit<UseListNavigationProps, 'listRef' | 'activeIndex'>>,
     props
   );
   const {
     listRef,
     activeIndex,
-    onNavigate: unstable_onNavigate,
     enabled,
     selectedIndex,
     allowEscape,
@@ -232,7 +242,9 @@ ElementProps {
     orientation,
     cols,
     scrollItemIntoView,
-  } = mergedProps;
+  } = destructure(mergedProps, {normalize: true});
+
+  const {onNavigate: unstable_onNavigate} = mergedProps;
 
   if (import.meta.env.DEV) {
     if (allowEscape()) {
@@ -537,12 +549,6 @@ ElementProps {
     return props;
   });
 
-  // return createMemo(() => {
-
-  // return createMemo(() => {
-
-  if (!enabled()) return {};
-
   function onKeyDown(event: KeyboardEvent) {
     isPointerModalityRef = false;
     forceSyncFocus = true;
@@ -846,122 +852,120 @@ ElementProps {
     hasActiveIndex() && {
       'aria-activedescendant': activeId(),
     };
-  return {
-    reference: {
-      'aria-placeholder': id,
-      ...ariaActiveDescendantProp,
-      onKeyDown(event: KeyboardEvent) {
-        isPointerModalityRef = false;
-        const isArrowKey = event.key.indexOf('Arrow') === 0;
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {
+            'aria-placeholder': id,
+            ...ariaActiveDescendantProp,
+            onKeyDown(event: KeyboardEvent) {
+              isPointerModalityRef = false;
+              const isArrowKey = event.key.indexOf('Arrow') === 0;
 
-        if (virtual() && open()) {
-          return onKeyDown(event);
-        }
+              if (virtual() && open()) {
+                return onKeyDown(event);
+              }
 
-        // If a floating element should not open on arrow key down, avoid
-        // setting `activeIndex` while it's closed.
-        if (!open() && !openOnArrowKeyDown() && isArrowKey) {
-          return;
-        }
+              // If a floating element should not open on arrow key down, avoid
+              // setting `activeIndex` while it's closed.
+              if (!open() && !openOnArrowKeyDown() && isArrowKey) {
+                return;
+              }
 
-        const isNavigationKey =
-          isArrowKey || event.key === 'Enter' || event.key.trim() === '';
-        // const isMainKey = isMainOrientationKey(event.key, orientation);
-        const isMainKey = isMainOrientationToEndKey(
-          event.key,
-          orientation,
-          rtl
-        );
-        const isCrossKey = isCrossOrientationOpenKey(
-          event.key,
-          orientation,
-          rtl
-        );
+              const isNavigationKey =
+                isArrowKey || event.key === 'Enter' || event.key.trim() === '';
+              // const isMainKey = isMainOrientationKey(event.key, orientation);
+              const isMainKey = isMainOrientationToEndKey(
+                event.key,
+                orientation,
+                rtl
+              );
+              const isCrossKey = isCrossOrientationOpenKey(
+                event.key,
+                orientation,
+                rtl
+              );
 
-        if (isNavigationKey) {
-          keyRef = nested() && isMainKey ? null : event.key;
-        }
-        /* console.log({nested: nested(), isCrossKey}); */
+              if (isNavigationKey) {
+                keyRef = nested() && isMainKey ? null : event.key;
+              }
+              /* console.log({nested: nested(), isCrossKey}); */
 
-        if (nested()) {
-          if (isCrossKey) {
-            stopEvent(event);
+              if (nested()) {
+                if (isCrossKey) {
+                  stopEvent(event);
 
-            // if (open()) {
-            //   indexRef = getMinIndex(listRef, disabledIndicesRef);
-            //   /* console.log(
-            //     'reference - onKeydown --- nested --- now onNavigate to',
-            //     indexRef
-            //   ); */
+                  // if (open()) {
+                  //   indexRef = getMinIndex(listRef, disabledIndicesRef);
+                  //   /* console.log(
+                  //     'reference - onKeydown --- nested --- now onNavigate to',
+                  //     indexRef
+                  //   ); */
 
-            //   onNavigate(indexRef);
-            // } else {
-            //   onOpenChange(true, event);
-            // }
-            if (!open()) {
-              onOpenChange(true, event);
-            }
-            indexRef = getMinIndex(listRef, disabledIndicesRef);
-            onNavigate(indexRef);
-          }
-          return;
-        }
+                  //   onNavigate(indexRef);
+                  // } else {
+                  //   onOpenChange(true, event);
+                  // }
+                  if (!open()) {
+                    onOpenChange(true, event);
+                  }
+                  indexRef = getMinIndex(listRef, disabledIndicesRef);
+                  onNavigate(indexRef);
+                }
+                return;
+              }
 
-        if (isMainKey) {
-          if (selectedIndex() != null) {
-            indexRef = selectedIndex() as number;
-          }
+              if (isMainKey) {
+                if (selectedIndex() != null) {
+                  indexRef = selectedIndex() as number;
+                }
 
-          stopEvent(event);
+                stopEvent(event);
 
-          if (!open() && openOnArrowKeyDown()) {
-            /* console.log(
+                if (!open() && openOnArrowKeyDown()) {
+                  /* console.log(
               'reference - onKeydown --- !open && openArrowKeyDown --- now opening'
             ); */
-            onOpenChange(true, event);
-            /* console.log('******* openened onArrowKeyDown', {indexRef}); */
-            indexRef =
-              (selectedIndex() as number) ??
-              getMinIndex(listRef, disabledIndicesRef); //addde MR
-            onNavigate(indexRef);
-          } else {
-            onKeyDown(event);
-          }
+                  onOpenChange(true, event);
+                  /* console.log('******* openened onArrowKeyDown', {indexRef}); */
+                  indexRef =
+                    (selectedIndex() as number) ??
+                    getMinIndex(listRef, disabledIndicesRef); //addde MR
+                  onNavigate(indexRef);
+                } else {
+                  onKeyDown(event);
+                }
 
-          if (open()) {
-            /* console.log(
+                if (open()) {
+                  /* console.log(
               'reference - open and now on Navigate to index:',
               indexRef
             ); */
-            onNavigate(indexRef);
-          }
-        }
-      },
-      onFocus() {
-        if (open()) {
-          onNavigate(null);
-        }
-      },
-      onPointerDown: checkVirtualPointer,
-      onMouseDown: checkVirtualMouse,
-      onClick: checkVirtualMouse,
-    },
-    floating: {
-      'aria-orientation':
-        orientation() === 'both'
-          ? undefined
-          : (orientation() as 'horizontal' | 'vertical'),
-      ...ariaActiveDescendantProp,
-      onKeyDown,
-      onPointerMove() {
-        isPointerModalityRef = true;
-      },
-    },
-    item: item(),
-  };
-  // });
+                  onNavigate(indexRef);
+                }
+              }
+            },
+            onFocus() {
+              if (open()) {
+                onNavigate(null);
+              }
+            },
+            onPointerDown: checkVirtualPointer,
+            onMouseDown: checkVirtualMouse,
+            onClick: checkVirtualMouse,
+          },
+          floating: {
+            'aria-orientation':
+              orientation() === 'both'
+                ? undefined
+                : (orientation() as 'horizontal' | 'vertical'),
+            ...ariaActiveDescendantProp,
+            onKeyDown,
+            onPointerMove() {
+              isPointerModalityRef = true;
+            },
+          },
+          item: item(),
+        };
 }
-// 	);
-
-//   return returnObject();
-// }

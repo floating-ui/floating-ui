@@ -3,9 +3,11 @@ import {
   isMouseLikePointerType,
   isTypeableElement,
 } from '@floating-ui/utils/react';
+import {MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {destructure} from '../utils/destructure';
 
 function isButtonTarget(event: KeyboardEvent) {
   return isHTMLElement(event.target) && event.target.tagName === 'BUTTON';
@@ -16,11 +18,11 @@ function isSpaceIgnored(element: Element | null) {
 }
 
 export interface UseClickProps {
-  enabled?: Accessor<boolean>;
-  event?: 'click' | 'mousedown';
-  toggle?: Accessor<boolean>;
-  ignoreMouse?: Accessor<boolean>;
-  keyboardHandlers?: Accessor<boolean>;
+  enabled?: MaybeAccessor<boolean>;
+  event?: MaybeAccessor<'click' | 'mousedown'>;
+  toggle?: MaybeAccessor<boolean>;
+  ignoreMouse?: MaybeAccessor<boolean>;
+  keyboardHandlers?: MaybeAccessor<boolean>;
 }
 type PointerType = 'mouse' | 'pen' | 'touch';
 /**
@@ -30,121 +32,139 @@ type PointerType = 'mouse' | 'pen' | 'touch';
 export function useClick<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseClickProps = {}
-): ElementProps {
+): Accessor<ElementProps> {
   const {open, onOpenChange, dataRef, refs} = context;
   const mergedProps = mergeProps(
     {
-      enabled: () => true,
+      enabled: true,
       event: 'click',
-      toggle: () => true,
-      ignoreMouse: () => false,
-      keyboardHandlers: () => true,
+      toggle: true,
+      ignoreMouse: false,
+      keyboardHandlers: true,
     },
     props
   );
-  const {enabled, toggle, ignoreMouse, keyboardHandlers} = mergedProps;
-  const eventOption = mergedProps.event;
+  const {
+    enabled,
+    toggle,
+    ignoreMouse,
+    keyboardHandlers,
+    event: eventOption,
+  } = destructure(mergedProps, {normalize: true});
+
   let pointerTypeRef: PointerType | undefined;
   let didKeyDownRef = false;
 
-  if (!enabled) return {};
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {
+            onPointerDown(event) {
+              pointerTypeRef = event.pointerType as PointerType;
+            },
+            onMouseDown(event) {
+              // Ignore all buttons except for the "main" button.
+              // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+              if (event.button !== 0) {
+                return;
+              }
 
-  return {
-    reference: {
-      onPointerDown(event) {
-        pointerTypeRef = event.pointerType as PointerType;
-      },
-      onMouseDown(event) {
-        // Ignore all buttons except for the "main" button.
-        // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
-        if (event.button !== 0) {
-          return;
-        }
+              if (
+                isMouseLikePointerType(pointerTypeRef, true) &&
+                ignoreMouse()
+              ) {
+                return;
+              }
 
-        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse()) {
-          return;
-        }
+              if (eventOption() === 'click') {
+                return;
+              }
 
-        if (eventOption === 'click') {
-          return;
-        }
+              if (
+                open() &&
+                toggle() &&
+                (dataRef.openEvent
+                  ? dataRef.openEvent.type === 'mousedown'
+                  : true)
+              ) {
+                onOpenChange(false, event);
+              } else {
+                // Prevent stealing focus from the floating element
+                event.preventDefault();
+                onOpenChange(true, event);
+              }
+            },
+            onClick(event) {
+              if (eventOption() === 'mousedown' && pointerTypeRef) {
+                pointerTypeRef = undefined;
+                return;
+              }
 
-        if (
-          open() &&
-          toggle() &&
-          (dataRef.openEvent ? dataRef.openEvent.type === 'mousedown' : true)
-        ) {
-          onOpenChange(false, event);
-        } else {
-          // Prevent stealing focus from the floating element
-          event.preventDefault();
-          onOpenChange(true, event);
-        }
-      },
-      onClick(event) {
-        if (eventOption === 'mousedown' && pointerTypeRef) {
-          pointerTypeRef = undefined;
-          return;
-        }
+              if (
+                isMouseLikePointerType(pointerTypeRef, true) &&
+                ignoreMouse()
+              ) {
+                return;
+              }
 
-        if (isMouseLikePointerType(pointerTypeRef, true) && ignoreMouse()) {
-          return;
-        }
+              if (
+                open() &&
+                toggle() &&
+                (dataRef.openEvent ? dataRef.openEvent.type === 'click' : true)
+              ) {
+                onOpenChange(false, event);
+              } else {
+                onOpenChange(true, event);
+              }
+            },
+            onKeyDown(event) {
+              pointerTypeRef = undefined;
 
-        if (
-          open() &&
-          toggle() &&
-          (dataRef.openEvent ? dataRef.openEvent.type === 'click' : true)
-        ) {
-          onOpenChange(false, event);
-        } else {
-          onOpenChange(true, event);
-        }
-      },
-      onKeyDown(event) {
-        pointerTypeRef = undefined;
+              if (
+                event.defaultPrevented ||
+                !keyboardHandlers ||
+                isButtonTarget(event)
+              ) {
+                return;
+              }
 
-        if (
-          event.defaultPrevented ||
-          !keyboardHandlers ||
-          isButtonTarget(event)
-        ) {
-          return;
-        }
+              if (
+                event.key === ' ' &&
+                !isSpaceIgnored(refs.reference() as Element)
+              ) {
+                // Prevent scrolling
+                event.preventDefault();
+                didKeyDownRef = true;
+              }
 
-        if (event.key === ' ' && !isSpaceIgnored(refs.reference() as Element)) {
-          // Prevent scrolling
-          event.preventDefault();
-          didKeyDownRef = true;
-        }
+              if (event.key === 'Enter') {
+                if (open() && toggle()) {
+                  onOpenChange(false, event);
+                } else {
+                  onOpenChange(true, event);
+                }
+              }
+            },
+            onKeyUp(event) {
+              if (
+                event.defaultPrevented ||
+                !keyboardHandlers ||
+                isButtonTarget(event) ||
+                isSpaceIgnored(refs.reference() as Element)
+              ) {
+                return;
+              }
 
-        if (event.key === 'Enter') {
-          if (open() && toggle()) {
-            onOpenChange(false, event);
-          } else {
-            onOpenChange(true, event);
-          }
-        }
-      },
-      onKeyUp(event) {
-        if (
-          event.defaultPrevented ||
-          !keyboardHandlers ||
-          isButtonTarget(event) ||
-          isSpaceIgnored(refs.reference() as Element)
-        ) {
-          return;
-        }
-
-        if (event.key === ' ' && didKeyDownRef) {
-          didKeyDownRef = false;
-          if (open() && toggle()) {
-            onOpenChange(false, event);
-          } else {
-            onOpenChange(true, event);
-          }
-        }
-      },
-    },
-  };
+              if (event.key === ' ' && didKeyDownRef) {
+                didKeyDownRef = false;
+                if (open() && toggle()) {
+                  onOpenChange(false, event);
+                } else {
+                  onOpenChange(true, event);
+                }
+              }
+            },
+          },
+        };
 }

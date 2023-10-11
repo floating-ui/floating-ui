@@ -4,7 +4,7 @@ import {
   getDocument,
   isMouseLikePointerType,
 } from '@floating-ui/utils/react';
-import {destructure} from '@solid-primitives/destructure';
+import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
 
 import {
@@ -18,6 +18,7 @@ import type {
   ReferenceType,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {destructure} from '../utils/destructure';
 // import {useLatestRef} from './utils/useLatestRef';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
@@ -36,11 +37,11 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
 }
 
 export function getDelay(
-  value: UseHoverProps['delay'],
+  value: MaybeAccessor<number | Partial<{open: number; close: number}>>,
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
-  const valueRef = value?.();
+  const valueRef = access(value);
   if (pointerType && !isMouseLikePointerType(pointerType)) {
     return 0;
   }
@@ -53,12 +54,12 @@ export function getDelay(
 }
 
 export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
-  enabled?: Accessor<boolean>;
+  enabled?: MaybeAccessor<boolean>;
   handleClose?: HandleCloseFn<RT>;
-  restMs?: number;
-  delay?: Accessor<number | Partial<{open: number; close: number}>>;
-  mouseOnly?: boolean;
-  move?: boolean;
+  restMs?: MaybeAccessor<number>;
+  delay?: MaybeAccessor<number | Partial<{open: number; close: number}>>;
+  mouseOnly?: MaybeAccessor<boolean>;
+  move?: MaybeAccessor<boolean>;
 }
 
 /**
@@ -69,32 +70,27 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
 export function useHover<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
   props: UseHoverProps<RT> = {}
-): ElementProps {
-  const {
-    open,
-    onOpenChange,
-    dataRef,
-    events,
-    // elements: {domReference, floating},
-    refs,
-  } = context;
+): Accessor<ElementProps> {
+  const {open, onOpenChange, dataRef, events, refs} = context;
   const mergedProps = mergeProps(
     {
-      enabled: () => true,
-      delay: () => 0,
+      enabled: true,
+      delay: 0,
       handleClose: null,
       mouseOnly: false,
       restMs: 0,
       move: true,
-    },
+    } as Required<Omit<UseHoverProps, 'handleClose'>>,
     props
   );
-  const {mouseOnly, restMs, move} = destructure(mergedProps);
-  const {enabled, handleClose, delay} = mergedProps;
+  const {enabled, mouseOnly, restMs, move, delay} = destructure(mergedProps, {
+    normalize: true,
+  });
+  const {handleClose} = mergedProps;
+  const handleCloseRef = handleClose;
   const tree = useFloatingTree<RT>();
   // const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
-  const handleCloseRef = handleClose;
 
   let pointerTypeRef: string | undefined;
   let timeoutRef: any;
@@ -223,18 +219,19 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           clearTimeout(timeoutRef);
         }
 
-        handlerRef = handleCloseRef({
-          ...context,
-          tree: tree(),
-          x: event.clientX,
-          y: event.clientY,
-          onClose() {
-            clearPointerEvents();
-            cleanupMouseMoveHandler();
-            // Should the event expose that it was closed by `safePolygon`?
-            closeWithDelay(event);
-          },
-        });
+        handlerRef = handleCloseRef(
+          mergeProps(context, {
+            tree: tree(),
+            x: event.clientX,
+            y: event.clientY,
+            onClose() {
+              clearPointerEvents();
+              cleanupMouseMoveHandler();
+              // Should the event expose that it was closed by `safePolygon`?
+              closeWithDelay(event);
+            },
+          })
+        );
 
         const handler = handlerRef;
 
@@ -355,42 +352,42 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     clearPointerEvents();
   });
 
-  if (!enabled()) return {};
-
   function setPointerRef(event: PointerEvent) {
     pointerTypeRef = event.pointerType;
   }
 
-  return {
-    reference: {
-      onPointerDown: setPointerRef,
-      onPointerEnter: setPointerRef,
-      onMouseMove(event) {
-        if (open() || restMs() === 0) {
-          return;
-        }
-        console.log('MouseMove - !open ');
-        clearTimeout(restTimeoutRef);
-        restTimeoutRef = setTimeout(() => {
-          if (!blockMouseMoveRef) {
-            onOpenChange(true, event);
-          }
-        }, restMs());
-      },
-    },
-    floating: {
-      onMouseEnter() {
-        clearTimeout(timeoutRef);
-      },
-      onMouseLeave(event) {
-        events.emit('dismiss', {
-          type: 'mouseLeave',
-          data: {
-            returnFocus: false,
+  return () =>
+    !enabled()
+      ? {}
+      : {
+          reference: {
+            onPointerDown: setPointerRef,
+            onPointerEnter: setPointerRef,
+            onMouseMove(event) {
+              if (open() || restMs() === 0) {
+                return;
+              }
+              clearTimeout(restTimeoutRef);
+              restTimeoutRef = setTimeout(() => {
+                if (!blockMouseMoveRef) {
+                  onOpenChange(true, event);
+                }
+              }, restMs());
+            },
           },
-        });
-        closeWithDelay(event, false);
-      },
-    },
-  };
+          floating: {
+            onMouseEnter() {
+              clearTimeout(timeoutRef);
+            },
+            onMouseLeave(event) {
+              events.emit('dismiss', {
+                type: 'mouseLeave',
+                data: {
+                  returnFocus: false,
+                },
+              });
+              closeWithDelay(event, false);
+            },
+          },
+        };
 }
