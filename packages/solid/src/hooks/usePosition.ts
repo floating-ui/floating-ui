@@ -44,6 +44,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     const currentError = error();
     if (currentError) {
       // throw currentError.value;
+      import.meta.env.DEV && console.warn(currentError.value);
     }
   });
 
@@ -130,7 +131,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
 
     const x = roundByDPR(floatingElement, data().x);
     const y = roundByDPR(floatingElement, data().y);
-    console.log({transform: options.transform});
+
     if (options?.transform) {
       return {
         ...initialStyles,

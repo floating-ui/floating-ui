@@ -40,22 +40,23 @@ export function getDelay(
   prop: 'open' | 'close',
   pointerType?: PointerEvent['pointerType']
 ) {
+  const valueRef = value?.();
   if (pointerType && !isMouseLikePointerType(pointerType)) {
     return 0;
   }
 
-  if (typeof value === 'number') {
-    return value;
+  if (typeof valueRef === 'number') {
+    return valueRef;
   }
 
-  return value?.[prop];
+  return valueRef?.[prop];
 }
 
 export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
   enabled?: Accessor<boolean>;
   handleClose?: HandleCloseFn<RT>;
   restMs?: number;
-  delay?: number | Partial<{open: number; close: number}>;
+  delay?: Accessor<number | Partial<{open: number; close: number}>>;
   mouseOnly?: boolean;
   move?: boolean;
 }
@@ -80,7 +81,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   const mergedProps = mergeProps(
     {
       enabled: () => true,
-      delay: 0,
+      delay: () => 0,
       handleClose: null,
       mouseOnly: false,
       restMs: 0,
@@ -88,17 +89,16 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     },
     props
   );
-  const {delay, mouseOnly, restMs, move} = destructure(mergedProps);
-  const {enabled, handleClose} = mergedProps;
+  const {mouseOnly, restMs, move} = destructure(mergedProps);
+  const {enabled, handleClose, delay} = mergedProps;
   const tree = useFloatingTree<RT>();
   // const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
   const handleCloseRef = handleClose;
-  const delayRef = delay;
 
   let pointerTypeRef: string | undefined;
   let timeoutRef: any;
-  let handlerRef: (event: MouseEvent) => void | null | undefined;
+  let handlerRef: ((event: MouseEvent) => void) | null | undefined;
   let restTimeoutRef: any;
   let blockMouseMoveRef = true;
   let performedPointerEventsMutationRef = false;
@@ -123,9 +123,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
 
     events.on('dismiss', onDismiss);
-    return () => {
+    onCleanup(() => {
       events.off('dismiss', onDismiss);
-    };
+    });
   });
 
   createEffect(() => {
@@ -141,13 +141,13 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     const html = getDocument(refs.floating()).documentElement;
     html.addEventListener('mouseleave', onLeave);
-    return () => {
+    onCleanup(() => {
       html.removeEventListener('mouseleave', onLeave);
-    };
+    });
   });
 
   const closeWithDelay = (event: Event, runElseBranch = true) => {
-    const closeDelay = getDelay(delayRef(), 'close', pointerTypeRef);
+    const closeDelay = getDelay(delay, 'close', pointerTypeRef);
     if (closeDelay && !handlerRef) {
       clearTimeout(timeoutRef);
       timeoutRef = setTimeout(() => onOpenChange(false, event), closeDelay);
@@ -159,7 +159,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
   const cleanupMouseMoveHandler = () => {
     unbindMouseMoveRef();
-    handlerRef = () => undefined;
+    handlerRef = undefined;
   };
 
   const clearPointerEvents = () => {
@@ -191,12 +191,12 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
       if (
         (mouseOnly() && !isMouseLikePointerType(pointerTypeRef)) ||
-        (restMs() > 0 && getDelay(delayRef(), 'open') === 0)
+        (restMs() > 0 && getDelay(delay, 'open') === 0)
       ) {
         return;
       }
 
-      const openDelay = getDelay(delayRef(), 'open', pointerTypeRef);
+      const openDelay = getDelay(delay, 'open', pointerTypeRef);
 
       if (openDelay) {
         timeoutRef = setTimeout(() => {
@@ -281,18 +281,19 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     if (isElement(refs.reference())) {
       const ref = refs.reference() as unknown as HTMLElement;
+
       open() && ref.addEventListener('mouseleave', onScrollMouseLeave);
       refs.floating()?.addEventListener('mouseleave', onScrollMouseLeave);
       move() && ref.addEventListener('mousemove', onMouseEnter, {once: true});
       ref.addEventListener('mouseenter', onMouseEnter);
       ref.addEventListener('mouseleave', onMouseLeave);
-      return () => {
+      onCleanup(() => {
         open() && ref.removeEventListener('mouseleave', onScrollMouseLeave);
         refs.floating()?.removeEventListener('mouseleave', onScrollMouseLeave);
         move() && ref.removeEventListener('mousemove', onMouseEnter);
         ref.removeEventListener('mouseenter', onMouseEnter);
         ref.removeEventListener('mouseleave', onMouseLeave);
-      };
+      });
     }
   });
 
@@ -354,7 +355,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     clearPointerEvents();
   });
 
-  if (!enabled) return {};
+  if (!enabled()) return {};
 
   function setPointerRef(event: PointerEvent) {
     pointerTypeRef = event.pointerType;
@@ -368,7 +369,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         if (open() || restMs() === 0) {
           return;
         }
-
+        console.log('MouseMove - !open ');
         clearTimeout(restTimeoutRef);
         restTimeoutRef = setTimeout(() => {
           if (!blockMouseMoveRef) {

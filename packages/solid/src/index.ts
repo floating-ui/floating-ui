@@ -1,7 +1,9 @@
 export {arrow} from './arrow';
 export {FloatingArrow} from './components/FloatingArrow';
+export * from './components/FloatingDelayGroup';
 export {FloatingFocusManager} from './components/FloatingFocusManager';
 export * from './components/FloatingList';
+export * from './components/FloatingOverlay';
 export {
   FloatingPortal,
   useFloatingPortalNode,

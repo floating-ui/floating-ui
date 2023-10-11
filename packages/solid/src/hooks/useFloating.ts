@@ -1,36 +1,26 @@
 // credits to Alexis Munsayac
 // "https://github.com/lxsmnsyc/solid-floating-ui/tree/main/packages/solid-floating-ui",
 import {ReferenceElement} from '@floating-ui/dom';
-import {isElement} from '@floating-ui/utils/dom';
-import {createEffect, createMemo, createUniqueId, onCleanup} from 'solid-js';
+import {createEffect, createMemo, createUniqueId, mergeProps} from 'solid-js';
 
 import {useFloatingTree} from '../components/FloatingTree';
-import {UseFloatingOptions, UseFloatingReturn} from '../types';
+import {ContextData, UseFloatingOptions, UseFloatingReturn} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 import {usePosition} from './usePosition';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function ignore<T>(_value: T): void {
-  // no-op
-}
-
 export function useFloating<R extends ReferenceElement>(
-  // reference: () => R | undefined | null,
-  // floating: () => F | undefined | null,
   options: UseFloatingOptions<R>
 ): UseFloatingReturn<R> {
-  // const placement = () => options?.placement ?? 'bottom';
-  // const strategy = () => options?.strategy ?? 'absolute';
   const floatingId = createUniqueId();
   const events = createPubSub();
   const position = usePosition({transform: true, ...options});
   // eslint-disable-next-line prefer-const
-  // let dataRef: ContextData = {};
+  let dataRef: ContextData = {};
 
   const onOpenChange = (open: boolean, event?: Event) => {
-    // if (open) {
-    //   dataRef.openEvent = event; //what do we need that for? It is not typed in any type!?
-    // }
+    if (open) {
+      dataRef.openEvent = event; //what do we need that for? It is not typed in any type!?
+    }
     options.onOpenChange?.(open, event);
   };
 
@@ -60,16 +50,17 @@ export function useFloating<R extends ReferenceElement>(
   // });
 
   const context = createMemo(() => {
-    const open = () => !!options.open?.();
-    return {
-      ...position,
-      dataRef: position,
-      nodeId: options?.nodeId,
-      floatingId,
-      events,
-      open,
-      onOpenChange,
-    };
+    return mergeProps(
+      {
+        dataRef: mergeProps(dataRef, position),
+        nodeId: options?.nodeId,
+        floatingId,
+        events,
+        open: options.open ?? (() => false),
+        onOpenChange,
+      },
+      position
+    );
   });
 
   //Add the context to the PortalNodes
@@ -112,7 +103,9 @@ export function useFloating<R extends ReferenceElement>(
     get refs() {
       return position.refs;
     },
-    context,
+    get context() {
+      return context;
+    },
     get update() {
       return position.update;
     },
