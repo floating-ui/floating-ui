@@ -287,9 +287,9 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   const closeOnPressOutsideCapture = useEffectEvent((event: MouseEvent) => {
     const callback = () => {
       closeOnPressOutside(event);
-      event.target?.removeEventListener(outsidePressEvent, callback);
+      getTarget(event)?.removeEventListener(outsidePressEvent, callback);
     };
-    event.target?.addEventListener(outsidePressEvent, callback);
+    getTarget(event)?.addEventListener(outsidePressEvent, callback);
   });
 
   React.useEffect(() => {
