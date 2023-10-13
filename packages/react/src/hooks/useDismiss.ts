@@ -39,14 +39,18 @@ const captureHandlerKeys = {
   click: 'onClickCapture',
 };
 
-export const normalizeBubblesProp = (
-  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean}
+export const normalizeProp = (
+  normalizable?: boolean | {escapeKey?: boolean; outsidePress?: boolean}
 ) => {
   return {
-    escapeKeyBubbles:
-      typeof bubbles === 'boolean' ? bubbles : bubbles?.escapeKey ?? false,
-    outsidePressBubbles:
-      typeof bubbles === 'boolean' ? bubbles : bubbles?.outsidePress ?? true,
+    escapeKey:
+      typeof normalizable === 'boolean'
+        ? normalizable
+        : normalizable?.escapeKey ?? false,
+    outsidePress:
+      typeof normalizable === 'boolean'
+        ? normalizable
+        : normalizable?.outsidePress ?? true,
   };
 };
 
@@ -66,6 +70,7 @@ export interface UseDismissProps {
   outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
+  capture?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
 }
 
 /**
@@ -94,6 +99,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles,
+    capture,
   } = props;
 
   const tree = useFloatingTree();
@@ -109,7 +115,10 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       : unstable_outsidePress;
   const insideReactTreeRef = React.useRef(false);
   const endedOrStartedInsideRef = React.useRef(false);
-  const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp(bubbles);
+  const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+    normalizeProp(bubbles);
+  const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+    normalizeProp(capture);
 
   const closeOnEscapeKeyDown = useEffectEvent(
     (event: React.KeyboardEvent<Element> | KeyboardEvent) => {
@@ -151,6 +160,14 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       onOpenChange(false, isReactEvent(event) ? event.nativeEvent : event);
     }
   );
+
+  const closeOnEscapeKeyDownCapture = useEffectEvent((event: KeyboardEvent) => {
+    const callback = () => {
+      closeOnEscapeKeyDown(event);
+      getTarget(event)?.removeEventListener('keydown', callback);
+    };
+    getTarget(event)?.addEventListener('keydown', callback);
+  });
 
   const closeOnPressOutside = useEffectEvent((event: MouseEvent) => {
     // Given developers can stop the propagation of the synthetic event,
@@ -282,6 +299,14 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     onOpenChange(false, event);
   });
 
+  const closeOnPressOutsideCapture = useEffectEvent((event: MouseEvent) => {
+    const callback = () => {
+      closeOnPressOutside(event);
+      getTarget(event)?.removeEventListener(outsidePressEvent, callback);
+    };
+    getTarget(event)?.addEventListener(outsidePressEvent, callback);
+  });
+
   React.useEffect(() => {
     if (!open || !enabled) {
       return;
@@ -295,9 +320,18 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     }
 
     const doc = getDocument(floating);
-    escapeKey && doc.addEventListener('keydown', closeOnEscapeKeyDown);
+    escapeKey &&
+      doc.addEventListener(
+        'keydown',
+        escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
+        escapeKeyCapture
+      );
     outsidePress &&
-      doc.addEventListener(outsidePressEvent, closeOnPressOutside);
+      doc.addEventListener(
+        outsidePressEvent,
+        outsidePressCapture ? closeOnPressOutsideCapture : closeOnPressOutside,
+        outsidePressCapture
+      );
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
 
@@ -327,9 +361,20 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     });
 
     return () => {
-      escapeKey && doc.removeEventListener('keydown', closeOnEscapeKeyDown);
+      escapeKey &&
+        doc.removeEventListener(
+          'keydown',
+          escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
+          escapeKeyCapture
+        );
       outsidePress &&
-        doc.removeEventListener(outsidePressEvent, closeOnPressOutside);
+        doc.removeEventListener(
+          outsidePressEvent,
+          outsidePressCapture
+            ? closeOnPressOutsideCapture
+            : closeOnPressOutside,
+          outsidePressCapture
+        );
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
       });
@@ -349,7 +394,11 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     escapeKeyBubbles,
     outsidePressBubbles,
     closeOnEscapeKeyDown,
+    escapeKeyCapture,
+    closeOnEscapeKeyDownCapture,
     closeOnPressOutside,
+    outsidePressCapture,
+    closeOnPressOutsideCapture,
   ]);
 
   React.useEffect(() => {

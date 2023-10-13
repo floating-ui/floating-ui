@@ -14,10 +14,7 @@ import {
   useFocus,
   useInteractions,
 } from '../../src';
-import {
-  normalizeBubblesProp,
-  UseDismissProps,
-} from '../../src/hooks/useDismiss';
+import {normalizeProp, UseDismissProps} from '../../src/hooks/useDismiss';
 
 function App(props: UseDismissProps) {
   const [open, setOpen] = useState(true);
@@ -354,40 +351,44 @@ describe('bubbles', () => {
 
   describe('prop resolution', () => {
     test('undefined', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp();
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp();
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('false', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} =
-        normalizeBubblesProp(false);
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp(false);
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(false);
     });
 
     test('{}', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({});
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({});
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('{ escapeKey: false }', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
-        escapeKey: false,
-      });
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({
+          escapeKey: false,
+        });
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('{ outsidePress: false }', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
-        outsidePress: false,
-      });
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({
+          outsidePress: false,
+        });
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(false);
