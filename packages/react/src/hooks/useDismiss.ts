@@ -285,11 +285,11 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   });
 
   const closeOnPressOutsideCapture = useEffectEvent((event: MouseEvent) => {
-    event.target?.addEventListener(
-      outsidePressEvent,
-      () => closeOnPressOutside(event),
-      {once: true}
-    );
+    const callback = () => {
+      closeOnPressOutside(event);
+      event.target?.removeEventListener(outsidePressEvent, callback);
+    };
+    event.target?.addEventListener(outsidePressEvent, callback);
   });
 
   React.useEffect(() => {
@@ -310,9 +310,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       doc.addEventListener(
         outsidePressEvent,
         capture ? closeOnPressOutsideCapture : closeOnPressOutside,
-        {
-          capture,
-        }
+        capture
       );
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
@@ -348,9 +346,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         doc.removeEventListener(
           outsidePressEvent,
           capture ? closeOnPressOutsideCapture : closeOnPressOutside,
-          {
-            capture,
-          }
+          capture
         );
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
