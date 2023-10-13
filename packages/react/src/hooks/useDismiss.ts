@@ -63,10 +63,10 @@ export interface UseDismissProps {
   referencePress?: boolean;
   referencePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   outsidePress?: boolean | ((event: MouseEvent) => boolean);
+  outsidePressCapture?: boolean;
   outsidePressEvent?: 'pointerdown' | 'mousedown' | 'click';
   ancestorScroll?: boolean;
   bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean};
-  capture?: boolean;
 }
 
 /**
@@ -90,12 +90,12 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     enabled = true,
     escapeKey = true,
     outsidePress: unstable_outsidePress = true,
+    outsidePressCapture = true,
     outsidePressEvent = 'pointerdown',
     referencePress = false,
     referencePressEvent = 'pointerdown',
     ancestorScroll = false,
     bubbles,
-    capture = true,
   } = props;
 
   const tree = useFloatingTree();
@@ -309,8 +309,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     outsidePress &&
       doc.addEventListener(
         outsidePressEvent,
-        capture ? closeOnPressOutsideCapture : closeOnPressOutside,
-        capture
+        outsidePressCapture ? closeOnPressOutsideCapture : closeOnPressOutside,
+        outsidePressCapture
       );
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
@@ -345,8 +345,10 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       outsidePress &&
         doc.removeEventListener(
           outsidePressEvent,
-          capture ? closeOnPressOutsideCapture : closeOnPressOutside,
-          capture
+          outsidePressCapture
+            ? closeOnPressOutsideCapture
+            : closeOnPressOutside,
+          outsidePressCapture
         );
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
@@ -368,7 +370,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     outsidePressBubbles,
     closeOnEscapeKeyDown,
     closeOnPressOutside,
-    capture,
+    outsidePressCapture,
     closeOnPressOutsideCapture,
   ]);
 
