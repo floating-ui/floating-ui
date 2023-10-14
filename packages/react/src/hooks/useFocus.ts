@@ -3,8 +3,10 @@ import {
   contains,
   getDocument,
   getTarget,
+  isMac,
   isSafari,
   isTypeableElement,
+  isVirtualPointerEvent,
 } from '@floating-ui/react/utils';
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
@@ -38,7 +40,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
   const blockFocusRef = React.useRef(false);
   const timeoutRef = React.useRef<number>();
-  const keyboardModalityRef = React.useRef(false);
+  const keyboardModalityRef = React.useRef(true);
 
   React.useEffect(() => {
     if (!enabled) {
@@ -102,7 +104,8 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
     return {
       reference: {
-        onPointerDown() {
+        onPointerDown(event) {
+          if (isVirtualPointerEvent(event.nativeEvent)) return;
           keyboardModalityRef.current = false;
         },
         onMouseLeave() {
@@ -115,10 +118,10 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
 
           if (visibleOnly && isElement(target)) {
             try {
-              // Safari unreliably matches `:focus-visible` on the reference
+              // Mac Safari unreliably matches `:focus-visible` on the reference
               // if focus was outside the page initially - use the fallback
               // instead.
-              if (isSafari()) throw Error();
+              if (isSafari() && isMac()) throw Error();
               if (!target.matches(':focus-visible')) return;
             } catch (e) {
               // Old browsers will throw an error when using `:focus-visible`.
