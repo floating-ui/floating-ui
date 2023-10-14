@@ -25,14 +25,10 @@ rendering of the composite components. Both `Composite` and
 `CompositeItem` accept JSX element:
 
 ```js
-<CompositeItem
-  render={
-    <select>
-      <option />
-      <option />
-    </select>
-  }
-/>
+<CompositeItem render={<select />}>
+  <option />
+  <option />
+</CompositeItem>
 ```
 
 <Notice type="error" title="Important">
@@ -66,6 +62,8 @@ interface Props {
   loop?: boolean;
   cols?: number;
   disabledIndices?: number[];
+  activeIndex?: number;
+  onNavigate?(index: number): void;
 }
 ```
 
@@ -118,4 +116,28 @@ Determines which items are disabled. The `disabled{:.keyword}` or
 
 ```js
 <Composite disabledIndices={[1]} />
+```
+
+### activeIndex
+
+default: `undefined{:js}`
+
+Determines which item is active. Used to externally control the
+active item.
+
+```js
+const [activeIndex, setActiveIndex] = useState(0);
+return <Composite activeIndex={activeIndex} />;
+```
+
+### onNavigate
+
+default: `undefined{:js}`
+
+Called when the user navigates to a new item. Used to externally
+control the active item.
+
+```js
+const [activeIndex, setActiveIndex] = useState(0);
+return <Composite onNavigate={setActiveIndex} />;
 ```
