@@ -9,6 +9,14 @@ html {
   @apply scroll-pt-20;
 }
 
+summary {
+  @apply cursor-pointer;
+}
+
+details *:last-child {
+  @apply mb-0 mt-2;
+}
+
 h1,
 h2,
 h3,

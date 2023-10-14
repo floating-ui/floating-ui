@@ -19,6 +19,27 @@ There are two different hooks you can use:
 This hook provides computed inline styles that you can spread
 into the `style{:.keyword}` prop for a floating element.
 
+<Notice>
+  The floating element is positioned using `transform` CSS by default. To avoid conflicts with positioning when transitioning this property, make the floating
+  element a positioned wrapper around a transitioned child.
+
+<details>
+  <summary>View example</summary>
+  ```js
+  <div ref={refs.setFloating} style={floatingStyles}>
+    <div
+      style={{
+        // Transition styles
+        ...styles,
+      }}
+    >
+      Content
+    </div>
+  </div>
+  ```
+</details>
+</Notice>
+
 This hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
 
