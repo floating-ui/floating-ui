@@ -12,7 +12,7 @@ export default function Notice({
   return (
     <aside
       className={cn(
-        'mb-4 rounded bg-opacity-40 px-6 pt-6 pb-0.5 dark:bg-opacity-40',
+        'mb-4 rounded bg-opacity-40 p-6 dark:bg-opacity-40 [&_pre:last-child]:mt-2 [&_*:last-child]:mb-0',
         className,
         {
           'bg-blue-300 text-blue-900 dark:bg-blue-500 dark:text-blue-200':
