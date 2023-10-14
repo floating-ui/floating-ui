@@ -1,5 +1,15 @@
 # @floating-ui/react
 
+## 0.26.1
+
+### Patch Changes
+
+- ac17abb7: feat(Composite): allow controlled mode with `activeIndex` and
+  `onNavigate` props
+- c3bfd04e: fix(useFocus): improve `visibleOnly` detection
+- 43725a2c: feat(useDismiss): add `capture` option and default `outsidePress` to
+  `true`
+
 ## 0.26.0
 
 ### Minor Changes
