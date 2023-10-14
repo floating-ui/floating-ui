@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
+import {useEffectEvent} from '../hooks/utils/useEffectEvent';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -29,10 +30,10 @@ function renderJsx(
 
 const CompositeContext = React.createContext<{
   activeIndex: number;
-  setActiveIndex: (index: number) => void;
+  onNavigate(index: number): void;
 }>({
   activeIndex: 0,
-  setActiveIndex: () => {},
+  onNavigate: () => {},
 });
 
 type RenderProp =
@@ -45,6 +46,8 @@ interface CompositeProps {
   loop?: boolean;
   cols?: number;
   disabledIndices?: number[];
+  activeIndex?: number;
+  onNavigate?(index: number): void;
 }
 
 const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
@@ -61,17 +64,24 @@ export const Composite = React.forwardRef<
     loop = true,
     cols = 1,
     disabledIndices,
+    activeIndex: externalActiveIndex,
+    onNavigate: externalSetActiveIndex,
     ...props
   },
   forwardedRef
 ) {
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [internalActiveIndex, internalSetActiveIndex] = React.useState(0);
+  const activeIndex = externalActiveIndex ?? internalActiveIndex;
+  const onNavigate = useEffectEvent(
+    externalSetActiveIndex ?? internalSetActiveIndex
+  );
+
   const elementsRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};
   const contextValue = React.useMemo(
-    () => ({activeIndex, setActiveIndex}),
-    [activeIndex]
+    () => ({activeIndex, onNavigate}),
+    [activeIndex, onNavigate]
   );
   const isGrid = cols > 1;
 
@@ -148,7 +158,7 @@ export const Composite = React.forwardRef<
         event.preventDefault();
       }
 
-      setActiveIndex(nextIndex);
+      onNavigate(nextIndex);
 
       // Wait for FocusManager `returnFocus` to execute.
       queueMicrotask(() => {
@@ -185,7 +195,7 @@ export const CompositeItem = React.forwardRef<
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};
 
-  const {activeIndex, setActiveIndex} = React.useContext(CompositeContext);
+  const {activeIndex, onNavigate} = React.useContext(CompositeContext);
   const {ref, index} = useListItem();
   const mergedRef = useMergeRefs([ref, forwardedRef, renderElementProps.ref]);
   const isActive = activeIndex === index;
@@ -199,7 +209,7 @@ export const CompositeItem = React.forwardRef<
     onFocus(e) {
       props.onFocus?.(e);
       renderElementProps.onFocus?.(e);
-      setActiveIndex(index);
+      onNavigate(index);
     },
   };
 
