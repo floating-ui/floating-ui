@@ -1,19 +1,28 @@
 // credits to Alexis Munsayac
 // "https://github.com/lxsmnsyc/solid-floating-ui/tree/main/packages/solid-floating-ui",
 import {ReferenceElement} from '@floating-ui/dom';
+import {access} from '@solid-primitives/utils';
 import {createEffect, createMemo, createUniqueId, mergeProps} from 'solid-js';
 
-import {useFloatingTree} from '../components/FloatingTree';
-import {ContextData, UseFloatingOptions, UseFloatingReturn} from '../types';
+import {
+  useFloatingTree,
+  useUnsafeFloatingTree,
+} from '../components/FloatingTree';
+import {
+  ContextData,
+  FloatingContext,
+  UseFloatingOptions,
+  UseFloatingReturn,
+} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 import {usePosition} from './usePosition';
 
 export function useFloating<R extends ReferenceElement>(
-  options: UseFloatingOptions<R>
+  options?: UseFloatingOptions<R>,
 ): UseFloatingReturn<R> {
   const floatingId = createUniqueId();
   const events = createPubSub();
-  const position = usePosition({transform: true, ...options});
+  const position = usePosition(mergeProps({transform: true}, options));
   // eslint-disable-next-line prefer-const
   let dataRef: ContextData = {};
 
@@ -21,7 +30,7 @@ export function useFloating<R extends ReferenceElement>(
     if (open) {
       dataRef.openEvent = event; //what do we need that for? It is not typed in any type!?
     }
-    options.onOpenChange?.(open, event);
+    options?.onOpenChange?.(open, event);
   };
 
   // createEffect(() => {
@@ -37,7 +46,7 @@ export function useFloating<R extends ReferenceElement>(
   //     if (options?.whileElementsMounted) {
   //       console.log({currentFloating, currentReference});
   //       return;
-  //       const cleanup = options.whileElementsMounted(
+  //       const cleanup = options?.whileElementsMounted(
   //         currentReference,
   //         currentFloating,
   //         position.update
@@ -56,19 +65,22 @@ export function useFloating<R extends ReferenceElement>(
         nodeId: options?.nodeId,
         floatingId,
         events,
-        open: options.open ?? (() => false),
+        open: () => access(options?.open) ?? false,
         onOpenChange,
       },
-      position
+      position,
     );
   });
 
   //Add the context to the PortalNodes
-  const tree = useFloatingTree<R>();
   createEffect(() => {
-    const node = tree()?.nodesRef.find((node) => node.id === options.nodeId);
+    const tree = useUnsafeFloatingTree<R>();
+    if (!tree?.()) return;
+    const node = tree?.()?.nodesRef?.find(
+      (node) => node.id === options?.nodeId,
+    );
     if (node) {
-      node.context = context();
+      node.context = context() as FloatingContext<R>;
     }
   });
 

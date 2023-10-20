@@ -40,7 +40,7 @@ const captureHandlerKeys = {
 };
 
 export const normalizeBubblesProp = (
-  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean}
+  bubbles?: boolean | {escapeKey?: boolean; outsidePress?: boolean},
 ) => {
   return {
     escapeKeyBubbles:
@@ -87,7 +87,7 @@ export interface UseDismissProps extends Partial<DefaultUseDismissProps> {
  */
 export function useDismiss<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseDismissProps
+  props: UseDismissProps,
 ): Accessor<ElementProps> {
   const {
     open,
@@ -125,7 +125,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   let insideReactTreeRef = false;
 
   const {escapeKeyBubbles, outsidePressBubbles} = destructure(
-    normalizeBubblesProp(bubbles && bubbles())
+    normalizeBubblesProp(bubbles && bubbles()),
   );
 
   const closeOnEscapeKeyDown = (event: KeyboardEvent) => {
@@ -207,7 +207,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       // If the target root element contains none of the markers, then the
       // element was injected after the floating element rendered.
       Array.from(markers).every(
-        (marker) => !contains(targetRootAncestor, marker)
+        (marker) => !contains(targetRootAncestor, marker),
       )
     ) {
       return;
@@ -244,7 +244,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     const targetIsInsideChildren =
       tree() &&
       getChildren(tree().nodesRef, nodeId()).some((node) =>
-        isEventTargetWithin(event, node.context?.refs.floating())
+        isEventTargetWithin(event, node.context?.refs.floating()),
       );
     const domRef = context.refs.reference() as HTMLElement | null;
     if (
@@ -327,7 +327,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
     // Ignore the visual viewport for scrolling dismissal (allow pinch-zoom)
     ancestors = ancestors.filter(
-      (ancestor) => ancestor !== doc.defaultView?.visualViewport
+      (ancestor) => ancestor !== doc.defaultView?.visualViewport,
     );
 
     ancestors.forEach((ancestor) => {

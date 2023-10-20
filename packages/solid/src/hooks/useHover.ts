@@ -29,7 +29,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
       onClose: () => void;
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
-    }
+    },
   ): (event: MouseEvent) => void;
   __options: {
     blockPointerEvents: boolean;
@@ -39,7 +39,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
 export function getDelay(
   value: MaybeAccessor<number | Partial<{open: number; close: number}>>,
   prop: 'open' | 'close',
-  pointerType?: PointerEvent['pointerType']
+  pointerType?: PointerEvent['pointerType'],
 ) {
   const valueRef = access(value);
   if (pointerType && !isMouseLikePointerType(pointerType)) {
@@ -69,7 +69,7 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
  */
 export function useHover<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseHoverProps<RT> = {}
+  props: UseHoverProps<RT> = {},
 ): Accessor<ElementProps> {
   const {open, onOpenChange, dataRef, events, refs} = context;
   const mergedProps = mergeProps(
@@ -81,7 +81,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       restMs: 0,
       move: true,
     } as Required<Omit<UseHoverProps, 'handleClose'>>,
-    props
+    props,
   );
   const {enabled, mouseOnly, restMs, move, delay} = destructure(mergedProps, {
     normalize: true,
@@ -230,7 +230,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
               // Should the event expose that it was closed by `safePolygon`?
               closeWithDelay(event);
             },
-          })
+          }),
         );
 
         const handler = handlerRef;

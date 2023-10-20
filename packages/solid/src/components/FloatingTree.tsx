@@ -14,17 +14,17 @@ import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
 import {createPubSub} from '../utils/createPubSub';
 
 const FloatingNodeContext = createContext<Accessor<FloatingNodeType> | null>(
-  null
+  null,
 );
 
 const FloatingTreeContext = createContext<Accessor<FloatingTreeType> | null>(
-  null
+  null,
 );
 export const useFloatingNodeContext = () => {
   const context = useContext(FloatingNodeContext);
   if (!context) {
     throw new Error(
-      'useFloatingNodeContext must be used within a FloatingNodeContext.Provider'
+      'useFloatingNodeContext must be used within a FloatingNodeContext.Provider',
     );
   }
   return context;
@@ -36,11 +36,15 @@ export const useFloatingTree = <R extends ReferenceType = ReferenceType>() => {
   > | null;
   if (!context) {
     throw new Error(
-      'useFloatingTreeContext must be used within a FloatingTreeContext.Provider'
+      'useFloatingTreeContext must be used within a FloatingTreeContext.Provider',
     );
   }
   return context;
 };
+
+export const useUnsafeFloatingTree = <
+  R extends ReferenceType = ReferenceType,
+>() => useContext(FloatingTreeContext) as Accessor<FloatingTreeType<R>> | null;
 
 export const useFloatingParentNodeId = (): string | null => {
   const context = useContext(FloatingNodeContext);
@@ -59,8 +63,8 @@ export function useFloatingNodeId(customParentId?: string): string {
   const node = createMemo(() => {
     return {id, parentId: customParentId || reactParentId};
   });
-  onMount(() => tree()?.addNode(node()));
-  onCleanup(() => tree()?.removeNode(node()));
+  onMount(() => tree?.()?.addNode(node()));
+  onCleanup(() => tree?.()?.removeNode(node()));
   return id;
 }
 

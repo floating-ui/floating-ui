@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "test", "test/visual/node_modules/components/Drawer.tsx"],
   "compilerOptions": {
     "strict": true,
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
@@ -13,6 +13,6 @@
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
     "declaration": true,
-    "types": ["solid-start/env"]
+    "types": ["solid-start/env", "jest"]
   }
 }

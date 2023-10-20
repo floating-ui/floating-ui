@@ -5,6 +5,7 @@ import {
   ComputePositionReturn,
   ReferenceElement,
 } from '@floating-ui/dom';
+import {access} from '@solid-primitives/utils';
 import {createEffect, createMemo, createSignal} from 'solid-js';
 
 import {UseFloatingOptions, UseFloatingReturn} from '../types';
@@ -62,7 +63,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
       const capturedVersion = version();
 
       computePosition(currentReference, currentFloating, {
-        middleware: options?.middleware,
+        middleware: access(options?.middleware),
         placement: placement(),
         strategy: strategy(),
       }).then(
@@ -90,7 +91,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     const currentFloating = floating();
 
     // Subscribe to other reactive properties
-    ignore(options?.middleware);
+    ignore(access(options?.middleware));
     placement();
     strategy();
 

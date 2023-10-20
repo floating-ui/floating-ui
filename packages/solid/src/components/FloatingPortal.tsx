@@ -12,7 +12,7 @@ import {
   Show,
   useContext,
 } from 'solid-js';
-import {createStore, SetStoreFunction} from 'solid-js/store';
+import {createStore} from 'solid-js/store';
 import {Portal} from 'solid-js/web';
 
 import type {ExtendedRefs} from '../types';
@@ -44,7 +44,7 @@ const PortalContext = createContext<null | {
   portalNode: Accessor<HTMLElement | null>;
   setFocusManagerState: Setter<FocusManagerState>;
   refs: PortalRefs;
-  setRefs: SetStoreFunction<PortalRefs>;
+  setRefs: Setter<Partial<PortalRefs>>;
 }>(null);
 
 export function useFloatingPortalNode(props: {
@@ -166,7 +166,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       // Don't render if unmount is transitioning.
       focusManagerState()?.open &&
       mergedProps.preserveTabOrder &&
-      !!(mergedProps.root || portalNode())
+      !!(mergedProps.root || portalNode()),
   );
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
@@ -183,11 +183,11 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
     // portal has already been focused, either by tabbing into a focus trap
     // element outside or using the mouse.
     function onFocus(event: FocusEvent) {
-      const portanNodeRef = portalNode();
-      if (portanNodeRef && isOutsideEvent(event)) {
+      const portalNodeRef = portalNode();
+      if (portalNodeRef && isOutsideEvent(event)) {
         const focusing = event.type === 'focusin';
         const manageFocus = focusing ? enableFocusInside : disableFocusInside;
-        manageFocus(portanNodeRef);
+        manageFocus(portalNodeRef);
       }
     }
     // Listen to the event on the capture phase so they run before the focus
@@ -214,9 +214,10 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       <Show when={shouldRenderGuards() && portalNode()}>
         <FocusGuard
           data-type="outside"
-          ref={(el) => setRefs('beforeOutsideRef', el)}
+          ref={(el) => setRefs({beforeOutsideRef: el})}
           onFocus={(event) => {
             if (isOutsideEvent(event, portalNode())) {
+              portalNode() && enableFocusInside(portalNode()!);
               refs.beforeInsideRef?.focus();
             } else {
               const prevTabbable =
@@ -236,9 +237,11 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
       <Show when={shouldRenderGuards() && portalNode()}>
         <FocusGuard
           data-type="outside"
-          ref={(el) => setRefs('afterOutsideRef', el)}
+          ref={(el) => setRefs({afterOutsideRef: el})}
           onFocus={(event) => {
             if (isOutsideEvent(event, portalNode())) {
+              //Call that directly as it's not called through useEffect at the correct time
+              portalNode() && enableFocusInside(portalNode()!);
               refs.afterInsideRef?.focus();
             } else {
               const nextTabbable =

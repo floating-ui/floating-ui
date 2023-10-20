@@ -1,6 +1,7 @@
 import {
   createContext,
   createEffect,
+  createRenderEffect,
   JSX,
   JSXElement,
   mergeProps,
@@ -52,7 +53,7 @@ interface FloatingDelayGroupProps {
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
 export const FloatingDelayGroup = (
-  props: FloatingDelayGroupProps
+  props: FloatingDelayGroupProps,
 ): JSX.Element => {
   const store = createStore({
     delay: props.delay,
@@ -66,7 +67,7 @@ export const FloatingDelayGroup = (
 
   createEffect(() => {
     const {currentId} = state;
-    console.log('FloatingGroupComponent', {currentId});
+
     if (currentId) {
       if (initialCurrentIdRef === null) {
         initialCurrentIdRef = currentId;
@@ -92,24 +93,15 @@ interface UseGroupOptions {
 
 export const useDelayGroup = (
   floatingContext: FloatingContext,
-  props: UseGroupOptions
+  props: UseGroupOptions,
 ) => {
   const context = useDelayGroupContext();
-  createEffect(() =>
-    console.log('currentID - Effect in LIB', context.currentId)
-  );
 
   createEffect(() => {
     const {onOpenChange} = floatingContext;
     const {initialDelay, setState, currentId} = context;
 
-    console.log(
-      'Should trigger effext when context.currentId changes',
-      currentId
-    );
-
     if (currentId) {
-      console.log('setting open to 1');
       setState({
         delay: {
           open: 1,
@@ -131,7 +123,6 @@ export const useDelayGroup = (
       onOpenChange(false);
       setState({delay: initialDelay, currentId: null});
     }
-
     if (!open() && currentId === props.id) {
       if (timeoutMs) {
         const timeout = window.setTimeout(unset, timeoutMs);
@@ -148,8 +139,9 @@ export const useDelayGroup = (
     const {open} = floatingContext;
 
     if (open()) {
-      console.log('setting currentId to ' + props.id);
       context.setState({currentId: props.id});
+    } else {
+      context.setState({currentId: null});
     }
   });
 };

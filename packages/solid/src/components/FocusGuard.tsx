@@ -38,7 +38,7 @@ function setActiveElementOnTab(event: KeyboardEvent) {
 }
 
 export const FocusGuard: Component<JSX.HTMLAttributes<HTMLSpanElement>> = (
-  props
+  props,
 ) => {
   const [role, setRole] = createSignal<'button' | undefined>();
 
@@ -59,7 +59,7 @@ export const FocusGuard: Component<JSX.HTMLAttributes<HTMLSpanElement>> = (
   });
 
   const restProps = createMemo(() => ({
-    'tab-index': 0,
+    tabindex: 0,
     // Role is only for VoiceOver
     role: role(),
     'aria-hidden': role() ? undefined : true,

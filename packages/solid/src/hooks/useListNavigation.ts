@@ -57,7 +57,7 @@ function findNonDisabledIndex(
     decrement?: boolean;
     disabledIndices?: Array<number>;
     amount?: number;
-  } = {}
+  } = {},
 ): number {
   const list = listRef;
 
@@ -82,7 +82,7 @@ function doSwitch(
     MaybeAccessorValue<UseListNavigationProps['orientation']>
   >,
   vertical: boolean,
-  horizontal: boolean
+  horizontal: boolean,
 ) {
   switch (orientation()) {
     case 'vertical':
@@ -98,7 +98,7 @@ function isMainOrientationKey(
   key: string,
   orientation: Accessor<
     MaybeAccessorValue<UseListNavigationProps['orientation']>
-  >
+  >,
 ) {
   const vertical = key === ARROW_UP || key === ARROW_DOWN;
   const horizontal = key === ARROW_LEFT || key === ARROW_RIGHT;
@@ -110,7 +110,7 @@ function isMainOrientationToEndKey(
   orientation: Accessor<
     MaybeAccessorValue<UseListNavigationProps['orientation']>
   >,
-  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>,
 ) {
   const vertical = key === ARROW_DOWN;
   const horizontal = rtl() ? key === ARROW_LEFT : key === ARROW_RIGHT;
@@ -127,7 +127,7 @@ function isCrossOrientationOpenKey(
   orientation: Accessor<
     MaybeAccessorValue<UseListNavigationProps['orientation']>
   >,
-  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>,
 ) {
   const vertical = rtl() ? key === ARROW_LEFT : key === ARROW_RIGHT;
   const horizontal = key === ARROW_DOWN;
@@ -145,7 +145,7 @@ function isCrossOrientationCloseKey(
   orientation: Accessor<
     MaybeAccessorValue<UseListNavigationProps['orientation']>
   >,
-  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>
+  rtl: Accessor<MaybeAccessorValue<UseListNavigationProps['rtl']>>,
 ) {
   const vertical = rtl() ? key === ARROW_RIGHT : key === ARROW_LEFT;
   const horizontal = key === ARROW_UP;
@@ -154,14 +154,14 @@ function isCrossOrientationCloseKey(
 
 function getMinIndex(
   listRef: Accessor<MaybeAccessorValue<UseListNavigationProps['listRef']>>,
-  disabledIndices: Array<number> | undefined
+  disabledIndices: Array<number> | undefined,
 ) {
   return findNonDisabledIndex(listRef(), {disabledIndices});
 }
 
 function getMaxIndex(
   listRef: Accessor<MaybeAccessorValue<UseListNavigationProps['listRef']>>,
-  disabledIndices: Array<number> | undefined
+  disabledIndices: Array<number> | undefined,
 ) {
   return findNonDisabledIndex(listRef(), {
     decrement: true,
@@ -197,7 +197,7 @@ export interface UseListNavigationProps {
  */
 export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseListNavigationProps
+  props: UseListNavigationProps,
 ): Accessor<ElementProps> {
   const {
     open,
@@ -223,7 +223,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       cols: 1,
       scrollItemIntoView: true,
     } as Required<Omit<UseListNavigationProps, 'listRef' | 'activeIndex'>>,
-    props
+    props,
   );
   const {
     listRef,
@@ -253,7 +253,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           [
             'Floating UI: `useListNavigation` looping must be enabled to allow',
             'escaping.',
-          ].join(' ')
+          ].join(' '),
         );
       }
 
@@ -262,7 +262,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           [
             'Floating UI: `useListNavigation` must be virtual to allow',
             'escaping.',
-          ].join(' ')
+          ].join(' '),
         );
       }
     }
@@ -272,7 +272,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         [
           'Floating UI: In grid list navigation mode (`cols` > 1), the',
           '`orientation` should be either "horizontal" or "both".',
-        ].join(' ')
+        ].join(' '),
       );
     }
   }
@@ -306,7 +306,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   const focusItem = (
     listRef: Array<HTMLElement | null>,
     indexRef: number,
-    forceScrollIntoView = false
+    forceScrollIntoView = false,
   ) => {
     const item = listRef[indexRef];
     /* console.log('FOCUSSING ITEM', {item, listRef, indexRef}); */
@@ -347,7 +347,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         item.scrollIntoView?.(
           typeof scrollIntoViewOptions === 'boolean'
             ? {block: 'nearest', inline: 'nearest'}
-            : scrollIntoViewOptions
+            : scrollIntoViewOptions,
         );
       }
     });
@@ -450,10 +450,10 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         }
       } else if (!isIndexOutOfBounds(listRef(), activeIndex() as number)) {
         indexRef = activeIndex() as number;
-        /* console.log(
+        console.log(
           'initial sync - CASE 2 else if - in sync active index -- !isIndexOutOfBounds -> activeIndex is within listItemRef scope',
-          {indexRef}
-        ); */
+          {indexRef, focussing: listRef()[indexRef]},
+        );
 
         focusItem(listRef(), indexRef, forceScrollIntoViewRef);
         forceScrollIntoViewRef = false;
@@ -476,7 +476,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       const activeEl = activeElement(getDocument(floating));
       const treeContainsActiveEl = nodes.some(
         (node) =>
-          node.context && contains(node.context.refs.floating(), activeEl)
+          node.context && contains(node.context.refs.floating(), activeEl),
       );
       /* console.log(
         'Ensure the parent floating element has focus when a nested child closes to allow arrow key navigation to work after the pointer leaves the child\n',
@@ -506,18 +506,19 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     function syncCurrentTarget(currentTarget: HTMLElement | null) {
       if (!open()) return;
       const index = listRef().indexOf(currentTarget);
-      /* console.log('LISTITEM - syncCurrentTarget - indexRef', {
+
+      console.log('LISTITEM - syncCurrentTarget - indexRef', {
         indexRef,
         listRef: listRef(),
-        mergedPropsListRef: mergedProps.listRef(),
+
         currentTarget,
-        id,
-      }); */
+      });
+
       if (index !== -1) {
         onNavigate(index);
       }
     }
-
+    console.log({focusItemOnHover: focusItemOnHover()});
     const props: ElementProps['item'] = {
       onFocus({currentTarget}) {
         /* console.log('FOCUS Item', currentTarget); */
@@ -528,6 +529,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       ...(focusItemOnHover() && {
         onMouseMove({currentTarget}) {
           /* console.log('focusItemOnHover'); */
+
           syncCurrentTarget(currentTarget);
         },
         onPointerLeave({pointerType}) {
@@ -791,7 +793,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             findNonDisabledIndex(listRef(), {
               startingIndex: currentIndex,
               disabledIndices: disabledIndicesRef,
-            })
+            }),
           );
         }
       } else {
@@ -813,7 +815,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
               startingIndex: currentIndex,
               decrement: true,
               disabledIndices: disabledIndicesRef,
-            })
+            }),
           );
         }
       }
@@ -879,12 +881,12 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
               const isMainKey = isMainOrientationToEndKey(
                 event.key,
                 orientation,
-                rtl
+                rtl,
               );
               const isCrossKey = isCrossOrientationOpenKey(
                 event.key,
                 orientation,
-                rtl
+                rtl,
               );
 
               if (isNavigationKey) {
@@ -911,6 +913,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                     onOpenChange(true, event);
                   }
                   indexRef = getMinIndex(listRef, disabledIndicesRef);
+
                   onNavigate(indexRef);
                 }
                 return;
@@ -924,14 +927,11 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                 stopEvent(event);
 
                 if (!open() && openOnArrowKeyDown()) {
-                  /* console.log(
-              'reference - onKeydown --- !open && openArrowKeyDown --- now opening'
-            ); */
                   onOpenChange(true, event);
-                  /* console.log('******* openened onArrowKeyDown', {indexRef}); */
                   indexRef =
                     (selectedIndex() as number) ??
                     getMinIndex(listRef, disabledIndicesRef); //addde MR
+
                   onNavigate(indexRef);
                 } else {
                   onKeyDown(event);

@@ -1,13 +1,18 @@
 import type {
-  ComputePositionConfig,
+  ComputePositionConfig as ComputePositionConfigDOM,
   ComputePositionReturn,
   Padding,
   ReferenceElement,
   VirtualElement,
 } from '@floating-ui/dom';
+import {MaybeAccessor} from '@solid-primitives/utils';
 import type {Accessor, JSX} from 'solid-js';
 
 import {DismissPayload} from './hooks/useDismiss';
+
+type ComputePositionConfig = ComputePositionConfigDOM & {
+  middleware?: MaybeAccessor<ComputePositionConfigDOM['middleware']>;
+};
 
 export {arrow} from './arrow';
 export {useFloating} from './hooks/useFloating';
@@ -132,17 +137,17 @@ export type UseFloatingOptions<R extends ReferenceType = ReferenceType> =
       whileElementsMounted?: (
         reference: ReferenceElement | R,
         floating: HTMLElement,
-        update: () => void
+        update: () => void,
       ) => () => void;
-      // elements?: {
-      //   reference?: R | null;
-      //   floating?: F | null;
-      // };
+      elements?: {
+        reference?: R | null;
+        floating?: HTMLElement | null;
+      };
       /**
        * The `open` state of the floating element to synchronize with the
        * `isPositioned` value.
        */
-      open?: Accessor<boolean>;
+      open?: MaybeAccessor<boolean>;
       /**
        * Whether to use `transform` for positioning instead of `top` and `left`
        * (layout) in the `floatingStyles` object.
@@ -186,7 +191,7 @@ export interface ExtendedElements<R extends ReferenceType = ReferenceType> {
 export interface FloatingEvents {
   emit<T extends string>(
     event: T,
-    data?: T extends 'dismiss' ? DismissPayload : any
+    data?: T extends 'dismiss' ? DismissPayload : any,
   ): void;
   on(event: string, handler: (data: any) => void): void;
   off(event: string, handler: (data: any) => void): void;

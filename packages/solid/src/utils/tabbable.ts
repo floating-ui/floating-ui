@@ -12,11 +12,11 @@ export const getTabbableOptions = () =>
       ResizeObserver.toString().includes('[native code]')
         ? 'full'
         : 'none',
-  } as const);
+  }) as const;
 
 export function getTabbableIn(
   container: HTMLElement,
-  direction: 'next' | 'prev'
+  direction: 'next' | 'prev',
 ) {
   const allTabbable = tabbable(container, getTabbableOptions());
 
@@ -25,7 +25,7 @@ export function getTabbableIn(
   }
 
   const activeIndex = allTabbable.indexOf(
-    activeElement(getDocument(container)) as HTMLElement
+    activeElement(getDocument(container)) as HTMLElement,
   );
   const nextTabbableElements = allTabbable.slice(activeIndex + 1);
   return nextTabbableElements[0];

@@ -45,7 +45,7 @@ interface SafePolygonOptions {
  * @see https://floating-ui.com/docs/useHover#safePolygon
  */
 export function safePolygon<RT extends ReferenceType = ReferenceType>(
-  options: Partial<SafePolygonOptions> = {}
+  options: Partial<SafePolygonOptions> = {},
 ) {
   const {
     buffer = 0.5,

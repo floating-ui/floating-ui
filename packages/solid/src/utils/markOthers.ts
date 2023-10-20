@@ -37,7 +37,7 @@ function applyAttributeToOthers(
   uncorrectedAvoidElements: Element[],
   body: HTMLElement,
   ariaHidden: boolean,
-  inert: boolean
+  inert: boolean,
 ): Undo {
   const markerName = 'data-floating-ui-inert';
   const controlAttribute = inert ? 'inert' : ariaHidden ? 'aria-hidden' : null;
@@ -137,13 +137,13 @@ function applyAttributeToOthers(
 export function markOthers(
   avoidElements: Element[],
   ariaHidden = false,
-  inert = false
+  inert = false,
 ): Undo {
   const body = getDocument(avoidElements[0]).body || document.body;
   return applyAttributeToOthers(
     avoidElements.concat(Array.from(body.querySelectorAll('[aria-live]'))),
     body,
     ariaHidden,
-    inert
+    inert,
   );
 }
