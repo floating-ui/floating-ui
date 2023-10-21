@@ -1,0 +1,22 @@
+{
+  "name": "floating-ui",
+  "dockerFile": "Dockerfile",
+  "build": {
+    "args": {"NODE_MAJOR_VERSION": "18"}
+  },
+  "postCreateCommand": [".devcontainer/post-create.sh"],
+  "portsAttributes": {
+    "1234": {"label": "Playground"},
+    "3000": {"label": "Website"},
+    "63315": {"label": "Vitest Browser"}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
