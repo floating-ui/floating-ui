@@ -422,17 +422,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         });
       }
     };
-  }, [
-    disabled,
-    floating,
-    returnFocusRef,
-    dataRef,
-    refs,
-    events,
-    tree,
-    nodeId,
-    domReference,
-  ]);
+  }, [disabled, floating, returnFocusRef, dataRef, refs, events, tree, nodeId]);
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
