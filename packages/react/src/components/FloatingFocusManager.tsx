@@ -420,7 +420,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         // If the focus moved somewhere else after mount, avoid returning focus
         // since it likely entered a different element which should be
         // respected: https://github.com/floating-ui/floating-ui/issues/2607
-        (previouslyFocusedElement !== activeEl
+        (previouslyFocusedElement !== activeEl && activeEl !== doc.body
           ? isFocusInsideFloatingTree
           : true)
       ) {
