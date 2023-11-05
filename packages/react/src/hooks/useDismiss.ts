@@ -5,8 +5,6 @@ import {
   isEventTargetWithin,
   isReactEvent,
   isRootElement,
-  isVirtualClick,
-  isVirtualPointerEvent,
 } from '@floating-ui/react/utils';
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
@@ -18,10 +16,7 @@ import {
 } from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import {
-  useFloatingParentNodeId,
-  useFloatingTree,
-} from '../components/FloatingTree';
+import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
@@ -54,13 +49,6 @@ export const normalizeProp = (
   };
 };
 
-export interface DismissPayload {
-  type: 'outsidePress' | 'referencePress' | 'escapeKey' | 'mouseLeave';
-  data: {
-    returnFocus: boolean | {preventScroll: boolean};
-  };
-}
-
 export interface UseDismissProps {
   enabled?: boolean;
   escapeKey?: boolean;
@@ -85,7 +73,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   const {
     open,
     onOpenChange,
-    events,
     nodeId,
     elements: {reference, domReference, floating},
     dataRef,
@@ -103,7 +90,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   } = props;
 
   const tree = useFloatingTree();
-  const nested = useFloatingParentNodeId() != null;
   const outsidePressFn = useEffectEvent(
     typeof unstable_outsidePress === 'function'
       ? unstable_outsidePress
@@ -150,14 +136,11 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      events.emit('dismiss', {
-        type: 'escapeKey',
-        data: {
-          returnFocus: {preventScroll: false},
-        },
-      });
-
-      onOpenChange(false, isReactEvent(event) ? event.nativeEvent : event);
+      onOpenChange(
+        false,
+        isReactEvent(event) ? event.nativeEvent : event,
+        'escape-key'
+      );
     }
   );
 
@@ -286,17 +269,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       }
     }
 
-    events.emit('dismiss', {
-      type: 'outsidePress',
-      data: {
-        returnFocus: nested
-          ? {preventScroll: true}
-          : isVirtualClick(event) ||
-            isVirtualPointerEvent(event as PointerEvent),
-      },
-    });
-
-    onOpenChange(false, event);
+    onOpenChange(false, event, 'outside-press');
   });
 
   const closeOnPressOutsideCapture = useEffectEvent((event: MouseEvent) => {
@@ -316,7 +289,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
     function onScroll(event: Event) {
-      onOpenChange(false, event);
+      onOpenChange(false, event, 'ancestor-scroll');
     }
 
     const doc = getDocument(floating);
@@ -417,11 +390,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
           event: React.SyntheticEvent
         ) => {
           if (referencePress) {
-            events.emit('dismiss', {
-              type: 'referencePress',
-              data: {returnFocus: false},
-            });
-            onOpenChange(false, event.nativeEvent);
+            onOpenChange(false, event.nativeEvent, 'reference-press');
           }
         },
       },
@@ -440,7 +409,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
-    events,
     referencePress,
     outsidePressEvent,
     referencePressEvent,

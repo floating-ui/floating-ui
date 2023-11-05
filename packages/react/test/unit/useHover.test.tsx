@@ -197,3 +197,34 @@ test('does not show after delay if domReference changes', async () => {
 
   cleanup();
 });
+
+test('reason string', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange(isOpen, _, reason) {
+        setIsOpen(isOpen);
+        expect(reason).toBe('hover');
+      },
+    });
+
+    const hover = useHover(context);
+    const {getReferenceProps, getFloatingProps} = useInteractions([hover]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()} />
+        {isOpen && (
+          <div role="tooltip" ref={refs.setFloating} {...getFloatingProps()} />
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+  const button = screen.getByRole('button');
+  fireEvent.mouseEnter(button);
+  await act(async () => {});
+  fireEvent.mouseLeave(button);
+});

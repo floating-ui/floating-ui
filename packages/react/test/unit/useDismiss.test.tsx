@@ -20,7 +20,18 @@ function App(props: UseDismissProps) {
   const [open, setOpen] = useState(true);
   const {refs, context} = useFloating({
     open,
-    onOpenChange: setOpen,
+    onOpenChange(open, _, reason) {
+      setOpen(open);
+      if (props.outsidePress) {
+        expect(reason).toBe('outside-press');
+      } else if (props.escapeKey) {
+        expect(reason).toBe('escape-key');
+      } else if (props.referencePress) {
+        expect(reason).toBe('reference-press');
+      } else if (props.ancestorScroll) {
+        expect(reason).toBe('ancestor-scroll');
+      }
+    },
   });
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useDismiss(context, props),

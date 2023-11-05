@@ -4,6 +4,8 @@ import {
   getDocument,
   getTarget,
   isTypeableElement,
+  isVirtualClick,
+  isVirtualPointerEvent,
   stopEvent,
 } from '@floating-ui/react/utils';
 import {isHTMLElement} from '@floating-ui/utils/dom';
@@ -11,9 +13,8 @@ import * as React from 'react';
 import {FocusableElement, tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import type {DismissPayload} from '../hooks/useDismiss';
 import {useLatestRef} from '../hooks/utils/useLatestRef';
-import type {FloatingContext, ReferenceType} from '../types';
+import type {FloatingContext, OpenChangeReason, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {enqueueFocus} from '../utils/enqueueFocus';
 import {getAncestors} from '../utils/getAncestors';
@@ -360,29 +361,40 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
-    function onDismiss(payload: DismissPayload) {
-      if (payload.type === 'escapeKey' && refs.domReference.current) {
+    function onOpenChange({
+      reason,
+      event,
+      nested,
+    }: {
+      reason: OpenChangeReason;
+      event: Event;
+      nested: boolean;
+    }) {
+      if (reason === 'escape-key' && refs.domReference.current) {
         previouslyFocusedElementRef.current = refs.domReference.current;
       }
 
-      if (['referencePress', 'escapeKey'].includes(payload.type)) {
-        return;
+      if (reason === 'hover' && event.type === 'mouseleave') {
+        preventReturnFocusRef.current = true;
       }
 
-      const returnFocus = payload.data.returnFocus;
+      if (reason !== 'outside-press') return;
 
-      if (typeof returnFocus === 'object') {
+      if (nested) {
         preventReturnFocusRef.current = false;
-        preventReturnFocusScroll = returnFocus.preventScroll;
+        preventReturnFocusScroll = true;
       } else {
-        preventReturnFocusRef.current = !returnFocus;
+        preventReturnFocusRef.current = !(
+          isVirtualClick(event as MouseEvent) ||
+          isVirtualPointerEvent(event as PointerEvent)
+        );
       }
     }
 
-    events.on('dismiss', onDismiss);
+    events.on('openchange', onOpenChange);
 
     return () => {
-      events.off('dismiss', onDismiss);
+      events.off('openchange', onOpenChange);
 
       const activeEl = activeElement(doc);
       const isFocusInsideFloatingTree =

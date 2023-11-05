@@ -144,3 +144,34 @@ test('blurs when hitting an "inside" focus guard', async () => {
 
   cleanup();
 });
+
+test('reason string', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange(isOpen, _, reason) {
+        setIsOpen(isOpen);
+        expect(reason).toBe('focus');
+      },
+    });
+
+    const focus = useFocus(context);
+    const {getReferenceProps, getFloatingProps} = useInteractions([focus]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()} />
+        {isOpen && (
+          <div role="tooltip" ref={refs.setFloating} {...getFloatingProps()} />
+        )}
+      </>
+    );
+  }
+
+  render(<App />);
+  const button = screen.getByRole('button');
+  fireEvent.focusIn(button);
+  await act(async () => {});
+  fireEvent.focusOut(button);
+});

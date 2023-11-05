@@ -3,11 +3,15 @@ import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-import {useFloatingTree} from '../components/FloatingTree';
+import {
+  useFloatingParentNodeId,
+  useFloatingTree,
+} from '../components/FloatingTree';
 import type {
   ContextData,
   FloatingContext,
   NarrowedElement,
+  OpenChangeReason,
   ReferenceType,
   UseFloatingOptions,
   UseFloatingReturn,
@@ -52,12 +56,17 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
   const position = usePosition<RT>(options);
   const tree = useFloatingTree<RT>();
-  const onOpenChange = useEffectEvent((open: boolean, event?: Event) => {
-    if (open) {
-      dataRef.current.openEvent = event;
+  const nested = useFloatingParentNodeId() != null;
+
+  const onOpenChange = useEffectEvent(
+    (open: boolean, event?: Event, reason?: OpenChangeReason) => {
+      if (open) {
+        dataRef.current.openEvent = event;
+      }
+      events.emit('openchange', {open, event, reason, nested});
+      unstable_onOpenChange?.(open, event, reason);
     }
-    unstable_onOpenChange?.(open, event);
-  });
+  );
 
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
   const dataRef = React.useRef<ContextData>({});
