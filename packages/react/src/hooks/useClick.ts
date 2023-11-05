@@ -81,11 +81,11 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
               ? dataRef.current.openEvent.type === 'mousedown'
               : true)
           ) {
-            onOpenChange(false, event.nativeEvent);
+            onOpenChange(false, event.nativeEvent, 'click');
           } else {
             // Prevent stealing focus from the floating element
             event.preventDefault();
-            onOpenChange(true, event.nativeEvent);
+            onOpenChange(true, event.nativeEvent, 'click');
           }
         },
         onClick(event) {
@@ -108,9 +108,9 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
               ? dataRef.current.openEvent.type === 'click'
               : true)
           ) {
-            onOpenChange(false, event.nativeEvent);
+            onOpenChange(false, event.nativeEvent, 'click');
           } else {
-            onOpenChange(true, event.nativeEvent);
+            onOpenChange(true, event.nativeEvent, 'click');
           }
         },
         onKeyDown(event) {
@@ -132,9 +132,9 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
 
           if (event.key === 'Enter') {
             if (open && toggle) {
-              onOpenChange(false, event.nativeEvent);
+              onOpenChange(false, event.nativeEvent, 'click');
             } else {
-              onOpenChange(true, event.nativeEvent);
+              onOpenChange(true, event.nativeEvent, 'click');
             }
           }
         },
@@ -151,9 +151,9 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
           if (event.key === ' ' && didKeyDownRef.current) {
             didKeyDownRef.current = false;
             if (open && toggle) {
-              onOpenChange(false, event.nativeEvent);
+              onOpenChange(false, event.nativeEvent, 'click');
             } else {
-              onOpenChange(true, event.nativeEvent);
+              onOpenChange(true, event.nativeEvent, 'click');
             }
           }
         },

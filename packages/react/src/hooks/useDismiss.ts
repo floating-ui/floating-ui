@@ -54,13 +54,6 @@ export const normalizeProp = (
   };
 };
 
-export interface DismissPayload {
-  type: 'outsidePress' | 'referencePress' | 'escapeKey' | 'mouseLeave';
-  data: {
-    returnFocus: boolean | {preventScroll: boolean};
-  };
-}
-
 export interface UseDismissProps {
   enabled?: boolean;
   escapeKey?: boolean;
@@ -150,14 +143,11 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         }
       }
 
-      events.emit('dismiss', {
-        type: 'escapeKey',
-        data: {
-          returnFocus: {preventScroll: false},
-        },
-      });
-
-      onOpenChange(false, isReactEvent(event) ? event.nativeEvent : event);
+      onOpenChange(
+        false,
+        isReactEvent(event) ? event.nativeEvent : event,
+        'escape-key'
+      );
     }
   );
 
@@ -296,7 +286,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
     });
 
-    onOpenChange(false, event);
+    onOpenChange(false, event, 'outside-press');
   });
 
   const closeOnPressOutsideCapture = useEffectEvent((event: MouseEvent) => {
@@ -316,7 +306,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     dataRef.current.__outsidePressBubbles = outsidePressBubbles;
 
     function onScroll(event: Event) {
-      onOpenChange(false, event);
+      onOpenChange(false, event, 'ancestor-scroll');
     }
 
     const doc = getDocument(floating);
@@ -417,11 +407,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
           event: React.SyntheticEvent
         ) => {
           if (referencePress) {
-            events.emit('dismiss', {
-              type: 'referencePress',
-              data: {returnFocus: false},
-            });
-            onOpenChange(false, event.nativeEvent);
+            onOpenChange(false, event.nativeEvent, 'reference-press');
           }
         },
       },
@@ -440,7 +426,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     };
   }, [
     enabled,
-    events,
     referencePress,
     outsidePressEvent,
     referencePressEvent,

@@ -5,8 +5,6 @@ import type {
 } from '@floating-ui/react-dom';
 import * as React from 'react';
 
-import type {DismissPayload} from './hooks/useDismiss';
-
 export * from '.';
 export {FloatingArrowProps} from './components/FloatingArrow';
 export {FloatingFocusManagerProps} from './components/FloatingFocusManager';
@@ -87,6 +85,16 @@ type Prettify<T> = {
   // eslint-disable-next-line @typescript-eslint/ban-types
 } & {};
 
+export type OpenChangeReason =
+  | 'outside-press'
+  | 'escape-key'
+  | 'ancestor-scroll'
+  | 'reference-press'
+  | 'click'
+  | 'hover'
+  | 'focus'
+  | 'list-navigation';
+
 export type NarrowedElement<T> = T extends Element ? T : Element;
 
 export interface ExtendedRefs<RT> {
@@ -105,10 +113,7 @@ export interface ExtendedElements<RT> {
 }
 
 export interface FloatingEvents {
-  emit<T extends string>(
-    event: T,
-    data?: T extends 'dismiss' ? DismissPayload : any
-  ): void;
+  emit<T extends string>(event: T, data?: any): void;
   on(event: string, handler: (data: any) => void): void;
   off(event: string, handler: (data: any) => void): void;
 }
@@ -125,7 +130,7 @@ export type FloatingContext<RT extends ReferenceType = ReferenceType> = Omit<
   'refs' | 'elements'
 > & {
   open: boolean;
-  onOpenChange: (open: boolean, event?: Event) => void;
+  onOpenChange(open: boolean, event?: Event, reason?: OpenChangeReason): void;
   events: FloatingEvents;
   dataRef: React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
@@ -172,6 +177,6 @@ export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
     reference?: Element | null;
     floating?: HTMLElement | null;
   };
-  onOpenChange?: (open: boolean, event?: Event) => void;
+  onOpenChange?(open: boolean, event?: Event, reason?: OpenChangeReason): void;
   nodeId?: string;
 }

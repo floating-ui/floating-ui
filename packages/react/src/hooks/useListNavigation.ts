@@ -480,7 +480,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
         stopEvent(event);
-        onOpenChange(false, event.nativeEvent);
+        onOpenChange(false, event.nativeEvent, 'list-navigation');
 
         if (isHTMLElement(domReference) && !virtual) {
           domReference.focus();
@@ -718,7 +718,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                 indexRef.current = getMinIndex(listRef, disabledIndices);
                 onNavigate(indexRef.current);
               } else {
-                onOpenChange(true, event.nativeEvent);
+                onOpenChange(true, event.nativeEvent, 'list-navigation');
               }
             }
 
@@ -733,7 +733,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             stopEvent(event);
 
             if (!open && openOnArrowKeyDown) {
-              onOpenChange(true, event.nativeEvent);
+              onOpenChange(true, event.nativeEvent, 'list-navigation');
             } else {
               onKeyDown(event);
             }

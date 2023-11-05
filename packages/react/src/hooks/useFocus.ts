@@ -11,9 +11,13 @@ import {
 import {getWindow, isElement, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {
+  ElementProps,
+  FloatingContext,
+  OpenChangeReason,
+  ReferenceType,
+} from '../types';
 import {createAttribute} from '../utils/createAttribute';
-import type {DismissPayload} from './useDismiss';
 
 export interface UseFocusProps {
   enabled?: boolean;
@@ -79,15 +83,15 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    function onDismiss(payload: DismissPayload) {
-      if (payload.type === 'referencePress' || payload.type === 'escapeKey') {
+    function onOpenChange({reason}: {reason: OpenChangeReason}) {
+      if (reason === 'reference-press' || reason === 'escape-key') {
         blockFocusRef.current = true;
       }
     }
 
-    events.on('dismiss', onDismiss);
+    events.on('openchange', onOpenChange);
     return () => {
-      events.off('dismiss', onDismiss);
+      events.off('openchange', onOpenChange);
     };
   }, [events, enabled]);
 
@@ -131,7 +135,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
             }
           }
 
-          onOpenChange(true, event.nativeEvent);
+          onOpenChange(true, event.nativeEvent, 'focus');
         },
         onBlur(event) {
           blockFocusRef.current = false;
@@ -164,7 +168,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
               return;
             }
 
-            onOpenChange(false, event.nativeEvent);
+            onOpenChange(false, event.nativeEvent, 'focus');
           });
         },
       },
