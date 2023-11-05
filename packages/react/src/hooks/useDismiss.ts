@@ -5,8 +5,6 @@ import {
   isEventTargetWithin,
   isReactEvent,
   isRootElement,
-  isVirtualClick,
-  isVirtualPointerEvent,
 } from '@floating-ui/react/utils';
 import {getOverflowAncestors} from '@floating-ui/react-dom';
 import {
@@ -18,10 +16,7 @@ import {
 } from '@floating-ui/utils/dom';
 import * as React from 'react';
 
-import {
-  useFloatingParentNodeId,
-  useFloatingTree,
-} from '../components/FloatingTree';
+import {useFloatingTree} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {getChildren} from '../utils/getChildren';
@@ -78,7 +73,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   const {
     open,
     onOpenChange,
-    events,
     nodeId,
     elements: {reference, domReference, floating},
     dataRef,
@@ -96,7 +90,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   } = props;
 
   const tree = useFloatingTree();
-  const nested = useFloatingParentNodeId() != null;
   const outsidePressFn = useEffectEvent(
     typeof unstable_outsidePress === 'function'
       ? unstable_outsidePress
@@ -275,16 +268,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         return;
       }
     }
-
-    events.emit('dismiss', {
-      type: 'outsidePress',
-      data: {
-        returnFocus: nested
-          ? {preventScroll: true}
-          : isVirtualClick(event) ||
-            isVirtualPointerEvent(event as PointerEvent),
-      },
-    });
 
     onOpenChange(false, event, 'outside-press');
   });
