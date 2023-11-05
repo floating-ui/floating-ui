@@ -14,7 +14,7 @@ import {
   isRootElement,
   isVirtualClick,
   isVirtualPointerEvent,
-} from '@floating-ui/utils/react';
+} from '../utils';
 import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,

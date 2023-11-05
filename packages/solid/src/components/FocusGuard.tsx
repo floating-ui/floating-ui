@@ -1,4 +1,4 @@
-import {isSafari} from '@floating-ui/utils/react';
+import {isSafari} from '../utils';
 import {
   Component,
   createMemo,

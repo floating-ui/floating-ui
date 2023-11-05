@@ -6,7 +6,7 @@ import {
   getTarget,
   isTypeableElement,
   stopEvent,
-} from '@floating-ui/utils/react';
+} from '../utils';
 import {
   JSX,
   ParentComponent,

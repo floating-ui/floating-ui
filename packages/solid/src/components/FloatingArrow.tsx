@@ -75,13 +75,13 @@ export const FloatingArrow: Component<
   //   style: {transform, ...restStyle} = {},
   //   ...rest
   // }
-  props
+  props,
 ) => {
-  if (!import.meta.env.PROD) {
+  if (process.env.NODE_ENV !== 'production') {
     if (!props.ref) {
       console.warn(
         'Floating UI: The `ref` prop is required for the `FloatingArrow`',
-        'component.'
+        'component.',
       );
     }
   }

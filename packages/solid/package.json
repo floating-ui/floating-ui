@@ -42,7 +42,7 @@
     "url": "https://github.com/floating-ui/floating-ui.git",
     "directory": "packages/solid"
   },
-  "homepage": "https://floating-ui.com/docs/solid",
+  "homepage": "https://floating-ui.com/docs/",
   "keywords": [
     "tooltip",
     "popover",
@@ -57,21 +57,20 @@
   },
   "dependencies": {
     "@floating-ui/dom": "^1.5.3",
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-replace": "^5.0.4",
+    "@floating-ui/utils": "^0.1.6",
     "@solid-primitives/map": "^0.4.8",
     "@solid-primitives/utils": "^6.2.1",
-    "@testing-library/user-event": "^14.5.1",
-    "solid-start": "^0.3.8",
     "style-to-object": "^0.4.4",
     "tabbable": "^6.2.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.2",
-    "@floating-ui/utils": "^0.1.6",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-replace": "^5.0.4",
     "@solid-primitives/media": "^2.2.5",
     "@solidjs/testing-library": "^0.8.4",
     "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/user-event": "^14.5.1",
     "@types/jest": "^29.5.6",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
@@ -84,7 +83,6 @@
     "rollup-preset-solid": "^2.0.1",
     "solid-jest": "^0.2.0",
     "solid-js": "^1.8.3",
-    "solid-start-node": "^0.3.8",
     "vite": "^4.5.0",
     "vite-plugin-solid": "^2.7.2",
     "vitest": "^0.34.6"

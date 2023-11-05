@@ -1,8 +1,5 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
-import {
-  isMouseLikePointerType,
-  isTypeableElement,
-} from '@floating-ui/utils/react';
+import {isMouseLikePointerType, isTypeableElement} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, mergeProps} from 'solid-js';
 

@@ -1,4 +1,4 @@
-import {stopEvent} from '@floating-ui/utils/react';
+import {stopEvent} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,

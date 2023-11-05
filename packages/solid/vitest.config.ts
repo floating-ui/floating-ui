@@ -22,9 +22,9 @@ export default defineConfig({
         __dirname,
         '../utils/dom/src/index.ts',
       ),
-      '@floating-ui/utils/react': path.resolve(
+      '@floating-ui/react/utils': path.resolve(
         __dirname,
-        '../utils/react/src/index.ts',
+        '../react/utils/src/index.ts',
       ),
       '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
       '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),

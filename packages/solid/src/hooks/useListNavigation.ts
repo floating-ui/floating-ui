@@ -8,7 +8,7 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
-} from '@floating-ui/utils/react';
+} from '../utils';
 import {MaybeAccessor, MaybeAccessorValue} from '@solid-primitives/utils';
 import {
   Accessor,

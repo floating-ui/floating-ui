@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 import path from 'path';
-import solid from 'solid-start/vite';
+import solidPlugin from 'vite-plugin-solid';
 import {defineConfig} from 'vite';
 
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
     port: 1234,
   },
   root: './test/visual',
-  plugins: [solid()],
+  plugins: [solidPlugin()],
   // ssr: {noExternal: true},
   resolve: {
     alias: {
@@ -17,9 +17,9 @@ export default defineConfig({
         __dirname,
         '../utils/dom/src/index.ts',
       ),
-      '@floating-ui/utils/react': path.resolve(
+      '@floating-ui/react/utils': path.resolve(
         __dirname,
-        '../utils/react/src/index.ts',
+        '../react/utils/src/index.ts',
       ),
       '@floating-ui/utils': path.resolve(__dirname, '../utils/src/index.ts'),
       '@floating-ui/core': path.resolve(__dirname, '../core/src/index.ts'),

@@ -11,7 +11,7 @@ export default withSolid({
   plugins: [
     summary({showGzippedSize: true}),
     replace({
-      __DEV__: '!import.meta.env.PROD',
+      __DEV__: 'process.env.NODE_ENV !== "production"',
       preventAssignment: true,
     }),
     commonjs(),

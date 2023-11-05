@@ -13,6 +13,6 @@
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
     "declaration": true,
-    "types": ["solid-start/env", "jest"]
+    "types": ["node", "jest"]
   }
 }

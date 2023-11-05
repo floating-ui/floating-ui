@@ -1,9 +1,5 @@
 import {isElement} from '@floating-ui/utils/dom';
-import {
-  contains,
-  getDocument,
-  isMouseLikePointerType,
-} from '@floating-ui/utils/react';
+
 import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
@@ -25,7 +21,7 @@ import type {
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {destructure} from '../utils/destructure';
-// import {useLatestRef} from './utils/useLatestRef';
+import {contains, getDocument, isMouseLikePointerType} from '../utils';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 

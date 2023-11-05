@@ -1,9 +1,5 @@
 import {getWindow} from '@floating-ui/utils/dom';
-import {
-  contains,
-  getTarget,
-  isMouseLikePointerType,
-} from '@floating-ui/utils/react';
+import {contains, getTarget, isMouseLikePointerType} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {cleanup} from '@solidjs/testing-library';
 import {

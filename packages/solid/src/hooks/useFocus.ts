@@ -4,7 +4,7 @@ import {
   contains,
   getDocument,
   isEventTargetWithin,
-} from '@floating-ui/utils/react';
+} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
 

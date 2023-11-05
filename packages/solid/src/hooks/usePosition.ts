@@ -73,7 +73,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     const currentError = error();
     if (currentError) {
       // throw currentError.value;
-      import.meta.env.DEV && console.warn(currentError.value);
+      process.env.NODE_ENV !== 'production' && console.warn(currentError.value);
     }
   });
 
