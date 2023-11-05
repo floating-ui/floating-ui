@@ -385,12 +385,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       events.off('dismiss', onDismiss);
 
       const activeEl = activeElement(doc);
-      const shouldFocusReference =
+      const isFocusInsideFloatingTree =
         contains(floating, activeEl) ||
         (tree &&
           getChildren(tree.nodesRef.current, nodeId).some((node) =>
             contains(node.context?.elements.floating, activeEl)
-          )) ||
+          ));
+      const shouldFocusReference =
+        isFocusInsideFloatingTree ||
         (contextData.openEvent &&
           ['click', 'mousedown'].includes(contextData.openEvent.type));
 
@@ -402,7 +404,13 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current &&
         isHTMLElement(previouslyFocusedElementRef.current) &&
-        !preventReturnFocusRef.current
+        !preventReturnFocusRef.current &&
+        // If the focus moved somewhere else after mount, avoid returning focus
+        // since it likely entered a different element which should be
+        // respected: https://github.com/floating-ui/floating-ui/issues/2607
+        (previouslyFocusedElement !== activeEl
+          ? isFocusInsideFloatingTree
+          : true)
       ) {
         enqueueFocus(previouslyFocusedElementRef.current, {
           // When dismissing nested floating elements, by the time the rAF has
