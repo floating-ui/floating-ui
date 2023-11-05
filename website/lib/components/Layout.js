@@ -23,6 +23,7 @@ import Logo from '../../assets/logo.svg';
 import Arrow from '../../public/icons/arrow.svg';
 import AutoPlacement from '../../public/icons/autoPlacement.svg';
 import AutoUpdate from '../../public/icons/autoUpdate.svg';
+import Composite from '../../public/icons/Composite.svg';
 import ComputePosition from '../../public/icons/computePosition.svg';
 import DetectOverflow from '../../public/icons/detectOverflow.svg';
 import Flip from '../../public/icons/flip.svg';
@@ -47,11 +48,11 @@ import Tutorial from '../../public/icons/tutorial.svg';
 import UseClick from '../../public/icons/useClick.svg';
 import UseClientPoint from '../../public/icons/useClientPoint.svg';
 import UseDismiss from '../../public/icons/useDismiss.svg';
+import UseFloating from '../../public/icons/useFloating.svg';
 import UseFocus from '../../public/icons/useFocus.svg';
 import UseHover from '../../public/icons/useHover.svg';
-import UseId from '../../public/icons/useId.svg';
+import UseInteractions from '../../public/icons/useInteractions.svg';
 import UseListNavigation from '../../public/icons/useListNavigation.svg';
-import UseMergeRefs from '../../public/icons/useMergeRefs.svg';
 import UseRole from '../../public/icons/useRole.svg';
 import UseTransition from '../../public/icons/useTransition.svg';
 import UseTypeahead from '../../public/icons/useTypeahead.svg';
@@ -221,20 +222,6 @@ const interactions = [
     mono: true,
   },
   {
-    url: '/docs/useMergeRefs',
-    title: 'useMergeRefs',
-    icon: UseMergeRefs,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useId',
-    title: 'useId',
-    icon: UseId,
-    depth: 1,
-    mono: true,
-  },
-  {
     url: '/docs/FloatingArrow',
     title: 'FloatingArrow',
     icon: Arrow,
@@ -284,9 +271,21 @@ const interactions = [
     mono: true,
   },
   {
+    url: '/docs/Composite',
+    title: 'Composite',
+    icon: Composite,
+    depth: 1,
+  },
+  {
     url: '/docs/inner',
     title: 'Inner',
     icon: Inner,
+    depth: 1,
+  },
+  {
+    url: '/docs/react-utils',
+    title: 'React Utils',
+    icon: MagicWand,
     depth: 1,
   },
 ];
@@ -372,6 +371,18 @@ const nav = [
     title: 'Dialog',
     depth: 1,
     hide: true,
+  },
+  {
+    url: '/docs/useFloating',
+    title: 'useFloating',
+    depth: 1,
+    icon: UseFloating,
+  },
+  {
+    url: '/docs/useInteractions',
+    title: 'useInteractions',
+    depth: 1,
+    icon: UseInteractions,
   },
   ...interactions,
   {
@@ -660,7 +671,8 @@ export default function Layout({children, className}) {
   const activeTitle =
     nav.find(({url}) => url === pathname)?.title ?? '';
 
-  const isReactDOMPage = activeTitle === 'React';
+  const isReactDOMPage =
+    activeTitle === 'React' || activeTitle === 'useFloating';
   const isDOMOnlyPage = activeTitle === 'autoUpdate';
   const isNoPage = activeTitle === 'Getting Started';
   const isReactPage =
@@ -670,6 +682,7 @@ export default function Layout({children, className}) {
     [
       'Inner',
       'Custom Hooks',
+      'Composite',
       'Tooltip',
       'Popover',
       'Dialog',

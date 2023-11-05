@@ -1,13 +1,6 @@
 {
   "name": "@floating-ui/vue",
-  "version": "0.1.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      1,
-      0
-    ]
-  },
+  "version": "1.0.2",
   "description": "Floating UI for Vue",
   "publishConfig": {
     "access": "public"
@@ -58,7 +51,7 @@
     "vue"
   ],
   "dependencies": {
-    "@floating-ui/dom": "^0.1.0",
+    "@floating-ui/dom": "^1.5.1",
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {

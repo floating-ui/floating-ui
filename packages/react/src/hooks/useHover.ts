@@ -1,9 +1,9 @@
-import {isElement} from '@floating-ui/utils/dom';
 import {
   contains,
   getDocument,
   isMouseLikePointerType,
-} from '@floating-ui/utils/react';
+} from '@floating-ui/react/utils';
+import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -15,6 +15,7 @@ import type {
   ElementProps,
   FloatingContext,
   FloatingTreeType,
+  OpenChangeReason,
   ReferenceType,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
@@ -104,22 +105,24 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     return type?.includes('mouse') && type !== 'mousedown';
   }, [dataRef]);
 
-  // When dismissing before opening, clear the delay timeouts to cancel it
+  // When closing before opening, clear the delay timeouts to cancel it
   // from showing.
   React.useEffect(() => {
     if (!enabled) {
       return;
     }
 
-    function onDismiss() {
-      clearTimeout(timeoutRef.current);
-      clearTimeout(restTimeoutRef.current);
-      blockMouseMoveRef.current = true;
+    function onOpenChange({open}: {open: boolean}) {
+      if (!open) {
+        clearTimeout(timeoutRef.current);
+        clearTimeout(restTimeoutRef.current);
+        blockMouseMoveRef.current = true;
+      }
     }
 
-    events.on('dismiss', onDismiss);
+    events.on('openchange', onOpenChange);
     return () => {
-      events.off('dismiss', onDismiss);
+      events.off('openchange', onOpenChange);
     };
   }, [enabled, events]);
 
@@ -130,7 +133,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     function onLeave(event: MouseEvent) {
       if (isHoverOpen()) {
-        onOpenChange(false, event);
+        onOpenChange(false, event, 'hover');
       }
     }
 
@@ -150,7 +153,11 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   ]);
 
   const closeWithDelay = React.useCallback(
-    (event: Event, runElseBranch = true) => {
+    (
+      event: Event,
+      runElseBranch = true,
+      reason: OpenChangeReason = 'hover'
+    ) => {
       const closeDelay = getDelay(
         delayRef.current,
         'close',
@@ -159,12 +166,12 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
-          () => onOpenChange(false, event),
+          () => onOpenChange(false, event, reason),
           closeDelay
         );
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
-        onOpenChange(false, event);
+        onOpenChange(false, event, reason);
       }
     },
     [delayRef, onOpenChange]
@@ -217,10 +224,10 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
       if (openDelay) {
         timeoutRef.current = setTimeout(() => {
-          onOpenChange(true, event);
+          onOpenChange(true, event, 'hover');
         }, openDelay);
       } else {
-        onOpenChange(true, event);
+        onOpenChange(true, event, 'hover');
       }
     }
 
@@ -248,8 +255,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           onClose() {
             clearPointerEvents();
             cleanupMouseMoveHandler();
-            // Should the event expose that it was closed by `safePolygon`?
-            closeWithDelay(event);
+            closeWithDelay(event, true, 'safe-polygon');
           },
         });
 
@@ -419,7 +425,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           clearTimeout(restTimeoutRef.current);
           restTimeoutRef.current = setTimeout(() => {
             if (!blockMouseMoveRef.current) {
-              onOpenChange(true, event.nativeEvent);
+              onOpenChange(true, event.nativeEvent, 'hover');
             }
           }, restMs);
         },
@@ -429,15 +435,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           clearTimeout(timeoutRef.current);
         },
         onMouseLeave(event) {
-          events.emit('dismiss', {
-            type: 'mouseLeave',
-            data: {
-              returnFocus: false,
-            },
-          });
           closeWithDelay(event.nativeEvent, false);
         },
       },
     };
-  }, [events, enabled, restMs, open, onOpenChange, closeWithDelay]);
+  }, [enabled, restMs, open, onOpenChange, closeWithDelay]);
 }

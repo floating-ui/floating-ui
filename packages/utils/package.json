@@ -1,13 +1,6 @@
 {
   "name": "@floating-ui/utils",
-  "version": "0.1.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      1,
-      0
-    ]
-  },
+  "version": "0.1.6",
   "description": "Utilities for Floating UI",
   "publishConfig": {
     "access": "public"
@@ -19,16 +12,13 @@
   "files": [
     "dist/",
     "dom/dist/",
-    "react/dist/",
     "dom/package.json",
-    "react/package.json",
     "**/*.d.ts",
     "**/*.d.mts"
   ],
   "exports": {
     "./package.json": "./package.json",
     "./dom/package.json": "./dom/package.json",
-    "./react/package.json": "./react/package.json",
     ".": {
       "import": {
         "types": "./src/types.d.ts",
@@ -46,15 +36,6 @@
       "types": "./dom/src/index.d.ts",
       "module": "./dom/dist/floating-ui.utils.dom.esm.js",
       "default": "./dom/dist/floating-ui.utils.dom.umd.js"
-    },
-    "./react": {
-      "import": {
-        "types": "./react/src/index.d.ts",
-        "default": "./react/dist/floating-ui.utils.react.mjs"
-      },
-      "types": "./react/src/index.d.ts",
-      "module": "./react/dist/floating-ui.utils.react.esm.js",
-      "default": "./react/dist/floating-ui.utils.react.umd.js"
     }
   },
   "scripts": {

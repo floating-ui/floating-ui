@@ -14,16 +14,24 @@ import {
   useFocus,
   useInteractions,
 } from '../../src';
-import {
-  normalizeBubblesProp,
-  UseDismissProps,
-} from '../../src/hooks/useDismiss';
+import {normalizeProp, UseDismissProps} from '../../src/hooks/useDismiss';
 
 function App(props: UseDismissProps) {
   const [open, setOpen] = useState(true);
   const {refs, context} = useFloating({
     open,
-    onOpenChange: setOpen,
+    onOpenChange(open, _, reason) {
+      setOpen(open);
+      if (props.outsidePress) {
+        expect(reason).toBe('outside-press');
+      } else if (props.escapeKey) {
+        expect(reason).toBe('escape-key');
+      } else if (props.referencePress) {
+        expect(reason).toBe('reference-press');
+      } else if (props.ancestorScroll) {
+        expect(reason).toBe('ancestor-scroll');
+      }
+    },
   });
   const {getReferenceProps, getFloatingProps} = useInteractions([
     useDismiss(context, props),
@@ -354,40 +362,44 @@ describe('bubbles', () => {
 
   describe('prop resolution', () => {
     test('undefined', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp();
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp();
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('false', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} =
-        normalizeBubblesProp(false);
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp(false);
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(false);
     });
 
     test('{}', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({});
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({});
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('{ escapeKey: false }', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
-        escapeKey: false,
-      });
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({
+          escapeKey: false,
+        });
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(true);
     });
 
     test('{ outsidePress: false }', () => {
-      const {escapeKeyBubbles, outsidePressBubbles} = normalizeBubblesProp({
-        outsidePress: false,
-      });
+      const {escapeKey: escapeKeyBubbles, outsidePress: outsidePressBubbles} =
+        normalizeProp({
+          outsidePress: false,
+        });
 
       expect(escapeKeyBubbles).toBe(false);
       expect(outsidePressBubbles).toBe(false);
@@ -482,7 +494,7 @@ describe('bubbles', () => {
           useDismiss(popover.context),
         ]);
         const tooltipInteractions = useInteractions([
-          useFocus(tooltip.context),
+          useFocus(tooltip.context, {visibleOnly: false}),
           useDismiss(tooltip.context),
         ]);
 
@@ -595,5 +607,37 @@ describe('bubbles', () => {
       expect(screen.queryByTestId('inner')).not.toBeInTheDocument();
       cleanup();
     });
+  });
+});
+
+describe('outsidePressEvent click', () => {
+  test('dragging outside the floating element does not close', () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(floatingEl);
+    fireEvent.mouseUp(document.body);
+    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('dragging inside the floating element does not close', () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(document.body);
+    fireEvent.mouseUp(floatingEl);
+    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    cleanup();
+  });
+
+  test('dragging outside the floating element then clicking outside closes', async () => {
+    render(<App outsidePressEvent="click" />);
+    const floatingEl = screen.getByRole('tooltip');
+    fireEvent.mouseDown(floatingEl);
+    fireEvent.mouseUp(document.body);
+    // A click event will have fired before the proper outside click.
+    fireEvent.click(document.body);
+    fireEvent.click(document.body);
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    cleanup();
   });
 });

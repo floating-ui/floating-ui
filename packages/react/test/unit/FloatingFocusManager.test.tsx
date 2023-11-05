@@ -1,4 +1,4 @@
-import {act, fireEvent, render, screen} from '@testing-library/react';
+import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useRef, useState} from 'react';
 import {Context as ResponsiveContext} from 'react-responsive';
@@ -14,6 +14,7 @@ import {
   useFloatingNodeId,
   useFloatingParentNodeId,
   useInteractions,
+  useRole,
 } from '../../src';
 import {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
@@ -1113,4 +1114,116 @@ describe('Drawer', () => {
     await userEvent.click(screen.getByText('Close'));
     expect(document.activeElement).toBe(screen.getByText('My button'));
   });
+});
+
+test('trapped combobox prevents focus moving outside floating element', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, floatingStyles, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const role = useRole(context);
+    const dismiss = useDismiss(context);
+    const click = useClick(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      role,
+      dismiss,
+      click,
+    ]);
+
+    return (
+      <div className="App">
+        <input
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          data-testid="input"
+          role="combobox"
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div
+              ref={refs.setFloating}
+              style={floatingStyles}
+              {...getFloatingProps()}
+            >
+              <button>one</button>
+              <button>two</button>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </div>
+    );
+  }
+
+  render(<App />);
+  await userEvent.click(screen.getByTestId('input'));
+  await act(async () => {});
+  expect(screen.getByTestId('input')).not.toHaveFocus();
+  expect(screen.getByRole('button', {name: 'one'})).toHaveFocus();
+  await userEvent.tab();
+  expect(screen.getByRole('button', {name: 'two'})).toHaveFocus();
+  await userEvent.tab();
+  expect(screen.getByRole('button', {name: 'one'})).toHaveFocus();
+  cleanup();
+});
+
+test('untrapped combobox creates non-modal focus management', async () => {
+  function App() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const {refs, floatingStyles, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const role = useRole(context);
+    const dismiss = useDismiss(context);
+    const click = useClick(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      role,
+      dismiss,
+      click,
+    ]);
+
+    return (
+      <>
+        <input
+          ref={refs.setReference}
+          {...getReferenceProps()}
+          data-testid="input"
+          role="combobox"
+        />
+        {isOpen && (
+          <FloatingPortal>
+            <FloatingFocusManager context={context} initialFocus={-1}>
+              <div
+                ref={refs.setFloating}
+                style={floatingStyles}
+                {...getFloatingProps()}
+              >
+                <button>one</button>
+                <button>two</button>
+              </div>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        )}
+        <button>outside</button>
+      </>
+    );
+  }
+
+  render(<App />);
+  await userEvent.click(screen.getByTestId('input'));
+  await act(async () => {});
+  expect(screen.getByTestId('input')).toHaveFocus();
+  await userEvent.tab();
+  expect(screen.getByRole('button', {name: 'one'})).toHaveFocus();
+  await userEvent.tab({shift: true});
+  expect(screen.getByTestId('input')).toHaveFocus();
+  cleanup();
 });

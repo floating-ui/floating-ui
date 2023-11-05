@@ -1,4 +1,3 @@
-import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
   activeElement,
   contains,
@@ -8,7 +7,8 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
-} from '@floating-ui/utils/react';
+} from '@floating-ui/react/utils';
+import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
@@ -17,59 +17,23 @@ import {
   useFloatingTree,
 } from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {
+  ARROW_DOWN,
+  ARROW_LEFT,
+  ARROW_RIGHT,
+  ARROW_UP,
+  findNonDisabledIndex,
+  getGridNavigatedIndex,
+  getMaxIndex,
+  getMinIndex,
+  isIndexOutOfBounds,
+} from '../utils/composite';
 import {enqueueFocus} from '../utils/enqueueFocus';
+import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
 
 let isPreventScrollSupported = false;
-
-const ARROW_UP = 'ArrowUp';
-const ARROW_DOWN = 'ArrowDown';
-const ARROW_LEFT = 'ArrowLeft';
-const ARROW_RIGHT = 'ArrowRight';
-
-function isDifferentRow(index: number, cols: number, prevRow: number) {
-  return Math.floor(index / cols) !== prevRow;
-}
-
-function isIndexOutOfBounds(
-  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  index: number
-) {
-  return index < 0 || index >= listRef.current.length;
-}
-
-function findNonDisabledIndex(
-  listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  {
-    startingIndex = -1,
-    decrement = false,
-    disabledIndices,
-    amount = 1,
-  }: {
-    startingIndex?: number;
-    decrement?: boolean;
-    disabledIndices?: Array<number>;
-    amount?: number;
-  } = {}
-): number {
-  const list = listRef.current;
-
-  let index = startingIndex;
-  do {
-    index = index + (decrement ? -amount : amount);
-  } while (
-    index >= 0 &&
-    index <= list.length - 1 &&
-    (disabledIndices
-      ? disabledIndices.includes(index)
-      : list[index] == null ||
-        list[index]?.hasAttribute('disabled') ||
-        list[index]?.getAttribute('aria-disabled') === 'true')
-  );
-
-  return index;
-}
 
 function doSwitch(
   orientation: UseListNavigationProps['orientation'],
@@ -130,24 +94,6 @@ function isCrossOrientationCloseKey(
   return doSwitch(orientation, vertical, horizontal);
 }
 
-function getMinIndex(
-  listRef: UseListNavigationProps['listRef'],
-  disabledIndices: Array<number> | undefined
-) {
-  return findNonDisabledIndex(listRef, {disabledIndices});
-}
-
-function getMaxIndex(
-  listRef: UseListNavigationProps['listRef'],
-  disabledIndices: Array<number> | undefined
-) {
-  return findNonDisabledIndex(listRef, {
-    decrement: true,
-    startingIndex: listRef.current.length,
-    disabledIndices,
-  });
-}
-
 export interface UseListNavigationProps {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
@@ -166,6 +112,7 @@ export interface UseListNavigationProps {
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
   scrollItemIntoView?: boolean | ScrollIntoViewOptions;
+  virtualItemRef?: React.MutableRefObject<HTMLElement | null>;
 }
 
 /**
@@ -201,6 +148,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     orientation = 'vertical',
     cols = 1,
     scrollItemIntoView = true,
+    virtualItemRef,
   } = props;
 
   if (__DEV__) {
@@ -253,6 +201,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   const scrollItemIntoViewRef = useLatestRef(scrollItemIntoView);
 
   const [activeId, setActiveId] = React.useState<string | undefined>();
+  const [virtualId, setVirtualId] = React.useState<string | undefined>();
 
   const focusItem = useEffectEvent(
     (
@@ -266,6 +215,10 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       if (virtual) {
         setActiveId(item.id);
+        tree?.events.emit('virtualfocus', item);
+        if (virtualItemRef) {
+          virtualItemRef.current = item;
+        }
       } else {
         enqueueFocus(item, {
           preventScroll: true,
@@ -413,25 +366,46 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
   useLayoutEffect(() => {
-    if (!enabled) {
+    if (
+      !enabled ||
+      floating ||
+      !tree ||
+      virtual ||
+      !previousMountedRef.current
+    ) {
       return;
     }
 
-    if (previousMountedRef.current && !floating && tree) {
-      const nodes = tree.nodesRef.current;
-      const parent = nodes.find((node) => node.id === parentId)?.context
-        ?.elements.floating;
-      const activeEl = activeElement(getDocument(floating));
-      const treeContainsActiveEl = nodes.some(
-        (node) =>
-          node.context && contains(node.context.elements.floating, activeEl)
-      );
+    const nodes = tree.nodesRef.current;
+    const parent = nodes.find((node) => node.id === parentId)?.context?.elements
+      .floating;
+    const activeEl = activeElement(getDocument(floating));
+    const treeContainsActiveEl = nodes.some(
+      (node) =>
+        node.context && contains(node.context.elements.floating, activeEl)
+    );
 
-      if (parent && !treeContainsActiveEl) {
-        parent.focus({preventScroll: true});
+    if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
+      parent.focus({preventScroll: true});
+    }
+  }, [enabled, floating, tree, parentId, virtual]);
+
+  useLayoutEffect(() => {
+    if (!enabled || !tree || !virtual || parentId) return;
+
+    function handleVirtualFocus(item: HTMLElement) {
+      setVirtualId(item.id);
+
+      if (virtualItemRef) {
+        virtualItemRef.current = item;
       }
     }
-  }, [enabled, floating, tree, parentId]);
+
+    tree.events.on('virtualfocus', handleVirtualFocus);
+    return () => {
+      tree.events.off('virtualfocus', handleVirtualFocus);
+    };
+  }, [enabled, tree, virtual, parentId, virtualItemRef]);
 
   useLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
@@ -506,9 +480,9 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       if (nested && isCrossOrientationCloseKey(event.key, orientation, rtl)) {
         stopEvent(event);
-        onOpenChange(false, event.nativeEvent);
+        onOpenChange(false, event.nativeEvent, 'list-navigation');
 
-        if (isHTMLElement(domReference)) {
+        if (isHTMLElement(domReference) && !virtual) {
           domReference.focus();
         }
 
@@ -533,147 +507,21 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       // Grid navigation.
       if (cols > 1) {
-        const prevIndex = indexRef.current;
+        indexRef.current = getGridNavigatedIndex(listRef, {
+          event,
+          orientation,
+          loop,
+          cols,
+          disabledIndices,
+          minIndex,
+          maxIndex,
+          prevIndex: indexRef.current,
+          stopEvent: true,
+        });
 
-        if (event.key === ARROW_UP) {
-          stopEvent(event);
+        onNavigate(indexRef.current);
 
-          if (prevIndex === -1) {
-            indexRef.current = maxIndex;
-          } else {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex,
-              amount: cols,
-              decrement: true,
-              disabledIndices,
-            });
-
-            if (loop && (prevIndex - cols < minIndex || indexRef.current < 0)) {
-              const col = prevIndex % cols;
-              const maxCol = maxIndex % cols;
-              const offset = maxIndex - (maxCol - col);
-
-              if (maxCol === col) {
-                indexRef.current = maxIndex;
-              } else {
-                indexRef.current = maxCol > col ? offset : offset - cols;
-              }
-            }
-          }
-
-          if (isIndexOutOfBounds(listRef, indexRef.current)) {
-            indexRef.current = prevIndex;
-          }
-
-          onNavigate(indexRef.current);
-        }
-
-        if (event.key === ARROW_DOWN) {
-          stopEvent(event);
-
-          if (prevIndex === -1) {
-            indexRef.current = minIndex;
-          } else {
-            indexRef.current = findNonDisabledIndex(listRef, {
-              startingIndex: prevIndex,
-              amount: cols,
-              disabledIndices,
-            });
-
-            if (loop && prevIndex + cols > maxIndex) {
-              indexRef.current = findNonDisabledIndex(listRef, {
-                startingIndex: (prevIndex % cols) - cols,
-                amount: cols,
-                disabledIndices,
-              });
-            }
-          }
-
-          if (isIndexOutOfBounds(listRef, indexRef.current)) {
-            indexRef.current = prevIndex;
-          }
-
-          onNavigate(indexRef.current);
-        }
-
-        // Remains on the same row/column.
         if (orientation === 'both') {
-          const prevRow = Math.floor(prevIndex / cols);
-
-          if (event.key === ARROW_RIGHT) {
-            stopEvent(event);
-
-            if (prevIndex % cols !== cols - 1) {
-              indexRef.current = findNonDisabledIndex(listRef, {
-                startingIndex: prevIndex,
-                disabledIndices,
-              });
-
-              if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
-                indexRef.current = findNonDisabledIndex(listRef, {
-                  startingIndex: prevIndex - (prevIndex % cols) - 1,
-                  disabledIndices,
-                });
-              }
-            } else if (loop) {
-              indexRef.current = findNonDisabledIndex(listRef, {
-                startingIndex: prevIndex - (prevIndex % cols) - 1,
-                disabledIndices,
-              });
-            }
-
-            if (isDifferentRow(indexRef.current, cols, prevRow)) {
-              indexRef.current = prevIndex;
-            }
-          }
-
-          if (event.key === ARROW_LEFT) {
-            stopEvent(event);
-
-            if (prevIndex % cols !== 0) {
-              indexRef.current = findNonDisabledIndex(listRef, {
-                startingIndex: prevIndex,
-                disabledIndices,
-                decrement: true,
-              });
-
-              if (loop && isDifferentRow(indexRef.current, cols, prevRow)) {
-                indexRef.current = findNonDisabledIndex(listRef, {
-                  startingIndex: prevIndex + (cols - (prevIndex % cols)),
-                  decrement: true,
-                  disabledIndices,
-                });
-              }
-            } else if (loop) {
-              indexRef.current = findNonDisabledIndex(listRef, {
-                startingIndex: prevIndex + (cols - (prevIndex % cols)),
-                decrement: true,
-                disabledIndices,
-              });
-            }
-
-            if (isDifferentRow(indexRef.current, cols, prevRow)) {
-              indexRef.current = prevIndex;
-            }
-          }
-
-          const lastRow = Math.floor(maxIndex / cols) === prevRow;
-
-          if (isIndexOutOfBounds(listRef, indexRef.current)) {
-            if (loop && lastRow) {
-              indexRef.current =
-                event.key === ARROW_LEFT
-                  ? maxIndex
-                  : findNonDisabledIndex(listRef, {
-                      startingIndex: prevIndex - (prevIndex % cols) - 1,
-                      disabledIndices,
-                    });
-            } else {
-              indexRef.current = prevIndex;
-            }
-          }
-
-          onNavigate(indexRef.current);
           return;
         }
       }
@@ -771,17 +619,84 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     const ariaActiveDescendantProp = virtual &&
       open &&
       hasActiveIndex && {
-        'aria-activedescendant': activeId,
+        'aria-activedescendant': virtualId || activeId,
       };
+
+    const activeItem = listRef.current.find((item) => item?.id === activeId);
 
     return {
       reference: {
         ...ariaActiveDescendantProp,
         onKeyDown(event) {
           isPointerModalityRef.current = false;
+
           const isArrowKey = event.key.indexOf('Arrow') === 0;
+          const isCrossOpenKey = isCrossOrientationOpenKey(
+            event.key,
+            orientation,
+            rtl
+          );
+          const isCrossCloseKey = isCrossOrientationCloseKey(
+            event.key,
+            orientation,
+            rtl
+          );
+          const isMainKey = isMainOrientationKey(event.key, orientation);
+          const isNavigationKey =
+            (nested ? isCrossOpenKey : isMainKey) ||
+            event.key === 'Enter' ||
+            event.key.trim() === '';
 
           if (virtual && open) {
+            const rootNode = tree?.nodesRef.current.find(
+              (node) => node.parentId == null
+            );
+
+            const deepestNode =
+              tree && rootNode
+                ? getDeepestNode(tree.nodesRef.current, rootNode.id)
+                : null;
+
+            if (isArrowKey && deepestNode && virtualItemRef) {
+              const eventObject = new KeyboardEvent('keydown', {
+                key: event.key,
+                bubbles: true,
+              });
+
+              if (isCrossOpenKey || isCrossCloseKey) {
+                const isCurrentTarget =
+                  deepestNode.context?.elements.domReference ===
+                  event.currentTarget;
+                const dispatchItem =
+                  isCrossCloseKey && !isCurrentTarget
+                    ? deepestNode.context?.elements.domReference
+                    : isCrossOpenKey
+                    ? activeItem
+                    : null;
+
+                if (dispatchItem) {
+                  stopEvent(event);
+                  dispatchItem.dispatchEvent(eventObject);
+                  setVirtualId(undefined);
+                }
+              }
+
+              if (isMainKey && deepestNode.context) {
+                if (
+                  deepestNode.context.open &&
+                  deepestNode.parentId &&
+                  event.currentTarget !==
+                    deepestNode.context.elements.domReference
+                ) {
+                  stopEvent(event);
+                  deepestNode.context.elements.domReference?.dispatchEvent(
+                    eventObject
+                  );
+                  return;
+                }
+              }
+            }
+
             return onKeyDown(event);
           }
 
@@ -791,28 +706,19 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             return;
           }
 
-          const isNavigationKey =
-            isArrowKey || event.key === 'Enter' || event.key.trim() === '';
-          const isMainKey = isMainOrientationKey(event.key, orientation);
-          const isCrossKey = isCrossOrientationOpenKey(
-            event.key,
-            orientation,
-            rtl
-          );
-
           if (isNavigationKey) {
             keyRef.current = nested && isMainKey ? null : event.key;
           }
 
           if (nested) {
-            if (isCrossKey) {
+            if (isCrossOpenKey) {
               stopEvent(event);
 
               if (open) {
                 indexRef.current = getMinIndex(listRef, disabledIndices);
                 onNavigate(indexRef.current);
               } else {
-                onOpenChange(true, event.nativeEvent);
+                onOpenChange(true, event.nativeEvent, 'list-navigation');
               }
             }
 
@@ -827,7 +733,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             stopEvent(event);
 
             if (!open && openOnArrowKeyDown) {
-              onOpenChange(true, event.nativeEvent);
+              onOpenChange(true, event.nativeEvent, 'list-navigation');
             } else {
               onKeyDown(event);
             }
@@ -860,6 +766,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     domReference,
     refs,
     activeId,
+    virtualId,
     disabledIndicesRef,
     latestOpenRef,
     listRef,
@@ -879,5 +786,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     onNavigate,
     onOpenChange,
     item,
+    tree,
+    virtualItemRef,
   ]);
 }

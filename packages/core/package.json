@@ -1,13 +1,6 @@
 {
   "name": "@floating-ui/core",
-  "version": "0.1.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      1,
-      0
-    ]
-  },
+  "version": "1.5.0",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {
     "access": "public"
@@ -57,6 +50,6 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/utils": "^0.1.0"
+    "@floating-ui/utils": "^0.1.3"
   }
 }

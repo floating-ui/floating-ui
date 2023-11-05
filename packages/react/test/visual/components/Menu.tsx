@@ -27,7 +27,7 @@ import {ChevronRightIcon} from '@radix-ui/react-icons';
 import c from 'clsx';
 import * as React from 'react';
 
-const MenuContext = React.createContext<{
+type MenuContextType = {
   getItemProps: (
     userProps?: React.HTMLProps<HTMLElement>
   ) => Record<string, unknown>;
@@ -36,13 +36,19 @@ const MenuContext = React.createContext<{
   setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;
   allowHover: boolean;
   isOpen: boolean;
-}>({
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  parent: MenuContextType | null;
+};
+
+const MenuContext = React.createContext<MenuContextType>({
   getItemProps: () => ({}),
   activeIndex: null,
   setActiveIndex: () => {},
   setHasFocusInside: () => {},
   allowHover: true,
   isOpen: false,
+  setIsOpen: () => {},
+  parent: null,
 });
 
 interface MenuProps {
@@ -181,11 +187,16 @@ export const MenuComponent = React.forwardRef<
         ref={useMergeRefs([refs.setReference, item.ref, forwardedRef])}
         data-open={isOpen ? '' : undefined}
         tabIndex={
-          !isNested ? undefined : parent.activeIndex === item.index ? 0 : -1
+          !isNested
+            ? props.tabIndex
+            : parent.activeIndex === item.index
+            ? 0
+            : -1
         }
         role={isNested ? 'menuitem' : undefined}
         className={c(
-          'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
+          props.className ||
+            'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
           {
             'focus:bg-blue-500 focus:text-white outline-none': isNested,
             'bg-blue-500 text-white': isOpen && isNested && !hasFocusInside,
@@ -226,6 +237,8 @@ export const MenuComponent = React.forwardRef<
           setHasFocusInside,
           allowHover,
           isOpen,
+          setIsOpen,
+          parent,
         }}
       >
         <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
@@ -293,6 +306,24 @@ export const MenuItem = React.forwardRef<
           props.onMouseEnter?.(event);
           if (menu.allowHover && menu.isOpen) {
             menu.setActiveIndex(item.index);
+          }
+        },
+        onKeyDown(event) {
+          function closeParents(parent: MenuContextType | null) {
+            parent?.setIsOpen(false);
+            if (parent?.parent) {
+              closeParents(parent.parent);
+            }
+          }
+
+          if (
+            event.key === 'ArrowRight' &&
+            // If the root reference is in a menubar, close parents
+            tree?.nodesRef.current[0].context?.elements.domReference?.closest(
+              '[role="menubar"]'
+            )
+          ) {
+            closeParents(menu.parent);
           }
         },
       })}

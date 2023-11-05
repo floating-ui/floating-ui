@@ -1,14 +1,12 @@
 import {
   clamp,
   evaluate,
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
   getPaddingObject,
   min as mathMin,
 } from '@floating-ui/utils';
 
 import type {Derivable, Middleware, Padding} from '../types';
+import {getAlignment, getAlignmentAxis, getAxisLength} from '../utils';
 
 export interface ArrowOptions {
   /**
@@ -36,7 +34,7 @@ export const arrow = (
   name: 'arrow',
   options,
   async fn(state) {
-    const {x, y, placement, rects, platform, elements} = state;
+    const {x, y, placement, rects, platform, elements, middlewareData} = state;
     // Since `element` is required, we don't Partial<> the type.
     const {element, padding = 0} = evaluate(options, state) || {};
 
@@ -88,9 +86,10 @@ export const arrow = (
 
     // If the reference is small enough that the arrow's padding causes it to
     // to point to nothing for an aligned placement, adjust the offset of the
-    // floating element itself. This stops `shift()` from taking action, but can
-    // be worked around by calling it again after the `arrow()` if desired.
+    // floating element itself. To ensure `shift()` continues to take action,
+    // a single reset is performed when this is true.
     const shouldAddOffset =
+      !middlewareData.arrow &&
       getAlignment(placement) != null &&
       center != offset &&
       rects.reference[length] / 2 -
@@ -99,16 +98,18 @@ export const arrow = (
         0;
     const alignmentOffset = shouldAddOffset
       ? center < min
-        ? min - center
-        : max - center
+        ? center - min
+        : center - max
       : 0;
 
     return {
-      [axis]: coords[axis] - alignmentOffset,
+      [axis]: coords[axis] + alignmentOffset,
       data: {
         [axis]: offset,
-        centerOffset: center - offset + alignmentOffset,
+        centerOffset: center - offset - alignmentOffset,
+        ...(shouldAddOffset && {alignmentOffset}),
       },
+      reset: shouldAddOffset,
     };
   },
 });

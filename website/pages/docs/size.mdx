@@ -23,9 +23,12 @@ change the size of the floating element.
   </Chrome>
 </div>
 
-This is useful for long dropdowns that become scrollable without
-specifying a fixed height, or matching the floating element's
-width with its reference element.
+This is useful for:
+
+- Ensuring the floating element isn't too big to fit in the
+  viewport (or more specifically, its clipping context),
+  especially when a maximum size isn't specified.
+- Matching the width of the reference element.
 
 ## Usage
 

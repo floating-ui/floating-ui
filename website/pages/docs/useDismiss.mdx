@@ -66,6 +66,9 @@ interface Props {
   bubbles?:
     | boolean
     | {escapeKey?: boolean; outsidePress?: boolean};
+  capture?:
+    | boolean
+    | {escapeKey?: boolean; outsidePress?: boolean};
 }
 ```
 
@@ -240,6 +243,22 @@ Any omitted events will use the default value.
 ```js
 useDismiss(context, {
   bubbles: {
+    escapeKey: true, // false by default
+    outsidePress: false, // true by default
+  },
+});
+```
+
+### capture
+
+default: `undefined{:js}`
+
+Determines whether to use capture phase event listeners.
+
+```js
+useDismiss(context, {
+  capture: true,
+  capture: {
     escapeKey: true, // false by default
     outsidePress: false, // true by default
   },

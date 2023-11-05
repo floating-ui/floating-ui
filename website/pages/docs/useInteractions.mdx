@@ -1,0 +1,103 @@
+# useInteractions
+
+A hook to merge or compose interaction event handlers together,
+preserving memoization.
+
+```js
+import {useInteractions} from '@floating-ui/react';
+```
+
+Interaction hooks like `useHover(){:js}` and `useFocus(){:js}` do
+two things: they set up effects inside the hook that work on
+their own, and return event handlers intended to be passed to the
+elements to add their functionality.
+
+## Usage
+
+`useInteractions(){:js}` accepts an array of the values returned
+from interaction hooks, merging their event handlers into prop
+getters used for rendering:
+
+```js /hover/ /focus/
+import {
+  useFloating,
+  useHover,
+  useFocus,
+  useInteractions,
+} from '@floating-ui/react';
+
+function App() {
+  const {context} = useFloating();
+
+  const hover = useHover(context);
+  const focus = useFocus(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    hover,
+    focus,
+  ]);
+}
+```
+
+## Return value
+
+```ts
+interface UseInteractionsReturn {
+  getReferenceProps(
+    userProps?: React.HTMLProps<Element>
+  ): Record<string, unknown>;
+  getFloatingProps(
+    userProps?: React.HTMLProps<HTMLElement>
+  ): Record<string, unknown>;
+  getItemProps(
+    userProps?: React.HTMLProps<HTMLElement>
+  ): Record<string, unknown>;
+}
+```
+
+The hook returns two core prop getters, one for the reference
+element and one for the floating element. These prop getters
+should be spread onto the elements:
+
+```js
+<>
+  <div ref={refs.setReference} {...getReferenceProps()} />
+  <div
+    ref={refs.setFloating}
+    style={floatingStyles}
+    {...getFloatingProps()}
+  />
+</>
+```
+
+All event handlers you pass in should be done so through the prop
+getter, not the element itself:
+
+```js
+<div
+  ref={refs.setReference}
+  {...getReferenceProps({
+    onClick: () => console.log('clicked'),
+    onFocus: () => console.log('focused'),
+  })}
+/>
+```
+
+This is because your handler may be either overwritten or
+overwrite one of the hooks' handlers. More event handlers may
+also be added in future versions.
+
+## getItemProps
+
+A third prop getter is returned for item elements when dealing
+with a list inside the floating element, which is not required
+for all types of floating elements.
+
+{/* prettier-ignore */}
+```js /getItemProps/
+const {
+  getReferenceProps, 
+  getFloatingProps, 
+  getItemProps
+} = useInteractions([]);
+```

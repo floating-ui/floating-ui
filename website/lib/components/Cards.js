@@ -1,7 +1,28 @@
-export function Cards({items}) {
+import {useEffect,useState} from 'react';
+
+import {getTierSponsors} from '../utils/openCollective';
+
+export function Cards({items, tier}) {
+  const [activeMembers, setActiveMembers] = useState([]);
+
+  useEffect(() => {
+    getTierSponsors('floating-ui', tier).then(
+      (activeMembers) => {
+        setActiveMembers(activeMembers);
+      }
+    );
+  }, [tier]);
+
+
+  const activeItems = items.filter((item) =>
+    activeMembers.some(
+      (member) => member.MemberId === item.MemberId
+    )
+  );
+
   return (
     <section className="my-16 flex flex-col justify-center gap-8 md:flex-row md:gap-2">
-      {items.map((item) => (
+      {activeItems.map((item) => (
         <a
           rel="noopener noreferrer"
           target="_blank"

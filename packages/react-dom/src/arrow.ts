@@ -1,5 +1,4 @@
-import type {Middleware, Padding} from '@floating-ui/core';
-import {arrow as arrowCore, MiddlewareState} from '@floating-ui/dom';
+import {arrow as arrowCore, Middleware, MiddlewareState, Padding} from '@floating-ui/dom';
 import * as React from 'react';
 
 export interface Options {

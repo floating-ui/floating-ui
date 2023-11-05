@@ -1,17 +1,11 @@
-import {
-  evaluate,
-  getAlignment,
-  getSide,
-  getSideAxis,
-  max,
-  min,
-} from '@floating-ui/utils';
+import {evaluate, max, min} from '@floating-ui/utils';
 
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
+import {getAlignment, getSide, getSideAxis} from '../utils';
 
 export type SizeOptions = Partial<
   DetectOverflowOptions & {

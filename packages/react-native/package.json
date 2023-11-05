@@ -1,13 +1,6 @@
 {
   "name": "@floating-ui/react-native",
-  "version": "0.1.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      1,
-      0
-    ]
-  },
+  "version": "0.10.1",
   "description": "Floating UI for React Native",
   "publishConfig": {
     "access": "public"
@@ -49,7 +42,7 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^0.1.0"
+    "@floating-ui/core": "^1.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

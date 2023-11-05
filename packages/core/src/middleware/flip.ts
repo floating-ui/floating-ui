@@ -3,8 +3,6 @@ import {
   getAlignmentSides,
   getExpandedPlacements,
   getOppositeAxisPlacements,
-  getOppositePlacement,
-  getSide,
 } from '@floating-ui/utils';
 
 import {detectOverflow} from '../detectOverflow';
@@ -14,6 +12,7 @@ import type {
   Middleware,
   Placement,
 } from '../types';
+import {getOppositeSidePlacement, getSide} from '../utils';
 
 export type FlipOptions = Partial<
   DetectOverflowOptions & {
@@ -90,6 +89,14 @@ export const flip = (
       ...detectOverflowOptions
     } = evaluate(options, state);
 
+    // If a reset by the arrow was caused due to an alignment offset being
+    // added, we should skip any logic now since `flip()` has already done its
+    // work.
+    // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
+    if (middlewareData.arrow?.alignmentOffset) {
+      return {};
+    }
+
     const side = getSide(placement);
     const isBasePlacement = getSide(initialPlacement) === initialPlacement;
     const rtl = await platform.isRTL?.(elements.floating);
@@ -97,7 +104,7 @@ export const flip = (
     const fallbackPlacements =
       specifiedFallbackPlacements ||
       (isBasePlacement || !flipAlignment
-        ? [getOppositePlacement(initialPlacement)]
+        ? [getOppositeSidePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
     if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {

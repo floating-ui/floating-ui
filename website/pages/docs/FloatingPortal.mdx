@@ -20,6 +20,13 @@ function Tooltip() {
 Context is provided so that portals nested in one another are
 appended to their respective parent.
 
+<Notice>
+  The portal component should be conditionally rendered based on
+  the `isOpen` or mounted state (as seen above), rather than
+  always rendered. This allows React Suspense to work as
+  expected.
+</Notice>
+
 ## Props
 
 ```ts

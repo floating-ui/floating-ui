@@ -1,0 +1,634 @@
+# useFloating
+
+The main hook of the library that acts as a controller for all
+other hooks and components.
+
+```js
+import {useFloating} from '@floating-ui/react';
+```
+
+## Packages
+
+There are two different React packages:
+
+- `@floating-ui/react{:.string}`: the full package containing all
+  features.
+- `@floating-ui/react-dom{:.string}`: a subset of the former,
+  containing only positioning features.
+
+If you only need positioning, install
+`@floating-ui/react-dom{:.string}` as it's leaner; if later on
+you decide you want to add interactions, you can uninstall
+`@floating-ui/react-dom{:.string}` and install
+`@floating-ui/react{:.string}`, then replace all your imports.
+It's a compatible superset, so it will continue to work without
+needing to change anything else.
+
+## Usage
+
+Call the hook inside a component.
+
+```js
+function App() {
+  const {refs, floatingStyles} = useFloating();
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles} />
+    </>
+  );
+}
+```
+
+## Options
+
+The hook accepts an object of options to configure its behavior.
+
+```js
+useFloating({
+  // options
+});
+```
+
+```ts
+interface UseFloatingOptions {
+  placement?: Placement;
+  strategy: 'fixed' | 'absolute';
+  transform?: boolean;
+  middleware?: Array<Middleware | undefined | null | false>;
+  open?: boolean;
+  elements?: {
+    reference?: ReferenceElement | null;
+    floating?: FloatingElement | null;
+  };
+  whileElementsMounted?(
+    reference?: ReferenceElement,
+    floating?: FloatingElement,
+    update?: () => void
+  ): () => void;
+  onOpenChange?(open: boolean, event?: Event): void;
+  nodeId?: string;
+}
+```
+
+### placement
+
+default: `'bottom'{:js}`
+
+The placement of the floating element relative to the reference
+element.
+
+```js
+useFloating({
+  placement: 'left',
+});
+```
+
+12 strings are available:
+
+```ts
+type Placement =
+  | 'top'
+  | 'top-start'
+  | 'top-end'
+  | 'right'
+  | 'right-start'
+  | 'right-end'
+  | 'bottom'
+  | 'bottom-start'
+  | 'bottom-end'
+  | 'left'
+  | 'left-start'
+  | 'left-end';
+```
+
+The `-start{:.string}` and `-end{:.string}` alignments are
+[logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties)
+and will adapt to the writing direction (e.g. RTL) as expected.
+
+<Notice>
+  You aren't limited to just these 12 placements though.
+  [`offset`](/docs/offset#creating-custom-placements) allows you
+  to create _any_ placement.
+</Notice>
+
+### strategy
+
+default: `'absolute'{:js}`
+
+This is the type of CSS position property to use. Two strings are
+available:
+
+```ts
+type Strategy = 'absolute' | 'fixed';
+```
+
+```js
+useFloating({
+  strategy: 'fixed',
+});
+```
+
+These strategies are differentiated as follows:
+
+- `'absolute'{:js}` — the floating element is positioned relative
+  to its nearest positioned ancestor. With most layouts, this
+  usually requires the browser to do the least work when updating
+  the position.
+- `'fixed'{:js}` — the floating element is positioned relative to
+  its nearest containing block (usually the viewport). This is
+  useful when the reference element is also fixed to reduce
+  jumpiness with positioning while scrolling. It will in many
+  cases also
+  ["break" the floating element out of a clipping ancestor](/docs/misc#clipping).
+
+### transform
+
+default: `true{:js}`
+
+Whether to use CSS transforms to position the floating element
+instead of layout (`top` and `left` CSS properties).
+
+```js
+useFloating({
+  transform: false,
+});
+```
+
+CSS transforms are more performant, but can cause conflicts with
+transform animations. In that case, you can make the positioned
+floating element a wrapper to avoid the conflict:
+
+```js
+<div ref={refs.setFloating} style={floatingStyles}>
+  <div style={transitionStyles}>Content</div>
+</div>
+```
+
+<Notice>
+  When using layout instead of transforms, ensure that the
+  floating element has a fixed width or sets a `width: max-width{:sass}` to
+  prevent it from resizing.
+</Notice>
+
+### middleware
+
+default: `[]{:js}`
+
+An array of middleware objects that change the positioning of the
+floating element.
+
+```js
+useFloating({
+  middleware: [
+    // ...
+  ],
+});
+```
+
+When you want granular control over how the floating element is
+positioned, middleware are used. They read the current
+coordinates, optionally alter them, and/or provide data for
+rendering. They compose and work together to produce the final
+coordinates which are in the `floatingStyles` object.
+
+The following are included in the package:
+
+#### Placement modifiers
+
+These middleware alter the base placement coordinates.
+
+- [`offset`](/docs/offset) modifies the placement to add distance
+  or margin between the reference and floating elements.
+
+- [`inline`](/docs/inline) positions the floating element
+  relative to individual client rects rather than the bounding
+  box for better precision.
+
+#### Visibility optimizers
+
+These middleware alter the coordinates to ensure the floating
+element stays on screen optimally.
+
+- [`shift`](/docs/shift) prevents the floating element from
+  overflowing a clipping container by shifting it to stay in
+  view.
+
+- [`flip`](/docs/flip) prevents the floating element from
+  overflowing a clipping container by flipping it to the opposite
+  placement to stay in view.
+
+- [`autoPlacement`](/docs/autoPlacement) automatically chooses a
+  placement for you using a "most space" strategy.
+
+- [`size`](/docs/size) resizes the floating element, for example
+  so it will not overflow a clipping container, or to match the
+  width of the reference element.
+
+#### Data providers
+
+These middleware only provide data and do not alter the
+coordinates.
+
+- [`arrow`](/docs/arrow) provides data to position an inner
+  element of the floating element such that it is centered to its
+  reference element.
+
+- [`hide`](/docs/hide) provides data to hide the floating element
+  in applicable situations when it no longer appears attached to
+  its reference element due to different clipping contexts.
+
+#### Option reactivity
+
+When using React state and middleware, stateful values inside
+_function options_ (useful when deriving from middleware state)
+aren't fresh or reactive.
+
+```js
+const [value, setValue] = useState(0);
+// Reactive and fresh:
+offset(value);
+// Not reactive or fresh:
+offset(() => value);
+```
+
+Calling a middleware function returns an object with an
+`options{:.objectKey}` key. These keys can hold the dependencies
+of the options object, allowing deep comparison to enable
+reactivity.
+
+Here's an example:
+
+```js /offset/
+import {offset} from '@floating-ui/react';
+
+const reactiveOffset = (options, deps) => ({
+  ...offset(options),
+  options: deps,
+});
+
+function App() {
+  const [value, setValue] = useState(0);
+
+  useFloating({
+    middleware: [
+      // No need to use `reactiveOffset`:
+      offset(value),
+      // We do need to use it, since a function is passed:
+      reactiveOffset(() => value, [value]),
+    ],
+  });
+}
+```
+
+### elements
+
+default: `undefined{:js}`
+
+An object of elements passed to the hook, which is useful for
+externally passing them, as an alternative to the `refs{:.const}`
+object setters.
+
+The elements must be held in state (not plain refs) to ensure
+that they are reactive.
+
+```js
+const [reference, setReference] = useState(null);
+
+const {refs} = useFloating({
+  elements: {
+    reference,
+  },
+});
+
+return (
+  <>
+    <div ref={setReference} />
+    <div ref={refs.setFloating} />;
+  </>
+);
+```
+
+You can also do the inverse of the above, or pass both
+externally.
+
+### whileElementsMounted
+
+default: `undefined{:js}`
+
+A function that is called when the reference and floating
+elements are mounted, and returns a cleanup function called when
+they are unmounted.
+
+```js
+useFloating({
+  whileElementsMounted: (reference, floating, update) => {
+    // ...
+    return () => {
+      // ...
+    };
+  },
+});
+```
+
+This allows you to pass [`autoUpdate`](/docs/autoUpdate) whose
+signature matches the option, to ensure the floating element
+remains anchored to the reference element:
+
+```js
+import {autoUpdate} from '@floating-ui/react';
+
+useFloating({
+  whileElementsMounted: autoUpdate,
+});
+```
+
+<Notice type="warning">
+  Only use this option if your floating element is _conditionally
+  rendered_, not hidden with CSS. Use an effect to call and clean
+  up `autoUpdate` in the latter scenario.
+</Notice>
+
+### open
+
+default: `false{:js}`
+
+Whether the floating element is open or not, which allows you to
+determine if the floating element has been positioned yet.
+
+```js {4}
+const [isOpen, setIsOpen] = useState(false);
+
+const {isPositioned} = useFloating({
+  open: isOpen,
+});
+
+// Once `isOpen` flips to `true`, `isPositioned` will switch to `true`
+// asynchronously. We can use an effect to determine when it has
+// been positioned.
+useEffect(() => {
+  if (isPositioned) {
+    // ...
+  }
+}, [isPositioned]);
+```
+
+### onOpenChange
+
+default: `undefined{:js}`
+
+A function that is called when the `open{:.objectKey}` state
+should change. By default, passing the setter of the
+`open{:.objectKey}` state will be sufficient:
+
+```js
+const [isOpen, setIsOpen] = useState(false);
+
+useFloating({
+  open: isOpen,
+  onOpenChange: setIsOpen,
+});
+```
+
+Since it's an event callback function, it allows you to
+conditionally react to the state changing, plus determine the
+event that caused the change.
+
+```js
+useFloating({
+  open: isOpen,
+  onOpenChange(isOpen, event) {
+    setIsOpen(isOpen);
+    if (event) {
+      console.log(event.type);
+    }
+  },
+});
+```
+
+<Notice>
+  This option is only available for `@floating-ui/react`.
+</Notice>
+
+### nodeId
+
+default: `undefined{:js}`
+
+A unique node ID for the floating element when using a
+[FloatingTree](/docs/FloatingTree).
+
+<Notice>
+  This option is only available for `@floating-ui/react`.
+</Notice>
+
+## Return value
+
+The hook returns the following type:
+
+```ts
+interface UseFloatingReturn {
+  context: FloatingContext;
+  placement: Placement;
+  strategy: Strategy;
+  x: number;
+  y: number;
+  middlewareData: MiddlewareData;
+  isPositioned: boolean;
+  update(): void;
+  floatingStyles: React.CSSProperties;
+  refs: {
+    reference: React.MutableRefObject<ReferenceElement | null>;
+    floating: React.MutableRefObject<HTMLElement | null>;
+    domReference: React.MutableRefObject<Element | null>;
+    setReference(node: RT | null): void;
+    setFloating(node: HTMLElement | null): void;
+    setPositionReference(node: ReferenceElement): void;
+  };
+  elements: {
+    reference: RT | null;
+    floating: HTMLElement | null;
+  };
+}
+```
+
+### context
+
+This object contains the context data provided to relevant hooks
+and components.
+
+```js
+const {context} = useFloating();
+```
+
+<Notice>
+  This object is only available for `@floating-ui/react`.
+</Notice>
+
+### placement
+
+The **final** placement of the floating element relative to the
+reference element. Unlike the one passed in the options, this one
+can be mutated by middleware like `flip(){:js}`. This is
+necessary to determine the actual side of the floating element
+for styling.
+
+```js
+const {placement} = useFloating();
+```
+
+### strategy
+
+The positoning strategy of the floating element.
+
+```js
+const {strategy} = useFloating();
+```
+
+### x
+
+The final x-coordinate of the floating element. This can be used
+as an alternative to `floatingStyles` to manually position the
+floating element with custom CSS.
+
+```js
+const {x} = useFloating();
+```
+
+### y
+
+The final y-coordinate of the floating element. This can be used
+as an alternative to `floatingStyles` to manually position the
+floating element with custom CSS.
+
+```js
+const {y} = useFloating();
+```
+
+### middlewareData
+
+The data provided by any middleware used.
+
+```js
+const {middlewareData} = useFloating();
+```
+
+### isPositioned
+
+Whether the floating element has been positioned yet when used
+inside an effect (not during render). Requires the
+`open{:.objectKey}` option to be passed.
+
+```js
+const {isPositioned} = useFloating();
+```
+
+### update
+
+A function that updates the floating element's position manually.
+
+```js
+const {update} = useFloating();
+```
+
+### floatingStyles
+
+The styles that should be applied to the floating element.
+
+```js
+const {floatingStyles} = useFloating();
+```
+
+### refs
+
+The refs that should be applied to the reference and floating
+elements.
+
+```js
+const {refs} = useFloating();
+```
+
+#### reference
+
+A ref for the reference element. You can access this inside an
+event handler or in an effect.
+
+```js
+const {refs} = useFloating();
+useEffect(() => {
+  console.log(refs.reference.current);
+}, [refs]);
+```
+
+#### floating
+
+A ref for the floating element. You can access this inside an
+event handler or in an effect.
+
+```js
+const {refs} = useFloating();
+useEffect(() => {
+  console.log(refs.floating.current);
+}, [refs]);
+```
+
+#### domReference
+
+A ref for the DOM reference element (if available). You can
+access this inside an event handler or in an effect.
+
+```js
+const {refs} = useFloating();
+useEffect(() => {
+  console.log(refs.domReference.current);
+}, [refs]);
+```
+
+This differs from `reference` in that it is guaranteed to be a
+DOM reference, while the former can be a
+[virtual element](/docs/virtual-elements).
+
+<Notice>
+  This property is only available for `@floating-ui/react`.
+</Notice>
+
+#### setReference
+
+A function that sets the reference element.
+
+```js
+const {refs} = useFloating();
+return <div ref={refs.setReference} />;
+```
+
+#### setFloating
+
+A function that sets the floating element.
+
+```js
+const {refs} = useFloating();
+return <div ref={refs.setFloating} />;
+```
+
+#### setPositionReference
+
+A function that sets the positioning reference element, to
+separate it from the events reference. This can be either a real
+or [virtual](/docs/virtual-elements) element.
+
+```js
+const {refs} = useFloating();
+return <div ref={refs.setPositionReference} />;
+```
+
+<Notice>
+  This function is only available for `@floating-ui/react`.
+</Notice>
+
+### elements
+
+The elements as set by the refs, useful for access during
+rendering (as opposed to inside an event handler or an effect).
+
+```js
+const {elements} = useFloating();
+```

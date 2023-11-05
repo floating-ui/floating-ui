@@ -1,3 +1,4 @@
+export {Composite, CompositeItem} from './components/Composite';
 export {FloatingArrow} from './components/FloatingArrow';
 export {
   FloatingDelayGroup,
@@ -48,4 +49,18 @@ export {
   platform,
   shift,
   size,
+} from '@floating-ui/react-dom';
+export {
+  alignments,
+  getAlignment,
+  getAlignmentAxis,
+  getAxisLength,
+  getOppositeAlignmentPlacement,
+  getOppositeAxis,
+  getOppositeSidePlacement,
+  getSide,
+  getSideAxis,
+  placements,
+  rectToClientRect,
+  sides,
 } from '@floating-ui/react-dom';

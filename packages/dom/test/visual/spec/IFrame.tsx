@@ -102,7 +102,12 @@ function Inside({scroll}: {scroll: number[]}) {
   return (
     <>
       <h2>Inside</h2>
-      <div className="container" id="inside-container">
+      <div
+        className="container"
+        id="inside-container"
+        // https://github.com/floating-ui/floating-ui/issues/2552
+        style={{overflow: 'hidden'}}
+      >
         <iframe
           ref={setIFrame}
           width={350}
@@ -131,6 +136,81 @@ function Inside({scroll}: {scroll: number[]}) {
                   }}
                 >
                   Floating
+                </div>
+              </div>,
+              mountNode
+            )}
+        </iframe>
+      </div>
+    </>
+  );
+}
+
+function InsideScrollable({scroll}: {scroll: number[]}) {
+  const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
+  const {x, y, refs, strategy} = useFloating({
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      shift({
+        crossAxis: true,
+        limiter: limitShift(),
+      }),
+    ],
+  });
+
+  const mountNode = iframe?.contentWindow?.document.body;
+
+  const [scrollableParent, setScrollableParent] =
+    useState<HTMLDivElement | null>(null);
+  useLayoutEffect(() => {
+    if (scrollableParent && scroll) {
+      scrollableParent.scrollLeft = scroll[0];
+      scrollableParent.scrollTop = scroll[1];
+    }
+  }, [scrollableParent, scroll]);
+
+  return (
+    <>
+      <h2>Inside Scrollable</h2>
+      <div
+        className="container"
+        id="inside-scrollable-container"
+        // https://github.com/floating-ui/floating-ui/issues/2552
+        style={{overflow: 'hidden'}}
+      >
+        <iframe
+          ref={setIFrame}
+          width={350}
+          height={350}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
+        >
+          {mountNode &&
+            createPortal(
+              <div
+                style={{width: '100%', height: '100%', overflow: 'auto'}}
+                ref={setScrollableParent}
+              >
+                <div style={{width: 2000, height: 2000, position: 'relative'}}>
+                  <button
+                    ref={refs.setReference}
+                    className="reference"
+                    style={{position: 'absolute', left: 1000, top: 1000}}
+                  >
+                    Reference
+                  </button>
+                  <div
+                    ref={refs.setFloating}
+                    style={{
+                      position: strategy,
+                      top: y ?? 0,
+                      left: x ?? 0,
+                      width: 80,
+                      height: 80,
+                      background: '#40e0d0',
+                    }}
+                  >
+                    Floating
+                  </div>
                 </div>
               </div>,
               mountNode
@@ -316,6 +396,7 @@ export function IFrame() {
       <Inside scroll={scroll} />
       <Nested scroll={scroll} />
       <Virtual scroll={scroll} />
+      <InsideScrollable scroll={scroll} />
 
       <h2>Scroll position</h2>
       <Controls>

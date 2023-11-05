@@ -580,8 +580,8 @@ function HomePage() {
             </a>
             .
           </p>
-          <Cards items={SPONSORS} />
-          <Logos items={MINI_SPONSORS} />
+          <Cards items={SPONSORS} tier="Website Sponsor" />
+          <Logos items={MINI_SPONSORS} tier="Mini Sponsor" />
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">

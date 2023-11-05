@@ -7,8 +7,10 @@ real DOM focus or virtual focus.
 import {useListNavigation} from '@floating-ui/react';
 ```
 
-See [`FloatingList`](/docs/FloatingList) for creating composable
-children API components.
+- See [`FloatingList`](/docs/FloatingList) for creating
+  composable children API components.
+- See [`Composite`](/docs/Composite) for list navigation outside
+  of floating element contexts.
 
 ## Usage
 
@@ -138,6 +140,7 @@ interface Props {
   nested?: boolean;
   rtl?: boolean;
   virtual?: boolean;
+  virtualItemRef?: React.MutableRefObject<HTMLElement | null>;
   allowEscape?: boolean;
   orientation?: 'vertical' | 'horizontal' | 'both';
   cols?: number;
@@ -294,6 +297,30 @@ useListNavigation(context, {
 <Notice type="error" title="Required">
   Your virtually-focused list items must have a unique `id{:.keyword}` set on 
   them.
+</Notice>
+
+### virtualItemRef
+
+default: `undefined{:js}`
+
+When using virtual focus management, this holds a ref to the
+virtually-focused item.
+
+This allows nested virtual navigation to be enabled, and lets you
+know when a nested element is virtually focused from the root
+reference handling the events.
+
+```js
+const virtualItemRef = useRef(null);
+useListNavigation(context, {
+  virtualItemRef,
+});
+```
+
+<Notice type="error" title="Required">
+  The React tree must be using a
+  [`FloatingTree`](/docs/FloatingTree) setup so that
+  communication of nested floating elements can occur.
 </Notice>
 
 ### allowEscape

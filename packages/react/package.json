@@ -1,13 +1,6 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.14.0",
-  "@rollingversions": {
-    "baseVersion": [
-      0,
-      14,
-      0
-    ]
-  },
+  "version": "0.26.1",
   "description": "Floating UI for React",
   "publishConfig": {
     "access": "public"
@@ -18,6 +11,7 @@
   "types": "./src/types.d.ts",
   "exports": {
     "./package.json": "./package.json",
+    "./utils/package.json": "./utils/package.json",
     ".": {
       "import": {
         "types": "./src/types.d.ts",
@@ -26,11 +20,22 @@
       "types": "./src/types.d.ts",
       "module": "./dist/floating-ui.react.esm.js",
       "default": "./dist/floating-ui.react.umd.js"
+    },
+    "./utils": {
+      "import": {
+        "types": "./utils/src/index.d.ts",
+        "default": "./utils/dist/floating-ui.react.utils.mjs"
+      },
+      "types": "./utils/src/index.d.ts",
+      "module": "./utils/dist/floating-ui.react.utils.esm.js",
+      "default": "./utils/dist/floating-ui.react.utils.umd.js"
     }
   },
   "sideEffects": false,
   "files": [
     "dist/",
+    "utils/dist/",
+    "utils/package.json",
     "**/*.d.ts",
     "**/*.d.mts"
   ],
@@ -63,8 +68,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^0.1.0",
-    "@floating-ui/utils": "^0.1.0",
+    "@floating-ui/react-dom": "^2.0.2",
+    "@floating-ui/utils": "^0.1.5",
     "tabbable": "^6.0.1"
   },
   "devDependencies": {

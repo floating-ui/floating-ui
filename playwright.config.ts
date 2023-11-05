@@ -1,6 +1,7 @@
-import {PlaywrightTestConfig} from '@playwright/test';
+import {defineConfig} from '@playwright/test';
 
-const config: PlaywrightTestConfig = {
+export default defineConfig({
+  retries: 3,
   workers: 4,
   fullyParallel: true,
   use: {
@@ -14,6 +15,4 @@ const config: PlaywrightTestConfig = {
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,
   },
-};
-
-export default config;
+});

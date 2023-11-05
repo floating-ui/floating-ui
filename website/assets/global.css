@@ -9,6 +9,10 @@ html {
   @apply scroll-pt-20;
 }
 
+summary {
+  @apply cursor-pointer;
+}
+
 h1,
 h2,
 h3,
