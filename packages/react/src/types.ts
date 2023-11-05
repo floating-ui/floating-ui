@@ -93,7 +93,8 @@ export type OpenChangeReason =
   | 'click'
   | 'hover'
   | 'focus'
-  | 'list-navigation';
+  | 'list-navigation'
+  | 'safe-polygon';
 
 export type NarrowedElement<T> = T extends Element ? T : Element;
 

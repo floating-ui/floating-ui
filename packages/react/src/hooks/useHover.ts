@@ -15,6 +15,7 @@ import type {
   ElementProps,
   FloatingContext,
   FloatingTreeType,
+  OpenChangeReason,
   ReferenceType,
 } from '../types';
 import {createAttribute} from '../utils/createAttribute';
@@ -152,7 +153,11 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   ]);
 
   const closeWithDelay = React.useCallback(
-    (event: Event, runElseBranch = true) => {
+    (
+      event: Event,
+      runElseBranch = true,
+      reason: OpenChangeReason = 'hover'
+    ) => {
       const closeDelay = getDelay(
         delayRef.current,
         'close',
@@ -161,12 +166,12 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
-          () => onOpenChange(false, event, 'hover'),
+          () => onOpenChange(false, event, reason),
           closeDelay
         );
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
-        onOpenChange(false, event, 'hover');
+        onOpenChange(false, event, reason);
       }
     },
     [delayRef, onOpenChange]
@@ -250,8 +255,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           onClose() {
             clearPointerEvents();
             cleanupMouseMoveHandler();
-            // Should the event expose that it was closed by `safePolygon`?
-            closeWithDelay(event);
+            closeWithDelay(event, true, 'safe-polygon');
           },
         });
 
