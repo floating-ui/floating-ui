@@ -5,8 +5,8 @@ import {
   min as mathMin,
 } from '@floating-ui/utils';
 
-import {getAlignment, getAlignmentAxis, getAxisLength} from '../';
 import type {Derivable, Middleware, Padding} from '../types';
+import {getAlignment, getAlignmentAxis, getAxisLength} from '../utils';
 
 export interface ArrowOptions {
   /**

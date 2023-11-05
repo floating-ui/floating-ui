@@ -1,7 +1,7 @@
 import {evaluate} from '@floating-ui/utils';
 
-import {getAlignment, getSide, getSideAxis} from '../';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
+import {getAlignment, getSide, getSideAxis} from '../utils';
 
 type OffsetValue =
   | number

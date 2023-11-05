@@ -5,7 +5,6 @@ import {
   getOppositeAxisPlacements,
 } from '@floating-ui/utils';
 
-import {getOppositeSidePlacement, getSide} from '../';
 import {detectOverflow} from '../detectOverflow';
 import type {
   Derivable,
@@ -13,6 +12,7 @@ import type {
   Middleware,
   Placement,
 } from '../types';
+import {getOppositeSidePlacement, getSide} from '../utils';
 
 export type FlipOptions = Partial<
   DetectOverflowOptions & {

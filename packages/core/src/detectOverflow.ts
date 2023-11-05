@@ -1,6 +1,5 @@
 import {evaluate, getPaddingObject} from '@floating-ui/utils';
 
-import {rectToClientRect} from '../';
 import type {
   Boundary,
   Derivable,
@@ -10,6 +9,7 @@ import type {
   RootBoundary,
   SideObject,
 } from './types';
+import {rectToClientRect} from './utils';
 
 export type Options = Partial<{
   /**
