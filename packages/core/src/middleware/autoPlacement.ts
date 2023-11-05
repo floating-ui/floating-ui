@@ -1,17 +1,16 @@
-import {
-  evaluate,
-  getAlignment,
-  getAlignmentSides,
-  getOppositeAlignmentPlacement,
-  getSide,
-  placements as ALL_PLACEMENTS,
-} from '@floating-ui/utils';
+import {evaluate, getAlignmentSides} from '@floating-ui/utils';
 
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Alignment, Derivable, Middleware, Placement} from '../types';
+import {
+  getAlignment,
+  getOppositeAlignmentPlacement,
+  getSide,
+  placements as ALL_PLACEMENTS,
+} from '../utils';
 
 export function getPlacementList(
   alignment: Alignment | null,

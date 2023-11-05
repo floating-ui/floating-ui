@@ -53,33 +53,6 @@ const bundles = [
       format: 'umd',
     },
   },
-  // React
-  {
-    input: './react/src/index.ts',
-    output: {
-      file: './react/dist/floating-ui.utils.react.esm.js',
-      format: 'esm',
-    },
-  },
-  {
-    input: './react/src/index.ts',
-    output: {
-      file: './react/dist/floating-ui.utils.react.mjs',
-      name: 'FloatingUIUtilsReact',
-      format: 'esm',
-    },
-  },
-  {
-    input: './react/src/index.ts',
-    output: {
-      file: './react/dist/floating-ui.utils.react.umd.js',
-      name: 'FloatingUIUtilsReact',
-      format: 'umd',
-      globals: {
-        '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
-      },
-    },
-  },
 ];
 
 export default bundles.map(({input, output}) => ({
@@ -89,7 +62,6 @@ export default bundles.map(({input, output}) => ({
     '@floating-ui/core',
     '@floating-ui/utils',
     '@floating-ui/utils/dom',
-    '@floating-ui/utils/react',
   ],
   plugins: [
     nodeResolve({extensions: ['.ts']}),

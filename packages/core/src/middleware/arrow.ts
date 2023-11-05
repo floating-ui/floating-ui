@@ -1,14 +1,12 @@
 import {
   clamp,
   evaluate,
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
   getPaddingObject,
   min as mathMin,
 } from '@floating-ui/utils';
 
 import type {Derivable, Middleware, Padding} from '../types';
+import {getAlignment, getAlignmentAxis, getAxisLength} from '../utils';
 
 export interface ArrowOptions {
   /**

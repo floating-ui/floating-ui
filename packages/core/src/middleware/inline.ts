@@ -1,14 +1,7 @@
-import {
-  evaluate,
-  getPaddingObject,
-  getSide,
-  getSideAxis,
-  max,
-  min,
-  rectToClientRect,
-} from '@floating-ui/utils';
+import {evaluate, getPaddingObject, max, min} from '@floating-ui/utils';
 
 import type {ClientRectObject, Derivable, Middleware, Padding} from '../types';
+import {getSide, getSideAxis, rectToClientRect} from '../utils';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {
   const minX = min(...rects.map((rect) => rect.left));
