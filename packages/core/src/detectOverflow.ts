@@ -1,5 +1,6 @@
-import {evaluate, getPaddingObject, rectToClientRect} from '@floating-ui/utils';
+import {evaluate, getPaddingObject} from '@floating-ui/utils';
 
+import {rectToClientRect} from '../';
 import type {
   Boundary,
   Derivable,

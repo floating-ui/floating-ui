@@ -1,13 +1,6 @@
-import {
-  evaluate,
-  getPaddingObject,
-  getSide,
-  getSideAxis,
-  max,
-  min,
-  rectToClientRect,
-} from '@floating-ui/utils';
+import {evaluate, getPaddingObject, max, min} from '@floating-ui/utils';
 
+import {getSide, getSideAxis, rectToClientRect} from '../';
 import type {ClientRectObject, Derivable, Middleware, Padding} from '../types';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {

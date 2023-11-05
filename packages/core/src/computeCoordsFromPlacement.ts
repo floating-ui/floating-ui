@@ -4,8 +4,7 @@ import {
   getAxisLength,
   getSide,
   getSideAxis,
-} from '@floating-ui/utils';
-
+} from '../';
 import type {Coords, ElementRects, Placement} from './types';
 
 export function computeCoordsFromPlacement(

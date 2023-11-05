@@ -1,11 +1,6 @@
-import {
-  clamp,
-  evaluate,
-  getOppositeAxis,
-  getSide,
-  getSideAxis,
-} from '@floating-ui/utils';
+import {clamp, evaluate} from '@floating-ui/utils';
 
+import {getOppositeAxis, getSide, getSideAxis} from '../';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,

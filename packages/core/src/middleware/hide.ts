@@ -1,5 +1,6 @@
-import {evaluate, sides} from '@floating-ui/utils';
+import {evaluate} from '@floating-ui/utils';
 
+import {sides} from '../';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,

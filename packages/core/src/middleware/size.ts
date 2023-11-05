@@ -1,12 +1,6 @@
-import {
-  evaluate,
-  getAlignment,
-  getSide,
-  getSideAxis,
-  max,
-  min,
-} from '@floating-ui/utils';
+import {evaluate, max, min} from '@floating-ui/utils';
 
+import {getAlignment, getSide, getSideAxis} from '../';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,

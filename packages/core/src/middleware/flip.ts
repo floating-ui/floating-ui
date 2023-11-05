@@ -3,10 +3,9 @@ import {
   getAlignmentSides,
   getExpandedPlacements,
   getOppositeAxisPlacements,
-  getOppositePlacement,
-  getSide,
 } from '@floating-ui/utils';
 
+import {getOppositeSidePlacement, getSide} from '../';
 import {detectOverflow} from '../detectOverflow';
 import type {
   Derivable,
@@ -105,7 +104,7 @@ export const flip = (
     const fallbackPlacements =
       specifiedFallbackPlacements ||
       (isBasePlacement || !flipAlignment
-        ? [getOppositePlacement(initialPlacement)]
+        ? [getOppositeSidePlacement(initialPlacement)]
         : getExpandedPlacements(initialPlacement));
 
     if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {

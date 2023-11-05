@@ -43,4 +43,18 @@ export {
   shift,
   size,
 } from '@floating-ui/core';
+export {
+  alignments,
+  getAlignment,
+  getAlignmentAxis,
+  getAxisLength,
+  getOppositeAlignmentPlacement,
+  getOppositeAxis,
+  getOppositeSidePlacement,
+  getSide,
+  getSideAxis,
+  placements,
+  rectToClientRect,
+  sides,
+} from '@floating-ui/core';
 export {getOverflowAncestors} from '@floating-ui/utils/dom';

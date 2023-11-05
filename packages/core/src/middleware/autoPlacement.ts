@@ -1,12 +1,11 @@
+import {evaluate, getAlignmentSides} from '@floating-ui/utils';
+
 import {
-  evaluate,
   getAlignment,
-  getAlignmentSides,
   getOppositeAlignmentPlacement,
   getSide,
   placements as ALL_PLACEMENTS,
-} from '@floating-ui/utils';
-
+} from '../';
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
