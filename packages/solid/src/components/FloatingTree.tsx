@@ -57,7 +57,7 @@ export const useFloatingParentNodeId = (): string | null => {
  */
 export function useFloatingNodeId(customParentId?: string): string {
   const id = createUniqueId();
-  const tree = useFloatingTree();
+  const tree = useUnsafeFloatingTree();
   const reactParentId = useFloatingParentNodeId();
 
   const node = createMemo(() => {

@@ -24,20 +24,22 @@ export interface UseRoleProps {
  * @see https://floating-ui.com/docs/useRole
  */
 export function useRole<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseRoleProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseRoleProps = {},
 ): Accessor<ElementProps> {
   const mergedProps = mergeProps(
     {
       enabled: true,
       role: 'dialog',
     } as Required<UseRoleProps>,
-    props
+    props,
   );
-  const {enabled, role} = destructure(mergedProps, {normalize: true});
+  const {enabled, role} = destructure(mergedProps, {
+    normalize: true,
+  });
   const referenceId = createUniqueId();
 
-  const floatingProps = {id: context.floatingId, role: role()};
+  const floatingProps = {id: context().floatingId, role: role()};
 
   return () =>
     !enabled()
@@ -45,18 +47,22 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
       : role() === 'tooltip'
       ? {
           reference: {
-            'aria-describedby': context.open() ? context.floatingId : undefined,
+            'aria-describedby': context().open()
+              ? context().floatingId
+              : undefined,
           },
           floating: floatingProps,
         }
       : {
           reference: {
-            'aria-expanded': context.open() ? 'true' : 'false',
+            'aria-expanded': context().open() ? 'true' : 'false',
             'aria-haspopup':
               role() === 'alertdialog'
                 ? 'dialog'
                 : (role() as 'dialog' | 'menu' | 'listbox' | 'grid' | 'tree'),
-            'aria-controls': context.open() ? context.floatingId : undefined,
+            'aria-controls': context().open()
+              ? context().floatingId
+              : undefined,
             ...(role() === 'listbox' && {
               role: 'combobox',
             }),

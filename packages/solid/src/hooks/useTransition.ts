@@ -16,19 +16,19 @@ import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 const camelCaseToKebabCase = (str: string): string =>
   str.replace(
     /[A-Z]+(?![a-z])|[A-Z]/g,
-    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase()
+    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase(),
   );
 
 function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
   valueOrFn: Value | ((args: SidePlacement) => Value),
-  args: SidePlacement
+  args: SidePlacement,
 ): Value {
   return typeof valueOrFn === 'function' ? valueOrFn(args) : valueOrFn;
 }
 
 function useDelayUnmount(
   open: Accessor<boolean>,
-  durationMs: number
+  durationMs: number,
 ): Accessor<boolean> {
   const [isMounted, setIsMounted] = createSignal(open());
 
@@ -57,8 +57,8 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  * @see https://floating-ui.com/docs/useTransition#usetransitionstatus
  */
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseTransitionStatusProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseTransitionStatusProps = {},
 ): {
   isMounted: Accessor<boolean>;
   status: Accessor<Status>;
@@ -73,7 +73,7 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
 
   const [initiated, setInitiated] = createSignal(false);
   const [status, setStatus] = createSignal<Status>('unmounted');
-  const isMounted = useDelayUnmount(context.open, closeDuration);
+  const isMounted = useDelayUnmount(context().open, closeDuration);
 
   // `initiated` check prevents this `setState` call from breaking
   // <FloatingPortal />. This call is necessary to ensure subsequent opens
@@ -86,9 +86,9 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   });
 
   createEffect(() => {
-    if (!context.refs.floating()) return;
+    if (!context().refs.floating()) return;
 
-    if (context.open()) {
+    if (context().open()) {
       setStatus('initial');
 
       const frame = requestAnimationFrame(() => {
@@ -127,8 +127,8 @@ export interface UseTransitionStylesProps extends UseTransitionStatusProps {
  * @see https://floating-ui.com/docs/useTransition#usetransitionstyles
  */
 export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseTransitionStylesProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseTransitionStylesProps = {},
 ): {
   isMounted: Accessor<boolean>;
   styles: JSX.CSSProperties;
@@ -138,7 +138,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
       initial: {opacity: 0},
       duration: 250,
     } as JSX.CSSProperties,
-    props
+    props,
   );
   // const {
   //   initial: unstable_initial,
@@ -149,7 +149,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   // } = props;
 
   const fnArgs = createMemo(() => {
-    const placement = context.placement;
+    const placement = context().placement;
     const side = placement.split('-')[0] as Side;
     return {side, placement};
   });

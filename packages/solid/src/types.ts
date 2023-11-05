@@ -119,10 +119,7 @@ export type UseFloatingReturn<R extends ReferenceType = ReferenceType> =
       //   setFloating: (node: F | null) => void;
       // };
       context: Accessor<FloatingContext<R>>;
-      // elements: {
-      //   reference?: R | null;
-      //   floating?: F | null;
-      // };
+      elements: ExtendedElements<R>;
     }
   >;
 
@@ -139,10 +136,7 @@ export type UseFloatingOptions<R extends ReferenceType = ReferenceType> =
         floating: HTMLElement,
         update: () => void,
       ) => () => void;
-      elements?: {
-        reference?: R | null;
-        floating?: HTMLElement | null;
-      };
+      elements?: Partial<ExtendedPositionElements<R>>;
       /**
        * The `open` state of the floating element to synchronize with the
        * `isPositioned` value.
@@ -176,18 +170,22 @@ export type NarrowedElement<T> = T extends Element ? T : Element;
 export type ExtendedRefs<R> = {
   reference: Accessor<R | null>;
   floating: Accessor<HTMLElement | null>;
-  // domReference: NarrowedElement<RT> | null;
+  domReference: NarrowedElement<R> | null;
   setReference: (node: R | null) => void;
   setFloating: (node: HTMLElement | null) => void;
-  // setPositionReference: (node: ReferenceType | null) => void;
+  setPositionReference: (node: ReferenceType | null) => void;
 };
+
+export type ExtendedPositionRefs<R extends ReferenceType = ReferenceType> =
+  Omit<ExtendedRefs<R>, 'domReference'>;
 
 export interface ExtendedElements<R extends ReferenceType = ReferenceType> {
   reference: Accessor<R | null>;
   floating: Accessor<HTMLElement | null>;
-  // domReference: NarrowedElement<RT> | null;
+  domReference: Accessor<NarrowedElement<R> | null>;
 }
-
+export type ExtendedPositionElements<R extends ReferenceType = ReferenceType> =
+  Omit<ExtendedElements<R>, 'domReference'>;
 export interface FloatingEvents {
   emit<T extends string>(
     event: T,
@@ -212,8 +210,8 @@ export type FloatingContext<R extends ReferenceType = ReferenceType> = Omit<
   dataRef: ContextData; //React.MutableRefObject<ContextData>;
   nodeId: string | undefined;
   floatingId: string;
-  // refs: ExtendedRefs<R, F>;
-  // elements: ExtendedElements<R>;
+  refs: ExtendedRefs<R>;
+  elements: ExtendedElements<R>;
 };
 
 export interface FloatingNodeType<R extends ReferenceType = ReferenceType> {

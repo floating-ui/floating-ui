@@ -1,8 +1,16 @@
 // credits to Alexis Munsayac
 // "https://github.com/lxsmnsyc/solid-floating-ui/tree/main/packages/solid-floating-ui",
 import {ReferenceElement} from '@floating-ui/dom';
+import {isElement} from '@floating-ui/utils/dom';
 import {access} from '@solid-primitives/utils';
-import {createEffect, createMemo, createUniqueId, mergeProps} from 'solid-js';
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  createUniqueId,
+  mergeProps,
+} from 'solid-js';
+import {createMutable} from 'solid-js/store';
 
 import {
   useFloatingTree,
@@ -11,6 +19,8 @@ import {
 import {
   ContextData,
   FloatingContext,
+  NarrowedElement,
+  ReferenceType,
   UseFloatingOptions,
   UseFloatingReturn,
 } from '../types';
@@ -21,47 +31,65 @@ export function useFloating<R extends ReferenceElement>(
   options?: UseFloatingOptions<R>,
 ): UseFloatingReturn<R> {
   const floatingId = createUniqueId();
+  const [_domReference, setDomReference] =
+    createSignal<NarrowedElement<R> | null>(null);
+
+  const domReference = createMemo(
+    () =>
+      (options?.elements?.reference?.() || _domReference) as NarrowedElement<R>,
+  );
+  let domReferenceRef: NarrowedElement<R> | null = null;
+
   const events = createPubSub();
   const position = usePosition(mergeProps({transform: true}, options));
-  // eslint-disable-next-line prefer-const
-  let dataRef: ContextData = {};
+
+  const dataRef = createMutable<ContextData>({
+    openEvent: undefined,
+    ...position,
+  });
 
   const onOpenChange = (open: boolean, event?: Event) => {
     if (open) {
-      dataRef.openEvent = event; //what do we need that for? It is not typed in any type!?
+      dataRef.openEvent = event;
     }
     options?.onOpenChange?.(open, event);
   };
 
-  // createEffect(() => {
-  //   const currentReference = position.refs.reference();
-  //   const currentFloating = position.refs.floating();
+  const setPositionReference = (node: ReferenceType | null) => {
+    const positionReference = isElement(node)
+      ? {
+          getBoundingClientRect: () => node.getBoundingClientRect(),
+          contextElement: node,
+        }
+      : node;
+    position.refs.setReference(positionReference as R | null);
+  };
 
-  //   // Subscribe to other reactive properties
-  //   ignore(options?.middleware);
-  //   placement();
-  //   strategy();
+  const setReference = (node: R | null) => {
+    if (isElement(node) || node === null) {
+      domReferenceRef = node as NarrowedElement<R> | null;
+      //@ts-ignore
+      setDomReference(node as NarrowedElement<R> | null);
+    }
 
-  //   if (currentReference && currentFloating) {
-  //     if (options?.whileElementsMounted) {
-  //       console.log({currentFloating, currentReference});
-  //       return;
-  //       const cleanup = options?.whileElementsMounted(
-  //         currentReference,
-  //         currentFloating,
-  //         position.update
-  //       );
-  //       onCleanup(cleanup);
-  //     } else {
-  //       position.update();
-  //     }
-  //   }
-  // });
+    // Backwards-compatibility for passing a virtual element to `reference`
+    // after it has set the DOM reference.
+    if (
+      isElement(position.refs.reference()) ||
+      position.refs.reference() === null ||
+      // Don't allow setting virtual elements using the old technique back to
+      // `null` to support `positionReference` + an unstable `reference`
+      // callback ref.
+      (node !== null && !isElement(node))
+    ) {
+      position.refs.setReference(node);
+    }
+  };
 
   const context = createMemo(() => {
     return mergeProps(
       {
-        dataRef: mergeProps(dataRef, position),
+        dataRef, //: mergeProps(dataRef, position),
         nodeId: options?.nodeId,
         floatingId,
         events,
@@ -69,12 +97,21 @@ export function useFloating<R extends ReferenceElement>(
         onOpenChange,
       },
       position,
+      {
+        refs: mergeProps(
+          {
+            domReference: domReference(),
+          },
+          position.refs,
+        ),
+        elements: mergeProps({domReference}, position.elements),
+      },
     );
   });
 
   //Add the context to the PortalNodes
+  const tree = useUnsafeFloatingTree<R>();
   createEffect(() => {
-    const tree = useUnsafeFloatingTree<R>();
     if (!tree?.()) return;
     const node = tree?.()?.nodesRef?.find(
       (node) => node.id === options?.nodeId,
@@ -106,14 +143,19 @@ export function useFloating<R extends ReferenceElement>(
     get floatingStyles() {
       return position.floatingStyles;
     },
-    // get elements() {
-    //   return {
-    //     reference: reference(),
-    //     floating: floating(),
-    //   };
-    // },
+    get elements() {
+      return {
+        reference: position.elements.reference,
+        floating: position.elements.floating,
+        domReference,
+      };
+    },
     get refs() {
-      return position.refs;
+      return mergeProps(position.refs, {
+        setReference,
+        setPositionReference,
+        domReference: domReferenceRef,
+      });
     },
     get context() {
       return context;

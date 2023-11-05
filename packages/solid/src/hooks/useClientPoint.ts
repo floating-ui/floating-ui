@@ -5,6 +5,7 @@ import {
   isMouseLikePointerType,
 } from '@floating-ui/utils/react';
 import {MaybeAccessor} from '@solid-primitives/utils';
+import {cleanup} from '@solidjs/testing-library';
 import {
   Accessor,
   createEffect,
@@ -12,6 +13,7 @@ import {
   createSignal,
   mergeProps,
   onCleanup,
+  onMount,
 } from 'solid-js';
 
 import type {
@@ -30,7 +32,7 @@ function createVirtualElement(
     pointerType: string | undefined;
     x: number | null;
     y: number | null;
-  }
+  },
 ) {
   let offsetX: number | null = null;
   let offsetY: number | null = null;
@@ -50,7 +52,7 @@ function createVirtualElement(
       const isYAxis = data.axis === 'y' || data.axis === 'both';
       const canTrackCursorOnAutoUpdate =
         ['mouseenter', 'mousemove'].includes(
-          data.dataRef.openEvent?.type || ''
+          data.dataRef.openEvent?.type || '',
         ) && data.pointerType !== 'touch';
 
       let width = domRect.width;
@@ -113,11 +115,17 @@ export interface UseClientPointProps {
  * such as the mouse position. By default, it follows the mouse cursor.
  * @see https://floating-ui.com/docs/useClientPoint
  */
+// export function useClientPoint<RT extends ReferenceType = ReferenceType>(
+//   context: Accessor<FloatingContext<RT>>,
+//   props: UseClientPointProps = {},
+// ): Accessor<ElementProps> {
+//   return () => ({});
+// }
+
 export function useClientPoint<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseClientPointProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseClientPointProps = {},
 ): Accessor<ElementProps> {
-  const {refs, dataRef} = context;
   const mergedProps = mergeProps(
     {
       enabled: true,
@@ -125,9 +133,11 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
       x: null,
       y: null,
     } as Required<UseClientPointProps>,
-    props
+    props,
   );
-  const {enabled, axis, x, y} = destructure(mergedProps, {normalize: true});
+  const {enabled, axis, x, y} = destructure(mergedProps, {
+    normalize: true,
+  });
 
   let initialRef = false;
   let cleanupListenerRef: null | (() => void) = null;
@@ -135,7 +145,11 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   const [pointerType, setPointerType] = createSignal<string | undefined>();
   const [reactive, setReactive] = createSignal([]);
 
+  const {dataRef, refs} = context();
+
   const setReference = (x: number | null, y: number | null) => {
+    // console.log('setReference from useClientPoint');
+
     if (initialRef) return;
 
     // Prevent setting if the open event was not a mouse-like one
@@ -144,22 +158,23 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     if (dataRef.openEvent && !isMouseBasedEvent(dataRef.openEvent)) {
       return;
     }
-    const node = createVirtualElement(context.refs.reference() as Element, {
+    const node = createVirtualElement(refs.reference() as Element, {
       x,
       y,
       axis: axis(),
       dataRef,
       pointerType: pointerType(),
     });
-    context.refs.setReference(node as RT); //changed by MR
+    refs.setReference(node as RT); //changed by MR
   };
 
   const handleReferenceEnterOrMove = (event: MouseEvent) => {
     if (x() != null || y() != null) return;
 
-    if (!context.open()) {
+    // console.log('handleReferenceEnterOrMove');
+    if (!context().open()) {
       setReference(event.clientX, event.clientY);
-    } else if (!cleanupListenerRef?.()) {
+    } else if (!cleanupListenerRef) {
       // If there's no cleanup, there's no listener, but we want to ensure
       // we add the listener if the cursor landed on the floating element and
       // then back on the reference (i.e. it's interactive).
@@ -171,78 +186,84 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   // mouse even if the floating element is transitioning out. On touch
   // devices, this is undesirable because the floating element will move to
   // the dismissal touch point.
-  const openCheck = createMemo(() =>
-    isMouseLikePointerType(pointerType()) ? refs.floating() : context.open()
-  );
+  const openCheck = () =>
+    isMouseLikePointerType(pointerType())
+      ? context().refs.floating()
+      : context().open();
+
+  function handleMouseMove(event: MouseEvent) {
+    const target = getTarget(event) as Element | null;
+    const win = getWindow(refs.floating());
+    if (!contains(refs.floating(), target)) {
+      setReference(event.clientX, event.clientY);
+    } else {
+      win.removeEventListener('mousemove', handleMouseMove);
+      cleanupListenerRef = null;
+    }
+  }
 
   const addListener = () => {
     // Explicitly specified `x`/`y` coordinates shouldn't add a listener.
-    if (!openCheck() || !enabled() || x() != null || y() != null) return;
-    const win = getWindow(refs.floating());
-
-    function handleMouseMove(event: MouseEvent) {
-      const target = getTarget(event) as Element | null;
-
-      if (!contains(refs.floating(), target)) {
-        setReference(event.clientX, event.clientY);
-      } else {
-        win.removeEventListener('mousemove', handleMouseMove);
-        cleanupListenerRef = null;
-      }
+    if (!enabled() || !openCheck() || x() != null || y() != null) {
+      return;
     }
 
-    if (
-      !context.dataRef.openEvent ||
-      isMouseBasedEvent(context.dataRef.openEvent)
-    ) {
+    const {refs, dataRef} = context();
+    const win = getWindow(refs.floating());
+
+    if (!dataRef.openEvent || isMouseBasedEvent(dataRef.openEvent)) {
       win.addEventListener('mousemove', handleMouseMove);
       const cleanup = () => {
         win.removeEventListener('mousemove', handleMouseMove);
         cleanupListenerRef = null;
       };
       cleanupListenerRef = cleanup;
-      onCleanup(cleanup);
+      return cleanup;
     }
 
-    refs.setReference(refs.reference());
+    // refs.setReference(refs.reference());
   };
+  onCleanup(() => window.removeEventListener('mousemove', handleMouseMove));
+
+  createEffect(() => {
+    if (enabled() && !context().refs.floating()) {
+      initialRef = false;
+    }
+  });
+
+  createEffect(() => {
+    if (!enabled() && context().open()) {
+      initialRef = true;
+    }
+  });
 
   createEffect(() => reactive() && addListener());
 
-  createEffect(() => {
-    if (enabled() && !refs.floating()) {
-      initialRef = false;
-    }
-  });
-
-  createEffect(() => {
-    if (!enabled() && context.open()) {
-      initialRef = true;
-    } else {
-      initialRef = false;
-    }
-  });
-
-  createEffect(() => {
-    if (enabled() && (x() != null || y() != null)) {
+  createEffect((prev: {x: number | null; y: number | null} | undefined) => {
+    if (
+      enabled() &&
+      (x() != null || y() != null) &&
+      (x() !== prev?.x || y() !== prev?.y)
+    ) {
       initialRef = false;
       setReference(x(), y());
+      return {x: x(), y: y()};
     }
   });
 
   function setPointerTypeRef({pointerType}: PointerEvent) {
     setPointerType(pointerType);
   }
-
-  return () =>
-    !enabled()
-      ? {}
-      : {
-          reference: {
-            onPointerDown: setPointerTypeRef,
-            onPointerEnter: setPointerTypeRef,
-            onMouseMove: handleReferenceEnterOrMove,
-            onMouseEnter: handleReferenceEnterOrMove,
-          },
-        };
+  const elementProps = createMemo(() => {
+    if (!enabled()) return {};
+    return {
+      reference: {
+        onPointerDown: setPointerTypeRef,
+        onPointerEnter: setPointerTypeRef,
+        onMouseMove: handleReferenceEnterOrMove,
+        onMouseEnter: handleReferenceEnterOrMove,
+      },
+    };
+  });
+  return elementProps;
 }

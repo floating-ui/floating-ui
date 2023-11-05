@@ -5,11 +5,17 @@ import {
   isMouseLikePointerType,
 } from '@floating-ui/utils/react';
 import {access, MaybeAccessor} from '@solid-primitives/utils';
-import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
+import {
+  Accessor,
+  createEffect,
+  createMemo,
+  mergeProps,
+  onCleanup,
+} from 'solid-js';
 
 import {
   useFloatingParentNodeId,
-  useFloatingTree,
+  useUnsafeFloatingTree,
 } from '../components/FloatingTree';
 import type {
   ElementProps,
@@ -68,10 +74,10 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
  * @see https://floating-ui.com/docs/useHover
  */
 export function useHover<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
+  context: Accessor<FloatingContext<RT>>,
   props: UseHoverProps<RT> = {},
 ): Accessor<ElementProps> {
-  const {open, onOpenChange, dataRef, events, refs} = context;
+  const {open, onOpenChange, refs} = context();
   const mergedProps = mergeProps(
     {
       enabled: true,
@@ -80,15 +86,17 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       mouseOnly: false,
       restMs: 0,
       move: true,
-    } as Required<Omit<UseHoverProps, 'handleClose'>>,
+    },
     props,
-  );
+  ) as Required<Omit<UseHoverProps, 'handleClose'>> & {
+    handleClose?: HandleCloseFn<RT>;
+  };
   const {enabled, mouseOnly, restMs, move, delay} = destructure(mergedProps, {
     normalize: true,
   });
   const {handleClose} = mergedProps;
   const handleCloseRef = handleClose;
-  const tree = useFloatingTree<RT>();
+  const tree = useUnsafeFloatingTree<RT>();
   // const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
 
@@ -101,27 +109,26 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   let unbindMouseMoveRef = () => {};
 
   const isHoverOpen = () => {
-    const type = dataRef.openEvent?.type;
+    const type = context().dataRef.openEvent?.type;
+
     return type?.includes('mouse') && type !== 'mousedown';
   };
 
   // When dismissing before opening, clear the delay timeouts to cancel it
   // from showing.
+  function onDismiss() {
+    clearTimeout(timeoutRef);
+    clearTimeout(restTimeoutRef);
+    blockMouseMoveRef = true;
+  }
   createEffect(() => {
     if (!enabled()) {
-      return;
+      return context().events.off('dismiss', onDismiss);
     }
-
-    function onDismiss() {
-      clearTimeout(timeoutRef);
-      clearTimeout(restTimeoutRef);
-      blockMouseMoveRef = true;
-    }
-
-    events.on('dismiss', onDismiss);
-    onCleanup(() => {
-      events.off('dismiss', onDismiss);
-    });
+    context().events.on('dismiss', onDismiss);
+  });
+  onCleanup(() => {
+    context().events.off('dismiss', onDismiss);
   });
 
   createEffect(() => {
@@ -146,9 +153,11 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     const closeDelay = getDelay(delay, 'close', pointerTypeRef);
     if (closeDelay && !handlerRef) {
       clearTimeout(timeoutRef);
+
       timeoutRef = setTimeout(() => onOpenChange(false, event), closeDelay);
     } else if (runElseBranch) {
       clearTimeout(timeoutRef);
+
       onOpenChange(false, event);
     }
   };
@@ -176,8 +185,10 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
 
     function isClickLikeOpenEvent() {
-      return dataRef.openEvent
-        ? ['click', 'mousedown'].includes(dataRef.openEvent.type)
+      return context().dataRef.openEvent
+        ? ['click', 'mousedown'].includes(
+            context()?.dataRef?.openEvent?.type ?? '',
+          )
         : false;
     }
 
@@ -193,7 +204,6 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       }
 
       const openDelay = getDelay(delay, 'open', pointerTypeRef);
-
       if (openDelay) {
         timeoutRef = setTimeout(() => {
           onOpenChange(true, event);
@@ -219,19 +229,18 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
           clearTimeout(timeoutRef);
         }
 
-        handlerRef = handleCloseRef(
-          mergeProps(context, {
-            tree: tree(),
-            x: event.clientX,
-            y: event.clientY,
-            onClose() {
-              clearPointerEvents();
-              cleanupMouseMoveHandler();
-              // Should the event expose that it was closed by `safePolygon`?
-              closeWithDelay(event);
-            },
-          }),
-        );
+        handlerRef = handleCloseRef({
+          ...context(),
+          tree: tree?.(),
+          x: event.clientX,
+          y: event.clientY,
+          onClose() {
+            clearPointerEvents();
+            cleanupMouseMoveHandler();
+            // Should the event expose that it was closed by `safePolygon`?
+            closeWithDelay(event);
+          },
+        });
 
         const handler = handlerRef;
 
@@ -264,13 +273,14 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       }
 
       handleCloseRef?.({
-        ...context,
-        tree: tree(),
+        ...context(),
+        tree: tree?.(),
         x: event.clientX,
         y: event.clientY,
         onClose() {
           clearPointerEvents();
           cleanupMouseMoveHandler();
+
           closeWithDelay(event);
         },
       })(event);
@@ -318,7 +328,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       if (isElement(domReference) && floating) {
         const ref = domReference as unknown as HTMLElement | SVGSVGElement;
 
-        const parentFloating = tree()
+        const parentFloating = tree?.()
           ?.nodesRef.find((node) => node.id === parentId)
           ?.context?.refs.floating();
 
@@ -345,7 +355,11 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
   });
 
-  onCleanup(() => {
+  createEffect(() => {
+    //subscribe
+    refs.reference();
+    // context().elements.domReference();
+    //end of subscribe
     cleanupMouseMoveHandler();
     clearTimeout(timeoutRef);
     clearTimeout(restTimeoutRef);
@@ -356,38 +370,39 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     pointerTypeRef = event.pointerType;
   }
 
-  return () =>
-    !enabled()
-      ? {}
-      : {
-          reference: {
-            onPointerDown: setPointerRef,
-            onPointerEnter: setPointerRef,
-            onMouseMove(event) {
-              if (open() || restMs() === 0) {
-                return;
-              }
-              clearTimeout(restTimeoutRef);
-              restTimeoutRef = setTimeout(() => {
-                if (!blockMouseMoveRef) {
-                  onOpenChange(true, event);
-                }
-              }, restMs());
+  return createMemo(() => {
+    if (!enabled()) return {};
+
+    return {
+      reference: {
+        onPointerDown: setPointerRef,
+        onPointerEnter: setPointerRef,
+        onMouseMove(event) {
+          if (open() || restMs() === 0) {
+            return;
+          }
+          clearTimeout(restTimeoutRef);
+          restTimeoutRef = setTimeout(() => {
+            if (!blockMouseMoveRef) {
+              onOpenChange(true, event);
+            }
+          }, restMs());
+        },
+      },
+      floating: {
+        onMouseEnter() {
+          clearTimeout(timeoutRef);
+        },
+        onMouseLeave(event) {
+          context().events.emit('dismiss', {
+            type: 'mouseLeave',
+            data: {
+              returnFocus: false,
             },
-          },
-          floating: {
-            onMouseEnter() {
-              clearTimeout(timeoutRef);
-            },
-            onMouseLeave(event) {
-              events.emit('dismiss', {
-                type: 'mouseLeave',
-                data: {
-                  returnFocus: false,
-                },
-              });
-              closeWithDelay(event, false);
-            },
-          },
-        };
+          });
+          closeWithDelay(event, false);
+        },
+      },
+    };
+  });
 }

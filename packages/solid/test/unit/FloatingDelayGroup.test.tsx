@@ -1,11 +1,11 @@
 import '@testing-library/jest-dom';
+
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
+import {createSignal, createUniqueId, JSX, Show} from 'solid-js';
 import {vi} from 'vitest';
-import {createEffect, createSignal, createUniqueId, JSX, Show} from 'solid-js';
 
 import {
   FloatingDelayGroup,
-  FloatingTree,
   useDelayGroup,
   useDelayGroupContext,
   useFloating,
@@ -29,12 +29,12 @@ function Tooltip(props: Props) {
     onOpenChange: setIsOpen,
   });
 
-  const hover = useHover(position.context(), {delay: () => delayContext.delay});
+  const hover = useHover(position.context, {delay: () => delayContext.delay});
 
   // const instantDuration = 0
   // const duration = 200
 
-  // const transition = useTransitionStyles(position.context(), {
+  // const transition = useTransitionStyles(position.context, {
   // 	duration: delayContext.isInstantPhase
   // 		? {
   // 				open: instantDuration,
@@ -47,7 +47,7 @@ function Tooltip(props: Props) {
   // })
 
   // createEffect(() => console.log('delay', delayContext.delay));
-  const delayGroup = useDelayGroup(position.context(), {
+  const delayGroup = useDelayGroup(position.context, {
     // Must be unique
     id: props.label,
   });
@@ -66,6 +66,7 @@ function Tooltip(props: Props) {
       >
         {props.children}
       </button>
+
       {/* <Show when={transition.isMounted()}> */}
       <Show when={isOpen()}>
         <div
@@ -89,7 +90,7 @@ function Tooltip(props: Props) {
 
 function App() {
   return (
-    <FloatingTree>
+    <>
       <FloatingDelayGroup delay={{open: 1000, close: 200}}>
         <Tooltip label="one">
           <button data-testid="treference-one_" />
@@ -101,12 +102,11 @@ function App() {
           <button data-testid="treference-three_" />
         </Tooltip>
       </FloatingDelayGroup>
-    </FloatingTree>
+    </>
   );
 }
 
 vi.useFakeTimers();
-
 describe('FloatingDelayGroup Timer', async () => {
   afterEach(cleanup);
   test('groups delays correctly', async () => {
@@ -116,11 +116,12 @@ describe('FloatingDelayGroup Timer', async () => {
     await Promise.resolve(vi.advanceTimersByTime(1));
     expect(screen.queryByTestId('floating-one')).not.toBeInTheDocument();
     await Promise.resolve(vi.advanceTimersByTime(999));
+
     expect(screen.queryByTestId('floating-one')).toBeInTheDocument();
 
     /*
-		 Reference 2
-		*/
+  	 Reference 2
+  	*/
 
     fireEvent.mouseEnter(screen.getByTestId('reference-two'));
     await Promise.resolve(vi.advanceTimersByTime(1));
@@ -140,6 +141,7 @@ describe('FloatingDelayGroup Timer', async () => {
   });
 
   test('timeoutMs', async () => {
+    cleanup();
     function App() {
       return (
         <FloatingDelayGroup delay={{open: 1000, close: 100}} timeoutMs={500}>
@@ -157,9 +159,9 @@ describe('FloatingDelayGroup Timer', async () => {
     }
 
     render(() => (
-      <FloatingTree>
+      <>
         <App />
-      </FloatingTree>
+      </>
     ));
 
     fireEvent.mouseEnter(screen.getByTestId('reference-one'));

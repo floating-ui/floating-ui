@@ -1,17 +1,23 @@
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+import path from 'path';
 import {defineConfig} from 'vite';
 import solidPlugin from 'vite-plugin-solid';
-import path from 'path';
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: [solidPlugin({})],
+  ssr: {
+    noExternal: ['solid-js'],
+  },
   server: {
-    port: 3000,
+    port: 3001,
   },
   build: {
     target: 'esnext',
   },
   resolve: {
     alias: {
+      // 'solid-js': 'node_modules/solid-js/dist/dev.js',
       '@floating-ui/utils/dom': path.resolve(
         __dirname,
         '../utils/dom/src/index.ts',
@@ -31,9 +37,17 @@ export default defineConfig({
       '@floating-ui/vue': path.resolve(__dirname, '../vue/src/index.ts'),
     },
   },
+  // define: {
+  //   __DEV__: true,
+  // },
   test: {
     environment: 'jsdom',
+
     globals: true,
     testTransformMode: {web: ['/.[jt]sx?$/']},
+    // transformMode: {web: [/.[jt]sx?$/]},
+    deps: {
+      inline: [/solid-js/],
+    },
   },
 });

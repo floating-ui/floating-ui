@@ -1,3 +1,4 @@
+import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import summary from 'rollup-plugin-summary';
 import withSolid from 'rollup-preset-solid';
@@ -10,9 +11,10 @@ export default withSolid({
   plugins: [
     summary({showGzippedSize: true}),
     replace({
-      __DEV__: 'process.env.NODE_ENV !== "production"',
+      __DEV__: '!import.meta.env.PROD',
       preventAssignment: true,
     }),
+    commonjs(),
   ],
   treeshake: true,
 });

@@ -1,7 +1,14 @@
 import {stopEvent} from '@floating-ui/utils/react';
 import {MaybeAccessor} from '@solid-primitives/utils';
-import {Accessor, createEffect, mergeProps} from 'solid-js';
+import {
+  Accessor,
+  createEffect,
+  createMemo,
+  mergeProps,
+  splitProps,
+} from 'solid-js';
 
+import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {destructure} from '../utils/destructure';
 
@@ -16,10 +23,10 @@ export interface UseTypeaheadProps {
     | null
     | ((
         list: Array<string | null>,
-        typedString: string
+        typedString: string,
       ) => string | null | undefined);
   resetMs?: MaybeAccessor<number>;
-  ignoreKeys?: Array<string>;
+  ignoreKeys?: MaybeAccessor<Array<string>>;
   selectedIndex?: MaybeAccessor<number | null>;
 }
 
@@ -29,41 +36,41 @@ export interface UseTypeaheadProps {
  * @see https://floating-ui.com/docs/useTypeahead
  */
 export function useTypeahead<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseTypeaheadProps
+  context: Accessor<FloatingContext<RT>>,
+  props: UseTypeaheadProps,
 ): Accessor<ElementProps> {
+  const [local, rest] = splitProps(props, [
+    'onMatch',
+    'onTypingChange',
+    'findMatch',
+  ]);
   const mergedProps = mergeProps(
     {
+      listRef: () => [],
+      activeIndex: null,
       enabled: true,
       findMatch: null,
       resetMs: 750,
       ignoreKeys: [],
       selectedIndex: null,
-    } as Required<
-      Pick<
-        UseTypeaheadProps,
-        'findMatch' | 'resetMs' | 'ignoreKeys' | 'selectedIndex' | 'enabled'
-      >
-    >,
-    props
-  );
+    },
+    rest,
+  ) as Required<
+    Omit<UseTypeaheadProps, 'onMatch' | 'onTypingChange' | 'findMatch'>
+  >;
 
   const {listRef, activeIndex, ignoreKeys, enabled, resetMs, selectedIndex} =
     destructure(mergedProps, {normalize: true});
-  const {
-    onMatch,
-    onTypingChange,
+  const {onTypingChange, findMatch, onMatch} = local;
 
-    findMatch,
-  } = mergedProps;
-
-  let timeoutIdRef: number;
+  let timeoutIdRef: number | ReturnType<typeof setTimeout>;
   let stringRef = '';
   let prevIndexRef: number | null = selectedIndex() ?? activeIndex() ?? -1;
   let matchIndexRef: number | null = null;
-
+  const parentId = useFloatingParentNodeId();
+  const isNotNested = parentId === null;
   createEffect(() => {
-    if (context.open()) {
+    if (context().open()) {
       clearTimeout(timeoutIdRef);
       matchIndexRef = null;
       stringRef = '';
@@ -72,36 +79,27 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
 
   createEffect(() => {
     // Sync arrow key navigation but not typeahead navigation.
-    if (context.open() && stringRef === '') {
+    if (context().open() && stringRef === '') {
       prevIndexRef = selectedIndex() ?? activeIndex() ?? -1;
     }
   });
 
   function setTypingChange(value: boolean) {
-    const {dataRef} = context;
-    if (value) {
-      if (!dataRef.typing) {
-        dataRef.typing = value;
-        onTypingChange?.(value);
-      }
-    } else {
-      if (dataRef.typing) {
-        dataRef.typing = value;
-        onTypingChange?.(value);
-      }
+    if (context().dataRef.typing !== value) {
+      context().dataRef.typing = value;
+      onTypingChange?.(value);
     }
   }
-
   function getMatchingIndex(
     list: Array<string | null>,
     orderedList: Array<string | null>,
-    string: string
+    string: string,
   ) {
     const str = findMatch
       ? findMatch(orderedList, string)
       : orderedList.find(
           (text) =>
-            text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) === 0
+            text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) === 0,
         );
 
     return str ? list.indexOf(str) : -1;
@@ -109,6 +107,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
 
   function onKeyDown(event: KeyboardEvent) {
     const listContent = listRef;
+
     if (stringRef.length > 0 && stringRef[0] !== ' ') {
       if (getMatchingIndex(listContent(), listContent(), stringRef) === -1) {
         setTypingChange(false);
@@ -130,9 +129,9 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
       return;
     }
 
-    if (context.open() && event.key !== ' ') {
-      stopEvent(event);
+    if (context().open() && event.key !== ' ') {
       setTypingChange(true);
+      stopEvent(event);
     }
 
     // Bail out if the list contains a word like "llama" or "aaron". TODO
@@ -140,7 +139,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     const allowRapidSuccessionOfFirstLetter = listContent().every((text) =>
       text
         ? text[0]?.toLocaleLowerCase() !== text[1]?.toLocaleLowerCase()
-        : true
+        : true,
     );
 
     // Allows the user to cycle through items that start with the same letter
@@ -151,6 +150,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     }
 
     stringRef += event.key;
+
     clearTimeout(timeoutIdRef);
     timeoutIdRef = setTimeout(() => {
       stringRef = '';
@@ -166,30 +166,34 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
         ...listContent().slice((prevIndex || 0) + 1),
         ...listContent().slice(0, (prevIndex || 0) + 1),
       ],
-      stringRef
+      stringRef,
     );
 
     if (index !== -1) {
+      if (event.key === ' ') {
+        stopEvent(event);
+      }
       onMatch?.(index);
       matchIndexRef = index;
     } else if (event.key !== ' ') {
+      //no match
       stringRef = '';
-      setTypingChange(false);
+      isNotNested && setTypingChange(false);
     }
   }
 
-  return () =>
-    !enabled()
-      ? {}
-      : {
-          reference: {onKeyDown},
-          floating: {
-            onKeyDown,
-            onKeyUp(event) {
-              if (event.key === ' ') {
-                setTypingChange(false);
-              }
-            },
-          },
-        };
+  return createMemo(() => {
+    if (!enabled()) return {};
+    return {
+      reference: {onKeyDown},
+      floating: {
+        onKeyDown,
+        onKeyUp(event) {
+          if (event.key === ' ') {
+            setTypingChange(false);
+          }
+        },
+      },
+    };
+  });
 }

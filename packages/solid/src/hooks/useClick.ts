@@ -30,10 +30,10 @@ type PointerType = 'mouse' | 'pen' | 'touch';
  * @see https://floating-ui.com/docs/useClick
  */
 export function useClick<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseClickProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseClickProps = {},
 ): Accessor<ElementProps> {
-  const {open, onOpenChange, dataRef, refs} = context;
+  const {open, onOpenChange, dataRef, refs} = context();
   const mergedProps = mergeProps(
     {
       enabled: true,
@@ -42,7 +42,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
       ignoreMouse: false,
       keyboardHandlers: true,
     },
-    props
+    props,
   );
   const {
     enabled,
@@ -64,6 +64,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
               pointerTypeRef = event.pointerType as PointerType;
             },
             onMouseDown(event) {
+              const {dataRef} = context();
               // Ignore all buttons except for the "main" button.
               // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
               if (event.button !== 0) {
@@ -107,7 +108,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
               ) {
                 return;
               }
-
+              const {dataRef} = context();
               if (
                 open() &&
                 toggle() &&

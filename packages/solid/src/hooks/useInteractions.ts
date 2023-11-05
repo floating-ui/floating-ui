@@ -9,7 +9,7 @@ function extractAndMergeElementProps(
     | JSX.HTMLAttributes<Element>
     | undefined,
   propsList: Array<MaybeAccessor<ElementProps | void>>,
-  elementKey: 'reference' | 'floating' | 'item'
+  elementKey: 'reference' | 'floating' | 'item',
 ): Record<string, unknown> {
   const map = new Map<string, Array<(...args: unknown[]) => void>>();
 
@@ -60,7 +60,7 @@ function extractAndMergeElementProps(
  * @see https://floating-ui.com/docs/react#interaction-hooks
  */
 export function useInteractions(
-  propsList: Array<MaybeAccessor<ElementProps | void>> = []
+  propsList: Array<MaybeAccessor<ElementProps | void>> = [],
 ) {
   const getReferenceProps = (userProps?: JSX.HTMLAttributes<Element>) =>
     extractAndMergeElementProps(userProps, propsList, 'reference');

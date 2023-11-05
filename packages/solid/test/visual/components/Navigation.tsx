@@ -73,14 +73,14 @@ export const NavigationItem: ParentComponent<
   });
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context(), {
+    useHover(context, {
       handleClose: safePolygon(),
       enabled: hasChildren,
     }),
-    useFocus(context(), {
+    useFocus(context, {
       enabled: hasChildren,
     }),
-    useDismiss(context(), {
+    useDismiss(context, {
       enabled: hasChildren,
     }),
   ]);

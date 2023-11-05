@@ -5,10 +5,17 @@ import {
   ComputePositionReturn,
   ReferenceElement,
 } from '@floating-ui/dom';
+import {isElement} from '@floating-ui/utils/dom';
 import {access} from '@solid-primitives/utils';
 import {createEffect, createMemo, createSignal} from 'solid-js';
 
-import {UseFloatingOptions, UseFloatingReturn} from '../types';
+import {
+  ExtendedPositionElements,
+  ExtendedPositionRefs,
+  ReferenceType,
+  UseFloatingOptions,
+  UseFloatingReturn,
+} from '../types';
 import {getDPR} from '../utils/getDPR';
 import {roundByDPR} from '../utils/roundByDPR';
 
@@ -20,8 +27,11 @@ function ignore<T>(_value: T): void {
 export function usePosition<R extends ReferenceElement = ReferenceElement>(
   // reference: () => R | undefined | null,
   // floating: () => F | undefined | null,
-  options: UseFloatingOptions<R> = {transform: true}
-): Omit<UseFloatingReturn<R>, 'context'> {
+  options: UseFloatingOptions<R> = {transform: true},
+): Omit<UseFloatingReturn<R>, 'context' | 'refs' | 'elements'> & {
+  refs: ExtendedPositionRefs<R>;
+  elements: ExtendedPositionElements<R>;
+} {
   const placement = () => options?.placement ?? 'bottom';
   const strategy = () => options?.strategy ?? 'absolute';
 
@@ -38,8 +48,26 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
 
   const [error, setError] = createSignal<{value: any} | undefined>();
 
-  const [reference, setReference] = createSignal<R | null>(null);
-  const [floating, setFloating] = createSignal<HTMLElement | null>(null);
+  const [_reference, setReference] = createSignal<R | null>(null);
+  const [_floating, setFloating] = createSignal<HTMLElement | null>(null);
+
+  const reference = createMemo(
+    () => _reference() ?? options.elements?.reference?.() ?? null,
+  );
+  const floating = createMemo(
+    () => _floating() ?? options.elements?.floating?.() ?? null,
+  );
+
+  const setPositionReference = (node: ReferenceType | null) => {
+    const positionReference = isElement(node)
+      ? {
+          getBoundingClientRect: () => node.getBoundingClientRect(),
+          contextElement: node,
+        }
+      : node;
+    //@ts-ignore
+    setReference(positionReference as R);
+  };
 
   createEffect(() => {
     const currentError = error();
@@ -81,7 +109,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
             currentFloating: currentFloating.id,
           });
           setError(err);
-        }
+        },
       );
     }
   }
@@ -153,6 +181,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     floating,
     setReference,
     setFloating,
+    setPositionReference,
   };
 
   return {
@@ -177,12 +206,12 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     get floatingStyles() {
       return floatingStyles();
     },
-    // get elements() {
-    //   return {
-    //     reference: reference(),
-    //     floating: floating(),
-    //   };
-    // },
+    get elements() {
+      return {
+        reference: reference,
+        floating: floating,
+      };
+    },
     get refs() {
       return refs;
     },

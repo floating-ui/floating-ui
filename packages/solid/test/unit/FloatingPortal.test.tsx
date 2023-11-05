@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom';
+
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
+import {createSignal, Show} from 'solid-js';
 import {vi} from 'vitest';
 
 import {FloatingPortal, useFloating} from '../../src';
-import {Show, createSignal} from 'solid-js';
 import {promiseRequestAnimationFrame} from '../helper';
 
 function App(props: {root?: HTMLElement | null; id?: string}) {

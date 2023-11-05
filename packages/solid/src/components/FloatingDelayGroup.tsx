@@ -1,7 +1,7 @@
 import {
+  Accessor,
   createContext,
   createEffect,
-  createRenderEffect,
   JSX,
   JSXElement,
   mergeProps,
@@ -55,14 +55,14 @@ interface FloatingDelayGroupProps {
 export const FloatingDelayGroup = (
   props: FloatingDelayGroupProps,
 ): JSX.Element => {
-  const store = createStore({
+  const [state, setState] = createStore({
     delay: props.delay,
     timeoutMs: props.timeoutMs ?? 0,
     initialDelay: props.delay,
     currentId: null,
     isInstantPhase: false,
   });
-  const [state, setState] = store;
+
   let initialCurrentIdRef: any = null;
 
   createEffect(() => {
@@ -92,13 +92,13 @@ interface UseGroupOptions {
 }
 
 export const useDelayGroup = (
-  floatingContext: FloatingContext,
+  floatingContext: Accessor<FloatingContext>,
   props: UseGroupOptions,
 ) => {
   const context = useDelayGroupContext();
 
   createEffect(() => {
-    const {onOpenChange} = floatingContext;
+    const {onOpenChange} = floatingContext();
     const {initialDelay, setState, currentId} = context;
 
     if (currentId) {
@@ -117,7 +117,7 @@ export const useDelayGroup = (
 
   createEffect(() => {
     const {currentId, initialDelay, setState, timeoutMs} = context;
-    const {open, onOpenChange} = floatingContext;
+    const {open, onOpenChange} = floatingContext();
 
     function unset() {
       onOpenChange(false);
@@ -136,7 +136,7 @@ export const useDelayGroup = (
   });
 
   createEffect(() => {
-    const {open} = floatingContext;
+    const {open} = floatingContext();
 
     if (open()) {
       context.setState({currentId: props.id});

@@ -1,23 +1,24 @@
+import {createMediaQuery} from '@solid-primitives/media';
 import {
   Accessor,
-  JSX,
-  Show,
   createMemo,
   createSignal,
   createUniqueId,
+  JSX,
+  Show,
 } from 'solid-js';
-import {Button} from '../lib/Button';
+
 import {
+  FloatingFocusManager,
+  FloatingOverlay,
+  FloatingPortal,
+  useClick,
+  useDismiss,
   useFloating,
   useInteractions,
-  useClick,
   useRole,
-  useDismiss,
-  FloatingFocusManager,
-  FloatingPortal,
-  FloatingOverlay,
 } from '../../../src';
-import {createMediaQuery} from '@solid-primitives/media';
+import {Button} from '../lib/Button';
 
 export const Main = (props: Partial<Props>) => {
   return (
@@ -71,9 +72,9 @@ export function Drawer(props: Props) {
   );
 
   const {getReferenceProps, getFloatingProps} = useInteractions([
-    useClick(context()),
-    useRole(context()),
-    useDismiss(context(), {
+    useClick(context),
+    useRole(context),
+    useDismiss(context, {
       outsidePress: modal,
       outsidePressEvent: 'mousedown',
     }),

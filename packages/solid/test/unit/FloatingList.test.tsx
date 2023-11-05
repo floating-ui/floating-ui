@@ -1,6 +1,6 @@
 import {fireEvent, render, screen} from '@solidjs/testing-library';
-import '@testing-library/jest-dom';
-
+// import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 import {
   Accessor,
   JSX,
@@ -9,22 +9,19 @@ import {
   createContext,
   createMemo,
   createSignal,
-  onCleanup,
-  onMount,
   useContext,
 } from 'solid-js';
 import {
   FloatingList,
-  FloatingTree,
+  createFloatingListContext,
   useClick,
   useFloating,
   useInteractions,
-  useList,
+  useListItem,
   useListNavigation,
   useTypeahead,
 } from '../../src';
 import {promiseRequestAnimationFrame} from '../helper';
-import userEvent from '@testing-library/user-event';
 
 const SelectContext = createContext<{
   getItemProps: (
@@ -42,19 +39,16 @@ function Select(props: ParentProps) {
     onOpenChange: setIsOpen,
   });
 
-  const {items} = useList();
-  const listRef = createMemo(() =>
-    items().map((item) => item?.textContent ?? ''),
-  );
+  const floatingListContext = createFloatingListContext();
 
-  const click = useClick(context());
-  const listNavigation = useListNavigation(context(), {
-    listRef: items,
+  const click = useClick(context);
+  const listNavigation = useListNavigation(context, {
+    listRef: floatingListContext.items,
     activeIndex,
     onNavigate: setActiveIndex,
   });
-  const typeahead = useTypeahead(context(), {
-    listRef,
+  const typeahead = useTypeahead(context, {
+    listRef: floatingListContext.labelsRef,
     activeIndex,
     onMatch: setActiveIndex,
   });
@@ -75,7 +69,7 @@ function Select(props: ParentProps) {
       >
         Open select menu
       </button>
-      <FloatingList>
+      <FloatingList context={floatingListContext}>
         <Show when={isOpen()}>
           <div ref={refs.setFloating} role="listbox" {...getFloatingProps()}>
             {props.children}
@@ -89,13 +83,13 @@ function Select(props: ParentProps) {
 function Option(props: {children: JSX.Element; label?: string}) {
   const [ref, setRef] = createSignal<HTMLDivElement | null>(null);
   const context = useContext(SelectContext);
-  const listContext = useList(ref);
+  const listContext = useListItem(ref);
 
-  onMount(() => listContext.register(ref()!));
-  onCleanup(() => listContext.unregister(ref()!));
+  // onMount(() => listContext.register(ref()!));
+  // onCleanup(() => listContext.unregister(ref()!));
 
   const isActive = createMemo(() => {
-    const itemIndex = listContext.refIndex();
+    const itemIndex = listContext.getItemIndex(ref());
     if (!itemIndex) return false;
     return itemIndex === context?.activeIndex();
   });
@@ -116,148 +110,144 @@ const user = userEvent.setup();
 
 test('registers element ref and indexes correctly', async () => {
   render(() => (
-    <FloatingTree>
-      <Select>
-        <Option>One</Option>
-        <div>
-          <Option>Two</Option>
-          <Option>Three</Option>
-          <Option>Four</Option>
-        </div>
-        <>
-          <Option>Five</Option>
-          <Option>Six</Option>
-        </>
-      </Select>
-    </FloatingTree>
+    <Select>
+      <Option>One</Option>
+      <div>
+        <Option>Two</Option>
+        <Option>Three</Option>
+        <Option>Four</Option>
+      </div>
+      <>
+        <Option>Five</Option>
+        <Option>Six</Option>
+      </>
+    </Select>
   ));
 
-  user.click(screen.getByTestId('reference'));
+  expect(screen.getByTestId('reference')).toBeInTheDocument();
+  // await user.click(screen.getByTestId('reference'));
+  fireEvent.click(screen.getByTestId('reference'));
   await promiseRequestAnimationFrame();
-  await Promise.resolve();
-  expect(screen.getByTestId('reference')).toHaveFocus();
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
 
-  // fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[1]).toHaveFocus();
 
-  // expect(screen.getAllByRole('option')[0]).toHaveFocus();
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[2]).toHaveFocus();
 
-  // fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  await promiseRequestAnimationFrame();
 
-  // expect(screen.getAllByRole('option')[1]).toHaveFocus();
-
-  // fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-
-  // expect(screen.getAllByRole('option')[2]).toHaveFocus();
-
-  // fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-  // fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-
-  // expect(screen.getAllByRole('option')[4]).toHaveFocus();
-  // expect(screen.getAllByRole('option')[4].getAttribute('tabindex')).toBe('0');
+  expect(screen.getAllByRole('option')[4]).toHaveFocus();
+  expect(screen.getAllByRole('option')[4].getAttribute('tabindex')).toBe('0');
 });
 
-// test('registers an element ref and index correctly', async () => {
-//   render(() => (
-//     <Select>
-//       <Option>One</Option>
-//     </Select>
-//   ));
+test('registers an element ref and index correctly', async () => {
+  render(() => (
+    <Select>
+      <Option>One</Option>
+    </Select>
+  ));
 
-//   fireEvent.click(screen.getByRole('button'));
-//   await promiseRequestAnimationFrame();
+  fireEvent.click(screen.getByRole('button'));
+  await promiseRequestAnimationFrame();
 
-//   expect(screen.getAllByRole('option')[0]).toHaveFocus();
-// });
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
+});
 
-// test('registers strings correctly (no value)', async () => {
-//   render(() => (
-//     <Select>
-//       <Option>One</Option>
-//       <div>
-//         <Option>Two</Option>
-//         <Option>Three</Option>
-//         <Option>Four</Option>
-//       </div>
-//       <>
-//         <Option>Five</Option>
-//         <Option>Six</Option>
-//       </>
-//     </Select>
-//   ));
+test('registers strings correctly (no value)', async () => {
+  render(() => (
+    <Select>
+      <Option>One</Option>
+      <div>
+        <Option>Two</Option>
+        <Option>Three</Option>
+        <Option>Four</Option>
+      </div>
+      <>
+        <Option>Five</Option>
+        <Option>Six</Option>
+      </>
+    </Select>
+  ));
 
-//   fireEvent.click(screen.getByRole('button'));
-//   await promiseRequestAnimationFrame();
+  fireEvent.click(screen.getByRole('button'));
+  await promiseRequestAnimationFrame();
 
-//   expect(screen.getAllByRole('option')[0]).toHaveFocus();
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
 
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'F'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'F'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[3]).toHaveFocus();
 
-//   expect(screen.getAllByRole('option')[3]).toHaveFocus();
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'I'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[4]).toHaveFocus();
+});
 
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'I'});
+test('registers strings correctly (label)', async () => {
+  render(() => (
+    <Select>
+      <Option label="One">One</Option>
+      <div>
+        <Option label="Two">Two</Option>
+        <Option label="Three">Three</Option>
+        <Option label="Four">Four</Option>
+      </div>
+      <>
+        <Option label="Five">Five</Option>
+        <Option label="Six">Six</Option>
+      </>
+    </Select>
+  ));
 
-//   expect(screen.getAllByRole('option')[4]).toHaveFocus();
-// });
+  fireEvent.click(screen.getByRole('button'));
+  await promiseRequestAnimationFrame();
 
-// test('registers strings correctly (label)', async () => {
-//   render(() => (
-//     <Select>
-//       <Option label="One">One</Option>
-//       <div>
-//         <Option label="Two">Two</Option>
-//         <Option label="Three">Three</Option>
-//         <Option label="Four">Four</Option>
-//       </div>
-//       <>
-//         <Option label="Five">Five</Option>
-//         <Option label="Six">Six</Option>
-//       </>
-//     </Select>
-//   ));
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
 
-//   fireEvent.click(screen.getByRole('button'));
-//   await promiseRequestAnimationFrame();
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'F'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[3]).toHaveFocus();
 
-//   expect(screen.getAllByRole('option')[0]).toHaveFocus();
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'I'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[4]).toHaveFocus();
+});
 
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'F'});
+test('handles re-ordering', async () => {
+  render(() => (
+    <Select>
+      <Option>One</Option>
+      <div>
+        <Option>Two</Option>
+        <Option>Three</Option>
+        <Option>Four</Option>
+      </div>
+      <>
+        <Option>Five</Option>
+        <Option>Six</Option>
+      </>
+    </Select>
+  ));
 
-//   expect(screen.getAllByRole('option')[3]).toHaveFocus();
+  fireEvent.click(screen.getByRole('button'));
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[0]).toHaveFocus();
 
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'I'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  await promiseRequestAnimationFrame();
+  expect(screen.getAllByRole('option')[1]).toHaveFocus();
 
-//   expect(screen.getAllByRole('option')[4]).toHaveFocus();
-// });
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
+  await promiseRequestAnimationFrame();
 
-// test('handles re-ordering', async () => {
-//   render(() => (
-//     <Select>
-//       <Option>One</Option>
-//       <div>
-//         <Option>Two</Option>
-//         <Option>Three</Option>
-//         <Option>Four</Option>
-//       </div>
-//       <>
-//         <Option>Five</Option>
-//         <Option>Six</Option>
-//       </>
-//     </Select>
-//   ));
-
-//   fireEvent.click(screen.getByRole('button'));
-//   await promiseRequestAnimationFrame();
-
-//   expect(screen.getAllByRole('option')[0]).toHaveFocus();
-
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-
-//   expect(screen.getAllByRole('option')[1]).toHaveFocus();
-
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-//   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});
-
-//   expect(screen.getAllByRole('option')[5]).toHaveFocus();
-// });
+  expect(screen.getAllByRole('option')[5]).toHaveFocus();
+});

@@ -8,16 +8,16 @@ import {
   stopEvent,
 } from '@floating-ui/utils/react';
 import {
-  createEffect,
-  createMemo,
-  createSignal,
   JSX,
-  mergeProps,
-  onCleanup,
-  onMount,
   ParentComponent,
   ParentProps,
   Show,
+  createEffect,
+  createMemo,
+  createSignal,
+  mergeProps,
+  onCleanup,
+  onMount,
   splitProps,
 } from 'solid-js';
 import {FocusableElement, tabbable} from 'tabbable';
@@ -37,7 +37,7 @@ import {
   isOutsideEvent,
 } from '../utils/tabbable';
 import {usePortalContext} from './FloatingPortal';
-import {useFloatingTree} from './FloatingTree';
+import {useUnsafeFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
 const VisuallyHiddenDismiss: ParentComponent<
@@ -94,12 +94,14 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     visuallyHiddenDismiss,
     closeOnFocusOut,
   } = destructure(mergedProps);
+
   const {open, refs, nodeId, events, dataRef} = destructure(context());
   const {onOpenChange} = context();
+
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const guards = () => (supportsInert() ? _guards() : true);
 
-  const tree = useFloatingTree();
+  const tree = useUnsafeFloatingTree();
   const portalContext = usePortalContext();
 
   // Controlled by `useListNavigation`.
@@ -235,7 +237,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         contains(portalContext?.portalNode(), relatedTarget) ||
         relatedTarget?.hasAttribute(createAttribute('focus-guard')) ||
         (tree?.() &&
-          (getChildren(tree?.().nodesRef, nodeId()).find(
+          (getChildren(tree().nodesRef, nodeId()).find(
             (node) =>
               contains(node.context?.refs.floating(), relatedTarget) ||
               contains(
@@ -243,7 +245,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
                 relatedTarget,
               ),
           ) ||
-            getAncestors(tree?.().nodesRef, nodeId()).find(
+            getAncestors(tree().nodesRef, nodeId()).find(
               (node) =>
                 node.context?.refs.floating() === relatedTarget ||
                 node.context?.refs.reference() === relatedTarget,
@@ -397,7 +399,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       const shouldFocusReference =
         contains(floating, activeEl) ||
         (tree?.() &&
-          getChildren(tree?.().nodesRef, nodeId()).some((node) =>
+          getChildren(tree().nodesRef, nodeId()).some((node) =>
             contains(node.context?.refs.floating(), activeEl),
           )) ||
         (openEvent && ['click', 'mousedown'].includes(openEvent.type));

@@ -1,5 +1,17 @@
 import '@testing-library/jest-dom';
+
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
+import userEvent from '@testing-library/user-event';
+import {
+  createMemo,
+  createSignal,
+  JSX,
+  mergeProps,
+  ParentComponent,
+  ParentProps,
+  Show,
+  splitProps,
+} from 'solid-js';
 import {vi} from 'vitest';
 
 import {
@@ -17,19 +29,6 @@ import {
 import {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
-import {
-  JSX,
-  ParentComponent,
-  ParentProps,
-  Show,
-  createEffect,
-  createMemo,
-  createSignal,
-  mergeProps,
-  onCleanup,
-  splitProps,
-} from 'solid-js';
-import userEvent from '@testing-library/user-event';
 
 const user = userEvent.setup();
 const promiseRequestAnimationFrame = async () =>
@@ -187,8 +186,8 @@ describe('returnFocus', () => {
       });
 
       const {getReferenceProps, getFloatingProps} = useInteractions([
-        useClick(context()),
-        useDismiss(context(), {bubbles: false}),
+        useClick(context),
+        useDismiss(context, {bubbles: false}),
       ]);
 
       return (
@@ -520,8 +519,8 @@ describe('returnFocus', () => {
         });
 
         const {getReferenceProps, getFloatingProps} = useInteractions([
-          useClick(context()),
-          useDismiss(context(), {bubbles: false}),
+          useClick(context),
+          useDismiss(context, {bubbles: false}),
         ]);
 
         return (
@@ -795,7 +794,7 @@ describe('returnFocus', () => {
           onOpenChange: setIsOpen,
         });
 
-        const click = useClick(context());
+        const click = useClick(context);
 
         const {getReferenceProps, getFloatingProps} = useInteractions([click]);
 
@@ -1225,11 +1224,7 @@ describe('returnFocus', () => {
     });
 
     test('closeOnFocusOut=false - does not close when tabbing out', async () => {
-      render(() => (
-        <FloatingTree>
-          <Drawer modal={false} />
-        </FloatingTree>
-      ));
+      render(() => <Drawer modal={false} />);
       await userEvent.click(screen.getByText('My button'));
       await promiseRequestAnimationFrame();
       expect(screen.queryByText('Close')).toBeInTheDocument();

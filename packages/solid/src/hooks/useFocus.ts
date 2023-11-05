@@ -24,12 +24,14 @@ export interface UseFocusProps {
  * @see https://floating-ui.com/docs/useFocus
  */
 export function useFocus<RT extends ReferenceType = ReferenceType>(
-  context: FloatingContext<RT>,
-  props: UseFocusProps = {}
+  context: Accessor<FloatingContext<RT>>,
+  props: UseFocusProps = {},
 ): Accessor<ElementProps> {
-  const {open, onOpenChange, dataRef, events, refs} = context;
+  const {open, onOpenChange, refs} = context();
   const mergedProps = mergeProps({enabled: true, keyboardOnly: true}, props);
-  const {enabled, keyboardOnly} = destructure(mergedProps, {normalize: true});
+  const {enabled, keyboardOnly} = destructure(mergedProps, {
+    normalize: true,
+  });
 
   let pointerTypeRef = '';
   let blockFocusRef = false;
@@ -67,7 +69,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
     if (!enabled()) {
       return;
     }
-
+    const {events} = context();
     function onDismiss(payload: DismissPayload) {
       if (payload.type === 'referencePress' || payload.type === 'escapeKey') {
         blockFocusRef = true;
@@ -100,7 +102,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
               if (blockFocusRef) {
                 return;
               }
-
+              const {dataRef} = context();
               // Dismiss with click should ignore the subsequent `focus` trigger,
               // but only if the click originated inside the reference element.
               if (
@@ -108,7 +110,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
                 dataRef.openEvent?.type === 'mousedown' &&
                 isEventTargetWithin(
                   dataRef.openEvent,
-                  refs.reference() as Node | null
+                  refs.reference() as Node | null,
                 )
               ) {
                 return;
@@ -136,7 +138,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
                   contains(refs.floating(), relatedTarget) ||
                   contains(
                     refs.reference() as HTMLElement | null,
-                    relatedTarget
+                    relatedTarget,
                   ) ||
                   movedToFocusGuard
                 ) {

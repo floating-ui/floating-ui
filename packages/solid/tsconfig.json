@@ -1,5 +1,5 @@
 {
-  "include": ["src", "test", "test/visual/node_modules/components/Drawer.tsx"],
+  "include": ["src", "test"],
   "compilerOptions": {
     "strict": true,
     "lib": ["ES2021", "DOM", "DOM.Iterable"],

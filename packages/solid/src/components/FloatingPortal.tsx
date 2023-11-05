@@ -72,14 +72,14 @@ export function useFloatingPortalNode(props: {
       }
     | undefined = undefined;
 
-  const [portalNode, setportalNode] = createSignal<HTMLElement | null>(null);
+  const [portalNode, setPortalNode] = createSignal<HTMLElement | null>(null);
   onCleanup(() => {
     portalNode()?.remove();
   });
 
   // const portalNode = createMemo(() => {
   createEffect(() => {
-    // if (dataRef === data()) return prev;
+    if (dataRef === data()) return;
     // if (!document || isServer) return null;
     dataRef = data();
 
@@ -94,7 +94,7 @@ export function useFloatingPortalNode(props: {
       subRoot.setAttribute(attr, '');
       existingIdRoot.appendChild(subRoot);
       // return subRoot;
-      setportalNode(subRoot);
+      setPortalNode(subRoot);
       return;
     }
 
@@ -116,7 +116,7 @@ export function useFloatingPortalNode(props: {
 
     container = idWrapper || container;
     container.appendChild(subRoot);
-    setportalNode(subRoot);
+    setPortalNode(subRoot);
     // return subRoot;
   });
 
@@ -128,6 +128,7 @@ interface FloatingPortalProps {
   id?: string;
   root?: HTMLElement | null;
   preserveTabOrder?: boolean;
+  useShadow?: boolean;
 }
 
 /**
@@ -229,7 +230,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
         <span aria-owns={portalNode()?.id} style={HIDDEN_STYLES} />
       </Show>
       <Show when={portalNode()}>
-        <Portal mount={portalNode() ?? document.body}>
+        <Portal mount={portalNode() ?? undefined} useShadow={!!props.useShadow}>
           {mergedProps.children}
         </Portal>
       </Show>

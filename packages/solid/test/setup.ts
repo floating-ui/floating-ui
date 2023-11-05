@@ -1,4 +1,3 @@
-// import 'regenerator-runtime/runtime';
-import '@testing-library/jest-dom';
-// var process = {env: {NODE_ENV: 'dev'}};
+// import '@testing-library/jest-dom';
 HTMLElement.prototype.inert = true;
+console.log('Setup successfull');

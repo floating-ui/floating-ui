@@ -1,18 +1,18 @@
 import {
-  access,
-  AnyFunction,
-  AnyObject,
-  MaybeAccessor,
-  MaybeAccessorValue,
-  Values,
-} from '@solid-primitives/utils';
-import {
-  Accessor,
   createMemo,
+  Accessor,
+  runWithOwner,
   getOwner,
   MemoOptions,
-  runWithOwner,
 } from 'solid-js';
+import {
+  access,
+  MaybeAccessor,
+  AnyObject,
+  Values,
+  AnyFunction,
+  MaybeAccessorValue,
+} from '@solid-primitives/utils';
 
 type ReactiveSource = [] | any[] | AnyObject;
 
@@ -25,28 +25,29 @@ export type DestructureOptions<T extends ReactiveSource> = MemoOptions<
   normalize?: boolean;
 };
 
-export type Spread<T extends ReactiveSource> = {
-  readonly [K in keyof T]: Accessor<T[K]>;
+type ReturnFunction<T> = T extends (...args: any[]) => any ? T : () => T;
+type ReturnValue<T, N> = N extends true ? ReturnFunction<T> : Accessor<T>;
+
+export type Spread<T extends ReactiveSource, N> = {
+  readonly [K in keyof T]: ReturnValue<T[K], N>;
 };
-export type SpreadNormalize<T extends ReactiveSource> = {
-  readonly [K in keyof T]: Accessor<MaybeAccessorValue<T[K]>>;
-};
-export type DeepSpread<T extends ReactiveSource> = {
+
+export type DeepSpread<T extends ReactiveSource, N> = {
   readonly [K in keyof T]: T[K] extends ReactiveSource
     ? T[K] extends AnyFunction
-      ? Accessor<T[K]>
-      : DeepSpread<T[K]>
-    : Accessor<T[K]>;
+      ? ReturnValue<T[K], N>
+      : DeepSpread<T[K], N>
+    : ReturnValue<T[K], N>;
 };
-export type Destructure<T extends ReactiveSource> = {
-  readonly [K in keyof T]-?: Accessor<T[K]>;
+export type Destructure<T extends ReactiveSource, N> = {
+  readonly [K in keyof T]-?: ReturnValue<T[K], N>;
 };
-export type DeepDestructure<T extends ReactiveSource> = {
+export type DeepDestructure<T extends ReactiveSource, N> = {
   readonly [K in keyof T]-?: T[K] extends ReactiveSource
     ? T[K] extends AnyFunction
-      ? Accessor<T[K]>
-      : DeepDestructure<T[K]>
-    : Accessor<T[K]>;
+      ? ReturnValue<T[K], N>
+      : DeepDestructure<T[K], N>
+    : ReturnValue<T[K], N>;
 };
 
 const isReactiveObject = (value: any): boolean =>
@@ -70,7 +71,7 @@ function createProxyCache(obj: object, get: (key: any) => any): any {
         return value;
       },
       set: () => false,
-    }
+    },
   );
 }
 
@@ -78,9 +79,11 @@ function createProxyCache(obj: object, get: (key: any) => any): any {
  * Destructures an reactive object *(e.g. store or component props)* or a signal of one into a tuple/map of signals for each object key.
  * @param source reactive object or signal returning one
  * @param options memo options + primitive configuration:
- * - `memo` - wraps accessors in `createMemo`, making each property update independently. *(enabled by default for signal source)*
+ * - `memo` - if true: wraps accessors in `createMemo`, making each property update independently. *(enabled by default for signal source)*
+ * - `memo` - if "normalize": turn all static values to accessors e.g. `{ a: 1 } => { a: () => 1 }` but keep all functions and accessors as they are. So after destructuring all destructured props are functions
  * - `lazy` - property accessors are created on key read. enable if you want to only a subset of source properties, or use properties initially missing
  * - `deep` - destructure nested objects
+
  * @returns object of the same keys as the source, but with values turned into accessors.
  * @example // spread tuples
  * const [first, second, third] = destructure(() => [1,2,3])
@@ -94,27 +97,30 @@ function createProxyCache(obj: object, get: (key: any) => any): any {
  */
 export function destructure<
   T extends ReactiveSource,
-  O extends DestructureOptions<T>
+  O extends DestructureOptions<T>,
 >(
   source: MaybeAccessor<T>,
-  options?: O
+  options?: O,
 ): O extends {lazy: true; deep: true}
-  ? DeepDestructure<T>
-  : O['lazy'] extends true
-  ? Destructure<T>
+  ? DeepDestructure<T, O['normalize']>
+  : O extends {lazy: true}
+  ? Destructure<T, O['normalize']>
   : O['deep'] extends true
-  ? DeepSpread<T>
-  : O['normalize'] extends true
-  ? SpreadNormalize<T>
-  : Spread<T> {
+  ? DeepSpread<T, O['normalize']>
+  : Spread<T, O['normalize']> {
   const config: DestructureOptions<T> = options ?? {};
   const memo = config.memo ?? typeof source === 'function';
-  const getter =
-    typeof source === 'function'
-      ? (key: any) => () =>
-          config.normalize ? access(source()[key]) : source()[key]
-      : (key: any) => () =>
-          config.normalize ? access(source[key]) : source[key];
+
+  const _source = createMemo(() =>
+    typeof source === 'function' ? source() : source,
+  );
+  const getter = (key: any) => {
+    const accessedValue = () => access(_source()[key]);
+    //If accessedValue() is a function with params return the original function
+    if (typeof accessedValue() === 'function' && accessedValue().length)
+      return accessedValue();
+    return accessedValue;
+  };
   const obj = access(source);
 
   // lazy (use proxy)
@@ -124,7 +130,7 @@ export function destructure<
       const calc = getter(key);
       if (config.deep && isReactiveObject(obj[key]))
         return runWithOwner(owner, () => destructure(calc, {...config, memo}));
-      return memo
+      return memo && (!config.normalize || calc.length === 0)
         ? runWithOwner(owner, () => createMemo(calc, undefined, options))
         : calc;
     });
@@ -136,7 +142,11 @@ export function destructure<
     const calc = getter(key);
     if (config.deep && isReactiveObject(value))
       result[key] = destructure(calc, {...config, memo});
-    else result[key] = memo ? createMemo(calc, undefined, options) : calc;
+    else
+      result[key] =
+        memo && (!config.normalize || calc.length === 0)
+          ? createMemo(calc, undefined, options)
+          : calc;
   }
   return result;
 }
