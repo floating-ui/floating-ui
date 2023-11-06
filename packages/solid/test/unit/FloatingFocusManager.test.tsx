@@ -71,7 +71,7 @@ function App(
           initialFocus={
             props.initialFocus === 'two' ? ref() : props.initialFocus
           }
-          context={context()}
+          context={context}
         >
           <div role="dialog" ref={refs.setFloating} data-testid="floating">
             <button data-testid="one">close</button>
@@ -200,7 +200,7 @@ describe('returnFocus', () => {
           </button>
           <FloatingPortal>
             <Show when={open()}>
-              <FloatingFocusManager context={context()}>
+              <FloatingFocusManager context={context}>
                 <div {...getFloatingProps({ref: refs.setFloating})}>
                   {props.render({
                     close: () => setOpen(false),
@@ -381,7 +381,7 @@ describe('returnFocus', () => {
             <button data-testid="btn-2" />
             <Show when={open()}>
               <FloatingFocusManager
-                context={context()}
+                context={context}
                 modal={true}
                 order={['reference']}
               >
@@ -428,7 +428,7 @@ describe('returnFocus', () => {
             <button data-testid="btn-1" />
             <button data-testid="btn-2" />
             <Show when={open()}>
-              <FloatingFocusManager context={context()} modal={false}>
+              <FloatingFocusManager context={context} modal={false}>
                 <div
                   role="listbox"
                   ref={refs.setFloating}
@@ -460,7 +460,7 @@ describe('returnFocus', () => {
           <FloatingTree>
             <button data-testid="reference" ref={refs.setReference} />
             <FloatingFocusManager
-              context={context()}
+              context={context}
               modal={true}
               order={['content', 'floating']} //added Floating to order. Otherwise test will fail
             >
@@ -529,7 +529,7 @@ describe('returnFocus', () => {
             <FloatingPortal>
               <Show when={open()}>
                 <FloatingFocusManager
-                  context={context()}
+                  context={context}
                   modal={mergedProps.modal}
                 >
                   <div {...getFloatingProps({ref: refs.setFloating})}>
@@ -618,7 +618,7 @@ describe('returnFocus', () => {
               <button data-testid="btn-2" />
             </div>
             <Show when={isOpen()}>
-              <FloatingFocusManager context={context()}>
+              <FloatingFocusManager context={context}>
                 <div ref={refs.setFloating} data-testid="floating" />
               </FloatingFocusManager>
             </Show>
@@ -682,7 +682,7 @@ describe('returnFocus', () => {
               <button data-testid="btn-2" />
             </div>
             <Show when={isOpen()}>
-              <FloatingFocusManager context={context()} modal={false}>
+              <FloatingFocusManager context={context} modal={false}>
                 <div
                   role="listbox"
                   ref={refs.setFloating}
@@ -766,7 +766,7 @@ describe('returnFocus', () => {
               onClick={() => setDisabled((v) => !v)}
             />
             <Show when={isOpen()}>
-              <FloatingFocusManager context={context()} disabled={disabled()}>
+              <FloatingFocusManager context={context} disabled={disabled()}>
                 <div ref={refs.setFloating} data-testid="floating" />
               </FloatingFocusManager>
             </Show>
@@ -810,7 +810,7 @@ describe('returnFocus', () => {
               onClick={() => setDisabled((v) => !v)}
             />
             <Show when={isOpen()}>
-              <FloatingFocusManager context={context()} disabled={disabled()}>
+              <FloatingFocusManager context={context} disabled={disabled()}>
                 <div
                   ref={refs.setFloating}
                   data-testid="floating"
@@ -950,7 +950,7 @@ describe('returnFocus', () => {
             <FloatingPortal>
               <Show when={open()}>
                 <FloatingFocusManager
-                  context={context()}
+                  context={context}
                   modal={false}
                   closeOnFocusOut={true}
                 >
@@ -998,7 +998,7 @@ describe('returnFocus', () => {
             <FloatingPortal>
               <Show when={open()}>
                 <FloatingFocusManager
-                  context={context()}
+                  context={context}
                   modal={false}
                   order={['reference', 'content']}
                 >
@@ -1048,7 +1048,7 @@ describe('returnFocus', () => {
             <FloatingPortal>
               <Show when={open()}>
                 <FloatingFocusManager
-                  context={context()}
+                  context={context}
                   modal={false}
                   order={['reference', 'floating', 'content']}
                 >
@@ -1100,7 +1100,7 @@ describe('returnFocus', () => {
             />
             <FloatingPortal>
               <Show when={open()}>
-                <FloatingFocusManager context={context()} modal={false}>
+                <FloatingFocusManager context={context} modal={false}>
                   <div data-testid="floating" ref={refs.setFloating}>
                     <span tabIndex={0} data-testid="inside" />
                   </div>

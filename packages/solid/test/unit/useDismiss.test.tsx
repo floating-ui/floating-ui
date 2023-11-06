@@ -103,7 +103,7 @@ describe('true', () => {
         <>
           <button {...getReferenceProps({ref: refs.setReference})} />
           <Show when={isOpen()}>
-            <FloatingFocusManager context={context()}>
+            <FloatingFocusManager context={context}>
               <div
                 role="dialog"
                 {...getFloatingProps({ref: refs.setFloating})}
@@ -163,7 +163,7 @@ describe('true', () => {
           <Show when={isOpen()}>
             <>
               <Show when={!!props.modal} fallback={dialogJsx}>
-                <FloatingFocusManager context={context()} modal={!!props.modal}>
+                <FloatingFocusManager context={context} modal={!!props.modal}>
                   {dialogJsx}
                 </FloatingFocusManager>
               </Show>
@@ -349,7 +349,7 @@ describe('bubbles', () => {
           Reference {nodeId}
         </button>
         <Show when={open()}>
-          {/* <FloatingFocusManager context={context()}> */}
+          {/* <FloatingFocusManager context={context}> */}
           <div
             ref={refs.setFloating}
             {...getFloatingProps({onKeyDown: (e) => fn(e)})}

@@ -95,7 +95,7 @@ export type UseFloatingReturn<R extends ReferenceType = ReferenceType> =
       /**
        * Pre-configured positioning styles to apply to the floating element.
        */
-      floatingStyles: JSX.CSSProperties;
+      floatingStyles: Accessor<JSX.CSSProperties>;
       /**
        * Object containing the reference and floating refs and reactive setters.
        */

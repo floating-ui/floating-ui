@@ -19,6 +19,8 @@ export {useClick} from './hooks/useClick';
 export {useClientPoint} from './hooks/useClientPoint';
 export {useDismiss} from './hooks/useDismiss';
 export {useFloating} from './hooks/useFloating';
+export {usePosition} from './hooks/usePosition';
+export * from './hooks/useP';
 export {useFocus} from './hooks/useFocus';
 export {useHover} from './hooks/useHover';
 export {useInteractions} from './hooks/useInteractions';

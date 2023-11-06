@@ -1,0 +1,7 @@
+{
+  "presets": [
+    ["solid", {"generate": "dom", "hydratable": true}],
+    ["@babel/env", {"loose": true}],
+    "@babel/typescript"
+  ]
+}

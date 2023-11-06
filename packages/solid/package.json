@@ -32,7 +32,7 @@
   "scripts": {
     "test": "vitest",
     "build": "NODE_ENV=build rollup -c",
-    "build-watch": "rollup --watch -c ./rollup.config.js"
+    "build-watch": "NODE_ENV=build rollup --watch -c ./rollup.config.js"
   },
   "author": "madaxen86",
   "license": "MIT",
@@ -66,6 +66,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.23.2",
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.4",
     "@solid-primitives/media": "^2.2.5",
     "@solidjs/testing-library": "^0.8.4",
@@ -80,6 +81,8 @@
     "jsdom": "^22.1.0",
     "rollup": "^4.1.4",
     "rollup-plugin-summary": "^2.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
     "rollup-preset-solid": "^2.0.1",
     "solid-jest": "^0.2.0",
     "solid-js": "^1.8.3",

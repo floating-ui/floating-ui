@@ -8,6 +8,7 @@ import {
   stopEvent,
 } from '../utils';
 import {
+  Accessor,
   JSX,
   ParentComponent,
   ParentProps,
@@ -51,7 +52,7 @@ const VisuallyHiddenDismiss: ParentComponent<
 export interface FloatingFocusManagerProps<
   RT extends ReferenceType = ReferenceType,
 > {
-  context: FloatingContext<RT>;
+  context: Accessor<FloatingContext<RT>>;
   disabled?: boolean;
   order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?: number | HTMLElement | null;
@@ -93,7 +94,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     modal,
     visuallyHiddenDismiss,
     closeOnFocusOut,
-  } = destructure(mergedProps);
+  } = destructure(mergedProps, {normalize: true});
 
   const {open, refs, nodeId, events, dataRef} = destructure(context());
   const {onOpenChange} = context();
