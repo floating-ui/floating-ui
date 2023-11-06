@@ -9,6 +9,10 @@
     ]
   },
   "description": "Floating UI for SolidJS",
+  "author": {
+    "name": "Martin Rapp",
+    "url": "https://github.com/madaxen86"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -34,7 +38,6 @@
     "build": "NODE_ENV=build rollup -c",
     "build-watch": "NODE_ENV=build rollup --watch -c ./rollup.config.js"
   },
-  "author": "madaxen86",
   "license": "MIT",
   "bugs": "https://github.com/floating-ui/floating-ui",
   "repository": {
@@ -50,7 +53,9 @@
     "menu",
     "popup",
     "positioning",
-    "solid"
+    "solid",
+    "autocomplete",
+    "keynavigation"
   ],
   "peerDependencies": {
     "solid-js": "^1.6.0"
