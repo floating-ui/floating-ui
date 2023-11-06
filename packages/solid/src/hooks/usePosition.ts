@@ -147,7 +147,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     // });
   });
 
-  const floatingStyles = createMemo(() => {
+  const floatingStyles = () => {
     const initialStyles = {
       position: strategy(),
       left: '0px',
@@ -174,7 +174,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
       left: `${x}px`,
       top: `${y}px`,
     };
-  });
+  };
 
   const refs = {
     reference,
@@ -204,7 +204,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
       return data().middlewareData;
     },
     get floatingStyles() {
-      return floatingStyles();
+      return floatingStyles;
     },
     get elements() {
       return {

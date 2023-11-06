@@ -1,3 +1,3 @@
-# @floating-ui/react-dom
+# @floating-ui/solid
 
-This is the library to use Floating UI with React DOM.
+This is the library to use Floating UI with SolidJS

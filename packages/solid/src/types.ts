@@ -100,24 +100,6 @@ export type UseFloatingReturn<R extends ReferenceType = ReferenceType> =
        * Object containing the reference and floating refs and reactive setters.
        */
       refs: ExtendedRefs<R>;
-      // {
-      //   /**
-      //    * A reactive reference element.
-      //    */
-      //   reference: Accessor<R | null>;
-      //   /**
-      //    * A reactive floating element.
-      //    */
-      //   floating: Accessor<F | null>;
-      //   /**
-      //    * A callback to set the reference element (reactive).
-      //    */
-      //   setReference: (node: R | null) => void;
-      //   /**
-      //    * A callback to set the floating element (reactive).
-      //    */
-      //   setFloating: (node: F | null) => void;
-      // };
       context: Accessor<FloatingContext<R>>;
       elements: ExtendedElements<R>;
     }

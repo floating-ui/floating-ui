@@ -1,5 +1,18 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
+  MaybeAccessor,
+  MaybeAccessorValue,
+  isProd,
+} from '@solid-primitives/utils';
+import {
+  Accessor,
+  createEffect,
+  createMemo,
+  createSignal,
+  mergeProps,
+  onMount,
+} from 'solid-js';
+import {
   activeElement,
   contains,
   getDocument,
@@ -9,15 +22,6 @@ import {
   isVirtualPointerEvent,
   stopEvent,
 } from '../utils';
-import {MaybeAccessor, MaybeAccessorValue} from '@solid-primitives/utils';
-import {
-  Accessor,
-  createEffect,
-  createMemo,
-  createSignal,
-  mergeProps,
-  onMount,
-} from 'solid-js';
 
 import {
   useFloatingNodeId,
@@ -199,12 +203,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: Accessor<FloatingContext<RT>>,
   props: UseListNavigationProps,
 ): Accessor<ElementProps> {
-  const {
-    open,
-    onOpenChange,
-    refs,
-    // elements: {domReference, floating},
-  } = context();
+  const {open, onOpenChange, refs} = context();
   const mergedProps = mergeProps(
     {
       onNavigate: () => {},
@@ -248,7 +247,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
   const {onNavigate: unstable_onNavigate} = mergedProps;
 
-  if (import.meta.env.DEV) {
+  if (!isProd) {
     if (allowEscape()) {
       if (!loop()) {
         console.warn(

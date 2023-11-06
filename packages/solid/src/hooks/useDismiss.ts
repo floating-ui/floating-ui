@@ -18,6 +18,7 @@ import {
 import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
+  batch,
   createEffect,
   createMemo,
   createSignal,
@@ -310,10 +311,10 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
     const {floating, reference} = context().refs;
     const domReference = reference() as Node | null;
-
-    context().dataRef.__escapeKeyBubbles = escapeKeyBubbles;
-    context().dataRef.__outsidePressBubbles = outsidePressBubbles;
-
+    batch(() => {
+      context().dataRef.__escapeKeyBubbles = escapeKeyBubbles;
+      context().dataRef.__outsidePressBubbles = outsidePressBubbles;
+    });
     const doc = getDocument(floating());
     escapeKey() && doc.addEventListener('keydown', closeOnEscapeKeyDown);
     outsidePress &&

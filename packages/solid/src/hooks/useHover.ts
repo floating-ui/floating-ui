@@ -93,7 +93,6 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   const {handleClose} = mergedProps;
   const handleCloseRef = handleClose;
   const tree = useUnsafeFloatingTree<RT>();
-  // const tree = useFloatingTree();
   const parentId = useFloatingParentNodeId();
 
   let pointerTypeRef: string | undefined;
@@ -354,7 +353,6 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   createEffect(() => {
     //subscribe
     refs.reference();
-    // context().elements.domReference();
     //end of subscribe
     cleanupMouseMoveHandler();
     clearTimeout(timeoutRef);
