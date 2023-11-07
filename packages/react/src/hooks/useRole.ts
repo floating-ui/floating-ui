@@ -7,6 +7,7 @@ export interface UseRoleProps {
   enabled?: boolean;
   role?:
     | 'tooltip'
+    | 'label'
     | 'dialog'
     | 'alertdialog'
     | 'menu'
@@ -30,16 +31,19 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
   const referenceId = useId();
 
   return React.useMemo(() => {
-    const floatingProps = {id: floatingId, role};
+    if (!enabled) return {};
 
-    if (!enabled) {
-      return {};
-    }
+    const floatingProps = {
+      id: floatingId,
+      ...(role !== 'label' && {role}),
+    };
 
-    if (role === 'tooltip') {
+    if (role === 'tooltip' || role === 'label') {
       return {
         reference: {
-          'aria-describedby': open ? floatingId : undefined,
+          [`aria-${role === 'label' ? 'labelledby' : 'describedby'}`]: open
+            ? floatingId
+            : undefined,
         },
         floating: floatingProps,
       };
