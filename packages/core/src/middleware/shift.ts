@@ -1,11 +1,16 @@
-import {clamp, evaluate} from '@floating-ui/utils';
+import {
+  clamp,
+  evaluate,
+  getOppositeAxis,
+  getSide,
+  getSideAxis,
+} from '@floating-ui/utils';
 
 import {
   detectOverflow,
   Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
-import {getOppositeAxis, getSide, getSideAxis} from '../utils';
 
 export type ShiftOptions = Partial<
   DetectOverflowOptions & {
