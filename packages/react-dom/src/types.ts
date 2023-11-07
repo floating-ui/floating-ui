@@ -5,7 +5,7 @@ import type {
 } from '@floating-ui/dom';
 import * as React from 'react';
 
-export {arrow, Options as ArrowOptions} from './arrow';
+export {arrow, ArrowOptions} from './arrow';
 export {useFloating} from './useFloating';
 export type {
   AlignedPlacement,
