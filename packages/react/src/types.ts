@@ -116,9 +116,9 @@ export interface ExtendedRefs<RT> {
   reference: React.MutableRefObject<ReferenceType | null>;
   floating: React.MutableRefObject<HTMLElement | null>;
   domReference: React.MutableRefObject<NarrowedElement<RT> | null>;
-  setReference: (node: RT | null) => void;
-  setFloating: (node: HTMLElement | null) => void;
-  setPositionReference: (node: ReferenceType | null) => void;
+  setReference(node: RT | null): void;
+  setFloating(node: HTMLElement | null): void;
+  setPositionReference(node: ReferenceType | null): void;
 }
 
 export interface ExtendedElements<RT> {
@@ -163,8 +163,8 @@ export interface FloatingNodeType<RT extends ReferenceType = ReferenceType> {
 export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
   nodesRef: React.MutableRefObject<Array<FloatingNodeType<RT>>>;
   events: FloatingEvents;
-  addNode: (node: FloatingNodeType) => void;
-  removeNode: (node: FloatingNodeType) => void;
+  addNode(node: FloatingNodeType): void;
+  removeNode(node: FloatingNodeType): void;
 }
 
 export interface ElementProps {
@@ -188,10 +188,26 @@ export type UseFloatingReturn<RT extends ReferenceType = ReferenceType> =
 
 export interface UseFloatingOptions<RT extends ReferenceType = ReferenceType>
   extends Omit<UsePositionOptions<RT>, 'elements'> {
+  /**
+   * Object of external elements as an alternative to the `refs` object setters.
+   */
   elements?: {
+    /**
+     * Externally passed reference element. Store in state.
+     */
     reference?: Element | null;
+    /**
+     * Externally passed floating element. Store in state.
+     */
     floating?: HTMLElement | null;
   };
+  /**
+   * An event callback that is invoked when the floating element is opened or
+   * closed.
+   */
   onOpenChange?(open: boolean, event?: Event, reason?: OpenChangeReason): void;
+  /**
+   * Unique node id when using `FloatingTree`.
+   */
   nodeId?: string;
 }

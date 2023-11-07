@@ -1,7 +1,8 @@
-import {arrow as arrowCore, Middleware, MiddlewareState, Padding} from '@floating-ui/dom';
+import type {Derivable, Middleware, Padding} from '@floating-ui/core';
+import {arrow as arrowCore} from '@floating-ui/dom';
 import * as React from 'react';
 
-export interface Options {
+export interface ArrowOptions {
   /**
    * The arrow element to be positioned.
    * @default undefined
@@ -22,7 +23,7 @@ export interface Options {
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (
-  options: Options | ((state: MiddlewareState) => Options)
+  options: ArrowOptions | Derivable<ArrowOptions>
 ): Middleware => {
   function isRef(value: unknown): value is React.MutableRefObject<unknown> {
     return {}.hasOwnProperty.call(value, 'current');

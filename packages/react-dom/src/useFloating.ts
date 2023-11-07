@@ -17,7 +17,7 @@ import {useLatestRef} from './utils/useLatestRef';
 
 /**
  * Provides data to position a floating element.
- * @see https://floating-ui.com/docs/react
+ * @see https://floating-ui.com/docs/useFloating
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: UseFloatingOptions = {}
