@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.26.1",
+  "version": "0.26.2",
   "description": "Floating UI for React",
   "publishConfig": {
     "access": "public"
@@ -68,7 +68,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^2.0.2",
+    "@floating-ui/react-dom": "^2.0.3",
     "@floating-ui/utils": "^0.1.5",
     "tabbable": "^6.0.1"
   },
