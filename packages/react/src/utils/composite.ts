@@ -61,9 +61,8 @@ export function findNonDisabledIndex(
     };
 
   let index = startingIndex;
-  amount = decrement ? -amount : amount;
   do {
-    index = index + amount;
+    index += decrement ? -amount : amount;
   } while (
     index >= 0 &&
     index <= list.length - 1 &&
