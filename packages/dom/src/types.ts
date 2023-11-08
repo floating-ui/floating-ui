@@ -286,19 +286,5 @@ export type {
   SideObject,
   Strategy,
 } from '@floating-ui/core';
-export {
-  alignments,
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
-  getOppositeAlignmentPlacement,
-  getOppositeAxis,
-  getOppositeSidePlacement,
-  getSide,
-  getSideAxis,
-  offset,
-  placements,
-  rectToClientRect,
-  sides,
-} from '@floating-ui/core';
+export {offset} from '@floating-ui/core';
 export {getOverflowAncestors} from '@floating-ui/utils/dom';

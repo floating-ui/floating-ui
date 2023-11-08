@@ -1,4 +1,4 @@
-import type {Platform} from '../types';
+import {Platform} from '../types';
 import {getRectRelativeToOffsetParent} from '../utils/getRectRelativeToOffsetParent';
 import {getOffsetParent} from './getOffsetParent';
 

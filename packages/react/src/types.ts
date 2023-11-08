@@ -79,20 +79,6 @@ export {
   shift,
   size,
 } from '@floating-ui/react-dom';
-export {
-  alignments,
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
-  getOppositeAlignmentPlacement,
-  getOppositeAxis,
-  getOppositeSidePlacement,
-  getSide,
-  getSideAxis,
-  placements,
-  rectToClientRect,
-  sides,
-} from '@floating-ui/react-dom';
 
 type Prettify<T> = {
   [K in keyof T]: T[K];

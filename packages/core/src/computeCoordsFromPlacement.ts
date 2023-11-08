@@ -1,11 +1,12 @@
-import type {Coords, ElementRects, Placement} from './types';
 import {
   getAlignment,
   getAlignmentAxis,
   getAxisLength,
   getSide,
   getSideAxis,
-} from './utils';
+} from '@floating-ui/utils';
+
+import type {Coords, ElementRects, Placement} from './types';
 
 export function computeCoordsFromPlacement(
   {reference, floating}: ElementRects,
