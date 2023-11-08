@@ -1,19 +1,20 @@
+import '@testing-library/jest-dom';
+
 import {fireEvent, render, screen} from '@solidjs/testing-library';
-// import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 import {
   Accessor,
-  JSX,
-  ParentProps,
-  Show,
   createContext,
   createMemo,
   createSignal,
+  JSX,
+  ParentProps,
+  Show,
   useContext,
 } from 'solid-js';
+
 import {
-  FloatingList,
   createFloatingListContext,
+  FloatingList,
   useClick,
   useFloating,
   useInteractions,
@@ -24,9 +25,8 @@ import {
 import {promiseRequestAnimationFrame} from '../helper';
 
 const SelectContext = createContext<{
-  getItemProps: (
-    userProps?: JSX.HTMLAttributes<HTMLElement> | undefined,
-  ) => Record<string, unknown>;
+  getItemProps: () // userProps?: JSX.HTMLAttributes<HTMLElement> | undefined,
+  => Record<string, unknown>;
   activeIndex: Accessor<number | null>;
 } | null>(null);
 
@@ -85,9 +85,6 @@ function Option(props: {children: JSX.Element; label?: string}) {
   const context = useContext(SelectContext);
   const listContext = useListItem(ref);
 
-  // onMount(() => listContext.register(ref()!));
-  // onCleanup(() => listContext.unregister(ref()!));
-
   const isActive = createMemo(() => {
     const itemIndex = listContext.getItemIndex(ref());
     if (!itemIndex) return false;
@@ -105,8 +102,6 @@ function Option(props: {children: JSX.Element; label?: string}) {
     </div>
   );
 }
-
-const user = userEvent.setup();
 
 test('registers element ref and indexes correctly', async () => {
   render(() => (

@@ -1,5 +1,5 @@
 import {MaybeAccessor} from '@solid-primitives/utils';
-import {Accessor, createMemo, createUniqueId, mergeProps} from 'solid-js';
+import {Accessor, createUniqueId, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {destructure} from '../utils/destructure';

@@ -1,4 +1,3 @@
-import {isSafari} from '../utils';
 import {
   Component,
   createMemo,
@@ -8,6 +7,7 @@ import {
   onMount,
 } from 'solid-js';
 
+import {isSafari} from '../utils';
 import {createAttribute} from '../utils/createAttribute';
 
 // See Diego Haz's Sandbox for making this logic work well on Safari/iOS:

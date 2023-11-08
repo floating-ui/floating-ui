@@ -1,15 +1,8 @@
 import '@testing-library/jest-dom';
 
-import {
-  cleanup,
-  createEvent,
-  fireEvent,
-  render,
-  screen,
-} from '@solidjs/testing-library';
+import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
 import userEvent from '@testing-library/user-event';
 import {createSignal, JSXElement, Show, splitProps} from 'solid-js';
-import {Portal} from 'solid-js/web';
 import {vi} from 'vitest';
 
 import {
@@ -267,7 +260,7 @@ describe('false', () => {
   });
 
   test('does not dismiss when clicking portaled children', async () => {
-    function App(props: any) {
+    function App(props: {pointerDown: () => void}) {
       const [open, setOpen] = createSignal(true);
       const {refs, context} = useFloating({
         open,
@@ -290,7 +283,7 @@ describe('false', () => {
               <FloatingPortal>
                 <button
                   data-testid="portaled-button"
-                  // onPointerDown={props.pointerDown}
+                  onPointerDown={() => props.pointerDown()}
                 >
                   Portaled-Button
                 </button>

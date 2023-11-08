@@ -1,9 +1,9 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
-import {isMouseLikePointerType, isTypeableElement} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {Accessor, mergeProps} from 'solid-js';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {isMouseLikePointerType, isTypeableElement} from '../utils';
 import {destructure} from '../utils/destructure';
 
 function isButtonTarget(event: KeyboardEvent) {
@@ -30,7 +30,7 @@ export function useClick<RT extends ReferenceType = ReferenceType>(
   context: Accessor<FloatingContext<RT>>,
   props: UseClickProps = {},
 ): Accessor<ElementProps> {
-  const {open, onOpenChange, dataRef, refs} = context();
+  const {open, onOpenChange, refs} = context();
   const mergedProps = mergeProps(
     {
       enabled: true,

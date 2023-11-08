@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 import path from 'path';
-import solidPlugin from 'vite-plugin-solid';
 import {defineConfig} from 'vite';
+import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
   server: {
@@ -32,7 +32,7 @@ export default defineConfig({
       '@floating-ui/vue': path.resolve(__dirname, '../vue/src/index.ts'),
     },
   },
-
+  optimizeDeps: {include: ['solid-js']},
   define: {
     __DEV__: true,
   },

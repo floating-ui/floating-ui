@@ -12,10 +12,7 @@ import {
 } from 'solid-js';
 import {createMutable} from 'solid-js/store';
 
-import {
-  useFloatingTree,
-  useUnsafeFloatingTree,
-} from '../components/FloatingTree';
+import {useUnsafeFloatingTree} from '../components/FloatingTree';
 import {
   ContextData,
   FloatingContext,
@@ -41,7 +38,8 @@ export function useFloating<R extends ReferenceElement>(
   let domReferenceRef: NarrowedElement<R> | null = null;
 
   const events = createPubSub();
-  const position = usePosition(mergeProps({transform: true}, options));
+  const positionProps = mergeProps({transform: true}, options);
+  const position = usePosition(positionProps);
 
   const dataRef = createMutable<ContextData>({
     openEvent: undefined,
@@ -50,6 +48,7 @@ export function useFloating<R extends ReferenceElement>(
 
   const onOpenChange = (open: boolean, event?: Event) => {
     if (open) {
+      // eslint-disable-next-line solid/reactivity
       dataRef.openEvent = event;
     }
     options?.onOpenChange?.(open, event);
@@ -87,6 +86,14 @@ export function useFloating<R extends ReferenceElement>(
   };
 
   const context = createMemo(() => {
+    const refs = mergeProps(
+      {
+        domReference: domReference(),
+      },
+      position.refs,
+    );
+    const elements = mergeProps({domReference}, position.elements);
+    // eslint-disable-next-line solid/reactivity
     return mergeProps(
       {
         dataRef, //: mergeProps(dataRef, position),
@@ -97,15 +104,7 @@ export function useFloating<R extends ReferenceElement>(
         onOpenChange,
       },
       position,
-      {
-        refs: mergeProps(
-          {
-            domReference: domReference(),
-          },
-          position.refs,
-        ),
-        elements: mergeProps({domReference}, position.elements),
-      },
+      {refs, elements},
     );
   });
 
@@ -151,11 +150,12 @@ export function useFloating<R extends ReferenceElement>(
       };
     },
     get refs() {
-      return mergeProps(position.refs, {
+      const refs = mergeProps(position.refs, {
         setReference,
         setPositionReference,
         domReference: domReferenceRef,
       });
+      return refs;
     },
     get context() {
       return context;

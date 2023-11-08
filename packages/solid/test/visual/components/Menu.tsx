@@ -1,5 +1,4 @@
 import {autoUpdate, flip, offset, shift} from '@floating-ui/dom';
-// import {ChevronRightIcon} from '@radix-ui/react-icons';
 import {
   Accessor,
   Component,
@@ -37,10 +36,8 @@ import {
   useListNavigation,
   useRole,
   useTypeahead,
-  useUnsafeListItem,
 } from '../../../src';
-
-const MenuContext = createContext<{
+interface IContext {
   getItemProps: (
     userProps?: ComponentProps<'HTMLElement'>,
   ) => Record<string, unknown>;
@@ -50,7 +47,9 @@ const MenuContext = createContext<{
   allowHover: Accessor<boolean>;
   isOpen: Accessor<boolean>;
   isTyping: Accessor<boolean>;
-}>({
+}
+
+const MenuContext = createContext<IContext>({
   getItemProps: () => ({}),
   activeIndex: () => null,
   setActiveIndex: () => {},
@@ -125,20 +124,17 @@ export const MenuComponent: ParentComponent<
   const listRef = createMemo(() =>
     floatingListContext
       .items()
-      .map((o, i) => (o.hasAttribute('disabled') ? '' : o.textContent ?? '')),
+      .map((o) => (o.hasAttribute('disabled') ? '' : o.textContent ?? '')),
   );
   // const [isTyping, setIsTyping] = createSignal(false);
   const typeahead = useTypeahead(context, {
     listRef,
-    onMatch: (i: number) => (isOpen() ? setActiveIndex(i) : undefined),
-    // onMatch: setActiveIndex,
-
+    onMatch: setActiveIndex,
     activeIndex,
-    // onTypingChange: setIsTyping,
   });
 
   const listNavigation = useListNavigation(context, {
-    enabled: () => !parent.isTyping(), //disable if typing on parent
+    enabled: () => !parent?.isTyping(), //disable if typing on parent
     listRef: floatingListContext.items, //elementsRef,
     activeIndex,
     nested: isNested,
@@ -211,10 +207,7 @@ export const MenuComponent: ParentComponent<
   return (
     <FloatingNode id={nodeId}>
       <button
-        ref={(el) => {
-          refs.setReference(el);
-          props.ref && (props.ref = el);
-        }}
+        ref={refs.setReference}
         data-open={isOpen() ? '' : undefined}
         tabIndex={
           !isNested
@@ -279,7 +272,7 @@ export const MenuComponent: ParentComponent<
               <path
                 fill-rule="evenodd"
                 d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-              ></path>
+              />
             </svg>
           </span>
         </Show>
@@ -299,7 +292,7 @@ export const MenuComponent: ParentComponent<
           <Show when={isOpen()}>
             <FloatingPortal>
               <FloatingFocusManager
-                context={context()}
+                context={context}
                 modal={false}
                 initialFocus={isNested ? -1 : 0}
                 returnFocus={!isNested}
@@ -308,7 +301,7 @@ export const MenuComponent: ParentComponent<
                   data-testId="floating"
                   ref={refs.setFloating}
                   class="flex flex-col p-1 bg-white border rounded shadow-lg outline-none border-slate-900/10 bg-clip-padding"
-                  style={floating.floatingStyles}
+                  style={floating.floatingStyles()}
                   {...getFloatingProps()}
                 >
                   {_local.children}
@@ -347,6 +340,7 @@ export const MenuItem: Component<ComponentProps<'button'> & MenuItemProps> = (
     <button
       {...props}
       ref={(el) => {
+        // eslint-disable-next-line solid/reactivity
         props.ref && (props.ref = el);
         ref = el;
       }}

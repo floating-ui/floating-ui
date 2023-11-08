@@ -95,6 +95,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
         placement: placement(),
         strategy: strategy(),
       }).then(
+        // eslint-disable-next-line solid/reactivity
         (currentData) => {
           // Check if it's still valid
           const x = roundByDPR(currentFloating, currentData.x);
@@ -103,6 +104,7 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
             setData({...currentData, x, y, isPositioned: true});
           }
         },
+        // eslint-disable-next-line solid/reactivity
         (err) => {
           console.log({
             floating: floating()?.id,

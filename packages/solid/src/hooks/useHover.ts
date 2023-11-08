@@ -1,5 +1,4 @@
 import {isElement} from '@floating-ui/utils/dom';
-
 import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
@@ -19,9 +18,9 @@ import type {
   FloatingTreeType,
   ReferenceType,
 } from '../types';
+import {contains, getDocument, isMouseLikePointerType} from '../utils';
 import {createAttribute} from '../utils/createAttribute';
 import {destructure} from '../utils/destructure';
-import {contains, getDocument, isMouseLikePointerType} from '../utils';
 
 const safePolygonIdentifier = createAttribute('safe-polygon');
 
@@ -90,6 +89,8 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   const {enabled, mouseOnly, restMs, move, delay} = destructure(mergedProps, {
     normalize: true,
   });
+
+  // eslint-disable-next-line solid/reactivity
   const {handleClose} = mergedProps;
   const handleCloseRef = handleClose;
   const tree = useUnsafeFloatingTree<RT>();
@@ -138,9 +139,9 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
 
     const html = getDocument(refs.floating()).documentElement;
-    html.addEventListener('mouseleave', onLeave);
+    html?.addEventListener('mouseleave', onLeave);
     onCleanup(() => {
-      html.removeEventListener('mouseleave', onLeave);
+      html?.removeEventListener('mouseleave', onLeave);
     });
   });
 
@@ -364,14 +365,14 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     pointerTypeRef = event.pointerType;
   }
 
-  return createMemo(() => {
+  const userProps = createMemo(() => {
     if (!enabled()) return {};
 
     return {
       reference: {
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
-        onMouseMove(event) {
+        onMouseMove(event: MouseEvent) {
           if (open() || restMs() === 0) {
             return;
           }
@@ -387,7 +388,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         onMouseEnter() {
           clearTimeout(timeoutRef);
         },
-        onMouseLeave(event) {
+        onMouseLeave(event: MouseEvent) {
           context().events.emit('dismiss', {
             type: 'mouseLeave',
             data: {
@@ -399,4 +400,5 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       },
     };
   });
+  return userProps;
 }

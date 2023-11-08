@@ -1,5 +1,23 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
+  Accessor,
+  createEffect,
+  createMemo,
+  createSignal,
+  JSX,
+  mergeProps,
+  onCleanup,
+  onMount,
+  ParentComponent,
+  ParentProps,
+  Show,
+  splitProps,
+} from 'solid-js';
+import {FocusableElement, tabbable} from 'tabbable';
+
+import type {DismissPayload} from '../hooks/useDismiss';
+import type {FloatingContext, ReferenceType} from '../types';
+import {
   activeElement,
   contains,
   getDocument,
@@ -7,24 +25,6 @@ import {
   isTypeableElement,
   stopEvent,
 } from '../utils';
-import {
-  Accessor,
-  JSX,
-  ParentComponent,
-  ParentProps,
-  Show,
-  createEffect,
-  createMemo,
-  createSignal,
-  mergeProps,
-  onCleanup,
-  onMount,
-  splitProps,
-} from 'solid-js';
-import {FocusableElement, tabbable} from 'tabbable';
-
-import type {DismissPayload} from '../hooks/useDismiss';
-import type {FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {destructure} from '../utils/destructure';
 import {enqueueFocus} from '../utils/enqueueFocus';

@@ -1,3 +1,3 @@
-// import '@testing-library/jest-dom';
+import '@testing-library/jest-dom';
 HTMLElement.prototype.inert = true;
 console.log('Setup successfull');

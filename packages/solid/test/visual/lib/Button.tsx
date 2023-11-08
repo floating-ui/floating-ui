@@ -1,4 +1,4 @@
-import {JSX, ParentProps, mergeProps, splitProps} from 'solid-js';
+import {JSX, ParentProps, splitProps} from 'solid-js';
 
 export const Button = (
   props: ParentProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>,

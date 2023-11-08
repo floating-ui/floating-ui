@@ -34,6 +34,7 @@
     }
   },
   "scripts": {
+    "lint": "eslint --fix --ext .ts,.tsx .",
     "test": "vitest",
     "build": "NODE_ENV=build rollup -c",
     "build-watch": "NODE_ENV=build rollup --watch -c ./rollup.config.js"
@@ -65,7 +66,7 @@
     "@floating-ui/utils": "^0.1.6",
     "@solid-primitives/map": "^0.4.8",
     "@solid-primitives/utils": "^6.2.1",
-    "style-to-object": "^0.4.4",
+    "style-to-object": "^1.0.0",
     "tabbable": "^6.2.0"
   },
   "devDependencies": {
@@ -73,6 +74,7 @@
     "@babel/preset-typescript": "^7.23.2",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@solid-primitives/media": "^2.2.5",
+    "@solid-primitives/refs": "^1.0.5",
     "@solidjs/testing-library": "^0.8.4",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/user-event": "^14.5.1",
@@ -84,9 +86,9 @@
     "jsdom": "^22.1.0",
     "rollup-plugin-summary": "^2.0.0",
     "rollup-preset-solid": "^2.0.1",
-    "solid-js": "^1.8.3",
+    "solid-js": "^1.8.5",
     "vite": "^4.5.0",
-    "vite-plugin-solid": "^2.7.2",
-    "vitest": "^0.34.6"
+    "vite-plugin-solid": "^2.7.0",
+    "vitest": "0.34.2"
   }
 }

@@ -1,13 +1,12 @@
 import '@testing-library/jest-dom';
 
 import {isElement} from '@floating-ui/utils/dom';
-import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
+import {render, screen} from '@solidjs/testing-library';
 import userEvent from '@testing-library/user-event';
 import {createEffect, createSignal, Show} from 'solid-js';
 import {vi} from 'vitest';
 
 import {
-  ReferenceElement,
   useClick,
   useDismiss,
   useFloating,
@@ -15,7 +14,6 @@ import {
   useHover,
   useInteractions,
 } from '../../src';
-import {promiseRequestAnimationFrame} from '../helper';
 
 describe('positionReference', () => {
   test('sets separate refs', () => {

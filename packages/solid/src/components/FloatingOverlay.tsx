@@ -1,4 +1,3 @@
-import {getPlatform} from '../utils';
 import {
   createEffect,
   JSX,
@@ -8,6 +7,7 @@ import {
   splitProps,
 } from 'solid-js';
 
+import {getPlatform} from '../utils';
 import {createAttribute} from '../utils/createAttribute';
 
 const identifier = createAttribute('scroll-lock');

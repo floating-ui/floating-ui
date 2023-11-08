@@ -1,8 +1,8 @@
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import {
+  isProd,
   MaybeAccessor,
   MaybeAccessorValue,
-  isProd,
 } from '@solid-primitives/utils';
 import {
   Accessor,
@@ -12,6 +12,13 @@ import {
   mergeProps,
   onMount,
 } from 'solid-js';
+
+import {
+  useFloatingNodeId,
+  useFloatingParentNodeId,
+  useUnsafeFloatingTree,
+} from '../components/FloatingTree';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {
   activeElement,
   contains,
@@ -22,17 +29,8 @@ import {
   isVirtualPointerEvent,
   stopEvent,
 } from '../utils';
-
-import {
-  useFloatingNodeId,
-  useFloatingParentNodeId,
-  useUnsafeFloatingTree,
-} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {destructure} from '../utils/destructure';
 import {enqueueFocus} from '../utils/enqueueFocus';
-// import {useEffectEvent} from './utils/useEffectEvent';
-// import {useLatestRef} from './utils/useLatestRef';
 
 let isPreventScrollSupported = false;
 
@@ -191,6 +189,7 @@ export interface UseListNavigationProps {
   virtual?: MaybeAccessor<boolean>;
   orientation?: MaybeAccessor<'vertical' | 'horizontal' | 'both'>;
   cols?: MaybeAccessor<number>;
+  // eslint-disable-next-line no-undef
   scrollItemIntoView?: MaybeAccessor<boolean | ScrollIntoViewOptions>;
 }
 
@@ -245,6 +244,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     scrollItemIntoView,
   } = destructure(mergedProps, {normalize: true});
 
+  // eslint-disable-next-line solid/reactivity
   const {onNavigate: unstable_onNavigate} = mergedProps;
 
   if (!isProd) {
@@ -851,14 +851,13 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     }
   }
 
-  const ariaActiveDescendantProp = virtual() &&
-    open() &&
-    hasActiveIndex() && {
-      'aria-activedescendant': activeId(),
-    };
-
-  return createMemo(() => {
+  const userProps = createMemo(() => {
     if (!enabled()) return {};
+    const ariaActiveDescendantProp = virtual() &&
+      open() &&
+      hasActiveIndex() && {
+        'aria-activedescendant': activeId(),
+      };
     return {
       reference: {
         'aria-placeholder': id,
@@ -967,4 +966,5 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       item: item(),
     };
   });
+  return userProps;
 }

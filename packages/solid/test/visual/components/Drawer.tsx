@@ -1,12 +1,5 @@
 import {createMediaQuery} from '@solid-primitives/media';
-import {
-  Accessor,
-  createMemo,
-  createSignal,
-  createUniqueId,
-  JSX,
-  Show,
-} from 'solid-js';
+import {createMemo, createSignal, createUniqueId, JSX, Show} from 'solid-js';
 
 import {
   FloatingFocusManager,
@@ -42,7 +35,7 @@ export const Main = (props: Partial<Props>) => {
           <Button>My button</Button>
         </Drawer>
         <Button>Next button</Button>
-        <div id="drawer-root"></div>
+        <div id="drawer-root" />
       </div>
     </>
   );
@@ -82,7 +75,7 @@ export function Drawer(props: Props) {
 
   const Content = () => (
     <FloatingFocusManager
-      context={context()}
+      context={context}
       modal={modal()}
       closeOnFocusOut={modal()}
     >

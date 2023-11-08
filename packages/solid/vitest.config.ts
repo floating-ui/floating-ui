@@ -5,9 +5,9 @@ import {defineConfig} from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 
 export default defineConfig({
-  plugins: [solidPlugin({})],
+  plugins: [solidPlugin()],
   ssr: {
-    noExternal: ['solid-js'],
+    noExternal: ['solid-js', '@solid'],
   },
   server: {
     port: 3001,
@@ -40,6 +40,7 @@ export default defineConfig({
   // define: {
   //   __DEV__: true,
   // },
+  optimizeDeps: {include: ['solid-js', '@solid*']},
   test: {
     environment: 'jsdom',
 
@@ -47,7 +48,7 @@ export default defineConfig({
     testTransformMode: {web: ['/.[jt]sx?$/']},
     // transformMode: {web: [/.[jt]sx?$/]},
     deps: {
-      inline: [/solid-js/],
+      inline: [/solid-js/, /@solid/],
     },
   },
 });

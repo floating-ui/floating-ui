@@ -139,32 +139,31 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
       duration: 250,
     } as JSX.CSSProperties,
     props,
-  );
-  // const {
-  //   initial: unstable_initial,
-  //   open: unstable_open,
-  //   close: unstable_close,
-  //   common: unstable_common,
-  //   duration,
-  // } = props;
-
+  ) as Required<UseTransitionStylesProps>;
   const fnArgs = createMemo(() => {
     const placement = context().placement;
     const side = placement.split('-')[0] as Side;
     return {side, placement};
   });
 
-  const {duration} = mergedProps;
-  const isNumberDuration = typeof duration === 'number';
-  const openDuration = (isNumberDuration ? duration : duration?.open) || 0;
-  const closeDuration = (isNumberDuration ? duration : duration?.close) || 0;
+  const durations = createMemo(() => {
+    const duration = mergedProps.duration;
+    const isNumberDuration = typeof duration === 'number';
+    const openDuration = (isNumberDuration ? duration : duration?.open) || 0;
+    const closeDuration = (isNumberDuration ? duration : duration?.close) || 0;
+    return {openDuration, closeDuration};
+  });
 
   const [styles, setStyles] = createStore<JSX.CSSProperties>({
+    // eslint-disable-next-line solid/reactivity
     ...execWithArgsOrReturn(mergedProps.common, fnArgs()),
+    // eslint-disable-next-line solid/reactivity
     ...execWithArgsOrReturn(mergedProps.initial, fnArgs()),
   });
 
-  const {isMounted, status} = useTransitionStatus(context, {duration});
+  const {isMounted, status} = useTransitionStatus(context, {
+    duration: mergedProps.duration,
+  });
 
   createEffect(() => {
     const initialRef = mergedProps.initial;
@@ -195,7 +194,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
         'transition-property':
           openStyles &&
           Object.keys(openStyles).map(camelCaseToKebabCase).join(','),
-        'transition-duration': `${openDuration}ms`,
+        'transition-duration': `${durations().openDuration}ms`,
         ...commonStyles,
         ...openStyles,
       });
@@ -206,7 +205,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
       setStyles({
         'transition-property':
           styles && Object.keys(styles).map(camelCaseToKebabCase).join(','),
-        'transition-duration': `${closeDuration}ms`,
+        'transition-duration': `${durations().closeDuration}ms`,
         ...commonStyles,
         ...styles,
       });

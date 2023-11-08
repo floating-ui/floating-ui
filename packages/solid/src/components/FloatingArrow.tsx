@@ -1,6 +1,6 @@
 import {platform} from '@floating-ui/dom';
 import {Component, createMemo, createUniqueId, JSX, splitProps} from 'solid-js';
-import styleToObject from 'style-to-object';
+import parse from 'style-to-object';
 
 // import {useId} from '../hooks/useId';
 import type {Alignment, Side, UseFloatingReturn} from '../types';
@@ -78,6 +78,7 @@ export const FloatingArrow: Component<
   props,
 ) => {
   if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line solid/reactivity
     if (!props.ref) {
       console.warn(
         'Floating UI: The `ref` prop is required for the `FloatingArrow`',
@@ -98,14 +99,12 @@ export const FloatingArrow: Component<
   ]);
   const clipPathId = createUniqueId();
 
-  if (!local.context.refs.floating()) {
-    return null;
-  }
-
   // Strokes must be double the border width, this ensures the stroke's width
   // works as you'd expect.
   const calculated = createMemo(() => {
     //initial values and default values
+
+    // eslint-disable-next-line solid/reactivity
     const {context, staticOffset} = local;
     const placement = context.placement;
 
@@ -115,9 +114,7 @@ export const FloatingArrow: Component<
     const tipRadius = local.tipRadius ?? 0;
     const arrow = context.middlewareData.arrow;
     const style =
-      typeof local.style === 'string'
-        ? styleToObject(local.style)
-        : local.style ?? {};
+      typeof local.style === 'string' ? parse(local.style) : local.style ?? {};
 
     const halfStrokeWidth = strokeWidth / 2;
 

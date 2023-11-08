@@ -1,3 +1,4 @@
+/* eslint-disable solid/reactivity */
 import {
   Accessor,
   createContext,
@@ -79,9 +80,9 @@ export const FloatingDelayGroup = (
       initialCurrentIdRef = null;
     }
   });
-
+  const context = mergeProps({setState}, state);
   return (
-    <FloatingDelayGroupContext.Provider value={mergeProps({setState}, state)}>
+    <FloatingDelayGroupContext.Provider value={context}>
       {props.children}
     </FloatingDelayGroupContext.Provider>
   );

@@ -1,14 +1,14 @@
 import '@testing-library/jest-dom';
 
-import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
+import {cleanup, render, screen} from '@solidjs/testing-library';
 import userEvent from '@testing-library/user-event';
-import {Accessor, createSignal, JSX, mergeProps, Show} from 'solid-js';
+import {Accessor, createSignal, For, JSX, mergeProps, Show} from 'solid-js';
 import {vi} from 'vitest';
 
 import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
 import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';
-import {Main} from '../visual/components/Menu';
 import {promiseRequestAnimationFrame} from '../helper';
+import {Main} from '../visual/components/Menu';
 
 vi.useFakeTimers();
 const user = userEvent.setup({advanceTimers: vi.advanceTimersByTime});
@@ -83,13 +83,12 @@ function Select(
   },
 ) {
   const [isOpen, setIsOpen] = createSignal(false);
-  const {getReferenceProps, getFloatingProps} = useImpl(
-    mergeProps(props, {
-      open: isOpen,
-      onOpenChange: setIsOpen,
-      addUseClick: () => true,
-    }),
-  );
+  const mergedProps = mergeProps(props, {
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    addUseClick: () => true,
+  });
+  const {getReferenceProps, getFloatingProps} = useImpl(mergedProps);
   return (
     <>
       <div tabIndex={0} {...getReferenceProps()} />
@@ -211,15 +210,17 @@ function App1(
 
       <Show when={open()}>
         <div {...getFloatingProps()}>
-          {props.list.map((value, i) => (
-            <div
-              role="option"
-              tabIndex={i === activeIndex() ? 0 : -1}
-              aria-selected={i === activeIndex()}
-            >
-              {value}
-            </div>
-          ))}
+          <For each={props.list}>
+            {(item, index) => (
+              <div
+                role="option"
+                tabIndex={index() === activeIndex() ? 0 : -1}
+                aria-selected={index() === activeIndex()}
+              >
+                {item}
+              </div>
+            )}
+          </For>
         </div>
       </Show>
     </>
@@ -286,7 +287,6 @@ test('Menu - skips disabled items and opens submenu on 2x space if no match', as
 
   expect(screen.getByRole('menu')).toBeInTheDocument();
   expect(screen.getByTestId('floating')).toBeInTheDocument();
-
   await userEvent.keyboard('c');
   await promiseRequestAnimationFrame();
 
@@ -314,18 +314,21 @@ test('Menu - skips disabled items and opens submenu on 2x space if no match', as
 
 test('Menu - resets once a match is no longer found', async () => {
   vi.useRealTimers();
-
+  const user = userEvent.setup();
   render(() => <Main />);
 
-  await userEvent.click(screen.getByText('Edit'));
-  await promiseRequestAnimationFrame();
-  expect(screen.getByRole('menu')).toBeInTheDocument();
+  await user.click(screen.getByText('Edit'));
 
-  await userEvent.keyboard('undr');
+  expect(screen.getByRole('menu')).toBeInTheDocument();
+  expect(screen.getByTestId('floating')).toBeInTheDocument();
+  expect(screen.getByText('Undo')).toBeInTheDocument();
+
+  await user.keyboard('undr');
   await promiseRequestAnimationFrame();
+
   expect(screen.getByText('Undo')).toHaveFocus();
 
-  await userEvent.keyboard('r');
+  await user.keyboard('r');
   await promiseRequestAnimationFrame();
   expect(screen.getByText('Redo')).toHaveFocus();
   cleanup();

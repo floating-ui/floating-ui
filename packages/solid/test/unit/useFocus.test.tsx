@@ -3,7 +3,6 @@ import '@testing-library/jest-dom';
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
 import userEvent from '@testing-library/user-event';
 import {createSignal, JSX, Show} from 'solid-js';
-import {Dynamic} from 'solid-js/web';
 import {vi} from 'vitest';
 
 import {
@@ -133,7 +132,7 @@ test('blurs when hitting an "inside" focus guard', async () => {
           data-testId="btn"
         />
         <Show when={open()}>
-          <FloatingFocusManager context={floating.context()}>
+          <FloatingFocusManager context={floating.context}>
             <div ref={floating.refs.setFloating} {...getFloatingProps()}>
               <button />
               <Tooltip>Tooltip</Tooltip>

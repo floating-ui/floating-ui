@@ -17,6 +17,7 @@ import {Portal} from 'solid-js/web';
 
 import type {ExtendedRefs} from '../types';
 import {createAttribute} from '../utils/createAttribute';
+import {destructure} from '../utils/destructure';
 import {
   disableFocusInside,
   enableFocusInside,
@@ -40,7 +41,7 @@ type PortalRefs = {
   afterOutsideRef: HTMLSpanElement | null;
 };
 const PortalContext = createContext<null | {
-  preserveTabOrder: boolean;
+  preserveTabOrder: Accessor<boolean>;
   portalNode: Accessor<HTMLElement | null>;
   setFocusManagerState: Setter<FocusManagerState>;
   refs: PortalRefs;
@@ -140,7 +141,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
   const [focusManagerState, setFocusManagerState] =
     createSignal<FocusManagerState>(null);
   const mergedProps = mergeProps({preserveTabOrder: true}, props);
-  // const {id, root, preserveTabOrder} = mergedProps;
+  const {preserveTabOrder} = destructure(mergedProps);
   const portalNode = useFloatingPortalNode({
     id: mergedProps.id,
     root: mergedProps.root,
@@ -172,11 +173,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
 
   // https://codesandbox.io/s/tabbable-portal-f4tng?file=/src/TabbablePortal.tsx
   createEffect(() => {
-    if (
-      !portalNode() ||
-      !mergedProps.preserveTabOrder ||
-      focusManagerState()?.modal
-    ) {
+    if (!portalNode() || !preserveTabOrder() || focusManagerState()?.modal) {
       return;
     }
 
@@ -209,7 +206,7 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
         setRefs,
         portalNode,
         setFocusManagerState,
-        preserveTabOrder: mergedProps.preserveTabOrder,
+        preserveTabOrder,
       }}
     >
       <Show when={shouldRenderGuards() && portalNode()}>
@@ -217,8 +214,9 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
           data-type="outside"
           ref={(el) => setRefs({beforeOutsideRef: el})}
           onFocus={(event) => {
-            if (isOutsideEvent(event, portalNode())) {
-              portalNode() && enableFocusInside(portalNode()!);
+            const node = portalNode();
+            if (isOutsideEvent(event, node)) {
+              node && enableFocusInside(node);
               refs.beforeInsideRef?.focus();
             } else {
               const prevTabbable =
@@ -241,8 +239,9 @@ export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
           ref={(el) => setRefs({afterOutsideRef: el})}
           onFocus={(event) => {
             if (isOutsideEvent(event, portalNode())) {
+              const node = portalNode();
               //Call that directly as it's not called through useEffect at the correct time
-              portalNode() && enableFocusInside(portalNode()!);
+              node && enableFocusInside(node);
               refs.afterInsideRef?.focus();
             } else {
               const nextTabbable =

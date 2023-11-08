@@ -1,5 +1,6 @@
-import {activeElement, contains, getDocument} from '../utils';
 import {tabbable} from 'tabbable';
+
+import {activeElement, contains, getDocument} from '../utils';
 
 export const getTabbableOptions = () =>
   ({

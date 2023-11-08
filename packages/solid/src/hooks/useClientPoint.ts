@@ -1,7 +1,5 @@
 import {getWindow} from '@floating-ui/utils/dom';
-import {contains, getTarget, isMouseLikePointerType} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
-import {cleanup} from '@solidjs/testing-library';
 import {
   Accessor,
   createEffect,
@@ -9,7 +7,6 @@ import {
   createSignal,
   mergeProps,
   onCleanup,
-  onMount,
 } from 'solid-js';
 
 import type {
@@ -18,6 +15,7 @@ import type {
   FloatingContext,
   ReferenceType,
 } from '../types';
+import {contains, getTarget, isMouseLikePointerType} from '../utils';
 import {destructure} from '../utils/destructure';
 
 function createVirtualElement(

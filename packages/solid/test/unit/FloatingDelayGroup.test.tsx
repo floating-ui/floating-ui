@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
-import {createSignal, createUniqueId, JSX, Show} from 'solid-js';
+import {createSignal, JSX, Show} from 'solid-js';
 import {vi} from 'vitest';
 
 import {
@@ -20,7 +20,6 @@ interface Props {
 
 function Tooltip(props: Props) {
   const delayContext = useDelayGroupContext();
-  const id = createUniqueId();
 
   const [isOpen, setIsOpen] = createSignal(false);
 

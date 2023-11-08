@@ -115,6 +115,7 @@ export function FloatingList(
   props: ParentProps<{context: TFloatingListContext}>,
 ) {
   return (
+    // eslint-disable-next-line solid/reactivity
     <FloatingListContext.Provider value={props.context}>
       {props.children}
     </FloatingListContext.Provider>

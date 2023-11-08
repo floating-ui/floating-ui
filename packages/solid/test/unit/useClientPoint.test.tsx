@@ -1,9 +1,7 @@
 import '@testing-library/jest-dom';
 
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
-import userEvent from '@testing-library/user-event';
-import {Accessor, createMemo, createSignal, Show} from 'solid-js';
-import {vi} from 'vitest';
+import {createMemo, createSignal, Show} from 'solid-js';
 
 import {Coords, useClientPoint, useFloating, useInteractions} from '../../src';
 import {promiseRequestAnimationFrame} from '../helper';
@@ -15,11 +13,7 @@ function expectLocation({x, y}: Coords) {
   expect(Number(screen.getByTestId('height')?.textContent)).toBe(0);
 }
 
-function App(props: {
-  enabled?: Accessor<boolean>;
-  point?: Coords;
-  axis?: 'both' | 'x' | 'y';
-}) {
+function App(props: {point?: Coords; axis?: 'both' | 'x' | 'y'}) {
   const [isOpen, setIsOpen] = createSignal(false);
   const [enabled, setEnabled] = createSignal(true);
   const {refs, context} = useFloating({
@@ -31,7 +25,7 @@ function App(props: {
     y: props.point?.y,
   });
   const clientPoint = useClientPoint(context, {
-    enabled: props.enabled,
+    enabled: enabled,
     x: coords().x,
     y: coords().y,
     axis: props.axis,
@@ -55,6 +49,7 @@ function App(props: {
       </div>
       <Show when={isOpen()}>
         <div
+          //@ts-ignore
           style={{'pointer-events': 'none'}}
           data-testid="floating"
           ref={refs.setFloating}

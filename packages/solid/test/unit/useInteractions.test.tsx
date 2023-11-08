@@ -56,6 +56,7 @@ test('does not error with undefined user supplied functions', () => {
     const {getReferenceProps} = useInteractions([{reference: {onClick() {}}}]);
     return null;
 
+    // eslint-disable-next-line no-unreachable
     expect(() =>
       // @ts-expect-error
       getReferenceProps({onClick: undefined}).onClick(),
@@ -105,50 +106,48 @@ test('does not break props that return values', () => {
 test('prop getters are memoized', () => {
   function App() {
     const [open, setOpen] = createSignal(false);
-    const [c, setCount] = createSignal(0);
-    c();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_c, setCount] = createSignal(0);
 
     const handleClose = () => () => {};
     handleClose.__options = {blockPointerEvents: true};
 
     const listRef: any[] = [];
-    const overflowRef = {top: 0, left: 0, bottom: 0, right: 0};
+    // const overflowRef = {top: 0, left: 0, bottom: 0, right: 0};
     const {context} = useFloating({open, onOpenChange: setOpen});
 
     // NOTE: if `ref`-related props are not memoized, this will cause
     // an infinite loop as they must be memoized externally (as done by React).
     // Other non-primitives like functions and arrays get memoized by the hooks.
-    const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
-      [
-        useHover(context, {handleClose}),
-        useFocus(context),
-        useClick(context),
-        useRole(context),
-        useDismiss(context),
-        useListNavigation(context, {
-          listRef,
-          activeIndex: 0,
-          onNavigate: () => {},
-          disabledIndices: [],
-        }),
-        useTypeahead(context, {
-          listRef: () => listRef,
-          activeIndex: 0,
-          ignoreKeys: [],
-          onMatch: () => {},
-          findMatch: () => '',
-        }),
-        // useInnerOffset(context, {
-        //   onChange: () => {},
-        //   overflowRef,
-        // }),
-      ],
-    );
+    useInteractions([
+      useHover(context, {handleClose}),
+      useFocus(context),
+      useClick(context),
+      useRole(context),
+      useDismiss(context),
+      useListNavigation(context, {
+        listRef,
+        activeIndex: 0,
+        onNavigate: () => {},
+        disabledIndices: [],
+      }),
+      useTypeahead(context, {
+        listRef: () => listRef,
+        activeIndex: 0,
+        ignoreKeys: [],
+        onMatch: () => {},
+        findMatch: () => '',
+      }),
+      // useInnerOffset(context, {
+      //   onChange: () => {},
+      //   overflowRef,
+      // }),
+    ]);
 
     createEffect(() => {
       // Should NOT cause an infinite loop as the prop getters are memoized.
       setCount((c) => c + 1);
-    }, [getReferenceProps, getFloatingProps, getItemProps]);
+    });
 
     return null;
   }

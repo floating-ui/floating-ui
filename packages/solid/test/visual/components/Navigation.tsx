@@ -1,19 +1,20 @@
 import {
+  children,
   Component,
+  createMemo,
+  createSignal,
   JSX,
   ParentComponent,
   ParentProps,
   Show,
-  children,
-  createMemo,
-  createSignal,
   splitProps,
 } from 'solid-js';
+
 import {
+  flip,
   FloatingFocusManager,
   FloatingNode,
   FloatingPortal,
-  flip,
   offset,
   safePolygon,
   shift,
@@ -93,6 +94,7 @@ export const NavigationItem: ParentComponent<
         <a
           href={local.href}
           ref={(el) => {
+            // eslint-disable-next-line solid/reactivity
             typeof local.ref === 'function' ? local.ref(el) : (local.ref = el);
             refs.setReference(el);
           }}
@@ -108,7 +110,7 @@ export const NavigationItem: ParentComponent<
       <FloatingPortal>
         <Show when={open()}>
           <FloatingFocusManager
-            context={context()}
+            context={context}
             modal={false}
             initialFocus={-1}
           >
@@ -116,7 +118,7 @@ export const NavigationItem: ParentComponent<
               data-testid="subnavigation"
               ref={refs.setFloating}
               class="flex flex-col bg-slate-100 overflow-y-auto rounded outline-none px-4 py-2 backdrop-blur-sm"
-              style={floatingStyles}
+              style={floatingStyles()}
               {...getFloatingProps()}
             >
               <button type="button" onClick={() => setOpen(false)}>

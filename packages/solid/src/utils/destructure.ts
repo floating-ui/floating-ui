@@ -1,18 +1,19 @@
-import {
-  createMemo,
-  Accessor,
-  runWithOwner,
-  getOwner,
-  MemoOptions,
-} from 'solid-js';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable solid/reactivity */
 import {
   access,
-  MaybeAccessor,
-  AnyObject,
-  Values,
   AnyFunction,
-  MaybeAccessorValue,
+  AnyObject,
+  MaybeAccessor,
+  Values,
 } from '@solid-primitives/utils';
+import {
+  Accessor,
+  createMemo,
+  getOwner,
+  MemoOptions,
+  runWithOwner,
+} from 'solid-js';
 
 type ReactiveSource = [] | any[] | AnyObject;
 

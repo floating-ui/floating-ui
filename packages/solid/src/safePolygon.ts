@@ -2,8 +2,8 @@ import {isElement} from '@floating-ui/utils/dom';
 
 import type {HandleCloseFn} from './hooks/useHover';
 import {Rect, ReferenceType, Side} from './types';
-import {getChildren} from './utils/getChildren';
 import {contains, getTarget} from './utils';
+import {getChildren} from './utils/getChildren';
 
 type Point = [number, number];
 type Polygon = Point[];

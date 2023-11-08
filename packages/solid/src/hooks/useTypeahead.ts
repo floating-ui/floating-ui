@@ -1,4 +1,3 @@
-import {stopEvent} from '../utils';
 import {MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
@@ -8,8 +7,8 @@ import {
   splitProps,
 } from 'solid-js';
 
-import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import {stopEvent} from '../utils';
 import {destructure} from '../utils/destructure';
 
 type ListType = Accessor<Array<string | null>>;
@@ -61,14 +60,15 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
 
   const {listRef, activeIndex, ignoreKeys, enabled, resetMs, selectedIndex} =
     destructure(mergedProps, {normalize: true});
-  const {onTypingChange, findMatch, onMatch} = local;
+  // const {onTypingChange, findMatch, onMatch} = destructure(local, {
+  //   normalize: true,
+  // });
 
   let timeoutIdRef: number | ReturnType<typeof setTimeout>;
   let stringRef = '';
   let prevIndexRef: number | null = selectedIndex() ?? activeIndex() ?? -1;
   let matchIndexRef: number | null = null;
-  const parentId = useFloatingParentNodeId();
-  const isNotNested = parentId === null;
+
   createEffect(() => {
     if (context().open()) {
       clearTimeout(timeoutIdRef);
@@ -87,7 +87,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   function setTypingChange(value: boolean) {
     if (context().dataRef.typing !== value) {
       context().dataRef.typing = value;
-      onTypingChange?.(value);
+      local.onTypingChange?.(value);
     }
   }
   function getMatchingIndex(
@@ -95,8 +95,8 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     orderedList: Array<string | null>,
     string: string,
   ) {
-    const str = findMatch
-      ? findMatch(orderedList, string)
+    const str = local.findMatch
+      ? local.findMatch(orderedList, string)
       : orderedList.find(
           (text) =>
             text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) === 0,
@@ -130,8 +130,8 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     }
 
     if (context().open() && event.key !== ' ') {
-      setTypingChange(true);
       stopEvent(event);
+      setTypingChange(true);
     }
 
     // Bail out if the list contains a word like "llama" or "aaron". TODO
@@ -173,15 +173,16 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
       if (event.key === ' ') {
         stopEvent(event);
       }
-      onMatch?.(index);
+      local.onMatch?.(index);
       matchIndexRef = index;
     } else if (event.key !== ' ') {
       //no match
       stringRef = '';
-      isNotNested && setTypingChange(false);
+      setTypingChange(false);
     }
   }
 
+  // eslint-disable-next-line solid/reactivity
   return createMemo(() => {
     if (!enabled()) return {};
     return {

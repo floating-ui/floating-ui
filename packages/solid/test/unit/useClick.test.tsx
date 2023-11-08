@@ -1,9 +1,6 @@
-// import '@testing-library/jest-dom';
-
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
-import {createEffect, createSignal, mergeProps, Show} from 'solid-js';
+import {createMemo, createSignal, mergeProps, Show} from 'solid-js';
 import {Dynamic} from 'solid-js/web';
-import {vi} from 'vitest';
 
 import {useClick, useFloating, useHover, useInteractions} from '../../src';
 import type {UseClickProps} from '../../src/hooks/useClick';
@@ -33,12 +30,14 @@ function App(
     useClick(context, props),
   ]);
 
-  const tag = props.typeable ? 'input' : props.button ? 'button' : 'div';
+  const tag = createMemo(() =>
+    props.typeable ? 'input' : props.button ? 'button' : 'div',
+  );
 
   return (
     <>
       <Dynamic
-        component={tag}
+        component={tag()}
         ref={refs.setReference}
         {...getReferenceProps()}
         data-testid="reference"

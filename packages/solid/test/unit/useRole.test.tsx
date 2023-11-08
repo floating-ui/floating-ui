@@ -8,7 +8,7 @@ import type {UseRoleProps} from '../../src/hooks/useRole';
 
 function App(props: UseRoleProps & {initiallyOpen?: boolean}) {
   const [local, rest] = splitProps(props, ['initiallyOpen']);
-  const [open, setOpen] = createSignal(!!local.initiallyOpen);
+  const [open, setOpen] = createSignal(false);
   const {refs, context} = useFloating({
     open,
     onOpenChange: setOpen,
@@ -27,7 +27,7 @@ function App(props: UseRoleProps & {initiallyOpen?: boolean}) {
           },
         })}
       />
-      <Show when={open()}>
+      <Show when={!!local.initiallyOpen || open()}>
         <div
           {...getFloatingProps({
             ref: refs.setFloating,
@@ -39,7 +39,7 @@ function App(props: UseRoleProps & {initiallyOpen?: boolean}) {
 }
 
 function AppWithExternalRef(props: UseRoleProps & {initiallyOpen?: boolean}) {
-  const [open, setOpen] = createSignal(!!props.initiallyOpen);
+  const [open, setOpen] = createSignal(false);
   const nodeId = createUniqueId();
   const {refs, context} = useFloating({
     nodeId,
@@ -60,7 +60,7 @@ function AppWithExternalRef(props: UseRoleProps & {initiallyOpen?: boolean}) {
           },
         })}
       />
-      <Show when={open()}>
+      <Show when={open() || !!props.initiallyOpen}>
         <div
           {...getFloatingProps({
             ref: refs.setFloating,

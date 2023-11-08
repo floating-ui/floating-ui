@@ -2,7 +2,6 @@ import '@testing-library/jest-dom';
 
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
 import {createSignal, Show} from 'solid-js';
-import {vi} from 'vitest';
 
 import {FloatingPortal, useFloating} from '../../src';
 import {promiseRequestAnimationFrame} from '../helper';

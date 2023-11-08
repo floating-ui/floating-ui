@@ -1,13 +1,7 @@
 import '@testing-library/jest-dom';
 
 import {cleanup, fireEvent, render, screen} from '@solidjs/testing-library';
-import {
-  createEffect,
-  createMemo,
-  createSignal,
-  onCleanup,
-  Show,
-} from 'solid-js';
+import {createEffect, createSignal, Show} from 'solid-js';
 import {vi} from 'vitest';
 
 import {useFloating, useHover, useInteractions} from '../../src';

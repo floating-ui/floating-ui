@@ -7,7 +7,6 @@ import {
   createSignal,
   JSX,
   mergeProps,
-  ParentComponent,
   ParentProps,
   Show,
   splitProps,
@@ -176,7 +175,7 @@ describe('returnFocus', () => {
     }
 
     const Dialog = (props: Props) => {
-      const [open, setOpen] = createSignal(!!props.open);
+      const [open, setOpen] = createSignal(false);
       const nodeId = useFloatingNodeId();
 
       const {refs, context} = useFloating({
@@ -199,7 +198,7 @@ describe('returnFocus', () => {
             {props.children}
           </button>
           <FloatingPortal>
-            <Show when={open()}>
+            <Show when={open() || !!props.open}>
               <FloatingFocusManager context={context}>
                 <div {...getFloatingProps({ref: refs.setFloating})}>
                   {props.render({
@@ -545,20 +544,17 @@ describe('returnFocus', () => {
         );
       };
 
-      const NestedDialog: ParentComponent<Props> = (props) => {
+      const NestedDialog = (props: Props) => {
         const parentId = useFloatingParentNodeId();
 
-        if (parentId == null) {
-          return (
+        return (
+          <Show when={() => parentId == null} fallback={<Dialog {...props} />}>
             <FloatingTree>
               <Dialog {...props} />
             </FloatingTree>
-          );
-        }
-
-        return <Dialog {...props} />;
+          </Show>
+        );
       };
-
       const App = () => {
         const [sideDialogOpen, setSideDialogOpen] = createSignal(false);
         return (
@@ -940,7 +936,7 @@ describe('returnFocus', () => {
         });
 
         return (
-          <FloatingTree>
+          <>
             <span tabIndex={0} data-testid="first" />
             <button
               data-testid="reference"
@@ -952,7 +948,7 @@ describe('returnFocus', () => {
                 <FloatingFocusManager
                   context={context}
                   modal={false}
-                  closeOnFocusOut={true}
+                  // closeOnFocusOut={true}
                 >
                   <div data-testid="floating" ref={refs.setFloating}>
                     <span tabIndex={0} data-testid="inside" />
@@ -961,7 +957,7 @@ describe('returnFocus', () => {
               </Show>
             </FloatingPortal>
             <span tabIndex={0} data-testid="last" />
-          </FloatingTree>
+          </>
         );
       }
 
@@ -973,7 +969,6 @@ describe('returnFocus', () => {
       expect(screen.getByTestId('inside')).toHaveFocus();
 
       await userEvent.tab();
-      await promiseRequestAnimationFrame();
 
       expect(screen.queryByTestId('floating')).not.toBeInTheDocument();
       expect(screen.getByTestId('last')).toHaveFocus();

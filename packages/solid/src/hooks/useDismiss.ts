@@ -6,6 +6,21 @@ import {
   isHTMLElement,
   isLastTraversableNode,
 } from '@floating-ui/utils/dom';
+import {access, MaybeAccessor} from '@solid-primitives/utils';
+import {
+  Accessor,
+  createEffect,
+  createMemo,
+  createSignal,
+  mergeProps,
+  onCleanup,
+} from 'solid-js';
+
+import {
+  useFloatingParentNodeId,
+  useUnsafeFloatingTree,
+} from '../components/FloatingTree';
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {
   contains,
   getDocument,
@@ -15,24 +30,6 @@ import {
   isVirtualClick,
   isVirtualPointerEvent,
 } from '../utils';
-import {access, MaybeAccessor} from '@solid-primitives/utils';
-import {
-  Accessor,
-  batch,
-  createEffect,
-  createMemo,
-  createSignal,
-  mergeProps,
-  onCleanup,
-} from 'solid-js';
-
-import {usePortalContext} from '../components/FloatingPortal';
-import {
-  useFloatingParentNodeId,
-  useFloatingTree,
-  useUnsafeFloatingTree,
-} from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {destructure} from '../utils/destructure';
 import {getChildren} from '../utils/getChildren';
@@ -43,11 +40,11 @@ const bubbleHandlerKeys = {
   click: 'onClick',
 };
 
-const captureHandlerKeys = {
-  pointerdown: 'oncapture:pointerdown',
-  mousedown: 'oncapture:mousedown',
-  click: 'oncapture:click',
-};
+// const captureHandlerKeys = {
+//   pointerdown: 'oncapture:pointerdown',
+//   mousedown: 'oncapture:mousedown',
+//   click: 'oncapture:click',
+// };
 
 export const normalizeBubblesProp = (_bubbles?: UseDismissProps['bubbles']) => {
   const bubbles = access(_bubbles);
@@ -117,6 +114,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     bubbles,
   } = destructure(mergedProps, {memo: true, normalize: true});
 
+  // eslint-disable-next-line solid/reactivity
   const {outsidePress: unstable_outsidePress} = mergedProps;
   const tree = useUnsafeFloatingTree();
 
@@ -311,11 +309,12 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
     const {floating, reference} = context().refs;
     const domReference = reference() as Node | null;
-    batch(() => {
-      context().dataRef.__escapeKeyBubbles = escapeKeyBubbles;
-      context().dataRef.__outsidePressBubbles = outsidePressBubbles;
-    });
-    const doc = getDocument(floating());
+    const floatingRef = floating();
+    // batch(() => {
+    context().dataRef.__escapeKeyBubbles = escapeKeyBubbles;
+    context().dataRef.__outsidePressBubbles = outsidePressBubbles;
+    // });
+    const doc = getDocument(floatingRef);
     escapeKey() && doc.addEventListener('keydown', closeOnEscapeKeyDown);
     outsidePress &&
       doc.addEventListener(outsidePressEvent(), closeOnPressOutside);
@@ -325,8 +324,8 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         ancestors = getOverflowAncestors(domReference);
       }
 
-      if (isElement(floating())) {
-        ancestors = ancestors.concat(getOverflowAncestors(floating()!));
+      if (isElement(floatingRef)) {
+        ancestors = ancestors.concat(getOverflowAncestors(floatingRef));
       }
 
       // if (!isElement(domReference) && domReference && domReference.contextElement) {
@@ -346,7 +345,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     });
     //Cleanup !!
     onCleanup(() => {
-      const doc = getDocument(context().refs.floating());
+      const doc = getDocument(floatingRef);
       escapeKey() && doc.removeEventListener('keydown', closeOnEscapeKeyDown);
       outsidePress &&
         doc.removeEventListener(outsidePressEvent(), closeOnPressOutside);
@@ -363,7 +362,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     setInsideReactTreeRef(false);
   });
 
-  return createMemo(() => {
+  const userProps = createMemo(() => {
     if (!enabled()) return {};
     return {
       reference: {
@@ -388,4 +387,5 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       },
     };
   });
+  return userProps;
 }

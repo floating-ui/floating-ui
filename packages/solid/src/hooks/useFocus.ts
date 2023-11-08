@@ -1,14 +1,14 @@
 import {isElement, isHTMLElement} from '@floating-ui/utils/dom';
+import {MaybeAccessor} from '@solid-primitives/utils';
+import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
+
+import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {
   activeElement,
   contains,
   getDocument,
   isEventTargetWithin,
 } from '../utils';
-import {MaybeAccessor} from '@solid-primitives/utils';
-import {Accessor, createEffect, mergeProps, onCleanup} from 'solid-js';
-
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {createAttribute} from '../utils/createAttribute';
 import {destructure} from '../utils/destructure';
 import type {DismissPayload} from './useDismiss';
@@ -33,6 +33,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
     normalize: true,
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let pointerTypeRef = '';
   let blockFocusRef = false;
   let timeoutRef: any;
