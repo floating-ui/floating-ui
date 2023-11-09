@@ -1,4 +1,4 @@
-import type {Derivable, Middleware, Padding} from '@floating-ui/core';
+import type {Derivable, Middleware, Padding} from '@floating-ui/dom';
 import {arrow as arrowCore} from '@floating-ui/dom';
 import * as React from 'react';
 
