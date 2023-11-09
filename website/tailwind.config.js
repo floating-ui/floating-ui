@@ -23,6 +23,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        outline: `0 0 0 0.75rem ${colors.cyan[300]}`,
+      },
       fontFamily: {
         variable: ['var(--font-variable)', ...fontFamily.sans],
       },
@@ -30,11 +33,11 @@ module.exports = {
         'blur-in': {
           '0%': {
             filter: 'brightness(1) blur(10px)',
-            transform: 'scale(0.94)',
+            transform: 'scale(0.9)',
           },
           '10%': {
-            filter: 'brightness(1.15) blur(5px)',
-            transform: 'scale(0.98)',
+            filter: 'brightness(1.4) blur(3px)',
+            transform: 'scale(0.97)',
           },
           '100%': {
             filter: 'brightness(1) blur(0)',
@@ -170,20 +173,29 @@ module.exports = {
                 right: '0',
                 top: '0',
                 content: 'attr(data-language)',
-                padding: '0.25rem 0.5rem',
+                padding: '0.125rem 0.25rem',
                 display: 'grid',
                 placeItems: 'center',
-                fontWeight: 'bold',
-                borderRadius: '0.25rem 0.25rem 0 0',
-                lineHeight: '1.5',
+                fontWeight: '900',
+                borderRadius: '0 0.25rem 0 0.25rem',
+                lineHeight: '1',
+                textTransform: 'uppercase',
               },
-              '&[data-theme="light"]::before': {
-                background: GRAY[50],
-                color: GRAY[700],
+              '&[data-language="html"]::before': {
+                backgroundColor: '#e34c26',
+                color: '#fff',
               },
-              '&[data-theme="dark"]::before': {
-                background: GRAY[800],
-                color: GRAY[200],
+              '&[data-language="css"]::before': {
+                backgroundColor: '#264de4',
+                color: '#fff',
+              },
+              '&[data-language="js"]::before': {
+                backgroundColor: '#ffe936',
+                color: '#000',
+              },
+              '&[data-language="ts"]::before': {
+                backgroundColor: '#007acc',
+                color: '#fff',
               },
               'code[data-theme="light"] [data-highlighted-line]':
                 {
@@ -240,7 +252,7 @@ module.exports = {
               },
               code: {
                 fontSize: 'inherit',
-                background: 'inherit',
+                background: 'none',
                 whiteSpace: 'pre',
                 border: 'none',
               },

@@ -1,3 +1,5 @@
+<PageCard>
+
 # useRole
 
 Adds base screen reader props to the reference and floating
@@ -6,6 +8,14 @@ elements for a given `role{:.objectKey}`.
 ```js
 import {useRole} from '@floating-ui/react';
 ```
+
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
 
 ## Usage
 
@@ -56,7 +66,8 @@ interface Props {
     | 'menu'
     | 'listbox'
     | 'grid'
-    | 'tree';
+    | 'tree'
+    | 'label';
 }
 ```
 

@@ -1,7 +1,67 @@
+<PageCard className="mb-8">
+
 # offset
 
-A placement modifier that translates the floating element along
-the specified axes.
+Translates the floating element along the specified axes.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Placement Modifier" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {offset} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {offset} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {offset} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {offset} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {offset} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {offset} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This lets you add distance (margin or spacing) between the
+reference and floating element, slightly alter the placement, or
+even create
+[custom placements](/docs/offset#creating-custom-placements).
+
+</PageCard>
 
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
@@ -18,19 +78,37 @@ the specified axes.
   </div>
 </Chrome>
 
-This is useful for adding distance between the reference and
-floating element, or for creating
-[custom placements](/docs/offset#creating-custom-placements).
-
 ## Usage
 
-```js
-import {computePosition, offset} from '@floating-ui/dom';
+<ShowFor packages={['core', 'dom']}>
 
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [offset(10)],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [offset(10)],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [offset(10)],
+});
+```
+
+</ShowFor>
 
 The value(s) passed are
 [logical](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties),
@@ -311,6 +389,8 @@ For example, although the library doesn't provide a placement for
 centering on both axes, offset enables this via the function
 option by allowing you to read the rects:
 
+<ShowFor packages={['core', 'dom']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   middleware: [
@@ -323,6 +403,42 @@ computePosition(referenceEl, floatingEl, {
   ],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [
+    // Assumes placement is 'bottom' (the default)
+    offset(({rects}) => {
+      return (
+        -rects.reference.height / 2 - rects.floating.height / 2
+      );
+    }),
+  ],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [
+    // Assumes placement is 'bottom' (the default)
+    offset(({rects}) => {
+      return (
+        -rects.reference.height / 2 - rects.floating.height / 2
+      );
+    }),
+  ],
+});
+```
+
+</ShowFor>
 
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
@@ -349,6 +465,8 @@ center the floating element on both axes.
 
 A diagonal placement is also possible:
 
+<ShowFor packages={['core', 'dom']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   placement: 'top-start',
@@ -359,6 +477,38 @@ computePosition(referenceEl, floatingEl, {
   ],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  placement: 'top-start',
+  middleware: [
+    offset(({rects}) => ({
+      alignmentAxis: -rects.floating.width,
+    })),
+  ],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  placement: 'top-start',
+  middleware: [
+    offset(({rects}) => ({
+      alignmentAxis: -rects.floating.width,
+    })),
+  ],
+});
+```
+
+</ShowFor>
 
 <Chrome center className="pt-16 pb-24">
   <div className="flex gap-4">
@@ -379,6 +529,8 @@ computePosition(referenceEl, floatingEl, {
 </Chrome>
 
 This time, `'top-start'{:js}` was used as the starting point.
+
+<ShowFor packages={['core', 'dom']}>
 
 So, it's straightforward to allow this:
 
@@ -416,6 +568,8 @@ export function computePosition(
   });
 }
 ```
+
+</ShowFor>
 
 <Notice>
   What about centering on the screen? You don't need Floating UI

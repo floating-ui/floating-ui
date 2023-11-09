@@ -1,55 +1,42 @@
-import inline from '../../assets/react.inline.jpg';
+import {ReactSelect} from '../../lib/components/PackageSelect';
+
+<PageCard>
 
 # React
 
-This package provides React bindings for `@floating-ui/dom`, a
-library that provides anchor positioning, and also interaction
-primitives to build floating UI components.
+A complete toolkit to position and create interactions for
+floating elements with React.
 
-<CircleImage name="react" inline={inline} />
-
-With this package, you can create components such as tooltips,
-popovers, dropdown menus, hover cards, modal dialogs, select
-menus, comboboxes, and more.
-
-## Goals
-
-- **Provide building blocks**: pre-built floating components
-  aren't exported, rather the primitives necessary to create
-  different types of them. Think of it like a LEGO toolkit.
-- **Flexible and low-level**: at the cost of more code to setup,
-  you get high control and flexibility to create custom
-  components that can suite a wide range of product needs.
-- **Accessibility is prioritized**: first-class support is
-  provided for creating accessible floating elements that work
-  with assistive technology (keyboard usage and screen readers).
-
-## Install
+Provides primitives to create components for tooltips, popovers,
+dropdown menus, hover cards, modal dialogs, select menus,
+comboboxes, and more.
 
 ```bash
 npm install @floating-ui/react
 ```
 
-<Notice>
-
-If you only need positioning, the following package is smaller in
-size (the above one uses it as a dependency). This is useful if
-you are controlling interactions yourself (e.g. a library).
+Alternatively, if you only need positioning without interactions,
+use:
 
 ```bash
 npm install @floating-ui/react-dom
 ```
 
-</Notice>
+</PageCard>
+
+Choose the package you installed for better docs.
+
+<ReactSelect />
 
 ## Usage
 
-There are two main parts to creating floating elements:
+Floating UI's usage can be broken down into two disparate parts:
 
-- [Positioning](/docs/react#positioning) — available for both
-  packages
-- [Interactions](/docs/react#interactions) — available for
-  `@floating-ui/react{:.string}`
+- [Positioning](/docs/react#positioning) (available for both
+  `@floating-ui/react{:.string}` and
+  `@floating-ui/react-dom{:.string}`).
+- [Interactions](/docs/react#interactions) (available for just
+  `@floating-ui/react{:.string}`).
 
 ## Positioning
 
@@ -60,7 +47,6 @@ import {useFloating} from '@floating-ui/react';
 
 function App() {
   const {refs, floatingStyles} = useFloating();
-
   return (
     <>
       <button ref={refs.setReference}>Button</button>
@@ -118,34 +104,6 @@ floating elements.
 - [Options](/docs/useFloating#options)
 - [Return value](/docs/useFloating#return-value)
 
-## Arrow
-
-The `arrow` module exported from this package allows refs in
-addition to elements:
-
-```js
-import {arrow} from '@floating-ui/react';
-
-// Inside your component
-const arrowRef = useRef(null);
-useFloating({
-  middleware: [
-    arrow({
-      element: arrowRef,
-    }),
-  ],
-});
-```
-
-If you need your arrow to be _reactive_ to updates (e.g. showing
-or hiding the arrow with conditional rendering while the floating
-element is open), you should use state instead. Alternatively,
-you can use `visibility: hidden{:sass}` CSS to hide it and keep
-using a plain ref.
-
-For details on creating an arrow element, see the
-[`arrow` middleware](/docs/arrow) page.
-
 ## Testing
 
 When testing your components, ensure you flush microtasks
@@ -176,25 +134,37 @@ test('something', async () => {
 
 ## Narrow reference type
 
-Because the `refs.setReference{:js}` callback ref accepts a
-[virtual element](/docs/virtual-elements), you may need to narrow
-the type when performing DOM operations on the ref:
+Due to [virtual elements](/docs/virtual-elements), you may need
+to narrow the type when performing DOM operations on the ref:
+
+<ShowFor packages={['react']}>
+
+```ts
+const {refs} = useFloating<HTMLButtonElement>();
+// refs.domReference.current is now of type HTMLButtonElement
+```
+
+The position reference
+[can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events)
+from the DOM (events) reference.
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
 
 ```js
 const {refs} = useFloating<HTMLButtonElement>();
-
-// @floating-ui/react
-// refs.domReference.current is now of type HTMLButtonElement
-
-// @floating-ui/react-dom
 // refs.reference.current is now of type HTMLButtonElement
 ```
 
-In the full package, it is narrowed on `refs.domReference{:js}`,
-as the
-[position can be separated](/docs/react#changing-the-positioning-reference-while-retaining-events).
+</ShowFor>
 
 ## Interactions
+
+{/* prettier-ignore */}
+<ShowFor packages={['react-dom']}>
+<PackageLimited>@floating-ui/react only</PackageLimited>
+</ShowFor>
 
 To add interactions, such as the ability to only show a floating
 element while hovering over its reference element, the hook must
@@ -234,12 +204,7 @@ function App() {
 Note that floating components do not always require "anchor
 positioning", so `floatingStyles` can be ignored.
 
-<Notice>
-  Interactions are only supported by `@floating-ui/react`, not
-  `@floating-ui/react-dom`.
-</Notice>
-
-## Interaction hooks
+## Hooks
 
 Interaction hooks allow the open state to change, among other
 functionality. Each interaction hook accepts the
@@ -299,51 +264,19 @@ props like `onFocus{:.keyword}`.
 </>
 ```
 
-All custom event listener props, such as `onClick{:.keyword}`,
-`onKeyDown{:.keyword}` and more you pass to the element should be
-specified inside the prop getter. They perform merging of their
-own internal event listeners and your own without overwriting
-them.
-
-```js
-// ❌ Your `onClick` can be overwritten:
-<div
-  onClick={() => {
-    // Potentially overwritten by the props below.
-  }}
-  {...getReferenceProps()}
-/>
-```
-
-```js
-// ✅ Merging works inside `getReferenceProps()`:
-<div
-  {...getReferenceProps({
-    onClick() {
-      // Will not be overwritten.
-    },
-  })}
-/>
-```
-
-You may find passing all props through the prop getter helps you
-remember to prevent overriding event handlers, but is not
-currently required unless the value is a function event handler
-that starts with `on`.
-
-## Open event
+## Open event callback
 
 The `onOpenChange{:.function}` event callback is invoked with an
-(optional) event as a second parameter:
+optionally-defined <WordHighlight id='a'>event
+object</WordHighlight> and <WordHighlight id="b">reason
+string</WordHighlight> as the second and third parameter:
 
-```js /event/1-2
+```js /event/1#a /reason/1#b
 useFloating({
-  onOpenChange(isOpen, event) {
+  onOpenChange(isOpen, event, reason) {
     setIsOpen(isOpen);
-    if (event) {
-      // The event can be determined. This callback may be invoked
-      // in an effect, so the event is not available.
-    }
+    event && console.log(event);
+    reason && console.log(reason);
   },
 });
 ```

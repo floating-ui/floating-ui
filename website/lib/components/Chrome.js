@@ -29,7 +29,13 @@ export const Chrome = ({
         scrollableRef.current.scrollHeight / 2 -
         scrollableRef.current.offsetHeight / 2;
     }
-  }, [scrollableY]);
+
+    if (scrollableX) {
+      scrollableRef.current.scrollLeft =
+        scrollableRef.current.scrollWidth / 2 -
+        scrollableRef.current.offsetWidth / 2;
+    }
+  }, [scrollableY, scrollableX]);
 
   return (
     <div

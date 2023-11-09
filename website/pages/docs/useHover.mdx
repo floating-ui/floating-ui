@@ -1,3 +1,5 @@
+<PageCard>
+
 # useHover
 
 Opens the floating element while hovering over the reference
@@ -6,6 +8,14 @@ element, like CSS `:hover`.
 ```js
 import {useHover} from '@floating-ui/react';
 ```
+
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
 
 ## Usage
 
@@ -79,6 +89,11 @@ useHover(context, {
   enabled: false,
 });
 ```
+
+This is also useful when you want to disable further events from
+firing based on some condition. For example, you may disable the
+hook after hovering over the floating element to then prevent it
+from closing.
 
 ### mouseOnly
 

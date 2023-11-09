@@ -13,13 +13,13 @@ import {
 import {MDXProvider} from '@mdx-js/react';
 import cn from 'classnames';
 import Head from 'next/head';
-import Link from 'next/link';
 import {useRouter} from 'next/router';
-import {Fragment, useEffect, useRef, useState} from 'react';
+import {Fragment, useRef, useState} from 'react';
 import {ExternalLink, GitHub, Menu} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../../assets/logo.svg';
+import {useAppContext} from '../../pages/_app';
 import Arrow from '../../public/icons/arrow.svg';
 import AutoPlacement from '../../public/icons/autoPlacement.svg';
 import AutoUpdate from '../../public/icons/autoUpdate.svg';
@@ -57,46 +57,26 @@ import UseRole from '../../public/icons/useRole.svg';
 import UseTransition from '../../public/icons/useTransition.svg';
 import UseTypeahead from '../../public/icons/useTypeahead.svg';
 import VirtualElements from '../../public/icons/virtual-elements.svg';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '../components/Tooltip';
+import {getPackageContext} from '../utils/getPackageContext';
+import {remToPx} from '../utils/remToPx';
 import {Chrome} from './Chrome';
 import {CircleImage} from './CircleImage';
 import Collapsible from './Collapsible';
 import {Floating} from './Floating';
+import {Link} from './Link';
+import {
+  MiddlewareBadge,
+  MiddlewareContainer,
+} from './MiddlewareBadge';
 import Navigation from './Navigation';
 import Notice from './Notice';
+import {PackageLimited} from './PackageLimited';
+import {PackageSelect} from './PackageSelect';
+import {PageCard} from './PageCard';
 import {SkipNavContent, SkipNavLink} from './ReachSkipNav';
 import {Required} from './Required';
+import {ShowFor} from './ShowFor';
 import {WordHighlight} from './WordHighlight';
-
-function PackageVersion({package: {name, version}}) {
-  return (
-    <Tooltip noRest label strategy="fixed">
-      <TooltipTrigger asChild>
-        <a
-          href={`https://npmjs.com/package/@floating-ui/${name}`}
-          className="w-fit rounded-md bg-blue-500 px-2 py-1 text-xs font-bold text-white transition-colors hover:bg-blue-400 dark:border dark:border-blue-600 dark:bg-transparent dark:text-blue-400 dark:hover:bg-blue-600 dark:hover:text-white"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {name}@{version}
-        </a>
-      </TooltipTrigger>
-      <TooltipContent>
-        The docs on this page reference the latest version of
-        <br />
-        <strong>
-          @floating-ui/
-          {name}
-        </strong>
-        . Click to view it on npm.
-      </TooltipContent>
-    </Tooltip>
-  );
-}
 
 const middleware = [
   {
@@ -422,6 +402,21 @@ const components = {
   WordHighlight,
   CircleImage,
   Required,
+  PageCard,
+  MiddlewareBadge,
+  MiddlewareContainer,
+  PackageLimited,
+  ShowFor,
+  h1: (props) => (
+    <h1 {...props}>
+      {props.children.split(/(?=[A-Z])/).map((value, index) => (
+        <Fragment key={index}>
+          {index !== 0 && <wbr />}
+          {value}
+        </Fragment>
+      ))}
+    </h1>
+  ),
   h2: (props) => <Heading level={2} {...props} />,
   h3: (props) => <Heading level={3} {...props} />,
   h4: (props) => <Heading level={4} {...props} />,
@@ -552,100 +547,32 @@ function SideNavList({anchors, hash}) {
   );
 }
 
-const initialPackages = [
-  {name: 'core', version: 'latest'},
-  {name: 'dom', version: 'latest'},
-  {name: 'react', version: 'latest'},
-  {name: 'react-dom', version: 'latest'},
-  {name: 'react-native', version: 'latest'},
-  {name: 'vue', version: 'latest'},
-];
-
 export default function Layout({children, className}) {
   const {pathname, events, asPath} = useRouter();
   const index = nav.findIndex(({url}) => url === pathname) ?? 0;
   const [navOpen, setNavOpen] = useState(false);
-  const activeLinkRef = useRef();
+  const [anchors, setAnchors] = useState([]);
+  const activeLinkRef = useRef(null);
+  const articleRef = useRef();
   const [hash, setHash] = useState(
     asPath.slice(asPath.indexOf('#'))
   );
-  const [packages, setPackages] = useState(initialPackages);
 
-  useEffect(() => {
-    let ignore = false;
-
-    async function fetchData() {
-      try {
-        const packageResults = await Promise.all(
-          initialPackages.map(({name}) =>
-            fetch(
-              `https://registry.npmjs.org/@floating-ui/${name}/latest`
-            ).then((res) => res.json())
-          )
-        );
-
-        if (!ignore) {
-          setPackages(
-            packageResults.map((pkg, index) => ({
-              name: initialPackages[index].name,
-              version: pkg.version,
-            }))
-          );
-        }
-      } catch (e) {
-        //
-      }
-    }
-
-    fetchData();
-
-    return () => {
-      ignore = true;
-    };
-  }, []);
+  const {
+    setPackageContext,
+    pageTransitionStatus,
+    articleTransitionStatus,
+    isPackageTooltipTouched,
+  } = useAppContext();
 
   const displayNavigation = nav[index] != null;
 
   useIsomorphicLayoutEffect(() => {
     setHash(asPath.slice(asPath.indexOf('#')));
-  }, [asPath]);
-
-  useIsomorphicLayoutEffect(() => {
-    function onRouteChangeComplete() {
-      document.querySelector('#focus-root').focus();
+    if (!isPackageTooltipTouched) {
+      setPackageContext(getPackageContext(asPath.toLowerCase()));
     }
-
-    function onHashChange() {
-      setHash(window.location.hash);
-    }
-
-    events.on('routeChangeComplete', onRouteChangeComplete);
-    window.addEventListener('hashchange', onHashChange);
-
-    return () => {
-      events.off('routeChangeComplete', onRouteChangeComplete);
-      window.removeEventListener('hashchange', onHashChange);
-    };
-  }, [events, pathname]);
-
-  const articleRef = useRef();
-  const [anchors, setAnchors] = useState([]);
-
-  useIsomorphicLayoutEffect(() => {
-    const localAnchors = [];
-    articleRef.current
-      .querySelectorAll('h2,h3')
-      .forEach((node) => {
-        localAnchors.push({
-          depth: node.tagName === 'H2' ? 2 : 3,
-          title: node.textContent,
-          url: `#${node.id}`,
-        });
-      });
-
-    setAnchors(localAnchors);
-    setNavOpen(false);
-  }, [pathname]);
+  }, [asPath, isPackageTooltipTouched]);
 
   let currentParentIndex = null;
   const anchorsComputed = anchors.map((node, index) => {
@@ -667,54 +594,6 @@ export default function Layout({children, className}) {
   const title = `${
     nav.find(({url}) => url === pathname)?.title ?? 'Docs'
   } | Floating UI`;
-
-  const activeTitle =
-    nav.find(({url}) => url === pathname)?.title ?? '';
-
-  const isReactDOMPage =
-    activeTitle === 'React' || activeTitle === 'useFloating';
-  const isDOMOnlyPage = activeTitle === 'autoUpdate';
-  const isNoPage = activeTitle === 'Getting Started';
-  const isReactPage =
-    activeTitle.includes('React') ||
-    activeTitle.startsWith('use') ||
-    activeTitle.startsWith('Floating') ||
-    [
-      'Inner',
-      'Custom Hooks',
-      'Composite',
-      'Tooltip',
-      'Popover',
-      'Dialog',
-    ].includes(activeTitle);
-  const isReactNativePage = activeTitle.includes('React Native');
-  const isVuePage = activeTitle.includes('Vue');
-  const isVanillaPage =
-    !isReactPage &&
-    !isReactNativePage &&
-    !isVuePage &&
-    !isDOMOnlyPage &&
-    !isNoPage;
-
-  let firstVersionIndex = null;
-  let secondVersionIndex = null;
-
-  if (isDOMOnlyPage) {
-    firstVersionIndex = 1;
-    secondVersionIndex = null;
-  } else if (isReactDOMPage) {
-    firstVersionIndex = 3;
-    secondVersionIndex = 2;
-  } else if (isReactNativePage) {
-    firstVersionIndex = 4;
-  } else if (isReactPage) {
-    firstVersionIndex = 2;
-  } else if (isVanillaPage) {
-    firstVersionIndex = 0;
-    secondVersionIndex = 1;
-  } else if (isVuePage) {
-    firstVersionIndex = 5;
-  }
 
   const {refs, context} = useFloating({
     open: navOpen,
@@ -748,6 +627,61 @@ export default function Layout({children, className}) {
     ? {context, modal: false, initialFocus: refs.floating}
     : {};
 
+  useIsomorphicLayoutEffect(() => {
+    if (isDrawer && !isMounted) return;
+    if (!refs.floating.current) return;
+    if (!activeLinkRef.current) return;
+
+    const scrollTop = refs.floating.current.scrollTop;
+    const linkRect =
+      activeLinkRef.current.getBoundingClientRect();
+    const linkTop = linkRect.top;
+    const linkBottom = linkTop + linkRect.height;
+    const height = refs.floating.current.clientHeight;
+
+    // Only scroll if it's not in view
+    if (
+      linkBottom <= 0 ||
+      linkTop >= scrollTop + height - remToPx(10)
+    ) {
+      activeLinkRef.current.scrollIntoView({block: 'start'});
+    }
+  }, [asPath, isDrawer, isMounted]);
+
+  useIsomorphicLayoutEffect(() => {
+    function onRouteChangeComplete() {
+      document.querySelector('#focus-root').focus();
+    }
+
+    function onHashChange() {
+      setHash(window.location.hash);
+    }
+
+    events.on('routeChangeComplete', onRouteChangeComplete);
+    window.addEventListener('hashchange', onHashChange);
+
+    return () => {
+      events.off('routeChangeComplete', onRouteChangeComplete);
+      window.removeEventListener('hashchange', onHashChange);
+    };
+  }, [events, pathname]);
+
+  useIsomorphicLayoutEffect(() => {
+    const localAnchors = [];
+    articleRef.current
+      .querySelectorAll('h2,h3')
+      .forEach((node) => {
+        localAnchors.push({
+          depth: node.tagName === 'H2' ? 2 : 3,
+          title: node.textContent,
+          url: `#${node.id}`,
+        });
+      });
+
+    setAnchors(localAnchors);
+    setNavOpen(false);
+  }, [pathname]);
+
   return (
     <MDXProvider components={components}>
       <Head>
@@ -766,6 +700,7 @@ export default function Layout({children, className}) {
       </svg>
       <div
         className={`md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-[15rem] 2xl:pr-72 ${className}`}
+        data-fade={pageTransitionStatus}
       >
         <NavWrapper {...wrapperProps}>
           <nav
@@ -780,7 +715,35 @@ export default function Layout({children, className}) {
             <div className="sticky top-0 -z-1 -mb-[25rem] h-[25rem] w-full bg-light-nav-gradient dark:bg-dark-nav-gradient" />
             <div className="container mx-auto mb-8">
               <div
-                className="sticky top-0 z-10 p-2 backdrop-blur-sm dark:bg-transparent"
+                className="sticky top-[7.5rem] z-10 -mb-[2rem] h-[2rem] w-full backdrop-blur-[2px]"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 0.4rem)',
+                }}
+              />
+              <div
+                className="sticky top-[8.5rem] z-10 -mb-[1rem] h-[1rem] w-full backdrop-blur-[1.5px]"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 0.3rem)',
+                }}
+              />
+              <div
+                className="sticky top-[9rem] z-10 -mb-[0.75rem] h-[0.75rem] w-full backdrop-blur-[1px]"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 0.2rem)',
+                }}
+              />
+              <div
+                className="absolute top-[9.375rem] z-10 -mb-[0.5rem] h-[0.5rem] w-full backdrop-blur-[0.5px]"
+                style={{
+                  WebkitMaskImage:
+                    'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 0.3rem)',
+                }}
+              />
+              <div
+                className="sticky top-0 z-10 p-2 backdrop-blur-[3px] dark:bg-transparent"
                 style={{
                   WebkitMaskImage:
                     'linear-gradient(0deg, transparent 0%, rgb(0 0 0) 1rem)',
@@ -812,20 +775,29 @@ export default function Layout({children, className}) {
                             ? activeLinkRef
                             : undefined
                         }
-                        className={cn('inline-block w-full', {
-                          'pl-4': depth === 1,
-                          'border-l border-solid border-gray-700':
-                            depth === 1,
-                        })}
+                        className={cn(
+                          'inline-block w-full scroll-mt-[10rem]',
+                          {
+                            'pl-4': depth === 1,
+                            'border-l border-solid border-gray-700':
+                              depth === 1,
+                          }
+                        )}
                       >
+                        {[
+                          '/docs/react',
+                          '/docs/react-native',
+                        ].includes(url) && (
+                          <hr className="my-4 h-[1px] border-none bg-gray-100 dark:bg-gray-700" />
+                        )}
                         <Link
                           href={url}
                           className={cn(
-                            'mx-[-1rem] block break-words rounded-lg px-3 py-1 transition duration-200 hover:duration-75 dark:hover:bg-purple-200/20 dark:hover:text-gray-50',
+                            'mx-[-1rem] flex h-12 items-center break-words rounded-lg px-3 dark:hover:text-gray-50',
                             {
-                              'bg-gray-800 text-gray-50 hover:bg-gray-700 dark:bg-purple-200/10 dark:text-gray-100/90':
+                              'bg-rose-200/40 text-rose-700 hover:bg-pink-100/50 dark:bg-pink-400/10 dark:text-pink-400 dark:hover:bg-pink-400/20':
                                 pathname === url,
-                              'hover:bg-gray-100/50':
+                              'hover:bg-gray-100/50 dark:hover:bg-purple-300/10':
                                 pathname !== url,
                               'rounded-tl-none rounded-bl-none':
                                 depth > 0,
@@ -842,13 +814,19 @@ export default function Layout({children, className}) {
                             ) : typeof Icon === 'function' ? (
                               <Icon
                                 aria-hidden
+                                className={cn({
+                                  'text-gray-600 dark:text-gray-200':
+                                    pathname !== url,
+                                  'text-rose-700 dark:text-pink-300':
+                                    pathname === url,
+                                })}
                                 width={32}
                                 height={32}
                               />
                             ) : null}
                             <span
                               className={cn('block truncate', {
-                                'font-bold text-white':
+                                'font-bold dark:text-pink-300':
                                   pathname === url,
                               })}
                             >
@@ -863,15 +841,7 @@ export default function Layout({children, className}) {
             </div>
           </nav>
         </NavWrapper>
-        <aside className="fixed right-0 top-0 hidden min-w-[15rem] max-w-[15rem] overflow-y-auto pt-12 [max-height:100vh] xl:block 2xl:min-w-[18rem] 2xl:max-w-[20rem]">
-          <nav>
-            <h4 className="text-md ml-6 mb-1 text-gray-500">
-              On this page
-            </h4>
-            <SideNavList anchors={anchorsComputed} hash={hash} />
-          </nav>
-        </aside>
-        <nav className="fixed top-0 z-10 w-full bg-gray-75/70 px-4 py-3 backdrop-blur-sm backdrop-saturate-150 dark:bg-gray-900/70 sm:px-6 md:py-4 lg:px-8 lg:py-2">
+        <nav className="fixed top-0 z-20 w-full bg-gray-75/90 px-4 py-3 backdrop-blur-lg backdrop-saturate-150 dark:bg-gray-900/90 sm:px-6 md:py-4 lg:px-8 lg:py-2">
           <div className="flex items-center justify-between">
             <button
               ref={refs.setReference}
@@ -889,7 +859,7 @@ export default function Layout({children, className}) {
                 apiKey="51e39a76760916075e22d9b217f4434f"
               />
               <a
-                className="flex items-center gap-1"
+                className="hidden items-center gap-1 md:flex"
                 href="https://github.com/floating-ui/floating-ui"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -899,46 +869,46 @@ export default function Layout({children, className}) {
                 </div>
                 GitHub
               </a>
-              {firstVersionIndex != null && (
-                <>
-                  <div className="hidden flex-wrap gap-2 pl-1 lg:flex">
-                    {firstVersionIndex !== null && (
-                      <PackageVersion
-                        package={packages[firstVersionIndex]}
-                      />
-                    )}
-                    {secondVersionIndex !== null && (
-                      <PackageVersion
-                        package={packages[secondVersionIndex]}
-                      />
-                    )}
-                  </div>
-                </>
-              )}
+              <PackageSelect />
             </div>
           </div>
         </nav>
-        <div
-          ref={articleRef}
-          className="container my-24 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] sm:px-6 md:my-0 md:py-20 lg:px-8 lg:py-24"
-        >
-          <SkipNavContent />
-          <article
-            className="
-              prose-floating prose max-w-full prose-code:bg-gray-50 
-              prose-code:shadow prose-pre:bg-gray-50 prose-pre:shadow
-              dark:prose-invert dark:prose-code:bg-gray-700
-              dark:prose-code:text-[#c8d3f5] dark:prose-pre:bg-gray-800 md:prose-md lg:prose-lg
-            "
+        <div data-fade={articleTransitionStatus}>
+          <div id="floating-container" />
+          <aside className="fixed right-0 top-0 hidden min-w-[15rem] max-w-[15rem] overflow-y-auto pt-12 [max-height:100vh] xl:block 2xl:min-w-[18rem] 2xl:max-w-[20rem]">
+            <nav>
+              <h4 className="text-md ml-6 mb-1 text-gray-500">
+                On this page
+              </h4>
+              <SideNavList
+                anchors={anchorsComputed}
+                hash={hash}
+              />
+            </nav>
+          </aside>
+          <div
+            ref={articleRef}
+            className="container my-24 mx-auto mt-24 px-4 [outline:0] [max-width:50rem] sm:px-6 md:my-0 md:py-20 lg:px-8 lg:py-24"
           >
-            {children}
-          </article>
-          {displayNavigation && (
-            <Navigation
-              prev={nav[index - 1]}
-              next={nav[index + 1]}
-            />
-          )}
+            <SkipNavContent />
+            <article
+              className="
+              prose max-w-full prose-a:font-bold 
+              prose-code:bg-gray-50 prose-code:shadow prose-pre:bg-gray-50
+              prose-pre:shadow dark:prose-invert
+              dark:prose-code:bg-gray-700 dark:prose-code:text-[#c8d3f5] dark:prose-pre:bg-gray-800 md:prose-md
+              lg:prose-lg
+            "
+            >
+              {children}
+            </article>
+            {displayNavigation && (
+              <Navigation
+                prev={nav[index - 1]}
+                next={nav[index + 1]}
+              />
+            )}
+          </div>
         </div>
       </div>
       <footer className="py-8 px-4 text-center text-gray-500 md:pl-64 lg:px-72 lg:pr-0 xl:px-[22rem] xl:pr-72">

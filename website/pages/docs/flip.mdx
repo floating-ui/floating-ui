@@ -1,8 +1,65 @@
+<PageCard className="mb-8">
+
 # flip
 
-A visibility optimizer that changes the placement of the floating
-element in order to keep it in view, with the ability to flip to
-any placement.
+Changes the placement of the floating element to keep it in view.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Visibility Optimizer" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {flip} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {flip} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {flip} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {flip} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {flip} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {flip} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This prevents the floating element from overflowing along its
+side axis by flipping it to the opposite side by default.
+
+</PageCard>
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -11,26 +68,47 @@ any placement.
     scrollable="y"
     className="h-96"
   >
-    <Floating middleware={[{name: 'flip'}]}>
-      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000">
-        Default
-      </div>
+    <Floating
+      middleware={[
+        {name: 'flip', options: {rootBoundary: 'document'}},
+      ]}
+    >
+      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
 
-This is useful to prevent the floating element from overflowing
-on the main axis of its placement.
-
 ## Usage
 
-```js
-import {computePosition, flip} from '@floating-ui/dom';
+<ShowFor packages={['core']}>
 
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [flip()],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [flip()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [flip()],
+});
+```
+
+</ShowFor>
 
 <Notice type="warning" title="Note">
   This is an alternative to `autoPlacement(){:js}`, so only one of either can be used.
@@ -219,7 +297,7 @@ In each of the following demos, the `placement{:.objectKey}` is
   >
     <Floating
       placement="right"
-      content="fallbackAxisSideDirection is set to 'none' (default)"
+      content="`fallbackAxisSideDirection` has been set to 'none' (default)"
       middleware={[
         {
           name: 'flip',
@@ -243,7 +321,7 @@ In each of the following demos, the `placement{:.objectKey}` is
 >
   <Floating
     placement="right"
-    content="fallbackAxisSideDirection is set to 'start'"
+    content="`fallbackAxisSideDirection` has been set to 'start'"
     middleware={[
       {
         name: 'flip',
@@ -251,6 +329,9 @@ In each of the following demos, the `placement{:.objectKey}` is
           fallbackAxisSideDirection: 'start',
           rootBoundary: 'document',
         },
+      },
+      {
+        name: 'shift',
       },
     ]}
   >
@@ -267,7 +348,7 @@ In each of the following demos, the `placement{:.objectKey}` is
   >
     <Floating
       placement="right"
-      content="fallbackAxisSideDirection is set to 'end'"
+      content="`fallbackAxisSideDirection` has been set to 'end'"
       middleware={[
         {
           name: 'flip',
@@ -276,6 +357,9 @@ In each of the following demos, the `placement{:.objectKey}` is
             rootBoundary: 'document'
           },
         },
+        {
+          name: 'shift'
+        }
       ]}
     >
       <div className="grid place-items-center w-32 h-32 border-2 border-gray-1000 border-dashed mt-12" />
@@ -418,6 +502,8 @@ flip((state) => ({
 The placement returned from the function is always the final one,
 not necessarily the one you passed in as the "preferred" one.
 
+<ShowFor packages={['core', 'dom']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   placement: 'bottom',
@@ -426,6 +512,32 @@ computePosition(referenceEl, floatingEl, {
   console.log(placement); // 'top' or 'bottom'
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+// placement can be 'top' or 'bottom'
+const {placement} = useFloating({
+  placement: 'bottom',
+  middleware: [flip()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+// placement can be 'top' or 'bottom'
+const {placement} = useFloating(reference, floating, {
+  placement: 'bottom',
+  middleware: [flip()],
+});
+```
+
+</ShowFor>
 
 ## Conflict with autoPlacement
 

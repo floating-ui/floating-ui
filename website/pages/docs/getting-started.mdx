@@ -1,42 +1,49 @@
-import introInline from '../../assets/intro.inline.jpg';
+<PageCard>
+<CircleImage name="getting-started"  />
 
 # Getting Started
 
 Floating UI is a library that helps you create "floating"
 elements such as tooltips, popovers, dropdowns, and more.
 
-<CircleImage name="intro" inline={introInline} />
+</PageCard>
 
-It offers two main features:
+Two key features are provided:
 
-1. **Anchor positioning**: Anchor a floating element (such as a
-   tooltip) to another element (such as a button) while
-   simultaneously ensuring it stays in view as best as possible
-   by avoiding collisions. This feature is available for all
-   platforms.
-2. **User interactions for React**: Hooks and components for
-   composing interactions to create accessible floating UI
-   components.
+### Positioning
 
-## Why
+Floating UI provides a toolkit of positioning features that let
+you robustly anchor an absolutely-positioned floating element
+next to a given reference element. For example, a popover floats
+next to and remains anchored to its triggering button, even while
+the page scrolls.
 
-Floating elements are absolutely positioned, typically anchored
-to another UI element. Ensuring a floating element remains
-anchored next to another element can be challenging, especially
-in unique layout contexts like scrolling containers.
+It also provides features to avoid collisions with the viewport,
+as absolute positioning often leads to unwanted overflow
+depending on the location of the positioning reference.
 
-Absolute positioning can also cause problems when the floating
-element is too close to the edge of the viewport and becomes
-obscured, also known as a collision. When a collision occurs, the
-position must be adjusted to ensure the floating element remains
-visible.
+### Interactions
 
-Further, floating elements are often interactive, which can raise
-complex accessibility issues when designing user interactions.
+Floating elements have a wide range of different and complex
+interactions. For example, a tooltip's interactions (hover or
+focus to open a label) has little in common with a combobox
+(focus and type to select options) despite them both "floating"
+and anchoring themselves to a trigger.
 
-Floating UI offers a set of low-level features to help you
-navigate these challenges and build accessible floating UI
-components.
+Floating UI's React package offers a toolkit of primitive hooks
+and components that let you build reusable floating components
+with complex and accessible interactions.
+
+## Design
+
+Floating UI is designed to be highly modular, so everything is as
+tree-shakeable as possible. You can use as much or as little of
+the library as you want, and your bundle size will adapt.
+
+Floating UI is also designed to be flexible and hackable. You can
+use it with any framework, or even without a framework, or on
+other platforms like React Native. You can also customize it to
+your needs, and won't feel limited in what you can achieve.
 
 ## Install
 

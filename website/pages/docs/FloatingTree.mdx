@@ -1,30 +1,17 @@
+<PageCard>
+
 # FloatingTree
 
 Provides context for nested floating elements when they are not
 children of each other on the DOM.
 
-A nested floating element may look like the following, where
-there is a popover **inside** the content of another one:
+<ShowFor packages={['react-dom']}>
 
-```js
-import {FloatingTree} from '@floating-ui/react';
+<PackageLimited>@floating-ui/react only</PackageLimited>
 
-function App() {
-  return (
-    <FloatingTree>
-      <Popover
-        render={() => (
-          <Popover render={() => 'Nested Popover'}>
-            <button>Child</button>
-          </Popover>
-        )}
-      >
-        <button>Root</button>
-      </Popover>
-    </FloatingTree>
-  );
-}
-```
+</ShowFor>
+
+</PageCard>
 
 <Notice>
   This is not necessary in all cases, except when there must be
@@ -40,29 +27,59 @@ function App() {
 
 ## Usage
 
-The following creates an infinitely nestable `<Popover />{:js}`
-component. Usage of this component must be wrapped within a
-single `<FloatingTree />{:js}` component as seen in the previous
-code snippet:
+The following creates an infinitely nestable `<Popover>{:js}`
+component. Usage of this component must be wrapped in a single
+`<FloatingTree>{:js}` provider:
 
-```js /nodeId/
-function Popover({children}) {
-  // Subscribe this component to the <FloatingTree />
+```js {10-11,15,25}
+import {
+  FloatingTree,
+  FloatingNode,
+  useFloatingNodeId,
+} from '@floating-ui/react';
+
+function Popover({children, content}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Subscribe this component to the <FloatingTree /> wrapper:
   const nodeId = useFloatingNodeId();
 
-  // Pass the subscribed `nodeId` to useFloating()
-  useFloating({
-    nodeId
+  // Pass the subscribed `nodeId` to useFloating:
+  const {refs, floatingStyles} = useFloating({
+    nodeId,
+    open: isOpen,
+    onOpenChange: setIsOpen,
   });
 
-  // Wrap the rendered element(s) in a `<FloatingNode />`,
-  // passing in the subscribed `nodeId`
+  // Wrap the rendered floating element in a `<FloatingNode />`,
+  // passing in the subscribed `nodeId`:
   return (
-    <FloatingNode id={nodeId}>
-      <FloatingPortal>
-        {isOpen && /* floating element */}
-      </FloatingPortal>
-    </FloatingNode>
+    <>
+      {cloneElement(children, {ref: refs.setReference})}
+      <FloatingNode id={nodeId}>
+        {isOpen && (
+          <FloatingPortal>
+            <div ref={refs.setFloating}>{content}</div>
+          </FloatingPortal>
+        )}
+      </FloatingNode>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <FloatingTree>
+      <Popover
+        content={
+          <Popover content="Nested content">
+            <button>Nested reference</button>
+          </Popover>
+        }
+      >
+        <button>Root reference</button>
+      </Popover>
+    </FloatingTree>
   );
 }
 ```
@@ -82,8 +99,8 @@ function Popover({children}) {
 interface FloatingTreeType {
   nodesRef: React.MutableRefObject<Array<FloatingNodeType>>;
   events: FloatingEvents;
-  addNode: (node: FloatingNodeType) => void;
-  removeNode: (node: FloatingNodeType) => void;
+  addNode(node: FloatingNodeType): void;
+  removeNode(node: FloatingNodeType): void;
 }
 ```
 

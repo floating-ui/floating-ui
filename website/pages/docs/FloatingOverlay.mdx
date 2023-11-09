@@ -1,14 +1,28 @@
+<PageCard>
+
 # FloatingOverlay
 
 Provides base styling for a fixed overlay element to dim content
 or block pointer events behind a floating element.
 
-It's a regular `<div />{:js}`, so it can be styled via any CSS
-solution you prefer.
-
 ```js
 import {FloatingOverlay} from '@floating-ui/react';
+```
 
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
+
+## Usage
+
+It renders a `<div>{:js}` with base styling. Can be styled with
+any CSS solution.
+
+```js
 function App() {
   return (
     <FloatingOverlay>

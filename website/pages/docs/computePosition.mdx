@@ -1,12 +1,35 @@
-import inline from '../../assets/computePosition.inline.jpg';
+<PageCard>
 
 # computePosition
 
-An async function that computes and returns `x` and `y`
-coordinates to position a floating element next to another
-element.
+Computes coordinates to position a floating element next to
+another element.
 
-<CircleImage name="computePosition" inline={inline} />
+<ShowFor packages={['core']}>
+
+```js
+import {computePosition} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {computePosition} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native', 'vue']}>
+  <Notice type="warning" title="Non-framework API">
+    `useFloating(){:js}` should be used instead with a framework. 
+    If you are using a base package, change the package with the red package 
+    switcher at the top of the page.
+  </Notice>
+</ShowFor>
+
+</PageCard>
 
 ## Usage
 
@@ -19,6 +42,21 @@ At its most basic, the function accepts two elements:
 - **Floating element** — this is the element that floats next to
   the reference element, remaining anchored to it. This is the
   popover or tooltip itself.
+
+<ShowFor packages={['core', 'react-native']}>
+
+```js
+const referenceEl = {width: 100, height: 100, x: 50, y: 50};
+const floatingEl = {width: 200, height: 200, x: 0, y: 0};
+```
+
+Then, call `computePosition(){:js}` with them as arguments,
+ensuring you pass the required
+[platform methods](/docs/platform#methods).
+
+</ShowFor>
+
+<ShowFor packages={['dom', 'react-dom' ,'react', 'vue']}>
 
 ```html
 <button id="button">My reference element</button>
@@ -45,10 +83,33 @@ Then, ensuring that these two elements are rendered onto the
 document and can be measured, call `computePosition(){:js}` with
 them as arguments.
 
+</ShowFor>
+
 The first argument is the <WordHighlight id="a">reference
 element</WordHighlight> to anchor to, and the second argument is
 the <WordHighlight id="b">floating element</WordHighlight> to be
 positioned.
+
+<ShowFor packages={['core', 'react-native']}>
+
+```js /button/1,3#a /tooltip/1,3-4#b
+import {computePosition} from '@floating-ui/core';
+
+const referenceEl = {width: 100, height: 100, x: 50, y: 50};
+const floatingEl = {width: 200, height: 200, x: 0, y: 0};
+
+computePosition(referenceEl, floatingEl, {
+  platform: {
+    // See https://floating-ui.com/docs/platform
+  },
+}).then(({x, y}) => {
+  // Paint the screen.
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom', 'react-dom', 'react', 'vue']}>
 
 ```js /button/1,3#a /tooltip/1,3-4#b
 import {computePosition} from '@floating-ui/dom';
@@ -64,12 +125,16 @@ computePosition(button, tooltip).then(({x, y}) => {
 });
 ```
 
+</ShowFor>
+
 `computePosition(){:js}` returns a `Promise{:.class}` that
 resolves with the coordinates that can be used to apply styles to
 the floating element.
 
 By default, the floating element will be placed at the bottom
 center of the reference element.
+
+<ShowFor packages={['dom', 'react-dom', 'react', 'vue']}>
 
 ### Initial layout
 
@@ -117,6 +182,8 @@ autoUpdate(referenceEl, floatingEl, () => {
   });
 });
 ```
+
+</ShowFor>
 
 ## Options
 
@@ -168,6 +235,8 @@ and will adapt to the writing direction (e.g. RTL) as expected.
   to create _any_ placement.
 </Notice>
 
+<ShowFor packages={['dom', 'react-dom', 'react', 'vue']}>
+
 ### strategy
 
 This is the type of CSS position property to use. Two strings are
@@ -203,6 +272,8 @@ These strategies are differentiated as follows:
   jumpiness with positioning while scrolling. It will in many
   cases also
   ["break" the floating element out of a clipping ancestor](/docs/misc#clipping).
+
+</ShowFor>
 
 ### middleware
 
@@ -283,11 +354,11 @@ needing the consumer to import middleware themselves:
 
 ```js {5-6}
 function wrapper(referenceEl, floatingEl, options) {
-  computePosition(referenceEl, floatingEl, {
+  return computePosition(referenceEl, floatingEl, {
     ...options,
     middleware: [
-      options.shouldFlip && flip(),
-      options.arrowEl && arrow({element: arrowEl}),
+      options.enableFlip && flip(),
+      options.arrowEl && arrow({element: options.arrowEl}),
     ],
   });
 }

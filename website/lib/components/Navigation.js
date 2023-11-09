@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import {ArrowLeft, ArrowRight} from 'react-feather';
+
+import {Link} from './Link';
 
 export default function Navigation({prev, next}) {
   return (

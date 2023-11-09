@@ -1,16 +1,22 @@
+<PageCard>
+
 # FloatingDelayGroup
 
 Provides context for a group of floating elements that should
 share a `delay{:.objectKey}` which temporarily becomes `1{:js}`
 ms after the first floating element of the group opens.
 
+```js
+import {FloatingDelayGroup} from '@floating-ui/react';
+```
+
+</PageCard>
+
 This allows higher discovery of floating elements when they have
 a hover delay (like tooltips) when their reference elements are
 placed near each other.
 
 ```js
-import {FloatingDelayGroup} from '@floating-ui/react';
-
 function App() {
   return (
     <FloatingDelayGroup delay={{open: 1000, close: 200}}>

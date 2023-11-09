@@ -1,7 +1,67 @@
+<PageCard>
+
 # hide
 
 A data provider that allows you to hide the floating element in
 applicable situations.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Data Provider" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {hide} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {hide} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {hide} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {hide} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {hide} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {hide} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This is useful for situations where you want to hide the floating
+element because it appears detached from the reference element
+(or attached to nothing).
+
+</PageCard>
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -20,15 +80,10 @@ applicable situations.
   </Chrome>
 </div>
 
-This is useful for situations where you want to hide the floating
-element because it appears detached from the reference element
-(or attached to nothing).
-
-<Notice>
-  In the above example, the floating element turns red once it has
-  `escaped{:.objectKey}` the reference element's clipping context.
-  Once the reference element is hidden, it hides itself.
-</Notice>
+In the above example, the floating element turns partially
+transparent once it has `escaped{:.objectKey}` the reference
+element's clipping context. Once the reference element is hidden,
+it hides itself.
 
 ## Usage
 

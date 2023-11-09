@@ -1,3 +1,5 @@
+<PageCard>
+
 # useInteractions
 
 A hook to merge or compose interaction event handlers together,
@@ -6,6 +8,14 @@ preserving memoization.
 ```js
 import {useInteractions} from '@floating-ui/react';
 ```
+
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
 
 Interaction hooks like `useHover(){:js}` and `useFocus(){:js}` do
 two things: they set up effects inside the hook that work on
@@ -38,6 +48,13 @@ function App() {
   ]);
 }
 ```
+
+<Notice>
+  You don't need to conditionally pass values into the interactions array if
+  you don't want one of the interactions to be enabled.
+  Instead, use the `enabled{:.objectKey}` option that each hook has -- 
+  it simultaneously disables all effects _and_ event handler props.
+</Notice>
 
 ## Return value
 

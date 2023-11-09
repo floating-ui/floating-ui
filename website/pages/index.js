@@ -1,7 +1,6 @@
 import {FloatingDelayGroup} from '@floating-ui/react';
 import cn from 'classnames';
 import Head from 'next/head';
-import Link from 'next/link';
 import {useEffect, useRef, useState} from 'react';
 import {
   ArrowRight,
@@ -39,17 +38,20 @@ import {
   Virtual,
 } from '../lib/components/Home/PositioningDemos';
 import {SelectDemo} from '../lib/components/Home/Select';
+import {Link} from '../lib/components/Link';
 import {Logos} from '../lib/components/Logos';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '../lib/components/Tooltip';
+import {useAppContext} from './_app';
 
 const b64banner =
   'data:image/png;base64,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';
 
 function HomePage() {
+  const {pageTransitionStatus} = useAppContext();
   const bannerRef = useRef();
   const logoRef = useRef();
 
@@ -70,7 +72,7 @@ function HomePage() {
   }, []);
 
   return (
-    <>
+    <div data-fade={pageTransitionStatus}>
       <Head>
         <link rel="preload" as="image" href="/floating-ui.jpg" />
         <title>
@@ -257,7 +259,7 @@ function HomePage() {
       </header>
       <main className="relative">
         <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Smart Anchor Positioning
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -277,8 +279,8 @@ function HomePage() {
         </div>
 
         <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
-            Interactions For React
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+            Interactions for React
           </h2>
           <p className="prose text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
             Build your own floating UI components with React.
@@ -482,7 +484,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Tree-shakeable & Platform-agnostic
           </h2>
           <p className="font-satoshi prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -563,7 +565,7 @@ function HomePage() {
         </div>
 
         <div className="font-satoshi container mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Support Floating UI
           </h2>
           <p className="prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -585,7 +587,7 @@ function HomePage() {
         </div>
 
         <div className="container relative mx-auto max-w-screen-xl px-4 md:px-8">
-          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-r from-indigo-400 via-blue-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-indigo-400 dark:via-blue-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
+          <h2 className="mb-4 mt-12 inline-block bg-gradient-to-br from-rose-400 via-purple-500 to-cyan-500 bg-clip-text py-1 text-3xl font-bold text-transparent dark:mt-0 dark:from-rose-400 dark:via-purple-400 dark:to-cyan-400 lg:mt-16 lg:text-4xl lg:[line-height:3.5rem] dark:lg:mt-4">
             Install
           </h2>
           <p className="font-satoshi prose mb-8 text-left text-xl dark:prose-invert lg:text-2xl lg:leading-relaxed">
@@ -665,7 +667,7 @@ function HomePage() {
           </p>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
 
