@@ -32,6 +32,14 @@ export const SPONSORS = [
   //   url:
   //     'https://d7m.tg?utm_source=floating-ui.com&utm_medium=paid_web&utm_campaign=may_2022',
   // },
+  {
+    title: 'Dopt',
+    description:
+      ' Dopt gives developers UI components and SDKs to build seamless onboarding and education experiences in minutes.',
+    image: '/sponsors/dopt.png',
+    url: 'https://dopt.com/?utm_source=floating_ui_website',
+    MemberId: 483438,
+  },
 ];
 
 // https://opencollective.com/floating-ui/tiers/mini-sponsor/all.json

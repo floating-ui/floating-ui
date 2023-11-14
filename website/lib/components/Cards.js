@@ -13,6 +13,7 @@ export function Cards({items, tier}) {
     );
   }, [tier]);
 
+  console.log(activeMembers);
 
   const activeItems = items.filter((item) =>
     activeMembers.some(
@@ -21,7 +22,7 @@ export function Cards({items, tier}) {
   );
 
   return (
-    <section className="my-16 flex flex-col justify-center gap-8 md:flex-row md:gap-2">
+    <section className="my-16 flex grid md:grid-cols-3 flex-col justify-center gap-8 md:flex-row md:gap-2">
       {activeItems.map((item) => (
         <a
           rel="noopener noreferrer"

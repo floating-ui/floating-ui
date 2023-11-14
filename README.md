@@ -133,6 +133,9 @@ development tests at `http://localhost:1234`.
     <td>
       <a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer"><img width="176" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" /></a>
     </td>
+    <td>
+      <a href="https://dopt.com/?utm_source=floating_ui_readme" target="_blank" rel="noopener noreferrer"><img width="200" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/dopt.png" alt="Dopt" /></a>
+    </td>
   </tr>
 </table>
 
