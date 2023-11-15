@@ -58,7 +58,11 @@ const rehypePrettyCodeOptions = {
   },
 };
 
+/**
+ * @type {import('next').NextConfig}
+ */
 export default {
+  output: 'export',
   experimental: {esmExternals: true, scrollRestoration: true},
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
   webpack(config, options) {
