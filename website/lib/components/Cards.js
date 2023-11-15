@@ -13,8 +13,6 @@ export function Cards({items, tier}) {
     );
   }, [tier]);
 
-  console.log(activeMembers);
-
   const activeItems = items.filter((item) =>
     activeMembers.some(
       (member) => member.MemberId === item.MemberId
