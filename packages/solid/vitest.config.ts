@@ -17,7 +17,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // 'solid-js': 'node_modules/solid-js/dist/dev.js',
       '@floating-ui/utils/dom': path.resolve(
         __dirname,
         '../utils/dom/src/index.ts',

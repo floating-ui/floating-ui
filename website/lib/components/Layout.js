@@ -513,7 +513,7 @@ function SideNavList({anchors, hash}) {
                     hash === url,
                   'hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                     hash !== url,
-                }
+                },
               )}
             >
               {title}
@@ -522,7 +522,7 @@ function SideNavList({anchors, hash}) {
               {anchors
                 .filter(
                   ({depth, parentTitle}) =>
-                    depth === 3 && parentTitle === title
+                    depth === 3 && parentTitle === title,
                 )
                 .map(({url, title}) => (
                   <li key={url}>
@@ -538,7 +538,7 @@ function SideNavList({anchors, hash}) {
                             hash === url,
                           'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                             hash !== url,
-                        }
+                        },
                       )}
                     >
                       {title}
@@ -559,6 +559,7 @@ const initialPackages = [
   {name: 'react-dom', version: 'latest'},
   {name: 'react-native', version: 'latest'},
   {name: 'vue', version: 'latest'},
+  {name: 'solid', version: 'latest'},
 ];
 
 export default function Layout({children, className}) {
@@ -567,7 +568,7 @@ export default function Layout({children, className}) {
   const [navOpen, setNavOpen] = useState(false);
   const activeLinkRef = useRef();
   const [hash, setHash] = useState(
-    asPath.slice(asPath.indexOf('#'))
+    asPath.slice(asPath.indexOf('#')),
   );
   const [packages, setPackages] = useState(initialPackages);
 
@@ -579,9 +580,9 @@ export default function Layout({children, className}) {
         const packageResults = await Promise.all(
           initialPackages.map(({name}) =>
             fetch(
-              `https://registry.npmjs.org/@floating-ui/${name}/latest`
-            ).then((res) => res.json())
-          )
+              `https://registry.npmjs.org/@floating-ui/${name}/latest`,
+            ).then((res) => res.json()),
+          ),
         );
 
         if (!ignore) {
@@ -589,7 +590,7 @@ export default function Layout({children, className}) {
             packageResults.map((pkg, index) => ({
               name: initialPackages[index].name,
               version: pkg.version,
-            }))
+            })),
           );
         }
       } catch (e) {
@@ -689,12 +690,14 @@ export default function Layout({children, className}) {
     ].includes(activeTitle);
   const isReactNativePage = activeTitle.includes('React Native');
   const isVuePage = activeTitle.includes('Vue');
+  const isSolidPage = activeTitle.startsWith('Solid');
   const isVanillaPage =
     !isReactPage &&
     !isReactNativePage &&
     !isVuePage &&
     !isDOMOnlyPage &&
-    !isNoPage;
+    !isNoPage &&
+    !isSolidPage;
 
   let firstVersionIndex = null;
   let secondVersionIndex = null;
@@ -714,6 +717,8 @@ export default function Layout({children, className}) {
     secondVersionIndex = 1;
   } else if (isVuePage) {
     firstVersionIndex = 5;
+  } else if (isSolidPage) {
+    firstVersionIndex = 6;
   }
 
   const {refs, context} = useFloating({
@@ -772,7 +777,7 @@ export default function Layout({children, className}) {
             ref={refs.setFloating}
             className={cn(
               'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg outline-none will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
-              {hidden: !isMounted}
+              {hidden: !isMounted},
             )}
             style={styles}
             {...getFloatingProps()}
@@ -829,7 +834,7 @@ export default function Layout({children, className}) {
                                 pathname !== url,
                               'rounded-tl-none rounded-bl-none':
                                 depth > 0,
-                            }
+                            },
                           )}
                         >
                           <span className="flex w-full items-center gap-4 py-1">
@@ -857,7 +862,7 @@ export default function Layout({children, className}) {
                           </span>
                         </Link>
                       </li>
-                    )
+                    ),
                 )}
               </ul>
             </div>
