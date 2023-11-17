@@ -1,19 +1,65 @@
-import inline from '../../assets/detectOverflow.inline.jpg';
+<PageCard>
 
 # detectOverflow
 
-A utility function that computes the overflow offsets of either
-the reference or floating element relative to any clipping
-boundaries.
+Detects when the floating or reference element is overflowing a
+clipping container or custom boundary.
 
-<CircleImage name="detectOverflow" inline={inline} />
+<ShowFor packages={['core']}>
 
-A clipping boundary is one that causes child elements inside it
-to be clipped if they overflow it.
+```js
+import {detectOverflow} from '@floating-ui/core';
+```
 
-Visibility optimizer middleware use this function for **collision
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {detectOverflow} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {detectOverflow} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {detectOverflow} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {detectOverflow} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {detectOverflow} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+</PageCard>
+
+A clipping container (or boundary) is one that causes child
+elements inside it to be clipped if they overflow it. Visibility
+optimizer middleware use this function for **collision
 detection**, making it useful for your own custom middleware that
-perform visibility optimization.
+do the same.
 
 ## Usage
 
@@ -22,8 +68,6 @@ Inside your custom middleware, make your `fn{:.function}`
 `state{:.param}`:
 
 ```js
-import {detectOverflow} from '@floating-ui/dom';
-
 const middleware = {
   name: 'middleware',
   async fn(state) {

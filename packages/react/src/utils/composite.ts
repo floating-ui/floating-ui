@@ -51,17 +51,22 @@ export function findNonDisabledIndex(
 ): number {
   const list = listRef.current;
 
+  const isDisabledIndex = disabledIndices
+    ? (index: number) => disabledIndices.includes(index)
+    : (index: number) => {
+      const element = list[index];
+      return element == null ||
+        element.hasAttribute('disabled') ||
+        element.getAttribute('aria-disabled') === 'true';
+    };
+
   let index = startingIndex;
   do {
-    index = index + (decrement ? -amount : amount);
+    index += decrement ? -amount : amount;
   } while (
     index >= 0 &&
     index <= list.length - 1 &&
-    (disabledIndices
-      ? disabledIndices.includes(index)
-      : list[index] == null ||
-        list[index]?.hasAttribute('disabled') ||
-        list[index]?.getAttribute('aria-disabled') === 'true')
+    isDisabledIndex(index)
   );
 
   return index;

@@ -1,15 +1,18 @@
 import {Canvas} from '../../lib/components/Canvas';
-import inline from '../../assets/platform.inline.jpg';
+
+<PageCard>
 
 # Platform
 
+Use Floating UI's positioning logic on any platform that can
+execute JavaScript.
+
+</PageCard>
+
 Floating UI's core is essentially a bunch of mathematical
-calculations.
-
-<CircleImage name="platform" inline={inline} />
-
-These calculations are pure and agnostic, allowing Floating UI to
-work on any platform that can execute JavaScript.
+calculations performed on rectangles. These calculations are pure
+and agnostic, allowing Floating UI to work on any platform that
+can execute JavaScript.
 
 To make it work with a given platform, methods are used to allow
 it to hook into measurement APIs, for instance, to measure the
@@ -25,7 +28,7 @@ This is Floating UI running in a pure `<canvas />{:js}` element!
 Check it out on
 [CodeSandbox](https://codesandbox.io/s/floating-ui-canvas-platform-w7pfx3?file=/src/index.js).
 
-## Custom object
+## Custom platform object
 
 If you're building a platform from scratch, e.g. your own tiny
 custom DOM platform, you'll be using the `@floating-ui/core`

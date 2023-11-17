@@ -1,26 +1,99 @@
+<PageCard className="mb-8">
+
 # arrow
 
-Provides data to position an inner element of the floating
-element (usually a triangle or caret) so that it appears centered
-to the reference element.
+Provides positioning data for an arrow element (triangle or
+caret) inside the floating element, such that it appears to be
+pointing toward the center of the reference element.
 
-<div className="flex flex-col gap-4">
-  <Chrome center className="h-96">
-    <Floating arrow>
-      <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
-    </Floating>
-  </Chrome>
-</div>
+<MiddlewareContainer>
+  <MiddlewareBadge type="Data Provider" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {arrow} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {arrow} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {arrow} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {arrow} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {arrow} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {arrow} from '@floating-ui/react-native';
+```
+
+</ShowFor>
 
 This is useful to add an additional visual cue to the floating
 element about which element it is referring to.
 
+<ShowFor packages={['react']}>
+
 <Notice>
-  If you're using React, the
-  [`FloatingArrow`](/docs/FloatingArrow) component renders out a
-  customizable arrow element and applies the positioning styles
-  for you.
+  The [`FloatingArrow`](/docs/FloatingArrow) component renders
+  out a customizable arrow element and applies the positioning
+  styles for you.
 </Notice>
+
+</ShowFor>
+
+</PageCard>
+
+<div className="flex flex-col gap-4">
+  <Chrome
+    center
+    className="h-96"
+    scrollable="x"
+    label="Scroll horizontally"
+  >
+    <Floating
+      content="The arrow is positioned dynamically"
+      arrow
+      middleware={[
+        {name: 'shift'},
+        {name: 'offset', options: 20},
+      ]}
+      portaled
+      bounded
+    >
+      <div className="relative -top-8 grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
+    </Floating>
+  </Chrome>
+</div>
 
 ## Usage
 
@@ -46,17 +119,13 @@ Given an arrow element inside your floating element:
 Pass it to the `arrow(){:js}` middleware and assign the dynamic
 styles:
 
-```js
-import {computePosition, arrow} from '@floating-ui/dom';
+<ShowFor packages={['dom']}>
 
+```js
 const arrowEl = document.querySelector('#arrow');
 
 computePosition(referenceEl, floatingEl, {
-  middleware: [
-    arrow({
-      element: arrowEl,
-    }),
-  ],
+  middleware: [arrow({element: arrowEl})],
 }).then(({middlewareData}) => {
   if (middlewareData.arrow) {
     const {x, y} = middlewareData.arrow;
@@ -68,6 +137,37 @@ computePosition(referenceEl, floatingEl, {
   }
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+const arrowRef = useRef(null);
+
+const {refs, floatingStyles, middlewareData} = useFloating({
+  middleware: [
+    arrow({
+      element: arrowRef,
+    }),
+  ],
+});
+
+return (
+  <div ref={refs.setFloating} style={floatingStyles}>
+    <div
+      ref={arrowRef}
+      style={{
+        position: 'absolute',
+        left: middlewareData.arrow?.x,
+        top: middlewareData.arrow?.y,
+      }}
+    />
+  </div>
+);
+```
+
+</ShowFor>
 
 <Notice type="error" title="Important">
   Depending on the placement, either `x` or `y` will be
@@ -104,6 +204,8 @@ middleware array, after `shift(){:js}` (if used).
 To know which side the floating element is actually placed at for
 the static axis offset of the arrow, the placement is returned:
 
+<ShowFor packages={['core', 'dom']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   placement: 'top',
@@ -114,15 +216,31 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-### React
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
 
 ```js
 // The final placement can be 'bottom' or 'top'
 const {placement} = useFloating({
   placement: 'top',
-  middleware: [flip(), arrow({element: arrowEl})],
+  middleware: [flip(), arrow({element: arrowRef})],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+// The final placement can be 'bottom' or 'top'
+const {placement} = useFloating(reference, floating, {
+  placement: 'top',
+  middleware: [flip(), arrow({element: arrowRef})],
+});
+```
+
+</ShowFor>
 
 ## Options
 

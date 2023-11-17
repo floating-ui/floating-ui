@@ -1,7 +1,67 @@
+<PageCard>
+
 # autoPlacement
 
-A visibility optimizer that chooses the placement that has the
-most space available automatically.
+Chooses the placement that has the most space available
+automatically.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Visibility Optimizer" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {autoPlacement} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {autoPlacement} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {autoPlacement} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {autoPlacement} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {autoPlacement} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {autoPlacement} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This is useful when you don't know which placement will be best
+for the floating element, or don't want to have to explicitly
+specify it.
+
+</PageCard>
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -22,10 +82,6 @@ most space available automatically.
     </Floating>
   </Chrome>
 </div>
-
-This is useful when you don't know which placement will be best
-for the floating element, or don't want to have to explicitly
-specify it.
 
 ## Usage
 

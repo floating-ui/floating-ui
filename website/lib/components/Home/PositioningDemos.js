@@ -1,5 +1,6 @@
 import {
   getOverflowAncestors,
+  offset,
   shift,
   useFloating,
 } from '@floating-ui/react';
@@ -26,7 +27,7 @@ const Reference = forwardRef(({className, children}, ref) => {
       )}
       aria-label="Reference element"
     >
-      {children}
+      {children ?? 'Reference'}
     </button>
   );
 });
@@ -190,7 +191,7 @@ export function Placement() {
           <Floating
             content={
               <div
-                className="text-center font-bold"
+                className="text-center text-sm font-bold"
                 style={{
                   minWidth:
                     ['top', 'bottom'].includes(
@@ -257,13 +258,8 @@ export function Shift() {
                 },
               ]}
               content={
-                <div className="w-24">
-                  <h3 className="text-xl font-bold">Popover</h3>
-                  <p className="text-sm">
-                    Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit. Nullam vitae pellentesque
-                    elit, in dapibus enim.
-                  </p>
+                <div className="grid h-48 w-20 place-items-center text-sm font-bold">
+                  Popover
                 </div>
               }
             >
@@ -297,13 +293,18 @@ export function Flip() {
           ref={setBoundary}
         >
           <Chrome
-            label="Scroll up"
+            label="Scroll down"
             scrollable="y"
             center
             shadow={false}
           >
             <Floating
-              content={<strong>Tooltip</strong>}
+              content={
+                <span className="text-sm font-bold">
+                  Tooltip
+                </span>
+              }
+              placement="top"
               middleware={[
                 {name: 'offset', options: 5},
                 {
@@ -338,7 +339,7 @@ export function Size() {
         >
           <Floating
             content={
-              <div className="grid items-center font-bold">
+              <div className="grid items-center text-sm font-bold">
                 Dropdown
               </div>
             }
@@ -385,7 +386,7 @@ export function Arrow() {
           >
             <Floating
               placement="right"
-              content={<div className="h-[18.3rem] w-24" />}
+              content={<div className="h-[12rem] w-24" />}
               middleware={[
                 {name: 'offset', options: 16},
                 {
@@ -417,9 +418,10 @@ export function Virtual() {
   const boundaryRef = useRef();
   const pointerTypeRef = useRef();
   const {x, y, refs, update} = useFloating({
-    placement: 'top',
+    placement: 'bottom-start',
     strategy: 'fixed',
     middleware: [
+      offset({mainAxis: 10, crossAxis: 10}),
       shift({
         crossAxis: true,
         padding: 5,
@@ -502,7 +504,7 @@ export function Virtual() {
           >
             <div
               ref={refs.setFloating}
-              className="rounded bg-gray-800 p-4 font-bold text-gray-50"
+              className="bg-rose-500 p-2 text-sm font-bold text-gray-50"
               style={{
                 position: 'absolute',
                 top: y ?? 0,

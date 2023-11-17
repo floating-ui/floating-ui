@@ -1,26 +1,41 @@
-import {
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
-  getOppositeAlignmentPlacement,
-  getOppositeSidePlacement,
-  getSide,
-} from '@floating-ui/core';
-
 import type {
   Alignment,
+  Axis,
+  ClientRectObject,
   ElementRects,
+  Length,
   Padding,
   Placement,
+  Rect,
   Side,
   SideObject,
 } from './types';
+
+export const sides: Side[] = ['top', 'right', 'bottom', 'left'];
+export const alignments: Alignment[] = ['start', 'end'];
+export const placements: Placement[] = sides.reduce(
+  (acc: Placement[], side) =>
+    acc.concat(side, `${side}-${alignments[0]}`, `${side}-${alignments[1]}`),
+  []
+);
 
 export const min = Math.min;
 export const max = Math.max;
 export const round = Math.round;
 export const floor = Math.floor;
 export const createCoords = (v: number) => ({x: v, y: v});
+
+const oppositeSideMap = {
+  left: 'right',
+  right: 'left',
+  bottom: 'top',
+  top: 'bottom',
+};
+
+const oppositeAlignmentMap = {
+  start: 'end',
+  end: 'start',
+};
 
 export function clamp(start: number, value: number, end: number): number {
   return max(start, min(value, end));
@@ -30,6 +45,30 @@ export function evaluate<T, P>(value: T | ((param: P) => T), param: P): T {
   return typeof value === 'function'
     ? (value as (param: P) => T)(param)
     : value;
+}
+
+export function getSide(placement: Placement): Side {
+  return placement.split('-')[0] as Side;
+}
+
+export function getAlignment(placement: Placement): Alignment | undefined {
+  return placement.split('-')[1] as Alignment | undefined;
+}
+
+export function getOppositeAxis(axis: Axis): Axis {
+  return axis === 'x' ? 'y' : 'x';
+}
+
+export function getAxisLength(axis: Axis): Length {
+  return axis === 'y' ? 'height' : 'width';
+}
+
+export function getSideAxis(placement: Placement): Axis {
+  return ['top', 'bottom'].includes(getSide(placement)) ? 'y' : 'x';
+}
+
+export function getAlignmentAxis(placement: Placement): Axis {
+  return getOppositeAxis(getSideAxis(placement));
 }
 
 export function getAlignmentSides(
@@ -51,19 +90,29 @@ export function getAlignmentSides(
       : 'top';
 
   if (rects.reference[length] > rects.floating[length]) {
-    mainAlignmentSide = getOppositeSidePlacement(mainAlignmentSide);
+    mainAlignmentSide = getOppositePlacement(mainAlignmentSide);
   }
 
-  return [mainAlignmentSide, getOppositeSidePlacement(mainAlignmentSide)];
+  return [mainAlignmentSide, getOppositePlacement(mainAlignmentSide)];
 }
 
 export function getExpandedPlacements(placement: Placement): Array<Placement> {
-  const oppositePlacement = getOppositeSidePlacement(placement);
+  const oppositePlacement = getOppositePlacement(placement);
+
   return [
     getOppositeAlignmentPlacement(placement),
     oppositePlacement,
     getOppositeAlignmentPlacement(oppositePlacement),
   ];
+}
+
+export function getOppositeAlignmentPlacement<T extends string>(
+  placement: T
+): T {
+  return placement.replace(
+    /start|end/g,
+    (alignment) => oppositeAlignmentMap[alignment as Alignment]
+  ) as T;
 }
 
 function getSideList(side: Side, isStart: boolean, rtl?: boolean): Placement[] {
@@ -105,6 +154,13 @@ export function getOppositeAxisPlacements(
   return list;
 }
 
+export function getOppositePlacement<T extends string>(placement: T): T {
+  return placement.replace(
+    /left|right|bottom|top/g,
+    (side) => oppositeSideMap[side as Side]
+  ) as T;
+}
+
 export function expandPaddingObject(padding: Partial<SideObject>): SideObject {
   return {top: 0, right: 0, bottom: 0, left: 0, ...padding};
 }
@@ -113,4 +169,14 @@ export function getPaddingObject(padding: Padding): SideObject {
   return typeof padding !== 'number'
     ? expandPaddingObject(padding)
     : {top: padding, right: padding, bottom: padding, left: padding};
+}
+
+export function rectToClientRect(rect: Rect): ClientRectObject {
+  return {
+    ...rect,
+    top: rect.y,
+    left: rect.x,
+    right: rect.x + rect.width,
+    bottom: rect.y + rect.height,
+  };
 }

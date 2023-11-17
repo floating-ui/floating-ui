@@ -1,28 +1,27 @@
+<PageCard>
+
 # useFloating
 
 The main hook of the library that acts as a controller for all
 other hooks and components.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useFloating} from '@floating-ui/react';
 ```
 
-## Packages
+</ShowFor>
 
-There are two different React packages:
+<ShowFor packages={['react-dom']}>
 
-- `@floating-ui/react{:.string}`: the full package containing all
-  features.
-- `@floating-ui/react-dom{:.string}`: a subset of the former,
-  containing only positioning features.
+```js
+import {useFloating} from '@floating-ui/react-dom';
+```
 
-If you only need positioning, install
-`@floating-ui/react-dom{:.string}` as it's leaner; if later on
-you decide you want to add interactions, you can uninstall
-`@floating-ui/react-dom{:.string}` and install
-`@floating-ui/react{:.string}`, then replace all your imports.
-It's a compatible superset, so it will continue to work without
-needing to change anything else.
+</ShowFor>
+
+</PageCard>
 
 ## Usage
 
@@ -50,6 +49,37 @@ useFloating({
 });
 ```
 
+<ShowFor packages={['react']}>
+
+```ts
+interface UseFloatingOptions {
+  placement?: Placement;
+  strategy: 'fixed' | 'absolute';
+  transform?: boolean;
+  middleware?: Array<Middleware | undefined | null | false>;
+  open?: boolean;
+  onOpenChange?(
+    open: boolean,
+    event?: Event,
+    reason?: OpenChangeReason
+  ): void;
+  elements?: {
+    reference?: ReferenceElement | null;
+    floating?: FloatingElement | null;
+  };
+  whileElementsMounted?(
+    reference?: ReferenceElement,
+    floating?: FloatingElement,
+    update?: () => void
+  ): () => void;
+  nodeId?: string;
+}
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
 ```ts
 interface UseFloatingOptions {
   placement?: Placement;
@@ -66,10 +96,10 @@ interface UseFloatingOptions {
     floating?: FloatingElement,
     update?: () => void
   ): () => void;
-  onOpenChange?(open: boolean, event?: Event): void;
-  nodeId?: string;
 }
 ```
+
+</ShowFor>
 
 ### placement
 
@@ -373,6 +403,8 @@ useEffect(() => {
 }, [isPositioned]);
 ```
 
+<ShowFor packages={['react']}>
+
 ### onOpenChange
 
 default: `undefined{:js}`
@@ -392,23 +424,34 @@ useFloating({
 
 Since it's an event callback function, it allows you to
 conditionally react to the state changing, plus determine the
-event that caused the change.
+event and reason that caused the change.
 
 ```js
 useFloating({
   open: isOpen,
-  onOpenChange(isOpen, event) {
+  onOpenChange(isOpen, event, reason) {
     setIsOpen(isOpen);
-    if (event) {
-      console.log(event.type);
-    }
+    event && console.log(event); // e.g. MouseEvent
+    reason && console.log(reason); // e.g. 'hover'
   },
 });
 ```
 
-<Notice>
-  This option is only available for `@floating-ui/react`.
-</Notice>
+Most open change events have a reason and event attached, but not
+all.
+
+```ts
+type OpenChangeReason =
+  | 'outside-press'
+  | 'escape-key'
+  | 'ancestor-scroll'
+  | 'reference-press'
+  | 'click'
+  | 'hover'
+  | 'focus'
+  | 'list-navigation'
+  | 'safe-polygon';
+```
 
 ### nodeId
 
@@ -417,9 +460,7 @@ default: `undefined{:js}`
 A unique node ID for the floating element when using a
 [FloatingTree](/docs/FloatingTree).
 
-<Notice>
-  This option is only available for `@floating-ui/react`.
-</Notice>
+</ShowFor>
 
 ## Return value
 
@@ -451,6 +492,8 @@ interface UseFloatingReturn {
 }
 ```
 
+<ShowFor packages={['react']}>
+
 ### context
 
 This object contains the context data provided to relevant hooks
@@ -460,9 +503,7 @@ and components.
 const {context} = useFloating();
 ```
 
-<Notice>
-  This object is only available for `@floating-ui/react`.
-</Notice>
+</ShowFor>
 
 ### placement
 
@@ -571,6 +612,8 @@ useEffect(() => {
 }, [refs]);
 ```
 
+<ShowFor packages={['react']}>
+
 #### domReference
 
 A ref for the DOM reference element (if available). You can
@@ -587,9 +630,7 @@ This differs from `reference` in that it is guaranteed to be a
 DOM reference, while the former can be a
 [virtual element](/docs/virtual-elements).
 
-<Notice>
-  This property is only available for `@floating-ui/react`.
-</Notice>
+</ShowFor>
 
 #### setReference
 
@@ -609,6 +650,8 @@ const {refs} = useFloating();
 return <div ref={refs.setFloating} />;
 ```
 
+<ShowFor packages={['react']}>
+
 #### setPositionReference
 
 A function that sets the positioning reference element, to
@@ -620,9 +663,7 @@ const {refs} = useFloating();
 return <div ref={refs.setPositionReference} />;
 ```
 
-<Notice>
-  This function is only available for `@floating-ui/react`.
-</Notice>
+</ShowFor>
 
 ### elements
 

@@ -1,3 +1,5 @@
+<PageCard>
+
 # FloatingPortal
 
 Portals the floating element into a given container element — by
@@ -5,7 +7,17 @@ default, outside of the app root and into the body.
 
 ```js
 import {FloatingPortal} from '@floating-ui/react';
+```
 
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
+
+```js
 function Tooltip() {
   return (
     isOpen && (

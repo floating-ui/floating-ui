@@ -1,15 +1,14 @@
-import inline from '../../assets/middleware.inline.jpg';
+<PageCard>
 
 # Middleware
 
-Middleware are plain objects that modify the positioning
-coordinates in some fashion, or provide useful data for
-rendering, as calculated by the positioning cycle.
+Objects that change the positioning of the floating element,
+executed in order as a stack.
 
-<CircleImage name="middleware" inline={inline} />
+</PageCard>
 
-This allows you to customize the behavior of the positioning and
-be as granular as you want, adding your own custom logic.
+Middleware allow you to customize the behavior of the positioning
+and be as granular as you want, adding your own custom logic.
 
 `computePosition(){:js}` starts with initial positioning via
 `placement{:.objectKey}` — then middleware are executed as an
@@ -17,7 +16,9 @@ in-between "middle" step of the initial placement computation and
 eventual return of data for rendering once the promise has
 resolved.
 
-Each middleware is executed in order, like a stack:
+Each middleware is executed in order:
+
+<ShowFor packages={['dom', 'core']}>
 
 ```js
 computePosition(referenceEl, floatingEl, {
@@ -25,6 +26,30 @@ computePosition(referenceEl, floatingEl, {
   middleware: [],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  placement: 'right',
+  middleware: [],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  placement: 'right',
+  middleware: [],
+});
+```
+
+</ShowFor>
 
 ## Example
 
@@ -44,6 +69,8 @@ This (not particularly useful) middleware adds `1{:js}` pixel to
 the coordinates. To use this middleware, add it to your
 `middleware{:.objectKey}` array:
 
+<ShowFor packages={['dom', 'core']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   placement: 'right',
@@ -51,11 +78,49 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  placement: 'right',
+  middleware: [shiftByOnePixel],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  placement: 'right',
+  middleware: [shiftByOnePixel],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['core', 'dom']}>
+
 Here, `computePosition(){:js}` will compute coordinates that will
 place the floating element to the right center of the reference
-element, lying flush with it. Middleware are then executed,
-resulting in these coordinates getting shifted by one pixel. Then
-that data is returned to the caller.
+element, lying flush with it.
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native', 'vue']}>
+
+Here, `useFloating(){:js}` will compute coordinates that will
+place the floating element to the right center of the reference
+element, lying flush with it.
+
+</ShowFor>
+
+Middleware are then executed, resulting in these coordinates
+getting shifted by one pixel. Then that data is returned to the
+caller.
 
 ### Shape
 
@@ -86,6 +151,8 @@ const shiftByOnePixel = {
 };
 ```
 
+<ShowFor packages={['core', 'dom']}>
+
 ```js
 computePosition(referenceEl, floatingEl, {
   middleware: [shiftByOnePixel],
@@ -93,6 +160,8 @@ computePosition(referenceEl, floatingEl, {
   console.log(middlewareData.shiftByOnePixel);
 });
 ```
+
+</ShowFor>
 
 ### Function
 
@@ -141,7 +210,7 @@ there are many more.
 The properties passed are below:
 
 ```ts
-type MiddlewareState = {
+interface MiddlewareState {
   x: number;
   y: number;
   initialPlacement: Placement;
@@ -151,7 +220,7 @@ type MiddlewareState = {
   elements: Elements;
   rects: ElementRects;
   platform: Platform;
-};
+}
 ```
 
 ### x

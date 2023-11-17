@@ -27,7 +27,7 @@ if (__DEV__) {
 
 /**
  * Provides data to position a floating element and context to add interactions.
- * @see https://floating-ui.com/docs/react
+ * @see https://floating-ui.com/docs/useFloating
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
   options: Partial<UseFloatingOptions> = {}

@@ -1,9 +1,23 @@
+<PageCard>
+
 # FloatingList
 
 Provides the ability to create composable children APIs for list
 components, without needing to keep track of a list item index
 for [`useListNavigation`](/docs/useListNavigation) or
 [`useTypeahead`](/docs/useTypeahead).
+
+```js
+import {FloatingList, useListItem} from '@floating-ui/react';
+```
+
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
 
 Manually specifying an index poses problems when wrapper tags
 surround list items, such as with grouping.
@@ -32,10 +46,6 @@ children:
 - [Select with Composable Children](https://codesandbox.io/s/floating-ui-react-select-with-composable-children-qsuw76?file=/src/App.tsx)
 
 ## Usage
-
-```jsx
-import {FloatingList, useListItem} from '@floating-ui/react';
-```
 
 ### FloatingList
 

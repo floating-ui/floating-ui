@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.26.2
+
+### Patch Changes
+
+- c1965f65: refactor: minor jsdoc/type improvements
+- 3bd42f24: feat: reason strings as third param of onOpenChange
+- 14cb1681: fix(FloatingFocusManager): avoid returning focus to reference if
+  focus moved elsewhere
+- 628fd119: feat(useRole): add label role
+- Updated dependencies [c1965f65]
+  - @floating-ui/react-dom@2.0.3
+
 ## 0.26.1
 
 ### Patch Changes

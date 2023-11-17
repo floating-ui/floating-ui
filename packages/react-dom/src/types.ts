@@ -5,7 +5,7 @@ import type {
 } from '@floating-ui/dom';
 import * as React from 'react';
 
-export {arrow, Options as ArrowOptions} from './arrow';
+export {arrow, ArrowOptions} from './arrow';
 export {useFloating} from './useFloating';
 export type {
   AlignedPlacement,
@@ -62,20 +62,6 @@ export {
   platform,
   shift,
   size,
-} from '@floating-ui/dom';
-export {
-  alignments,
-  getAlignment,
-  getAlignmentAxis,
-  getAxisLength,
-  getOppositeAlignmentPlacement,
-  getOppositeAxis,
-  getOppositeSidePlacement,
-  getSide,
-  getSideAxis,
-  placements,
-  rectToClientRect,
-  sides,
 } from '@floating-ui/dom';
 
 type Prettify<T> = {

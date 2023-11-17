@@ -1,11 +1,5 @@
 import * as FloatingUI from '@floating-ui/react';
-import {
-  cloneElement,
-  Fragment,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import {cloneElement, useEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
 
 import {useChromeContext} from './Chrome';
@@ -122,14 +116,14 @@ export function Floating({
 
   const tooltipJsx = (
     <div
-      className="z-10 grid place-items-center rounded bg-gray-800 text-gray-50"
+      className="z-10 grid place-items-center bg-rose-500 text-base font-semibold text-gray-50"
       ref={refs.setFloating}
       style={{
         ...tooltipStyle,
         ...floatingStyles,
         maxWidth: bounded ? '60vw' : undefined,
-        backgroundColor: middlewareData.hide?.escaped
-          ? 'red'
+        opacity: middlewareData.hide?.escaped
+          ? '0.5'
           : undefined,
         visibility:
           middlewareData.hide?.referenceHidden || !isPositioned
@@ -158,7 +152,7 @@ export function Floating({
             right: undefined,
             bottom: undefined,
             [staticSide]: lockedFromArrow ? '-0.5rem' : '-1rem',
-            background: lockedFromArrow ? 'inherit' : 'red',
+            background: lockedFromArrow ? 'inherit' : 'inherit',
             transition: lockedFromArrow
               ? 'transform 0.2s ease'
               : 'none',
@@ -173,14 +167,16 @@ export function Floating({
     </div>
   );
 
-  const Wrapper = portaled
-    ? FloatingUI.FloatingPortal
-    : Fragment;
-
   return (
     <>
       {cloneElement(children, {ref: refs.setReference})}
-      <Wrapper>{tooltipJsx}</Wrapper>
+      {portaled ? (
+        <FloatingUI.FloatingPortal id="floating-container">
+          {tooltipJsx}
+        </FloatingUI.FloatingPortal>
+      ) : (
+        tooltipJsx
+      )}
     </>
   );
 }

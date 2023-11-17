@@ -7,8 +7,6 @@ export default function Notice({
   children,
   className,
 }) {
-  const ChildrenTag = type === 'version' ? 'strong' : 'span';
-
   return (
     <aside
       className={cn(
@@ -28,12 +26,10 @@ export default function Notice({
         }
       )}
     >
-      {type !== 'version' && (
-        <h5 className="-mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">
-          {title[0].toUpperCase() + title.slice(1)}
-        </h5>
-      )}
-      <ChildrenTag>{children}</ChildrenTag>
+      <h5 className="-mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">
+        {title[0].toUpperCase() + title.slice(1)}
+      </h5>
+      <span>{children}</span>
     </aside>
   );
 }

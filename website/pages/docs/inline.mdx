@@ -1,8 +1,68 @@
+<PageCard>
+
 # inline
 
-A placement modifier that improves positioning for inline
-reference elements that span over multiple lines, such as
-hyperlinks or range selections.
+Improves positioning for inline reference elements that span over
+multiple lines.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Placement Modifier" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {inline} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {inline} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {inline} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {inline} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {inline} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {inline} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This is useful for reference elements such as hyperlinks or range
+selections, as the default positioning using
+`getBoundingClientRect(){:js}` may appear "detached" when
+measuring over the bounding box.
+
+</PageCard>
 
 In the following examples, the `placement{:.objectKey}` is
 `'top'{:js}`.
@@ -28,10 +88,6 @@ With `inline(){:js}`:
   className="rounded-lg shadow"
   draggable={false}
 />
-
-This is useful as the default positioning using
-`getBoundingClientRect(){:js}` may appear "detached" when
-measuring over the bounding box.
 
 ## Usage
 

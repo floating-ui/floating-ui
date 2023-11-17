@@ -1,7 +1,65 @@
+<PageCard className="mb-8">
+
 # shift
 
-A visibility optimizer that shifts the floating element along the
-specified axes in order to keep it in view.
+Shifts the floating element to keep it in view.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Visibility Optimizer" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {shift} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {shift} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {shift} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {shift} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {shift} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {shift} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This prevents the floating element from overflowing along its
+axis of alignment, thereby preserving the side it's placed on.
+
+</PageCard>
 
 <Chrome label="Scroll horizontally" center scrollable="x">
   <Floating
@@ -14,18 +72,37 @@ specified axes in order to keep it in view.
   </Floating>
 </Chrome>
 
-This is useful for preventing overflow while maintaining the
-desired placement as best as possible.
-
 ## Usage
 
-```js
-import {computePosition, shift} from '@floating-ui/dom';
+<ShowFor packages={['core', 'dom']}>
 
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [shift()],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [shift()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [shift()],
+});
+```
+
+</ShowFor>
 
 ## Options
 

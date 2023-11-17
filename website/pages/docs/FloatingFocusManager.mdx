@@ -1,15 +1,27 @@
+<PageCard>
+
 # FloatingFocusManager
 
 Provides flexible modal or non-modal focus management for a
 floating element. Modal behavior is the default — focus is fully
 trapped inside the floating element while it is rendered.
 
+```js
+import {FloatingFocusManager} from '@floating-ui/react';
+```
+
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
+
 This component should only be rendered when the floating element
 is open and directly wrap it.
 
 ```js /context/1,3
-import {FloatingFocusManager} from '@floating-ui/react';
-
 function App() {
   const {context} = useFloating();
 
@@ -201,10 +213,13 @@ reload the page).
 
 #### Comboboxes
 
+When the reference element has a `combobox{:.string}`
+`role{:.keyword}` present, the focus manager behavior changes.
+
 The listbox part (floating element) of a combobox (input +
 listbox popup) can be portalled and accessible to touch screen
-readers when using modal focus management. DOM focus does not
-become modal but screen reader virtual cursors do become modal,
+readers when using modal focus management, but DOM focus does not
+become modal. Screen reader virtual cursors do become modal,
 allowing a touch screen reader to immediately access the
 portalled listbox items.
 
@@ -241,10 +256,10 @@ when using `true{:js}` is `Dismiss{:.string}`.
 
 default: `true{:js}`
 
-Determines whether `focusout` event listeners that control
-whether the floating element should be closed if the focus moves
-outside of it are attached to the reference and floating
-elements. This mostly affects non-modal focus management.
+Determines whether `focusout{:.string}` event listeners that
+control whether the floating element should be closed if the
+focus moves outside of it are attached to the reference and
+floating elements. This affects non-modal focus management.
 
 ```js
 <FloatingFocusManager context={context} closeOnFocusOut={false}>

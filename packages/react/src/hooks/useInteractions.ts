@@ -50,7 +50,7 @@ function mergeProps(
  * Merges an array of interaction hooks' props into prop getters, allowing
  * event handler functions to be composed together without overwriting one
  * another.
- * @see https://floating-ui.com/docs/react#interaction-hooks
+ * @see https://floating-ui.com/docs/useInteractions
  */
 export function useInteractions(propsList: Array<ElementProps | void> = []) {
   // The dependencies are a dynamic array, so we can't use the linter's

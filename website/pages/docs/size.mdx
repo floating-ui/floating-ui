@@ -1,7 +1,68 @@
+<PageCard className="mb-8">
+
 # size
 
-A visibility optimizer and data provider that allows you to
-change the size of the floating element.
+Provides data to change the size of a floating element.
+
+<MiddlewareContainer>
+  <MiddlewareBadge type="Visibility Optimizer" />
+  <MiddlewareBadge type="Data Provider" />
+</MiddlewareContainer>
+
+<ShowFor packages={['core']}>
+
+```js
+import {size} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
+import {size} from '@floating-ui/dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {size} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {size} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {size} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {size} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+This is useful to ensure the floating element isn't too big to
+fit in the viewport (or more specifically, its clipping context),
+especially when a maximum size isn't specified. It also allows
+matching the width/height of the reference element.
+
+</PageCard>
 
 <div className="flex flex-col gap-4">
   <Chrome
@@ -16,19 +77,17 @@ change the size of the floating element.
         overflow: 'hidden',
         maxHeight: 0,
       }}
-      middleware={[{name: 'size', options: {padding: 5}}]}
+      middleware={[
+        {
+          name: 'size',
+          options: {padding: 5, rootBoundary: 'document'},
+        },
+      ]}
     >
       <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />
     </Floating>
   </Chrome>
 </div>
-
-This is useful for:
-
-- Ensuring the floating element isn't too big to fit in the
-  viewport (or more specifically, its clipping context),
-  especially when a maximum size isn't specified.
-- Matching the width of the reference element.
 
 ## Usage
 
@@ -37,9 +96,25 @@ the example, you can make the floating element scrollable with
 `overflow: scroll{:sass}` (or `auto{:.param}`). Ensure your CSS
 is using `box-sizing: border-box{:sass}`!
 
-```js
-import {computePosition, size} from '@floating-ui/dom';
+<ShowFor packages={['core']}>
 
+```js
+computePosition(referenceEl, floatingEl, {
+  middleware: [
+    size({
+      apply({availableWidth, availableHeight, elements}) {
+        // Do things with the data.
+      },
+    }),
+  ],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
@@ -54,6 +129,37 @@ computePosition(referenceEl, floatingEl, {
   ],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom']}>
+
+```js
+import {flushSync} from 'react-dom';
+```
+
+1. You can use sync state, and apply using React props.
+2. Or, mutate the style attribute directly.
+
+```js
+const [maxWidth, setMaxWidth] = useState(null);
+
+useFloating({
+  middleware: [
+    size({
+      apply({availableWidth, availableHeight, elements}) {
+        // 1. You can use sync state, and apply using React props:
+        flushSync(() => setMaxWidth(availableWidth));
+
+        // 2. Or, mutate the style attribute directly:
+        elements.floating.style.maxHeight = `${availableHeight}px`;
+      },
+    }),
+  ],
+});
+```
+
+</ShowFor>
 
 ## Options
 
@@ -212,10 +318,10 @@ the width of the reference regardless of its contents. You can
 also use `size(){:js}` for this, as the `Rect{:.class}`s get
 passed in:
 
-```js /rects/
+```js
 size({
-  apply({rects}) {
-    Object.assign(floatingEl.style, {
+  apply({rects, elements}) {
+    Object.assign(elements.floating.style, {
       width: `${rects.reference.width}px`,
     });
   },

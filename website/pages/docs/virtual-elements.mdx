@@ -1,14 +1,12 @@
-import inline from '../../assets/virtual-elements.inline.jpg';
+<PageCard>
 
 # Virtual Elements
 
-A floating element can be positioned relative to a virtual
-reference element instead of a real one.
+Position a floating element relative to a custom reference area,
+useful for context menus, range selections, following the cursor,
+and more.
 
-<CircleImage name="virtual-elements" inline={inline} />
-
-This enables features such as positioning context menus,
-following the cursor, range selections, etc.
+</PageCard>
 
 ## Usage
 
@@ -32,11 +30,48 @@ const virtualEl = {
     };
   },
 };
+```
 
+<ShowFor packages={['core', 'dom']}>
+
+```js
 computePosition(virtualEl, floatingEl);
 ```
 
+</ShowFor>
+
+<ShowFor packages={['react-dom', 'react-native']}>
+
+```js
+useFloating({
+  elements: {
+    reference: virtualEl,
+  },
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+const virtual = ref(virtualEl);
+useFloating(virtual, floating);
+```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+The `refs.setPositionReference(){:js}` method can be used to set
+the virtual element. This is separate from the DOM reference that
+receives events.
+
+</ShowFor>
+
 A point reference, such as a mouse event, is one such use case:
+
+<ShowFor packages={['dom']}>
 
 ```js
 function onClick({clientX, clientY}) {
@@ -62,6 +97,72 @@ function onClick({clientX, clientY}) {
 
 document.addEventListener('click', onClick);
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+const {refs} = useFloating();
+
+return (
+  <div
+    onClick={({clientX, clientY}) => {
+      refs.setPositionReference({
+        getBoundingClientRect() {
+          return {
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            top: clientY,
+            left: clientX,
+            right: clientX,
+            bottom: clientY,
+          };
+        },
+      });
+    }}
+  />
+);
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+const [virtualEl, setVirtualEl] = useState(null);
+
+useFloating({
+  elements: {
+    reference: virtualEl,
+  },
+});
+
+return (
+  <div
+    onClick={({clientX, clientY}) => {
+      setVirtualEl({
+        getBoundingClientRect() {
+          return {
+            width: 0,
+            height: 0,
+            x: clientX,
+            y: clientY,
+            top: clientY,
+            left: clientX,
+            right: clientX,
+            bottom: clientY,
+          };
+        },
+      });
+    }}
+  />
+);
+```
+
+</ShowFor>
 
 ## contextElement
 
