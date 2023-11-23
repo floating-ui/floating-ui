@@ -214,3 +214,39 @@ describe('listbox', () => {
     cleanup();
   });
 });
+
+describe('type prop', () => {
+  test('tooltip type sets correct aria attribute', () => {
+    render(<App type="tooltip" initiallyOpen />);
+    expect(screen.getByRole('dialog')).toHaveAttribute('aria-describedby');
+    cleanup();
+  });
+
+  test('label type sets correct aria attribute', () => {
+    render(<App type="label" initiallyOpen />);
+    const floatingElement = screen.getByRole('dialog');
+    expect(floatingElement).toHaveAttribute('aria-labelledby');
+    cleanup();
+  });
+
+  test('autocomplete type sets correct aria attribute', () => {
+    render(<App type="autocomplete" initiallyOpen />);
+    const floatingElement = screen.getByRole('dialog');
+    expect(floatingElement).toHaveAttribute('aria-autocomplete', 'both');
+    cleanup();
+  });
+
+  test('select type sets correct aria attribute', () => {
+    render(<App type="select" initiallyOpen />);
+    const floatingElement = screen.getByRole('dialog');
+    expect(floatingElement).toHaveAttribute('aria-haspopup', 'listbox');
+    cleanup();
+  });
+
+  test('multiselect type sets correct aria attribute', () => {
+    render(<App type="multiselect" initiallyOpen />);
+    const floatingElement = screen.getByRole('dialog');
+    expect(floatingElement).toHaveAttribute('aria-multiselectable', 'true');
+    cleanup();
+  });
+});
