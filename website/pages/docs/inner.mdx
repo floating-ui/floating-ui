@@ -56,7 +56,7 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ## inner Props
 
 ```js
-interface Props extends DetectOverflowOptions {
+interface InnerProps extends DetectOverflowOptions {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   index: number;
   offset?: number;
@@ -194,7 +194,7 @@ inner({
 ## useInnerOffset Props
 
 ```js
-interface Props extends DetectOverflowOptions {
+interface UseInnerOffsetProps extends DetectOverflowOptions {
   enabled?: boolean;
   overflowRef: React.MutableRefObject<SideObject | null>;
   scrollRef?: React.MutableRefObject<HTMLElement | null>;

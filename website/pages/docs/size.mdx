@@ -132,26 +132,62 @@ computePosition(referenceEl, floatingEl, {
 
 </ShowFor>
 
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [
+    size({
+      apply({availableWidth, availableHeight, elements}) {
+        Object.assign(elements.floating.style, {
+          maxWidth: `${availableWidth}px`,
+          maxHeight: `${availableHeight}px`,
+        });
+      },
+    }),
+  ],
+});
+```
+
+</ShowFor>
+
 <ShowFor packages={['react', 'react-dom']}>
+
+1. You can use sync state, and apply using the `style{:.keyword}`
+   prop during render, achieved via `flushSync(){:js}`:
 
 ```js
 import {flushSync} from 'react-dom';
 ```
 
-1. You can use sync state, and apply using React props.
-2. Or, mutate the style attribute directly.
+```js {6-8}  /maxHeight/
+const [maxHeight, setMaxHeight] = useState(null);
+
+const {refs, floatingStyles} = useFloating({
+  middleware: [
+    size({
+      apply({availableHeight}) {
+        flushSync(() => setMaxHeight(availableHeight));
+      },
+    }),
+  ],
+});
+
+return (
+  <div
+    ref={refs.setFloating}
+    style={{...floatingStyles, maxHeight}}
+  />
+);
+```
+
+2. Or, mutate the style property directly:
 
 ```js
-const [maxWidth, setMaxWidth] = useState(null);
-
 useFloating({
   middleware: [
     size({
-      apply({availableWidth, availableHeight, elements}) {
-        // 1. You can use sync state, and apply using React props:
-        flushSync(() => setMaxWidth(availableWidth));
-
-        // 2. Or, mutate the style attribute directly:
+      apply({availableHeight, elements}) {
         elements.floating.style.maxHeight = `${availableHeight}px`;
       },
     }),
@@ -166,7 +202,7 @@ useFloating({
 These are the options you can pass to `size(){:js}`.
 
 ```ts
-interface Options extends DetectOverflowOptions {
+interface SizeOptions extends DetectOverflowOptions {
   apply?: (
     state: MiddlewareState & {
       availableWidth: number;
@@ -210,9 +246,7 @@ overflow its clipping context. You'll generally set this as the
 See [MiddlewareState](/docs/middleware#middlewarestate).
 
 Many useful properties are also accessible via this callback,
-such as `rects{:.objectKey}` and `elements{:.objectKey}`, the
-latter of which is useful in the context of React where you need
-access to the floating element and it does not exist in scope.
+such as `rects{:.objectKey}` and `elements{:.objectKey}`.
 
 ### ...detectOverflowOptions
 
