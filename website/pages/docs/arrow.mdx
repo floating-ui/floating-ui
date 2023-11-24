@@ -104,17 +104,21 @@ aspect ratio.
 Given an arrow element inside your floating element:
 
 ```html
-<div id="tooltip">
-  Tooltip text
+<div>
+  Floating element
   <div id="arrow"></div>
 </div>
 ```
+
+<ShowFor packages={['dom']}>
 
 ```css
 #arrow {
   position: absolute;
 }
 ```
+
+</ShowFor>
 
 Pass the <WordHighlight id='a'>element</WordHighlight> to the
 `arrow(){:js}` middleware and assign the dynamic styles using the
@@ -298,24 +302,124 @@ const {placement} = useFloating(reference, floating, {
 
 These are the options you can pass to `arrow(){:js}`.
 
+<ShowFor packages={['core', 'dom']}>
+
 ```ts
-interface Options {
+interface ArrowOptions {
   element: Element;
   padding?: Padding;
 }
 ```
 
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```ts
+interface ArrowOptions {
+  element:
+    | Element
+    | null
+    | React.MutableRefObject<Element | null>;
+  padding?: Padding;
+}
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```ts
+interface ArrowOptions {
+  element: MaybeReadonlyRef<MaybeElement<Element>>;
+  padding?: Padding;
+}
+```
+
+</ShowFor>
+
 ### element
 
 default: `undefined{:js}`
 
-This is the arrow element to be positioned.
+This is the arrow element to be positioned, which must be a child
+of the floating element.
+
+<ShowFor packages={['dom']}>
 
 ```js
 arrow({
   element: document.querySelector('#arrow'),
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+This can either be a reactive element:
+
+```js
+const [arrowEl, setArrowEl] = useState(null);
+```
+
+```js
+arrow({
+  element: arrowEl,
+});
+```
+
+```js
+return (
+  <div ref={refs.setFloating}>
+    <div ref={setArrowEl} />
+  </div>
+);
+```
+
+Or a non-reactive ref:
+
+```js
+const arrowRef = useRef(null);
+```
+
+```js
+arrow({
+  element: arrowRef,
+});
+```
+
+```js
+return (
+  <div ref={refs.setFloating}>
+    <div ref={arrowRef} />
+  </div>
+);
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```vue /floatingArrow/
+<script setup>
+const reference = ref(null);
+const floating = ref(null);
+const floatingArrow = ref(null);
+
+const {floatingStyles} = useFloating(reference, floating, {
+  mdidleware: [arrow({element: floatingArrow})],
+});
+</script>
+
+<template>
+  <div ref="floating" :style="floatingStyles">
+    <div ref="floatingArrow"></div>
+  </div>
+</template>
+```
+
+</ShowFor>
 
 ### padding
 
@@ -328,7 +432,6 @@ overflowing the corners.
 
 ```js
 arrow({
-  element: document.querySelector('#arrow'),
   padding: 5, // stop 5px from the edges of the floating element
 });
 ```
