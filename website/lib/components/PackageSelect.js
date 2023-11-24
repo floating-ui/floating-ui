@@ -237,6 +237,7 @@ function Option({
   return (
     <button
       ref={ref}
+      role="option"
       className={cn(
         'md:text-md flex w-full cursor-default items-center gap-2 rounded-md p-2 text-left text-sm outline-none dark:text-white md:text-base',
         {
@@ -271,6 +272,7 @@ export function PackageSelect() {
     packageContext,
     isPackageTooltipTouched,
     setIsPackageTooltipTouched,
+    setPackageContext,
   } = useAppContext();
   const pkgIndex = packageOptions.indexOf(packageContext);
   const router = useRouter();
@@ -375,10 +377,15 @@ export function PackageSelect() {
     onNavigate: setActiveIndex,
   });
   const typeahead = useTypeahead(context, {
-    listRef: labelsRef,
+    listRef: isOpen
+      ? labelsRef
+      : {current: Object.values(optionsLabelMap)},
     activeIndex,
     selectedIndex,
-    onMatch: isOpen ? setActiveIndex : setSelectedIndex,
+    onMatch: isOpen
+      ? setActiveIndex
+      : (index) =>
+          setPackageContext(Object.values(optionsPkgMap)[index]),
   });
 
   const {isMounted, styles} = useTransitionStyles(context, {
@@ -389,7 +396,7 @@ export function PackageSelect() {
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} =
-    useInteractions([listNav, typeahead, role, click, dismiss]);
+    useInteractions([typeahead, listNav, role, click, dismiss]);
 
   const version = packages[selectedIndex].version;
 

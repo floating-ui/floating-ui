@@ -29,6 +29,10 @@ module.exports = {
       fontFamily: {
         variable: ['var(--font-variable)', ...fontFamily.sans],
       },
+      transitionProperty: {
+        height: 'height',
+        spacing: 'margin, padding',
+      },
       keyframes: {
         'blur-in': {
           '0%': {
@@ -169,7 +173,7 @@ module.exports = {
               },
               '&::before': {
                 position: 'absolute',
-                fontSize: '0.8rem',
+                fontSize: '0.7rem',
                 right: '0',
                 top: '0',
                 content: 'attr(data-language)',
@@ -195,6 +199,10 @@ module.exports = {
               },
               '&[data-language="ts"]::before': {
                 backgroundColor: '#007acc',
+                color: '#fff',
+              },
+              '&[data-language="bash"]::before': {
+                backgroundColor: GRAY[600],
                 color: '#fff',
               },
               'code[data-theme="light"] [data-highlighted-line]':
@@ -311,6 +319,20 @@ module.exports = {
         '-1': '-1',
       },
       backgroundImage: {
+        'light-react-gradient': `linear-gradient(
+          45deg,
+          ${colors.blue[50]},
+          ${colors.cyan[50]},
+          ${colors.cyan[100]},
+          ${colors.teal[50]},
+          ${colors.purple[50]}
+        )`,
+        'dark-react-gradient': `linear-gradient(
+          45deg,
+          rgba(255, 100, 255, 0.2),
+          rgba(100, 100, 255, 0.2),
+          rgba(50, 200, 255, 0.25)
+        )`,
         'dark-nav-gradient': `linear-gradient(
           195deg,
           hsl(348deg 10% 90%) 0%,

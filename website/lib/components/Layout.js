@@ -1,8 +1,8 @@
 import {DocSearch} from '@docsearch/react';
 import {
   autoUpdate,
-  FloatingFocusManager as FloatingFocusManagerComponent,
-  FloatingPortal as FloatingPortalComponent,
+  FloatingFocusManager,
+  FloatingPortal,
   offset,
   useClick,
   useDismiss,
@@ -15,48 +15,53 @@ import cn from 'classnames';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
 import {Fragment, useRef, useState} from 'react';
-import {ExternalLink, GitHub, Menu} from 'react-feather';
+import {
+  ChevronDown,
+  ExternalLink,
+  GitHub,
+  Menu,
+} from 'react-feather';
 import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import Logo from '../../assets/logo.svg';
 import {useAppContext} from '../../pages/_app';
-import Arrow from '../../public/icons/arrow.svg';
-import AutoPlacement from '../../public/icons/autoPlacement.svg';
-import AutoUpdate from '../../public/icons/autoUpdate.svg';
-import Composite from '../../public/icons/Composite.svg';
-import ComputePosition from '../../public/icons/computePosition.svg';
-import DetectOverflow from '../../public/icons/detectOverflow.svg';
-import Flip from '../../public/icons/flip.svg';
-import FloatingDelayGroup from '../../public/icons/FloatingDelayGroup.svg';
-import FloatingFocusManager from '../../public/icons/FloatingFocusManager.svg';
-import FloatingList from '../../public/icons/FloatingList.svg';
-import FloatingOverlay from '../../public/icons/FloatingOverlay.svg';
-import FloatingPortal from '../../public/icons/FloatingPortal.svg';
-import FloatingTree from '../../public/icons/FloatingTree.svg';
-import GettingStarted from '../../public/icons/getting-started.svg';
-import Hide from '../../public/icons/hide.svg';
-import Inline from '../../public/icons/inline.svg';
-import Inner from '../../public/icons/inner.svg';
-import MagicWand from '../../public/icons/magic-wand.svg';
-import Middleware from '../../public/icons/middleware.svg';
-import Offset from '../../public/icons/offset.svg';
-import Platform from '../../public/icons/platform.svg';
-import React from '../../public/icons/react.png';
-import Shift from '../../public/icons/shift.svg';
-import Size from '../../public/icons/size.svg';
-import Tutorial from '../../public/icons/tutorial.svg';
-import UseClick from '../../public/icons/useClick.svg';
-import UseClientPoint from '../../public/icons/useClientPoint.svg';
-import UseDismiss from '../../public/icons/useDismiss.svg';
-import UseFloating from '../../public/icons/useFloating.svg';
-import UseFocus from '../../public/icons/useFocus.svg';
-import UseHover from '../../public/icons/useHover.svg';
-import UseInteractions from '../../public/icons/useInteractions.svg';
-import UseListNavigation from '../../public/icons/useListNavigation.svg';
-import UseRole from '../../public/icons/useRole.svg';
-import UseTransition from '../../public/icons/useTransition.svg';
-import UseTypeahead from '../../public/icons/useTypeahead.svg';
-import VirtualElements from '../../public/icons/virtual-elements.svg';
+import ArrowIcon from '../../public/icons/arrow.svg';
+import AutoPlacementIcon from '../../public/icons/autoPlacement.svg';
+import AutoUpdateIcon from '../../public/icons/autoUpdate.svg';
+import CompositeIcon from '../../public/icons/Composite.svg';
+import ComputePositionIcon from '../../public/icons/computePosition.svg';
+import DetectOverflowIcon from '../../public/icons/detectOverflow.svg';
+import FlipIcon from '../../public/icons/flip.svg';
+import FloatingDelayGroupIcon from '../../public/icons/FloatingDelayGroup.svg';
+import FloatingFocusManagerIcon from '../../public/icons/FloatingFocusManager.svg';
+import FloatingListIcon from '../../public/icons/FloatingList.svg';
+import FloatingOverlayIcon from '../../public/icons/FloatingOverlay.svg';
+import FloatingPortalIcon from '../../public/icons/FloatingPortal.svg';
+import FloatingTreeIcon from '../../public/icons/FloatingTree.svg';
+import GettingStartedIcon from '../../public/icons/getting-started.svg';
+import HideIcon from '../../public/icons/hide.svg';
+import InlineIcon from '../../public/icons/inline.svg';
+import InnerIcon from '../../public/icons/inner.svg';
+import MagicWandIcon from '../../public/icons/magic-wand.svg';
+import MiddlewareIcon from '../../public/icons/middleware.svg';
+import OffsetIcon from '../../public/icons/offset.svg';
+import PlatformIcon from '../../public/icons/platform.svg';
+import ReactIcon from '../../public/icons/react.png'; // This is a PNG, not an SVG
+import ShiftIcon from '../../public/icons/shift.svg';
+import SizeIcon from '../../public/icons/size.svg';
+import TutorialIcon from '../../public/icons/tutorial.svg';
+import UseClickIcon from '../../public/icons/useClick.svg';
+import UseClientPointIcon from '../../public/icons/useClientPoint.svg';
+import UseDismissIcon from '../../public/icons/useDismiss.svg';
+import UseFloatingIcon from '../../public/icons/useFloating.svg';
+import UseFocusIcon from '../../public/icons/useFocus.svg';
+import UseHoverIcon from '../../public/icons/useHover.svg';
+import UseInteractionsIcon from '../../public/icons/useInteractions.svg';
+import UseListNavigationIcon from '../../public/icons/useListNavigation.svg';
+import UseRoleIcon from '../../public/icons/useRole.svg';
+import UseTransitionIcon from '../../public/icons/useTransition.svg';
+import UseTypeaheadIcon from '../../public/icons/useTypeahead.svg';
+import VirtualElementsIcon from '../../public/icons/virtual-elements.svg';
 import {getPackageContext} from '../utils/getPackageContext';
 import {remToPx} from '../utils/remToPx';
 import {Chrome} from './Chrome';
@@ -82,295 +87,237 @@ const middleware = [
   {
     url: '/docs/offset',
     title: 'offset',
-    icon: Offset,
-    depth: 1,
-    mono: true,
+    icon: OffsetIcon,
   },
   {
     url: '/docs/shift',
     title: 'shift',
-    icon: Shift,
-    depth: 1,
-    mono: true,
+    icon: ShiftIcon,
   },
   {
     url: '/docs/flip',
     title: 'flip',
-    icon: Flip,
-    depth: 1,
-    mono: true,
+    icon: FlipIcon,
   },
   {
     url: '/docs/arrow',
     title: 'arrow',
-    icon: Arrow,
-    depth: 1,
-    mono: true,
+    icon: ArrowIcon,
   },
   {
     url: '/docs/size',
     title: 'size',
-    icon: Size,
-    depth: 1,
-    mono: true,
+    icon: SizeIcon,
   },
   {
     url: '/docs/autoPlacement',
     title: 'autoPlacement',
-    icon: AutoPlacement,
-    depth: 1,
-    mono: true,
+    icon: AutoPlacementIcon,
   },
   {
     url: '/docs/hide',
     title: 'hide',
-    icon: Hide,
-    depth: 1,
-    mono: true,
+    icon: HideIcon,
   },
   {
     url: '/docs/inline',
     title: 'inline',
-    icon: Inline,
-    depth: 1,
-    mono: true,
+    icon: InlineIcon,
   },
-];
+].map((item) => {
+  item.parent = 'Middleware';
+  return item;
+});
 
 const interactions = [
   {
-    url: '/docs/useHover',
-    title: 'useHover',
-    icon: UseHover,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useFocus',
-    title: 'useFocus',
-    icon: UseFocus,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useClick',
-    title: 'useClick',
-    icon: UseClick,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useRole',
-    title: 'useRole',
-    icon: UseRole,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useDismiss',
-    title: 'useDismiss',
-    icon: UseDismiss,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useListNavigation',
-    title: 'useListNavigation',
-    icon: UseListNavigation,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useTypeahead',
-    title: 'useTypeahead',
-    icon: UseTypeahead,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useTransition',
-    title: 'useTransition',
-    icon: UseTransition,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/useClientPoint',
-    title: 'useClientPoint',
-    icon: UseClientPoint,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingArrow',
-    title: 'FloatingArrow',
-    icon: Arrow,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingFocusManager',
-    title: 'FloatingFocusManager',
-    icon: FloatingFocusManager,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingPortal',
-    title: 'FloatingPortal',
-    icon: FloatingPortal,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingTree',
-    title: 'FloatingTree',
-    icon: FloatingTree,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingOverlay',
-    title: 'FloatingOverlay',
-    icon: FloatingOverlay,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingList',
-    title: 'FloatingList',
-    icon: FloatingList,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/FloatingDelayGroup',
-    title: 'FloatingDelayGroup',
-    icon: FloatingDelayGroup,
-    depth: 1,
-    mono: true,
-  },
-  {
-    url: '/docs/Composite',
-    title: 'Composite',
-    icon: Composite,
-    depth: 1,
-  },
-  {
-    url: '/docs/inner',
-    title: 'Inner',
-    icon: Inner,
-    depth: 1,
-  },
-  {
-    url: '/docs/react-utils',
-    title: 'React Utils',
-    icon: MagicWand,
-    depth: 1,
-  },
-];
-
-const nav = [
-  {
-    url: '/docs/getting-started',
-    title: 'Getting Started',
-    icon: GettingStarted,
-    depth: 0,
-  },
-  {
-    url: '/docs/tutorial',
-    title: 'Tutorial',
-    icon: Tutorial,
-    depth: 0,
-  },
-  {
-    url: '/docs/computePosition',
-    title: 'computePosition',
-    icon: ComputePosition,
-    depth: 0,
-    mono: true,
-  },
-  {
-    url: '/docs/autoUpdate',
-    title: 'autoUpdate',
-    icon: AutoUpdate,
-    mono: true,
-  },
-  {
-    url: '/docs/middleware',
-    title: 'Middleware',
-    icon: Middleware,
-    depth: 0,
-  },
-  ...middleware,
-  {
-    url: '/docs/detectOverflow',
-    title: 'detectOverflow',
-    icon: DetectOverflow,
-    mono: true,
-  },
-  {
-    url: '/docs/virtual-elements',
-    title: 'Virtual Elements',
-    icon: VirtualElements,
-  },
-  {
-    url: '/docs/misc',
-    title: 'Misc',
-    icon: MagicWand,
-  },
-  {
-    url: '/docs/platform',
-    title: 'Platform',
-    icon: Platform,
-  },
-  {
-    url: '/docs/react',
-    title: 'React',
-    icon: React.src,
-  },
-  {
     url: '/docs/react-examples',
     title: 'React Examples',
-    depth: 1,
   },
   {
     url: '/docs/tooltip',
     title: 'Tooltip',
-    depth: 1,
     hide: true,
   },
   {
     url: '/docs/popover',
     title: 'Popover',
-    depth: 1,
     hide: true,
   },
   {
     url: '/docs/dialog',
     title: 'Dialog',
-    depth: 1,
     hide: true,
   },
   {
     url: '/docs/useFloating',
     title: 'useFloating',
-    depth: 1,
-    icon: UseFloating,
+    icon: UseFloatingIcon,
   },
   {
     url: '/docs/useInteractions',
     title: 'useInteractions',
-    depth: 1,
-    icon: UseInteractions,
+    icon: UseInteractionsIcon,
   },
-  ...interactions,
+  {
+    url: '/docs/useHover',
+    title: 'useHover',
+    icon: UseHoverIcon,
+  },
+  {
+    url: '/docs/useFocus',
+    title: 'useFocus',
+    icon: UseFocusIcon,
+  },
+  {
+    url: '/docs/useClick',
+    title: 'useClick',
+    icon: UseClickIcon,
+  },
+  {
+    url: '/docs/useRole',
+    title: 'useRole',
+    icon: UseRoleIcon,
+  },
+  {
+    url: '/docs/useDismiss',
+    title: 'useDismiss',
+    icon: UseDismissIcon,
+  },
+  {
+    url: '/docs/useListNavigation',
+    title: 'useListNavigation',
+    icon: UseListNavigationIcon,
+  },
+  {
+    url: '/docs/useTypeahead',
+    title: 'useTypeahead',
+    icon: UseTypeaheadIcon,
+  },
+  {
+    url: '/docs/useTransition',
+    title: 'useTransition',
+    icon: UseTransitionIcon,
+  },
+  {
+    url: '/docs/useClientPoint',
+    title: 'useClientPoint',
+    icon: UseClientPointIcon,
+  },
+  {
+    url: '/docs/FloatingArrow',
+    title: 'FloatingArrow',
+    icon: ArrowIcon,
+  },
+  {
+    url: '/docs/FloatingFocusManager',
+    title: 'FloatingFocusManager',
+    icon: FloatingFocusManagerIcon,
+  },
+  {
+    url: '/docs/FloatingPortal',
+    title: 'FloatingPortal',
+    icon: FloatingPortalIcon,
+  },
+  {
+    url: '/docs/FloatingTree',
+    title: 'FloatingTree',
+    icon: FloatingTreeIcon,
+  },
+  {
+    url: '/docs/FloatingOverlay',
+    title: 'FloatingOverlay',
+    icon: FloatingOverlayIcon,
+  },
+  {
+    url: '/docs/FloatingList',
+    title: 'FloatingList',
+    icon: FloatingListIcon,
+  },
+  {
+    url: '/docs/FloatingDelayGroup',
+    title: 'FloatingDelayGroup',
+    icon: FloatingDelayGroupIcon,
+  },
+  {
+    url: '/docs/Composite',
+    title: 'Composite',
+    icon: CompositeIcon,
+  },
+  {
+    url: '/docs/inner',
+    title: 'Inner',
+    icon: InnerIcon,
+  },
+  {
+    url: '/docs/react-utils',
+    title: 'React Utils',
+    icon: MagicWandIcon,
+  },
   {
     url: '/docs/custom-hooks',
     title: 'Custom Hooks',
-    depth: 1,
-    mono: true,
   },
+].map((item) => {
+  item.parent = 'React';
+  return item;
+});
+
+const nav = [
+  {
+    url: '/docs/getting-started',
+    title: 'Getting Started',
+    icon: GettingStartedIcon,
+  },
+  {
+    url: '/docs/tutorial',
+    title: 'Tutorial',
+    icon: TutorialIcon,
+  },
+  {
+    url: '/docs/computePosition',
+    title: 'computePosition',
+    icon: ComputePositionIcon,
+  },
+  {
+    url: '/docs/autoUpdate',
+    title: 'autoUpdate',
+    icon: AutoUpdateIcon,
+  },
+  {
+    url: '/docs/middleware',
+    title: 'Middleware',
+    icon: MiddlewareIcon,
+    collapse: false,
+  },
+  ...middleware,
+  {
+    url: '/docs/detectOverflow',
+    title: 'detectOverflow',
+    icon: DetectOverflowIcon,
+  },
+  {
+    url: '/docs/virtual-elements',
+    title: 'Virtual Elements',
+    icon: VirtualElementsIcon,
+  },
+  {
+    url: '/docs/misc',
+    title: 'Misc',
+    icon: MagicWandIcon,
+  },
+  {
+    url: '/docs/platform',
+    title: 'Platform',
+    icon: PlatformIcon,
+  },
+  {
+    url: '/docs/react',
+    title: 'React',
+    icon: ReactIcon.src,
+    collapse: true,
+  },
+  ...interactions,
   {
     url: '/docs/react-native',
     title: 'React Native',
@@ -454,7 +401,7 @@ const components = {
   },
 };
 
-function SideNavList({anchors, hash}) {
+function TableOfContents({anchors, hash}) {
   const isTopLevelAnchor = anchors
     .filter(({depth}) => depth === 2)
     .find(({url}) => hash === url);
@@ -486,13 +433,13 @@ function SideNavList({anchors, hash}) {
   return (
     <ul className="overflow-hidden px-2 pt-1 pb-8">
       {isMounted && (
-        <FloatingPortalComponent>
+        <FloatingPortal>
           <div
             className="h-2 w-2 rounded-full bg-gradient-to-br from-red-500 to-pink-500 shadow"
             ref={refs.setFloating}
             style={{...floatingStyles, ...styles}}
           />
-        </FloatingPortalComponent>
+        </FloatingPortal>
       )}
       {anchors
         .filter(({depth}) => depth === 2)
@@ -543,6 +490,160 @@ function SideNavList({anchors, hash}) {
             </ul>
           </li>
         ))}
+    </ul>
+  );
+}
+
+function NavbarItem({
+  url,
+  title,
+  icon: Icon,
+  hide,
+  activeLinkRef,
+  parent,
+  collapse,
+}) {
+  const {pathname} = useRouter();
+
+  const children = nav.filter(({parent: p}) => p === title);
+
+  const shouldCollapse = collapse === true;
+  const isReact = title === 'React';
+
+  const [childrenCollapsed, setChildrenCollapsed] =
+    useState(shouldCollapse);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!shouldCollapse) return;
+
+    const activeChildItem = nav.find(
+      ({url: u}) => u === pathname
+    );
+
+    setChildrenCollapsed(
+      pathname !== url && activeChildItem.parent !== title
+    );
+  }, [shouldCollapse, pathname, url, title, parent]);
+
+  if (hide) return null;
+
+  return (
+    <li
+      key={url}
+      className="inline-block w-full scroll-mt-[10rem]"
+    >
+      <Link
+        href={url}
+        ref={pathname === url ? activeLinkRef : undefined}
+        aria-current={pathname === url ? 'page' : undefined}
+        aria-expanded={
+          shouldCollapse ? !childrenCollapsed : undefined
+        }
+        className={cn(
+          'mx-[-1rem] flex h-12 items-center break-words rounded-lg px-3 dark:hover:text-gray-50',
+          {
+            'bg-rose-200/40 text-rose-700 hover:bg-pink-100/50 dark:bg-pink-400/10 dark:text-pink-400 dark:hover:bg-pink-400/20':
+              pathname === url && !isReact,
+            'hover:bg-gray-100/50 dark:hover:bg-purple-300/10':
+              pathname !== url,
+            'border border-gray-600/10 bg-light-react-gradient bg-clip-padding shadow-lg shadow-cyan-600/10 hover:shadow-blue-900/10 hover:brightness-[0.87] hover:contrast-125 dark:bg-dark-react-gradient dark:shadow-none':
+              isReact,
+            'text-black dark:text-pink-300 dark:hover:text-pink-300':
+              pathname === url && isReact,
+            'mr-0 rounded-tl-none rounded-bl-none':
+              parent != null,
+          }
+        )}
+      >
+        <span className="flex w-full items-center gap-4 py-1">
+          {typeof Icon === 'string' ? (
+            <img
+              src={Icon}
+              className={cn('h-8 w-8', {
+                'animate-spin [animation-duration:5s]': isReact,
+              })}
+              aria-hidden
+            />
+          ) : typeof Icon === 'function' ? (
+            <Icon
+              aria-hidden
+              className={cn({
+                'text-gray-600 dark:text-gray-200':
+                  pathname !== url,
+                'text-rose-700 dark:text-pink-300':
+                  pathname === url,
+              })}
+              width={32}
+              height={32}
+            />
+          ) : null}
+          <span
+            className={cn('block truncate', {
+              'font-bold dark:text-pink-300': pathname === url,
+            })}
+          >
+            {title}
+          </span>
+        </span>
+        <span>
+          {children.length > 0 && shouldCollapse && (
+            <ChevronDown size={20} />
+          )}
+        </span>
+      </Link>
+      <Navbar
+        parent={title}
+        collapsed={childrenCollapsed}
+        activeLinkRef={activeLinkRef}
+      />
+    </li>
+  );
+}
+
+function Navbar({activeLinkRef, parent, collapsed}) {
+  const ref = useRef(null);
+  const items = nav.filter(({parent: p}) => p === parent);
+  const [height, setHeight] = useState('auto');
+  const naturalHeightRef = useRef(null);
+  const [transition, setTransition] = useState(false);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!ref.current) return;
+    naturalHeightRef.current = ref.current.scrollHeight;
+  }, []);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!ref.current || !parent) return;
+    setHeight(collapsed ? 0 : naturalHeightRef.current);
+  }, [collapsed, parent]);
+
+  useIsomorphicLayoutEffect(() => {
+    setTimeout(() => setTransition(true));
+  }, []);
+
+  if (!items.length) return;
+
+  return (
+    <ul
+      ref={ref}
+      className={cn('flex flex-col overflow-hidden text-lg', {
+        'transition-height duration-300': transition,
+        'mt-4 px-6 xl:px-10': parent == null,
+        'border-l border-solid border-gray-700 pl-4 pr-0':
+          parent != null,
+      })}
+      style={{
+        height,
+      }}
+    >
+      {items.map((item) => (
+        <NavbarItem
+          key={item.url}
+          activeLinkRef={activeLinkRef}
+          parent={parent}
+          {...item}
+        />
+      ))}
     </ul>
   );
 }
@@ -620,9 +721,7 @@ export default function Layout({children, className}) {
 
   const isDrawer =
     navOpen && window.matchMedia('(max-width: 768px)').matches;
-  const NavWrapper = isDrawer
-    ? FloatingFocusManagerComponent
-    : Fragment;
+  const NavWrapper = isDrawer ? FloatingFocusManager : Fragment;
   const wrapperProps = isDrawer
     ? {context, modal: false, initialFocus: refs.floating}
     : {};
@@ -644,24 +743,20 @@ export default function Layout({children, className}) {
       linkBottom <= 0 ||
       linkTop >= scrollTop + height - remToPx(10)
     ) {
-      activeLinkRef.current.scrollIntoView({block: 'start'});
+      requestAnimationFrame(() => {
+        activeLinkRef.current.scrollIntoView({block: 'center'});
+      });
     }
   }, [asPath, isDrawer, isMounted]);
 
   useIsomorphicLayoutEffect(() => {
-    function onRouteChangeComplete() {
-      document.querySelector('#focus-root').focus();
-    }
-
     function onHashChange() {
       setHash(window.location.hash);
     }
 
-    events.on('routeChangeComplete', onRouteChangeComplete);
     window.addEventListener('hashchange', onHashChange);
 
     return () => {
-      events.off('routeChangeComplete', onRouteChangeComplete);
       window.removeEventListener('hashchange', onHashChange);
     };
   }, [events, pathname]);
@@ -764,80 +859,7 @@ export default function Layout({children, className}) {
                   </button>
                 )}
               </div>
-              <ul className="mt-4 px-6 text-lg xl:px-10">
-                {nav.map(
-                  ({url, title, icon: Icon, depth, hide}) =>
-                    !hide && (
-                      <li
-                        key={url}
-                        ref={
-                          pathname === url
-                            ? activeLinkRef
-                            : undefined
-                        }
-                        className={cn(
-                          'inline-block w-full scroll-mt-[10rem]',
-                          {
-                            'pl-4': depth === 1,
-                            'border-l border-solid border-gray-700':
-                              depth === 1,
-                          }
-                        )}
-                      >
-                        {[
-                          '/docs/react',
-                          '/docs/react-native',
-                        ].includes(url) && (
-                          <hr className="my-4 h-[1px] border-none bg-gray-100 dark:bg-gray-700" />
-                        )}
-                        <Link
-                          href={url}
-                          className={cn(
-                            'mx-[-1rem] flex h-12 items-center break-words rounded-lg px-3 dark:hover:text-gray-50',
-                            {
-                              'bg-rose-200/40 text-rose-700 hover:bg-pink-100/50 dark:bg-pink-400/10 dark:text-pink-400 dark:hover:bg-pink-400/20':
-                                pathname === url,
-                              'hover:bg-gray-100/50 dark:hover:bg-purple-300/10':
-                                pathname !== url,
-                              'rounded-tl-none rounded-bl-none':
-                                depth > 0,
-                            }
-                          )}
-                        >
-                          <span className="flex w-full items-center gap-4 py-1">
-                            {typeof Icon === 'string' ? (
-                              <img
-                                src={Icon}
-                                className="h-8 w-8"
-                                aria-hidden
-                              />
-                            ) : typeof Icon === 'function' ? (
-                              <Icon
-                                aria-hidden
-                                className={cn({
-                                  'text-gray-600 dark:text-gray-200':
-                                    pathname !== url,
-                                  'text-rose-700 dark:text-pink-300':
-                                    pathname === url,
-                                })}
-                                width={32}
-                                height={32}
-                              />
-                            ) : null}
-                            <span
-                              className={cn('block truncate', {
-                                'font-bold dark:text-pink-300':
-                                  pathname === url,
-                              })}
-                            >
-                              {title}
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
-                    )
-                )}
-              </ul>
+              <Navbar activeLinkRef={activeLinkRef} />
             </div>
           </nav>
         </NavWrapper>
@@ -880,7 +902,7 @@ export default function Layout({children, className}) {
               <h4 className="text-md ml-6 mb-1 text-gray-500">
                 On this page
               </h4>
-              <SideNavList
+              <TableOfContents
                 anchors={anchorsComputed}
                 hash={hash}
               />
