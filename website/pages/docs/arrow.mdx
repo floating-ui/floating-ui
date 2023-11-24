@@ -117,7 +117,7 @@ Given an arrow element inside your floating element:
 ```
 
 Pass it to the `arrow(){:js}` middleware and assign the dynamic
-styles:
+styles available in `middlewareData.arrow{:js}`:
 
 <ShowFor packages={['dom']}>
 
@@ -142,7 +142,7 @@ computePosition(referenceEl, floatingEl, {
 
 <ShowFor packages={['react', 'react-dom', 'react-native']}>
 
-```js
+```js /middlewareData/
 const arrowRef = useRef(null);
 
 const {refs, floatingStyles, middlewareData} = useFloating({
@@ -165,6 +165,50 @@ return (
     />
   </div>
 );
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```vue {24-34} /middlewareData/
+<script setup>
+import {arrow, useFloating} from '@floating-ui/vue';
+import {ref} from 'vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const floatingArrow = ref(null);
+
+const {floatingStyles, middlewareData} = useFloating(
+  reference,
+  floating,
+  {
+    middleware: [arrow({element: floatingArrow})],
+  }
+);
+</script>
+
+<template>
+  <span ref="reference">Reference</span>
+  <div ref="floating" :style="floatingStyles">
+    Floating
+    <div
+      ref="floatingArrow"
+      :style="{
+        position: 'absolute',
+        left:
+          middlewareData.arrow?.x != null
+            ? `${middlewareData.arrow.x}px`
+            : '',
+        top:
+          middlewareData.arrow?.y != null
+            ? `${middlewareData.arrow.y}px`
+            : '',
+      }"
+    ></div>
+  </div>
+</template>
 ```
 
 </ShowFor>

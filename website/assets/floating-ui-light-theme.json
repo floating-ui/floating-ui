@@ -338,6 +338,7 @@
         "punctuation.definition.tag.html",
         "punctuation.definition.tag.begin.html",
         "punctuation.definition.tag.end.html",
+        "punctuation.definition.block",
         "meta.property-list",
         "meta.brace.square",
         "keyword.other.template",
@@ -452,7 +453,7 @@
       ],
       "settings": {
         "fontStyle": "",
-        "foreground": "#4e8400"
+        "foreground": "#5f7200"
       }
     },
     {
@@ -830,19 +831,6 @@
       "scope": ["punctuation.definition.list_item.markdown"],
       "settings": {
         "foreground": "#828bb8"
-      }
-    },
-    {
-      "name": "Block Punctuation",
-      "scope": [
-        "meta.block",
-        "meta.brace",
-        "punctuation.definition.block",
-        "punctuation.definition.parameters",
-        "punctuation.section.function"
-      ],
-      "settings": {
-        "foreground": "#52586d"
       }
     },
     {

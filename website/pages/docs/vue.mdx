@@ -199,7 +199,7 @@ import MyTooltip from './MyTooltip.vue';
 
 const reference = ref(null);
 const floating = ref(null);
-const {x, y, strategy} = useFloating(reference, floating);
+const {floatingStyles} = useFloating(reference, floating);
 </script>
 
 <template>
@@ -246,20 +246,48 @@ on the page.
 ## Arrow
 
 The `arrow` module exported from this package allows template
-refs in addition to elements:
+refs in addition to elements. See [arrow](/docs/arrow) for
+details.
 
-```js
-import {arrow} from '@floating-ui/vue';
+```vue
+<script setup>
+import {arrow, useFloating} from '@floating-ui/vue';
+import {ref} from 'vue';
 
-// Inside your component
+const reference = ref(null);
+const floating = ref(null);
 const floatingArrow = ref(null);
-useFloating({
-  middleware: [arrow({element: floatingArrow})],
-});
-```
 
-For details on creating an arrow element, see the
-[`arrow` middleware](/docs/arrow) page.
+const {floatingStyles, middlewareData} = useFloating(
+  reference,
+  floating,
+  {
+    middleware: [arrow({element: floatingArrow})],
+  }
+);
+</script>
+
+<template>
+  <span ref="reference">Reference</span>
+  <div ref="floating" :style="floatingStyles">
+    Floating
+    <div
+      ref="floatingArrow"
+      :style="{
+        position: 'absolute',
+        left:
+          middlewareData.arrow?.x != null
+            ? `${middlewareData.arrow.x}px`
+            : '',
+        top:
+          middlewareData.arrow?.y != null
+            ? `${middlewareData.arrow.y}px`
+            : '',
+      }"
+    ></div>
+  </div>
+</template>
+```
 
 ## Virtual Element
 
@@ -273,7 +301,7 @@ import {useFloating} from '@floating-ui/vue';
 
 const reference = ref(null);
 const floating = ref(null);
-const {x, y, strategy} = useFloating(reference, floating);
+const {floatingStyles} = useFloating(reference, floating);
 
 onMounted(() => {
   /**

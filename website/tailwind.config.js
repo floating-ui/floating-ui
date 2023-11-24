@@ -205,6 +205,10 @@ module.exports = {
                 backgroundColor: GRAY[600],
                 color: '#fff',
               },
+              '&[data-language="vue"]::before': {
+                backgroundColor: '#41b883',
+                color: '#fff',
+              },
               'code[data-theme="light"] [data-highlighted-line]':
                 {
                   borderLeftColor: colors.rose[400],
