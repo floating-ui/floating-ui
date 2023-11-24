@@ -87,19 +87,79 @@ it hides itself.
 
 ## Usage
 
-```js
-import {computePosition, hide} from '@floating-ui/dom';
+Apply a hidden visibility style to the floating element based on
+the data in `middlewareData.hide{:js}`:
 
+<ShowFor packages={['core', 'dom']}>
+
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [hide()],
 }).then(({middlewareData}) => {
-  const {referenceHidden} = middlewareData.hide;
-
-  Object.assign(floatingEl.style, {
-    visibility: referenceHidden ? 'hidden' : 'visible',
-  });
+  if (middlewareData.hide) {
+    Object.assign(floatingEl.style, {
+      visibility: middlewareData.hide.referenceHidden
+        ? 'hidden'
+        : 'visible',
+    });
+  }
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js /middlewareData/
+const {refs, floatingStyles, middlewareData} = useFloating({
+  middleware: [hide()],
+});
+
+return (
+  <div
+    ref={refs.setFloating}
+    style={{
+      ...floatingStyles,
+      visibility: middlewareData.hide?.referenceHidden
+        ? 'hidden'
+        : 'visible',
+    }}
+  />
+);
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```vue /middlewareData/
+<script setup>
+const reference = ref(null);
+const floating = ref(null);
+const {floatingStyles, middlewareData} = useFloating(
+  reference,
+  floating,
+  {
+    middleware: [hide()],
+  }
+);
+</script>
+
+<template>
+  <div ref="reference"></div>
+  <div
+    ref="floating"
+    :style="{
+      ...floatingStyles,
+      visibility: middlewareData.hide?.referenceHidden
+        ? 'hidden'
+        : 'visible',
+    }"
+  ></div>
+</template>
+```
+
+</ShowFor>
 
 ## Order
 
