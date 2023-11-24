@@ -116,12 +116,13 @@ Given an arrow element inside your floating element:
 }
 ```
 
-Pass it to the `arrow(){:js}` middleware and assign the dynamic
-styles available in `middlewareData.arrow{:js}`:
+Pass the <WordHighlight id='a'>element</WordHighlight> to the
+`arrow(){:js}` middleware and assign the dynamic styles using the
+coordinates data available in `middlewareData.arrow{:js}`:
 
 <ShowFor packages={['dom']}>
 
-```js
+```js /arrowEl/#a
 const arrowEl = document.querySelector('#arrow');
 
 computePosition(referenceEl, floatingEl, {
@@ -142,7 +143,7 @@ computePosition(referenceEl, floatingEl, {
 
 <ShowFor packages={['react', 'react-dom', 'react-native']}>
 
-```js /middlewareData/
+```js /middlewareData.arrow/ /arrowRef/#a
 const arrowRef = useRef(null);
 
 const {refs, floatingStyles, middlewareData} = useFloating({
@@ -171,7 +172,7 @@ return (
 
 <ShowFor packages={['vue']}>
 
-```vue {24-34} /middlewareData/
+```vue {24-34} /middlewareData.arrow/ /floatingArrow/#a
 <script setup>
 import {arrow, useFloating} from '@floating-ui/vue';
 import {ref} from 'vue';
@@ -214,10 +215,17 @@ const {floatingStyles, middlewareData} = useFloating(
 </ShowFor>
 
 <Notice type="error" title="Important">
-  Depending on the placement, either `x` or `y` will be
-  `undefined{:js}`. The above code checks for `null{:js}` and
-  `undefined{:js}` simultaneously. Don't remove `!= null{:js}`,
-  because either value can be falsy (0), causing a bug!
+  Unlike the floating element, which has both coordinates defined at all times, 
+  the arrow only has one defined. Due to this, either `x` or `y` will be 
+  `undefined{:js}`, depending on the side of placement.
+
+  <ShowFor packages={['dom', 'vue']}>
+
+    The above code uses `!={:js}` to check for `null{:js}` and
+    `undefined{:js}` **simultaneously**. Don't remove `!= null{:js}`,
+    because either value can be falsy (`0{:js}`), causing a bug!
+
+  </ShowFor>
 </Notice>
 
 This middleware is designed only to position the arrow on one
