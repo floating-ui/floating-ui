@@ -14,7 +14,7 @@ import {MDXProvider} from '@mdx-js/react';
 import cn from 'classnames';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {Fragment, useRef, useState} from 'react';
+import {Fragment, useEffect, useRef, useState} from 'react';
 import {
   ChevronDown,
   ExternalLink,
@@ -504,17 +504,24 @@ function NavbarItem({
   collapse,
 }) {
   const {pathname} = useRouter();
+  const {packageContext} = useAppContext();
 
   const children = nav.filter(({parent: p}) => p === title);
 
-  const shouldCollapse = collapse === true;
+  const isReactContext = ['react', 'react-dom'].includes(
+    packageContext
+  );
   const isReact = title === 'React';
+  const shouldCollapse = collapse === true && !isReactContext;
 
   const [childrenCollapsed, setChildrenCollapsed] =
     useState(shouldCollapse);
 
   useIsomorphicLayoutEffect(() => {
-    if (!shouldCollapse) return;
+    if (isReactContext || !shouldCollapse) {
+      setChildrenCollapsed(false);
+      return;
+    }
 
     const activeChildItem = nav.find(
       ({url: u}) => u === pathname
@@ -523,7 +530,14 @@ function NavbarItem({
     setChildrenCollapsed(
       pathname !== url && activeChildItem.parent !== title
     );
-  }, [shouldCollapse, pathname, url, title, parent]);
+  }, [
+    shouldCollapse,
+    pathname,
+    url,
+    title,
+    parent,
+    packageContext,
+  ]);
 
   if (hide) return null;
 
@@ -635,6 +649,7 @@ function Navbar({activeLinkRef, parent, collapsed}) {
       style={{
         height,
       }}
+      inert={collapsed ? '' : undefined}
     >
       {items.map((item) => (
         <NavbarItem
@@ -670,10 +685,18 @@ export default function Layout({children, className}) {
 
   useIsomorphicLayoutEffect(() => {
     setHash(asPath.slice(asPath.indexOf('#')));
-    if (!isPackageTooltipTouched) {
-      setPackageContext(getPackageContext(asPath.toLowerCase()));
-    }
-  }, [asPath, isPackageTooltipTouched]);
+  }, [asPath]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!isPackageTooltipTouched) {
+        setPackageContext(
+          getPackageContext(asPath.toLowerCase())
+        );
+      }
+    });
+    return () => clearTimeout(timeout);
+  }, [asPath, setPackageContext, isPackageTooltipTouched]);
 
   let currentParentIndex = null;
   const anchorsComputed = anchors.map((node, index) => {
