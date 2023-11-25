@@ -19,6 +19,19 @@ It offers two main features:
 2. **User interactions for React**: Hooks and components for composing
    interactions to create accessible floating UI components.
 
+## README Sponsors
+
+<table>
+  <tr>
+    <td>
+      <a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer"><img width="176" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" /></a>
+    </td>
+    <td>
+      <a href="https://dopt.com/?utm_source=floating_ui_readme" target="_blank" rel="noopener noreferrer"><img width="200" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/dopt.png" alt="Dopt" /></a>
+    </td>
+  </tr>
+</table>
+
 ## Why
 
 Floating elements are absolutely positioned, typically anchored to another UI
@@ -125,19 +138,6 @@ as much as possible.
 
 `npm -w packages/react run dev` in the root will launch the `@floating-ui/react`
 development tests at `http://localhost:1234`.
-
-## README Sponsors
-
-<table>
-  <tr>
-    <td>
-      <a href="https://milfordasset.com/" target="_blank" rel="noopener noreferrer"><img width="176" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/milford.svg" alt="Milford" /></a>
-    </td>
-    <td>
-      <a href="https://dopt.com/?utm_source=floating_ui_readme" target="_blank" rel="noopener noreferrer"><img width="200" height="150" src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/sponsors/dopt.png" alt="Dopt" /></a>
-    </td>
-  </tr>
-</table>
 
 You can sponsor Floating UI in a variety of ways on
 [Open Collective](https://opencollective.com/floating-ui).
