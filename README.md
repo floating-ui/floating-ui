@@ -32,6 +32,9 @@ It offers two main features:
   </tr>
 </table>
 
+You can sponsor Floating UI in a variety of ways on
+[Open Collective](https://opencollective.com/floating-ui).
+
 ## Why
 
 Floating elements are absolutely positioned, typically anchored to another UI
@@ -138,9 +141,6 @@ as much as possible.
 
 `npm -w packages/react run dev` in the root will launch the `@floating-ui/react`
 development tests at `http://localhost:1234`.
-
-You can sponsor Floating UI in a variety of ways on
-[Open Collective](https://opencollective.com/floating-ui).
 
 ## Credits
 
