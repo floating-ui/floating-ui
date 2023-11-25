@@ -8,7 +8,7 @@ import {
   isVirtualPointerEvent,
   stopEvent,
 } from '@floating-ui/react/utils';
-import {isHTMLElement} from '@floating-ui/utils/dom';
+import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import type {FocusableElement} from 'tabbable';
 import {tabbable} from 'tabbable';
@@ -59,6 +59,23 @@ export interface FloatingFocusManagerProps<
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
   closeOnFocusOut?: boolean;
+}
+
+let previouslyFocusedElements: Element[] = [];
+
+function addPreviouslyFocusedElement(element: Element | null) {
+  if (element && element.isConnected && getNodeName(element) !== 'body') {
+    previouslyFocusedElements.push(element);
+  }
+
+  previouslyFocusedElements = previouslyFocusedElements.filter(
+    (x) => x.isConnected,
+  );
+
+  // Keep a rolling window of the last 10 elements.
+  if (previouslyFocusedElements.length > 10) {
+    previouslyFocusedElements = previouslyFocusedElements.slice(1);
+  }
 }
 
 /**
@@ -116,7 +133,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   const startDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const endDismissButtonRef = React.useRef<HTMLButtonElement>(null);
   const preventReturnFocusRef = React.useRef(false);
-  const previouslyFocusedElementRef = React.useRef<Element | null>(null);
   const isPointerDownRef = React.useRef(false);
 
   const isInsidePortal = portalContext != null;
@@ -245,7 +261,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           movedToUnrelatedNode &&
           !isPointerDownRef.current &&
           // Fix React 18 Strict Mode returnFocus due to double rendering.
-          relatedTarget !== previouslyFocusedElementRef.current
+          !previouslyFocusedElements.includes(relatedTarget)
         ) {
           preventReturnFocusRef.current = true;
           onOpenChange(false, event);
@@ -358,7 +374,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     const previouslyFocusedElement = activeElement(doc);
     const contextData = dataRef.current;
 
-    previouslyFocusedElementRef.current = previouslyFocusedElement;
+    addPreviouslyFocusedElement(previouslyFocusedElement);
 
     // Dismissing via outside press should always ignore `returnFocus` to
     // prevent unwanted scrolling.
@@ -372,7 +388,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       nested: boolean;
     }) {
       if (reason === 'escape-key' && refs.domReference.current) {
-        previouslyFocusedElementRef.current = refs.domReference.current;
+        addPreviouslyFocusedElement(refs.domReference.current);
       }
 
       if (reason === 'hover' && event.type === 'mouseleave') {
@@ -410,22 +426,26 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           ['click', 'mousedown'].includes(contextData.openEvent.type));
 
       if (shouldFocusReference && refs.domReference.current) {
-        previouslyFocusedElementRef.current = refs.domReference.current;
+        addPreviouslyFocusedElement(refs.domReference.current);
       }
+
+      const lastAttachedElement = Array.from(previouslyFocusedElements)
+        .reverse()
+        .find((x) => x.isConnected);
 
       if (
         // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current &&
-        isHTMLElement(previouslyFocusedElementRef.current) &&
+        isHTMLElement(lastAttachedElement) &&
         !preventReturnFocusRef.current &&
         // If the focus moved somewhere else after mount, avoid returning focus
         // since it likely entered a different element which should be
         // respected: https://github.com/floating-ui/floating-ui/issues/2607
-        (previouslyFocusedElement !== activeEl && activeEl !== doc.body
+        (lastAttachedElement !== activeEl && activeEl !== doc.body
           ? isFocusInsideFloatingTree
           : true)
       ) {
-        enqueueFocus(previouslyFocusedElementRef.current, {
+        enqueueFocus(lastAttachedElement, {
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try
           // to get focused, the calls get ignored — leaving the root
