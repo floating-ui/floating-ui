@@ -160,7 +160,7 @@ const Item = forwardRef(({children, active, ...rest}, ref) => {
         'cursor-default scroll-my-1 rounded-md p-2',
         {
           'bg-blue-500 text-white': active,
-        }
+        },
       )}
       role="option"
       id={id}
@@ -189,7 +189,7 @@ export function ComboboxDemo() {
       window.removeEventListener('resize', onResize);
       window.visualViewport?.removeEventListener(
         'resize',
-        onResize
+        onResize,
       );
     };
   }, []);
@@ -209,7 +209,7 @@ export function ComboboxDemo() {
               placement === 'bottom'
                 ? `${Math.max(
                     padding === 25 ? 150 : 75,
-                    availableHeight
+                    availableHeight,
                   )}px`
                 : `${Math.max(50, availableHeight)}px`,
             width: `${rects.reference.width}px`,
@@ -251,7 +251,7 @@ export function ComboboxDemo() {
   }
 
   const items = fruits.filter((item) =>
-    item.toLowerCase().startsWith(inputValue.toLowerCase())
+    item.toLowerCase().startsWith(inputValue.toLowerCase()),
   );
 
   return (

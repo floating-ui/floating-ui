@@ -111,7 +111,7 @@ describe('dialog', () => {
 
     expect(screen.queryByRole('dialog')).toBeInTheDocument();
     expect(button.getAttribute('aria-controls')).toBe(
-      screen.getByRole('dialog').getAttribute('id')
+      screen.getByRole('dialog').getAttribute('id'),
     );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');
@@ -138,7 +138,7 @@ describe('dialog', () => {
 
     expect(screen.queryByRole('dialog')).toBeInTheDocument();
     expect(button.getAttribute('aria-controls')).toBe(
-      screen.getByRole('dialog').getAttribute('id')
+      screen.getByRole('dialog').getAttribute('id'),
     );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');
@@ -167,10 +167,10 @@ describe('menu', () => {
 
     expect(screen.queryByRole('menu')).toBeInTheDocument();
     expect(button.getAttribute('id')).toBe(
-      screen.getByRole('menu').getAttribute('aria-labelledby')
+      screen.getByRole('menu').getAttribute('aria-labelledby'),
     );
     expect(button.getAttribute('aria-controls')).toBe(
-      screen.getByRole('menu').getAttribute('id')
+      screen.getByRole('menu').getAttribute('id'),
     );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');
@@ -199,7 +199,7 @@ describe('listbox', () => {
 
     expect(screen.queryByRole('listbox')).toBeInTheDocument();
     expect(button.getAttribute('aria-controls')).toBe(
-      screen.getByRole('listbox').getAttribute('id')
+      screen.getByRole('listbox').getAttribute('id'),
     );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');

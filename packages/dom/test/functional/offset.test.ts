@@ -25,7 +25,7 @@ allPlacements.forEach((placement) => {
         await click(page, `[data-testid="rtl-${rtl}"]`);
 
         expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-          `${name}-${placement}-${rtlStr}.png`
+          `${name}-${placement}-${rtlStr}.png`,
         );
       });
     });

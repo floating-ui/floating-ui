@@ -10,7 +10,8 @@ import {
 } from '@floating-ui/react/utils';
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import {FocusableElement, tabbable} from 'tabbable';
+import type {FocusableElement} from 'tabbable';
+import {tabbable} from 'tabbable';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
@@ -32,7 +33,7 @@ import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
-  ref: React.Ref<HTMLButtonElement>
+  ref: React.Ref<HTMLButtonElement>,
 ) {
   return (
     <button
@@ -46,7 +47,7 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
 });
 
 export interface FloatingFocusManagerProps<
-  RT extends ReferenceType = ReferenceType
+  RT extends ReferenceType = ReferenceType,
 > {
   context: FloatingContext<RT>;
   children: JSX.Element;
@@ -65,7 +66,7 @@ export interface FloatingFocusManagerProps<
  * @see https://floating-ui.com/docs/FloatingFocusManager
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
-  props: FloatingFocusManagerProps<RT>
+  props: FloatingFocusManagerProps<RT>,
 ): JSX.Element {
   const {
     context,
@@ -124,7 +125,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     (container: HTMLElement | null = floating) => {
       return container ? tabbable(container, getTabbableOptions()) : [];
     },
-    [floating]
+    [floating],
   );
 
   const getTabbableElements = React.useCallback(
@@ -146,7 +147,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         .filter(Boolean)
         .flat() as Array<FocusableElement>;
     },
-    [domReference, floating, orderRef, getTabbableContent]
+    [domReference, floating, orderRef, getTabbableContent],
   );
 
   React.useEffect(() => {
@@ -228,12 +229,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
             (getChildren(tree.nodesRef.current, nodeId).find(
               (node) =>
                 contains(node.context?.elements.floating, relatedTarget) ||
-                contains(node.context?.elements.domReference, relatedTarget)
+                contains(node.context?.elements.domReference, relatedTarget),
             ) ||
               getAncestors(tree.nodesRef.current, nodeId).find(
                 (node) =>
                   node.context?.elements.floating === relatedTarget ||
-                  node.context?.elements.domReference === relatedTarget
+                  node.context?.elements.domReference === relatedTarget,
               )))
         );
 
@@ -281,8 +282,8 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     // Don't hide portals nested within the parent portal.
     const portalNodes = Array.from(
       portalContext?.portalNode?.querySelectorAll(
-        `[${createAttribute('portal')}]`
-      ) || []
+        `[${createAttribute('portal')}]`,
+      ) || [],
     );
 
     if (floating) {
@@ -332,7 +333,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           : initialFocusValue.current) || floating;
       const focusAlreadyInsideFloatingEl = contains(
         floating,
-        previouslyFocusedElement
+        previouslyFocusedElement,
       );
 
       if (!ignoreInitialFocus && !focusAlreadyInsideFloatingEl && open) {
@@ -401,7 +402,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         contains(floating, activeEl) ||
         (tree &&
           getChildren(tree.nodesRef.current, nodeId).some((node) =>
-            contains(node.context?.elements.floating, activeEl)
+            contains(node.context?.elements.floating, activeEl),
           ));
       const shouldFocusReference =
         isFocusInsideFloatingTree ||
@@ -537,7 +538,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
             if (modal) {
               const els = getTabbableElements();
               enqueueFocus(
-                order[0] === 'reference' ? els[0] : els[els.length - 1]
+                order[0] === 'reference' ? els[0] : els[els.length - 1],
               );
             } else if (
               portalContext?.preserveTabOrder &&

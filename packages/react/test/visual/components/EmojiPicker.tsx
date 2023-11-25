@@ -1,3 +1,4 @@
+import type {Placement} from '@floating-ui/react';
 import {
   arrow,
   autoUpdate,
@@ -6,7 +7,6 @@ import {
   FloatingFocusManager,
   FloatingPortal,
   offset,
-  Placement,
   useClick,
   useDismiss,
   useFloating,
@@ -68,7 +68,7 @@ type OptionProps = React.HTMLAttributes<HTMLButtonElement> & {
 
 const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
   {name, active, selected, children, ...props},
-  ref
+  ref,
 ) {
   const id = useId();
   return (
@@ -82,7 +82,7 @@ const Option = forwardRef<HTMLButtonElement, OptionProps>(function Option(
         {
           'bg-cyan-100': selected && !active,
           'bg-cyan-200': active,
-        }
+        },
       )}
       aria-selected={selected}
       aria-label={name}
@@ -184,7 +184,7 @@ export const Main = () => {
   };
 
   const filteredEmojis = emojis.filter(({name}) =>
-    name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
   );
 
   return (

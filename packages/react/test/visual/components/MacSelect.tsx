@@ -1,3 +1,4 @@
+import type {SideObject} from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
@@ -6,7 +7,6 @@ import {
   inner,
   offset,
   shift,
-  SideObject,
   size,
   useClick,
   useDismiss,
@@ -56,7 +56,7 @@ const SCROLL_ARROW_PADDING = 10;
 
 const shouldShowArrow = (
   scrollRef: React.MutableRefObject<HTMLDivElement | null>,
-  dir: 'down' | 'up'
+  dir: 'down' | 'up',
 ) => {
   if (scrollRef.current) {
     const {scrollTop, scrollHeight, clientHeight} = scrollRef.current;
@@ -154,7 +154,7 @@ export function ScrollArrow({
         onScroll(
           dir === 'up'
             ? Math.min(pixelsToScroll, remainingPixels)
-            : Math.max(-pixelsToScroll, -remainingPixels)
+            : Math.max(-pixelsToScroll, -remainingPixels),
         );
 
         if (scrollRemaining) {
@@ -181,7 +181,7 @@ export function ScrollArrow({
         {
           'top-0': dir === 'up',
           'bottom-0': dir === 'down',
-        }
+        },
       )}
       data-dir={dir}
       ref={ref}
@@ -381,8 +381,8 @@ export function Main() {
                               activeIndex === i
                                 ? 'rgba(0,200,255,0.2)'
                                 : i === selectedIndex
-                                ? 'rgba(0,0,50,0.05)'
-                                : 'transparent',
+                                  ? 'rgba(0,0,50,0.05)'
+                                  : 'transparent',
                             fontWeight: i === selectedIndex ? 'bold' : 'normal',
                           }}
                           ref={(node) => {

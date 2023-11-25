@@ -16,7 +16,7 @@ import type {
 export const computePosition: ComputePosition = async (
   reference,
   floating,
-  config
+  config,
 ): Promise<ComputePositionReturn> => {
   const {
     placement = 'bottom',

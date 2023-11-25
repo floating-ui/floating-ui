@@ -12,13 +12,13 @@ test('bottom', () => {
 
 test('bottom-start', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'bottom-start')
+    computeCoordsFromPlacement({reference, floating}, 'bottom-start'),
   ).toEqual({x: 0, y: 100});
 });
 
 test('bottom-end', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'bottom-end')
+    computeCoordsFromPlacement({reference, floating}, 'bottom-end'),
   ).toEqual({x: 50, y: 100});
 });
 
@@ -31,7 +31,7 @@ test('top', () => {
 
 test('top-start', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'top-start')
+    computeCoordsFromPlacement({reference, floating}, 'top-start'),
   ).toEqual({x: 0, y: -50});
 });
 
@@ -51,13 +51,13 @@ test('right', () => {
 
 test('right-start', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'right-start')
+    computeCoordsFromPlacement({reference, floating}, 'right-start'),
   ).toEqual({x: 100, y: 0});
 });
 
 test('right-end', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'right-end')
+    computeCoordsFromPlacement({reference, floating}, 'right-end'),
   ).toEqual({x: 100, y: 50});
 });
 
@@ -70,12 +70,12 @@ test('left', () => {
 
 test('left-start', () => {
   expect(
-    computeCoordsFromPlacement({reference, floating}, 'left-start')
+    computeCoordsFromPlacement({reference, floating}, 'left-start'),
   ).toEqual({x: -50, y: 0});
 });
 
 test('left-end', () => {
   expect(computeCoordsFromPlacement({reference, floating}, 'left-end')).toEqual(
-    {x: -50, y: 50}
+    {x: -50, y: 50},
   );
 });

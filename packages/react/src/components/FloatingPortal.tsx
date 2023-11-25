@@ -47,7 +47,7 @@ export function useFloatingPortalNode({
 
   const data = React.useMemo(
     () => ({id, root, portalContext, uniqueId}),
-    [id, root, portalContext, uniqueId]
+    [id, root, portalContext, uniqueId],
   );
 
   const dataRef = React.useRef<typeof data>();
@@ -177,7 +177,7 @@ export function FloatingPortal({
           portalNode,
           setFocusManagerState,
         }),
-        [preserveTabOrder, portalNode]
+        [preserveTabOrder, portalNode],
       )}
     >
       {shouldRenderGuards && portalNode && (

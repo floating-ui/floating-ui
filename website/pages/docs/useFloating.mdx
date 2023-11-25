@@ -61,7 +61,7 @@ interface UseFloatingOptions {
   onOpenChange?(
     open: boolean,
     event?: Event,
-    reason?: OpenChangeReason
+    reason?: OpenChangeReason,
   ): void;
   elements?: {
     reference?: ReferenceElement | null;
@@ -70,7 +70,7 @@ interface UseFloatingOptions {
   whileElementsMounted?(
     reference?: ReferenceElement,
     floating?: FloatingElement,
-    update?: () => void
+    update?: () => void,
   ): () => void;
   nodeId?: string;
 }
@@ -94,7 +94,7 @@ interface UseFloatingOptions {
   whileElementsMounted?(
     reference?: ReferenceElement,
     floating?: FloatingElement,
-    update?: () => void
+    update?: () => void,
   ): () => void;
 }
 ```

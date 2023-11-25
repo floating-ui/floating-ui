@@ -7,8 +7,8 @@ import {
 } from '@floating-ui/utils';
 
 import {
+  type Options as DetectOverflowOptions,
   detectOverflow,
-  Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
 
@@ -45,7 +45,7 @@ export type ShiftOptions = Partial<
  * @see https://floating-ui.com/docs/shift
  */
 export const shift = (
-  options: ShiftOptions | Derivable<ShiftOptions> = {}
+  options: ShiftOptions | Derivable<ShiftOptions> = {},
 ): Middleware => ({
   name: 'shift',
   options,
@@ -139,7 +139,7 @@ export type LimitShiftOptions = Partial<{
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
 export const limitShift = (
-  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {}
+  options: LimitShiftOptions | Derivable<LimitShiftOptions> = {},
 ): {
   options: any;
   fn: (state: MiddlewareState) => Coords;

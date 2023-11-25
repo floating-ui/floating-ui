@@ -29,7 +29,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
       onClose: () => void;
       tree?: FloatingTreeType<RT> | null;
       leave?: boolean;
-    }
+    },
   ): (event: MouseEvent) => void;
   __options: {
     blockPointerEvents: boolean;
@@ -39,7 +39,7 @@ export interface HandleCloseFn<RT extends ReferenceType = ReferenceType> {
 export function getDelay(
   value: UseHoverProps['delay'],
   prop: 'open' | 'close',
-  pointerType?: PointerEvent['pointerType']
+  pointerType?: PointerEvent['pointerType'],
 ) {
   if (pointerType && !isMouseLikePointerType(pointerType)) {
     return 0;
@@ -68,7 +68,7 @@ export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
  */
 export function useHover<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseHoverProps<RT> = {}
+  props: UseHoverProps<RT> = {},
 ): ElementProps {
   const {
     open,
@@ -156,25 +156,25 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     (
       event: Event,
       runElseBranch = true,
-      reason: OpenChangeReason = 'hover'
+      reason: OpenChangeReason = 'hover',
     ) => {
       const closeDelay = getDelay(
         delayRef.current,
         'close',
-        pointerTypeRef.current
+        pointerTypeRef.current,
       );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(
           () => onOpenChange(false, event, reason),
-          closeDelay
+          closeDelay,
         );
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
         onOpenChange(false, event, reason);
       }
     },
-    [delayRef, onOpenChange]
+    [delayRef, onOpenChange],
   );
 
   const cleanupMouseMoveHandler = React.useCallback(() => {
@@ -219,7 +219,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       const openDelay = getDelay(
         delayRef.current,
         'open',
-        pointerTypeRef.current
+        pointerTypeRef.current,
       );
 
       if (openDelay) {
@@ -359,7 +359,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         const ref = domReference as unknown as HTMLElement | SVGSVGElement;
 
         const parentFloating = tree?.nodesRef.current.find(
-          (node) => node.id === parentId
+          (node) => node.id === parentId,
         )?.context?.elements.floating;
 
         if (parentFloating) {

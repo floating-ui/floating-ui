@@ -54,7 +54,7 @@ test('uncontrolled mode', async () => {
       <CompositeItem data-testid="1">1</CompositeItem>
       <CompositeItem data-testid="2">2</CompositeItem>
       <CompositeItem data-testid="3">3</CompositeItem>
-    </Composite>
+    </Composite>,
   );
 
   screen.getByTestId('1').focus();

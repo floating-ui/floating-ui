@@ -99,7 +99,7 @@ interface UseTypeaheadProps {
     | null
     | ((
         list: Array<string | null>,
-        typedString: string
+        typedString: string,
       ) => string | null | undefined);
   resetMs?: number;
   ignoreKeys?: Array<string>;
@@ -205,7 +205,7 @@ useTypeahead(context, {
   findMatch: (list, typedString) =>
     list.find(
       (itemString) =>
-        itemString?.toLowerCase().indexOf(typedString) === 0
+        itemString?.toLowerCase().indexOf(typedString) === 0,
     ),
 });
 ```

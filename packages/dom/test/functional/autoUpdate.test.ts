@@ -17,7 +17,7 @@ import {click} from './utils/click';
       }
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `${option}-${bool}.png`
+        `${option}-${bool}.png`,
       );
     });
   });
@@ -30,7 +30,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="layoutShift-${option}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `layoutShift-${option}.png`
+      `layoutShift-${option}.png`,
     );
   });
 });

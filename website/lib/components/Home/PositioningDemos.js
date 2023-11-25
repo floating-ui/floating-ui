@@ -23,7 +23,7 @@ const Reference = forwardRef(({className, children}, ref) => {
       ref={ref}
       className={classNames(
         `z-50 h-24 w-24 cursor-default border-2 border-dashed border-gray-900 bg-gray-50 p-2 text-sm font-bold text-gray-900`,
-        className
+        className,
       )}
       aria-label="Reference element"
     >
@@ -45,7 +45,7 @@ function GridItem({
         'relative flex-col justify-between overflow-x-hidden bg-gray-50 px-4 py-8 shadow dark:bg-gray-700 sm:p-8 md:rounded-lg lg:flex',
         {
           hidden: hidden,
-        }
+        },
       )}
     >
       <div className="overflow-hidden">
@@ -183,7 +183,7 @@ export function Placement() {
                     'border-gray-800 bg-gray-800':
                       placement === p,
                     'border-gray-900': placement !== p,
-                  }
+                  },
                 )}
               />
             </button>
@@ -195,7 +195,7 @@ export function Placement() {
                 style={{
                   minWidth:
                     ['top', 'bottom'].includes(
-                      placement.split('-')[0]
+                      placement.split('-')[0],
                     ) && placement.includes('-')
                       ? '8rem'
                       : undefined,
@@ -447,7 +447,7 @@ export function Virtual() {
         },
       });
     },
-    [refs]
+    [refs],
   );
 
   useEffect(() => {
@@ -470,7 +470,7 @@ export function Virtual() {
     return () => {
       boundary.removeEventListener(
         'pointermove',
-        handleMouseMove
+        handleMouseMove,
       );
       window.removeEventListener('scroll', handleWindowScroll);
       parents.forEach((parent) => {

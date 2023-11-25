@@ -64,7 +64,7 @@ export const FloatingDelayGroup = ({
       initialDelay: delay,
       currentId: null,
       isInstantPhase: false,
-    }
+    },
   );
 
   const initialCurrentIdRef = React.useRef<any>(null);
@@ -90,7 +90,7 @@ export const FloatingDelayGroup = ({
     <FloatingDelayGroupContext.Provider
       value={React.useMemo(
         () => ({...state, setState, setCurrentId}),
-        [state, setState, setCurrentId]
+        [state, setState, setCurrentId],
       )}
     >
       {children}
@@ -104,7 +104,7 @@ interface UseGroupOptions {
 
 export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
-  {id}: UseGroupOptions
+  {id}: UseGroupOptions,
 ) => {
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();

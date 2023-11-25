@@ -15,7 +15,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="scroll-${scroll}"]`);
 
     expect(
-      await page.locator('#outside-container').screenshot()
+      await page.locator('#outside-container').screenshot(),
     ).toMatchSnapshot(`outside-${scroll}.png`);
   });
 
@@ -26,7 +26,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="scroll-${scroll}"]`);
 
     expect(
-      await page.locator('#inside-container').screenshot()
+      await page.locator('#inside-container').screenshot(),
     ).toMatchSnapshot(`inside-${scroll}.png`);
   });
 
@@ -37,7 +37,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="scroll-${scroll}"]`);
 
     expect(
-      await page.locator('#nested-container').screenshot()
+      await page.locator('#nested-container').screenshot(),
     ).toMatchSnapshot(`nested-${scroll}.png`);
   });
 
@@ -48,7 +48,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="scroll-${scroll}"]`);
 
     expect(
-      await page.locator('#virtual-container').screenshot()
+      await page.locator('#virtual-container').screenshot(),
     ).toMatchSnapshot(`virtual-${scroll}.png`);
   });
 
@@ -59,7 +59,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="scroll-${scroll}"]`);
 
     expect(
-      await page.locator('#inside-scrollable-container').screenshot()
+      await page.locator('#inside-scrollable-container').screenshot(),
     ).toMatchSnapshot(`inside-scrollable-${scroll}.png`);
   });
 });

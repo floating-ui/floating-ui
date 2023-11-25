@@ -54,7 +54,7 @@ export interface Platform {
   }) => Promisable<Rect>;
   getOffsetParent?: (
     element: Element,
-    polyfill?: (element: HTMLElement) => Element | null
+    polyfill?: (element: HTMLElement) => Element | null,
   ) => Promisable<Element | Window>;
   isElement?: (value: unknown) => Promisable<boolean>;
   getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
@@ -138,7 +138,7 @@ export type SizeOptions = Prettify<
         args: MiddlewareState & {
           availableWidth: number;
           availableHeight: number;
-        }
+        },
       ): Promisable<void>;
     }
 >;
@@ -167,7 +167,7 @@ export type HideOptions = Prettify<
  * @see https://floating-ui.com/docs/autoPlacement
  */
 declare const autoPlacement: (
-  options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>
+  options?: AutoPlacementOptions | Derivable<AutoPlacementOptions>,
 ) => Middleware;
 
 /**
@@ -176,7 +176,7 @@ declare const autoPlacement: (
  * @see https://floating-ui.com/docs/shift
  */
 declare const shift: (
-  options?: ShiftOptions | Derivable<ShiftOptions>
+  options?: ShiftOptions | Derivable<ShiftOptions>,
 ) => Middleware;
 
 /**
@@ -186,7 +186,7 @@ declare const shift: (
  * @see https://floating-ui.com/docs/flip
  */
 declare const flip: (
-  options?: FlipOptions | Derivable<FlipOptions>
+  options?: FlipOptions | Derivable<FlipOptions>,
 ) => Middleware;
 
 /**
@@ -196,7 +196,7 @@ declare const flip: (
  * @see https://floating-ui.com/docs/size
  */
 declare const size: (
-  options?: SizeOptions | Derivable<SizeOptions>
+  options?: SizeOptions | Derivable<SizeOptions>,
 ) => Middleware;
 
 /**
@@ -205,7 +205,7 @@ declare const size: (
  * @see https://floating-ui.com/docs/hide
  */
 declare const hide: (
-  options?: HideOptions | Derivable<HideOptions>
+  options?: HideOptions | Derivable<HideOptions>,
 ) => Middleware;
 
 /**
@@ -214,7 +214,7 @@ declare const hide: (
  * @see https://floating-ui.com/docs/arrow
  */
 declare const arrow: (
-  options: ArrowOptions | Derivable<ArrowOptions>
+  options: ArrowOptions | Derivable<ArrowOptions>,
 ) => Middleware;
 
 /**
@@ -223,14 +223,14 @@ declare const arrow: (
  * @see https://floating-ui.com/docs/inline
  */
 declare const inline: (
-  options?: InlineOptions | Derivable<InlineOptions>
+  options?: InlineOptions | Derivable<InlineOptions>,
 ) => Middleware;
 
 /**
  * Built-in `limiter` that will stop `shift()` at a certain point.
  */
 declare const limitShift: (
-  options?: LimitShiftOptions | Derivable<LimitShiftOptions>
+  options?: LimitShiftOptions | Derivable<LimitShiftOptions>,
 ) => {
   options: any;
   fn: (state: MiddlewareState) => Coords;
@@ -246,7 +246,7 @@ declare const limitShift: (
  */
 declare const detectOverflow: (
   state: MiddlewareState,
-  options?: DetectOverflowOptions
+  options?: DetectOverflowOptions,
 ) => Promise<SideObject>;
 
 export {

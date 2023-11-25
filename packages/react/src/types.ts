@@ -3,7 +3,7 @@ import type {
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
 } from '@floating-ui/react-dom';
-import * as React from 'react';
+import type * as React from 'react';
 
 export * from '.';
 export {FloatingArrowProps} from './components/FloatingArrow';

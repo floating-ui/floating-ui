@@ -10,7 +10,7 @@ import {cloneElement, forwardRef, useRef} from 'react';
 
 const Example = forwardRef(function Example(
   {children, placement},
-  ref
+  ref,
 ) {
   const arrowRef = useRef(null);
 

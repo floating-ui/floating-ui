@@ -64,7 +64,7 @@ const useImpl = ({
 function Combobox(
   props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
     list?: Array<string>;
-  }
+  },
 ) {
   const {getReferenceProps, getFloatingProps} = useImpl(props);
   return (
@@ -78,7 +78,7 @@ function Combobox(
 function Select(
   props: Pick<UseTypeaheadProps, 'onMatch' | 'onTypingChange'> & {
     list?: Array<string>;
-  }
+  },
 ) {
   const [isOpen, setIsOpen] = useState(false);
   const {getReferenceProps, getFloatingProps} = useImpl({
@@ -134,7 +134,7 @@ test('starts from the current activeIndex and correctly loops', async () => {
     <Combobox
       onMatch={spy}
       list={['Toy Story 2', 'Toy Story 3', 'Toy Story 4']}
-    />
+    />,
   );
 
   await user.click(screen.getByRole('combobox'));
@@ -188,7 +188,7 @@ test('capslock characters continue to match', async () => {
 });
 
 function App1(
-  props: Pick<UseTypeaheadProps, 'onMatch'> & {list: Array<string>}
+  props: Pick<UseTypeaheadProps, 'onMatch'> & {list: Array<string>},
 ) {
   const {getReferenceProps, getFloatingProps, activeIndex, open} =
     useImpl(props);
@@ -247,7 +247,7 @@ test('matches when focus is withing floating', async () => {
 
   await user.keyboard('h');
   expect(
-    (await screen.findByRole('option', {selected: true})).textContent
+    (await screen.findByRole('option', {selected: true})).textContent,
   ).toBe('three');
 
   cleanup();
@@ -287,13 +287,13 @@ test('Menu - skips disabled items and opens submenu on space if no match', async
   await userEvent.keyboard('opy as ');
 
   expect(screen.getByText('Copy as').getAttribute('aria-expanded')).toBe(
-    'false'
+    'false',
   );
 
   await userEvent.keyboard(' ');
 
   expect(screen.getByText('Copy as').getAttribute('aria-expanded')).toBe(
-    'true'
+    'true',
   );
 });
 

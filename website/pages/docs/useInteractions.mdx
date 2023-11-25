@@ -61,13 +61,13 @@ function App() {
 ```ts
 interface UseInteractionsReturn {
   getReferenceProps(
-    userProps?: React.HTMLProps<Element>
+    userProps?: React.HTMLProps<Element>,
   ): Record<string, unknown>;
   getFloatingProps(
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ): Record<string, unknown>;
   getItemProps(
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ): Record<string, unknown>;
 }
 ```

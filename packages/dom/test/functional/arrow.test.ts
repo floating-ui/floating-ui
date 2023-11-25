@@ -18,7 +18,7 @@ allPlacements.forEach((placement) => {
           await click(page, `[data-testid="arrow-padding-${arrowPadding}"]`);
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-            `centered-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            `centered-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`,
           );
         });
       });
@@ -42,13 +42,13 @@ allPlacements.forEach((placement) => {
           await scroll(page, {x: 765});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-            `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            `not-centered-left-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`,
           );
 
           await scroll(page, {x: 285});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-            `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            `not-centered-right-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`,
           );
         });
       });
@@ -72,13 +72,13 @@ allPlacements.forEach((placement) => {
           await scroll(page, {y: 880});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-            `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            `not-centered-top-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`,
           );
 
           await scroll(page, {y: 300});
 
           expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-            `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`
+            `not-centered-bottom-${placement}-${floatingSize}-${referenceSize}-${arrowPadding}.png`,
           );
         });
       });
@@ -93,7 +93,7 @@ test('svg arrow should be positioned correctly within containing block', async (
   await click(page, `[data-testid="svg-true"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `svg-arrow.png`
+    `svg-arrow.png`,
   );
 });
 
@@ -102,7 +102,7 @@ test('large padding value should not uncenter the arrow', async ({page}) => {
   await click(page, `[data-testid="arrow-padding-200"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `arrow-padding-200-center.png`
+    `arrow-padding-200-center.png`,
   );
 });
 
@@ -113,6 +113,6 @@ test('internal shifting should return correct centerOffset value', async ({
   await click(page, `[data-testid="centerOffset-true"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `center-offset-true.png`
+    `center-offset-true.png`,
   );
 });

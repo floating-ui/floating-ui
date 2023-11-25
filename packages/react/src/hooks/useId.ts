@@ -7,7 +7,7 @@ const genId = () => `floating-ui-${count++}`;
 
 function useFloatingId() {
   const [id, setId] = React.useState(() =>
-    serverHandoffComplete ? genId() : undefined
+    serverHandoffComplete ? genId() : undefined,
   );
 
   useLayoutEffect(() => {

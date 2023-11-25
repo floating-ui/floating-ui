@@ -33,7 +33,7 @@ function ColorSwatch({color}: {color?: string}) {
 
 const SelectContext = React.createContext<{
   getItemProps: (
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ) => Record<string, unknown>;
   activeIndex: number | null;
   selectedIndex: number | null;
@@ -66,7 +66,7 @@ function Select({
       onChange?.(value);
       setIsOpen(false);
     },
-    [onChange]
+    [onChange],
   );
 
   const {refs, floatingStyles, context} = useFloating({
@@ -196,12 +196,12 @@ const MemoOption = React.memo(
       active: boolean;
       selected: boolean;
       getItemProps: (
-        userProps?: React.HTMLProps<HTMLElement>
+        userProps?: React.HTMLProps<HTMLElement>,
       ) => Record<string, unknown>;
       onSelect: () => void;
       isTypingRef: React.MutableRefObject<boolean>;
     },
-    ref: React.Ref<HTMLDivElement>
+    ref: React.Ref<HTMLDivElement>,
   ) {
     return (
       <div
@@ -213,7 +213,7 @@ const MemoOption = React.memo(
           'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
           {
             'bg-cyan-200': active,
-          }
+          },
         )}
         {...getItemProps({
           // Handle pointer select.
@@ -240,7 +240,7 @@ const MemoOption = React.memo(
         </span>
       </div>
     );
-  })
+  }),
 );
 
 function Option({children, value}: {children: React.ReactNode; value: string}) {

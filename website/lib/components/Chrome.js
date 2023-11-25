@@ -44,7 +44,7 @@ export const Chrome = ({
         {
           shadow,
           'border border-gray-100': shadow,
-        }
+        },
       )}
     >
       <div className="bg-gray-75 dark:bg-gray-600/60 dark:text-white">
@@ -81,7 +81,7 @@ export const Chrome = ({
               'overflow-x-auto': scrollableX,
               'h-[50rem] md:h-[30rem]': tall,
               relative,
-            }
+            },
           )}
         >
           {isScrollable && (

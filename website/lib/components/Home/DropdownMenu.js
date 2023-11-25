@@ -51,7 +51,7 @@ export const MenuComponent = forwardRef(
           strings.push(
             child.props.label && !child.props.disabled
               ? child.props.label
-              : null
+              : null,
           );
         }
       });
@@ -175,7 +175,7 @@ export const MenuComponent = forwardRef(
           onPointerMove,
           {
             capture: true,
-          }
+          },
         );
         window.removeEventListener('keydown', onKeyDown, true);
       };
@@ -221,7 +221,7 @@ export const MenuComponent = forwardRef(
                 isOpen && isNested && !hasFocusInside,
               'rounded bg-gray-500/20 dark:bg-gray-700':
                 isNested && isOpen && hasFocusInside,
-            }
+            },
           )}
         >
           {label}{' '}
@@ -279,8 +279,8 @@ export const MenuComponent = forwardRef(
                             setActiveIndex(index);
                           }
                         },
-                      })
-                    )
+                      }),
+                    ),
                 )}
               </div>
             </FloatingFocusManager>
@@ -288,7 +288,7 @@ export const MenuComponent = forwardRef(
         </FloatingPortal>
       </FloatingNode>
     );
-  }
+  },
 );
 
 export const Menu = forwardRef((props, ref) => {
@@ -315,7 +315,7 @@ export const MenuItem = forwardRef(
           'flex cursor-default rounded py-2 px-3 text-left outline-none focus:bg-blue-500 focus:text-white',
           {
             'opacity-40': disabled,
-          }
+          },
         )}
         ref={ref}
         role="menuitem"
@@ -324,5 +324,5 @@ export const MenuItem = forwardRef(
         {label}
       </button>
     );
-  }
+  },
 );

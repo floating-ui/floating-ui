@@ -101,7 +101,7 @@ const ReactPackageButton = forwardRef(
         {props.children}
       </button>
     );
-  }
+  },
 );
 
 export function ReactSelect() {
@@ -175,7 +175,7 @@ function Tooltip({
         getReferenceProps({
           ref,
           ...children.props,
-        })
+        }),
       )}
       {isMounted && (
         <div
@@ -244,7 +244,7 @@ function Option({
           'bg-gray-200/20 dark:bg-gray-400/30':
             index === activeIndex,
           'font-bold': index === selectedIndex,
-        }
+        },
       )}
       tabIndex={index === activeIndex ? 0 : -1}
       {...getItemProps({
@@ -259,7 +259,7 @@ function Option({
               selectedIndex !== index,
             'bg-rose-500 dark:bg-rose-400':
               selectedIndex === index,
-          }
+          },
         )}
       />
       <span>{option}</span>
@@ -286,9 +286,9 @@ export function PackageSelect() {
         const packageResults = await Promise.all(
           initialPackages.map(({name}) =>
             fetch(
-              `https://registry.npmjs.org/@floating-ui/${name}/latest`
-            ).then((res) => res.json())
-          )
+              `https://registry.npmjs.org/@floating-ui/${name}/latest`,
+            ).then((res) => res.json()),
+          ),
         );
 
         if (!ignore) {
@@ -296,7 +296,7 @@ export function PackageSelect() {
             packageResults.map((pkg, index) => ({
               name: initialPackages[index].name,
               version: pkg.version,
-            }))
+            })),
           );
         }
       } catch (e) {
@@ -332,13 +332,13 @@ export function PackageSelect() {
 
     router.events.on(
       'routeChangeComplete',
-      handleRouteChangeComplete
+      handleRouteChangeComplete,
     );
 
     return () => {
       router.events.off(
         'routeChangeComplete',
-        handleRouteChangeComplete
+        handleRouteChangeComplete,
       );
     };
   }, [isPackageTooltipTouched, router]);

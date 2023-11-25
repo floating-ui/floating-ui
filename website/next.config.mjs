@@ -11,11 +11,11 @@ const replaceVariables = () => async (tree) => {
     packageVersions = await Promise.all(
       ['core', 'dom'].map((name) =>
         fetch(
-          `https://registry.npmjs.org/@floating-ui/${name}/latest`
+          `https://registry.npmjs.org/@floating-ui/${name}/latest`,
         )
           .then((res) => res.json())
-          .then((res) => res.version)
-      )
+          .then((res) => res.version),
+      ),
     );
   } catch (e) {
     //
@@ -35,17 +35,17 @@ const rehypePrettyCodeOptions = {
       readFileSync(
         new URL(
           './assets/floating-ui-theme.json',
-          import.meta.url
-        )
-      )
+          import.meta.url,
+        ),
+      ),
     ),
     light: JSON.parse(
       readFileSync(
         new URL(
           './assets/floating-ui-light-theme.json',
-          import.meta.url
-        )
-      )
+          import.meta.url,
+        ),
+      ),
     ),
   },
   keepBackground: false,
@@ -75,7 +75,7 @@ export default {
     });
 
     const imageLoaderRule = config.module.rules.find(
-      (rule) => rule.loader === 'next-image-loader'
+      (rule) => rule.loader === 'next-image-loader',
     );
     imageLoaderRule.exclude = /\.inline\.(png|jpg|svg)$/i;
     config.module.rules.push({

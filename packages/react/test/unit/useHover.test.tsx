@@ -172,7 +172,7 @@ test('mouseleave on the floating element closes it (mouse)', async () => {
     screen.getByRole('button'),
     new MouseEvent('mouseleave', {
       relatedTarget: screen.getByRole('tooltip'),
-    })
+    }),
   );
 
   expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();

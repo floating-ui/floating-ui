@@ -23,7 +23,7 @@ function sortByDocumentPosition(a: Node, b: Node) {
 
 function areMapsEqual(
   map1: Map<Node, number | null>,
-  map2: Map<Node, number | null>
+  map2: Map<Node, number | null>,
 ) {
   if (map1.size !== map2.size) {
     return false;
@@ -95,7 +95,7 @@ export function FloatingList({
     <FloatingListContext.Provider
       value={React.useMemo(
         () => ({register, unregister, map, elementsRef, labelsRef}),
-        [register, unregister, map, elementsRef, labelsRef]
+        [register, unregister, map, elementsRef, labelsRef],
       )}
     >
       {children}
@@ -130,7 +130,7 @@ export function useListItem({label}: UseListItemProps = {}): {
         }
       }
     },
-    [index, elementsRef, labelsRef, label]
+    [index, elementsRef, labelsRef, label],
   );
 
   useLayoutEffect(() => {
@@ -155,6 +155,6 @@ export function useListItem({label}: UseListItemProps = {}): {
       ref,
       index: index == null ? -1 : index,
     }),
-    [index, ref]
+    [index, ref],
   );
 }

@@ -1,4 +1,4 @@
-import {Strategy} from '@floating-ui/core';
+import type {Strategy} from '@floating-ui/core';
 import {useFloating} from '@floating-ui/react-dom';
 import {useLayoutEffect, useState} from 'react';
 
@@ -77,7 +77,7 @@ export function Scroll() {
               ref={scrollRef}
               style={{
                 position: ['sameScrollParent', 'floatingScrollParent'].includes(
-                  node
+                  node,
                 )
                   ? 'relative'
                   : undefined,

@@ -134,7 +134,7 @@ export interface ComputePositionReturn extends Coords {
 export type ComputePosition = (
   reference: unknown,
   floating: unknown,
-  config: ComputePositionConfig
+  config: ComputePositionConfig,
 ) => Promise<ComputePositionReturn>;
 
 export interface MiddlewareReturn extends Partial<Coords> {

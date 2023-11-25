@@ -90,7 +90,7 @@ export function useTooltip({
       ...data,
       arrowRef,
     }),
-    [open, setOpen, interactions, data]
+    [open, setOpen, interactions, data],
   );
 }
 
@@ -101,7 +101,7 @@ export const useTooltipContext = () => {
 
   if (context == null) {
     throw new Error(
-      'Tooltip components must be wrapped in <Tooltip />'
+      'Tooltip components must be wrapped in <Tooltip />',
     );
   }
 
@@ -122,7 +122,7 @@ export function Tooltip({children, ...options}) {
 export const TooltipTrigger = React.forwardRef(
   function TooltipTrigger(
     {children, asChild = false, ...props},
-    propRef
+    propRef,
   ) {
     const context = useTooltipContext();
     const childrenRef = children.ref;
@@ -141,7 +141,7 @@ export const TooltipTrigger = React.forwardRef(
           ...props,
           ...children.props,
           'data-state': context.open ? 'open' : 'closed',
-        })
+        }),
       );
     }
 
@@ -155,7 +155,7 @@ export const TooltipTrigger = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );
 
 export const TooltipContent = React.forwardRef(
@@ -201,7 +201,7 @@ export const TooltipContent = React.forwardRef(
             }px`,
           }[side],
         }),
-      }
+      },
     );
 
     return (
@@ -213,7 +213,7 @@ export const TooltipContent = React.forwardRef(
             className={classNames(
               'z-50 bg-gray-600 text-white shadow-lg',
               'pointer-events-none cursor-default rounded p-2 text-sm',
-              props.className
+              props.className,
             )}
             style={{
               position: context.strategy,
@@ -235,5 +235,5 @@ export const TooltipContent = React.forwardRef(
         )}
       </FloatingPortal>
     );
-  }
+  },
 );

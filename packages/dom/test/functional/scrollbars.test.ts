@@ -9,13 +9,13 @@ import {click} from './utils/click';
     await click(page, `[data-testid="placement-${placement}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}.png`
+      `${placement}.png`,
     );
 
     await click(page, '[data-testid="rtl-true"]');
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}--rtl.png`
+      `${placement}--rtl.png`,
     );
   });
 });

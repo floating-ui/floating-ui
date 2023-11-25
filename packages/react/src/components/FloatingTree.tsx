@@ -11,7 +11,7 @@ const FloatingTreeContext = React.createContext<FloatingTreeType | null>(null);
 export const useFloatingParentNodeId = (): string | null =>
   React.useContext(FloatingNodeContext)?.id || null;
 export const useFloatingTree = <
-  RT extends ReferenceType = ReferenceType
+  RT extends ReferenceType = ReferenceType,
 >(): FloatingTreeType<RT> | null =>
   React.useContext(FloatingTreeContext) as FloatingTreeType<RT> | null;
 
@@ -89,7 +89,7 @@ export function FloatingTree({
           removeNode,
           events,
         }),
-        [nodesRef, addNode, removeNode, events]
+        [nodesRef, addNode, removeNode, events],
       )}
     >
       {children}

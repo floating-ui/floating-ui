@@ -10,7 +10,7 @@ test('chooses right client rect placed on bottom', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-client-rect-bottom.png'
+    'right-client-rect-bottom.png',
   );
 });
 
@@ -20,7 +20,7 @@ test('chooses right client rect placed on top', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-client-rect-top.png'
+    'right-client-rect-top.png',
   );
 });
 
@@ -29,7 +29,7 @@ test('chooses left client rect placed on bottom', async ({page}) => {
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-client-rect-bottom.png'
+    'left-client-rect-bottom.png',
   );
 });
 
@@ -39,7 +39,7 @@ test('chooses left client rect placed on top', async ({page}) => {
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-client-rect-top.png'
+    'left-client-rect-top.png',
   );
 });
 
@@ -50,7 +50,7 @@ test.skip('chooses right client rect placed on the right', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-client-rect-right.png'
+    'right-client-rect-right.png',
   );
 });
 
@@ -60,7 +60,7 @@ test('chooses left client rect placed on the right', async ({page}) => {
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-client-rect-right.png'
+    'right-client-rect-right.png',
   );
 });
 
@@ -70,7 +70,7 @@ test('chooses right client rect placed on the left', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-client-rect-left.png'
+    'right-client-rect-left.png',
   );
 });
 
@@ -80,7 +80,7 @@ test('chooses left client rect placed on the left', async ({page}) => {
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-client-rect-left.png'
+    'left-client-rect-left.png',
   );
 });
 
@@ -91,7 +91,7 @@ test('connected placed on top', async ({page}) => {
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'connected-top.png'
+    'connected-top.png',
   );
 });
 
@@ -101,7 +101,7 @@ test('connected placed on bottom', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'connected-bottom.png'
+    'connected-bottom.png',
   );
 });
 
@@ -112,7 +112,7 @@ test('connected placed on left', async ({page}) => {
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'connected-left.png'
+    'connected-left.png',
   );
 });
 
@@ -123,7 +123,7 @@ test('connected placed on right', async ({page}) => {
 
   await page.hover('.container strong', {position: LEFT_CLIENT_RECT});
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'connected-right.png'
+    'connected-right.png',
   );
 });
 
@@ -134,7 +134,7 @@ test('chooses rect based on placement without any mouse coords', async ({
   await page.hover('.container strong', {position: RIGHT_CLIENT_RECT});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'first-rect-no-coords.png'
+    'first-rect-no-coords.png',
   );
 });
 
@@ -145,7 +145,7 @@ test('chooses rect based on placement without any mouse coords bottom', async ({
   await click(page, '[data-testid="open-true"]');
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-rect-no-coords.png'
+    'left-rect-no-coords.png',
   );
 });
 
@@ -157,7 +157,7 @@ test('chooses rect based on placement without any mouse coords top', async ({
   await click(page, '[data-testid="placement-top"]');
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'right-rect-no-coords.png'
+    'right-rect-no-coords.png',
   );
 });
 
@@ -168,6 +168,6 @@ test('correctly centers over two rects', async ({page}) => {
   await click(page, '[data-testid="open-true"]');
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    'left-connected-3.png'
+    'left-connected-3.png',
   );
 });

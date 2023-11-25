@@ -8,12 +8,12 @@ allPlacements.forEach((placement) => {
     await page.goto('http://localhost:1234/placement');
     await click(page, `[data-testid="placement-${placement}"]`);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}.png`
+      `${placement}.png`,
     );
 
     await page.evaluate((placement) => {
       const target = document.querySelector(
-        `[data-testid="placement-${placement}"]`
+        `[data-testid="placement-${placement}"]`,
       ) as HTMLInputElement;
 
       if (target) {
@@ -23,7 +23,7 @@ allPlacements.forEach((placement) => {
       (window as any).__handleSizeChange_floating({target});
     }, placement);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}--size.png`
+      `${placement}--size.png`,
     );
   });
 });
@@ -35,7 +35,7 @@ allPlacements.forEach((placement) => {
     await click(page, `[data-testid="rtl-true"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${placement}-rtl.png`
+      `${placement}-rtl.png`,
     );
   });
 });

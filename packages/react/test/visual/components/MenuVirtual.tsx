@@ -27,7 +27,7 @@ import * as React from 'react';
 
 type MenuContextType = {
   getItemProps: (
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ) => Record<string, unknown>;
   activeIndex: number | null;
   setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -192,7 +192,7 @@ export const MenuComponent = React.forwardRef<
               'bg-red-100 text-red-900': isOpen && isNested && !hasFocusInside,
               'bg-red-100 rounded py-1 px-2':
                 isNested && isOpen && hasFocusInside,
-            }
+            },
           )}
           {...getReferenceProps({
             ...parent.getItemProps({
@@ -298,7 +298,7 @@ export const MenuItem = React.forwardRef<
       aria-disabled={disabled}
       className={c(
         'text-left flex py-1 px-2 focus:bg-red-500 outline-none rounded cursor-default',
-        {'opacity-40': disabled, 'bg-red-500 text-white': isActive}
+        {'opacity-40': disabled, 'bg-red-500 text-white': isActive},
       )}
       {...menu.getItemProps({
         onClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -327,7 +327,7 @@ export const MenuItem = React.forwardRef<
             event.key === 'ArrowRight' &&
             // If the root reference is in a menubar, close parents
             tree?.nodesRef.current[0].context?.elements.domReference?.closest(
-              '[role="menubar"]'
+              '[role="menubar"]',
             )
           ) {
             closeParents(menu.parent);

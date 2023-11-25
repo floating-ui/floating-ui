@@ -112,7 +112,7 @@ export function usePopover({
       labelId,
       descriptionId,
       transition,
-    ]
+    ],
   );
 }
 
@@ -123,7 +123,7 @@ export const usePopoverContext = () => {
 
   if (context == null) {
     throw new Error(
-      'Popover components must be wrapped in <Popover />'
+      'Popover components must be wrapped in <Popover />',
     );
   }
 
@@ -148,7 +148,7 @@ export function Popover({
 export const PopoverTrigger = React.forwardRef(
   function PopoverTrigger(
     {children, asChild = false, ...props},
-    propRef
+    propRef,
   ) {
     const context = usePopoverContext();
     const childrenRef = children.ref;
@@ -167,7 +167,7 @@ export const PopoverTrigger = React.forwardRef(
           ...props,
           ...children.props,
           'data-state': context.open ? 'open' : 'closed',
-        })
+        }),
       );
     }
 
@@ -182,7 +182,7 @@ export const PopoverTrigger = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );
 
 export const PopoverContent = React.forwardRef(
@@ -230,7 +230,7 @@ export const PopoverContent = React.forwardRef(
         )}
       </FloatingPortal>
     );
-  }
+  },
 );
 
 export const PopoverHeading = React.forwardRef(
@@ -250,7 +250,7 @@ export const PopoverHeading = React.forwardRef(
         {children}
       </h2>
     );
-  }
+  },
 );
 
 export const PopoverDescription = React.forwardRef(
@@ -270,7 +270,7 @@ export const PopoverDescription = React.forwardRef(
         {children}
       </p>
     );
-  }
+  },
 );
 
 export const PopoverClose = React.forwardRef(
@@ -289,5 +289,5 @@ export const PopoverClose = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );

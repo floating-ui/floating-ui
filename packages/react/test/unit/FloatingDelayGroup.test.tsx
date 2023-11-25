@@ -40,7 +40,7 @@ export const Tooltip = ({children, label}: Props) => {
         getReferenceProps({
           ref: refs.setReference,
           ...children.props,
-        })
+        }),
       )}
       {open && (
         <div

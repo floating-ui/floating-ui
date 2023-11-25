@@ -31,7 +31,7 @@ export interface UseFocusProps {
  */
 export function useFocus<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseFocusProps = {}
+  props: UseFocusProps = {},
 ): ElementProps {
   const {
     open,
@@ -151,7 +151,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
           // Wait for the window blur listener to fire.
           timeoutRef.current = window.setTimeout(() => {
             const activeEl = activeElement(
-              domReference ? domReference.ownerDocument : document
+              domReference ? domReference.ownerDocument : document,
             );
 
             // Focus left the page, keep it open.

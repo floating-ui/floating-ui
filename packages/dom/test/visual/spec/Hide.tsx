@@ -16,7 +16,7 @@ export function Hide() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [hierarchy, setHierarchy] = useState('a');
   const isFixedStrategy = ['j', 'k', 'l', 'm', 'o', 'p', 'q'].includes(
-    hierarchy
+    hierarchy,
   );
 
   const {

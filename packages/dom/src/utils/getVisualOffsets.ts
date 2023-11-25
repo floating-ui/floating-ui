@@ -20,7 +20,7 @@ export function getVisualOffsets(element: Element | undefined): Coords {
 export function shouldAddVisualOffsets(
   element: Element | undefined,
   isFixed = false,
-  floatingOffsetParent?: Element | Window | undefined
+  floatingOffsetParent?: Element | Window | undefined,
 ): boolean {
   if (
     !floatingOffsetParent ||

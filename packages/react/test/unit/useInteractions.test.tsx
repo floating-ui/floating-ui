@@ -57,7 +57,7 @@ test('does not error with undefined user supplied functions', () => {
 
     expect(() =>
       // @ts-expect-error
-      getReferenceProps({onClick: undefined}).onClick()
+      getReferenceProps({onClick: undefined}).onClick(),
     ).not.toThrowError();
   }
 
@@ -141,7 +141,7 @@ test('prop getters are memoized', () => {
           onChange: () => {},
           overflowRef,
         }),
-      ]
+      ],
     );
 
     useEffect(() => {

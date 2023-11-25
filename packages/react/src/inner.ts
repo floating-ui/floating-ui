@@ -15,7 +15,7 @@ import type {
 
 function getArgsWithCustomFloatingHeight(
   state: MiddlewareState,
-  height: number
+  height: number,
 ) {
   return {
     ...state,
@@ -46,7 +46,7 @@ export interface InnerProps {
  * @see https://floating-ui.com/docs/inner
  */
 export const inner = (
-  props: InnerProps & Partial<DetectOverflowOptions>
+  props: InnerProps & Partial<DetectOverflowOptions>,
 ): Middleware => ({
   name: 'inner',
   options: props,
@@ -76,7 +76,7 @@ export const inner = (
           [
             'Floating UI: `placement` side must be "bottom" when using the',
             '`inner` middleware.',
-          ].join(' ')
+          ].join(' '),
         );
       }
     }
@@ -92,7 +92,7 @@ export const inner = (
           floating.clientTop -
           rects.reference.height / 2 -
           item.offsetHeight / 2 -
-          innerOffset
+          innerOffset,
       ).fn(state)),
     };
 
@@ -100,7 +100,7 @@ export const inner = (
 
     const overflow = await detectOverflow(
       getArgsWithCustomFloatingHeight(nextArgs, el.scrollHeight),
-      detectOverflowOptions
+      detectOverflowOptions,
     );
     const refOverflow = await detectOverflow(nextArgs, {
       ...detectOverflowOptions,
@@ -112,7 +112,7 @@ export const inner = (
 
     const maxHeight = Math.max(
       0,
-      el.scrollHeight - diffY - Math.max(0, overflow.bottom)
+      el.scrollHeight - diffY - Math.max(0, overflow.bottom),
     );
 
     el.style.maxHeight = `${maxHeight}px`;
@@ -138,9 +138,9 @@ export const inner = (
       overflowRef.current = await detectOverflow(
         getArgsWithCustomFloatingHeight(
           {...nextArgs, y: nextY},
-          el.offsetHeight
+          el.offsetHeight,
         ),
-        detectOverflowOptions
+        detectOverflowOptions,
       );
     }
 
@@ -164,7 +164,7 @@ export interface UseInnerOffsetProps {
  */
 export function useInnerOffset(
   context: FloatingContext,
-  props: UseInnerOffsetProps
+  props: UseInnerOffsetProps,
 ): ElementProps {
   const {open, elements} = context;
   const {

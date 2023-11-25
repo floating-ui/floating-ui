@@ -8,8 +8,8 @@ test('returns an array of ancestors', () => {
         {id: '1', parentId: '0'},
         {id: '2', parentId: '1'},
       ],
-      '2'
-    )
+      '2',
+    ),
   ).toEqual([
     {id: '1', parentId: '0'},
     {id: '0', parentId: null},

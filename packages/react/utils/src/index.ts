@@ -120,7 +120,7 @@ export function isMac() {
 
 export function isMouseLikePointerType(
   pointerType: string | undefined,
-  strict?: boolean
+  strict?: boolean,
 ) {
   // On some Linux machines with Chromium, mouse inputs return a `pointerType`
   // of "pen": https://github.com/floating-ui/floating-ui/issues/2015
@@ -145,7 +145,7 @@ export function getDocument(node: Element | null) {
 
 export function isEventTargetWithin(
   event: Event,
-  node: Node | null | undefined
+  node: Node | null | undefined,
 ) {
   if (node == null) {
     return false;

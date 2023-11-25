@@ -1,3 +1,4 @@
+import type {Placement} from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
@@ -6,7 +7,6 @@ import {
   FloatingPortal,
   FloatingTree,
   offset,
-  Placement,
   shift,
   useClick,
   useDismiss,
@@ -157,7 +157,7 @@ function PopoverComponent({
           getReferenceProps({
             ref: refs.setReference,
             'data-open': open ? '' : undefined,
-          } as React.HTMLProps<Element>)
+          } as React.HTMLProps<Element>),
         )}
       <FloatingPortal>
         {open && (

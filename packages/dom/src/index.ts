@@ -15,7 +15,7 @@ import type {
 export const computePosition = (
   reference: ReferenceElement,
   floating: FloatingElement,
-  options?: Partial<ComputePositionConfig>
+  options?: Partial<ComputePositionConfig>,
 ) => {
   // This caches the expensive `getClippingElementAncestors` function so that
   // multiple lifecycle resets re-use the same result. It only lives for a

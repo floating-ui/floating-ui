@@ -1,8 +1,8 @@
 import {evaluate, sides} from '@floating-ui/utils';
 
 import {
+  type Options as DetectOverflowOptions,
   detectOverflow,
-  Options as DetectOverflowOptions,
 } from '../detectOverflow';
 import type {Derivable, Middleware, Rect, SideObject} from '../types';
 
@@ -34,7 +34,7 @@ export type HideOptions = Partial<
  * @see https://floating-ui.com/docs/hide
  */
 export const hide = (
-  options: HideOptions | Derivable<HideOptions> = {}
+  options: HideOptions | Derivable<HideOptions> = {},
 ): Middleware => ({
   name: 'hide',
   options,
@@ -43,7 +43,7 @@ export const hide = (
 
     const {strategy = 'referenceHidden', ...detectOverflowOptions} = evaluate(
       options,
-      state
+      state,
     );
 
     switch (strategy) {

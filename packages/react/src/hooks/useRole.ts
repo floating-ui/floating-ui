@@ -23,7 +23,7 @@ export interface UseRoleProps {
  */
 export function useRole<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseRoleProps = {}
+  props: UseRoleProps = {},
 ): ElementProps {
   const {open, floatingId} = context;
   const {enabled = true, role = 'dialog'} = props;

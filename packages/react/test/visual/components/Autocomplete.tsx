@@ -228,7 +228,7 @@ export function Main() {
   }
 
   const items = data.filter((item) =>
-    item.toLowerCase().startsWith(inputValue.toLowerCase())
+    item.toLowerCase().startsWith(inputValue.toLowerCase()),
   );
 
   return (

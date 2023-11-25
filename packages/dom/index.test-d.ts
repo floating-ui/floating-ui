@@ -1,3 +1,4 @@
+import type {Middleware} from '.';
 import {
   arrow,
   autoPlacement,
@@ -7,7 +8,6 @@ import {
   hide,
   inline,
   limitShift,
-  Middleware,
   offset,
   platform,
   shift,
@@ -34,7 +34,7 @@ computePosition(
       height: 0,
     }),
   },
-  document.body
+  document.body,
 ).then();
 
 computePosition(
@@ -51,7 +51,7 @@ computePosition(
     }),
     contextElement: document.body,
   },
-  document.body
+  document.body,
 ).then();
 
 computePosition(
@@ -63,7 +63,7 @@ computePosition(
     // @ts-expect-error
     contextElement: '',
   },
-  document.body
+  document.body,
 ).then();
 
 computePosition(document.body, document.body, {

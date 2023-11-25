@@ -134,7 +134,7 @@ module.exports = {
             '--tw-prose-invert-body': theme('colors.gray[150]'),
             '--tw-prose-bullets': theme('colors.gray[800]'),
             '--tw-prose-invert-bullets': theme(
-              'colors.gray[150]'
+              'colors.gray[150]',
             ),
             'a code': {
               color: 'inherit !important',

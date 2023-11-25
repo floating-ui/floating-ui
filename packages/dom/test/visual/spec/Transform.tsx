@@ -98,7 +98,7 @@ export function Transform() {
     if (node === 'virtual' && element) {
       element.style.transform = 'scale(0.5)';
       const virtualContext = document.querySelector(
-        '#virtual-context'
+        '#virtual-context',
       ) as HTMLElement;
       refs.setReference({
         getBoundingClientRect: () => virtualContext.getBoundingClientRect(),

@@ -54,7 +54,7 @@ export function useDialog({
       setLabelId,
       setDescriptionId,
     }),
-    [open, setOpen, interactions, data, labelId, descriptionId]
+    [open, setOpen, interactions, data, labelId, descriptionId],
   );
 }
 
@@ -65,7 +65,7 @@ export const useDialogContext = () => {
 
   if (context == null) {
     throw new Error(
-      'Dialog components must be wrapped in <Dialog />'
+      'Dialog components must be wrapped in <Dialog />',
     );
   }
 
@@ -84,7 +84,7 @@ export function Dialog({children, ...options}) {
 export const DialogTrigger = React.forwardRef(
   function DialogTrigger(
     {children, asChild = false, ...props},
-    propRef
+    propRef,
   ) {
     const context = useDialogContext();
     const childrenRef = children.ref;
@@ -103,7 +103,7 @@ export const DialogTrigger = React.forwardRef(
           ...props,
           ...children.props,
           'data-state': context.open ? 'open' : 'closed',
-        })
+        }),
       );
     }
 
@@ -117,7 +117,7 @@ export const DialogTrigger = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );
 
 export const DialogContent = React.forwardRef(
@@ -131,7 +131,7 @@ export const DialogContent = React.forwardRef(
 
     const backdropTransition = useTransitionStyles(
       floatingContext,
-      {duration: {open: 200, close: 100}}
+      {duration: {open: 200, close: 100}},
     );
 
     const floatingTransition = useTransitionStyles(
@@ -146,7 +146,7 @@ export const DialogContent = React.forwardRef(
           opacity: 0,
           transform: 'scale(0.95)',
         },
-      }
+      },
     );
 
     return (
@@ -175,7 +175,7 @@ export const DialogContent = React.forwardRef(
         )}
       </FloatingPortal>
     );
-  }
+  },
 );
 
 export const DialogHeading = React.forwardRef(
@@ -195,7 +195,7 @@ export const DialogHeading = React.forwardRef(
         {children}
       </h2>
     );
-  }
+  },
 );
 
 export const DialogDescription = React.forwardRef(
@@ -215,12 +215,12 @@ export const DialogDescription = React.forwardRef(
         {children}
       </p>
     );
-  }
+  },
 );
 
 export const DialogClose = React.forwardRef(function DialogClose(
   {children, ...props},
-  ref
+  ref,
 ) {
   const {setOpen} = useDialogContext();
   return (

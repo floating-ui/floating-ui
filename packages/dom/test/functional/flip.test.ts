@@ -10,7 +10,7 @@ test('does not flip when `mainAxis` is false', async ({page}) => {
   await scroll(page, {y: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `mainAxis-false.png`
+    `mainAxis-false.png`,
   );
 });
 
@@ -21,7 +21,7 @@ test('does flip when `mainAxis` is true', async ({page}) => {
   await scroll(page, {y: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `mainAxis-true.png`
+    `mainAxis-true.png`,
   );
 });
 
@@ -33,7 +33,7 @@ test('does not flip when `crossAxis` is false', async ({page}) => {
   await scroll(page, {x: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-false.png`
+    `crossAxis-false.png`,
   );
 });
 
@@ -45,7 +45,7 @@ test('does flip when `crossAxis` is true', async ({page}) => {
   await scroll(page, {x: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `crossAxis-true.png`
+    `crossAxis-true.png`,
   );
 });
 
@@ -58,7 +58,7 @@ test('does not flip when `fallbackPlacements` is an empty array', async ({
   await scroll(page, {y: 500});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackPlacements-empty-array.png`
+    `fallbackPlacements-empty-array.png`,
   );
 });
 
@@ -68,73 +68,73 @@ test('fallbackPlacements: all', async ({page}) => {
   await click(page, `[data-testid="fallbackPlacements-all"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-all-top-start.png`
+    `fallbackStrategy-all-top-start.png`,
   );
 
   await scroll(page, {x: 675, y: 585});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-top.png`
+    `fallbackStrategy-top.png`,
   );
 
   await scroll(page, {x: 735, y: 585});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-top-end.png`
+    `fallbackStrategy-top-end.png`,
   );
 
   await scroll(page, {x: 735, y: 700});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right-start.png`
+    `fallbackStrategy-right-start.png`,
   );
 
   await scroll(page, {x: 735, y: 775});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right.png`
+    `fallbackStrategy-right.png`,
   );
 
   await scroll(page, {x: 735, y: 825});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-right-end.png`
+    `fallbackStrategy-right-end.png`,
   );
 
   await scroll(page, {x: 735, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom-end.png`
+    `fallbackStrategy-bottom-end.png`,
   );
 
   await scroll(page, {x: 375, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom.png`
+    `fallbackStrategy-bottom.png`,
   );
 
   await scroll(page, {x: 325, y: 850});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bottom-start.png`
+    `fallbackStrategy-bottom-start.png`,
   );
 
   await scroll(page, {x: 250, y: 800});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left-end.png`
+    `fallbackStrategy-left-end.png`,
   );
 
   await scroll(page, {x: 250, y: 450});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left.png`
+    `fallbackStrategy-left.png`,
   );
 
   await scroll(page, {x: 250, y: 400});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-left-start.png`
+    `fallbackStrategy-left-start.png`,
   );
 });
 
@@ -145,7 +145,7 @@ test('fallbackStrategy: "bestFit"', async ({page}) => {
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-bestFit.png`
+    `fallbackStrategy-bestFit.png`,
   );
 });
 
@@ -156,7 +156,7 @@ test('fallbackStrategy: "initialPlacement"', async ({page}) => {
   await scroll(page, {x: 300, y: 315});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallbackStrategy-initialPlacement.png`
+    `fallbackStrategy-initialPlacement.png`,
   );
 });
 
@@ -168,6 +168,6 @@ test('falls back to only checking mainAxis overflow first', async ({page}) => {
   await scroll(page, {x: 780, y: 600});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `fallback-shift-main-axis.png`
+    `fallback-shift-main-axis.png`,
   );
 });

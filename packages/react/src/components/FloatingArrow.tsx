@@ -72,13 +72,13 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     style: {transform, ...restStyle} = {},
     ...rest
   }: FloatingArrowProps,
-  ref: React.Ref<SVGSVGElement>
+  ref: React.Ref<SVGSVGElement>,
 ): JSX.Element | null {
   if (__DEV__) {
     if (!ref) {
       console.warn(
         'Floating UI: The `ref` prop is required for the `FloatingArrow`',
-        'component.'
+        'component.',
       );
     }
   }

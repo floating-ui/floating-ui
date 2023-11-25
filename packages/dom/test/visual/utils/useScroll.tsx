@@ -1,12 +1,7 @@
-import {VirtualElement} from '@floating-ui/core';
+import type {VirtualElement} from '@floating-ui/core';
 import {getOverflowAncestors, shift, useFloating} from '@floating-ui/react-dom';
-import {
-  MutableRefObject,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import type {MutableRefObject} from 'react';
+import {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {flushSync} from 'react-dom';
 
 import {isElement} from '../../../src/platform/isElement';

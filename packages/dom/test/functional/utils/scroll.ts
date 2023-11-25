@@ -6,7 +6,7 @@ import type {Coords} from '@floating-ui/core';
 export async function scroll(
   page: any,
   scrollOffsets: Partial<Coords>,
-  selector = '.scroll'
+  selector = '.scroll',
 ) {
   await page.waitForSelector(selector);
   return await page.evaluate(
@@ -21,6 +21,6 @@ export async function scroll(
         }
       }
     },
-    {...scrollOffsets, selector}
+    {...scrollOffsets, selector},
   );
 }

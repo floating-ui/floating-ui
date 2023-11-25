@@ -12,10 +12,10 @@ import {click} from './utils/click';
       await click(page, `[data-testid="willchange-${willChange}"]`);
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `will-change-${willChange}.png`
+        `will-change-${willChange}.png`,
       );
     });
-  }
+  },
 );
 
 ['paint', 'layout', 'paint, layout', 'strict', 'content', 'size'].forEach(
@@ -28,10 +28,10 @@ import {click} from './utils/click';
       await click(page, `[data-testid="contain-${contain}"]`);
 
       expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-        `contain-${contain}.png`
+        `contain-${contain}.png`,
       );
     });
-  }
+  },
 );
 
 ['normal', 'inline-size', 'size'].forEach((containerType) => {
@@ -43,7 +43,7 @@ import {click} from './utils/click';
     await click(page, `[data-testid="container-type-${containerType}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `container-type-${containerType}.png`
+      `container-type-${containerType}.png`,
     );
   });
 });

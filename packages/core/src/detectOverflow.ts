@@ -53,7 +53,7 @@ export type Options = Partial<{
  */
 export async function detectOverflow(
   state: MiddlewareState,
-  options: Options | Derivable<Options> = {}
+  options: Options | Derivable<Options> = {},
 ): Promise<SideObject> {
   const {x, y, platform, rects, elements, strategy} = state;
 
@@ -79,7 +79,7 @@ export async function detectOverflow(
       boundary,
       rootBoundary,
       strategy,
-    })
+    }),
   );
 
   const rect =
@@ -97,7 +97,7 @@ export async function detectOverflow(
           offsetParent,
           strategy,
         })
-      : rect
+      : rect,
   );
 
   return {

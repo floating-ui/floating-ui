@@ -20,7 +20,7 @@ import {useLatestRef} from './utils/useLatestRef';
  * @see https://floating-ui.com/docs/useFloating
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: UseFloatingOptions = {}
+  options: UseFloatingOptions = {},
 ): UseFloatingReturn<RT> {
   const {
     placement = 'bottom',
@@ -58,7 +58,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         _setReference(node);
       }
     },
-    [_setReference]
+    [_setReference],
   );
 
   const setFloating = React.useCallback(
@@ -68,7 +68,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         _setFloating(node);
       }
     },
-    [_setFloating]
+    [_setFloating],
   );
 
   const referenceEl = (externalReference || _reference) as RT | null;
@@ -105,7 +105,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
             setData(fullData);
           });
         }
-      }
+      },
     );
   }, [latestMiddleware, placement, strategy, platformRef]);
 
@@ -144,12 +144,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       setReference,
       setFloating,
     }),
-    [setReference, setFloating]
+    [setReference, setFloating],
   );
 
   const elements = React.useMemo(
     () => ({reference: referenceEl, floating: floatingEl}),
-    [referenceEl, floatingEl]
+    [referenceEl, floatingEl],
   );
 
   const floatingStyles = React.useMemo(() => {
@@ -189,6 +189,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       elements,
       floatingStyles,
     }),
-    [data, update, refs, elements, floatingStyles]
+    [data, update, refs, elements, floatingStyles],
   );
 }

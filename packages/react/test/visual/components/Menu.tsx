@@ -29,7 +29,7 @@ import * as React from 'react';
 
 type MenuContextType = {
   getItemProps: (
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ) => Record<string, unknown>;
   activeIndex: number | null;
   setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -190,8 +190,8 @@ export const MenuComponent = React.forwardRef<
           !isNested
             ? props.tabIndex
             : parent.activeIndex === item.index
-            ? 0
-            : -1
+              ? 0
+              : -1
         }
         role={isNested ? 'menuitem' : undefined}
         className={c(
@@ -203,7 +203,7 @@ export const MenuComponent = React.forwardRef<
             'bg-slate-200 rounded py-1 px-2':
               isNested && isOpen && hasFocusInside,
             'bg-slate-200': !isNested && isOpen,
-          }
+          },
         )}
         {...getReferenceProps(
           parent.getItemProps({
@@ -219,7 +219,7 @@ export const MenuComponent = React.forwardRef<
                 parent.setActiveIndex(item.index);
               }
             },
-          })
+          }),
         )}
       >
         {label}
@@ -291,7 +291,7 @@ export const MenuItem = React.forwardRef<
       disabled={disabled}
       className={c(
         'text-left flex py-1 px-2 focus:bg-blue-500 focus:text-white outline-none rounded',
-        {'opacity-40': disabled}
+        {'opacity-40': disabled},
       )}
       {...menu.getItemProps({
         onClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -320,7 +320,7 @@ export const MenuItem = React.forwardRef<
             event.key === 'ArrowRight' &&
             // If the root reference is in a menubar, close parents
             tree?.nodesRef.current[0].context?.elements.domReference?.closest(
-              '[role="menubar"]'
+              '[role="menubar"]',
             )
           ) {
             closeParents(menu.parent);

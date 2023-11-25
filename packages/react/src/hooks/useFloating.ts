@@ -30,7 +30,7 @@ if (__DEV__) {
  * @see https://floating-ui.com/docs/useFloating
  */
 export function useFloating<RT extends ReferenceType = ReferenceType>(
-  options: Partial<UseFloatingOptions> = {}
+  options: Partial<UseFloatingOptions> = {},
 ): UseFloatingReturn<RT> {
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
@@ -65,7 +65,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       }
       events.emit('openchange', {open, event, reason, nested});
       unstable_onOpenChange?.(open, event, reason);
-    }
+    },
   );
 
   const domReferenceRef = React.useRef<NarrowedElement<RT> | null>(null);
@@ -84,7 +84,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         : node;
       position.refs.setReference(positionReference as RT | null);
     },
-    [position.refs]
+    [position.refs],
   );
 
   const setReference = React.useCallback(
@@ -108,7 +108,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
         position.refs.setReference(node);
       }
     },
-    [position.refs]
+    [position.refs],
   );
 
   const refs = React.useMemo(
@@ -118,7 +118,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       setPositionReference,
       domReference: domReferenceRef,
     }),
-    [position.refs, setReference, setPositionReference]
+    [position.refs, setReference, setPositionReference],
   );
 
   const elements = React.useMemo(
@@ -126,7 +126,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       ...position.elements,
       domReference: domReference,
     }),
-    [position.elements, domReference]
+    [position.elements, domReference],
   );
 
   const context = React.useMemo<FloatingContext<RT>>(
@@ -141,7 +141,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       open,
       onOpenChange,
     }),
-    [position, nodeId, floatingId, events, open, onOpenChange, refs, elements]
+    [position, nodeId, floatingId, events, open, onOpenChange, refs, elements],
   );
 
   useLayoutEffect(() => {
@@ -158,6 +158,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       refs,
       elements,
     }),
-    [position, refs, elements, context]
+    [position, refs, elements, context],
   ) as UseFloatingReturn<RT>;
 }

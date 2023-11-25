@@ -1,6 +1,6 @@
 import type {Derivable, Middleware, Padding} from '@floating-ui/dom';
 import {arrow as arrowCore} from '@floating-ui/dom';
-import * as React from 'react';
+import type * as React from 'react';
 
 export interface ArrowOptions {
   /**
@@ -23,7 +23,7 @@ export interface ArrowOptions {
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (
-  options: ArrowOptions | Derivable<ArrowOptions>
+  options: ArrowOptions | Derivable<ArrowOptions>,
 ): Middleware => {
   function isRef(value: unknown): value is React.MutableRefObject<unknown> {
     return {}.hasOwnProperty.call(value, 'current');
