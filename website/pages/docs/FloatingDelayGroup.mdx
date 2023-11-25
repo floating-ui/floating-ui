@@ -38,46 +38,39 @@ function App() {
 
 - [Tooltip delay group](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
 
-## Hooks
+## Usage
 
-These hooks are used:
+To enable delay grouping:
 
-- `useDelayGroupContext(){:js}` — accessible due to a
-  `<FloatingDelayGroup />{:js}` context wrapper, which provides
-  the contextual delay for the group.
-- `useDelayGroup(){:js}` — a hook called inside the component.
+- Wrap the grouped floating components in a
+  `<FloatingDelayGroup />{:js}` provider.
+- Call `useDelayGroupContext(){:js}` to read the data from
+  `<FloatingDelayGroup />{:js}`, which provides the
+  <WordHighlight id='a'>delay</WordHighlight> for the group to
+pass to the `useHover(){:js}` hook.
+- `useDelayGroup(){:js}`, a hook called inside the component,
+  enables grouping for the component.
 
-<Notice gap="above">
-  The `id` must be unique. The label of a tooltip for example is
-  usually unique in a given group, but you could use the `useId(){:js}` hook.
-</Notice>
+```js /delay/#a
+import {
+  FloatingDelayGroup,
+  useDelayGroupContext,
+  useDelayGroup,
+  useHover,
+  useFloating,
+} from '@floating-ui/react';
 
-```js {2,13,20-23} /delay/
 function Tooltip() {
-  const {delay} = useDelayGroupContext();
-  const id = useId();
+  const {context} = useFloating();
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const {context} = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
-  });
-
-  const hover = useHover(context, {
-    delay,
-  });
-
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    hover,
-  ]);
-
+  // `id` must be unique. Each `useFloating()` call returns a unique
+  // `floatingId`.
   useDelayGroup(context, {
-    // Must be unique
-    id,
+    id: context.floatingId,
   });
 
-  // ...
+  const {delay} = useDelayGroupContext();
+  const hover = useHover(context, {delay});
 }
 ```
 
@@ -100,7 +93,7 @@ The delay to use for the group.
 
 ```js
 <FloatingDelayGroup
-  // Both open and close
+  // Both open and close delays
   delay={200}
   // Or, configured individually
   delay={{open: 1000, close: 200}}
@@ -127,18 +120,14 @@ close delay at all.
 
 ## Transitions
 
-The `isInstantPhase{:.const}` boolean determines whether the
-delay is currently in the instant phase. This allows you to make
-transitions instant/faster. See
-[`useTransitionStyles`](/docs/useTransition#usetransitionstyles).
+- <WordHighlight id="a">isInstantPhase</WordHighlight> is a boolean
+  that determines whether the delay is currently in the instant phase.
+  This allows you to make transitions instant/faster. See [`useTransitionStyles`](/docs/useTransition#usetransitionstyles).
+- <WordHighlight id="b">currentId</WordHighlight> refers to the `id`
+  of the floating element of the group currently open.
 
-```js /isInstantPhase/
+```js /isInstantPhase/#a /currentId/#b
 const {currentId, isInstantPhase} = useDelayGroupContext();
-const id = useId();
-
-useDelayGroup(context, {
-  id,
-});
 
 const instantDuration = 0;
 const duration = 200;
@@ -147,9 +136,10 @@ const {isMounted, styles} = useTransitionStyles(context, {
   duration: isInstantPhase
     ? {
         open: instantDuration,
-        // `id` is this component's `id`
-        // `currentId` is the current group's `id`
-        close: currentId === id ? duration : instantDuration,
+        close:
+          currentId === context.floatingId
+            ? duration
+            : instantDuration,
       }
     : duration,
   // ...
