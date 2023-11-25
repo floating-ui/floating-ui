@@ -184,7 +184,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     let targetRootAncestor = isElement(target) ? target : null;
     while (targetRootAncestor && !isLastTraversableNode(targetRootAncestor)) {
       const nextParent = getParentNode(targetRootAncestor);
-      if (nextParent === getDocument(floating).body || !isElement(nextParent)) {
+      if (isLastTraversableNode(nextParent) || !isElement(nextParent)) {
         break;
       } else {
         targetRootAncestor = nextParent;
