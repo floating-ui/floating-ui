@@ -103,7 +103,7 @@ computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
       apply({availableWidth, availableHeight, elements}) {
-        // Do things with the data.
+        // Change styles
       },
     }),
   ],
@@ -119,7 +119,7 @@ computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
       apply({availableWidth, availableHeight, elements}) {
-        // Do things with the data, e.g.
+        // Change styles, e.g.
         Object.assign(elements.floating.style, {
           maxWidth: `${availableWidth}px`,
           maxHeight: `${availableHeight}px`,
@@ -139,6 +139,7 @@ useFloating(reference, floating, {
   middleware: [
     size({
       apply({availableWidth, availableHeight, elements}) {
+        // Change styles, e.g.
         Object.assign(elements.floating.style, {
           maxWidth: `${availableWidth}px`,
           maxHeight: `${availableHeight}px`,
@@ -268,7 +269,7 @@ size((state) => ({
 }));
 ```
 
-## Using with flip
+## Using with `flip`
 
 Using `size(){:js}` together with `flip(){:js}` enables some
 useful behavior. The floating element can be resized, thus
@@ -310,8 +311,14 @@ const middleware = [
         maxHeight: 0,
       }}
       middleware={[
-        {name: 'flip', options: {padding: 5}},
-        {name: 'size', options: {padding: 5}},
+        {
+          name: 'flip',
+          options: {padding: 5, rootBoundary: 'document'},
+        },
+        {
+          name: 'size',
+          options: {padding: 5, rootBoundary: 'document'},
+        },
       ]}
     >
       <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />

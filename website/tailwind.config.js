@@ -206,8 +206,8 @@ module.exports = {
                 color: '#fff',
               },
               '&[data-language="vue"]::before': {
-                backgroundColor: '#41b883',
-                color: '#fff',
+                backgroundColor: '#6fedb6',
+                color: '#000',
               },
               'code[data-theme="light"] [data-highlighted-line]':
                 {

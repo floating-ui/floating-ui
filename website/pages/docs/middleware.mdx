@@ -13,8 +13,7 @@ and be as granular as you want, adding your own custom logic.
 `computePosition(){:js}` starts with initial positioning via
 `placement{:.objectKey}` — then middleware are executed as an
 in-between "middle" step of the initial placement computation and
-eventual return of data for rendering once the promise has
-resolved.
+eventual return of data for rendering.
 
 Each middleware is executed in order:
 
@@ -105,36 +104,36 @@ useFloating(reference, floating, {
 <ShowFor packages={['core', 'dom']}>
 
 Here, `computePosition(){:js}` will compute coordinates that will
-place the floating element to the right center of the reference
-element, lying flush with it.
+place the floating element to the `right{:.string}` center of the
+reference element, lying flush with it.
 
 </ShowFor>
 
 <ShowFor packages={['react', 'react-dom', 'react-native', 'vue']}>
 
 Here, `useFloating(){:js}` will compute coordinates that will
-place the floating element to the right center of the reference
-element, lying flush with it.
+place the floating element to the `right{:.string}` center of the
+reference element, lying flush with it.
 
 </ShowFor>
 
 Middleware are then executed, resulting in these coordinates
-getting shifted by one pixel. Then that data is returned to the
-caller.
+getting shifted by one pixel. Then that data is returned for
+rendering.
 
 ### Shape
 
-A middleware is an object which has a `name{:.objectKey}`
-property and a `fn{:.function}` property. The `fn{:.function}`
-property provides the logic of the middleware, which returns new
+A middleware is an object that has a `name{:.objectKey}` property
+and a `fn{:.function}` property. The `fn{:.function}` property
+provides the logic of the middleware, which returns new
 positioning coordinates or useful data.
 
 ### Data
 
 Any data can be passed via an optional `data{:.objectKey}`
 property of the object that is returned from `fn{:.function}`.
-This will be accessible to the consumer via the
-`middlewareData{:.param}` property:
+This will be accessible to the consumer via the `middlewareData`
+property:
 
 ```js {7-9}
 const shiftByOnePixel = {
@@ -163,10 +162,35 @@ computePosition(referenceEl, floatingEl, {
 
 </ShowFor>
 
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+const {middlewareData} = useFloating({
+  middleware: [shiftByOnePixel],
+});
+console.log(middlewareData.shiftByOnePixel);
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+const {middlewareData} = useFloating(reference, floating, {
+  middleware: [shiftByOnePixel],
+});
+
+// Available once mounted and positioned as:
+// `middlewareData.value.shiftByOnePixel`
+```
+
+</ShowFor>
+
 ### Function
 
-You may notice that Floating UI's core middleware are actually
-functions. This is so you can pass options in:
+You may notice that Floating UI's packaged middleware are
+actually functions. This is so you can pass options in, changing
+how the middleware behaves:
 
 ```js
 const shiftByAmount = (amount = 0) => ({
@@ -186,9 +210,8 @@ behavior:
 const middleware = [shiftByAmount(10)];
 ```
 
-The `options{:.objectKey}` key on a middleware object allows
-libraries like React to compare and update middleware on
-component re-renders.
+The `options{:.objectKey}` key on a middleware object holds the
+dependencies, allowing deep comparison reactivity.
 
 ### Always return an object
 

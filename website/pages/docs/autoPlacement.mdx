@@ -74,7 +74,10 @@ specify it.
       middleware={[
         {
           name: 'autoPlacement',
-          options: {allowedPlacements: ['top', 'bottom']},
+          options: {
+            allowedPlacements: ['top', 'bottom'],
+            rootBoundary: 'document',
+          },
         },
       ]}
     >
