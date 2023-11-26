@@ -62,20 +62,26 @@ export interface FloatingFocusManagerProps<
 }
 
 let previouslyFocusedElements: Element[] = [];
+const LIST_LIMIT = 20;
 
 function addPreviouslyFocusedElement(element: Element | null) {
-  if (element && element.isConnected && getNodeName(element) !== 'body') {
-    previouslyFocusedElements.push(element);
-  }
-
   previouslyFocusedElements = previouslyFocusedElements.filter(
-    (x) => x.isConnected,
+    (el) => el.isConnected,
   );
 
-  // Keep a rolling window of the last 10 elements.
-  if (previouslyFocusedElements.length > 10) {
-    previouslyFocusedElements = previouslyFocusedElements.slice(1);
+  if (element && getNodeName(element) !== 'body') {
+    previouslyFocusedElements.push(element);
+    if (previouslyFocusedElements.length > LIST_LIMIT) {
+      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
+    }
   }
+}
+
+function getPreviouslyFocusedElement() {
+  return previouslyFocusedElements
+    .slice()
+    .reverse()
+    .find((el) => el.isConnected);
 }
 
 /**
@@ -429,23 +435,21 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const lastAttachedElement = Array.from(previouslyFocusedElements)
-        .reverse()
-        .find((x) => x.isConnected);
+      const returnElement = getPreviouslyFocusedElement();
 
       if (
         // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current &&
-        isHTMLElement(lastAttachedElement) &&
         !preventReturnFocusRef.current &&
+        isHTMLElement(returnElement) &&
         // If the focus moved somewhere else after mount, avoid returning focus
         // since it likely entered a different element which should be
         // respected: https://github.com/floating-ui/floating-ui/issues/2607
-        (lastAttachedElement !== activeEl && activeEl !== doc.body
+        (returnElement !== activeEl && activeEl !== doc.body
           ? isFocusInsideFloatingTree
           : true)
       ) {
-        enqueueFocus(lastAttachedElement, {
+        enqueueFocus(returnElement, {
           // When dismissing nested floating elements, by the time the rAF has
           // executed, the menus will all have been unmounted. When they try
           // to get focused, the calls get ignored — leaving the root
