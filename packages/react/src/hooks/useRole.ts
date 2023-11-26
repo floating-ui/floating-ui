@@ -3,18 +3,28 @@ import * as React from 'react';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 
+type AriaRole =
+  | 'tooltip'
+  | 'dialog'
+  | 'alertdialog'
+  | 'menu'
+  | 'listbox'
+  | 'grid'
+  | 'tree';
+type ComponentRole = 'select' | 'label';
+
 export interface UseRoleProps {
   enabled?: boolean;
-  role?:
-    | 'tooltip'
-    | 'label'
-    | 'dialog'
-    | 'alertdialog'
-    | 'menu'
-    | 'listbox'
-    | 'grid'
-    | 'tree';
+  role?: AriaRole | ComponentRole;
 }
+
+const componentRoleToAriaRoleMap = new Map<
+  AriaRole | ComponentRole,
+  AriaRole | false
+>([
+  ['select', 'listbox'],
+  ['label', false],
+]);
 
 /**
  * Adds base screen reader props to the reference and floating elements for a
@@ -28,6 +38,11 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
   const {open, floatingId} = context;
   const {enabled = true, role = 'dialog'} = props;
 
+  const ariaRole = (componentRoleToAriaRoleMap.get(role) ?? role) as
+    | AriaRole
+    | false
+    | undefined;
+
   const referenceId = useId();
 
   return React.useMemo(() => {
@@ -35,10 +50,10 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
 
     const floatingProps = {
       id: floatingId,
-      ...(role !== 'label' && {role}),
+      ...(ariaRole && {role: ariaRole}),
     };
 
-    if (role === 'tooltip' || role === 'label') {
+    if (ariaRole === 'tooltip' || role === 'label') {
       return {
         reference: {
           [`aria-${role === 'label' ? 'labelledby' : 'describedby'}`]: open
@@ -52,21 +67,26 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
     return {
       reference: {
         'aria-expanded': open ? 'true' : 'false',
-        'aria-haspopup': role === 'alertdialog' ? 'dialog' : role,
+        'aria-haspopup': ariaRole === 'alertdialog' ? 'dialog' : ariaRole,
         'aria-controls': open ? floatingId : undefined,
-        ...(role === 'listbox' && {
-          role: 'combobox',
-        }),
-        ...(role === 'menu' && {
-          id: referenceId,
-        }),
+        ...(ariaRole === 'listbox' && {role: 'combobox'}),
+        ...(ariaRole === 'menu' && {id: referenceId}),
+        ...(role === 'select' && {'aria-autocomplete': 'none'}),
       },
       floating: {
         ...floatingProps,
-        ...(role === 'menu' && {
-          'aria-labelledby': referenceId,
-        }),
+        ...(ariaRole === 'menu' && {'aria-labelledby': referenceId}),
+      },
+      item({active, selected}) {
+        if (role === 'select') {
+          return {
+            tabIndex: active ? 0 : -1,
+            role: 'option',
+            'aria-selected': active && selected,
+          };
+        }
+        return {};
       },
     };
-  }, [enabled, role, open, floatingId, referenceId]);
+  }, [enabled, role, ariaRole, open, floatingId, referenceId]);
 }
