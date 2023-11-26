@@ -267,7 +267,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
           movedToUnrelatedNode &&
           !isPointerDownRef.current &&
           // Fix React 18 Strict Mode returnFocus due to double rendering.
-          !previouslyFocusedElements.includes(relatedTarget)
+          relatedTarget !== getPreviouslyFocusedElement()
         ) {
           preventReturnFocusRef.current = true;
           onOpenChange(false, event);
