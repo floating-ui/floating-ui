@@ -1227,3 +1227,80 @@ test('untrapped combobox creates non-modal focus management', async () => {
   expect(screen.getByTestId('input')).toHaveFocus();
   cleanup();
 });
+
+test('returns focus to last connected element', async () => {
+  function Drawer({
+    open,
+    onOpenChange,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }) {
+    const {refs, context} = useFloating({open, onOpenChange});
+    const dismiss = useDismiss(context);
+    const {getFloatingProps} = useInteractions([dismiss]);
+
+    return (
+      <FloatingFocusManager context={context}>
+        <div ref={refs.setFloating} {...getFloatingProps()}>
+          <button data-testid="child-reference" />
+        </div>
+      </FloatingFocusManager>
+    );
+  }
+
+  function Parent() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const dismiss = useDismiss(context);
+    const click = useClick(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      click,
+      dismiss,
+    ]);
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          data-testid="parent-reference"
+          {...getReferenceProps()}
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div ref={refs.setFloating} {...getFloatingProps()}>
+              Parent Floating
+              <button
+                data-testid="parent-floating-reference"
+                onClick={() => {
+                  setIsDrawerOpen(true);
+                  setIsOpen(false);
+                }}
+              />
+            </div>
+          </FloatingFocusManager>
+        )}
+        {isDrawerOpen && (
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+        )}
+      </>
+    );
+  }
+
+  render(<Parent />);
+  await userEvent.click(screen.getByTestId('parent-reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('parent-floating-reference')).toHaveFocus();
+  await userEvent.click(screen.getByTestId('parent-floating-reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('child-reference')).toHaveFocus();
+  await userEvent.keyboard('{Escape}');
+  expect(screen.getByTestId('parent-reference')).toHaveFocus();
+});
