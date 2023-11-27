@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.26.3
+
+### Patch Changes
+
+- 9170b9e6: fix(useDismiss): `targetRootAncestor` check for third party outside
+  presses
+
+  The Grammarly extension no longer closes upon clicking when inside floating
+  elements.
+
+- 66efdaf8: fix(FloatingFocusManager): return focus to last connected element
+
 ## 0.26.2
 
 ### Patch Changes
