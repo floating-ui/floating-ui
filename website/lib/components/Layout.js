@@ -455,7 +455,7 @@ function TableOfContents({anchors, hash}) {
                     hash === url,
                   'hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                     hash !== url,
-                }
+                },
               )}
             >
               {title}
@@ -464,7 +464,7 @@ function TableOfContents({anchors, hash}) {
               {anchors
                 .filter(
                   ({depth, parentTitle}) =>
-                    depth === 3 && parentTitle === title
+                    depth === 3 && parentTitle === title,
                 )
                 .map(({url, title}) => (
                   <li key={url}>
@@ -480,7 +480,7 @@ function TableOfContents({anchors, hash}) {
                             hash === url,
                           'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-purple-300/10 dark:hover:text-gray-50':
                             hash !== url,
-                        }
+                        },
                       )}
                     >
                       {title}
@@ -509,7 +509,7 @@ function NavbarItem({
   const children = nav.filter(({parent: p}) => p === title);
 
   const isReactContext = ['react', 'react-dom'].includes(
-    packageContext
+    packageContext,
   );
   const isReact = title === 'React';
   const shouldCollapse = collapse === true && !isReactContext;
@@ -524,11 +524,11 @@ function NavbarItem({
     }
 
     const activeChildItem = nav.find(
-      ({url: u}) => u === pathname
+      ({url: u}) => u === pathname,
     );
 
     setChildrenCollapsed(
-      pathname !== url && activeChildItem?.parent !== title
+      pathname !== url && activeChildItem?.parent !== title,
     );
   }, [
     shouldCollapse,
@@ -566,7 +566,7 @@ function NavbarItem({
               pathname === url && isReact,
             'mr-0 rounded-tl-none rounded-bl-none':
               parent != null,
-          }
+          },
         )}
       >
         <span className="flex w-full items-center gap-4 py-1">
@@ -671,7 +671,7 @@ export default function Layout({children, className}) {
   const activeLinkRef = useRef(null);
   const articleRef = useRef();
   const [hash, setHash] = useState(
-    asPath.slice(asPath.indexOf('#'))
+    asPath.slice(asPath.indexOf('#')),
   );
 
   const {
@@ -691,7 +691,7 @@ export default function Layout({children, className}) {
     const timeout = setTimeout(() => {
       if (!isPackageTooltipTouched) {
         setPackageContext(
-          getPackageContext(asPath.toLowerCase())
+          getPackageContext(asPath.toLowerCase()),
         );
       }
     });
@@ -825,7 +825,7 @@ export default function Layout({children, className}) {
             ref={refs.setFloating}
             className={cn(
               'fixed top-0 left-0 z-50 h-full w-[min(90%,20rem)] overflow-y-auto overflow-x-hidden bg-gray-50 font-variable shadow-lg outline-none will-change-transform motion-reduce:!transition-none dark:border-r dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:shadow-none md:block md:w-64 md:!transform-none md:shadow lg:w-72 xl:w-[22rem]',
-              {hidden: !isMounted}
+              {hidden: !isMounted},
             )}
             style={styles}
             {...getFloatingProps()}
