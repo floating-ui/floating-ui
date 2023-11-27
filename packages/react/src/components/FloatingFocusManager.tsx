@@ -31,6 +31,29 @@ import {usePortalContext} from './FloatingPortal';
 import {useFloatingTree} from './FloatingTree';
 import {FocusGuard, HIDDEN_STYLES} from './FocusGuard';
 
+const LIST_LIMIT = 20;
+let previouslyFocusedElements: Element[] = [];
+
+function addPreviouslyFocusedElement(element: Element | null) {
+  previouslyFocusedElements = previouslyFocusedElements.filter(
+    (el) => el.isConnected,
+  );
+
+  if (element && getNodeName(element) !== 'body') {
+    previouslyFocusedElements.push(element);
+    if (previouslyFocusedElements.length > LIST_LIMIT) {
+      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
+    }
+  }
+}
+
+function getPreviouslyFocusedElement() {
+  return previouslyFocusedElements
+    .slice()
+    .reverse()
+    .find((el) => el.isConnected);
+}
+
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
   ref: React.Ref<HTMLButtonElement>,
@@ -59,29 +82,6 @@ export interface FloatingFocusManagerProps<
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
   closeOnFocusOut?: boolean;
-}
-
-let previouslyFocusedElements: Element[] = [];
-const LIST_LIMIT = 20;
-
-function addPreviouslyFocusedElement(element: Element | null) {
-  previouslyFocusedElements = previouslyFocusedElements.filter(
-    (el) => el.isConnected,
-  );
-
-  if (element && getNodeName(element) !== 'body') {
-    previouslyFocusedElements.push(element);
-    if (previouslyFocusedElements.length > LIST_LIMIT) {
-      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
-    }
-  }
-}
-
-function getPreviouslyFocusedElement() {
-  return previouslyFocusedElements
-    .slice()
-    .reverse()
-    .find((el) => el.isConnected);
 }
 
 /**
