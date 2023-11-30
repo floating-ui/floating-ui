@@ -123,6 +123,7 @@ test('internal shifting does not double up offset', async ({page}) => {
   await click(page, `[data-testid="reference-25"]`);
   await click(page, `[data-testid="floating-150"]`);
   await click(page, `[data-testid="arrow-padding-20"]`);
+  await click(page, `[data-testid="add-offset-true"]`);
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `arrow-offset-no-doubling.png`,
