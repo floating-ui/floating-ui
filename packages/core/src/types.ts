@@ -92,7 +92,7 @@ export interface MiddlewareData {
     referenceHiddenOffsets?: SideObject;
     escapedOffsets?: SideObject;
   };
-  offset?: Coords;
+  offset?: Coords & {placement: Placement};
   shift?: Coords;
 }
 

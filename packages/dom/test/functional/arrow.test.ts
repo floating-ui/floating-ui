@@ -116,3 +116,16 @@ test('internal shifting should return correct centerOffset value', async ({
     `center-offset-true.png`,
   );
 });
+
+test('internal shifting does not double up offset', async ({page}) => {
+  await page.goto('http://localhost:1234/arrow');
+  await click(page, `[data-testid="placement-bottom-start"]`);
+  await click(page, `[data-testid="reference-25"]`);
+  await click(page, `[data-testid="floating-150"]`);
+  await click(page, `[data-testid="arrow-padding-20"]`);
+  await click(page, `[data-testid="add-offset-true"]`);
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `arrow-offset-no-doubling.png`,
+  );
+});
