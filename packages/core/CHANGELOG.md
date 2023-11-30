@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 1.5.1
+
+### Patch Changes
+
+- 88bf9768: fix(offset): avoid doubling calculation on same placement reset when
+  `arrow` changes alignment of floating element
+
 ## 1.5.0
 
 ### Minor Changes
