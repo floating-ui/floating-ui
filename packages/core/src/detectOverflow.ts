@@ -10,7 +10,7 @@ import type {
   SideObject,
 } from './types';
 
-export type Options = Partial<{
+export type DetectOverflowOptions = Partial<{
   /**
    * The clipping element(s) or area in which overflow will be checked.
    * @default 'clippingAncestors'
@@ -53,7 +53,7 @@ export type Options = Partial<{
  */
 export async function detectOverflow(
   state: MiddlewareState,
-  options: Options | Derivable<Options> = {},
+  options: DetectOverflowOptions | Derivable<DetectOverflowOptions> = {},
 ): Promise<SideObject> {
   const {x, y, platform, rects, elements, strategy} = state;
 
