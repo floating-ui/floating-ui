@@ -6,10 +6,8 @@ import {
   getSideAxis,
 } from '@floating-ui/utils';
 
-import {
-  type Options as DetectOverflowOptions,
-  detectOverflow,
-} from '../detectOverflow';
+import type {Options as DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Coords, Derivable, Middleware, MiddlewareState} from '../types';
 
 export type ShiftOptions = Partial<
