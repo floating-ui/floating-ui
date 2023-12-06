@@ -7,10 +7,8 @@ import {
   min,
 } from '@floating-ui/utils';
 
-import {
-  type Options as DetectOverflowOptions,
-  detectOverflow,
-} from '../detectOverflow';
+import type {DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
 export type SizeOptions = Partial<

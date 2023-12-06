@@ -7,10 +7,8 @@ import {
   placements as ALL_PLACEMENTS,
 } from '@floating-ui/utils';
 
-import {
-  type Options as DetectOverflowOptions,
-  detectOverflow,
-} from '../detectOverflow';
+import type {DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Alignment, Derivable, Middleware, Placement} from '../types';
 
 export function getPlacementList(
