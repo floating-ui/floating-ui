@@ -184,10 +184,7 @@ export type RootBoundary = 'viewport' | 'document' | Rect;
 export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';
-export {
-  detectOverflow,
-  Options as DetectOverflowOptions,
-} from './detectOverflow';
+export {detectOverflow, DetectOverflowOptions} from './detectOverflow';
 export {arrow, ArrowOptions} from './middleware/arrow';
 export {autoPlacement, AutoPlacementOptions} from './middleware/autoPlacement';
 export {flip, FlipOptions} from './middleware/flip';
