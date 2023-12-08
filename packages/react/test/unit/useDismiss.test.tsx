@@ -612,6 +612,140 @@ describe('bubbles', () => {
   });
 });
 
+describe('capture', () => {
+  describe('prop resolution', () => {
+    test('undefined', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp();
+
+      expect(escapeKeyCapture).toBe(false);
+      expect(outsidePressCapture).toBe(true);
+    });
+
+    test('{}', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp({});
+
+      expect(escapeKeyCapture).toBe(false);
+      expect(outsidePressCapture).toBe(true);
+    });
+
+    test('true', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp(true);
+
+      expect(escapeKeyCapture).toBe(true);
+      expect(outsidePressCapture).toBe(true);
+    });
+
+    test('false', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp(false);
+
+      expect(escapeKeyCapture).toBe(false);
+      expect(outsidePressCapture).toBe(false);
+    });
+
+    test('{ escapeKey: true }', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp({
+          escapeKey: true,
+        });
+
+      expect(escapeKeyCapture).toBe(true);
+      expect(outsidePressCapture).toBe(true);
+    });
+
+    test('{ outsidePress: false }', () => {
+      const {escapeKey: escapeKeyCapture, outsidePress: outsidePressCapture} =
+        normalizeProp({
+          outsidePress: false,
+        });
+
+      expect(escapeKeyCapture).toBe(false);
+      expect(outsidePressCapture).toBe(false);
+    });
+  });
+
+  const Overlay = ({children}: {children: ReactNode}) => {
+    return (
+      <div
+        style={{width: '100vw', height: '100vh'}}
+        onPointerDown={(e) => e.stopPropagation()}
+      >
+        <span>outside</span>
+        {children}
+      </div>
+    );
+  };
+
+  const Dialog = (props: UseDismissProps) => {
+    const [open, setOpen] = useState(true);
+    const nodeId = useFloatingNodeId();
+
+    const {refs, context} = useFloating({
+      open,
+      onOpenChange: setOpen,
+      nodeId,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      useDismiss(context, props),
+    ]);
+
+    return (
+      <FloatingNode id={nodeId}>
+        <button {...getReferenceProps({ref: refs.setReference})}>open</button>
+        {open && (
+          <FloatingPortal>
+            <FloatingFocusManager context={context}>
+              <div {...getFloatingProps({ref: refs.setFloating})}>dialog</div>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        )}
+      </FloatingNode>
+    );
+  };
+
+  describe('outsidePress', () => {
+    test('false', async () => {
+      render(
+        <Overlay>
+          <Dialog capture={{outsidePress: false}} />
+        </Overlay>,
+      );
+
+      const user = userEvent.setup();
+
+      await user.click(screen.getByText(/open/i));
+
+      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+
+      await user.click(screen.getByText(/outside/i));
+
+      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+    });
+
+    test('true', async () => {
+      render(
+        <Overlay>
+          <Dialog capture={{outsidePress: true}} />
+        </Overlay>,
+      );
+
+      const user = userEvent.setup();
+
+      await user.click(screen.getByText(/open/i));
+
+      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+
+      await user.click(screen.getByText(/outside/i));
+
+      expect(screen.queryByText(/dialog/i)).not.toBeInTheDocument();
+    });
+  });
+});
+
 describe('outsidePressEvent click', () => {
   test('dragging outside the floating element does not close', () => {
     render(<App outsidePressEvent="click" />);
