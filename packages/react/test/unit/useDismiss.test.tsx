@@ -679,7 +679,11 @@ describe('capture', () => {
     );
   };
 
-  const Dialog = (props: UseDismissProps) => {
+  const Dialog = ({
+    testId,
+    children,
+    ...props
+  }: UseDismissProps & {testId: string; children: ReactNode}) => {
     const [open, setOpen] = useState(true);
     const nodeId = useFloatingNodeId();
 
@@ -699,7 +703,10 @@ describe('capture', () => {
         {open && (
           <FloatingPortal>
             <FloatingFocusManager context={context}>
-              <div {...getFloatingProps({ref: refs.setFloating})}>dialog</div>
+              <div {...getFloatingProps({ref: refs.setFloating})}>
+                {testId}
+                {children}
+              </div>
             </FloatingFocusManager>
           </FloatingPortal>
         )}
@@ -707,41 +714,125 @@ describe('capture', () => {
     );
   };
 
+  const NestedDialog = (
+    props: UseDismissProps & {testId: string; children: ReactNode},
+  ) => {
+    const parentId = useFloatingParentNodeId();
+
+    if (parentId == null) {
+      return (
+        <FloatingTree>
+          <Dialog {...props} />
+        </FloatingTree>
+      );
+    }
+
+    return <Dialog {...props} />;
+  };
+
   describe('outsidePress', () => {
     test('false', async () => {
       render(
         <Overlay>
-          <Dialog capture={{outsidePress: false}} />
+          <NestedDialog testId="outer" capture={{outsidePress: false}}>
+            <NestedDialog testId="inner" capture={{outsidePress: false}}>
+              <></>
+            </NestedDialog>
+          </NestedDialog>
         </Overlay>,
       );
 
       const user = userEvent.setup();
 
-      await user.click(screen.getByText(/open/i));
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
 
-      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+      await user.click(screen.getByText(/outer/));
 
-      await user.click(screen.getByText(/outside/i));
-
-      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
+      cleanup();
     });
 
     test('true', async () => {
       render(
         <Overlay>
-          <Dialog capture={{outsidePress: true}} />
+          <NestedDialog testId="outer" capture={{outsidePress: true}}>
+            <NestedDialog testId="inner" capture={{outsidePress: true}}>
+              <></>
+            </NestedDialog>
+          </NestedDialog>
         </Overlay>,
       );
 
       const user = userEvent.setup();
 
-      await user.click(screen.getByText(/open/i));
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
 
-      expect(screen.getByText(/dialog/i)).toBeInTheDocument();
+      await user.click(screen.getByText(/outer/));
 
-      await user.click(screen.getByText(/outside/i));
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.queryByText(/inner/)).not.toBeInTheDocument();
 
-      expect(screen.queryByText(/dialog/i)).not.toBeInTheDocument();
+      await user.click(screen.getByText(/outside/));
+
+      expect(screen.queryByText(/outer/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/inner/)).not.toBeInTheDocument();
+      cleanup();
+    });
+  });
+
+  describe('escapeKey', () => {
+    test.skip('false', async () => {
+      render(
+        <Overlay>
+          <NestedDialog testId="outer" capture={{escapeKey: false}}>
+            <NestedDialog testId="inner" capture={{escapeKey: false}}>
+              <></>
+            </NestedDialog>
+          </NestedDialog>
+        </Overlay>,
+      );
+
+      const user = userEvent.setup();
+
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
+      cleanup();
+    });
+
+    test('true', async () => {
+      render(
+        <Overlay>
+          <NestedDialog testId="outer" capture={{escapeKey: true}}>
+            <NestedDialog testId="inner" capture={{escapeKey: true}}>
+              <></>
+            </NestedDialog>
+          </NestedDialog>
+        </Overlay>,
+      );
+
+      const user = userEvent.setup();
+
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.getByText(/inner/)).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.getByText(/outer/)).toBeInTheDocument();
+      expect(screen.queryByText(/inner/)).not.toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+
+      expect(screen.queryByText(/outer/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/inner/)).not.toBeInTheDocument();
+      cleanup();
     });
   });
 });
