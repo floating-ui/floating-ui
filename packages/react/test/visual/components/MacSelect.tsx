@@ -260,7 +260,7 @@ export function Main() {
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
     useClick(context, {event: 'mousedown'}),
     useDismiss(context),
-    useRole(context, {role: 'listbox'}),
+    useRole(context, {role: 'select'}),
     useInnerOffset(context, {
       enabled: !fallback,
       onChange: setInnerOffset,
@@ -373,9 +373,6 @@ export function Main() {
                           // Prevent immediate selection on touch devices when
                           // pressing the ScrollArrows
                           disabled={blockSelection}
-                          aria-selected={selectedIndex === i}
-                          role="option"
-                          tabIndex={activeIndex === i ? 0 : -1}
                           style={{
                             background:
                               activeIndex === i
@@ -390,6 +387,8 @@ export function Main() {
                             listContentRef.current[i] = text;
                           }}
                           {...getItemProps({
+                            active: activeIndex === i,
+                            selected: selectedIndex === i,
                             onTouchStart() {
                               allowSelectRef.current = true;
                               allowMouseUpRef.current = false;
