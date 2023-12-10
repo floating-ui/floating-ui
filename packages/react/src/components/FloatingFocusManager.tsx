@@ -3,7 +3,7 @@ import {
   contains,
   getDocument,
   getTarget,
-  isTypeableElement,
+  isTypeableCombobox,
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
@@ -121,9 +121,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   // hidden dismiss button should only appear at the end of the list, not the
   // start.
   const isUntrappedTypeableCombobox =
-    domReference?.getAttribute('role') === 'combobox' &&
-    isTypeableElement(domReference) &&
-    ignoreInitialFocus;
+    isTypeableCombobox(domReference) && ignoreInitialFocus;
   const modal = isUntrappedTypeableCombobox ? false : originalModal;
 
   // Force the guards to be rendered if the `inert` attribute is not supported.

@@ -4,6 +4,7 @@ import {
   getDocument,
   isMac,
   isSafari,
+  isTypeableCombobox,
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
@@ -754,7 +755,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       },
       floating: {
         'aria-orientation': orientation === 'both' ? undefined : orientation,
-        ...ariaActiveDescendantProp,
+        ...(!isTypeableCombobox(domReference) && ariaActiveDescendantProp),
         onKeyDown,
         onPointerMove() {
           isPointerModalityRef.current = true;
