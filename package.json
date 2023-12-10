@@ -23,7 +23,9 @@
   "prettier": {
     "singleQuote": true,
     "bracketSpacing": false,
-    "proseWrap": "always"
+    "proseWrap": "always",
+    "arrowParens": "always",
+    "semi": true
   },
   "browserslist": [
     "Chrome >= 73",
