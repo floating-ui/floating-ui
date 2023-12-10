@@ -205,8 +205,8 @@ export const TooltipContent = React.forwardRef(
     );
 
     return (
-      <FloatingPortal id="tooltip-portal">
-        {isMounted && (
+      isMounted && (
+        <FloatingPortal id="tooltip-portal">
           <div
             {...context.getFloatingProps(props)}
             ref={ref}
@@ -232,8 +232,8 @@ export const TooltipContent = React.forwardRef(
               className="fill-gray-600"
             />
           </div>
-        )}
-      </FloatingPortal>
+        </FloatingPortal>
+      )
     );
   },
 );

@@ -194,40 +194,40 @@ export const PopoverContent = React.forwardRef(
       propRef,
     ]);
 
+    if (!context.isMounted) return null;
+
     return (
       <FloatingPortal>
-        {context.isMounted && (
-          <FloatingFocusManager
-            context={floatingContext}
-            modal={context.modal}
+        <FloatingFocusManager
+          context={floatingContext}
+          modal={context.modal}
+        >
+          <div
+            ref={ref}
+            style={{
+              position: context.strategy,
+              top: context.y ?? 0,
+              left: context.x ?? 0,
+              width: 'max-content',
+              ...props.style,
+              ...context.styles,
+            }}
+            aria-labelledby={context.labelId}
+            aria-describedby={context.descriptionId}
+            {...context.getFloatingProps(props)}
           >
-            <div
-              ref={ref}
-              style={{
-                position: context.strategy,
-                top: context.y ?? 0,
-                left: context.x ?? 0,
-                width: 'max-content',
-                ...props.style,
-                ...context.styles,
-              }}
-              aria-labelledby={context.labelId}
-              aria-describedby={context.descriptionId}
-              {...context.getFloatingProps(props)}
-            >
-              {props.children}
-              <FloatingArrow
-                ref={context.arrowRef}
-                context={floatingContext}
-                height={10}
-                fill="white"
-                stroke="rgba(0,0,0,0.1)"
-                strokeWidth={1}
-                tipRadius={2}
-              />
-            </div>
-          </FloatingFocusManager>
-        )}
+            {props.children}
+            <FloatingArrow
+              ref={context.arrowRef}
+              context={floatingContext}
+              height={10}
+              fill="white"
+              stroke="rgba(0,0,0,0.1)"
+              strokeWidth={1}
+              tipRadius={2}
+            />
+          </div>
+        </FloatingFocusManager>
       </FloatingPortal>
     );
   },
