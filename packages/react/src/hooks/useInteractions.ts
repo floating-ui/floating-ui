@@ -99,10 +99,8 @@ export function useInteractions(propsList: Array<ElementProps | void> = []) {
 
   const getItemProps = React.useCallback(
     (
-      userProps?: Omit<React.HTMLProps<HTMLElement>, 'selected' | 'active'> & {
-        selected?: boolean;
-        active?: boolean;
-      },
+      userProps?: Omit<React.HTMLProps<HTMLElement>, 'selected' | 'active'> &
+        ExtendedUserProps,
     ) => mergeProps(userProps, propsList, 'item'),
     // Granularly check for `item` changes, because the `getItemProps` getter
     // should be as referentially stable as possible since it may be passed as
