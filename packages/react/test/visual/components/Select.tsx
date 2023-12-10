@@ -208,6 +208,7 @@ const MemoOption = React.memo(
             'bg-cyan-200': active,
           },
         )}
+        tabIndex={active ? 0 : -1}
         {...getItemProps({
           active,
           selected,

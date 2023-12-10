@@ -1,7 +1,13 @@
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {useState} from 'react';
 
-import {useFloating, useId, useInteractions, useRole} from '../../src';
+import {
+  useClick,
+  useFloating,
+  useId,
+  useInteractions,
+  useRole,
+} from '../../src';
 import type {UseRoleProps} from '../../src/hooks/useRole';
 
 function App({
@@ -203,6 +209,136 @@ describe('listbox', () => {
     );
     expect(button.hasAttribute('aria-describedby')).toBe(false);
     expect(button.getAttribute('aria-expanded')).toBe('true');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    cleanup();
+  });
+});
+
+describe('select', () => {
+  test('sets correct aria attributes based on the open state', () => {
+    function Select() {
+      const [isOpen, setIsOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+      const {getReferenceProps, getFloatingProps, getItemProps} =
+        useInteractions([
+          useClick(context),
+          useRole(context, {role: 'select'}),
+        ]);
+      return (
+        <>
+          <button ref={refs.setReference} {...getReferenceProps()} />
+          {isOpen && (
+            <div ref={refs.setFloating} {...getFloatingProps()}>
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  data-testid={`item-${i}`}
+                  {...getItemProps({active: i === 2, selected: i === 2})}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<Select />);
+
+    const button = screen.getByRole('combobox');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).toBeInTheDocument();
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('listbox').getAttribute('id'),
+    );
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(button.getAttribute('aria-autocomplete')).toBe('none');
+    expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
+      'false',
+    );
+    expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
+      'true',
+    );
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(button.hasAttribute('aria-controls')).toBe(false);
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    cleanup();
+  });
+});
+
+describe('combobox', () => {
+  test('sets correct aria attributes based on the open state', () => {
+    function Select() {
+      const [isOpen, setIsOpen] = useState(false);
+      const {refs, context} = useFloating({
+        open: isOpen,
+        onOpenChange: setIsOpen,
+      });
+      const {getReferenceProps, getFloatingProps, getItemProps} =
+        useInteractions([
+          useClick(context),
+          useRole(context, {role: 'combobox'}),
+        ]);
+      return (
+        <>
+          <input ref={refs.setReference} {...getReferenceProps()} />
+          {isOpen && (
+            <div ref={refs.setFloating} {...getFloatingProps()}>
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  data-testid={`item-${i}`}
+                  {...getItemProps({active: i === 2, selected: i === 2})}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      );
+    }
+
+    render(<Select />);
+
+    const button = screen.getByRole('combobox');
+
+    expect(button.getAttribute('aria-haspopup')).toBe('listbox');
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+
+    fireEvent.click(button);
+
+    expect(screen.queryByRole('listbox')).toBeInTheDocument();
+    expect(button.getAttribute('aria-controls')).toBe(
+      screen.getByRole('listbox').getAttribute('id'),
+    );
+    expect(button.hasAttribute('aria-describedby')).toBe(false);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(button.getAttribute('aria-autocomplete')).toBe('list');
+    expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
+      null,
+    );
+    expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
+      'true',
+    );
 
     fireEvent.click(button);
 

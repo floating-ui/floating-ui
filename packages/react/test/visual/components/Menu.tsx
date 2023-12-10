@@ -28,9 +28,7 @@ import c from 'clsx';
 import * as React from 'react';
 
 type MenuContextType = {
-  getItemProps: (
-    userProps?: React.HTMLProps<HTMLElement>,
-  ) => Record<string, unknown>;
+  getItemProps: ReturnType<typeof useInteractions>['getItemProps'];
   activeIndex: number | null;
   setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setHasFocusInside: React.Dispatch<React.SetStateAction<boolean>>;
@@ -193,7 +191,6 @@ export const MenuComponent = React.forwardRef<
               ? 0
               : -1
         }
-        role={isNested ? 'menuitem' : undefined}
         className={c(
           props.className ||
             'text-left flex gap-4 justify-between items-center rounded py-1 px-2',
@@ -286,14 +283,14 @@ export const MenuItem = React.forwardRef<
       {...props}
       ref={useMergeRefs([item.ref, forwardedRef])}
       type="button"
-      role="menuitem"
-      tabIndex={isActive ? 0 : -1}
       disabled={disabled}
+      tabIndex={isActive ? 0 : -1}
       className={c(
         'text-left flex py-1 px-2 focus:bg-blue-500 focus:text-white outline-none rounded',
         {'opacity-40': disabled},
       )}
       {...menu.getItemProps({
+        active: isActive,
         onClick(event: React.MouseEvent<HTMLButtonElement>) {
           props.onClick?.(event);
           tree?.events.emit('click');

@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import {useFloatingParentNodeId} from '../components/FloatingTree';
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useId} from './useId';
 
@@ -11,7 +12,7 @@ type AriaRole =
   | 'listbox'
   | 'grid'
   | 'tree';
-type ComponentRole = 'select' | 'label';
+type ComponentRole = 'select' | 'label' | 'combobox';
 
 export interface UseRoleProps {
   enabled?: boolean;
@@ -23,6 +24,7 @@ const componentRoleToAriaRoleMap = new Map<
   AriaRole | false
 >([
   ['select', 'listbox'],
+  ['combobox', 'listbox'],
   ['label', false],
 ]);
 
@@ -44,6 +46,8 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
     | undefined;
 
   const referenceId = useId();
+  const parentId = useFloatingParentNodeId();
+  const isNested = parentId != null;
 
   return React.useMemo(() => {
     if (!enabled) return {};
@@ -71,22 +75,34 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
         'aria-controls': open ? floatingId : undefined,
         ...(ariaRole === 'listbox' && {role: 'combobox'}),
         ...(ariaRole === 'menu' && {id: referenceId}),
+        ...(ariaRole === 'menu' && isNested && {role: 'menuitem'}),
         ...(role === 'select' && {'aria-autocomplete': 'none'}),
+        ...(role === 'combobox' && {'aria-autocomplete': 'list'}),
       },
       floating: {
         ...floatingProps,
         ...(ariaRole === 'menu' && {'aria-labelledby': referenceId}),
       },
       item({active, selected}) {
-        if (role === 'select') {
-          return {
-            tabIndex: active ? 0 : -1,
-            role: 'option',
-            'aria-selected': active && selected,
-          };
+        // For `menu`, we are unable to tell if the item is a `menuitemradio`
+        // or `menuitemcheckbox`. For backwards-compatibility reasons, also
+        // avoid defaulting to `menuitem` as it may overwrite custom role props.
+        switch (role) {
+          case 'select':
+            return {
+              role: 'option',
+              'aria-selected': active && selected,
+            };
+          case 'combobox': {
+            return {
+              role: 'option',
+              ...(active && {'aria-selected': true}),
+            };
+          }
         }
+
         return {};
       },
     };
-  }, [enabled, role, ariaRole, open, floatingId, referenceId]);
+  }, [enabled, role, ariaRole, open, floatingId, referenceId, isNested]);
 }

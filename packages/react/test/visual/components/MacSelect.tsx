@@ -382,6 +382,7 @@ export function Main() {
                                   : 'transparent',
                             fontWeight: i === selectedIndex ? 'bold' : 'normal',
                           }}
+                          tabIndex={i === activeIndex ? 0 : -1}
                           ref={(node) => {
                             listRef.current[i] = node;
                             listContentRef.current[i] = text;
