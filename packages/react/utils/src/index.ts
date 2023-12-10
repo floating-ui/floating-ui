@@ -182,3 +182,10 @@ export function stopEvent(event: Event | React.SyntheticEvent) {
   event.preventDefault();
   event.stopPropagation();
 }
+
+export function isTypeableCombobox(element: Element | null) {
+  if (!element) return false;
+  return (
+    element.getAttribute('role') === 'combobox' && isTypeableElement(element)
+  );
+}
