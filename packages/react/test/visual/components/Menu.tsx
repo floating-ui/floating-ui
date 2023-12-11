@@ -283,6 +283,7 @@ export const MenuItem = React.forwardRef<
       {...props}
       ref={useMergeRefs([item.ref, forwardedRef])}
       type="button"
+      role="menuitem"
       disabled={disabled}
       tabIndex={isActive ? 0 : -1}
       className={c(
