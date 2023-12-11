@@ -73,7 +73,7 @@ export function useTooltip({
     enabled: controlledOpen == null,
   });
   const dismiss = useDismiss(context);
-  const role = useRole(context, {role: 'tooltip'});
+  const role = useRole(context, {role: 'label'});
 
   const interactions = useInteractions([
     hover,
