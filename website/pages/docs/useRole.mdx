@@ -62,13 +62,13 @@ interface UseRoleProps {
   role?:
     // Native ARIA roles
     | 'dialog'
-    | 'alertdialog'
     | 'tooltip'
     | 'menu'
     | 'listbox'
     | 'grid'
     | 'tree'
     // Custom component roles
+    | 'alertdialog'
     | 'label';
     | 'select'
     | 'combobox'
@@ -99,43 +99,122 @@ useRole(context, {
 });
 ```
 
-#### Item roles
+### Component roles
 
-For the custom component roles listed above, the reference
-element, floating element, and item elements all receive the
-necessary ARIA roles, which should cover most core use cases.
+These are custom roles that are used for floating elements that
+more narrowly specify the type of element being rendered. This
+enables a more complete set of accessible props for items inside
+the floating element.
 
-To ensure the items receive the correct roles, you'll need to
-pass `active{:.objectKey}` and `selected{:.objectKey}` props,
-which are determined based on the item's index in the tree:
+#### `label{:.string}`
+
+This role should be used for floating elements that act as a
+label for a reference element with no text/label (e.g. an icon
+button).
+
+#### `alertdialog{:.string}`
+
+This role should be used when the floating element has arbitrary
+tabbable content that requires user action and can't be
+dismissed.
+
+---
+
+For the following two roles, the `getItemProps{:.const}` prop
+getter should be called with `active{:.objectKey}` and
+`selected{:.objectKey}` boolean props when spread.
 
 ```js
-const active = itemIndex === activeIndex;
-const selected = itemIndex === selectedIndex;
-// When spreading onto the item element, pass the props like so:
-getItemProps({
-  active,
-  selected,
-  // other native props
-});
+const {getItemProps} = useInteractions([]);
+
+// A given item being rendered in the list
+<div
+  {...getItemProps({
+    active: boolean, // activeIndex === itemIndex
+    selected: boolean, // selectedIndex === itemIndex
+  })}
+/>;
 ```
 
-For the "base" native ARIA roles listed above, only the reference
-and floating element receive ARIA props -- you'll need to provide
+These props are derived from the `activeIndex` and
+`selectedIndex` states for the
+[`useListNavigation`](/docs/useListNavigation) and
+[`useTypeahead`](/docs/useTypeahead) hooks.
+
+#### `select{:.string}`
+
+This role should be used when the floating element contains a
+list of items that can be selected. Items receive ARIA props
+automatically.
+
+#### `combobox{:.string}`
+
+This role should be used when the floating element contains a
+list of items that can be selected, and also has an input for
+filtering the list. Items receive ARIA props automatically.
+
+---
+
+### Native roles
+
+These roles are native ARIA roles that are used for floating
+elements that are more generic in nature, directly accepted by
+the `aria-haspopup{:.keyword}` attribute. Items inside the
+floating elements do not receive any roles and must be
+explicitly/manually specified.
+
+#### `tooltip{:.string}`
+
+This role should be used for floating elements that add a
+description to the reference element they are attached to. The
+reference element should have its own label/text.
+
+#### `dialog{:.string}`
+
+This is the default role, and should be used when the floating
+element has arbitrary tabbable content (e.g. a popover or modal
+dialog).
+
+#### `menu{:.string}`
+
+This role should be used when the floating element contains a
+list of items that perform an action, similar to an OS menu (e.g.
+File > ). Items do not receive props and must be manually
+specified.
+
+<Notice title="Item roles">
+
+Explicitly specify item roles for children: a `role{:.keyword}`
+of `'menuitem'{:js}`, `'menuitemcheckbox'{:js}`, or
+`'menuitemradio'{:js}`.
+
+</Notice>
+
+#### `listbox{:.string}`
+
+This role should be used when the floating element contains a
+list of items that can be selected. Items do not receive props
+and must be manually specified.
+
+<Notice title="Item roles">
+
+Explicitly specify item roles for children: a `role{:.keyword}`
+of `'option'{:js}` with an `aria-selected{:.keyword}` attribute.
+
+If the options are inside a group, then wrapped inside a
+`'group'{:js}` role that is `aria-labelledby{:.keyword}` the
+group heading.
+
+</Notice>
+
+For the native roles listed above, only the reference and
+floating element receive ARIA props -- you'll need to provide
 roles for the items inside the floating element manually if
 required, since these roles allow for a wide variety of item
 types.
 
-For instance:
-
-- A `'menu'{:js}` role will require the focusable children to
-  have a role of `'menuitem'{:js}`, `'menuitemcheckbox'{:js}`, or
-  `'menuitemradio'{:js}`.
-- A `'listbox'{:js}` role will require the focusable children to
-  have a role of `'option'{:js}`. If inside a group, then wrapped
-  inside a `'group'{:js}` role that is
-  `aria-labelledby{:.keyword}` the group heading.
-
 It's recommended that you read
 [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices-1.2/)
-to ensure your item elements have semantic roles and attributes.
+to ensure your item elements have semantic roles and attributes,
+especially if you're deviating from the simple nature of the
+default roles and adding complex logic.

@@ -104,11 +104,13 @@ This is because your handler may be either overwritten or
 overwrite one of the hooks' handlers. More event handlers may
 also be added in future versions.
 
-## getItemProps
+## `getItemProps`
 
 A third prop getter is returned for item elements when dealing
 with a list inside the floating element, which is not required
-for all types of floating elements.
+for all types of floating elements. See
+[`useRole`](/docs/useRole#role) for more information on this prop
+getter for listbox (e.g. select or combobox) or menu roles.
 
 {/* prettier-ignore */}
 ```js /getItemProps/
