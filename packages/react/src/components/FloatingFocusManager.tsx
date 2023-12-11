@@ -99,7 +99,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     guards: _guards = true,
     initialFocus = 0,
     returnFocus = true,
-    modal: originalModal = true,
+    modal = true,
     visuallyHiddenDismiss = false,
     closeOnFocusOut = true,
   } = props;
@@ -122,7 +122,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   // start.
   const isUntrappedTypeableCombobox =
     isTypeableCombobox(domReference) && ignoreInitialFocus;
-  const modal = isUntrappedTypeableCombobox ? false : originalModal;
 
   // Force the guards to be rendered if the `inert` attribute is not supported.
   const guards = supportsInert() ? _guards : true;
@@ -318,7 +317,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       ].filter((x): x is Element => x != null);
 
       const cleanup =
-        originalModal || isUntrappedTypeableCombobox
+        modal || isUntrappedTypeableCombobox
           ? markOthers(insideElements, guards, !guards)
           : markOthers(insideElements);
 
@@ -330,7 +329,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     disabled,
     domReference,
     floating,
-    originalModal,
+    modal,
     orderRef,
     portalContext,
     isUntrappedTypeableCombobox,
