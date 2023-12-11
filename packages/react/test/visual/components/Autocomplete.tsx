@@ -7,7 +7,6 @@ import {
   size,
   useDismiss,
   useFloating,
-  useId,
   useInteractions,
   useListNavigation,
   useRole,
@@ -160,16 +159,12 @@ const Item = forwardRef<
   HTMLDivElement,
   ItemProps & React.HTMLProps<HTMLDivElement>
 >(({children, active, ...rest}, ref) => {
-  const id = useId();
   return (
     <div
       ref={ref}
       className={c('p-2 cursor-default', {
         'bg-blue-500 text-white': active,
       })}
-      role="option"
-      id={id}
-      aria-selected={active}
       {...rest}
     >
       {children}
@@ -204,7 +199,7 @@ export function Main() {
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
-    useRole(context, {role: 'listbox'}),
+    useRole(context, {role: 'combobox'}),
     useDismiss(context),
     useListNavigation(context, {
       listRef,
@@ -271,8 +266,9 @@ export function Main() {
               >
                 {items.map((item, index) => (
                   <Item
+                    key={item}
                     {...getItemProps({
-                      key: item,
+                      active: activeIndex === index,
                       ref(node) {
                         listRef.current[index] = node;
                       },

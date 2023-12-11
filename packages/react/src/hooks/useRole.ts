@@ -84,18 +84,23 @@ export function useRole<RT extends ReferenceType = ReferenceType>(
         ...(ariaRole === 'menu' && {'aria-labelledby': referenceId}),
       },
       item({active, selected}) {
+        const commonProps = {
+          role: 'option',
+          ...(active && {id: `${floatingId}-option`}),
+        };
+
         // For `menu`, we are unable to tell if the item is a `menuitemradio`
         // or `menuitemcheckbox`. For backwards-compatibility reasons, also
         // avoid defaulting to `menuitem` as it may overwrite custom role props.
         switch (role) {
           case 'select':
             return {
-              role: 'option',
+              ...commonProps,
               'aria-selected': active && selected,
             };
           case 'combobox': {
             return {
-              role: 'option',
+              ...commonProps,
               ...(active && {'aria-selected': true}),
             };
           }
