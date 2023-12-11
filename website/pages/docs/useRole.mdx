@@ -105,10 +105,26 @@ For the custom component roles listed above, the reference
 element, floating element, and item elements all receive the
 necessary ARIA roles, which should cover most core use cases.
 
+To ensure the items receive the correct roles, you'll need to
+pass `active{:.objectKey}` and `selected{:.objectKey}` props,
+which are determined based on the item's index in the tree:
+
+```js
+const active = itemIndex === activeIndex;
+const selected = itemIndex === selectedIndex;
+// When spreading onto the item element, pass the props like so:
+getItemProps({
+  active,
+  selected,
+  // other native props
+});
+```
+
 For the "base" native ARIA roles listed above, only the reference
 and floating element receive ARIA props -- you'll need to provide
-roles for the items inside the floating element if required,
-since these roles allow for a wide variety of item types.
+roles for the items inside the floating element manually if
+required, since these roles allow for a wide variety of item
+types.
 
 For instance:
 
