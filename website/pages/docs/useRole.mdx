@@ -60,6 +60,7 @@ function App() {
 interface UseRoleProps {
   enabled?: boolean;
   role?:
+    // Native ARIA roles
     | 'dialog'
     | 'alertdialog'
     | 'tooltip'
@@ -67,7 +68,10 @@ interface UseRoleProps {
     | 'listbox'
     | 'grid'
     | 'tree'
+    // Custom component roles
     | 'label';
+    | 'select'
+    | 'combobox'
 }
 ```
 
@@ -97,9 +101,14 @@ useRole(context, {
 
 #### Item roles
 
-As only the reference and floating element receives these props,
-you'll need to provide roles for the items inside the floating
-element if required.
+For the custom component roles listed above, the reference
+element, floating element, and item elements all receive the
+necessary ARIA roles, which should cover most core use cases.
+
+For the "base" native ARIA roles listed above, only the reference
+and floating element receive ARIA props -- you'll need to provide
+roles for the items inside the floating element if required,
+since these roles allow for a wide variety of item types.
 
 For instance:
 
