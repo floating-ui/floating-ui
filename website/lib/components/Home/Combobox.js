@@ -2,6 +2,7 @@ import {
   autoUpdate,
   flip,
   FloatingFocusManager,
+  FloatingPortal,
   offset,
   size,
   useDismiss,
@@ -283,48 +284,49 @@ export function ComboboxDemo() {
         })}
       />
       {open && (
-        <FloatingFocusManager
-          context={context}
-          initialFocus={-1}
-          visuallyHiddenDismiss
-          returnFocus={false}
-        >
-          <div
-            ref={refs.setFloating}
-            className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
-            style={floatingStyles}
-            {...getFloatingProps()}
+        <FloatingPortal>
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            visuallyHiddenDismiss
           >
-            {items.length === 0 && (
-              <p
-                className="m-2"
-                id="combobox-no-results"
-                role="region"
-                aria-atomic="true"
-                aria-live="assertive"
-              >
-                No flavors found.
-              </p>
-            )}
-            {items.map((item, index) => (
-              <Item
-                {...getItemProps({
-                  key: item,
-                  ref(node) {
-                    listRef.current[index] = node;
-                  },
-                  onClick() {
-                    setInputValue(item);
-                    setOpen(false);
-                  },
-                })}
-                active={activeIndex === index}
-              >
-                {item}
-              </Item>
-            ))}
-          </div>
-        </FloatingFocusManager>
+            <div
+              ref={refs.setFloating}
+              className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
+              style={floatingStyles}
+              {...getFloatingProps()}
+            >
+              {items.length === 0 && (
+                <p
+                  className="m-2"
+                  id="combobox-no-results"
+                  role="region"
+                  aria-atomic="true"
+                  aria-live="assertive"
+                >
+                  No flavors found.
+                </p>
+              )}
+              {items.map((item, index) => (
+                <Item
+                  {...getItemProps({
+                    key: item,
+                    ref(node) {
+                      listRef.current[index] = node;
+                    },
+                    onClick() {
+                      setInputValue(item);
+                      setOpen(false);
+                    },
+                  })}
+                  active={activeIndex === index}
+                >
+                  {item}
+                </Item>
+              ))}
+            </div>
+          </FloatingFocusManager>
+        </FloatingPortal>
       )}
     </>
   );
