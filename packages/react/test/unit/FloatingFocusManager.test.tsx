@@ -1200,7 +1200,11 @@ test('untrapped combobox creates non-modal focus management', async () => {
         />
         {isOpen && (
           <FloatingPortal>
-            <FloatingFocusManager context={context} initialFocus={-1}>
+            <FloatingFocusManager
+              context={context}
+              initialFocus={-1}
+              modal={false}
+            >
               <div
                 ref={refs.setFloating}
                 style={floatingStyles}
