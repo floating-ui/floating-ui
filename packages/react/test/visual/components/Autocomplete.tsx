@@ -162,6 +162,7 @@ const Item = forwardRef<
   return (
     <div
       ref={ref}
+      tabIndex={-1}
       className={c('p-2 cursor-default', {
         'bg-blue-500 text-white': active,
       })}
