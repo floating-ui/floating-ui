@@ -21,12 +21,20 @@ import {useFloating} from '@floating-ui/react-dom';
 
 </ShowFor>
 
+<ShowFor packages={['solid']}>
+
+```js
+import {useFloating} from '@floating-ui/solid';
+```
+
+</ShowFor>
 </PageCard>
 
 ## Usage
 
 Call the hook inside a component.
 
+<ShowFor packages={['react','react-dom']}>
 ```js
 function App() {
   const {refs, floatingStyles} = useFloating();
@@ -38,7 +46,20 @@ function App() {
   );
 }
 ```
-
+</ShowFor>
+<ShowFor packages={['solid']}>
+```js
+function App() {
+  const {refs, floatingStyles} = useFloating();
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles()} />
+    </>
+  );
+}
+```
+</ShowFor>
 ## Options
 
 The hook accepts an object of options to configure its behavior.
@@ -61,7 +82,7 @@ interface UseFloatingOptions {
   onOpenChange?(
     open: boolean,
     event?: Event,
-    reason?: OpenChangeReason
+    reason?: OpenChangeReason,
   ): void;
   elements?: {
     reference?: ReferenceElement | null;
@@ -70,7 +91,7 @@ interface UseFloatingOptions {
   whileElementsMounted?(
     reference?: ReferenceElement,
     floating?: FloatingElement,
-    update?: () => void
+    update?: () => void,
   ): () => void;
   nodeId?: string;
 }
@@ -94,8 +115,43 @@ interface UseFloatingOptions {
   whileElementsMounted?(
     reference?: ReferenceElement,
     floating?: FloatingElement,
-    update?: () => void
+    update?: () => void,
   ): () => void;
+}
+```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+```js
+function App() {
+  const {refs, floatingStyles} = useFloating();
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles()} />
+    </>
+  );
+}
+```
+
+```ts
+interface UseFloatingOptions {
+  placement?: Placement;
+  strategy: 'fixed' | 'absolute';
+  transform?: boolean;
+  middleware?: Array<Middleware | undefined | null | false>;
+  open?: MaybeAccessor<boolean>;
+  onOpenChange?(open: boolean, event?: Event): void;
+  elements?: {
+    reference?: ReferenceElement | null;
+    floating?: FloatingElement | null;
+  };
+  whileElementsMounted?(
+    reference?: ReferenceElement,
+    floating?: FloatingElement,
+    update?: () => void,
+  ): () => void;
+  nodeId?: string;
 }
 ```
 
@@ -189,18 +245,26 @@ CSS transforms are more performant, but can cause conflicts with
 transform animations. In that case, you can make the positioned
 floating element a wrapper to avoid the conflict:
 
-```js
-<div ref={refs.setFloating} style={floatingStyles}>
-  <div style={transitionStyles}>Content</div>
-</div>
-```
+<ShowFor packages={['react', 'react-dom']}>
+  ```js
+  <div ref={refs.setFloating} style={floatingStyles}>
+    <div style={transitionStyles}>Content</div>
+  </div>
+  ```
+</ShowFor>
+<ShowFor packages={['solid']}>
+  ```js
+  <div ref={refs.setFloating} style={floatingStyles()}>
+    <div style={transitionStyles()}>Content</div>
+  </div>
+  ```
+</ShowFor>
 
 <Notice>
   When using layout instead of transforms, ensure that the
   floating element has a fixed width or sets a `width: max-width{:sass}` to
   prevent it from resizing.
 </Notice>
-
 ### middleware
 
 default: `[]{:js}`
@@ -270,6 +334,11 @@ coordinates.
 
 #### Option reactivity
 
+<ShowFor packages={['solid']}>
+	<Notice>Currently you can only use static values for the middleware.</Notice>
+</ShowFor>
+<ShowFor packages={['react', 'react-dom']}>
+
 When using React state and middleware, stateful values inside
 _function options_ (useful when deriving from middleware state)
 aren't fresh or reactive.
@@ -311,6 +380,8 @@ function App() {
 }
 ```
 
+</ShowFor>
+
 ### elements
 
 default: `undefined{:js}`
@@ -322,22 +393,37 @@ object setters.
 The elements must be held in state (not plain refs) to ensure
 that they are reactive.
 
+<ShowFor packages={['react','react-dom']}>
 ```js
 const [reference, setReference] = useState(null);
 
-const {refs} = useFloating({
-  elements: {
-    reference,
-  },
-});
+const {refs} = useFloating({ elements: { reference }});
 
 return (
+
   <>
     <div ref={setReference} />
     <div ref={refs.setFloating} />;
   </>
 );
 ```
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+```js
+const [reference, setReference] = createSignal(null);
+
+const {refs} = useFloating({ elements: { reference } });
+
+return (
+
+  <>
+    <div ref={setReference} />
+    <div ref={refs.setFloating} />;
+  </>
+);
+```
+</ShowFor>
 
 You can also do the inverse of the above, or pass both
 externally.
@@ -365,13 +451,24 @@ This allows you to pass [`autoUpdate`](/docs/autoUpdate) whose
 signature matches the option, to ensure the floating element
 remains anchored to the reference element:
 
+<ShowFor packages={['react', 'react-dom']}>
+
 ```js
 import {autoUpdate} from '@floating-ui/react';
 
-useFloating({
-  whileElementsMounted: autoUpdate,
-});
+useFloating({whileElementsMounted: autoUpdate});
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {autoUpdate} from '@floating-ui/solid';
+
+useFloating({whileElementsMounted: autoUpdate});
+```
+
+</ShowFor>
 
 <Notice type="warning">
   Only use this option if your floating element is _conditionally
@@ -386,24 +483,23 @@ default: `false{:js}`
 Whether the floating element is open or not, which allows you to
 determine if the floating element has been positioned yet.
 
+<ShowFor packages={['react', 'react-dom']}>
+
 ```js {4}
 const [isOpen, setIsOpen] = useState(false);
 
-const {isPositioned} = useFloating({
-  open: isOpen,
-});
+const {isPositioned} = useFloating({ open: isOpen });
 
-// Once `isOpen` flips to `true`, `isPositioned` will switch to `true`
-// asynchronously. We can use an effect to determine when it has
-// been positioned.
-useEffect(() => {
-  if (isPositioned) {
-    // ...
-  }
-}, [isPositioned]);
+// Once `isOpen` flips to `true`, `isPositioned` will switch to
+`true` // asynchronously. We can use an effect to determine when
+it has // been positioned. useEffect(() => { if (isPositioned) {
+// ... } }, [isPositioned]);
+
 ```
 
-<ShowFor packages={['react']}>
+</ShowFor>
+
+<ShowFor packages={['react','solid']}>
 
 ### onOpenChange
 
@@ -413,13 +509,14 @@ A function that is called when the `open{:.objectKey}` state
 should change. By default, passing the setter of the
 `open{:.objectKey}` state will be sufficient:
 
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
 ```js
 const [isOpen, setIsOpen] = useState(false);
 
-useFloating({
-  open: isOpen,
-  onOpenChange: setIsOpen,
-});
+useFloating({open: isOpen, onOpenChange: setIsOpen});
 ```
 
 Since it's an event callback function, it allows you to
@@ -436,6 +533,34 @@ useFloating({
   },
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+const [isOpen, setIsOpen] = createSignal(false);
+
+useFloating({open: isOpen, onOpenChange: setIsOpen});
+```
+
+Since it's an event callback function, it allows you to
+conditionally react to the state changing, plus determine the
+event and reason that caused the change.
+
+```js
+useFloating({
+  open: isOpen,
+  onOpenChange(isOpen, event) {
+    setIsOpen(isOpen);
+    event && console.log(event); // e.g. MouseEvent
+  },
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['react','solid']}>
 
 Most open change events have a reason and event attached, but not
 all.

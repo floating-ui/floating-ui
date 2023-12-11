@@ -6,9 +6,20 @@ Creates a single tab stop whose items are navigated by arrow
 keys, which provides list navigation outside of floating element
 contexts.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {Composite, CompositeItem} from '@floating-ui/react';
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {Composite, CompositeItem} from '@floating-ui/solid';
+```
+
+</ShowFor>
 
 <ShowFor packages={['react-dom']}>
 
@@ -29,6 +40,8 @@ A menubar is an example of a composite.
   <CompositeItem>Item 3</CompositeItem>
 </Composite>
 ```
+
+<ShowFor packages={['react']}>
 
 The `render{:.keyword}` prop can be used to customize the
 rendering of the composite components. Both `Composite` and
@@ -87,6 +100,54 @@ Determines the element to render.
 <Composite render={<button />} />
 ```
 
+</ShowFor>
+<ShowFor packages={["solid"]}>
+The `render{:.keyword}` prop can be used to customize the
+rendering of the composite components. Both `Composite` and
+`CompositeItem` provide the props that have to be passed to the JSX element or custom component:
+
+```js
+<CompositeItem
+  render={(htmlProps) => (
+    <select {...htmlProps()}>
+      <option />
+      <option />
+    </select>
+  )}
+/>
+```
+
+<Notice type="error" title="Important">
+  When using the `render{:.keyword}` prop `children{:.keyword}` of `Composite` or `CompositeItem` are not rendered.
+	Pass them inside the render function instead.
+</Notice>
+
+## Props
+
+```tsx
+interface Props {
+  render?: RenderProp;
+  orientation?: MaybeAccessor<
+    'horizontal' | 'vertical' | 'both'
+  >;
+  loop?: MaybeAccessor<boolean>;
+  cols?: MaybeAccessor<number>;
+  disabledIndices?: MaybeAccessor<number[]>;
+  activeIndex?: Accessor<number>;
+  onNavigate?: Setter<number>;
+}
+```
+
+### render
+
+Determines the element to render.
+
+```js
+<Composite render={(htmlProps) => <button {...htmlProps()} />} />
+```
+
+</ShowFor>
+
 ### orientation
 
 default: `'both'{:js}`
@@ -135,11 +196,22 @@ default: `undefined{:js}`
 Determines which item is active. Used to externally control the
 active item.
 
+<ShowFor packages={["react"]}>
+
 ```js
 const [activeIndex, setActiveIndex] = useState(0);
 return <Composite activeIndex={activeIndex} />;
 ```
 
+</ShowFor>
+<ShowFor packages={["solid"]}>
+
+```js
+const [activeIndex, setActiveIndex] = createSignal(0);
+return <Composite activeIndex={activeIndex} />;
+```
+
+</ShowFor>
 ### onNavigate
 
 default: `undefined{:js}`
@@ -147,7 +219,19 @@ default: `undefined{:js}`
 Called when the user navigates to a new item. Used to externally
 control the active item.
 
+<ShowFor packages={["react"]}>
+
 ```js
 const [activeIndex, setActiveIndex] = useState(0);
 return <Composite onNavigate={setActiveIndex} />;
 ```
+
+</ShowFor>
+<ShowFor packages={["solid"]}>
+
+```js
+const [activeIndex, setActiveIndex] = createSignal(0);
+return <Composite onNavigate={setActiveIndex} />;
+```
+
+</ShowFor>

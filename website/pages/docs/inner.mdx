@@ -32,6 +32,8 @@ There are two modules: `inner(){:js}` and
   This is not strictly required but is necessary to match the UX
   of the macOS-style select menu.
 
+<ShowFor packages={['react']}>
+
 ```js /inner/1-2 /useInnerOffset/1-2
 import {inner, useInnerOffset} from '@floating-ui/react';
 
@@ -68,6 +70,46 @@ interface Props extends DetectOverflowOptions {
 }
 ```
 
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js /inner/1-2 /useInnerOffset/1-2
+import {inner, useInnerOffset} from '@floating-ui/solid';
+
+// ...
+const {context} = useFloating({
+  middleware: [inner()],
+});
+
+const innerOffset = useInnerOffset(context);
+
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  innerOffset,
+]);
+```
+
+## Examples
+
+## inner Props
+
+```tsx
+interface Props extends DetectOverflowOptions {
+  listRef: Array<HTMLElement | null>;
+  index: number;
+  onFallbackChange?: null | ((fallback: boolean) => void);
+  offset?: number;
+  overflowRef?: [
+    get: SideObject,
+    set: SetStoreFunction<SideObject>,
+  ];
+  scrollRef?: MaybeAccessor<HTMLElement | null>;
+  minItemsVisible?: number;
+  referenceOverflowThreshold?: number;
+}
+```
+
+</ShowFor>
 ### listRef
 
 <Required />
@@ -78,7 +120,7 @@ An ref containing an array of list items inside the floating
 element.
 
 ```js
-const listRef = useRef([]);
+let listRef = [];
 
 inner({
   listRef,
@@ -94,6 +136,8 @@ default: `0{:js}`
 The index of the list item that should be anchored to the
 reference element.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [index, setIndex] = useState(0);
 
@@ -102,6 +146,19 @@ inner({
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [index, setIndex] = createSignal(0);
+
+inner({
+  index: index(),
+});
+```
+
+</ShowFor>
+
 ### overflowRef
 
 default: `undefined{:js}`
@@ -109,6 +166,8 @@ default: `undefined{:js}`
 A ref containing a `SideObject{:.class}`. This is used to
 determine the overflow of the floating element and is required
 when using the `useInnerOffset(){:js}` interaction hook.
+
+<ShowFor packages={['react']}>
 
 ```js
 const overflowRef = useRef({
@@ -122,6 +181,25 @@ inner({
   overflowRef,
 });
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```tsx
+import {createOverflowRef, inner} from '@floating-ui/solid';
+
+function App() {
+  const overflowRef = createOverflowRef();
+
+  inner({
+    overflowRef,
+  });
+
+  //...
+}
+```
+
+</ShowFor>
 
 ### scrollRef
 
@@ -183,6 +261,8 @@ A callback that is invoked with a boolean when positioning should
 enter fallback mode. You should fallback to middleware that
 create standard anchor positioning when `true{:js}`.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [fallback, setFallback] = useState(false);
 
@@ -191,7 +271,22 @@ inner({
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [fallback, setFallback] = createSignal(false);
+
+inner({
+  onFallbackChange: setFallback,
+});
+```
+
+</ShowFor>
+
 ## useInnerOffset Props
+
+<ShowFor packages={['react']}>
 
 ```js
 interface Props extends DetectOverflowOptions {
@@ -204,11 +299,31 @@ interface Props extends DetectOverflowOptions {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```tsx
+interface Props extends DetectOverflowOptions {
+  enabled?: MaybeAccessor<boolean>;
+  overflowRef: [
+    get: SideObject,
+    set: SetStoreFunction<SideObject>,
+  ];
+  scrollRef?: HTMLElement | null;
+  onChange: (
+    offset: number | ((offset: number) => number),
+  ) => void;
+}
+```
+
+</ShowFor>
 ### enabled
 
 default: `true{:js}`
 
 Conditionally enable/disable the hook.
+
+<ShowFor packages={['react']}>
 
 ```js
 useInnerOffset(context, {
@@ -216,6 +331,7 @@ useInnerOffset(context, {
 });
 ```
 
+</ShowFor>
 ### overflowRef
 
 <Required />

@@ -1,3 +1,4 @@
+import {access, MaybeAccessor} from '@solid-primitives/utils';
 import {
   Accessor,
   createEffect,
@@ -28,13 +29,13 @@ function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
 
 function useDelayUnmount(
   open: Accessor<boolean>,
-  durationMs: number,
+  durationMs: MaybeAccessor<number>,
 ): Accessor<boolean> {
   const [isMounted, setIsMounted] = createSignal(open());
 
   createEffect(() => {
     if (!open()) {
-      const timeout = setTimeout(() => setIsMounted(false), durationMs);
+      const timeout = setTimeout(() => setIsMounted(false), access(durationMs));
 
       onCleanup(() => clearTimeout(timeout));
     } else {
@@ -46,7 +47,7 @@ function useDelayUnmount(
 }
 
 export interface UseTransitionStatusProps {
-  duration?: number | Partial<{open: number; close: number}>;
+  duration?: MaybeAccessor<number | Partial<{open: number; close: number}>>;
 }
 
 type Status = 'unmounted' | 'initial' | 'open' | 'close';
@@ -68,8 +69,11 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   // } = context;
   const {duration = 250} = props;
 
-  const isNumberDuration = typeof duration === 'number';
-  const closeDuration = (isNumberDuration ? duration : duration.close) || 0;
+  const closeDuration = createMemo(() => {
+    const durationRef = access(duration);
+    const isNumberDuration = typeof durationRef === 'number';
+    return (isNumberDuration ? durationRef : durationRef.close) || 0;
+  });
 
   const [initiated, setInitiated] = createSignal(false);
   const [status, setStatus] = createSignal<Status>('unmounted');
@@ -147,7 +151,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   });
 
   const durations = createMemo(() => {
-    const duration = mergedProps.duration;
+    const duration = access(mergedProps.duration);
     const isNumberDuration = typeof duration === 'number';
     const openDuration = (isNumberDuration ? duration : duration?.open) || 0;
     const closeDuration = (isNumberDuration ? duration : duration?.close) || 0;

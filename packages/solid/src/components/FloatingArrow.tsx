@@ -1,9 +1,17 @@
 import {platform} from '@floating-ui/dom';
-import {Component, createMemo, createUniqueId, JSX, splitProps} from 'solid-js';
+import {
+  Accessor,
+  Component,
+  createMemo,
+  createUniqueId,
+  JSX,
+  mergeProps,
+  splitProps,
+} from 'solid-js';
 import parse from 'style-to-object';
 
 // import {useId} from '../hooks/useId';
-import type {Alignment, Side, UseFloatingReturn} from '../types';
+import type {Alignment, FloatingContext, Side} from '../types';
 
 export interface FloatingArrowProps {
   // Omit the original `refs` property from the context to avoid issues with
@@ -11,7 +19,7 @@ export interface FloatingArrowProps {
   /**
    * The floating context.
    */
-  context: UseFloatingReturn;
+  context: Accessor<FloatingContext>;
 
   /**
    * Width of the arrow.
@@ -86,7 +94,11 @@ export const FloatingArrow: Component<
       );
     }
   }
-  const [local, rest] = splitProps(props, [
+  const mergedProps = mergeProps(
+    {width: 14, height: 7, tipRadius: 0, strokeWidth: 0},
+    props,
+  );
+  const [local, rest] = splitProps(mergedProps, [
     'context',
     'width',
     'height',
@@ -106,13 +118,13 @@ export const FloatingArrow: Component<
 
     // eslint-disable-next-line solid/reactivity
     const {context, staticOffset} = local;
-    const placement = context.placement;
+    const placement = context().placement;
 
     const strokeWidth = (local.strokeWidth ?? 0) * 2;
     const width = local.width ?? 14;
     const height = local.height ?? 7;
     const tipRadius = local.tipRadius ?? 0;
-    const arrow = context.middlewareData.arrow;
+    const arrow = context().middlewareData.arrow;
     const style =
       typeof local.style === 'string' ? parse(local.style) : local.style ?? {};
 
@@ -122,7 +134,7 @@ export const FloatingArrow: Component<
     const svgY = ((height / 2) * tipRadius) / 4;
 
     const [side, alignment] = placement.split('-') as [Side, Alignment];
-    const isRTL = platform.isRTL(context.refs.floating() as HTMLElement); //we already return early
+    const isRTL = platform.isRTL(context().refs.floating() as HTMLElement); //we already return early
     const isCustomShape = !!local.d;
     const isVerticalSide = side === 'top' || side === 'bottom';
 

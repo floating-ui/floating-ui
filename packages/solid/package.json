@@ -89,6 +89,6 @@
     "solid-js": "^1.8.5",
     "vite": "^4.5.0",
     "vite-plugin-solid": "^2.7.0",
-    "vitest": "0.34.2"
+    "vitest": "^0.34.2"
   }
 }

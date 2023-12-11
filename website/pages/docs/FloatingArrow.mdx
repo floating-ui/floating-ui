@@ -7,10 +7,20 @@ import {Demo} from '../../lib/components/FloatingArrow';
 Renders a customizable `<svg>{:html}` pointing arrow triangle
 inside the floating element that gets automatically positioned.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {FloatingArrow} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingArrow} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -32,6 +42,8 @@ import {FloatingArrow} from '@floating-ui/react';
 - Pass the <WordHighlight id="a">context</WordHighlight> to the
   `<FloatingArrow />{:js}` component. This lets the component
   read the positioning data.
+
+<ShowFor packages={['react']}>
 
 ```js /context/1,3#a /arrowRef/#b
 import {FloatingArrow, arrow} from '@floating-ui/react';
@@ -57,9 +69,38 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/1,3#a /arrowRef/#b
+import {FloatingArrow, arrow} from '@floating-ui/solid';
+
+function App() {
+  let arrowRef = null;
+  const {refs, context, floatingStyles} = useFloating({
+    middleware: [
+      arrow({
+        element: arrowRef,
+      }),
+    ],
+  });
+
+  return (
+    <>
+      <div ref={refs.setReference} />
+      <div ref={refs.setFloating} style={floatingStyles()}>
+        <FloatingArrow ref={arrowRef} context={context} />
+      </div>
+    </>
+  );
+}
+```
+
+</ShowFor>
 The arrow will, by default, overlap the reference element. The
 `height{:.keyword}` of the arrow will offset it by the desired
 amount.
+<ShowFor packages={['react']}>
 
 ```js
 import {offset} from '@floating-ui/react';
@@ -72,12 +113,29 @@ useFloating({
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {offset} from '@floating-ui/solid';
+
+const ARROW_HEIGHT = 7;
+const GAP = 2;
+
+useFloating({
+  middleware: [offset(ARROW_HEIGHT + GAP)],
+});
+```
+
+</ShowFor>
 This does not take into account tip rounding or strokes.
 
 ## Props
 
 The arrow accepts all the props of an `<svg>{:js}` element, plus
 some additional props:
+
+<ShowFor packages={['react']}>
 
 ```ts
 interface Props extends React.SVGAttributes<SVGSVGElement> {
@@ -96,6 +154,27 @@ interface Props extends React.SVGAttributes<SVGSVGElement> {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```ts
+interface Props extends React.SVGAttributes<SVGSVGElement> {
+  context: Accessor<FloatingContext>;
+  width?: number;
+  height?: number;
+  tipRadius?: number;
+  staticOffset?: number | string | null;
+
+  // Inherited SVG props that are intercepted and passed
+  // to the <path>s
+  d?: string;
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+}
+```
+
+</ShowFor>
 ### ref
 
 <Required />
@@ -154,6 +233,8 @@ edge. Often desirable if the floating element is smaller than the
 reference element along the relevant axis and has an edge
 alignment (`'start'{:js}`/`'end'{:js}`).
 
+<ShowFor packages={['react']}>
+
 ```js
 <FloatingArrow
   ref={arrowRef}
@@ -162,6 +243,18 @@ alignment (`'start'{:js}`/`'end'{:js}`).
 />
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  staticOffset={isEdgeAlignedAndSmaller() ? '15%' : null}
+/>
+```
+
+</ShowFor>
 ### d
 
 default: `undefined{:js}` (use dynamic path)
@@ -226,6 +319,8 @@ The stroke (border) width of the arrow.
 `strokeWidth{:.keyword}` should still be manually specified as a
 prop.
 
+<ShowFor packages={['react']}>
+
 ```js
 <FloatingArrow
   ref={arrowRef}
@@ -237,6 +332,24 @@ prop.
   "
 />
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+<FloatingArrow
+  ref={arrowRef}
+  context={context}
+  class="
+    fill-white 
+    [&>path:first-of-type]:stroke-pink-500
+    [&>path:last-of-type]:stroke-white
+  "
+/>
+```
+
+</ShowFor>
 
 ## Scale transforms
 

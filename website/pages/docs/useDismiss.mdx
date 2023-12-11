@@ -6,10 +6,20 @@ Closes the floating element when a dismissal is requested — by
 default, when the user presses the `escape` key or outside of the
 floating element.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useDismiss} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useDismiss} from '@floating-ui/solid';
+```
+
+</ShowFor>
 </PageCard>
 
 ## Usage
@@ -21,6 +31,8 @@ To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
 `useInteractions(){:js}` array. The returned prop getters are
 then spread onto the elements for rendering.
+
+<ShowFor packages={['react']}>
 
 ```js {9-13} /context/
 function App() {
@@ -76,6 +88,69 @@ interface Props {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js {9-13} /context/
+function App() {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const {refs, floatingStyles, context} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  const dismiss = useDismiss(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    dismiss,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <Show when={isOpen()}>
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles()}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      </Show>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  enabled?: MaybeAccessor<boolean>;
+  escapeKey?: MaybeAccessor<boolean>;
+  referencePress?: MaybeAccessor<boolean>;
+  referencePressEvent?: MaybeAccessor<
+    'pointerdown' | 'mousedown' | 'click'
+  >;
+  outsidePress?:
+    | MaybeAccessor<boolean>
+    | ((event: MouseEvent) => boolean);
+  outsidePressEvent?: MaybeAccessor<
+    'pointerdown' | 'mousedown' | 'click'
+  >;
+  ancestorScroll?: MaybeAccessor<boolean>;
+  bubbles?: MaybeAccessor<
+    | boolean
+    | {escapeKey?: boolean; outsidePress?: boolean}
+    | null
+  >;
+}
+```
+
+</ShowFor>
 ### enabled
 
 default: `true{:js}`
@@ -163,7 +238,9 @@ useDismiss(context, {
 ```
 
 If you have another element, like a toast, that is rendered
-outside the floating element's React tree and don't want the
+outside the floating element's <ShowFor
+packages={['react']}>React</ShowFor><ShowFor
+packages={['solid']}>component</ShowFor> tree and don't want the
 floating element to close when pressing it, you can guard the
 check like so:
 
@@ -173,6 +250,8 @@ useDismiss(context, {
   outsidePress: (event) => !event.target.closest('.toast'),
 });
 ```
+
+<ShowFor packages={['react']}>
 
 ```js
 function App() {
@@ -188,6 +267,24 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+function App() {
+  // The toast is not inside the Dialog's component tree, so we
+  // need to add a guard to consider it a child of the Dialog
+  // to prevent the Dialog's outside press from closing it.
+  return (
+    <>
+      <Dialog />
+      <Toast class="toast" />
+    </>
+  );
+}
+```
+
+</ShowFor>
 ### outsidePressEvent
 
 default: `'pointerdown'{:js}`

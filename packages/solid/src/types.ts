@@ -73,10 +73,10 @@ export {
   size,
 } from '@floating-ui/dom';
 
-type Prettify<T> = {
+export type Prettify<T> = {
   [K in keyof T]: T[K];
   // eslint-disable-next-line @typescript-eslint/ban-types
-} & {};
+} & unknown;
 
 export type UseFloatingData = Prettify<
   ComputePositionReturn & {isPositioned: boolean}

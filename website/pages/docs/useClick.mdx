@@ -5,10 +5,20 @@
 Opens or closes the floating element when clicking the reference
 element.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useClick} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useClick} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -26,6 +36,8 @@ To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
 `useInteractions(){:js}` array. The returned prop getters are
 then spread onto the elements for rendering.
+
+<ShowFor packages={['react']}>
 
 ```js {9-13} /context/
 function App() {
@@ -72,6 +84,57 @@ interface Props {
   keyboardHandlers?: boolean;
 }
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js {9-13} /context/
+function App() {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const {refs, floatingStyles, context} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  const click = useClick(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    click,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <Show when={isOpen()}>
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles()}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      </Show>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  enabled?: MaybeAccessor<boolean>;
+  event?: MaybeAccessor<'click' | 'mousedown'>;
+  toggle?: MaybeAccessor<boolean>;
+  ignoreMouse?: MaybeAccessor<boolean>;
+  keyboardHandlers?: MaybeAccessor<boolean>;
+}
+```
+
+</ShowFor>
 
 ### enabled
 

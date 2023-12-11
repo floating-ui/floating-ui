@@ -5,10 +5,20 @@
 Portals the floating element into a given container element — by
 default, outside of the app root and into the body.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {FloatingPortal} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingPortal} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -16,6 +26,7 @@ import {FloatingPortal} from '@floating-ui/react';
 </ShowFor>
 
 </PageCard>
+<ShowFor packages={['react']}>
 
 ```js
 function Tooltip() {
@@ -29,6 +40,22 @@ function Tooltip() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+function Tooltip() {
+  return (
+    <Show when={isOpen()}>
+      <FloatingPortal>
+        <div>Floating element</div>
+      </FloatingPortal>
+    </Show>
+  );
+}
+```
+
+</ShowFor>
 Context is provided so that portals nested in one another are
 appended to their respective parent.
 
@@ -41,6 +68,8 @@ appended to their respective parent.
 
 ## Props
 
+<ShowFor packages={['react']}>
+
 ```ts
 interface Props {
   root?:
@@ -51,6 +80,20 @@ interface Props {
   preserveTabOrder?: boolean;
 }
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```ts
+interface Props {
+  root?: HTMLElement | null;
+  id?: string;
+  preserveTabOrder?: boolean;
+  useShadow?: boolean;
+}
+```
+
+</ShowFor>
 
 ### root
 
@@ -86,10 +129,26 @@ context based on the React tree instead of the DOM tree.
 <FloatingPortal preserveTabOrder={false} />
 ```
 
+<ShowFor packages={['solid']}>
+### useShadow
+
+default: `false{:js}`
+
+If set to true the portal will be placed in a Shadow Root for
+style isolation.
+[see SolidJS docs](https://docs.solidjs.com/references/api-reference/control-flow/Portal)
+
+```js
+<FloatingPortal useShadow={true} />
+```
+
+</ShowFor>
 ## `useFloatingPortalNode`
 
 Exposes the portal container node for custom use in other
 components.
+
+<ShowFor packages={['react']}>
 
 ```js
 function App() {
@@ -104,3 +163,23 @@ function App() {
   return null;
 }
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+function App() {
+  const portalNode = useFloatingPortalNode({
+    // Accepts `id` and `root` props
+  });
+
+  createEffect(() => {
+    portalNode()?.setAttribute('aria-labelledby', 'MyModal');
+  });
+
+  return portalNode();
+}
+```
+
+</ShowFor>

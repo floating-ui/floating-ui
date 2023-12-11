@@ -5,10 +5,20 @@
 Opens the floating element while hovering over the reference
 element, like CSS `:hover`.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useHover} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useHover} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -26,6 +36,8 @@ To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
 `useInteractions(){:js}` array. The returned prop getters are
 then spread onto the elements for rendering.
+
+<ShowFor packages={['react-dom','react']}>
 
 ```js {9-13} /context/
 function App() {
@@ -77,6 +89,61 @@ interface Props {
   handleClose?: null | HandleCloseFn;
 }
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js {9-13} /context/
+function App() {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const {refs, floatingStyles, context} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  const hover = useHover(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    hover,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <Show when={isOpen()}>
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles()}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      </Show>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  enabled?: MaybeAccessor<boolean>;
+  handleClose?: HandleCloseFn<RT>;
+  restMs?: MaybeAccessor<number>;
+  delay?: MaybeAccessor<
+    number | Partial<{open: number; close: number}>
+  >;
+  mouseOnly?: MaybeAccessor<boolean>;
+  move?: MaybeAccessor<boolean>;
+}
+```
+
+</ShowFor>
 
 ### enabled
 
@@ -185,6 +252,8 @@ This allows the user to move the cursor off the reference element
 and towards the floating element without it closing (e.g. it has
 interactive content inside).
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useHover, safePolygon} from '@floating-ui/react';
 
@@ -193,6 +262,21 @@ useHover(context, {
   handleClose: safePolygon(),
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+import {useHover, safePolygon} from '@floating-ui/solid';
+
+// ...
+useHover(context, {
+  handleClose: safePolygon(),
+});
+```
+
+</ShowFor>
 
 This handler runs on `mousemove{:.string}`.
 
@@ -314,11 +398,23 @@ available as a parent, so scrolling containers can negate the
 }
 ```
 
-```js
-<div className="scroll">
-  <div>
-    Content inside here will remain blocked without affecting the
-    scrolling parent.
+<ShowFor packages={['react']}>
+  ```js
+  <div className="scroll">
+    <div>
+      Content inside here will remain blocked without affecting
+      the scrolling parent.
+    </div>
   </div>
-</div>
-```
+  ```
+</ShowFor>
+<ShowFor packages={['solid']}>
+  ```js
+  <div class="scroll">
+    <div>
+      Content inside here will remain blocked without affecting
+      the scrolling parent.
+    </div>
+  </div>
+  ```
+</ShowFor>

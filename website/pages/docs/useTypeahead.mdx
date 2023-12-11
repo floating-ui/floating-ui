@@ -6,10 +6,20 @@ Provides a matching callback that can be used to focus an item as
 the user types, often used in tandem with
 `useListNavigation(){:js}`.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useTypeahead} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useTypeahead} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -39,6 +49,8 @@ then spread onto the elements for rendering.
 
 `useListNavigation(){:js}` is responsible for synchronizing the
 index for focus.
+
+<ShowFor packages={['react']}>
 
 ```js /context/
 function App() {
@@ -99,7 +111,7 @@ interface Props {
     | null
     | ((
         list: Array<string | null>,
-        typedString: string
+        typedString: string,
       ) => string | null | undefined);
   resetMs?: number;
   ignoreKeys?: Array<string>;
@@ -108,6 +120,77 @@ interface Props {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/
+function App() {
+  const [activeIndex, setActiveIndex] = createSignal(null);
+
+  const {refs, floatingStyles, context} = useFloating({
+    open: true,
+  });
+
+  const items = ['one', 'two', 'three'];
+
+  const typeahead = useTypeahead(context, {
+    listRef: () => items,
+    activeIndex,
+    onMatch: setActiveIndex,
+  });
+
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([typeahead]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <div
+        ref={refs.setFloating}
+        style={floatingStyles()}
+        {...getFloatingProps()}
+      >
+        <For each={items}>
+          {(item, index) => (
+            <div
+              // Make these elements focusable using a roving tabIndex.
+              tabIndex={activeIndex() === index() ? 0 : -1}
+              {...getItemProps()}
+            >
+              {item}
+            </div>
+          )}
+        </For>
+      </div>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  listRef: Accessor<Array<string | null>>;
+  activeIndex: MaybeAccessor<number | null>;
+  onMatch?: (index: number) => void;
+  onTypingChange?: (isTyping: boolean) => void;
+  enabled?: MaybeAccessor<boolean>;
+  findMatch?:
+    | null
+    | ((
+        list: Array<string | null>,
+        typedString: string,
+      ) => string | null | undefined);
+  resetMs?: MaybeAccessor<number>;
+  ignoreKeys?: MaybeAccessor<Array<string>>;
+  selectedIndex?: MaybeAccessor<number | null>;
+}
+```
+
+</ShowFor>
 ### listRef
 
 <Required />
@@ -116,6 +199,8 @@ default: empty list
 
 A ref which contains an array of strings whose indices match the
 HTML elements of the list.
+
+<ShowFor packages={['react']}>
 
 ```js
 const listRef = useRef(['one', 'two', 'three']);
@@ -144,6 +229,42 @@ const listContentRef = useRef([]);
 />
 ```
 
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+const listRef = ['one', 'two', 'three'];
+
+useTypeahead(context, {
+  listRef,
+});
+```
+
+You can derive these strings when assigning the node if the
+strings are not available up front:
+
+```js
+// Array<HTMLElement | null> for `useListNavigation`
+const listItemsRef = [];
+// Array<string | null> for `useTypeahead`
+const listContentRef = [];
+```
+
+```js {4}
+<li
+  ref={(node) => {
+    listItemsRef[index()] = node;
+    listContentRef[index()] = node?.textContent ?? null;
+  }}
+/>
+```
+
+<Notice>
+This example is only for static list items.
+If you require items to be added/removed dynamically see [`FloatingList`](/docs/FloatingList) .
+</Notice>
+</ShowFor>
 Disabled items can be represented by `null{:js}` values in the
 array at the relevant index, and will be skipped.
 
@@ -171,6 +292,8 @@ default: no-op
 Callback invoked with the matching index if found as the user
 types.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [isOpen, setIsOpen] = useState(false);
 const [activeIndex, setActiveIndex] = useState(null);
@@ -181,6 +304,20 @@ useTypeahead(context, {
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [isOpen, setIsOpen] = createSignal(false);
+const [activeIndex, setActiveIndex] = createSignal(null);
+const [selectedIndex, setSelectedIndex] = createSignal(null);
+
+useTypeahead(context, {
+  onMatch: () => (isOpen() ? setActiveIndex : setSelectedIndex),
+});
+```
+
+</ShowFor>
 ### enabled
 
 default: `true{:js}`
@@ -205,7 +342,7 @@ useTypeahead(context, {
   findMatch: (list, typedString) =>
     list.find(
       (itemString) =>
-        itemString?.toLowerCase().indexOf(typedString) === 0
+        itemString?.toLowerCase().indexOf(typedString) === 0,
     ),
 });
 ```
@@ -241,6 +378,8 @@ default: `null{:js}`
 
 The currently selected index, if available.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -249,6 +388,18 @@ useTypeahead(context, {
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [selectedIndex, setSelectedIndex] = createSignal(null);
+
+useTypeahead(context, {
+  selectedIndex,
+});
+```
+
+</ShowFor>
 ### onTypingChange
 
 default: no-op

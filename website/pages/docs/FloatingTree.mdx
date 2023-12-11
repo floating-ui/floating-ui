@@ -31,6 +31,8 @@ The following creates an infinitely nestable `<Popover>{:js}`
 component. Usage of this component must be wrapped in a single
 `<FloatingTree>{:js}` provider:
 
+<ShowFor packages={['react']}>
+
 ```js {10-11,15,25}
 import {
   FloatingTree,
@@ -84,6 +86,63 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js {10-11,15,25}
+import {
+  FloatingTree,
+  FloatingNode,
+  useFloatingNodeId,
+} from '@floating-ui/solid';
+
+function Popover(props) {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  // Subscribe this component to the <FloatingTree /> wrapper:
+  const nodeId = useFloatingNodeId();
+
+  // Pass the subscribed `nodeId` to useFloating:
+  const {refs, floatingStyles} = useFloating({
+    nodeId,
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  // Wrap the rendered floating element in a `<FloatingNode />`,
+  // passing in the subscribed `nodeId`:
+  return (
+    <>
+      <div ref={refs.setReference}>{props.children}</div>
+      <FloatingNode id={nodeId}>
+        <Show when={isOpen()}>
+          <FloatingPortal>
+            <div ref={refs.setFloating}>{props.content}</div>
+          </FloatingPortal>
+        </Show>
+      </FloatingNode>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <FloatingTree>
+      <Popover
+        content={
+          <Popover content="Nested content">
+            <button>Nested reference</button>
+          </Popover>
+        }
+      >
+        <button>Root reference</button>
+      </Popover>
+    </FloatingTree>
+  );
+}
+```
+
+</ShowFor>
 ## Hooks
 
 - `useFloatingNodeId(){:js}` subscribes the component to the tree
@@ -95,6 +154,8 @@ function App() {
   includes an event emitter to communicate across the tree
   components (`events{:.objectKey}`).
 
+<ShowFor packages={['react']}>
+
 ```js
 interface FloatingTreeType {
   nodesRef: React.MutableRefObject<Array<FloatingNodeType>>;
@@ -104,6 +165,19 @@ interface FloatingTreeType {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+interface FloatingTreeType {
+  nodesRef: Array<FloatingNodeType>;
+  events: FloatingEvents;
+  addNode(node: FloatingNodeType): void;
+  removeNode(node: FloatingNodeType): void;
+}
+```
+
+</ShowFor>
 ## Custom parent
 
 By default, the parent node is the closest
@@ -115,12 +189,16 @@ const nodeId = useFloatingNodeId(parentId);
 ```
 
 This is useful if you want to mark a sibling floating element in
-the React tree as the child of another sibling.
+the <ShowFor packages={['react']}>React</ShowFor><ShowFor
+packages={['solid']}>component</ShowFor> tree as the child of
+another sibling.
 
 ## FloatingTree wrapper
 
 You can use the following technique to avoid having the consumer
 specify the `<FloatingTree />{:js}` wrapper:
+
+<ShowFor packages={['react']}>
 
 ```js
 function PopoverComponent() {
@@ -143,3 +221,32 @@ export function Popover(props) {
   return <PopoverComponent {...props} />;
 }
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js
+function PopoverComponent() {
+  // Main logic as seen earlier
+}
+
+// This is the component the consumer uses
+export function Popover(props) {
+  const parentId = useFloatingParentNodeId();
+
+  // If it is a root, we wrap it with the tree
+  return (
+    <Show
+      when={parentId === null}
+      fallback={<PopoverComponent {...props} />}
+    >
+      <FloatingTree>
+        <PopoverComponent {...props} />
+      </FloatingTree>
+    </Show>
+  );
+}
+```
+
+</ShowFor>

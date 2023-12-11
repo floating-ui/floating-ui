@@ -6,10 +6,20 @@ Provides flexible modal or non-modal focus management for a
 floating element. Modal behavior is the default — focus is fully
 trapped inside the floating element while it is rendered.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {FloatingFocusManager} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingFocusManager} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -20,6 +30,8 @@ import {FloatingFocusManager} from '@floating-ui/react';
 
 This component should only be rendered when the floating element
 is open and directly wrap it.
+
+<ShowFor packages={['react']}>
 
 ```js /context/1,3
 function App() {
@@ -55,6 +67,44 @@ interface Props {
   closeOnFocusOut?: boolean;
 }
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/1,3
+function App() {
+  const {context} = useFloating();
+
+  return (
+    <>
+      {/* reference element */}
+      <Show when={isOpen()}>
+        <FloatingFocusManager context={context}>
+          {/* floating element */}
+        </FloatingFocusManager>
+      </Show>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  context: Accessor<FloatingContext>;
+  disabled?: boolean;
+  order?: Array<'reference' | 'floating' | 'content'>;
+  initialFocus?: number | HTMLElement | null;
+  returnFocus?: boolean;
+  guards?: boolean;
+  modal?: boolean;
+  visuallyHiddenDismiss?: boolean | string;
+  closeOnFocusOut?: boolean;
+}
+```
+
+</ShowFor>
 
 ### context
 

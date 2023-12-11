@@ -4,9 +4,20 @@
 Opens the floating element while the reference element has focus,
 like CSS `:focus`.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useFocus} from '@floating-ui/react';
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useFocus} from '@floating-ui/solid';
+```
+
+</ShowFor>
 
 <ShowFor packages={['react-dom']}>
 
@@ -25,6 +36,8 @@ To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
 `useInteractions(){:js}` array. The returned prop getters are
 then spread onto the elements for rendering.
+
+<ShowFor packages={['react-dom','react']}>
 
 ```js {9-13} /context/
 function App() {
@@ -68,6 +81,55 @@ interface Props {
   visibleOnly?: boolean;
 }
 ```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js {9-13} /context/
+function App() {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const {refs, floatingStyles, context} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  const focus = useFocus(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    focus,
+  ]);
+
+  return (
+    <>
+      <div ref={refs.setReference} {...getReferenceProps()}>
+        Reference element
+      </div>
+      <Show when={isOpen()}>
+        <div
+          ref={refs.setFloating}
+          style={floatingStyles()}
+          {...getFloatingProps()}
+        >
+          Floating element
+        </div>
+      </Show>
+    </>
+  );
+}
+```
+
+## Props
+
+```ts
+interface Props {
+  enabled?: MaybeAccessor<boolean>;
+  keyboardOnly?: MaybeAccessor<boolean>;
+}
+```
+
+</ShowFor>
 
 ### enabled
 

@@ -5,10 +5,20 @@
 Adds arrow key-based navigation of a list of items, either using
 real DOM focus or virtual focus.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useListNavigation} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useListNavigation} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -40,6 +50,8 @@ currently active (focused or highlighted).
 When using real DOM focus (default), the list items **must be
 focusable** and should have an appropriate `role{:.keyword}` prop
 based on the role of the floating element.
+
+<ShowFor packages={['react']}>
 
 ```js /context/
 function App() {
@@ -91,6 +103,63 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/
+function App() {
+  const [activeIndex, setActiveIndex] = createSignal(null)
+
+	const { refs, floatingStyles, context } = useFloating({
+		open: true,
+	})
+
+	const listRef: HTMLElement[] = []
+
+	const listNavigation = useListNavigation(context, {
+		listRef: () => listRef,
+		activeIndex,
+		onNavigate: setActiveIndex,
+	})
+
+	const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions([listNavigation])
+
+	const items = ["one", "two", "three"]
+
+	return (
+		<>
+			<div
+				ref={refs.setReference}
+				{...getReferenceProps()}
+			>
+				Reference element
+			</div>
+			<div
+				ref={refs.setFloating}
+				style={floatingStyles()}
+				{...getFloatingProps()}
+			>
+				<For each={items}>
+					{(item, index) => (
+						<div
+							// Make these elements focusable using a roving tabIndex.
+							tabIndex={activeIndex() === index() ? 0 : -1}
+							ref={(node) => {
+								listRef[index()] = node
+							}}
+							{...getItemProps()}
+						>
+							{item}
+						</div>
+					)}
+				</For>
+			</div>
+		</>
+	)
+}
+```
+
+</ShowFor>
 ## Examples
 
 - [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
@@ -133,6 +202,8 @@ start navigating with arrow keys).
 
 A roving tabIndex is the recommended strategy:
 
+<ShowFor packages={['react']}>
+
 ```js
 <div tabIndex={activeIndex === index ? 0 : -1} />
 ```
@@ -162,6 +233,42 @@ interface Props {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+<div tabIndex={activeIndex() === index() ? 0 : -1} />
+```
+
+## Props
+
+```ts
+interface Props {
+  listRef: MaybeAccessor<Array<HTMLElement | null>>;
+  activeIndex: MaybeAccessor<number | null>;
+  onNavigate?: (index: number | null) => void;
+  enabled?: MaybeAccessor<boolean>;
+  selectedIndex?: MaybeAccessor<number | null>;
+  focusItemOnOpen?: MaybeAccessor<boolean | 'auto'>;
+  focusItemOnHover?: MaybeAccessor<boolean>;
+  openOnArrowKeyDown?: MaybeAccessor<boolean>;
+  disabledIndices?: MaybeAccessor<Array<number>>;
+  allowEscape?: MaybeAccessor<boolean>;
+  loop?: MaybeAccessor<boolean>;
+  nested?: MaybeAccessor<boolean>;
+  rtl?: MaybeAccessor<boolean>;
+  virtual?: MaybeAccessor<boolean>;
+  orientation?: MaybeAccessor<
+    'vertical' | 'horizontal' | 'both'
+  >;
+  cols?: MaybeAccessor<number>;
+  scrollItemIntoView?: MaybeAccessor<
+    boolean | ScrollIntoViewOptions
+  >;
+}
+```
+
+</ShowFor>
 ### listRef
 
 <Required />
@@ -170,6 +277,8 @@ default: empty list
 
 A ref that holds an array of list items. You can assign each item
 in the array by its index like so:
+
+<ShowFor packages={['react']}>
 
 ```js
 const options = ['one', 'two', 'three'];
@@ -187,6 +296,29 @@ return options.map((option, index) => (
 ));
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const options = ['one', 'two', 'three'];
+const listRef = [];
+
+return (
+  <For each={options}>
+    {(option, index) => (
+      <li
+        ref={(node) => {
+          listRef[index()] = node;
+        }}
+      >
+        {option}
+      </li>
+    )}
+  </For>
+);
+```
+
+</ShowFor>
 ### activeIndex
 
 <Required />
@@ -196,6 +328,8 @@ default: `null{:js}`
 The currently active (i.e. highlighted or focused) item index,
 which may or may not be selected.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [activeIndex, setActiveIndex] = useState(null);
 
@@ -204,12 +338,26 @@ useListNavigation(context, {
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [activeIndex, setActiveIndex] = createSignal(null);
+
+useListNavigation(context, {
+  activeIndex,
+});
+```
+
+</ShowFor>
 ### onNavigate
 
 default: no-op
 
 Callback invoked when the user navigates, passed in the current
 `activeIndex{:.param}`.
+
+<ShowFor packages={['react']}>
 
 ```js
 const [activeIndex, setActiveIndex] = useState(null);
@@ -219,6 +367,18 @@ useListNavigation(context, {
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [activeIndex, setActiveIndex] = createSignal(null);
+
+useListNavigation(context, {
+  onNavigate: setActiveIndex,
+});
+```
+
+</ShowFor>
 ### enabled
 
 default: `true{:js}`
@@ -240,6 +400,8 @@ active.
 
 This is the item shown in the trigger button/input.
 
+<ShowFor packages={['react']}>
+
 ```js
 const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -248,6 +410,18 @@ useListNavigation(context, {
 });
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+const [selectedIndex, setSelectedIndex] = createSignal(null);
+
+useListNavigation(context, {
+  selectedIndex,
+});
+```
+
+</ShowFor>
 ### loop
 
 default: `false{:js}`
@@ -311,6 +485,8 @@ useListNavigation(context, {
 
 ### virtualItemRef
 
+<ShowFor packages={['react']}>
+
 default: `undefined{:js}`
 
 When using virtual focus management, this holds a ref to the
@@ -332,6 +508,13 @@ useListNavigation(context, {
   [`FloatingTree`](/docs/FloatingTree) setup so that
   communication of nested floating elements can occur.
 </Notice>
+
+</ShowFor>
+<ShowFor packages={["solid"]}>
+<Notice title="Info">
+ Currenttly not available for Solid.
+</Notice>
+</ShowFor>
 
 ### allowEscape
 

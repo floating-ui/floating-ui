@@ -1,4 +1,5 @@
 export {arrow} from './arrow';
+export * from './components/Composite';
 export {FloatingArrow} from './components/FloatingArrow';
 export * from './components/FloatingDelayGroup';
 export {FloatingFocusManager} from './components/FloatingFocusManager';
@@ -27,6 +28,7 @@ export {usePosition} from './hooks/usePosition';
 export {useRole} from './hooks/useRole';
 export * from './hooks/useTransition';
 export {useTypeahead} from './hooks/useTypeahead';
+export {createOverflowRef, inner, useInnerOffset} from './inner';
 export {safePolygon} from './safePolygon';
 export * from './types';
 export {

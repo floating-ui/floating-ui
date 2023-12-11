@@ -1,0 +1,328 @@
+import {ReactSelect} from '../../lib/components/PackageSelect';
+
+<PageCard>
+
+# Solid
+
+A complete toolkit to position and create interactions for
+floating elements with Solid.
+
+Provides primitives to create components for tooltips, popovers,
+dropdown menus, hover cards, modal dialogs, select menus,
+comboboxes, and more.
+
+```bash
+npm install @floating-ui/solid
+pnpm add @floating-ui/solid
+yarn add @floating-ui/solid
+```
+
+</PageCard>
+
+Choose the package you installed for better docs.
+
+<ReactSelect />
+
+## Usage
+
+Floating UI's usage can be broken down into two disparate parts:
+
+- [Positioning](/docs/solid#positioning)
+- [Interactions](/docs/solid#interactions)
+
+## Positioning
+
+`useFloating(){:js}` is the main hook of each package.
+
+```js
+import {useFloating} from '@floating-ui/solid';
+
+function App() {
+  const {refs, floatingStyles} = useFloating();
+  return (
+    <>
+      <button ref={refs.setReference}>Button</button>
+      <div ref={refs.setFloating} style={floatingStyles()}>
+        Tooltip
+      </div>
+    </>
+  );
+}
+```
+
+This will position the floating `Tooltip` element at the **bottom
+center** of the `Button` element by default.
+
+- `refs.setReference{:js}` is the reference (or anchor) element
+  that is being referred to for positioning.
+- `refs.setFloating{:js}` is the floating element that is being
+  positioned relative to the reference element.
+- `floatingStyles{:js}` is an object of positioning styles to
+  apply to the floating element's `style{:.keyword}` prop.
+
+The refs are functions to make them **reactive** — this ensures
+changes to the reference or floating elements, such as with
+conditional rendering, are handled correctly by updating the
+position.
+
+## Anchoring
+
+To ensure the floating element remains anchored to the reference
+element, such as when scrolling or resizing, pass
+[`autoUpdate`](/docs/autoUpdate) to the
+`whileElementsMounted{:.objectKey}` option:
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/solid';
+
+const {refs, floatingStyles} = useFloating({
+  whileElementsMounted: autoUpdate,
+});
+```
+
+<Notice type="warning">
+  Only use this option if your floating element is _conditionally
+  rendered_, not hidden with CSS. Use an effect to call and clean
+  up `autoUpdate` in the latter scenario.
+</Notice>
+
+## API docs
+
+Visit the full [`useFloating` API docs](/docs/useFloating) for
+detailed information about customizing the positioning of
+floating elements.
+
+- [Externally pass elements](/docs/useFloating#elements)
+- [Options](/docs/useFloating#options)
+- [Return value](/docs/useFloating#return-value)
+
+## Narrow reference type
+
+Due to [virtual elements](/docs/virtual-elements), you may need
+to narrow the type when performing DOM operations on the ref:
+
+```ts
+const {refs} = useFloating<HTMLButtonElement>();
+// refs.domReference is now of type HTMLButtonElement
+```
+
+The position reference
+[can be separated](/docs/solid#changing-the-positioning-reference-while-retaining-events)
+from the DOM (events) reference.
+
+## Interactions
+
+{/* prettier-ignore */}
+To add interactions, such as the ability to only show a floating
+element while hovering over its reference element, the hook must
+first accept the following two options:
+
+- `open{:.objectKey}` — a reactive
+  <WordHighlight id="a">boolean</WordHighlight> that represents whether
+  the floating element is currently rendered.
+- `onOpenChange{:.objectKey}` — an <WordHighlight id="b">event
+  callback</WordHighlight> invoked when the open boolean state
+  should change.
+
+```js /isOpen/#a /setIsOpen/#b
+import {useFloating} from '@floating-ui/solid';
+
+function App() {
+  const [isOpen, setIsOpen] = createSignal(false);
+
+  const {refs, floatingStyles} = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+  });
+
+  return (
+    <>
+      <button ref={refs.setReference}>Button</button>
+      <Show when={isOpen()}>
+        <div ref={refs.setFloating} style={floatingStyles()}>
+          Tooltip
+        </div>
+      </Show>
+    </>
+  );
+}
+```
+
+Note that floating components do not always require "anchor
+positioning", so `floatingStyles` can be ignored.
+
+## Hooks
+
+Interaction hooks allow the open state to change, among other
+functionality. Each interaction hook accepts the
+`context{:.const}` object which gets returned from
+`useFloating(){:js}` as their first argument:
+
+```js /context/
+import {
+  useFloating,
+  useInteractions,
+  useHover,
+  useFocus,
+} from '@floating-ui/solid';
+
+// Inside your component
+const {refs, context} = useFloating({
+  open: isOpen,
+  onOpenChange: setIsOpen,
+});
+
+const hover = useHover(context);
+const focus = useFocus(context);
+
+const {getReferenceProps, getFloatingProps} = useInteractions([
+  hover,
+  focus,
+]);
+```
+
+The `useHover(){:js}` and `useFocus(){:js}` hooks set up effects
+and return event handler props to change the open state, the
+latter of which get merged by `useInteractions(){:js}` for
+rendering.
+
+This API enables each of the hooks to be fully tree-shakeable and
+opt-in. The navigation bar on the left explains them in detail.
+
+### Prop getters
+
+The prop getters are used to add event handlers returned from the
+interaction hooks, among other functionality, to the reference
+and floating elements. When called, they return an object of
+props like `onFocus{:.keyword}`.
+
+```js
+<>
+  <button ref={refs.setReference} {...getReferenceProps()}>
+    My button
+  </button>
+  <div
+    ref={refs.setFloating}
+    style={floatingStyles()}
+    {...getFloatingProps()}
+  >
+    My tooltip
+  </div>
+</>
+```
+
+## Open event callback
+
+The `onOpenChange{:.function}` event callback is invoked with an
+optionally-defined <WordHighlight id='a'>event
+object</WordHighlight>
+{/* and <WordHighlight id="b">reason string</WordHighlight> as the second and third parameter: */}
+
+```js /event/1#a /reason/1#b
+useFloating({
+  onOpenChange(isOpen, event) {
+    setIsOpen(isOpen);
+    event && console.log(event);
+  },
+});
+```
+
+Note that `onOpenChange{:.function}` is _not_ called if you
+manually changed the open state via the `setIsOpen(){:js}`
+setter. You can derive the event yourself in this case anyway.
+
+## Changing the positioning reference while retaining events
+
+- `refs.setReference{:js}` element is **both** the events and
+  position reference by default.
+- `refs.setPositionReference{:js}` allows you to separate the
+  position to another element (either real or virtual).
+
+```js /refs.setPositionReference/
+const {refs} = useFloating();
+
+return (
+  <>
+    <button ref={refs.setReference} {...getReferenceProps()}>
+      Event reference
+    </button>
+    <button ref={refs.setPositionReference}>
+      Position reference
+    </button>
+  </>
+);
+```
+
+{/* [View on CodeSandbox](https://codesandbox.io/s/xenodochial-butterfly-1xtup0?file=/src/App.tsx) */}
+
+## Multiple floating elements on a single reference element
+
+```js
+import {mergeRefs} from '@solid-primitives/refs';
+```
+
+Refs can be merged with the
+[`mergeRefs`](https://github.com/solidjs-community/solid-primitives/tree/main/packages/refs#mergerefs)
+hook, and props can be merged by calling one of the getters
+inside of the other:
+
+```js {11-14}
+const {refs: tooltipRefs} = useFloating();
+const {refs: menuRefs} = useFloating();
+
+const {getReferenceProps: getTooltipReferenceProps} =
+  useInteractions([]);
+const {getReferenceProps: getMenuReferenceProps} =
+  useInteractions([]);
+
+return (
+  <button
+    ref={mergeRefs((el) => {
+      tooltipRefs.setReference(el);
+      menuRefs.setReference(el);
+    })}
+    {...getTooltipReferenceProps(getMenuReferenceProps())}
+  >
+    Common reference
+  </button>
+);
+```
+
+{/* [View on CodeSandbox](https://codesandbox.io/s/trusting-mendeleev-49qn11?file=/src/App.tsx) */}
+
+## Disabled elements
+
+Disabled elements don't fire events, so tooltips attached to
+disabled buttons don't show. Avoid using the
+`disabled{:.keyword}` prop, and make the button visually disabled
+instead. This ensures you won't need any wrapper tags and makes
+the tooltip accessible to all users.
+
+{/* [View on CodeSandbox](https://codesandbox.io/s/focused-feistel-0q6v43?file=/src/App.tsx) */}
+
+## Reactivity
+
+As Solid will run the hooks only once, most of the props you can
+pass to the hooks are declared as MaybeAccessor. A MaybeAccessor
+can be a function (reactive prop) or a static value.
+
+```ts
+interface useHookProps {
+	enabled: MaybeAccessor<boolean>
+	timeOut: MaybeAccessor<number>
+	//...
+}
+
+const [isEnabled,setIsEnabled] = createSignal(false);
+const [isNested,setIsNested] = createSignal(false);
+
+useHook({
+	enabled: true, //not reactive
+	enabled: isEnabled(), //not reactive
+	enabled: isEnabled, //reactive
+	enabled: isNested() && isEnabled(), //not reactive,
+	enabled: () => isNested() && isEnabled() //reactive
+	timeOut: isNested() ? 100 : 50, //not reactive
+	timeOut: ()=> isNested() ? 100 : 50, //reactive
+})
+```

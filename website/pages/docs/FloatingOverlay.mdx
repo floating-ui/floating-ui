@@ -5,10 +5,20 @@
 Provides base styling for a fixed overlay element to dim content
 or block pointer events behind a floating element.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {FloatingOverlay} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingOverlay} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -52,7 +62,9 @@ and handles horizontal scrolling.
 </FloatingOverlay>
 ```
 
-If you need a more advanced solution, or find enabling this prop
-causes unwanted side effects in your application,
-[react-remove-scroll](https://www.npmjs.com/package/react-remove-scroll)
-is a solid solution.
+<ShowFor packages={['react']}>
+  If you need a more advanced solution, or find enabling this
+  prop causes unwanted side effects in your application,
+  [react-remove-scroll](https://www.npmjs.com/package/react-remove-scroll)
+  is a solid solution.
+</ShowFor>

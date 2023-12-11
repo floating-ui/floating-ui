@@ -6,12 +6,26 @@ Provides the ability to apply CSS transitions to a floating
 element, including correct handling of "placement-aware"
 transitions.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {
   useTransitionStyles,
   useTransitionStatus,
 } from '@floating-ui/react';
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {
+  useTransitionStyles,
+  useTransitionStatus,
+} from '@floating-ui/solid';
+```
+
+</ShowFor>
 
 <ShowFor packages={['react-dom']}>
 
@@ -42,23 +56,46 @@ into the `style{:.keyword}` prop for a floating element.
 
 <details>
   <summary>View example</summary>
-  ```js
-  <div ref={refs.setFloating} style={floatingStyles}>
-    <div
-      style={{
-        // Transition styles
-        ...styles,
-      }}
-    >
-      Content
-    </div>
+<ShowFor packages={['react']}>
+
+```js
+<div ref={refs.setFloating} style={floatingStyles}>
+  <div
+    style={{
+      // Transition styles
+      ...styles,
+    }}
+  >
+    Content
   </div>
-  ```
+</div>
+```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+<div ref={refs.setFloating} style={floatingStyles()}>
+  <div
+    style={{
+      // Transition styles
+      ...styles,
+    }}
+  >
+    Content
+  </div>
+</div>
+```
+
+</ShowFor>
+
 </details>
 </Notice>
 
 This hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
+
+<ShowFor packages={['react']}>
 
 ```js /context/
 function App() {
@@ -79,6 +116,31 @@ function App() {
   );
 }
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/
+function App() {
+  const {context} = useFloating();
+  const {isMounted, styles} = useTransitionStyles(context);
+
+  return (
+    <Show when={isMounted()}>
+      <div
+        style={{
+          // Transition styles
+          ...styles,
+        }}
+      >
+        Tooltip
+      </div>
+    </Show>
+  );
+}
+```
+
+</ShowFor>
 
 - `isMounted{:.const}` is a boolean that determines whether or
   not the floating element is mounted on the screen, which allows
@@ -271,6 +333,8 @@ unmounted -> initial -> open -> close -> unmounted
 This hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
 
+<ShowFor packages={['react']}>
+
 ```js /context/
 function App() {
   const {context, placement} = useFloating();
@@ -286,6 +350,25 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /context/
+function App() {
+  const {context, placement} = useFloating();
+  const {isMounted, status} = useTransitionStatus(context);
+
+  return (
+    <Show when={isMounted()}>
+      <div id="floating" data-status={status}>
+        Tooltip
+      </div>
+    </Show>
+  );
+}
+```
+
+</ShowFor>
 - `isMounted{:.const}` is a boolean that determines whether or
   not the floating element is mounted on the screen, which allows
   for unmounting animations to play. This replaces the
@@ -354,6 +437,8 @@ option passed to the hook.
 
 ### Placement-aware transitions
 
+<ShowFor packages={['react']}>
+
 ```js /placement/
 const {context, placement} = useFloating();
 const {isMounted, status} = useTransitionStatus(context);
@@ -370,6 +455,28 @@ return (
   )
 );
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /placement/
+const {context, placement} = useFloating();
+const {isMounted, status} = useTransitionStatus(context);
+
+return (
+  <Show when={isMounted()}>
+    <div
+      id="floating"
+      data-placement={placement}
+      data-status={status}
+    >
+      Tooltip
+    </div>
+  </Show>
+);
+```
+
+</ShowFor>
 
 ```css
 #floating {

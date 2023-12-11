@@ -48,7 +48,7 @@ const PortalContext = createContext<null | {
   setRefs: Setter<Partial<PortalRefs>>;
 }>(null);
 
-export function useFloatingPortalNode(props: {
+export function useFloatingPortalNode(props?: {
   id?: string;
   root?: HTMLElement | null;
 }) {
@@ -58,8 +58,8 @@ export function useFloatingPortalNode(props: {
   const portalContext = usePortalContext();
 
   const data = createMemo(() => ({
-    id: props.id,
-    root: props.root,
+    id: props?.id,
+    root: props?.root,
     portalContext,
     uniqueId,
   }));
@@ -140,7 +140,10 @@ interface FloatingPortalProps {
 export function FloatingPortal(props: FloatingPortalProps): JSX.Element {
   const [focusManagerState, setFocusManagerState] =
     createSignal<FocusManagerState>(null);
-  const mergedProps = mergeProps({preserveTabOrder: true}, props);
+  const mergedProps = mergeProps(
+    {preserveTabOrder: true, useShadow: false},
+    props,
+  );
   const {preserveTabOrder} = destructure(mergedProps);
   const portalNode = useFloatingPortalNode({
     id: mergedProps.id,

@@ -73,7 +73,8 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
     const currentError = error();
     if (currentError) {
       // throw currentError.value;
-      process.env.NODE_ENV !== 'production' && console.warn(currentError.value);
+      process.env.NODE_ENV === 'development' &&
+        console.warn(currentError.value);
     }
   });
 
@@ -106,10 +107,10 @@ export function usePosition<R extends ReferenceElement = ReferenceElement>(
         },
         // eslint-disable-next-line solid/reactivity
         (err) => {
-          console.log({
-            floating: floating()?.id,
-            currentFloating: currentFloating.id,
-          });
+          // console.log({
+          //   floating: floating()?.id,
+          //   currentFloating: currentFloating.id,
+          // });
           setError(err);
         },
       );

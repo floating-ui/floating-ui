@@ -28,6 +28,8 @@ elements to add their functionality.
 from interaction hooks, merging their event handlers into prop
 getters used for rendering:
 
+<ShowFor packages={['react']}>
+
 ```js /hover/ /focus/
 import {
   useFloating,
@@ -49,32 +51,80 @@ function App() {
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /hover/ /focus/
+import {
+  useFloating,
+  useHover,
+  useFocus,
+  useInteractions,
+} from '@floating-ui/solid';
+
+function App() {
+  const {context} = useFloating();
+
+  const hover = useHover(context);
+  const focus = useFocus(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    hover,
+    focus,
+  ]);
+}
+```
+
+</ShowFor>
 <Notice>
   You don't need to conditionally pass values into the interactions array if
   you don't want one of the interactions to be enabled.
-  Instead, use the `enabled{:.objectKey}` option that each hook has -- 
+  Instead, use the `enabled{:.objectKey}` option that each hook has --
   it simultaneously disables all effects _and_ event handler props.
 </Notice>
 
 ## Return value
 
+<ShowFor packages={['react']}>
+
 ```ts
 interface UseInteractionsReturn {
   getReferenceProps(
-    userProps?: React.HTMLProps<Element>
+    userProps?: React.HTMLProps<Element>,
   ): Record<string, unknown>;
   getFloatingProps(
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ): Record<string, unknown>;
   getItemProps(
-    userProps?: React.HTMLProps<HTMLElement>
+    userProps?: React.HTMLProps<HTMLElement>,
   ): Record<string, unknown>;
 }
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```ts
+interface UseInteractionsReturn {
+  getReferenceProps(
+    userProps?: JSX.HTMLAttributes<Element>,
+  ): Record<string, unknown>;
+  getFloatingProps(
+    userProps?: JSX.HTMLAttributes<HTMLElement>,
+  ): Record<string, unknown>;
+  getItemProps(
+    userProps?: JSX.HTMLAttributes<HTMLElement>,
+  ): Record<string, unknown>;
+}
+```
+
+</ShowFor>
+
 The hook returns two core prop getters, one for the reference
 element and one for the floating element. These prop getters
 should be spread onto the elements:
+
+<ShowFor packages={['react']}>
 
 ```js
 <>
@@ -87,6 +137,21 @@ should be spread onto the elements:
 </>
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+<>
+  <div ref={refs.setReference} {...getReferenceProps()} />
+  <div
+    ref={refs.setFloating}
+    style={floatingStyles()}
+    {...getFloatingProps()}
+  />
+</>
+```
+
+</ShowFor>
 All event handlers you pass in should be done so through the prop
 getter, not the element itself:
 

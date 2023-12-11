@@ -6,10 +6,20 @@ Provides context for a group of floating elements that should
 share a `delay{:.objectKey}` which temporarily becomes `1{:js}`
 ms after the first floating element of the group opens.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {FloatingDelayGroup} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingDelayGroup} from '@floating-ui/solid';
+```
+
+</ShowFor>
 </PageCard>
 
 This allows higher discovery of floating elements when they have
@@ -36,7 +46,10 @@ function App() {
 
 ## Example
 
-- [Tooltip delay group](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
+<ShowFor packages={['react']}>
+  - [Tooltip delay
+  group](https://codesandbox.io/s/clever-aryabhata-yq3xyc?file=/src/Group.tsx)
+</ShowFor>
 
 ## Hooks
 
@@ -52,12 +65,14 @@ These hooks are used:
   usually unique in a given group, but you could use the `useId(){:js}` hook.
 </Notice>
 
+<ShowFor packages={['solid']}>
+
 ```js {2,13,20-23} /delay/
 function Tooltip() {
   const {delay} = useDelayGroupContext();
-  const id = useId();
+  const id = createUniqueId();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = createSignal(false);
 
   const {context} = useFloating({
     open: isOpen,
@@ -81,6 +96,7 @@ function Tooltip() {
 }
 ```
 
+</ShowFor>
 ## Props
 
 ```ts
@@ -132,6 +148,8 @@ delay is currently in the instant phase. This allows you to make
 transitions instant/faster. See
 [`useTransitionStyles`](/docs/useTransition#usetransitionstyles).
 
+<ShowFor packages={['react']}>
+
 ```js /isInstantPhase/
 const {currentId, isInstantPhase} = useDelayGroupContext();
 const id = useId();
@@ -155,3 +173,33 @@ const {isMounted, styles} = useTransitionStyles(context, {
   // ...
 });
 ```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js /isInstantPhase/
+const {currentId, isInstantPhase} = useDelayGroupContext();
+const id = createUniqueId();
+
+useDelayGroup(context, {
+  id,
+});
+
+const instantDuration = 0;
+const duration = 200;
+
+const {isMounted, styles} = useTransitionStyles(context, {
+  duration: () =>
+    isInstantPhase
+      ? {
+          open: instantDuration,
+          // `id` is this component's `id`
+          // `currentId` is the current group's `id`
+          close: currentId === id ? duration : instantDuration,
+        }
+      : duration,
+  // ...
+});
+```
+
+</ShowFor>

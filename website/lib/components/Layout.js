@@ -44,6 +44,7 @@ import Platform from '../../public/icons/platform.svg';
 import React from '../../public/icons/react.png';
 import Shift from '../../public/icons/shift.svg';
 import Size from '../../public/icons/size.svg';
+import Solid from '../../public/icons/solid.svg';
 import Tutorial from '../../public/icons/tutorial.svg';
 import UseClick from '../../public/icons/useClick.svg';
 import UseClientPoint from '../../public/icons/useClientPoint.svg';
@@ -353,6 +354,11 @@ const nav = [
     hide: true,
   },
   {
+    url: '/docs/solid',
+    title: 'Solid',
+    icon: Solid,
+  },
+  {
     url: '/docs/useFloating',
     title: 'useFloating',
     depth: 1,
@@ -424,7 +430,7 @@ const components = {
   h6: (props) => <Heading level={6} {...props} />,
   a(props) {
     const className =
-      'transition-colors inline-flex items-center border-none underline ' +
+      'inline-flex items-center underline transition-colors border-none ' +
       'underline-offset-4 text-rose-600 dark:text-rose-300 hover:text-gray-1000 dark:hover:text-gray-50 ' +
       'decoration-rose-500/80 dark:decoration-rose-300/70 ' +
       'hover:decoration-gray-1000 dark:hover:decoration-gray-50 decoration-1 group';
@@ -446,7 +452,7 @@ const components = {
       >
         <span>{props.children}</span>
         <ExternalLink
-          className="ml-1 h-5 w-5 text-gray-800 dark:text-gray-400"
+          className="w-5 h-5 ml-1 text-gray-800 dark:text-gray-400"
           aria-label="Opens in new tab"
         />
       </a>
@@ -484,11 +490,11 @@ function SideNavList({anchors, hash}) {
   });
 
   return (
-    <ul className="overflow-hidden px-2 pt-1 pb-8">
+    <ul className="px-2 pt-1 pb-8 overflow-hidden">
       {isMounted && (
         <FloatingPortalComponent>
           <div
-            className="h-2 w-2 rounded-full bg-gradient-to-br from-red-500 to-pink-500 shadow"
+            className="w-2 h-2 rounded-full shadow bg-gradient-to-br from-red-500 to-pink-500"
             ref={refs.setFloating}
             style={{...floatingStyles, ...styles}}
           />
@@ -750,12 +756,12 @@ export default function Layout({children, className}) {
                 }}
               >
                 <Link href="/">
-                  <Logo className="mx-auto mt-2 mb-1 h-28 origin-top" />
+                  <Logo className="mx-auto mt-2 mb-1 origin-top h-28" />
                 </Link>
                 {navOpen && (
                   <button
                     onClick={() => setNavOpen(false)}
-                    className="absolute top-2 right-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 text-3xl text-gray-900 shadow md:hidden"
+                    className="absolute z-10 flex items-center justify-center w-10 h-10 text-3xl text-gray-900 rounded-full shadow top-2 right-2 bg-gray-50 md:hidden"
                     aria-label="Close"
                   >
                     <span className="relative top-[-1px]">
@@ -764,7 +770,7 @@ export default function Layout({children, className}) {
                   </button>
                 )}
               </div>
-              <ul className="mt-4 px-6 text-lg xl:px-10">
+              <ul className="px-6 mt-4 text-lg xl:px-10">
                 {nav.map(
                   ({url, title, icon: Icon, depth, hide}) =>
                     !hide && (
@@ -804,11 +810,11 @@ export default function Layout({children, className}) {
                             },
                           )}
                         >
-                          <span className="flex w-full items-center gap-4 py-1">
+                          <span className="flex items-center w-full gap-4 py-1">
                             {typeof Icon === 'string' ? (
                               <img
                                 src={Icon}
-                                className="h-8 w-8"
+                                className="w-8 h-8"
                                 aria-hidden
                               />
                             ) : typeof Icon === 'function' ? (
@@ -841,30 +847,30 @@ export default function Layout({children, className}) {
             </div>
           </nav>
         </NavWrapper>
-        <nav className="fixed top-0 z-20 w-full bg-gray-75/90 px-4 py-3 backdrop-blur-lg backdrop-saturate-150 dark:bg-gray-900/90 sm:px-6 md:py-4 lg:px-8 lg:py-2">
+        <nav className="fixed top-0 z-20 w-full px-4 py-3 bg-gray-75/90 backdrop-blur-lg backdrop-saturate-150 dark:bg-gray-900/90 sm:px-6 md:py-4 lg:px-8 lg:py-2">
           <div className="flex items-center justify-between">
             <button
               ref={refs.setReference}
               aria-label="Open menu"
               aria-expanded={navOpen}
-              className="block rounded bg-gray-50 p-3 text-gray-900 shadow md:mt-0 md:hidden"
+              className="block p-3 text-gray-900 rounded shadow bg-gray-50 md:mt-0 md:hidden"
               {...getReferenceProps()}
             >
               <Menu />
             </button>
-            <div className="ml-4 flex min-w-0 items-center justify-end gap-4 md:ml-0 md:mr-0 md:flex-row md:justify-start md:pl-0">
+            <div className="flex items-center justify-end min-w-0 gap-4 ml-4 md:ml-0 md:mr-0 md:flex-row md:justify-start md:pl-0">
               <DocSearch
                 appId="0E85PIAI2P"
                 indexName="floating-ui"
                 apiKey="51e39a76760916075e22d9b217f4434f"
               />
               <a
-                className="hidden items-center gap-1 md:flex"
+                className="items-center hidden gap-1 md:flex"
                 href="https://github.com/floating-ui/floating-ui"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <div className="grid h-6 w-6 place-items-center rounded-full text-black dark:text-gray-200">
+                <div className="grid w-6 h-6 text-black rounded-full place-items-center dark:text-gray-200">
                   <GitHub size={16} />
                 </div>
                 GitHub
@@ -877,7 +883,7 @@ export default function Layout({children, className}) {
           <div id="floating-container" />
           <aside className="fixed right-0 top-0 hidden min-w-[15rem] max-w-[15rem] overflow-y-auto pt-12 [max-height:100vh] xl:block 2xl:min-w-[18rem] 2xl:max-w-[20rem]">
             <nav>
-              <h4 className="text-md ml-6 mb-1 text-gray-500">
+              <h4 className="mb-1 ml-6 text-gray-500 text-md">
                 On this page
               </h4>
               <SideNavList

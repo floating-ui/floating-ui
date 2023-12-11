@@ -43,6 +43,7 @@ const initialPackages = [
   {name: 'react-dom', version: 'latest'},
   {name: 'vue', version: 'latest'},
   {name: 'react-native', version: 'latest'},
+  {name: 'solid', version: 'latest'},
 ];
 
 const options = [
@@ -52,6 +53,7 @@ const options = [
   'React DOM (@floating-ui/react-dom)',
   'Vue (@floating-ui/vue)',
   'React Native (@floating-ui/react-native)',
+  'Solid (@floating-ui/solid)',
 ];
 
 const optionsLabelMap = {
@@ -61,6 +63,7 @@ const optionsLabelMap = {
   'React DOM (@floating-ui/react-dom)': 'React DOM',
   'Vue (@floating-ui/vue)': 'Vue',
   'React Native (@floating-ui/react-native)': 'React Native',
+  'Solid (@floating-ui/solid)': 'Solid',
 };
 
 const optionsPkgMap = {
@@ -70,6 +73,7 @@ const optionsPkgMap = {
   'React DOM (@floating-ui/react-dom)': 'react-dom',
   'Vue (@floating-ui/vue)': 'vue',
   'React Native (@floating-ui/react-native)': 'react-native',
+  'Solid (@floating-ui/solid)': 'solid',
 };
 
 const packageOptions = [
@@ -79,6 +83,7 @@ const packageOptions = [
   'react-dom',
   'vue',
   'react-native',
+  'solid',
 ];
 
 const ReactPackageButton = forwardRef(
@@ -101,12 +106,12 @@ const ReactPackageButton = forwardRef(
         {props.children}
       </button>
     );
-  }
+  },
 );
 
 export function ReactSelect() {
   return (
-    <Composite className="-mt-2 flex gap-1" role="group">
+    <Composite className="flex gap-1 -mt-2" role="group">
       <CompositeItem
         render={<ReactPackageButton package="react" />}
       >
@@ -175,7 +180,7 @@ function Tooltip({
         getReferenceProps({
           ref,
           ...children.props,
-        })
+        }),
       )}
       {isMounted && (
         <div
@@ -190,7 +195,7 @@ function Tooltip({
             context={context}
             className="fill-rose-500 dark:fill-rose-500/90"
           />
-          <div className="-mr-1 flex gap-1">
+          <div className="flex gap-1 -mr-1">
             <button
               className="ml-4 cursor-default rounded bg-green-200 p-1 px-1.5 text-green-900 transition-colors hover:bg-green-100 hover:text-green-700"
               onClick={() => {
@@ -243,7 +248,7 @@ function Option({
           'bg-gray-200/20 dark:bg-gray-400/30':
             index === activeIndex,
           'font-bold': index === selectedIndex,
-        }
+        },
       )}
       tabIndex={index === activeIndex ? 0 : -1}
       {...getItemProps({
@@ -258,7 +263,7 @@ function Option({
               selectedIndex !== index,
             'bg-rose-500 dark:bg-rose-400':
               selectedIndex === index,
-          }
+          },
         )}
       />
       <span>{option}</span>
@@ -284,9 +289,9 @@ export function PackageSelect() {
         const packageResults = await Promise.all(
           initialPackages.map(({name}) =>
             fetch(
-              `https://registry.npmjs.org/@floating-ui/${name}/latest`
-            ).then((res) => res.json())
-          )
+              `https://registry.npmjs.org/@floating-ui/${name}/latest`,
+            ).then((res) => res.json()),
+          ),
         );
 
         if (!ignore) {
@@ -294,7 +299,7 @@ export function PackageSelect() {
             packageResults.map((pkg, index) => ({
               name: initialPackages[index].name,
               version: pkg.version,
-            }))
+            })),
           );
         }
       } catch (e) {
@@ -330,13 +335,13 @@ export function PackageSelect() {
 
     router.events.on(
       'routeChangeComplete',
-      handleRouteChangeComplete
+      handleRouteChangeComplete,
     );
 
     return () => {
       router.events.off(
         'routeChangeComplete',
-        handleRouteChangeComplete
+        handleRouteChangeComplete,
       );
     };
   }, [isPackageTooltipTouched, router]);
@@ -408,7 +413,7 @@ export function PackageSelect() {
       >
         <button
           ref={refs.setReference}
-          className="inline-flex cursor-default items-center gap-1 whitespace-nowrap rounded-md bg-rose-500 py-1 px-2 text-sm font-bold text-white outline-transparent transition-colors hover:bg-rose-600 focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-transparent dark:bg-rose-500/90"
+          className="inline-flex items-center gap-1 px-2 py-1 text-sm font-bold text-white transition-colors rounded-md cursor-default whitespace-nowrap bg-rose-500 outline-transparent hover:bg-rose-600 focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-transparent dark:bg-rose-500/90"
           aria-label={`Select the package you are using to tailor the documentation's context to it. Currently selected: ${
             optionsLabelMap[options[selectedIndex]]
           }`}
@@ -430,11 +435,11 @@ export function PackageSelect() {
               className="w-[24rem] overflow-y-auto rounded-md bg-white/75 p-2 shadow-md outline-none backdrop-blur-xl dark:bg-gray-600/70"
               {...getFloatingProps()}
             >
-              <p className="mb-2 py-1 px-3 font-semibold">
+              <p className="px-3 py-1 mb-2 font-semibold">
                 By selecting the package you are using, the
                 documentation will be tailored to it.
               </p>
-              <p className="mb-2 py-1 px-3 text-sm opacity-75">
+              <p className="px-3 py-1 mb-2 text-sm opacity-75">
                 This documentation refers to the latest version
                 of each package.
               </p>

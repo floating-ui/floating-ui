@@ -56,6 +56,13 @@ import {size} from '@floating-ui/react-native';
 ```
 
 </ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {size} from '@floating-ui/solid';
+```
+
+</ShowFor>
 
 This is useful to ensure the floating element isn't too big to
 fit in the viewport (or more specifically, its clipping context),
@@ -112,7 +119,7 @@ computePosition(referenceEl, floatingEl, {
 
 </ShowFor>
 
-<ShowFor packages={['dom']}>
+<ShowFor packages={['dom','solid']}>
 
 ```js
 computePosition(referenceEl, floatingEl, {
@@ -161,6 +168,32 @@ useFloating({
 
 </ShowFor>
 
+<ShowFor packages={['solid']}>
+OR
+
+1. You can use sync state, and apply using React props.
+2. Or, mutate the style attribute directly.
+
+```js
+const [maxWidth, setMaxWidth] = createSignal(null);
+
+useFloating({
+  middleware: [
+    size({
+      apply({availableWidth, availableHeight, elements}) {
+        // 1. You can set the width with a signal
+        setMaxWidth(availableWidth);
+
+        // 2. Or, mutate the style attribute directly:
+        elements.floating.style.maxHeight = `${availableHeight}px`;
+      },
+    }),
+  ],
+});
+```
+
+</ShowFor>
+
 ## Options
 
 These are the options you can pass to `size(){:js}`.
@@ -171,7 +204,7 @@ interface Options extends DetectOverflowOptions {
     state: MiddlewareState & {
       availableWidth: number;
       availableHeight: number;
-    }
+    },
   ) => void;
 }
 ```

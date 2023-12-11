@@ -7,10 +7,20 @@ components, without needing to keep track of a list item index
 for [`useListNavigation`](/docs/useListNavigation) or
 [`useTypeahead`](/docs/useTypeahead).
 
+<ShowFor packages={['react']}>
+
 ```js
-import {FloatingList, useListItem} from '@floating-ui/react';
+import {FloatingList} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {FloatingList} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -43,14 +53,17 @@ children:
 
 ## Examples
 
-- [Select with Composable Children](https://codesandbox.io/s/floating-ui-react-select-with-composable-children-qsuw76?file=/src/App.tsx)
+<ShowFor packages={['react']}>
+  - [Select with Composable
+  Children](https://codesandbox.io/s/floating-ui-react-select-with-composable-children-qsuw76?file=/src/App.tsx)
+</ShowFor>
 
 ## Usage
 
 ### FloatingList
 
+<ShowFor packages={['react']}>
 This component is a context provider that receives two props:
-
 - <WordHighlight id="a">elementsRef</WordHighlight> — `useListNavigation(){:js}`'s `listRef{:.objectKey}` prop (array of elements).
 - <WordHighlight id="b">labelsRef</WordHighlight> — `useTypeahead(){:js}`'s `listRef{:.objectKey}` prop (array of strings; **optional**).
 
@@ -72,8 +85,104 @@ return (
 );
 ```
 
-### useListItem
+</ShowFor>
+<ShowFor packages={['solid']}>
+This component receives one prop *context* which you create with **createFloatingListContext** which will provide actions to interact with the list and helpers.
 
+```ts
+interface IFloatingListContext {
+	// will register the node only if it is not already registered
+  register: (node: HTMLElement | null | undefined, label?: string): void;
+  unregister: (node: HTMLElement | null | undefined):void;
+	// Array of the registered elements sorted by their position in the DOM
+	// `useListNavigation(){:js}`'s `listRef{:.objectKey}` prop
+  items: Accessor<Array<HTMLElement>>;
+	// Array of the registered elements text contents
+	// or label passed in `useListItem`
+	// `useTypeahead(){:js}`'s `listRef{:.objectKey}` prop
+  labelsRef: Accessor<Array<string>>;
+  getItemIndex: (node: HTMLElement | null | undefined): number;
+	// use the parent context to register nodes in the parent list
+	// (e.g. nested menus)
+  parent: IFloatingListContext | null;
+}
+```
+
+With this functions you create the context that has to be passed
+to the FloatingList component.
+
+```js /floatingListContext.items/1,2,4#a /floatingListContext.labelsRef/1,2,4#b  /floatingListContext/1,2,4#c
+const floatingListContext = createFloatingListContext();
+
+const listNav = useListNavigation(context, {
+  listRef: floatingListContext.items,
+});
+const typeahead = useTypeahead(context, {
+  listRef: floatingListContext.labelsRef,
+});
+
+return (
+  <FloatingList context={floatingListContext}>
+    {/* floating element with list item children */}
+  </FloatingList>
+);
+```
+
+You can optionally extend the FloatingListContext by the props
+passed to createFloatingListContext, which are then available in
+the items through the useListItem hook. If you ara using
+Typescript make sure to pass a type to useListItem. You may also
+pass the same type to createFloatingListContext to ensure
+matching props.
+
+```tsx
+interface IContext {
+  activeIndex: Accessor<number | null>;
+  setActiveIndex: Setter<number | null>;
+}
+function List() {
+  const [activeIndex, setActiveIndex] = createSignal<
+    number | null
+  >(null);
+  const floatingListContext =
+    createFloatingListContext<IContext>({
+      activeIndex,
+      setActiveIndex,
+    });
+
+  //...
+
+  return (
+    <FloatingList context={floatingListContext}>
+      {/* floating element with list item children */}
+    </FloatingList>
+  );
+}
+
+function ListItem() {
+  const [ref, setRef] = createSignal<HTMLButtonElement | null>(
+    null,
+  );
+  const context = useListItem(ref);
+
+  return (
+    <button
+      ref={setRef}
+      onClick={() =>
+        context.setActiveIndex(
+          context.getItemIndex(ref()) ?? null,
+        )
+      }
+    >
+      Item
+    </button>
+  );
+}
+```
+
+</ShowFor>
+### useListItem
+<ShowFor packages={['react']}>
 This hook is used to register a list item and its index (DOM
 position) in the `FloatingList`. It returns two properties:
 `ref{:.const}` and `index{:.const}`.
@@ -105,3 +214,67 @@ function Option({label}) {
 
 The `label` can be `null{:js}` for disabled items, which will be
 ignored for typeahead.
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+This hook is used to register a list item in the `FloatingList`. It returns the FloatingListContext provided by the FloatingList.
+You have two options to register list items:
+1. pass a ref as an Accessor to useListItem(ref)
+2. use the returned context to register and unregister items
+
+The hook optionally accepts a `label` prop, which is used to
+determine the string that can be matched with typeahead. The
+`label` can be `null{:js}` for disabled items, which will be
+ignored for typeahead.
+
+```ts
+interface Props {
+  ref?: Accessor<HTMLElement | null>;
+  options?: {
+    // only register if true (default:true)
+    registerCondition?: Accessor<boolean>;
+    // label returned in the labelsRef of context instead of the textContent
+    label?: string;
+  };
+}
+```
+
+```js {5-8,20,22-28}
+//1. pass ref to useListItem
+function Option(props) {
+  const [ref, setRef] = createSignal(null);
+  const {activeIndex} = useSelectContext();
+  const context = useListItem(ref, {
+    registerCondition: () => !props.disabled,
+    label: 'myLabel',
+  });
+
+  const isActive = createMemo(
+    () => activeIndex() === context?.getItemIndex(ref()),
+  );
+
+  return <div ref={setRef} tabIndex={isActive() ? 0 : -1} />;
+}
+// 2. take control of register and unregister
+function Option2(props) {
+  const [ref, setRef] = createSignal(null);
+  const {activeIndex} = useSelectContext();
+  const context = useListItem();
+
+  createEffect(() => {
+    if (!props.disabled) {
+      context?.register(ref(), 'myLabel');
+    } else {
+      context?.unregister(ref());
+    }
+  });
+
+  const isActive = createMemo(
+    () => activeIndex() === context?.getItemIndex(ref()),
+  );
+
+  return <div ref={setRef} tabIndex={isActive() ? 0 : -1} />;
+}
+```
+
+</ShowFor>
