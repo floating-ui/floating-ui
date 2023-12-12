@@ -1,5 +1,5 @@
 {
-  "include": ["src", "test"],
+  "include": ["src", "test", "../../.config/_global.d.ts"],
   "compilerOptions": {
     "strict": true,
     "lib": ["ES2021", "DOM", "DOM.Iterable"],

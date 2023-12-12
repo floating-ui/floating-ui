@@ -13,6 +13,6 @@
     "esModuleInterop": true,
     "jsx": "react-jsx"
   },
-  "include": ["packages/**/*", "playwright.config.ts", ".config/_global.d.ts", "packages/solid/test/visual/node_modules/components/Drawer.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["packages/**/*", "playwright.config.ts", ".config/_global.d.ts"],
+  "exclude": ["node_modules", "packages/solid"]
 }

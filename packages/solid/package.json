@@ -34,6 +34,7 @@
     }
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "lint": "eslint --fix --ext .ts,.tsx .",
     "test": "vitest",
     "build": "NODE_ENV=build rollup -c",

@@ -7,7 +7,7 @@
     "./packages/*"
   ],
   "scripts": {
-    "typecheck": "tsc",
+    "typecheck": "tsc && tsc -w packages/solid",
     "lint": "eslint . --ext .js,.ts,.tsx",
     "playwright": "npx playwright test packages/dom/test/functional",
     "playwright:update": "npm run playwright -- -u",
