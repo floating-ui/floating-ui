@@ -162,7 +162,7 @@ interface FloatingDelayGroupProps {
 }
 ```
 
-    </ShowFor>
+</ShowFor>
 
 ### delay
 
@@ -203,7 +203,12 @@ close delay at all.
 
 - <WordHighlight id="a">isInstantPhase</WordHighlight> is a boolean
   that determines whether the delay is currently in the instant phase.
-  This allows you to make transitions instant/faster. See [`useTransitionStyles`](/docs/useTransition#usetransitionstyles).
+  This allows you to make transitions instant/faster. See
+  <ShowFor packages={['react']}>
+    [`useTransitionStyles`](/docs/react/useTransition#usetransitionstyles)
+  </ShowFor>
+  <ShowFor packages={['solid']}>[`useTransitionStyles`](/docs/solid/useTransition#usetransitionstyles)</ShowFor>
+
 - <WordHighlight id="b">currentId</WordHighlight> refers to the `id`
   of the floating element of the group currently open.
 

@@ -584,8 +584,13 @@ type OpenChangeReason =
 default: `undefined{:js}`
 
 A unique node ID for the floating element when using a
-[FloatingTree](/docs/FloatingTree).
 
+</ShowFor>
+<ShowFor packages={['react']}>
+[FloatingTree](/docs/react/FloatingTree).
+</ShowFor>
+<ShowFor packages={['solid']}>
+[FloatingTree](/docs/solid/FloatingTree).
 </ShowFor>
 
 ## Return value

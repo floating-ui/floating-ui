@@ -49,7 +49,7 @@ import PlatformIcon from '../../public/icons/platform.svg';
 import ReactIcon from '../../public/icons/react.png'; // This is a PNG, not an SVG
 import ShiftIcon from '../../public/icons/shift.svg';
 import SizeIcon from '../../public/icons/size.svg';
-import Solid from '../../public/icons/solid.svg';
+import SolidIcon from '../../public/icons/solid.svg';
 import TutorialIcon from '../../public/icons/tutorial.svg';
 import UseClickIcon from '../../public/icons/useClick.svg';
 import UseClientPointIcon from '../../public/icons/useClientPoint.svg';
@@ -132,137 +132,134 @@ const middleware = [
 
 const interactions = [
   {
-    url: '/docs/react-examples',
-    title: 'React Examples',
+    url: 'react-examples',
+    title: 'Examples',
   },
   {
-    url: '/docs/tooltip',
+    url: 'tooltip',
     title: 'Tooltip',
     hide: true,
   },
   {
-    url: '/docs/popover',
+    url: 'popover',
     title: 'Popover',
     hide: true,
   },
   {
-    url: '/docs/dialog',
+    url: 'dialog',
     title: 'Dialog',
     hide: true,
   },
   {
-    url: '/docs/useFloating',
+    url: 'useFloating',
     title: 'useFloating',
     icon: UseFloatingIcon,
   },
   {
-    url: '/docs/useInteractions',
+    url: 'useInteractions',
     title: 'useInteractions',
     icon: UseInteractionsIcon,
   },
   {
-    url: '/docs/useHover',
+    url: 'useHover',
     title: 'useHover',
     icon: UseHoverIcon,
   },
   {
-    url: '/docs/useFocus',
+    url: 'useFocus',
     title: 'useFocus',
     icon: UseFocusIcon,
   },
   {
-    url: '/docs/useClick',
+    url: 'useClick',
     title: 'useClick',
     icon: UseClickIcon,
   },
   {
-    url: '/docs/useRole',
+    url: 'useRole',
     title: 'useRole',
     icon: UseRoleIcon,
   },
   {
-    url: '/docs/useDismiss',
+    url: 'useDismiss',
     title: 'useDismiss',
     icon: UseDismissIcon,
   },
   {
-    url: '/docs/useListNavigation',
+    url: 'useListNavigation',
     title: 'useListNavigation',
     icon: UseListNavigationIcon,
   },
   {
-    url: '/docs/useTypeahead',
+    url: 'useTypeahead',
     title: 'useTypeahead',
     icon: UseTypeaheadIcon,
   },
   {
-    url: '/docs/useTransition',
+    url: 'useTransition',
     title: 'useTransition',
     icon: UseTransitionIcon,
   },
   {
-    url: '/docs/useClientPoint',
+    url: 'useClientPoint',
     title: 'useClientPoint',
     icon: UseClientPointIcon,
   },
   {
-    url: '/docs/FloatingArrow',
+    url: 'FloatingArrow',
     title: 'FloatingArrow',
     icon: ArrowIcon,
   },
   {
-    url: '/docs/FloatingFocusManager',
+    url: 'FloatingFocusManager',
     title: 'FloatingFocusManager',
     icon: FloatingFocusManagerIcon,
   },
   {
-    url: '/docs/FloatingPortal',
+    url: 'FloatingPortal',
     title: 'FloatingPortal',
     icon: FloatingPortalIcon,
   },
   {
-    url: '/docs/FloatingTree',
+    url: 'FloatingTree',
     title: 'FloatingTree',
     icon: FloatingTreeIcon,
   },
   {
-    url: '/docs/FloatingOverlay',
+    url: 'FloatingOverlay',
     title: 'FloatingOverlay',
     icon: FloatingOverlayIcon,
   },
   {
-    url: '/docs/FloatingList',
+    url: 'FloatingList',
     title: 'FloatingList',
     icon: FloatingListIcon,
   },
   {
-    url: '/docs/FloatingDelayGroup',
+    url: 'FloatingDelayGroup',
     title: 'FloatingDelayGroup',
     icon: FloatingDelayGroupIcon,
   },
   {
-    url: '/docs/Composite',
+    url: 'Composite',
     title: 'Composite',
     icon: CompositeIcon,
   },
   {
-    url: '/docs/inner',
+    url: 'inner',
     title: 'Inner',
     icon: InnerIcon,
   },
   {
-    url: '/docs/react-utils',
+    url: 'react-utils',
     title: 'React Utils',
     icon: MagicWandIcon,
   },
   {
-    url: '/docs/custom-hooks',
+    url: 'custom-hooks',
     title: 'Custom Hooks',
   },
-].map((item) => {
-  item.parent = 'React';
-  return item;
-});
+];
 
 const nav = [
   {
@@ -290,8 +287,9 @@ const nav = [
     title: 'Middleware',
     icon: MiddlewareIcon,
     collapse: false,
+    items: middleware,
   },
-  ...middleware,
+  // ...middleware,
   {
     url: '/docs/detectOverflow',
     title: 'detectOverflow',
@@ -317,13 +315,24 @@ const nav = [
     title: 'React',
     icon: ReactIcon.src,
     collapse: true,
+    items: interactions.map((item) => ({
+      ...item,
+      parent: 'React',
+      url: '/docs/react/' + item.title.replace(' ', '-'),
+    })),
   },
   {
     url: '/docs/solid',
     title: 'Solid',
-    icon: Solid,
+    icon: SolidIcon,
+    collapse: true,
+    items: interactions.map((item) => ({
+      ...item,
+      parent: 'Solid',
+      url: '/docs/solid/' + item.title.replace(' ', '-'),
+    })),
   },
-  ...interactions,
+  // ...interactions,
   {
     url: '/docs/react-native',
     title: 'React Native',
@@ -508,41 +517,40 @@ function NavbarItem({
   activeLinkRef,
   parent,
   collapse,
+  items: children = [],
 }) {
-  const {pathname} = useRouter();
+  const {pathname, asPath} = useRouter();
   const {packageContext} = useAppContext();
+  const isCurrentPath =
+    url === pathname || url === asPath.split('#')[0];
 
-  const children = nav.filter(({parent: p}) => p === title);
-
-  const isReactContext = ['react', 'react-dom'].includes(
-    packageContext,
-  );
-  const isReact = title === 'React';
-  const shouldCollapse = collapse === true && !isReactContext;
+  const shouldCollapse = collapse === true;
 
   const [childrenCollapsed, setChildrenCollapsed] =
     useState(shouldCollapse);
 
   useIsomorphicLayoutEffect(() => {
-    if (isReactContext || !shouldCollapse) {
+    if (!shouldCollapse) {
       setChildrenCollapsed(false);
       return;
     }
 
-    const activeChildItem = nav.find(
-      ({url: u}) => u === pathname,
+    const activeChildItem = children.find(
+      ({url: u}) => u === pathname || u === asPath.split('#')[0],
     );
 
     setChildrenCollapsed(
-      pathname !== url && activeChildItem?.parent !== title,
+      !isCurrentPath && activeChildItem?.parent !== title,
     );
   }, [
     shouldCollapse,
     pathname,
+    asPath,
     url,
     title,
     parent,
     packageContext,
+    isCurrentPath,
   ]);
 
   if (hide) return null;
@@ -554,8 +562,8 @@ function NavbarItem({
     >
       <Link
         href={url}
-        ref={pathname === url ? activeLinkRef : undefined}
-        aria-current={pathname === url ? 'page' : undefined}
+        ref={isCurrentPath ? activeLinkRef : undefined}
+        aria-current={isCurrentPath ? 'page' : undefined}
         aria-expanded={
           shouldCollapse ? !childrenCollapsed : undefined
         }
@@ -563,13 +571,13 @@ function NavbarItem({
           'mx-[-1rem] flex h-12 items-center break-words rounded-lg px-3 dark:hover:text-gray-50',
           {
             'bg-rose-200/40 text-rose-700 hover:bg-pink-100/50 dark:bg-pink-400/10 dark:text-pink-400 dark:hover:bg-pink-400/20':
-              pathname === url && !isReact,
+              isCurrentPath && !childrenCollapsed,
             'hover:bg-gray-100/50 dark:hover:bg-purple-300/10':
-              pathname !== url,
+              !isCurrentPath,
             'border border-gray-600/10 bg-light-react-gradient bg-clip-padding shadow-lg shadow-cyan-600/10 hover:shadow-blue-900/10 hover:brightness-[0.87] hover:contrast-125 dark:bg-dark-react-gradient dark:shadow-none':
-              isReact,
+              shouldCollapse,
             'text-black dark:text-pink-300 dark:hover:text-pink-300':
-              pathname === url && isReact,
+              isCurrentPath && childrenCollapsed,
             'mr-0 rounded-tl-none rounded-bl-none':
               parent != null,
           },
@@ -580,7 +588,8 @@ function NavbarItem({
             <img
               src={Icon}
               className={cn('h-8 w-8', {
-                'animate-spin [animation-duration:5s]': isReact,
+                'animate-spin [animation-duration:5s]':
+                  childrenCollapsed,
               })}
               aria-hidden
             />
@@ -589,9 +598,9 @@ function NavbarItem({
               aria-hidden
               className={cn({
                 'text-gray-600 dark:text-gray-200':
-                  pathname !== url,
+                  !isCurrentPath,
                 'text-rose-700 dark:text-pink-300':
-                  pathname === url,
+                  isCurrentPath,
               })}
               width={32}
               height={32}
@@ -599,7 +608,7 @@ function NavbarItem({
           ) : null}
           <span
             className={cn('block truncate', {
-              'font-bold dark:text-pink-300': pathname === url,
+              'font-bold dark:text-pink-300': isCurrentPath,
             })}
           >
             {title}
@@ -615,14 +624,17 @@ function NavbarItem({
         parent={title}
         collapsed={childrenCollapsed}
         activeLinkRef={activeLinkRef}
+        childItems={children}
       />
     </li>
   );
 }
 
-function Navbar({activeLinkRef, parent, collapsed}) {
+function Navbar({activeLinkRef, parent, collapsed, childItems}) {
   const ref = useRef(null);
-  const items = nav.filter(({parent: p}) => p === parent);
+  const items =
+    childItems ??
+    nav.filter((item) => item.parent === undefined); //.filter(({parent: p}) => p === parent);
   const [height, setHeight] = useState('auto');
   const naturalHeightRef = useRef(null);
   const [transition, setTransition] = useState(false);
@@ -888,80 +900,7 @@ export default function Layout({children, className}) {
                   </button>
                 )}
               </div>
-              <ul className="px-6 mt-4 text-lg xl:px-10">
-                {nav.map(
-                  ({url, title, icon: Icon, depth, hide}) =>
-                    !hide && (
-                      <li
-                        key={url}
-                        ref={
-                          pathname === url
-                            ? activeLinkRef
-                            : undefined
-                        }
-                        className={cn(
-                          'inline-block w-full scroll-mt-[10rem]',
-                          {
-                            'pl-4': depth === 1,
-                            'border-l border-solid border-gray-700':
-                              depth === 1,
-                          },
-                        )}
-                      >
-                        {[
-                          '/docs/react',
-                          '/docs/react-native',
-                        ].includes(url) && (
-                          <hr className="my-4 h-[1px] border-none bg-gray-100 dark:bg-gray-700" />
-                        )}
-                        <Link
-                          href={url}
-                          className={cn(
-                            'mx-[-1rem] flex h-12 items-center break-words rounded-lg px-3 dark:hover:text-gray-50',
-                            {
-                              'bg-rose-200/40 text-rose-700 hover:bg-pink-100/50 dark:bg-pink-400/10 dark:text-pink-400 dark:hover:bg-pink-400/20':
-                                pathname === url,
-                              'hover:bg-gray-100/50 dark:hover:bg-purple-300/10':
-                                pathname !== url,
-                              'rounded-tl-none rounded-bl-none':
-                                depth > 0,
-                            },
-                          )}
-                        >
-                          <span className="flex items-center w-full gap-4 py-1">
-                            {typeof Icon === 'string' ? (
-                              <img
-                                src={Icon}
-                                className="w-8 h-8"
-                                aria-hidden
-                              />
-                            ) : typeof Icon === 'function' ? (
-                              <Icon
-                                aria-hidden
-                                className={cn({
-                                  'text-gray-600 dark:text-gray-200':
-                                    pathname !== url,
-                                  'text-rose-700 dark:text-pink-300':
-                                    pathname === url,
-                                })}
-                                width={32}
-                                height={32}
-                              />
-                            ) : null}
-                            <span
-                              className={cn('block truncate', {
-                                'font-bold dark:text-pink-300':
-                                  pathname === url,
-                              })}
-                            >
-                              {title}
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
-                    ),
-                )}
-              </ul>
+              <Navbar activeLinkRef={activeLinkRef} />
             </div>
           </nav>
         </NavWrapper>

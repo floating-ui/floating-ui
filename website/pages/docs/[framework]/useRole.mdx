@@ -198,9 +198,14 @@ const {getItemProps} = useInteractions([]);
 ```
 
 These props are derived from the `activeIndex` and
-`selectedIndex` states for the
-[`useListNavigation`](/docs/useListNavigation) and
-[`useTypeahead`](/docs/useTypeahead) hooks.
+`selectedIndex` states for the <ShowFor
+packages={['react']}>[`useListNavigation`](/docs/react/useListNavigation)</ShowFor><ShowFor
+packages={['solid']}>
+[`useListNavigation`](/docs/solid/useListNavigation)</ShowFor>and
+<ShowFor
+packages={['react']}>[`useTypeahead`](/docs/react/useTypeahead)</ShowFor><ShowFor
+packages={['solid']}>
+[`useTypeahead`](/docs/solid/useTypeahead)</ShowFor> hooks.
 
 #### `select{:.string}`
 

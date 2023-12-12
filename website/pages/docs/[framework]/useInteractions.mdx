@@ -5,10 +5,20 @@
 A hook to merge or compose interaction event handlers together,
 preserving memoization.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useInteractions} from '@floating-ui/react';
 ```
 
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {useInteractions} from '@floating-ui/solid';
+```
+
+</ShowFor>
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -52,6 +62,7 @@ function App() {
 ```
 
 </ShowFor>
+
 <ShowFor packages={['solid']}>
 
 ```js /hover/ /focus/
@@ -76,6 +87,7 @@ function App() {
 ```
 
 </ShowFor>
+
 <Notice>
   You don't need to conditionally pass values into the interactions array if
   you don't want one of the interactions to be enabled.
@@ -173,9 +185,12 @@ also be added in future versions.
 
 A third prop getter is returned for item elements when dealing
 with a list inside the floating element, which is not required
-for all types of floating elements. See
-[`useRole`](/docs/useRole#role) for more information on this prop
-getter for listbox (e.g. select or combobox) or menu roles.
+for all types of floating elements. See <ShowFor
+packages={['react']}>[`useRole`](/docs/react/useRole#role)</ShowFor><ShowFor
+packages={['solid']}>
+[`useRole`](/docs/solid/useRole#role)</ShowFor> for more
+information on this prop getter for listbox (e.g. select or
+combobox) or menu roles.
 
 {/* prettier-ignore */}
 ```js /getItemProps/

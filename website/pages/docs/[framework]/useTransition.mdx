@@ -37,11 +37,24 @@ import {
 
 There are two different hooks you can use:
 
-- [`useTransitionStyles`](/docs/useTransition#usetransitionstyles)
+- <ShowFor packages={['react']}>
+    [`useTransitionStyles`](/docs/react/useTransition#usetransitionstyles)
+  </ShowFor>
+  <ShowFor packages={['solid']}>
+    [`useTransitionStyles`](/docs/solid/useTransition#usetransitionstyles)
+  </ShowFor>
+
   — a high level wrapper around `useTransitionStatus` that
   returns computed styles for you. This is simpler and can handle
   the majority of use cases.
-- [`useTransitionStatus`](/docs/useTransition#usetransitionstatus)
+
+- <ShowFor packages={['react']}>
+    [`useTransitionStatus`](/docs/react/useTransition#usetransitionstatus)
+  </ShowFor>
+  <ShowFor packages={['solid']}>
+    [`useTransitionStatus`](/docs/solid/useTransition#usetransitionstatus)
+  </ShowFor>
+
   — a low level hook that returns a status string to compute the
   styles yourself.
 

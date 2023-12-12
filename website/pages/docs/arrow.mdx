@@ -57,6 +57,13 @@ import {arrow} from '@floating-ui/react-native';
 ```
 
 </ShowFor>
+<ShowFor packages={['solid']}>
+
+```js
+import {arrow} from '@floating-ui/solid';
+```
+
+</ShowFor>
 
 This is useful to add an additional visual cue to the floating
 element about which element it is referring to.
@@ -64,9 +71,19 @@ element about which element it is referring to.
 <ShowFor packages={['react']}>
 
 <Notice>
-  The [`FloatingArrow`](/docs/FloatingArrow) component renders
-  out a customizable arrow element and applies the positioning
-  styles for you.
+  The [`FloatingArrow`](/docs/react/FloatingArrow) component
+  renders out a customizable arrow element and applies the
+  positioning styles for you.
+</Notice>
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+<Notice>
+  The [`FloatingArrow`](/docs/solid/FloatingArrow) component
+  renders out a customizable arrow element and applies the
+  positioning styles for you.
 </Notice>
 
 </ShowFor>
@@ -162,6 +179,35 @@ return (
   <div ref={refs.setFloating} style={floatingStyles}>
     <div
       ref={arrowRef}
+      style={{
+        position: 'absolute',
+        left: middlewareData.arrow?.x,
+        top: middlewareData.arrow?.y,
+      }}
+    />
+  </div>
+);
+```
+
+</ShowFor>
+
+<ShowFor packages={['solid']}>
+
+```js /middlewareData.arrow/ /arrowRef/#a
+const [arrowRef, setArrowRef] = createSignal(null);
+
+const {refs, floatingStyles, middlewareData} = useFloating({
+  middleware: [
+    arrow({
+      element: arrowRef,
+    }),
+  ],
+});
+
+return (
+  <div ref={refs.setFloating} style={floatingStyles()}>
+    <div
+      ref={setArrowRef}
       style={{
         position: 'absolute',
         left: middlewareData.arrow?.x,
@@ -274,7 +320,7 @@ computePosition(referenceEl, floatingEl, {
 
 </ShowFor>
 
-<ShowFor packages={['react', 'react-dom', 'react-native']}>
+<ShowFor packages={['react', 'react-dom', 'react-native','solid']}>
 
 ```js
 // The final placement can be 'bottom' or 'top'
@@ -321,6 +367,16 @@ interface ArrowOptions {
     | Element
     | null
     | React.MutableRefObject<Element | null>;
+  padding?: Padding;
+}
+```
+
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```ts
+interface ArrowOptions {
+  element: Accessor<HTMLElement | undefined>;
   padding?: Padding;
 }
 ```

@@ -28,8 +28,10 @@ import {useTypeahead} from '@floating-ui/solid';
 
 </PageCard>
 
-See [`FloatingList`](/docs/FloatingList) for creating composable
-children API components.
+See <ShowFor
+packages={['react']}>[`FloatingList`](/docs/react/FloatingList)</ShowFor><ShowFor
+packages={['solid']}>[`FloatingList`](/docs/solid/FloatingList)</ShowFor>
+for creating composable children API components.
 
 <Notice>
   This hook should not be used for typeable `<input />{:html}` elements. 
@@ -262,7 +264,7 @@ const listContentRef = [];
 
 <Notice>
 This example is only for static list items.
-If you require items to be added/removed dynamically see [`FloatingList`](/docs/FloatingList) .
+If you require items to be added/removed dynamically see [`FloatingList`](/docs/solid/FloatingList) .
 </Notice>
 </ShowFor>
 Disabled items can be represented by `null{:js}` values in the
