@@ -1,0 +1,30 @@
+{
+  "name": "@floating-ui/devtools",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_END=development vite build --watch --mode development",
+    "build": "vite build",
+    "build:types": "tsc -b && api-extractor run --local --verbose && rm -rf dist/tsc"
+  },
+  "files": [
+    "dist"
+  ],
+  "module": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "peerDependencies": {
+    "@floating-ui/dom": ">=1.0.0 <2.0.0"
+  },
+  "devDependencies": {
+    "vite-plugin-dts": "^3.6.4"
+  }
+}

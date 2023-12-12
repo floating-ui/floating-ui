@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "outDir": "../dist/tsc",
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "jsx": "react-jsx",
+    "lib": ["DOM", "ES2020"],
+    "rootDir": "../"
+  },
+  "include": [
+    "../src/**/*.stories.ts",
+    "../src/**/*.stories.tsx",
+    "../../.config/_global.d.ts"
+  ],
+  "references": [{"path": "../tsconfig.app.json"}]
+}

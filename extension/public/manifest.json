@@ -1,0 +1,12 @@
+{
+  "description": "Devtools to help debugging Floating UI elements",
+  "manifest_version": 3,
+  "name": "Floating UI Devtools",
+  "version": "1.0",
+  "devtools_page": "devtools-page.html",
+  "icons": {
+    "16": "./images/favicon-16x16.png",
+    "48": "./images/favicon-32x32.png",
+    "128": "./images/android-chrome-192x192.png"
+  }
+}

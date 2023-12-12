@@ -1,6 +1,6 @@
 {
   "include": ["../packages/**/src/**/*.ts", "./_global.d.ts"],
-  "exclude": ["../**/*.test.ts"],
+  "exclude": ["../**/*.test.ts", "../packages/devtools"],
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "es2020"],
