@@ -91,13 +91,35 @@ With `inline(){:js}`:
 
 ## Usage
 
-```js
-import {computePosition, inline} from '@floating-ui/dom';
+<ShowFor packages={['core', 'dom']}>
 
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [inline()],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [inline()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [inline()],
+});
+```
+
+</ShowFor>
 
 ### Choosing a rect
 
@@ -111,14 +133,9 @@ likely want the floating element to be placed there. This logic
 is only applied when the reference element's rects are disjoined.
 
 ```js
-function onMouseEnter({clientX, clientY}) {
+function onMouseEnter({clientX: x, clientY: y}) {
   computePosition(referenceEl, floatingEl, {
-    middleware: [
-      inline({
-        x: clientX,
-        y: clientY,
-      }),
-    ],
+    middleware: [inline({x, y})],
   }).then(({x, y}) => {
     // ...
   });
@@ -137,7 +154,7 @@ of your middleware array, before `flip(){:js}` (if used).
 These are the options you can pass to `inline(){:js}`.
 
 ```ts
-interface Options {
+interface InlineOptions {
   x?: number;
   y?: number;
   padding?: number | SideObject;

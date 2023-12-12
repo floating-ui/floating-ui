@@ -145,7 +145,7 @@ test('resets indexRef to -1 upon close', async () => {
           virtual: true,
           loop: true,
         }),
-      ]
+      ],
     );
 
     function onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -161,7 +161,7 @@ test('resets indexRef to -1 upon close', async () => {
     }
 
     const items = data.filter((item) =>
-      item.toLowerCase().startsWith(inputValue.toLowerCase())
+      item.toLowerCase().startsWith(inputValue.toLowerCase()),
     );
 
     return (
@@ -353,27 +353,27 @@ describe('allowEscape + virtual', () => {
     render(<App allowEscape={true} virtual loop />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowUp'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'false'
+      'false',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-2').getAttribute('aria-selected')).toBe(
-      'false'
+      'false',
     );
     cleanup();
   });
@@ -382,11 +382,11 @@ describe('allowEscape + virtual', () => {
     render(<App allowEscape={false} virtual loop />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-0').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     fireEvent.keyDown(screen.getByRole('button'), {key: 'ArrowDown'});
     expect(screen.getByTestId('item-1').getAttribute('aria-selected')).toBe(
-      'true'
+      'true',
     );
     cleanup();
   });
@@ -459,7 +459,7 @@ describe('focusOnHover', () => {
   test('false - does not focus item on hover and does not sync the active index', async () => {
     const spy = vi.fn();
     render(
-      <App onNavigate={spy} focusItemOnOpen={false} focusItemOnHover={false} />
+      <App onNavigate={spy} focusItemOnOpen={false} focusItemOnHover={false} />,
     );
     fireEvent.click(screen.getByRole('button'));
     fireEvent.mouseMove(screen.getByTestId('item-1'));
@@ -684,7 +684,7 @@ test('scheduled list population', async () => {
     });
 
     const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions(
-      [listNavigation]
+      [listNavigation],
     );
 
     return (

@@ -1,5 +1,11 @@
 import type {Placement} from '@floating-ui/core';
-import {arrow, autoUpdate, shift, useFloating} from '@floating-ui/react-dom';
+import {
+  arrow,
+  autoUpdate,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
 import {useLayoutEffect, useRef, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
@@ -14,6 +20,7 @@ export function Arrow() {
   const [referenceSize, setReferenceSize] = useState(125);
   const [svg, setSvg] = useState(false);
   const [centerOffset, setCenterOffset] = useState(false);
+  const [addOffset, setAddOffset] = useState(false);
 
   const {
     x,
@@ -28,7 +35,11 @@ export function Arrow() {
   } = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
-    middleware: [shift({padding: 10}), arrow({element: arrowRef, padding})],
+    middleware: [
+      addOffset && offset(20),
+      shift({padding: 10}),
+      arrow({element: arrowRef, padding}),
+    ],
   });
 
   useLayoutEffect(update, [update, padding, referenceSize, floatingSize]);
@@ -146,6 +157,23 @@ export function Arrow() {
         ))}
       </Controls>
 
+      <h2>Add offset</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`add-offset-${bool}`}
+            onClick={() => setAddOffset(bool)}
+            style={{
+              backgroundColor: addOffset === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Placement</h2>
       <Controls>
         {allPlacements.map((localPlacement) => (
           <button

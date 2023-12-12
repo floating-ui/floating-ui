@@ -35,7 +35,7 @@ import {unwrapElement} from './utils/unwrapElement';
 export function useFloating<T extends ReferenceElement = ReferenceElement>(
   reference: Readonly<Ref<MaybeElement<T>>>,
   floating: Readonly<Ref<MaybeElement<FloatingElement>>>,
-  options: UseFloatingOptions<T> = {}
+  options: UseFloatingOptions<T> = {},
 ): UseFloatingReturn {
   const whileElementsMountedOption = options.whileElementsMounted;
   const openOption = computed(() => unref(options.open) ?? true);
@@ -120,7 +120,7 @@ export function useFloating<T extends ReferenceElement = ReferenceElement>(
       whileElementsMountedCleanup = whileElementsMountedOption(
         referenceElement.value,
         floatingElement.value,
-        update
+        update,
       );
       return;
     }

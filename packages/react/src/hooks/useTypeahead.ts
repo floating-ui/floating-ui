@@ -16,7 +16,7 @@ export interface UseTypeaheadProps {
     | null
     | ((
         list: Array<string | null>,
-        typedString: string
+        typedString: string,
       ) => string | null | undefined);
   resetMs?: number;
   ignoreKeys?: Array<string>;
@@ -30,7 +30,7 @@ export interface UseTypeaheadProps {
  */
 export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseTypeaheadProps
+  props: UseTypeaheadProps,
 ): ElementProps {
   const {open, dataRef} = context;
   const {
@@ -48,7 +48,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   const timeoutIdRef = React.useRef<any>();
   const stringRef = React.useRef('');
   const prevIndexRef = React.useRef<number | null>(
-    selectedIndex ?? activeIndex ?? -1
+    selectedIndex ?? activeIndex ?? -1,
   );
   const matchIndexRef = React.useRef<number | null>(null);
 
@@ -95,14 +95,14 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     function getMatchingIndex(
       list: Array<string | null>,
       orderedList: Array<string | null>,
-      string: string
+      string: string,
     ) {
       const str = findMatchRef.current
         ? findMatchRef.current(orderedList, string)
         : orderedList.find(
             (text) =>
               text?.toLocaleLowerCase().indexOf(string.toLocaleLowerCase()) ===
-              0
+              0,
           );
 
       return str ? list.indexOf(str) : -1;
@@ -144,7 +144,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
       const allowRapidSuccessionOfFirstLetter = listContent.every((text) =>
         text
           ? text[0]?.toLocaleLowerCase() !== text[1]?.toLocaleLowerCase()
-          : true
+          : true,
       );
 
       // Allows the user to cycle through items that start with the same letter
@@ -173,7 +173,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
           ...listContent.slice((prevIndex || 0) + 1),
           ...listContent.slice(0, (prevIndex || 0) + 1),
         ],
-        stringRef.current
+        stringRef.current,
       );
 
       if (index !== -1) {

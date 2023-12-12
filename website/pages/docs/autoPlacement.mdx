@@ -74,7 +74,10 @@ specify it.
       middleware={[
         {
           name: 'autoPlacement',
-          options: {allowedPlacements: ['top', 'bottom']},
+          options: {
+            allowedPlacements: ['top', 'bottom'],
+            rootBoundary: 'document',
+          },
         },
       ]}
     >
@@ -85,13 +88,35 @@ specify it.
 
 ## Usage
 
-```js
-import {computePosition, autoPlacement} from '@floating-ui/dom';
+<ShowFor packages={['core', 'dom']}>
 
+```js
 computePosition(referenceEl, floatingEl, {
   middleware: [autoPlacement()],
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+useFloating({
+  middleware: [autoPlacement()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [autoPlacement()],
+});
+```
+
+</ShowFor>
 
 <Notice type="warning" title="Note">
   This is an alternative to `flip(){:js}`, so only one of either can be used.
@@ -103,7 +128,7 @@ computePosition(referenceEl, floatingEl, {
 These are the options you can pass to `autoPlacement(){:js}`.
 
 ```ts
-interface Options extends DetectOverflowOptions {
+interface AutoPlacementOptions extends DetectOverflowOptions {
   crossAxis?: boolean;
   alignment?: Alignment | null;
   autoAlignment?: boolean;
@@ -204,21 +229,46 @@ autoPlacement((state) => ({
 
 ## Final placement
 
-The placement returned from the function will let you know which
-placement was chosen.
+The placement returned is always the final one.
+
+<ShowFor packages={['core', 'dom']}>
 
 ```js
 computePosition(referenceEl, floatingEl, {
   middleware: [autoPlacement()],
 }).then(({placement}) => {
-  console.log(placement); // 'top', 'bottom', 'left' or 'right'
+  console.log(placement); // any side
 });
 ```
 
-## Conflict with flip
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```js
+// placement can be any side
+const {placement} = useFloating({
+  middleware: [autoPlacement()],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+// placement can be any side
+const {placement} = useFloating(reference, floating, {
+  middleware: [autoPlacement()],
+});
+```
+
+</ShowFor>
+
+## Conflict with `flip`
 
 `flip(){:js}` and `autoPlacement(){:js}` cannot be used together
-inside the same middleware array, make sure you choose only one
+inside the same middleware array; make sure you choose only one
 of them to use.
 
 The reason is they both try to perform work on the placement but
@@ -226,7 +276,7 @@ with opposing strategies. Therefore, they will continually try to
 change the result or work of the other one, leading to a reset
 loop.
 
-- `flip(){:js}` — Uses a fallback "no space" strategy. Ensures
-  the preferred placement is kept unless there is no space left.
-- `autoPlacement(){:js}` — Uses a primary "most space" strategy.
+- `flip(){:js}` uses a fallback "no space" strategy. Ensures the
+  preferred placement is kept unless there is no space left.
+- `autoPlacement(){:js}` uses a primary "most space" strategy.
   Always chooses the placement with the most space available.

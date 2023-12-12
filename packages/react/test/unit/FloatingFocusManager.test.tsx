@@ -16,7 +16,7 @@ import {
   useInteractions,
   useRole,
 } from '../../src';
-import {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
+import type {FloatingFocusManagerProps} from '../../src/components/FloatingFocusManager';
 import {Main as Drawer} from '../visual/components/Drawer';
 import {Main as Navigation} from '../visual/components/Navigation';
 
@@ -25,7 +25,7 @@ function App(
     Omit<FloatingFocusManagerProps, 'initialFocus'> & {
       initialFocus?: 'two' | number;
     }
-  >
+  >,
 ) {
   const ref = useRef<HTMLButtonElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -94,7 +94,7 @@ describe('initialFocus', () => {
     render(
       <App>
         <input autoFocus data-testid="input" />
-      </App>
+      </App>,
     );
     fireEvent.click(screen.getByTestId('reference'));
     await act(async () => {});
@@ -161,7 +161,7 @@ describe('returnFocus', () => {
         <FloatingNode id={nodeId}>
           {cloneElement(
             children,
-            getReferenceProps({ref: refs.setReference, ...children.props})
+            getReferenceProps({ref: refs.setReference, ...children.props}),
           )}
           <FloatingPortal>
             {open && (
@@ -208,7 +208,7 @@ describe('returnFocus', () => {
         )}
       >
         <button data-testid="open-dialog" />
-      </NestedDialog>
+      </NestedDialog>,
     );
 
     await userEvent.click(screen.getByTestId('open-dialog'));
@@ -469,7 +469,7 @@ describe('modal', () => {
           {children &&
             cloneElement(
               children,
-              getReferenceProps({ref: refs.setReference, ...children.props})
+              getReferenceProps({ref: refs.setReference, ...children.props}),
             )}
           <FloatingPortal>
             {open && (
@@ -575,7 +575,7 @@ describe('modal', () => {
 
     expect(screen.getByTestId('reference')).toHaveAttribute(
       'aria-hidden',
-      'true'
+      'true',
     );
     expect(screen.getByTestId('floating')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('aria-live')).not.toHaveAttribute('aria-hidden');
@@ -634,39 +634,39 @@ describe('modal', () => {
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute('aria-hidden');
     expect(screen.getByTestId('reference')).toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('btn-1')).toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('btn-2')).toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('original')).toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('original')).toHaveAttribute(
       'aria-hidden',
-      'false'
+      'false',
     );
 
     fireEvent.click(screen.getByTestId('reference'));
 
     expect(screen.getByTestId('reference')).not.toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('btn-1')).not.toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('btn-2')).not.toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('original')).not.toHaveAttribute(
-      'data-floating-ui-inert'
+      'data-floating-ui-inert',
     );
     expect(screen.getByTestId('original')).toHaveAttribute(
       'aria-hidden',
-      'false'
+      'false',
     );
   });
 });
@@ -1076,7 +1076,7 @@ describe('Drawer', () => {
     render(
       <ResponsiveContext.Provider value={{width: 1600}}>
         <Drawer />
-      </ResponsiveContext.Provider>
+      </ResponsiveContext.Provider>,
     );
     await userEvent.click(screen.getByText('My button'));
     expect(screen.queryByText('Close')).toBeInTheDocument();
@@ -1089,7 +1089,7 @@ describe('Drawer', () => {
     render(
       <ResponsiveContext.Provider value={{width: 1600}}>
         <Drawer />
-      </ResponsiveContext.Provider>
+      </ResponsiveContext.Provider>,
     );
     await userEvent.click(screen.getByText('My button'));
     expect(screen.queryByText('Close')).toBeInTheDocument();
@@ -1103,7 +1103,7 @@ describe('Drawer', () => {
     render(
       <ResponsiveContext.Provider value={{width: 1600}}>
         <Drawer />
-      </ResponsiveContext.Provider>
+      </ResponsiveContext.Provider>,
     );
     await userEvent.click(screen.getByText('My button'));
     expect(screen.queryByText('Close')).toBeInTheDocument();
@@ -1200,7 +1200,11 @@ test('untrapped combobox creates non-modal focus management', async () => {
         />
         {isOpen && (
           <FloatingPortal>
-            <FloatingFocusManager context={context} initialFocus={-1}>
+            <FloatingFocusManager
+              context={context}
+              initialFocus={-1}
+              modal={false}
+            >
               <div
                 ref={refs.setFloating}
                 style={floatingStyles}
@@ -1226,4 +1230,81 @@ test('untrapped combobox creates non-modal focus management', async () => {
   await userEvent.tab({shift: true});
   expect(screen.getByTestId('input')).toHaveFocus();
   cleanup();
+});
+
+test('returns focus to last connected element', async () => {
+  function Drawer({
+    open,
+    onOpenChange,
+  }: {
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+  }) {
+    const {refs, context} = useFloating({open, onOpenChange});
+    const dismiss = useDismiss(context);
+    const {getFloatingProps} = useInteractions([dismiss]);
+
+    return (
+      <FloatingFocusManager context={context}>
+        <div ref={refs.setFloating} {...getFloatingProps()}>
+          <button data-testid="child-reference" />
+        </div>
+      </FloatingFocusManager>
+    );
+  }
+
+  function Parent() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const dismiss = useDismiss(context);
+    const click = useClick(context);
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      click,
+      dismiss,
+    ]);
+
+    return (
+      <>
+        <button
+          ref={refs.setReference}
+          data-testid="parent-reference"
+          {...getReferenceProps()}
+        />
+        {isOpen && (
+          <FloatingFocusManager context={context}>
+            <div ref={refs.setFloating} {...getFloatingProps()}>
+              Parent Floating
+              <button
+                data-testid="parent-floating-reference"
+                onClick={() => {
+                  setIsDrawerOpen(true);
+                  setIsOpen(false);
+                }}
+              />
+            </div>
+          </FloatingFocusManager>
+        )}
+        {isDrawerOpen && (
+          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen} />
+        )}
+      </>
+    );
+  }
+
+  render(<Parent />);
+  await userEvent.click(screen.getByTestId('parent-reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('parent-floating-reference')).toHaveFocus();
+  await userEvent.click(screen.getByTestId('parent-floating-reference'));
+  await act(async () => {});
+  expect(screen.getByTestId('child-reference')).toHaveFocus();
+  await userEvent.keyboard('{Escape}');
+  expect(screen.getByTestId('parent-reference')).toHaveFocus();
 });

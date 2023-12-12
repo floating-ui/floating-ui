@@ -51,32 +51,31 @@ var defaultId = 'reach-skip-nav'; //////////////////////////////////////////////
  * @see Docs https://reach.tech/skip-nav#skipnavlink
  */
 
-var SkipNavLink = /*#__PURE__*/ forwardRef(function SkipNavLink(
-  _ref,
-  forwardedRef
-) {
-  var _ref$as = _ref.as,
-    Comp = _ref$as === void 0 ? 'a' : _ref$as,
-    _ref$children = _ref.children,
-    children =
-      _ref$children === void 0
-        ? 'Skip to content'
-        : _ref$children,
-    contentId = _ref.contentId,
-    props = _objectWithoutPropertiesLoose(_ref, _excluded);
+var SkipNavLink = /*#__PURE__*/ forwardRef(
+  function SkipNavLink(_ref, forwardedRef) {
+    var _ref$as = _ref.as,
+      Comp = _ref$as === void 0 ? 'a' : _ref$as,
+      _ref$children = _ref.children,
+      children =
+        _ref$children === void 0
+          ? 'Skip to content'
+          : _ref$children,
+      contentId = _ref.contentId,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded);
 
-  var id = contentId || defaultId;
-  return /*#__PURE__*/ createElement(
-    Comp,
-    _extends({}, props, {
-      ref: forwardedRef,
-      href: '#' + id, // TODO: Remove in 1.0 (kept for back compat)
-      'data-reach-skip-link': '',
-      'data-reach-skip-nav-link': '',
-    }),
-    children
-  );
-});
+    var id = contentId || defaultId;
+    return /*#__PURE__*/ createElement(
+      Comp,
+      _extends({}, props, {
+        ref: forwardedRef,
+        href: '#' + id, // TODO: Remove in 1.0 (kept for back compat)
+        'data-reach-skip-link': '',
+        'data-reach-skip-nav-link': '',
+      }),
+      children,
+    );
+  },
+);
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavlink-props
  */
@@ -107,9 +106,9 @@ var SkipNavContent = /*#__PURE__*/ forwardRef(
         ref: forwardedRef,
         id: id,
         'data-reach-skip-nav-content': '',
-      })
+      }),
     );
-  }
+  },
 );
 /**
  * @see Docs https://reach.tech/skip-nav#skipnavcontent-props

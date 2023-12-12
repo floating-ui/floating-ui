@@ -31,7 +31,7 @@ export interface ArrowOptions {
  * @see https://floating-ui.com/docs/arrow
  */
 export const arrow = (
-  options: ArrowOptions | Derivable<ArrowOptions>
+  options: ArrowOptions | Derivable<ArrowOptions>,
 ): Middleware => ({
   name: 'arrow',
   options,

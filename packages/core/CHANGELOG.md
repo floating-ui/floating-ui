@@ -1,5 +1,18 @@
 # @floating-ui/core
 
+## 1.5.2
+
+### Patch Changes
+
+- 23f32f5d: fix(types): avoid ts 4.2+ syntax
+
+## 1.5.1
+
+### Patch Changes
+
+- 88bf9768: fix(offset): avoid doubling calculation on same placement reset when
+  `arrow` changes alignment of floating element
+
 ## 1.5.0
 
 ### Minor Changes

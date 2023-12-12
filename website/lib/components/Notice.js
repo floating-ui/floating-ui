@@ -23,7 +23,7 @@ export default function Notice({
             type === 'version',
           'mt-8': gap === 'above',
           'mb-8': gap === 'below',
-        }
+        },
       )}
     >
       <h5 className="-mb-2 text-xl font-bold text-gray-900 dark:text-gray-50">

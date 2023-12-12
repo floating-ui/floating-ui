@@ -16,13 +16,13 @@ export function getDocumentRect(element: HTMLElement): Rect {
     html.scrollWidth,
     html.clientWidth,
     body.scrollWidth,
-    body.clientWidth
+    body.clientWidth,
   );
   const height = max(
     html.scrollHeight,
     html.clientHeight,
     body.scrollHeight,
-    body.clientHeight
+    body.clientHeight,
   );
 
   let x = -scroll.scrollLeft + getWindowScrollBarX(element);

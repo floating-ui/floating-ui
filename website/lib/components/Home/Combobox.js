@@ -2,6 +2,7 @@ import {
   autoUpdate,
   flip,
   FloatingFocusManager,
+  FloatingPortal,
   offset,
   size,
   useDismiss,
@@ -160,7 +161,7 @@ const Item = forwardRef(({children, active, ...rest}, ref) => {
         'cursor-default scroll-my-1 rounded-md p-2',
         {
           'bg-blue-500 text-white': active,
-        }
+        },
       )}
       role="option"
       id={id}
@@ -189,7 +190,7 @@ export function ComboboxDemo() {
       window.removeEventListener('resize', onResize);
       window.visualViewport?.removeEventListener(
         'resize',
-        onResize
+        onResize,
       );
     };
   }, []);
@@ -209,7 +210,7 @@ export function ComboboxDemo() {
               placement === 'bottom'
                 ? `${Math.max(
                     padding === 25 ? 150 : 75,
-                    availableHeight
+                    availableHeight,
                   )}px`
                 : `${Math.max(50, availableHeight)}px`,
             width: `${rects.reference.width}px`,
@@ -251,7 +252,7 @@ export function ComboboxDemo() {
   }
 
   const items = fruits.filter((item) =>
-    item.toLowerCase().startsWith(inputValue.toLowerCase())
+    item.toLowerCase().startsWith(inputValue.toLowerCase()),
   );
 
   return (
@@ -283,48 +284,49 @@ export function ComboboxDemo() {
         })}
       />
       {open && (
-        <FloatingFocusManager
-          context={context}
-          initialFocus={-1}
-          visuallyHiddenDismiss
-          returnFocus={false}
-        >
-          <div
-            ref={refs.setFloating}
-            className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
-            style={floatingStyles}
-            {...getFloatingProps()}
+        <FloatingPortal>
+          <FloatingFocusManager
+            context={context}
+            initialFocus={-1}
+            visuallyHiddenDismiss
           >
-            {items.length === 0 && (
-              <p
-                className="m-2"
-                id="combobox-no-results"
-                role="region"
-                aria-atomic="true"
-                aria-live="assertive"
-              >
-                No flavors found.
-              </p>
-            )}
-            {items.map((item, index) => (
-              <Item
-                {...getItemProps({
-                  key: item,
-                  ref(node) {
-                    listRef.current[index] = node;
-                  },
-                  onClick() {
-                    setInputValue(item);
-                    setOpen(false);
-                  },
-                })}
-                active={activeIndex === index}
-              >
-                {item}
-              </Item>
-            ))}
-          </div>
-        </FloatingFocusManager>
+            <div
+              ref={refs.setFloating}
+              className="z-10 max-h-[20rem] overflow-y-auto rounded-lg border border-slate-900/5 bg-white/80 bg-clip-padding p-1 text-left shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
+              style={floatingStyles}
+              {...getFloatingProps()}
+            >
+              {items.length === 0 && (
+                <p
+                  className="m-2"
+                  id="combobox-no-results"
+                  role="region"
+                  aria-atomic="true"
+                  aria-live="assertive"
+                >
+                  No flavors found.
+                </p>
+              )}
+              {items.map((item, index) => (
+                <Item
+                  {...getItemProps({
+                    key: item,
+                    ref(node) {
+                      listRef.current[index] = node;
+                    },
+                    onClick() {
+                      setInputValue(item);
+                      setOpen(false);
+                    },
+                  })}
+                  active={activeIndex === index}
+                >
+                  {item}
+                </Item>
+              ))}
+            </div>
+          </FloatingFocusManager>
+        </FloatingPortal>
       )}
     </>
   );

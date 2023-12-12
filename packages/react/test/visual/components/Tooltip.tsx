@@ -1,10 +1,10 @@
+import type {Placement} from '@floating-ui/react';
 import {
   autoUpdate,
   flip,
   FloatingDelayGroup,
   FloatingPortal,
   offset,
-  Placement,
   shift,
   useDelayGroup,
   useDelayGroupContext,

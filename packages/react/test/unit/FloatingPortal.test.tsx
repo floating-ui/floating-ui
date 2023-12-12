@@ -42,7 +42,7 @@ test('uses a custom id node as the root', async () => {
   fireEvent.click(screen.getByTestId('reference'));
   await act(async () => {});
   expect(screen.getByTestId('floating').parentElement?.parentElement).toBe(
-    customRoot
+    customRoot,
   );
   customRoot.remove();
 });
@@ -52,7 +52,7 @@ test('creates a custom id node as the root', async () => {
   fireEvent.click(screen.getByTestId('reference'));
   await act(async () => {});
   expect(screen.getByTestId('floating').parentElement?.parentElement?.id).toBe(
-    'custom-id'
+    'custom-id',
   );
 });
 

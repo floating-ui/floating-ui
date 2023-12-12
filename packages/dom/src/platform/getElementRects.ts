@@ -1,10 +1,10 @@
-import {Platform} from '../types';
+import type {Platform} from '../types';
 import {getRectRelativeToOffsetParent} from '../utils/getRectRelativeToOffsetParent';
 import {getOffsetParent} from './getOffsetParent';
 
 export const getElementRects: Platform['getElementRects'] = async function (
   this: Platform,
-  {reference, floating, strategy}
+  {reference, floating, strategy},
 ) {
   const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
   const getDimensionsFn = this.getDimensions;
@@ -12,7 +12,7 @@ export const getElementRects: Platform['getElementRects'] = async function (
     reference: getRectRelativeToOffsetParent(
       reference,
       await getOffsetParentFn(floating),
-      strategy
+      strategy,
     ),
     floating: {x: 0, y: 0, ...(await getDimensionsFn(floating))},
   };

@@ -9,12 +9,12 @@ import {useLatestRef} from './utils/useLatestRef';
 const camelCaseToKebabCase = (str: string): string =>
   str.replace(
     /[A-Z]+(?![a-z])|[A-Z]/g,
-    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase()
+    ($, ofs) => (ofs ? '-' : '') + $.toLowerCase(),
   );
 
 function execWithArgsOrReturn<Value extends object | undefined, SidePlacement>(
   valueOrFn: Value | ((args: SidePlacement) => Value),
-  args: SidePlacement
+  args: SidePlacement,
 ): Value {
   return typeof valueOrFn === 'function' ? valueOrFn(args) : valueOrFn;
 }
@@ -49,7 +49,7 @@ type Status = 'unmounted' | 'initial' | 'open' | 'close';
  */
 export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseTransitionStatusProps = {}
+  props: UseTransitionStatusProps = {},
 ): {
   isMounted: boolean;
   status: Status;
@@ -120,7 +120,7 @@ export interface UseTransitionStylesProps extends UseTransitionStatusProps {
  */
 export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseTransitionStylesProps = {}
+  props: UseTransitionStylesProps = {},
 ): {
   isMounted: boolean;
   styles: React.CSSProperties;

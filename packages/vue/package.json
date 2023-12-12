@@ -57,7 +57,7 @@
   "devDependencies": {
     "@parcel/transformer-vue": "^2.6.0",
     "@testing-library/vue": "^6.6.1",
-    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue": "^4.5.0",
     "vue": "^3.2.45"
   }
 }

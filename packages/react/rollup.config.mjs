@@ -117,7 +117,7 @@ export default bundles.map(({input, output}) => ({
           '@floating-ui/utils/dom',
           '@floating-ui/react/utils',
         ]
-      : []
+      : [],
   ),
   plugins: [
     commonjs(),

@@ -107,7 +107,7 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
     whileElementsMounted?: (
       reference: T,
       floating: FloatingElement,
-      update: () => void
+      update: () => void,
     ) => () => void;
   };
 

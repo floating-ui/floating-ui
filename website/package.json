@@ -24,7 +24,6 @@
     "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.4",
-    "prettier": "^2.8.6",
     "prettier-plugin-tailwindcss": "^0.2.5",
     "tailwindcss": "^3.2.4",
     "url-loader": "^4.1.1"
@@ -32,7 +31,7 @@
   "dependencies": {
     "@docsearch/css": "^3.3.3",
     "@docsearch/react": "^3.3.3",
-    "@floating-ui/react": "^0.26.2",
+    "@floating-ui/react": "^0.26.4",
     "@mdx-js/loader": "^2.1.1",
     "@mdx-js/react": "^2.1.1",
     "@next/mdx": "^12.1.5",

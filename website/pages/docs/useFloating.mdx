@@ -75,7 +75,7 @@ useFloating({
 ```ts
 interface UseFloatingOptions {
   placement?: Placement;
-  strategy: 'fixed' | 'absolute';
+  strategy?: 'fixed' | 'absolute';
   transform?: boolean;
   middleware?: Array<Middleware | undefined | null | false>;
   open?: boolean;
@@ -83,15 +83,16 @@ interface UseFloatingOptions {
     open: boolean,
     event?: Event,
     reason?: OpenChangeReason,
+    reason?: OpenChangeReason,
   ): void;
   elements?: {
     reference?: ReferenceElement | null;
     floating?: FloatingElement | null;
   };
   whileElementsMounted?(
-    reference?: ReferenceElement,
-    floating?: FloatingElement,
-    update?: () => void,
+    reference: ReferenceElement,
+    floating: FloatingElement,
+    update: () => void,
   ): () => void;
   nodeId?: string;
 }
@@ -104,7 +105,7 @@ interface UseFloatingOptions {
 ```ts
 interface UseFloatingOptions {
   placement?: Placement;
-  strategy: 'fixed' | 'absolute';
+  strategy?: 'fixed' | 'absolute';
   transform?: boolean;
   middleware?: Array<Middleware | undefined | null | false>;
   open?: boolean;
@@ -113,9 +114,9 @@ interface UseFloatingOptions {
     floating?: FloatingElement | null;
   };
   whileElementsMounted?(
-    reference?: ReferenceElement,
-    floating?: FloatingElement,
-    update?: () => void,
+    reference: ReferenceElement,
+    floating: FloatingElement,
+    update: () => void,
   ): () => void;
 }
 ```

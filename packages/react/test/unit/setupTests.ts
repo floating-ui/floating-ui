@@ -11,7 +11,7 @@ vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
   (callback: FrameRequestCallback): number => {
     callback(0);
     return 0;
-  }
+  },
 );
 
 HTMLElement.prototype.inert = true;

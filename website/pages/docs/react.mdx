@@ -15,8 +15,8 @@ comboboxes, and more.
 npm install @floating-ui/react
 ```
 
-Alternatively, if you only need positioning without interactions,
-use:
+Alternatively for a smaller bundle size, if you only need
+positioning without interactions, use:
 
 ```bash
 npm install @floating-ui/react-dom
@@ -42,9 +42,26 @@ Floating UI's usage can be broken down into two disparate parts:
 
 `useFloating(){:js}` is the main hook of each package.
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useFloating} from '@floating-ui/react';
+```
 
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {useFloating} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+At its most basic, the hook returns a `refs{:.const}` object and
+a `floatingStyles{:.const}` object:
+
+```js
 function App() {
   const {refs, floatingStyles} = useFloating();
   return (
@@ -80,9 +97,23 @@ element, such as when scrolling or resizing, pass
 [`autoUpdate`](/docs/autoUpdate) to the
 `whileElementsMounted{:.objectKey}` option:
 
+<ShowFor packages={['react']}>
+
 ```js
 import {useFloating, autoUpdate} from '@floating-ui/react';
+```
 
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {useFloating, autoUpdate} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+```js
 const {refs, floatingStyles} = useFloating({
   whileElementsMounted: autoUpdate,
 });

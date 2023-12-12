@@ -94,7 +94,7 @@ test('registers element ref and indexes correctly', async () => {
         <Option>Five</Option>
         <Option>Six</Option>
       </>
-    </Select>
+    </Select>,
   );
 
   fireEvent.click(screen.getByRole('button'));
@@ -121,7 +121,7 @@ test('registers an element ref and index correctly', async () => {
   render(
     <Select>
       <Option>One</Option>
-    </Select>
+    </Select>,
   );
 
   fireEvent.click(screen.getByRole('button'));
@@ -143,7 +143,7 @@ test('registers strings correctly (no value)', async () => {
         <Option>Five</Option>
         <Option>Six</Option>
       </>
-    </Select>
+    </Select>,
   );
 
   fireEvent.click(screen.getByRole('button'));
@@ -173,7 +173,7 @@ test('registers strings correctly (label)', async () => {
         <Option label="Five">Five</Option>
         <Option label="Six">Six</Option>
       </>
-    </Select>
+    </Select>,
   );
 
   fireEvent.click(screen.getByRole('button'));
@@ -203,7 +203,7 @@ test('handles re-ordering', async () => {
         <Option>Five</Option>
         <Option>Six</Option>
       </>
-    </Select>
+    </Select>,
   );
 
   fireEvent.click(screen.getByRole('button'));
@@ -227,7 +227,7 @@ test('handles re-ordering', async () => {
         <Option>Six</Option>
         <Option>Five</Option>
       </>
-    </Select>
+    </Select>,
   );
 
   fireEvent.keyDown(screen.getByRole('listbox'), {key: 'ArrowDown'});

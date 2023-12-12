@@ -18,7 +18,7 @@ import {FloatingList, useListItem} from './FloatingList';
 
 function renderJsx(
   render: RenderProp | undefined,
-  computedProps: React.HTMLAttributes<HTMLElement>
+  computedProps: React.HTMLAttributes<HTMLElement>,
 ) {
   if (typeof render === 'function') {
     return render(computedProps);
@@ -68,12 +68,12 @@ export const Composite = React.forwardRef<
     onNavigate: externalSetActiveIndex,
     ...props
   },
-  forwardedRef
+  forwardedRef,
 ) {
   const [internalActiveIndex, internalSetActiveIndex] = React.useState(0);
   const activeIndex = externalActiveIndex ?? internalActiveIndex;
   const onNavigate = useEffectEvent(
-    externalSetActiveIndex ?? internalSetActiveIndex
+    externalSetActiveIndex ?? internalSetActiveIndex,
   );
 
   const elementsRef = React.useRef<Array<HTMLDivElement | null>>([]);
@@ -81,7 +81,7 @@ export const Composite = React.forwardRef<
     render && typeof render !== 'function' ? render.props : {};
   const contextValue = React.useMemo(
     () => ({activeIndex, onNavigate}),
-    [activeIndex, onNavigate]
+    [activeIndex, onNavigate],
   );
   const isGrid = cols > 1;
 

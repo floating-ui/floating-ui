@@ -211,7 +211,7 @@ A roving tabIndex is the recommended strategy:
 ## Props
 
 ```ts
-interface Props {
+interface UseListNavigationProps {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
   onNavigate?: (index: number | null) => void;

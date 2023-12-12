@@ -17,7 +17,7 @@ import {click} from './utils/click';
     await page.goto('http://localhost:1234/border');
     await click(page, `[data-testid="border-${node}"]`);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${node}.png`
+      `${node}.png`,
     );
   });
 });

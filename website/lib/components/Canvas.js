@@ -48,7 +48,7 @@ export function Canvas() {
         reference.x,
         reference.y,
         reference.width,
-        reference.height
+        reference.height,
       );
       ctx.fillStyle = 'royalblue';
       ctx.fill();
@@ -58,7 +58,7 @@ export function Canvas() {
       ctx.fillText(
         'Drag me',
         reference.x + 43,
-        reference.y + reference.height / 2 + 5
+        reference.y + reference.height / 2 + 5,
       );
 
       ctx.beginPath();
@@ -71,7 +71,7 @@ export function Canvas() {
       ctx.fillText(
         'Floating',
         x + 100,
-        y + floating.height / 2 + 5
+        y + floating.height / 2 + 5,
       );
     });
   }, [width, height]);
@@ -173,12 +173,12 @@ export function Canvas() {
     return () => {
       window.removeEventListener(
         'pointerdown',
-        handlePointerDown
+        handlePointerDown,
       );
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener(
         'pointermove',
-        handlePointerMove
+        handlePointerMove,
       );
     };
   }, [position]);

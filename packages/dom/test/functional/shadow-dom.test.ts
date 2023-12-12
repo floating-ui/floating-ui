@@ -19,14 +19,14 @@ useCases.forEach((useCase) => {
             await click(page, `[data-testid="strategy-${strategy}"]`);
             await click(
               page,
-              `[data-testid="with-transform-${withTransform}"]`
+              `[data-testid="with-transform-${withTransform}"]`,
             );
             expect(
-              await page.locator('.container').screenshot()
+              await page.locator('.container').screenshot(),
             ).toMatchSnapshot(
               `${useCase}-host-position-${cssPosition}-${placement}-${strategy}-${
                 withTransform ? 'with' : 'without'
-              }-transform.png`
+              }-transform.png`,
             );
           });
         });
@@ -40,16 +40,16 @@ test('relative position host polyfill', async ({page}) => {
 
   await click(
     page,
-    '[data-testid="use-case-relative-host-with-shadowed-floating-child"]'
+    '[data-testid="use-case-relative-host-with-shadowed-floating-child"]',
   );
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `without-polyfill.png`
+    `without-polyfill.png`,
   );
 
   await click(page, '[data-testid="polyfill-true"]');
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `with-polyfill.png`
+    `with-polyfill.png`,
   );
 });

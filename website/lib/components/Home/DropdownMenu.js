@@ -51,7 +51,7 @@ export const MenuComponent = forwardRef(
           strings.push(
             child.props.label && !child.props.disabled
               ? child.props.label
-              : null
+              : null,
           );
         }
       });
@@ -63,8 +63,9 @@ export const MenuComponent = forwardRef(
     const parentId = useFloatingParentNodeId();
     const isNested = parentId != null;
 
-    const {x, y, strategy, refs, context} = useFloating({
+    const {refs, floatingStyles, context} = useFloating({
       nodeId,
+      transform: false,
       open: isOpen,
       onOpenChange: setIsOpen,
       placement: isNested ? 'right-start' : 'bottom-start',
@@ -175,7 +176,7 @@ export const MenuComponent = forwardRef(
           onPointerMove,
           {
             capture: true,
-          }
+          },
         );
         window.removeEventListener('keydown', onKeyDown, true);
       };
@@ -221,7 +222,7 @@ export const MenuComponent = forwardRef(
                 isOpen && isNested && !hasFocusInside,
               'rounded bg-gray-500/20 dark:bg-gray-700':
                 isNested && isOpen && hasFocusInside,
-            }
+            },
           )}
         >
           {label}{' '}
@@ -231,8 +232,8 @@ export const MenuComponent = forwardRef(
             </span>
           )}
         </button>
-        <FloatingPortal>
-          {isMounted && (
+        {isMounted && (
+          <FloatingPortal>
             <FloatingFocusManager
               context={context}
               // Prevent outside content interference.
@@ -246,9 +247,7 @@ export const MenuComponent = forwardRef(
                 ref={refs.setFloating}
                 className="flex flex-col rounded border border-slate-900/10 bg-white/80 bg-clip-padding p-1 shadow-lg outline-none backdrop-blur-lg dark:bg-gray-600/80"
                 style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
+                  ...floatingStyles,
                   width: 'max-content',
                   ...styles,
                 }}
@@ -279,16 +278,16 @@ export const MenuComponent = forwardRef(
                             setActiveIndex(index);
                           }
                         },
-                      })
-                    )
+                      }),
+                    ),
                 )}
               </div>
             </FloatingFocusManager>
-          )}
-        </FloatingPortal>
+          </FloatingPortal>
+        )}
       </FloatingNode>
     );
-  }
+  },
 );
 
 export const Menu = forwardRef((props, ref) => {
@@ -315,7 +314,7 @@ export const MenuItem = forwardRef(
           'flex cursor-default rounded py-2 px-3 text-left outline-none focus:bg-blue-500 focus:text-white',
           {
             'opacity-40': disabled,
-          }
+          },
         )}
         ref={ref}
         role="menuitem"
@@ -324,5 +323,5 @@ export const MenuItem = forwardRef(
         {label}
       </button>
     );
-  }
+  },
 );

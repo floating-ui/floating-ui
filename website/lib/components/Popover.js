@@ -112,7 +112,7 @@ export function usePopover({
       labelId,
       descriptionId,
       transition,
-    ]
+    ],
   );
 }
 
@@ -123,7 +123,7 @@ export const usePopoverContext = () => {
 
   if (context == null) {
     throw new Error(
-      'Popover components must be wrapped in <Popover />'
+      'Popover components must be wrapped in <Popover />',
     );
   }
 
@@ -148,7 +148,7 @@ export function Popover({
 export const PopoverTrigger = React.forwardRef(
   function PopoverTrigger(
     {children, asChild = false, ...props},
-    propRef
+    propRef,
   ) {
     const context = usePopoverContext();
     const childrenRef = children.ref;
@@ -167,7 +167,7 @@ export const PopoverTrigger = React.forwardRef(
           ...props,
           ...children.props,
           'data-state': context.open ? 'open' : 'closed',
-        })
+        }),
       );
     }
 
@@ -182,7 +182,7 @@ export const PopoverTrigger = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );
 
 export const PopoverContent = React.forwardRef(
@@ -194,43 +194,43 @@ export const PopoverContent = React.forwardRef(
       propRef,
     ]);
 
+    if (!context.isMounted) return null;
+
     return (
       <FloatingPortal>
-        {context.isMounted && (
-          <FloatingFocusManager
-            context={floatingContext}
-            modal={context.modal}
+        <FloatingFocusManager
+          context={floatingContext}
+          modal={context.modal}
+        >
+          <div
+            ref={ref}
+            style={{
+              position: context.strategy,
+              top: context.y ?? 0,
+              left: context.x ?? 0,
+              width: 'max-content',
+              ...props.style,
+              ...context.styles,
+            }}
+            aria-labelledby={context.labelId}
+            aria-describedby={context.descriptionId}
+            {...context.getFloatingProps(props)}
           >
-            <div
-              ref={ref}
-              style={{
-                position: context.strategy,
-                top: context.y ?? 0,
-                left: context.x ?? 0,
-                width: 'max-content',
-                ...props.style,
-                ...context.styles,
-              }}
-              aria-labelledby={context.labelId}
-              aria-describedby={context.descriptionId}
-              {...context.getFloatingProps(props)}
-            >
-              {props.children}
-              <FloatingArrow
-                ref={context.arrowRef}
-                context={floatingContext}
-                height={10}
-                fill="white"
-                stroke="rgba(0,0,0,0.1)"
-                strokeWidth={1}
-                tipRadius={2}
-              />
-            </div>
-          </FloatingFocusManager>
-        )}
+            {props.children}
+            <FloatingArrow
+              ref={context.arrowRef}
+              context={floatingContext}
+              height={10}
+              fill="white"
+              stroke="rgba(0,0,0,0.1)"
+              strokeWidth={1}
+              tipRadius={2}
+            />
+          </div>
+        </FloatingFocusManager>
       </FloatingPortal>
     );
-  }
+  },
 );
 
 export const PopoverHeading = React.forwardRef(
@@ -250,7 +250,7 @@ export const PopoverHeading = React.forwardRef(
         {children}
       </h2>
     );
-  }
+  },
 );
 
 export const PopoverDescription = React.forwardRef(
@@ -270,7 +270,7 @@ export const PopoverDescription = React.forwardRef(
         {children}
       </p>
     );
-  }
+  },
 );
 
 export const PopoverClose = React.forwardRef(
@@ -289,5 +289,5 @@ export const PopoverClose = React.forwardRef(
         {children}
       </button>
     );
-  }
+  },
 );

@@ -12,21 +12,21 @@ export function isDifferentRow(index: number, cols: number, prevRow: number) {
 
 export function isIndexOutOfBounds(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  index: number
+  index: number,
 ) {
   return index < 0 || index >= listRef.current.length;
 }
 
 export function getMinIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  disabledIndices: Array<number> | undefined
+  disabledIndices: Array<number> | undefined,
 ) {
   return findNonDisabledIndex(listRef, {disabledIndices});
 }
 
 export function getMaxIndex(
   listRef: React.MutableRefObject<Array<HTMLElement | null>>,
-  disabledIndices: Array<number> | undefined
+  disabledIndices: Array<number> | undefined,
 ) {
   return findNonDisabledIndex(listRef, {
     decrement: true,
@@ -47,27 +47,25 @@ export function findNonDisabledIndex(
     decrement?: boolean;
     disabledIndices?: Array<number>;
     amount?: number;
-  } = {}
+  } = {},
 ): number {
   const list = listRef.current;
 
   const isDisabledIndex = disabledIndices
     ? (index: number) => disabledIndices.includes(index)
     : (index: number) => {
-      const element = list[index];
-      return element == null ||
-        element.hasAttribute('disabled') ||
-        element.getAttribute('aria-disabled') === 'true';
-    };
+        const element = list[index];
+        return (
+          element == null ||
+          element.hasAttribute('disabled') ||
+          element.getAttribute('aria-disabled') === 'true'
+        );
+      };
 
   let index = startingIndex;
   do {
     index += decrement ? -amount : amount;
-  } while (
-    index >= 0 &&
-    index <= list.length - 1 &&
-    isDisabledIndex(index)
-  );
+  } while (index >= 0 && index <= list.length - 1 && isDisabledIndex(index));
 
   return index;
 }
@@ -94,7 +92,7 @@ export function getGridNavigatedIndex(
     maxIndex: number;
     prevIndex: number;
     stopEvent?: boolean;
-  }
+  },
 ) {
   let nextIndex = prevIndex;
 

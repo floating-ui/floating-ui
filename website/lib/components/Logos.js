@@ -1,5 +1,5 @@
 import {FloatingDelayGroup} from '@floating-ui/react';
-import {useEffect,useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {getTierSponsors} from '../utils/openCollective';
 import {
@@ -15,14 +15,14 @@ export function Logos({items, tier}) {
     getTierSponsors('floating-ui', tier).then(
       (activeMembers) => {
         setActiveMembers(activeMembers);
-      }
+      },
     );
   }, [tier]);
 
   const activeItems = items.filter((item) =>
     activeMembers.some(
-      (member) => member.MemberId === item.MemberId
-    )
+      (member) => member.MemberId === item.MemberId,
+    ),
   );
 
   return (

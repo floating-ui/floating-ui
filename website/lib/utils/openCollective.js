@@ -8,7 +8,7 @@ export function isDateWithinLastMonth(date) {
   const oneMonthAgo = new Date(
     now.getFullYear(),
     now.getMonth() - 1,
-    now.getDate()
+    now.getDate(),
   );
 
   return date > oneMonthAgo;
@@ -16,7 +16,7 @@ export function isDateWithinLastMonth(date) {
 
 export async function getTierSponsors(collectiveSlug, tierName) {
   const response = await fetch(
-    `https://opencollective.com/${collectiveSlug}/members/all.json`
+    `https://opencollective.com/${collectiveSlug}/members/all.json`,
   );
   const data = await response.json();
 
@@ -26,13 +26,13 @@ export async function getTierSponsors(collectiveSlug, tierName) {
         member.lastTransactionAmount ===
           TIER_AMOUNTS[tierName] &&
         isDateWithinLastMonth(
-          new Date(member.lastTransactionAt)
+          new Date(member.lastTransactionAt),
         );
       return result;
     };
 
     return data.filter(
-      (member) => member.isActive && isMatchingTier(member)
+      (member) => member.isActive && isMatchingTier(member),
     );
   } else {
     throw new Error(data.error);

@@ -71,7 +71,7 @@ function App() {
 ## Props
 
 ```ts
-interface Props {
+interface UseDismissProps {
   enabled?: boolean;
   escapeKey?: boolean;
   referencePress?: boolean;
@@ -333,16 +333,7 @@ floating elements will prefer bubbling.
 ```js
 useDismiss(context, {
   bubbles: false,
-});
-```
-
-The boolean value of `bubbles` applies to both `escapeKey` and
-`outsidePress` event bubbling. In case of a need to only disable
-bubbling of one of those events, specify an object to the prop.
-Any omitted events will use the default value.
-
-```js
-useDismiss(context, {
+  // or, individually configure:
   bubbles: {
     escapeKey: true, // false by default
     outsidePress: false, // true by default
@@ -359,6 +350,7 @@ Determines whether to use capture phase event listeners.
 ```js
 useDismiss(context, {
   capture: true,
+  // or, individually configure:
   capture: {
     escapeKey: true, // false by default
     outsidePress: false, // true by default

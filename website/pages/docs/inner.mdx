@@ -34,7 +34,7 @@ There are two modules: `inner(){:js}` and
 
 <ShowFor packages={['react']}>
 
-```js /inner/1-2 /useInnerOffset/1-2
+```js /inner/1-2#a /useInnerOffset/1-2#b
 import {inner, useInnerOffset} from '@floating-ui/react';
 
 // ...
@@ -58,7 +58,7 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ## inner Props
 
 ```js
-interface Props extends DetectOverflowOptions {
+interface InnerProps extends DetectOverflowOptions {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   index: number;
   offset?: number;
@@ -289,7 +289,7 @@ inner({
 <ShowFor packages={['react']}>
 
 ```js
-interface Props extends DetectOverflowOptions {
+interface UseInnerOffsetProps extends DetectOverflowOptions {
   enabled?: boolean;
   overflowRef: React.MutableRefObject<SideObject | null>;
   scrollRef?: React.MutableRefObject<HTMLElement | null>;

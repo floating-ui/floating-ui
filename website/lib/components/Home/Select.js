@@ -158,7 +158,7 @@ export function SelectDemo() {
                   {
                     'bg-cyan-200 dark:bg-blue-500 dark:text-white':
                       i === activeIndex,
-                  }
+                  },
                 )}
                 {...getItemProps({
                   // Handle pointer select.

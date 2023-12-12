@@ -24,7 +24,7 @@ export function CircleImage({name}) {
           {
             'animate-blur-in': loaded,
             'opacity-0': !loaded,
-          }
+          },
         )}
         src={src}
         aria-hidden

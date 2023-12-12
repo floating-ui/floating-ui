@@ -3,7 +3,9 @@ import type {
   UseFloatingReturn as UsePositionFloatingReturn,
   VirtualElement,
 } from '@floating-ui/react-dom';
-import * as React from 'react';
+import type * as React from 'react';
+
+import type {ExtendedUserProps} from './hooks/useInteractions';
 
 export * from '.';
 export {FloatingArrowProps} from './components/FloatingArrow';
@@ -156,7 +158,9 @@ export interface FloatingTreeType<RT extends ReferenceType = ReferenceType> {
 export interface ElementProps {
   reference?: React.HTMLProps<Element>;
   floating?: React.HTMLProps<HTMLElement>;
-  item?: React.HTMLProps<HTMLElement>;
+  item?:
+    | React.HTMLProps<HTMLElement>
+    | ((props: ExtendedUserProps) => React.HTMLProps<HTMLElement>);
 }
 
 export type ReferenceType = Element | VirtualElement;

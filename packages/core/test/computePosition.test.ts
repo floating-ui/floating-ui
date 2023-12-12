@@ -22,7 +22,7 @@ test('returned data', async () => {
       placement: 'top',
       middleware: [{name: 'custom', fn: () => ({data: {property: true}})}],
       platform,
-    }
+    },
   );
 
   expect(placement).toBe('top');

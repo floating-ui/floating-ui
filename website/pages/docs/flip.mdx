@@ -80,7 +80,7 @@ side axis by flipping it to the opposite side by default.
 
 ## Usage
 
-<ShowFor packages={['core']}>
+<ShowFor packages={['core', 'dom']}>
 
 ```js
 computePosition(referenceEl, floatingEl, {
@@ -120,7 +120,7 @@ useFloating(reference, floating, {
 These are the options you can pass to `flip(){:js}`.
 
 ```ts
-interface Options extends DetectOverflowOptions {
+interface FlipOptions extends DetectOverflowOptions {
   mainAxis?: boolean;
   crossAxis?: boolean;
   fallbackAxisSideDirection?: 'none' | 'start' | 'end';
@@ -539,10 +539,10 @@ const {placement} = useFloating(reference, floating, {
 
 </ShowFor>
 
-## Conflict with autoPlacement
+## Conflict with `autoPlacement`
 
 `flip(){:js}` and `autoPlacement(){:js}` cannot be used together
-inside the same middleware array, make sure you choose only one
+inside the same middleware array; make sure you choose only one
 of them to use.
 
 The reason is they both try to perform work on the placement but
@@ -550,7 +550,7 @@ with opposing strategies. Therefore, they will continually try to
 change the result or work of the other one, leading to a reset
 loop.
 
-- `flip(){:js}` — Uses a fallback "no space" strategy. Ensures
-  the preferred placement is kept unless there is no space left.
-- `autoPlacement(){:js}` — Uses a primary "most space" strategy.
+- `flip(){:js}` uses a fallback "no space" strategy. Ensures the
+  preferred placement is kept unless there is no space left.
+- `autoPlacement(){:js}` uses a primary "most space" strategy.
   Always chooses the placement with the most space available.

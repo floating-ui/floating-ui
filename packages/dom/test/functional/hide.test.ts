@@ -9,7 +9,7 @@ test('yellow once it has escaped', async ({page}) => {
   await scroll(page, {y: 450});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `hide-escaped.png`
+    `hide-escaped.png`,
   );
 });
 
@@ -19,7 +19,7 @@ test('black once reference is hidden', async ({page}) => {
   await scroll(page, {y: 300});
 
   expect(await page.locator('main').screenshot()).toMatchSnapshot(
-    `hide-reference-hidden.png`
+    `hide-reference-hidden.png`,
   );
 });
 
@@ -29,7 +29,7 @@ test('not black or yellow while still within bounds', async ({page}) => {
   await scroll(page, {y: 908, x: 264});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `hide-within-bounds.png`
+    `hide-within-bounds.png`,
   );
 });
 
@@ -39,7 +39,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
   await scroll(page, {y: 920});
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-    `hide-reference-hidden-no-escape.png`
+    `hide-reference-hidden-no-escape.png`,
   );
 });
 
@@ -49,7 +49,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `not-black-${hierarchy}.png`
+      `not-black-${hierarchy}.png`,
     );
   });
 });
@@ -60,7 +60,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `black-${hierarchy}.png`
+      `black-${hierarchy}.png`,
     );
   });
 });
@@ -71,7 +71,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `yellow-${hierarchy}.png`
+      `yellow-${hierarchy}.png`,
     );
   });
 });
@@ -84,7 +84,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `square-${hierarchy}.png`
+      `square-${hierarchy}.png`,
     );
   });
 });
@@ -97,7 +97,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `resize-height-${hierarchy}.png`
+      `resize-height-${hierarchy}.png`,
     );
   });
 });
@@ -110,7 +110,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `yellow-not-black-${hierarchy}.png`
+      `yellow-not-black-${hierarchy}.png`,
     );
   });
 });
@@ -123,7 +123,7 @@ test('black while reference is hidden, without escaping', async ({page}) => {
     await click(page, `[data-testid="hierarchy-${hierarchy}"]`);
 
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `bottom-center-${hierarchy}.png`
+      `bottom-center-${hierarchy}.png`,
     );
   });
 });

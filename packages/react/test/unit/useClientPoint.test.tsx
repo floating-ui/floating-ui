@@ -87,7 +87,7 @@ test('renders at mouse event coords', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -99,7 +99,7 @@ test('renders at mouse event coords', async () => {
       bubbles: true,
       clientX: 1000,
       clientY: 1000,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -112,7 +112,7 @@ test('renders at mouse event coords', async () => {
       bubbles: true,
       clientX: 700,
       clientY: 700,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -127,7 +127,7 @@ test('renders at mouse event coords', async () => {
       bubbles: true,
       clientX: 700,
       clientY: 700,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -139,7 +139,7 @@ test('renders at mouse event coords', async () => {
       bubbles: true,
       clientX: 0,
       clientY: 0,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -155,7 +155,7 @@ test('ignores mouse events when explicit coords are specified', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -173,7 +173,7 @@ test('cleans up window listener when closing or disabling', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -185,7 +185,7 @@ test('cleans up window listener when closing or disabling', async () => {
       bubbles: true,
       clientX: 0,
       clientY: 0,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -199,7 +199,7 @@ test('cleans up window listener when closing or disabling', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -213,7 +213,7 @@ test('cleans up window listener when closing or disabling', async () => {
       bubbles: true,
       clientX: 0,
       clientY: 0,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -231,7 +231,7 @@ test('axis x', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -249,7 +249,7 @@ test('axis y', async () => {
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
   await act(async () => {});
 
@@ -267,7 +267,7 @@ test('removes window listener when cursor lands on floating element', async () =
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
 
   fireEvent(
@@ -276,7 +276,7 @@ test('removes window listener when cursor lands on floating element', async () =
       bubbles: true,
       clientX: 500,
       clientY: 500,
-    })
+    }),
   );
 
   fireEvent(
@@ -285,7 +285,7 @@ test('removes window listener when cursor lands on floating element', async () =
       bubbles: true,
       clientX: 0,
       clientY: 0,
-    })
+    }),
   );
   await act(async () => {});
 

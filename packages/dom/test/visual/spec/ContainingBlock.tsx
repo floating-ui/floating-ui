@@ -8,7 +8,7 @@ export function ContainingBlock() {
     useState<CSSStyleDeclaration['willChange']>('transform');
   const [contain, setContain] = useState('paint');
   const [containerType, setContainerType] = useState<string | undefined>(
-    undefined
+    undefined,
   );
 
   const {refs, floatingStyles, update} = useFloating({
@@ -55,7 +55,7 @@ export function ContainingBlock() {
             >
               {localWillChange}
             </button>
-          )
+          ),
         )}
       </Controls>
 
@@ -73,7 +73,7 @@ export function ContainingBlock() {
             >
               {localContain}
             </button>
-          )
+          ),
         )}
       </Controls>
 

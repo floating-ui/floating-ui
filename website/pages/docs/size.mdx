@@ -110,7 +110,7 @@ computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
       apply({availableWidth, availableHeight, elements}) {
-        // Do things with the data.
+        // Change styles
       },
     }),
   ],
@@ -126,7 +126,27 @@ computePosition(referenceEl, floatingEl, {
   middleware: [
     size({
       apply({availableWidth, availableHeight, elements}) {
-        // Do things with the data, e.g.
+        // Change styles, e.g.
+        Object.assign(elements.floating.style, {
+          maxWidth: `${availableWidth}px`,
+          maxHeight: `${availableHeight}px`,
+        });
+      },
+    }),
+  ],
+});
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+useFloating(reference, floating, {
+  middleware: [
+    size({
+      apply({availableWidth, availableHeight, elements}) {
+        // Change styles, e.g.
         Object.assign(elements.floating.style, {
           maxWidth: `${availableWidth}px`,
           maxHeight: `${availableHeight}px`,
@@ -141,24 +161,41 @@ computePosition(referenceEl, floatingEl, {
 
 <ShowFor packages={['react', 'react-dom']}>
 
+1. You can use sync state, and apply using the `style{:.keyword}`
+   prop during render, achieved via `flushSync(){:js}`:
+
 ```js
 import {flushSync} from 'react-dom';
 ```
 
-1. You can use sync state, and apply using React props.
-2. Or, mutate the style attribute directly.
+```js {6-8}  /maxHeight/
+const [maxHeight, setMaxHeight] = useState(null);
+
+const {refs, floatingStyles} = useFloating({
+  middleware: [
+    size({
+      apply({availableHeight}) {
+        flushSync(() => setMaxHeight(availableHeight));
+      },
+    }),
+  ],
+});
+
+return (
+  <div
+    ref={refs.setFloating}
+    style={{...floatingStyles, maxHeight}}
+  />
+);
+```
+
+2. Or, mutate the style property directly:
 
 ```js
-const [maxWidth, setMaxWidth] = useState(null);
-
 useFloating({
   middleware: [
     size({
-      apply({availableWidth, availableHeight, elements}) {
-        // 1. You can use sync state, and apply using React props:
-        flushSync(() => setMaxWidth(availableWidth));
-
-        // 2. Or, mutate the style attribute directly:
+      apply({availableHeight, elements}) {
         elements.floating.style.maxHeight = `${availableHeight}px`;
       },
     }),
@@ -199,7 +236,7 @@ useFloating({
 These are the options you can pass to `size(){:js}`.
 
 ```ts
-interface Options extends DetectOverflowOptions {
+interface SizeOptions extends DetectOverflowOptions {
   apply?: (
     state: MiddlewareState & {
       availableWidth: number;
@@ -243,9 +280,7 @@ overflow its clipping context. You'll generally set this as the
 See [MiddlewareState](/docs/middleware#middlewarestate).
 
 Many useful properties are also accessible via this callback,
-such as `rects{:.objectKey}` and `elements{:.objectKey}`, the
-latter of which is useful in the context of React where you need
-access to the floating element and it does not exist in scope.
+such as `rects{:.objectKey}` and `elements{:.objectKey}`.
 
 ### ...detectOverflowOptions
 
@@ -267,7 +302,7 @@ size((state) => ({
 }));
 ```
 
-## Using with flip
+## Using with `flip`
 
 Using `size(){:js}` together with `flip(){:js}` enables some
 useful behavior. The floating element can be resized, thus
@@ -309,8 +344,14 @@ const middleware = [
         maxHeight: 0,
       }}
       middleware={[
-        {name: 'flip', options: {padding: 5}},
-        {name: 'size', options: {padding: 5}},
+        {
+          name: 'flip',
+          options: {padding: 5, rootBoundary: 'document'},
+        },
+        {
+          name: 'size',
+          options: {padding: 5, rootBoundary: 'document'},
+        },
       ]}
     >
       <div className="grid h-32 w-32 place-items-center border-2 border-dashed border-gray-1000" />

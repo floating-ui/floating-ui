@@ -22,6 +22,6 @@ export function useEffectEvent<T extends AnyFunction>(callback?: T) {
 
   return React.useCallback<AnyFunction>(
     (...args) => ref.current?.(...args),
-    []
+    [],
   ) as T;
 }

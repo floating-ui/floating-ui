@@ -132,7 +132,7 @@ export function autoUpdate(
   reference: ReferenceElement,
   floating: FloatingElement,
   update: () => void,
-  options: AutoUpdateOptions = {}
+  options: AutoUpdateOptions = {},
 ) {
   const {
     ancestorScroll = true,

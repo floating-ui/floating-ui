@@ -40,7 +40,7 @@ export function Floating({
           ? [
               FloatingUI.shift(
                 middleware.find((m) => m.name === 'shift')
-                  ?.options
+                  ?.options,
               ),
             ]
           : []),
@@ -56,10 +56,10 @@ export function Floating({
                     maxHeight: minHeight
                       ? `${Math.max(
                           availableHeight,
-                          minHeight
+                          minHeight,
                         )}px`
                       : `${Math.max(availableHeight, 0)}px`,
-                  }
+                  },
                 );
               },
             });
@@ -80,7 +80,7 @@ export function Floating({
                     ? boundaryRef.current || undefined
                     : undefined,
                 }
-              : options
+              : options,
           );
         })
         .flat()

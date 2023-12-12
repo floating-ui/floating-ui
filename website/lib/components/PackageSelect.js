@@ -242,6 +242,8 @@ function Option({
   return (
     <button
       ref={ref}
+      role="option"
+      aria-selected={index === selectedIndex}
       className={cn(
         'md:text-md flex w-full cursor-default items-center gap-2 rounded-md p-2 text-left text-sm outline-none dark:text-white md:text-base',
         {
@@ -276,6 +278,7 @@ export function PackageSelect() {
     packageContext,
     isPackageTooltipTouched,
     setIsPackageTooltipTouched,
+    setPackageContext,
   } = useAppContext();
   const pkgIndex = packageOptions.indexOf(packageContext);
   const router = useRouter();
@@ -380,10 +383,15 @@ export function PackageSelect() {
     onNavigate: setActiveIndex,
   });
   const typeahead = useTypeahead(context, {
-    listRef: labelsRef,
+    listRef: isOpen
+      ? labelsRef
+      : {current: Object.values(optionsLabelMap)},
     activeIndex,
     selectedIndex,
-    onMatch: isOpen ? setActiveIndex : setSelectedIndex,
+    onMatch: isOpen
+      ? setActiveIndex
+      : (index) =>
+          setPackageContext(Object.values(optionsPkgMap)[index]),
   });
 
   const {isMounted, styles} = useTransitionStyles(context, {
@@ -394,7 +402,7 @@ export function PackageSelect() {
   });
 
   const {getReferenceProps, getFloatingProps, getItemProps} =
-    useInteractions([listNav, typeahead, role, click, dismiss]);
+    useInteractions([typeahead, listNav, role, click, dismiss]);
 
   const version = packages[selectedIndex].version;
 
@@ -432,7 +440,7 @@ export function PackageSelect() {
             <div
               ref={refs.setFloating}
               style={{...floatingStyles, ...styles}}
-              className="w-[24rem] overflow-y-auto rounded-md bg-white/75 p-2 shadow-md outline-none backdrop-blur-xl dark:bg-gray-600/70"
+              className="w-[24rem] overflow-y-auto rounded-md bg-white/75 p-2 shadow-md outline-none backdrop-blur-xl dark:bg-gray-600/70 z-50"
               {...getFloatingProps()}
             >
               <p className="px-3 py-1 mb-2 font-semibold">

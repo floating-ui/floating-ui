@@ -104,11 +104,13 @@ aspect ratio.
 Given an arrow element inside your floating element:
 
 ```html
-<div id="tooltip">
-  Tooltip text
+<div>
+  Floating element
   <div id="arrow"></div>
 </div>
 ```
+
+<ShowFor packages={['dom']}>
 
 ```css
 #arrow {
@@ -116,12 +118,15 @@ Given an arrow element inside your floating element:
 }
 ```
 
-Pass it to the `arrow(){:js}` middleware and assign the dynamic
-styles:
+</ShowFor>
+
+Pass the <WordHighlight id='a'>element</WordHighlight> to the
+`arrow(){:js}` middleware and assign the dynamic styles using the
+coordinates data available in `middlewareData.arrow{:js}`:
 
 <ShowFor packages={['dom']}>
 
-```js
+```js /arrowEl/#a
 const arrowEl = document.querySelector('#arrow');
 
 computePosition(referenceEl, floatingEl, {
@@ -142,7 +147,7 @@ computePosition(referenceEl, floatingEl, {
 
 <ShowFor packages={['react', 'react-dom', 'react-native']}>
 
-```js
+```js /middlewareData.arrow/ /arrowRef/#a
 const arrowRef = useRef(null);
 
 const {refs, floatingStyles, middlewareData} = useFloating({
@@ -169,11 +174,62 @@ return (
 
 </ShowFor>
 
+<ShowFor packages={['vue']}>
+
+```vue {24-34} /middlewareData.arrow/ /floatingArrow/#a
+<script setup>
+import {arrow, useFloating} from '@floating-ui/vue';
+import {ref} from 'vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const floatingArrow = ref(null);
+
+const {floatingStyles, middlewareData} = useFloating(
+  reference,
+  floating,
+  {
+    middleware: [arrow({element: floatingArrow})],
+  },
+);
+</script>
+
+<template>
+  <span ref="reference">Reference</span>
+  <div ref="floating" :style="floatingStyles">
+    Floating
+    <div
+      ref="floatingArrow"
+      :style="{
+        position: 'absolute',
+        left:
+          middlewareData.arrow?.x != null
+            ? `${middlewareData.arrow.x}px`
+            : '',
+        top:
+          middlewareData.arrow?.y != null
+            ? `${middlewareData.arrow.y}px`
+            : '',
+      }"
+    ></div>
+  </div>
+</template>
+```
+
+</ShowFor>
+
 <Notice type="error" title="Important">
-  Depending on the placement, either `x` or `y` will be
-  `undefined{:js}`. The above code checks for `null{:js}` and
-  `undefined{:js}` simultaneously. Don't remove `!= null{:js}`,
-  because either value can be falsy (0), causing a bug!
+  Unlike the floating element, which has both coordinates defined at all times, 
+  the arrow only has one defined. Due to this, either `x` or `y` will be 
+  `undefined{:js}`, depending on the side of placement.
+
+  <ShowFor packages={['dom', 'vue']}>
+
+    The above code uses `!={:js}` to check for `null{:js}` and
+    `undefined{:js}` **simultaneously**. Don't remove `!= null{:js}`,
+    because either value can be falsy (`0{:js}`), causing a bug!
+
+  </ShowFor>
 </Notice>
 
 This middleware is designed only to position the arrow on one
@@ -246,24 +302,124 @@ const {placement} = useFloating(reference, floating, {
 
 These are the options you can pass to `arrow(){:js}`.
 
+<ShowFor packages={['core', 'dom']}>
+
 ```ts
-interface Options {
+interface ArrowOptions {
   element: Element;
   padding?: Padding;
 }
 ```
 
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+```ts
+interface ArrowOptions {
+  element:
+    | Element
+    | null
+    | React.MutableRefObject<Element | null>;
+  padding?: Padding;
+}
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```ts
+interface ArrowOptions {
+  element: MaybeReadonlyRef<MaybeElement<Element>>;
+  padding?: Padding;
+}
+```
+
+</ShowFor>
+
 ### element
 
 default: `undefined{:js}`
 
-This is the arrow element to be positioned.
+This is the arrow element to be positioned, which must be a child
+of the floating element.
+
+<ShowFor packages={['dom']}>
 
 ```js
 arrow({
   element: document.querySelector('#arrow'),
 });
 ```
+
+</ShowFor>
+
+<ShowFor packages={['react', 'react-dom', 'react-native']}>
+
+This can either be a reactive element:
+
+```js
+const [arrowEl, setArrowEl] = useState(null);
+```
+
+```js
+arrow({
+  element: arrowEl,
+});
+```
+
+```js
+return (
+  <div ref={refs.setFloating}>
+    <div ref={setArrowEl} />
+  </div>
+);
+```
+
+Or a non-reactive ref:
+
+```js
+const arrowRef = useRef(null);
+```
+
+```js
+arrow({
+  element: arrowRef,
+});
+```
+
+```js
+return (
+  <div ref={refs.setFloating}>
+    <div ref={arrowRef} />
+  </div>
+);
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```vue /floatingArrow/
+<script setup>
+const reference = ref(null);
+const floating = ref(null);
+const floatingArrow = ref(null);
+
+const {floatingStyles} = useFloating(reference, floating, {
+  mdidleware: [arrow({element: floatingArrow})],
+});
+</script>
+
+<template>
+  <div ref="floating" :style="floatingStyles">
+    <div ref="floatingArrow"></div>
+  </div>
+</template>
+```
+
+</ShowFor>
 
 ### padding
 
@@ -276,7 +432,6 @@ overflowing the corners.
 
 ```js
 arrow({
-  element: document.querySelector('#arrow'),
   padding: 5, // stop 5px from the edges of the floating element
 });
 ```

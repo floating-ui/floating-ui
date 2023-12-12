@@ -35,7 +35,7 @@ const captureHandlerKeys = {
 };
 
 export const normalizeProp = (
-  normalizable?: boolean | {escapeKey?: boolean; outsidePress?: boolean}
+  normalizable?: boolean | {escapeKey?: boolean; outsidePress?: boolean},
 ) => {
   return {
     escapeKey:
@@ -68,7 +68,7 @@ export interface UseDismissProps {
  */
 export function useDismiss<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseDismissProps = {}
+  props: UseDismissProps = {},
 ): ElementProps {
   const {
     open,
@@ -93,7 +93,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
   const outsidePressFn = useEffectEvent(
     typeof unstable_outsidePress === 'function'
       ? unstable_outsidePress
-      : () => false
+      : () => false,
   );
   const outsidePress =
     typeof unstable_outsidePress === 'function'
@@ -139,9 +139,9 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       onOpenChange(
         false,
         isReactEvent(event) ? event.nativeEvent : event,
-        'escape-key'
+        'escape-key',
       );
-    }
+    },
   );
 
   const closeOnEscapeKeyDownCapture = useEffectEvent((event: KeyboardEvent) => {
@@ -184,7 +184,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     let targetRootAncestor = isElement(target) ? target : null;
     while (targetRootAncestor && !isLastTraversableNode(targetRootAncestor)) {
       const nextParent = getParentNode(targetRootAncestor);
-      if (nextParent === getDocument(floating).body || !isElement(nextParent)) {
+      if (isLastTraversableNode(nextParent) || !isElement(nextParent)) {
         break;
       } else {
         targetRootAncestor = nextParent;
@@ -202,7 +202,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       // If the target root element contains none of the markers, then the
       // element was injected after the floating element rendered.
       Array.from(markers).every(
-        (marker) => !contains(targetRootAncestor, marker)
+        (marker) => !contains(targetRootAncestor, marker),
       )
     ) {
       return;
@@ -239,7 +239,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     const targetIsInsideChildren =
       tree &&
       getChildren(tree.nodesRef.current, nodeId).some((node) =>
-        isEventTargetWithin(event, node.context?.elements.floating)
+        isEventTargetWithin(event, node.context?.elements.floating),
       );
 
     if (
@@ -297,13 +297,13 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       doc.addEventListener(
         'keydown',
         escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
-        escapeKeyCapture
+        escapeKeyCapture,
       );
     outsidePress &&
       doc.addEventListener(
         outsidePressEvent,
         outsidePressCapture ? closeOnPressOutsideCapture : closeOnPressOutside,
-        outsidePressCapture
+        outsidePressCapture,
       );
 
     let ancestors: (Element | Window | VisualViewport)[] = [];
@@ -319,14 +319,14 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
 
       if (!isElement(reference) && reference && reference.contextElement) {
         ancestors = ancestors.concat(
-          getOverflowAncestors(reference.contextElement)
+          getOverflowAncestors(reference.contextElement),
         );
       }
     }
 
     // Ignore the visual viewport for scrolling dismissal (allow pinch-zoom)
     ancestors = ancestors.filter(
-      (ancestor) => ancestor !== doc.defaultView?.visualViewport
+      (ancestor) => ancestor !== doc.defaultView?.visualViewport,
     );
 
     ancestors.forEach((ancestor) => {
@@ -338,7 +338,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
         doc.removeEventListener(
           'keydown',
           escapeKeyCapture ? closeOnEscapeKeyDownCapture : closeOnEscapeKeyDown,
-          escapeKeyCapture
+          escapeKeyCapture,
         );
       outsidePress &&
         doc.removeEventListener(
@@ -346,7 +346,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
           outsidePressCapture
             ? closeOnPressOutsideCapture
             : closeOnPressOutside,
-          outsidePressCapture
+          outsidePressCapture,
         );
       ancestors.forEach((ancestor) => {
         ancestor.removeEventListener('scroll', onScroll);
@@ -387,7 +387,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       reference: {
         onKeyDown: closeOnEscapeKeyDown,
         [bubbleHandlerKeys[referencePressEvent]]: (
-          event: React.SyntheticEvent
+          event: React.SyntheticEvent,
         ) => {
           if (referencePress) {
             onOpenChange(false, event.nativeEvent, 'reference-press');

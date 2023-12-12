@@ -23,7 +23,7 @@ function createVirtualElement(
     pointerType: string | undefined;
     x: number | null;
     y: number | null;
-  }
+  },
 ) {
   let offsetX: number | null = null;
   let offsetY: number | null = null;
@@ -43,7 +43,7 @@ function createVirtualElement(
       const isYAxis = data.axis === 'y' || data.axis === 'both';
       const canTrackCursorOnAutoUpdate =
         ['mouseenter', 'mousemove'].includes(
-          data.dataRef.current.openEvent?.type || ''
+          data.dataRef.current.openEvent?.type || '',
         ) && data.pointerType !== 'touch';
 
       let width = domRect.width;
@@ -108,7 +108,7 @@ export interface UseClientPointProps {
  */
 export function useClientPoint<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseClientPointProps = {}
+  props: UseClientPointProps = {},
 ): ElementProps {
   const {
     open,
@@ -144,7 +144,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
         axis,
         dataRef,
         pointerType,
-      })
+      }),
     );
   });
 
@@ -160,7 +160,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
         // then back on the reference (i.e. it's interactive).
         setReactive([]);
       }
-    }
+    },
   );
 
   // If the pointer is a mouse-like pointer, we want to continue following the

@@ -12,7 +12,7 @@ import type {
   ReferenceElement,
   Strategy,
 } from '../src/types';
-import {ArrowOptions, UseFloatingOptions} from '../src/types';
+import type {ArrowOptions, UseFloatingOptions} from '../src/types';
 
 describe('useFloating', () => {
   function setup(options?: UseFloatingOptions) {
@@ -380,7 +380,7 @@ describe('useFloating', () => {
             whileElementsMounted() {
               return whileElementsMountedCleanup;
             },
-          })
+          }),
         );
       },
       template: /* HTML */ `
@@ -476,7 +476,7 @@ describe('useFloating', () => {
 
     await waitFor(() => {
       expect(getByTestId('middleware-data-test-content').textContent).toBe(
-        'Content'
+        'Content',
       );
     });
   });

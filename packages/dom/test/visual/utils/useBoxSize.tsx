@@ -8,7 +8,7 @@ const sizes: Record<string, number> = {
 };
 
 export const useBoxSize = (
-  initialSize = 'large'
+  initialSize = 'large',
 ): [number, string, (value: string) => void] => {
   const [size, setSize] = useState(initialSize);
 

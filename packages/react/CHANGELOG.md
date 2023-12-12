@@ -1,5 +1,29 @@
 # @floating-ui/react
 
+## 0.26.4
+
+### Patch Changes
+
+- 7dc269cf: feat(useRole): add `select` and `combobox` component roles and allow
+  dynamic/derivable item props based on `active` and `selected` states. Also
+  adds `menuitem` role for nested `menu` reference elements, and automatically
+  adds an `id` to the item props for the new component roles for virtual focus.
+- d9be2481: fix(useListNavigation): apply `aria-activedescendant` prop on
+  floating element only for non typeable-combobox reference elements. Fixes
+  issues with Firefox VoiceOver on Mac forcing DOM focus into the listbox.
+
+## 0.26.3
+
+### Patch Changes
+
+- 9170b9e6: fix(useDismiss): `targetRootAncestor` check for third party outside
+  presses
+
+  The Grammarly extension no longer closes upon clicking when inside floating
+  elements.
+
+- 66efdaf8: fix(FloatingFocusManager): return focus to last connected element
+
 ## 0.26.2
 
 ### Patch Changes

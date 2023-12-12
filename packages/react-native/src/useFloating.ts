@@ -3,13 +3,13 @@ import {computePosition} from '@floating-ui/core';
 import * as React from 'react';
 
 import {createPlatform} from './createPlatform';
-import {UseFloatingOptions, UseFloatingReturn} from './types';
+import type {UseFloatingOptions, UseFloatingReturn} from './types';
 import {deepEqual} from './utils/deepEqual';
 
 const ORIGIN = {x: 0, y: 0};
 
 export function useFloating(
-  options: UseFloatingOptions = {}
+  options: UseFloatingOptions = {},
 ): UseFloatingReturn {
   const {
     placement = 'bottom',
@@ -37,7 +37,7 @@ export function useFloating(
         _setReference(node);
       }
     },
-    [_setReference]
+    [_setReference],
   );
 
   const setFloating = React.useCallback(
@@ -47,7 +47,7 @@ export function useFloating(
         _setFloating(node);
       }
     },
-    [_setFloating]
+    [_setFloating],
   );
 
   const setOffsetParent = React.useCallback(
@@ -57,7 +57,7 @@ export function useFloating(
         _setOffsetParent(node);
       }
     },
-    [_setOffsetParent]
+    [_setOffsetParent],
   );
 
   const referenceRef = React.useRef<any>(null);
@@ -86,7 +86,7 @@ export function useFloating(
         scrollOffsets,
         sameScrollView,
       }),
-    [offsetParentEl, scrollOffsets, sameScrollView]
+    [offsetParentEl, scrollOffsets, sameScrollView],
   );
 
   const update = React.useCallback(() => {
@@ -132,7 +132,7 @@ export function useFloating(
       setFloating,
       setOffsetParent,
     }),
-    [setReference, setFloating, setOffsetParent]
+    [setReference, setFloating, setOffsetParent],
   );
 
   const elements = React.useMemo(
@@ -141,7 +141,7 @@ export function useFloating(
       floating: floatingEl,
       offsetParent: offsetParentEl,
     }),
-    [referenceEl, floatingEl, offsetParentEl]
+    [referenceEl, floatingEl, offsetParentEl],
   );
 
   const floatingStyles = React.useMemo(() => {
@@ -184,6 +184,6 @@ export function useFloating(
       setFloating,
       setOffsetParent,
       update,
-    ]
+    ],
   );
 }

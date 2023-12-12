@@ -1,4 +1,4 @@
-import {FloatingContext} from '../../src/types';
+import type {FloatingContext} from '../../src/types';
 import {getChildren} from '../../src/utils/getChildren';
 
 const contextOpen = {open: true} as FloatingContext;
@@ -14,8 +14,8 @@ test('returns an array of children, ignoring closed ones', () => {
         {id: '3', parentId: '1', context: contextOpen},
         {id: '4', parentId: '1', context: contextClosed},
       ],
-      '0'
-    )
+      '0',
+    ),
   ).toEqual([
     {id: '1', parentId: '0', context: contextOpen},
     {id: '2', parentId: '1', context: contextOpen},

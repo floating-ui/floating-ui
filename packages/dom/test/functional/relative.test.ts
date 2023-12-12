@@ -9,7 +9,7 @@ import {click} from './utils/click';
     await page.goto('http://localhost:1234/relative');
     await click(page, `[data-testid="relative-${node}"]`);
     expect(await page.locator('.container').screenshot()).toMatchSnapshot(
-      `${node}.png`
+      `${node}.png`,
     );
   });
 });

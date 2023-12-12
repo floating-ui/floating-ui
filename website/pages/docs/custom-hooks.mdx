@@ -28,26 +28,26 @@ thing.
 
 ```ts
 const useCustomLogic = (
-  context: FloatingContext
+  context: FloatingContext,
 ): ElementProps => {
   const referenceProps = useMemo(
     () => ({
       // React.HTMLProps
       onClick: () => console.log('clicked'),
     }),
-    []
+    [],
   );
   const floatingProps = useMemo(
     () => ({
       // React.HTMLProps
     }),
-    []
+    [],
   );
   const itemProps = useMemo(
     () => ({
       // React.HTMLProps
     }),
-    []
+    [],
   );
 
   // All 3 of these properties are optional.
@@ -57,7 +57,7 @@ const useCustomLogic = (
       floating: floatingProps,
       item: itemProps,
     }),
-    [referenceProps, floatingProps, itemProps]
+    [referenceProps, floatingProps, itemProps],
   );
 };
 ```

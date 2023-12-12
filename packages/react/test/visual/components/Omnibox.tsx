@@ -30,7 +30,7 @@ interface SelectContextValue {
 }
 
 const SelectContext = createContext<SelectContextValue>(
-  {} as SelectContextValue
+  {} as SelectContextValue,
 );
 
 function SearchOption({
@@ -58,7 +58,7 @@ function SearchOption({
         'p-4 outline-none cursor-default flex justify-between align-items-center',
         {
           'bg-slate-50': isActive,
-        }
+        },
       )}
       {...getItemProps({
         onClick,
@@ -241,7 +241,7 @@ export function Main() {
                       onRemove={() => {
                         removedIndexRef.current = index;
                         setOptions((options) =>
-                          options.filter((o) => o !== option)
+                          options.filter((o) => o !== option),
                         );
                       }}
                       onClick={() => {

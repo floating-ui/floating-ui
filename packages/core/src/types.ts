@@ -92,7 +92,7 @@ export interface MiddlewareData {
     referenceHiddenOffsets?: SideObject;
     escapedOffsets?: SideObject;
   };
-  offset?: Coords;
+  offset?: Coords & {placement: Placement};
   shift?: Coords;
 }
 
@@ -134,7 +134,7 @@ export interface ComputePositionReturn extends Coords {
 export type ComputePosition = (
   reference: unknown,
   floating: unknown,
-  config: ComputePositionConfig
+  config: ComputePositionConfig,
 ) => Promise<ComputePositionReturn>;
 
 export interface MiddlewareReturn extends Partial<Coords> {
@@ -184,10 +184,7 @@ export type RootBoundary = 'viewport' | 'document' | Rect;
 export type ElementContext = 'reference' | 'floating';
 
 export {computePosition} from './computePosition';
-export {
-  detectOverflow,
-  Options as DetectOverflowOptions,
-} from './detectOverflow';
+export {detectOverflow, DetectOverflowOptions} from './detectOverflow';
 export {arrow, ArrowOptions} from './middleware/arrow';
 export {autoPlacement, AutoPlacementOptions} from './middleware/autoPlacement';
 export {flip, FlipOptions} from './middleware/flip';

@@ -1,11 +1,6 @@
-import {
-  autoUpdate,
-  computePosition,
-  Placement,
-  platform,
-  Strategy,
-} from '@floating-ui/dom';
-import {HTMLAttributes} from 'react';
+import type {Placement, Strategy} from '@floating-ui/dom';
+import {autoUpdate, computePosition, platform} from '@floating-ui/dom';
+import type {HTMLAttributes} from 'react';
 
 interface FloatingUICustomElement {
   reference: HTMLElement;
@@ -66,7 +61,7 @@ export function defineElements(): void {
 
       attributeChangedCallback<
         N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy
+        V extends Placement | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
@@ -87,7 +82,7 @@ export function defineElements(): void {
       disconnectedCallback(): void {
         this.cleanup?.();
       }
-    }
+    },
   );
 
   defineIfNeeded(
@@ -119,7 +114,7 @@ export function defineElements(): void {
 
       attributeChangedCallback<
         N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy
+        V extends Placement | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
@@ -140,7 +135,7 @@ export function defineElements(): void {
       disconnectedCallback(): void {
         this.cleanup?.();
       }
-    }
+    },
   );
 
   defineIfNeeded(
@@ -157,7 +152,7 @@ export function defineElements(): void {
         const style = recreateDocumentStyle();
         shadow.append(style, wrapper);
       }
-    }
+    },
   );
 
   defineIfNeeded(
@@ -188,7 +183,7 @@ export function defineElements(): void {
 
       attributeChangedCallback<
         N extends Extract<keyof this, 'placement' | 'strategy' | 'polyfill'>,
-        V extends Placement | Strategy
+        V extends Placement | Strategy,
       >(name: N, _oldValue: V, value: V): void {
         if (name === 'placement') {
           this.placement = value as Placement;
@@ -211,13 +206,13 @@ export function defineElements(): void {
       disconnectedCallback(): void {
         this.cleanup?.();
       }
-    }
+    },
   );
 }
 
 function defineIfNeeded(
   tag: string,
-  customElementConstructor: CustomElementConstructor
+  customElementConstructor: CustomElementConstructor,
 ): void {
   if (!customElements.get(tag)) {
     customElements.define(tag, customElementConstructor);

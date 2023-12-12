@@ -7,24 +7,22 @@ import {
   placements as ALL_PLACEMENTS,
 } from '@floating-ui/utils';
 
-import {
-  detectOverflow,
-  Options as DetectOverflowOptions,
-} from '../detectOverflow';
+import type {DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Alignment, Derivable, Middleware, Placement} from '../types';
 
 export function getPlacementList(
   alignment: Alignment | null,
   autoAlignment: boolean,
-  allowedPlacements: Array<Placement>
+  allowedPlacements: Array<Placement>,
 ) {
   const allowedPlacementsSortedByAlignment = alignment
     ? [
         ...allowedPlacements.filter(
-          (placement) => getAlignment(placement) === alignment
+          (placement) => getAlignment(placement) === alignment,
         ),
         ...allowedPlacements.filter(
-          (placement) => getAlignment(placement) !== alignment
+          (placement) => getAlignment(placement) !== alignment,
         ),
       ]
     : allowedPlacements.filter((placement) => getSide(placement) === placement);
@@ -81,7 +79,7 @@ export type AutoPlacementOptions = Partial<
  * @see https://floating-ui.com/docs/autoPlacement
  */
 export const autoPlacement = (
-  options: AutoPlacementOptions | Derivable<AutoPlacementOptions> = {}
+  options: AutoPlacementOptions | Derivable<AutoPlacementOptions> = {},
 ): Middleware => ({
   name: 'autoPlacement',
   options,
@@ -113,7 +111,7 @@ export const autoPlacement = (
     const alignmentSides = getAlignmentSides(
       currentPlacement,
       rects,
-      await platform.isRTL?.(elements.floating)
+      await platform.isRTL?.(elements.floating),
     );
 
     // Make `computeCoords` start from the right place.
@@ -173,9 +171,9 @@ export const autoPlacement = (
             0,
             // Aligned placements should not check their opposite crossAxis
             // side.
-            getAlignment(d[0]) ? 2 : 3
+            getAlignment(d[0]) ? 2 : 3,
           )
-          .every((v) => v <= 0)
+          .every((v) => v <= 0),
     );
 
     const resetPlacement =

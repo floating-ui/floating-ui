@@ -31,7 +31,7 @@ function MyApp({Component, pageProps}) {
 
   const [packageContext, setPackageContext] = useLocalStorage(
     'package-context',
-    'dom'
+    'dom',
   );
   const [isPackageTooltipTouched, setIsPackageTooltipTouched] =
     useLocalStorage('package-context-tooltip-touched', false);
@@ -53,7 +53,7 @@ function MyApp({Component, pageProps}) {
     return () => {
       events.off(
         'routeChangeComplete',
-        handleRouteChangeComplete
+        handleRouteChangeComplete,
       );
     };
   }, [events]);
@@ -76,7 +76,7 @@ function MyApp({Component, pageProps}) {
       articleTransitionStatus,
       isPackageTooltipTouched,
       setIsPackageTooltipTouched,
-    ]
+    ],
   );
 
   useEffect(() => {

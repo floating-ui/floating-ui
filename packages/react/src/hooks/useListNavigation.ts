@@ -4,6 +4,7 @@ import {
   getDocument,
   isMac,
   isSafari,
+  isTypeableCombobox,
   isVirtualClick,
   isVirtualPointerEvent,
   stopEvent,
@@ -38,7 +39,7 @@ let isPreventScrollSupported = false;
 function doSwitch(
   orientation: UseListNavigationProps['orientation'],
   vertical: boolean,
-  horizontal: boolean
+  horizontal: boolean,
 ) {
   switch (orientation) {
     case 'vertical':
@@ -52,7 +53,7 @@ function doSwitch(
 
 function isMainOrientationKey(
   key: string,
-  orientation: UseListNavigationProps['orientation']
+  orientation: UseListNavigationProps['orientation'],
 ) {
   const vertical = key === ARROW_UP || key === ARROW_DOWN;
   const horizontal = key === ARROW_LEFT || key === ARROW_RIGHT;
@@ -62,7 +63,7 @@ function isMainOrientationKey(
 function isMainOrientationToEndKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
-  rtl: boolean
+  rtl: boolean,
 ) {
   const vertical = key === ARROW_DOWN;
   const horizontal = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
@@ -77,7 +78,7 @@ function isMainOrientationToEndKey(
 function isCrossOrientationOpenKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
-  rtl: boolean
+  rtl: boolean,
 ) {
   const vertical = rtl ? key === ARROW_LEFT : key === ARROW_RIGHT;
   const horizontal = key === ARROW_DOWN;
@@ -87,7 +88,7 @@ function isCrossOrientationOpenKey(
 function isCrossOrientationCloseKey(
   key: string,
   orientation: UseListNavigationProps['orientation'],
-  rtl: boolean
+  rtl: boolean,
 ) {
   const vertical = rtl ? key === ARROW_RIGHT : key === ARROW_LEFT;
   const horizontal = key === ARROW_UP;
@@ -122,7 +123,7 @@ export interface UseListNavigationProps {
  */
 export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseListNavigationProps
+  props: UseListNavigationProps,
 ): ElementProps {
   const {
     open,
@@ -158,7 +159,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           [
             'Floating UI: `useListNavigation` looping must be enabled to allow',
             'escaping.',
-          ].join(' ')
+          ].join(' '),
         );
       }
 
@@ -167,7 +168,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           [
             'Floating UI: `useListNavigation` must be virtual to allow',
             'escaping.',
-          ].join(' ')
+          ].join(' '),
         );
       }
     }
@@ -177,7 +178,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         [
           'Floating UI: In grid list navigation mode (`cols` > 1), the',
           '`orientation` should be either "horizontal" or "both".',
-        ].join(' ')
+        ].join(' '),
       );
     }
   }
@@ -207,7 +208,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     (
       listRef: React.MutableRefObject<Array<HTMLElement | null>>,
       indexRef: React.MutableRefObject<number>,
-      forceScrollIntoView = false
+      forceScrollIntoView = false,
     ) => {
       const item = listRef.current[indexRef.current];
 
@@ -250,11 +251,11 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           item.scrollIntoView?.(
             typeof scrollIntoViewOptions === 'boolean'
               ? {block: 'nearest', inline: 'nearest'}
-              : scrollIntoViewOptions
+              : scrollIntoViewOptions,
           );
         }
       });
-    }
+    },
   );
 
   useLayoutEffect(() => {
@@ -382,7 +383,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     const activeEl = activeElement(getDocument(floating));
     const treeContainsActiveEl = nodes.some(
       (node) =>
-        node.context && contains(node.context.elements.floating, activeEl)
+        node.context && contains(node.context.elements.floating, activeEl),
     );
 
     if (parent && !treeContainsActiveEl && isPointerModalityRef.current) {
@@ -539,7 +540,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           indexRef.current = isMainOrientationToEndKey(
             event.key,
             orientation,
-            rtl
+            rtl,
           )
             ? minIndex
             : maxIndex;
@@ -564,7 +565,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
               findNonDisabledIndex(listRef, {
                 startingIndex: currentIndex,
                 disabledIndices,
-              })
+              }),
             );
           }
         } else {
@@ -586,7 +587,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                 startingIndex: currentIndex,
                 decrement: true,
                 disabledIndices,
-              })
+              }),
             );
           }
         }
@@ -634,12 +635,12 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           const isCrossOpenKey = isCrossOrientationOpenKey(
             event.key,
             orientation,
-            rtl
+            rtl,
           );
           const isCrossCloseKey = isCrossOrientationCloseKey(
             event.key,
             orientation,
-            rtl
+            rtl,
           );
           const isMainKey = isMainOrientationKey(event.key, orientation);
           const isNavigationKey =
@@ -649,7 +650,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
           if (virtual && open) {
             const rootNode = tree?.nodesRef.current.find(
-              (node) => node.parentId == null
+              (node) => node.parentId == null,
             );
 
             const deepestNode =
@@ -671,8 +672,8 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                   isCrossCloseKey && !isCurrentTarget
                     ? deepestNode.context?.elements.domReference
                     : isCrossOpenKey
-                    ? activeItem
-                    : null;
+                      ? activeItem
+                      : null;
 
                 if (dispatchItem) {
                   stopEvent(event);
@@ -690,7 +691,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                 ) {
                   stopEvent(event);
                   deepestNode.context.elements.domReference?.dispatchEvent(
-                    eventObject
+                    eventObject,
                   );
                   return;
                 }
@@ -754,7 +755,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       },
       floating: {
         'aria-orientation': orientation === 'both' ? undefined : orientation,
-        ...ariaActiveDescendantProp,
+        ...(!isTypeableCombobox(domReference) && ariaActiveDescendantProp),
         onKeyDown,
         onPointerMove() {
           isPointerModalityRef.current = true;

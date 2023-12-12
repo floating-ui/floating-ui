@@ -29,7 +29,7 @@ export interface UseClickProps {
  */
 export function useClick<RT extends ReferenceType = ReferenceType>(
   context: FloatingContext<RT>,
-  props: UseClickProps = {}
+  props: UseClickProps = {},
 ): ElementProps {
   const {
     open,

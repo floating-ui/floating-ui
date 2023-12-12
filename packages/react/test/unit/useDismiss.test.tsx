@@ -1,6 +1,7 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {ReactNode, useState} from 'react';
+import type {ReactNode} from 'react';
+import {useState} from 'react';
 
 import {
   FloatingFocusManager,
@@ -14,7 +15,8 @@ import {
   useFocus,
   useInteractions,
 } from '../../src';
-import {normalizeProp, UseDismissProps} from '../../src/hooks/useDismiss';
+import type {UseDismissProps} from '../../src/hooks/useDismiss';
+import {normalizeProp} from '../../src/hooks/useDismiss';
 
 function App(props: UseDismissProps) {
   const [open, setOpen] = useState(true);
@@ -345,7 +347,7 @@ describe('bubbles', () => {
   };
 
   const NestedDialog = (
-    props: UseDismissProps & {testId: string; children: ReactNode}
+    props: UseDismissProps & {testId: string; children: ReactNode},
   ) => {
     const parentId = useFloatingParentNodeId();
 
@@ -413,7 +415,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner">
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();
@@ -432,7 +434,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner" bubbles={{outsidePress: false}}>
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();
@@ -456,7 +458,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner" bubbles={{outsidePress: false}}>
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();
@@ -548,7 +550,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner" bubbles>
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();
@@ -566,7 +568,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();
@@ -590,7 +592,7 @@ describe('bubbles', () => {
           <NestedDialog testId="inner" bubbles={{escapeKey: false}}>
             <button>test button</button>
           </NestedDialog>
-        </NestedDialog>
+        </NestedDialog>,
       );
 
       expect(screen.queryByTestId('outer')).toBeInTheDocument();

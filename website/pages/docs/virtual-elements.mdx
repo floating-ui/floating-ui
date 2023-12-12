@@ -55,8 +55,9 @@ useFloating({
 <ShowFor packages={['vue']}>
 
 ```js
-const virtual = ref(virtualEl);
-useFloating(virtual, floating);
+const reference = ref(virtualEl);
+const floating = ref(null);
+useFloating(reference, floating);
 ```
 
 </ShowFor>
@@ -160,6 +161,45 @@ return (
     }}
   />
 );
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```vue
+<script setup>
+import {ref} from 'vue';
+import {useFloating} from '@floating-ui/vue';
+
+const reference = ref(null);
+const floating = ref(null);
+const {floatingStyles} = useFloating(reference, floating);
+
+function handleClick({clientX, clientY}) {
+  reference.value = {
+    getBoundingClientRect() {
+      return {
+        width: 0,
+        height: 0,
+        x: clientX,
+        y: clientY,
+        top: clientY,
+        left: clientX,
+        right: clientX,
+        bottom: clientY,
+      };
+    },
+  };
+}
+</script>
+
+<template>
+  <button @click="handleClick">Button</button>
+  <div ref="floating" :style="floatingStyles" v-if="reference">
+    Tooltip
+  </div>
+</template>
 ```
 
 </ShowFor>

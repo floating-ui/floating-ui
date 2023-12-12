@@ -7,6 +7,6 @@ test('polyfill', () => {
     platform.getOffsetParent?.(element, (el) => {
       expect(el).toBe(element);
       return parent;
-    })
+    }),
   ).toBe(parent);
 });

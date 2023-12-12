@@ -66,7 +66,7 @@ export type FlipOptions = Partial<
  * @see https://floating-ui.com/docs/flip
  */
 export const flip = (
-  options: FlipOptions | Derivable<FlipOptions> = {}
+  options: FlipOptions | Derivable<FlipOptions> = {},
 ): Middleware => ({
   name: 'flip',
   options,
@@ -114,8 +114,8 @@ export const flip = (
           initialPlacement,
           flipAlignment,
           fallbackAxisSideDirection,
-          rtl
-        )
+          rtl,
+        ),
       );
     }
 
@@ -173,7 +173,7 @@ export const flip = (
                     d.overflows
                       .filter((overflow) => overflow > 0)
                       .reduce((acc, overflow) => acc + overflow, 0),
-                  ] as const
+                  ] as const,
               )
               .sort((a, b) => a[1] - b[1])[0]?.[0];
             if (placement) {

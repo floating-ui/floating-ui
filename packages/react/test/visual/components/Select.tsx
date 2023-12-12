@@ -31,10 +31,8 @@ function ColorSwatch({color}: {color?: string}) {
   );
 }
 
-const SelectContext = React.createContext<{
-  getItemProps: (
-    userProps?: React.HTMLProps<HTMLElement>
-  ) => Record<string, unknown>;
+interface SelectContextData {
+  getItemProps: ReturnType<typeof useInteractions>['getItemProps'];
   activeIndex: number | null;
   selectedIndex: number | null;
   setActiveIndex: React.Dispatch<React.SetStateAction<number | null>>;
@@ -42,7 +40,9 @@ const SelectContext = React.createContext<{
   isTypingRef: React.MutableRefObject<boolean>;
   setSelectedValue: (value: string, index: number) => void;
   selectedValue: string;
-}>({} as any);
+}
+
+const SelectContext = React.createContext<SelectContextData>({} as any);
 
 function Select({
   children,
@@ -66,7 +66,7 @@ function Select({
       onChange?.(value);
       setIsOpen(false);
     },
-    [onChange]
+    [onChange],
   );
 
   const {refs, floatingStyles, context} = useFloating({
@@ -95,7 +95,7 @@ function Select({
 
   const click = useClick(context, {event: 'mousedown'});
   const dismiss = useDismiss(context);
-  const role = useRole(context, {role: 'listbox'});
+  const role = useRole(context, {role: 'select'});
   const listNav = useListNavigation(context, {
     listRef: elementsRef,
     activeIndex,
@@ -137,7 +137,6 @@ function Select({
           <Button
             ref={refs.setReference}
             aria-labelledby="select-label"
-            aria-autocomplete="none"
             data-open={isOpen ? '' : undefined}
             className="flex items-center gap-2 bg-slate-200 rounded w-[10rem]"
             {...getReferenceProps()}
@@ -191,31 +190,28 @@ const MemoOption = React.memo(
       getItemProps,
       onSelect,
       isTypingRef,
-    }: {
+    }: Pick<SelectContextData, 'getItemProps'> & {
       children: React.ReactNode;
       active: boolean;
       selected: boolean;
-      getItemProps: (
-        userProps?: React.HTMLProps<HTMLElement>
-      ) => Record<string, unknown>;
       onSelect: () => void;
       isTypingRef: React.MutableRefObject<boolean>;
     },
-    ref: React.Ref<HTMLDivElement>
+    ref: React.Ref<HTMLDivElement>,
   ) {
     return (
       <div
         ref={ref}
-        role="option"
-        tabIndex={active ? 0 : -1}
-        aria-selected={active && selected}
         className={c(
           'flex gap-2 items-center p-2 rounded outline-none cursor-default scroll-my-1',
           {
             'bg-cyan-200': active,
-          }
+          },
         )}
+        tabIndex={active ? 0 : -1}
         {...getItemProps({
+          active,
+          selected,
           // Handle pointer select.
           onClick: onSelect,
           // Handle keyboard select.
@@ -240,7 +236,7 @@ const MemoOption = React.memo(
         </span>
       </div>
     );
-  })
+  }),
 );
 
 function Option({children, value}: {children: React.ReactNode; value: string}) {

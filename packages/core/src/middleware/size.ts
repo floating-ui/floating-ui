@@ -7,10 +7,8 @@ import {
   min,
 } from '@floating-ui/utils';
 
-import {
-  detectOverflow,
-  Options as DetectOverflowOptions,
-} from '../detectOverflow';
+import type {DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
 export type SizeOptions = Partial<
@@ -24,7 +22,7 @@ export type SizeOptions = Partial<
       args: MiddlewareState & {
         availableWidth: number;
         availableHeight: number;
-      }
+      },
     ): void | Promise<void>;
   }
 >;
@@ -36,7 +34,7 @@ export type SizeOptions = Partial<
  * @see https://floating-ui.com/docs/size
  */
 export const size = (
-  options: SizeOptions | Derivable<SizeOptions> = {}
+  options: SizeOptions | Derivable<SizeOptions> = {},
 ): Middleware => ({
   name: 'size',
   options,
@@ -45,7 +43,7 @@ export const size = (
 
     const {apply = () => {}, ...detectOverflowOptions} = evaluate(
       options,
-      state
+      state,
     );
 
     const overflow = await detectOverflow(state, detectOverflowOptions);

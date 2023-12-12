@@ -1,9 +1,9 @@
+import type {Placement} from '@floating-ui/react';
 import {
   arrow,
   autoUpdate,
   FloatingArrow,
   offset,
-  Placement,
   useFloating,
 } from '@floating-ui/react';
 import {useRef, useState} from 'react';
@@ -76,7 +76,7 @@ function Demo({
 const allPlacements = ['top', 'bottom', 'right', 'left']
   .map(
     (placement) =>
-      [placement, `${placement}-start`, `${placement}-end`] as Array<Placement>
+      [placement, `${placement}-start`, `${placement}-end`] as Array<Placement>,
   )
   .flat();
 

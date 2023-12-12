@@ -46,7 +46,7 @@ interface SafePolygonOptions {
  * @see https://floating-ui.com/docs/useHover#safePolygon
  */
 export function safePolygon<RT extends ReferenceType = ReferenceType>(
-  options: Partial<SafePolygonOptions> = {}
+  options: Partial<SafePolygonOptions> = {},
 ) {
   const {
     buffer = 0.5,
@@ -160,7 +160,7 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
       if (
         tree &&
         getChildren(tree.nodesRef.current, nodeId).some(
-          ({context}) => context?.open
+          ({context}) => context?.open,
         )
       ) {
         return;
@@ -228,16 +228,16 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
               isFloatingWider
                 ? x + buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer * 4
-                : x - buffer * 4,
+                  ? x + buffer * 4
+                  : x - buffer * 4,
               y + buffer + 1,
             ];
             const cursorPointTwo: Point = [
               isFloatingWider
                 ? x - buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer * 4
-                : x - buffer * 4,
+                  ? x + buffer * 4
+                  : x - buffer * 4,
               y + buffer + 1,
             ];
             const commonPoints: [Point, Point] = [
@@ -246,8 +246,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
                 cursorLeaveFromRight
                   ? rect.bottom - buffer
                   : isFloatingWider
-                  ? rect.bottom - buffer
-                  : rect.top,
+                    ? rect.bottom - buffer
+                    : rect.top,
               ],
               [
                 rect.right,
@@ -266,16 +266,16 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
               isFloatingWider
                 ? x + buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer * 4
-                : x - buffer * 4,
+                  ? x + buffer * 4
+                  : x - buffer * 4,
               y - buffer,
             ];
             const cursorPointTwo: Point = [
               isFloatingWider
                 ? x - buffer / 2
                 : cursorLeaveFromRight
-                ? x + buffer * 4
-                : x - buffer * 4,
+                  ? x + buffer * 4
+                  : x - buffer * 4,
               y - buffer,
             ];
             const commonPoints: [Point, Point] = [
@@ -284,8 +284,8 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
                 cursorLeaveFromRight
                   ? rect.top + buffer
                   : isFloatingWider
-                  ? rect.top + buffer
-                  : rect.bottom,
+                    ? rect.top + buffer
+                    : rect.bottom,
               ],
               [
                 rect.right,
@@ -305,24 +305,24 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
               isFloatingTaller
                 ? y + buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer * 4
-                : y - buffer * 4,
+                  ? y + buffer * 4
+                  : y - buffer * 4,
             ];
             const cursorPointTwo: Point = [
               x + buffer + 1,
               isFloatingTaller
                 ? y - buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer * 4
-                : y - buffer * 4,
+                  ? y + buffer * 4
+                  : y - buffer * 4,
             ];
             const commonPoints: [Point, Point] = [
               [
                 cursorLeaveFromBottom
                   ? rect.right - buffer
                   : isFloatingTaller
-                  ? rect.right - buffer
-                  : rect.left,
+                    ? rect.right - buffer
+                    : rect.left,
                 rect.top,
               ],
               [
@@ -343,24 +343,24 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
               isFloatingTaller
                 ? y + buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer * 4
-                : y - buffer * 4,
+                  ? y + buffer * 4
+                  : y - buffer * 4,
             ];
             const cursorPointTwo: Point = [
               x - buffer,
               isFloatingTaller
                 ? y - buffer / 2
                 : cursorLeaveFromBottom
-                ? y + buffer * 4
-                : y - buffer * 4,
+                  ? y + buffer * 4
+                  : y - buffer * 4,
             ];
             const commonPoints: [Point, Point] = [
               [
                 cursorLeaveFromBottom
                   ? rect.left + buffer
                   : isFloatingTaller
-                  ? rect.left + buffer
-                  : rect.right,
+                    ? rect.left + buffer
+                    : rect.right,
                 rect.top,
               ],
               [

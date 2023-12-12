@@ -6,7 +6,7 @@ export function remToPx(value) {
   return (
     value *
     parseFloat(
-      getComputedStyle(document.documentElement).fontSize
+      getComputedStyle(document.documentElement).fontSize,
     )
   );
 }
