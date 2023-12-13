@@ -142,7 +142,7 @@ export const MINI_SPONSORS = [
   {
     logo: '/sponsors/tubidy.svg',
     label: 'Tubidy',
-    url: 'https://thetubidy.net/',
+    url: 'https://the-tubidy.com/',
     MemberId: 480283,
   },
   {
@@ -156,5 +156,11 @@ export const MINI_SPONSORS = [
     label: 'Mobilemall',
     url: 'https://mobilemall.co/',
     MemberId: 480290,
+  },
+  {
+    logo: '/sponsors/thetinyzone.svg',
+    label: 'Tinyzone',
+    url: 'https://thetinyzone.com/',
+    MemberId: 507711,
   },
 ];
