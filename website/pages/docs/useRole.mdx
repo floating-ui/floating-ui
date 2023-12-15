@@ -3,7 +3,7 @@
 # useRole
 
 Adds base screen reader props to the reference and floating
-elements for a given `role{:.objectKey}`.
+elements for a given `role{:.key}`.
 
 ```js
 import {useRole} from '@floating-ui/react';
@@ -19,8 +19,7 @@ import {useRole} from '@floating-ui/react';
 
 ## Usage
 
-This hook is an interaction hook that returns ARIA attribute
-props.
+This Hook returns ARIA attribute props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -75,11 +74,11 @@ interface UseRoleProps {
 }
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useRole(context, {
@@ -87,7 +86,7 @@ useRole(context, {
 });
 ```
 
-### role
+### `role{:.key}`
 
 default: `'dialog'{:js}`
 
@@ -121,8 +120,8 @@ dismissed.
 ---
 
 For the following two roles, the `getItemProps{:.const}` prop
-getter should be called with `active{:.objectKey}` and
-`selected{:.objectKey}` boolean props when spread.
+getter should be called with `active{:.key}` and
+`selected{:.key}` boolean props when spread.
 
 ```js
 const {getItemProps} = useInteractions([]);
@@ -139,7 +138,7 @@ const {getItemProps} = useInteractions([]);
 These props are derived from the `activeIndex` and
 `selectedIndex` states for the
 [`useListNavigation`](/docs/useListNavigation) and
-[`useTypeahead`](/docs/useTypeahead) hooks.
+[`useTypeahead`](/docs/useTypeahead) Hooks.
 
 #### `select{:.string}`
 

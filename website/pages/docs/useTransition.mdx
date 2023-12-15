@@ -21,19 +21,19 @@ import {
 
 </PageCard>
 
-There are two different hooks you can use:
+There are two different Hooks you can use:
 
 - [`useTransitionStyles`](/docs/useTransition#usetransitionstyles)
-  — a high level wrapper around `useTransitionStatus` that
+  is a high level wrapper around `useTransitionStatus` that
   returns computed styles for you. This is simpler and can handle
   the majority of use cases.
 - [`useTransitionStatus`](/docs/useTransition#usetransitionstatus)
-  — a low level hook that returns a status string to compute the
+  is a low level hook that returns a status string to compute the
   styles yourself.
 
-## useTransitionStyles
+## `useTransitionStyles`
 
-This hook provides computed inline styles that you can spread
+This Hook provides computed inline styles that you can spread
 into the `style{:.keyword}` prop for a floating element.
 
 <Notice>
@@ -57,7 +57,7 @@ into the `style{:.keyword}` prop for a floating element.
 </details>
 </Notice>
 
-This hook is a standalone hook that accepts the
+This Hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
 
 ```js /context/
@@ -87,10 +87,10 @@ function App() {
 - `styles{:.const}` is an object of inline transition styles
   (`React.CSSProperties{:ts}`).
 
-The hook defaults to a basic opacity fade transition with a
+The Hook defaults to a basic opacity fade transition with a
 duration of 250ms.
 
-## useTransitionStyles Props
+## `useTransitionStyles` Props
 
 ```ts
 interface UseTransitionStylesProps {
@@ -102,7 +102,7 @@ interface UseTransitionStylesProps {
 }
 ```
 
-### duration
+### `duration{:.key}`
 
 default: `250{:js}`
 
@@ -112,7 +112,6 @@ Specifies the length of the transition in ms.
 const {isMounted, styles} = useTransitionStyles(context, {
   // Configure both open and close durations:
   duration: 200,
-
   // Or, configure open and close durations separately:
   duration: {
     open: 200,
@@ -121,7 +120,7 @@ const {isMounted, styles} = useTransitionStyles(context, {
 });
 ```
 
-### initial
+### `initial{:.key}`
 
 default: `{opacity: 0}`
 
@@ -162,14 +161,14 @@ interface Params {
 }
 ```
 
-- `side{:.objectKey}` represents a physical side — with the vast
+- `side{:.key}` represents a physical side — with the vast
   majority of transitions, you'll likely only need to be
   concerned about the side.
-- `placement{:.objectKey}` represents the whole placement string
-  in cases where you want to also change the transition based on
-  the alignment.
+- `placement{:.key}` represents the whole placement string in
+  cases where you want to also change the transition based on the
+  alignment.
 
-### close
+### `close{:.key}`
 
 default: `undefined{:js}`
 
@@ -182,7 +181,7 @@ const {isMounted, styles} = useTransitionStyles(context, {
     opacity: 0,
     transform: 'scale(2)',
   },
-  // or, for side-aware styles:
+  // Or, for side-aware styles:
   close: ({side}) => ({
     opacity: 0,
     transform:
@@ -198,7 +197,7 @@ const {isMounted, styles} = useTransitionStyles(context, {
   transition.
 </Notice>
 
-### open
+### `open{:.key}`
 
 default: `undefined{:js}`
 
@@ -220,7 +219,7 @@ const {isMounted, styles} = useTransitionStyles(context, {
 });
 ```
 
-### common
+### `common{:.key}`
 
 default: `undefined{:js}`
 
@@ -232,7 +231,7 @@ const {isMounted, styles} = useTransitionStyles(context, {
   common: {
     transformOrigin: 'bottom',
   },
-  // or, for side-aware styles:
+  // Or, for side-aware styles:
   common: ({side}) => ({
     transformOrigin: {
       top: 'bottom',
@@ -247,28 +246,24 @@ const {isMounted, styles} = useTransitionStyles(context, {
 ### Scale transforms
 
 When animating the floating element's scale, it looks best if the
-floating element's `transformOrigin{:.objectKey}` is at the tip
-of the arrow. The `arrow` middleware provides data to achieve
-this.
+floating element's `transformOrigin{:.key}` is at the tip of the
+arrow. The `arrow` middleware provides data to achieve this.
 
 [View on CodeSandbox](https://codesandbox.io/s/floating-ui-react-scale-transform-origin-qv0t1c?file=/src/App.tsx)
 
-## useTransitionStatus
+## `useTransitionStatus{:.fn}`
 
-This hook provides a `status{:.const}` string that determines if
+This Hook provides a `status{:.const}` string that determines if
 the floating element is in one of four states:
 
 ```ts
 type Status = 'unmounted' | 'initial' | 'open' | 'close';
+
+// Cycle:
+// unmounted -> initial -> open -> close -> unmounted
 ```
 
-The floating element cycles through the order as seen below:
-
-```text
-unmounted -> initial -> open -> close -> unmounted
-```
-
-This hook is a standalone hook that accepts the
+This Hook is a standalone hook that accepts the
 `context{:.const}` object returned from `useFloating(){:js}`:
 
 ```js /context/
@@ -327,8 +322,8 @@ The statuses map to the following:
 - `'close'{:js}` indicates the floating element is in the close
   state and begins transitioning out.
 
-The transition duration must match the `duration{:.objectKey}`
-option passed to the hook.
+The transition duration must match the `duration{:.key}` option
+passed to the Hook.
 
 ### Asymmetric transitions
 
@@ -401,7 +396,7 @@ return (
 }
 ```
 
-## useTransitionStatus Props
+## `useTransitionStatus` Props
 
 ```ts
 interface UseTransitionStatusProps {
@@ -409,7 +404,7 @@ interface UseTransitionStatusProps {
 }
 ```
 
-### duration
+### `duration{:.key}`
 
 default: `250{:js}`
 
@@ -419,7 +414,6 @@ Specifies the length of the transition in ms.
 const {isMounted, status} = useTransitionStatus(context, {
   // Configure both open and close durations:
   duration: 200,
-
   // Or, configure open and close durations separately:
   duration: {
     open: 200,

@@ -64,7 +64,7 @@ measuring over the bounding box.
 
 </PageCard>
 
-In the following examples, the `placement{:.objectKey}` is
+In the following examples, the `placement{:.key}` is
 `'top'{:js}`.
 
 Without `inline(){:js}`:
@@ -124,9 +124,8 @@ useFloating(reference, floating, {
 ### Choosing a rect
 
 By default, `inline(){:js}` infers which of the
-`ClientRect{:.class}`s to choose based on the
-`placement{:.objectKey}`. However, you may want a different rect
-to be chosen.
+`ClientRect{:.class}`s to choose based on the `placement{:.key}`.
+However, you may want a different rect to be chosen.
 
 For instance, if the user hovered over the last client rect, you
 likely want the floating element to be placed there. This logic
@@ -161,21 +160,21 @@ interface InlineOptions {
 }
 ```
 
-### x
+### `x{:.key}`
 
 default: `undefined{:js}`
 
 This is the viewport-relative (client) x-axis coordinate which
 can be passed in to choose a rect.
 
-### y
+### `y{:.key}`
 
 default: `undefined{:js}`
 
 This is the viewport-relative (client) y-axis coordinate which
 can be passed in to choose a rect.
 
-### padding
+### `padding{:.key}`
 
 default: `2{:js}`
 

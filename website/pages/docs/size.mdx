@@ -213,7 +213,7 @@ interface SizeOptions extends DetectOverflowOptions {
 }
 ```
 
-### apply
+### `apply{:.function}`
 
 default: `undefined{:js}`
 
@@ -230,24 +230,24 @@ size({
 });
 ```
 
-#### availableWidth
+#### `availableWidth{:.param}`
 
 Represents how wide the floating element can be before it will
 overflow its clipping context. You'll generally set this as the
-`maxWidth{:.objectKey}` CSS property.
+`maxWidth{:.key}` CSS property.
 
-#### availableHeight
+#### `availableHeight{:.param}`
 
 Represents how tall the floating element can be before it will
 overflow its clipping context. You'll generally set this as the
-`maxHeight{:.objectKey}` CSS property.
+`maxHeight{:.key}` CSS property.
 
 #### ...middlewareState
 
 See [MiddlewareState](/docs/middleware#middlewarestate).
 
 Many useful properties are also accessible via this callback,
-such as `rects{:.objectKey}` and `elements{:.objectKey}`.
+such as `rects{:.key}` and `elements{:.key}`.
 
 ### ...detectOverflowOptions
 
@@ -269,17 +269,17 @@ size((state) => ({
 }));
 ```
 
-## Using with `flip`
+## Using with `flip(){:js}`
 
 Using `size(){:js}` together with `flip(){:js}` enables some
 useful behavior. The floating element can be resized, thus
 allowing it to prefer its initial placement as much as possible,
 until it reaches a minimum size, at which point it will flip.
 
-If you're using the `padding{:.objectKey}` option in either
-middleware, ensure they share the **same value**.
+If you're using the `padding{:.key}` option in either middleware,
+ensure they share the **same value**.
 
-### bestFit
+### `bestFit{:.string}`
 
 The `'bestFit'{:js}` fallback strategy in the `flip(){:js}`
 middleware is the default, which ensures the best fitting
@@ -329,13 +329,13 @@ const middleware = [
 This strategy ensures the floating element stays in view at all
 times at the most optimal size.
 
-### initialPlacement
+### `initialPlacement{:.string}`
 
 If instead, you want the initial placement to take precedence,
 and are setting a minimum acceptable size, place `size(){:js}`
 **before** `flip(){:js}`:
 
-```js
+```js {12}
 const middleware = [
   size({
     apply({availableHeight, elements}) {

@@ -40,7 +40,7 @@ interface FloatingOverlayProps {
 }
 ```
 
-### lockScroll
+### `lockScroll{:.keyword}`
 
 Whether the `<body>{:html}` is prevented from scrolling while the
 overlay is rendered. Uses a robust technique that works on iOS
@@ -52,7 +52,10 @@ and handles horizontal scrolling.
 </FloatingOverlay>
 ```
 
-If you need a more advanced solution, or find enabling this prop
-causes unwanted side effects in your application,
-[react-remove-scroll](https://www.npmjs.com/package/react-remove-scroll)
-is a solid solution.
+<Notice>
+
+If you need a more advanced solution,
+[`react-remove-scroll`](https://www.npmjs.com/package/react-remove-scroll)
+is a great option.
+
+</Notice>

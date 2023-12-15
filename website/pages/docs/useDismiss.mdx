@@ -14,8 +14,7 @@ import {useDismiss} from '@floating-ui/react';
 
 ## Usage
 
-This hook is an interaction hook that returns event handler
-props.
+This Hook returns event handler props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -76,11 +75,11 @@ interface UseDismissProps {
 }
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useDismiss(context, {
@@ -88,7 +87,7 @@ useDismiss(context, {
 });
 ```
 
-### escapeKey
+### `escapeKey{:.key}`
 
 default: `true{:js}`
 
@@ -101,7 +100,7 @@ useDismiss(context, {
 });
 ```
 
-### referencePress
+### `referencePress{:.key}`
 
 default: `false{:js}`
 
@@ -114,7 +113,7 @@ useDismiss(context, {
 });
 ```
 
-You likely want to ensure the `move{:.objectKey}` option in the
+You likely want to ensure the `move{:.key}` option in the
 `useHover(){:js}` hook has been disabled when this is in use.
 
 #### Keyboard press dismissal
@@ -132,7 +131,7 @@ getReferenceProps({
 });
 ```
 
-### referencePressEvent
+### `referencePressEvent{:.key}`
 
 default: `'pointerdown'{:js}`
 
@@ -140,16 +139,16 @@ The type of event to use to determine a "press".
 
 ```js
 useDismiss(context, {
-  // eager on both mouse + touch input
+  // Eager on both mouse + touch input.
   referencePressEvent: 'pointerdown',
-  // eager on mouse input, lazy on touch input
+  // Eager on mouse input; lazy on touch input.
   referencePressEvent: 'mousedown',
-  // lazy on both mouse + touch input
+  // Lazy on both mouse + touch input.
   referencePressEvent: 'click',
 });
 ```
 
-### outsidePress
+### `outsidePress{:.key}`
 
 default: `true{:js}`
 
@@ -174,6 +173,13 @@ useDismiss(context, {
 });
 ```
 
+<Notice>
+  This option handles many edge cases, including browser
+  extension elements injected after the floating element renders
+  to prevent them from closing. If your toast is injected after
+  render, this won't be necessary.
+</Notice>
+
 ```js
 function App() {
   // The toast is not inside the Dialog's React tree, so we
@@ -188,7 +194,7 @@ function App() {
 }
 ```
 
-### outsidePressEvent
+### `outsidePressEvent{:.key}`
 
 default: `'pointerdown'{:js}`
 
@@ -196,16 +202,16 @@ The type of event to use to determine a "press".
 
 ```js
 useDismiss(context, {
-  // eager on both mouse + touch input
+  // Eager on both mouse + touch input.
   outsidePressEvent: 'pointerdown',
-  // eager on mouse input, lazy on touch input
+  // Eager on mouse input; lazy on touch input.
   outsidePressEvent: 'mousedown',
-  // lazy on both mouse + touch input
+  // Lazy on both mouse + touch input.
   outsidePressEvent: 'click',
 });
 ```
 
-### ancestorScroll
+### `ancestorScroll{:.key}`
 
 default: `false{:js}`
 
@@ -218,25 +224,29 @@ useDismiss(context, {
 });
 ```
 
-### bubbles
+### `bubbles{:.key}`
 
 default: `undefined{:js}`
 
-When dealing with nested floating elements, this determines
-whether the dismissal bubbles through the entire
-`<FloatingTree />{:js}` or stops at the current node.
+Determines whether event listeners bubble upwards through a tree
+of floating elements.
 
-When `false{:js}`, the floating element must have focus inside
-it.
-
-Generally, nested modal dialogs (where focus cannot escape the
-current node) will prefer no bubbling, while other nested
-floating elements will prefer bubbling.
+- `escapeKey{:.key}` determines whether pressing the `esc` key
+  bubbles, causing ancestor floating elements to dismiss as well.
+  For instance, if you're dismissing a tooltip inside a dialog
+  using the `esc` key, you likely don't want the dialog to
+  dismiss as well until a second key press, which is the default
+  behavior.
+- `outsidePress{:.key}` determines whether pressing outside of a
+  child floating element bubbles, causing ancestor floating
+  elements to dismiss as well. Setting this to `false{:js}`
+  requires a [`FloatingTree`](/docs/FloatingTree) to be set up.
 
 ```js
 useDismiss(context, {
+  // Configure bubbling for all relevant events:
   bubbles: false,
-  // or, individually configure:
+  // Or, individually configure by event:
   bubbles: {
     escapeKey: true, // false by default
     outsidePress: false, // true by default
@@ -244,7 +254,7 @@ useDismiss(context, {
 });
 ```
 
-### capture
+### `capture{:.key}`
 
 default: `undefined{:js}`
 
@@ -252,8 +262,9 @@ Determines whether to use capture phase event listeners.
 
 ```js
 useDismiss(context, {
+  // Configure capturing for all relevant events:
   capture: true,
-  // or, individually configure:
+  // Or, individually configure by event:
   capture: {
     escapeKey: true, // false by default
     outsidePress: false, // true by default

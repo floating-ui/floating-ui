@@ -22,15 +22,14 @@ See [`FloatingList`](/docs/FloatingList) for creating composable
 children API components.
 
 <Notice>
-  This hook should not be used for typeable `<input />{:html}` elements. 
+  This Hook should not be used for typeable `<input />{:html}` elements. 
   It is intended to be used on menu buttons for a dropdown menu or select menu, 
   rather than a combobox that is searchable.
 </Notice>
 
 ## Usage
 
-This hook is an interaction hook that returns event handler
-props.
+This Hook returns event handler props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -93,22 +92,22 @@ function App() {
 interface UseTypeaheadProps {
   listRef: React.MutableRefObject<Array<string | null>>;
   activeIndex: number | null;
-  onMatch?: (index: number) => void;
+  onMatch?(index: number): void;
   enabled?: boolean;
+  resetMs?: number;
+  ignoreKeys?: Array<string>;
+  selectedIndex?: number | null;
+  onTypingChange?(isTyping: boolean): void;
   findMatch?:
     | null
     | ((
         list: Array<string | null>,
         typedString: string,
       ) => string | null | undefined);
-  resetMs?: number;
-  ignoreKeys?: Array<string>;
-  selectedIndex?: number | null;
-  onTypingChange?: (isTyping) => void;
 }
 ```
 
-### listRef
+### `listRef{:.key}`
 
 <Required />
 
@@ -147,7 +146,7 @@ const listContentRef = useRef([]);
 Disabled items can be represented by `null{:js}` values in the
 array at the relevant index, and will be skipped.
 
-### activeIndex
+### `activeIndex{:.key}`
 
 <Required />
 
@@ -164,7 +163,7 @@ useTypeahead(context, {
 });
 ```
 
-### onMatch
+### `onMatch{:.function}`
 
 default: no-op
 
@@ -181,11 +180,11 @@ useTypeahead(context, {
 });
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useTypeahead(context, {
@@ -193,7 +192,7 @@ useTypeahead(context, {
 });
 ```
 
-### findMatch
+### `findMatch{:.function}`
 
 default: lowercase finder
 
@@ -210,7 +209,7 @@ useTypeahead(context, {
 });
 ```
 
-### resetMs
+### `resetMs{:.key}`
 
 default: `750{:js}`
 
@@ -223,7 +222,7 @@ useTypeahead(context, {
 });
 ```
 
-### ignoreKeys
+### `ignoreKeys{:.key}`
 
 default: `[]{:js}`
 
@@ -235,7 +234,7 @@ useTypeahead(context, {
 });
 ```
 
-### selectedIndex
+### `selectedIndex{:.key}`
 
 default: `null{:js}`
 
@@ -249,7 +248,7 @@ useTypeahead(context, {
 });
 ```
 
-### onTypingChange
+### `onTypingChange{:.function}`
 
 default: no-op
 

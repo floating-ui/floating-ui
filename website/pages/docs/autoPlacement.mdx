@@ -136,14 +136,14 @@ interface AutoPlacementOptions extends DetectOverflowOptions {
 }
 ```
 
-### crossAxis
+### `crossAxis{:.key}`
 
 default: `false{:js}`
 
 Determines whether a "most space" strategy is also used for the
 cross axis (which runs along the alignment of the floating
-element). May be desirable when the
-`allowedPlacements{:.objectKey}` are all on the same axis.
+element). May be desirable when the `allowedPlacements{:.key}`
+are all on the same axis.
 
 ```js
 autoPlacement({
@@ -151,7 +151,7 @@ autoPlacement({
 });
 ```
 
-### alignment
+### `alignment{:.key}`
 
 default: `undefined{:js}`
 
@@ -169,13 +169,13 @@ autoPlacement({
 });
 ```
 
-### autoAlignment
+### `autoAlignment{:.key}`
 
 default: `true{:js}`
 
-When `alignment{:.objectKey}` is specified, this describes
-whether to automatically choose placements with the opposite
-alignment if they fit better.
+When `alignment{:.key}` is specified, this describes whether to
+automatically choose placements with the opposite alignment if
+they fit better.
 
 ```js
 autoPlacement({
@@ -185,7 +185,7 @@ autoPlacement({
 });
 ```
 
-### allowedPlacements
+### `allowedPlacements{:.key}`
 
 default: computed subset of `allPlacements{:.const}`
 
@@ -265,7 +265,7 @@ const {placement} = useFloating(reference, floating, {
 
 </ShowFor>
 
-## Conflict with `flip`
+## Conflict with `flip(){:js}`
 
 `flip(){:js}` and `autoPlacement(){:js}` cannot be used together
 inside the same middleware array; make sure you choose only one

@@ -65,15 +65,15 @@ rendering.
 The `useFloating(){:js}` hook provides positioning and context
 for our popover. We need to pass it some information:
 
-- `open{:.objectKey}`: The open state from our `useState(){:js}`
-  hook above.
-- `onOpenChange{:.objectKey}`: A callback function that will be
-  called when the popover is opened or closed. We'll use this to
-  update our `isOpen{:.const}` state.
-- `middleware{:.objectKey}`: Import and pass middleware to the
-  array that ensure the popover remains on the screen, no matter
-  where it ends up being positioned.
-- `whileElementsMounted{:.objectKey}`: Ensure the popover remains
+- `open{:.key}`: The open state from our `useState(){:js}` hook
+  above.
+- `onOpenChange{:.key}`: A callback function that will be called
+  when the popover is opened or closed. We'll use this to update
+  our `isOpen{:.const}` state.
+- `middleware{:.key}`: Import and pass middleware to the array
+  that ensure the popover remains on the screen, no matter where
+  it ends up being positioned.
+- `whileElementsMounted{:.key}`: Ensure the popover remains
   anchored to the reference element by updating the position when
   necessary, only while both the reference and floating elements
   are mounted for performance.
@@ -99,14 +99,14 @@ function Popover() {
 }
 ```
 
-### Interaction hooks
+### Interaction Hooks
 
-Interaction hooks return objects containing keys of props that
+Interaction Hooks return objects containing keys of props that
 enable the popover to be opened, closed, or accessible to screen
 readers.
 
-Using the `context{:.const}` that was returned from the hook,
-call the interaction hooks:
+Using the `context{:.const}` that was returned from the Hook,
+call the interaction Hooks:
 
 ```js /context/
 import {
@@ -182,7 +182,7 @@ function Popover() {
 
 - `{...getReferenceProps()}{:js}` /
   `{...getFloatingProps()}{:js}` spreads the props from the
-  interaction hooks onto the relevant elements. They contain
+  interaction Hooks onto the relevant elements. They contain
   props like `onClick{:.keyword}`, `aria-expanded{:.keyword}`,
   etc.
 - `<FloatingFocusManager />{:js}` is a component that manages
@@ -238,7 +238,7 @@ like so:
 
 It is better to create a reusable component API that can be used
 in a variety of different scenarios more easily. We can place all
-of our hooks into a single custom hook for better reusability,
+of our Hooks into a single custom hook for better reusability,
 which is then used by a controller component which encapsulates
 the state.
 

@@ -17,15 +17,15 @@ import {useInteractions} from '@floating-ui/react';
 
 </PageCard>
 
-Interaction hooks like `useHover(){:js}` and `useFocus(){:js}` do
-two things: they set up effects inside the hook that work on
+Interaction Hooks like `useHover(){:js}` and `useFocus(){:js}` do
+two things: they set up Effects inside the Hook that work on
 their own, and return event handlers intended to be passed to the
 elements to add their functionality.
 
 ## Usage
 
 `useInteractions(){:js}` accepts an array of the values returned
-from interaction hooks, merging their event handlers into prop
+from interaction Hooks, merging their event handlers into prop
 getters used for rendering:
 
 ```js /hover/ /focus/
@@ -49,11 +49,15 @@ function App() {
 }
 ```
 
-<Notice>
-  You don't need to conditionally pass values into the interactions array if
-  you don't want one of the interactions to be enabled.
-  Instead, use the `enabled{:.objectKey}` option that each hook has -- 
-  it simultaneously disables all effects _and_ event handler props.
+<Notice title="Conditional interactions">
+  Don't conditionally pass values into the interactions array if you don't
+  want one of the interactions to be enabled. This is because each Hook also has Effects that
+  register independent event handlers globally, among other side effects.
+
+Instead, use the `enabled{:.key}` option that each Hook has -- it
+simultaneously disables all Effects _and_ event handler props so
+the Hook is fully inert.
+
 </Notice>
 
 ## Return value
@@ -72,7 +76,7 @@ interface UseInteractionsReturn {
 }
 ```
 
-The hook returns two core prop getters, one for the reference
+The Hook returns two core prop getters, one for the reference
 element and one for the floating element. These prop getters
 should be spread onto the elements:
 
@@ -101,7 +105,7 @@ getter, not the element itself:
 ```
 
 This is because your handler may be either overwritten or
-overwrite one of the hooks' handlers. More event handlers may
+overwrite one of the Hooks' handlers. More event handlers may
 also be added in future versions.
 
 ## `getItemProps`

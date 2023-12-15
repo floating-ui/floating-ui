@@ -18,8 +18,7 @@ children of each other on the DOM.
   explicit communication between parent and child floating elements. 
   It is necessary for:
 
-- The `bubbles{:.objectKey}` option in the `useDismiss(){:js}`
-  hook
+- The `bubbles{:.key}` option in the `useDismiss(){:js}` Hook
 - [Nested virtual list navigation](/docs/useListNavigation#virtualitemref)
 - Custom communication between parent and child floating elements
 
@@ -93,7 +92,7 @@ function App() {
   `null{:js}` for roots (not nested).
 - `useFloatingTree(){:js}` for accessing the tree object, which
   includes an event emitter to communicate across the tree
-  components (`events{:.objectKey}`).
+  components (`events{:.key}`).
 
 ```js
 interface FloatingTreeType {
@@ -117,7 +116,7 @@ const nodeId = useFloatingNodeId(parentId);
 This is useful if you want to mark a sibling floating element in
 the React tree as the child of another sibling.
 
-## FloatingTree wrapper
+## `FloatingTree` wrapper
 
 You can use the following technique to avoid having the consumer
 specify the `<FloatingTree />{:js}` wrapper:

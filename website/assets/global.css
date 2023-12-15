@@ -144,18 +144,15 @@ code ::selection {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  pre[data-theme='light'],
-  code[data-theme='light'] {
-    display: none;
-  }
+code[data-theme*=' '],
+code[data-theme*=' '] span {
+  color: var(--shiki-light);
 }
 
-@media (prefers-color-scheme: light),
-  (prefers-color-scheme: no-preference) {
-  pre[data-theme='dark'],
-  code[data-theme='dark'] {
-    display: none;
+@media (prefers-color-scheme: dark) {
+  code[data-theme*=' '],
+  code[data-theme*=' '] span {
+    color: var(--shiki-dark);
   }
 }
 
@@ -183,8 +180,4 @@ code ::selection {
 
 [data-fade='out'] {
   animation: fadeOut 75ms ease-out forwards;
-}
-
-::view-transition {
-  pointer-events: none;
 }

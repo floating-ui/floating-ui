@@ -19,8 +19,7 @@ import {useHover} from '@floating-ui/react';
 
 ## Usage
 
-This hook is an interaction hook that returns event handler
-props.
+This Hook returns event handler props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -61,6 +60,19 @@ function App() {
 }
 ```
 
+<Notice>
+
+Due to a bug with React's event delegation system, some event
+handlers are assigned directly on the reference element ref. This
+means `useHover(){:js}` will appear to work without spreading any
+props onto the reference element (or passing it into the
+interactions array).
+
+However, not all features will work, and bugs can occur, so
+ensure you always spread the props onto the reference element.
+
+</Notice>
+
 ## Examples
 
 - [Default hover](https://codesandbox.io/s/late-https-lu3833?file=/src/App.tsx)
@@ -78,11 +90,11 @@ interface UseHoverProps {
 }
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useHover(context, {
@@ -95,7 +107,7 @@ firing based on some condition. For example, you may disable the
 hook after hovering over the floating element to then prevent it
 from closing.
 
-### mouseOnly
+### `mouseOnly{:.key}`
 
 default: `false{:js}`
 
@@ -108,7 +120,7 @@ useHover(context, {
 });
 ```
 
-### delay
+### `delay{:.key}`
 
 default: `0{:js}`
 
@@ -117,10 +129,10 @@ changing the `open{:.const}` state.
 
 ```js
 useHover(context, {
-  // both open and close in ms
+  // Delay opening or closing the floating element by 500ms.
   delay: 500,
 
-  // configure them individually
+  // Configure the delay for opening and closing separately.
   delay: {
     open: 500,
     close: 0,
@@ -128,7 +140,7 @@ useHover(context, {
 });
 ```
 
-### restMs
+### `restMs{:.key}`
 
 default: `0{:js}` (off)
 
@@ -137,7 +149,7 @@ element before changing the open state.
 
 ```js
 useHover(context, {
-  // waits 150 ms once the user's cursor is at rest
+  // The user's cursor must be at rest for 150ms before opening.
   restMs: 150,
 });
 ```
@@ -148,12 +160,13 @@ rests, to ensure the floating element will eventually open:
 ```js
 useHover(context, {
   restMs: 150,
-  // if their cursor never rests, open it after 1000 ms (fallback)
+  // If their cursor never rests, open it after 1000ms as a
+  // fallback.
   delay: {open: 1000},
 });
 ```
 
-### move
+### `move{:.key}`
 
 default: `true{:js}`
 
@@ -169,7 +182,7 @@ useHover(context, {
 });
 ```
 
-### handleClose
+### `handleClose{:.key}`
 
 default: `null{:js}`
 
@@ -188,7 +201,6 @@ interactive content inside).
 ```js
 import {useHover, safePolygon} from '@floating-ui/react';
 
-// ...
 useHover(context, {
   handleClose: safePolygon(),
 });
@@ -220,7 +232,7 @@ looks like this:
 
 This function takes options.
 
-### requireIntent
+### `requireIntent{:.key}`
 
 default: `true{:js}`
 
@@ -242,7 +254,7 @@ have a hoverable floating element attached, `true{:js}` ensures
 that hover events for the other nearby references aren't too
 aggressively blocked.
 
-### buffer
+### `buffer{:.key}`
 
 default: `0.5{:js}`
 
@@ -278,7 +290,7 @@ useHover(context, {
 });
 ```
 
-### blockPointerEvents
+### `blockPointerEvents{:.key}`
 
 default: `false{:js}`
 

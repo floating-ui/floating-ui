@@ -20,8 +20,7 @@ import {useClientPoint} from '@floating-ui/react';
 
 ## Usage
 
-This hook is an interaction hook that returns event handler
-props.
+This Hook returns event handler props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -90,11 +89,11 @@ interface UseClientPointProps {
 }
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useClientPoint(context, {
@@ -102,7 +101,7 @@ useClientPoint(context, {
 });
 ```
 
-### axis
+### `axis{:.key}`
 
 default: `'both'{:js}`
 
@@ -116,7 +115,7 @@ useClientPoint(context, {
 });
 ```
 
-### x
+### `x{:.key}`
 
 default: `null{:js}`
 
@@ -128,7 +127,7 @@ useClientPoint(context, {
 });
 ```
 
-### y
+### `y{:.key}`
 
 default: `null{:js}`
 

@@ -24,8 +24,7 @@ import {useListNavigation} from '@floating-ui/react';
 
 ## Usage
 
-This hook is an interaction hook that returns event handler props
-and ARIA attribute props.
+This Hook returns event handler props and ARIA attribute props.
 
 To use it, pass it the `context{:.const}` object returned from
 `useFloating(){:js}`, and then feed its result into the
@@ -96,7 +95,7 @@ function App() {
 - [Select](https://codesandbox.io/s/gallant-sea-rcg43b?file=/src/Select.tsx)
 - [Combobox](https://codesandbox.io/s/fragrant-water-bsuirj?file=/src/App.tsx)
 
-## Using with `FloatingFocusManager`
+## Using with `FloatingFocusManager{:.class}`
 
 `useListNavigation(){:js}` and `<FloatingFocusManager>{:js}` both
 manage focus but in different ways. To ensure they work together
@@ -108,8 +107,8 @@ it falls back to the floating element itself. This allows keydown
 events to work for pointer input (e.g. open with mouse, then
 start navigating with arrow keys).
 
-1. For a combobox, where the input should keep focus, set it to
-   `-1{:js}` so focus doesn't move at all:
+1. For a **combobox**, where the input should keep focus, set it
+   to `-1{:js}` so focus doesn't move at all:
 
 ```js /initialFocus={-1}/
 <FloatingFocusManager context={context} initialFocus={-1}>
@@ -117,10 +116,10 @@ start navigating with arrow keys).
 </FloatingFocusManager>
 ```
 
-2. For other types of components, like a Menu or a Select — where
-   you want focus to move inside the floating element — the
-   default value works, but make sure your list items aren't
-   tabbable if the `activeIndex` is `null{:js}`.
+2. For other types of components, like a **menu** or a
+   **select**, where you want focus to move inside the floating
+   element, the default value works, but make sure your list
+   items aren't tabbable if the `activeIndex` is `null{:js}`.
 
 ```js
 // Not focusable, not tabbable.
@@ -143,7 +142,7 @@ A roving tabIndex is the recommended strategy:
 interface UseListNavigationProps {
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
   activeIndex: number | null;
-  onNavigate?: (index: number | null) => void;
+  onNavigate?(index: number | null): void;
   enabled?: boolean;
   selectedIndex?: number | null;
   loop?: boolean;
@@ -162,7 +161,7 @@ interface UseListNavigationProps {
 }
 ```
 
-### listRef
+### `listRef{:.key}`
 
 <Required />
 
@@ -187,7 +186,7 @@ return options.map((option, index) => (
 ));
 ```
 
-### activeIndex
+### `activeIndex{:.key}`
 
 <Required />
 
@@ -204,7 +203,7 @@ useListNavigation(context, {
 });
 ```
 
-### onNavigate
+### `onNavigate{:.function}`
 
 default: no-op
 
@@ -219,11 +218,11 @@ useListNavigation(context, {
 });
 ```
 
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 ```js
 useListNavigation(context, {
@@ -231,7 +230,7 @@ useListNavigation(context, {
 });
 ```
 
-### selectedIndex
+### `selectedIndex{:.key}`
 
 default: `null{:js}`
 
@@ -248,12 +247,12 @@ useListNavigation(context, {
 });
 ```
 
-### loop
+### `loop{:.key}`
 
 default: `false{:js}`
 
-Whether to restart from the beginning or end if the user has
-navigated to the boundary of the list.
+Determines whether focus should loop around when navigating past
+the first or last item.
 
 ```js
 useListNavigation(context, {
@@ -261,7 +260,7 @@ useListNavigation(context, {
 });
 ```
 
-### nested
+### `nested{:.key}`
 
 default: `false{:js}`
 
@@ -274,7 +273,7 @@ useListNavigation(context, {
 });
 ```
 
-### rtl
+### `rtl{:.key}`
 
 default: `false{:js}`
 
@@ -287,7 +286,7 @@ useListNavigation(context, {
 });
 ```
 
-### virtual
+### `virtual{:.key}`
 
 default: `false{:js}`
 
@@ -306,10 +305,11 @@ useListNavigation(context, {
 
 <Notice type="error" title="Required">
   Your virtually-focused list items must have a unique `id{:.keyword}` set on 
-  them.
+  them. If you're using a component role with the `useRole(){:js}` Hook, 
+  then an `id{:.keyword}` is generated automatically.
 </Notice>
 
-### virtualItemRef
+### `virtualItemRef{:.key}`
 
 default: `undefined{:js}`
 
@@ -333,7 +333,7 @@ useListNavigation(context, {
   communication of nested floating elements can occur.
 </Notice>
 
-### allowEscape
+### `allowEscape{:.key}`
 
 Determines whether focus can escape the list, such that nothing
 is selected after navigating beyond the boundary of the list. In
@@ -348,10 +348,10 @@ useListNavigation(context, {
 ```
 
 <Notice type="error" title="Required">
-  The `loop{:.objectKey}` option must be set to `true{:js}`.
+  The `loop{:.key}` option must be set to `true{:js}`.
 </Notice>
 
-### orientation
+### `orientation{:.key}`
 
 default: `'vertical'{:js}`
 
@@ -363,11 +363,11 @@ useListNavigation(context, {
 });
 ```
 
-### cols
+### `cols{:.key}`
 
 default: `1{:js}`
 
-Specifies how many columns the list has (i.e., it’s a grid).
+Specifies how many columns the list has (i.e., it's a grid).
 
 Use an orientation of `'horizontal'{:js}` (e.g. for an emoji
 picker/date picker, where pressing ArrowRight or ArrowLeft can
@@ -382,7 +382,7 @@ useListNavigation(context, {
 });
 ```
 
-### focusItemOnOpen
+### `focusItemOnOpen{:.key}`
 
 default: `'auto'{:js}`
 
@@ -396,7 +396,7 @@ useListNavigation(context, {
 });
 ```
 
-### focusItemOnHover
+### `focusItemOnHover{:.key}`
 
 default: `true{:js}`
 
@@ -408,7 +408,7 @@ useListNavigation(context, {
 });
 ```
 
-### openOnArrowKeyDown
+### `openOnArrowKeyDown{:.key}`
 
 default: `true{:js}`
 
@@ -421,13 +421,13 @@ useListNavigation(context, {
 });
 ```
 
-### disabledIndices
+### `disabledIndices{:.key}`
 
 default: `undefined{:js}`
 
 By default elements with either a `disabled{:.keyword}` or
 `aria-disabled{:.keyword}` attribute are skipped in the list
-navigation – however, this requires the items to be rendered.
+navigation -- however, this requires the items to be rendered.
 
 This prop allows you to manually specify indices which should be
 disabled, overriding the default logic.
@@ -441,9 +441,9 @@ useListNavigation(context, {
 });
 ```
 
-### scrollItemIntoView
+### `scrollItemIntoView{:.key}`
 
-default: `true{:js}`
+default: `true{:js}` | `ScrollIntoViewOptions{:.class}`
 
 Whether to scroll the active item into view when navigating. The
 default value uses `nearest{:.string}` options.

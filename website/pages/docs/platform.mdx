@@ -95,8 +95,8 @@ interface Rect {
 ```
 
 This data can come from anywhere, and the library will perform
-the right computations. `x{:.objectKey}` and `y{:.objectKey}`
-represent the coordinates of the element relative to another one.
+the right computations. `x{:.key}` and `y{:.key}` represent the
+coordinates of the element relative to another one.
 
 ```js
 import {computePosition} from '@floating-ui/core';
@@ -110,9 +110,9 @@ computePosition(referenceElement, floatingElement, {
 
 ## Methods
 
-A `platform{:.objectKey}` is a plain object consisting of 3
-required and 7 optional methods. These methods allow the platform
-to interface with Floating UI's logic.
+A `platform{:.key}` is a plain object consisting of 3 required
+and 7 optional methods. These methods allow the platform to
+interface with Floating UI's logic.
 
 Each of these methods can be either async or sync. This enables
 support of platforms whose measurement APIs are async, like React
@@ -120,10 +120,10 @@ Native.
 
 ## Required methods
 
-### getElementRects
+### `getElementRects{:.function}`
 
-Takes in the elements and the positioning `strategy{:.objectKey}`
-and returns the element `Rect{:.class}` objects.
+Takes in the elements and the positioning `strategy{:.key}` and
+returns the element `Rect{:.class}` objects.
 
 ```js
 function getElementRects({reference, floating, strategy}) {
@@ -134,19 +134,19 @@ function getElementRects({reference, floating, strategy}) {
 }
 ```
 
-#### reference
+#### `reference{:.key}`
 
-The `x{:.objectKey}` and `y{:.objectKey}` values of a reference
+The `x{:.key}` and `y{:.key}` values of a reference
 `Rect{:.class}` should be its coordinates relative to the
 floating element's `offsetParent` element if required rather than
 the viewport.
 
-#### floating
+#### `floating{:.key}`
 
-Both `x{:.objectKey}` and `y{:.objectKey}` are not relevant
-initially, so you can set these both of these to `0{:js}`.
+Both `x{:.key}` and `y{:.key}` are not relevant initially, so you
+can set these both of these to `0{:js}`.
 
-### getDimensions
+### `getDimensions{:.function}`
 
 Returns the dimensions of an element.
 
@@ -156,7 +156,7 @@ function getDimensions(element) {
 }
 ```
 
-### getClippingRect
+### `getClippingRect{:.function}`
 
 Returns the `Rect{:.class}` (**relative to the viewport**) whose
 outside bounds will clip the given element. For instance, the
@@ -178,12 +178,12 @@ function getClippingRect({element, boundary, rootBoundary}) {
 Depending on the platform you're working with, these may or may
 not be necessary.
 
-### convertOffsetParentRelativeRectToViewportRelativeRect
+### `convertOffsetParentRelativeRectToViewportRelativeRect{:.function}`
 
 This function will take a `Rect{:.class}` that is relative to a
-given `offsetParent{:.param}` element and convert its
-`x{:.objectKey}` and `y{:.objectKey}` values such that it is
-instead relative to the viewport.
+given `offsetParent{:.param}` element and convert its `x{:.key}`
+and `y{:.key}` values such that it is instead relative to the
+viewport.
 
 ```js
 function convertOffsetParentRelativeRectToViewportRelativeRect({
@@ -195,7 +195,7 @@ function convertOffsetParentRelativeRectToViewportRelativeRect({
 }
 ```
 
-### getOffsetParent
+### `getOffsetParent{:.function}`
 
 Returns the `offsetParent` of a given element. The following four
 properties are what is accessed on an `offsetParent`.
@@ -215,7 +215,7 @@ The `polyfill{:.param}` parameter exists only for
 `@floating-ui/dom` and is optional to fix the
 [Shadow DOM bug](/docs/platform#shadow-dom-fix).
 
-### getDocumentElement
+### `getDocumentElement{:.function}`
 
 Returns the document element.
 
@@ -225,7 +225,7 @@ function getDocumentElement(element) {
 }
 ```
 
-### getClientRects
+### `getClientRects{:.function}`
 
 Returns an array of `ClientRect{:.class}`s.
 
@@ -235,7 +235,7 @@ function getClientRects(element) {
 }
 ```
 
-### isElement
+### `isElement{:.function}`
 
 Determines if the current value is an element.
 
@@ -245,7 +245,7 @@ function isElement(value) {
 }
 ```
 
-### isRTL
+### `isRTL{:.function}`
 
 Determines if an element is in RTL layout.
 
@@ -255,7 +255,7 @@ function isRTL(element) {
 }
 ```
 
-### getScale
+### `getScale{:.function}`
 
 Determines the scale of an element.
 
@@ -267,7 +267,7 @@ function getScale(element) {
 
 ## Usage
 
-All these methods are passed to `platform{:.objectKey}`:
+All these methods are passed to `platform{:.key}`:
 
 ```js
 import {computePosition} from '@floating-ui/core';

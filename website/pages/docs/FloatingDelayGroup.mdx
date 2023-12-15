@@ -3,8 +3,8 @@
 # FloatingDelayGroup
 
 Provides context for a group of floating elements that should
-share a `delay{:.objectKey}` which temporarily becomes `1{:js}`
-ms after the first floating element of the group opens.
+share a `delay{:.key}` which temporarily becomes `1{:js}` ms
+after the first floating element of the group opens.
 
 ```js
 import {FloatingDelayGroup} from '@floating-ui/react';
@@ -47,8 +47,8 @@ To enable delay grouping:
 - Call `useDelayGroupContext(){:js}` to read the data from
   `<FloatingDelayGroup />{:js}`, which provides the
   <WordHighlight id='a'>delay</WordHighlight> for the group to
-pass to the `useHover(){:js}` hook.
-- `useDelayGroup(){:js}`, a hook called inside the component,
+pass to the `useHover(){:js}` Hook.
+- `useDelayGroup(){:js}`, a Hook called inside the component,
   enables grouping for the component.
 
 ```js /delay/#a
@@ -83,7 +83,7 @@ interface FloatingDelayGroupProps {
 }
 ```
 
-### delay
+### `delay{:.keyword}`
 
 <Required />
 
@@ -102,7 +102,7 @@ The delay to use for the group.
 </FloatingDelayGroup>
 ```
 
-### timeoutMs
+### `timeoutMs{:.keyword}`
 
 default: `0{:js}`
 

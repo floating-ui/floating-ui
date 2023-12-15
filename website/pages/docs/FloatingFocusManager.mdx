@@ -44,7 +44,6 @@ function App() {
 interface FloatingFocusManagerProps {
   context: FloatingContext;
   disabled?: boolean;
-  order?: Array<'reference' | 'floating' | 'content'>;
   initialFocus?:
     | number
     | React.MutableRefObject<HTMLElement | null>;
@@ -53,10 +52,11 @@ interface FloatingFocusManagerProps {
   modal?: boolean;
   visuallyHiddenDismiss?: boolean | string;
   closeOnFocusOut?: boolean;
+  order?: Array<'reference' | 'floating' | 'content'>;
 }
 ```
 
-### context
+### `context{:.keyword}`
 
 <Required />
 
@@ -68,7 +68,7 @@ The `context{:.const}` object returned from `useFloating(){:js}`.
 </FloatingFocusManager>
 ```
 
-### disabled
+### `disabled{:.keyword}`
 
 default: `false{:js}`
 
@@ -82,35 +82,12 @@ conditional state.
 </FloatingFocusManager>
 ```
 
-### order
-
-default: `['content']{:js}`
-
-The order in which focus cycles.
-
-```js
-<FloatingFocusManager
-  context={context}
-  // Initially focuses the floating element. Subsequent tabs
-  // will cycle through the tabbable contents of the floating
-  // element.
-  order={['floating', 'content']}
-  // Keeps focus on the reference element. Subsequent tabs
-  // will cycle through the tabbable contents of the floating
-  // element.
-  order={['reference', 'content']}
->
-  {/* floating element */}
-</FloatingFocusManager>
-```
-
-### initialFocus
+### `initialFocus{:.keyword}`
 
 default: `0{:js}`
 
 Which element to initially focus. Can be either a number
-(tabbable index as specified by the `order{:.objectKey}`) or a
-ref.
+(tabbable index as specified by the `order{:.key}`) or a ref.
 
 ```js
 <FloatingFocusManager
@@ -126,7 +103,7 @@ ref.
 You can set this to a negative number to ignore the initial
 focus. This is required to prevent conflicts if your floating
 element has no tabbable content and is instead controlled by the
-`useListNavigation(){:js}` hook which has its own focus
+`useListNavigation(){:js}` Hook which has its own focus
 management.
 
 ```js
@@ -152,7 +129,7 @@ return (
 );
 ```
 
-### returnFocus
+### `returnFocus{:.keyword}`
 
 default: `true{:js}`
 
@@ -166,7 +143,7 @@ This prop is ignored if the floating element lost focus.
 </FloatingFocusManager>
 ```
 
-### guards
+### `guards{:.keyword}`
 
 default: `true{:js}`
 
@@ -180,7 +157,7 @@ dialogs.
 </FloatingFocusManager>
 ```
 
-### modal
+### `modal{:.keyword}`
 
 default: `true{:js}`
 
@@ -223,7 +200,7 @@ become modal. Screen reader virtual cursors do become modal,
 allowing a touch screen reader to immediately access the
 portalled listbox items.
 
-### visuallyHiddenDismiss
+### `visuallyHiddenDismiss{:.keyword}`
 
 default: `false{:js}`
 
@@ -252,7 +229,7 @@ when using `true{:js}` is `Dismiss{:.string}`.
 </FloatingFocusManager>
 ```
 
-### closeOnFocusOut
+### `closeOnFocusOut{:.keyword}`
 
 default: `true{:js}`
 
@@ -263,6 +240,28 @@ floating elements. This affects non-modal focus management.
 
 ```js
 <FloatingFocusManager context={context} closeOnFocusOut={false}>
+  {/* floating element */}
+</FloatingFocusManager>
+```
+
+### `order{:.keyword}`
+
+default: `['content']{:js}`
+
+The order in which focus cycles.
+
+```js
+<FloatingFocusManager
+  context={context}
+  // Initially focuses the floating element. Subsequent tabs
+  // will cycle through the tabbable contents of the floating
+  // element.
+  order={['floating', 'content']}
+  // Keeps focus on the reference element. Subsequent tabs
+  // will cycle through the tabbable contents of the floating
+  // element.
+  order={['reference', 'content']}
+>
   {/* floating element */}
 </FloatingFocusManager>
 ```

@@ -27,7 +27,7 @@ import {FloatingArrow} from '@floating-ui/react';
 
 - Create an <WordHighlight id="b">arrowRef</WordHighlight> and
   pass it to the [arrow middleware](/docs/arrow)'s
-  `element{:.objectKey}` option and the `<FloatingArrow />{:js}`
+  `element{:.key}` option and the `<FloatingArrow />{:js}`
   component. This lets the arrow be measured for positioning.
 - Pass the <WordHighlight id="a">context</WordHighlight> to the
   `<FloatingArrow />{:js}` component. This lets the component
@@ -96,7 +96,7 @@ interface Props extends React.SVGAttributes<SVGSVGElement> {
 }
 ```
 
-### ref
+### `ref{:.keyword}`
 
 <Required />
 
@@ -104,7 +104,7 @@ interface Props extends React.SVGAttributes<SVGSVGElement> {
 <FloatingArrow ref={arrowRef} />
 ```
 
-### context
+### `context{:.keyword}`
 
 <Required />
 
@@ -115,7 +115,7 @@ const {context} = useFloating();
 <FloatingArrow context={context} />;
 ```
 
-### width
+### `width{:.keyword}`
 
 default: `14{:js}`
 
@@ -125,7 +125,7 @@ The width of the arrow.
 <FloatingArrow ref={arrowRef} context={context} width={10} />
 ```
 
-### height
+### `height{:.keyword}`
 
 default: `7{:js}`
 
@@ -135,7 +135,7 @@ The height of the arrow.
 <FloatingArrow ref={arrowRef} context={context} height={10} />
 ```
 
-### tipRadius
+### `tipRadius{:.keyword}`
 
 default: `0{:js}` (sharp)
 
@@ -145,7 +145,7 @@ The radius (rounding) of the arrow tip.
 <FloatingArrow ref={arrowRef} context={context} tipRadius={2} />
 ```
 
-### staticOffset
+### `staticOffset{:.keyword}`
 
 default: `undefined{:js}` (use dynamic position)
 
@@ -162,7 +162,7 @@ alignment (`'start'{:js}`/`'end'{:js}`).
 />
 ```
 
-### d
+### `d{:.keyword}`
 
 default: `undefined{:js}` (use dynamic path)
 
@@ -181,7 +181,7 @@ which will be rotated for other placements.
 />
 ```
 
-### fill
+### `fill{:.keyword}`
 
 default: `"black"{:js}` (browser default)
 
@@ -191,7 +191,7 @@ The color of the arrow.
 <FloatingArrow ref={arrowRef} context={context} fill="red" />
 ```
 
-### stroke
+### `stroke{:.keyword}`
 
 default: `"none"{:js}`
 
@@ -202,7 +202,7 @@ less than) the floating element's border width.
 <FloatingArrow ref={arrowRef} context={context} stroke="red" />
 ```
 
-### strokeWidth
+### `strokeWidth{:.keyword}`
 
 default: `0{:js}`
 

@@ -2,8 +2,8 @@
 
 # useFloating
 
-The main hook of the library that acts as a controller for all
-other hooks and components.
+The main Hook of the library that acts as a controller for all
+other Hooks and components.
 
 <ShowFor packages={['react']}>
 
@@ -25,7 +25,7 @@ import {useFloating} from '@floating-ui/react-dom';
 
 ## Usage
 
-Call the hook inside a component.
+Call the Hook inside a component.
 
 ```js
 function App() {
@@ -41,7 +41,7 @@ function App() {
 
 ## Options
 
-The hook accepts an object of options to configure its behavior.
+The Hook accepts an object of options to configure its behavior.
 
 ```js
 useFloating({
@@ -101,7 +101,7 @@ interface UseFloatingOptions {
 
 </ShowFor>
 
-### placement
+### `placement{:.key}`
 
 default: `'bottom'{:js}`
 
@@ -142,7 +142,7 @@ and will adapt to the writing direction (e.g. RTL) as expected.
   to create _any_ placement.
 </Notice>
 
-### strategy
+### `strategy{:.key}`
 
 default: `'absolute'{:js}`
 
@@ -172,7 +172,7 @@ These strategies are differentiated as follows:
   cases also
   ["break" the floating element out of a clipping ancestor](/docs/misc#clipping).
 
-### transform
+### `transform{:.key}`
 
 default: `true{:js}`
 
@@ -201,7 +201,7 @@ floating element a wrapper to avoid the conflict:
   prevent it from resizing.
 </Notice>
 
-### middleware
+### `middleware{:.key}`
 
 default: `[]{:js}`
 
@@ -283,39 +283,51 @@ offset(() => value);
 ```
 
 Calling a middleware function returns an object with an
-`options{:.objectKey}` key. These keys can hold the dependencies
-of the options object, allowing deep comparison to enable
-reactivity.
+`options{:.key}` key. These keys can hold the dependencies of the
+options object, allowing deep comparison to enable reactivity.
 
 Here's an example:
 
-```js /offset/
+```js
 import {offset} from '@floating-ui/react';
-
-const reactiveOffset = (options, deps) => ({
-  ...offset(options),
-  options: deps,
-});
 
 function App() {
   const [value, setValue] = useState(0);
 
   useFloating({
     middleware: [
-      // No need to use `reactiveOffset`:
+      // Updates when `value` changes ✅
       offset(value),
-      // We do need to use it, since a function is passed:
-      reactiveOffset(() => value, [value]),
+
+      // Does not update when `value` changes ❌
+      offset(() => value),
+
+      // Updates when `value` changes ✅
+      {
+        ...offset(() => value),
+        options: [value],
+      },
     ],
   });
 }
 ```
 
-### elements
+As a wrapper:
+
+```js
+const reactiveOffset = (options, deps) => ({
+  ...offset(options),
+  options: deps,
+});
+
+reactiveOffset(() => value, [value]);
+```
+
+### `elements{:.key}`
 
 default: `undefined{:js}`
 
-An object of elements passed to the hook, which is useful for
+An object of elements passed to the Hook, which is useful for
 externally passing them, as an alternative to the `refs{:.const}`
 object setters.
 
@@ -334,7 +346,7 @@ const {refs} = useFloating({
 return (
   <>
     <div ref={setReference} />
-    <div ref={refs.setFloating} />;
+    <div ref={refs.setFloating} />
   </>
 );
 ```
@@ -342,7 +354,7 @@ return (
 You can also do the inverse of the above, or pass both
 externally.
 
-### whileElementsMounted
+### `whileElementsMounted{:.function}`
 
 default: `undefined{:js}`
 
@@ -379,7 +391,7 @@ useFloating({
   up `autoUpdate` in the latter scenario.
 </Notice>
 
-### open
+### `open{:.key}`
 
 default: `false{:js}`
 
@@ -405,13 +417,13 @@ useEffect(() => {
 
 <ShowFor packages={['react']}>
 
-### onOpenChange
+### `onOpenChange{:.function}`
 
 default: `undefined{:js}`
 
-A function that is called when the `open{:.objectKey}` state
-should change. By default, passing the setter of the
-`open{:.objectKey}` state will be sufficient:
+A function that is called when the `open{:.key}` state should
+change. By default, passing the setter of the `open{:.key}` state
+will be sufficient:
 
 ```js
 const [isOpen, setIsOpen] = useState(false);
@@ -422,11 +434,13 @@ useFloating({
 });
 ```
 
+{/* prettier-ignore */}
 Since it's an event callback function, it allows you to
-conditionally react to the state changing, plus determine the
-event and reason that caused the change.
+conditionally react to the state changing, plus determine the <WordHighlight id="a" children="event" />
+and <WordHighlight id="b" children="reason" /> that caused the
+change.
 
-```js
+```js /event/#a /reason/#b
 useFloating({
   open: isOpen,
   onOpenChange(isOpen, event, reason) {
@@ -453,18 +467,18 @@ type OpenChangeReason =
   | 'safe-polygon';
 ```
 
-### nodeId
+### `nodeId{:.key}`
 
 default: `undefined{:js}`
 
 A unique node ID for the floating element when using a
-[FloatingTree](/docs/FloatingTree).
+[`FloatingTree`](/docs/FloatingTree).
 
 </ShowFor>
 
 ## Return value
 
-The hook returns the following type:
+The Hook returns the following type:
 
 ```ts
 interface UseFloatingReturn {
@@ -494,9 +508,9 @@ interface UseFloatingReturn {
 
 <ShowFor packages={['react']}>
 
-### context
+### `context{:.const}`
 
-This object contains the context data provided to relevant hooks
+This object contains the context data provided to relevant Hooks
 and components.
 
 ```js
@@ -505,7 +519,7 @@ const {context} = useFloating();
 
 </ShowFor>
 
-### placement
+### `placement{:.const}`
 
 The **final** placement of the floating element relative to the
 reference element. Unlike the one passed in the options, this one
@@ -517,7 +531,7 @@ for styling.
 const {placement} = useFloating();
 ```
 
-### strategy
+### `strategy{:.const}`
 
 The positoning strategy of the floating element.
 
@@ -525,7 +539,7 @@ The positoning strategy of the floating element.
 const {strategy} = useFloating();
 ```
 
-### x
+### `x{:.const}`
 
 The final x-coordinate of the floating element. This can be used
 as an alternative to `floatingStyles` to manually position the
@@ -535,7 +549,7 @@ floating element with custom CSS.
 const {x} = useFloating();
 ```
 
-### y
+### `y{:.const}`
 
 The final y-coordinate of the floating element. This can be used
 as an alternative to `floatingStyles` to manually position the
@@ -545,7 +559,7 @@ floating element with custom CSS.
 const {y} = useFloating();
 ```
 
-### middlewareData
+### `middlewareData{:.const}`
 
 The data provided by any middleware used.
 
@@ -553,17 +567,17 @@ The data provided by any middleware used.
 const {middlewareData} = useFloating();
 ```
 
-### isPositioned
+### `isPositioned{:.const}`
 
 Whether the floating element has been positioned yet when used
-inside an effect (not during render). Requires the
-`open{:.objectKey}` option to be passed.
+inside an effect (not during render). Requires the `open{:.key}`
+option to be passed.
 
 ```js
 const {isPositioned} = useFloating();
 ```
 
-### update
+### `update{:.const}`
 
 A function that updates the floating element's position manually.
 
@@ -571,7 +585,7 @@ A function that updates the floating element's position manually.
 const {update} = useFloating();
 ```
 
-### floatingStyles
+### `floatingStyles{:.const}`
 
 The styles that should be applied to the floating element.
 
@@ -579,7 +593,7 @@ The styles that should be applied to the floating element.
 const {floatingStyles} = useFloating();
 ```
 
-### refs
+### `refs{:.const}`
 
 The refs that should be applied to the reference and floating
 elements.
@@ -588,7 +602,7 @@ elements.
 const {refs} = useFloating();
 ```
 
-#### reference
+#### `reference`
 
 A ref for the reference element. You can access this inside an
 event handler or in an effect.
@@ -600,7 +614,7 @@ useEffect(() => {
 }, [refs]);
 ```
 
-#### floating
+#### `floating`
 
 A ref for the floating element. You can access this inside an
 event handler or in an effect.
@@ -614,7 +628,7 @@ useEffect(() => {
 
 <ShowFor packages={['react']}>
 
-#### domReference
+#### `domReference`
 
 A ref for the DOM reference element (if available). You can
 access this inside an event handler or in an effect.
@@ -632,7 +646,7 @@ DOM reference, while the former can be a
 
 </ShowFor>
 
-#### setReference
+#### `setReference`
 
 A function that sets the reference element.
 
@@ -641,7 +655,7 @@ const {refs} = useFloating();
 return <div ref={refs.setReference} />;
 ```
 
-#### setFloating
+#### `setFloating`
 
 A function that sets the floating element.
 
@@ -652,7 +666,7 @@ return <div ref={refs.setFloating} />;
 
 <ShowFor packages={['react']}>
 
-#### setPositionReference
+#### `setPositionReference`
 
 A function that sets the positioning reference element, to
 separate it from the events reference. This can be either a real
@@ -665,7 +679,7 @@ return <div ref={refs.setPositionReference} />;
 
 </ShowFor>
 
-### elements
+### `elements{:.const}`
 
 The elements as set by the refs, useful for access during
 rendering (as opposed to inside an event handler or an effect).
@@ -673,3 +687,34 @@ rendering (as opposed to inside an event handler or an effect).
 ```js
 const {elements} = useFloating();
 ```
+
+#### `reference`
+
+The reference element. May be virtual.
+
+```js
+const {elements} = useFloating();
+console.log(elements.reference);
+```
+
+#### `floating`
+
+The floating element.
+
+```js
+const {elements} = useFloating();
+console.log(elements.floating);
+```
+
+<ShowFor packages={['react']}>
+
+#### `domReference`
+
+The DOM reference element.
+
+```js
+const {elements} = useFloating();
+console.log(elements.domReference);
+```
+
+</ShowFor>

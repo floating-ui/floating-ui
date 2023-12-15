@@ -66,13 +66,19 @@ automatically call an update function which invokes
 `computePosition(){:js}` when necessary. Updates typically take
 only ~1ms.
 
+## Usage
+
+It's important that this function is only called/set-up when the
+floating element is open on the screen, and cleaned up when it's
+removed. Otherwise, it can cause severe performance degradation,
+especially with many floating elements being created.
+
 <ShowFor packages={['react', 'react-dom']}>
 
 ### Conditional rendering
 
 If you're conditionally rendering the floating element
-(recommended), use the `whileElementsMounted{:.objectKey}`
-option:
+(recommended), use the `whileElementsMounted{:.key}` option:
 
 ```js
 useFloating({
@@ -80,9 +86,9 @@ useFloating({
 });
 ```
 
-`whileElementsMounted{:.objectKey}` automatically handles calling
-and cleaning up `autoUpdate` based on the presence of the
-reference and floating element.
+`whileElementsMounted{:.key}` automatically handles calling and
+cleaning up `autoUpdate` based on the presence of the reference
+and floating element.
 
 ### CSS
 
@@ -120,7 +126,7 @@ return (
 
 If you're conditionally rendering the floating element with
 `v-if{:.keyword}` (recommended), use the
-`whileElementsMounted{:.objectKey}` option:
+`whileElementsMounted{:.key}` option:
 
 ```js
 useFloating(reference, floating, {
@@ -128,9 +134,9 @@ useFloating(reference, floating, {
 });
 ```
 
-`whileElementsMounted{:.objectKey}` automatically handles calling
-and cleaning up `autoUpdate` based on the presence of the
-reference and floating element.
+`whileElementsMounted{:.key}` automatically handles calling and
+cleaning up `autoUpdate` based on the presence of the reference
+and floating element.
 
 ### CSS
 
@@ -157,8 +163,8 @@ const cleanup = autoUpdate(
 
 <ShowFor packages={['dom']}>
 
-Only call this function when the floating element is open on the
-screen.
+Call `autoUpdate(){:js}` **only** when the floating element is
+open or mounted:
 
 ```js
 // This function will get called repeatedly.
@@ -168,6 +174,10 @@ function updatePosition() {
   });
 }
 
+// Mount the floating element to the DOM, such as on hover
+// or click.
+document.body.append(floatingEl);
+// Start auto updates.
 const cleanup = autoUpdate(
   referenceEl,
   floatingEl,
@@ -175,11 +185,15 @@ const cleanup = autoUpdate(
 );
 ```
 
-It returns a cleanup function that should be invoked when the
-floating element is removed from the screen.
+Then, when the user unhovers or clicks away, unmount the floating
+element and ensure you call the **cleanup** function to stop the
+auto updates:
 
 ```js
-// Later, when the element is removed from the screen
+// Remove the floating element from the DOM, such as on blur
+// or outside click.
+floatingEl.remove();
+// Stop auto updates.
 cleanup();
 ```
 
@@ -200,7 +214,7 @@ interface AutoUpdateOptions {
 }
 ```
 
-### ancestorScroll
+### `ancestorScroll{:.key}`
 
 default: `true{:js}`
 
@@ -247,7 +261,7 @@ useFloating(reference, floating, {
 
 </ShowFor>
 
-### ancestorResize
+### `ancestorResize{:.key}`
 
 default: `true{:js}`
 
@@ -294,7 +308,7 @@ useFloating(reference, floating, {
 
 </ShowFor>
 
-### elementResize
+### `elementResize{:.key}`
 
 default: `true{:js}`
 
@@ -345,7 +359,7 @@ useFloating(reference, floating, {
   To support old browsers, polyfill `ResizeObserver{:.class}`, or update manually when the elements resize.
 </Notice>
 
-### layoutShift
+### `layoutShift{:.key}`
 
 default: `true{:js}`
 
@@ -397,7 +411,7 @@ useFloating(reference, floating, {
   To support old browsers, polyfill `IntersectionObserver{:.class}`, or update manually when the reference element moves.
 </Notice>
 
-### animationFrame
+### `animationFrame{:.key}`
 
 default: `false{:js}`
 

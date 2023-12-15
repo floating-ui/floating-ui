@@ -119,7 +119,7 @@ interface ShiftOptions extends DetectOverflowOptions {
 }
 ```
 
-### mainAxis
+### `mainAxis{:.key}`
 
 default: `true{:js}`
 
@@ -143,12 +143,12 @@ shift({
   </Floating>
 </Chrome>
 
-### crossAxis
+### `crossAxis{:.key}`
 
 default: `false{:js}`
 
 This is the cross axis in which shifting is applied, the opposite
-axis of `mainAxis{:.objectKey}`.
+axis of `mainAxis{:.key}`.
 
 Enabling this can lead to the floating element **overlapping**
 the reference element, which may not be desired and is often
@@ -180,7 +180,7 @@ shift({
   </Floating>
 </Chrome>
 
-### limiter
+### `limiter{:.key}`
 
 default: no-op
 
@@ -310,6 +310,6 @@ interface Data {
 }
 ```
 
-`x{:.objectKey}` and `y{:.objectKey}` represent how much the
-floating element has been shifted along that axis. The values are
-offsets, and therefore can be negative.
+`x{:.key}` and `y{:.key}` represent how much the floating element
+has been shifted along that axis. The values are offsets, and
+therefore can be negative.

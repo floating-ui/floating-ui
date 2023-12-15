@@ -143,7 +143,7 @@ tooltip elements as arguments.
 It returns a `Promise{:.class}`, so we use the `.then(){:js}`
 method which passes in the calculated `x{:.param}` and
 `y{:.param}` coordinates for us, which we use to assign
-`left{:.objectKey}` and `top{:.objectKey}` styles to the tooltip.
+`left{:.key}` and `top{:.key}` styles to the tooltip.
 
 Our tooltip is now centered underneath the button:
 
@@ -153,8 +153,8 @@ Our tooltip is now centered underneath the button:
 
 The default placement is `'bottom'{:js}`, but you probably want
 to place the tooltip anywhere relative to the button. For this,
-Floating UI has the `placement{:.objectKey}` option, passed into
-the options object as a third argument:
+Floating UI has the `placement{:.key}` option, passed into the
+options object as a third argument:
 
 ```js {7}
 import {computePosition} from 'https://cdn.jsdelivr.net/npm/@floating-ui/dom@__DOM_VERSION__/+esm';
@@ -240,10 +240,9 @@ computePosition(button, tooltip, {
 });
 ```
 
-Now, even though we've set `placement{:.objectKey}` to
-`'top'{:js}`, the tooltip flips to the bottom automatically for
-us if it can't fit on the top. No need to adjust anything
-manually.
+Now, even though we've set `placement{:.key}` to `'top'{:js}`,
+the tooltip flips to the bottom automatically for us if it can't
+fit on the top. No need to adjust anything manually.
 
 <T.Result7 />
 
@@ -499,10 +498,10 @@ placements.
 - `y` is the y-axis offset, only existing if the placement is
   horizontal (`'right'{:js}` or `'left'{:js}`).
 
-`staticSide{:js}` depends on the `placement{:.objectKey}` that
-gets chosen. For instance, if the placement is `'bottom'{:js}`,
-then we want the arrow to be positioned 4px outside of the
-**top** of the tooltip (so we use a negative number).
+`staticSide{:js}` depends on the `placement{:.key}` that gets
+chosen. For instance, if the placement is `'bottom'{:js}`, then
+we want the arrow to be positioned 4px outside of the **top** of
+the tooltip (so we use a negative number).
 
 The reason we use `.split('-')[0]{:js}` is to also handle aligned
 placements, like `'top-start'{:js}` rather than only
