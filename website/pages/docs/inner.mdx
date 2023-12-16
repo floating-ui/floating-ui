@@ -22,22 +22,22 @@ where the selected item pops up directly over the target button.
 There are two modules: `inner(){:js}` and
 `useInnerOffset(){:js}`.
 
-- `inner(){:js}` is a middleware that positions the floating
-  element such that an inner element inside of it is anchored to
-  the reference element.
+- <WordHighlight id="a" children="inner" /> is a middleware that positions
+  the floating element such that an inner element inside of it is
+  anchored to the reference element.
 
-- `useInnerOffset(){:js}` is an interaction hook that offsets the
-  anchoring upon a `wheel{:.string}` event. This allows the
-  floating element's height to expand, revealing more list items.
-  This is not strictly required but is necessary to match the UX
-  of the macOS-style select menu.
+- <WordHighlight id='b' children="useInnerOffset" /> is an interaction Hook that offsets the
+anchoring upon a `wheel{:.string}` event. This allows the
+floating element's height to expand, revealing more list items.
+This is not strictly required but is necessary to match the UX
+of the macOS-style select menu.
 
 <ShowFor packages={['react']}>
 
 ```js /inner/1-2#a /useInnerOffset/1-2#b
 import {inner, useInnerOffset} from '@floating-ui/react';
 
-// ...
+// Inside your component
 const {context} = useFloating({
   middleware: [inner()],
 });
@@ -66,7 +66,7 @@ interface InnerProps extends DetectOverflowOptions {
   scrollRef?: React.MutableRefObject<HTMLElement | null>;
   referenceOverflowThreshold?: number;
   minItemsVisible?: number;
-  onFallbackChange?: (fallback: boolean) => void;
+  onFallbackChange?(fallback: boolean): void;
 }
 ```
 
@@ -110,7 +110,7 @@ interface Props extends DetectOverflowOptions {
 ```
 
 </ShowFor>
-### listRef
+### `listRef{:.key}`
 
 <Required />
 
@@ -127,7 +127,7 @@ inner({
 });
 ```
 
-### index
+### `index{:.key}`
 
 <Required />
 
@@ -165,7 +165,7 @@ default: `undefined{:js}`
 
 A ref containing a `SideObject{:.class}`. This is used to
 determine the overflow of the floating element and is required
-when using the `useInnerOffset(){:js}` interaction hook.
+when using the `useInnerOffset(){:js}` interaction Hook.
 
 <ShowFor packages={['react']}>
 
@@ -201,7 +201,26 @@ function App() {
 
 </ShowFor>
 
-### scrollRef
+</ShowFor>
+<ShowFor packages={['solid']}>
+
+```tsx
+import {createOverflowRef, inner} from '@floating-ui/solid';
+
+function App() {
+  const overflowRef = createOverflowRef();
+
+  inner({
+    overflowRef,
+  });
+
+  //...
+}
+```
+
+</ShowFor>
+
+### `scrollRef{:.key}`
 
 default: `undefined{:js}`
 
@@ -210,7 +229,7 @@ used as the scrolling container instead of the floating element —
 for instance, to position inner elements as direct children
 without being interfered by scrolling layout.
 
-### referenceOverflowThreshold
+### `referenceOverflowThreshold{:.key}`
 
 default: `0{:js}`
 
@@ -226,7 +245,7 @@ inner({
 });
 ```
 
-### minItemsVisible
+### `minItemsVisible{:.key}`
 
 default: `4{:js}`
 
@@ -241,7 +260,7 @@ inner({
 });
 ```
 
-### offset
+### `offset{:.key}`
 
 default: `0{:js}`
 
@@ -253,7 +272,7 @@ inner({
 });
 ```
 
-### onFallbackChange
+### `onFallbackChange{:.function}`
 
 default: no-op
 
@@ -284,18 +303,18 @@ inner({
 
 </ShowFor>
 
-## useInnerOffset Props
+## `useInnerOffset` Props
 
 <ShowFor packages={['react']}>
 
 ```js
-interface UseInnerOffsetProps extends DetectOverflowOptions {
+interface UseInnerOffsetProps {
   enabled?: boolean;
   overflowRef: React.MutableRefObject<SideObject | null>;
-  scrollRef?: React.MutableRefObject<HTMLElement | null>;
-  onChange: (
+  onChange(
     offset: number | ((offset: number) => number)
-  ) => void;
+  ): void;
+  scrollRef?: React.MutableRefObject<HTMLElement | null>;
 }
 ```
 
@@ -317,11 +336,11 @@ interface Props extends DetectOverflowOptions {
 ```
 
 </ShowFor>
-### enabled
+### `enabled{:.key}`
 
 default: `true{:js}`
 
-Conditionally enable/disable the hook.
+Conditionally enable/disable the Hook.
 
 <ShowFor packages={['react']}>
 
@@ -332,7 +351,7 @@ useInnerOffset(context, {
 ```
 
 </ShowFor>
-### overflowRef
+### `overflowRef{:.key}`
 
 <Required />
 
@@ -354,16 +373,7 @@ useInnerOffset(context, {
 });
 ```
 
-### scrollRef
-
-default: `undefined{:js}`
-
-An optional ref containing an `HTMLElement{:.class}`. This may be
-used as the scrolling container instead of the floating element —
-for instance, to position inner elements as direct children
-without being interfered by scrolling layout.
-
-### onChange
+### `onChange{:.function}`
 
 <Required />
 
@@ -390,3 +400,12 @@ useInnerOffset(context, {
   onChange: setOffset,
 });
 ```
+
+### `scrollRef{:.key}`
+
+default: `undefined{:js}`
+
+An optional ref containing an `HTMLElement{:.class}`. This may be
+used as the scrolling container instead of the floating element —
+for instance, to position inner elements as direct children
+without being interfered by scrolling layout.

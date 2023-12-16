@@ -17,7 +17,7 @@ npm install @floating-ui/react-native
 
 The `useFloating(){:js}` hook accepts all of
 [`computePosition`'s options](/docs/computePosition#options)
-excluding `strategy{:.objectKey}`.
+excluding `strategy{:.key}`.
 
 ```jsx
 import {View, Text} from 'react-native';
@@ -72,7 +72,7 @@ render, or when the reference/floating elements changed.
 Depending on the context in which the floating element lives, you
 may need to update its position in an effect.
 
-The hook returns an `update(){:js}` function to update the
+The Hook returns an `update(){:js}` function to update the
 position:
 
 ```js
@@ -119,7 +119,7 @@ function MyComponent({referenceEl, floatingEl}) {
 
 When your floating element is portaled to the app root, while the
 reference element is inside a `<ScrollView />{:jsx}`, you pass
-the `sameScrollView{:.objectKey}` option, and spread
+the `sameScrollView{:.key}` option, and spread
 `scrollProps{:.const}` to the component:
 
 ```jsx /scrollProps/ {6}
@@ -188,7 +188,7 @@ function App() {
 
 ## Arrow
 
-A `ref{:.const}` can be passed as the `element{:.objectKey}`:
+A `ref{:.const}` can be passed as the `element{:.key}`:
 
 ```jsx /arrowRef/1-2 {11}
 import {useRef} from 'react';

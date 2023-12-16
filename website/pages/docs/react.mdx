@@ -58,7 +58,7 @@ import {useFloating} from '@floating-ui/react-dom';
 
 </ShowFor>
 
-At its most basic, the hook returns a `refs{:.const}` object and
+At its most basic, the Hook returns a `refs{:.const}` object and
 a `floatingStyles{:.const}` object:
 
 ```js
@@ -95,7 +95,7 @@ position.
 To ensure the floating element remains anchored to the reference
 element, such as when scrolling or resizing, pass
 [`autoUpdate`](/docs/autoUpdate) to the
-`whileElementsMounted{:.objectKey}` option:
+`whileElementsMounted{:.key}` option:
 
 <ShowFor packages={['react']}>
 
@@ -198,13 +198,13 @@ const {refs} = useFloating<HTMLButtonElement>();
 </ShowFor>
 
 To add interactions, such as the ability to only show a floating
-element while hovering over its reference element, the hook must
+element while hovering over its reference element, the Hook must
 first accept the following two options:
 
-- `open{:.objectKey}` — a
+- `open{:.key}` — a
   <WordHighlight id="a">boolean</WordHighlight> that represents whether
   the floating element is currently rendered.
-- `onOpenChange{:.objectKey}` — an <WordHighlight id="b">event
+- `onOpenChange{:.key}` — an <WordHighlight id="b">event
   callback</WordHighlight> invoked when the open boolean state
   should change.
 
@@ -237,8 +237,8 @@ positioning", so `floatingStyles` can be ignored.
 
 ## Hooks
 
-Interaction hooks allow the open state to change, among other
-functionality. Each interaction hook accepts the
+Interaction Hooks allow the open state to change, among other
+functionality. Each interaction Hook accepts the
 `context{:.const}` object which gets returned from
 `useFloating(){:js}` as their first argument:
 
@@ -265,18 +265,18 @@ const {getReferenceProps, getFloatingProps} = useInteractions([
 ]);
 ```
 
-The `useHover(){:js}` and `useFocus(){:js}` hooks set up effects
+The `useHover(){:js}` and `useFocus(){:js}` Hooks set up Effects
 and return event handler props to change the open state, the
 latter of which get merged by `useInteractions(){:js}` for
 rendering.
 
-This API enables each of the hooks to be fully tree-shakeable and
+This API enables each of the Hooks to be fully tree-shakeable and
 opt-in. The navigation bar on the left explains them in detail.
 
 ### Prop getters
 
 The prop getters are used to add event handlers returned from the
-interaction hooks, among other functionality, to the reference
+interaction Hooks, among other functionality, to the reference
 and floating elements. When called, they return an object of
 props like `onFocus{:.keyword}`.
 

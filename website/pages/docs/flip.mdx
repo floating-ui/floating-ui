@@ -130,7 +130,7 @@ interface FlipOptions extends DetectOverflowOptions {
 }
 ```
 
-### mainAxis
+### `mainAxis{:.key}`
 
 default: `true{:js}`
 
@@ -169,13 +169,13 @@ flip({
   </Chrome>
 </div>
 
-### crossAxis
+### `crossAxis{:.key}`
 
 default: `true{:js}`
 
 This is the cross axis in which overflow is checked to perform a
-flip, the axis perpendicular to `mainAxis{:.objectKey}`. By
-disabling this, it will ignore overflow.
+flip, the axis perpendicular to `mainAxis{:.key}`. By disabling
+this, it will ignore overflow.
 
 ```js
 flip({
@@ -231,7 +231,7 @@ flip({
   </Chrome>
 </div>
 
-### fallbackAxisSideDirection
+### `fallbackAxisSideDirection{:.key}`
 
 default: `'none'{:js}`
 
@@ -249,9 +249,8 @@ fallback to the other direction.
   In RTL writing direction, the x-axis directions are reversed.
 </Notice>
 
-For instance, by default, if the initial `placement{:.objectKey}`
-is set to `'right'{:js}`, then the placements to try (in order)
-are:
+For instance, by default, if the initial `placement{:.key}` is
+set to `'right'{:js}`, then the placements to try (in order) are:
 
 `['right', 'left']{:js}`
 
@@ -285,7 +284,7 @@ fit), then you'd use `'start'{:js}`. For an interactive popover,
 you likely want to use `'end'{:js}` so it's placed on the bottom,
 closer to the user's fingers.
 
-In each of the following demos, the `placement{:.objectKey}` is
+In each of the following demos, the `placement{:.key}` is
 `'right'{:js}`.
 
 <div className="flex flex-col gap-4">
@@ -368,13 +367,13 @@ In each of the following demos, the `placement{:.objectKey}` is
   </Chrome>
 </div>
 
-#### Combining with `shift`
+#### Combining with `shift(){:js}`
 
 If `shift(){:js}` is in use in the middleware array, you may
-desire to disable `crossAxis{:.objectKey}` overflow checking,
-which will allow `shift(){:js}` to perform its work without
-falling back to the opposite axis (therefore preserving the
-original axis as best as possible):
+desire to disable `crossAxis{:.key}` overflow checking, which
+will allow `shift(){:js}` to perform its work without falling
+back to the opposite axis (therefore preserving the original axis
+as best as possible):
 
 ```js {4}
 const middleware = [
@@ -389,7 +388,7 @@ const middleware = [
 If your placement is not edge aligned, disabling it is usually a
 good choice.
 
-### flipAlignment
+### `flipAlignment{:.key}`
 
 default: `true{:js}`
 
@@ -405,15 +404,15 @@ flip({
 
 When using this with the `shift(){:js}` middleware, ensure
 `flip(){:js}` is placed **before** `shift(){:js}` in your
-middleware array. This ensures the `flipAlignment{:.objectKey}`
-logic can act before `shift(){:js}`'s does.
+middleware array. This ensures the `flipAlignment{:.key}` logic
+can act before `shift(){:js}`'s does.
 
-### fallbackPlacements
+### `fallbackPlacements{:.key}`
 
 default: `[oppositePlacement]{:js}`
 
 This describes an **explicit** array of placements to try if the
-initial `placement{:.objectKey}` doesn't fit on the axes in which
+initial `placement{:.key}` doesn't fit on the axes in which
 overflow is checked.
 
 ```js
@@ -422,7 +421,7 @@ flip({
 });
 ```
 
-In the above example, if `placement{:.objectKey}` is set to
+In the above example, if `placement{:.key}` is set to
 `'top'{:js}`, then the placements to try (in order) are:
 
 `['top', 'right', 'bottom']{:js}`
@@ -453,21 +452,21 @@ In the above example, if `placement{:.objectKey}` is set to
 </div>
 
 <Notice gap="above">
-  The options `flipAlignment{:.objectKey}` and
-  `fallbackAxisSideDirection{:.objectKey}` no longer have an effect if
+  The options `flipAlignment{:.key}` and
+  `fallbackAxisSideDirection{:.key}` no longer have an effect if
   this option is explicitly specified, as they are only shortcuts to
   create a computed list of fallback placements. To ensure your
   explicit list is preferred, they will be ignored.
 </Notice>
 
-### fallbackStrategy
+### `fallbackStrategy{:.key}`
 
 default: `'bestFit'{:js}`
 
 When no placements fit, then you'll want to decide what happens.
 `'bestFit'{:js}` will use the placement which fits best on the
 checked axes. `'initialPlacement'{:js}` will use the initial
-`placement{:.objectKey}` specified.
+`placement{:.key}` specified.
 
 ```js
 flip({
@@ -539,7 +538,7 @@ const {placement} = useFloating(reference, floating, {
 
 </ShowFor>
 
-## Conflict with `autoPlacement`
+## Conflict with `autoPlacement(){:js}`
 
 `flip(){:js}` and `autoPlacement(){:js}` cannot be used together
 inside the same middleware array; make sure you choose only one

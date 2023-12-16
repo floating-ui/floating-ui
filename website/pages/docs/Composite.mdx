@@ -90,7 +90,7 @@ interface CompositeProps {
 }
 ```
 
-### render
+### `render{:.keyword}`
 
 default: `<div />{:js}`
 
@@ -148,7 +148,55 @@ Determines the element to render.
 
 </ShowFor>
 
-### orientation
+</ShowFor>
+<ShowFor packages={["solid"]}>
+The `render{:.keyword}` prop can be used to customize the
+rendering of the composite components. Both `Composite` and
+`CompositeItem` provide the props that have to be passed to the JSX element or custom component:
+
+```js
+<CompositeItem
+  render={(htmlProps) => (
+    <select {...htmlProps()}>
+      <option />
+      <option />
+    </select>
+  )}
+/>
+```
+
+<Notice type="error" title="Important">
+  When using the `render{:.keyword}` prop `children{:.keyword}` of `Composite` or `CompositeItem` are not rendered.
+	Pass them inside the render function instead.
+</Notice>
+
+## Props
+
+```tsx
+interface Props {
+  render?: RenderProp;
+  orientation?: MaybeAccessor<
+    'horizontal' | 'vertical' | 'both'
+  >;
+  loop?: MaybeAccessor<boolean>;
+  cols?: MaybeAccessor<number>;
+  disabledIndices?: MaybeAccessor<number[]>;
+  activeIndex?: Accessor<number>;
+  onNavigate?: Setter<number>;
+}
+```
+
+### render
+
+Determines the element to render.
+
+```js
+<Composite render={(htmlProps) => <button {...htmlProps()} />} />
+```
+
+</ShowFor>
+
+### `orientation{:.keyword}`
 
 default: `'both'{:js}`
 
@@ -158,7 +206,7 @@ Determines the orientation of the composite.
 <Composite orientation="horizontal" />
 ```
 
-### loop
+### `loop{:.keyword}`
 
 default: `true{:js}`
 
@@ -169,7 +217,7 @@ navigating past the first or last item.
 <Composite loop={false} />
 ```
 
-### cols
+### `cols{:.keyword}`
 
 default: `1{:js}`
 
@@ -180,7 +228,7 @@ it's a grid).
 <Composite cols={3} />
 ```
 
-### disabledIndices
+### `disabledIndices{:.keyword}`
 
 Determines which items are disabled. The `disabled{:.keyword}` or
 `aria-disabled{:.keyword}` attributes are used by default.
@@ -189,7 +237,7 @@ Determines which items are disabled. The `disabled{:.keyword}` or
 <Composite disabledIndices={[1]} />
 ```
 
-### activeIndex
+### `activeIndex{:.keyword}`
 
 default: `undefined{:js}`
 
@@ -212,7 +260,7 @@ return <Composite activeIndex={activeIndex} />;
 ```
 
 </ShowFor>
-### onNavigate
+### `onNavigate{:.keyword}`
 
 default: `undefined{:js}`
 

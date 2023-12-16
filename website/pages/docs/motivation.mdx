@@ -39,13 +39,13 @@ The differences are summarized as follows:
   defaults. Floating UI is just a function that returns some
   unrounded numbers for you, which you can use as you please.
 - 💪 **Improved extensibility**: Modifiers in Popper are hard to
-  write. `requires{:.objectKey}`,
-  `requiresIfExists{:.objectKey}`, `phase{:.objectKey}`, needing
-  to check for other modifiers' data to write the correct logic,
-  etc. Floating UI removes all of it, making it much easier to
-  write custom middleware. The order of the array is yours to
-  control and configure. The new architecture also supports finer
-  control over the middleware lifecycle.
+  write. `requires{:.key}`, `requiresIfExists{:.key}`,
+  `phase{:.key}`, needing to check for other modifiers' data to
+  write the correct logic, etc. Floating UI removes all of it,
+  making it much easier to write custom middleware. The order of
+  the array is yours to control and configure. The new
+  architecture also supports finer control over the middleware
+  lifecycle.
 - 💎 **More features**: New features are easier to support thanks
   to the new architecture, and Floating UI already offers more,
   like the `size(){:js}` and `inline(){:js}` middleware.

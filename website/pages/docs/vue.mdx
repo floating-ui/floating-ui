@@ -45,9 +45,8 @@ center** of the `Button` element by default.
 ### Disabling transform
 
 By default, the floating element is positioned using
-`transform{:.objectKey}` in the `floatingStyles` object. This is
-the most performant way to position elements, but can be
-disabled:
+`transform{:.key}` in the `floatingStyles` object. This is the
+most performant way to position elements, but can be disabled:
 
 ```js
 useFloating(reference, floating, {
@@ -118,8 +117,8 @@ useFloating(reference, floating, {
 ```
 
 [Middleware](/docs/computePosition#middleware) can alter the
-positioning from the basic `placement{:.objectKey}`, act as
-visibility optimizers, or provide data to use.
+positioning from the basic `placement{:.key}`, act as visibility
+optimizers, or provide data to use.
 
 The docs for the middleware that were passed are available here:
 
@@ -138,7 +137,7 @@ To ensure the floating element remains anchored to its reference
 element in a variety of scenarios without detaching — such as
 when scrolling or resizing the page — you can pass the
 [`autoUpdate`](/docs/autoUpdate) utility to the
-`whileElementsMounted{:.objectKey}` prop:
+`whileElementsMounted{:.key}` prop:
 
 ```js
 import {useFloating, autoUpdate} from '@floating-ui/vue';
@@ -164,7 +163,7 @@ useFloating(reference, floating, {
 Ensure you are using conditional rendering (`v-if{:.keyword}`)
 for the floating element, not an opacity/visibility/display
 style. If you are using `v-show{:.keyword}` instead, avoid the
-`whileElementsMounted{:.objectKey}` prop.
+`whileElementsMounted{:.key}` prop.
 
 ### Manual updating
 

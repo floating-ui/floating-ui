@@ -2,12 +2,12 @@ const colors = require('tailwindcss/colors');
 const {fontFamily} = require('tailwindcss/defaultTheme');
 
 const GRAY = {
+  ...colors.gray,
   1000: '#18191f',
   900: '#1F2028',
   800: '#272935',
   700: '#2d2e3a',
   600: '#575969',
-
   200: '#BFC3D9',
   150: '#B0B2C3',
   100: '#dcdfec',
@@ -101,6 +101,9 @@ module.exports = {
             img: {
               margin: '0',
             },
+            figure: {
+              marginTop: '0',
+            },
           },
         },
         md: {
@@ -122,6 +125,9 @@ module.exports = {
             },
             img: {
               margin: '0',
+            },
+            figure: {
+              marginTop: '0',
             },
             '.card': {
               maxWidth: 'calc(50% - 5px)',
@@ -146,12 +152,15 @@ module.exports = {
             img: {
               margin: '0',
             },
+            figure: {
+              marginTop: '0',
+            },
             '.card': {
               maxWidth: '100%',
             },
             fontSize: '1rem',
             maxWidth: '70ch',
-            '[data-rehype-pretty-code-fragment]': {
+            '[data-rehype-pretty-code-figure]': {
               position: 'relative',
             },
             pre: {
@@ -165,11 +174,6 @@ module.exports = {
               '[data-line]': {
                 margin: '0 -1.5rem',
                 padding: '0 1.5rem',
-              },
-              '[data-highlighted-chars]': {
-                padding: '0.2rem 0',
-                borderRadius: '0.25rem',
-                zIndex: '0',
               },
               '&::before': {
                 position: 'absolute',
@@ -209,54 +213,70 @@ module.exports = {
                 backgroundColor: '#6fedb6',
                 color: '#000',
               },
-              'code[data-theme="light"] [data-highlighted-line]':
-                {
-                  borderLeftColor: colors.rose[400],
-                  backgroundColor: colors.orange[50],
-                },
-              'code[data-theme="dark"] [data-highlighted-line]':
-                {
-                  borderLeftColor: colors.rose[400],
-                  backgroundColor: `rgb(221 214 254 / 0.1)`,
-                },
-              'code[data-theme="light"] [data-highlighted-chars]':
-                {
-                  backgroundColor: colors.orange[100],
-                  boxShadow: `0 0 0 1px ${colors.orange[100]}`,
-                },
-              'code[data-theme="dark"] [data-highlighted-chars]':
-                {
-                  backgroundColor: 'rgba(200,200,255,0.2)',
-                  boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
-                },
+              '[data-highlighted-line]': {
+                borderLeftColor: colors.rose[400],
+                backgroundColor: colors.orange[50],
+              },
+              '[data-highlighted-chars]': {
+                backgroundColor: colors.orange[100],
+                boxShadow: `0 0 0 1px ${colors.orange[100]}`,
+                padding: '0.2rem 0',
+                borderRadius: '0.25rem',
+                zIndex: '0',
+              },
               '[data-chars-id]': {
                 borderBottom: '1px solid transparent',
                 boxShadow: 'none',
                 padding: '0.25rem',
+                '& > span': {
+                  color: 'inherit',
+                },
               },
-              'code[data-theme="dark"] [data-chars-id="a"]': {
-                backgroundColor: theme.colors.rose[800],
-                color: `${theme.colors.rose[200]} !important`,
-                borderBottomColor: theme.colors.rose[500],
-                boxShadow: 'none',
-              },
-              'code[data-theme="dark"] [data-chars-id="b"]': {
-                backgroundColor: theme.colors.cyan[800],
-                color: `${theme.colors.cyan[200]} !important`,
-                borderBottomColor: theme.colors.cyan[500],
-                boxShadow: 'none',
-              },
-              'code[data-theme="light"] [data-chars-id="a"]': {
+              '[data-chars-id="a"]': {
                 backgroundColor: theme.colors.rose[100],
                 color: `${theme.colors.rose[900]} !important`,
                 borderBottomColor: theme.colors.rose[300],
                 boxShadow: 'none',
               },
-              'code[data-theme="light"] [data-chars-id="b"]': {
+              '[data-chars-id="b"]': {
                 backgroundColor: theme.colors.cyan[100],
                 color: `${theme.colors.cyan[900]} !important`,
                 borderBottomColor: theme.colors.cyan[300],
                 boxShadow: 'none',
+              },
+              '[data-chars-id="c"]': {
+                backgroundColor: theme.colors.purple[100],
+                color: `${theme.colors.purple[900]} !important`,
+                borderBottomColor: theme.colors.purple[300],
+                boxShadow: 'none',
+              },
+              '@media (prefers-color-scheme: dark)': {
+                '[data-highlighted-chars]': {
+                  backgroundColor: 'rgba(200,200,255,0.2)',
+                  boxShadow: '0 0 0 1px rgb(200 200 255 / 20%)',
+                },
+                '[data-highlighted-line]': {
+                  borderLeftColor: colors.rose[400],
+                  backgroundColor: `rgb(221 214 254 / 0.1)`,
+                },
+                '[data-chars-id="a"]': {
+                  backgroundColor: theme.colors.rose[800],
+                  color: `${theme.colors.rose[200]} !important`,
+                  borderBottomColor: theme.colors.rose[500],
+                  boxShadow: 'none',
+                },
+                '[data-chars-id="b"]': {
+                  backgroundColor: theme.colors.cyan[800],
+                  color: `${theme.colors.cyan[200]} !important`,
+                  borderBottomColor: theme.colors.cyan[500],
+                  boxShadow: 'none',
+                },
+                '[data-chars-id="c"]': {
+                  backgroundColor: theme.colors.purple[800],
+                  color: `${theme.colors.purple[200]} !important`,
+                  borderBottomColor: theme.colors.purple[500],
+                  boxShadow: 'none',
+                },
               },
               span: {
                 position: 'relative',
@@ -282,11 +302,21 @@ module.exports = {
               '> a': {
                 textDecoration: 'none',
               },
+              code: {
+                fontWeight: 'bold',
+                whiteSpace: 'wrap',
+                boxDecorationBreak: 'clone',
+              },
             },
             h3: {
               wordBreak: 'break-word',
               '> a': {
                 textDecoration: 'none',
+              },
+              code: {
+                fontWeight: 'bold',
+                whiteSpace: 'wrap',
+                boxDecorationBreak: 'clone',
               },
             },
             h4: {
@@ -296,6 +326,7 @@ module.exports = {
             },
             code: {
               fontWeight: '500',
+              color: theme.colors.gray[800],
               '&::before': {
                 display: 'none',
               },

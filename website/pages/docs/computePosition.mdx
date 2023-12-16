@@ -149,8 +149,8 @@ Certain CSS styles must be applied **before**
 
 This makes the element float on top of the UI with intrinsic
 dimensions based on the content, instead of acting as a block.
-The `top{:.objectKey}` and `left{:.objectKey}` coordinates can
-then take effect.
+The `top{:.key}` and `left{:.key}` coordinates can then take
+effect.
 
 - `width: max-content{:sass}` (or a fixed value)
 - `top: 0{:sass}`
@@ -176,11 +176,15 @@ the calculation in [`autoUpdate`](/docs/autoUpdate):
 ```js
 import {computePosition, autoUpdate} from '@floating-ui/dom';
 
-autoUpdate(referenceEl, floatingEl, () => {
+// When the floating element is mounted to the DOM:
+const cleanup = autoUpdate(referenceEl, floatingEl, () => {
   computePosition(referenceEl, floatingEl).then(({x, y}) => {
     // ...
   });
 });
+
+// ...later, when it's removed from the DOM:
+cleanup();
 ```
 
 </ShowFor>
@@ -196,7 +200,7 @@ computePosition(referenceEl, floatingEl, {
 });
 ```
 
-### placement
+### `placement{:.key}`
 
 Where to place the floating element relative to its reference
 element. By default, this is `'bottom'{:js}`.
@@ -237,7 +241,7 @@ and will adapt to the writing direction (e.g. RTL) as expected.
 
 <ShowFor packages={['dom', 'react-dom', 'react', 'vue']}>
 
-### strategy
+### `strategy{:.key}`
 
 This is the type of CSS position property to use. Two strings are
 available:
@@ -275,7 +279,7 @@ These strategies are differentiated as follows:
 
 </ShowFor>
 
-### middleware
+### `middleware{:.key}`
 
 When you want granular control over how the floating element is
 positioned, middleware are used. They read the current
@@ -378,25 +382,25 @@ interface ComputePositionReturn {
 }
 ```
 
-### x
+### `x{:.key}`
 
 The x-coordinate of the floating element.
 
-### y
+### `y{:.key}`
 
 The y-coordinate of the floating element.
 
-### placement
+### `placement{:.key}`
 
 The final placement of the floating element, which may be
 different from the initial or preferred one passed in due to
 middleware modifications. This allows you to know which side the
 floating element is placed at.
 
-### strategy
+### `strategy{:.key}`
 
 The CSS position property to use.
 
-### middlewareData
+### `middlewareData{:.key}`
 
 The data returned by any middleware used.

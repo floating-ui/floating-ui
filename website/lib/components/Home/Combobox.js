@@ -13,7 +13,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import classNames from 'classnames';
-import {useEffect, useId} from 'react';
+import {useEffect} from 'react';
 import {forwardRef, useRef, useState} from 'react';
 
 const fruits = [
@@ -153,7 +153,6 @@ const fruits = [
 ];
 
 const Item = forwardRef(({children, active, ...rest}, ref) => {
-  const id = useId();
   return (
     <div
       ref={ref}
@@ -163,9 +162,6 @@ const Item = forwardRef(({children, active, ...rest}, ref) => {
           'bg-blue-500 text-white': active,
         },
       )}
-      role="option"
-      id={id}
-      aria-selected={active}
       {...rest}
     >
       {children}
@@ -222,10 +218,9 @@ export function ComboboxDemo() {
     ],
   });
 
-  const role = useRole(context, {role: 'listbox'});
+  const role = useRole(context, {role: 'combobox'});
   const focus = useFocus(context, {
     enabled: inputValue.length > 0,
-    keyboardOnly: false,
   });
   const dismiss = useDismiss(context);
   const navigation = useListNavigation(context, {
@@ -309,17 +304,17 @@ export function ComboboxDemo() {
               )}
               {items.map((item, index) => (
                 <Item
+                  key={item}
+                  ref={(node) => {
+                    listRef.current[index] = node;
+                  }}
+                  active={activeIndex === index}
                   {...getItemProps({
-                    key: item,
-                    ref(node) {
-                      listRef.current[index] = node;
-                    },
                     onClick() {
                       setInputValue(item);
                       setOpen(false);
                     },
                   })}
-                  active={activeIndex === index}
                 >
                   {item}
                 </Item>

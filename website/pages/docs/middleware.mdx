@@ -11,7 +11,7 @@ Middleware allow you to customize the behavior of the positioning
 and be as granular as you want, adding your own custom logic.
 
 `computePosition(){:js}` starts with initial positioning via
-`placement{:.objectKey}` — then middleware are executed as an
+`placement{:.key}` — then middleware are executed as an
 in-between "middle" step of the initial placement computation and
 eventual return of data for rendering.
 
@@ -66,7 +66,7 @@ const shiftByOnePixel = {
 
 This (not particularly useful) middleware adds `1{:js}` pixel to
 the coordinates. To use this middleware, add it to your
-`middleware{:.objectKey}` array:
+`middleware{:.key}` array:
 
 <ShowFor packages={['dom', 'core']}>
 
@@ -123,17 +123,16 @@ rendering.
 
 ### Shape
 
-A middleware is an object that has a `name{:.objectKey}` property
-and a `fn{:.function}` property. The `fn{:.function}` property
-provides the logic of the middleware, which returns new
-positioning coordinates or useful data.
+A middleware is an object that has a `name{:.key}` property and a
+`fn{:.function}` property. The `fn{:.function}` property provides
+the logic of the middleware, which returns new positioning
+coordinates or useful data.
 
 ### Data
 
-Any data can be passed via an optional `data{:.objectKey}`
-property of the object that is returned from `fn{:.function}`.
-This will be accessible to the consumer via the `middlewareData`
-property:
+Any data can be passed via an optional `data{:.key}` property of
+the object that is returned from `fn{:.function}`. This will be
+accessible to the consumer via the `middlewareData` property:
 
 ```js {7-9}
 const shiftByOnePixel = {
@@ -210,7 +209,7 @@ behavior:
 const middleware = [shiftByAmount(10)];
 ```
 
-The `options{:.objectKey}` key on a middleware object holds the
+The `options{:.key}` key on a middleware object holds the
 dependencies, allowing deep comparison reactivity.
 
 ### Always return an object
@@ -246,49 +245,48 @@ interface MiddlewareState {
 }
 ```
 
-### x
+### `x{:.key}`
 
 This is the x-axis coordinate to position the floating element
 to.
 
-### y
+### `y{:.key}`
 
 This is the y-axis coordinate to position the floating element
 to.
 
-### elements
+### `elements{:.key}`
 
 This is an object containing the reference and floating elements.
 
-### rects
+### `rects{:.key}`
 
 This is an object containing the `Rect{:.class}`s of the
 reference and floating elements, an object of shape
 `{width, height, x, y}`.
 
-### middlewareData
+### `middlewareData{:.key}`
 
 This is an object containing all the data of any middleware at
 the current step in the lifecycle. The lifecycle loops over the
-`middleware{:.objectKey}` array, so later middleware have access
-to data from any middleware run prior.
+`middleware{:.key}` array, so later middleware have access to
+data from any middleware run prior.
 
-### strategy
+### `strategy{:.key}`
 
 The positioning strategy.
 
-### initialPlacement
+### `initialPlacement{:.key}`
 
 The initial (or preferred) placement passed in to
 `computePosition(){:js}`.
 
-### placement
+### `placement{:.key}`
 
 The stateful resultant placement. Middleware like
-`flip{:.function}` change `initialPlacement{:.objectKey}` to a
-new one.
+`flip{:.function}` change `initialPlacement{:.key}` to a new one.
 
-### platform
+### `platform{:.key}`
 
 An object containing methods to make Floating UI work on the
 current platform, e.g. DOM or React Native.
@@ -345,7 +343,7 @@ so that other middleware perform fresh logic.
 - When `flip(){:js}` and `autoPlacement(){:js}` change the
   placement, they reset the lifecycle so that other middleware
   that modify the coordinates based on the current
-  `placement{:.objectKey}` do not perform stale logic.
+  `placement{:.key}` do not perform stale logic.
 - `size(){:js}` resets the lifecycle with the newly applied
   dimensions, as many middleware read the dimensions to perform
   their logic.
@@ -353,7 +351,7 @@ so that other middleware perform fresh logic.
   reference rect to a custom implementation, similar to a
   [Virtual Element](/docs/virtual-elements).
 
-In order to do this, add a `reset{:.objectKey}` property to the
+In order to do this, add a `reset{:.key}` property to the
 returned object from `fn{:.function}`.
 
 ```ts

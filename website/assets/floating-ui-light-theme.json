@@ -1,5 +1,5 @@
 {
-  "name": "Moonlight II (Light)",
+  "name": "moonlight-ii-light",
   "type": "light",
   "colors": {
     "foreground": "#363a49",
@@ -263,7 +263,7 @@
       "name": "Colors",
       "scope": ["constant.other.color"],
       "settings": {
-        "foreground": "#ffffff"
+        "foreground": "#000000"
       }
     },
     {
@@ -340,7 +340,7 @@
         "punctuation.definition.tag.end.html",
         "punctuation.definition.block",
         "meta.property-list",
-        "meta.brace.square",
+        "meta.brace",
         "keyword.other.template",
         "keyword.other.substitution"
       ],

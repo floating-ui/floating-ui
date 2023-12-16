@@ -19,9 +19,9 @@ The following browsers are supported (defined by `browserslist`):
 
 ## Subpixel and accelerated positioning
 
-Instead of `top{:.objectKey}` and `left{:.objectKey}` as shown
-throughout the docs, you can use transform styles instead to
-position the floating element for increased performance.
+Instead of `top{:.key}` and `left{:.key}` as shown throughout the
+docs, you can use transform styles instead to position the
+floating element for increased performance.
 
 ```js
 function roundByDPR(value) {
@@ -55,7 +55,7 @@ Object.assign(floatingEl.style, {
 ```
 
 If you're animating the location of the floating element, using
-`transform{:.objectKey}` will offer smoother animations.
+`transform{:.key}` will offer smoother animations.
 
 <Notice type="warning">
   3D transforms can sometimes result in blurry text on some
@@ -113,8 +113,8 @@ This will always make it 10 pixels less than the width of the
 viewport.
 
 The constant `10{:js}` shown in the example should be double the
-`padding{:.objectKey}` given to the `shift(){:js}` middleware if
-it's in use.
+`padding{:.key}` given to the `shift(){:js}` middleware if it's
+in use.
 
 Alternatively, you may experiment with the [`size`](/docs/size)
 middleware depending on the axis overflow is occurring.

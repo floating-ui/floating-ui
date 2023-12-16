@@ -136,7 +136,7 @@ type Options =
 
 A number represents the distance (gutter or margin) between the
 floating element and the reference element. This is shorthand for
-`mainAxis{:.objectKey}`.
+`mainAxis{:.key}`.
 
 ```js
 offset(10);
@@ -145,7 +145,7 @@ offset(10);
 An object can also be passed, which enables you to individually
 configure each axis.
 
-### mainAxis
+### `mainAxis{:.key}`
 
 default: `0{:js}`
 
@@ -220,7 +220,7 @@ Here's how it looks on the four sides:
   </div>
 </Chrome>
 
-### crossAxis
+### `crossAxis{:.key}`
 
 default: `0{:js}`
 
@@ -295,14 +295,13 @@ Here's how it looks on the four sides:
   </div>
 </Chrome>
 
-### alignmentAxis
+### `alignmentAxis{:.key}`
 
 default: `null{:js}`
 
-The same axis as `crossAxis{:.objectKey}` but applies only to
-aligned placements and inverts the `end{:.string}` alignment.
-When set to a number, it overrides the `crossAxis{:.objectKey}`
-value.
+The same axis as `crossAxis{:.key}` but applies only to aligned
+placements and inverts the `end{:.string}` alignment. When set to
+a number, it overrides the `crossAxis{:.key}` value.
 
 A positive number will move the floating element in the direction
 of the opposite edge to the one that is aligned, while a negative
@@ -314,7 +313,7 @@ offset({
 });
 ```
 
-Here's how it differentiates from `crossAxis{:.objectKey}`:
+Here's how it differentiates from `crossAxis{:.key}`:
 
 <Chrome center className="pt-16 pb-24" tall>
   <div className="mt-4 flex flex-col gap-4 md:flex-row">

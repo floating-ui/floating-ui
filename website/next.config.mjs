@@ -50,7 +50,7 @@ const rehypePrettyCodeOptions = {
   },
   keepBackground: false,
   tokensMap: {
-    objectKey: 'meta.object-literal.key',
+    key: 'meta.object-literal.key',
     function: 'entity.name.function',
     param: 'variable.parameter',
     const: 'variable.other.constant',

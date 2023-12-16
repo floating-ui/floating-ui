@@ -2,7 +2,7 @@
 
 # Custom Hooks
 
-You can build your own custom hook to perform unique logic that
+You can build your own custom Hook to perform unique logic that
 is not currently exported by the library.
 
 <ShowFor packages={['react-dom']}>
@@ -13,15 +13,15 @@ is not currently exported by the library.
 
 </PageCard>
 
-The hooks exported by the library essentially just return HTML
+The Hooks exported by the library essentially just return HTML
 props (`onClick{:.keyword}`, `aria-describedby{:.keyword}`, etc.)
 inside a prop getter key, which get merged. You can do the same
 thing.
 
 <Notice>
-  The library is fully tree-shakeable, so we can add new hooks
+  The library is fully tree-shakeable, so we can add new Hooks
   for specific commonly requested features. If you have ideas for
-  new hooks or functionality, don't hesitate to open a new issue
+  new Hooks or functionality, don't hesitate to open a new issue
   or discussion on the [GitHub
   repo](https://github.com/floating-ui/floating-ui)!
 </Notice>
@@ -62,9 +62,9 @@ const useCustomLogic = (
 };
 ```
 
-## Communicating between hooks
+## Communicating between Hooks
 
-Interaction hooks are decoupled, so passing the shared context
+Interaction Hooks are decoupled, so passing the shared context
 object as a first argument is how they communicate with each
 other.
 
@@ -90,7 +90,7 @@ return (
 );
 ```
 
-And also a mutable ref to pass state variables around hooks:
+And also a mutable ref to pass state variables around Hooks:
 
 ```js
 const {context} = useFloating();

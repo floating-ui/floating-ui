@@ -97,7 +97,17 @@ await detectOverflow(state, {
 });
 ```
 
-### boundary
+```ts
+interface DetectOverflowOptions {
+  boundary: Boundary;
+  rootBoundary: RootBoundary;
+  elementContext: ElementContext;
+  altBoundary: boolean;
+  padding: Padding;
+}
+```
+
+### `boundary{:.key}`
 
 ```ts
 type Boundary =
@@ -118,7 +128,7 @@ await detectOverflow(state, {
 });
 ```
 
-### rootBoundary
+### `rootBoundary{:.key}`
 
 ```ts
 type RootBoundary = 'viewport' | 'document' | Rect;
@@ -156,7 +166,7 @@ await detectOverflow(state, {
 });
 ```
 
-### padding
+### `padding{:.key}`
 
 ```ts
 type Padding =
@@ -184,7 +194,7 @@ await detectOverflow(state, {
 });
 ```
 
-### elementContext
+### `elementContext{:.key}`
 
 ```ts
 type ElementContext = 'reference' | 'floating';
@@ -202,16 +212,16 @@ await detectOverflow(state, {
 });
 ```
 
-### altBoundary
+### `altBoundary{:.key}`
 
 This is a boolean value which determines whether to check the
-alternate `elementContext{:.objectKey}`'s boundary.
+alternate `elementContext{:.key}`'s boundary.
 
-For instance, if the `elementContext{:.objectKey}` is
+For instance, if the `elementContext{:.key}` is
 `'floating'{:js}`, and you enable this option, then the boundary
 in which overflow is checked for is the `'reference'{:js}`'s
 boundary. This only applies if you are using the default
-`'clippingAncestors'{:js}` string as the `boundary{:.objectKey}`.
+`'clippingAncestors'{:js}` string as the `boundary{:.key}`.
 
 ```js
 await detectOverflow(state, {

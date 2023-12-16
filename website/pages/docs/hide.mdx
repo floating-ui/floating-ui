@@ -81,9 +81,9 @@ element because it appears detached from the reference element
 </div>
 
 In the above example, the floating element turns partially
-transparent once it has `escaped{:.objectKey}` the reference
-element's clipping context. Once the reference element is hidden,
-it hides itself.
+transparent once it has `escaped{:.key}` the reference element's
+clipping context. Once the reference element is hidden, it hides
+itself.
 
 ## Usage
 
@@ -176,7 +176,7 @@ interface HideOptions extends DetectOverflowOptions {
 }
 ```
 
-### strategy
+### `strategy{:.key}`
 
 default: `'referenceHidden'{:js}`
 
@@ -227,7 +227,7 @@ interface Data {
 Depending on the strategy used, these options may exist in the
 data object.
 
-### referenceHidden
+### `referenceHidden{:.key}`
 
 Determines whether the reference element is fully clipped, and is
 therefore hidden from view.
@@ -235,15 +235,15 @@ therefore hidden from view.
 Note that “hidden” means clipping, `visibility` and `opacity`
 styles are not considered.
 
-### referenceHiddenOffsets
+### `referenceHiddenOffsets{:.key}`
 
 A side object containing overflow offsets.
 
-### escaped
+### `escaped{:.key}`
 
 Determines whether the floating element has "escaped" the
 reference's clipping context and appears fully detached from it.
 
-### escapedOffsets
+### `escapedOffsets{:.key}`
 
 A side object containing overflow offsets.
