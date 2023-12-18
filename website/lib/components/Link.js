@@ -23,7 +23,12 @@ export const Link = forwardRef(function Link(props, ref) {
     const [hrefBase, hrefHash] = props.href.split('#');
     const [asPathBase, asPathHash] = router.asPath.split('#');
 
-    if (hrefBase === asPathBase || hrefHash !== asPathHash) {
+    if (
+      hrefBase === asPathBase ||
+      (hrefBase === asPathBase && hrefHash !== asPathHash) ||
+      // plain #hash (table of contents)
+      hrefBase === ''
+    ) {
       return;
     }
 
