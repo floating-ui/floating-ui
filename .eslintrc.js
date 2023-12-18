@@ -10,6 +10,7 @@ module.exports = {
     'dist',
     'public',
     'website/out',
+    'out-tsc',
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'react-hooks', 'simple-import-sort'],

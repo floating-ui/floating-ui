@@ -1,0 +1,10 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "outDir": "out-tsc",
+    "types": []
+  },
+  "include": ["src"],
+  "references": [{"path": "../core/tsconfig.lib.json"}]
+}

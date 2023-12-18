@@ -34,6 +34,7 @@ export {useTransitionStatus, useTransitionStyles} from './hooks/useTransition';
 export {useTypeahead} from './hooks/useTypeahead';
 export {inner, useInnerOffset} from './inner';
 export {safePolygon} from './safePolygon';
+export type * from './types';
 export {
   arrow,
   autoPlacement,

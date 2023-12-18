@@ -1,0 +1,19 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "outDir": "out-tsc",
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "lib": ["DOM", "ES2020"]
+  },
+  "include": ["src"],
+  "exclude": ["src/**/*.stories.ts", "src/**/*.stories.tsx"],
+  "references": [{"path": "../packages/dom/tsconfig.lib.json"}]
+}

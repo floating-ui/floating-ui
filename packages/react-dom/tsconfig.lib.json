@@ -1,0 +1,8 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc"
+  },
+  "include": ["src"],
+  "references": [{"path": "../dom/tsconfig.lib.json"}]
+}

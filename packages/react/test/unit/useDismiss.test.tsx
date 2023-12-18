@@ -858,7 +858,7 @@ describe('outsidePressEvent click', () => {
     const floatingEl = screen.getByRole('tooltip');
     fireEvent.mouseDown(floatingEl);
     fireEvent.mouseUp(document.body);
-    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
 
@@ -867,7 +867,7 @@ describe('outsidePressEvent click', () => {
     const floatingEl = screen.getByRole('tooltip');
     fireEvent.mouseDown(document.body);
     fireEvent.mouseUp(floatingEl);
-    expect(screen.queryByRole('tooltip')).to.toBeInTheDocument();
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
     cleanup();
   });
 

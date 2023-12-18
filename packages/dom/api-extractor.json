@@ -1,0 +1,10 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "extends": "config/api-extractor.base.json",
+  "projectFolder": ".",
+  "mainEntryPointFilePath": "<projectFolder>/out-tsc/src/index.d.ts",
+  "dtsRollup": {
+    "untrimmedFilePath": "<projectFolder>/dist/floating-ui.dom.d.ts",
+    "enabled": true
+  }
+}

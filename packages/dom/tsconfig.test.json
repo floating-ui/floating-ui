@@ -1,0 +1,12 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc",
+    "jsx": "react-jsx"
+  },
+  "include": ["test", "vite.config.mts"],
+  "references": [
+    {"path": "./tsconfig.lib.json"},
+    {"path": "../react-dom/tsconfig.lib.json"}
+  ]
+}

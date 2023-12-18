@@ -1,0 +1,26 @@
+{
+  "name": "config",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rimraf dist"
+  },
+  "files": [
+    "dist",
+    "tsconfig.base.json",
+    "api-extractor.base.json"
+  ],
+  "bin": {
+    "build-api": "./scripts/buildAPI.mjs"
+  },
+  "main": "dist/src/index.mjs",
+  "module": "dist/src/index.mjs",
+  "types": "dist/src/index.d.mts",
+  "devDependencies": {
+    "glob": "^10.3.10",
+    "minimist": "^1.2.8",
+    "zx": "^7.2.3"
+  }
+}

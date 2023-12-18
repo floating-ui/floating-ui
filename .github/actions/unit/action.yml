@@ -5,15 +5,5 @@ runs:
   steps:
     - run: npm run build
       shell: sh
-    - run: npm -w packages/core test
-      shell: sh
-    - run: npm -w packages/dom test
-      shell: sh
-    - run: npm -w packages/react-dom test
-      shell: sh
-    - run: npm -w packages/react test
-      shell: sh
-    - run: npm -w packages/vue test
-      shell: sh
-    - run: npm -w packages/utils test
+    - run: npm run test
       shell: sh

@@ -15,3 +15,5 @@ stats
 .parcel-cache
 test-results
 out
+out-tsc
+.turbo

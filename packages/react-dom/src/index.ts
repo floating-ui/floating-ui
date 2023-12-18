@@ -1,4 +1,5 @@
 export {arrow} from './arrow';
+export type * from './types';
 export {useFloating} from './useFloating';
 export {
   autoPlacement,

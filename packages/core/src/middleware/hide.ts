@@ -1,8 +1,7 @@
-import {evaluate, sides} from '@floating-ui/utils';
+import {type Rect, type SideObject, evaluate, sides} from '@floating-ui/utils';
 
-import type {DetectOverflowOptions} from '../detectOverflow';
-import {detectOverflow} from '../detectOverflow';
-import type {Derivable, Middleware, Rect, SideObject} from '../types';
+import {type DetectOverflowOptions, detectOverflow} from '../detectOverflow';
+import type {Derivable, Middleware} from '../types';
 
 function getSideOffsets(overflow: SideObject, rect: Rect) {
   return {

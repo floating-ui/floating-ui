@@ -8,21 +8,6 @@ import type {
   SideObject,
   Strategy,
 } from '@floating-ui/utils';
-export type {
-  AlignedPlacement,
-  Alignment,
-  Axis,
-  ClientRectObject,
-  ElementRects,
-  Length,
-  Padding,
-  Placement,
-  Rect,
-  Side,
-  SideObject,
-  Strategy,
-  VirtualElement,
-} from '@floating-ui/utils';
 
 type Promisable<T> = T | Promise<T>;
 
@@ -182,20 +167,3 @@ export type MiddlewareArguments = MiddlewareState;
 export type Boundary = any;
 export type RootBoundary = 'viewport' | 'document' | Rect;
 export type ElementContext = 'reference' | 'floating';
-
-export {computePosition} from './computePosition';
-export {detectOverflow, DetectOverflowOptions} from './detectOverflow';
-export {arrow, ArrowOptions} from './middleware/arrow';
-export {autoPlacement, AutoPlacementOptions} from './middleware/autoPlacement';
-export {flip, FlipOptions} from './middleware/flip';
-export {hide, HideOptions} from './middleware/hide';
-export {inline, InlineOptions} from './middleware/inline';
-export {offset, OffsetOptions} from './middleware/offset';
-export {
-  limitShift,
-  LimitShiftOptions,
-  shift,
-  ShiftOptions,
-} from './middleware/shift';
-export {size, SizeOptions} from './middleware/size';
-export {rectToClientRect} from '@floating-ui/utils';

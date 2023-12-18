@@ -1,6 +1,0 @@
-{
-  "sideEffects": false,
-  "main": "./dist/floating-ui.utils.react.umd.js",
-  "module": "./dist/floating-ui.utils.react.esm.js",
-  "types": "./src/types.d.ts"
-}

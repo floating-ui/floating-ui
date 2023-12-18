@@ -3,8 +3,8 @@ import type {
   Middleware,
   Placement,
 } from '@floating-ui/core';
+import type * as React from 'react';
 
-export {useFloating} from './';
 export type {
   AlignedPlacement,
   Alignment,
@@ -30,18 +30,6 @@ export type {
   Side,
   SideObject,
   Strategy,
-} from '@floating-ui/core';
-export {
-  arrow,
-  autoPlacement,
-  detectOverflow,
-  flip,
-  hide,
-  inline,
-  limitShift,
-  offset,
-  shift,
-  size,
 } from '@floating-ui/core';
 
 export interface UseFloatingOptions {

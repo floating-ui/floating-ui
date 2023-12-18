@@ -9,8 +9,6 @@ export default defineConfig({
   resolve: {
     alias: {
       extension: resolve(__dirname, './src'),
-      // TODO: remove this once npm package is published
-      'floating-ui-devtools': resolve(__dirname, '../packages/devtools/src'),
     },
   },
 });

@@ -5,8 +5,6 @@ runs:
   steps:
     - run: npx playwright install --with-deps chromium
       shell: sh
-    - run: npm run build
-      shell: sh
     - run: npm run playwright
       shell: sh
     - uses: actions/upload-artifact@v2
