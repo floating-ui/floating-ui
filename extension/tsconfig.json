@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {"path": "./tsconfig.app.json"},
+    {"path": "./.storybook/tsconfig.stories.json"}
+  ]
+}
