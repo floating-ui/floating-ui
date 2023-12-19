@@ -1,6 +1,5 @@
-import type {CONTROLLER, ELEMENT_METADATA} from 'extension/utils/constants';
-
 import type {Controller} from './controller';
+import type {CONTROLLER, ELEMENT_METADATA} from './extension/constants';
 import type {References} from './utils/references';
 
 /**
@@ -31,3 +30,8 @@ declare global {
     [CONTROLLER]: Controller;
   }
 }
+
+export type {devtools} from './middleware';
+// TODO: remove middleware once this is properly release
+// at the moment this is being consumed by @fluentui/react-positioning
+export type {devtools as middleware} from './middleware';

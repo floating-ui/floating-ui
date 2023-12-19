@@ -1,5 +1,4 @@
-import {CONTROLLER, ELEMENT_METADATA} from 'extension/utils/constants';
-
+import {CONTROLLER, ELEMENT_METADATA} from './extension/constants';
 import type {HTMLElementWithMetadata} from './types';
 
 export type Controller = {

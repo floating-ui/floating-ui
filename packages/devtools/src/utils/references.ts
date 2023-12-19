@@ -1,5 +1,5 @@
-import type {ReferenceId} from 'extension/types';
-import {HTML_ELEMENT_REFERENCE} from 'extension/utils/constants';
+import {HTML_ELEMENT_REFERENCE} from '../extension/constants';
+import type {ReferenceId} from '../extension/types';
 
 const generateReferenceId = (): ReferenceId => {
   return `${HTML_ELEMENT_REFERENCE}:${crypto.randomUUID()}`;

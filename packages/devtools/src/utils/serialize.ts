@@ -1,5 +1,4 @@
-import type {Serialized} from 'extension/types';
-
+import type {Serialized} from '../extension/types';
 import {isHTMLElement} from './isHTMLElement';
 import {type References, createReferences} from './references';
 
