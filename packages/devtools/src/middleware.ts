@@ -1,8 +1,8 @@
 import type {Middleware, MiddlewareState} from '@floating-ui/dom';
-import {ELEMENT_METADATA} from 'extension/utils/constants';
-import type {FloatingUIMiddlewareData} from 'extension/views/floating-ui';
 
 import {injectController} from './controller';
+import {ELEMENT_METADATA} from './extension/constants';
+import type {FloatingUIMiddlewareData} from './extension/floating-ui';
 import type {Metadata, MiddlewareData} from './types';
 import {serialize} from './utils/serialize';
 

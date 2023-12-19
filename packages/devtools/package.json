@@ -1,30 +1,33 @@
 {
   "name": "@floating-ui/devtools",
   "version": "0.0.1",
-  "type": "module",
   "scripts": {
-    "dev": "NODE_END=development vite build --watch --mode development",
-    "build": "vite build",
-    "build:types": "tsc -b && api-extractor run --local --verbose && rm -rf dist/tsc"
+    "test": "vitest --globals",
+    "dev": "rollup -c -w",
+    "build": "NODE_ENV=build rollup -c"
   },
-  "files": [
-    "dist"
-  ],
-  "module": "./dist/index.js",
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
-  "typings": "./dist/index.d.ts",
+  "main": "./dist/floating-ui.devtools.umd.js",
+  "module": "./dist/floating-ui.devtools.esm.js",
+  "unpkg": "./dist/floating-ui.devtools.umd.min.js",
+  "types": "./src/types.d.ts",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./src/types.d.ts",
+        "default": "./dist/floating-ui.devtools.mjs"
+      },
+      "types": "./src/types.d.ts",
+      "module": "./dist/floating-ui.devtools.esm.js",
+      "default": "./dist/floating-ui.devtools.umd.js"
     }
   },
+  "files": [
+    "dist/",
+    "**/*.d.ts",
+    "**/*.d.mts"
+  ],
   "peerDependencies": {
     "@floating-ui/dom": ">=1.0.0 <2.0.0"
-  },
-  "devDependencies": {
-    "vite-plugin-dts": "^3.6.4"
   }
 }
