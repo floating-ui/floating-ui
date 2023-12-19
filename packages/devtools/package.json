@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/devtools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "test": "vitest --globals",
     "dev": "rollup -c -w",
