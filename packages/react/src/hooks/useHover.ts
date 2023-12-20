@@ -55,6 +55,8 @@ export function getDelay(
 export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
   enabled?: boolean;
   handleClose?: HandleCloseFn<RT> | null;
+  onHoverStartInitiated?: (event: Event) => void
+  onHoverCloseInitiated?: (event: Event) => void;
   restMs?: number;
   delay?: number | Partial<{open: number; close: number}>;
   mouseOnly?: boolean;
@@ -82,6 +84,8 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     enabled = true,
     delay = 0,
     handleClose = null,
+    onHoverStartInitiated = () => {},
+    onHoverCloseInitiated = () => {},
     mouseOnly = false,
     restMs = 0,
     move = true,
@@ -133,6 +137,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
 
     function onLeave(event: MouseEvent) {
       if (isHoverOpen()) {
+        onHoverCloseInitiated(event);
         onOpenChange(false, event, 'hover');
       }
     }
@@ -146,6 +151,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     floating,
     open,
     onOpenChange,
+    onHoverCloseInitiated,
     enabled,
     handleCloseRef,
     dataRef,
@@ -165,16 +171,18 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       );
       if (closeDelay && !handlerRef.current) {
         clearTimeout(timeoutRef.current);
+        onHoverCloseInitiated(event);
         timeoutRef.current = setTimeout(
           () => onOpenChange(false, event, reason),
           closeDelay,
         );
       } else if (runElseBranch) {
         clearTimeout(timeoutRef.current);
+        onHoverCloseInitiated(event);
         onOpenChange(false, event, reason);
       }
     },
-    [delayRef, onOpenChange],
+    [delayRef, onOpenChange, onHoverCloseInitiated],
   );
 
   const cleanupMouseMoveHandler = React.useCallback(() => {
@@ -223,10 +231,12 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
       );
 
       if (openDelay) {
+        onHoverStartInitiated(event);
         timeoutRef.current = setTimeout(() => {
           onOpenChange(true, event, 'hover');
         }, openDelay);
       } else {
+        onHoverStartInitiated(event);
         onOpenChange(true, event, 'hover');
       }
     }
@@ -329,6 +339,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     cleanupMouseMoveHandler,
     clearPointerEvents,
     onOpenChange,
+    onHoverStartInitiated,
     open,
     tree,
     delayRef,

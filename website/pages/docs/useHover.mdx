@@ -87,6 +87,8 @@ interface UseHoverProps {
   restMs?: number;
   move?: boolean;
   handleClose?: null | HandleCloseFn;
+  onHoverStartInitiated?: (event?: Event) => void
+  onHoverCloseInitiated?: (event?: Event) => void;
 }
 ```
 
@@ -210,6 +212,43 @@ This handler runs on `mousemove{:.string}`.
 
 For a simpler alternative, depending on the type of floating
 element, you can use a short close delay instead.
+
+
+### `onHoverStartInitiated{:.key}`
+
+default: `() => {}{:js}`
+
+This is a callback function that is invoked when the opening process of the floating element is initiated. It is called right before the `onOpenChange{:.function}` callback. This function receives the event that initiated the opening as an argument.
+
+It is usefull when you have an open delay, and you want to do something immediately when the opening process got started and cannot wait for the `onOpenChange{:.function}` callback.
+
+```ts
+import {useHover} from '@floating-ui/react';
+
+useHover(context, {
+  onHoverStartInitiated: (event: Event) => {
+    // Custom logic here...
+  },
+});
+```
+
+### `onHoverCloseInitiated{:.key}`
+
+default: `() => {}{:js}`
+
+This is a callback function that is invoked when the closing process of the floating element is initiated. It is called right before the `onOpenChange{:.function}` callback. This function receives the event that initiated the closing as an argument.
+
+It is usefull when you have a close delay, and you want to do something immediately when the closing process got started and cannot wait for the `onOpenChange{:.function}` callback.
+
+```ts
+import {useHover} from '@floating-ui/react';
+
+useHover(context, {
+  onHoverCloseInitiated: (event: Event) => {
+    // Custom logic here...
+  },
+});
+```
 
 ## safePolygon
 
