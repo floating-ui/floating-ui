@@ -74,6 +74,8 @@ interface CompositeProps {
   disabledIndices?: number[];
   activeIndex?: number;
   onNavigate?(index: number): void;
+  itemSizes?: Size[];
+  dense?: boolean;
 }
 ```
 
@@ -150,4 +152,31 @@ control the active item.
 ```js
 const [activeIndex, setActiveIndex] = useState(0);
 return <Composite onNavigate={setActiveIndex} />;
+```
+
+### `itemSizes{:.keyword}`
+
+default: `undefined{:js}`
+
+Only for grid navigation, an array of `Size` objects, which specify the
+width (number of columns) and height (number of rows) of each item, so
+the navigation algorithm can take the variable sizes into account.
+If not specified, every item will be treated as if it has a size of 1
+row and 1 column.
+
+```js
+<Composite
+  itemSizes={[{ width: 2, height: 2 }, { width: 1, height: 3 }]}
+/>
+```
+
+### `dense{:.keyword}`
+
+default: `false{:js}`
+
+Only for grid navigation, determines if the grid positioning algorithm
+should follow CSS Grid's `auto-flow` `dense` algorithm.
+
+```js
+<Composite dense />
 ```
