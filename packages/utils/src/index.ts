@@ -6,7 +6,9 @@ export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
 export type Length = 'width' | 'height';
 export type SideObject = {[key in Side]: number};
-export type Rect = {x: number; y: number; width: number; height: number};
+export type Position = {[key in Axis]: number}
+export type Size = {[key in Length]: number};
+export type Rect = Size & Position;
 export type Padding = number | Partial<SideObject>;
 export type ClientRectObject = Rect & SideObject;
 
