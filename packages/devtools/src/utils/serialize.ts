@@ -1,7 +1,8 @@
 import type {Serialized} from 'extension/types';
 
 import {isHTMLElement} from './isHTMLElement';
-import {type References, createReferences} from './references';
+import type {References} from './references';
+import {createReferences} from './references';
 
 export const serialize = <Data extends object>(
   data: Data,

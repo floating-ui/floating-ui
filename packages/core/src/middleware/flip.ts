@@ -8,7 +8,8 @@ import {
   getSide,
 } from '@floating-ui/utils';
 
-import {type DetectOverflowOptions, detectOverflow} from '../detectOverflow';
+import type {DetectOverflowOptions} from '../detectOverflow';
+import {detectOverflow} from '../detectOverflow';
 import type {Derivable, Middleware} from '../types';
 
 export type FlipOptions = Partial<

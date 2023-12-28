@@ -1,5 +1,5 @@
+import type {Padding} from '@floating-ui/utils';
 import {
-  type Padding,
   clamp,
   evaluate,
   getAlignment,
