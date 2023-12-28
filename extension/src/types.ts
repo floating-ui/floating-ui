@@ -12,6 +12,4 @@ export type Serialized<T> = T extends (infer R)[]
         ? {[P in keyof T]: Serialized<T[P]>}
         : T;
 
-export type ReferenceId = `${typeof HTML_ELEMENT_REFERENCE}:${ReturnType<
-  typeof crypto.randomUUID
->}`;
+export type ReferenceId = `${typeof HTML_ELEMENT_REFERENCE}:${string}`;

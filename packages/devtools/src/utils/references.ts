@@ -1,8 +1,9 @@
 import {HTML_ELEMENT_REFERENCE} from '../extension/constants';
 import type {ReferenceId} from '../extension/types';
 
+let counter = 0;
 const generateReferenceId = (): ReferenceId => {
-  return `${HTML_ELEMENT_REFERENCE}:${crypto.randomUUID()}`;
+  return `${HTML_ELEMENT_REFERENCE}:${counter++}`;
 };
 
 export type References = {
