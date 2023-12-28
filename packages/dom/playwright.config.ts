@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   webServer: {
-    command: 'npm -w packages/dom run dev',
+    command: 'npm run dev',
     port: 1234,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,

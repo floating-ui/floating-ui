@@ -11,4 +11,4 @@ runs:
       if: always()
       with:
         name: visual-snapshots-diff
-        path: test-results
+        path: packages/dom/test-results
