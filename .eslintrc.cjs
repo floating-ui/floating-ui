@@ -13,6 +13,16 @@ module.exports = {
     'out-tsc',
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    tsconfigRootDir: __dirname,
+    project: [
+      './config/tsconfig.eslint.json',
+      './**/.storybook/tsconfig.stories.json',
+      './**/tsconfig.lib.json',
+      './**/tsconfig.test.json',
+      './**/tsconfig.json',
+    ],
+  },
   plugins: ['@typescript-eslint', 'react-hooks', 'simple-import-sort'],
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   rules: {
@@ -22,6 +32,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/consistent-type-exports': 'error',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'simple-import-sort/imports': 'error',

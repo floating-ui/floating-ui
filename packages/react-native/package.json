@@ -13,7 +13,7 @@
     "dist"
   ],
   "scripts": {
-    "lint": "eslint src --ext .js,.ts,.tsx",
+    "lint": "eslint .",
     "clean": "rimraf dist out-tsc",
     "build": "rollup -c",
     "build:api": "build-api",

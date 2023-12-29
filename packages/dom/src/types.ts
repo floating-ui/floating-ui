@@ -155,4 +155,4 @@ export type FlipOptions = Prettify<
 export type HideOptions = Prettify<
   Omit<CoreHideOptions, 'boundary'> & DetectOverflowOptions
 >;
-export {AutoUpdateOptions} from './autoUpdate';
+export type {AutoUpdateOptions} from './autoUpdate';

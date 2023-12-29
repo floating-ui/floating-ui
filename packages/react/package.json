@@ -35,7 +35,7 @@
     "dist/"
   ],
   "scripts": {
-    "lint": "eslint src --ext .js,.ts,.tsx",
+    "lint": "eslint .",
     "clean": "rimraf dist out-tsc",
     "test": "vitest run",
     "test:watch": "vitest watch",

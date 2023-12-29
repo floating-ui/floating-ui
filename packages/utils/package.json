@@ -43,7 +43,7 @@
     }
   },
   "scripts": {
-    "lint": "eslint src --ext .js,.ts,.tsx",
+    "lint": "eslint .",
     "clean": "rimraf dist out-tsc",
     "test": "vitest run --globals",
     "test:watch": "vitest watch --globals",

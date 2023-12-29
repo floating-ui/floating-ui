@@ -28,7 +28,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "lint": "eslint src --ext .js,.ts,.tsx",
+    "lint": "eslint .",
     "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
     "build": "rollup -c",

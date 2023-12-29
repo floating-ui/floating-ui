@@ -28,7 +28,7 @@
     "**/*.d.mts"
   ],
   "scripts": {
-    "lint": "eslint src --ext .js,.ts,.tsx",
+    "lint": "eslint .",
     "clean": "rimraf dist out-tsc test-results",
     "dev": "vite",
     "build": "rollup -c",

@@ -1,21 +1,28 @@
 export {computePosition} from './computePosition';
-export {detectOverflow, DetectOverflowOptions} from './detectOverflow';
-export {arrow, ArrowOptions} from './middleware/arrow';
+export type {DetectOverflowOptions} from './detectOverflow';
+export {detectOverflow} from './detectOverflow';
+export type {ArrowOptions} from './middleware/arrow';
+export {arrow} from './middleware/arrow';
 export {
   type AutoPlacementOptions,
   autoPlacement,
 } from './middleware/autoPlacement';
-export {flip, FlipOptions} from './middleware/flip';
-export {hide, HideOptions} from './middleware/hide';
-export {inline, InlineOptions} from './middleware/inline';
-export {offset, OffsetOptions} from './middleware/offset';
+export type {FlipOptions} from './middleware/flip';
+export {flip} from './middleware/flip';
+export type {HideOptions} from './middleware/hide';
+export {hide} from './middleware/hide';
+export type {InlineOptions} from './middleware/inline';
+export {inline} from './middleware/inline';
+export type {OffsetOptions} from './middleware/offset';
+export {offset} from './middleware/offset';
 export {
   type LimitShiftOptions,
   type ShiftOptions,
   limitShift,
   shift,
 } from './middleware/shift';
-export {size, SizeOptions} from './middleware/size';
+export type {SizeOptions} from './middleware/size';
+export {size} from './middleware/size';
 export type {
   Boundary,
   ComputePosition,

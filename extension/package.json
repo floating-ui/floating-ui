@@ -9,7 +9,7 @@
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
-    "lint": "eslint src --ext .ts,.tsx"
+    "lint": "eslint src"
   },
   "devDependencies": {
     "@floating-ui/devtools": "file:../packages/devtools",
