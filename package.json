@@ -43,7 +43,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
-    "@changesets/cli": "^2.26.2",
+    "@changesets/cli": "^2.27.1",
     "@microsoft/api-extractor": "^7.38.5",
     "@playwright/test": "^1.38.0",
     "@rollup/plugin-alias": "^5.1.0",

@@ -15,7 +15,7 @@ importers:
         specifier: ^7.23.3
         version: 7.23.3(@babel/core@7.23.6)
       '@changesets/cli':
-        specifier: ^2.26.2
+        specifier: ^2.27.1
         version: 2.27.1
       '@microsoft/api-extractor':
         specifier: ^7.38.5
@@ -235,7 +235,7 @@ importers:
   packages/devtools:
     devDependencies:
       '@floating-ui/dom':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../dom
       config:
         specifier: workspace:*

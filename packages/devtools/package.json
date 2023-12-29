@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/devtools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
     "lint": "eslint .",
     "clean": "rimraf dist out-tsc",
@@ -35,6 +35,6 @@
   },
   "devDependencies": {
     "config": "workspace:*",
-    "@floating-ui/dom": "*"
+    "@floating-ui/dom": "workspace:*"
   }
 }
