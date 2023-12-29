@@ -241,7 +241,7 @@ export function buildCellMap(sizes: Dimensions[], cols: number, dense: boolean) 
   const cellMap: (number | undefined)[] = [];
   let startIndex = 0;
   sizes.forEach(({ width, height }, index) => {
-    if (width > cols) {
+    if (width > cols && __DEV__) {
       throw new Error(
         `Invalid grid: item width at index ${index} is greater than grid columns`
       );
