@@ -111,6 +111,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
   const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
 
+  const placementGap = 0.5;
+
   const dValue =
     d ||
     'M0,0' +
@@ -141,8 +143,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
         [yOffsetProp]: arrowY,
         [side]:
           isVerticalSide || isCustomShape
-            ? '100%'
-            : `calc(100% - ${strokeWidth / 2}px)`,
+            ? `calc(100% - ${placementGap}px)`
+            : `calc(100% - ${placementGap}px - ${strokeWidth / 2}px)`,
         transform: `${rotation}${transform ?? ''}`,
         ...restStyle,
       }}
