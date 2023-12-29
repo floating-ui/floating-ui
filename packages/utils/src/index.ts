@@ -1,4 +1,4 @@
-import type {Dimensions} from '@floating-ui/core';
+import type {Coords, Dimensions} from '@floating-ui/core';
 
 export type Alignment = 'start' | 'end';
 export type Side = 'top' | 'right' | 'bottom' | 'left';
@@ -8,8 +8,7 @@ export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
 export type Length = 'width' | 'height';
 export type SideObject = {[key in Side]: number};
-export type Position = {[key in Axis]: number}
-export type Rect = Dimensions & Position;
+export type Rect = Coords & Dimensions;
 export type Padding = number | Partial<SideObject>;
 export type ClientRectObject = Rect & SideObject;
 
