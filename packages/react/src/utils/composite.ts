@@ -1,6 +1,7 @@
 import {stopEvent} from '@floating-ui/react/utils';
-import type {Size} from '@floating-ui/utils';
 import {floor} from '@floating-ui/utils';
+
+import type {Dimensions} from '../types';
 
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';
@@ -236,7 +237,7 @@ export function getGridNavigatedIndex(
 }
 
 /** For each cell index, gets the item index that occupies that cell */
-export function buildCellMap(sizes: Size[], cols: number, dense: boolean) {
+export function buildCellMap(sizes: Dimensions[], cols: number, dense: boolean) {
   const cellMap: (number | undefined)[] = [];
   let startIndex = 0;
   sizes.forEach(({ width, height }, index) => {
@@ -275,7 +276,7 @@ export function buildCellMap(sizes: Size[], cols: number, dense: boolean) {
 /** Gets cell index of an item's corner */
 export function getCellIndexOfCorner(
   index: number,
-  sizes: Size[],
+  sizes: Dimensions[],
   cellMap: (number | undefined)[],
   cols: number,
   corner: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'

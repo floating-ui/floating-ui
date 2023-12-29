@@ -1,8 +1,8 @@
-import type {Size} from '@floating-ui/utils';
 import * as React from 'react';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
 import {useEffectEvent} from '../hooks/utils/useEffectEvent';
+import type {Dimensions} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -56,7 +56,7 @@ interface CompositeProps {
    * Only for `cols > 1`, specify sizes for grid items.
    * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
    */
-  itemSizes?: Size[];
+  itemSizes?: Dimensions[];
   /**
    * Only relevant for `cols > 1` and items with different sizes, specify if
    * the grid is dense (as defined in the CSS spec for grid-auto-flow).

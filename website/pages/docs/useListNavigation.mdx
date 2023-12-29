@@ -158,7 +158,7 @@ interface UseListNavigationProps {
   openOnArrowKeyDown?: boolean;
   disabledIndices?: Array<number>;
   scrollItemIntoView?: boolean | ScrollIntoViewOptions;
-  itemSizes?: Size[];
+  itemSizes?: Dimensions[];
   dense?: boolean;
 }
 ```
@@ -460,7 +460,7 @@ useListNavigation(context, {
 
 default: `undefined{:js}`
 
-Only for grid navigation, an array of `Size` objects, which specify the
+Only for grid navigation, an array of `Dimensions` objects, which specify the
 width (number of columns) and height (number of rows) of each item, so
 the navigation algorithm can take the variable sizes into account.
 If not specified, every item will be treated as if it has a size of 1

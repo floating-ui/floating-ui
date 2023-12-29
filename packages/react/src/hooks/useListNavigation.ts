@@ -9,7 +9,6 @@ import {
   isVirtualPointerEvent,
   stopEvent,
 } from '@floating-ui/react/utils';
-import type {Size} from '@floating-ui/utils';
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
@@ -18,7 +17,7 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {Dimensions, ElementProps, FloatingContext, ReferenceType} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -122,7 +121,7 @@ export interface UseListNavigationProps {
    * Only for `cols > 1`, specify sizes for grid items.
    * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
    */
-  itemSizes?: Size[];
+  itemSizes?: Dimensions[];
   /**
    * Only relevant for `cols > 1` and items with different sizes, specify if
    * the grid is dense (as defined in the CSS spec for grid-auto-flow).
