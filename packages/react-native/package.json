@@ -43,10 +43,10 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^1.4.1"
+    "@floating-ui/core": "workspace:*"
   },
   "devDependencies": {
-    "config": "*",
+    "config": "workspace:*",
     "@types/react": "^18.2.45",
     "@types/react-native": "^0.72.2",
     "react": "^18.0.0",

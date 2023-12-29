@@ -58,12 +58,14 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.1"
+    "@floating-ui/dom": "workspace:*"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",
-    "config": "*",
+    "config": "workspace:*",
     "@testing-library/react": "^13.2.0",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@vitejs/plugin-react": "^4.2.0",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "react": "^18.2.0",

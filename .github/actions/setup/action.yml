@@ -10,4 +10,7 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
-      uses: bahmutov/npm-install@v1
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: true

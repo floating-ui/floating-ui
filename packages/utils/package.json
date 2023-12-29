@@ -70,8 +70,9 @@
     "positioning"
   ],
   "devDependencies": {
-    "config": "*",
-    "@types/react": "^18.2.45"
+    "config": "workspace:*",
+    "@types/react": "^18.2.45",
+    "@testing-library/jest-dom": "^6.1.5"
   },
   "peerDependencies": {
     "react": ">=16.8.0"

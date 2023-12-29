@@ -34,7 +34,7 @@
     "@floating-ui/dom": ">=1.0.0 <2.0.0"
   },
   "devDependencies": {
-    "config": "*",
+    "config": "workspace:*",
     "@floating-ui/dom": "*"
   }
 }

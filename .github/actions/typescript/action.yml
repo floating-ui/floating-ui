@@ -3,7 +3,7 @@ description: Performs typescript checks
 runs:
   using: composite
   steps:
-    - run: npm run lint
+    - run: pnpm run lint
       shell: sh
-    - run: npm run build:api
+    - run: pnpm run build:api
       shell: sh

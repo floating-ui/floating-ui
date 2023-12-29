@@ -12,7 +12,8 @@
     "../**/tailwind.config.js",
     "../**/playwright.config.ts",
     "../**/*.test-d.ts",
-    "../**/*.test-d.tsx"
+    "../**/*.test-d.tsx",
+    "scripts/*.mjs"
   ],
   "exclude": ["node_modules", "dist", "out-tsc"]
 }

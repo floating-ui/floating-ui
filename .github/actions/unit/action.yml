@@ -3,7 +3,7 @@ description: Performs unit tests checks
 runs:
   using: composite
   steps:
-    - run: npm run build
+    - run: pnpm run build
       shell: sh
-    - run: npm run test
+    - run: pnpm run test
       shell: sh

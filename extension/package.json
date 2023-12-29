@@ -12,9 +12,10 @@
     "lint": "eslint src"
   },
   "devDependencies": {
-    "@floating-ui/devtools": "file:../packages/devtools",
-    "@floating-ui/dom": "^1.5.3",
-    "@floating-ui/react": "^0.26.3",
+    "config": "workspace:*",
+    "@floating-ui/devtools": "workspace:*",
+    "@floating-ui/dom": "workspace:*",
+    "@floating-ui/react": "workspace:*",
     "@fluentui/react-components": "^9.43.3",
     "@fluentui/react-icons": "^2.0.224",
     "@fluentui/react-utilities": "^9.15.4",

@@ -68,13 +68,13 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^2.0.3",
-    "@floating-ui/utils": "^0.1.5",
+    "@floating-ui/react-dom": "workspace:*",
+    "@floating-ui/utils": "workspace:*",
     "tabbable": "^6.0.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",
-    "config": "*",
+    "config": "workspace:*",
     "@radix-ui/react-checkbox": "^1.0.2",
     "@radix-ui/react-icons": "^1.2.0",
     "@testing-library/jest-dom": "^6.1.5",

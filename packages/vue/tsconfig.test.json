@@ -1,8 +1,6 @@
 {
   "extends": "config/tsconfig.base.json",
   "compilerOptions": {
-    // This is required to avoid conflict between react and vue types
-    "typeRoots": ["node_modules/@types"],
     "outDir": "out-tsc"
   },
   "include": ["test", "vite.config.mts"],

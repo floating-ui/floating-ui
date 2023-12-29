@@ -54,13 +54,14 @@
     "vue"
   ],
   "dependencies": {
-    "@floating-ui/dom": "^1.5.1",
+    "@floating-ui/dom": "workspace:*",
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {
-    "config": "*",
+    "config": "workspace:*",
     "@parcel/transformer-vue": "^2.6.0",
     "@testing-library/vue": "^6.6.1",
+    "@testing-library/jest-dom": "^6.1.5",
     "@vitejs/plugin-vue": "^5.0.0",
     "vue": "^3.2.45"
   }

@@ -7,7 +7,7 @@ to help debugging Floating UI
 
 ### Contribution
 
-- run `npm run build` from root `/extension` folder
+- run `pnpm run build` from root `/extension` folder
 - load extension from `/extension/dist` folder
 - open chrome devtools, inspect extension in devtools panel (next to 'Styles'
   tab).
