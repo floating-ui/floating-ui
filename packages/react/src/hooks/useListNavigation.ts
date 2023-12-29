@@ -531,12 +531,12 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         // as if every item was 1x1, then convert back to real indices.
         const cellMap = buildCellMap(sizes, cols, dense);
         const minGridIndex = cellMap.findIndex(
-          index => index !== undefined && !disabledIndices?.includes(index)
+          index => index != null && !disabledIndices?.includes(index)
         );
         // last enabled index
         const maxGridIndex = cellMap.reduce(
           (foundIndex: number, index, cellIndex) =>
-            index !== undefined && !disabledIndices?.includes(index)
+            index != null && !disabledIndices?.includes(index)
               ? cellIndex
               : foundIndex,
           -1
