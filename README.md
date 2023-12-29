@@ -114,20 +114,20 @@ npm install @floating-ui/core
 
 ## Contributing
 
-This project is a monorepo written in TypeScript using npm workspaces. The
-website is using Next.js SSG and Tailwind CSS for styling.
+This project is a monorepo written in TypeScript using [pnpm](https://pnpm.io/)
+workspaces. The website is using Next.js SSG and Tailwind CSS for styling.
 
 - Fork and clone the repo
-- Install dependencies in root directory with `npm install`
-- Build initial package dist files with `npm run build`
+- Install dependencies in root directory with `pnpm install`
+- Build initial package dist files with `pnpm run build`
 
 ### Testing grounds
 
 #### DOM
 
-`npm -w packages/dom run dev` in the root will launch the `@floating-ui/dom`
-development visual tests at `http://localhost:1234`. The playground uses React
-to write each test route, bundled by Vite.
+`pnpm run dev --filter @floating-ui/dom` in the root will launch the
+`@floating-ui/dom` development visual tests at `http://localhost:1234`. The
+playground uses React to write each test route, bundled by Vite.
 
 Each route has screenshots taken of the page by Playwright to ensure all the
 functionalities work as expected; this is an easy, reliable and high-level way
@@ -139,8 +139,8 @@ as much as possible.
 
 #### React
 
-`npm -w packages/react run dev` in the root will launch the `@floating-ui/react`
-development tests at `http://localhost:1234`.
+`pnpm run dev --filter @floating-ui/react` in the root will launch the
+`@floating-ui/react` development tests at `http://localhost:1234`.
 
 ## Credits
 
