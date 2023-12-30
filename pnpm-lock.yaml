@@ -225,7 +225,7 @@ importers:
   packages/core:
     dependencies:
       '@floating-ui/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../utils
     devDependencies:
       config:
@@ -244,10 +244,10 @@ importers:
   packages/dom:
     dependencies:
       '@floating-ui/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
       '@floating-ui/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../utils
     devDependencies:
       '@types/react':
@@ -272,10 +272,10 @@ importers:
   packages/react:
     dependencies:
       '@floating-ui/react-dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../react-dom
       '@floating-ui/utils':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../utils
       tabbable:
         specifier: ^6.0.1
@@ -339,7 +339,7 @@ importers:
   packages/react-dom:
     dependencies:
       '@floating-ui/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
     devDependencies:
       '@babel/preset-react':
@@ -376,7 +376,7 @@ importers:
   packages/react-native:
     dependencies:
       '@floating-ui/core':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../core
     devDependencies:
       '@types/react':
@@ -414,7 +414,7 @@ importers:
   packages/vue:
     dependencies:
       '@floating-ui/dom':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../dom
       vue-demi:
         specifier: '>=0.13.0'

@@ -33,7 +33,8 @@
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -53,7 +54,7 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/utils": "workspace:*"
+    "@floating-ui/utils": "workspace:^"
   },
   "devDependencies": {
     "config": "workspace:*"

@@ -32,17 +32,19 @@
   },
   "sideEffects": false,
   "files": [
-    "dist/"
+    "dist",
+    "utils"
   ],
   "scripts": {
     "lint": "eslint .",
-    "clean": "rimraf dist out-tsc",
+    "clean": "rimraf dist out-tsc utils",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor{,.utils}.json",
     "dev": "vite",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -68,8 +70,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "workspace:*",
-    "@floating-ui/utils": "workspace:*",
+    "@floating-ui/react-dom": "workspace:^",
+    "@floating-ui/utils": "workspace:^",
     "tabbable": "^6.0.1"
   },
   "devDependencies": {

@@ -10,7 +10,9 @@
   "types": "./dist/floating-ui.utils.d.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "dom",
+    "react"
   ],
   "exports": {
     "./package.json": "./package.json",
@@ -44,13 +46,14 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "clean": "rimraf dist out-tsc",
+    "clean": "rimraf dist out-tsc dom react",
     "test": "vitest run --globals",
     "test:watch": "vitest watch --globals",
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor{,.dom,.react}.json",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",

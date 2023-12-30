@@ -36,7 +36,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "publint": "publint",
-    "playwright": "playwright test ./test/functional"
+    "playwright": "playwright test ./test/functional",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -56,8 +57,8 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/core": "workspace:*",
-    "@floating-ui/utils": "workspace:*"
+    "@floating-ui/core": "workspace:^",
+    "@floating-ui/utils": "workspace:^"
   },
   "devDependencies": {
     "config": "workspace:*",

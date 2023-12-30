@@ -21,6 +21,7 @@
     "clean": "turbo clean",
     "publint": "turbo publint",
     "test": "turbo test",
+    "prepack": "turbo prepack",
     "release": "turbo publint && changeset publish"
   },
   "author": "",

@@ -24,7 +24,7 @@
       ]
     },
     "publint": {
-      "dependsOn": ["build", "build:api"],
+      "dependsOn": ["prepack"],
       "inputs": ["package.json", "dist/**"]
     },
     "dev": {
@@ -49,6 +49,10 @@
     "playwright": {
       "dependsOn": ["build"],
       "cache": false
+    },
+    "prepack": {
+      "dependsOn": ["build", "build:api"],
+      "inputs": ["package.json", "dist/**"]
     }
   }
 }

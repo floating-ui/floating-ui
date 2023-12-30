@@ -7,7 +7,8 @@
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "build:api": "build-api",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "main": "./dist/floating-ui.devtools.umd.js",
   "module": "./dist/floating-ui.devtools.esm.js",

@@ -3,7 +3,7 @@
 //@ts-check
 import {glob} from 'glob';
 import minimist from 'minimist';
-import {$, fs} from 'zx';
+import {$, chalk, echo, fs} from 'zx';
 
 const args = minimist(process.argv.slice(2), {
   default: {
@@ -12,10 +12,10 @@ const args = minimist(process.argv.slice(2), {
   },
 });
 
-console.log(`Running tsc (${args.tsc})`);
+echo(chalk.cyan(`Running tsc (${args.tsc})`));
 await $`npx tsc -b ${args.tsc}`;
 for (const aec of await glob(args.aec)) {
-  console.log(`Running API Extractor (${aec})`);
+  echo(chalk.cyan(`Running API Extractor (${aec})`));
   await $`npx api-extractor run --local --verbose -c ${aec}`;
   /** @type {import('@microsoft/api-extractor').IConfigFile} */
   const configFile = await fs.readJson(aec);
@@ -25,7 +25,7 @@ for (const aec of await glob(args.aec)) {
       configFile.projectFolder ?? '.',
     );
     const mdtsPath = path.replace(/\.d\.ts$/, '.d.mts');
-    console.log(`Copying ${path} into ${mdtsPath}`);
-    await $`cp ${path} ${mdtsPath}`;
+    echo(chalk.cyan(`Copying ${path} into ${mdtsPath}`));
+    await fs.copyFile(path, mdtsPath);
   }
 }

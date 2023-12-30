@@ -17,7 +17,8 @@
     "clean": "rimraf dist out-tsc",
     "build": "rollup -c",
     "build:api": "build-api",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -43,7 +44,7 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "workspace:*"
+    "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
     "config": "workspace:*",

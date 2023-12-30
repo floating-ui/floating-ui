@@ -32,7 +32,8 @@
     "test:watch": "vitest watch",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",
-    "publint": "publint"
+    "publint": "publint",
+    "prepack": "prepack"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -58,7 +59,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "workspace:*"
+    "@floating-ui/dom": "workspace:^"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",

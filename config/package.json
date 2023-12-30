@@ -2,6 +2,7 @@
   "name": "config",
   "private": true,
   "type": "module",
+  "version": "0.0.0",
   "scripts": {
     "build": "tsc -b",
     "clean": "rimraf dist",
@@ -13,7 +14,8 @@
     "api-extractor.base.json"
   ],
   "bin": {
-    "build-api": "./scripts/buildAPI.mjs"
+    "build-api": "./scripts/buildAPI.mjs",
+    "prepack": "./scripts/prepack.mjs"
   },
   "main": "dist/src/index.mjs",
   "module": "dist/src/index.mjs",
