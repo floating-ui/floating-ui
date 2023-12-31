@@ -48,6 +48,10 @@ function App() {
 This will position the floating element at the **bottom center**
 of the reference element by default.
 
+Positioning is relative to the parent by default, see
+[ScrollView](/docs/react-native#scrollview) or
+[offsetParent](/docs/react-native#offsetparent) to adjust this.
+
 - `refs.setReference{:js}` is the reference (or anchor) element
   that is being referred to for positioning.
 - `refs.setFloating{:js}` is the floating element that is being
@@ -65,7 +69,43 @@ position.
   on Android. [More info here](https://github.com/facebook/react-native/issues/29712).
 </Notice>
 
-## Updating
+## ScrollView
+
+When your floating element is portaled to the app root, while the
+reference element is inside a `<ScrollView />{:jsx}`, pass the
+`sameScrollView{:.key}` option, and spread `scrollProps{:.const}`
+to the component:
+
+```jsx /scrollProps/ {6}
+import {View, Text, ScrollView} from 'react-native';
+import {useFloating} from '@floating-ui/react-native';
+
+function App() {
+  const {refs, floatingStyles, scrollProps} = useFloating({
+    sameScrollView: false,
+  });
+
+  return (
+    <View>
+      <ScrollView {...scrollProps}>
+        <View ref={refs.setReference} collapsable={false}>
+          <Text>Reference</Text>
+        </View>
+      </ScrollView>
+
+      <View
+        ref={refs.setFloating}
+        collapsable={false}
+        style={floatingStyles}
+      >
+        <Text>Floating</Text>
+      </View>
+    </View>
+  );
+}
+```
+
+## Anchoring
 
 `useFloating(){:js}` only calculates the position **once** on
 render, or when the reference/floating elements changed.
@@ -73,7 +113,7 @@ Depending on the context in which the floating element lives, you
 may need to update its position in an effect.
 
 The Hook returns an `update(){:js}` function to update the
-position:
+position at will:
 
 ```js
 const {update} = useFloating();
@@ -115,45 +155,33 @@ function MyComponent({referenceEl, floatingEl}) {
 }
 ```
 
-## ScrollView
+## Arrow
 
-When your floating element is portaled to the app root, while the
-reference element is inside a `<ScrollView />{:jsx}`, you pass
-the `sameScrollView{:.key}` option, and spread
-`scrollProps{:.const}` to the component:
+A plain `ref{:.const}` can be passed as the `element{:.key}`
+value:
 
-```jsx /scrollProps/ {6}
-import {View, Text, ScrollView} from 'react-native';
-import {useFloating} from '@floating-ui/react-native';
+```jsx /arrowRef/1-2 {11}
+import {useRef} from 'react';
+import {useFloating, arrow} from '@floating-ui/react-native';
 
 function App() {
-  const {refs, floatingStyles, scrollProps} = useFloating({
-    sameScrollView: false,
+  const arrowRef = useRef();
+  const {
+    refs,
+    floatingStyles,
+    middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
+  } = useFloating({
+    middleware: [arrow({element: arrowRef})],
   });
 
-  return (
-    <View>
-      <ScrollView {...scrollProps}>
-        <View ref={refs.setReference} collapsable={false}>
-          <Text>Reference</Text>
-        </View>
-      </ScrollView>
-
-      <View
-        ref={refs.setFloating}
-        collapsable={false}
-        style={floatingStyles}
-      >
-        <Text>Floating</Text>
-      </View>
-    </View>
-  );
+  // Pass the `arrowRef` to the element
 }
 ```
 
 ## offsetParent
 
-Pass this to the floating element's `offsetParent``, if required:
+Pass this to the floating element's `offsetParent`, if required
+for positioning:
 
 ```jsx /offsetParent/
 import {View, Text, ScrollView} from 'react-native';
@@ -183,27 +211,5 @@ function App() {
       </View>
     </View>
   );
-}
-```
-
-## Arrow
-
-A `ref{:.const}` can be passed as the `element{:.key}`:
-
-```jsx /arrowRef/1-2 {11}
-import {useRef} from 'react';
-import {useFloating, arrow} from '@floating-ui/react-native';
-
-function App() {
-  const arrowRef = useRef();
-  const {
-    refs,
-    floatingStyles,
-    middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
-  } = useFloating({
-    middleware: [arrow({element: arrowRef})],
-  });
-
-  // Pass the `arrowRef` to the element
 }
 ```
