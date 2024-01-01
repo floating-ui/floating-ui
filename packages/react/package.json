@@ -44,7 +44,7 @@
     "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor{,.utils}.json",
     "dev": "vite",
     "publint": "publint",
-    "prepack": "prepack"
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",

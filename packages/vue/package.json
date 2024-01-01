@@ -34,7 +34,7 @@
     "build:api": "build-api --tsc tsconfig.lib.json",
     "dev": "vite",
     "publint": "publint",
-    "prepack": "prepack"
+    "prepack": "compat-exports"
   },
   "author": "lozinsky",
   "license": "MIT",

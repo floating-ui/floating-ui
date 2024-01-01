@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "build:api": "build-api",
     "publint": "publint",
-    "prepack": "prepack"
+    "prepack": "compat-exports"
   },
   "main": "./dist/floating-ui.devtools.umd.js",
   "module": "./dist/floating-ui.devtools.esm.js",

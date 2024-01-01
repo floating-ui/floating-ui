@@ -37,7 +37,7 @@
     "test:watch": "vitest watch",
     "publint": "publint",
     "playwright": "playwright test ./test/functional",
-    "prepack": "prepack"
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",

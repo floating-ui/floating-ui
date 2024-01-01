@@ -14,8 +14,8 @@
     "api-extractor.base.json"
   ],
   "bin": {
-    "build-api": "./scripts/buildAPI.mjs",
-    "prepack": "./scripts/prepack.mjs"
+    "build-api": "./scripts/build-api.mjs",
+    "compat-exports": "./scripts/compat-exports.mjs"
   },
   "main": "dist/src/index.mjs",
   "module": "dist/src/index.mjs",
