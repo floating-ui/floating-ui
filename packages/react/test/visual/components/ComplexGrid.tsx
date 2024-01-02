@@ -79,6 +79,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
             <div
               ref={refs.setFloating}
               data-testid="floating"
+              className="grid gap-2"
               style={{
                 ...floatingStyles,
                 display: 'grid',
@@ -88,18 +89,23 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
               {...getFloatingProps()}
             >
               {[...Array(37)].map((_, index) => (
-                <button
-                  role="option"
-                  key={index}
-                  tabIndex={activeIndex === index ? 0 : -1}
-                  disabled={disabledIndices.includes(index)}
-                  ref={(node) => {
-                    listRef.current[index] = node;
-                  }}
-                  {...getItemProps()}
-                >
-                  Item {index}
-                </button>
+              <button
+                role="option"
+                key={index}
+                tabIndex={activeIndex === index ? 0 : -1}
+                disabled={disabledIndices.includes(index)}
+                ref={(node) => {
+                  listRef.current[index] = node;
+                }}
+                className="border border-black disabled:opacity-20"
+                style={{
+                  gridRow: `span ${itemSizes[index].height}`,
+                  gridColumn: `span ${itemSizes[index].width}`,
+                }}
+                {...getItemProps()}
+              >
+                Item {index}
+              </button>
               ))}
             </div>
           </FloatingFocusManager>

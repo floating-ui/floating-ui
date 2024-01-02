@@ -54,9 +54,9 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
             <div
               ref={refs.setFloating}
               data-testid="floating"
+              className="grid gap-2"
               style={{
                 ...floatingStyles,
-                display: 'grid',
                 gridTemplateColumns: '100px 100px 100px 100px 100px',
                 zIndex: 999,
               }}
@@ -71,6 +71,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
                   ref={(node) => {
                     listRef.current[index] = node;
                   }}
+                  className="border border-black disabled:opacity-20"
                   {...getItemProps()}
                 >
                   Item {index}
