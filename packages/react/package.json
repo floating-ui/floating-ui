@@ -41,7 +41,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor{,.utils}.json",
+    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.utils.json",
     "dev": "vite",
     "publint": "publint",
     "prepack": "compat-exports"

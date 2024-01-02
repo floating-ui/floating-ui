@@ -51,7 +51,7 @@
     "test:watch": "vitest watch --globals",
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor{,.dom,.react}.json",
+    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.dom.json --aec api-extractor.react.json",
     "publint": "publint",
     "prepack": "compat-exports"
   },
