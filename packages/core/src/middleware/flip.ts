@@ -1,5 +1,5 @@
+import type {Placement} from '@floating-ui/utils';
 import {
-  type Placement,
   evaluate,
   getAlignmentSides,
   getExpandedPlacements,

@@ -48,10 +48,10 @@
     "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
+    "@types/react": "^18.2.46",
+    "@types/react-native": "^0.72.8",
     "config": "workspace:*",
-    "@types/react": "^18.2.45",
-    "@types/react-native": "^0.72.2",
-    "react": "^18.0.0",
+    "react": "^18.2.0",
     "react-native": "0.72.1"
   }
 }

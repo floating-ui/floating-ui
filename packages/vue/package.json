@@ -60,11 +60,11 @@
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {
-    "config": "workspace:*",
-    "@parcel/transformer-vue": "^2.6.0",
+    "@parcel/transformer-vue": "^2.10.3",
+    "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/vue": "^6.6.1",
-    "@testing-library/jest-dom": "^6.1.5",
-    "@vitejs/plugin-vue": "^5.0.0",
-    "vue": "^3.2.45"
+    "@vitejs/plugin-vue": "^5.0.2",
+    "config": "workspace:*",
+    "vue": "^3.4.4"
   }
 }

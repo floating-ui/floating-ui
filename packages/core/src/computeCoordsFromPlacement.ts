@@ -1,6 +1,5 @@
+import type {ElementRects, Placement} from '@floating-ui/utils';
 import {
-  type ElementRects,
-  type Placement,
   getAlignment,
   getAlignmentAxis,
   getAxisLength,

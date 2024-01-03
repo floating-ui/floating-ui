@@ -1,6 +1,8 @@
-import type {GriffelStyle} from '@fluentui/react-components';
+import type {
+  FluentProviderProps as FluentProviderInternalProps,
+  GriffelStyle,
+} from '@fluentui/react-components';
 import {
-  type FluentProviderProps as FluentProviderInternalProps,
   FluentProvider as FluentProviderInternal,
   webDarkTheme,
   webLightTheme,
