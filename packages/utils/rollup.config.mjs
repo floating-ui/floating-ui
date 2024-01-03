@@ -13,11 +13,6 @@ export default defineRollupConfig({
       path: './src/dom.ts',
       globalVariableName: 'FloatingUIUtilsDOM',
     },
-    {
-      name: 'utils.react',
-      path: './src/react.ts',
-      globalVariableName: 'FloatingUIUtilsReact',
-    },
   ],
   globals: {
     '@floating-ui/utils/dom': 'FloatingUIUtilsDOM',
