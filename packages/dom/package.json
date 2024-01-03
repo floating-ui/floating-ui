@@ -23,9 +23,7 @@
   },
   "sideEffects": false,
   "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist"
   ],
   "scripts": {
     "lint": "eslint .",

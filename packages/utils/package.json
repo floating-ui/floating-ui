@@ -11,8 +11,7 @@
   "sideEffects": false,
   "files": [
     "dist",
-    "dom",
-    "react"
+    "dom"
   ],
   "exports": {
     "./package.json": "./package.json",
