@@ -1,4 +1,5 @@
 import {
+  type Coords,
   type ElementRects,
   type Placement,
   getAlignment,
@@ -7,8 +8,6 @@ import {
   getSide,
   getSideAxis,
 } from '@floating-ui/utils';
-
-import type {Coords} from './types';
 
 export function computeCoordsFromPlacement(
   {reference, floating}: ElementRects,

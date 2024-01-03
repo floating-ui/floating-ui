@@ -1,12 +1,12 @@
-import type {Coords, Dimensions} from '@floating-ui/core';
-
 export type Alignment = 'start' | 'end';
 export type Side = 'top' | 'right' | 'bottom' | 'left';
 export type AlignedPlacement = `${Side}-${Alignment}`;
 export type Placement = Side | AlignedPlacement;
 export type Strategy = 'absolute' | 'fixed';
 export type Axis = 'x' | 'y';
+export type Coords = {[key in Axis]: number};
 export type Length = 'width' | 'height';
+export type Dimensions = {[key in Length]: number};
 export type SideObject = {[key in Side]: number};
 export type Rect = Coords & Dimensions;
 export type Padding = number | Partial<SideObject>;
