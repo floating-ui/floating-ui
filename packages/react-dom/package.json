@@ -33,7 +33,8 @@
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",
     "publint": "publint",
-    "prepack": "compat-exports"
+    "prepack": "compat-exports",
+    "typecheck": "tsc -b"
   },
   "author": "atomiks",
   "license": "MIT",

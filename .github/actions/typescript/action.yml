@@ -5,5 +5,5 @@ runs:
   steps:
     - run: pnpm run lint
       shell: sh
-    - run: pnpm run build:api
+    - run: pnpm run typecheck
       shell: sh

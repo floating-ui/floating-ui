@@ -1,6 +1,6 @@
 import {useRef} from 'react';
 
-import {arrow, offset, platform, shift, useFloating} from '.';
+import {arrow, offset, platform, shift, useFloating} from '../src';
 
 App;
 function App() {

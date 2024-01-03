@@ -33,6 +33,18 @@ export const computePosition = (
 };
 
 export {autoUpdate} from './autoUpdate';
+export {
+  arrow,
+  autoPlacement,
+  detectOverflow,
+  flip,
+  hide,
+  inline,
+  limitShift,
+  offset,
+  shift,
+  size,
+} from './middleware';
 export {platform} from './platform';
 export type {
   ArrowOptions,
@@ -78,17 +90,5 @@ export type {
   Side,
   SideObject,
   Strategy,
-} from '@floating-ui/core';
-export {
-  arrow,
-  autoPlacement,
-  detectOverflow,
-  flip,
-  hide,
-  inline,
-  limitShift,
-  offset,
-  shift,
-  size,
 } from '@floating-ui/core';
 export {getOverflowAncestors} from '@floating-ui/utils/dom';

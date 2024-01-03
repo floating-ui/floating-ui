@@ -1,0 +1,12 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2020"],
+    "outDir": "out-tsc",
+    "composite": true,
+    "jsx": "react-jsx",
+    "types": []
+  },
+  "files": ["index.test-d.tsx"],
+  "references": [{"path": "./tsconfig.lib.json"}]
+}

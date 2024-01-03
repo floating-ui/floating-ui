@@ -16,7 +16,7 @@ import {
   useMergeRefs,
   useRole,
   useTypeahead,
-} from '.';
+} from '../src';
 
 App;
 function App() {

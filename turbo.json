@@ -13,6 +13,7 @@
       ]
     },
     "build:api": {
+      "dependsOn": ["^build:api"],
       "outputs": ["dist/**/*.d{.ts,.mts}"],
       "inputs": [
         "src/**",
@@ -22,6 +23,11 @@
         "api-extractor.json",
         "api-extractor.*.json"
       ]
+    },
+    "typecheck": {
+      "dependsOn": ["^typecheck"],
+      "outputs": ["out-tsc/**"],
+      "inputs": ["src/**", "test/**", "tsconfig.json", "tsconfig.*.json"]
     },
     "publint": {
       "dependsOn": ["prepack"],

@@ -53,7 +53,8 @@
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.dom.json --aec api-extractor.react.json",
     "publint": "publint",
-    "prepack": "compat-exports"
+    "prepack": "compat-exports",
+    "typecheck": "tsc -b"
   },
   "author": "atomiks",
   "license": "MIT",

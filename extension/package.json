@@ -9,7 +9,8 @@
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "typecheck": "tsc -b tsconfig.lib.json"
   },
   "dependencies": {
     "@floating-ui/devtools": "workspace:*",
