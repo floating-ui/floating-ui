@@ -1,10 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "config/tsconfig.base.json",
   "compilerOptions": {
     "composite": true,
     "module": "ES2020",
     "moduleResolution": "Node",
-    "outDir": "../dist/tsc",
+    "outDir": "../out-tsc",
     "declaration": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
@@ -18,5 +18,5 @@
     "../src/**/*.stories.tsx",
     "../../.config/_global.d.ts"
   ],
-  "references": [{"path": "../tsconfig.app.json"}]
+  "references": [{"path": "../tsconfig.lib.json"}]
 }

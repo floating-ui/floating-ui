@@ -5,12 +5,10 @@ runs:
   steps:
     - run: npx playwright install --with-deps chromium
       shell: sh
-    - run: npm run build
-      shell: sh
-    - run: npm run playwright
+    - run: pnpm run playwright
       shell: sh
     - uses: actions/upload-artifact@v2
       if: always()
       with:
         name: visual-snapshots-diff
-        path: test-results
+        path: packages/dom/test-results

@@ -1,0 +1,18 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc",
+    "baseUrl": ".",
+    "paths": {
+      "@floating-ui/dom": ["../dom/src/index.ts"],
+      "@floating-ui/dom/*": ["../dom/src/*"],
+      "extension": ["../../extension/src/index.ts"],
+      "extension/*": ["../../extension/src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [
+    {"path": "../dom/tsconfig.lib.json"},
+    {"path": "../../extension/tsconfig.lib.json"}
+  ]
+}

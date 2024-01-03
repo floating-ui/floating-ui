@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true,
+    "allowJs": true
+  },
+  "include": [
+    "../**/rollup.config.mjs",
+    "../.eslintrc.cjs",
+    "../**/babel.config.js",
+    "../**/tailwind.config.js",
+    "../**/playwright.config.ts",
+    "../**/*.test-d.ts",
+    "../**/*.test-d.tsx",
+    "scripts/*.mjs"
+  ],
+  "exclude": ["node_modules", "dist", "out-tsc"]
+}

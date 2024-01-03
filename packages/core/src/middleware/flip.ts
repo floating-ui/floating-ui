@@ -1,4 +1,5 @@
 import {
+  type Placement,
   evaluate,
   getAlignmentSides,
   getExpandedPlacements,
@@ -7,13 +8,9 @@ import {
   getSide,
 } from '@floating-ui/utils';
 
+import type {DetectOverflowOptions} from '../detectOverflow';
 import {detectOverflow} from '../detectOverflow';
-import type {
-  Derivable,
-  DetectOverflowOptions,
-  Middleware,
-  Placement,
-} from '../types';
+import type {Derivable, Middleware} from '../types';
 
 export type FlipOptions = Partial<
   DetectOverflowOptions & {

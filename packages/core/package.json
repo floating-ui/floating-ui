@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/core",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Positioning library for floating elements: tooltips, popovers, dropdowns, and more",
   "publishConfig": {
     "access": "public"
@@ -8,29 +8,33 @@
   "main": "./dist/floating-ui.core.umd.js",
   "module": "./dist/floating-ui.core.esm.js",
   "unpkg": "./dist/floating-ui.core.umd.min.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/floating-ui.core.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.ts",
+        "types": "./dist/floating-ui.core.d.mts",
         "default": "./dist/floating-ui.core.mjs"
       },
-      "types": "./src/types.d.ts",
+      "types": "./dist/floating-ui.core.d.ts",
       "module": "./dist/floating-ui.core.esm.js",
       "default": "./dist/floating-ui.core.umd.js"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist"
   ],
   "scripts": {
-    "test": "vitest --globals",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "lint": "eslint .",
+    "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
-    "build": "NODE_ENV=build rollup -c"
+    "build": "rollup -c",
+    "build:api": "build-api --tsc tsconfig.lib.json",
+    "publint": "publint",
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -50,6 +54,9 @@
     "positioning"
   ],
   "dependencies": {
-    "@floating-ui/utils": "^0.1.3"
+    "@floating-ui/utils": "workspace:^"
+  },
+  "devDependencies": {
+    "config": "workspace:*"
   }
 }

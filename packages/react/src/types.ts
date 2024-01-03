@@ -8,21 +8,21 @@ import type * as React from 'react';
 import type {ExtendedUserProps} from './hooks/useInteractions';
 
 export * from '.';
-export {FloatingArrowProps} from './components/FloatingArrow';
-export {FloatingFocusManagerProps} from './components/FloatingFocusManager';
-export {UseClickProps} from './hooks/useClick';
-export {UseClientPointProps} from './hooks/useClientPoint';
-export {UseDismissProps} from './hooks/useDismiss';
-export {UseFocusProps} from './hooks/useFocus';
-export {UseHoverProps} from './hooks/useHover';
-export {UseListNavigationProps} from './hooks/useListNavigation';
-export {UseRoleProps} from './hooks/useRole';
-export {
+export type {FloatingArrowProps} from './components/FloatingArrow';
+export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
+export type {UseClickProps} from './hooks/useClick';
+export type {UseClientPointProps} from './hooks/useClientPoint';
+export type {UseDismissProps} from './hooks/useDismiss';
+export type {UseFocusProps} from './hooks/useFocus';
+export type {UseHoverProps} from './hooks/useHover';
+export type {UseListNavigationProps} from './hooks/useListNavigation';
+export type {UseRoleProps} from './hooks/useRole';
+export type {
   UseTransitionStatusProps,
   UseTransitionStylesProps,
 } from './hooks/useTransition';
-export {UseTypeaheadProps} from './hooks/useTypeahead';
-export {InnerProps, UseInnerOffsetProps} from './inner';
+export type {UseTypeaheadProps} from './hooks/useTypeahead';
+export type {InnerProps, UseInnerOffsetProps} from './inner';
 export type {
   AlignedPlacement,
   Alignment,

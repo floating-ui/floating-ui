@@ -1,5 +1,6 @@
+import type {CONTROLLER, ELEMENT_METADATA} from 'extension/utils/constants';
+
 import type {Controller} from './controller';
-import type {CONTROLLER, ELEMENT_METADATA} from './extension/constants';
 import type {References} from './utils/references';
 
 /**

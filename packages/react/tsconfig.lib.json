@@ -1,0 +1,12 @@
+{
+  "extends": "config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc",
+    "jsx": "react-jsx"
+  },
+  "include": ["src"],
+  "references": [
+    {"path": "../react-dom/tsconfig.lib.json"},
+    {"path": "../utils/tsconfig.lib.json"}
+  ]
+}

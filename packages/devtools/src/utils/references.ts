@@ -1,5 +1,5 @@
-import {HTML_ELEMENT_REFERENCE} from '../extension/constants';
-import type {ReferenceId} from '../extension/types';
+import type {ReferenceId} from 'extension/types';
+import {HTML_ELEMENT_REFERENCE} from 'extension/utils/constants';
 
 let counter = 0;
 const generateReferenceId = (): ReferenceId => {

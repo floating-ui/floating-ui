@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-dom",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Floating UI for React DOM",
   "publishConfig": {
     "access": "public"
@@ -8,28 +8,32 @@
   "main": "./dist/floating-ui.react-dom.umd.js",
   "module": "./dist/floating-ui.react-dom.esm.js",
   "unpkg": "./dist/floating-ui.react-dom.umd.min.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/floating-ui.react-dom.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.ts",
+        "types": "./dist/floating-ui.react-dom.d.mts",
         "default": "./dist/floating-ui.react-dom.mjs"
       },
-      "types": "./src/types.d.ts",
+      "types": "./dist/floating-ui.react-dom.d.ts",
       "module": "./dist/floating-ui.react-dom.esm.js",
       "default": "./dist/floating-ui.react-dom.umd.js"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist/"
   ],
   "scripts": {
-    "test": "vitest",
-    "build": "NODE_ENV=build rollup -c"
+    "lint": "eslint .",
+    "clean": "rimraf dist out-tsc",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "build": "rollup -c",
+    "build:api": "build-api --tsc tsconfig.lib.json",
+    "publint": "publint",
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -55,12 +59,16 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.5.1"
+    "@floating-ui/dom": "workspace:^"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",
+    "config": "workspace:*",
     "@testing-library/react": "^13.2.0",
-    "@types/react": "^18.2.14",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@vitejs/plugin-react": "^4.2.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "use-isomorphic-layout-effect": "^1.1.1"

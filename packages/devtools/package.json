@@ -1,23 +1,27 @@
 {
   "name": "@floating-ui/devtools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "scripts": {
-    "test": "vitest --globals",
+    "lint": "eslint .",
+    "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
-    "build": "NODE_ENV=build rollup -c"
+    "build": "rollup -c",
+    "build:api": "build-api",
+    "publint": "publint",
+    "prepack": "compat-exports"
   },
   "main": "./dist/floating-ui.devtools.umd.js",
   "module": "./dist/floating-ui.devtools.esm.js",
   "unpkg": "./dist/floating-ui.devtools.umd.min.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/floating-ui.devtools.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.ts",
+        "types": "./dist/floating-ui.devtools.d.mts",
         "default": "./dist/floating-ui.devtools.mjs"
       },
-      "types": "./src/types.d.ts",
+      "types": "./dist/floating-ui.devtools.d.ts",
       "module": "./dist/floating-ui.devtools.esm.js",
       "default": "./dist/floating-ui.devtools.umd.js"
     }
@@ -29,5 +33,9 @@
   ],
   "peerDependencies": {
     "@floating-ui/dom": ">=1.0.0 <2.0.0"
+  },
+  "devDependencies": {
+    "config": "workspace:*",
+    "@floating-ui/dom": "workspace:*"
   }
 }

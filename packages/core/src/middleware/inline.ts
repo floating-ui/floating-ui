@@ -1,4 +1,6 @@
 import {
+  type ClientRectObject,
+  type Padding,
   evaluate,
   getPaddingObject,
   getSide,
@@ -8,7 +10,7 @@ import {
   rectToClientRect,
 } from '@floating-ui/utils';
 
-import type {ClientRectObject, Derivable, Middleware, Padding} from '../types';
+import type {Derivable, Middleware} from '../types';
 
 function getBoundingRect(rects: Array<ClientRectObject>) {
   const minX = min(...rects.map((rect) => rect.left));

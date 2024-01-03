@@ -1,0 +1,76 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "bundledPackages": [],
+  "newlineKind": "crlf",
+  "enumMemberOrder": "preserve",
+  "compiler": {
+    "tsconfigFilePath": "<projectFolder>/tsconfig.json",
+    "skipLibCheck": false,
+    "overrideTsconfig": {
+      "compilerOptions": {
+        "moduleResolution": "Bundler",
+        "types": ["node", "resize-observer-browser"],
+        // api-extractor does not support `paths` in tsconfig.json
+        "paths": []
+      }
+    }
+  },
+  "apiReport": {
+    "enabled": false
+  },
+  "docModel": {
+    "enabled": false
+  },
+  "dtsRollup": {
+    "enabled": true
+  },
+  "tsdocMetadata": {
+    "enabled": false
+  },
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      }
+    },
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "warning"
+      },
+      "ae-forgotten-export": {
+        "logLevel": "warning"
+      },
+      "ae-incompatible-release-tags": {
+        "logLevel": "warning"
+      },
+      "ae-internal-missing-underscore": {
+        "logLevel": "warning"
+      },
+      "ae-internal-mixed-release-tag": {
+        "logLevel": "warning"
+      },
+      // TODO: would be nice to ensure proper documentation for all public members
+      "ae-undocumented": {
+        "logLevel": "none"
+      },
+      "ae-unresolved-inheritdoc-reference": {
+        "logLevel": "warning"
+      },
+      "ae-unresolved-inheritdoc-base": {
+        "logLevel": "warning"
+      },
+      "ae-wrong-input-file-type": {
+        "logLevel": "error"
+      },
+      // TODO: would be nice to include the release tag in the error message
+      "ae-missing-release-tag": {
+        "logLevel": "none"
+      }
+    },
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "none"
+      }
+    }
+  }
+}

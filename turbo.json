@@ -1,0 +1,58 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "tsconfig.json",
+        "rollup.config.mjs",
+        "vite.config.ts"
+      ]
+    },
+    "build:api": {
+      "outputs": ["dist/**/*.d{.ts,.mts}"],
+      "inputs": [
+        "src/**",
+        "package.json",
+        "tsconfig.json",
+        "tsconfig.*.json",
+        "api-extractor.json",
+        "api-extractor.*.json"
+      ]
+    },
+    "publint": {
+      "dependsOn": ["prepack"],
+      "inputs": ["package.json", "dist/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "clean": {
+      "cache": false
+    },
+    "lint": {
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["config#build"],
+      "cache": false
+    },
+    "test:watch": {
+      "dependsOn": ["config#build"],
+      "cache": false,
+      "persistent": true
+    },
+    "playwright": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "prepack": {
+      "dependsOn": ["build", "build:api"],
+      "inputs": ["package.json", "dist/**"]
+    }
+  }
+}

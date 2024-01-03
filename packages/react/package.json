@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react",
-  "version": "0.26.4",
+  "version": "0.26.5",
   "description": "Floating UI for React",
   "publishConfig": {
     "access": "public"
@@ -8,41 +8,43 @@
   "main": "./dist/floating-ui.react.umd.js",
   "module": "./dist/floating-ui.react.esm.js",
   "unpkg": "./dist/floating-ui.react.umd.min.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/floating-ui.react.d.ts",
   "exports": {
     "./package.json": "./package.json",
-    "./utils/package.json": "./utils/package.json",
     ".": {
       "import": {
-        "types": "./src/types.d.ts",
+        "types": "./dist/floating-ui.react.d.mts",
         "default": "./dist/floating-ui.react.mjs"
       },
-      "types": "./src/types.d.ts",
+      "types": "./dist/floating-ui.react.d.ts",
       "module": "./dist/floating-ui.react.esm.js",
       "default": "./dist/floating-ui.react.umd.js"
     },
     "./utils": {
       "import": {
-        "types": "./utils/src/index.d.ts",
-        "default": "./utils/dist/floating-ui.react.utils.mjs"
+        "types": "./dist/floating-ui.react.utils.d.mts",
+        "default": "./dist/floating-ui.react.utils.mjs"
       },
-      "types": "./utils/src/index.d.ts",
-      "module": "./utils/dist/floating-ui.react.utils.esm.js",
-      "default": "./utils/dist/floating-ui.react.utils.umd.js"
+      "types": "./dist/floating-ui.react.utils.d.ts",
+      "module": "./dist/floating-ui.react.utils.esm.js",
+      "default": "./dist/floating-ui.react.utils.umd.js"
     }
   },
   "sideEffects": false,
   "files": [
-    "dist/",
-    "utils/dist/",
-    "utils/package.json",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist",
+    "utils"
   ],
   "scripts": {
-    "test": "vitest",
-    "build": "NODE_ENV=build rollup -c",
-    "dev": "vite"
+    "lint": "eslint .",
+    "clean": "rimraf dist out-tsc utils",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "build": "rollup -c",
+    "build:api": "build-api --tsc tsconfig.lib.json --aec api-extractor.json --aec api-extractor.utils.json",
+    "dev": "vite",
+    "publint": "publint",
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -68,19 +70,21 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "^2.0.3",
-    "@floating-ui/utils": "^0.1.5",
+    "@floating-ui/react-dom": "workspace:^",
+    "@floating-ui/utils": "workspace:^",
     "tabbable": "^6.0.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.16.0",
+    "config": "workspace:*",
     "@radix-ui/react-checkbox": "^1.0.2",
     "@radix-ui/react-icons": "^1.2.0",
-    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^13.1.1",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^14.4.3",
-    "@types/react": "^18.2.14",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.0",
     "clsx": "^1.2.1",
     "react": "^18.2.0",

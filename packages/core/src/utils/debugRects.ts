@@ -1,4 +1,4 @@
-import type {Rect} from '@floating-ui/core';
+import type {Rect} from '@floating-ui/utils';
 
 export function paintDebugRects(elementRect: Rect, clippingRect: Rect) {
   const elNode = document.getElementById('elementRect') as HTMLElement;

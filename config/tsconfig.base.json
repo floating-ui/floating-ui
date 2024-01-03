@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM", "ES2020"],
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmitOnError": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@floating-ui/core": ["../packages/core/src/index.ts"],
+      "@floating-ui/core/*": ["../packages/core/src/*"],
+      "@floating-ui/utils": ["../packages/utils/src/index.ts"],
+      "@floating-ui/utils/*": ["../packages/utils/src/*"],
+      "@floating-ui/dom": ["../packages/dom/src/index.ts"],
+      "@floating-ui/dom/*": ["../packages/dom/src/*"],
+      "@floating-ui/react-dom": ["../packages/react-dom/src/index.ts"],
+      "@floating-ui/react-dom/*": ["../packages/react-dom/src/*"],
+      "@floating-ui/react": ["../packages/react/src/index.ts"],
+      "@floating-ui/react/*": ["../packages/react/src/*"],
+      "@floating-ui/react-native": ["../packages/react-native/src/index.ts"],
+      "@floating-ui/react-native/*": ["../packages/react-native/src/*"],
+      "config": ["./src/index.ts"],
+      "config/*": ["./src/*"]
+    }
+  }
+}

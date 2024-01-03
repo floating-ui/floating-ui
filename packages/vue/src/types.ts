@@ -9,8 +9,6 @@ import type {
 } from '@floating-ui/dom';
 import type {ComponentPublicInstance, Ref} from 'vue-demi';
 
-export {arrow} from './arrow';
-export {useFloating} from './useFloating';
 export type {
   AlignedPlacement,
   Alignment,
@@ -51,21 +49,6 @@ export type {
   SizeOptions,
   Strategy,
   VirtualElement,
-} from '@floating-ui/dom';
-export {
-  autoPlacement,
-  autoUpdate,
-  computePosition,
-  detectOverflow,
-  flip,
-  getOverflowAncestors,
-  hide,
-  inline,
-  limitShift,
-  offset,
-  platform,
-  shift,
-  size,
 } from '@floating-ui/dom';
 
 export type MaybeReadonlyRef<T> = T | Readonly<Ref<T>>;

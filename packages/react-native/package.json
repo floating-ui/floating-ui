@@ -1,22 +1,24 @@
 {
   "name": "@floating-ui/react-native",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Floating UI for React Native",
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/floating-ui.react-native.js",
+  "main": "./dist/floating-ui.react-native.cjs",
   "module": "./dist/floating-ui.react-native.esm.js",
-  "types": "./src/types.d.ts",
+  "types": "./dist/floating-ui.react-native.d.ts",
   "sideEffects": false,
   "files": [
-    "dist/",
-    "**/*.d.ts",
-    "**/*.d.mts"
+    "dist"
   ],
   "scripts": {
-    "test": "jest test",
-    "build": "NODE_ENV=build rollup -c"
+    "lint": "eslint .",
+    "clean": "rimraf dist out-tsc",
+    "build": "rollup -c",
+    "build:api": "build-api",
+    "publint": "publint",
+    "prepack": "compat-exports"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -42,10 +44,11 @@
     "react-native": ">=0.64.0"
   },
   "dependencies": {
-    "@floating-ui/core": "^1.4.1"
+    "@floating-ui/core": "workspace:^"
   },
   "devDependencies": {
-    "@types/react": "^18.0.28",
+    "config": "workspace:*",
+    "@types/react": "^18.2.45",
     "@types/react-native": "^0.72.2",
     "react": "^18.0.0",
     "react-native": "0.72.1"

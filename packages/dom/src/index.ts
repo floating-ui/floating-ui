@@ -8,6 +8,9 @@ import type {
 } from './types';
 
 /**
+ * TODO: move this method declaration to its own file, and import it from there
+ * The index file should only export the public API.
+ *
  * Computes the `x` and `y` coordinates that will place the floating element
  * next to a reference element when it is given a certain CSS positioning
  * strategy.
@@ -31,6 +34,51 @@ export const computePosition = (
 
 export {autoUpdate} from './autoUpdate';
 export {platform} from './platform';
+export type {
+  ArrowOptions,
+  AutoPlacementOptions,
+  AutoUpdateOptions,
+  Boundary,
+  ComputePositionConfig,
+  Derivable,
+  DetectOverflowOptions,
+  Elements,
+  FlipOptions,
+  FloatingElement,
+  HideOptions,
+  Middleware,
+  MiddlewareArguments,
+  MiddlewareState,
+  NodeScroll,
+  Platform,
+  ReferenceElement,
+  ShiftOptions,
+  SizeOptions,
+  VirtualElement,
+} from './types';
+export type {
+  AlignedPlacement,
+  Alignment,
+  Axis,
+  ClientRectObject,
+  ComputePositionReturn,
+  Coords,
+  Dimensions,
+  ElementContext,
+  ElementRects,
+  InlineOptions,
+  Length,
+  MiddlewareData,
+  MiddlewareReturn,
+  OffsetOptions,
+  Padding,
+  Placement,
+  Rect,
+  RootBoundary,
+  Side,
+  SideObject,
+  Strategy,
+} from '@floating-ui/core';
 export {
   arrow,
   autoPlacement,

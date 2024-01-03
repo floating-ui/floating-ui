@@ -1,13 +1,17 @@
-import {evaluate, getPaddingObject, rectToClientRect} from '@floating-ui/utils';
+import {
+  type Padding,
+  type SideObject,
+  evaluate,
+  getPaddingObject,
+  rectToClientRect,
+} from '@floating-ui/utils';
 
 import type {
   Boundary,
   Derivable,
   ElementContext,
   MiddlewareState,
-  Padding,
   RootBoundary,
-  SideObject,
 } from './types';
 
 export type DetectOverflowOptions = Partial<{
