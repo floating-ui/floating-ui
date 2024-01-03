@@ -33,15 +33,6 @@
       "types": "./dist/floating-ui.utils.dom.d.ts",
       "module": "./dist/floating-ui.utils.dom.esm.js",
       "default": "./dist/floating-ui.utils.dom.umd.js"
-    },
-    "./react": {
-      "import": {
-        "types": "./dist/floating-ui.utils.react.d.mts",
-        "default": "./dist/floating-ui.utils.react.mjs"
-      },
-      "types": "./dist/floating-ui.utils.react.d.ts",
-      "module": "./dist/floating-ui.utils.react.esm.js",
-      "default": "./dist/floating-ui.utils.react.umd.js"
     }
   },
   "scripts": {
