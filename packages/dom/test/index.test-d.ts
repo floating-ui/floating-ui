@@ -1,4 +1,4 @@
-import type {Middleware} from '.';
+import type {Middleware} from '../src';
 import {
   arrow,
   autoPlacement,
@@ -12,7 +12,7 @@ import {
   platform,
   shift,
   size,
-} from '.';
+} from '../src';
 
 // @ts-expect-error
 computePosition();

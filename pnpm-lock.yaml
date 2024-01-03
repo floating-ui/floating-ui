@@ -230,6 +230,9 @@ importers:
       '@types/react':
         specifier: ^18.2.45
         version: 18.2.46
+      '@types/react-dom':
+        specifier: ^18.2.18
+        version: 18.2.18
       '@vitejs/plugin-react':
         specifier: ^4.2.0
         version: 4.2.1(vite@5.0.10)

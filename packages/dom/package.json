@@ -37,7 +37,8 @@
     "test:watch": "vitest watch",
     "publint": "publint",
     "playwright": "playwright test ./test/functional",
-    "prepack": "compat-exports"
+    "prepack": "compat-exports",
+    "typecheck": "tsc -b"
   },
   "author": "atomiks",
   "license": "MIT",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "config": "workspace:*",
     "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

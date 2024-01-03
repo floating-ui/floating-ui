@@ -4,5 +4,5 @@
     "outDir": "out-tsc"
   },
   "include": ["test", "vite.config.mts"],
-  "references": [{"path": "./tsconfig.lib.json"}]
+  "references": [{"path": "./tsconfig.lib.json"}, {"path": "../../config"}]
 }
