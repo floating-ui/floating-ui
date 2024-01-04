@@ -1,6 +1,5 @@
+import type {ClientRectObject, Padding} from '@floating-ui/utils';
 import {
-  type ClientRectObject,
-  type Padding,
   evaluate,
   getPaddingObject,
   getSide,
