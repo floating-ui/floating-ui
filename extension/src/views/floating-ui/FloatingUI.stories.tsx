@@ -10,8 +10,7 @@ import {
 import {HTML_ELEMENT_REFERENCE} from '../../utils/constants';
 import FloatingUIMiddlewarePanel from './FloatingUIMiddleware';
 
-const dummyReferenceId =
-  `${HTML_ELEMENT_REFERENCE}:${crypto.randomUUID()}` as const;
+const dummyReferenceId = `${HTML_ELEMENT_REFERENCE}:1` as const;
 
 export default {
   title: 'Panels/Floating UI',
@@ -58,8 +57,6 @@ Middleware.decorators = [
     <DevtoolsProvider
       value={{
         ...devtoolsDefaultContextValue,
-
-        theme: 'default',
         serializedData: {
           elements: {
             floating: dummyReferenceId,

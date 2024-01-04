@@ -1,4 +1,4 @@
-import {resolve} from 'node:path';
+import path from 'node:path';
 
 import react from '@vitejs/plugin-react';
 import {defineViteConfig} from 'config';
@@ -14,7 +14,10 @@ export default defineViteConfig({
   },
   resolve: {
     alias: {
-      extension: resolve(__dirname, './src'),
+      extension: path.resolve(__dirname, './src'),
+      '@floating-ui/devtools/package.json': path.resolve(
+        '../packages/devtools/package.json',
+      ),
     },
   },
 });

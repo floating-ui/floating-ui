@@ -13,6 +13,7 @@ export const defineViteConfig = (config: UserConfig): UserConfig =>
     resolve: {
       ...config.resolve,
       alias: {
+        ...(config.resolve?.alias ?? {}),
         '@floating-ui/react': path.resolve(basePath, 'packages/react/src'),
         '@floating-ui/utils': path.resolve(basePath, 'packages/utils/src'),
         '@floating-ui/devtools': path.resolve(
@@ -26,7 +27,6 @@ export const defineViteConfig = (config: UserConfig): UserConfig =>
           'packages/react-dom/src',
         ),
         '@floating-ui/vue': path.resolve(basePath, 'packages/vue/src'),
-        ...(config.resolve?.alias ?? {}),
       },
     },
     test: {

@@ -143,6 +143,9 @@ importers:
       '@griffel/react':
         specifier: ^1.5.19
         version: 1.5.19(react@17.0.2)
+      react-feather:
+        specifier: ^2.0.10
+        version: 2.0.10(react@17.0.2)
     devDependencies:
       '@storybook/addon-essentials':
         specifier: ^7.6.7
@@ -190,8 +193,8 @@ importers:
         specifier: ^17.0.2
         version: 17.0.2(react@17.0.2)
       react-error-boundary:
-        specifier: ^3.1.4
-        version: 3.1.4(react@17.0.2)
+        specifier: ^4.0.12
+        version: 4.0.12(react@17.0.2)
       react-json-view:
         specifier: ^1.21.3
         version: 1.21.3(@types/react@18.2.46)(react-dom@17.0.2)(react@17.0.2)
@@ -13063,16 +13066,6 @@ packages:
       react-is: 18.1.0
     dev: true
 
-  /react-error-boundary@3.1.4(react@17.0.2):
-    resolution: {integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==}
-    engines: {node: '>=10', npm: '>=6'}
-    peerDependencies:
-      react: '>=16.13.1'
-    dependencies:
-      '@babel/runtime': 7.23.7
-      react: 17.0.2
-    dev: true
-
   /react-error-boundary@3.1.4(react@18.2.0):
     resolution: {integrity: sha512-uM9uPzZJTF6wRQORmSrvOIgt4lJ9MC1sNgEOj2XGsDTRE4kmpWxg7ENK9EWNKJRMAOY9z0MuF4yIfl6gp4sotA==}
     engines: {node: '>=10', npm: '>=6'}
@@ -13082,6 +13075,24 @@ packages:
       '@babel/runtime': 7.23.7
       react: 18.2.0
     dev: true
+
+  /react-error-boundary@4.0.12(react@17.0.2):
+    resolution: {integrity: sha512-kJdxdEYlb7CPC1A0SeUY38cHpjuu6UkvzKiAmqmOFL21VRfMhOcWxTCBgLVCO0VEMh9JhFNcVaXlV4/BTpiwOA==}
+    peerDependencies:
+      react: '>=16.13.1'
+    dependencies:
+      '@babel/runtime': 7.23.7
+      react: 17.0.2
+    dev: true
+
+  /react-feather@2.0.10(react@17.0.2):
+    resolution: {integrity: sha512-BLhukwJ+Z92Nmdcs+EMw6dy1Z/VLiJTzEQACDUEnWMClhYnFykJCGWQx+NmwP/qQHGX/5CzQ+TGi8ofg2+HzVQ==}
+    peerDependencies:
+      react: '>=16.8.6'
+    dependencies:
+      prop-types: 15.8.1
+      react: 17.0.2
+    dev: false
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}

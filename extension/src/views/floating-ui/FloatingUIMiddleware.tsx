@@ -1,8 +1,8 @@
 import {mergeClasses} from '@griffel/react';
 import * as React from 'react';
-import JsonView, {type ThemeKeys} from 'react-json-view';
 
 import {useDevtools} from '../../contexts/devtools';
+import JsonView from '../common/components/JsonView';
 import styles from './FloatingUIMiddleware.module.css';
 
 export const FloatingUIMiddleware = React.memo(() => {
@@ -17,8 +17,7 @@ export const FloatingUIMiddleware = React.memo(() => {
     rects,
     placement,
   } = devtools.serializedData;
-  const theme: ThemeKeys =
-    devtools.theme === 'dark' ? 'monokai' : 'rjv-default';
+
   return (
     <div
       className={mergeClasses(
@@ -42,13 +41,7 @@ export const FloatingUIMiddleware = React.memo(() => {
               name={key}
               indentWidth={2}
               collapsed={true}
-              enableClipboard={false}
-              displayObjectSize={false}
-              displayDataTypes={false}
-              quotesOnKeys={false}
-              style={{backgroundColor: 'unset'}}
               src={value}
-              theme={theme}
             />
           );
         }
@@ -60,7 +53,7 @@ export const FloatingUIMiddleware = React.memo(() => {
         );
       })}
       <div className={styles.buttonGroup}>
-        <div className={styles.buttonContainer}>
+        <div>
           <span className={styles.propertyKey}>floating :</span>{' '}
           <button
             title={`Inspect floating`}
@@ -69,7 +62,7 @@ export const FloatingUIMiddleware = React.memo(() => {
             HTMLElement
           </button>
         </div>
-        <div className={styles.buttonContainer}>
+        <div>
           <span className={styles.propertyKey}>reference :</span>{' '}
           <button
             title={`Inspect reference`}

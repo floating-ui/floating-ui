@@ -11,12 +11,14 @@
     "declarationMap": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "ES2020"],
-    "rootDir": "../"
+    "rootDir": "../",
+    "types": [],
+    "skipLibCheck": true
   },
-  "include": [
-    "../src/**/*.stories.ts",
-    "../src/**/*.stories.tsx",
-    "../../.config/_global.d.ts"
-  ],
-  "references": [{"path": "../tsconfig.lib.json"}]
+  "include": ["../src/**/*.stories.ts", "../src/**/*.stories.tsx"],
+  "references": [
+    {"path": "../tsconfig.lib.json"},
+    {"path": "../../packages/devtools/tsconfig.json"},
+    {"path": "../../packages/react/tsconfig.lib.json"}
+  ]
 }
