@@ -36,15 +36,12 @@ module.exports = {
       keyframes: {
         'blur-in': {
           '0%': {
-            filter: 'brightness(1) blur(10px)',
             transform: 'scale(0.9)',
           },
           '10%': {
-            filter: 'brightness(1.4) blur(3px)',
             transform: 'scale(0.97)',
           },
           '100%': {
-            filter: 'brightness(1) blur(0)',
             transform: 'scale(1)',
           },
         },

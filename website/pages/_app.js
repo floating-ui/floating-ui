@@ -37,9 +37,9 @@ function MyApp({Component, pageProps}) {
     useLocalStorage('package-context-tooltip-touched', false);
 
   const [pageTransitionStatus, setPageTransitionStatus] =
-    useState('in');
+    useState('initial');
   const [articleTransitionStatus, setArticleTransitionStatus] =
-    useState('in');
+    useState('initial');
 
   useEffect(() => {
     function handleRouteChangeComplete() {

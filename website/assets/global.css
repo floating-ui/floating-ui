@@ -174,6 +174,10 @@ code[data-theme*=' '] span {
   }
 }
 
+[data-fade='initial'] {
+  animation: fadeIn 0ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
 [data-fade='in'] {
   animation: fadeIn 300ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
 }

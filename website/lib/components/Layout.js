@@ -904,14 +904,14 @@ export default function Layout({children, className}) {
 				<p className="mt-4 text-sm">
 					Icons made by{' '}
 					<a
-						className="text-blue-600 dark:text-blue-400"
+						className="text-blue-600 dark:text-blue-400 underline"
 						href="https://www.zwicon.com/cheatsheet.html"
 					>
 						zwoelf
 					</a>{' '}
 					and{' '}
 					<a
-						className="text-blue-600 dark:text-blue-400"
+						className="text-blue-600 dark:text-blue-400 underline"
 						href="https://www.flaticon.com"
 					>
 						Freepik
