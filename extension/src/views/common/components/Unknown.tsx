@@ -1,5 +1,6 @@
 import {mergeClasses} from '@griffel/react';
 import * as React from 'react';
+import {Navigation} from 'react-feather';
 
 import {useDevtools} from '../../../contexts/devtools';
 import styles from './Unknown.module.css';
@@ -12,16 +13,16 @@ export const Unknown = React.memo(() => (
     )}
   >
     <u aria-hidden className={styles.icon}>
-      💡️
+      <Navigation />
     </u>
     <div>
-      Please select a{' '}
+      Select a{' '}
       <a
         className={styles.link}
         href="https://floating-ui.com/"
         target="_blank"
       >
-        floating
+        Floating UI
       </a>{' '}
       element
     </div>

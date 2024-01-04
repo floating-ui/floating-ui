@@ -69,7 +69,6 @@ Middleware.decorators = [
     <DevtoolsProvider
       value={{
         ...devtoolsDefaultContextValue,
-        theme: 'default',
         serializedData: {
           type: 'FluentUIMiddleware',
           middlewareState: {
@@ -88,7 +87,7 @@ Middleware.decorators = [
             initialPlacement: 'bottom-end',
             middlewareData: {},
           },
-          flipBoundaries: [dummyReferenceId],
+          flipBoundaries: [dummyReferenceId, dummyReferenceId],
           scrollParents: [dummyReferenceId],
           overflowBoundaries: [dummyReferenceId],
           options: {},

@@ -4,6 +4,7 @@
     "outDir": "out-tsc",
     "composite": true
   },
+  "include": ["vite.config.mts"],
   "references": [
     {"path": "./tsconfig.lib.json"},
     {"path": "./.storybook/tsconfig.stories.json"}

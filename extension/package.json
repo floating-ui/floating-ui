@@ -5,12 +5,11 @@
   "scripts": {
     "dev": "NODE_END=development vite build --watch --mode development",
     "build": "vite build",
-    "build:types": "tsc -b tsconfig.lib.json",
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
     "lint": "eslint src",
-    "typecheck": "tsc -b tsconfig.lib.json"
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "@floating-ui/devtools": "workspace:*",
@@ -19,7 +18,8 @@
     "@fluentui/react-components": "^9.44.0",
     "@fluentui/react-icons": "^2.0.224",
     "@fluentui/react-utilities": "^9.15.5",
-    "@griffel/react": "^1.5.19"
+    "@griffel/react": "^1.5.19",
+    "react-feather": "^2.0.10"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.7",
@@ -37,7 +37,7 @@
     "config": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-error-boundary": "^3.1.4",
+    "react-error-boundary": "^4.0.12",
     "react-json-view": "^1.21.3",
     "storybook": "^7.6.7"
   }

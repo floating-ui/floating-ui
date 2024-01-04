@@ -14,6 +14,8 @@
     "paths": {
       "@floating-ui/core": ["../packages/core/src/index.ts"],
       "@floating-ui/core/*": ["../packages/core/src/*"],
+      "@floating-ui/devtools": ["../packages/devtools/src/index.ts"],
+      "@floating-ui/devtools/*": ["../packages/devtools/src/*"],
       "@floating-ui/utils": ["../packages/utils/src/index.ts"],
       "@floating-ui/utils/*": ["../packages/utils/src/*"],
       "@floating-ui/dom": ["../packages/dom/src/index.ts"],

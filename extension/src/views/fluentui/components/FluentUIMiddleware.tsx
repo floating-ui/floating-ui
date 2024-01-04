@@ -1,9 +1,9 @@
 import {Button, makeStyles, shorthands} from '@fluentui/react-components';
 import {Eye20Filled} from '@fluentui/react-icons';
 import React from 'react';
-import JsonView, {type ThemeKeys} from 'react-json-view';
 
 import {useDevtools} from '../../../contexts/devtools';
+import JsonView from '../../common/components/JsonView';
 import {tokens} from '../utils/tokens';
 import FluentProvider from './FluentProvider';
 
@@ -44,6 +44,7 @@ const useStyles = makeStyles({
 
 export const FluentUIMiddleware = React.memo(() => {
   const devtools = useDevtools('FluentUIMiddleware');
+  const styles = useStyles();
   const {
     middlewareState: {elements, middlewareData, y, x, strategy, rects},
     flipBoundaries,
@@ -53,9 +54,6 @@ export const FluentUIMiddleware = React.memo(() => {
     placement,
     scrollParents,
   } = devtools.serializedData;
-  const styles = useStyles();
-  const theme: ThemeKeys =
-    devtools.theme === 'dark' ? 'monokai' : 'rjv-default';
   return (
     <FluentProvider>
       {Object.entries({
@@ -74,13 +72,7 @@ export const FluentUIMiddleware = React.memo(() => {
               name={key}
               indentWidth={2}
               collapsed={true}
-              enableClipboard={false}
-              displayObjectSize={false}
-              displayDataTypes={false}
-              quotesOnKeys={false}
-              style={{backgroundColor: 'unset'}}
               src={value}
-              theme={theme}
             />
           );
         }
