@@ -399,6 +399,9 @@ importers:
       '@floating-ui/dom':
         specifier: workspace:^
         version: link:../dom
+      '@floating-ui/utils':
+        specifier: workspace:^
+        version: link:../utils
       vue-demi:
         specifier: '>=0.13.0'
         version: 0.14.6(vue@3.4.4)

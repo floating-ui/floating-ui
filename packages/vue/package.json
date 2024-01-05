@@ -57,6 +57,7 @@
   ],
   "dependencies": {
     "@floating-ui/dom": "workspace:^",
+    "@floating-ui/utils": "workspace:^",
     "vue-demi": ">=0.13.0"
   },
   "devDependencies": {

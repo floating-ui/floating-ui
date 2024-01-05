@@ -605,6 +605,100 @@ describe('useFloating', () => {
       expect(getByTestId('y').textContent).toBe('5');
     });
   });
+
+  test('does not throw when component type reference renders nothing', () => {
+    const FloatingReference = defineComponent({
+      name: 'FloatingReference',
+      render() {
+        return null;
+      },
+    });
+    const App = defineComponent({
+      name: 'App',
+      components: {FloatingReference},
+      setup() {
+        return setup({});
+      },
+      template: /* HTML */ `
+        <FloatingReference ref="reference" />
+        <div ref="floating" />
+      `,
+    });
+
+    render(App);
+  });
+
+  test('does not throw when component type floating renders nothing', () => {
+    const FloatingFloating = defineComponent({
+      name: 'FloatingFloating',
+      render() {
+        return null;
+      },
+    });
+    const App = defineComponent({
+      name: 'App',
+      components: {FloatingFloating},
+      setup() {
+        return setup({});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <FloatingFloating ref="floating" />
+      `,
+    });
+
+    render(App);
+  });
+
+  test('does not throw when component type reference renders nothing and "$el" is null', () => {
+    const FloatingReference = defineComponent({
+      name: 'FloatingReference',
+      setup(props, {expose}) {
+        expose({$el: null});
+      },
+      render() {
+        return null;
+      },
+    });
+    const App = defineComponent({
+      name: 'App',
+      components: {FloatingReference},
+      setup() {
+        return setup({});
+      },
+      template: /* HTML */ `
+        <FloatingReference ref="reference" />
+        <div ref="floating" />
+      `,
+    });
+
+    render(App);
+  });
+
+  test('does not throw when component type floating renders nothing and "$el" is null', () => {
+    const FloatingFloating = defineComponent({
+      name: 'FloatingFloating',
+      setup(props, {expose}) {
+        expose({$el: null});
+      },
+      render() {
+        return null;
+      },
+    });
+    const App = defineComponent({
+      name: 'App',
+      components: {FloatingFloating},
+      setup() {
+        return setup({});
+      },
+      template: /* HTML */ `
+        <div ref="reference" />
+        <FloatingFloating ref="floating" />
+      `,
+    });
+
+    render(App);
+  });
 });
 
 describe('arrow', () => {
