@@ -52,6 +52,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
         {open && (
           <FloatingFocusManager context={context}>
             <div
+              role="menu"
               ref={refs.setFloating}
               data-testid="floating"
               className="grid gap-2"

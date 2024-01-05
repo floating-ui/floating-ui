@@ -275,7 +275,7 @@ export function buildCellMap(sizes: Dimensions[], cols: number, dense: boolean) 
   return [...cellMap];
 }
 
-/** Gets cell index of an item's corner */
+/** Gets cell index of an item's corner or -1 when index is -1. */
 export function getCellIndexOfCorner(
   index: number,
   sizes: Dimensions[],
@@ -283,6 +283,8 @@ export function getCellIndexOfCorner(
   cols: number,
   corner: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
 ) {
+  if (index === -1) return -1;
+
   const firstCellIndex = cellMap.indexOf(index);
 
   switch (corner) {

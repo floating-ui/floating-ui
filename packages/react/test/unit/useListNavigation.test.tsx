@@ -471,6 +471,15 @@ describe('focusOnHover', () => {
 });
 
 describe('grid navigation', () => {
+  test('ArrowDown focuses first item', () => {
+    render(<Grid />);
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(screen.queryByRole('menu')).toBeInTheDocument();
+    fireEvent.keyDown(document, {key: 'ArrowDown'});
+    expect(screen.getAllByRole('option')[8]).toHaveFocus();
+    cleanup();
+  });
   test('focuses first non-disabled item in grid', () => {
     render(<Grid />);
     fireEvent.keyDown(screen.getByRole('button'), {key: 'Enter'});
