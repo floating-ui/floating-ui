@@ -17,13 +17,16 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {Dimensions, ElementProps, FloatingContext, ReferenceType} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
   ARROW_RIGHT,
   ARROW_UP,
+  buildCellMap,
   findNonDisabledIndex,
+  getCellIndexOfCorner,
+  getCellIndices,
   getGridNavigatedIndex,
   getMaxIndex,
   getMinIndex,
@@ -114,6 +117,16 @@ export interface UseListNavigationProps {
   cols?: number;
   scrollItemIntoView?: boolean | ScrollIntoViewOptions;
   virtualItemRef?: React.MutableRefObject<HTMLElement | null>;
+  /**
+   * Only for `cols > 1`, specify sizes for grid items.
+   * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
+   */
+  itemSizes?: Dimensions[];
+  /**
+   * Only relevant for `cols > 1` and items with different sizes, specify if
+   * the grid is dense (as defined in the CSS spec for grid-auto-flow).
+   */
+  dense?: boolean;
 }
 
 /**
@@ -150,6 +163,8 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     cols = 1,
     scrollItemIntoView = true,
     virtualItemRef,
+    itemSizes,
+    dense = false,
   } = props;
 
   if (__DEV__) {
@@ -508,17 +523,63 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       // Grid navigation.
       if (cols > 1) {
-        indexRef.current = getGridNavigatedIndex(listRef, {
-          event,
-          orientation,
-          loop,
-          cols,
-          disabledIndices,
-          minIndex,
-          maxIndex,
-          prevIndex: indexRef.current,
-          stopEvent: true,
-        });
+        const sizes = itemSizes ?? Array.from(
+          Array(listRef.current.length),
+          () => ({ width: 1, height: 1 })
+        );
+        // To calculate movements on the grid, we use hypothetical cell indices
+        // as if every item was 1x1, then convert back to real indices.
+        const cellMap = buildCellMap(sizes, cols, dense);
+        const minGridIndex = cellMap.findIndex(
+          index => index != null && !disabledIndices?.includes(index)
+        );
+        // last enabled index
+        const maxGridIndex = cellMap.reduce(
+          (foundIndex: number, index, cellIndex) =>
+            index != null && !disabledIndices?.includes(index)
+              ? cellIndex
+              : foundIndex,
+          -1
+        );
+
+        indexRef.current = cellMap[
+          getGridNavigatedIndex(
+            {
+              current: cellMap.map((itemIndex) =>
+                itemIndex ? listRef.current[itemIndex] : null
+              ),
+            },
+            {
+              event,
+              orientation,
+              loop,
+              cols,
+              // treat undefined (empty grid spaces) as disabled indices so we
+              // don't end up in them
+              disabledIndices: getCellIndices(
+                [...(disabledIndices || []), undefined],
+                cellMap
+              ),
+              minIndex: minGridIndex,
+              maxIndex: maxGridIndex,
+              prevIndex: getCellIndexOfCorner(
+                indexRef.current,
+                sizes,
+                cellMap,
+                cols,
+                // use a corner matching the edge closest to the direction
+                // we're moving in so we don't end up in the same item. Prefer
+                // top/left over bottom/right.
+                event.key === ARROW_DOWN
+                  ? 'bottomLeft'
+                  : event.key === ARROW_RIGHT
+                  ? 'topRight'
+                  : 'topLeft'
+              ),
+              stopEvent: true,
+            }
+          )
+        ] as number; // navigated cell will never be nullish
 
         onNavigate(indexRef.current);
 
@@ -789,5 +850,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     item,
     tree,
     virtualItemRef,
+    itemSizes,
+    dense,
   ]);
 }

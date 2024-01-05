@@ -158,6 +158,8 @@ interface UseListNavigationProps {
   openOnArrowKeyDown?: boolean;
   disabledIndices?: Array<number>;
   scrollItemIntoView?: boolean | ScrollIntoViewOptions;
+  itemSizes?: Dimensions[];
+  dense?: boolean;
 }
 ```
 
@@ -304,8 +306,8 @@ useListNavigation(context, {
 ```
 
 <Notice type="error" title="Required">
-  Your virtually-focused list items must have a unique `id{:.keyword}` set on 
-  them. If you're using a component role with the `useRole(){:js}` Hook, 
+  Your virtually-focused list items must have a unique `id{:.keyword}` set on
+  them. If you're using a component role with the `useRole(){:js}` Hook,
   then an `id{:.keyword}` is generated automatically.
 </Notice>
 
@@ -451,5 +453,34 @@ default value uses `nearest{:.string}` options.
 ```js
 useListNavigation(context, {
   scrollItemIntoView: false,
+});
+```
+
+### `itemSizes{:.key}`
+
+default: `undefined{:js}`
+
+Only for grid navigation, an array of `Dimensions` objects, which specify the
+width (number of columns) and height (number of rows) of each item, so
+the navigation algorithm can take the variable sizes into account.
+If not specified, every item will be treated as if it has a size of 1
+row and 1 column.
+
+```js
+useListNavigation(context, {
+  itemSizes: [{ width: 2, height: 2 }, { width: 1, height: 3 }],
+});
+```
+
+### `dense{:.key}`
+
+default: `false{:js}`
+
+Only for grid navigation, determines if the grid positioning algorithm
+should follow CSS Grid's `auto-flow` `dense` algorithm.
+
+```js
+useListNavigation(context, {
+  dense: true
 });
 ```

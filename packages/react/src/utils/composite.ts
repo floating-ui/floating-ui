@@ -1,6 +1,8 @@
 import {stopEvent} from '@floating-ui/react/utils';
 import {floor} from '@floating-ui/utils';
 
+import type {Dimensions} from '../types';
+
 export const ARROW_UP = 'ArrowUp';
 export const ARROW_DOWN = 'ArrowDown';
 export const ARROW_LEFT = 'ArrowLeft';
@@ -232,4 +234,75 @@ export function getGridNavigatedIndex(
   }
 
   return nextIndex;
+}
+
+/** For each cell index, gets the item index that occupies that cell */
+export function buildCellMap(sizes: Dimensions[], cols: number, dense: boolean) {
+  const cellMap: (number | undefined)[] = [];
+  let startIndex = 0;
+  sizes.forEach(({ width, height }, index) => {
+    if (width > cols) {
+      if (__DEV__) {
+        throw new Error(
+          `Invalid grid: item width at index ${index} is greater than grid columns`
+        );
+      }
+    }
+    let itemPlaced = false;
+    if (dense) {
+      startIndex = 0;
+    }
+    while (!itemPlaced) {
+      const targetCells: number[] = [];
+      for (let i = 0; i < width; i++) {
+        for (let j = 0; j < height; j++) {
+          targetCells.push(startIndex + i + j * cols);
+        }
+      }
+      if (
+        (startIndex % cols) + width <= cols &&
+        targetCells.every((cell) => cellMap[cell] === undefined)
+      ) {
+        targetCells.forEach((cell) => (cellMap[cell] = index));
+        itemPlaced = true;
+      } else {
+        startIndex++;
+      }
+    }
+  });
+
+  // convert into a non-sparse array
+  return [...cellMap];
+}
+
+/** Gets cell index of an item's corner */
+export function getCellIndexOfCorner(
+  index: number,
+  sizes: Dimensions[],
+  cellMap: (number | undefined)[],
+  cols: number,
+  corner: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
+) {
+  const firstCellIndex = cellMap.indexOf(index);
+
+  switch (corner) {
+    case 'topLeft':
+      return firstCellIndex;
+    case 'topRight':
+      return firstCellIndex + sizes[index].width - 1;
+    case 'bottomLeft':
+      return firstCellIndex + (sizes[index].height - 1) * cols;
+    case 'bottomRight':
+      return cellMap.lastIndexOf(index);
+  }
+}
+
+/** Gets all cell indices that correspond to the specified indices */
+export function getCellIndices(
+  indices: (number | undefined)[],
+  cellMap: (number | undefined)[]
+) {
+  return cellMap.flatMap((index, cellIndex) =>
+    indices.includes(index) ? [cellIndex] : []
+  );
 }

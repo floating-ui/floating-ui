@@ -1,8 +1,8 @@
 import type {
-  Axis,
   ClientRectObject,
+  Coords,
+  Dimensions,
   ElementRects,
-  Length,
   Placement,
   Rect,
   SideObject,
@@ -48,8 +48,6 @@ export interface Platform {
   isRTL?: (element: any) => Promisable<boolean>;
   getScale?: (element: any) => Promisable<{x: number; y: number}>;
 }
-
-export type Coords = {[key in Axis]: number};
 
 export interface MiddlewareData {
   [key: string]: any;
@@ -139,8 +137,6 @@ export type Middleware = {
   options?: any;
   fn: (state: MiddlewareState) => Promisable<MiddlewareReturn>;
 };
-
-export type Dimensions = {[key in Length]: number};
 
 export type ReferenceElement = any;
 export type FloatingElement = any;

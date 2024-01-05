@@ -2,12 +2,16 @@ import * as React from 'react';
 
 import {useMergeRefs} from '../hooks/useMergeRefs';
 import {useEffectEvent} from '../hooks/utils/useEffectEvent';
+import type {Dimensions} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
   ARROW_RIGHT,
   ARROW_UP,
+  buildCellMap,
   findNonDisabledIndex,
+  getCellIndexOfCorner,
+  getCellIndices,
   getGridNavigatedIndex,
   getMaxIndex,
   getMinIndex,
@@ -48,6 +52,16 @@ interface CompositeProps {
   disabledIndices?: number[];
   activeIndex?: number;
   onNavigate?(index: number): void;
+  /**
+   * Only for `cols > 1`, specify sizes for grid items.
+   * `{ width: 2, height: 2 }` means an item is 2 columns wide and 2 rows tall.
+   */
+  itemSizes?: Dimensions[];
+  /**
+   * Only relevant for `cols > 1` and items with different sizes, specify if
+   * the grid is dense (as defined in the CSS spec for grid-auto-flow).
+   */
+  dense?: boolean;
 }
 
 const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
@@ -63,9 +77,11 @@ export const Composite = React.forwardRef<
     orientation = 'both',
     loop = true,
     cols = 1,
-    disabledIndices,
+    disabledIndices = [],
     activeIndex: externalActiveIndex,
     onNavigate: externalSetActiveIndex,
+    itemSizes,
+    dense = false,
     ...props
   },
   forwardedRef,
@@ -88,24 +104,69 @@ export const Composite = React.forwardRef<
   function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
     if (!allKeys.includes(event.key)) return;
 
-    const minIndex = getMinIndex(elementsRef, disabledIndices);
-    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
-    const prevIndex = activeIndex;
-
     let nextIndex = activeIndex;
 
     if (isGrid) {
-      nextIndex = getGridNavigatedIndex(elementsRef, {
-        event,
-        orientation,
-        loop,
-        cols,
-        disabledIndices,
-        minIndex,
-        maxIndex,
-        prevIndex,
-      });
+      const sizes = itemSizes ?? Array.from(
+        Array(elementsRef.current.length),
+        () => ({ width: 1, height: 1 })
+      );
+      // To calculate movements on the grid, we use hypothetical cell indices
+      // as if every item was 1x1, then convert back to real indices.
+      const cellMap = buildCellMap(sizes, cols, dense);
+      const minGridIndex = cellMap.findIndex(
+        index => index != null && !disabledIndices.includes(index)
+      );
+      // last enabled index
+      const maxGridIndex = cellMap.reduce(
+        (foundIndex: number, index, cellIndex) =>
+          index != null && !disabledIndices?.includes(index)
+            ? cellIndex
+            : foundIndex,
+        -1
+      );
+
+      nextIndex = cellMap[
+        getGridNavigatedIndex(
+          {
+            current: cellMap.map((itemIndex) =>
+              itemIndex ? elementsRef.current[itemIndex] : null
+            ),
+          },
+          {
+            event,
+            orientation,
+            loop,
+            cols,
+            // treat undefined (empty grid spaces) as disabled indices so we
+            // don't end up in them
+            disabledIndices: getCellIndices(
+              [...disabledIndices, undefined],
+              cellMap
+            ),
+            minIndex: minGridIndex,
+            maxIndex: maxGridIndex,
+            prevIndex: getCellIndexOfCorner(
+              activeIndex,
+              sizes,
+              cellMap,
+              cols,
+              // use a corner matching the edge closest to the direction we're
+              // moving in so we don't end up in the same item. Prefer
+              // top/left over bottom/right.
+              event.key === ARROW_DOWN
+                ? 'bottomLeft'
+                : event.key === ARROW_RIGHT
+                ? 'topRight'
+                : 'topLeft'
+            ),
+          }
+        )
+      ] as number; // navigated cell will never be nullish
     }
+
+    const minIndex = getMinIndex(elementsRef, disabledIndices);
+    const maxIndex = getMaxIndex(elementsRef, disabledIndices);
 
     const toEndKeys = {
       horizontal: [ARROW_RIGHT],

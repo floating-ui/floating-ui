@@ -10,8 +10,10 @@ import {
 
 import {Main as Arrow} from './components/Arrow';
 import {Main as Autocomplete} from './components/Autocomplete';
+import {Main as ComplexGrid} from './components/ComplexGrid';
 import {Main as Drawer} from './components/Drawer';
 import {Main as EmojiPicker} from './components/EmojiPicker';
+import {Main as Grid} from './components/Grid';
 import {Main as MacSelect} from './components/MacSelect';
 import {Main as Menu} from './components/Menu';
 import {Main as Menubar} from './components/Menubar';
@@ -37,6 +39,8 @@ const ROUTES = [
   {path: 'menubar', component: Menubar},
   {path: 'menu-virtual', component: MenuVirtual},
   {path: 'omnibox', component: Omnibox},
+  {path: 'grid', component: Grid},
+  {path: 'complex-grid', component: ComplexGrid},
 ];
 
 function Index() {
@@ -44,7 +48,7 @@ function Index() {
 
   return (
     <div>
-      <main className="lg:ml-64 p-12">
+      <main className="p-12 lg:ml-64">
         {pathname === '/' && (
           <>
             <h1>Floating UI Testing Grounds</h1>
@@ -56,19 +60,19 @@ function Index() {
         )}
         <Outlet />
       </main>
-      <nav className="fixed hidden overflow-y-auto left-0 top-0 h-full p-8 flex-col bg-slate-100 lg:w-64 lg:flex">
+      <nav className="fixed top-0 left-0 flex-col hidden h-full p-8 overflow-y-auto bg-slate-100 lg:w-64 lg:flex">
         <div className="">
-          <Link to="/" className="text-2xl font-bold mb-4 block">
+          <Link to="/" className="block mb-4 text-2xl font-bold">
             Tests
           </Link>
           <Link
             to="/new"
-            className="bg-blue-500 inline-block rounded px-4 py-2 font-bold text-white mb-4"
+            className="inline-block px-4 py-2 mb-4 font-bold text-white bg-blue-500 rounded"
           >
             New
           </Link>
         </div>
-        <ul className="flex flex-col capitalize text-lg">
+        <ul className="flex flex-col text-lg capitalize">
           {ROUTES.map(({path}) => (
             <Link
               key={path}
