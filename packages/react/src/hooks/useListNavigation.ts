@@ -529,8 +529,8 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
       // Grid navigation.
       if (cols > 1) {
         const sizes =
-          itemSizes ??
-          Array.from(Array(listRef.current.length), () => ({
+          itemSizes ||
+          Array.from({length: listRef.current.length}, () => ({
             width: 1,
             height: 1,
           }));
@@ -553,7 +553,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
           getGridNavigatedIndex(
             {
               current: cellMap.map((itemIndex) =>
-                itemIndex ? listRef.current[itemIndex] : null,
+                itemIndex != null ? listRef.current[itemIndex] : null,
               ),
             },
             {
