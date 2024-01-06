@@ -23,7 +23,7 @@
     "test": "turbo test",
     "prepack": "turbo prepack",
     "typecheck": "turbo typecheck",
-    "release": "turbo publint && changeset publish"
+    "release": "turbo prepack && turbo publint && changeset publish"
   },
   "author": "",
   "license": "MIT",
