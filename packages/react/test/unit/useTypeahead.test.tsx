@@ -7,8 +7,7 @@ import {useClick, useFloating, useInteractions, useTypeahead} from '../../src';
 import type {UseTypeaheadProps} from '../../src/hooks/useTypeahead';
 import {Main} from '../visual/components/Menu';
 
-vi.useFakeTimers();
-const user = userEvent.setup({advanceTimers: vi.advanceTimersByTime});
+vi.useFakeTimers({shouldAdvanceTime: true});
 
 const useImpl = ({
   addUseClick = false,
@@ -99,15 +98,15 @@ test('rapidly focuses list items when they start with the same letter', async ()
   const spy = vi.fn();
   render(<Combobox onMatch={spy} />);
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   expect(spy).toHaveBeenCalledWith(1);
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   expect(spy).toHaveBeenCalledWith(2);
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   expect(spy).toHaveBeenCalledWith(1);
 
   cleanup();
@@ -117,12 +116,12 @@ test('bails out of rapid focus of first letter if the list contains a string tha
   const spy = vi.fn();
   render(<Combobox onMatch={spy} list={['apple', 'aaron', 'apricot']} />);
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('a');
+  await userEvent.keyboard('a');
   expect(spy).toHaveBeenCalledWith(0);
 
-  await user.keyboard('a');
+  await userEvent.keyboard('a');
   expect(spy).toHaveBeenCalledWith(0);
 
   cleanup();
@@ -137,39 +136,39 @@ test('starts from the current activeIndex and correctly loops', async () => {
     />,
   );
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('t');
-  await user.keyboard('o');
-  await user.keyboard('y');
+  await userEvent.keyboard('t');
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('y');
   expect(spy).toHaveBeenCalledWith(0);
 
   spy.mockReset();
 
-  await user.keyboard('t');
-  await user.keyboard('o');
-  await user.keyboard('y');
+  await userEvent.keyboard('t');
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('y');
   expect(spy).not.toHaveBeenCalled();
 
   vi.advanceTimersByTime(750);
 
-  await user.keyboard('t');
-  await user.keyboard('o');
-  await user.keyboard('y');
+  await userEvent.keyboard('t');
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('y');
   expect(spy).toHaveBeenCalledWith(1);
 
   vi.advanceTimersByTime(750);
 
-  await user.keyboard('t');
-  await user.keyboard('o');
-  await user.keyboard('y');
+  await userEvent.keyboard('t');
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('y');
   expect(spy).toHaveBeenCalledWith(2);
 
   vi.advanceTimersByTime(750);
 
-  await user.keyboard('t');
-  await user.keyboard('o');
-  await user.keyboard('y');
+  await userEvent.keyboard('t');
+  await userEvent.keyboard('o');
+  await userEvent.keyboard('y');
   expect(spy).toHaveBeenCalledWith(0);
 
   cleanup();
@@ -179,9 +178,9 @@ test('capslock characters continue to match', async () => {
   const spy = vi.fn();
   render(<Combobox onMatch={spy} />);
 
-  user.click(screen.getByRole('combobox'));
+  userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('{CapsLock}t');
+  await userEvent.keyboard('{CapsLock}t');
   expect(spy).toHaveBeenCalledWith(1);
 
   cleanup();
@@ -225,9 +224,9 @@ test('matches when focus is withing reference', async () => {
   const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   expect(spy).toHaveBeenCalledWith(1);
 
   cleanup();
@@ -237,15 +236,15 @@ test('matches when focus is withing floating', async () => {
   const spy = vi.fn();
   render(<App1 onMatch={spy} list={['one', 'two', 'three']} />);
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   const option = await screen.findByRole('option', {selected: true});
   expect(option.textContent).toBe('two');
   option.focus();
   expect(option).toHaveFocus();
 
-  await user.keyboard('h');
+  await userEvent.keyboard('h');
   expect(
     (await screen.findByRole('option', {selected: true})).textContent,
   ).toBe('three');
@@ -259,7 +258,7 @@ test('onTypingChange is called when typing starts or stops', async () => {
 
   act(() => screen.getByRole('combobox').focus());
 
-  await user.keyboard('t');
+  await userEvent.keyboard('t');
   expect(spy).toHaveBeenCalledTimes(1);
   expect(spy).toHaveBeenCalledWith(true);
 
@@ -320,18 +319,18 @@ test('typing spaces on <div> references does not open the menu', async () => {
   const spy = vi.fn();
   render(<Select onMatch={spy} />);
 
-  vi.useFakeTimers();
+  vi.useFakeTimers({shouldAdvanceTime: true});
 
-  await user.click(screen.getByRole('combobox'));
+  await userEvent.click(screen.getByRole('combobox'));
 
-  await user.keyboard('h');
-  await user.keyboard(' ');
+  await userEvent.keyboard('h');
+  await userEvent.keyboard(' ');
 
   expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
 
   vi.advanceTimersByTime(750);
 
-  await user.keyboard(' ');
+  await userEvent.keyboard(' ');
   await act(async () => {});
 
   expect(screen.queryByRole('listbox')).toBeInTheDocument();

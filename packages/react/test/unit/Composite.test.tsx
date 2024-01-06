@@ -22,7 +22,7 @@ describe('list', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -43,7 +43,7 @@ describe('list', () => {
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     await microtask();
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
@@ -58,7 +58,7 @@ describe('list', () => {
       </Composite>,
     );
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -79,7 +79,7 @@ describe('list', () => {
     expect(screen.getByTestId('2')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('2')).toHaveFocus();
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     await microtask();
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
@@ -92,8 +92,10 @@ describe('grid', () => {
       return (
         // 1 to 9 numpad
         <Composite cols={3}>
-          {['1','2','3','4','5','6','7','8','9'].map(i => (
-            <CompositeItem key={i} data-testid={i}>{i}</CompositeItem>
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
           ))}
         </Composite>
       );
@@ -101,7 +103,7 @@ describe('grid', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -134,7 +136,7 @@ describe('grid', () => {
     expect(screen.getByTestId('4')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('4')).toHaveFocus();
 
-    screen.getByTestId('9').focus();
+    act(() => screen.getByTestId('9').focus());
     await microtask();
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
@@ -156,8 +158,10 @@ describe('grid', () => {
             {width: 1, height: 1},
           ]}
         >
-          {['1','2','3','456','7','8','9'].map(i => (
-            <CompositeItem key={i} data-testid={i}>{i}</CompositeItem>
+          {['1', '2', '3', '456', '7', '8', '9'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
           ))}
         </Composite>
       );
@@ -165,7 +169,7 @@ describe('grid', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -198,11 +202,11 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
-    screen.getByTestId('9').focus();
+    act(() => screen.getByTestId('9').focus());
     await microtask();
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
-  })
+  });
 
   test('wider and taller item', async () => {
     function App() {
@@ -219,8 +223,10 @@ describe('grid', () => {
             {width: 1, height: 1},
           ]}
         >
-          {['1','2','3','4578','6','9'].map(i => (
-            <CompositeItem key={i} data-testid={i}>{i}</CompositeItem>
+          {['1', '2', '3', '4578', '6', '9'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
           ))}
         </Composite>
       );
@@ -228,7 +234,7 @@ describe('grid', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -261,11 +267,11 @@ describe('grid', () => {
     expect(screen.getByTestId('1')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('1')).toHaveFocus();
 
-    screen.getByTestId('9').focus();
+    act(() => screen.getByTestId('9').focus());
     await microtask();
     expect(screen.getByTestId('9')).toHaveAttribute('data-active');
     expect(screen.getByTestId('9')).toHaveAttribute('tabindex', '0');
-  })
+  });
 
   test('grid flow', async () => {
     function App() {
@@ -281,8 +287,10 @@ describe('grid', () => {
             {width: 1, height: 1},
           ]}
         >
-          {['1', '2356', '78', '9'].map(i => (
-            <CompositeItem key={i} data-testid={i}>{i}</CompositeItem>
+          {['1', '2356', '78', '9'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
           ))}
         </Composite>
       );
@@ -290,7 +298,7 @@ describe('grid', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -298,7 +306,7 @@ describe('grid', () => {
     expect(screen.getByTestId('78')).toHaveAttribute('data-active');
     expect(screen.getByTestId('78')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('78')).toHaveFocus();
-  })
+  });
 
   test('grid flow: dense', async () => {
     function App() {
@@ -315,8 +323,10 @@ describe('grid', () => {
           ]}
           dense
         >
-          {['1', '2356', '78', '4'].map(i => (
-            <CompositeItem key={i} data-testid={i}>{i}</CompositeItem>
+          {['1', '2356', '78', '4'].map((i) => (
+            <CompositeItem key={i} data-testid={i}>
+              {i}
+            </CompositeItem>
           ))}
         </Composite>
       );
@@ -324,7 +334,7 @@ describe('grid', () => {
 
     render(<App />);
 
-    screen.getByTestId('1').focus();
+    act(() => screen.getByTestId('1').focus());
     expect(screen.getByTestId('1')).toHaveAttribute('data-active');
 
     fireEvent.keyDown(screen.getByTestId('1'), {key: 'ArrowDown'});
@@ -338,5 +348,5 @@ describe('grid', () => {
     expect(screen.getByTestId('78')).toHaveAttribute('data-active');
     expect(screen.getByTestId('78')).toHaveAttribute('tabindex', '0');
     expect(screen.getByTestId('78')).toHaveFocus();
-  })
+  });
 });
