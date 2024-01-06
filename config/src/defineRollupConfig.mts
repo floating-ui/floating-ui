@@ -74,7 +74,9 @@ export const defineRollupConfig = (
             input: inputPath,
             output: {
               name: globalVariableName,
-              file: `./dist/floating-ui.${name}.cjs`,
+              file: `./dist/floating-ui.${name}.${
+                name === 'react-native' ? 'js' : 'cjs'
+              }`,
               globals: globalsFromOutputFormat('cjs', configOptions),
               format: 'cjs',
             },
@@ -163,12 +165,13 @@ export const defineRollupConfig = (
 
 const filterRollupOptions =
   (configOptions: RollupConfigOptions) =>
-  (rollupOptions: {output: {file: string}}) =>
-    Boolean(
+  (rollupOptions: {output: {file: string}}) => {
+    return Boolean(
       configOptions.outputs?.[
         outputFormatFromFileName(rollupOptions.output.file)
       ] ?? true,
     );
+  };
 
 const commonPlugins = (configOptions: RollupConfigOptions): Plugin[] => {
   const {

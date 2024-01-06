@@ -7,6 +7,7 @@ const outputFormatByExtension = {
   'esm.js': 'esm',
   mjs: 'mjs',
   cjs: 'cjs',
+  'react-native.js': 'cjs',
   'umd.js': 'umd',
   'umd.min.js': 'umd',
   'browser.mjs': 'browser',
@@ -37,7 +38,7 @@ export const globalsFromOutputFormat = (
   format: OutputFormat,
   options: Pick<RollupConfigOptions, 'globals' | 'outputs'>,
 ): GlobalsOption =>
-  (options?.outputs?.[format] || {}).globals ?? options?.globals ?? {};
+  (options?.outputs?.[format] || {})?.globals ?? options?.globals ?? {};
 
 export const externalFromOutputFormat = (
   format: OutputFormat,
