@@ -1,5 +1,4 @@
-import {fireEvent, render, screen} from '@testing-library/react';
-import {act} from '@testing-library/react-hooks';
+import {act, fireEvent, render, screen} from '@testing-library/react';
 import {cloneElement, useState} from 'react';
 import {vi} from 'vitest';
 
