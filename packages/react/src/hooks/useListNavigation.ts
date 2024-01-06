@@ -17,7 +17,12 @@ import {
   useFloatingParentNodeId,
   useFloatingTree,
 } from '../components/FloatingTree';
-import type {Dimensions, ElementProps, FloatingContext, ReferenceType} from '../types';
+import type {
+  Dimensions,
+  ElementProps,
+  FloatingContext,
+  ReferenceType,
+} from '../types';
 import {
   ARROW_DOWN,
   ARROW_LEFT,
@@ -523,15 +528,17 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
       // Grid navigation.
       if (cols > 1) {
-        const sizes = itemSizes ?? Array.from(
-          Array(listRef.current.length),
-          () => ({ width: 1, height: 1 })
-        );
+        const sizes =
+          itemSizes ??
+          Array.from(Array(listRef.current.length), () => ({
+            width: 1,
+            height: 1,
+          }));
         // To calculate movements on the grid, we use hypothetical cell indices
         // as if every item was 1x1, then convert back to real indices.
         const cellMap = buildCellMap(sizes, cols, dense);
         const minGridIndex = cellMap.findIndex(
-          index => index != null && !disabledIndices?.includes(index)
+          (index) => index != null && !disabledIndices?.includes(index),
         );
         // last enabled index
         const maxGridIndex = cellMap.reduce(
@@ -539,14 +546,14 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
             index != null && !disabledIndices?.includes(index)
               ? cellIndex
               : foundIndex,
-          -1
+          -1,
         );
 
         indexRef.current = cellMap[
           getGridNavigatedIndex(
             {
               current: cellMap.map((itemIndex) =>
-                itemIndex ? listRef.current[itemIndex] : null
+                itemIndex ? listRef.current[itemIndex] : null,
               ),
             },
             {
@@ -558,7 +565,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
               // don't end up in them
               disabledIndices: getCellIndices(
                 [...(disabledIndices || []), undefined],
-                cellMap
+                cellMap,
               ),
               minIndex: minGridIndex,
               maxIndex: maxGridIndex,
@@ -571,13 +578,13 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
                 // we're moving in so we don't end up in the same item. Prefer
                 // top/left over bottom/right.
                 event.key === ARROW_DOWN
-                  ? 'bottomLeft'
+                  ? 'bl'
                   : event.key === ARROW_RIGHT
-                  ? 'topRight'
-                  : 'topLeft'
+                    ? 'tr'
+                    : 'tl',
               ),
               stopEvent: true,
-            }
+            },
           )
         ] as number; // navigated cell will never be nullish
 

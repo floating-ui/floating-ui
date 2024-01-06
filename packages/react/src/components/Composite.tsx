@@ -107,15 +107,17 @@ export const Composite = React.forwardRef<
     let nextIndex = activeIndex;
 
     if (isGrid) {
-      const sizes = itemSizes ?? Array.from(
-        Array(elementsRef.current.length),
-        () => ({ width: 1, height: 1 })
-      );
+      const sizes =
+        itemSizes ??
+        Array.from(Array(elementsRef.current.length), () => ({
+          width: 1,
+          height: 1,
+        }));
       // To calculate movements on the grid, we use hypothetical cell indices
       // as if every item was 1x1, then convert back to real indices.
       const cellMap = buildCellMap(sizes, cols, dense);
       const minGridIndex = cellMap.findIndex(
-        index => index != null && !disabledIndices.includes(index)
+        (index) => index != null && !disabledIndices.includes(index),
       );
       // last enabled index
       const maxGridIndex = cellMap.reduce(
@@ -123,14 +125,14 @@ export const Composite = React.forwardRef<
           index != null && !disabledIndices?.includes(index)
             ? cellIndex
             : foundIndex,
-        -1
+        -1,
       );
 
       nextIndex = cellMap[
         getGridNavigatedIndex(
           {
             current: cellMap.map((itemIndex) =>
-              itemIndex ? elementsRef.current[itemIndex] : null
+              itemIndex ? elementsRef.current[itemIndex] : null,
             ),
           },
           {
@@ -142,7 +144,7 @@ export const Composite = React.forwardRef<
             // don't end up in them
             disabledIndices: getCellIndices(
               [...disabledIndices, undefined],
-              cellMap
+              cellMap,
             ),
             minIndex: minGridIndex,
             maxIndex: maxGridIndex,
@@ -155,12 +157,12 @@ export const Composite = React.forwardRef<
               // moving in so we don't end up in the same item. Prefer
               // top/left over bottom/right.
               event.key === ARROW_DOWN
-                ? 'bottomLeft'
+                ? 'bl'
                 : event.key === ARROW_RIGHT
-                ? 'topRight'
-                : 'topLeft'
+                  ? 'tr'
+                  : 'tl',
             ),
-          }
+          },
         )
       ] as number; // navigated cell will never be nullish
     }

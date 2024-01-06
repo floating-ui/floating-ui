@@ -237,14 +237,18 @@ export function getGridNavigatedIndex(
 }
 
 /** For each cell index, gets the item index that occupies that cell */
-export function buildCellMap(sizes: Dimensions[], cols: number, dense: boolean) {
+export function buildCellMap(
+  sizes: Dimensions[],
+  cols: number,
+  dense: boolean,
+) {
   const cellMap: (number | undefined)[] = [];
   let startIndex = 0;
-  sizes.forEach(({ width, height }, index) => {
+  sizes.forEach(({width, height}, index) => {
     if (width > cols) {
       if (__DEV__) {
         throw new Error(
-          `Invalid grid: item width at index ${index} is greater than grid columns`
+          `[Floating UI]: Invalid grid - item width at index ${index} is greater than grid columns`,
         );
       }
     }
@@ -281,20 +285,20 @@ export function getCellIndexOfCorner(
   sizes: Dimensions[],
   cellMap: (number | undefined)[],
   cols: number,
-  corner: 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
+  corner: 'tl' | 'tr' | 'bl' | 'br',
 ) {
   if (index === -1) return -1;
 
   const firstCellIndex = cellMap.indexOf(index);
 
   switch (corner) {
-    case 'topLeft':
+    case 'tl':
       return firstCellIndex;
-    case 'topRight':
+    case 'tr':
       return firstCellIndex + sizes[index].width - 1;
-    case 'bottomLeft':
+    case 'bl':
       return firstCellIndex + (sizes[index].height - 1) * cols;
-    case 'bottomRight':
+    case 'br':
       return cellMap.lastIndexOf(index);
   }
 }
@@ -302,9 +306,9 @@ export function getCellIndexOfCorner(
 /** Gets all cell indices that correspond to the specified indices */
 export function getCellIndices(
   indices: (number | undefined)[],
-  cellMap: (number | undefined)[]
+  cellMap: (number | undefined)[],
 ) {
   return cellMap.flatMap((index, cellIndex) =>
-    indices.includes(index) ? [cellIndex] : []
+    indices.includes(index) ? [cellIndex] : [],
   );
 }
