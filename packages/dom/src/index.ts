@@ -9,7 +9,7 @@ import type {
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element.
+ * next to a given reference element.
  */
 export const computePosition = (
   reference: ReferenceElement,
