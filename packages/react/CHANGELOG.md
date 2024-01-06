@@ -1,5 +1,17 @@
 # @floating-ui/react
 
+## 0.26.5
+
+### Patch Changes
+
+- 672e458: feat(useListNavigation, Composite): support grid navigation over items with variable sizes
+- 4c04669: chore: exports .d.mts types, solves #2472
+- 6af9808: fix(react/utils): cross-browser `isVirtualPointerEvent`
+- Updated dependencies [4c04669]
+- Updated dependencies [afb7e5e]
+  - @floating-ui/react-dom@2.0.5
+  - @floating-ui/utils@0.2.0
+
 ## 0.26.4
 
 ### Patch Changes

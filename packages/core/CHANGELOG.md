@@ -1,5 +1,14 @@
 # @floating-ui/core
 
+## 1.5.3
+
+### Patch Changes
+
+- 4c04669: chore: exports .d.mts types, solves #2472
+- Updated dependencies [4c04669]
+- Updated dependencies [afb7e5e]
+  - @floating-ui/utils@0.2.0
+
 ## 1.5.2
 
 ### Patch Changes

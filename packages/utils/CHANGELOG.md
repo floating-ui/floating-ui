@@ -1,5 +1,15 @@
 # @floating-ui/utils
 
+## 0.2.0
+
+### Minor Changes
+
+- afb7e5e: chore(utils): remove `/react` path
+
+### Patch Changes
+
+- 4c04669: chore: exports .d.mts types, solves #2472
+
 ## 0.1.6
 
 ### Patch Changes
