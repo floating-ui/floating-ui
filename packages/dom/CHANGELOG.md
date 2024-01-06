@@ -1,5 +1,16 @@
 # @floating-ui/dom
 
+## 1.5.4
+
+### Patch Changes
+
+- 4c04669: chore: exports .d.mts types, solves #2472
+- 0d18e37: refactor: avoid $ appearing in rects dimensions
+- Updated dependencies [4c04669]
+- Updated dependencies [afb7e5e]
+  - @floating-ui/utils@0.2.0
+  - @floating-ui/core@1.5.3
+
 ## 1.5.3
 
 ### Patch Changes
