@@ -8,12 +8,8 @@ import type {
 } from './types';
 
 /**
- * TODO: move this method declaration to its own file, and import it from there
- * The index file should only export the public API.
- *
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element when it is given a certain CSS positioning
- * strategy.
+ * next to a reference element.
  */
 export const computePosition = (
   reference: ReferenceElement,
