@@ -65,10 +65,6 @@
   ],
   "devDependencies": {
     "@testing-library/jest-dom": "^6.1.6",
-    "@types/react": "^18.2.46",
     "config": "workspace:*"
-  },
-  "peerDependencies": {
-    "react": ">=16.8.0"
   }
 }
