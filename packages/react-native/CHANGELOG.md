@@ -1,11 +1,5 @@
 # @floating-ui/react-native
 
-## 0.10.3
-
-### Patch Changes
-
-- @floating-ui/core@1.5.4
-
 ## 0.10.2
 
 ### Patch Changes

@@ -1,13 +1,5 @@
 # @floating-ui/dom
 
-## 1.5.5
-
-### Patch Changes
-
-- Updated dependencies [270a075]
-  - @floating-ui/utils@0.2.1
-  - @floating-ui/core@1.5.4
-
 ## 1.5.4
 
 ### Patch Changes
