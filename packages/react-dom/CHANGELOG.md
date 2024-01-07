@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.0.6
+
+### Patch Changes
+
+- @floating-ui/dom@1.5.5
+
 ## 2.0.5
 
 ### Patch Changes

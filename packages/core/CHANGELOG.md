@@ -1,5 +1,12 @@
 # @floating-ui/core
 
+## 1.5.4
+
+### Patch Changes
+
+- Updated dependencies [b78ad40]
+  - @floating-ui/utils@0.2.1
+
 ## 1.5.3
 
 ### Patch Changes
