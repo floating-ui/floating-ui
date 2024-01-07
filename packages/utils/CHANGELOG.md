@@ -1,11 +1,5 @@
 # @floating-ui/utils
 
-## 0.2.1
-
-### Patch Changes
-
-- b78ad40: fix: remove `react` peer dependency
-
 ## 0.2.0
 
 ### Minor Changes
