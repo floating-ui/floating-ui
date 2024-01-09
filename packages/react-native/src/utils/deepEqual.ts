@@ -13,12 +13,14 @@ export function deepEqual(a: any, b: any) {
     return true;
   }
 
-  let length, i, keys;
+  let length: number;
+  let i: number;
+  let keys: Array<string>;
 
-  if (a && b && typeof a == 'object') {
+  if (a && b && typeof a === 'object') {
     if (Array.isArray(a)) {
       length = a.length;
-      if (length != b.length) return false;
+      if (length !== b.length) return false;
       for (i = length; i-- !== 0; ) {
         if (!deepEqual(a[i], b[i])) {
           return false;
@@ -54,5 +56,6 @@ export function deepEqual(a: any, b: any) {
     return true;
   }
 
+  // biome-ignore lint/suspicious/noSelfCompare: in source
   return a !== a && b !== b;
 }

@@ -1,6 +1,6 @@
 import type {Placement} from '@floating-ui/core';
-import {arrow, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useRef, useState} from 'react';
+import {arrow, autoUpdate, useFloating} from '@floating-ui/react-dom';
+import {useRef, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -11,12 +11,11 @@ export function New() {
   const arrowRef = useRef<HTMLDivElement | null>(null);
   const {refs, floatingStyles, update} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [arrow({element: arrowRef})],
   });
 
   const [size, handleSizeChange] = useSize();
-
-  useLayoutEffect(update, [update, size]);
 
   return (
     <>

@@ -90,7 +90,7 @@ export const FloatingDelayGroup = ({
     <FloatingDelayGroupContext.Provider
       value={React.useMemo(
         () => ({...state, setState, setCurrentId}),
-        [state, setState, setCurrentId],
+        [state, setCurrentId],
       )}
     >
       {children}
@@ -136,9 +136,9 @@ export const useDelayGroup = (
         return () => {
           clearTimeout(timeout);
         };
-      } else {
-        unset();
       }
+
+      unset();
     }
   }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
 

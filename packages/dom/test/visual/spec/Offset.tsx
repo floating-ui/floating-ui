@@ -1,9 +1,9 @@
 import type {OffsetOptions, Placement} from '@floating-ui/core';
-import {offset, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {autoUpdate, offset, useFloating} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
+import {allPlacements} from '../utils/allPlacements';
 
 const VALUES: Array<{
   offset: OffsetOptions;
@@ -27,12 +27,16 @@ export function Offset() {
   const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<Placement>('bottom');
   const [offsetValue, setOffsetValue] = useState<OffsetOptions>(0);
-  const {refs, floatingStyles, update} = useFloating({
+  const {refs, floatingStyles} = useFloating({
     placement,
-    middleware: [offset(offsetValue)],
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      {
+        ...offset(offsetValue),
+        options: [offsetValue, rtl, placement],
+      },
+    ],
   });
-
-  useLayoutEffect(update, [offsetValue, update, rtl]);
 
   return (
     <>

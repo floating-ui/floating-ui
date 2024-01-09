@@ -22,7 +22,7 @@ export function computeCoordsFromPlacement(
   const commonY = reference.y + reference.height / 2 - floating.height / 2;
   const commonAlign = reference[alignLength] / 2 - floating[alignLength] / 2;
 
-  let coords;
+  let coords: Coords;
   switch (side) {
     case 'top':
       coords = {x: commonX, y: reference.y - floating.height};

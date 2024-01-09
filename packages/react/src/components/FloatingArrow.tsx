@@ -113,6 +113,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 
   const dValue =
     d ||
+    // biome-ignore lint/style/useTemplate: readability
     'M0,0' +
       ` H${width}` +
       ` L${width - svgX},${height - svgY}` +

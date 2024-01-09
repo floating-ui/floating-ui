@@ -1,6 +1,12 @@
 import type {Placement} from '@floating-ui/core';
-import {flip, shift, size, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {
+  autoUpdate,
+  flip,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -15,6 +21,7 @@ export function Size() {
 
   const {x, y, strategy, update, refs} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [
       addFlipShift && flip({padding: 10}),
       addFlipShift && !hasEdgeAlignment && shift({padding: 10}),
@@ -30,8 +37,6 @@ export function Size() {
       addFlipShift && hasEdgeAlignment && shift({padding: 10}),
     ],
   });
-
-  useLayoutEffect(update, [update, rtl]);
 
   const {scrollRef, indicator} = useScroll({refs, update, rtl});
 

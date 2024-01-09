@@ -6,7 +6,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
-import {useLayoutEffect, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -41,8 +41,6 @@ export function Arrow() {
       arrow({element: arrowRef, padding}),
     ],
   });
-
-  useLayoutEffect(update, [update, padding, referenceSize, floatingSize]);
 
   const oppositeSidesMap: {[key: string]: string} = {
     top: 'bottom',

@@ -22,11 +22,9 @@
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",
     "test": "vitest run",
     "test:watch": "vitest watch",

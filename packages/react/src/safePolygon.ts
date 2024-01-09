@@ -380,7 +380,9 @@ export function safePolygon<RT extends ReferenceType = ReferenceType>(
 
       if (isPointInPolygon([clientX, clientY], rectPoly)) {
         return;
-      } else if (hasLanded && !isOverReferenceRect) {
+      }
+
+      if (hasLanded && !isOverReferenceRect) {
         return close();
       }
 

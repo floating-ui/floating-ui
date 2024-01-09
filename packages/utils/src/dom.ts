@@ -84,9 +84,9 @@ export function getContainingBlock(element: Element): HTMLElement | null {
   while (isHTMLElement(currentNode) && !isLastTraversableNode(currentNode)) {
     if (isContainingBlock(currentNode)) {
       return currentNode;
-    } else {
-      currentNode = getParentNode(currentNode);
     }
+
+    currentNode = getParentNode(currentNode);
   }
 
   return null;

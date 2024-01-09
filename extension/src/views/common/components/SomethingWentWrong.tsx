@@ -52,6 +52,7 @@ export const SomethingWentWrong = React.memo(() => {
         <button
           className={styles.reloadButton}
           onClick={handleReload}
+          // biome-ignore lint/a11y/noAutofocus: <explanation>
           autoFocus
         >
           Reload <RotateCcw />
@@ -62,6 +63,7 @@ export const SomethingWentWrong = React.memo(() => {
             className={styles.link}
             href="https://github.com/floating-ui/floating-ui"
             target="_blank"
+            rel="noreferrer"
           >
             Github
           </a>

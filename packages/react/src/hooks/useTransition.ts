@@ -90,10 +90,10 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
       return () => {
         cancelAnimationFrame(frame);
       };
-    } else {
-      setInitiated(true);
-      setStatus('close');
     }
+
+    setInitiated(true);
+    setStatus('close');
   }, [open, floating]);
 
   return {

@@ -84,7 +84,6 @@ export const computePosition: ComputePosition = async (
       }
 
       i = -1;
-      continue;
     }
   }
 

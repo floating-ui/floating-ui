@@ -743,7 +743,7 @@ describe('capture', () => {
         <Overlay>
           <NestedDialog id="outer" capture={{outsidePress: false}}>
             <NestedDialog id="inner" capture={{outsidePress: false}}>
-              <></>
+              {null}
             </NestedDialog>
           </NestedDialog>
         </Overlay>,
@@ -771,7 +771,7 @@ describe('capture', () => {
         <Overlay>
           <NestedDialog id="outer" capture={{outsidePress: true}}>
             <NestedDialog id="inner" capture={{outsidePress: true}}>
-              <></>
+              {null}
             </NestedDialog>
           </NestedDialog>
         </Overlay>,
@@ -801,7 +801,7 @@ describe('capture', () => {
         <Overlay>
           <NestedDialog id="outer" capture={{escapeKey: false}}>
             <NestedDialog id="inner" capture={{escapeKey: false}}>
-              <></>
+              {null}
             </NestedDialog>
           </NestedDialog>
         </Overlay>,
@@ -829,7 +829,7 @@ describe('capture', () => {
         <Overlay>
           <NestedDialog id="outer" capture={{escapeKey: true}}>
             <NestedDialog id="inner" capture={{escapeKey: true}}>
-              <></>
+              {null}
             </NestedDialog>
           </NestedDialog>
         </Overlay>,

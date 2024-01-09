@@ -1,7 +1,7 @@
 import type {Placement} from '@floating-ui/core';
 import type {FlipOptions} from '@floating-ui/core';
-import {flip, shift, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {autoUpdate, flip, shift, useFloating} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -24,6 +24,7 @@ export function Flip() {
   const [addShift, setAddShift] = useState(false);
   const {x, y, strategy, update, refs} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [
       flip({
         mainAxis,
@@ -35,14 +36,6 @@ export function Flip() {
       addShift && shift(),
     ],
   });
-
-  useLayoutEffect(update, [
-    update,
-    mainAxis,
-    crossAxis,
-    fallbackPlacements?.length,
-    fallbackStrategy,
-  ]);
 
   const {scrollRef, indicator} = useScroll({refs, update});
 

@@ -28,7 +28,9 @@ export const arrow = (options: {
         }
 
         return {};
-      } else if (element) {
+      }
+
+      if (element) {
         return arrowCore({element, padding}).fn(args);
       }
 

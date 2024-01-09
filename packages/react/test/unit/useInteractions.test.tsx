@@ -53,12 +53,11 @@ test('correctly merges functions', () => {
 test('does not error with undefined user supplied functions', () => {
   function App() {
     const {getReferenceProps} = useInteractions([{reference: {onClick() {}}}]);
-    return null;
-
     expect(() =>
       // @ts-expect-error
       getReferenceProps({onClick: undefined}).onClick(),
     ).not.toThrowError();
+    return null;
   }
 
   render(<App />);
@@ -144,6 +143,7 @@ test('prop getters are memoized', () => {
       ],
     );
 
+    // biome-ignore lint/correctness/useExhaustiveDependencies: testing
     useEffect(() => {
       // Should NOT cause an infinite loop as the prop getters are memoized.
       setCount((c) => c + 1);

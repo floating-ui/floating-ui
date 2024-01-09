@@ -51,25 +51,19 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const [_reference, _setReference] = React.useState<RT | null>(null);
   const [_floating, _setFloating] = React.useState<HTMLElement | null>(null);
 
-  const setReference = React.useCallback(
-    (node: RT | null) => {
-      if (node != referenceRef.current) {
-        referenceRef.current = node;
-        _setReference(node);
-      }
-    },
-    [_setReference],
-  );
+  const setReference = React.useCallback((node: RT | null) => {
+    if (node !== referenceRef.current) {
+      referenceRef.current = node;
+      _setReference(node);
+    }
+  }, []);
 
-  const setFloating = React.useCallback(
-    (node: HTMLElement | null) => {
-      if (node !== floatingRef.current) {
-        floatingRef.current = node;
-        _setFloating(node);
-      }
-    },
-    [_setFloating],
-  );
+  const setFloating = React.useCallback((node: HTMLElement | null) => {
+    if (node !== floatingRef.current) {
+      floatingRef.current = node;
+      _setFloating(node);
+    }
+  }, []);
 
   const referenceEl = (externalReference || _reference) as RT | null;
   const floatingEl = externalFloating || _floating;
@@ -131,9 +125,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
         return whileElementsMountedRef.current(referenceEl, floatingEl, update);
-      } else {
-        update();
       }
+
+      update();
     }
   }, [referenceEl, floatingEl, update, whileElementsMountedRef]);
 
