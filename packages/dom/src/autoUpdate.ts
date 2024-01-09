@@ -50,7 +50,7 @@ function observeMove(element: Element, onMove: () => void) {
 
   function cleanup() {
     clearTimeout(timeoutId);
-    io && io.disconnect();
+    io?.disconnect();
     io = null;
   }
 
@@ -172,7 +172,7 @@ export function autoUpdate(
         resizeObserver.unobserve(floating);
         cancelAnimationFrame(reobserveFrame);
         reobserveFrame = requestAnimationFrame(() => {
-          resizeObserver && resizeObserver.observe(floating);
+          resizeObserver?.observe(floating);
         });
       }
       update();
@@ -216,8 +216,8 @@ export function autoUpdate(
       ancestorResize && ancestor.removeEventListener('resize', update);
     });
 
-    cleanupIo && cleanupIo();
-    resizeObserver && resizeObserver.disconnect();
+    cleanupIo?.();
+    resizeObserver?.disconnect();
     resizeObserver = null;
 
     if (animationFrame) {

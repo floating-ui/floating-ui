@@ -846,7 +846,6 @@ describe('grid navigation when items have different sizes', () => {
   });
 });
 
-
 test('scheduled list population', async () => {
   function Option({
     listRef,
@@ -868,6 +867,7 @@ test('scheduled list population', async () => {
     return (
       <div
         role="option"
+        aria-selected={active}
         tabIndex={active ? 0 : -1}
         ref={(node) => {
           if (index !== -1) {

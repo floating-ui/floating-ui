@@ -83,20 +83,21 @@ export function useInteractions(propsList: Array<ElementProps | void> = []) {
   // suggestion to add it to the deps array.
   const deps = propsList;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   const getReferenceProps = React.useCallback(
     (userProps?: React.HTMLProps<Element>) =>
       mergeProps(userProps, propsList, 'reference'),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     deps,
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   const getFloatingProps = React.useCallback(
     (userProps?: React.HTMLProps<HTMLElement>) =>
       mergeProps(userProps, propsList, 'floating'),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     deps,
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   const getItemProps = React.useCallback(
     (
       userProps?: Omit<React.HTMLProps<HTMLElement>, 'selected' | 'active'> &
@@ -106,7 +107,6 @@ export function useInteractions(propsList: Array<ElementProps | void> = []) {
     // should be as referentially stable as possible since it may be passed as
     // a prop to many components. All `item` key values must therefore be
     // memoized.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     propsList.map((key) => key?.item),
   );
 

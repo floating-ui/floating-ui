@@ -73,6 +73,7 @@ function Option({
     <div
       ref={ref}
       role="option"
+      aria-selected={isActive}
       tabIndex={isActive ? 0 : -1}
       {...getItemProps()}
     >

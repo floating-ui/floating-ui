@@ -1,6 +1,6 @@
 import type {Placement} from '@floating-ui/core';
 import {arrow, flip, offset, shift, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useRef, useState} from 'react';
+import {useRef, useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {BoxSizeControl} from '../utils/BoxSizeControl';
@@ -37,8 +37,6 @@ export function Complex() {
       arrow({element: arrowRef, padding: paddingValue}),
     ],
   });
-
-  useLayoutEffect(update, [update, floatingSize, referenceSize, paddingValue]);
 
   const oppositeSidesMap: {[key: string]: string} = {
     top: 'bottom',

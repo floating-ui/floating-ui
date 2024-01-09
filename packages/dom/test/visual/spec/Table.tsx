@@ -12,6 +12,7 @@ export function Table() {
   const [node, setNode] = useState<Node>('td');
   const {x, y, refs, strategy, update} = useFloating();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: testing
   useLayoutEffect(update, [update, node, sameParent]);
 
   const floatingJsx = (

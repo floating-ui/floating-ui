@@ -41,7 +41,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
 
   const disabledIndices = [0, 1, 2, 3, 4, 5, 6, 9, 14, 23, 35];
 
-  const itemSizes = Array.from(Array(37), () => ({ width: 1, height: 1}));
+  const itemSizes = Array.from(Array(37), () => ({width: 1, height: 1}));
   itemSizes[1].width = 2;
   itemSizes[20].width = 2;
   itemSizes[20].height = 2;
@@ -62,7 +62,7 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
       loop,
       openOnArrowKeyDown: false,
       disabledIndices,
-      itemSizes
+      itemSizes,
     }),
     useDismiss(context),
   ]);
@@ -83,29 +83,32 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
               style={{
                 ...floatingStyles,
                 display: 'grid',
-                gridTemplateColumns: '100px 100px 100px 100px 100px 100px 100px',
+                gridTemplateColumns:
+                  '100px 100px 100px 100px 100px 100px 100px',
                 zIndex: 999,
               }}
               {...getFloatingProps()}
             >
               {[...Array(37)].map((_, index) => (
-              <button
-                role="option"
-                key={index}
-                tabIndex={activeIndex === index ? 0 : -1}
-                disabled={disabledIndices.includes(index)}
-                ref={(node) => {
-                  listRef.current[index] = node;
-                }}
-                className="border border-black disabled:opacity-20"
-                style={{
-                  gridRow: `span ${itemSizes[index].height}`,
-                  gridColumn: `span ${itemSizes[index].width}`,
-                }}
-                {...getItemProps()}
-              >
-                Item {index}
-              </button>
+                <button
+                  role="option"
+                  // biome-ignore lint/suspicious/noArrayIndexKey: testing
+                  key={index}
+                  aria-selected={activeIndex === index}
+                  tabIndex={activeIndex === index ? 0 : -1}
+                  disabled={disabledIndices.includes(index)}
+                  ref={(node) => {
+                    listRef.current[index] = node;
+                  }}
+                  className="border border-black disabled:opacity-20"
+                  style={{
+                    gridRow: `span ${itemSizes[index].height}`,
+                    gridColumn: `span ${itemSizes[index].width}`,
+                  }}
+                  {...getItemProps()}
+                >
+                  Item {index}
+                </button>
               ))}
             </div>
           </FloatingFocusManager>

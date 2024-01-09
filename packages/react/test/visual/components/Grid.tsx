@@ -66,7 +66,9 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
               {[...Array(49)].map((_, index) => (
                 <button
                   role="option"
+                  // biome-ignore lint/suspicious/noArrayIndexKey: testing
                   key={index}
+                  aria-selected={activeIndex === index}
                   tabIndex={activeIndex === index ? 0 : -1}
                   disabled={disabledIndices.includes(index)}
                   ref={(node) => {

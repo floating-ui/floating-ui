@@ -9,11 +9,9 @@
   "module": "./dist/floating-ui.react-native.esm.js",
   "types": "./dist/floating-ui.react-native.d.ts",
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",

@@ -78,7 +78,7 @@ function isMainOrientationToEndKey(
   return (
     doSwitch(orientation, vertical, horizontal) ||
     key === 'Enter' ||
-    key == ' ' ||
+    key === ' ' ||
     key === ''
   );
 }

@@ -110,7 +110,7 @@ export const FluentUIMiddleware = React.memo(() => {
         </div>
         {overflowBoundaries.map((overflowBoundary, index) => {
           return (
-            <div key={index} className={styles.buttonContainer}>
+            <div key={overflowBoundary} className={styles.buttonContainer}>
               <span className={styles.propertyKey}>
                 overflowBoundary[{index}] :
               </span>{' '}
@@ -128,7 +128,7 @@ export const FluentUIMiddleware = React.memo(() => {
         })}
         {flipBoundaries.map((flipBoundary, index) => {
           return (
-            <div key={index} className={styles.buttonContainer}>
+            <div key={flipBoundary} className={styles.buttonContainer}>
               <span className={styles.propertyKey}>
                 flipBoundary[{index}] :
               </span>{' '}
@@ -146,7 +146,7 @@ export const FluentUIMiddleware = React.memo(() => {
         })}
         {scrollParents.map((scrollParent, index) => {
           return (
-            <div key={index} className={styles.buttonContainer}>
+            <div key={scrollParent} className={styles.buttonContainer}>
               <span className={styles.propertyKey}>
                 scrollParent[{index}] :
               </span>{' '}

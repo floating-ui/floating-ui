@@ -16,7 +16,7 @@ export function contains(parent?: Element | null, child?: Element | null) {
     return false;
   }
 
-  const rootNode = child.getRootNode && child.getRootNode();
+  const rootNode = child.getRootNode?.();
 
   // First, attempt with faster native method
   if (parent.contains(child)) {

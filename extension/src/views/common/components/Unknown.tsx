@@ -21,6 +21,7 @@ export const Unknown = React.memo(() => (
         className={styles.link}
         href="https://floating-ui.com/"
         target="_blank"
+        rel="noreferrer"
       >
         Floating UI
       </a>{' '}

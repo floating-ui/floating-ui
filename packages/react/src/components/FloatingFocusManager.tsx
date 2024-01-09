@@ -217,7 +217,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     floating,
     modal,
     orderRef,
-    refs,
     isUntrappedTypeableCombobox,
     getTabbableContent,
     getTabbableElements,

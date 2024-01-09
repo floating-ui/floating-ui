@@ -1,12 +1,13 @@
 import type {Placement} from '@floating-ui/core';
 import type {LimitShiftOptions} from '@floating-ui/core';
 import {
+  autoUpdate,
   limitShift as limitShiftFn,
   offset,
   shift,
   useFloating,
 } from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -43,6 +44,7 @@ export function Shift() {
   const [offsetValue, setOffsetValue] = useState(0);
   const {x, y, strategy, update, refs} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetValue),
       shift({
@@ -58,16 +60,6 @@ export function Shift() {
       }),
     ],
   });
-
-  useLayoutEffect(update, [
-    update,
-    mainAxis,
-    crossAxis,
-    limitShift,
-    limitShiftMainAxis,
-    limitShiftCrossAxis,
-    limitShiftOffset,
-  ]);
 
   const {scrollRef, indicator} = useScroll({refs, update});
 

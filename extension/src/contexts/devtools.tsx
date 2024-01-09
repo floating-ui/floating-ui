@@ -144,7 +144,7 @@ export const isEvaluationException = (
   typeof error === 'object' &&
   error !== null &&
   'isException' in error &&
-  error.isException == true;
+  error.isException === true;
 
 export const isEvaluationError = (
   error: unknown,
@@ -155,4 +155,4 @@ export const isEvaluationError = (
   typeof error === 'object' &&
   error !== null &&
   'isError' in error &&
-  error.isError == true;
+  error.isError === true;

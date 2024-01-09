@@ -30,35 +30,26 @@ export function useFloating(
   const floatingEl = externalFloating || _floating;
   const offsetParentEl = externalOffsetParent || _offsetParent;
 
-  const setReference = React.useCallback(
-    (node: any) => {
-      if (node !== referenceRef.current) {
-        referenceRef.current = node;
-        _setReference(node);
-      }
-    },
-    [_setReference],
-  );
+  const setReference = React.useCallback((node: any) => {
+    if (node !== referenceRef.current) {
+      referenceRef.current = node;
+      _setReference(node);
+    }
+  }, []);
 
-  const setFloating = React.useCallback(
-    (node: any) => {
-      if (node !== floatingRef.current) {
-        floatingRef.current = node;
-        _setFloating(node);
-      }
-    },
-    [_setFloating],
-  );
+  const setFloating = React.useCallback((node: any) => {
+    if (node !== floatingRef.current) {
+      floatingRef.current = node;
+      _setFloating(node);
+    }
+  }, []);
 
-  const setOffsetParent = React.useCallback(
-    (node: any) => {
-      if (node !== offsetParentRef.current) {
-        offsetParentRef.current = node;
-        _setOffsetParent(node);
-      }
-    },
-    [_setOffsetParent],
-  );
+  const setOffsetParent = React.useCallback((node: any) => {
+    if (node !== offsetParentRef.current) {
+      offsetParentRef.current = node;
+      _setOffsetParent(node);
+    }
+  }, []);
 
   const referenceRef = React.useRef<any>(null);
   const floatingRef = React.useRef<any>(null);

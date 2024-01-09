@@ -265,9 +265,11 @@ export function buildCellMap(
       }
       if (
         (startIndex % cols) + width <= cols &&
-        targetCells.every((cell) => cellMap[cell] === undefined)
+        targetCells.every((cell) => cellMap[cell] == null)
       ) {
-        targetCells.forEach((cell) => (cellMap[cell] = index));
+        targetCells.forEach((cell) => {
+          cellMap[cell] = index;
+        });
         itemPlaced = true;
       } else {
         startIndex++;

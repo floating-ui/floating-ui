@@ -186,9 +186,9 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
       const nextParent = getParentNode(targetRootAncestor);
       if (isLastTraversableNode(nextParent) || !isElement(nextParent)) {
         break;
-      } else {
-        targetRootAncestor = nextParent;
       }
+
+      targetRootAncestor = nextParent;
     }
 
     // Check if the click occurred on a third-party element injected after the
@@ -374,6 +374,7 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     closeOnPressOutsideCapture,
   ]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   React.useEffect(() => {
     insideReactTreeRef.current = false;
   }, [outsidePress, outsidePressEvent]);

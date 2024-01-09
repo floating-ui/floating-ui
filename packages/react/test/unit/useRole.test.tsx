@@ -97,7 +97,10 @@ describe('tooltip', () => {
 
 describe('label', () => {
   test('sets correct aria attributes based on the open state', () => {
-    const {container} = render(<App role="label" initiallyOpen />);
+    const {container} = render(
+      // biome-ignore lint/a11y/useValidAriaRole: testing
+      <App role="label" initiallyOpen />,
+    );
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
     expect(container.querySelector('[aria-labelledby]')).toBeInTheDocument();
     cleanup();

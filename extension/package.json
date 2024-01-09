@@ -8,7 +8,7 @@
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
-    "lint": "eslint src",
+    "lint": "biome lint src",
     "typecheck": "tsc -b"
   },
   "dependencies": {

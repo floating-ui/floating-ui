@@ -94,7 +94,7 @@ export const arrow = (
     const shouldAddOffset =
       !middlewareData.arrow &&
       getAlignment(placement) != null &&
-      center != offset &&
+      center !== offset &&
       rects.reference[length] / 2 -
         (center < min ? minPadding : maxPadding) -
         arrowDimensions[length] / 2 <

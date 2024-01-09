@@ -26,7 +26,8 @@ function renderJsx(
 ) {
   if (typeof render === 'function') {
     return render(computedProps);
-  } else if (render) {
+  }
+  if (render) {
     return React.cloneElement(render, computedProps);
   }
   return <div {...computedProps} />;

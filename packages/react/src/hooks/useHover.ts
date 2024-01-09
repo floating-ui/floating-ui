@@ -142,15 +142,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     return () => {
       html.removeEventListener('mouseleave', onLeave);
     };
-  }, [
-    floating,
-    open,
-    onOpenChange,
-    enabled,
-    handleCloseRef,
-    dataRef,
-    isHoverOpen,
-  ]);
+  }, [floating, open, onOpenChange, enabled, handleCloseRef, isHoverOpen]);
 
   const closeWithDelay = React.useCallback(
     (
@@ -395,6 +387,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
   }, [open, cleanupMouseMoveHandler, clearPointerEvents]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();

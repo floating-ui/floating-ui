@@ -89,7 +89,7 @@ export function FloatingTree({
           removeNode,
           events,
         }),
-        [nodesRef, addNode, removeNode, events],
+        [addNode, removeNode, events],
       )}
     >
       {children}

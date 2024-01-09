@@ -76,7 +76,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
       win.removeEventListener('blur', onBlur);
       win.removeEventListener('keydown', onKeyDown, true);
     };
-  }, [floating, domReference, open, enabled]);
+  }, [domReference, open, enabled]);
 
   React.useEffect(() => {
     if (!enabled) {

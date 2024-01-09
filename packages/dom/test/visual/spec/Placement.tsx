@@ -1,6 +1,6 @@
 import type {Placement as PlacementType} from '@floating-ui/core';
 import {autoUpdate, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -14,8 +14,6 @@ export function Placement() {
     whileElementsMounted: autoUpdate,
   });
   const [size, handleSizeChange] = useSize();
-
-  useLayoutEffect(update, [rtl, update]);
 
   return (
     <>

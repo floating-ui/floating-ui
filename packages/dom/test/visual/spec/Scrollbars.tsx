@@ -1,6 +1,6 @@
 import type {Placement} from '@floating-ui/core';
-import {shift, useFloating} from '@floating-ui/react-dom';
-import {useLayoutEffect, useState} from 'react';
+import {autoUpdate, shift, useFloating} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
 import {allPlacements} from '../utils/allPlacements';
 import {Controls} from '../utils/Controls';
@@ -11,11 +11,10 @@ export function Scrollbars() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const {x, y, refs, strategy, update} = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [shift({crossAxis: true, altBoundary: true})],
   });
   const [size, handleSizeChange] = useSize(300);
-
-  useLayoutEffect(update, [size, update, rtl]);
 
   return (
     <>

@@ -31,12 +31,9 @@
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist",
-    "utils"
-  ],
+  "files": ["dist", "utils"],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "biome lint .",
     "clean": "rimraf dist out-tsc utils",
     "test": "vitest run",
     "test:watch": "vitest watch",

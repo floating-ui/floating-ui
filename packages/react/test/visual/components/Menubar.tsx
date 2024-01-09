@@ -18,6 +18,7 @@ export function Main() {
         >
           {[...Array(9)].map((_, i) => (
             <CompositeItem
+              // biome-ignore lint/suspicious/noArrayIndexKey: testing
               key={i}
               role="menuitem"
               className="focus:bg-gray-200 p-2"

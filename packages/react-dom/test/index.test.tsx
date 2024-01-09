@@ -192,6 +192,7 @@ describe('whileElementsMounted', () => {
       return (
         <>
           {open && <button ref={refs.setReference} />}
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: testing */}
           <div
             role="tooltip"
             ref={refs.setFloating}

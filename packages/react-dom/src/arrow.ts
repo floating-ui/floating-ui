@@ -42,7 +42,9 @@ export const arrow = (
         }
 
         return {};
-      } else if (element) {
+      }
+
+      if (element) {
         return arrowCore({element, padding}).fn(state);
       }
 

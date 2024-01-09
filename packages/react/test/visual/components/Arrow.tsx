@@ -73,12 +73,10 @@ function Demo({
   );
 }
 
-const allPlacements = ['top', 'bottom', 'right', 'left']
-  .map(
-    (placement) =>
-      [placement, `${placement}-start`, `${placement}-end`] as Array<Placement>,
-  )
-  .flat();
+const allPlacements = ['top', 'bottom', 'right', 'left'].flatMap(
+  (placement) =>
+    [placement, `${placement}-start`, `${placement}-end`] as Array<Placement>,
+);
 
 export const Main = () => {
   const borderWidth = 1;
