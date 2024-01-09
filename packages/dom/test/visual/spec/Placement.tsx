@@ -2,8 +2,9 @@ import type {Placement as PlacementType} from '@floating-ui/core';
 import {autoUpdate, useFloating} from '@floating-ui/react-dom';
 import {useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
+import {flushSync} from 'react-dom';
 import {Controls} from '../utils/Controls';
+import {allPlacements} from '../utils/allPlacements';
 import {useSize} from '../utils/useSize';
 
 export function Placement() {
@@ -72,7 +73,10 @@ export function Placement() {
           <button
             key={String(bool)}
             data-testid={`rtl-${bool}`}
-            onClick={() => setRtl(bool)}
+            onClick={() => {
+              flushSync(() => setRtl(bool));
+              update();
+            }}
             style={{
               backgroundColor: rtl === bool ? 'black' : '',
             }}

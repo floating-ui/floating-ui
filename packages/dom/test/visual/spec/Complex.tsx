@@ -1,11 +1,18 @@
 import type {Placement} from '@floating-ui/core';
-import {arrow, flip, offset, shift, useFloating} from '@floating-ui/react-dom';
+import {
+  arrow,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useFloating,
+} from '@floating-ui/react-dom';
 import {useRef, useState} from 'react';
 
-import {allPlacements} from '../utils/allPlacements';
 import {BoxSizeControl} from '../utils/BoxSizeControl';
 import {Container} from '../utils/Container';
 import {Controls} from '../utils/Controls';
+import {allPlacements} from '../utils/allPlacements';
 import {useBoxSize} from '../utils/useBoxSize';
 import {useSize} from '../utils/useSize';
 
@@ -30,6 +37,7 @@ export function Complex() {
     middlewareData: {arrow: {x: arrowX, y: arrowY} = {}},
   } = useFloating({
     placement,
+    whileElementsMounted: autoUpdate,
     middleware: [
       offset(offsetValue),
       flip(),
