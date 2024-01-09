@@ -18,5 +18,8 @@ export default defineRollupConfig({
     browser: false,
     umd: false,
     mjs: false,
+    cjs: {
+      file: './dist/floating-ui.react-native.js',
+    },
   },
 });

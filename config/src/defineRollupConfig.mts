@@ -2,17 +2,28 @@ import babel from '@rollup/plugin-babel';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
-import type {GlobalsOption, Plugin, RollupOptions} from 'rollup';
+import type {
+  ExternalOption,
+  GlobalsOption,
+  Plugin,
+  RollupOptions,
+} from 'rollup';
 
 import {
   type OutputFormat,
-  externalFromOutputFormat,
-  globalsFromOutputFormat,
-  outputFormatFromFileName,
+  normalizeOutputOptions,
 } from './utils/outputFormat.mjs';
 
-export type OutputOptions = {
+export type OutputOptionsObject = {
   globals?: GlobalsOption;
+  file?: string;
+};
+
+export type OutputOptions = OutputOptionsObject | false;
+
+export type NormalizedOutputOptions = OutputOptionsObject & {
+  skip: boolean;
+  external?: ExternalOption;
 };
 
 export type RollupConfigOptions = {
@@ -27,78 +38,77 @@ export type RollupConfigOptions = {
     [K: string]: Plugin | undefined;
   };
   globals?: GlobalsOption;
-  outputs?: Partial<Record<OutputFormat, OutputOptions | false>>;
+  outputs?: Partial<Record<OutputFormat, OutputOptions>>;
 };
 
 export const defineRollupConfig = (
   configOptions: RollupConfigOptions,
-): RollupOptions[] =>
-  configOptions.input.flatMap(
-    ({name, path: inputPath, globalVariableName}): RollupOptions[] =>
-      (
-        [
-          // ESM
-          {
-            input: inputPath,
-            output: {
-              file: `./dist/floating-ui.${name}.esm.js`,
-              format: 'esm',
-            },
-            external: externalFromOutputFormat('esm', configOptions),
-            plugins: [
-              replace({
-                __DEV__: 'process.env.NODE_ENV !== "production"',
-                preventAssignment: true,
-              }),
-              ...commonPlugins(configOptions),
-            ],
+): RollupOptions[] => {
+  const outputOptions = normalizeOutputOptions(configOptions);
+  return configOptions.input.flatMap(
+    ({name, path: inputPath, globalVariableName}): RollupOptions[] => {
+      const rollupOptionsByOutputFormat: Record<
+        OutputFormat,
+        RollupOptions[] | RollupOptions
+      > = {
+        esm: {
+          input: inputPath,
+          output: {
+            file: outputOptions.esm.file ?? `./dist/floating-ui.${name}.esm.js`,
+            format: 'esm',
           },
-          // MJS
-          {
-            input: inputPath,
-            output: {
-              file: `./dist/floating-ui.${name}.mjs`,
-              format: 'esm',
-            },
-            external: externalFromOutputFormat('mjs', configOptions),
-            plugins: [
-              replace({
-                __DEV__: 'process.env.NODE_ENV !== "production"',
-                preventAssignment: true,
-              }),
-              ...commonPlugins(configOptions),
-            ],
+          external: outputOptions.esm.external,
+          plugins: [
+            replace({
+              __DEV__: 'process.env.NODE_ENV !== "production"',
+              preventAssignment: true,
+            }),
+            ...commonPlugins(configOptions),
+          ],
+        },
+        mjs: {
+          input: inputPath,
+          output: {
+            file: outputOptions.mjs.file ?? `./dist/floating-ui.${name}.mjs`,
+            format: 'esm',
           },
-          // CJS
+          external: outputOptions.mjs.external,
+          plugins: [
+            replace({
+              __DEV__: 'process.env.NODE_ENV !== "production"',
+              preventAssignment: true,
+            }),
+            ...commonPlugins(configOptions),
+          ],
+        },
+        cjs: {
+          input: inputPath,
+          output: {
+            name: globalVariableName,
+            file: outputOptions.cjs.file ?? `./dist/floating-ui.${name}.cjs`,
+            globals: outputOptions.cjs.globals,
+            format: 'cjs',
+          },
+          external: outputOptions.cjs.external,
+          plugins: [
+            replace({
+              __DEV__: 'process.env.NODE_ENV !== "production"',
+              preventAssignment: true,
+            }),
+            ...commonPlugins(configOptions),
+          ],
+        },
+        umd: [
           {
             input: inputPath,
             output: {
               name: globalVariableName,
-              file: `./dist/floating-ui.${name}.${
-                name === 'react-native' ? 'js' : 'cjs'
-              }`,
-              globals: globalsFromOutputFormat('cjs', configOptions),
-              format: 'cjs',
-            },
-            external: externalFromOutputFormat('cjs', configOptions),
-            plugins: [
-              replace({
-                __DEV__: 'process.env.NODE_ENV !== "production"',
-                preventAssignment: true,
-              }),
-              ...commonPlugins(configOptions),
-            ],
-          },
-          // UMD
-          {
-            input: inputPath,
-            output: {
-              name: globalVariableName,
-              file: `./dist/floating-ui.${name}.umd.js`,
+              file:
+                outputOptions.umd.file ?? `./dist/floating-ui.${name}.umd.js`,
               format: 'umd',
-              globals: globalsFromOutputFormat('umd', configOptions),
+              globals: outputOptions.umd.globals,
             },
-            external: externalFromOutputFormat('umd', configOptions),
+            external: outputOptions.umd.external,
             plugins: [
               replace({
                 __DEV__: 'true',
@@ -107,16 +117,17 @@ export const defineRollupConfig = (
               ...commonPlugins(configOptions),
             ],
           },
-          // UMD min
           {
             input: inputPath,
             output: {
               name: globalVariableName,
-              file: `./dist/floating-ui.${name}.umd.min.js`,
+              file:
+                outputOptions.umd.file ??
+                `./dist/floating-ui.${name}.umd.min.js`,
               format: 'umd',
-              globals: globalsFromOutputFormat('umd', configOptions),
+              globals: outputOptions.umd.globals,
             },
-            external: externalFromOutputFormat('umd', configOptions),
+            external: outputOptions.umd.external,
             plugins: [
               replace({
                 __DEV__: 'false',
@@ -126,14 +137,17 @@ export const defineRollupConfig = (
               terser(),
             ],
           },
-          // Browser
+        ],
+        browser: [
           {
             input: inputPath,
             output: {
-              file: `./dist/floating-ui.${name}.browser.mjs`,
+              file:
+                outputOptions.browser.file ??
+                `./dist/floating-ui.${name}.browser.mjs`,
               format: 'esm',
             },
-            external: externalFromOutputFormat('browser', configOptions),
+            external: outputOptions.browser.external,
             plugins: [
               replace({
                 __DEV__: 'true',
@@ -142,14 +156,15 @@ export const defineRollupConfig = (
               ...commonPlugins(configOptions),
             ],
           },
-          // Browser min
           {
             input: inputPath,
             output: {
-              file: `./dist/floating-ui.${name}.browser.min.mjs`,
+              file:
+                outputOptions.browser.file ??
+                `./dist/floating-ui.${name}.browser.min.mjs`,
               format: 'esm',
             },
-            external: externalFromOutputFormat('browser', configOptions),
+            external: outputOptions.browser.external,
             plugins: [
               replace({
                 __DEV__: 'false',
@@ -159,19 +174,21 @@ export const defineRollupConfig = (
               terser(),
             ],
           },
-        ] satisfies RollupOptions[]
-      ).filter(filterRollupOptions(configOptions)),
+        ],
+      };
+      return strictlyTypedEntries(rollupOptionsByOutputFormat).flatMap(
+        ([key, value]) => (outputOptions[key].skip ? [] : value),
+      );
+    },
   );
+};
 
-const filterRollupOptions =
-  (configOptions: RollupConfigOptions) =>
-  (rollupOptions: {output: {file: string}}) => {
-    return Boolean(
-      configOptions.outputs?.[
-        outputFormatFromFileName(rollupOptions.output.file)
-      ] ?? true,
-    );
-  };
+/**
+ * Explicitly typed version of Object.entries.
+ */
+const strictlyTypedEntries = Object.entries as <T extends object>(
+  o: T,
+) => {[K in keyof T]: [K, T[K]]}[keyof T][];
 
 const commonPlugins = (configOptions: RollupConfigOptions): Plugin[] => {
   const {
