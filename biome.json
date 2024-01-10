@@ -17,7 +17,12 @@
       "./**/*.json",
       "./**/*.jsonc"
     ],
-    "ignore": ["./**/node_modules", "./**/dist", "./extension/dist"],
+    "ignore": [
+      "./**/node_modules",
+      "./**/dist",
+      "./**/out-tsc",
+      "./extension/dist"
+    ],
     "ignoreUnknown": true
   },
   "organizeImports": {
