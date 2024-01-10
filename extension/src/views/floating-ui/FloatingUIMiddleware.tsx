@@ -1,12 +1,21 @@
-import {mergeClasses} from '@griffel/react';
 import * as React from 'react';
 
 import {useDevtools} from '../../contexts/devtools';
+import {useSerializedData} from '../../contexts/serializedData';
 import JsonView from '../common/components/JsonView';
 import styles from './FloatingUIMiddleware.module.css';
 
 export const FloatingUIMiddleware = React.memo(() => {
-  const devtools = useDevtools('FloatingUIMiddleware');
+  const devtools = useDevtools();
+  const serializedData = useSerializedData('FloatingUIMiddleware');
+  const [index, setIndex] = React.useState(serializedData.length - 1);
+  const handleIndexChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setIndex(Number(event.target.value));
+    },
+    [],
+  );
+
   const {
     elements,
     initialPlacement,
@@ -16,14 +25,15 @@ export const FloatingUIMiddleware = React.memo(() => {
     strategy,
     rects,
     placement,
-  } = devtools.serializedData;
+  } = serializedData[serializedData.length - 1 - index];
+
+  React.useEffect(() => {
+    setIndex(serializedData.length - 1);
+  }, [serializedData.length]);
 
   return (
     <div
-      className={mergeClasses(
-        styles.root,
-        devtools.theme === 'dark' ? styles.darkTheme : styles.lightTheme,
-      )}
+      className={styles.root}
     >
       {Object.entries({
         initialPlacement,
@@ -57,7 +67,7 @@ export const FloatingUIMiddleware = React.memo(() => {
           <span className={styles.propertyKey}>floating :</span>{' '}
           <button
             title={`Inspect floating`}
-            onClick={() => devtools.inspect(elements.floating)}
+            onClick={() => devtools.inspectByReferenceId(elements.floating)}
           >
             HTMLElement
           </button>
@@ -66,12 +76,31 @@ export const FloatingUIMiddleware = React.memo(() => {
           <span className={styles.propertyKey}>reference :</span>{' '}
           <button
             title={`Inspect reference`}
-            onClick={() => devtools.inspect(elements.reference)}
+            onClick={() => devtools.inspectByReferenceId(elements.reference)}
           >
             HTMLElement
           </button>
         </div>
       </div>
+      {serializedData.length > 1 && (
+        <div className={styles.buttonGroup}>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <label className={styles.propertyKey} htmlFor="serializedDataIndex">
+              history:{' '}
+            </label>
+            <input
+              title={(index - (serializedData.length - 1)).toString()}
+              type="range"
+              id="serializedDataIndex"
+              name="serializedDataIndex"
+              min={0}
+              max={serializedData.length - 1}
+              value={index}
+              onChange={handleIndexChange}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 });

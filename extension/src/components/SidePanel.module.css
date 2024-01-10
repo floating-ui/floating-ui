@@ -1,0 +1,28 @@
+.root {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  align-self: flex-end;
+  z-index: 1;
+  margin: 1rem;
+  background-color: var(--fuidt-colorNeutralBackground1);
+}
+
+.button {
+  all: unset;
+  border: solid 2px var(--fuidt-colorNeutralForeground1);
+  background-color: var(--fuidt-colorNeutralBackground1);
+  color: var(--fuidt-colorNeutralForeground1);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: var(--fuidt-colorNeutralForeground1);
+    color: var(--fuidt-colorNeutralBackground1);
+  }
+  &:active {
+    background-color: var(--fuidt-colorNeutralBackground1);
+    color: var(--fuidt-colorNeutralForeground1);
+  }
+}

@@ -3,117 +3,106 @@
  * in extension environment https://developer.chrome.com/docs/extensions
  * it's usage should be limited to this file
  */
-/* eslint no-restricted-globals: ["off", "chrome"] */
 
 import * as React from 'react';
-import {useErrorBoundary} from 'react-error-boundary';
-
-import type {ReferenceId, Serialized} from '../types';
 import {CONTROLLER, ELEMENT_METADATA} from '../utils/constants';
-import type {Data} from '../views';
+import {ReferenceId} from '../utils/references';
+import themes from '../styles/themes.module.css';
 
-export type DevtoolsContextValue<D = Data> = {
-  inspect: (referenceId: ReferenceId) => Promise<void>;
+export type DevtoolsContextValue = {
+  inspectByReferenceId: (referenceId: ReferenceId) => Promise<void>;
+  inspectDocument: () => Promise<void>;
   debug: () => Promise<void>;
-  reload: () => Promise<void>;
-  serializedData: Serialized<D>;
-  forceUpdateSerializedData: () => void;
+  reloadInspectedWindow: () => void;
+  dangerouslyEvalInspectedWindow: <Result>(
+    expression: string,
+  ) => Promise<Result | void>;
+  onSelectionChanged: Pick<
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    chrome.devtools.panels.SelectionChangedEvent,
+    'addListener' | 'removeListener'
+  >;
+  onMessage: Pick<
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    chrome.runtime.ExtensionMessageEvent,
+    'addListener' | 'removeListener'
+  >;
+  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+  theme: typeof chrome.devtools.panels.themeName;
+  error: unknown;
 };
 
-export type DevtoolsThemeContextValue = typeof chrome.devtools.panels.themeName;
-
-const noop = () => {};
-const noopp = async () => {};
-
+const noop = () => {
+  console.log('noop');
+};
+const noopp = async () => {
+  console.log('noopp');
+};
 export const devtoolsDefaultContextValue: DevtoolsContextValue = {
-  inspect: noopp,
+  inspectByReferenceId: noopp,
   debug: noopp,
-  reload: noopp,
-  serializedData: {type: 'Unknown'},
-  forceUpdateSerializedData: noop,
+  reloadInspectedWindow: noop,
+  dangerouslyEvalInspectedWindow: noopp,
+  inspectDocument: noopp,
+  onSelectionChanged: {
+    addListener: noop,
+    removeListener: noop,
+  },
+  onMessage: {
+    addListener: noop,
+    removeListener: noop,
+  },
+  theme: 'default',
+  error: undefined,
 };
-
-export const devtoolsThemeDefaultContextValue: DevtoolsThemeContextValue =
-  chrome.devtools?.panels.themeName ?? 'default';
 
 const DevtoolsContext = React.createContext<DevtoolsContextValue>(
   devtoolsDefaultContextValue,
 );
 
-const DevtoolsThemeContext = React.createContext<DevtoolsThemeContextValue>(
-  devtoolsThemeDefaultContextValue,
+export const DevtoolsProvider = (
+  props: React.ProviderProps<DevtoolsContextValue>,
+) => (
+  <div className={themes[props.value.theme]}>
+    <DevtoolsContext.Provider {...props} />
+  </div>
 );
 
-export const {Provider: DevtoolsProvider} = DevtoolsContext;
-
-export const DevtoolsThemeProvider = React.memo(
-  (props: {value?: DevtoolsThemeContextValue; children?: React.ReactNode}) => (
-    <DevtoolsThemeContext.Provider
-      value={devtoolsThemeDefaultContextValue}
-      {...props}
-    />
-  ),
-);
-
-export const useDevtools = <Type extends Data['type']>(type?: Type) => {
-  const devtoolsContext = React.useContext(DevtoolsContext);
-  const devtoolsThemeContext = React.useContext(DevtoolsThemeContext);
-  if (type === devtoolsContext.serializedData.type || type === undefined) {
-    return {
-      ...devtoolsContext,
-      theme: devtoolsThemeContext,
-    } as DevtoolsContextValue<Extract<Data, {type: Type}>> & {
-      theme: DevtoolsThemeContextValue;
-    };
-  }
-  throw new Error(`Error: Unknown type ${type}`);
-};
+export const useDevtools = () => React.useContext(DevtoolsContext);
 
 export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
-  const {showBoundary} = useErrorBoundary();
-  const [serializedData, setSerializedData] = React.useState<Serialized<Data>>({
-    type: 'Unknown',
-  });
-
-  const forceUpdateSerializedData = React.useCallback(async () => {
-    try {
-      setSerializedData(await getLatestSerializedData());
-    } catch (error) {
-      showBoundary(error);
-    }
-  }, [showBoundary]);
-
-  React.useEffect(() => {
-    forceUpdateSerializedData();
-    chrome.devtools.panels.elements.onSelectionChanged.addListener(
-      forceUpdateSerializedData,
-    );
-    return () => {
-      chrome.devtools.panels.elements.onSelectionChanged.removeListener(
-        forceUpdateSerializedData,
-      );
-    };
-  }, [forceUpdateSerializedData]);
+  const [error, setError] = React.useState<unknown>(undefined);
   return {
-    debug: () =>
+    error,
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    onSelectionChanged: chrome.devtools.panels.elements.onSelectionChanged,
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    onMessage: chrome.runtime.onMessage,
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    theme: chrome.devtools.panels.themeName,
+    inspectDocument: React.useCallback(async () => {
+      await evalInspectedWindow<void>(`void inspect($0.ownerDocument);`).catch(
+        setError,
+      );
+    }, []),
+    dangerouslyEvalInspectedWindow: React.useCallback(
+      <Result,>(expression: string) =>
+        evalInspectedWindow<Result>(expression).catch(setError),
+      [],
+    ),
+    debug: React.useCallback(async () => {
       evalInspectedWindow<void>(
         `void setTimeout(() => {debugger;}, 2000);`,
-      ).catch(showBoundary),
-    inspect: (referenceId) =>
+      ).catch(setError);
+    }, []),
+    inspectByReferenceId: React.useCallback(async (referenceId) => {
       evalInspectedWindow<void>(
         `void inspect($0.ownerDocument.defaultView['${CONTROLLER}'].selectedElement['${ELEMENT_METADATA}'].references.get('${referenceId}'));`,
-      ).catch(showBoundary),
-    serializedData,
-    forceUpdateSerializedData,
-    reload: reloadInspectedWindow,
+      ).catch(setError);
+    }, []),
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+    reloadInspectedWindow: chrome.devtools.inspectedWindow.reload,
   };
-};
-
-/**
- * reloads window and inspects the document to reset selection
- */
-const reloadInspectedWindow = async () => {
-  chrome.devtools.inspectedWindow.reload();
 };
 
 /**
@@ -121,6 +110,7 @@ const reloadInspectedWindow = async () => {
  */
 const evalInspectedWindow = <Result,>(expression: string): Promise<Result> =>
   new Promise((resolve, reject) =>
+    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     chrome.devtools.inspectedWindow.eval<Result>(
       expression,
       {},
@@ -128,30 +118,29 @@ const evalInspectedWindow = <Result,>(expression: string): Promise<Result> =>
     ),
   );
 
-const getLatestSerializedData = async (): Promise<Serialized<Data>> =>
-  (await evalInspectedWindow<Serialized<Data> | null | undefined>(
-    `
-    $0?.ownerDocument?.defaultView?.['${CONTROLLER}']?.select($0)?.['${ELEMENT_METADATA}']?.serializedData;
-    `,
-  )) ?? {type: 'Unknown'};
-
-export const isEvaluationException = (
-  error: unknown,
-): error is Pick<
+export type ChromeEvaluationException = Pick<
+  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
   chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
-  'isException' | 'value'
-> =>
+  'value' | 'isException'
+>;
+
+export type ChromeEvaluationError = Pick<
+  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+  chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
+  'description' | 'isError'
+>;
+
+export const isChromeEvaluationException = (
+  error: unknown,
+): error is ChromeEvaluationException =>
   typeof error === 'object' &&
   error !== null &&
   'isException' in error &&
   error.isException === true;
 
-export const isEvaluationError = (
+export const isChromeEvaluationError = (
   error: unknown,
-): error is Omit<
-  chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
-  'isException' | 'value'
-> =>
+): error is ChromeEvaluationError =>
   typeof error === 'object' &&
   error !== null &&
   'isError' in error &&

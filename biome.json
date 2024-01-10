@@ -42,7 +42,13 @@
       "style": {
         "useBlockStatements": "off",
         "useSelfClosingElements": "off",
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "noRestrictedGlobals": {
+          "level": "error",
+          "options": {
+            "deniedGlobals": ["chrome"]
+          }
+        }
       },
       "a11y": {
         "noSvgWithoutTitle": "off",

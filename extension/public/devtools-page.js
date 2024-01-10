@@ -1,3 +1,4 @@
+// biome-ignore lint/style/noRestrictedGlobals:
 chrome.devtools.panels.elements.createSidebarPane(
   'Floating UI',
   (sidebarPanel) => {

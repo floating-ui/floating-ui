@@ -1,6 +1,6 @@
 import path from 'node:path';
-
 import react from '@vitejs/plugin-react';
+import cssNested from 'postcss-nested';
 import {defineViteConfig} from 'config';
 
 // FIXME: seems like vite type definitions are conflicting between vite v4 and v5
@@ -11,6 +11,11 @@ export default defineViteConfig({
   define: {
     // This is only used in storybook
     __DEV__: true,
+  },
+  css: {
+    postcss: {
+      plugins: [cssNested()],
+    },
   },
   resolve: {
     alias: {

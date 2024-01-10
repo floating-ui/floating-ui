@@ -1,22 +1,27 @@
-import React from 'react';
+import {ErrorBoundary} from 'react-error-boundary';
 
 import {
   DevtoolsProvider,
   useChromeDevtoolsContextValue,
 } from '../contexts/devtools';
-import {views} from '../views';
+import {
+  SerializedDataProvider,
+  useSerializedDataContextValue,
+} from '../contexts/serializedData';
+import {MainPanel} from './MainPanel';
 import {SidePanel} from './SidePanel';
+import SomethingWentWrong from './SomethingWentWrong';
 
 export const Devtools = () => {
   const devtools = useChromeDevtoolsContextValue();
-  const View = views[devtools.serializedData.type];
-  console.log(View, devtools.serializedData.type);
   return (
     <DevtoolsProvider value={devtools}>
-      <React.Suspense fallback={null}>
-        <View />
-      </React.Suspense>
-      <SidePanel />
+      <SerializedDataProvider value={useSerializedDataContextValue(devtools)}>
+        <ErrorBoundary FallbackComponent={SomethingWentWrong}>
+          <MainPanel />
+          <SidePanel />
+        </ErrorBoundary>
+      </SerializedDataProvider>
     </DevtoolsProvider>
   );
 };

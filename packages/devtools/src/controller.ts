@@ -1,6 +1,7 @@
 import {CONTROLLER, ELEMENT_METADATA} from 'extension/utils/constants';
 
 import type {HTMLElementWithMetadata} from './types';
+import {isHTMLElementWithMetadata} from './utils/isHTMLElement';
 
 export type Controller = {
   withdraw(): void;
@@ -23,7 +24,8 @@ export const createController = (): Controller => {
         });
       }
       if (selectedElement && nextSelectedElement) {
-        if (isNextSelectedElementValid(selectedElement, nextSelectedElement)) {
+        const metadata = selectedElement[ELEMENT_METADATA];
+        if (metadata.references.has(nextSelectedElement)) {
           return selectedElement;
         }
       }
@@ -60,22 +62,7 @@ export const injectController = (targetDocument: Document) => {
   }
 };
 
-const isNextSelectedElementValid = (
-  selectedElement: HTMLElementWithMetadata,
-  nextSelectedElement: HTMLElement,
-): boolean => {
-  const metadata = selectedElement[ELEMENT_METADATA];
-  switch (metadata.type) {
-    case 'middleware':
-      return metadata.references.has(nextSelectedElement);
-    default:
-      return false;
-  }
+export const getController = (targetDocument: Document) => {
+  injectController(targetDocument);
+  return targetDocument.defaultView?.[CONTROLLER] ?? null;
 };
-
-const isHTMLElementWithMetadata = (
-  element?: HTMLElement | null,
-): element is HTMLElementWithMetadata & {parentElement: HTMLElement} =>
-  Boolean(
-    element && ELEMENT_METADATA in element && element.parentElement !== null,
-  );

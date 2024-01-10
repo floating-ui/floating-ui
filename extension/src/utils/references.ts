@@ -1,10 +1,10 @@
-import type {ReferenceId} from 'extension/types';
-import {HTML_ELEMENT_REFERENCE} from 'extension/utils/constants';
+import {HTML_ELEMENT_REFERENCE} from './constants';
+
+export type ReferenceId = `${typeof HTML_ELEMENT_REFERENCE}:${string}`;
 
 let counter = 0;
-const generateReferenceId = (): ReferenceId => {
-  return `${HTML_ELEMENT_REFERENCE}:${counter++}`;
-};
+export const generateReferenceId = (): ReferenceId =>
+  `${HTML_ELEMENT_REFERENCE}:${counter++}`;
 
 export type References = {
   add: (element: HTMLElement) => ReferenceId;
@@ -13,23 +13,27 @@ export type References = {
 };
 
 export const createReferences = (): References => {
-  const weakSet = new WeakSet<HTMLElement>();
   const map = new Map<ReferenceId, HTMLElement>();
+  const weakMap = new WeakMap<HTMLElement, ReferenceId>();
   const references: References = {
     add: (element) => {
+      if (weakMap.has(element)) {
+        // biome-ignore lint/style/noNonNullAssertion: weakMap.has(element) ensures this is not undefined
+        return weakMap.get(element)!;
+      }
       const id: ReferenceId = generateReferenceId();
       map.set(id, element);
-      weakSet.add(element);
+      weakMap.set(element, id);
       return id;
     },
     get: (id) => {
       const element = map.get(id);
-      if (element && weakSet.has(element)) {
+      if (element && weakMap.has(element)) {
         return element;
       }
     },
     has: (element) => {
-      return weakSet.has(element);
+      return weakMap.has(element);
     },
   };
   return references;
