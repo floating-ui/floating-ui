@@ -1,5 +1,11 @@
 # @floating-ui/devtools
 
+## 0.2.0
+
+### Minor Changes
+
+- 3d0368e: feature: BREAKING CHANGE! introduces serialized data as an array
+
 ## 0.0.4
 
 ### Patch Changes
