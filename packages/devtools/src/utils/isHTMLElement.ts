@@ -1,3 +1,6 @@
+import {ELEMENT_METADATA} from 'extension/utils/constants';
+import type {HTMLElementWithMetadata} from '../types';
+
 /**
  * Verifies if a given node is an HTMLElement,
  * this method works seamlessly with frames and elements from different documents
@@ -99,3 +102,12 @@ export type HTMLElementConstructorName =
   | 'HTMLTrackElement'
   | 'HTMLUListElement'
   | 'HTMLVideoElement';
+
+export const isHTMLElementWithMetadata = (
+  element?: HTMLElement | null,
+): element is HTMLElementWithMetadata & {parentElement: HTMLElement} =>
+  Boolean(
+    isHTMLElement(element) &&
+      ELEMENT_METADATA in element &&
+      element.parentElement !== null,
+  );

@@ -1,16 +1,11 @@
-import {mergeClasses} from '@griffel/react';
 import * as React from 'react';
 import {Navigation} from 'react-feather';
 
-import {useDevtools} from '../../../contexts/devtools';
 import styles from './Unknown.module.css';
 
 export const Unknown = React.memo(() => (
   <div
-    className={mergeClasses(
-      styles.root,
-      useDevtools().theme === 'dark' ? styles.darkTheme : styles.lightTheme,
-    )}
+    className={styles.root}
   >
     <u aria-hidden className={styles.icon}>
       <Navigation />
@@ -29,7 +24,5 @@ export const Unknown = React.memo(() => (
     </div>
   </div>
 ));
-
-Unknown.displayName = 'NoData';
 
 export default Unknown;

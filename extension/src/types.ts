@@ -1,6 +1,7 @@
 import type {ReferenceElement} from '@floating-ui/dom';
 
-import type {HTML_ELEMENT_REFERENCE} from './utils/constants';
+import type {SERIALIZED_DATA_CHANGE} from './utils/constants';
+import type {ReferenceId} from './utils/references';
 
 export type Serialized<T> = T extends (infer R)[]
   ? Serialized<R>[]
@@ -12,4 +13,4 @@ export type Serialized<T> = T extends (infer R)[]
         ? {[P in keyof T]: Serialized<T[P]>}
         : T;
 
-export type ReferenceId = `${typeof HTML_ELEMENT_REFERENCE}:${string}`;
+export type SerializedDataChangeMessage = typeof SERIALIZED_DATA_CHANGE;

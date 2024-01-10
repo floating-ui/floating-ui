@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/devtools",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "scripts": {
     "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",

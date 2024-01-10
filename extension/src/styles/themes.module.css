@@ -1,0 +1,36 @@
+.root {
+  height: inherit;
+  width: inherit;
+}
+
+.default {
+  --fuidt-htmlElementColor: rgb(133, 153, 0);
+  --fuidt-stringColor: rgb(203, 75, 22);
+  --fuidt-propertyColor: rgb(0, 43, 54);
+  --fuidt-colorNeutralBackground1: #ffffff;
+  --fuidt-colorNeutralForeground1: #242424;
+  --fuidt-colorBrandForegroundLink: #115ea3;
+  --fuidt-colorBrandForegroundLinkHover: #0f548c;
+  --fuidt-colorBrandForegroundLinkPressed: #0c3b5e;
+  --fuidt-colorBrandForegroundLinkSelected: #115ea3;
+  --fuidt-colorStrokeFocus2: #000000;
+  --fuidt-errorBGColor: rgb(225 29 72);
+  --fuidt-errorColor: #ffffff;
+  composes: root;
+}
+
+.dark {
+  --fuidt-htmlElementColor: rgb(166, 226, 46);
+  --fuidt-stringColor: rgb(253, 151, 31);
+  --fuidt-propertyColor: rgb(249, 248, 245);
+  --fuidt-colorNeutralBackground1: #292929;
+  --fuidt-colorNeutralForeground1: #ffffff;
+  --fuidt-colorBrandForegroundLink: #479ef5;
+  --fuidt-colorBrandForegroundLinkHover: #62abf5;
+  --fuidt-colorBrandForegroundLinkPressed: #2886de;
+  --fuidt-colorBrandForegroundLinkSelected: #479ef5;
+  --fuidt-colorStrokeFocus2: #ffffff;
+  --fuidt-errorBGColor: rgb(225 29 72);
+  --fuidt-errorColor: #ffffff;
+  composes: root
+}

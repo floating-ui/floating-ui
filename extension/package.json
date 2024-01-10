@@ -9,17 +9,20 @@
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
     "lint": "biome lint src",
-    "typecheck": "tsc -b"
+    "typecheck": "tsc -b",
+    "analyze": "vite-bundle-visualizer -o dist/stats.html"
   },
   "dependencies": {
     "@floating-ui/devtools": "workspace:*",
     "@floating-ui/dom": "workspace:*",
     "@floating-ui/react": "workspace:*",
-    "@fluentui/react-components": "^9.44.0",
+    "@fluentui/react-components": "^9.44.2",
     "@fluentui/react-icons": "^2.0.224",
-    "@fluentui/react-utilities": "^9.15.5",
-    "@griffel/react": "^1.5.19",
-    "react-feather": "^2.0.10"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-error-boundary": "^4.0.12",
+    "react-feather": "^2.0.10",
+    "react-json-view": "^1.21.3"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.6.7",
@@ -35,10 +38,8 @@
     "@types/scheduler": "^0.16.8",
     "@vitejs/plugin-react": "^4.2.1",
     "config": "workspace:*",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-error-boundary": "^4.0.12",
-    "react-json-view": "^1.21.3",
-    "storybook": "^7.6.7"
+    "postcss-nested": "^6.0.1",
+    "storybook": "^7.6.7",
+    "vite-bundle-visualizer": "^1.0.0"
   }
 }

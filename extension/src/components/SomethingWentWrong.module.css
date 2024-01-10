@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 3px;
-  padding: 5px;
+  padding: 1rem;
   color: var(--fuidt-colorNeutralForeground1);
   background-color: var(--fuidt-colorNeutralBackground1);
   height: inherit;
@@ -38,6 +38,7 @@
   border: dashed 2px var(--fuidt-errorBGColor);
   color: var(--fuidt-colorNeutralForeground1);
   padding: 0.5rem;
+  align-self: stretch;
 }
 .content {
   display: flex;
@@ -46,23 +47,25 @@
   justify-content: start;
   box-sizing: border-box;
   row-gap: 1rem;
+  padding-block-start: 1rem;
 }
 
 .link {
   color: var(--fuidt-colorBrandForegroundLink);
-}
-.link:hover {
-  color: var(--fuidt-colorBrandForegroundLinkHover);
-  text-decoration: underline;
-}
-.link:active {
-  color: var(--fuidt-colorBrandForegroundLinkPressed);
-}
-.link:focus-visible {
-  color: var(--fuidt-colorStrokeFocus2);
-  text-decoration: underline;
-  text-decoration-style: double;
-  outline: none;
+
+  &:hover {
+    color: var(--fuidt-colorBrandForegroundLinkHover);
+    text-decoration: underline;
+  }
+  &:active {
+    color: var(--fuidt-colorBrandForegroundLinkPressed);
+  }
+  &:focus-visible {
+    color: var(--fuidt-colorStrokeFocus2);
+    text-decoration: underline;
+    text-decoration-style: double;
+    outline: none;
+  }
 }
 
 .row {
@@ -105,38 +108,9 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-}
 
-.reloadButton:hover {
-  background-color: rgb(236 72 153/1);
-}
-
-.lightTheme {
-  --fuidt-errorBGColor: rgb(225 29 72 / 1);
-  --fuidt-errorColor: #ffffff;
-  --fuidt-htmlElementColor: rgb(133, 153, 0);
-  --fuidt-stringColor: rgb(203, 75, 22);
-  --fuidt-propertyColor: rgb(0, 43, 54);
-  --fuidt-colorNeutralBackground1: #ffffff;
-  --fuidt-colorNeutralForeground1: #242424;
-  --fuidt-colorBrandForegroundLink: #115ea3;
-  --fuidt-colorBrandForegroundLinkHover: #0f548c;
-  --fuidt-colorBrandForegroundLinkPressed: #0c3b5e;
-  --fuidt-colorBrandForegroundLinkSelected: #115ea3;
-  --fuidt-colorStrokeFocus2: #000000;
-}
-
-.darkTheme {
-  ---fuidt-errorBGColor: rgb(225 29 72 / 1);
-  ---fuidt-errorColor: #ffffff;
-  --fuidt-htmlElementColor: rgb(166, 226, 46);
-  --fuidt-stringColor: rgb(253, 151, 31);
-  --fuidt-propertyColor: rgb(249, 248, 245);
-  --fuidt-colorNeutralBackground1: #292929;
-  --fuidt-colorNeutralForeground1: #ffffff;
-  --fuidt-colorBrandForegroundLink: #479ef5;
-  --fuidt-colorBrandForegroundLinkHover: #62abf5;
-  --fuidt-colorBrandForegroundLinkPressed: #2886de;
-  --fuidt-colorBrandForegroundLinkSelected: #479ef5;
-  --fuidt-colorStrokeFocus2: #ffffff;
+  &:hover {
+    background-color: var(--fuidt-errorBGColor);
+    filter: brightness(1.1);
+  }
 }

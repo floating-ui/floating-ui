@@ -1,4 +1,4 @@
-import Unknown from './components/Unknown';
+import {Unknown} from './components/Unknown';
 
 export type * from './data-types';
 
