@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "../../biome.json"
+  ],
+  "files": {
+    "ignore": [
+      "./**/node_modules",
+      "./**/dist",
+      "./utils",
+      "./out-tsc"
+    ]
+  }
+}
