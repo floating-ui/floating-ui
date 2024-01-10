@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/devtools",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",
@@ -27,7 +27,11 @@
       "default": "./dist/floating-ui.devtools.umd.js"
     }
   },
-  "files": ["dist/", "**/*.d.ts", "**/*.d.mts"],
+  "files": [
+    "dist/",
+    "**/*.d.ts",
+    "**/*.d.mts"
+  ],
   "peerDependencies": {
     "@floating-ui/dom": ">=1.5.4"
   },
