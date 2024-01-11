@@ -8,6 +8,10 @@ import {defineViteConfig} from 'config';
 // @storybook/react-vite seems to be using vite v4 but it works fine with vite v5
 export default defineViteConfig({
   plugins: [react()],
+  build: {
+    // minification is discouraged for extensions as the code will be reviewed before publishing
+    minify: false
+  },
   define: {
     // This is only used in storybook
     __DEV__: true,

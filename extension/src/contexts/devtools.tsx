@@ -5,7 +5,11 @@
  */
 
 import * as React from 'react';
-import {CONTROLLER, ELEMENT_METADATA} from '../utils/constants';
+import {
+  CONTROLLER,
+  ELEMENT_METADATA,
+  type SERIALIZED_DATA_CHANGE,
+} from '../utils/constants';
 import {ReferenceId} from '../utils/references';
 import themes from '../styles/themes.module.css';
 
@@ -72,6 +76,35 @@ export const useDevtools = () => React.useContext(DevtoolsContext);
 
 export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
   const [error, setError] = React.useState<unknown>(undefined);
+  React.useEffect(() => {
+    // biome-ignore lint/style/noRestrictedGlobals:
+    chrome.scripting.executeScript({
+      // biome-ignore lint/style/noRestrictedGlobals:
+      target: {tabId: chrome.devtools.inspectedWindow.tabId, allFrames: true},
+      /**
+       * Everything in this function should be local to the inspected page
+       * nothing should be injected from the extension
+       */
+      func: () => {
+        // FIXME: devtools should be agnostic of serialization
+        // there should be a middle layer to abstract messaging and serialization
+        const LOCAL_SERIALIZED_DATA_CHANGE: typeof SERIALIZED_DATA_CHANGE =
+          '__FUIDT_SERIALIZED_DATA_CHANGE__';
+        window.addEventListener(
+          'message',
+          (event) => {
+            if (
+              event.data === LOCAL_SERIALIZED_DATA_CHANGE
+            ) {
+              // biome-ignore lint/style/noRestrictedGlobals:
+              chrome.runtime.sendMessage(event.data);
+            }
+          },
+          false,
+        );
+      },
+    });
+  }, []);
   return {
     error,
     // biome-ignore lint/style/noRestrictedGlobals: @see top of file

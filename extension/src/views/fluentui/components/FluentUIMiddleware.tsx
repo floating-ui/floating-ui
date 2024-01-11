@@ -64,7 +64,6 @@ export const FluentUIMiddleware = React.memo(() => {
   );
   const selectedSerializedDataIndex = serializedData.length - 1 - index;
   const selectedSerializedData = serializedData[selectedSerializedDataIndex];
-  console.log(serializedData);
   const {
     middlewareState: {middlewareData, y, x, strategy, rects},
     initialPlacement,
