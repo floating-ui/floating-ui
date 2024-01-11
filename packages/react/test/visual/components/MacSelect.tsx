@@ -1,9 +1,9 @@
 import type {SideObject} from '@floating-ui/react';
 import {
-  autoUpdate,
-  flip,
   FloatingFocusManager,
   FloatingOverlay,
+  autoUpdate,
+  flip,
   inner,
   offset,
   shift,
@@ -119,7 +119,6 @@ export function ScrollArrow({
       onHide();
     }
     // Assuming `onHide` does not change.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, scrollTop]);
 
   useLayoutEffect(() => {

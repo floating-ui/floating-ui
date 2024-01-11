@@ -20,7 +20,6 @@ function mergeProps<Key extends keyof ElementProps>(
 
   let domUserProps = userProps;
   if (isItem && userProps) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {[ACTIVE_KEY]: _, [SELECTED_KEY]: __, ...validProps} = userProps;
     domUserProps = validProps;
   }

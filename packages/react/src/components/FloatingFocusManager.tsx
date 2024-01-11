@@ -434,7 +434,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
       const returnElement = getPreviouslyFocusedElement();
 
       if (
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         returnFocusRef.current &&
         !preventReturnFocusRef.current &&
         isHTMLElement(returnElement) &&

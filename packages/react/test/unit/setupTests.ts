@@ -24,7 +24,6 @@ function isNullOrUndefined(a: any) {
 // From https://github.com/jsdom/jsdom/issues/1261#issuecomment-512217225
 Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
   get() {
-    // eslint-disable-next-line
     let element = this;
     while (
       !isNullOrUndefined(element) &&

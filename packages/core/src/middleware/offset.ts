@@ -1,4 +1,10 @@
-import {type Coords, evaluate, getAlignment, getSide, getSideAxis} from '@floating-ui/utils';
+import {
+  type Coords,
+  evaluate,
+  getAlignment,
+  getSide,
+  getSideAxis,
+} from '@floating-ui/utils';
 
 import type {Derivable, Middleware, MiddlewareState} from '../types';
 
@@ -49,7 +55,6 @@ export async function convertValueToCoords(
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = evaluate(options, state);
 
-  // eslint-disable-next-line prefer-const
   let {mainAxis, crossAxis, alignmentAxis} =
     typeof rawValue === 'number'
       ? {mainAxis: rawValue, crossAxis: 0, alignmentAxis: null}

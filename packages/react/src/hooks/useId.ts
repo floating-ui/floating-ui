@@ -14,7 +14,6 @@ function useFloatingId() {
     if (id == null) {
       setId(genId());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {

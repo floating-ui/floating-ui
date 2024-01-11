@@ -7,7 +7,6 @@
   },
   "include": [
     "../**/rollup.config.mjs",
-    "../.eslintrc.cjs",
     "../**/babel.config.js",
     "../**/tailwind.config.js",
     "../**/playwright.config.ts",
