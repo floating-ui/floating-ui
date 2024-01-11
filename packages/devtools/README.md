@@ -16,14 +16,14 @@ consumed by the devtools extension.
 ### Install
 
 ```bash
-npm install floating-ui-devtools
+npm install @floating-ui/devtools
 ```
 
 ### Usage
 
 ```js
 // example with @floating-ui/react
-import {devtools} from 'floating-ui-devtools';
+import {devtools} from '@floating-ui/devtools';
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState(false);
