@@ -299,6 +299,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
         // Regardless of the pointer modality, we want to ensure the selected
         // item comes into view when the floating element is opened.
         forceScrollIntoViewRef.current = true;
+        indexRef.current = selectedIndex;
         onNavigate(selectedIndex);
       }
     } else if (previousMountedRef.current) {

@@ -4,10 +4,13 @@ import {useLayoutEffect, useRef, useState} from 'react';
 import {vi} from 'vitest';
 
 import {
+  FloatingFocusManager,
+  FloatingList,
   useClick,
   useDismiss,
   useFloating,
   useInteractions,
+  useListItem,
   useListNavigation,
 } from '../../src';
 import type {UseListNavigationProps} from '../../src/hooks/useListNavigation';
@@ -943,4 +946,97 @@ test('scheduled list population', async () => {
   await act(async () => {});
 
   expect(screen.getAllByRole('option')[0]).toHaveFocus();
+});
+
+test('async selectedIndex', async () => {
+  const options = ['core', 'dom', 'react', 'react-dom', 'vue', 'react-native'];
+
+  function Option({
+    option,
+    activeIndex,
+    selectedIndex,
+  }: {
+    option: string;
+    activeIndex: number | null;
+    selectedIndex: number | null;
+  }) {
+    const {ref, index} = useListItem();
+    return (
+      <button
+        ref={ref}
+        role="option"
+        tabIndex={index === activeIndex ? 0 : -1}
+        aria-selected={index === selectedIndex}
+      >
+        <span>{option}</span>
+      </button>
+    );
+  }
+
+  function Select() {
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+
+    if (selectedIndex !== 2) {
+      setSelectedIndex(2);
+    }
+
+    const {refs, floatingStyles, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const elementsRef = useRef([]);
+
+    const click = useClick(context);
+    const listNav = useListNavigation(context, {
+      listRef: elementsRef,
+      activeIndex,
+      selectedIndex,
+      onNavigate: setActiveIndex,
+    });
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([
+      listNav,
+      click,
+    ]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()}>
+          Open
+        </button>
+        {isOpen && (
+          <FloatingFocusManager context={context} modal={false}>
+            <div
+              ref={refs.setFloating}
+              style={floatingStyles}
+              {...getFloatingProps()}
+            >
+              <FloatingList elementsRef={elementsRef}>
+                {options.map((option) => (
+                  <Option
+                    key={option}
+                    option={option}
+                    activeIndex={activeIndex}
+                    selectedIndex={selectedIndex}
+                  />
+                ))}
+              </FloatingList>
+            </div>
+          </FloatingFocusManager>
+        )}
+      </>
+    );
+  }
+
+  render(<Select />);
+
+  fireEvent.click(screen.getByRole('button'));
+  await act(async () => {});
+
+  expect(screen.getAllByRole('option')[2]).toHaveFocus();
+  await userEvent.keyboard('{ArrowDown}');
+  expect(screen.getAllByRole('option')[3]).toHaveFocus();
 });
