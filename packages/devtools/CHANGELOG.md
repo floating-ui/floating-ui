@@ -1,5 +1,11 @@
 # @floating-ui/devtools
 
+## 0.2.1
+
+### Patch Changes
+
+- 180d1ad: fix: devtools controller emits event once the selected element is removed
+
 ## 0.2.0
 
 ### Minor Changes
