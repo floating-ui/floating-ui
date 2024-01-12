@@ -1,4 +1,8 @@
-import {CONTROLLER, ELEMENT_METADATA} from 'extension/utils/constants';
+import {
+  CONTROLLER,
+  ELEMENT_METADATA,
+  SERIALIZED_DATA_CHANGE,
+} from 'extension/utils/constants';
 
 import type {HTMLElementWithMetadata} from './types';
 import {isHTMLElementWithMetadata} from './utils/isHTMLElement';
@@ -9,8 +13,21 @@ export type Controller = {
   readonly selectedElement: HTMLElementWithMetadata | null;
 };
 
-export const createController = (): Controller => {
+export const createController = (defaultView: Window): Controller => {
   let selectedElement: HTMLElementWithMetadata | null = null;
+  const observer = new MutationObserver((mutations) => {
+    if (!selectedElement) {
+      return;
+    }
+    for (const mutation of mutations) {
+      if (
+        mutation.type === 'childList' &&
+        Array.from(mutation.removedNodes).includes(selectedElement)
+      ) {
+        controller.withdraw();
+      }
+    }
+  });
   const controller: Controller = {
     get selectedElement() {
       return selectedElement;
@@ -35,30 +52,18 @@ export const createController = (): Controller => {
     withdraw: () => {
       selectedElement = null;
       observer.disconnect();
+      defaultView.postMessage(SERIALIZED_DATA_CHANGE);
     },
   };
-  const observer = new MutationObserver((mutations) => {
-    if (!selectedElement) {
-      return;
-    }
-    for (const mutation of mutations) {
-      if (
-        mutation.type === 'childList' &&
-        Array.from(mutation.removedNodes).includes(selectedElement)
-      ) {
-        controller.withdraw();
-      }
-    }
-  });
   return controller;
 };
 
-export const injectController = (targetDocument: Document) => {
-  if (!targetDocument.defaultView) {
+export const injectController = ({defaultView}: Document) => {
+  if (!defaultView) {
     return;
   }
-  if (!targetDocument.defaultView[CONTROLLER]) {
-    targetDocument.defaultView[CONTROLLER] = createController();
+  if (!defaultView[CONTROLLER]) {
+    defaultView[CONTROLLER] = createController(defaultView);
   }
 };
 

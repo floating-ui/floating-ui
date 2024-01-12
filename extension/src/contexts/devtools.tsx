@@ -93,9 +93,7 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
         window.addEventListener(
           'message',
           (event) => {
-            if (
-              event.data === LOCAL_SERIALIZED_DATA_CHANGE
-            ) {
+            if (event.data === LOCAL_SERIALIZED_DATA_CHANGE) {
               // biome-ignore lint/style/noRestrictedGlobals:
               chrome.runtime.sendMessage(event.data);
             }
@@ -114,9 +112,10 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
     // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     theme: chrome.devtools.panels.themeName,
     inspectDocument: React.useCallback(async () => {
-      await evalInspectedWindow<void>(`void inspect($0.ownerDocument);`).catch(
-        setError,
-      );
+      // inspect of ownerDocument works as a "reset" mechanism, it should be used to remove errors and to set the inspected window to the current document
+      await evalInspectedWindow<void>(
+        `void inspect($0.ownerDocument);`,
+      ).finally(() => setError(undefined));
     }, []),
     dangerouslyEvalInspectedWindow: React.useCallback(
       <Result,>(expression: string) =>
@@ -130,7 +129,12 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
     }, []),
     inspectByReferenceId: React.useCallback(async (referenceId) => {
       evalInspectedWindow<void>(
-        `void inspect($0.ownerDocument.defaultView['${CONTROLLER}'].selectedElement['${ELEMENT_METADATA}'].references.get('${referenceId}'));`,
+        `{
+          const selectedElement = $0.ownerDocument?.defaultView?.['${CONTROLLER}'].selectedElement;
+          if (selectedElement) {
+            void inspect(selectedElement['${ELEMENT_METADATA}'].references.get('${referenceId}'));
+          }
+        }`,
       ).catch(setError);
     }, []),
     // biome-ignore lint/style/noRestrictedGlobals: @see top of file
