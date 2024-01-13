@@ -189,9 +189,55 @@ order to prevent detachment or "overly-eager" behavior. The
 behavior is to stop shifting once the opposite edges of the
 elements are aligned.
 
+<ShowFor packages={['core']}>
+
+```js
+import {shift, limitShift} from '@floating-ui/core';
+```
+
+</ShowFor>
+
+<ShowFor packages={['dom']}>
+
 ```js
 import {shift, limitShift} from '@floating-ui/dom';
+```
 
+</ShowFor>
+
+<ShowFor packages={['react']}>
+
+```js
+import {shift, limitShift} from '@floating-ui/react';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-dom']}>
+
+```js
+import {shift, limitShift} from '@floating-ui/react-dom';
+```
+
+</ShowFor>
+
+<ShowFor packages={['react-native']}>
+
+```js
+import {shift, limitShift} from '@floating-ui/react-native';
+```
+
+</ShowFor>
+
+<ShowFor packages={['vue']}>
+
+```js
+import {shift, limitShift} from '@floating-ui/vue';
+```
+
+</ShowFor>
+
+```js
 shift({
   limiter: limitShift(),
 });

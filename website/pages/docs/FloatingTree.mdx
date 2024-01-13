@@ -20,6 +20,7 @@ children of each other on the DOM.
 
 - The `bubbles{:.key}` option in the `useDismiss(){:js}` Hook
 - [Nested virtual list navigation](/docs/useListNavigation#virtualitemref)
+- Nested floating elements that each open on hover
 - Custom communication between parent and child floating elements
 
 </Notice>
@@ -30,7 +31,7 @@ The following creates an infinitely nestable `<Popover>{:js}`
 component. Usage of this component must be wrapped in a single
 `<FloatingTree>{:js}` provider:
 
-```js {10-11,15,25}
+```js {10-11,15,25,31,38,48}
 import {
   FloatingTree,
   FloatingNode,
@@ -40,17 +41,17 @@ import {
 function Popover({children, content}) {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Subscribe this component to the <FloatingTree /> wrapper:
+  // Subscribe this component to the <FloatingTree> wrapper:
   const nodeId = useFloatingNodeId();
 
-  // Pass the subscribed `nodeId` to useFloating:
+  // Pass the subscribed `nodeId` to `useFloating`:
   const {refs, floatingStyles} = useFloating({
     nodeId,
     open: isOpen,
     onOpenChange: setIsOpen,
   });
 
-  // Wrap the rendered floating element in a `<FloatingNode />`,
+  // Wrap the rendered floating element in a `<FloatingNode>`,
   // passing in the subscribed `nodeId`:
   return (
     <>
@@ -116,10 +117,10 @@ const nodeId = useFloatingNodeId(parentId);
 This is useful if you want to mark a sibling floating element in
 the React tree as the child of another sibling.
 
-## `FloatingTree` wrapper
+## `<FloatingTree>{:js}` wrapper
 
 You can use the following technique to avoid having the consumer
-specify the `<FloatingTree />{:js}` wrapper:
+specify the `<FloatingTree>{:js}` wrapper:
 
 ```js
 function PopoverComponent() {
@@ -142,3 +143,9 @@ export function Popover(props) {
   return <PopoverComponent {...props} />;
 }
 ```
+
+## Troubleshooting
+
+Ensure that the component that you're calling `useFloatingNodeId(){:js}` is a 
+_child_ of the `<FloatingTree>{:js}` wrapper. If it is not, then it will not
+be able to find the tree context.

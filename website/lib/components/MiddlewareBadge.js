@@ -11,18 +11,15 @@ export function MiddlewareBadge({type}) {
 
   switch (type) {
     case 'Visibility Optimizer':
-      badgeColor =
-        'bg-purple-500 dark:bg-purple-200 dark:text-purple-900';
+      badgeColor = 'bg-purple-500 dark:bg-purple-200 dark:text-purple-900';
       icon = <Eye size={16} />;
       break;
     case 'Placement Modifier':
-      badgeColor =
-        'bg-blue-500 dark:bg-blue-200 dark:text-blue-900';
+      badgeColor = 'bg-blue-500 dark:bg-blue-200 dark:text-blue-900';
       icon = <Move size={16} />;
       break;
     case 'Data Provider':
-      badgeColor =
-        'bg-cyan-500 dark:bg-cyan-200 dark:text-cyan-900';
+      badgeColor = 'bg-cyan-500 dark:bg-cyan-200 dark:text-cyan-900';
       icon = <Database size={16} />;
       break;
     default:

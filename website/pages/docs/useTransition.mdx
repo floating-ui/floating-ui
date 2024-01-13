@@ -31,7 +31,7 @@ There are two different Hooks you can use:
   is a low level hook that returns a status string to compute the
   styles yourself.
 
-## `useTransitionStyles`
+## `useTransitionStyles(){:js}`
 
 This Hook provides computed inline styles that you can spread
 into the `style{:.keyword}` prop for a floating element.
@@ -90,7 +90,7 @@ function App() {
 The Hook defaults to a basic opacity fade transition with a
 duration of 250ms.
 
-## `useTransitionStyles` Props
+## `useTransitionStyles(){:js}` Props
 
 ```ts
 interface UseTransitionStylesProps {
@@ -251,7 +251,7 @@ arrow. The `arrow` middleware provides data to achieve this.
 
 [View on CodeSandbox](https://codesandbox.io/s/floating-ui-react-scale-transform-origin-qv0t1c?file=/src/App.tsx)
 
-## `useTransitionStatus{:.fn}`
+## `useTransitionStatus(){:js}`
 
 This Hook provides a `status{:.const}` string that determines if
 the floating element is in one of four states:
@@ -396,7 +396,7 @@ return (
 }
 ```
 
-## `useTransitionStatus` Props
+## `useTransitionStatus(){:js}` Props
 
 ```ts
 interface UseTransitionStatusProps {

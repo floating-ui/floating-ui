@@ -1,7 +1,7 @@
 import {
+  FloatingFocusManager,
   autoUpdate,
   flip,
-  FloatingFocusManager,
   offset,
   size,
   useClick,
@@ -95,8 +95,13 @@ export function SelectDemo() {
     },
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} =
-    useInteractions([click, dismiss, role, listNav, typeahead]);
+  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
+    click,
+    dismiss,
+    role,
+    listNav,
+    typeahead,
+  ]);
 
   const handleSelect = (index) => {
     setSelectedIndex(index);
@@ -108,9 +113,11 @@ export function SelectDemo() {
 
   return (
     <div className="flex flex-col gap-2">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <label
         className="text-md flex flex-col items-center font-bold"
         id="select-label"
+        onClick={() => refs.domReference.current?.focus()}
       >
         Select balloon color
       </label>
@@ -125,9 +132,7 @@ export function SelectDemo() {
         className="flex w-[10rem] items-center gap-2 rounded bg-gray-100/75"
         {...getReferenceProps()}
       >
-        <ColorSwatch
-          color={selectedItemLabel?.toLocaleLowerCase()}
-        />
+        <ColorSwatch color={selectedItemLabel?.toLocaleLowerCase()} />
         {selectedItemLabel || 'Select...'}
       </Button>
       {isOpen && (
@@ -150,9 +155,7 @@ export function SelectDemo() {
                 }}
                 role="option"
                 tabIndex={i === activeIndex ? 0 : -1}
-                aria-selected={
-                  i === selectedIndex && i === activeIndex
-                }
+                aria-selected={i === selectedIndex && i === activeIndex}
                 className={classNames(
                   'flex cursor-default select-none scroll-my-1 items-center gap-2 rounded p-2 outline-none',
                   {
@@ -173,18 +176,12 @@ export function SelectDemo() {
                     }
 
                     // Only if not using typeahead.
-                    if (
-                      event.key === ' ' &&
-                      !isTypingRef.current
-                    ) {
+                    if (event.key === ' ' && !isTypingRef.current) {
                       event.preventDefault();
                     }
                   },
                   onKeyUp(event) {
-                    if (
-                      event.key === ' ' &&
-                      !isTypingRef.current
-                    ) {
+                    if (event.key === ' ' && !isTypingRef.current) {
                       handleSelect(i);
                     }
                   },
@@ -193,9 +190,7 @@ export function SelectDemo() {
                 <ColorSwatch color={options[i]?.toLowerCase()} />
                 {value}
                 <span aria-hidden className="absolute right-4">
-                  {i === selectedIndex && (
-                    <Check width={20} height={20} />
-                  )}
+                  {i === selectedIndex && <Check width={20} height={20} />}
                 </span>
               </div>
             ))}
