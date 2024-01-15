@@ -12,7 +12,7 @@ import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import type {FocusableElement} from 'tabbable';
 import {tabbable} from 'tabbable';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
 import type {FloatingContext, OpenChangeReason, ReferenceType} from '../types';
@@ -335,7 +335,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     guards,
   ]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (disabled || !floating) return;
 
     const doc = getDocument(floating);
@@ -367,7 +367,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     initialFocusRef,
   ]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (disabled || !floating) return;
 
     let preventReturnFocusScroll = false;
@@ -458,7 +458,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
   // Synchronize the `context` & `modal` value to the FloatingPortal context.
   // It will decide whether or not it needs to render its own guards.
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (disabled || !portalContext) return;
 
     portalContext.setFocusManagerState({
@@ -482,7 +482,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
     closeOnFocusOut,
   ]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (
       disabled ||
       !floating ||

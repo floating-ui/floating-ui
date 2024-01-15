@@ -1,7 +1,7 @@
 import {useFloating as usePosition} from '@floating-ui/react-dom';
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {
   useFloatingParentNodeId,
@@ -144,7 +144,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     [position, nodeId, floatingId, events, open, onOpenChange, refs, elements],
   );
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const node = tree?.nodesRef.current.find((node) => node.id === nodeId);
     if (node) {
       node.context = context;

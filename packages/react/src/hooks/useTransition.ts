@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {FloatingContext, Placement, ReferenceType, Side} from '../types';
 import {useLatestRef} from './utils/useLatestRef';
@@ -71,13 +71,13 @@ export function useTransitionStatus<RT extends ReferenceType = ReferenceType>(
   // <FloatingPortal />. This call is necessary to ensure subsequent opens
   // after the initial one allows the correct side animation to play when the
   // placement has changed.
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (initiated && !isMounted) {
       setStatus('unmounted');
     }
   }, [initiated, isMounted]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!floating) return;
 
     if (open) {
@@ -151,7 +151,7 @@ export function useTransitionStyles<RT extends ReferenceType = ReferenceType>(
   const closeRef = useLatestRef(unstable_close);
   const commonRef = useLatestRef(unstable_common);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const initialStyles = execWithArgsOrReturn(initialRef.current, fnArgs);
     const closeStyles = execWithArgsOrReturn(closeRef.current, fnArgs);
     const commonStyles = execWithArgsOrReturn(commonRef.current, fnArgs);

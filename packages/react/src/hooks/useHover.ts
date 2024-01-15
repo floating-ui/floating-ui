@@ -5,7 +5,7 @@ import {
 } from '@floating-ui/react/utils';
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {
   useFloatingParentNodeId,
@@ -332,7 +332,7 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
   // while the floating element is open and has a `handleClose` handler. Also
   // handles nested floating elements.
   // https://github.com/floating-ui/floating-ui/issues/1722
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!enabled) {
       return;
     }
@@ -375,11 +375,10 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     domReference,
     tree,
     handleCloseRef,
-    dataRef,
     isHoverOpen,
   ]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!open) {
       pointerTypeRef.current = undefined;
       cleanupMouseMoveHandler();

@@ -1,6 +1,6 @@
 import {stopEvent} from '@floating-ui/react/utils';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {ElementProps, FloatingContext, ReferenceType} from '../types';
 import {useEffectEvent} from './utils/useEffectEvent';
@@ -58,7 +58,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
   const findMatchRef = useLatestRef(findMatch);
   const ignoreKeysRef = useLatestRef(ignoreKeys);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (open) {
       clearTimeout(timeoutIdRef.current);
       matchIndexRef.current = null;
@@ -66,7 +66,7 @@ export function useTypeahead<RT extends ReferenceType = ReferenceType>(
     }
   }, [open]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     // Sync arrow key navigation but not typeahead navigation.
     if (open && stringRef.current === '') {
       prevIndexRef.current = selectedIndex ?? activeIndex ?? -1;

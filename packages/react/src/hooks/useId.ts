@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 let serverHandoffComplete = false;
 let count = 0;
@@ -10,7 +10,8 @@ function useFloatingId() {
     serverHandoffComplete ? genId() : undefined,
   );
 
-  useLayoutEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
+  useModernLayoutEffect(() => {
     if (id == null) {
       setId(genId());
     }

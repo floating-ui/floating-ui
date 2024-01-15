@@ -5,7 +5,7 @@ import {
 } from '@floating-ui/react/utils';
 import {getWindow} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {
   ContextData,
@@ -219,7 +219,7 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     }
   }, [enabled, open]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (enabled && (x != null || y != null)) {
       initialRef.current = false;
       setReference(x, y);

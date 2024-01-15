@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {getDelay} from '../hooks/useHover';
 import type {FloatingContext} from '../types';
@@ -73,7 +73,7 @@ export const FloatingDelayGroup = ({
     setState({currentId});
   }, []);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (state.currentId) {
       if (initialCurrentIdRef.current === null) {
         initialCurrentIdRef.current = state.currentId;
@@ -109,7 +109,7 @@ export const useDelayGroup = (
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (currentId) {
       setState({
         delay: {
@@ -124,7 +124,7 @@ export const useDelayGroup = (
     }
   }, [id, onOpenChange, setState, currentId, initialDelay]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     function unset() {
       onOpenChange(false);
       setState({delay: initialDelay, currentId: null});
@@ -142,7 +142,7 @@ export const useDelayGroup = (
     }
   }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (open) {
       setCurrentId(id);
     }

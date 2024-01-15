@@ -58,7 +58,21 @@
       },
       "nursery": { "noUnusedImports": "off" },
       "performance": { "noAccumulatingSpread": "off" },
-      "correctness": { "noUndeclaredVariables": "off" },
+      "correctness": {
+        "noUndeclaredVariables": "off",
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "options": {
+            "hooks": [
+              {
+                "name": "useModernLayoutEffect",
+                "closureIndex": 0,
+                "dependenciesIndex": 1
+              }
+            ]
+          }
+        }
+      },
       "suspicious": {
         "noExplicitAny": "off",
         "noEmptyInterface": "off",
