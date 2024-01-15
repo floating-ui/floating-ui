@@ -1,7 +1,7 @@
 import {computePosition} from '@floating-ui/dom';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import type {
   ComputePositionConfig,
@@ -104,7 +104,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     );
   }, [latestMiddleware, placement, strategy, platformRef]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (open === false && dataRef.current.isPositioned) {
       dataRef.current.isPositioned = false;
       setData((data) => ({...data, isPositioned: false}));
@@ -112,14 +112,15 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   }, [open]);
 
   const isMountedRef = React.useRef(false);
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
     };
   }, []);
 
-  useLayoutEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `hasWhileElementsMounted` is intentionally included.
+  useModernLayoutEffect(() => {
     if (referenceEl) referenceRef.current = referenceEl;
     if (floatingEl) floatingRef.current = floatingEl;
 

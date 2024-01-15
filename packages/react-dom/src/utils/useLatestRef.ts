@@ -1,9 +1,9 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 export function useLatestRef<T>(value: T) {
   const ref = React.useRef(value);
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     ref.current = value;
   });
   return ref;

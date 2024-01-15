@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 function sortByDocumentPosition(a: Node, b: Node) {
   const position = a.compareDocumentPosition(b);
@@ -78,7 +78,7 @@ export function FloatingList({
     });
   }, []);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const newMap = new Map(map);
     const nodes = Array.from(newMap.keys()).sort(sortByDocumentPosition);
 
@@ -133,7 +133,7 @@ export function useListItem({label}: UseListItemProps = {}): {
     [index, elementsRef, labelsRef, label],
   );
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const node = componentRef.current;
     if (node) {
       register(node);
@@ -143,7 +143,7 @@ export function useListItem({label}: UseListItemProps = {}): {
     }
   }, [register, unregister]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const index = componentRef.current ? map.get(componentRef.current) : null;
     if (index != null) {
       setIndex(index);

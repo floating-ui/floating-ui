@@ -1,7 +1,7 @@
 import {isElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import {createPortal} from 'react-dom';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 import type {ExtendedRefs, OpenChangeReason} from '../types';
@@ -52,13 +52,14 @@ export function useFloatingPortalNode({
 
   const dataRef = React.useRef<typeof data>();
 
-  useLayoutEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `data` is intentionally specified
+  useModernLayoutEffect(() => {
     return () => {
       portalNode?.remove();
     };
   }, [portalNode, data]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (dataRef.current === data) return;
 
     dataRef.current = data;

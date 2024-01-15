@@ -1,6 +1,6 @@
 import {getPlatform} from '@floating-ui/react/utils';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 
@@ -18,7 +18,7 @@ export const FloatingOverlay = React.forwardRef<
 >(function FloatingOverlay({lockScroll = false, ...rest}, ref) {
   const lockId = useId();
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!lockScroll) return;
 
     activeLocks.add(lockId);

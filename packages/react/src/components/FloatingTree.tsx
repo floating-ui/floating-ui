@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useId} from '../hooks/useId';
 import type {FloatingNodeType, FloatingTreeType, ReferenceType} from '../types';
@@ -24,7 +24,7 @@ export function useFloatingNodeId(customParentId?: string): string {
   const reactParentId = useFloatingParentNodeId();
   const parentId = customParentId || reactParentId;
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     const node = {id, parentId};
     tree?.addNode(node);
     return () => {

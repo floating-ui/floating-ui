@@ -11,7 +11,7 @@ import {
 } from '@floating-ui/react/utils';
 import {isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
+import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {
   useFloatingParentNodeId,
@@ -278,7 +278,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     },
   );
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     document.createElement('div').focus({
       get preventScroll() {
         isPreventScrollSupported = true;
@@ -289,7 +289,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
   // Sync `selectedIndex` to be the `activeIndex` upon opening the floating
   // element. Also, reset `activeIndex` upon closing the floating element.
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!enabled) {
       return;
     }
@@ -313,7 +313,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
   // Sync `activeIndex` to be the focused item while the floating element is
   // open.
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!enabled) {
       return;
     }
@@ -387,7 +387,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
 
   // Ensure the parent floating element has focus when a nested child closes
   // to allow arrow key navigation to work after the pointer leaves the child.
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (
       !enabled ||
       floating ||
@@ -412,7 +412,7 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     }
   }, [enabled, floating, tree, parentId, virtual]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!enabled || !tree || !virtual || parentId) return;
 
     function handleVirtualFocus(item: HTMLElement) {
@@ -429,12 +429,12 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
     };
   }, [enabled, tree, virtual, parentId, virtualItemRef]);
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     previousOnNavigateRef.current = onNavigate;
     previousMountedRef.current = !!floating;
   });
 
-  useLayoutEffect(() => {
+  useModernLayoutEffect(() => {
     if (!open) {
       keyRef.current = null;
     }
