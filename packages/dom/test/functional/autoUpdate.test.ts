@@ -35,7 +35,7 @@ import {click} from './utils/click';
   });
 });
 
-test(`reactive whileElementsMounted`, async ({page}) => {
+test.only(`reactive whileElementsMounted`, async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
 
   // option is `false` on mount by default, so test that changing it to `true`
@@ -49,7 +49,7 @@ test(`reactive whileElementsMounted`, async ({page}) => {
 
   // test that changing it back to `undefined` works
   await click(page, `[data-testid="whileElementsMounted-false"]`);
-  await page.evaluate(() => window.scrollTo(0, 25));
+  await page.evaluate(() => window.scrollTo(0, 50));
 
   expect(await page.locator('.container').screenshot()).toMatchSnapshot(
     `whileElementsMounted-false.png`,
