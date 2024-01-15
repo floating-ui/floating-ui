@@ -26,9 +26,11 @@ export function AutoUpdate() {
 
   const [referenceSize, setReferenceSize] = useState(200);
   const [floatingSize, setFloatingSize] = useState(100);
+  const [whileElementsMounted, setWhileElementsMounted] = useState(false);
 
   const {x, y, strategy, refs, update} = useFloating({
     strategy: 'fixed',
+    whileElementsMounted: whileElementsMounted ? autoUpdate : undefined,
   });
 
   useLayoutEffect(() => {
@@ -175,6 +177,24 @@ export function AutoUpdate() {
             data-testid={`animationFrame-${bool}`}
             style={{
               backgroundColor: options.animationFrame === bool ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>Reactive whileElementsMounted</h2>
+      <Controls>
+        {[true, false].map((bool) => (
+          <button
+            key={String(bool)}
+            onClick={() => {
+              setWhileElementsMounted(bool);
+            }}
+            data-testid={`whileElementsMounted-${bool}`}
+            style={{
+              backgroundColor: whileElementsMounted === bool ? 'black' : '',
             }}
           >
             {String(bool)}

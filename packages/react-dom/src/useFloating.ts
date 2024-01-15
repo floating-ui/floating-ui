@@ -72,6 +72,7 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const floatingRef = React.useRef<HTMLElement | null>(null);
   const dataRef = React.useRef(data);
 
+  const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
 
@@ -129,7 +130,13 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
 
       update();
     }
-  }, [referenceEl, floatingEl, update, whileElementsMountedRef]);
+  }, [
+    referenceEl,
+    floatingEl,
+    update,
+    whileElementsMountedRef,
+    hasWhileElementsMounted,
+  ]);
 
   const refs = React.useMemo(
     () => ({

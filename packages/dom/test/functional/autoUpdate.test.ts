@@ -34,3 +34,24 @@ import {click} from './utils/click';
     );
   });
 });
+
+test.only(`reactive whileElementsMounted`, async ({page}) => {
+  await page.goto('http://localhost:1234/autoUpdate');
+
+  // option is `false` on mount by default, so test that changing it to `true`
+  // works
+  await click(page, `[data-testid="whileElementsMounted-true"]`);
+  await page.evaluate(() => window.scrollTo(0, 25));
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `whileElementsMounted-true.png`,
+  );
+
+  // test that changing it back to `undefined` works
+  await click(page, `[data-testid="whileElementsMounted-false"]`);
+  await page.evaluate(() => window.scrollTo(0, 50));
+
+  expect(await page.locator('.container').screenshot()).toMatchSnapshot(
+    `whileElementsMounted-false.png`,
+  );
+});
