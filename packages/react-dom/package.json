@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-dom",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Floating UI for React DOM",
   "publishConfig": {
     "access": "public"
@@ -22,7 +22,9 @@
     }
   },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",

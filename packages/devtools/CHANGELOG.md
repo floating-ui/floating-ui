@@ -1,5 +1,11 @@
 # @floating-ui/devtools
 
+## 0.2.2
+
+### Patch Changes
+
+- d824150: chore: add license field to package.json
+
 ## 0.2.1
 
 ### Patch Changes
