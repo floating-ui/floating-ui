@@ -47,10 +47,15 @@ export const createPlatform = ({
                 },
               );
             } else {
-              resolve({
-                reference: reference.getBoundingClientRect(),
-                floating: floatingRect,
-              });
+              const boundingRect = reference.getBoundingClientRect();
+              const referenceRect = {
+                width: boundingRect.width,
+                height: boundingRect.height,
+                x: boundingRect.x - offsetX,
+                y: boundingRect.y - offsetY,
+              };
+
+              resolve({reference: referenceRect, floating: floatingRect});
             }
           },
         );
