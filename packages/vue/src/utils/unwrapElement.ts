@@ -4,7 +4,7 @@ import type {ComponentPublicInstance} from 'vue-demi';
 import type {MaybeElement} from '../types';
 
 function isComponentPublicInstance(target: unknown): target is ComponentPublicInstance {
-  return target != null && {}.hasOwnProperty.call(target, '$el');
+  return target != null && typeof target === 'object' && '$el' in target;
 }
 
 export function unwrapElement<T>(target: MaybeElement<T>) {
