@@ -175,3 +175,42 @@ test('reason string', async () => {
   await act(async () => {});
   fireEvent.focusOut(button);
 });
+
+describe('visibleOnly prop', () => {
+  function App({visibleOnly}: {visibleOnly: boolean}) {
+    const [isOpen, setIsOpen] = useState(false);
+    const {refs, context} = useFloating({
+      open: isOpen,
+      onOpenChange: setIsOpen,
+    });
+
+    const focus = useFocus(context, {visibleOnly});
+
+    const {getReferenceProps, getFloatingProps} = useInteractions([focus]);
+
+    return (
+      <>
+        <button ref={refs.setReference} {...getReferenceProps()} />
+        {isOpen && (
+          <div role="tooltip" ref={refs.setFloating} {...getFloatingProps()} />
+        )}
+      </>
+    );
+  }
+
+  test('true', async () => {
+    render(<App visibleOnly />);
+    const button = screen.getByRole('button');
+    await userEvent.click(button);
+    await act(async () => {});
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  test('false', async () => {
+    render(<App visibleOnly={false} />);
+    const button = screen.getByRole('button');
+    await userEvent.click(button);
+    await act(async () => {});
+    expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+  });
+});
