@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/react-native",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Floating UI for React Native",
   "publishConfig": {
     "access": "public"
@@ -9,7 +9,9 @@
   "module": "./dist/floating-ui.react-native.esm.js",
   "types": "./dist/floating-ui.react-native.d.ts",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",
