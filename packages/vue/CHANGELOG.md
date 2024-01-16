@@ -1,5 +1,11 @@
 # @floating-ui/vue
 
+## 1.0.4
+
+### Patch Changes
+
+- de70c04: fix: change `isComponentPublicInstance` implementation
+
 ## 1.0.3
 
 ### Patch Changes
