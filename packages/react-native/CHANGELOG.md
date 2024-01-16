@@ -1,5 +1,11 @@
 # @floating-ui/react-native
 
+## 0.10.3
+
+### Patch Changes
+
+- 7d201f7: fix: check for virtual elements when measuring
+
 ## 0.10.2
 
 ### Patch Changes
