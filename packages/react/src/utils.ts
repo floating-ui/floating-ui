@@ -88,6 +88,7 @@ export function isVirtualClick(event: MouseEvent | PointerEvent): boolean {
 }
 
 export function isVirtualPointerEvent(event: PointerEvent) {
+  if (isJSDOM()) return false;
   return (
     (!isAndroid() && event.width === 0 && event.height === 0) ||
     (isAndroid() &&
@@ -119,6 +120,10 @@ export function isMac() {
   return (
     getPlatform().toLowerCase().startsWith('mac') && !navigator.maxTouchPoints
   );
+}
+
+export function isJSDOM() {
+  return getUserAgent().includes('jsdom/');
 }
 
 export function isMouseLikePointerType(
