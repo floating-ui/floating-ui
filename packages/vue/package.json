@@ -1,6 +1,6 @@
 {
   "name": "@floating-ui/vue",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Floating UI for Vue",
   "publishConfig": {
     "access": "public"
@@ -22,7 +22,9 @@
     }
   },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "lint": "biome lint .",
     "clean": "rimraf dist out-tsc",
