@@ -1,5 +1,14 @@
 # @floating-ui/react
 
+## 0.26.6
+
+### Patch Changes
+
+- c9c5058: fix(useListNavigation): sync internal `indexRef` to `selectedIndex` on open. Fixes an issue where if `selectedIndex` changed after initial render before opening, `activeIndex` would not be correctly synced.
+- 8b3c93b: fix(utils): check if env is JSDOM for `isVirtualPointerEvent`. Fixes issue when testing `visibleOnly` prop in `useFocus`.
+- Updated dependencies [d3a773b]
+  - @floating-ui/react-dom@2.0.6
+
 ## 0.26.5
 
 ### Patch Changes

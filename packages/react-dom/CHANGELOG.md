@@ -1,5 +1,11 @@
 # @floating-ui/react-dom
 
+## 2.0.6
+
+### Patch Changes
+
+- d3a773b: fix: make `whileElementsMounted` reactive with respect from changing from a function to `undefined`
+
 ## 2.0.5
 
 ### Patch Changes
