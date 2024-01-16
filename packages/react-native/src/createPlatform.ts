@@ -1,21 +1,31 @@
-import type {Platform} from '@floating-ui/core';
-import {Dimensions} from 'react-native';
+import type {Platform, VirtualElement} from '@floating-ui/core';
+import {Dimensions, View} from 'react-native';
 
 const ORIGIN = {x: 0, y: 0};
+
+function isView(reference: View | VirtualElement): reference is View {
+  return 'measure' in reference;
+}
 
 export const createPlatform = ({
   offsetParent,
   sameScrollView = true,
   scrollOffsets = ORIGIN,
 }: {
-  offsetParent: any;
+  offsetParent: View;
   sameScrollView: boolean;
   scrollOffsets: {
     x: number;
     y: number;
   };
 }): Platform => ({
-  getElementRects({reference, floating}) {
+  getElementRects({
+    reference,
+    floating,
+  }: {
+    reference: View | VirtualElement;
+    floating: View;
+  }) {
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
         floating.measure(
@@ -23,18 +33,25 @@ export const createPlatform = ({
             const floatingRect = {width, height, ...ORIGIN};
             const method = sameScrollView ? 'measure' : 'measureInWindow';
 
-            reference[method](
-              (x: number, y: number, width: number, height: number) => {
-                const referenceRect = {
-                  width,
-                  height,
-                  x: x - offsetX,
-                  y: y - offsetY,
-                };
+            if (isView(reference)) {
+              reference[method](
+                (x: number, y: number, width: number, height: number) => {
+                  const referenceRect = {
+                    width,
+                    height,
+                    x: x - offsetX,
+                    y: y - offsetY,
+                  };
 
-                resolve({reference: referenceRect, floating: floatingRect});
-              },
-            );
+                  resolve({reference: referenceRect, floating: floatingRect});
+                },
+              );
+            } else {
+              resolve({
+                reference: reference.getBoundingClientRect(),
+                floating: floatingRect,
+              });
+            }
           },
         );
       };
