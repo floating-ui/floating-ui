@@ -5,11 +5,11 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"],
       "inputs": [
-        "src/**",
-        "package.json",
-        "tsconfig.json",
-        "rollup.config.mjs",
-        "vite.config.ts"
+        "packages/**/src/**",
+        "packages/**/package.json",
+        "packages/**/tsconfig.json",
+        "packages/**/rollup.config.mjs",
+        "packages/**/vite.config.ts"
       ]
     },
     "build:api": {
