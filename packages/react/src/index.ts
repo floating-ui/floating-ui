@@ -50,4 +50,5 @@ export {
   platform,
   shift,
   size,
+  topLayer,
 } from '@floating-ui/react-dom';

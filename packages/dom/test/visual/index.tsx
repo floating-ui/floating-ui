@@ -34,6 +34,7 @@ import {Table} from './spec/Table';
 import {Transform} from './spec/Transform';
 import {VirtualElement} from './spec/VirtualElement';
 import {New} from './utils/New';
+import {TopLayer} from './spec/TopLayer';
 
 const ROUTES = [
   {path: 'placement', component: Placement},
@@ -58,6 +59,7 @@ const ROUTES = [
   {path: 'virtual-element', component: VirtualElement},
   {path: 'perf', component: Perf},
   {path: 'iframe', component: IFrame},
+  {path: 'top-layer', component: TopLayer},
 ];
 
 function App() {

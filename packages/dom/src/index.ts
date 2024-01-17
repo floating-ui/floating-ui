@@ -40,6 +40,7 @@ export {
   offset,
   shift,
   size,
+  topLayer,
 } from './middleware';
 export {platform} from './platform';
 export type {

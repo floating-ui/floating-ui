@@ -35,7 +35,7 @@ import {click} from './utils/click';
   });
 });
 
-test.only(`reactive whileElementsMounted`, async ({page}) => {
+test(`reactive whileElementsMounted`, async ({page}) => {
   await page.goto('http://localhost:1234/autoUpdate');
 
   // option is `false` on mount by default, so test that changing it to `true`
