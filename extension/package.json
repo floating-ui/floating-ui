@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_END=development vite build --watch --mode development",
-    "build": "vite build",
+    "build:website": "vite build",
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
