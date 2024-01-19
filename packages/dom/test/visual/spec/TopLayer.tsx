@@ -1,4 +1,10 @@
-import {useFloating, autoUpdate, topLayer, flip} from '@floating-ui/react-dom';
+import {
+  useFloating,
+  autoUpdate,
+  topLayer,
+  flip,
+  shift,
+} from '@floating-ui/react-dom';
 import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
@@ -36,7 +42,9 @@ function StackedOnDialog({children, withMiddleware, withTransform}: Props) {
   } as const;
 
   const dialogStyles = {
-    inset: '0 auto auto 0',
+    margin: 0,
+    border: 'none',
+    backgroundColor: '#ccc',
   } as const;
 
   return (
@@ -90,7 +98,9 @@ function StackedOnPopover({children, withMiddleware, withTransform}: Props) {
   } as const;
 
   const dialogStyles = {
-    inset: '0 auto auto 0',
+    margin: 0,
+    border: 'none',
+    backgroundColor: '#ccc',
   } as const;
 
   return (
@@ -145,24 +155,25 @@ export function TopLayer() {
     whileElementsMounted: autoUpdate,
     placement: 'top',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer(), flip()],
+    middleware: [withMiddleware && topLayer(), flip(), shift()],
   });
 
   const tooltipStyles = {
-    background: '#222',
-    color: 'white',
-    fontWeight: 'bold',
-    padding: 5,
-    borderRadius: 4,
-    fontSize: '90%',
+    width: 100,
+    height: 75,
     margin: 0,
+    border: 'none',
   } as const;
 
   const styles = `
-        dialog:popover-open {
-            display: block;
-        }
-    `;
+    dialog:popover-open {
+      display: block;
+    }
+
+    .host {
+      border-width: 5px;
+    }
+`;
 
   const Stack =
     stackedOn === 'none'
@@ -181,7 +192,7 @@ export function TopLayer() {
   return (
     <>
       <style>{styles}</style>
-      <h1>Top Layer Over Transforms</h1>
+      <h1>Top Layer</h1>
       <Stack {...stackProps}>
         <div
           className={classes}
@@ -209,7 +220,7 @@ export function TopLayer() {
             ref={refs.setReference}
             aria-describedby="tooltip"
           >
-            Test button
+            Reference
           </button>
           <dialog
             // @ts-ignore
@@ -217,14 +228,16 @@ export function TopLayer() {
             ref={refs.setFloating}
             id="tooltip"
             role="tooltip"
+            className="floating"
             style={{
               ...tooltipStyles,
+              display: 'revert',
               position: strategy,
               top: y,
               left: x,
             }}
           >
-            Test tooltip
+            Floating
           </dialog>
         </div>
       </Stack>

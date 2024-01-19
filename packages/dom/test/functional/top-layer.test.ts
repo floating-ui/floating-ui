@@ -143,3 +143,19 @@ test('top-layer, dialog, no transform, stack on dialog', async ({page}) => {
     `top-layer.dialog.no-transform.on-dialog.png`,
   );
 });
+
+test('flip collision', async ({page}) => {
+  await click(page, '#reference');
+
+  await page.evaluate(() => window.scrollTo(0, 130));
+
+  expect(await page.locator('.host').screenshot()).toMatchSnapshot(
+    `top-layer.no-flip.png`,
+  );
+
+  await page.evaluate(() => window.scrollTo(0, 140));
+
+  expect(await page.locator('.host').screenshot()).toMatchSnapshot(
+    `top-layer.flip.png`,
+  );
+});

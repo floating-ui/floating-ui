@@ -7,7 +7,7 @@ export function getTopLayerData({
   reference,
   floating,
 }: {
-  reference: Element | undefined;
+  reference?: Element;
   floating: HTMLElement;
 }): [boolean, boolean] {
   let isWithinReference = false;

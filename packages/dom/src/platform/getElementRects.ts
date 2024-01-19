@@ -12,6 +12,7 @@ export const getElementRects: Platform['getElementRects'] = async function (
     reference: getRectRelativeToOffsetParent(
       reference,
       await getOffsetParentFn(floating),
+      floating,
       strategy,
     ),
     floating: {x: 0, y: 0, ...(await getDimensionsFn(floating))},

@@ -10,16 +10,19 @@ import {
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
+import {getTopLayerData} from './getTopLayerData';
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
+  floating: HTMLElement,
   strategy: Strategy,
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
   const isFixed = strategy === 'fixed';
   const rect = getBoundingClientRect(element, true, isFixed, offsetParent);
+  const [isOnTopLayer] = getTopLayerData({floating});
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   const offsets = createCoords(0);
@@ -39,8 +42,8 @@ export function getRectRelativeToOffsetParent(
         isFixed,
         offsetParent,
       );
-      offsets.x = offsetRect.x + offsetParent.clientLeft;
-      offsets.y = offsetRect.y + offsetParent.clientTop;
+      offsets.x = offsetRect.x + (isOnTopLayer ? 0 : offsetParent.clientLeft);
+      offsets.y = offsetRect.y + (isOnTopLayer ? 0 : offsetParent.clientTop);
     } else if (documentElement) {
       offsets.x = getWindowScrollBarX(documentElement);
     }

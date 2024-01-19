@@ -95,6 +95,7 @@ main {
 .reference {
   display: grid;
   place-items: center;
+  font: inherit;
   width: 160px;
   height: 160px;
   background: #ed4f73;
