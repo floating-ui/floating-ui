@@ -145,6 +145,7 @@ test('top-layer, dialog, no transform, stack on dialog', async ({page}) => {
 });
 
 test('flip collision', async ({page}) => {
+  await page.goto('http://localhost:1234/top-layer');
   await click(page, '#reference');
 
   await page.evaluate(() => window.scrollTo(0, 130));
