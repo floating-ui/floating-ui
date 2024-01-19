@@ -108,6 +108,7 @@ main {
   background: turquoise;
   width: 80px;
   height: 80px;
+  outline: none;
 }
 
 .arrow {

@@ -146,15 +146,16 @@ test('top-layer, dialog, no transform, stack on dialog', async ({page}) => {
 
 test('flip collision', async ({page}) => {
   await page.goto('http://localhost:1234/top-layer');
+  await click(page, '[data-testid="collision-true"]');
   await click(page, '#reference');
 
-  await page.evaluate(() => window.scrollTo(0, 130));
+  await page.evaluate(() => window.scrollTo(0, 86));
 
   expect(await page.locator('.host').screenshot()).toMatchSnapshot(
     `top-layer.no-flip.png`,
   );
 
-  await page.evaluate(() => window.scrollTo(0, 140));
+  await page.evaluate(() => window.scrollTo(0, 96));
 
   expect(await page.locator('.host').screenshot()).toMatchSnapshot(
     `top-layer.flip.png`,

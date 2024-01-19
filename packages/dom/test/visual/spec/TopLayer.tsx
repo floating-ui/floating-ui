@@ -150,12 +150,13 @@ export function TopLayer() {
   const [withTransform, setWithTransform] = useState(true);
   const [withPopover, setPopover] = useState(true);
   const [stackedOn, setStackedOn] = useState<STACKED_TYPES>('none');
+  const [collision, setCollision] = useState(false);
 
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'top',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer(), flip(), shift()],
+    middleware: [withMiddleware && topLayer(), collision && flip()],
   });
 
   const tooltipStyles = {
@@ -192,7 +193,11 @@ export function TopLayer() {
   return (
     <>
       <style>{styles}</style>
-      <h1>Top Layer</h1>
+      <h1
+        style={{display: 'flex', alignItems: 'center', height: 100, margin: 0}}
+      >
+        Top Layer
+      </h1>
       <Stack {...stackProps}>
         <div
           className={classes}
@@ -235,12 +240,31 @@ export function TopLayer() {
               position: strategy,
               top: y,
               left: x,
+              ...(collision && {
+                height: 100,
+              }),
             }}
           >
             Floating
           </dialog>
         </div>
       </Stack>
+
+      <h2>Collision</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`collision-${bool}`}
+            onClick={() => setCollision(bool)}
+            style={{
+              backgroundColor: bool === collision ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
 
       <h2>withMiddleware</h2>
       <Controls>
