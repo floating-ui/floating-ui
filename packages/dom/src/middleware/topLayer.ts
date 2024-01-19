@@ -2,13 +2,10 @@ import {
   getComputedStyle,
   getContainingBlock,
   isContainingBlock,
-  isElement,
 } from '@floating-ui/utils/dom';
 import type {Middleware} from '../types';
 import {unwrapElement} from '../utils/unwrapElement';
-
-const ancestorQueryEventName = '__fluiaq__';
-const topLayerSelectors = [':popover-open', ':open', ':modal'] as const;
+import {getTopLayerData} from '../utils/getTopLayerData';
 
 /**
  * This DOM-only middleware ensures CSS :top-layer elements (e.g. native dialogs
@@ -23,49 +20,23 @@ export const topLayer = (): Middleware => ({
       elements: {reference, floating},
     } = state;
 
-    let onTopLayer = false;
-    let withinReference = false;
-    let offsetX = 0;
-    let offsetY = 0;
     const referenceEl = unwrapElement(reference);
 
-    function setTopLayer(
-      selector: (typeof topLayerSelectors)[number],
-      element: Element = floating,
-    ) {
-      try {
-        onTopLayer = onTopLayer || element.matches(selector);
-      } catch (e) {}
-    }
-
-    topLayerSelectors.forEach((selector) => {
-      setTopLayer(selector);
+    const [isOnTopLayer, isWithinReference] = getTopLayerData({
+      reference: referenceEl,
+      floating,
     });
 
-    floating.addEventListener(
-      ancestorQueryEventName,
-      (event) => {
-        event.composedPath().forEach((el) => {
-          if (!isElement(el)) return;
-          withinReference = withinReference || el === reference;
-          if (el === floating || el.localName !== 'dialog') return;
-          setTopLayer(':modal', el);
-        });
-      },
-      {once: true},
-    );
-
-    floating.dispatchEvent(
-      new Event(ancestorQueryEventName, {composed: true, bubbles: true}),
-    );
+    let offsetX = 0;
+    let offsetY = 0;
 
     if (referenceEl) {
-      const root = withinReference ? referenceEl : floating;
+      const root = isWithinReference ? referenceEl : floating;
       const containingBlock = isContainingBlock(root)
         ? root
         : getContainingBlock(root);
 
-      if (onTopLayer && containingBlock) {
+      if (isOnTopLayer && containingBlock) {
         const rect = containingBlock.getBoundingClientRect();
         // Margins are not included in the bounding client rect and need to be
         // handled separately.
@@ -76,8 +47,8 @@ export const topLayer = (): Middleware => ({
       }
     }
 
-    const nextX = x + (onTopLayer ? offsetX : -offsetX);
-    const nextY = y + (onTopLayer ? offsetY : -offsetY);
+    const nextX = x + (isOnTopLayer ? offsetX : -offsetX);
+    const nextY = y + (isOnTopLayer ? offsetY : -offsetY);
 
     return {
       x: nextX,

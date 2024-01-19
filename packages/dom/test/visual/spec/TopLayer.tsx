@@ -1,5 +1,5 @@
-import {useFloating, autoUpdate, topLayer} from '@floating-ui/react-dom';
-import {useEffect, useState} from 'react';
+import {useFloating, autoUpdate, topLayer, flip} from '@floating-ui/react-dom';
+import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
 
@@ -8,7 +8,7 @@ const STACKED = ['none', 'dialog', 'popover'];
 type STACKED_TYPES = (typeof STACKED)[number];
 
 const transformStyles = {
-  transform: 'rotateX(25deg) rotateY(10deg) translateZ(0px)',
+  transform: 'translateZ(0px)',
 } as const;
 
 type Props = {
@@ -26,13 +26,13 @@ function StackedOnDialog({children, withMiddleware, withTransform}: Props) {
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer()],
+    middleware: [withMiddleware && topLayer(), flip()],
   });
 
   const buttonStyles = {
-    top: '100px',
-    left: '100px',
     position: 'absolute',
+    top: 100,
+    left: 100,
   } as const;
 
   const dialogStyles = {
@@ -76,25 +76,17 @@ function StackedOnDialog({children, withMiddleware, withTransform}: Props) {
 }
 
 function StackedOnPopover({children, withMiddleware, withTransform}: Props) {
-  const {x, y, strategy, refs, update} = useFloating({
+  const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer()],
+    middleware: [withMiddleware && topLayer(), flip()],
   });
 
-  useEffect(() => {
-    if (!refs.reference.current || !refs.floating.current) {
-      return;
-    }
-
-    return autoUpdate(refs.reference.current, refs.floating.current, update);
-  }, [refs.floating, refs.reference, update]);
-
   const buttonStyles = {
-    top: '100px',
-    left: '100px',
     position: 'absolute',
+    top: 100,
+    left: 100,
   } as const;
 
   const dialogStyles = {
@@ -131,8 +123,8 @@ function StackedOnPopover({children, withMiddleware, withTransform}: Props) {
           style={{
             ...dialogStyles,
             position: strategy,
-            top: y ?? '',
-            left: x ?? '',
+            top: y,
+            left: x,
           }}
         >
           <h2>Stacked content</h2>
@@ -153,17 +145,17 @@ export function TopLayer() {
     whileElementsMounted: autoUpdate,
     placement: 'top',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer()],
+    middleware: [withMiddleware && topLayer(), flip()],
   });
 
   const tooltipStyles = {
     background: '#222',
     color: 'white',
     fontWeight: 'bold',
-    padding: '5px',
-    borderRadius: '4px',
+    padding: 5,
+    borderRadius: 4,
     fontSize: '90%',
-    inset: '0 auto auto 0',
+    margin: 0,
   } as const;
 
   const styles = `

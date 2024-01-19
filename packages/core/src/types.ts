@@ -37,6 +37,7 @@ export interface Platform {
 
   // Optional
   convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+    elements?: Elements;
     rect: Rect;
     offsetParent: any;
     strategy: Strategy;

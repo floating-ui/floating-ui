@@ -92,6 +92,7 @@ export async function detectOverflow(
   const elementClientRect = rectToClientRect(
     platform.convertOffsetParentRelativeRectToViewportRelativeRect
       ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+          elements,
           rect,
           offsetParent,
           strategy,
