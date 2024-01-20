@@ -61,12 +61,8 @@ export function topLayer({
 
     if (isTopLayer && containingBlock) {
       const rect = containingBlock.getBoundingClientRect();
-      // Margins are not included in the bounding client rect and need to be
-      // handled separately.
-      const {marginInlineStart = '0', marginBlockStart = '0'} =
-        getComputedStyle(containingBlock);
-      offsetX = rect.x + parseFloat(marginInlineStart);
-      offsetY = rect.y + parseFloat(marginBlockStart);
+      offsetX = rect.x;
+      offsetY = rect.y;
     }
   }
 

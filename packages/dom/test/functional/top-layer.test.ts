@@ -161,3 +161,13 @@ test('flip collision', async ({page}) => {
     `top-layer.flip.png`,
   );
 });
+
+test('containing block margins', async ({page}) => {
+  await page.goto('http://localhost:1234/top-layer');
+  await click(page, '[data-testid="withMargin-true"]');
+  await click(page, '#reference');
+
+  expect(await page.locator('.host').screenshot()).toMatchSnapshot(
+    `top-layer.containing-block-margin.png`,
+  );
+});

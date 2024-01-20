@@ -159,6 +159,7 @@ export function TopLayer() {
   const [withPopover, setPopover] = useState(true);
   const [stackedOn, setStackedOn] = useState<STACKED_TYPES>('none');
   const [collision, setCollision] = useState(false);
+  const [withMargin, setWithMargin] = useState(false);
 
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
@@ -214,7 +215,8 @@ export function TopLayer() {
         <div
           className={classes}
           style={{
-            ...(withTransform ? transformStyles : {}),
+            ...(withTransform && transformStyles),
+            ...(withMargin && {margin: 20}),
             width: 200,
             height: 200,
           }}
@@ -338,6 +340,22 @@ export function TopLayer() {
             }}
           >
             {stack}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>withMargin</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`withMargin-${bool}`}
+            onClick={() => setWithMargin(bool)}
+            style={{
+              backgroundColor: bool === withMargin ? 'black' : '',
+            }}
+          >
+            {String(bool)}
           </button>
         ))}
       </Controls>
