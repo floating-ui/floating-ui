@@ -40,8 +40,8 @@ export {
   offset,
   shift,
   size,
-  topLayer,
 } from './middleware';
+export {topLayer} from './platform/topLayer';
 export {platform} from './platform';
 export type {
   ArrowOptions,

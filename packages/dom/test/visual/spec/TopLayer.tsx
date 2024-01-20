@@ -3,7 +3,7 @@ import {
   autoUpdate,
   topLayer,
   flip,
-  shift,
+  platform,
 } from '@floating-ui/react-dom';
 import {useState} from 'react';
 
@@ -19,7 +19,7 @@ const transformStyles = {
 
 type Props = {
   children?: React.ReactNode;
-  withMiddleware: boolean;
+  withMethod: boolean;
   withTransform: boolean;
 };
 
@@ -27,12 +27,16 @@ function NotStacked({children}: Props) {
   return children;
 }
 
-function StackedOnDialog({children, withMiddleware, withTransform}: Props) {
+function StackedOnDialog({children, withMethod, withTransform}: Props) {
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer(), flip()],
+    middleware: [flip()],
+    platform: {
+      ...platform,
+      topLayer: withMethod ? topLayer : undefined,
+    },
   });
 
   const buttonStyles = {
@@ -83,12 +87,16 @@ function StackedOnDialog({children, withMiddleware, withTransform}: Props) {
   );
 }
 
-function StackedOnPopover({children, withMiddleware, withTransform}: Props) {
+function StackedOnPopover({children, withMethod, withTransform}: Props) {
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer(), flip()],
+    middleware: [flip()],
+    platform: {
+      ...platform,
+      topLayer: withMethod ? topLayer : undefined,
+    },
   });
 
   const buttonStyles = {
@@ -146,7 +154,7 @@ function StackedOnPopover({children, withMiddleware, withTransform}: Props) {
 }
 
 export function TopLayer() {
-  const [withMiddleware, setWithMiddleware] = useState(true);
+  const [withMethod, setWithMethod] = useState(true);
   const [withTransform, setWithTransform] = useState(true);
   const [withPopover, setPopover] = useState(true);
   const [stackedOn, setStackedOn] = useState<STACKED_TYPES>('none');
@@ -156,7 +164,11 @@ export function TopLayer() {
     whileElementsMounted: autoUpdate,
     placement: 'top',
     strategy: 'fixed',
-    middleware: [withMiddleware && topLayer(), collision && flip()],
+    middleware: [collision && flip()],
+    platform: {
+      ...platform,
+      topLayer: withMethod ? topLayer : undefined,
+    },
   });
 
   const tooltipStyles = {
@@ -184,7 +196,7 @@ export function TopLayer() {
         : StackedOnPopover;
 
   const stackProps = {
-    withMiddleware,
+    withMethod,
     withTransform,
   };
 
@@ -266,15 +278,15 @@ export function TopLayer() {
         ))}
       </Controls>
 
-      <h2>withMiddleware</h2>
+      <h2>withMethod</h2>
       <Controls>
         {BOOLS.map((bool) => (
           <button
             key={String(bool)}
-            data-testid={`withMiddleware-${bool}`}
-            onClick={() => setWithMiddleware(bool)}
+            data-testid={`withMethod-${bool}`}
+            onClick={() => setWithMethod(bool)}
             style={{
-              backgroundColor: bool === withMiddleware ? 'black' : '',
+              backgroundColor: bool === withMethod ? 'black' : '',
             }}
           >
             {String(bool)}

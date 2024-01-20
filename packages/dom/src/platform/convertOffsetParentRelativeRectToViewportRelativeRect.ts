@@ -10,23 +10,25 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
-import {getTopLayerData} from '../utils/getTopLayerData';
+import type {Platform} from '../types';
 
-export function convertOffsetParentRelativeRectToViewportRelativeRect({
-  elements,
-  rect,
-  offsetParent,
-  strategy,
-}: {
-  elements?: Elements;
-  rect: Rect;
-  offsetParent: Element | Window;
-  strategy: Strategy;
-}): Rect {
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+export function convertOffsetParentRelativeRectToViewportRelativeRect(
+  this: Platform,
+  {
+    elements,
+    rect,
+    offsetParent,
+    strategy,
+  }: {
+    elements?: Elements;
+    rect: Rect;
+    offsetParent: Element | Window;
+    strategy: Strategy;
+  },
+): Rect {
   const documentElement = getDocumentElement(offsetParent);
-
-  const [isOnTopLayer] = elements ? getTopLayerData(elements) : [false];
+  const isOnTopLayer =
+    this.topLayer && elements ? this.topLayer(elements) : false;
 
   if (offsetParent === documentElement || isOnTopLayer) {
     return rect;
@@ -35,6 +37,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   let scroll = {scrollLeft: 0, scrollTop: 0};
   let scale = createCoords(1);
   const offsets = createCoords(0);
+  const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
   if (
     isOffsetParentAnElement ||

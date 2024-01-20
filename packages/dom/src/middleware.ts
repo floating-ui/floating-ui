@@ -27,7 +27,6 @@ import type {
 } from './types';
 
 export {detectOverflow, offset} from '@floating-ui/core';
-export {topLayer} from './middleware/topLayer';
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement

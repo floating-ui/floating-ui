@@ -1,14 +1,15 @@
 import {isElement} from '@floating-ui/utils/dom';
+import {ReferenceElement, FloatingElement} from '../types';
 
 const ancestorQueryEventName = '__fui_aq__';
 const topLayerSelectors = [':popover-open', ':modal'] as const;
 
-export function getTopLayerData({
+export function topLayer({
   reference,
   floating,
 }: {
-  reference?: Element;
-  floating: HTMLElement;
+  reference?: ReferenceElement;
+  floating: FloatingElement;
 }): [boolean, boolean] {
   let isWithinReference = false;
   let isOnTopLayer = false;
