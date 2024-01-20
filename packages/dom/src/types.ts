@@ -42,21 +42,21 @@ export interface Platform {
   getDimensions: (element: Element) => Promisable<Dimensions>;
 
   // Optional
-  convertOffsetParentRelativeRectToViewportRelativeRect?: (args: {
+  convertOffsetParentRelativeRectToViewportRelativeRect: (args: {
     elements?: Elements;
     rect: Rect;
     offsetParent: Element;
     strategy: Strategy;
   }) => Promisable<Rect>;
-  getOffsetParent?: (
+  getOffsetParent: (
     element: Element,
     polyfill?: (element: HTMLElement) => Element | null,
   ) => Promisable<Element | Window>;
-  isElement?: (value: unknown) => Promisable<boolean>;
-  getDocumentElement?: (element: Element) => Promisable<HTMLElement>;
-  getClientRects?: (element: Element) => Promisable<Array<ClientRectObject>>;
-  isRTL?: (element: Element) => Promisable<boolean>;
-  getScale?: (element: HTMLElement) => Promisable<{x: number; y: number}>;
+  isElement: (value: unknown) => Promisable<boolean>;
+  getDocumentElement: (element: Element) => Promisable<HTMLElement>;
+  getClientRects: (element: Element) => Promisable<Array<ClientRectObject>>;
+  isRTL: (element: Element) => Promisable<boolean>;
+  getScale: (element: HTMLElement) => Promisable<{x: number; y: number}>;
   topLayer?: (elements: Elements) => [boolean, boolean];
 }
 

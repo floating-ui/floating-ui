@@ -1,5 +1,5 @@
 import {isElement} from '@floating-ui/utils/dom';
-import {ReferenceElement, FloatingElement} from '../types';
+import type {ReferenceElement, FloatingElement} from '../types';
 
 const ancestorQueryEventName = '__fui_aq__';
 const topLayerSelectors = [':popover-open', ':modal'] as const;

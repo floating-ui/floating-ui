@@ -10,7 +10,7 @@ import {isElement} from './platform/isElement';
 import {isRTL} from './platform/isRTL';
 import type {Platform} from './types';
 
-export const platform: Required<Platform> = {
+export const platform: Platform = {
   convertOffsetParentRelativeRectToViewportRelativeRect,
   getDocumentElement,
   getClippingRect,
