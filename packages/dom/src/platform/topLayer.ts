@@ -3,23 +3,14 @@ import {
   isContainingBlock,
   isElement,
 } from '@floating-ui/utils/dom';
-import type {ReferenceElement, FloatingElement} from '../types';
-import {unwrapElement} from '../utils/unwrapElement';
 
 const ancestorQueryEventName = '__fui_aq__';
 const topLayerSelectors = [':popover-open', ':modal'] as const;
 
-export function topLayer({
-  reference,
-  floating,
-}: {
-  reference?: ReferenceElement;
-  floating: FloatingElement;
-}) {
-  const referenceEl = reference && unwrapElement(reference);
-
-  let isWithinReference = false;
+export function topLayer(floating: HTMLElement) {
   let isTopLayer = false;
+  let x = 0;
+  let y = 0;
 
   function setTopLayer(
     selector: (typeof topLayerSelectors)[number],
@@ -37,7 +28,6 @@ export function topLayer({
   function handleEvent(event: Event) {
     event.composedPath().forEach((el) => {
       if (!isElement(el)) return;
-      isWithinReference = isWithinReference || el === reference;
       if (el === floating || el.localName !== 'dialog') return;
       setTopLayer(':modal', el);
     });
@@ -50,28 +40,19 @@ export function topLayer({
     new Event(ancestorQueryEventName, {composed: true, bubbles: true}),
   );
 
-  let offsetX = 0;
-  let offsetY = 0;
+  const containingBlock = isContainingBlock(floating)
+    ? floating
+    : getContainingBlock(floating);
 
-  if (referenceEl) {
-    const root = isWithinReference ? referenceEl : floating;
-    const containingBlock = isContainingBlock(root)
-      ? root
-      : getContainingBlock(root);
-
-    if (isTopLayer && containingBlock) {
-      const rect = containingBlock.getBoundingClientRect();
-      offsetX = rect.x;
-      offsetY = rect.y;
-    }
+  if (isTopLayer && containingBlock) {
+    const rect = containingBlock.getBoundingClientRect();
+    x = rect.x;
+    y = rect.y;
   }
 
-  const addX = isTopLayer ? offsetX : -offsetX;
-  const addY = isTopLayer ? offsetY : -offsetY;
-
   return {
-    x: addX,
-    y: addY,
+    x,
+    y,
     isTopLayer,
   };
 }

@@ -28,7 +28,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect(
 ): Rect {
   const documentElement = getDocumentElement(offsetParent);
   const isOnTopLayer =
-    this.topLayer && elements ? this.topLayer(elements) : false;
+    this.topLayer && elements ? this.topLayer(elements.floating) : false;
 
   if (offsetParent === documentElement || isOnTopLayer) {
     return rect;
