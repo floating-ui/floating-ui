@@ -57,7 +57,12 @@ export interface Platform {
   getClientRects: (element: Element) => Promisable<Array<ClientRectObject>>;
   isRTL: (element: Element) => Promisable<boolean>;
   getScale: (element: HTMLElement) => Promisable<{x: number; y: number}>;
-  topLayer?: (elements: Elements) => [boolean, boolean];
+  topLayer?: (data: {
+    floating: FloatingElement;
+    reference?: ReferenceElement;
+    x?: number;
+    y?: number;
+  }) => {isTopLayer: boolean; x: number; y: number};
 }
 
 export interface NodeScroll {

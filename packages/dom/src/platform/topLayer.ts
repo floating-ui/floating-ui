@@ -1,5 +1,10 @@
-import {isElement} from '@floating-ui/utils/dom';
+import {
+  getContainingBlock,
+  isContainingBlock,
+  isElement,
+} from '@floating-ui/utils/dom';
 import type {ReferenceElement, FloatingElement} from '../types';
+import {unwrapElement} from '../utils/unwrapElement';
 
 const ancestorQueryEventName = '__fui_aq__';
 const topLayerSelectors = [':popover-open', ':modal'] as const;
@@ -10,16 +15,18 @@ export function topLayer({
 }: {
   reference?: ReferenceElement;
   floating: FloatingElement;
-}): [boolean, boolean] {
+}) {
+  const referenceEl = reference && unwrapElement(reference);
+
   let isWithinReference = false;
-  let isOnTopLayer = false;
+  let isTopLayer = false;
 
   function setTopLayer(
     selector: (typeof topLayerSelectors)[number],
     element: Element = floating,
   ) {
     try {
-      isOnTopLayer = isOnTopLayer || element.matches(selector);
+      isTopLayer = isTopLayer || element.matches(selector);
     } catch (e) {}
   }
 
@@ -43,5 +50,32 @@ export function topLayer({
     new Event(ancestorQueryEventName, {composed: true, bubbles: true}),
   );
 
-  return [isOnTopLayer, isWithinReference];
+  let offsetX = 0;
+  let offsetY = 0;
+
+  if (referenceEl) {
+    const root = isWithinReference ? referenceEl : floating;
+    const containingBlock = isContainingBlock(root)
+      ? root
+      : getContainingBlock(root);
+
+    if (isTopLayer && containingBlock) {
+      const rect = containingBlock.getBoundingClientRect();
+      // Margins are not included in the bounding client rect and need to be
+      // handled separately.
+      const {marginInlineStart = '0', marginBlockStart = '0'} =
+        getComputedStyle(containingBlock);
+      offsetX = rect.x + parseFloat(marginInlineStart);
+      offsetY = rect.y + parseFloat(marginBlockStart);
+    }
+  }
+
+  const addX = isTopLayer ? offsetX : -offsetX;
+  const addY = isTopLayer ? offsetY : -offsetY;
+
+  return {
+    x: addX,
+    y: addY,
+    isTopLayer,
+  };
 }

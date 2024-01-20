@@ -10,21 +10,15 @@ import {
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
+import type {Platform} from '../types';
+import {unwrapElement} from './unwrapElement';
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
-  floating: HTMLElement,
   strategy: Strategy,
-  isTopLayer: boolean,
-  handleTopLayerCoordinates: (state: {
-    x: number;
-    y: number;
-    elements: {
-      reference: Element | VirtualElement;
-      floating: HTMLElement;
-    };
-  }) => {x: number; y: number},
+  floating: HTMLElement,
+  topLayerFn: Platform['topLayer'],
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
@@ -49,21 +43,32 @@ export function getRectRelativeToOffsetParent(
         isFixed,
         offsetParent,
       );
-      offsets.x = offsetRect.x + (isTopLayer ? 0 : offsetParent.clientLeft);
-      offsets.y = offsetRect.y + (isTopLayer ? 0 : offsetParent.clientTop);
+      offsets.x = offsetRect.x + offsetParent.clientLeft;
+      offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
       offsets.x = getWindowScrollBarX(documentElement);
     }
   }
 
-  const {x, y} = handleTopLayerCoordinates({
-    x: rect.left + scroll.scrollLeft - offsets.x,
-    y: rect.top + scroll.scrollTop - offsets.y,
-    elements: {
-      reference: element,
+  let x = rect.left + scroll.scrollLeft - offsets.x;
+  let y = rect.top + scroll.scrollTop - offsets.y;
+
+  if (topLayerFn) {
+    const topLayer = topLayerFn({
+      reference: unwrapElement(element),
       floating,
-    },
-  });
+    });
+
+    if (topLayer.isTopLayer) {
+      x += topLayer.x;
+      y += topLayer.y;
+
+      if (isOffsetParentAnElement) {
+        x += offsetParent.clientLeft;
+        y += offsetParent.clientTop;
+      }
+    }
+  }
 
   return {
     x,
