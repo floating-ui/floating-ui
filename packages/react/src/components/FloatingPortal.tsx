@@ -33,6 +33,8 @@ const PortalContext = React.createContext<null | {
   afterOutsideRef: React.RefObject<HTMLSpanElement>;
 }>(null);
 
+const attr = createAttribute('portal');
+
 export function useFloatingPortalNode({
   id,
   root,
@@ -44,60 +46,58 @@ export function useFloatingPortalNode({
 
   const uniqueId = useId();
   const portalContext = usePortalContext();
+  const portalNodeRef = React.useRef<HTMLDivElement | null>(null);
 
-  const data = React.useMemo(
-    () => ({id, root, portalContext, uniqueId}),
-    [id, root, portalContext, uniqueId],
-  );
-
-  const dataRef = React.useRef<typeof data>();
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `data` is intentionally specified
   useModernLayoutEffect(() => {
     return () => {
       portalNode?.remove();
+      // Allow the subsequent layout effects to create a new node on updates.
+      // The portal node will still be cleaned up on unmount.
+      // https://github.com/floating-ui/floating-ui/issues/2454
+      queueMicrotask(() => {
+        portalNodeRef.current = null;
+      });
     };
-  }, [portalNode, data]);
+  }, [portalNode]);
 
   useModernLayoutEffect(() => {
-    if (dataRef.current === data) return;
-
-    dataRef.current = data;
-
-    const {id, root, portalContext, uniqueId} = data;
-
+    if (portalNodeRef.current) return;
     const existingIdRoot = id ? document.getElementById(id) : null;
-    const attr = createAttribute('portal');
+    if (!existingIdRoot) return;
 
-    if (existingIdRoot) {
-      const subRoot = document.createElement('div');
-      subRoot.id = uniqueId;
-      subRoot.setAttribute(attr, '');
-      existingIdRoot.appendChild(subRoot);
-      setPortalNode(subRoot);
-    } else {
-      let container = root || portalContext?.portalNode;
-      if (container && !isElement(container)) container = container.current;
-      container = container || document.body;
+    const subRoot = document.createElement('div');
+    subRoot.id = uniqueId;
+    subRoot.setAttribute(attr, '');
+    existingIdRoot.appendChild(subRoot);
+    portalNodeRef.current = subRoot;
+    setPortalNode(subRoot);
+  }, [id, uniqueId]);
 
-      let idWrapper: HTMLDivElement | null = null;
-      if (id) {
-        idWrapper = document.createElement('div');
-        idWrapper.id = id;
-        container.appendChild(idWrapper);
-      }
+  useModernLayoutEffect(() => {
+    if (portalNodeRef.current) return;
 
-      const subRoot = document.createElement('div');
+    let container = root || portalContext?.portalNode;
+    if (container && !isElement(container)) container = container.current;
+    container = container || document.body;
 
-      subRoot.id = uniqueId;
-      subRoot.setAttribute(attr, '');
-
-      container = idWrapper || container;
-      container.appendChild(subRoot);
-
-      setPortalNode(subRoot);
+    let idWrapper: HTMLDivElement | null = null;
+    if (id) {
+      idWrapper = document.createElement('div');
+      idWrapper.id = id;
+      container.appendChild(idWrapper);
     }
-  }, [data]);
+
+    const subRoot = document.createElement('div');
+
+    subRoot.id = uniqueId;
+    subRoot.setAttribute(attr, '');
+
+    container = idWrapper || container;
+    container.appendChild(subRoot);
+
+    portalNodeRef.current = subRoot;
+    setPortalNode(subRoot);
+  }, [id, root, uniqueId, portalContext]);
 
   return portalNode;
 }
