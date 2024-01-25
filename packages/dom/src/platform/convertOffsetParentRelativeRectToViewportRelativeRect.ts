@@ -1,4 +1,4 @@
-import type {Rect, Strategy} from '@floating-ui/core';
+import type {Elements, Rect, Strategy} from '@floating-ui/core';
 import {createCoords} from '@floating-ui/utils';
 import {
   getDocumentElement,
@@ -10,26 +10,34 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
+import type {Platform} from '../types';
+import {topLayer} from '../utils/topLayer';
 
-export function convertOffsetParentRelativeRectToViewportRelativeRect({
-  rect,
-  offsetParent,
-  strategy,
-}: {
-  rect: Rect;
-  offsetParent: Element | Window;
-  strategy: Strategy;
-}): Rect {
-  const isOffsetParentAnElement = isHTMLElement(offsetParent);
+export function convertOffsetParentRelativeRectToViewportRelativeRect(
+  this: Platform,
+  {
+    elements,
+    rect,
+    offsetParent,
+    strategy,
+  }: {
+    elements?: Elements;
+    rect: Rect;
+    offsetParent: Element | Window;
+    strategy: Strategy;
+  },
+): Rect {
   const documentElement = getDocumentElement(offsetParent);
+  const [isTopLayer] = elements ? topLayer(elements.floating) : [false];
 
-  if (offsetParent === documentElement) {
+  if (offsetParent === documentElement || isTopLayer) {
     return rect;
   }
 
   let scroll = {scrollLeft: 0, scrollTop: 0};
   let scale = createCoords(1);
   const offsets = createCoords(0);
+  const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
   if (
     isOffsetParentAnElement ||
