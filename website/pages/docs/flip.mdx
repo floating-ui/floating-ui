@@ -367,26 +367,12 @@ In each of the following demos, the `placement{:.key}` is
   </Chrome>
 </div>
 
-#### Combining with `shift(){:js}`
+<Notice title="Recommended reading" gap="above">
 
-If `shift(){:js}` is in use in the middleware array, you may
-desire to disable `crossAxis{:.key}` overflow checking, which
-will allow `shift(){:js}` to perform its work without falling
-back to the opposite axis (therefore preserving the original axis
-as best as possible):
+Check [combining with `shift`](/docs/flip#combining-with-shift)
+when using this option.
 
-```js {4}
-const middleware = [
-  flip({
-    fallbackAxisSideDirection: 'start',
-    crossAxis: false,
-  }),
-  shift(),
-];
-```
-
-If your placement is not edge aligned, disabling it is usually a
-good choice.
+</Notice>
 
 ### `flipAlignment{:.key}`
 
@@ -457,6 +443,13 @@ In the above example, if `placement{:.key}` is set to
   this option is explicitly specified, as they are only shortcuts to
   create a computed list of fallback placements. To ensure your
   explicit list is preferred, they will be ignored.
+</Notice>
+
+<Notice title="Recommended reading" gap="above">
+
+Check [combining with `shift`](/docs/flip#combining-with-shift)
+when using this option.
+
 </Notice>
 
 ### `fallbackStrategy{:.key}`
@@ -537,6 +530,63 @@ const {placement} = useFloating(reference, floating, {
 ```
 
 </ShowFor>
+
+## Combining with `shift(){:js}`
+
+If you're allowing fallback to the opposite axis of the preferred
+placement via `fallbackAxisSideDirection{:.key}` or
+`fallbackPlacements{:.key}`, then you may want to determine what
+behavior you want when combining `flip(){:js}` with
+`shift(){:js}`.
+
+If you want to ensure the placement side is preserved as best as
+possible without flipping, then you have two options to consider:
+
+1. Disabling the cross axis check in `flip(){:js}` places top
+   priority on `shift(){:js}` to do its work, with `flip(){:js}`
+   only taking action when absolutely necessary. The preferred
+   placement of the floating element will be conserved as much as
+   possible.
+
+```js {4}
+const middleware = [
+  flip({
+    fallbackAxisSideDirection: 'start',
+    crossAxis: false,
+  }),
+  shift(),
+];
+```
+
+2. Placing `shift(){:js}` _before_ `flip(){:js}` in the array
+   ensures it can do its work before `flip(){:js}` tries to
+   change the placement. This is similar to the first technique
+   above, but allows `flip(){:js}` to take action on its
+   `crossAxis{:.key}` too -- useful if `shift(){:js}` has a
+   limiter.
+
+```js {3}
+const middleware = [
+  shift({
+    limiter: limitShift(),
+  }),
+  flip({
+    fallbackAxisSideDirection: 'start',
+  }),
+];
+```
+
+<Notice>
+
+The second method is only recommended if your placement is not
+edge aligned, e.g. `'top'{:js}` instead of `'top-start'{:js}`.
+This is because alignment flipping will no longer be possible
+since `shift` takes over first.
+
+For reusable/generic components, you can use basic conditional
+checks on the supplied preferred placement to alter the ordering.
+
+</Notice>
 
 ## Conflict with `autoPlacement(){:js}`
 

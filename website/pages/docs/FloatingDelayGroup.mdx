@@ -10,11 +10,17 @@ after the first floating element of the group opens.
 import {FloatingDelayGroup} from '@floating-ui/react';
 ```
 
-</PageCard>
+This is useful to enable higher discovery of floating elements
+when they have a hover delay (like tooltips) when their reference
+elements are placed near each other.
 
-This allows higher discovery of floating elements when they have
-a hover delay (like tooltips) when their reference elements are
-placed near each other.
+<ShowFor packages={['react-dom']}>
+
+<PackageLimited>@floating-ui/react only</PackageLimited>
+
+</ShowFor>
+
+</PageCard>
 
 ```js
 function App() {
@@ -46,7 +52,7 @@ To enable delay grouping:
   `<FloatingDelayGroup />{:js}` provider.
 - Call `useDelayGroupContext(){:js}` to read the data from
   `<FloatingDelayGroup />{:js}`, which provides the
-  <WordHighlight id='a'>delay</WordHighlight> for the group to
+    <WordHighlight id='a'>delay</WordHighlight> for the group to
 pass to the `useHover(){:js}` Hook.
 - `useDelayGroup(){:js}`, a Hook called inside the component,
   enables grouping for the component.

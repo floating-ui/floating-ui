@@ -75,8 +75,6 @@ especially with many floating elements being created.
 
 <ShowFor packages={['react', 'react-dom']}>
 
-### Conditional rendering
-
 If you're conditionally rendering the floating element
 (recommended), use the `whileElementsMounted{:.key}` option:
 
@@ -89,8 +87,6 @@ useFloating({
 `whileElementsMounted{:.key}` automatically handles calling and
 cleaning up `autoUpdate` based on the presence of the reference
 and floating element.
-
-### CSS
 
 Alternatively, if you've hidden the floating element with CSS
 (based on an `isOpen` state), use an effect to handle it instead:

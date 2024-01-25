@@ -9,6 +9,10 @@ real DOM focus or virtual focus.
 import {useListNavigation} from '@floating-ui/react';
 ```
 
+This is useful for creating floating elements that contain a list
+of items (such as a menu, select, or combobox) to ensure that
+keyboard usage can navigate the list.
+
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -460,15 +464,18 @@ useListNavigation(context, {
 
 default: `undefined{:js}`
 
-Only for grid navigation, an array of `Dimensions` objects, which specify the
-width (number of columns) and height (number of rows) of each item, so
-the navigation algorithm can take the variable sizes into account.
-If not specified, every item will be treated as if it has a size of 1
-row and 1 column.
+Only for grid navigation, an array of `Dimensions` objects, which
+specify the width (number of columns) and height (number of rows)
+of each item, so the navigation algorithm can take the variable
+sizes into account. If not specified, every item will be treated
+as if it has a size of 1 row and 1 column.
 
 ```js
 useListNavigation(context, {
-  itemSizes: [{ width: 2, height: 2 }, { width: 1, height: 3 }],
+  itemSizes: [
+    {width: 2, height: 2},
+    {width: 1, height: 3},
+  ],
 });
 ```
 
@@ -476,11 +483,11 @@ useListNavigation(context, {
 
 default: `false{:js}`
 
-Only for grid navigation, determines if the grid positioning algorithm
-should follow CSS Grid's `auto-flow` `dense` algorithm.
+Only for grid navigation, determines if the grid positioning
+algorithm should follow CSS Grid's `auto-flow` `dense` algorithm.
 
 ```js
 useListNavigation(context, {
-  dense: true
+  dense: true,
 });
 ```

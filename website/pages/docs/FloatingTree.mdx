@@ -13,17 +13,14 @@ children of each other on the DOM.
 
 </PageCard>
 
-<Notice>
-  This is not necessary in all cases, except when there must be
-  explicit communication between parent and child floating elements. 
-  It is necessary for:
+This is not necessary in all cases, except when there must be
+explicit communication between parent and child floating
+elements. It is necessary for:
 
 - The `bubbles{:.key}` option in the `useDismiss(){:js}` Hook
 - [Nested virtual list navigation](/docs/useListNavigation#virtualitemref)
 - Nested floating elements that each open on hover
 - Custom communication between parent and child floating elements
-
-</Notice>
 
 ## Usage
 
@@ -146,6 +143,7 @@ export function Popover(props) {
 
 ## Troubleshooting
 
-Ensure that the component that you're calling `useFloatingNodeId(){:js}` is a 
-_child_ of the `<FloatingTree>{:js}` wrapper. If it is not, then it will not
-be able to find the tree context.
+Ensure that the component that you're calling
+`useFloatingNodeId(){:js}` is a _child_ of the
+`<FloatingTree>{:js}` wrapper. If it is not, then it will not be
+able to find the tree context.

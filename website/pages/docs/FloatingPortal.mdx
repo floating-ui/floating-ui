@@ -9,6 +9,11 @@ default, outside of the app root and into the body.
 import {FloatingPortal} from '@floating-ui/react';
 ```
 
+This is necessary to ensure the floating element can appear
+outside any potential parent containers that cause clipping (such
+as `overflow: hidden`), while retaining its location in the React
+tree.
+
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>

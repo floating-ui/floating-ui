@@ -10,6 +10,10 @@ contexts.
 import {Composite, CompositeItem} from '@floating-ui/react';
 ```
 
+This is useful to enable navigation of a list of items that
+aren't part of a floating element. A menubar is an example of a
+composite, with each reference element being an item.
+
 <ShowFor packages={['react-dom']}>
 
 <PackageLimited>@floating-ui/react only</PackageLimited>
@@ -17,8 +21,6 @@ import {Composite, CompositeItem} from '@floating-ui/react';
 </ShowFor>
 
 </PageCard>
-
-A menubar is an example of a composite.
 
 ## Usage
 
@@ -31,8 +33,8 @@ A menubar is an example of a composite.
 ```
 
 The `render{:.keyword}` prop can be used to customize the
-rendering of the composite components. Both `Composite{:.class}` and
-`CompositeItem{:.class}` accept a JSX element:
+rendering of the composite components. Both `Composite{:.class}`
+and `CompositeItem{:.class}` accept a JSX element:
 
 ```js
 <CompositeItem render={<select />}>
@@ -158,15 +160,18 @@ return <Composite onNavigate={setActiveIndex} />;
 
 default: `undefined{:js}`
 
-Only for grid navigation, an array of `Dimensions` objects, which specify the
-width (number of columns) and height (number of rows) of each item, so
-the navigation algorithm can take the variable sizes into account.
-If not specified, every item will be treated as if it has a size of 1
-row and 1 column.
+Only for grid navigation, an array of `Dimensions` objects, which
+specify the width (number of columns) and height (number of rows)
+of each item, so the navigation algorithm can take the variable
+sizes into account. If not specified, every item will be treated
+as if it has a size of 1 row and 1 column.
 
 ```js
 <Composite
-  itemSizes={[{ width: 2, height: 2 }, { width: 1, height: 3 }]}
+  itemSizes={[
+    {width: 2, height: 2},
+    {width: 1, height: 3},
+  ]}
 />
 ```
 
@@ -174,8 +179,8 @@ row and 1 column.
 
 default: `false{:js}`
 
-Only for grid navigation, determines if the grid positioning algorithm
-should follow CSS Grid's `auto-flow` `dense` algorithm.
+Only for grid navigation, determines if the grid positioning
+algorithm should follow CSS Grid's `auto-flow` `dense` algorithm.
 
 ```js
 <Composite dense />

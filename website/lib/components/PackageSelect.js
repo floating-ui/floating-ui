@@ -98,7 +98,7 @@ const ReactPackageButton = forwardRef(({package: pkg, ...props}, ref) => {
 
 export function ReactSelect() {
   return (
-    <Composite className="-mt-2 flex gap-1" role="group">
+    <Composite className="-mt-2 mb-4 flex gap-1" role="group">
       <CompositeItem render={<ReactPackageButton package="react" />}>
         React (all features)
       </CompositeItem>
@@ -235,7 +235,7 @@ function Option({
     >
       <div
         className={cn('relative top-[1px] h-3 w-3 rounded-full', {
-          'bg-gray-100 dark:bg-gray-400': selectedIndex !== index,
+          'bg-gray-900/30 dark:bg-gray-200/50': selectedIndex !== index,
           'bg-rose-500 dark:bg-rose-400': selectedIndex === index,
         })}
       />
