@@ -23,6 +23,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.27.1
+      '@changesets/types':
+        specifier: ^6.0.0
+        version: 6.0.0
       '@microsoft/api-extractor':
         specifier: ^7.39.1
         version: 7.39.1(@types/node@20.10.6)

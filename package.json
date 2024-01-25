@@ -47,6 +47,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@biomejs/biome": "^1.5.2",
     "@changesets/cli": "^2.27.1",
+    "@changesets/types": "^6.0.0",
     "@microsoft/api-extractor": "^7.39.1",
     "@playwright/test": "^1.40.1",
     "@rollup/plugin-alias": "^5.1.0",
