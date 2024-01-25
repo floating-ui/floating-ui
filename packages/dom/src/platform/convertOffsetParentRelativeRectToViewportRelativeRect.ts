@@ -11,6 +11,7 @@ import {
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
 import type {Platform} from '../types';
+import {topLayer} from '../utils/topLayer';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect(
   this: Platform,
@@ -27,10 +28,9 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect(
   },
 ): Rect {
   const documentElement = getDocumentElement(offsetParent);
-  const isOnTopLayer =
-    this.topLayer && elements ? this.topLayer(elements.floating) : false;
+  const [isTopLayer] = elements ? topLayer(elements.floating) : [false];
 
-  if (offsetParent === documentElement || isOnTopLayer) {
+  if (offsetParent === documentElement || isTopLayer) {
     return rect;
   }
 

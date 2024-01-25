@@ -41,7 +41,6 @@ export {
   shift,
   size,
 } from './middleware';
-export {topLayer} from './platform/topLayer';
 export {platform} from './platform';
 export type {
   ArrowOptions,

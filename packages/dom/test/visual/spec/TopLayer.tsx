@@ -1,10 +1,4 @@
-import {
-  useFloating,
-  autoUpdate,
-  topLayer,
-  flip,
-  platform,
-} from '@floating-ui/react-dom';
+import {useFloating, autoUpdate, flip} from '@floating-ui/react-dom';
 import {useState} from 'react';
 
 import {Controls} from '../utils/Controls';
@@ -19,7 +13,6 @@ const transformStyles = {
 
 type Props = {
   children?: React.ReactNode;
-  withMethod: boolean;
   withTransform: boolean;
 };
 
@@ -27,16 +20,12 @@ function NotStacked({children}: Props) {
   return children;
 }
 
-function StackedOnDialog({children, withMethod, withTransform}: Props) {
+function StackedOnDialog({children, withTransform}: Props) {
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
     middleware: [flip()],
-    platform: {
-      ...platform,
-      topLayer: withMethod ? topLayer : undefined,
-    },
   });
 
   const buttonStyles = {
@@ -87,16 +76,12 @@ function StackedOnDialog({children, withMethod, withTransform}: Props) {
   );
 }
 
-function StackedOnPopover({children, withMethod, withTransform}: Props) {
+function StackedOnPopover({children, withTransform}: Props) {
   const {x, y, strategy, refs} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     strategy: 'fixed',
     middleware: [flip()],
-    platform: {
-      ...platform,
-      topLayer: withMethod ? topLayer : undefined,
-    },
   });
 
   const buttonStyles = {
@@ -154,22 +139,18 @@ function StackedOnPopover({children, withMethod, withTransform}: Props) {
 }
 
 export function TopLayer() {
-  const [withMethod, setWithMethod] = useState(true);
   const [withTransform, setWithTransform] = useState(true);
   const [withPopover, setPopover] = useState(true);
   const [stackedOn, setStackedOn] = useState<STACKED_TYPES>('none');
   const [collision, setCollision] = useState(false);
   const [withMargin, setWithMargin] = useState(false);
+  const [layoutStyles, setLayoutStyles] = useState(true);
 
-  const {x, y, strategy, refs} = useFloating({
+  const {refs, floatingStyles, x, y} = useFloating({
     whileElementsMounted: autoUpdate,
     placement: 'top',
     strategy: 'fixed',
     middleware: [collision && flip()],
-    platform: {
-      ...platform,
-      topLayer: withMethod ? topLayer : undefined,
-    },
   });
 
   const tooltipStyles = {
@@ -197,7 +178,6 @@ export function TopLayer() {
         : StackedOnPopover;
 
   const stackProps = {
-    withMethod,
     withTransform,
   };
 
@@ -251,9 +231,13 @@ export function TopLayer() {
             style={{
               ...tooltipStyles,
               display: 'revert',
-              position: strategy,
-              top: y,
-              left: x,
+              ...(layoutStyles
+                ? {
+                    position: 'fixed',
+                    top: y,
+                    left: x,
+                  }
+                : floatingStyles),
               ...(collision && {
                 height: 100,
               }),
@@ -264,6 +248,22 @@ export function TopLayer() {
         </div>
       </Stack>
 
+      <h2>Layout styles</h2>
+      <Controls>
+        {BOOLS.map((bool) => (
+          <button
+            key={String(bool)}
+            data-testid={`layoutStyles-${bool}`}
+            onClick={() => setLayoutStyles(bool)}
+            style={{
+              backgroundColor: bool === layoutStyles ? 'black' : '',
+            }}
+          >
+            {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
       <h2>Collision</h2>
       <Controls>
         {BOOLS.map((bool) => (
@@ -273,22 +273,6 @@ export function TopLayer() {
             onClick={() => setCollision(bool)}
             style={{
               backgroundColor: bool === collision ? 'black' : '',
-            }}
-          >
-            {String(bool)}
-          </button>
-        ))}
-      </Controls>
-
-      <h2>withMethod</h2>
-      <Controls>
-        {BOOLS.map((bool) => (
-          <button
-            key={String(bool)}
-            data-testid={`withMethod-${bool}`}
-            onClick={() => setWithMethod(bool)}
-            style={{
-              backgroundColor: bool === withMethod ? 'black' : '',
             }}
           >
             {String(bool)}

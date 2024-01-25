@@ -10,15 +10,13 @@ import {
 import {getDocumentElement} from '../platform/getDocumentElement';
 import {getBoundingClientRect} from './getBoundingClientRect';
 import {getWindowScrollBarX} from './getWindowScrollBarX';
-import type {Platform} from '../types';
-import {unwrapElement} from './unwrapElement';
+import {topLayer} from './topLayer';
 
 export function getRectRelativeToOffsetParent(
   element: Element | VirtualElement,
   offsetParent: Element | Window,
   strategy: Strategy,
   floating: HTMLElement,
-  topLayerFn: Platform['topLayer'],
 ): Rect {
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   const documentElement = getDocumentElement(offsetParent);
@@ -53,17 +51,15 @@ export function getRectRelativeToOffsetParent(
   let x = rect.left + scroll.scrollLeft - offsets.x;
   let y = rect.top + scroll.scrollTop - offsets.y;
 
-  if (topLayerFn) {
-    const topLayer = topLayerFn(floating);
+  const [isTopLayer, topLayerX, topLayerY] = topLayer(floating);
 
-    if (topLayer.isTopLayer) {
-      x += topLayer.x;
-      y += topLayer.y;
+  if (isTopLayer) {
+    x += topLayerX;
+    y += topLayerY;
 
-      if (isOffsetParentAnElement) {
-        x += offsetParent.clientLeft;
-        y += offsetParent.clientTop;
-      }
+    if (isOffsetParentAnElement) {
+      x += offsetParent.clientLeft;
+      y += offsetParent.clientTop;
     }
   }
 
