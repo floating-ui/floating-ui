@@ -53,11 +53,42 @@ export function getDelay(
 }
 
 export interface UseHoverProps<RT extends ReferenceType = ReferenceType> {
+  /**
+   * Whether the Hook is enabled, including all internal Effects and event
+   * handlers.
+   * @default true
+   */
   enabled?: boolean;
+  /**
+   * Instead of closing the floating element when the cursor leaves its
+   * reference, we can leave it open until a certain condition is satisfied,
+   * e.g. to let them traverse into the floating element.
+   * @default null
+   */
   handleClose?: HandleCloseFn<RT> | null;
+  /**
+   * Waits until the user’s cursor is at “rest” over the reference element
+   *  before changing the `open` state.
+   * @default 0
+   */
   restMs?: number;
+  /**
+   * Waits for the specified time when the event listener runs before changing
+   * the `open` state.
+   * @default 0
+   */
   delay?: number | Partial<{open: number; close: number}>;
+  /**
+   * Whether the logic only runs for mouse input, ignoring touch input.
+   * Note: due to a bug with Linux Chrome, "pen" inputs are considered "mouse".
+   * @default false
+   */
   mouseOnly?: boolean;
+  /**
+   * Whether moving the cursor over the floating element will open it, without a
+   * regular hover event required.
+   * @default true
+   */
   move?: boolean;
 }
 

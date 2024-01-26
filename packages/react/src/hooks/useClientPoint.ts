@@ -95,9 +95,28 @@ function isMouseBasedEvent(event: Event | undefined): event is MouseEvent {
 }
 
 export interface UseClientPointProps {
+  /**
+   * Whether the Hook is enabled, including all internal Effects and event
+   * handlers.
+   * @default true
+   */
   enabled?: boolean;
+  /**
+   * Whether to restrict the client point to an axis and use the reference
+   * element (if it exists) as the other axis. This can be useful if the
+   * floating element is also interactive.
+   * @default 'both'
+   */
   axis?: 'x' | 'y' | 'both';
+  /**
+   * An explicitly defined `x` client coordinate.
+   * @default null
+   */
   x?: number | null;
+  /**
+   * An explicitly defined `y` client coordinate.
+   * @default null
+   */
   y?: number | null;
 }
 

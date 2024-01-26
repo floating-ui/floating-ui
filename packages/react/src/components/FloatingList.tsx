@@ -51,7 +51,15 @@ export const FloatingListContext = React.createContext<{
 
 interface FloatingListProps {
   children: React.ReactNode;
+  /**
+   * A ref to the list of HTML elements, ordered by their index.
+   * `useListNavigation`'s `listRef` prop.
+   */
   elementsRef: React.MutableRefObject<Array<HTMLElement | null>>;
+  /**
+   * A ref to the list of element labels, ordered by their index.
+   * `useTypeahead`'s `listRef` prop.
+   */
   labelsRef?: React.MutableRefObject<Array<string | null>>;
 }
 
@@ -107,6 +115,11 @@ export interface UseListItemProps {
   label?: string | null;
 }
 
+/**
+ * Used to register a list item and its index (DOM position) in the
+ * `FloatingList`.
+ * @see https://floating-ui.com/docs/FloatingList#uselistitem
+ */
 export function useListItem({label}: UseListItemProps = {}): {
   ref: (node: HTMLElement | null) => void;
   index: number;

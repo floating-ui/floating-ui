@@ -46,12 +46,43 @@ type RenderProp =
   | ((props: React.HTMLAttributes<HTMLElement>) => JSX.Element);
 
 interface CompositeProps {
+  /**
+   * Determines the element to render.
+   * @example
+   * ```jsx
+   * <Composite render={<ul />} />
+   * <Composite render={(htmlProps) => <ul {...htmlProps} />} />
+   * ```
+   */
   render?: RenderProp;
+  /**
+   * Determines the orientation of the composite.
+   */
   orientation?: 'horizontal' | 'vertical' | 'both';
+  /**
+   * Determines whether focus should loop around when navigating past the first
+   * or last item.
+   */
   loop?: boolean;
+  /**
+   * Determines the number of columns there are in the composite
+   * (i.e. it’s a grid).
+   */
   cols?: number;
+  /**
+   * Determines which items are disabled. The `disabled` or `aria-disabled`
+   * attributes are used by default.
+   */
   disabledIndices?: number[];
+  /**
+   * Determines which item is active. Used to externally control the active
+   * item.
+   */
   activeIndex?: number;
+  /**
+   * Called when the user navigates to a new item. Used to externally control
+   * the active item.
+   */
   onNavigate?(index: number): void;
   /**
    * Only for `cols > 1`, specify sizes for grid items.
@@ -69,6 +100,15 @@ const horizontalKeys = [ARROW_LEFT, ARROW_RIGHT];
 const verticalKeys = [ARROW_UP, ARROW_DOWN];
 const allKeys = [...horizontalKeys, ...verticalKeys];
 
+/**
+ * Creates a single tab stop whose items are navigated by arrow keys, which
+ * provides list navigation outside of floating element contexts.
+ *
+ * This is useful to enable navigation of a list of items that aren’t part of a
+ * floating element. A menubar is an example of a composite, with each reference
+ * element being an item.
+ * @see https://floating-ui.com/docs/Composite
+ */
 export const Composite = React.forwardRef<
   HTMLElement,
   React.HTMLProps<HTMLElement> & CompositeProps
@@ -109,8 +149,8 @@ export const Composite = React.forwardRef<
 
     if (isGrid) {
       const sizes =
-        itemSizes ??
-        Array.from(Array(elementsRef.current.length), () => ({
+        itemSizes ||
+        Array.from({length: elementsRef.current.length}, () => ({
           width: 1,
           height: 1,
         }));
@@ -252,9 +292,24 @@ export const Composite = React.forwardRef<
   );
 });
 
+interface CompositeItemProps {
+  /**
+   * Determines the element to render.
+   * @example
+   * ```jsx
+   * <CompositeItem render={<li />} />
+   * <CompositeItem render={(htmlProps) => <li {...htmlProps} />} />
+   * ```
+   */
+  render?: RenderProp;
+}
+
+/**
+ * @see https://floating-ui.com/docs/Composite
+ */
 export const CompositeItem = React.forwardRef<
   HTMLElement,
-  React.HTMLProps<HTMLElement> & {render?: RenderProp}
+  React.HTMLProps<HTMLElement> & CompositeItemProps
 >(function CompositeItem({render, ...props}, forwardedRef) {
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};

@@ -6,6 +6,14 @@ import {useId} from '../hooks/useId';
 
 const activeLocks = new Set<string>();
 
+interface FloatingOverlayProps {
+  /**
+   * Whether the overlay should lock scrolling on the document body.
+   * @default false
+   */
+  lockScroll?: boolean;
+}
+
 /**
  * Provides base styling for a fixed overlay element to dim content or block
  * pointer events behind a floating element.
@@ -14,7 +22,7 @@ const activeLocks = new Set<string>();
  */
 export const FloatingOverlay = React.forwardRef<
   HTMLDivElement,
-  React.HTMLProps<HTMLDivElement> & {lockScroll?: boolean}
+  React.HTMLProps<HTMLDivElement> & FloatingOverlayProps
 >(function FloatingOverlay({lockScroll = false, ...rest}, ref) {
   const lockId = useId();
 

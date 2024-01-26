@@ -20,7 +20,17 @@ import type {
 import {createAttribute} from '../utils/createAttribute';
 
 export interface UseFocusProps {
+  /**
+   * Whether the Hook is enabled, including all internal Effects and event
+   * handlers.
+   * @default true
+   */
   enabled?: boolean;
+  /**
+   * Whether the open state only changes if the focus event is considered
+   * visible (`:focus-visible` CSS selector).
+   * @default true
+   */
   visibleOnly?: boolean;
 }
 
@@ -38,7 +48,7 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
     onOpenChange,
     events,
     refs,
-    elements: {floating, domReference},
+    elements: {domReference},
   } = context;
   const {enabled = true, visibleOnly = true} = props;
 
