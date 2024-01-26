@@ -39,7 +39,16 @@ export const useDelayGroupContext = (): GroupContext =>
 
 interface FloatingDelayGroupProps {
   children?: React.ReactNode;
+  /**
+   * The delay to use for the group.
+   */
   delay: Delay;
+  /**
+   * An optional explicit timeout to use for the group, which represents when
+   * grouping logic will no longer be active after the close delay completes.
+   * This is useful if you want grouping to “last” longer than the close delay,
+   * for example if there is no close delay at all.
+   */
   timeoutMs?: number;
 }
 
@@ -102,6 +111,11 @@ interface UseGroupOptions {
   id: any;
 }
 
+/**
+ * Enables grouping when called inside a component that's a child of a
+ * `FloatingDelayGroup`.
+ * @see https://floating-ui.com/docs/FloatingDelayGroup
+ */
 export const useDelayGroup = (
   {open, onOpenChange}: FloatingContext,
   {id}: UseGroupOptions,

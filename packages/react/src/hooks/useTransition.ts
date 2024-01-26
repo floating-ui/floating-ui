@@ -37,6 +37,10 @@ function useDelayUnmount(open: boolean, durationMs: number): boolean {
 }
 
 export interface UseTransitionStatusProps {
+  /**
+   * The duration of the transition in milliseconds, or an object containing
+   * `open` and `close` keys for different durations.
+   */
   duration?: number | Partial<{open: number; close: number}>;
 }
 
@@ -107,9 +111,23 @@ type CSSStylesProperty =
   | ((params: {side: Side; placement: Placement}) => React.CSSProperties);
 
 export interface UseTransitionStylesProps extends UseTransitionStatusProps {
+  /**
+   * The styles to apply when the floating element is initially mounted.
+   */
   initial?: CSSStylesProperty;
+  /**
+   * The styles to apply when the floating element is transitioning to the
+   * `open` state.
+   */
   open?: CSSStylesProperty;
+  /**
+   * The styles to apply when the floating element is transitioning to the
+   * `close` state.
+   */
   close?: CSSStylesProperty;
+  /**
+   * The styles to apply to all states.
+   */
   common?: CSSStylesProperty;
 }
 

@@ -35,6 +35,9 @@ const PortalContext = React.createContext<null | {
 
 const attr = createAttribute('portal');
 
+/**
+ * @see https://floating-ui.com/docs/FloatingPortal#usefloatingportalnode
+ */
 export function useFloatingPortalNode({
   id,
   root,
@@ -104,14 +107,29 @@ export function useFloatingPortalNode({
 
 interface FloatingPortalProps {
   children?: React.ReactNode;
+  /**
+   * Optionally selects the node with the id if it exists, or create it and
+   * append it to the specified `root` (by default `document.body`).
+   */
   id?: string;
+  /**
+   * Specifies the root node the portal container will be appended to.
+   */
   root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
+  /**
+   * When using non-modal focus management using `FloatingFocusManager`, this
+   * will preserve the tab order context based on the React tree instead of the
+   * DOM tree.
+   */
   preserveTabOrder?: boolean;
 }
 
 /**
  * Portals the floating element into a given container element — by default,
  * outside of the app root and into the body.
+ * This is necessary to ensure the floating element can appear outside any
+ * potential parent containers that cause clipping (such as `overflow: hidden`),
+ * while retaining its location in the React tree.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
 export function FloatingPortal({

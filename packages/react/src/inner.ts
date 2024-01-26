@@ -30,13 +30,45 @@ function getArgsWithCustomFloatingHeight(
 }
 
 export interface InnerProps {
+  /**
+   * A ref which contains an array of HTML elements.
+   * @default empty list
+   */
   listRef: React.MutableRefObject<Array<HTMLElement | null>>;
+  /**
+   * The index of the active (focused or highlighted) item in the list.
+   * @default 0
+   */
   index: number;
+  /**
+   * Callback invoked when the fallback state changes.
+   */
   onFallbackChange?: null | ((fallback: boolean) => void);
+  /**
+   * The offset to apply to the floating element.
+   * @default 0
+   */
   offset?: number;
+  /**
+   * A ref which contains the overflow of the floating element.
+   */
   overflowRef?: React.MutableRefObject<SideObject | null>;
+  /**
+   * An optional ref containing an HTMLElement. This may be used as the
+   * scrolling container instead of the floating element — for instance,
+   * to position inner elements as direct children without being interfered by
+   * scrolling layout.
+   */
   scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  /**
+   * The minimum number of items that should be visible in the list.
+   * @default 4
+   */
   minItemsVisible?: number;
+  /**
+   * The threshold for the reference element's overflow in pixels.
+   * @default 0
+   */
   referenceOverflowThreshold?: number;
 }
 
@@ -151,9 +183,26 @@ export const inner = (
 });
 
 export interface UseInnerOffsetProps {
+  /**
+   * Whether the Hook is enabled, including all internal Effects and event
+   * handlers.
+   * @default true
+   */
   enabled?: boolean;
+  /**
+   * A ref which contains the overflow of the floating element.
+   */
   overflowRef: React.MutableRefObject<SideObject | null>;
+  /**
+   * An optional ref containing an HTMLElement. This may be used as the
+   * scrolling container instead of the floating element — for instance,
+   * to position inner elements as direct children without being interfered by
+   * scrolling layout.
+   */
   scrollRef?: React.MutableRefObject<HTMLElement | null>;
+  /**
+   * Callback invoked when the offset changes.
+   */
   onChange: (offset: number | ((offset: number) => number)) => void;
 }
 

@@ -8,15 +8,24 @@ import {createPubSub} from '../utils/createPubSub';
 const FloatingNodeContext = React.createContext<FloatingNodeType | null>(null);
 const FloatingTreeContext = React.createContext<FloatingTreeType | null>(null);
 
+/**
+ * Returns the parent node id for nested floating elements, if available.
+ * Returns `null` for top-level floating elements.
+ */
 export const useFloatingParentNodeId = (): string | null =>
   React.useContext(FloatingNodeContext)?.id || null;
+
+/**
+ * Returns the nearest floating tree context, if available.
+ */
 export const useFloatingTree = <
   RT extends ReferenceType = ReferenceType,
 >(): FloatingTreeType<RT> | null =>
   React.useContext(FloatingTreeContext) as FloatingTreeType<RT> | null;
 
 /**
- * Registers a node into the floating tree, returning its id.
+ * Registers a node into the `FloatingTree`, returning its id.
+ * @see https://floating-ui.com/docs/FloatingTree
  */
 export function useFloatingNodeId(customParentId?: string): string {
   const id = useId();
@@ -59,8 +68,12 @@ export function FloatingNode({
 
 /**
  * Provides context for nested floating elements when they are not children of
- * each other on the DOM (i.e. portalled to a common node, rather than their
- * respective parent).
+ * each other on the DOM.
+ * This is not necessary in all cases, except when there must be explicit communication between parent and child floating elements. It is necessary for:
+ * - The `bubbles` option in the `useDismiss()` Hook
+ * - Nested virtual list navigation
+ * - Nested floating elements that each open on hover
+ * - Custom communication between parent and child floating elements
  * @see https://floating-ui.com/docs/FloatingTree
  */
 export function FloatingTree({

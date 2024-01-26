@@ -15,7 +15,16 @@ type AriaRole =
 type ComponentRole = 'select' | 'label' | 'combobox';
 
 export interface UseRoleProps {
+  /**
+   * Whether the Hook is enabled, including all internal Effects and event
+   * handlers.
+   * @default true
+   */
   enabled?: boolean;
+  /**
+   * The role of the floating element.
+   * @default 'dialog'
+   */
   role?: AriaRole | ComponentRole;
 }
 
