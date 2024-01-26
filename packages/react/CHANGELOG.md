@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.26.7
+
+### Patch Changes
+
+- chore: improve JSDocs
+- fix(FloatingPortal): unconditional rendering with Suspense
+- Update dependencies: `@floating-ui/react-dom@2.0.7`
+
 ## 0.26.6
 
 ### Patch Changes

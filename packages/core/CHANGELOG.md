@@ -1,5 +1,13 @@
 # @floating-ui/core
 
+## 1.6.0
+
+### Minor Changes
+
+- fix: handle CSS `:top-layer` elements inside containing blocks. It's no longer
+  necessary to implement the middleware workaround outlined in
+  https://github.com/floating-ui/floating-ui/issues/1842#issuecomment-1872653245.
+
 ## 1.5.3
 
 ### Patch Changes
