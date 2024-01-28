@@ -1,5 +1,11 @@
 # @floating-ui/dom
 
+## 1.6.1
+
+### Patch Changes
+
+- perf: avoid `getContainingBlock` call for non-top layer elements
+
 ## 1.6.0
 
 ### Minor Changes
