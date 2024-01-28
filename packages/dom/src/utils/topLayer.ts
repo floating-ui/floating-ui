@@ -17,12 +17,13 @@ export function topLayer(floating: HTMLElement) {
     setIsTopLayer(selector);
   });
 
-  const containingBlock = getContainingBlock(floating);
-
-  if (isTopLayer && containingBlock) {
-    const rect = containingBlock.getBoundingClientRect();
-    x = rect.x;
-    y = rect.y;
+  if (isTopLayer) {
+    const containingBlock = getContainingBlock(floating);
+    if (containingBlock) {
+      const rect = containingBlock.getBoundingClientRect();
+      x = rect.x;
+      y = rect.y;
+    }
   }
 
   return [isTopLayer, x, y] as const;
