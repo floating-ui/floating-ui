@@ -170,9 +170,13 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
             // When focusing the reference element (e.g. regular click), then
             // clicking into the floating element, prevent it from hiding.
             // Note: it must be focusable, e.g. `tabindex="-1"`.
+            // We can not rely on relatedTarget to point to the correct element
+            // as it will only point to the shadow host of the newly focused element
+            // and not the element that actually has received focus if it is located
+            // inside a shadow root.
             if (
-              contains(refs.floating.current, relatedTarget) ||
-              contains(domReference, relatedTarget) ||
+              contains(refs.floating.current, activeEl) ||
+              contains(domReference, activeEl) ||
               movedToFocusGuard
             ) {
               return;
