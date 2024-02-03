@@ -27,13 +27,6 @@
   },
   "author": "",
   "license": "MIT",
-  "prettier": {
-    "singleQuote": true,
-    "bracketSpacing": false,
-    "proseWrap": "always",
-    "arrowParens": "always",
-    "semi": true
-  },
   "browserslist": [
     "Chrome >= 73",
     "Firefox >= 78",
