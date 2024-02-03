@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.9
+
+### Patch Changes
+
+- fix(useFocus): avoid closing floating element when focus moves inside shadow roots
+
 ## 0.26.8
 
 ### Patch Changes
