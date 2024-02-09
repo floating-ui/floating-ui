@@ -48,8 +48,9 @@ export function getBoundingClientRect(
         ? getWindow(offsetParent)
         : offsetParent;
 
-    let currentIFrame = win.frameElement;
-    while (currentIFrame && offsetParent && offsetWin !== win) {
+    let currentWin = win;
+    let currentIFrame = currentWin.frameElement;
+    while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
       const css = getComputedStyle(currentIFrame);
@@ -69,7 +70,8 @@ export function getBoundingClientRect(
       x += left;
       y += top;
 
-      currentIFrame = getWindow(currentIFrame).frameElement;
+      currentWin = getWindow(currentIFrame);
+      currentIFrame = currentWin.frameElement;
     }
   }
 
