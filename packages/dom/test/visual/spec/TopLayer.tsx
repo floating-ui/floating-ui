@@ -14,14 +14,16 @@ const transformStyles = {
 type Props = {
   children?: React.ReactNode;
   withTransform: boolean;
+  strategy: 'absolute' | 'fixed';
 };
 
 function NotStacked({children}: Props) {
   return children;
 }
 
-function StackedOnDialog({children, withTransform}: Props) {
-  const {x, y, strategy, refs} = useFloating({
+function StackedOnDialog({children, withTransform, strategy}: Props) {
+  const {x, y, refs} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     middleware: [flip()],
@@ -75,8 +77,9 @@ function StackedOnDialog({children, withTransform}: Props) {
   );
 }
 
-function StackedOnPopover({children, withTransform}: Props) {
-  const {x, y, strategy, refs} = useFloating({
+function StackedOnPopover({children, withTransform, strategy}: Props) {
+  const {x, y, refs} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
     middleware: [flip()],
@@ -146,9 +149,9 @@ export function TopLayer() {
   const [strategy, setStrategy] = useState<'absolute' | 'fixed'>('fixed');
 
   const {refs, floatingStyles, x, y} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'top',
-    strategy,
     middleware: [collision && flip()],
   });
 
@@ -178,6 +181,7 @@ export function TopLayer() {
 
   const stackProps = {
     withTransform,
+    strategy,
   };
 
   const classes = `container ${stackedOn === 'none' ? 'host' : ''}`;
