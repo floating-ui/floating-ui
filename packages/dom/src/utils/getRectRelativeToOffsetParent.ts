@@ -51,7 +51,7 @@ export function getRectRelativeToOffsetParent(
   let x = rect.left + scroll.scrollLeft - offsets.x;
   let y = rect.top + scroll.scrollTop - offsets.y;
 
-  const [isTopLayer, topLayerX, topLayerY] = topLayer(floating);
+  const [isTopLayer, topLayerX, topLayerY] = topLayer(floating, isFixed);
 
   if (isTopLayer) {
     x += topLayerX;

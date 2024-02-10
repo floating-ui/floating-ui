@@ -10,27 +10,26 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
-import type {Platform} from '../types';
 import {topLayer} from '../utils/topLayer';
 
-export function convertOffsetParentRelativeRectToViewportRelativeRect(
-  this: Platform,
-  {
-    elements,
-    rect,
-    offsetParent,
-    strategy,
-  }: {
-    elements?: Elements;
-    rect: Rect;
-    offsetParent: Element | Window;
-    strategy: Strategy;
-  },
-): Rect {
+export function convertOffsetParentRelativeRectToViewportRelativeRect({
+  elements,
+  rect,
+  offsetParent,
+  strategy,
+}: {
+  elements?: Elements;
+  rect: Rect;
+  offsetParent: Element | Window;
+  strategy: Strategy;
+}): Rect {
+  const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const [isTopLayer] = elements ? topLayer(elements.floating) : [false];
+  const [isTopLayer, x, y] = elements
+    ? topLayer(elements.floating, isFixed)
+    : [false];
 
-  if (offsetParent === documentElement || isTopLayer) {
+  if (offsetParent === documentElement || (isTopLayer && isFixed)) {
     return rect;
   }
 
@@ -39,10 +38,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect(
   const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
-  if (
-    isOffsetParentAnElement ||
-    (!isOffsetParentAnElement && strategy !== 'fixed')
-  ) {
+  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)
@@ -58,10 +54,22 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect(
     }
   }
 
+  let topLayerX = 0;
+  let topLayerY = 0;
+
+  if (isTopLayer) {
+    if (x) topLayerX = x;
+    if (y) topLayerY = y;
+    if (isOffsetParentAnElement) {
+      topLayerX += offsetParent.clientLeft;
+      topLayerY += offsetParent.clientTop;
+    }
+  }
+
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y,
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x - topLayerX,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y - topLayerY,
   };
 }

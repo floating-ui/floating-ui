@@ -1,8 +1,12 @@
-import {getContainingBlock} from '@floating-ui/utils/dom';
+import {
+  getContainingBlock,
+  getNodeScroll,
+  getWindow,
+} from '@floating-ui/utils/dom';
 
 const topLayerSelectors = [':popover-open', ':modal'] as const;
 
-export function topLayer(floating: HTMLElement) {
+export function topLayer(floating: HTMLElement, isFixed: boolean) {
   let isTopLayer = false;
   let x = 0;
   let y = 0;
@@ -19,10 +23,17 @@ export function topLayer(floating: HTMLElement) {
 
   if (isTopLayer) {
     const containingBlock = getContainingBlock(floating);
+
     if (containingBlock) {
       const rect = containingBlock.getBoundingClientRect();
       x = rect.x;
       y = rect.y;
+
+      if (!isFixed) {
+        const winScroll = getNodeScroll(getWindow(floating));
+        x += winScroll.scrollLeft;
+        y += winScroll.scrollTop;
+      }
     }
   }
 
