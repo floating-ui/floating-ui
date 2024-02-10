@@ -25,9 +25,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 }): Rect {
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const [isTopLayer, x, y] = elements
-    ? topLayer(elements.floating, isFixed)
-    : [false, 0, 0];
+  const isTopLayer = elements ? topLayer(elements.floating) : false;
 
   if (offsetParent === documentElement || (isTopLayer && isFixed)) {
     return rect;
@@ -54,22 +52,10 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
     }
   }
 
-  let topLayerX = 0;
-  let topLayerY = 0;
-
-  if (isTopLayer) {
-    topLayerX = x;
-    topLayerY = y;
-    if (isOffsetParentAnElement) {
-      topLayerX += offsetParent.clientLeft;
-      topLayerY += offsetParent.clientTop;
-    }
-  }
-
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x - topLayerX,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y - topLayerY,
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y,
   };
 }

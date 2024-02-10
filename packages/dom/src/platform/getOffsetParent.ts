@@ -7,6 +7,7 @@ import {
   isHTMLElement,
   isTableElement,
 } from '@floating-ui/utils/dom';
+import {topLayer} from '../utils/topLayer';
 
 type Polyfill = (element: HTMLElement) => Element | null;
 
@@ -37,6 +38,12 @@ export function getOffsetParent(
   const window = getWindow(element);
 
   if (!isHTMLElement(element)) {
+    return window;
+  }
+
+  const isTopLayer = topLayer(element);
+
+  if (isTopLayer) {
     return window;
   }
 
