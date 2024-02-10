@@ -27,7 +27,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   const documentElement = getDocumentElement(offsetParent);
   const [isTopLayer, x, y] = elements
     ? topLayer(elements.floating, isFixed)
-    : [false];
+    : [false, 0, 0];
 
   if (offsetParent === documentElement || (isTopLayer && isFixed)) {
     return rect;
@@ -58,8 +58,8 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
   let topLayerY = 0;
 
   if (isTopLayer) {
-    if (x) topLayerX = x;
-    if (y) topLayerY = y;
+    topLayerX = x;
+    topLayerY = y;
     if (isOffsetParentAnElement) {
       topLayerX += offsetParent.clientLeft;
       topLayerY += offsetParent.clientTop;
