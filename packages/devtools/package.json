@@ -34,7 +34,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "@floating-ui/dom": ">=1.5.4"
+    "@floating-ui/dom": "^1.0.0"
   },
   "devDependencies": {
     "config": "workspace:*",

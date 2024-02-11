@@ -71,9 +71,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/react-dom": "workspace:^",
-    "@floating-ui/utils": "workspace:^",
-    "tabbable": "^6.0.1"
+    "@floating-ui/react-dom": "^2.0.0",
+    "@floating-ui/utils": "^0.2.0",
+    "tabbable": "^6.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",

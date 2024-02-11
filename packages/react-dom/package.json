@@ -60,7 +60,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@floating-ui/dom": "workspace:^"
+    "@floating-ui/dom": "^1.0.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.23.3",
