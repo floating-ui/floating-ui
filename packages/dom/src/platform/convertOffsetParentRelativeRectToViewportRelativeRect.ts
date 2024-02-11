@@ -10,27 +10,24 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
-import type {Platform} from '../types';
-import {topLayer} from '../utils/topLayer';
+import {isTopLayer} from '../utils/isTopLayer';
 
-export function convertOffsetParentRelativeRectToViewportRelativeRect(
-  this: Platform,
-  {
-    elements,
-    rect,
-    offsetParent,
-    strategy,
-  }: {
-    elements?: Elements;
-    rect: Rect;
-    offsetParent: Element | Window;
-    strategy: Strategy;
-  },
-): Rect {
+export function convertOffsetParentRelativeRectToViewportRelativeRect({
+  elements,
+  rect,
+  offsetParent,
+  strategy,
+}: {
+  elements?: Elements;
+  rect: Rect;
+  offsetParent: Element | Window;
+  strategy: Strategy;
+}): Rect {
+  const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const [isTopLayer] = elements ? topLayer(elements.floating) : [false];
+  const topLayer = elements ? isTopLayer(elements.floating) : false;
 
-  if (offsetParent === documentElement || isTopLayer) {
+  if (offsetParent === documentElement || (topLayer && isFixed)) {
     return rect;
   }
 
@@ -39,10 +36,7 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect(
   const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
 
-  if (
-    isOffsetParentAnElement ||
-    (!isOffsetParentAnElement && strategy !== 'fixed')
-  ) {
+  if (isOffsetParentAnElement || (!isOffsetParentAnElement && !isFixed)) {
     if (
       getNodeName(offsetParent) !== 'body' ||
       isOverflowElement(documentElement)

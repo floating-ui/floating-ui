@@ -14,17 +14,18 @@ const transformStyles = {
 type Props = {
   children?: React.ReactNode;
   withTransform: boolean;
+  strategy: 'absolute' | 'fixed';
 };
 
 function NotStacked({children}: Props) {
   return children;
 }
 
-function StackedOnDialog({children, withTransform}: Props) {
-  const {x, y, strategy, refs} = useFloating({
+function StackedOnDialog({children, withTransform, strategy}: Props) {
+  const {x, y, refs} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
-    strategy: 'fixed',
     middleware: [flip()],
   });
 
@@ -76,11 +77,11 @@ function StackedOnDialog({children, withTransform}: Props) {
   );
 }
 
-function StackedOnPopover({children, withTransform}: Props) {
-  const {x, y, strategy, refs} = useFloating({
+function StackedOnPopover({children, withTransform, strategy}: Props) {
+  const {x, y, refs} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'bottom',
-    strategy: 'fixed',
     middleware: [flip()],
   });
 
@@ -145,11 +146,12 @@ export function TopLayer() {
   const [collision, setCollision] = useState(false);
   const [withMargin, setWithMargin] = useState(false);
   const [layoutStyles, setLayoutStyles] = useState(true);
+  const [strategy, setStrategy] = useState<'absolute' | 'fixed'>('fixed');
 
   const {refs, floatingStyles, x, y} = useFloating({
+    strategy,
     whileElementsMounted: autoUpdate,
     placement: 'top',
-    strategy: 'fixed',
     middleware: [collision && flip()],
   });
 
@@ -179,6 +181,7 @@ export function TopLayer() {
 
   const stackProps = {
     withTransform,
+    strategy,
   };
 
   const classes = `container ${stackedOn === 'none' ? 'host' : ''}`;
@@ -233,7 +236,7 @@ export function TopLayer() {
               display: 'revert',
               ...(layoutStyles
                 ? {
-                    position: 'fixed',
+                    position: strategy,
                     top: y,
                     left: x,
                   }
@@ -260,6 +263,22 @@ export function TopLayer() {
             }}
           >
             {String(bool)}
+          </button>
+        ))}
+      </Controls>
+
+      <h2>strategy</h2>
+      <Controls>
+        {(['absolute', 'fixed'] as const).map((s) => (
+          <button
+            key={s}
+            data-testid={`strategy-${s}`}
+            onClick={() => setStrategy(s)}
+            style={{
+              backgroundColor: s === strategy ? 'black' : '',
+            }}
+          >
+            {s}
           </button>
         ))}
       </Controls>
