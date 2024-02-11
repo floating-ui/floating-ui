@@ -1,5 +1,11 @@
 # @floating-ui/dom
 
+## 1.6.2
+
+### Patch Changes
+
+- fix: top layer element positioning and collision detection when using `absolute` strategy
+
 ## 1.6.1
 
 ### Patch Changes
