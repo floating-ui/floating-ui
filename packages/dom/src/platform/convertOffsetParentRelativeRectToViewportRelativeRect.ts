@@ -10,7 +10,7 @@ import {
 
 import {getBoundingClientRect} from '../utils/getBoundingClientRect';
 import {getScale} from './getScale';
-import {topLayer} from '../utils/topLayer';
+import {isTopLayer} from '../utils/isTopLayer';
 
 export function convertOffsetParentRelativeRectToViewportRelativeRect({
   elements,
@@ -25,9 +25,9 @@ export function convertOffsetParentRelativeRectToViewportRelativeRect({
 }): Rect {
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const isTopLayer = elements ? topLayer(elements.floating) : false;
+  const topLayer = elements ? isTopLayer(elements.floating) : false;
 
-  if (offsetParent === documentElement || (isTopLayer && isFixed)) {
+  if (offsetParent === documentElement || (topLayer && isFixed)) {
     return rect;
   }
 
