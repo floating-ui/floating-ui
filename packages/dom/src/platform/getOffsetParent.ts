@@ -37,13 +37,7 @@ export function getOffsetParent(
 ): Element | Window {
   const window = getWindow(element);
 
-  if (!isHTMLElement(element)) {
-    return window;
-  }
-
-  const isTopLayer = topLayer(element);
-
-  if (isTopLayer) {
+  if (!isHTMLElement(element || topLayer(element))) {
     return window;
   }
 
