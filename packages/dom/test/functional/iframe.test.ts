@@ -19,6 +19,17 @@ import {click} from './utils/click';
     ).toMatchSnapshot(`outside-${scroll}.png`);
   });
 
+  test(`[outside-embedded] ${scroll} correctly positioned on bottom with clipping detection`, async ({
+    page,
+  }) => {
+    await page.goto('http://localhost:1234/iframe');
+    await click(page, `[data-testid="scroll-${scroll}"]`);
+
+    expect(
+      await page.locator('#outside-embedded-container').screenshot(),
+    ).toMatchSnapshot(`outside-embedded-${scroll}.png`);
+  });
+
   test(`[inside] ${scroll} correctly positioned on bottom with clipping detection`, async ({
     page,
   }) => {

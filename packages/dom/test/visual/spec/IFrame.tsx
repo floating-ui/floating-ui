@@ -78,6 +78,92 @@ function Outside({scroll}: {scroll: number[]}) {
   );
 }
 
+function OutsideEmbedded({scroll}: {scroll: number[]}) {
+  const [rootIFrame, setRootIFrame] = useState<HTMLIFrameElement | null>(null);
+  const [nestedIFrame, setNestedIFrame] = useState<HTMLIFrameElement | null>(
+    null,
+  );
+
+  const {x, y, refs, strategy} = useFloating({
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      shift({
+        crossAxis: true,
+        limiter: limitShift(),
+        boundary: nestedIFrame || undefined,
+      }),
+    ],
+  });
+
+  const rootNode = rootIFrame?.contentWindow?.document.body;
+  const nestedNode = nestedIFrame?.contentWindow?.document.body;
+
+  useLayoutEffect(() => {
+    if (nestedNode && scroll) {
+      nestedNode.scrollLeft = scroll[0];
+      nestedNode.scrollTop = scroll[1];
+    }
+  }, [nestedNode, scroll]);
+
+  return (
+    <>
+      <h2>Outside Embedded</h2>
+      <div className="container" id="outside-embedded-container">
+        <iframe
+          ref={setRootIFrame}
+          width={350}
+          height={350}
+          style={{transform: 'scale(1.25)', border: '5px solid black'}}
+        >
+          {rootNode &&
+            createPortal(
+              <div style={{width: 2000, height: 2000, position: 'relative'}}>
+                <iframe
+                  ref={setNestedIFrame}
+                  width={200}
+                  height={200}
+                  style={{transform: 'scale(1.25)', border: '5px solid black'}}
+                >
+                  {nestedNode &&
+                    createPortal(
+                      <div
+                        style={{
+                          width: 2000,
+                          height: 2000,
+                          position: 'relative',
+                        }}
+                      >
+                        <button
+                          ref={refs.setReference}
+                          className="reference"
+                          style={{position: 'absolute', left: 1000, top: 1000}}
+                        >
+                          Reference
+                        </button>
+                      </div>,
+                      nestedNode,
+                    )}
+                </iframe>
+                <div
+                  ref={refs.setFloating}
+                  className="floating"
+                  style={{
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                  }}
+                >
+                  Floating
+                </div>
+              </div>,
+              rootNode,
+            )}
+        </iframe>
+      </div>
+    </>
+  );
+}
+
 function Inside({scroll}: {scroll: number[]}) {
   const [iframe, setIFrame] = useState<HTMLIFrameElement | null>(null);
   const {x, y, refs, strategy} = useFloating({
@@ -393,6 +479,7 @@ export function IFrame() {
       <h1>iframe</h1>
       <p></p>
       <Outside scroll={scroll} />
+      <OutsideEmbedded scroll={scroll} />
       <Inside scroll={scroll} />
       <Nested scroll={scroll} />
       <Virtual scroll={scroll} />
