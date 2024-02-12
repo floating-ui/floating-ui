@@ -1,5 +1,22 @@
 # @floating-ui/dom
 
+## 1.6.3
+
+### Patch Changes
+
+- fix: calculate reference element offset relative to `offsetParent` iframe. Fixes issue with positioning in nested iframes, such as the following:
+
+```html
+<html>
+  <iframe>
+    <div>floating</div>
+    <iframe>
+      <div>reference</div>
+    </iframe>
+  </iframe>
+</html>
+```
+
 ## 1.6.2
 
 ### Patch Changes
