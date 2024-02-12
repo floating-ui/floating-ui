@@ -163,4 +163,10 @@ export const MINI_SPONSORS = [
     url: 'https://thetinyzone.com/',
     MemberId: 507711,
   },
+  {
+    logo: '/sponsors/bestkru.svg',
+    label: 'BestKru',
+    url: 'https://bestkru.com/',
+    MemberId: 533657,
+  },
 ];
