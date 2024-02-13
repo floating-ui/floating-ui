@@ -8,6 +8,7 @@ import type {
   Strategy,
 } from '@floating-ui/dom';
 import type {ComponentPublicInstance, Ref} from 'vue-demi';
+import type {unwrapElement} from './utils/unwrapElement';
 
 export type {
   AlignedPlacement,
@@ -55,7 +56,11 @@ export type MaybeReadonlyRef<T> = T | Readonly<Ref<T>>;
 
 export type MaybeElement<T> = T | ComponentPublicInstance | null | undefined;
 
-export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
+export type VueReferenceElement = ReferenceElement | ComponentPublicInstance;
+
+export type VueFloatingElement = FloatingElement | ComponentPublicInstance;
+
+export type UseFloatingOptions<T extends VueReferenceElement = VueReferenceElement> =
   {
     /**
      * Represents the open/close state of the floating element.
@@ -88,7 +93,7 @@ export type UseFloatingOptions<T extends ReferenceElement = ReferenceElement> =
      * @default undefined
      */
     whileElementsMounted?: (
-      reference: T,
+      reference: Exclude<ReturnType<typeof unwrapElement<T>>, null | undefined>,
       floating: FloatingElement,
       update: () => void,
     ) => () => void;

@@ -4,18 +4,18 @@ import {defineComponent, effectScope, ref, toRef} from 'vue';
 
 import {arrow, offset, useFloating} from '../src';
 import type {
-  FloatingElement,
   Middleware,
   Placement,
-  ReferenceElement,
   Strategy,
+  VueReferenceElement,
+  VueFloatingElement,
 } from '../src/types';
 import type {ArrowOptions, UseFloatingOptions} from '../src/types';
 
 describe('useFloating', () => {
   function setup(options?: UseFloatingOptions) {
-    const reference = ref<ReferenceElement | null>(null);
-    const floating = ref<FloatingElement | null>(null);
+    const reference = ref<VueReferenceElement | null>(null);
+    const floating = ref<VueFloatingElement | null>(null);
     const position = useFloating(reference, floating, options);
 
     return {reference, floating, ...position};
@@ -701,8 +701,8 @@ describe('useFloating', () => {
 
 describe('arrow', () => {
   function setup(options?: Omit<ArrowOptions, 'element'>) {
-    const reference = ref<ReferenceElement | null>(null);
-    const floating = ref<FloatingElement | null>(null);
+    const reference = ref<VueReferenceElement | null>(null);
+    const floating = ref<VueFloatingElement | null>(null);
     const floatingArrow = ref<HTMLElement | null>(null);
     const position = useFloating(reference, floating, {
       middleware: [arrow({...options, element: floatingArrow})],

@@ -20,6 +20,8 @@ import type {
   MaybeElement,
   UseFloatingOptions,
   UseFloatingReturn,
+  VueReferenceElement,
+  VueFloatingElement,
 } from './types';
 import {getDPR} from './utils/getDPR';
 import {roundByDPR} from './utils/roundByDPR';
@@ -32,10 +34,10 @@ import {unwrapElement} from './utils/unwrapElement';
  * @param options The floating options.
  * @see https://floating-ui.com/docs/vue
  */
-export function useFloating<T extends ReferenceElement = ReferenceElement>(
+export function useFloating<T extends VueReferenceElement = VueReferenceElement>(
   reference: Readonly<Ref<MaybeElement<T>>>,
-  floating: Readonly<Ref<MaybeElement<FloatingElement>>>,
-  options: UseFloatingOptions<T> = {},
+  floating: Readonly<Ref<MaybeElement<VueFloatingElement>>>,
+  options: UseFloatingOptions = {},
 ): UseFloatingReturn {
   const whileElementsMountedOption = options.whileElementsMounted;
   const openOption = computed(() => unref(options.open) ?? true);
