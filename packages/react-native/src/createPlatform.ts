@@ -29,13 +29,13 @@ export const createPlatform = ({
     return new Promise((resolve) => {
       const onMeasure = (offsetX = 0, offsetY = 0) => {
         floating.measure(
-          (x: number, y: number, width: number, height: number) => {
+          (x = 0, y = 0, width = 0, height = 0) => {
             const floatingRect = {width, height, ...ORIGIN};
             const method = sameScrollView ? 'measure' : 'measureInWindow';
 
             if (isView(reference)) {
               reference[method](
-                (x: number, y: number, width: number, height: number) => {
+                (x = 0, y = 0, width = 0, height = 0) => {
                   const referenceRect = {
                     width,
                     height,
