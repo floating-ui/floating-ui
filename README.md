@@ -2,10 +2,11 @@
   <img src="https://github.com/floating-ui/floating-ui/blob/master/website/assets/floating-ui-banner.png" alt="Floating UI">
 <p>
 
-> **Popper is now Floating UI! For Popper v2, visit
-> [its dedicated branch.](https://github.com/floating-ui/floating-ui/tree/v2.x)
+> [!NOTE]
+> Popper is now Floating UI! For Popper v2, visit
+> [its dedicated branch](https://github.com/floating-ui/floating-ui/tree/v2.x) and [its documentation](https://popper.js.org/docs).
 > For help on migrating, check out the
-> [Migration Guide.](https://floating-ui.com/docs/migration)**
+> [Migration Guide.](https://floating-ui.com/docs/migration)
 
 [Floating UI](https://floating-ui.com) is a small library that helps you create
 "floating" elements such as tooltips, popovers, dropdowns, and more.
