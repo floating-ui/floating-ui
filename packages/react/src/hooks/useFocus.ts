@@ -182,6 +182,9 @@ export function useFocus<RT extends ReferenceType = ReferenceType>(
               return;
             }
 
+            // Focus movement should not cause floating elements to be hidden while in the hover state.
+            if (event.target.matches(":hover")) return;
+
             onOpenChange(false, event.nativeEvent, 'focus');
           });
         },
