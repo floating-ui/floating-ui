@@ -169,4 +169,10 @@ export const MINI_SPONSORS = [
     url: 'https://bestkru.com/',
     MemberId: 533657,
   },
+  {
+    logo: '/sponsors/bfh.svg',
+    label: 'BasementFloodHelpers.com',
+    url: 'https://basementfloodhelpers.com/',
+    MemberId: 517657,
+  },
 ];
