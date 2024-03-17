@@ -36,6 +36,12 @@ export interface FloatingArrowProps extends React.SVGAttributes<SVGSVGElement> {
   staticOffset?: string | number | null;
 
   /**
+   * Whether to skew the arrow shape so that it points to the center as best as
+   * possible.
+   */
+  skewToCenter?: boolean;
+
+  /**
    * Custom path string.
    */
   d?: string;
@@ -66,6 +72,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     height = 7,
     tipRadius = 0,
     strokeWidth = 0,
+    skewToCenter = false,
     staticOffset,
     stroke,
     d,
@@ -111,13 +118,25 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
   const arrowX = arrow?.x != null ? staticOffset || arrow.x : '';
   const arrowY = arrow?.y != null ? staticOffset || arrow.y : '';
 
+  const centerOffset =
+    staticOffset || !skewToCenter
+      ? 0
+      : (arrow?.centerOffset || 0) *
+        (side === 'top' || side === 'right' ? 1 : -1);
+  const skewOffset =
+    centerOffset < 0
+      ? -Math.min(width / 2 - tipRadius, -centerOffset)
+      : Math.min(width / 2 - tipRadius, centerOffset);
+
   const dValue =
     d ||
     // biome-ignore lint/style/useTemplate: readability
     'M0,0' +
       ` H${width}` +
-      ` L${width - svgX},${height - svgY}` +
-      ` Q${width / 2},${height} ${svgX},${height - svgY}` +
+      ` L${width - svgX + skewOffset},${height - svgY}` +
+      ` Q${width / 2 + skewOffset},${height} ${svgX + skewOffset},${
+        height - svgY
+      }` +
       ' Z';
 
   const rotation = {
@@ -154,13 +173,11 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
           fill="none"
           stroke={stroke}
           // Account for the stroke on the fill path rendered below.
-          strokeWidth={strokeWidth + (d ? 0 : 1)}
+          strokeWidth={strokeWidth}
           d={dValue}
         />
       )}
-      {/* In Firefox, for left/right placements there's a ~0.5px gap where the
-      border can show through. Adding a stroke on the fill removes it. */}
-      <path stroke={strokeWidth && !d ? rest.fill : 'none'} d={dValue} />
+      <path stroke="none" d={dValue} />
       {/* Assumes the border-width of the floating element matches the 
       stroke. */}
       <clipPath id={clipPathId}>
