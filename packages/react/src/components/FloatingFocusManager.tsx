@@ -54,6 +54,21 @@ function getPreviouslyFocusedElement() {
     .find((el) => el.isConnected);
 }
 
+const focusableElementsQuery = 'a, button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), details, [tabindex]:not([tabindex="-1"])';
+
+function isElementFocusable(node: Element) {
+	if (!(node instanceof HTMLElement) || !node.isConnected) {
+		return false;
+	}
+	return node.matches(focusableElementsQuery);
+}
+
+function getFirstFocusableElement(node: Element) {
+	const focusable = Array.from(node.querySelectorAll(focusableElementsQuery))
+	  .filter(isElementFocusable);
+	return focusable[0];
+}
+
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
   ref: React.Ref<HTMLButtonElement>,
@@ -482,8 +497,12 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      const returnElement = getPreviouslyFocusedElement();
+      let returnElement = getPreviouslyFocusedElement();
 
+	  // if the returnElement is not focusable, attempt to find a focusable element within it's tree
+	  if (returnElement && !isElementFocusable(returnElement)) {
+		returnElement = getFirstFocusableElement(returnElement);
+	  }
       if (
         returnFocusRef.current &&
         !preventReturnFocusRef.current &&
