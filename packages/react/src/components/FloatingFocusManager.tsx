@@ -38,12 +38,13 @@ function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
-  if(element && getNodeName(element) !== 'body' && !isTabbable(element)) {
+  let targetEl = element;
+  if(targetEl && getNodeName(targetEl) !== 'body' && !isTabbable(targetEl)) {
 	// If the element itself is not tabbable, try to find the first tabbable node inside it.
-    element = tabbable(element, getTabbableOptions())[0];
+    targetEl = tabbable(targetEl, getTabbableOptions())[0];
   }
-  if (element && getNodeName(element) !== 'body') {
-    previouslyFocusedElements.push(element);
+  if (targetEl && getNodeName(targetEl) !== 'body') {
+    previouslyFocusedElements.push(targetEl);
     if (previouslyFocusedElements.length > LIST_LIMIT) {
       previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
     }
@@ -485,7 +486,7 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
         addPreviouslyFocusedElement(refs.domReference.current);
       }
 
-      let returnElement = getPreviouslyFocusedElement();
+      const returnElement = getPreviouslyFocusedElement();
 
       if (
         returnFocusRef.current &&
