@@ -39,7 +39,7 @@ function addPreviouslyFocusedElement(element: Element | null) {
     (el) => el.isConnected,
   );
   let targetEl = element;
-  if (!targetEl || getNodeName(targetEl) !== 'body') {
+  if (!targetEl || getNodeName(targetEl) === 'body') {
     return;
   }
   if (!isTabbable(targetEl, getTabbableOptions())) {
