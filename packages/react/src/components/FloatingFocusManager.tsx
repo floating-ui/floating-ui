@@ -38,15 +38,14 @@ function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
-  let targetEl = element;
-  if (!targetEl || getNodeName(targetEl) === 'body') {
-    return;
+  let tabbableEl = element;
+  if (!tabbableEl || getNodeName(tabbableEl) === 'body') return;
+  if (!isTabbable(tabbableEl, getTabbableOptions())) {
+    const tabbableChild = tabbable(tabbableEl, getTabbableOptions())[0];
+    if (!tabbableChild) return;
+    tabbableEl = tabbableChild;
   }
-  if (!isTabbable(targetEl, getTabbableOptions())) {
-    // If the element itself is not tabbable, try to find the first tabbable node inside it.
-    targetEl = tabbable(targetEl, getTabbableOptions())[0] ?? targetEl;
-  }
-  previouslyFocusedElements.push(targetEl);
+  previouslyFocusedElements.push(tabbableEl);
   if (previouslyFocusedElements.length > LIST_LIMIT) {
     previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
   }
