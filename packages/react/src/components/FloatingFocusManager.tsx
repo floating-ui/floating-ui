@@ -11,7 +11,7 @@ import {
 import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import type {FocusableElement} from 'tabbable';
-import {tabbable} from 'tabbable';
+import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
@@ -38,7 +38,10 @@ function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
-
+  if(element && getNodeName(element) !== 'body' && !isTabbable(element)) {
+	// If the element itself is not tabbable, try to find the first tabbable node inside it.
+    element = tabbable(element, getTabbableOptions())[0];
+  }
   if (element && getNodeName(element) !== 'body') {
     previouslyFocusedElements.push(element);
     if (previouslyFocusedElements.length > LIST_LIMIT) {
@@ -52,21 +55,6 @@ function getPreviouslyFocusedElement() {
     .slice()
     .reverse()
     .find((el) => el.isConnected);
-}
-
-const focusableElementsQuery = 'a, button:not(:disabled), input:not(:disabled), textarea:not(:disabled), select:not(:disabled), details, [tabindex]:not([tabindex="-1"])';
-
-function isElementFocusable(node: Element) {
-	if (!(node instanceof HTMLElement) || !node.isConnected) {
-		return false;
-	}
-	return node.matches(focusableElementsQuery);
-}
-
-function getFirstFocusableElement(node: Element) {
-	const focusable = Array.from(node.querySelectorAll(focusableElementsQuery))
-	  .filter(isElementFocusable);
-	return focusable[0];
 }
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
@@ -499,10 +487,6 @@ export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
 
       let returnElement = getPreviouslyFocusedElement();
 
-	  // if the returnElement is not focusable, attempt to find a focusable element within it's tree
-	  if (returnElement && !isElementFocusable(returnElement)) {
-		returnElement = getFirstFocusableElement(returnElement);
-	  }
       if (
         returnFocusRef.current &&
         !preventReturnFocusRef.current &&

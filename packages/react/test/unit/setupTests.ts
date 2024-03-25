@@ -56,3 +56,19 @@ Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
     return this.parentNode;
   },
 });
+
+// Mock tabbable options - see https://github.com/focus-trap/tabbable#testing-in-jsdom
+vi.mock('tabbable', async (importOriginal) => {
+	const lib = await importOriginal<typeof import('tabbable')>();
+	const tabbableMock: typeof lib['tabbable'] = (node, options) => lib.tabbable(node, { ...options, displayCheck: 'none' });
+	const focusableMock: typeof lib['focusable'] = (node, options) => lib.focusable(node, { ...options, displayCheck: 'none' });
+	const isFocusableMock: typeof lib['isFocusable'] = (node, options) => lib.isFocusable(node, { ...options, displayCheck: 'none' });
+	const isTabbableMock: typeof lib['isTabbable'] = (node, options) => lib.isTabbable(node, { ...options, displayCheck: 'none' });
+	return {
+		...lib,
+		tabbable: tabbableMock,
+		focusable: focusableMock,
+		isFocusable: isFocusableMock,
+		isTabbable: isTabbableMock
+	};
+});

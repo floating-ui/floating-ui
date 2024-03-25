@@ -247,7 +247,6 @@ describe('returnFocus', () => {
 
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
 
-    expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
 	expect(screen.getByTestId('open-dialog')).toHaveFocus();
   });
 });
