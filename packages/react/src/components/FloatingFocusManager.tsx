@@ -11,7 +11,7 @@ import {
 import {getNodeName, isHTMLElement} from '@floating-ui/utils/dom';
 import * as React from 'react';
 import type {FocusableElement} from 'tabbable';
-import {tabbable} from 'tabbable';
+import {tabbable, isTabbable} from 'tabbable';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {useLatestRef} from '../hooks/utils/useLatestRef';
@@ -38,12 +38,16 @@ function addPreviouslyFocusedElement(element: Element | null) {
   previouslyFocusedElements = previouslyFocusedElements.filter(
     (el) => el.isConnected,
   );
-
-  if (element && getNodeName(element) !== 'body') {
-    previouslyFocusedElements.push(element);
-    if (previouslyFocusedElements.length > LIST_LIMIT) {
-      previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
-    }
+  let tabbableEl = element;
+  if (!tabbableEl || getNodeName(tabbableEl) === 'body') return;
+  if (!isTabbable(tabbableEl, getTabbableOptions())) {
+    const tabbableChild = tabbable(tabbableEl, getTabbableOptions())[0];
+    if (!tabbableChild) return;
+    tabbableEl = tabbableChild;
+  }
+  previouslyFocusedElements.push(tabbableEl);
+  if (previouslyFocusedElements.length > LIST_LIMIT) {
+    previouslyFocusedElements = previouslyFocusedElements.slice(-LIST_LIMIT);
   }
 }
 

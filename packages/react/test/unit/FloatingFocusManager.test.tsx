@@ -2,7 +2,6 @@ import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useRef, useState} from 'react';
 import {Context as ResponsiveContext} from 'react-responsive';
-
 import {
   FloatingFocusManager,
   FloatingNode,
@@ -65,6 +64,48 @@ function App(
     </>
   );
 }
+
+interface DialogProps {
+  open?: boolean;
+  render: (props: {close: () => void}) => React.ReactNode;
+  children: JSX.Element;
+}
+
+const Dialog = ({render, open: passedOpen = false, children}: DialogProps) => {
+  const [open, setOpen] = useState(passedOpen);
+  const nodeId = useFloatingNodeId();
+
+  const {refs, context} = useFloating({
+    open,
+    onOpenChange: setOpen,
+    nodeId,
+  });
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    useClick(context),
+    useDismiss(context, {bubbles: false}),
+  ]);
+
+  return (
+    <FloatingNode id={nodeId}>
+      {cloneElement(
+        children,
+        getReferenceProps({ref: refs.setReference, ...children.props}),
+      )}
+      <FloatingPortal>
+        {open && (
+          <FloatingFocusManager context={context}>
+            <div {...getFloatingProps({ref: refs.setFloating})}>
+              {render({
+                close: () => setOpen(false),
+              })}
+            </div>
+          </FloatingFocusManager>
+        )}
+      </FloatingPortal>
+    </FloatingNode>
+  );
+};
 
 describe('initialFocus', () => {
   test('number', async () => {
@@ -137,49 +178,7 @@ describe('returnFocus', () => {
   });
 
   test('always returns to the reference for nested elements', async () => {
-    interface Props {
-      open?: boolean;
-      render: (props: {close: () => void}) => React.ReactNode;
-      children: JSX.Element;
-    }
-
-    const Dialog = ({render, open: passedOpen = false, children}: Props) => {
-      const [open, setOpen] = useState(passedOpen);
-      const nodeId = useFloatingNodeId();
-
-      const {refs, context} = useFloating({
-        open,
-        onOpenChange: setOpen,
-        nodeId,
-      });
-
-      const {getReferenceProps, getFloatingProps} = useInteractions([
-        useClick(context),
-        useDismiss(context, {bubbles: false}),
-      ]);
-
-      return (
-        <FloatingNode id={nodeId}>
-          {cloneElement(
-            children,
-            getReferenceProps({ref: refs.setReference, ...children.props}),
-          )}
-          <FloatingPortal>
-            {open && (
-              <FloatingFocusManager context={context}>
-                <div {...getFloatingProps({ref: refs.setFloating})}>
-                  {render({
-                    close: () => setOpen(false),
-                  })}
-                </div>
-              </FloatingFocusManager>
-            )}
-          </FloatingPortal>
-        </FloatingNode>
-      );
-    };
-
-    const NestedDialog: React.FC<Props> = (props) => {
+    const NestedDialog: React.FC<DialogProps> = (props) => {
       const parentId = useFloatingParentNodeId();
 
       if (parentId == null) {
@@ -224,6 +223,31 @@ describe('returnFocus', () => {
     fireEvent.pointerDown(document.body);
 
     expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
+  });
+  test('return to the first focusable descendent of the reference, if the reference is not focusable', async () => {
+    render(
+      <Dialog
+        render={({close}) => (
+          <>
+            <button onClick={close} data-testid="close-dialog" />
+          </>
+        )}
+      >
+        <div data-testid="non-focusable-reference">
+          <button data-testid="open-dialog" />
+        </div>
+      </Dialog>,
+    );
+    screen.getByTestId('open-dialog').focus();
+    await userEvent.keyboard('{Enter}');
+
+    expect(screen.queryByTestId('close-dialog')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Esc}');
+
+    expect(screen.queryByTestId('close-dialog')).not.toBeInTheDocument();
+
+    expect(screen.getByTestId('open-dialog')).toHaveFocus();
   });
 });
 
