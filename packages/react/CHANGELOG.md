@@ -1,5 +1,11 @@
 # @floating-ui/react
 
+## 0.26.10
+
+### Patch Changes
+
+- fix(FloatingFocusManager): return focus to the first tabbable descendant of the reference element if the reference element itself is not focusable
+
 ## 0.26.9
 
 ### Patch Changes
