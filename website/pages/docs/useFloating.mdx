@@ -387,7 +387,7 @@ useFloating({
 
 <Notice type="warning">
   Only use this option if your floating element is _conditionally
-  rendered_, not hidden with CSS. Use an effect to call and clean
+  rendered_, not hidden with CSS. Use an Effect to call and clean
   up `autoUpdate` in the latter scenario.
 </Notice>
 
@@ -406,7 +406,7 @@ const {isPositioned} = useFloating({
 });
 
 // Once `isOpen` flips to `true`, `isPositioned` will switch to `true`
-// asynchronously. We can use an effect to determine when it has
+// asynchronously. We can use an Effect to determine when it has
 // been positioned.
 useEffect(() => {
   if (isPositioned) {
@@ -570,7 +570,7 @@ const {middlewareData} = useFloating();
 ### `isPositioned{:.const}`
 
 Whether the floating element has been positioned yet when used
-inside an effect (not during render). Requires the `open{:.key}`
+inside an Effect (not during render). Requires the `open{:.key}`
 option to be passed.
 
 ```js
@@ -605,7 +605,7 @@ const {refs} = useFloating();
 #### `reference`
 
 A ref for the reference element. You can access this inside an
-event handler or in an effect.
+event handler or in an Effect.
 
 ```js
 const {refs} = useFloating();
@@ -617,13 +617,16 @@ useEffect(() => {
 #### `floating`
 
 A ref for the floating element. You can access this inside an
-event handler or in an effect.
+event handler.
+
+For usage in Effects, prefer using `elements.floating{:js}`,
+since it's not guaranteed the floating element will be available
+on the first pass.
 
 ```js
 const {refs} = useFloating();
-useEffect(() => {
-  console.log(refs.floating.current);
-}, [refs]);
+// Inside an event handler:
+console.log(refs.floating.current);
 ```
 
 <ShowFor packages={['react']}>
@@ -631,7 +634,7 @@ useEffect(() => {
 #### `domReference`
 
 A ref for the DOM reference element (if available). You can
-access this inside an event handler or in an effect.
+access this inside an event handler or in an Effect.
 
 ```js
 const {refs} = useFloating();
@@ -682,7 +685,8 @@ return <div ref={refs.setPositionReference} />;
 ### `elements{:.const}`
 
 The elements as set by the refs, useful for access during
-rendering (as opposed to inside an event handler or an effect).
+rendering or when needing to reactively check if the element
+exists.
 
 ```js
 const {elements} = useFloating();
@@ -699,11 +703,17 @@ console.log(elements.reference);
 
 #### `floating`
 
-The floating element.
+The floating element. Enables you to reactively check if the
+floating element exists inside Effects, notable when using
+`<FloatingPortal>{:js}`, as it won't be available on the first
+pass.
 
 ```js
 const {elements} = useFloating();
-console.log(elements.floating);
+React.useEffect(() => {
+  if (!elements.floating) return;
+  // ...
+}, [elements.floating]);
 ```
 
 <ShowFor packages={['react']}>
