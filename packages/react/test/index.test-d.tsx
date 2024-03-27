@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import * as React from 'react';
 
 import {
   arrow,
@@ -20,7 +20,7 @@ import {
 
 App;
 function App() {
-  const arrowRef = useRef(null);
+  const arrowRef = React.useRef(null);
   useFloating();
   const {refs, floatingStyles, update, context} = useFloating({
     placement: 'right',
@@ -81,8 +81,8 @@ function App() {
     },
   });
 
-  const ref1 = useRef<HTMLDivElement>(null);
-  const ref2 = useRef<HTMLDivElement>(null);
+  const ref1 = React.useRef<HTMLDivElement>(null);
+  const ref2 = React.useRef<HTMLDivElement>(null);
   const ref = useMergeRefs([ref1, ref2, arrowRef, null]);
 
   const {context: contextGeneric} = useFloating<HTMLDivElement>();

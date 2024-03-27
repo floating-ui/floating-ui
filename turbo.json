@@ -43,6 +43,9 @@
     "lint": {
       "cache": false
     },
+    "format": {
+      "cache": false
+    },
     "test": {
       "dependsOn": ["config#build"],
       "cache": false

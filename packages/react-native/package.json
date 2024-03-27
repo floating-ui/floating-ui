@@ -13,7 +13,8 @@
     "dist"
   ],
   "scripts": {
-    "lint": "biome lint .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "clean": "rimraf dist out-tsc",
     "build": "rollup -c",
     "build:api": "build-api --tsc tsconfig.lib.json",

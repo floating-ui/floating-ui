@@ -24,7 +24,13 @@ import {
 } from '@floating-ui/react';
 import cn from 'classnames';
 import {useRouter} from 'next/router';
-import {cloneElement, forwardRef, useEffect, useRef, useState} from 'react';
+import {
+  cloneElement,
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {Check, ChevronDown} from 'react-feather';
 
 import {useAppContext} from '../../pages/_app';
@@ -75,41 +81,53 @@ const packageOptions = [
   'react-native',
 ];
 
-const ReactPackageButton = forwardRef(({package: pkg, ...props}, ref) => {
-  const {packageContext, setPackageContext} = useAppContext();
-  return (
-    <button
-      role="radio"
-      className="flex cursor-default items-center gap-1.5 rounded bg-rose-500 p-1 px-1.5 text-sm font-semibold text-white outline-transparent transition-colors hover:bg-rose-600 focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-transparent dark:bg-rose-500/90"
-      onClick={() => setPackageContext(pkg)}
-      aria-checked={packageContext === pkg}
-      ref={ref}
-      {...props}
-    >
-      {packageContext === pkg && (
-        <div className="rounded bg-white p-0.5 text-rose-500 dark:bg-gray-900 dark:text-white">
-          <Check size={16} />
-        </div>
-      )}
-      {props.children}
-    </button>
-  );
-});
+const ReactPackageButton = forwardRef(
+  function ReactPackageButton({package: pkg, ...props}, ref) {
+    const {packageContext, setPackageContext} = useAppContext();
+    return (
+      <button
+        role="radio"
+        className="flex cursor-default items-center gap-1.5 rounded bg-rose-500 p-1 px-1.5 text-sm font-semibold text-white outline-transparent transition-colors hover:bg-rose-600 focus-visible:ring-4 focus-visible:ring-rose-500 focus-visible:ring-offset-transparent dark:bg-rose-500/90"
+        onClick={() => setPackageContext(pkg)}
+        aria-checked={packageContext === pkg}
+        ref={ref}
+        {...props}
+      >
+        {packageContext === pkg && (
+          <div className="rounded bg-white p-0.5 text-rose-500 dark:bg-gray-900 dark:text-white">
+            <Check size={16} />
+          </div>
+        )}
+        {props.children}
+      </button>
+    );
+  },
+);
 
 export function ReactSelect() {
   return (
     <Composite className="-mt-2 mb-4 flex gap-1" role="group">
-      <CompositeItem render={<ReactPackageButton package="react" />}>
+      <CompositeItem
+        render={<ReactPackageButton package="react" />}
+      >
         React (all features)
       </CompositeItem>
-      <CompositeItem render={<ReactPackageButton package="react-dom" />}>
+      <CompositeItem
+        render={<ReactPackageButton package="react-dom" />}
+      >
         React DOM (only positioning)
       </CompositeItem>
     </Composite>
   );
 }
 
-function Tooltip({children, label, open, onOpenChange, openSelectMenu}) {
+function Tooltip({
+  children,
+  label,
+  open,
+  onOpenChange,
+  openSelectMenu,
+}) {
   const arrowRef = useRef(null);
   const {setIsPackageTooltipTouched} = useAppContext();
 
@@ -224,7 +242,8 @@ function Option({
       className={cn(
         'md:text-md flex w-full cursor-default items-center gap-2 rounded-md p-2 text-left text-sm outline-none dark:text-white md:text-base',
         {
-          'bg-gray-200/20 dark:bg-gray-400/30': index === activeIndex,
+          'bg-gray-200/20 dark:bg-gray-400/30':
+            index === activeIndex,
           'font-bold': index === selectedIndex,
         },
       )}
@@ -234,10 +253,15 @@ function Option({
       })}
     >
       <div
-        className={cn('relative top-[1px] h-3 w-3 rounded-full', {
-          'bg-gray-900/30 dark:bg-gray-200/50': selectedIndex !== index,
-          'bg-rose-500 dark:bg-rose-400': selectedIndex === index,
-        })}
+        className={cn(
+          'relative top-[1px] h-3 w-3 rounded-full',
+          {
+            'bg-gray-900/30 dark:bg-gray-200/50':
+              selectedIndex !== index,
+            'bg-rose-500 dark:bg-rose-400':
+              selectedIndex === index,
+          },
+        )}
       />
       <span>{option}</span>
     </button>
@@ -299,15 +323,24 @@ export function PackageSelect() {
 
   useEffect(() => {
     function handleRouteChangeComplete(path) {
-      if (!isPackageTooltipTouched && getPackageContext(path) !== 'dom') {
+      if (
+        !isPackageTooltipTouched &&
+        getPackageContext(path) !== 'dom'
+      ) {
         setIsTooltipOpen(true);
       }
     }
 
-    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+    router.events.on(
+      'routeChangeComplete',
+      handleRouteChangeComplete,
+    );
 
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChangeComplete);
+      router.events.off(
+        'routeChangeComplete',
+        handleRouteChangeComplete,
+      );
     };
   }, [isPackageTooltipTouched, router]);
 
@@ -345,12 +378,15 @@ export function PackageSelect() {
     onNavigate: setActiveIndex,
   });
   const typeahead = useTypeahead(context, {
-    listRef: isOpen ? labelsRef : {current: Object.values(optionsLabelMap)},
+    listRef: isOpen
+      ? labelsRef
+      : {current: Object.values(optionsLabelMap)},
     activeIndex,
     selectedIndex,
     onMatch: isOpen
       ? setActiveIndex
-      : (index) => setPackageContext(Object.values(optionsPkgMap)[index]),
+      : (index) =>
+          setPackageContext(Object.values(optionsPkgMap)[index]),
   });
 
   const {isMounted, styles} = useTransitionStyles(context, {
@@ -360,13 +396,8 @@ export function PackageSelect() {
     },
   });
 
-  const {getReferenceProps, getFloatingProps, getItemProps} = useInteractions([
-    typeahead,
-    listNav,
-    role,
-    click,
-    dismiss,
-  ]);
+  const {getReferenceProps, getFloatingProps, getItemProps} =
+    useInteractions([typeahead, listNav, role, click, dismiss]);
 
   const version = packages[selectedIndex]?.version;
 
@@ -408,13 +439,17 @@ export function PackageSelect() {
               {...getFloatingProps()}
             >
               <p className="mb-2 py-1 px-3 font-semibold">
-                By selecting the package you are using, the documentation will
-                be tailored to it.
+                By selecting the package you are using, the
+                documentation will be tailored to it.
               </p>
               <p className="mb-2 py-1 px-3 text-sm opacity-75">
-                This documentation refers to the latest version of each package.
+                This documentation refers to the latest version
+                of each package.
               </p>
-              <FloatingList elementsRef={elementsRef} labelsRef={labelsRef}>
+              <FloatingList
+                elementsRef={elementsRef}
+                labelsRef={labelsRef}
+              >
                 {options.map((option) => (
                   <Option
                     key={option}

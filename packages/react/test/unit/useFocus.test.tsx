@@ -1,4 +1,11 @@
-import {act, cleanup, fireEvent, render, screen, within} from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {cloneElement, useState} from 'react';
 import {vi} from 'vitest';
@@ -17,13 +24,17 @@ import type {UseFocusProps} from '../../src/hooks/useFocus';
 vi.useFakeTimers();
 
 beforeAll(() => {
-  customElements.define('render-root', class RenderRoot extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: 'open' })
-        .appendChild(document.createElement('div'));
-    }
-  });
+  customElements.define(
+    'render-root',
+    class RenderRoot extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({mode: 'open'}).appendChild(
+          document.createElement('div'),
+        );
+      }
+    },
+  );
 });
 
 function App(props: UseFocusProps & {dismiss?: boolean; hover?: boolean}) {
@@ -40,7 +51,7 @@ function App(props: UseFocusProps & {dismiss?: boolean; hover?: boolean}) {
 
   return (
     <>
-      <button {...getReferenceProps({ref: refs.setReference})} >
+      <button {...getReferenceProps({ref: refs.setReference})}>
         <span data-testid="inside-reference" tabIndex={0} />
       </button>
       {open && (
@@ -71,12 +82,14 @@ test('closes on blur', () => {
 });
 
 test('stays open when focus moves to tooltip rendered inside a shadow root', async () => {
-  const container = document.body.appendChild(document.createElement('render-root'));
+  const container = document.body.appendChild(
+    document.createElement('render-root'),
+  );
   const renderRoot = container.shadowRoot?.firstElementChild as HTMLElement;
 
-  render(<App />, { container: renderRoot });
+  render(<App />, {container: renderRoot});
 
-  const root = within(renderRoot)
+  const root = within(renderRoot);
 
   // Open the tooltip by focusing the reference
   const button = root.getByRole('button');
@@ -87,7 +100,7 @@ test('stays open when focus moves to tooltip rendered inside a shadow root', asy
   tooltip.focus();
 
   // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
-  fireEvent.focusOut(button, { relatedTarget: container })
+  fireEvent.focusOut(button, {relatedTarget: container});
 
   act(() => {
     vi.runAllTimers();
@@ -97,12 +110,14 @@ test('stays open when focus moves to tooltip rendered inside a shadow root', asy
 });
 
 test('stays open when focus moves to element inside reference that is rendered inside a shadow root', async () => {
-  const container = document.body.appendChild(document.createElement('render-root'));
+  const container = document.body.appendChild(
+    document.createElement('render-root'),
+  );
   const renderRoot = container.shadowRoot?.firstElementChild as HTMLElement;
 
-  render(<App />, { container: renderRoot });
+  render(<App />, {container: renderRoot});
 
-  const root = within(renderRoot)
+  const root = within(renderRoot);
 
   // Open the tooltip by focusing the reference
   const button = root.getByRole('button');
@@ -113,7 +128,7 @@ test('stays open when focus moves to element inside reference that is rendered i
   insideReference.focus();
 
   // trigger the blur event caused by the focus move, note relatedTarget points to the shadow root here
-  fireEvent.focusOut(button, { relatedTarget: container })
+  fireEvent.focusOut(button, {relatedTarget: container});
 
   act(() => {
     vi.runAllTimers();

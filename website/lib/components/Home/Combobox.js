@@ -152,7 +152,10 @@ const fruits = [
   'Zucchini Squash',
 ];
 
-const Item = forwardRef(({children, active, ...rest}, ref) => {
+const Item = forwardRef(function Item(
+  {children, active, ...rest},
+  ref,
+) {
   return (
     <div
       ref={ref}

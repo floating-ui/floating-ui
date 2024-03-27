@@ -25,7 +25,7 @@ interface SubItemProps {
 export const NavigationSubItem = React.forwardRef<
   HTMLAnchorElement,
   SubItemProps & React.HTMLProps<HTMLAnchorElement>
->(({label, href, ...props}, ref) => {
+>(function NavigationSubItem({label, href, ...props}, ref) {
   return (
     <a {...props} ref={ref} href={href} className="NavigationItem">
       {label}
@@ -42,7 +42,7 @@ interface ItemProps {
 export const NavigationItem = React.forwardRef<
   HTMLAnchorElement,
   ItemProps & React.HTMLProps<HTMLAnchorElement>
->(({children, label, href, ...props}, ref) => {
+>(function NavigationItem({children, label, href, ...props}, ref) {
   const [open, setOpen] = React.useState(false);
   const hasChildren = !!children;
 

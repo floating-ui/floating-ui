@@ -9,7 +9,7 @@ import {useSize} from './useSize';
 export function New() {
   const [placement, setPlacement] = useState<Placement>('bottom');
   const arrowRef = useRef<HTMLDivElement | null>(null);
-  const {refs, floatingStyles, update} = useFloating({
+  const {refs, floatingStyles} = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
     middleware: [arrow({element: arrowRef})],

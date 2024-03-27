@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "lint": "turbo lint",
+    "format": "turbo format",
     "playwright": "turbo playwright",
     "playwright:update": "turbo playwright -- -u",
     "build": "turbo build",
@@ -35,10 +36,15 @@
     "iOS >= 12.0",
     "Opera >= 53"
   ],
+  "prettier": {
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "useTabs": false,
+    "semi": true
+  },
   "devDependencies": {
     "@babel/preset-env": "^7.23.7",
     "@babel/preset-typescript": "^7.23.3",
-    "@biomejs/biome": "^1.5.2",
     "@changesets/cli": "^2.27.1",
     "@changesets/types": "^6.0.0",
     "@microsoft/api-extractor": "^7.39.1",
@@ -53,6 +59,9 @@
     "@types/jest": "^29.5.11",
     "@types/node": "^20.10.6",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^22.1.0",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",
@@ -63,6 +72,7 @@
     "tailwindcss": "^3.4.0",
     "turbo": "^1.11.2",
     "typescript": "~5.2.2",
+    "typescript-eslint": "^7.4.0",
     "vite": "^5.0.10",
     "vitest": "^1.1.1"
   },

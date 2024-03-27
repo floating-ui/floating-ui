@@ -28,7 +28,8 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "lint": "biome lint .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
     "build": "rollup -c",

@@ -17,42 +17,6 @@ vi.spyOn(window, 'requestAnimationFrame').mockImplementation(
 HTMLElement.prototype.inert = true;
 global.ResizeObserver = ResizeObserverPolyfill;
 
-function isNullOrUndefined(a: any) {
+function isNullOrUndefined(a: unknown) {
   return a == null;
 }
-
-// From https://github.com/jsdom/jsdom/issues/1261#issuecomment-512217225
-Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
-  get() {
-    let element = this;
-    while (
-      !isNullOrUndefined(element) &&
-      (isNullOrUndefined(element.style) ||
-        isNullOrUndefined(element.style.display) ||
-        element.style.display.toLowerCase() !== 'none')
-    ) {
-      element = element.parentNode;
-    }
-
-    if (!isNullOrUndefined(element)) {
-      return null;
-    }
-
-    if (
-      !isNullOrUndefined(this.style) &&
-      !isNullOrUndefined(this.style.position) &&
-      this.style.position.toLowerCase() === 'fixed'
-    ) {
-      return null;
-    }
-
-    if (
-      this.tagName.toLowerCase() === 'html' ||
-      this.tagName.toLowerCase() === 'body'
-    ) {
-      return null;
-    }
-
-    return this.parentNode;
-  },
-});
