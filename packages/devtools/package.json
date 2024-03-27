@@ -2,7 +2,8 @@
   "name": "@floating-ui/devtools",
   "version": "0.2.2",
   "scripts": {
-    "lint": "biome lint .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "clean": "rimraf dist out-tsc",
     "dev": "rollup -c -w",
     "build": "rollup -c",

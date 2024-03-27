@@ -58,7 +58,7 @@ interface MenuProps {
 export const MenuComponent = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
->(({children, label, ...props}, forwardedRef) => {
+>(function Menu({children, label, ...props}, forwardedRef) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [allowHover, setAllowHover] = React.useState(false);
@@ -273,7 +273,7 @@ interface MenuItemProps {
 export const MenuItem = React.forwardRef<
   HTMLButtonElement,
   MenuItemProps & React.ButtonHTMLAttributes<HTMLButtonElement>
->(({label, disabled, ...props}, forwardedRef) => {
+>(function MenuItem({label, disabled, ...props}, forwardedRef) {
   const menu = React.useContext(MenuContext);
   const item = useListItem({label: disabled ? null : label});
   const tree = useFloatingTree();
@@ -335,7 +335,7 @@ export const MenuItem = React.forwardRef<
 export const Menu = React.forwardRef<
   HTMLButtonElement,
   MenuProps & React.HTMLProps<HTMLButtonElement>
->((props, ref) => {
+>(function MenuWrapper(props, ref) {
   const parentId = useFloatingParentNodeId();
 
   if (parentId === null) {

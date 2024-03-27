@@ -9,7 +9,7 @@ import {useSize} from '../utils/useSize';
 export function Scrollbars() {
   const [rtl, setRtl] = useState(false);
   const [placement, setPlacement] = useState<Placement>('bottom');
-  const {x, y, refs, strategy, update} = useFloating({
+  const {x, y, refs, strategy} = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
     middleware: [shift({crossAxis: true, altBoundary: true})],

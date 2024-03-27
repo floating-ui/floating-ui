@@ -7,7 +7,6 @@ import * as React from 'react';
 export function useMergeRefs<Instance>(
   refs: Array<React.Ref<Instance> | undefined>,
 ): React.RefCallback<Instance> | null {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   return React.useMemo(() => {
     if (refs.every((ref) => ref == null)) {
       return null;
@@ -22,5 +21,6 @@ export function useMergeRefs<Instance>(
         }
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, refs);
 }

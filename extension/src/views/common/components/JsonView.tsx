@@ -6,7 +6,7 @@ import {useDevtools} from '../../../contexts/devtools';
 
 export type JsonViewProps = ReactJsonViewProps;
 
-export const JsonView = React.memo((props: JsonViewProps) => {
+export const JsonView = React.memo(function JsonView(props: JsonViewProps) {
   const devtools = useDevtools();
   const theme: ThemeKeys =
     devtools.theme === 'dark' ? 'monokai' : 'rjv-default';

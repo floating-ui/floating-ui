@@ -11,27 +11,33 @@ import {
   DevtoolsProvider,
 } from '../contexts/devtools';
 
-export const fluentDecorator =
-  (props?: FluentProviderProps) => (Story: React.ElementType) => (
-    <FluentProvider theme={webLightTheme} {...props}>
-      <Story />
-    </FluentProvider>
-  );
+export const fluentDecorator = (props?: FluentProviderProps) =>
+  function Wrapper(Story: React.ElementType) {
+    return (
+      <FluentProvider theme={webLightTheme} {...props}>
+        <Story />
+      </FluentProvider>
+    );
+  };
 
-export const serializedDataDecorator =
-  (serializedData = defaultSerializedDataContextValue.serializedData) =>
-  (Story: React.ElementType) => (
-    <SerializedDataProvider
-      value={{...defaultSerializedDataContextValue, serializedData}}
-    >
-      <Story />
-    </SerializedDataProvider>
-  );
+export const serializedDataDecorator = (
+  serializedData = defaultSerializedDataContextValue.serializedData,
+) =>
+  function Wrapper(Story: React.ElementType) {
+    return (
+      <SerializedDataProvider
+        value={{...defaultSerializedDataContextValue, serializedData}}
+      >
+        <Story />
+      </SerializedDataProvider>
+    );
+  };
 
-export const devtoolsDecorator =
-  (value = devtoolsDefaultContextValue) =>
-  (Story: React.ElementType) => (
-    <DevtoolsProvider value={value}>
-      <Story />
-    </DevtoolsProvider>
-  );
+export const devtoolsDecorator = (value = devtoolsDefaultContextValue) =>
+  function Wrapper(Story: React.ElementType) {
+    return (
+      <DevtoolsProvider value={value}>
+        <Story />
+      </DevtoolsProvider>
+    );
+  };

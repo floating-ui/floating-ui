@@ -1,5 +1,5 @@
 import {act, cleanup, fireEvent, render, screen} from '@testing-library/react';
-import {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import * as React from 'react';
 import {vi} from 'vitest';
 
 import {
@@ -15,7 +15,7 @@ import {
 
 test('middleware is always fresh and does not cause an infinite loop', async () => {
   function InlineMiddleware() {
-    const arrowRef = useRef(null);
+    const arrowRef = React.useRef(null);
     const {refs} = useFloating({
       placement: 'right',
       middleware: [
@@ -60,8 +60,8 @@ test('middleware is always fresh and does not cause an infinite loop', async () 
   }
 
   function StateMiddleware() {
-    const arrowRef = useRef(null);
-    const [middleware, setMiddleware] = useState([
+    const arrowRef = React.useRef(null);
+    const [middleware, setMiddleware] = React.useState([
       offset(),
       offset(10),
       offset(() => 5),
@@ -165,7 +165,7 @@ describe('whileElementsMounted', () => {
     const spy = vi.fn();
 
     function App() {
-      const [open, setOpen] = useState(false);
+      const [open, setOpen] = React.useState(false);
       const {refs} = useFloating({whileElementsMounted: spy});
       return (
         <>
@@ -187,7 +187,7 @@ describe('whileElementsMounted', () => {
     const spy = vi.fn();
 
     function App() {
-      const [open, setOpen] = useState(false);
+      const [open, setOpen] = React.useState(false);
       const {refs} = useFloating({whileElementsMounted: spy});
       return (
         <>
@@ -214,10 +214,10 @@ describe('whileElementsMounted', () => {
     const spy = vi.fn();
 
     function App() {
-      const [open, setOpen] = useState(false);
+      const [open, setOpen] = React.useState(false);
       const {refs} = useFloating({whileElementsMounted: spy});
 
-      useEffect(() => {
+      React.useEffect(() => {
         setOpen(true);
       }, []);
 
@@ -240,10 +240,10 @@ describe('whileElementsMounted', () => {
     const spy = vi.fn(() => cleanupSpy);
 
     function App() {
-      const [open, setOpen] = useState(true);
+      const [open, setOpen] = React.useState(true);
       const {refs} = useFloating({whileElementsMounted: spy});
 
-      useEffect(() => {
+      React.useEffect(() => {
         setOpen(false);
       }, []);
 
@@ -288,12 +288,12 @@ test('isPositioned', async () => {
   const spy = vi.fn();
 
   function App() {
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
     const {refs, isPositioned} = useFloating({
       open,
     });
 
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
       spy(isPositioned);
     }, [isPositioned]);
 
@@ -330,15 +330,19 @@ test('isPositioned', async () => {
 
 test('external elements sync', async () => {
   function App() {
-    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
-    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
+      null,
+    );
+    const [floatingEl, setFloatingEl] = React.useState<HTMLElement | null>(
+      null,
+    );
     const {x, y, refs} = useFloating();
 
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
       refs.setReference(referenceEl);
     }, [refs, referenceEl]);
 
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
       refs.setFloating(floatingEl);
     }, [refs, floatingEl]);
 
@@ -360,7 +364,9 @@ test('external elements sync', async () => {
 
 test('external reference element sync', async () => {
   function App() {
-    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
+    const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
+      null,
+    );
     const {x, y, refs} = useFloating({
       elements: {
         reference: referenceEl,
@@ -398,7 +404,9 @@ test('external reference element sync', async () => {
 
 test('external floating element sync', async () => {
   function App() {
-    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const [floatingEl, setFloatingEl] = React.useState<HTMLElement | null>(
+      null,
+    );
     const {x, y, refs} = useFloating({
       elements: {
         floating: floatingEl,
@@ -436,8 +444,12 @@ test('external floating element sync', async () => {
 
 test('external elements sync', async () => {
   function App() {
-    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
-    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
+      null,
+    );
+    const [floatingEl, setFloatingEl] = React.useState<HTMLElement | null>(
+      null,
+    );
     const {x, y} = useFloating({
       elements: {
         reference: referenceEl,
@@ -476,8 +488,12 @@ test('external elements sync', async () => {
 
 test('external elements sync update', async () => {
   function App() {
-    const [referenceEl, setReferenceEl] = useState<HTMLElement | null>(null);
-    const [floatingEl, setFloatingEl] = useState<HTMLElement | null>(null);
+    const [referenceEl, setReferenceEl] = React.useState<HTMLElement | null>(
+      null,
+    );
+    const [floatingEl, setFloatingEl] = React.useState<HTMLElement | null>(
+      null,
+    );
     const {x, y} = useFloating({
       elements: {
         reference: referenceEl,

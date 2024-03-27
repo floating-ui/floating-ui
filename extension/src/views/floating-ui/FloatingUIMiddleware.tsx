@@ -5,7 +5,7 @@ import {useSerializedData} from '../../contexts/serializedData';
 import JsonView from '../common/components/JsonView';
 import styles from './FloatingUIMiddleware.module.css';
 
-export const FloatingUIMiddleware = React.memo(() => {
+export const FloatingUIMiddleware = React.memo(function FloatingUIMiddleware() {
   const devtools = useDevtools();
   const serializedData = useSerializedData('FloatingUIMiddleware');
   const [index, setIndex] = React.useState(serializedData.length - 1);
@@ -32,9 +32,7 @@ export const FloatingUIMiddleware = React.memo(() => {
   }, [serializedData.length]);
 
   return (
-    <div
-      className={styles.root}
-    >
+    <div className={styles.root}>
       {Object.entries({
         initialPlacement,
         middlewareData,
@@ -58,7 +56,7 @@ export const FloatingUIMiddleware = React.memo(() => {
         return (
           <div key={key} className={styles.keyValueContainer}>
             <span className={styles.propertyKey}>{key} :</span>{' '}
-            <span className={styles.string}>"{value}"</span>
+            <span className={styles.string}>&quot;{value}&quot;</span>
           </div>
         );
       })}

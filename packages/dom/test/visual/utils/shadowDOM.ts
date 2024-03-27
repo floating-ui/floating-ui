@@ -14,6 +14,7 @@ interface FloatingUICustomElement {
 type CustomElement<T> = Partial<T & HTMLAttributes<T> & {children: any}>;
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       ['direct-host-child']: CustomElement<FloatingUICustomElement>;

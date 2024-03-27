@@ -119,6 +119,7 @@ export function ScrollArrow({
       onHide();
     }
     // Assuming `onHide` does not change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show, scrollTop]);
 
   useLayoutEffect(() => {

@@ -1,10 +1,10 @@
-import {useRef} from 'react';
+import * as React from 'react';
 
 import {arrow, offset, platform, shift, useFloating} from '../src';
 
 App;
 function App() {
-  const arrowRef = useRef(null);
+  const arrowRef = React.useRef(null);
   useFloating();
   const {refs, floatingStyles, update} = useFloating({
     open: true,
@@ -17,7 +17,7 @@ function App() {
       {
         name: 'test',
         async fn({elements}) {
-          // @ts-expect-error
+          // @ts-expect-error - should not be allowed with strong typing
           elements.floating.style = '';
           return {};
         },

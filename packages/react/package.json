@@ -36,7 +36,8 @@
     "utils"
   ],
   "scripts": {
-    "lint": "biome lint .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "clean": "rimraf dist out-tsc utils",
     "test": "vitest run",
     "test:watch": "vitest watch",

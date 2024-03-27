@@ -158,7 +158,7 @@ interface ItemProps {
 const Item = forwardRef<
   HTMLDivElement,
   ItemProps & React.HTMLProps<HTMLDivElement>
->(({children, active, ...rest}, ref) => {
+>(function Item({children, active, ...rest}, ref) {
   return (
     <div
       ref={ref}

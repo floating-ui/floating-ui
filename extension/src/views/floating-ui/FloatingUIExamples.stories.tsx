@@ -1,7 +1,7 @@
 import {devtools} from '@floating-ui/devtools';
 import {useClick, useFloating, useInteractions} from '@floating-ui/react';
 import type {Meta} from '@storybook/react';
-import {useState} from 'react';
+import * as React from 'react';
 
 export default {
   title: 'Examples/Floating UI',
@@ -11,7 +11,7 @@ export default {
 } satisfies Meta;
 
 export const UseFloating = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = React.useState(true);
 
   const {refs, floatingStyles, context} = useFloating({
     open: isOpen,

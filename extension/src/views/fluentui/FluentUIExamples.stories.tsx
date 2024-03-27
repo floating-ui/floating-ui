@@ -6,6 +6,7 @@ import {
   PopoverTrigger,
 } from '@fluentui/react-components';
 import type {Meta} from '@storybook/react';
+import * as React from 'react';
 
 import {fluentDecorator} from '../../utils/decorators';
 

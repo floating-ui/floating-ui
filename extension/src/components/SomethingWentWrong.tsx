@@ -1,5 +1,5 @@
 import devtoolsPackageJSON from '@floating-ui/devtools/package.json';
-import React from 'react';
+import * as React from 'react';
 import type {FallbackProps} from 'react-error-boundary';
 import {RotateCcw, XOctagon} from 'react-feather';
 
@@ -44,11 +44,11 @@ export const SomethingWentWrong = (props: SomethingWentWrongProps) => {
       </u>
       <div className={styles.content}>
         <span>
-          Something went wrong with '
+          Something went wrong with &apos;
           {type.startsWith('Chrome')
             ? 'chrome.devtools'
             : currentSerializedData.type}
-          ' module
+          &apos; module
         </span>
         <span>{type}: </span>
         <span className={styles.errorBox}>

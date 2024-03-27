@@ -17,7 +17,10 @@ import {remToPx} from '../../utils/remToPx';
 import {Chrome} from '../Chrome';
 import {Floating} from '../Floating';
 
-const Reference = forwardRef(({className, children}, ref) => {
+const Reference = forwardRef(function Reference(
+  {className, children},
+  ref,
+) {
   return (
     <button
       ref={ref}

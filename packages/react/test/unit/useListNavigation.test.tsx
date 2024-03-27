@@ -198,8 +198,8 @@ test('resets indexRef to -1 upon close', async () => {
             <ul>
               {items.map((item, index) => (
                 <li
+                  key={item}
                   {...getItemProps({
-                    key: item,
                     ref(node) {
                       listRef.current[index] = node;
                     },

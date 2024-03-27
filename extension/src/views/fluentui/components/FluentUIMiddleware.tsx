@@ -100,7 +100,7 @@ export const FluentUIMiddleware = React.memo(() => {
         return (
           <div key={key} className={styles.keyValueContainer}>
             <span className={styles.propertyKey}>{key} :</span>{' '}
-            <span className={styles.string}>"{value}"</span>
+            <span className={styles.string}>&quot;{value}&quot;</span>
           </div>
         );
       })}

@@ -8,7 +8,7 @@
     "clean": "rimraf dist out-tsc",
     "storybook": "storybook dev",
     "build:storybook": "storybook build",
-    "lint": "biome lint src",
+    "lint": "eslint src",
     "typecheck": "tsc -b",
     "analyze": "vite-bundle-visualizer -o dist/stats.html"
   },

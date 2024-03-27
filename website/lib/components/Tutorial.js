@@ -11,15 +11,20 @@ import useIsomorphicLayoutEffect from 'use-isomorphic-layout-effect';
 
 import {Chrome} from './Chrome';
 
-const Button = forwardRef(({children, ...props}, ref) => (
-  <button
-    ref={ref}
-    className="rounded bg-gray-100 px-2"
-    {...props}
-  >
-    {children}
-  </button>
-));
+const Button = forwardRef(function Button(
+  {children, ...props},
+  ref,
+) {
+  return (
+    <button
+      ref={ref}
+      className="rounded bg-gray-100 px-2"
+      {...props}
+    >
+      {children}
+    </button>
+  );
+});
 
 export const Result1 = () => {
   return (

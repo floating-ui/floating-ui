@@ -9,7 +9,10 @@
   "module": "./dist/floating-ui.utils.esm.js",
   "types": "./dist/floating-ui.utils.d.ts",
   "sideEffects": false,
-  "files": ["dist", "dom"],
+  "files": [
+    "dist",
+    "dom"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -32,7 +35,8 @@
     }
   },
   "scripts": {
-    "lint": "biome lint .",
+    "lint": "eslint .",
+    "format": "prettier --write .",
     "clean": "rimraf dist out-tsc dom react",
     "test": "vitest run --globals",
     "test:watch": "vitest watch --globals",
