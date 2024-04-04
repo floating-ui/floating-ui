@@ -145,6 +145,15 @@ positioned.
 Certain CSS styles must be applied **before**
 `computePosition(){:js}` is called:
 
+```css {2-5}
+#floating {
+  position: absolute;
+  width: max-content;
+  top: 0;
+  left: 0;
+}
+```
+
 - `position: absolute{:sass}`
 
 This makes the element float on top of the UI with intrinsic

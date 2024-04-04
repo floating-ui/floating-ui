@@ -268,3 +268,21 @@ The order in which focus cycles.
   {/* floating element */}
 </FloatingFocusManager>
 ```
+
+## Troubleshooting
+
+### Page scrolls to top when opening the floating element
+
+This can happen if you're placing the `autoFocus{:.keyword}` prop
+on an element inside the floating element. This is because the
+floating element is initially rendered at the top-left of the
+page, and the browser scrolls to it when it receives focus.
+
+Instead, use the `initialFocus{:.keyword}` prop on
+`<FloatingFocusManager>{:js}` to focus the desired element, which
+waits for the position to be ready first.
+
+### Usage with `<FloatingPortal>{:js}`
+
+Ensure the focus manager is rendered as a child (can be a nested
+descendant) of `<FloatingPortal>{:js}`.

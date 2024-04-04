@@ -24,13 +24,15 @@ tree.
 
 ```js
 function Tooltip() {
-  return (
-    isOpen && (
+  if (isOpen) {
+    return (
       <FloatingPortal>
         <div>Floating element</div>
       </FloatingPortal>
-    )
-  );
+    );
+  }
+
+  return null;
 }
 ```
 
@@ -40,8 +42,8 @@ appended to their respective parent.
 <Notice>
   The portal component should be conditionally rendered based on
   the `isOpen` or mounted state (as seen above), rather than
-  always rendered. This allows React Suspense to work as
-  expected.
+  always rendered. This prevents a portal container from being
+  mounted to the DOM when not in use.
 </Notice>
 
 ## Props

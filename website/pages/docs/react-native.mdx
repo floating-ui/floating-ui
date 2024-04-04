@@ -110,7 +110,7 @@ function App() {
 `useFloating(){:js}` only calculates the position **once** on
 render, or when the reference/floating elements changed.
 Depending on the context in which the floating element lives, you
-may need to update its position in an effect.
+may need to update its position in an Effect.
 
 The Hook returns an `update(){:js}` function to update the
 position at will:
@@ -126,7 +126,7 @@ To access the elements, you can either access the refs:
 ```js
 const {refs} = useFloating();
 
-// Inside an effect or event handler:
+// Inside an Effect or event handler:
 refs.reference.current;
 refs.floating.current;
 ```

@@ -4,8 +4,8 @@ import {ReactSelect} from '../../lib/components/PackageSelect';
 
 # React
 
-A toolkit to position and create interactions for floating
-elements with React.
+A React toolkit to position floating elements and optionally
+create interactions for them.
 
 ```bash
 npm install @floating-ui/react
@@ -24,12 +24,14 @@ Choose the package you installed for better docs:
 
 </PageCard>
 
-The goal of this package is to provide primitives to create
-components for tooltips, popovers, dropdown menus, hover cards,
-modal dialogs, select menus, comboboxes, and more. Instead of
-providing any pre-built components, it gives you the tools to
-create them more easily. This is ideal if you want lots of
-control, but does require more work to get started. The full
+The goal of this package is to provide primitives — features
+common to all types of floating elements — to create components
+for tooltips, popovers, dropdown menus, hover cards, modal
+dialogs, select menus, comboboxes, and more.
+
+Instead of providing any pre-built components, it gives you the
+tools to create them more easily. This is ideal if you want lots
+of control, but does require more work to get started. The full
 guides in [React Examples](/docs/react-examples) contain some
 copy-pasteable examples to get you started more quickly.
 
@@ -40,12 +42,12 @@ Floating UI's usage can be broken down into two disparate parts:
 - [Positioning](/docs/react#positioning) (available for both
   `@floating-ui/react{:.string}` and
   `@floating-ui/react-dom{:.string}`).
-- [Interactions](/docs/react#interactions) (available for just
+- [Interactions](/docs/react#interactions) (available for only
   `@floating-ui/react{:.string}`).
 
 ## Positioning
 
-`useFloating(){:js}` is the main hook of each package.
+`useFloating(){:js}` is the main Hook of each package.
 
 <ShowFor packages={['react']}>
 
@@ -83,17 +85,17 @@ function App() {
 This will position the floating `Tooltip` element at the **bottom
 center** of the `Button` element by default.
 
-- `refs.setReference{:js}` is the reference (or anchor) element
+- `refs.setReference{:js}` sets the reference (or anchor) element
   that is being referred to for positioning.
-- `refs.setFloating{:js}` is the floating element that is being
+- `refs.setFloating{:js}` sets the floating element that is being
   positioned relative to the reference element.
 - `floatingStyles{:js}` is an object of positioning styles to
   apply to the floating element's `style{:.keyword}` prop.
 
-The refs are functions to make them **reactive** — this ensures
-changes to the reference or floating elements, such as with
-conditional rendering, are handled correctly by updating the
-position.
+The refs are callback refs (functions) to make them **reactive**
+— this ensures changes to the reference or floating elements,
+such as with conditional rendering, are handled correctly by
+updating the position.
 
 ## Anchoring
 
@@ -126,7 +128,7 @@ const {refs, floatingStyles} = useFloating({
 
 <Notice type="warning">
   Only use this option if your floating element is _conditionally
-  rendered_, not hidden with CSS. Use an effect to call and clean
+  rendered_, not hidden with CSS. Use an Effect to call and clean
   up `autoUpdate` in the latter scenario.
 </Notice>
 

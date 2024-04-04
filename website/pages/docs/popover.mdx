@@ -60,12 +60,12 @@ function Popover() {
 currently open on the screen. It is used for conditional
 rendering.
 
-### useFloating hook
+### useFloating Hook
 
-The `useFloating(){:js}` hook provides positioning and context
+The `useFloating(){:js}` Hook provides positioning and context
 for our popover. We need to pass it some information:
 
-- `open{:.key}`: The open state from our `useState(){:js}` hook
+- `open{:.key}`: The open state from our `useState(){:js}` Hook
   above.
 - `onOpenChange{:.key}`: A callback function that will be called
   when the popover is opened or closed. We'll use this to update
@@ -153,7 +153,7 @@ prop getters which can be used for rendering.
 
 ### Rendering
 
-Now we have all the variables and hooks set up, we can render out
+Now we have all the variables and Hooks set up, we can render out
 our elements.
 
 ```js
@@ -238,7 +238,7 @@ like so:
 
 It is better to create a reusable component API that can be used
 in a variety of different scenarios more easily. We can place all
-of our Hooks into a single custom hook for better reusability,
+of our Hooks into a single custom Hook for better reusability,
 which is then used by a controller component which encapsulates
 the state.
 

@@ -21,15 +21,15 @@ floating element, in addition to locking the body scroll.
 
 ## Usage
 
-It renders a `<div>{:js}` with base styling. Can be styled with
-any CSS solution.
+It renders a `<div>{:js}` with base styling.
 
 ```js
 function App() {
   return (
-    <FloatingOverlay>
-      <div />
-    </FloatingOverlay>
+    <>
+      <FloatingOverlay />
+      <div>Floating element</div>
+    </>
   );
 }
 ```
@@ -61,3 +61,23 @@ If you need a more advanced solution,
 is a great option.
 
 </Notice>
+
+## Troubleshooting
+
+### Sibling Overlay
+
+When using anchor positioning and the overlay in scrollable
+contexts, prefer making the overlay a sibling of the floating
+element rather than a parent container.
+
+This will ensure the floating element does not get contained by
+the overlay, allowing it to be positioned out of its bounds,
+preventing scroll issues. It also allows the overlay to be
+independently animated.
+
+```js
+<>
+  <FloatingOverlay />
+  <div ref={refs.setFloating} />
+</>
+```
