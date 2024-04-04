@@ -440,16 +440,27 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         onPointerDown: setPointerRef,
         onPointerEnter: setPointerRef,
         onMouseMove(event) {
+          function handleMouseMove() {
+            if (!blockMouseMoveRef.current) {
+              onOpenChange(true, event.nativeEvent, 'hover');
+            }
+          }
+
+          if (mouseOnly && !isMouseLikePointerType(pointerTypeRef.current)) {
+            return;
+          }
+
           if (open || restMs === 0) {
             return;
           }
 
           clearTimeout(restTimeoutRef.current);
-          restTimeoutRef.current = setTimeout(() => {
-            if (!blockMouseMoveRef.current) {
-              onOpenChange(true, event.nativeEvent, 'hover');
-            }
-          }, restMs);
+
+          if (pointerTypeRef.current === 'touch') {
+            handleMouseMove();
+          } else {
+            restTimeoutRef.current = setTimeout(handleMouseMove, restMs);
+          }
         },
       },
       floating: {
@@ -461,5 +472,5 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
         },
       },
     };
-  }, [enabled, restMs, open, onOpenChange, closeWithDelay]);
+  }, [enabled, mouseOnly, open, restMs, onOpenChange, closeWithDelay]);
 }
