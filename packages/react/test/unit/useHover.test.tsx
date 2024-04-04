@@ -162,6 +162,28 @@ test('restMs', async () => {
   cleanup();
 });
 
+test('restMs is always 0 for touch input', async () => {
+  render(<App restMs={100} />);
+
+  fireEvent.pointerDown(screen.getByRole('button'), {pointerType: 'touch'});
+  fireEvent.mouseMove(screen.getByRole('button'));
+
+  await act(async () => {});
+
+  expect(screen.queryByRole('tooltip')).toBeInTheDocument();
+});
+
+test('restMs does not cause floating element to open if mouseOnly is true', async () => {
+  render(<App restMs={100} mouseOnly />);
+
+  fireEvent.pointerDown(screen.getByRole('button'), {pointerType: 'touch'});
+  fireEvent.mouseMove(screen.getByRole('button'));
+
+  await act(async () => {});
+
+  expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+});
+
 test('mouseleave on the floating element closes it (mouse)', async () => {
   render(<App />);
 
