@@ -10,6 +10,7 @@ import type {ExtendedUserProps} from './hooks/useInteractions';
 export * from '.';
 export type {FloatingArrowProps} from './components/FloatingArrow';
 export type {FloatingFocusManagerProps} from './components/FloatingFocusManager';
+export type {FloatingOverlayProps} from './components/FloatingOverlay';
 export type {UseClickProps} from './hooks/useClick';
 export type {UseClientPointProps} from './hooks/useClientPoint';
 export type {UseDismissProps} from './hooks/useDismiss';

@@ -6,7 +6,7 @@ import {useId} from '../hooks/useId';
 
 const activeLocks = new Set<string>();
 
-interface FloatingOverlayProps {
+export interface FloatingOverlayProps {
   /**
    * Whether the overlay should lock scrolling on the document body.
    * @default false
