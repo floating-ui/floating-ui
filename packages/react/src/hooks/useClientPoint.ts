@@ -221,7 +221,6 @@ export function useClientPoint<RT extends ReferenceType = ReferenceType>(
     refs.setPositionReference(refs.domReference.current);
   }, [dataRef, enabled, openCheck, refs, setReference, x, y]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally specifying `reactive`
   React.useEffect(() => {
     return addListener();
   }, [addListener, reactive]);

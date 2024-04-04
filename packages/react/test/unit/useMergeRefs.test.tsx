@@ -13,7 +13,6 @@ test('merges refs and cleans up', () => {
     const ref2 = React.useCallback(callbackSpy, []);
     const ref = useMergeRefs([ref1, ref2]);
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: testing
     React.useLayoutEffect(() => {
       refSpy = ref1.current;
     }, [show]);

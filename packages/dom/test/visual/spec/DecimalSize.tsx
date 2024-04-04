@@ -27,7 +27,6 @@ export function DecimalSize() {
     ],
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: testing
   useLayoutEffect(update, [size, truncate, update]);
 
   return (

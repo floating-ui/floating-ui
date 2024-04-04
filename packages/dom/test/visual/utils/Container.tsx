@@ -33,7 +33,6 @@ const getStyleForPosition = (position: string) => {
 
 export function Container({children, update}: Props) {
   const [position, setPosition] = useState<string>('center');
-  // biome-ignore lint/correctness/useExhaustiveDependencies: testing
   useLayoutEffect(update, [update, position]);
 
   return (

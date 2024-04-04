@@ -146,7 +146,6 @@ export const MenuComponent = React.forwardRef<
   // Determine if "hover" logic can run based on the modality of input. This
   // prevents unwanted focus synchronization as menus open and close with
   // keyboard navigation and the cursor is resting on the menu.
-  // biome-ignore lint/correctness/useExhaustiveDependencies:
   React.useEffect(() => {
     function onPointerMove({pointerType}: PointerEvent) {
       if (pointerType !== 'touch') {
@@ -226,7 +225,6 @@ export const MenuComponent = React.forwardRef<
           id={id}
           data-open={isOpen ? '' : undefined}
           tabIndex={isNested ? -1 : 0}
-          // biome-ignore lint/a11y/useAriaPropsForRole: spread below
           role="combobox"
           aria-autocomplete="list"
           {...getReferenceProps({

@@ -428,7 +428,6 @@ export function useDismiss<RT extends ReferenceType = ReferenceType>(
     closeOnPressOutsideCapture,
   ]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   React.useEffect(() => {
     insideReactTreeRef.current = false;
   }, [outsidePress, outsidePressEvent]);

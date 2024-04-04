@@ -417,7 +417,6 @@ export function useHover<RT extends ReferenceType = ReferenceType>(
     }
   }, [open, cleanupMouseMoveHandler, clearPointerEvents]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   React.useEffect(() => {
     return () => {
       cleanupMouseMoveHandler();

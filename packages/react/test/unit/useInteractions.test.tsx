@@ -143,7 +143,6 @@ test('prop getters are memoized', () => {
       ],
     );
 
-    // biome-ignore lint/correctness/useExhaustiveDependencies: testing
     useEffect(() => {
       // Should NOT cause an infinite loop as the prop getters are memoized.
       setCount((c) => c + 1);

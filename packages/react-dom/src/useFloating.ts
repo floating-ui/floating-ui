@@ -119,7 +119,6 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
     };
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `hasWhileElementsMounted` is intentionally included.
   useModernLayoutEffect(() => {
     if (referenceEl) referenceRef.current = referenceEl;
     if (floatingEl) floatingRef.current = floatingEl;

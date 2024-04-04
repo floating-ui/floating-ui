@@ -10,7 +10,6 @@ function useFloatingId() {
     serverHandoffComplete ? genId() : undefined,
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional
   useModernLayoutEffect(() => {
     if (id == null) {
       setId(genId());

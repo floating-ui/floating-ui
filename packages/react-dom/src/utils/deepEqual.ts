@@ -56,6 +56,5 @@ export function deepEqual(a: any, b: any) {
     return true;
   }
 
-  // biome-ignore lint/suspicious/noSelfCompare: in source
   return a !== a && b !== b;
 }

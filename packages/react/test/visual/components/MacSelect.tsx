@@ -95,7 +95,6 @@ export function ScrollArrow({
   const statusRef = useRef<'idle' | 'active'>('idle');
 
   // Updates the visibility state of the arrow when necessary.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: needs refactoring
   useLayoutEffect(() => {
     if (open) {
       // Wait for the floating element to be positioned, and
@@ -113,7 +112,6 @@ export function ScrollArrow({
 
   // While pressing the scroll arrows on touch devices,
   // prevent selection once they disappear (lift finger)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: needs refactoring
   useLayoutEffect(() => {
     if (!show && statusRef.current === 'active') {
       onHide();

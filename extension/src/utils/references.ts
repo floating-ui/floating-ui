@@ -18,7 +18,6 @@ export const createReferences = (): References => {
   const references: References = {
     add: (element) => {
       if (weakMap.has(element)) {
-        // biome-ignore lint/style/noNonNullAssertion: weakMap.has(element) ensures this is not undefined
         return weakMap.get(element)!;
       }
       const id: ReferenceId = generateReferenceId();

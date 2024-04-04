@@ -22,16 +22,14 @@ export type DevtoolsContextValue = {
     expression: string,
   ) => Promise<Result | void>;
   onSelectionChanged: Pick<
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     chrome.devtools.panels.SelectionChangedEvent,
     'addListener' | 'removeListener'
   >;
   onMessage: Pick<
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     chrome.runtime.ExtensionMessageEvent,
     'addListener' | 'removeListener'
   >;
-  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+
   theme: typeof chrome.devtools.panels.themeName;
   error: unknown;
 };
@@ -78,9 +76,7 @@ export const useDevtools = () => React.useContext(DevtoolsContext);
 export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
   const [error, setError] = React.useState<unknown>(undefined);
   React.useEffect(() => {
-    // biome-ignore lint/style/noRestrictedGlobals:
     chrome.scripting.executeScript({
-      // biome-ignore lint/style/noRestrictedGlobals:
       target: {tabId: chrome.devtools.inspectedWindow.tabId, allFrames: true},
       /**
        * Everything in this function should be local to the inspected page
@@ -95,7 +91,6 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
           'message',
           (event) => {
             if (event.data === LOCAL_SERIALIZED_DATA_CHANGE) {
-              // biome-ignore lint/style/noRestrictedGlobals:
               chrome.runtime.sendMessage(event.data);
             }
           },
@@ -106,11 +101,8 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
   }, []);
   return {
     error,
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     onSelectionChanged: chrome.devtools.panels.elements.onSelectionChanged,
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     onMessage: chrome.runtime.onMessage,
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     theme: chrome.devtools.panels.themeName,
     inspectDocument: React.useCallback(async () => {
       // inspect of ownerDocument works as a "reset" mechanism, it should be used to remove errors and to set the inspected window to the current document
@@ -138,7 +130,7 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
         }`,
       ).catch(setError);
     }, []),
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
+
     reloadInspectedWindow: chrome.devtools.inspectedWindow.reload,
   };
 };
@@ -148,7 +140,6 @@ export const useChromeDevtoolsContextValue = (): DevtoolsContextValue => {
  */
 const evalInspectedWindow = <Result,>(expression: string): Promise<Result> =>
   new Promise((resolve, reject) =>
-    // biome-ignore lint/style/noRestrictedGlobals: @see top of file
     chrome.devtools.inspectedWindow.eval<Result>(
       expression,
       {},
@@ -157,13 +148,11 @@ const evalInspectedWindow = <Result,>(expression: string): Promise<Result> =>
   );
 
 export type ChromeEvaluationException = Pick<
-  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
   chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
   'value' | 'isException'
 >;
 
 export type ChromeEvaluationError = Pick<
-  // biome-ignore lint/style/noRestrictedGlobals: @see top of file
   chrome.devtools.inspectedWindow.EvaluationExceptionInfo,
   'description' | 'isError'
 >;

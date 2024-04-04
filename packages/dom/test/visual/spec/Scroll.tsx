@@ -26,7 +26,6 @@ export function Scroll() {
   });
   const {scrollRef, indicator} = useScroll({refs, update});
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: testing
   useLayoutEffect(update, [update, node]);
 
   const referenceJsx = (

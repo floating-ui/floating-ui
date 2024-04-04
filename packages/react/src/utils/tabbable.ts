@@ -60,7 +60,6 @@ export function enableFocusInside(container: HTMLElement) {
   const elements = container.querySelectorAll<HTMLElement>('[data-tabindex]');
   elements.forEach((element) => {
     const tabindex = element.dataset.tabindex;
-    // biome-ignore lint/performance/noDelete: purity
     delete element.dataset.tabindex;
     if (tabindex) {
       element.setAttribute('tabindex', tabindex);

@@ -92,7 +92,6 @@ export const Main = ({orientation = 'horizontal', loop = false}: Props) => {
               {[...Array(37)].map((_, index) => (
                 <button
                   role="option"
-                  // biome-ignore lint/suspicious/noArrayIndexKey: testing
                   key={index}
                   aria-selected={activeIndex === index}
                   tabIndex={activeIndex === index ? 0 : -1}

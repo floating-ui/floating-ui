@@ -16,7 +16,6 @@ export function ContainingBlock() {
     whileElementsMounted: autoUpdate,
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: testing
   useLayoutEffect(update, [update, willChange, contain, containerType]);
 
   return (

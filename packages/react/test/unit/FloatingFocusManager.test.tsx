@@ -358,7 +358,6 @@ describe('modal', () => {
       return (
         <>
           <input
-            // biome-ignore lint/a11y/useAriaPropsForRole: testing
             role="combobox"
             data-testid="reference"
             ref={refs.setReference}
@@ -405,7 +404,6 @@ describe('modal', () => {
       return (
         <>
           <input
-            // biome-ignore lint/a11y/useAriaPropsForRole: testing
             role="combobox"
             data-testid="reference"
             ref={refs.setReference}
@@ -1072,7 +1070,6 @@ describe('Navigation', () => {
   test('returns focus to reference when floating element was opened by hover but is closed by an explicit close button', async () => {
     render(<Navigation />);
     await userEvent.hover(screen.getByText('Product'));
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     await userEvent.click(screen.getByText('Close').parentElement!);
     await userEvent.keyboard('{Tab}');
     expect(screen.getByText('Close')).toHaveFocus();
@@ -1168,7 +1165,6 @@ test('trapped combobox prevents focus moving outside floating element', async ()
           ref={refs.setReference}
           {...getReferenceProps()}
           data-testid="input"
-          // biome-ignore lint/a11y/useAriaPropsForRole: testing
           role="combobox"
         />
         {isOpen && (
@@ -1224,7 +1220,6 @@ test('untrapped combobox creates non-modal focus management', async () => {
           ref={refs.setReference}
           {...getReferenceProps()}
           data-testid="input"
-          // biome-ignore lint/a11y/useAriaPropsForRole: testing
           role="combobox"
         />
         {isOpen && (
