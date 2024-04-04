@@ -60,7 +60,7 @@ function getPreviouslyFocusedElement() {
 
 const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
   props: React.ButtonHTMLAttributes<HTMLButtonElement>,
-  ref: React.Ref<HTMLButtonElement>,
+  ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   return (
     <button
@@ -76,7 +76,7 @@ const VisuallyHiddenDismiss = React.forwardRef(function VisuallyHiddenDismiss(
 export interface FloatingFocusManagerProps<
   RT extends ReferenceType = ReferenceType,
 > {
-  children: JSX.Element;
+  children: React.JSX.Element;
   /**
    * The floating context returned from `useFloating`.
    */
@@ -145,7 +145,7 @@ export interface FloatingFocusManagerProps<
  */
 export function FloatingFocusManager<RT extends ReferenceType = ReferenceType>(
   props: FloatingFocusManagerProps<RT>,
-): JSX.Element {
+): React.JSX.Element {
   const {
     context,
     children,

@@ -67,11 +67,9 @@ interface FloatingListProps {
  * Provides context for a list of items within the floating element.
  * @see https://floating-ui.com/docs/FloatingList
  */
-export function FloatingList({
-  children,
-  elementsRef,
-  labelsRef,
-}: FloatingListProps): JSX.Element {
+export function FloatingList(props: FloatingListProps): React.JSX.Element {
+  const {children, elementsRef, labelsRef} = props;
+
   const [map, setMap] = React.useState(() => new Map<Node, number | null>());
 
   const register = React.useCallback((node: Node) => {
@@ -120,14 +118,18 @@ export interface UseListItemProps {
  * `FloatingList`.
  * @see https://floating-ui.com/docs/FloatingList#uselistitem
  */
-export function useListItem({label}: UseListItemProps = {}): {
+export function useListItem(props: UseListItemProps = {}): {
   ref: (node: HTMLElement | null) => void;
   index: number;
 } {
-  const [index, setIndex] = React.useState<number | null>(null);
-  const componentRef = React.useRef<Node | null>(null);
+  const {label} = props;
+
   const {register, unregister, map, elementsRef, labelsRef} =
     React.useContext(FloatingListContext);
+
+  const [index, setIndex] = React.useState<number | null>(null);
+
+  const componentRef = React.useRef<Node | null>(null);
 
   const ref = React.useCallback(
     (node: HTMLElement | null) => {

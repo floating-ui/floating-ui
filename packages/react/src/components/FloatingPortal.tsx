@@ -38,17 +38,19 @@ const attr = createAttribute('portal');
 /**
  * @see https://floating-ui.com/docs/FloatingPortal#usefloatingportalnode
  */
-export function useFloatingPortalNode({
-  id,
-  root,
-}: {
-  id?: string;
-  root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
-} = {}) {
-  const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
+export function useFloatingPortalNode(
+  props: {
+    id?: string;
+    root?: HTMLElement | null | React.MutableRefObject<HTMLElement | null>;
+  } = {},
+) {
+  const {id, root} = props;
 
   const uniqueId = useId();
   const portalContext = usePortalContext();
+
+  const [portalNode, setPortalNode] = React.useState<HTMLElement | null>(null);
+
   const portalNodeRef = React.useRef<HTMLDivElement | null>(null);
 
   useModernLayoutEffect(() => {
@@ -132,12 +134,9 @@ interface FloatingPortalProps {
  * while retaining its location in the React tree.
  * @see https://floating-ui.com/docs/FloatingPortal
  */
-export function FloatingPortal({
-  children,
-  id,
-  root = null,
-  preserveTabOrder = true,
-}: FloatingPortalProps): JSX.Element {
+export function FloatingPortal(props: FloatingPortalProps): React.JSX.Element {
+  const {children, id, root = null, preserveTabOrder = true} = props;
+
   const portalNode = useFloatingPortalNode({id, root});
   const [focusManagerState, setFocusManagerState] =
     React.useState<FocusManagerState>(null);

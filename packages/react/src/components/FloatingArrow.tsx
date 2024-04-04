@@ -4,47 +4,40 @@ import * as React from 'react';
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
 
-export interface FloatingArrowProps extends React.SVGAttributes<SVGSVGElement> {
+export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   // Omit the original `refs` property from the context to avoid issues with
   // generics: https://github.com/floating-ui/floating-ui/issues/2483
   /**
    * The floating context.
    */
   context: Omit<FloatingContext, 'refs'> & {refs: any};
-
   /**
    * Width of the arrow.
    * @default 14
    */
   width?: number;
-
   /**
    * Height of the arrow.
    * @default 7
    */
   height?: number;
-
   /**
    * The corner radius (rounding) of the arrow tip.
    * @default 0 (sharp)
    */
   tipRadius?: number;
-
   /**
    * Forces a static offset over dynamic positioning under a certain condition.
    */
   staticOffset?: string | number | null;
-
   /**
    * Custom path string.
    */
   d?: string;
-
   /**
    * Stroke (border) color of the arrow.
    */
   stroke?: string;
-
   /**
    * Stroke (border) width of the arrow.
    */
@@ -56,7 +49,10 @@ export interface FloatingArrowProps extends React.SVGAttributes<SVGSVGElement> {
  * @see https://floating-ui.com/docs/FloatingArrow
  */
 export const FloatingArrow = React.forwardRef(function FloatingArrow(
-  {
+  props: FloatingArrowProps,
+  ref: React.ForwardedRef<SVGSVGElement>,
+): React.JSX.Element | null {
+  const {
     context: {
       placement,
       elements: {floating},
@@ -71,9 +67,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
     d,
     style: {transform, ...restStyle} = {},
     ...rest
-  }: FloatingArrowProps,
-  ref: React.Ref<SVGSVGElement>,
-): JSX.Element | null {
+  } = props;
+
   if (__DEV__) {
     if (!ref) {
       console.warn(
@@ -91,8 +86,8 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 
   // Strokes must be double the border width, this ensures the stroke's width
   // works as you'd expect.
-  strokeWidth *= 2;
-  const halfStrokeWidth = strokeWidth / 2;
+  const computedStrokeWidth = strokeWidth * 2;
+  const halfStrokeWidth = computedStrokeWidth / 2;
 
   const svgX = (width / 2) * (tipRadius / -8 + 1);
   const svgY = ((height / 2) * tipRadius) / 4;
@@ -132,7 +127,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
       {...rest}
       aria-hidden
       ref={ref}
-      width={isCustomShape ? width : width + strokeWidth}
+      width={isCustomShape ? width : width + computedStrokeWidth}
       height={width}
       viewBox={`0 0 ${width} ${height > width ? height : width}`}
       style={{
@@ -143,31 +138,34 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
         [side]:
           isVerticalSide || isCustomShape
             ? '100%'
-            : `calc(100% - ${strokeWidth / 2}px)`,
+            : `calc(100% - ${computedStrokeWidth / 2}px)`,
         transform: `${rotation}${transform ?? ''}`,
         ...restStyle,
       }}
     >
-      {strokeWidth > 0 && (
+      {computedStrokeWidth > 0 && (
         <path
           clipPath={`url(#${clipPathId})`}
           fill="none"
           stroke={stroke}
           // Account for the stroke on the fill path rendered below.
-          strokeWidth={strokeWidth + (d ? 0 : 1)}
+          strokeWidth={computedStrokeWidth + (d ? 0 : 1)}
           d={dValue}
         />
       )}
       {/* In Firefox, for left/right placements there's a ~0.5px gap where the
       border can show through. Adding a stroke on the fill removes it. */}
-      <path stroke={strokeWidth && !d ? rest.fill : 'none'} d={dValue} />
+      <path
+        stroke={computedStrokeWidth && !d ? rest.fill : 'none'}
+        d={dValue}
+      />
       {/* Assumes the border-width of the floating element matches the 
       stroke. */}
       <clipPath id={clipPathId}>
         <rect
           x={-halfStrokeWidth}
           y={halfStrokeWidth * (isCustomShape ? -1 : 1)}
-          width={width + strokeWidth}
+          width={width + computedStrokeWidth}
           height={width}
         />
       </clipPath>
