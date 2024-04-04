@@ -57,11 +57,11 @@ interface FloatingDelayGroupProps {
  * `delay`.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export const FloatingDelayGroup = ({
-  children,
-  delay,
-  timeoutMs = 0,
-}: FloatingDelayGroupProps): JSX.Element => {
+export const FloatingDelayGroup = (
+  props: FloatingDelayGroupProps,
+): React.JSX.Element => {
+  const {children, delay, timeoutMs = 0} = props;
+
   const [state, setState] = React.useReducer(
     (prev: GroupState, next: Partial<GroupState>): GroupState => ({
       ...prev,
@@ -116,10 +116,13 @@ interface UseGroupOptions {
  * `FloatingDelayGroup`.
  * @see https://floating-ui.com/docs/FloatingDelayGroup
  */
-export const useDelayGroup = (
-  {open, onOpenChange}: FloatingContext,
-  {id}: UseGroupOptions,
-) => {
+export function useDelayGroup(
+  context: FloatingContext,
+  options: UseGroupOptions,
+) {
+  const {open, onOpenChange} = context;
+  const {id} = options;
+
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
     useDelayGroupContext();
 
@@ -161,4 +164,4 @@ export const useDelayGroup = (
       setCurrentId(id);
     }
   }, [open, setCurrentId, id]);
-};
+}

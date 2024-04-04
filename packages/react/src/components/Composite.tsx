@@ -42,8 +42,8 @@ const CompositeContext = React.createContext<{
 });
 
 type RenderProp =
-  | JSX.Element
-  | ((props: React.HTMLAttributes<HTMLElement>) => JSX.Element);
+  | React.JSX.Element
+  | ((props: React.HTMLAttributes<HTMLElement>) => React.JSX.Element);
 
 interface CompositeProps {
   /**
@@ -112,8 +112,8 @@ const allKeys = [...horizontalKeys, ...verticalKeys];
 export const Composite = React.forwardRef<
   HTMLElement,
   React.HTMLProps<HTMLElement> & CompositeProps
->(function Composite(
-  {
+>(function Composite(props, forwardedRef) {
+  const {
     render,
     orientation = 'both',
     loop = true,
@@ -123,10 +123,9 @@ export const Composite = React.forwardRef<
     onNavigate: externalSetActiveIndex,
     itemSizes,
     dense = false,
-    ...props
-  },
-  forwardedRef,
-) {
+    ...domProps
+  } = props;
+
   const [internalActiveIndex, internalSetActiveIndex] = React.useState(0);
   const activeIndex = externalActiveIndex ?? internalActiveIndex;
   const onNavigate = useEffectEvent(
@@ -272,12 +271,12 @@ export const Composite = React.forwardRef<
   }
 
   const computedProps: React.HTMLAttributes<HTMLElement> = {
-    ...props,
+    ...domProps,
     ...renderElementProps,
     ref: forwardedRef,
     'aria-orientation': orientation === 'both' ? undefined : orientation,
     onKeyDown(e) {
-      props.onKeyDown?.(e);
+      domProps.onKeyDown?.(e);
       renderElementProps.onKeyDown?.(e);
       handleKeyDown(e);
     },
@@ -310,7 +309,8 @@ interface CompositeItemProps {
 export const CompositeItem = React.forwardRef<
   HTMLElement,
   React.HTMLProps<HTMLElement> & CompositeItemProps
->(function CompositeItem({render, ...props}, forwardedRef) {
+>(function CompositeItem(props, forwardedRef) {
+  const {render, ...domProps} = props;
   const renderElementProps =
     render && typeof render !== 'function' ? render.props : {};
 
@@ -320,13 +320,13 @@ export const CompositeItem = React.forwardRef<
   const isActive = activeIndex === index;
 
   const computedProps: React.HTMLAttributes<HTMLElement> = {
-    ...props,
+    ...domProps,
     ...renderElementProps,
     ref: mergedRef,
     tabIndex: isActive ? 0 : -1,
     'data-active': isActive ? '' : undefined,
     onFocus(e) {
-      props.onFocus?.(e);
+      domProps.onFocus?.(e);
       renderElementProps.onFocus?.(e);
       onNavigate(index);
     },

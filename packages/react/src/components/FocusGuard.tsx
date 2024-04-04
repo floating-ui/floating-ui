@@ -31,10 +31,10 @@ function setActiveElementOnTab(event: KeyboardEvent) {
   }
 }
 
-export const FocusGuard = React.forwardRef<
-  HTMLSpanElement,
-  React.HTMLProps<HTMLSpanElement>
->(function FocusGuard(props, ref) {
+export const FocusGuard = React.forwardRef(function FocusGuard(
+  props: React.ComponentPropsWithoutRef<'span'>,
+  ref: React.ForwardedRef<HTMLSpanElement>,
+) {
   const [role, setRole] = React.useState<'button' | undefined>();
 
   useModernLayoutEffect(() => {

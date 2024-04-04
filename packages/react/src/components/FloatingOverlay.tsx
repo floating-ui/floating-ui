@@ -20,10 +20,12 @@ interface FloatingOverlayProps {
  * It's a regular `<div>`, so it can be styled via any CSS solution you prefer.
  * @see https://floating-ui.com/docs/FloatingOverlay
  */
-export const FloatingOverlay = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLProps<HTMLDivElement> & FloatingOverlayProps
->(function FloatingOverlay({lockScroll = false, ...rest}, ref) {
+export const FloatingOverlay = React.forwardRef(function FloatingOverlay(
+  props: React.ComponentPropsWithoutRef<'div'> & FloatingOverlayProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const {lockScroll = false, ...rest} = props;
+
   const lockId = useId();
 
   useModernLayoutEffect(() => {
