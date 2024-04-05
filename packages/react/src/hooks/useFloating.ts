@@ -19,6 +19,7 @@ import type {
 import {createPubSub} from '../utils/createPubSub';
 import {useId} from './useId';
 import {useEffectEvent} from './utils/useEffectEvent';
+import {error} from '../utils/log';
 
 let devMessageSet: Set<string> | undefined;
 if (__DEV__) {
@@ -35,16 +36,12 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   const {open = false, onOpenChange: unstable_onOpenChange, nodeId} = options;
 
   if (__DEV__) {
-    const err =
-      'Floating UI: Cannot pass a virtual element to the ' +
-      '`elements.reference` option, as it must be a real DOM element. ' +
-      'Use `refs.setPositionReference` instead.';
-
     if (options.elements?.reference && !isElement(options.elements.reference)) {
-      if (!devMessageSet?.has(err)) {
-        devMessageSet?.add(err);
-        console.error(err);
-      }
+      error(
+        'Floating UI: Cannot pass a virtual element to the',
+        '`elements.reference` option, as it must be a real DOM element. Use',
+        '`refs.setPositionReference()` instead.',
+      );
     }
   }
 

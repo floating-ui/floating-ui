@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import {useId} from '../hooks/useId';
 import type {Alignment, FloatingContext, Side} from '../types';
+import {warn} from '../utils/log';
 
 export interface FloatingArrowProps extends React.ComponentPropsWithRef<'svg'> {
   // Omit the original `refs` property from the context to avoid issues with
@@ -71,10 +72,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 
   if (__DEV__) {
     if (!ref) {
-      console.warn(
-        'Floating UI: The `ref` prop is required for the `FloatingArrow`',
-        'component.',
-      );
+      warn('Floating UI: The `ref` prop is required for `FloatingArrow`.');
     }
   }
 
