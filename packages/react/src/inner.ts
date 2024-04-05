@@ -106,8 +106,8 @@ export const inner = (
     if (__DEV__) {
       if (!state.placement.startsWith('bottom')) {
         warn(
-          'Floating UI: `placement` side must be "bottom" when using the',
-          '`inner` middleware.',
+          '`placement` side must be "bottom" when using the `inner`',
+          'middleware.',
         );
       }
     }

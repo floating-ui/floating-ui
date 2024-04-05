@@ -280,24 +280,18 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   if (__DEV__) {
     if (allowEscape) {
       if (!loop) {
-        warn(
-          'Floating UI: `useListNavigation` looping must be enabled to allow',
-          'escaping.',
-        );
+        warn('`useListNavigation` looping must be enabled to allow escaping.');
       }
 
       if (!virtual) {
-        warn(
-          'Floating UI: `useListNavigation` must be virtual to allow',
-          'escaping.',
-        );
+        warn('`useListNavigation` must be virtual to allow escaping.');
       }
     }
 
     if (orientation === 'vertical' && cols > 1) {
       warn(
-        'Floating UI: In grid list navigation mode (`cols` > 1), the',
-        '`orientation` should be either "horizontal" or "both".',
+        'In grid list navigation mode (`cols` > 1), the `orientation` should',
+        'be either "horizontal" or "both".',
       );
     }
   }

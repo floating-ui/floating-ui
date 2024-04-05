@@ -4,7 +4,7 @@ if (__DEV__) {
 }
 
 export function warn(...messages: string[]) {
-  const message = messages.join(' ');
+  const message = `Floating UI: ${messages.join(' ')}`;
   if (!devMessageSet?.has(message)) {
     devMessageSet?.add(message);
     console.warn(message);
@@ -12,7 +12,7 @@ export function warn(...messages: string[]) {
 }
 
 export function error(...messages: string[]) {
-  const message = messages.join(' ');
+  const message = `Floating UI: ${messages.join(' ')}`;
   if (!devMessageSet?.has(message)) {
     devMessageSet?.add(message);
     console.error(message);

@@ -38,9 +38,9 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
   if (__DEV__) {
     if (options.elements?.reference && !isElement(options.elements.reference)) {
       error(
-        'Floating UI: Cannot pass a virtual element to the',
-        '`elements.reference` option, as it must be a real DOM element. Use',
-        '`refs.setPositionReference()` instead.',
+        'Cannot pass a virtual element to the `elements.reference` option,',
+        'as it must be a real DOM element. Use `refs.setPositionReference()`',
+        'instead.',
       );
     }
   }

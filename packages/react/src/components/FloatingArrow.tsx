@@ -72,7 +72,7 @@ export const FloatingArrow = React.forwardRef(function FloatingArrow(
 
   if (__DEV__) {
     if (!ref) {
-      warn('Floating UI: The `ref` prop is required for `FloatingArrow`.');
+      warn('The `ref` prop is required for `FloatingArrow`.');
     }
   }
 
