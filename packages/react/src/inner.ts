@@ -12,6 +12,7 @@ import type {
   MiddlewareState,
   SideObject,
 } from './types';
+import {warn} from './utils/log';
 
 function getArgsWithCustomFloatingHeight(
   state: MiddlewareState,
@@ -104,11 +105,9 @@ export const inner = (
 
     if (__DEV__) {
       if (!state.placement.startsWith('bottom')) {
-        console.warn(
-          [
-            'Floating UI: `placement` side must be "bottom" when using the',
-            '`inner` middleware.',
-          ].join(' '),
+        warn(
+          '`placement` side must be "bottom" when using the `inner`',
+          'middleware.',
         );
       }
     }

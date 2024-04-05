@@ -41,6 +41,7 @@ import {enqueueFocus} from '../utils/enqueueFocus';
 import {getDeepestNode} from '../utils/getChildren';
 import {useEffectEvent} from './utils/useEffectEvent';
 import {useLatestRef} from './utils/useLatestRef';
+import {warn} from '../utils/log';
 
 let isPreventScrollSupported = false;
 
@@ -279,30 +280,18 @@ export function useListNavigation<RT extends ReferenceType = ReferenceType>(
   if (__DEV__) {
     if (allowEscape) {
       if (!loop) {
-        console.warn(
-          [
-            'Floating UI: `useListNavigation` looping must be enabled to allow',
-            'escaping.',
-          ].join(' '),
-        );
+        warn('`useListNavigation` looping must be enabled to allow escaping.');
       }
 
       if (!virtual) {
-        console.warn(
-          [
-            'Floating UI: `useListNavigation` must be virtual to allow',
-            'escaping.',
-          ].join(' '),
-        );
+        warn('`useListNavigation` must be virtual to allow escaping.');
       }
     }
 
     if (orientation === 'vertical' && cols > 1) {
-      console.warn(
-        [
-          'Floating UI: In grid list navigation mode (`cols` > 1), the',
-          '`orientation` should be either "horizontal" or "both".',
-        ].join(' '),
+      warn(
+        'In grid list navigation mode (`cols` > 1), the `orientation` should',
+        'be either "horizontal" or "both".',
       );
     }
   }
