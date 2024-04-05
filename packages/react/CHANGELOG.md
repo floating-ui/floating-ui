@@ -1,5 +1,13 @@
 # @floating-ui/react
 
+## 0.26.11
+
+### Patch Changes
+
+- fix(useHover): ensure `mouseOnly` is respected when `restMs` is specified. Also ensure `restMs` is always `0` for touch input.
+- fix(types): export `FloatingOverlayProps`
+- feat(useDelayGroup): return the `GroupContext` value from the Hook, and don't require an `id` option to be passed. You only need to invoke `useDelayGroup()` and read the context data from it. As a result, `useDelayGroupContext()` has been deprecated as it no longer needs to be used.
+
 ## 0.26.10
 
 ### Patch Changes
