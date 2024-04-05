@@ -5,7 +5,6 @@ import {vi} from 'vitest';
 import {
   FloatingDelayGroup,
   useDelayGroup,
-  useDelayGroupContext,
   useFloating,
   useHover,
   useInteractions,
@@ -19,7 +18,6 @@ interface Props {
 }
 
 export const Tooltip = ({children, label}: Props) => {
-  const {delay} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
 
   const {x, y, refs, strategy, context} = useFloating({
@@ -27,10 +25,9 @@ export const Tooltip = ({children, label}: Props) => {
     onOpenChange: setOpen,
   });
 
-  const {getReferenceProps} = useInteractions([
-    useHover(context, {delay}),
-    useDelayGroup(context, {id: label}),
-  ]);
+  const {delay} = useDelayGroup(context);
+  const hover = useHover(context, {delay});
+  const {getReferenceProps} = useInteractions([hover]);
 
   return (
     <>
