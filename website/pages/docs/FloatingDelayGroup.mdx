@@ -49,18 +49,15 @@ function App() {
 To enable delay grouping:
 
 - Wrap the grouped floating components in a
-  `<FloatingDelayGroup />{:js}` provider.
-- Call `useDelayGroupContext(){:js}` to read the data from
-  `<FloatingDelayGroup />{:js}`, which provides the
-    <WordHighlight id='a'>delay</WordHighlight> for the group to
-pass to the `useHover(){:js}` Hook.
+  `<FloatingDelayGroup>{:js}` provider.
 - `useDelayGroup(){:js}`, a Hook called inside the component,
-  enables grouping for the component.
+  enables grouping for the component and returns the group
+    <WordHighlight id='a'>delay</WordHighlight> context from the
+`<FloatingDelayGroup>{:js}` provider.
 
 ```js /delay/#a
 import {
   FloatingDelayGroup,
-  useDelayGroupContext,
   useDelayGroup,
   useHover,
   useFloating,
@@ -68,14 +65,7 @@ import {
 
 function Tooltip() {
   const {context} = useFloating();
-
-  // `id` must be unique. Each `useFloating()` call returns a unique
-  // `floatingId`.
-  useDelayGroup(context, {
-    id: context.floatingId,
-  });
-
-  const {delay} = useDelayGroupContext();
+  const {delay} = useDelayGroup(context);
   const hover = useHover(context, {delay});
 }
 ```
@@ -133,7 +123,7 @@ close delay at all.
   of the floating element of the group currently open.
 
 ```js /isInstantPhase/#a /currentId/#b
-const {currentId, isInstantPhase} = useDelayGroupContext();
+const {currentId, isInstantPhase} = useDelayGroup(context);
 
 const instantDuration = 0;
 const duration = 200;
@@ -151,3 +141,11 @@ const {isMounted, styles} = useTransitionStyles(context, {
   // ...
 });
 ```
+
+## Troubleshooting
+
+The `delay{:.const}` returned from `useDelayGroup(){:js}` is
+`0{:js}` by default if your floating components don't have a
+provider. This allows you to conditionally use, for example, a
+`delay{:.param}` prop that's passed directly into the component
+rather than the group delay from context.
