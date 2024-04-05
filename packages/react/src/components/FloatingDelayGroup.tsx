@@ -19,6 +19,8 @@ interface GroupContext extends GroupState {
   setState: React.Dispatch<Partial<GroupState>>;
 }
 
+const NOOP = () => {};
+
 const FloatingDelayGroupContext = React.createContext<
   GroupState & {
     setCurrentId: (currentId: any) => void;
@@ -29,8 +31,8 @@ const FloatingDelayGroupContext = React.createContext<
   initialDelay: 0,
   timeoutMs: 0,
   currentId: null,
-  setCurrentId: () => {},
-  setState: () => {},
+  setCurrentId: NOOP,
+  setState: NOOP,
   isInstantPhase: false,
 });
 
@@ -108,7 +110,7 @@ export const FloatingDelayGroup = (
 };
 
 interface UseGroupOptions {
-  id: any;
+  id?: any;
 }
 
 /**
@@ -118,26 +120,28 @@ interface UseGroupOptions {
  */
 export function useDelayGroup(
   context: FloatingContext,
-  options: UseGroupOptions,
-) {
-  const {open, onOpenChange} = context;
-  const {id} = options;
+  options: UseGroupOptions = {},
+): GroupContext {
+  const {open, onOpenChange, floatingId} = context;
+  const {id: optionId} = options;
+  const id = optionId ?? floatingId;
 
+  const groupContext = useDelayGroupContext();
   const {currentId, setCurrentId, initialDelay, setState, timeoutMs} =
-    useDelayGroupContext();
+    groupContext;
 
   useModernLayoutEffect(() => {
-    if (currentId) {
-      setState({
-        delay: {
-          open: 1,
-          close: getDelay(initialDelay, 'close'),
-        },
-      });
+    if (!currentId) return;
 
-      if (currentId !== id) {
-        onOpenChange(false);
-      }
+    setState({
+      delay: {
+        open: 1,
+        close: getDelay(initialDelay, 'close'),
+      },
+    });
+
+    if (currentId !== id) {
+      onOpenChange(false);
     }
   }, [id, onOpenChange, setState, currentId, initialDelay]);
 
@@ -146,6 +150,8 @@ export function useDelayGroup(
       onOpenChange(false);
       setState({delay: initialDelay, currentId: null});
     }
+
+    if (!currentId) return;
 
     if (!open && currentId === id) {
       if (timeoutMs) {
@@ -160,8 +166,9 @@ export function useDelayGroup(
   }, [open, setState, currentId, id, onOpenChange, initialDelay, timeoutMs]);
 
   useModernLayoutEffect(() => {
-    if (open) {
-      setCurrentId(id);
-    }
+    if (setCurrentId === NOOP || !open) return;
+    setCurrentId(id);
   }, [open, setCurrentId, id]);
+
+  return groupContext;
 }

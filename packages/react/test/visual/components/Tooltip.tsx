@@ -7,7 +7,6 @@ import {
   offset,
   shift,
   useDelayGroup,
-  useDelayGroupContext,
   useDismiss,
   useFloating,
   useFocus,
@@ -63,9 +62,7 @@ export function Tooltip({
   placement = 'top',
   delay = 0,
 }: Props) {
-  const {delay: groupDelay, currentId, isInstantPhase} = useDelayGroupContext();
   const [open, setOpen] = useState(false);
-  const id = useId();
 
   const {refs, floatingStyles, context} = useFloating({
     placement,
@@ -75,17 +72,22 @@ export function Tooltip({
     whileElementsMounted: autoUpdate,
   });
 
-  const {getReferenceProps, getFloatingProps} = useInteractions([
-    useHover(context, {
-      delay: groupDelay === 0 ? delay : groupDelay,
-      move: false,
-    }),
-    useFocus(context),
-    useRole(context, {role: 'tooltip'}),
-    useDismiss(context),
-  ]);
+  const {delay: groupDelay, currentId, isInstantPhase} = useDelayGroup(context);
 
-  useDelayGroup(context, {id});
+  const hover = useHover(context, {
+    delay: groupDelay === 0 ? delay : groupDelay,
+    move: false,
+  });
+  const focus = useFocus(context);
+  const role = useRole(context, {role: 'tooltip'});
+  const dismiss = useDismiss(context);
+
+  const {getReferenceProps, getFloatingProps} = useInteractions([
+    hover,
+    focus,
+    role,
+    dismiss,
+  ]);
 
   const instantDuration = 0;
   const openDuration = 750;
@@ -95,7 +97,8 @@ export function Tooltip({
     duration: isInstantPhase
       ? {
           open: instantDuration,
-          close: currentId === id ? closeDuration : instantDuration,
+          close:
+            currentId === context.floatingId ? closeDuration : instantDuration,
         }
       : {
           open: openDuration,
