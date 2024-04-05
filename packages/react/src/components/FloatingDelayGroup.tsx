@@ -36,6 +36,10 @@ const FloatingDelayGroupContext = React.createContext<
   isInstantPhase: false,
 });
 
+/**
+ * @deprecated
+ * Use the return value of `useDelayGroup()` instead.
+ */
 export const useDelayGroupContext = (): GroupContext =>
   React.useContext(FloatingDelayGroupContext);
 
