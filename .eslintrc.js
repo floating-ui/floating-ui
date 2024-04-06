@@ -48,6 +48,12 @@ module.exports = {
         additionalHooks: 'useModernLayoutEffect',
       },
     ],
+    '@typescript-eslint/consistent-type-imports': [
+      'error',
+      {
+        prefer: 'type-imports',
+      },
+    ],
   },
   settings: {
     react: {

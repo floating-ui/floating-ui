@@ -10,7 +10,7 @@ import {
   ELEMENT_METADATA,
   type SERIALIZED_DATA_CHANGE,
 } from '../utils/constants';
-import {ReferenceId} from '../utils/references';
+import type {ReferenceId} from '../utils/references';
 import themes from '../styles/themes.module.css';
 
 export type DevtoolsContextValue = {

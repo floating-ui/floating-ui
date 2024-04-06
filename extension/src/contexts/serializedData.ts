@@ -2,7 +2,7 @@ import React from 'react';
 
 import type {Serialized, SerializedDataChangeMessage} from '../types';
 import type {Datatype} from '../views';
-import {DevtoolsContextValue} from './devtools';
+import type {DevtoolsContextValue} from './devtools';
 import {
   CONTROLLER,
   ELEMENT_METADATA,

@@ -1,5 +1,6 @@
 import type {Platform, VirtualElement} from '@floating-ui/core';
-import {Dimensions, View} from 'react-native';
+import {Dimensions} from 'react-native';
+import type {View} from 'react-native';
 
 const ORIGIN = {x: 0, y: 0};
 
