@@ -29,7 +29,7 @@ function useFloatingId() {
   return id;
 }
 
-const useReactId = _React.useId;
+const useReactId = _React.useId as () => string;
 
 /**
  * Uses React 18's built-in `useId()` when available, or falls back to a
