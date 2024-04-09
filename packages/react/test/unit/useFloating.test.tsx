@@ -238,7 +238,7 @@ test('onOpenChange is passed an event as second param', async () => {
 });
 
 test('refs.domReference.current is synchronized with external reference', async () => {
-  let testEl: HTMLButtonElement | null = null;
+  let isSameNode = false;
 
   function App() {
     const [referenceEl, setReferenceEl] = useState<Element | null>(null);
@@ -251,8 +251,8 @@ test('refs.domReference.current is synchronized with external reference', async 
     return (
       <button
         ref={setReferenceEl}
-        onClick={() => {
-          testEl = refs.domReference.current;
+        onClick={(event) => {
+          isSameNode = event.currentTarget === refs.domReference.current;
         }}
       />
     );
@@ -262,5 +262,5 @@ test('refs.domReference.current is synchronized with external reference', async 
 
   fireEvent.click(screen.getByRole('button'));
 
-  expect((testEl as HTMLButtonElement | null)?.nodeName).toBe('BUTTON');
+  expect(isSameNode).toBe(true);
 });
