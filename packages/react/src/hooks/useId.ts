@@ -1,8 +1,6 @@
 import * as React from 'react';
 import useModernLayoutEffect from 'use-isomorphic-layout-effect';
-
-// https://github.com/mui/material-ui/issues/41190#issuecomment-2040873379
-const _React = {...React};
+import {SafeReact} from '../utils/safeReact';
 
 let serverHandoffComplete = false;
 let count = 0;
@@ -30,7 +28,7 @@ function useFloatingId() {
   return id;
 }
 
-const useReactId = _React.useId as () => string;
+const useReactId = SafeReact.useId as () => string;
 
 /**
  * Uses React 18's built-in `useId()` when available, or falls back to a

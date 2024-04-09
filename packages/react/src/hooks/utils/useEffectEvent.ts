@@ -1,9 +1,9 @@
 import * as React from 'react';
+import {SafeReact} from '../../utils/safeReact';
 
 type AnyFunction = (...args: any[]) => any;
 
-// `toString()` prevents bundlers from trying to `import { useInsertionEffect } from 'react'`
-const useInsertionEffect = (React as any)['useInsertionEffect'.toString()] as
+const useInsertionEffect = SafeReact.useInsertionEffect as
   | AnyFunction
   | undefined;
 
