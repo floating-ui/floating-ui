@@ -98,6 +98,8 @@ export function useFloating<RT extends ReferenceType = ReferenceType>(
       // `elements.reference` option. This ensures that it won't be overridden on future renders.
       if (optionDomReference) {
         _setPositionReference(positionReference);
+      } else if (positionReference !== null) {
+        _setPositionReference(null);
       }
       position.refs.setReference(positionReference as RT | null);
     },
